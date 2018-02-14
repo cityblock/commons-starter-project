@@ -1,15 +1,32 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import DiagnosisCode from '../../models/diagnosis-code';
+import User from '../../models/user';
+import {
+  createMockClinic,
+  createMockUser,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const userRole = 'admin';
+const permissions = 'green';
+
+interface ISetup {
+  user: User;
+}
+
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  return { user };
+}
 
 describe('concern resolver', () => {
   let db: Db;
-  const userRole = 'admin';
-
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
@@ -22,9 +39,10 @@ describe('concern resolver', () => {
   describe('resolve concern', () => {
     it('fetches a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const concern = await Concern.create({ title: 'Housing' }, txn);
         const query = `{ concern(concernId: "${concern.id}") { title } }`;
-        const result = await graphql(schema, query, null, { userRole, txn });
+        const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.concern)).toMatchObject({
           title: 'Housing',
         });
@@ -35,12 +53,13 @@ describe('concern resolver', () => {
   describe('concern create', () => {
     it('creates a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const mutation = `mutation {
           concernCreate(input: { title: "Housing" }) {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.concernCreate)).toMatchObject({
           title: 'Housing',
         });
@@ -51,13 +70,14 @@ describe('concern resolver', () => {
   describe('concern edit', () => {
     it('edits a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const concern = await Concern.create({ title: 'housing' }, txn);
         const mutation = `mutation {
           concernEdit(input: { title: "Medical", concernId: "${concern.id}" }) {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.concernEdit)).toMatchObject({
           title: 'Medical',
         });
@@ -68,13 +88,14 @@ describe('concern resolver', () => {
   describe('concern delete', () => {
     it('deletes a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const concern = await Concern.create({ title: 'housing' }, txn);
         const mutation = `mutation {
           concernDelete(input: { concernId: "${concern.id}" }) {
             title, deletedAt
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.concernDelete).deletedAt).not.toBeFalsy();
       });
     });
@@ -83,6 +104,7 @@ describe('concern resolver', () => {
   describe('concerns', () => {
     it('returns concerns', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const concern1 = await Concern.create({ title: 'housing' }, txn);
         const concern2 = await Concern.create({ title: 'medical' }, txn);
 
@@ -92,7 +114,8 @@ describe('concern resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          permissions,
+          userId: user.id,
           txn,
         });
         const concernTitles = cloneDeep(result.data!.concerns).map((c: Concern) => c.title);
@@ -103,6 +126,7 @@ describe('concern resolver', () => {
 
     it('returns concerns in a custom order', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const concern1 = await Concern.create({ title: 'abc' }, txn);
         const concern2 = await Concern.create({ title: 'def' }, txn);
 
@@ -112,7 +136,8 @@ describe('concern resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          userId: user.id,
+          permissions,
           txn,
         });
         expect(cloneDeep(result.data!.concerns)).toMatchObject([
@@ -130,6 +155,7 @@ describe('concern resolver', () => {
   describe('concern add diagnosis code', () => {
     it('adds a diagnosis code to a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         await DiagnosisCode.create(
           {
             codesetName: 'ICD-10',
@@ -158,7 +184,7 @@ describe('concern resolver', () => {
             }
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.concernAddDiagnosisCode)).toMatchObject({
           title: concern.title,
           diagnosisCodes: [
@@ -177,6 +203,7 @@ describe('concern resolver', () => {
   describe('concern remove diagnosis code', () => {
     it('removes a diagnosis code from a concern', async () => {
       await transaction(Concern.knex(), async txn => {
+        const { user } = await setup(txn);
         const diagnosisCode = await DiagnosisCode.create(
           {
             codesetName: 'ICD-10',
@@ -213,7 +240,7 @@ describe('concern resolver', () => {
             }
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.concernRemoveDiagnosisCode)).toMatchObject({
           title: concern.title,
           diagnosisCodes: [],

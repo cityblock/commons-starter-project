@@ -5,8 +5,8 @@ import { IPaginatedResults, IPaginationOptions } from '../db';
 import EventNotification from '../models/event-notification';
 import Task from '../models/task';
 import TaskComment from '../models/task-comment';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { formatRelayEdge, IContext } from './shared/utils';
 
 const NO_TASK_EVENT = 'ERROR: No task event';
 
@@ -192,12 +192,16 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 export async function resolveEventNotificationsForCurrentUser(
   root: any,
   args: IUserEventNotificationOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
   const { taskEventNotificationsOnly } = args;
-
-  await accessControls.isAllowed(userRole, 'view', 'user');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'user',
+    txn,
+  );
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 0;
@@ -246,10 +250,16 @@ export async function resolveEventNotificationsForCurrentUser(
 export async function resolveEventNotificationsForTask(
   root: any,
   args: ITaskEventNotificationOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'task',
+    txn,
+    args.taskId,
+  );
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -286,10 +296,15 @@ export async function resolveEventNotificationsForTask(
 export async function eventNotificationDismiss(
   root: any,
   { input }: IDismissEventNotificationOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ) {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'eventNotification',
+    txn,
+  );
 
   return EventNotification.dismiss(input.eventNotificationId, txn);
 }
@@ -297,10 +312,16 @@ export async function eventNotificationDismiss(
 export async function resolveEventNotificationsForUserTask(
   root: any,
   { taskId }: IEventNotificationsForUserTaskOptions,
-  { userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ) {
-  await accessControls.isAllowedForUser(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'task',
+    txn,
+    taskId,
+  );
 
   const notifications = await EventNotification.getForUserTask(taskId, userId!, txn);
 
@@ -315,10 +336,15 @@ export async function resolveEventNotificationsForUserTask(
 export async function eventNotificationsForTaskDismiss(
   root: any,
   { input }: IDismissTaskNotificationsOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ) {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'eventNotification',
+    txn,
+  );
 
   return EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
 }

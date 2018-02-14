@@ -1,6 +1,6 @@
 import { IConcernSuggestInput, IRootMutationType, IRootQueryType } from 'schema';
 import ConcernSuggestion from '../models/concern-suggestion';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface IConcernSuggestOptions {
@@ -10,9 +10,15 @@ export interface IConcernSuggestOptions {
 export async function resolveConcernsForAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concernsForAnswer']> {
-  await accessControls.isAllowed(userRole, 'view', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'concernSuggestion',
+    txn,
+  );
 
   return ConcernSuggestion.getForAnswer(args.answerId, txn);
 }
@@ -20,9 +26,15 @@ export async function resolveConcernsForAnswer(
 export async function concernSuggestionCreate(
   root: any,
   args: IConcernSuggestOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernSuggestionCreate']> {
-  await accessControls.isAllowed(userRole, 'view', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'create',
+    'concernSuggestion',
+    txn,
+  );
 
   return ConcernSuggestion.create(
     {
@@ -37,9 +49,15 @@ export async function concernSuggestionCreate(
 export async function concernSuggestionDelete(
   root: any,
   args: IConcernSuggestOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernSuggestionDelete']> {
-  await accessControls.isAllowed(userRole, 'view', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'delete',
+    'concernSuggestion',
+    txn,
+  );
 
   return ConcernSuggestion.delete(
     {

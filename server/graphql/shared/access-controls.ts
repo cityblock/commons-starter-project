@@ -43,7 +43,8 @@ export type Resource =
   | 'patientList'
   | 'CBOCategory'
   | 'CBO'
-  | 'CBOReferral';
+  | 'CBOReferral'
+  | 'eventNotification';
 
 /*
 ACL SPEC:

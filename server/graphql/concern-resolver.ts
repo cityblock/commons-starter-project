@@ -8,7 +8,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import Concern, { ConcernOrderOptions } from '../models/concern';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { formatOrderOptions, IContext } from './shared/utils';
 
 export interface IConcernCreateArgs {
@@ -38,10 +38,15 @@ export interface IRemoveDiagnosisCodeArgs {
 export async function concernCreate(
   root: any,
   { input }: IConcernCreateArgs,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernCreate']> {
-  const { userRole, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'create',
+    'concern',
+    txn,
+  );
 
   return Concern.create(input, txn);
 }
@@ -49,9 +54,15 @@ export async function concernCreate(
 export async function resolveConcern(
   root: any,
   args: { concernId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concern']> {
-  await accessControls.isAllowed(userRole, 'view', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'concern',
+    txn,
+  );
 
   return Concern.get(args.concernId, txn);
 }
@@ -59,9 +70,15 @@ export async function resolveConcern(
 export async function resolveConcerns(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concerns']> {
-  await accessControls.isAllowed(userRole, 'view', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'concern',
+    txn,
+  );
 
   const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
     orderBy: 'createdAt',
@@ -74,9 +91,15 @@ export async function resolveConcerns(
 export async function concernEdit(
   root: any,
   args: IEditConcernOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'concern',
+    txn,
+  );
 
   return Concern.edit(args.input.concernId, args.input, txn);
 }
@@ -84,9 +107,15 @@ export async function concernEdit(
 export async function concernDelete(
   root: any,
   args: IDeleteConcernOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'delete',
+    'concern',
+    txn,
+  );
 
   return Concern.delete(args.input.concernId, txn);
 }
@@ -94,9 +123,15 @@ export async function concernDelete(
 export async function concernAddDiagnosisCode(
   root: any,
   { input }: IAddDiagnosisCodeArgs,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernAddDiagnosisCode']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'concern',
+    txn,
+  );
   const { concernId, codesetName, code, version } = input;
 
   return Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
@@ -105,9 +140,15 @@ export async function concernAddDiagnosisCode(
 export async function concernRemoveDiagnosisCode(
   root: any,
   { input }: IRemoveDiagnosisCodeArgs,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernRemoveDiagnosisCode']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'concern',
+    txn,
+  );
   const { concernId, diagnosisCodeId } = input;
 
   return Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);

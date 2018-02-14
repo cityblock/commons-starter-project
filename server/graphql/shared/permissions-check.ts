@@ -87,17 +87,15 @@ export const isUserOnPatientCareTeam = async (
   const model = resourceToModelMapping[resource as ResourceWithPatientIdMethod];
   // if model does not have association with an individual patient, allow action
   if (!model) return true;
-
+  // if resource id needed but not provided, do not allow action
   if (!resourceId) return false;
-  let isOnCareTeam = false;
 
-  // call the getPatientIdForResource on the relevant model to get patient id
+   // call getPatientIdForResource on the relevant model to get patient id
   const patientId = await (model as any).getPatientIdForResource(resourceId, txn);
   // check that relevant patient is on user's care team
-  const careTeamQueryResult = patientId
+  const isOnCareTeam = patientId
     ? await CareTeam.isOnCareTeam({ userId, patientId }, txn)
     : false;
-  if (careTeamQueryResult) isOnCareTeam = true;
 
   return isOnCareTeam;
 };

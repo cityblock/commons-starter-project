@@ -33,6 +33,7 @@ export const patientViewOnlyResources: Resource[] = [
   'question',
   'questionCondition',
   'concern',
+  'concernSuggestion',
   'goalSuggestion',
   'goalSuggestionTemplate',
   'taskTemplate',
@@ -52,6 +53,7 @@ export const patientAllActionsAllowedResources: Resource[] = [
   'patientTaskSuggestion',
   'progressNote',
   'CBOReferral',
+  'eventNotification',
 ];
 
 export const patientCreatableAndDeletableOnlyResoruces: Resource[] = [

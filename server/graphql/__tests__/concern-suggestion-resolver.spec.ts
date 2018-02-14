@@ -3,21 +3,27 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import ConcernSuggestion from '../../models/concern-suggestion';
 import Question from '../../models/question';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
-import { createRiskArea } from '../../spec-helpers';
+import User from '../../models/user';
+import { createMockClinic, createMockUser, createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
   answer: Answer;
+  user: User;
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
   const question = await Question.create(
     {
@@ -42,7 +48,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { answer };
+  return { answer, user };
 }
 
 describe('concern suggestion resolver', () => {
@@ -58,10 +64,10 @@ describe('concern suggestion resolver', () => {
   describe('resolve concern suggestion for answer', () => {
     it('fetches a concern suggestion', async () => {
       await transaction(ConcernSuggestion.knex(), async txn => {
-        const { answer } = await setup(txn);
+        const { answer, user } = await setup(txn);
         const concern = await Concern.create({ title: 'Housing' }, txn);
         const query = `{ concernsForAnswer(answerId: "${answer.id}") { title } }`;
-        const result = await graphql(schema, query, null, { userRole, txn });
+        const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
         // null if no suggested concerns
         expect(cloneDeep(result.data!.concernsForAnswer)).toMatchObject([]);
 
@@ -73,7 +79,7 @@ describe('concern suggestion resolver', () => {
           txn,
         );
         // one if suggested concern
-        const result2 = await graphql(schema, query, null, { userRole, txn });
+        const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([{ title: 'Housing' }]);
       });
     });
@@ -82,7 +88,7 @@ describe('concern suggestion resolver', () => {
   describe('concern suggestion create', () => {
     it('suggests a concern for an answer', async () => {
       await transaction(ConcernSuggestion.knex(), async txn => {
-        const { answer } = await setup(txn);
+        const { answer, user } = await setup(txn);
         const concern = await Concern.create({ title: 'Housing' }, txn);
         const mutation = `mutation {
           concernSuggestionCreate(
@@ -91,7 +97,7 @@ describe('concern suggestion resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
           {
             title: 'Housing',
@@ -102,6 +108,7 @@ describe('concern suggestion resolver', () => {
 
     it('suggests a concern for a screening tool score range', async () => {
       await transaction(ConcernSuggestion.knex(), async txn => {
+        const { user } = await setup(txn);
         const riskArea = await createRiskArea({ title: 'Risk Area Also' }, txn);
         const concern = await Concern.create({ title: 'No Housing' }, txn);
         const screeningTool = await ScreeningTool.create(
@@ -130,7 +137,7 @@ describe('concern suggestion resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
           {
             title: 'No Housing',
@@ -143,7 +150,7 @@ describe('concern suggestion resolver', () => {
   describe('concern suggestion delete', () => {
     it('unsuggests a concern for an answer', async () => {
       await transaction(ConcernSuggestion.knex(), async txn => {
-        const { answer } = await setup(txn);
+        const { answer, user } = await setup(txn);
         const concern = await Concern.create({ title: 'housing' }, txn);
         await ConcernSuggestion.create(
           {
@@ -157,10 +164,10 @@ describe('concern suggestion resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.concernSuggestionDelete)).toMatchObject([]);
         const query = `{ concernsForAnswer(answerId: "${answer.id}") { title } }`;
-        const result2 = await graphql(schema, query, null, { userRole, txn });
+        const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
         // null with no suggested concerns
         expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([]);
       });

@@ -8,7 +8,7 @@ import {
 import GoalSuggestionTemplate, {
   GoalSuggestionTemplateOrderOptions,
 } from '../models/goal-suggestion-template';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { formatOrderOptions, IContext } from './shared/utils';
 
 export interface IGoalSuggestionTemplatesCreateArgs {
@@ -30,10 +30,15 @@ export interface IDeleteGoalSuggestionTemplateOptions {
 export async function goalSuggestionTemplateCreate(
   root: any,
   { input }: IGoalSuggestionTemplatesCreateArgs,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateCreate']> {
-  const { userRole, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'goalSuggestionTemplate');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'create',
+    'goalSuggestionTemplate',
+    txn,
+  );
 
   return GoalSuggestionTemplate.create(input, txn);
 }
@@ -41,9 +46,15 @@ export async function goalSuggestionTemplateCreate(
 export async function resolveGoalSuggestionTemplates(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplates']> {
-  await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'goalSuggestionTemplate',
+    txn,
+  );
 
   const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(args.orderBy, {
     orderBy: 'createdAt',
@@ -56,9 +67,15 @@ export async function resolveGoalSuggestionTemplates(
 export async function resolveGoalSuggestionTemplate(
   root: any,
   args: { goalSuggestionTemplateId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplate']> {
-  await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'goalSuggestionTemplate',
+    txn,
+  );
 
   return GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
 }
@@ -66,9 +83,15 @@ export async function resolveGoalSuggestionTemplate(
 export async function goalSuggestionTemplateEdit(
   root: any,
   args: IEditGoalSuggestionTemplateOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'goalSuggestionTemplate',
+    txn,
+  );
 
   return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input, txn);
 }
@@ -76,9 +99,15 @@ export async function goalSuggestionTemplateEdit(
 export async function goalSuggestionTemplateDelete(
   root: any,
   args: IDeleteGoalSuggestionTemplateOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'delete',
+    'goalSuggestionTemplate',
+    txn,
+  );
 
   return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId, txn);
 }

@@ -162,7 +162,7 @@ export default class PatientAnswer extends BaseModel {
       relation: Model.HasOneRelation,
       modelClass: 'risk-area-assessment-submission',
       join: {
-        from: 'patient_answer.riskAreaAssessmentSubmission',
+        from: 'patient_answer.riskAreaAssessmentSubmissionId',
         to: 'risk_area_assessment_submission.id',
       },
     },

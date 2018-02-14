@@ -80,7 +80,6 @@ describe('user model', () => {
   it('should not create a user when given an invalid email address', async () => {
     await transaction(User.knex(), async txn => {
       const email = 'nonEmail';
-      const message = 'should match format "email"';
       const clinic = await Clinic.create(createMockClinic(), txn);
 
       await expect(
@@ -88,15 +87,7 @@ describe('user model', () => {
           { firstName: 'Jon', lastName: 'Snow', email, userRole, homeClinicId: clinic.id },
           txn,
         ),
-      ).rejects.toMatchObject(
-        new Error(
-          JSON.stringify(
-            { email: [{ message, keyword: 'format', params: { format: 'email' } }] },
-            null,
-            '  ',
-          ),
-        ),
-      );
+      ).rejects.toMatchObject(new Error('email: should match format "email"'));
     });
   });
 

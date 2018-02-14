@@ -1,7 +1,7 @@
 import { IComputedFieldFlagCreateInput, IRootMutationType } from 'schema';
 import ComputedFieldFlag from '../models/computed-field-flag';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IComputedFieldFlagCreateArgs {
   input: IComputedFieldFlagCreateInput;
@@ -10,10 +10,16 @@ export interface IComputedFieldFlagCreateArgs {
 export async function computedFieldFlagCreate(
   root: any,
   { input }: IComputedFieldFlagCreateArgs,
-  { userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['computedFieldFlagCreate']> {
-  await accessControls.isAllowed(userRole, 'create', 'computedFieldFlag');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'patientAnswer',
+    txn,
+    input.patientAnswerId,
+  );
 
   return ComputedFieldFlag.create(
     {

@@ -6,7 +6,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import ComputedField, { ComputedFieldOrderOptions } from '../models/computed-field';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { formatOrderOptions, IContext } from './shared/utils';
 
 export interface IComputedFieldCreateArgs {
@@ -29,10 +29,9 @@ export interface IDeleteComputedFieldOptions {
 export async function computedFieldCreate(
   root: any,
   { input }: IComputedFieldCreateArgs,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['computedFieldCreate']> {
-  const { userRole, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'computedField');
+  await checkUserPermissions(userId, permissions, 'create', 'computedField', txn);
 
   const slug = kebabCase(input.label);
 
@@ -42,9 +41,9 @@ export async function computedFieldCreate(
 export async function resolveComputedField(
   root: any,
   args: IResolveComputedFieldOptions,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['computedField']> {
-  await accessControls.isAllowed(userRole, 'view', 'computedField');
+  await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
   return ComputedField.get(args.computedFieldId, txn);
 }
@@ -52,9 +51,9 @@ export async function resolveComputedField(
 export async function resolveComputedFields(
   root: any,
   args: IResolveComputedFieldsOptions,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['computedFields']> {
-  await accessControls.isAllowed(userRole, 'view', 'computedField');
+  await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
   const { order, orderBy } = formatOrderOptions<ComputedFieldOrderOptions>(args.orderBy, {
     orderBy: 'createdAt',
@@ -67,9 +66,9 @@ export async function resolveComputedFields(
 export async function computedFieldDelete(
   root: any,
   args: IDeleteComputedFieldOptions,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['computedFieldDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'computedField');
+  await checkUserPermissions(userId, permissions, 'delete', 'computedField', txn);
 
   return ComputedField.delete(args.input.computedFieldId, txn);
 }

@@ -1,12 +1,28 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import ComputedField from '../../models/computed-field';
 import Question from '../../models/question';
+import User from '../../models/user';
 import { createRiskArea } from '../../spec-helpers';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const userRole = 'admin';
+const permissions = 'green';
+
+interface ISetup {
+  user: User;
+}
+
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  return { user };
+}
 
 describe('computed field schema resolver', () => {
   let db: Db;
@@ -23,6 +39,7 @@ describe('computed field schema resolver', () => {
   describe('resolve computed fields schema', () => {
     it('returns computed fields', async () => {
       await transaction(ComputedField.knex(), async txn => {
+        const { user } = await setup(txn);
         const computedField1 = await ComputedField.create(
           {
             label: 'def',
@@ -84,7 +101,12 @@ describe('computed field schema resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.computedFieldsSchema)).toMatchObject({
           computedFields: [
             {

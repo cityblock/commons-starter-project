@@ -432,5 +432,13 @@ export default class PatientAnswer extends BaseModel {
     }
     return patientAnswer;
   }
+
+  static async getPatientIdForResource(patientAnswerId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(patientAnswerId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

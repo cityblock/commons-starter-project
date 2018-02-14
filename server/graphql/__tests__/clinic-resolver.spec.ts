@@ -3,11 +3,14 @@ import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import User from '../../models/user';
+import { createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('clinic resolver', () => {
   let db: Db;
   const userRole = 'admin';
+  const permissions = 'green';
 
   beforeEach(async () => {
     db = await Db.get();
@@ -28,8 +31,9 @@ describe('clinic resolver', () => {
           },
           txn,
         );
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
         const query = `{ clinic(clinicId: "${clinic.id}") { name, departmentId } }`;
-        const result = await graphql(schema, query, null, { userRole, txn });
+        const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
 
         expect(cloneDeep(result.data!.clinic)).toMatchObject({
           name: 'Center Zero',
@@ -39,42 +43,6 @@ describe('clinic resolver', () => {
     });
   });
 
-  describe('clinicCreate', () => {
-    it('creates a clinic', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const mutation = `mutation {
-          clinicCreate(input: { departmentId: 1, name: "Center Zero" }) {
-            name
-            departmentId
-          }
-        }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
-
-        expect(cloneDeep(result.data!.clinicCreate)).toMatchObject({
-          name: 'Center Zero',
-          departmentId: 1,
-        });
-      });
-    });
-
-    it('returns an error if a clinic with the same departmentId already exists', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        await Clinic.create({ departmentId: 1, name: 'Center Zero' }, txn);
-        const mutation = `mutation {
-          clinicCreate(input: { departmentId: 1, name: "Center One" }) {
-            name
-            departmentId
-          }
-        }`;
-
-        const result = await graphql(schema, mutation, null, { userRole, txn });
-
-        expect(cloneDeep(result.errors![0].message)).toMatch(
-          'Cannot create clinic: departmentId already exists for 1',
-        );
-      });
-    });
-  });
   describe('clinics', () => {
     it('returns correct page information', async () => {
       await transaction(Clinic.knex(), async txn => {
@@ -121,10 +89,11 @@ describe('clinic resolver', () => {
             }
           }
         }`;
-
+        const user = await User.create(createMockUser(11, clinic1.id, userRole), txn);
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          permissions,
+          userId: user.id,
           txn,
         });
         expect(cloneDeep(result.data!.clinics)).toMatchObject({

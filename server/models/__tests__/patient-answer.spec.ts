@@ -940,4 +940,37 @@ describe('answer model', () => {
       });
     });
   });
+
+  describe('getPatientIdForResource', () => {
+    it('gets patient id for a given patient answer', async () => {
+      await transaction(PatientAnswer.knex(), async txn => {
+        const { patient, riskAreaAssessmentSubmission, answer, user } = await setup(txn);
+        const patientAnswers = await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [answer.questionId],
+            answers: [
+              {
+                questionId: answer.questionId,
+                answerId: answer.id,
+                answerValue: '3',
+                patientId: patient.id,
+                userId: user.id,
+                applicable: true,
+              },
+            ],
+          },
+          txn,
+        );
+        const fetchedPatientId = await PatientAnswer.getPatientIdForResource(
+          patientAnswers[0].id,
+          txn,
+        );
+
+        expect(fetchedPatientId).toBe(patient.id);
+      });
+    });
+  });
 });

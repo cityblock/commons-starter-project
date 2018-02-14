@@ -1,15 +1,16 @@
 // NOTE: THIS IS AN UNAUTHENTICATED RESOLVER! BEWARE!
 import { IRootQueryType } from 'schema';
 import ComputedField from '../models/computed-field';
+import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 /* tslint:disable:check-is-allowed */
 export async function resolveComputedFieldsSchema(
   root: any,
   args: any,
-  context: IContext,
+  { txn, userId, permissions }: IContext,
 ): Promise<IRootQueryType['computedFieldsSchema']> {
-  const { txn } = context;
+  await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
   const computedFields = await ComputedField.getForSchema({ orderBy: 'slug', order: 'asc' }, txn);
 
   const formattedComputedFields = computedFields.map(computedField => ({

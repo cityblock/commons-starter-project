@@ -37,7 +37,7 @@ import {
   CBODelete,
   CBOEdit,
 } from './cbo-resolver';
-import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
+import { resolveClinic, resolveClinics } from './clinic-resolver';
 import { computedFieldFlagCreate } from './computed-field-flag-resolver';
 import {
   computedFieldCreate,
@@ -377,7 +377,6 @@ const resolveFunctions = {
     careTeamAddUser,
     careTeamAssignPatients,
     careTeamRemoveUser,
-    clinicCreate,
     patientEdit,
     patientInfoEdit,
     patientScratchPadEdit,

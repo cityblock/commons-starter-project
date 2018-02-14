@@ -22,6 +22,7 @@ import {
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
+const permissions = 'green';
 const reason = 'Viscerion destroyed the Wall';
 
 interface ISetup {
@@ -109,7 +110,12 @@ describe('computed field flag resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
       const computedFieldFlag = cloneDeep(result.data!.computedFieldFlagCreate);
 
       expect(computedFieldFlag.id).toBeTruthy();

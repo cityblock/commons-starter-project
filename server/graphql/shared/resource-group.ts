@@ -16,6 +16,7 @@ export const builderResources: Resource[] = [
   'progressNoteTemplate',
   'computedField',
   'CBO',
+  'CBOCategory',
   'patientList',
 ];
 
@@ -24,6 +25,7 @@ export const userResources: Resource[] = ['user', 'allUsers'];
 export const careTeamMemberResources: Resource[] = ['user', 'patient'];
 
 export const patientViewOnlyResources: Resource[] = [
+  'clinic',
   'careTeam',
   'answer',
   'riskAreaGroup',

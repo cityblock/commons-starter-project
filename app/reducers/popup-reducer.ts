@@ -9,6 +9,11 @@ interface IProgressNotePopup {
   options: IProgressNotePopupOptions;
 }
 
+interface IProgressNotesDrawer {
+  name: 'PROGRESS_NOTES_DRAWER';
+  options: {};
+}
+
 export interface ICreatePatientGoalPopupOptions {
   patientId: string;
   patientConcernId: string;
@@ -95,6 +100,7 @@ export type IState =
   | ICreatePatientConcernPopup
   | ICreatePatientGoalPopup
   | IProgressNotePopup
+  | IProgressNotesDrawer
   | IPatientConcernHamburgerMenu
   | IPatientGoalHamburgerMenu
   | IPatientGoalDeletePopup

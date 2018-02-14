@@ -37,34 +37,32 @@ interface IGraphqlProps {
 
 export interface IStateProps {
   popupIsOpen: boolean;
+  drawerIsOpen: boolean;
   progressNoteId: string | null;
 }
 
 interface IDispatchProps {
   closeProgressNote: () => any;
   openProgressNote: (progressNoteId: string) => any;
+  closeProgressNotesDrawer: () => any;
+  openProgressNotesDrawer: () => any;
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
 
-interface IState {
-  drawerIsOpen: boolean;
-}
-
-export class ProgressNoteContainer extends React.Component<allProps, IState> {
+export class ProgressNoteContainer extends React.Component<allProps> {
   constructor(props: allProps) {
     super(props);
     this.state = { drawerIsOpen: false };
   }
 
-  showHideList = () => {
-    const { drawerIsOpen } = this.state;
-    this.setState({ drawerIsOpen: !drawerIsOpen });
-  };
-
   getProgressNotesHtml() {
-    const { drawerIsOpen } = this.state;
-    const { progressNotes, progressNotesForSupervisorReview, currentUser } = this.props;
+    const {
+      progressNotes,
+      progressNotesForSupervisorReview,
+      currentUser,
+      drawerIsOpen,
+    } = this.props;
     const notes = (progressNotesForSupervisorReview || []).concat(progressNotes || []);
     const height = drawerIsOpen && notes ? notes.length * 63 : 0;
     const currentUserId = currentUser ? currentUser.id : '';
@@ -93,16 +91,19 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
       progressNoteId,
       progressNotesForSupervisorReview,
       currentUser,
+      drawerIsOpen,
+      openProgressNotesDrawer,
+      closeProgressNotesDrawer,
     } = this.props;
-    const { drawerIsOpen } = this.state;
     const progressNotesCount =
       (progressNotes || []).length + (progressNotesForSupervisorReview || []).length;
     const progressNotesHtml = this.getProgressNotesHtml();
     const icon = drawerIsOpen ? (
-      <Icon name="expandMore" onClick={this.showHideList} className={styles.icon} />
+      <Icon name="expandMore" onClick={closeProgressNotesDrawer} className={styles.icon} />
     ) : (
-      <Icon name="expandLess" onClick={this.showHideList} className={styles.icon} />
+      <Icon name="expandLess" onClick={openProgressNotesDrawer} className={styles.icon} />
     );
+    const topBarAction = drawerIsOpen ? closeProgressNotesDrawer : openProgressNotesDrawer;
     // Hide the popup if no open progress notes
     if (progressNotesCount < 1) {
       return null;
@@ -110,7 +111,7 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
     return (
       <div>
         <div className={styles.container}>
-          <div className={styles.topBar} onClick={this.showHideList}>
+          <div className={styles.topBar} onClick={topBarAction}>
             <FormattedMessage id="progressNote.progressNotes">
               {(message: string) => (
                 <div className={styles.text}>
@@ -135,9 +136,11 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   const popupIsOpen = state.popup.name === 'PROGRESS_NOTE';
+  const drawerIsOpen = state.popup.name === 'PROGRESS_NOTES_DRAWER';
 
   return {
     popupIsOpen,
+    drawerIsOpen,
     progressNoteId: popupIsOpen
       ? (state.popup.options as IProgressNotePopupOptions).progressNoteId
       : null,
@@ -146,6 +149,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
+    openProgressNotesDrawer: () =>
+      dispatch(
+        openPopup({
+          name: 'PROGRESS_NOTES_DRAWER',
+          options: {},
+        }),
+      ),
+    closeProgressNotesDrawer: () => dispatch(closePopup()),
     openProgressNote: (progressNoteId: string) =>
       dispatch(
         openPopup({

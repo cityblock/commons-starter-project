@@ -2,7 +2,6 @@ import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { IEventNotificationNode } from 'schema';
 import Db from '../../db';
-import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
 import EventNotification from '../../models/event-notification';
 import Patient from '../../models/patient';
@@ -12,8 +11,8 @@ import User from '../../models/user';
 import { UserRole } from '../../models/user';
 import {
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -32,8 +31,14 @@ async function setup(txn: Transaction, userRole?: UserRole): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+  const patient = await createPatient(
+    {
+      cityblockId: 123,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const dueAt = new Date().toISOString();
 
   const task = await Task.create(

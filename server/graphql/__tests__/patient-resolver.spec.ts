@@ -2,12 +2,11 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import CareTeam from '../../models/care-team';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
-  createMockPatient,
+  createPatient,
   setupComputedPatientList,
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
@@ -47,8 +46,14 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await Patient.create(createMockPatient(1, 1, homeClinicId), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+  const patient = await createPatient(
+    {
+      cityblockId: 1,
+      homeClinicId,
+      userId: user.id,
+    },
+    txn,
+  );
 
   return { patient, user, homeClinicId };
 }
@@ -65,26 +70,46 @@ async function additionalSetup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient2 = await Patient.create(
-    createMockPatient(11, 12, homeClinicId, 'Jon', 'Snow'),
+  await createPatient(
+    {
+      cityblockId: 11,
+      firstName: 'Jon',
+      lastName: 'Snow',
+      homeClinicId,
+      userId: user.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(
-    createMockPatient(12, 12, homeClinicId, 'Robb', 'Stark'),
+  await createPatient(
+    {
+      cityblockId: 12,
+      firstName: 'Robb',
+      lastName: 'Stark',
+      homeClinicId,
+      userId: user2.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
-  const patient4 = await Patient.create(
-    createMockPatient(13, 13, homeClinicId, 'Arya', 'Stark'),
+  await createPatient(
+    {
+      cityblockId: 13,
+      firstName: 'Arya',
+      lastName: 'Stark',
+      homeClinicId,
+      userId: user.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
-  const patient5 = await Patient.create(
-    createMockPatient(14, 14, homeClinicId, 'Sansa', 'Stark'),
+  await createPatient(
+    {
+      cityblockId: 14,
+      firstName: 'Sansa',
+      lastName: 'Stark',
+      homeClinicId,
+      userId: user.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
 
   return { user, patient, homeClinicId };
 }
@@ -432,10 +457,22 @@ describe('patient', () => {
     it('works if user has patients', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user, patient, homeClinicId } = await setup(txn);
-        const patient1 = await Patient.create(createMockPatient(123, 123, homeClinicId), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-        const patient2 = await Patient.create(createMockPatient(321, 321, homeClinicId), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+        const patient1 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId,
+            userId: user.id,
+          },
+          txn,
+        );
+        const patient2 = await createPatient(
+          {
+            cityblockId: 321,
+            homeClinicId,
+            userId: user.id,
+          },
+          txn,
+        );
 
         const query = `{
           patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {

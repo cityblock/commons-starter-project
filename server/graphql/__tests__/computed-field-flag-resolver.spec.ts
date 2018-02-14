@@ -14,9 +14,9 @@ import User from '../../models/user';
 import {
   createMockAnswer,
   createMockClinic,
-  createMockPatient,
   createMockQuestion,
   createMockUser,
+  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -39,7 +39,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(12, 12, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id }, txn);
   const riskArea = await createRiskArea({ title: 'The War for the Dawn' }, txn);
   const question = await Question.create(createMockQuestion(riskArea.id) as IRiskAreaQuestion, txn);
   const answer = await Answer.create(createMockAnswer(question.id), txn);

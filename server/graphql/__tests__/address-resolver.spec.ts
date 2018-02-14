@@ -8,7 +8,7 @@ import Patient from '../../models/patient';
 import PatientAddress from '../../models/patient-address';
 import PatientInfo from '../../models/patient-info';
 import User from '../../models/user';
-import { createMockAddress, createMockPatient } from '../../spec-helpers';
+import { createMockAddress, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -38,7 +38,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await Patient.create(createMockPatient(1, 1, homeClinicId), txn);
+  const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
   return { patient, user };
 }
 

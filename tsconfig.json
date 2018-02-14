@@ -18,7 +18,13 @@
     // does not work with our objection models which have no constructor
     "strictPropertyInitialization": false
   },
-  "include": ["./server/**/*.ts", "./app/**/*.ts", "./app/**/*.tsx", "./declarations/*"],
+  "include": [
+    "./server/**/*.ts",
+    "./server/**/*.tsx",
+    "./app/**/*.ts",
+    "./app/**/*.tsx",
+    "./declarations/*"
+  ],
   "exclude": [
     "public",
     "server-compiled",

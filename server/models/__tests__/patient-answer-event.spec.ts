@@ -4,8 +4,8 @@ import Db from '../../db';
 import {
   cleanPatientAnswerEvents,
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
@@ -35,7 +35,7 @@ const userRole = 'physician';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
   const question = await Question.create(
     {

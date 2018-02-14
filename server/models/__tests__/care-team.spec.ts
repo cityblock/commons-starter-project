@@ -1,10 +1,9 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
-import Patient from '../patient';
 import User from '../user';
 
 const userRole = 'physician';
@@ -37,8 +36,14 @@ describe('care model', () => {
           txn,
         );
         const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
-        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user1.id, patientId: patient1.id }, txn);
+        const patient1 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user1.id,
+          },
+          txn,
+        );
 
         const careTeam = await CareTeam.create(
           {
@@ -55,7 +60,7 @@ describe('care model', () => {
     it('throws an error if adding a non-existant user to a care team', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
         const error =
           'insert into "care_team" ("createdAt", "id", "patientId", "updatedAt", "userId") values ($1, $2, $3, $4, $5) returning "id" - insert or update on table "care_team" violates foreign key constraint "care_team_userid_foreign"';
 
@@ -73,8 +78,14 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+        const patient1 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         const careTeamResponse = await CareTeam.delete(
           {
@@ -96,10 +107,22 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-        const patient2 = await Patient.create(createMockPatient(321, 321, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+        const patient1 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const patient2 = await createPatient(
+          {
+            cityblockId: 234,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         expect(
           await CareTeam.getForUser(user.id, { pageNumber: 1, pageSize: 1 }, txn),
@@ -126,8 +149,14 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         expect(await CareTeam.getForPatient(patient.id, txn)).toMatchObject([{ id: user.id }]);
       });
@@ -146,8 +175,14 @@ describe('care model', () => {
           createMockUser(12, clinic.id, userRole, 'care2@care.com'),
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         const careTeamCount1 = await CareTeam.getCountForPatient(patient.id, txn);
         expect(careTeamCount1).toEqual(1);
@@ -168,8 +203,14 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         const result = await CareTeam.isOnCareTeam({ userId: user.id, patientId: patient.id }, txn);
         expect(result).toBe(true);
@@ -183,7 +224,7 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
         const result = await CareTeam.isOnCareTeam({ userId: user.id, patientId: patient.id }, txn);
         expect(result).toBe(false);
@@ -204,12 +245,30 @@ describe('care model', () => {
           txn,
         );
 
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
-        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
-        const patient2 = await Patient.create(createMockPatient(124, 124, clinic.id), txn);
-        await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
-        const patient3 = await Patient.create(createMockPatient(125, 125, clinic.id), txn);
-        await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const patient2 = await createPatient(
+          {
+            cityblockId: 234,
+            homeClinicId: clinic.id,
+            userId: user2.id,
+          },
+          txn,
+        );
+        const patient3 = await createPatient(
+          {
+            cityblockId: 345,
+            homeClinicId: clinic.id,
+            userId: user2.id,
+          },
+          txn,
+        );
 
         const result = await CareTeam.createAllForUser(
           {

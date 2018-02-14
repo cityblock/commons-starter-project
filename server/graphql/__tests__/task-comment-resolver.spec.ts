@@ -3,12 +3,11 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
-import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -22,7 +21,7 @@ const userRole = 'physician';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
   const dueAt = new Date().toISOString();
   const task = await Task.create(
     {

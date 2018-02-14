@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
@@ -21,7 +21,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
       title: 'title',
@@ -81,7 +81,7 @@ describe('computed patient status model', () => {
   it('updates computed patient statuses for all patients', async () => {
     await transaction(ComputedPatientStatus.knex(), async txn => {
       const { clinic, patient, user } = await setup(txn);
-      const patient2 = await Patient.create(createMockPatient(456, 456, clinic.id), txn);
+      const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
 
       const computedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
       const computedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);

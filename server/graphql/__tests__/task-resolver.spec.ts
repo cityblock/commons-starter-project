@@ -11,8 +11,8 @@ import User from '../../models/user';
 import {
   createCBOReferral,
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -32,7 +32,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const dueAt = new Date().toISOString();
   const task1 = await Task.create(
     {

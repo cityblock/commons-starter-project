@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
 import Patient from '../patient';
@@ -17,7 +17,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return { patient, user };
 }

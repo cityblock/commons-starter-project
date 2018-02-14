@@ -3,8 +3,8 @@ import Db from '../../db';
 import {
   createMockAddress,
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
 } from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
@@ -24,7 +24,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const address = await Address.create(createMockAddress(user.id), txn);
 
   return { patient, address, user, clinic };
@@ -119,7 +119,7 @@ describe('patient address model', () => {
         await PatientAddress.delete({ patientId: patient.id, addressId: address3.id }, txn);
 
         // address for another patient
-        const patient2 = await Patient.create(createMockPatient(124, 124, clinic.id), txn);
+        const patient2 = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
         const address4 = await Address.create(
           { zip: '11401', street: '54 Main St', updatedBy: user.id },
           txn,

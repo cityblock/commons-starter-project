@@ -18,8 +18,8 @@ import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
 import {
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -102,7 +102,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,

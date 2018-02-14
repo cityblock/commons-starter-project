@@ -3,7 +3,6 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import CBOReferral from '../../models/cbo-referral';
 import Clinic from '../../models/clinic';
-import Patient from '../../models/patient';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
@@ -12,8 +11,8 @@ import {
   createCBO,
   createCBOReferral,
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -81,7 +80,7 @@ describe('CBO Referral resolver', () => {
         const { user, clinic } = await setup(txn);
         const cboReferral = await createCBOReferral(txn);
         expect(cboReferral.sentAt).toBeFalsy();
-        const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
         const patientGoal = await PatientGoal.create(
           {
             userId: user.id,

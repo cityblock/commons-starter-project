@@ -2,15 +2,14 @@ import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
-import Patient from '../../models/patient';
 import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
 import {
   createFullRiskAreaGroupAssociations,
   createMockClinic,
-  createMockPatient,
   createMockRiskAreaGroup,
   createMockUser,
+  createPatient,
 } from '../../spec-helpers';
 
 describe('risk area group model', () => {
@@ -108,7 +107,7 @@ describe('risk area group model', () => {
     await transaction(RiskAreaGroup.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id), txn);
-      const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
+      const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
       const title = 'Night King Breach of Wall';
       const riskAreaTitle = 'Zombie Viscerion';
       const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(title), txn);

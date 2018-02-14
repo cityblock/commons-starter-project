@@ -16,7 +16,7 @@ import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
 import { createRiskArea } from '../../spec-helpers';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import { processNewComputedFieldValue } from '../computed-field-consumer';
 
 const queue = kue.createQueue();
@@ -31,7 +31,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const riskArea = await createRiskArea({ title: 'testing' }, txn);
 
   return {

@@ -1,9 +1,8 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
-import Patient from '../patient';
 import Task from '../task';
 import TaskComment from '../task-comment';
 import User from '../user';
@@ -24,7 +23,7 @@ describe('task comment model', () => {
     await transaction(Task.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const dueAt = new Date().toISOString();
       const task = await Task.create(
         {
@@ -74,7 +73,7 @@ describe('task comment model', () => {
     await transaction(Task.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const dueAt = new Date().toISOString();
       const task = await Task.create(
         {
@@ -105,7 +104,7 @@ describe('task comment model', () => {
     await transaction(Task.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const dueAt = new Date().toISOString();
       const task = await Task.create(
         {
@@ -186,7 +185,7 @@ describe('task comment model', () => {
     await transaction(Task.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const dueAt = new Date().toISOString();
       const task = await Task.create(
         {

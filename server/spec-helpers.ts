@@ -41,6 +41,41 @@ export interface ICreateRiskArea {
   order?: number;
 }
 
+export interface ICreatePatient {
+  cityblockId: number;
+  homeClinicId: string;
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string;
+  userId?: string;
+  gender?: PatientGenderOptions;
+  language?: string;
+}
+
+export async function createPatient(patient: ICreatePatient, txn: Transaction): Promise<Patient> {
+  const { cityblockId, firstName, lastName, dateOfBirth, gender, userId, homeClinicId } = patient;
+
+  const mockPatient = await Patient.create(
+    createMockPatient(
+      cityblockId,
+      cityblockId,
+      homeClinicId,
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+    ),
+    txn,
+  );
+
+  // Automatically create the CareTeam association if a userId is passed in
+  if (userId) {
+    await CareTeam.create({ userId, patientId: mockPatient.id }, txn);
+  }
+
+  return mockPatient;
+}
+
 export async function createAddressForPatient(
   street: string,
   zip: string,
@@ -78,20 +113,22 @@ export function createMockAddress(userId: string) {
 }
 
 export function createMockPatient(
-  athenaPatientId: number,
+  athenaPatientId: number, // TODO: Remove this once athenaPatientId is no longer a thing
   cityblockId: number,
   homeClinicId: string,
   firstName?: string,
   lastName?: string,
   dateOfBirth?: string,
+  gender?: PatientGenderOptions,
+  language?: string,
 ) {
   return {
     patientId: uuid(),
     cityblockId,
     firstName: firstName || 'dan',
     lastName: lastName || 'plant',
-    gender: 'male' as PatientGenderOptions,
-    language: 'en',
+    gender: (gender || 'male') as PatientGenderOptions,
+    language: language || 'en',
     homeClinicId,
     dateOfBirth: dateOfBirth || '01/01/1900',
   };
@@ -276,12 +313,33 @@ export async function setupPatientsNewToCareTeam(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic("King's Landing", 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(311, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  await Patient.create(createMockPatient(312, 234, clinic.id, patient2Name), txn);
-  const patient3 = await Patient.create(createMockPatient(313, 345, clinic.id, patient2Name), txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+    },
+    txn,
+  );
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
   await CareTeam.query(txn)
     .where({ userId: user.id, patientId: patient3.id })
     .patch({ createdAt: new Date('2017-01-01').toISOString() });
@@ -294,14 +352,42 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
   const user = await User.create(createMockUser(311, clinic.id), txn);
   const user2 = await User.create(createMockUser(411, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(411, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(412, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(413, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
-  const patient4 = await Patient.create(createMockPatient(414, 456, clinic.id, patient4Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient4 = await createPatient(
+    {
+      cityblockId: 456,
+      firstName: patient4Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const concern = await Concern.create({ title: 'Cersei lied to Jon Snow' }, txn);
   const computedField = await ComputedField.create(
@@ -360,6 +446,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(311, clinic.id), txn);
 
+  // FOR NOW THESE ARE SPECIAL CASES AND YOU SHOULD NOT USE createPatient
   const patient = await Patient.create(
     {
       patientId: uuid(),
@@ -428,12 +515,33 @@ export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(611, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(612, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(613, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
@@ -467,12 +575,33 @@ export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
   const user = await User.create(createMockUser(311, clinic.id), txn);
   const user2 = await User.create(createMockUser(213, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(711, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(712, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(713, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
 
@@ -503,16 +632,51 @@ export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
   const user2 = await User.create(createMockUser(311, clinic.id), txn);
   const cbo = await createCBO(txn);
 
-  const patient1 = await Patient.create(createMockPatient(432, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(543, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(876, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
-  const patient4 = await Patient.create(createMockPatient(256, 456, clinic.id, patient4Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
-  const patient5 = await Patient.create(createMockPatient(816, 567, clinic.id, patient5Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient4 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient4Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient5 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient5Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const cboReferral1 = await CBOReferral.create(
     {
@@ -563,16 +727,51 @@ export async function setupUrgentTasks(txn: Transaction) {
   const user = await User.create(createMockUser(111, clinic.id), txn);
   const user2 = await User.create(createMockUser(121, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(1234, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(234, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(456, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
-  const patient4 = await Patient.create(createMockPatient(345, 456, clinic.id, patient4Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
-  const patient5 = await Patient.create(createMockPatient(567, 567, clinic.id, patient5Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  await createPatient(
+    {
+      cityblockId: 456,
+      firstName: patient4Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient5 = await createPatient(
+    {
+      cityblockId: 567,
+      firstName: patient5Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const soonDueDate = '2017-09-07T13:45:14.532Z';
   const laterDueDate = '2050-11-07T13:45:14.532Z';
@@ -636,48 +835,72 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
   const user = await User.create(createMockUser(11, clinic.id), txn);
   const user2 = await User.create(createMockUser(12, clinic.id), txn);
 
-  const patient1 = await Patient.create(
-    createMockPatient(14, 14, clinic.id, 'Robb', 'Stark', getDateOfBirthForAge(19)),
+  const patient1 = await createPatient(
+    {
+      cityblockId: 14,
+      firstName: 'Robb',
+      lastName: 'Stark',
+      homeClinicId: clinic.id,
+      dateOfBirth: getDateOfBirthForAge(19),
+      userId: user.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
   await createPrimaryAddressForPatient('11211', patient1.id, patient1.patientInfo.id, user.id, txn);
 
-  const patient2 = await Patient.create(
-    createMockPatient(15, 15, clinic.id, 'Mark', 'Man', getDateOfBirthForAge(80)),
+  const patient2 = await createPatient(
+    {
+      cityblockId: 15,
+      firstName: 'Mark',
+      lastName: 'Man',
+      homeClinicId: clinic.id,
+      dateOfBirth: getDateOfBirthForAge(80),
+      userId: user.id,
+    },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
   await createPrimaryAddressForPatient('10001', patient2.id, patient2.patientInfo.id, user.id, txn);
 
-  const patient3 = await Patient.create(
+  const patient3 = await createPatient(
     {
-      ...createMockPatient(16, 16, clinic.id, 'Jane', 'Jacobs', getDateOfBirthForAge(20)),
+      cityblockId: 16,
+      firstName: 'Jane',
+      lastName: 'Jacobs',
+      homeClinicId: clinic.id,
+      dateOfBirth: getDateOfBirthForAge(20),
+      userId: user.id,
       gender: 'female',
     },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
   await createPrimaryAddressForPatient('11211', patient3.id, patient3.patientInfo.id, user.id, txn);
 
-  const patient4 = await Patient.create(
+  const patient4 = await createPatient(
     {
-      ...createMockPatient(17, 17, clinic.id, 'Maxie', 'Jacobs', getDateOfBirthForAge(23)),
+      cityblockId: 17,
+      firstName: 'Maxie',
+      lastName: 'Jacobs',
+      homeClinicId: clinic.id,
+      dateOfBirth: getDateOfBirthForAge(23),
+      userId: user.id,
       gender: 'female',
     },
     txn,
   );
-  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
   await createPrimaryAddressForPatient('10055', patient4.id, patient4.patientInfo.id, user.id, txn);
 
-  const patient5 = await Patient.create(
+  const patient5 = await createPatient(
     {
-      ...createMockPatient(18, 18, clinic.id, 'Juanita', 'Jacobs', getDateOfBirthForAge(73)),
+      cityblockId: 18,
+      firstName: 'Juanita',
+      lastName: 'Jacobs',
+      homeClinicId: clinic.id,
+      dateOfBirth: getDateOfBirthForAge(73),
+      userId: user2.id,
       gender: 'female',
     },
     txn,
   );
-  await CareTeam.create({ userId: user2.id, patientId: patient5.id }, txn);
   await createPrimaryAddressForPatient('11211', patient5.id, patient5.patientInfo.id, user.id, txn);
 
   return { user, user2 };
@@ -756,12 +979,33 @@ export async function setupComputedPatientList(txn: Transaction) {
   const user = await User.create(createMockUser(111, clinic.id), txn);
   const user2 = await User.create(createMockUser(211, clinic.id), txn);
 
-  const patient1 = await Patient.create(createMockPatient(811, 123, clinic.id, patient1Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
-  const patient2 = await Patient.create(createMockPatient(812, 234, clinic.id, patient2Name), txn);
-  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
-  const patient3 = await Patient.create(createMockPatient(813, 345, clinic.id, patient3Name), txn);
-  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
 
   const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
   const riskArea = await RiskArea.create(

@@ -3,8 +3,8 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
@@ -12,7 +12,6 @@ import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
-import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientGoal from '../patient-goal';
 import Question from '../question';
@@ -172,7 +171,7 @@ describe('goal suggestion model', () => {
           },
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
         const question2 = await Question.create(
           {
             title: 'hate writing tests?',
@@ -289,7 +288,7 @@ describe('goal suggestion model', () => {
           },
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
         const question2 = await Question.create(
           {
@@ -396,7 +395,7 @@ describe('goal suggestion model', () => {
           { title: 'Fix Food' },
           txn,
         );
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
         const question2 = await Question.create(
           {
@@ -510,7 +509,7 @@ describe('goal suggestion model', () => {
         const { goalSuggestionTemplate, answer, clinic, riskArea, question } = await setup(txn);
 
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
         await GoalSuggestion.create(
           {

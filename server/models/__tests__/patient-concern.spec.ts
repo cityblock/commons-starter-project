@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
 import Clinic from '../clinic';
 import Concern from '../concern';
@@ -36,7 +36,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return {
     concern,
@@ -237,7 +237,7 @@ describe('patient concern model', () => {
   it('auto increments "order" on create', async () => {
     await transaction(PatientConcern.knex(), async txn => {
       const { clinic, user, concern, concern2, patient } = await setup(txn);
-      const patient2 = await Patient.create(createMockPatient(456, 456, clinic.id), txn);
+      const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
       await PatientConcern.create(
         {
           concernId: concern.id,

@@ -4,17 +4,15 @@ import * as React from 'react';
 import 'regenerator-runtime/runtime';
 import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';
 import Db from '../../../db';
-import { signJwt, IJWTForPDFData } from '../../../graphql/shared/utils';
+import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
-import Patient from '../../../models/patient';
 import Task from '../../../models/task';
 import User from '../../../models/user';
 import {
   createCBOReferral,
   createMockClinic,
-  createMockPatient,
   createMockUser,
-  setupUrgentTasks,
+  createPatient,
 } from '../../../spec-helpers';
 import { formatCBOReferralTaskPDFFileName } from '../helpers';
 import {
@@ -42,7 +40,7 @@ const getAuthToken = (): string => {
 async function setup(txn: Transaction): Promise<Task> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const cboReferral = await createCBOReferral(txn);
   const dueAt = new Date().toISOString();
   const task = await Task.create(
@@ -73,7 +71,6 @@ describe('handling PDF requests', () => {
   });
 
   const filename = 'aryaStark';
-  const token = 'isFacelessMan';
 
   describe('validateJWTForPDF', () => {
     it('returns false if no token provided', async () => {
@@ -118,7 +115,7 @@ describe('handling PDF requests', () => {
         res.status = jest.fn();
         (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        const result = await renderPDF(req, res, <CBOReferral task={task} />, filename);
+        await renderPDF(req, res, <CBOReferral task={task} />, filename);
 
         expect(res.status).toBeCalledWith(401);
       });
@@ -133,7 +130,7 @@ describe('handling PDF requests', () => {
         res.status = jest.fn();
         (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        const result = await renderPDF(req, res, <CBOReferral task={task} />, filename);
+        await renderPDF(req, res, <CBOReferral task={task} />, filename);
 
         expect(res.status).toBeCalledWith(401);
       });
@@ -170,7 +167,7 @@ describe('handling PDF requests', () => {
         res.status = jest.fn();
         (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        const result = await renderCBOReferralFormPDF(req, res);
+        await renderCBOReferralFormPDF(req, res);
 
         expect(res.status).toBeCalledWith(404);
       });

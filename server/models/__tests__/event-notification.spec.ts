@@ -3,8 +3,8 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
   createMockClinic,
-  createMockPatient,
   createMockUser,
+  createPatient,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
@@ -29,7 +29,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'), txn);
-  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const task = await Task.create(
     {
       title: 'title',

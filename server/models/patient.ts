@@ -19,7 +19,7 @@ import User from './user';
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.2;
 
-const EAGER_QUERY = '[patientInfo.[primaryAddress]]';
+const EAGER_QUERY = '[patientInfo.[primaryAddress, addresses]]';
 
 export interface IPatientCreateFields {
   patientId: string;
@@ -60,20 +60,12 @@ export interface IPatientInfoOptions {
 }
 
 interface IEditPatient extends Partial<IPatientEditableFields> {
-  athenaPatientId?: number;
   scratchPad?: string;
 }
 
 interface IPatientSearchResult {
   userCareTeam: boolean;
 }
-
-interface IGetByOptions {
-  fieldName: GetByFields;
-  field?: string;
-}
-
-type GetByFields = 'athenaPatientId';
 
 /* tslint:disable:member-ordering */
 export default class Patient extends Model {
@@ -89,7 +81,6 @@ export default class Patient extends Model {
   lastName: string;
   middleName: string | null;
   dateOfBirth: string;
-  athenaPatientId: number;
   homeClinicId: string;
   homeClinic: Clinic;
   scratchPad: string;
@@ -116,7 +107,6 @@ export default class Patient extends Model {
     properties: {
       id: { type: 'string' },
       cityblockId: { type: 'number' },
-      athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
       firstName: { type: 'string', minLength: 1 }, // cannot be blank
       middleName: { type: 'string' },
@@ -184,7 +174,7 @@ export default class Patient extends Model {
 
   static async get(patientId: string, txn: Transaction): Promise<Patient> {
     const patient = await this.query(txn)
-      .eager('[patientInfo.[primaryAddress, addresses]]')
+      .eager(EAGER_QUERY)
       .findById(patientId);
 
     if (!patient) {
@@ -213,25 +203,10 @@ export default class Patient extends Model {
     return patientIds.map(patientId => patientId.id);
   }
 
-  static async getBy(input: IGetByOptions, txn: Transaction): Promise<Patient | null> {
-    if (!input.field) {
-      return null;
-    }
-
+  static async getById(patientId: string, txn: Transaction): Promise<Patient | null> {
     const patient = await this.query(txn)
       .eager(EAGER_QUERY)
-      .where(input.fieldName, input.field)
-      .first();
-
-    if (!patient) {
-      return null;
-    }
-
-    return patient;
-  }
-
-  static async getById(patientId: string, txn: Transaction): Promise<Patient | null> {
-    const patient = await this.query(txn).findOne({ id: patientId });
+      .findOne({ id: patientId });
 
     if (!patient) {
       return null;
@@ -320,17 +295,6 @@ export default class Patient extends Model {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientId, patient);
-  }
-
-  // limit accidentally editing the athenaPatientId by only allowing it explicitly here
-  static async addAthenaPatientId(
-    athenaPatientId: number,
-    patientId: string,
-    txn: Transaction,
-  ): Promise<Patient> {
-    return this.query(txn)
-      .eager(EAGER_QUERY)
-      .patchAndFetchById(patientId, { athenaPatientId });
   }
 
   static async search(

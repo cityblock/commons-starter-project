@@ -1479,18 +1479,6 @@ declare module 'schema' {
   */
     careTeamAssignPatients: IUserWithCount | null;
     /**
-    Add a note to an appointment
-  */
-    appointmentAddNote: IAppointmentAddNoteResult | null;
-    /**
-    Start an appointment
-  */
-    appointmentStart: IAppointment | null;
-    /**
-    End an appointment
-  */
-    appointmentEnd: IAppointmentEndResult | null;
-    /**
     Create an address for a Patient
   */
     addressCreateForPatient: IAddress | null;
@@ -1954,68 +1942,6 @@ declare module 'schema' {
     firstName: string | null;
     lastName: string | null;
     patientCount: number | null;
-  }
-
-  /**
-    params for adding a note to an appointment
-  */
-  interface IAppointmentAddNoteInput {
-    patientId: string;
-    appointmentId: string;
-    appointmentNote: string;
-  }
-
-  /**
-    Appointment Add Note Result
-  */
-  interface IAppointmentAddNoteResult {
-    success: boolean;
-    appointmentNote: string;
-  }
-
-  /**
-    params for starting an appointment
-  */
-  interface IAppointmentStartInput {
-    patientId: string;
-    appointmentTypeId: number | null;
-  }
-
-  /**
-    Appointment
-  */
-  interface IAppointment {
-    athenaAppointmentId: string;
-    dateTime: string;
-    athenaDepartmentId: number;
-    status: IAppointmentStatusEnum;
-    athenaPatientId: number;
-    duration: number;
-    appointmentTypeId: number;
-    appointmentType: string;
-    athenaProviderId: number;
-    userId: string;
-    patientId: string;
-    clinicId: string;
-  }
-
-
-  type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
-
-  /**
-    params for ending an appointment
-  */
-  interface IAppointmentEndInput {
-    patientId: string;
-    appointmentId: string;
-    appointmentNote: string | null;
-  }
-
-  /**
-    Appointment End Result
-  */
-  interface IAppointmentEndResult {
-    success: boolean;
   }
 
   /**

@@ -43,14 +43,13 @@ function buildPhysician(firstName, lastName, email, homeClinicId, athenaProvider
   };
 }
 
-function buildPatient(firstName, lastName, athenaPatientId, homeClinicId, gender) {
+function buildPatient(firstName, lastName, homeClinicId, gender) {
   return {
     id: uuid.v4(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     firstName,
     lastName,
-    athenaPatientId,
     homeClinicId,
     gender,
   };
@@ -90,18 +89,18 @@ function createPatients(knex, clinicIds) {
     .table('patient')
     .returning('id')
     .insert([
-      buildPatient('Carmen', 'Vasbinder', 1, clinicIds[0], 'female'),
-      buildPatient('Minh', 'Marceau', 2, clinicIds[0], 'male'),
-      buildPatient('Florentino', 'Berge', 3, clinicIds[0], 'male'),
-      buildPatient('Jacquiline', 'Santore', 4, clinicIds[0], 'female'),
-      buildPatient('Lan', 'Overstreet', 5, clinicIds[0], 'female'),
-      buildPatient('Toby', 'Hartshorn', 6, clinicIds[0], 'male'),
-      buildPatient('Birdie', 'Wansley', 7, clinicIds[0], 'female'),
-      buildPatient('Emery', 'Official', 8, clinicIds[0], 'male'),
-      buildPatient('Candace', 'Kimberlin', 9, clinicIds[0], 'female'),
-      buildPatient('Ula', 'Hertel', 10, clinicIds[0], 'female'),
-      buildPatient('Rolland', 'Auman', 11, clinicIds[0], 'male'),
-      buildPatient('Barney', 'Ober', 12, clinicIds[0], 'male'),
+      buildPatient('Carmen', 'Vasbinder', clinicIds[0], 'female'),
+      buildPatient('Minh', 'Marceau', clinicIds[0], 'male'),
+      buildPatient('Florentino', 'Berge', clinicIds[0], 'male'),
+      buildPatient('Jacquiline', 'Santore', clinicIds[0], 'female'),
+      buildPatient('Lan', 'Overstreet', clinicIds[0], 'female'),
+      buildPatient('Toby', 'Hartshorn', clinicIds[0], 'male'),
+      buildPatient('Birdie', 'Wansley', clinicIds[0], 'female'),
+      buildPatient('Emery', 'Official', clinicIds[0], 'male'),
+      buildPatient('Candace', 'Kimberlin', clinicIds[0], 'female'),
+      buildPatient('Ula', 'Hertel', clinicIds[0], 'female'),
+      buildPatient('Rolland', 'Auman', clinicIds[0], 'male'),
+      buildPatient('Barney', 'Ober', clinicIds[0], 'male'),
     ]);
 }
 

@@ -10,15 +10,6 @@ enum UserRole {
   admin
 }
 
-enum AppointmentStatus {
-  cancelled
-  future
-  open
-  checkedIn
-  checkedOut
-  chargeEntered
-}
-
 enum ConcernOrderOptions {
   createdAtDesc
   createdAtAsc
@@ -390,33 +381,6 @@ type PatientDiagnosis {
   code: String!
   codeSystem: String!
   description: String!
-}
-
-# Appointment
-type Appointment {
-  athenaAppointmentId: ID!
-  dateTime: String!
-  athenaDepartmentId: Int!
-  status: AppointmentStatus!
-  athenaPatientId: Int!
-  duration: Int!
-  appointmentTypeId: Int!
-  appointmentType: String!
-  athenaProviderId: Int!
-  userId: ID!
-  patientId: ID!
-  clinicId: ID!
-}
-
-# Appointment End Result
-type AppointmentEndResult {
-  success: Boolean!
-}
-
-# Appointment Add Note Result
-type AppointmentAddNoteResult {
-  success: Boolean!
-  appointmentNote: String!
 }
 
 # Patient Scratch Pad
@@ -1205,26 +1169,6 @@ input CareTeamAssignInput {
   patientIds: [ID!]!
 }
 
-# params for starting an appointment
-input AppointmentStartInput {
-  patientId: ID!
-  appointmentTypeId: Int
-}
-
-# params for ending an appointment
-input AppointmentEndInput {
-  patientId: ID!
-  appointmentId: ID!
-  appointmentNote: String
-}
-
-# params for adding a note to an appointment
-input AppointmentAddNoteInput {
-  patientId: ID!
-  appointmentId: ID!
-  appointmentNote: String!
-}
-
 # params for editing a patient in the db
 input PatientEditInput {
   patientId: ID!
@@ -1842,12 +1786,6 @@ type RootMutationType {
   careTeamRemoveUser(input: CareTeamInput): [User]
   # Add multiple patients to careTeam
   careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
-  # Add a note to an appointment
-  appointmentAddNote(input: AppointmentAddNoteInput): AppointmentAddNoteResult
-  # Start an appointment
-  appointmentStart(input: AppointmentStartInput): Appointment
-  # End an appointment
-  appointmentEnd(input: AppointmentEndInput): AppointmentEndResult
   # Create an address for a Patient
   addressCreateForPatient(input: AddressCreateForPatientInput): Address
   # Create an primary address for a Patient

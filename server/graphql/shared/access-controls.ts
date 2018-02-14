@@ -14,7 +14,6 @@ export type Resource =
   | 'encounter'
   | 'clinic'
   | 'task'
-  | 'appointment'
   | 'answer'
   | 'questionCondition'
   | 'patientAnswer'

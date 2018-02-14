@@ -56,15 +56,7 @@ export async function createPatient(patient: ICreatePatient, txn: Transaction): 
   const { cityblockId, firstName, lastName, dateOfBirth, gender, userId, homeClinicId } = patient;
 
   const mockPatient = await Patient.create(
-    createMockPatient(
-      cityblockId,
-      cityblockId,
-      homeClinicId,
-      firstName,
-      lastName,
-      dateOfBirth,
-      gender,
-    ),
+    createMockPatient(cityblockId, homeClinicId, firstName, lastName, dateOfBirth, gender),
     txn,
   );
 
@@ -113,7 +105,6 @@ export function createMockAddress(userId: string) {
 }
 
 export function createMockPatient(
-  athenaPatientId: number, // TODO: Remove this once athenaPatientId is no longer a thing
   cityblockId: number,
   homeClinicId: string,
   firstName?: string,

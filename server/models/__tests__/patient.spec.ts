@@ -78,6 +78,26 @@ describe('patient model', () => {
     });
   });
 
+  describe('getById', () => {
+    it('should retrieve a patient by id', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+        const fetchedPatient = await Patient.getById(patient.id, txn);
+
+        expect(fetchedPatient).toMatchObject(patient);
+      });
+    });
+
+    it('should return null when getting a patient by an unknown id', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const fetchedPatient = await Patient.getById(uuid(), txn);
+
+        expect(fetchedPatient).toBeNull();
+      });
+    });
+  });
+
   describe('edit', () => {
     it('should edit patient', async () => {
       await transaction(Patient.knex(), async txn => {
@@ -298,22 +318,6 @@ describe('patient model', () => {
           ],
           total: 2,
         });
-      });
-    });
-
-    it('should return null if calling getBy without a matchable param', async () => {
-      await transaction(Patient.knex(), async txn => {
-        await patientsSetup(txn);
-        expect(await Patient.getBy({ fieldName: 'athenaPatientId' }, txn)).toBeFalsy();
-      });
-    });
-
-    it('should return null if a patient cannot be found for the matchable param', async () => {
-      await transaction(Patient.knex(), async txn => {
-        await patientsSetup(txn);
-        expect(
-          await Patient.getBy({ fieldName: 'athenaPatientId', field: '99999' }, txn),
-        ).toBeFalsy();
       });
     });
   });

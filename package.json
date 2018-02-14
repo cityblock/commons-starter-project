@@ -133,7 +133,7 @@
     "node": "8.9"
   },
   "dependencies": {
-    "@google-cloud/error-reporting": "^0.2.3",
+    "@google-cloud/error-reporting": "0.2.2",
     "@react-pdf/core": "^0.6.3",
     "@react-pdf/node": "^0.6.3",
     "@types/acl": "^0.4.33",

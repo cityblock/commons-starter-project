@@ -31,6 +31,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -81,14 +82,19 @@ describe('answer tests', () => {
   describe('resolve riskArea', () => {
     it('can fetch riskArea', async () => {
       await transaction(RiskArea.knex(), async txn => {
-        const { riskArea } = await setup(txn);
+        const { riskArea, user } = await setup(txn);
         const query = `{
           riskArea(riskAreaId: "${riskArea.id}") {
             id
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.riskArea)).toMatchObject({
           id: riskArea.id,
           title: 'testing',
@@ -100,21 +106,31 @@ describe('answer tests', () => {
       await transaction(RiskArea.knex(), async txn => {
         const fakeId = uuid();
         const query = `{ riskArea(riskAreaId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: 'fakeUserId',
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such risk area: ${fakeId}`);
       });
     });
 
     it('gets all risk areas', async () => {
       await transaction(RiskArea.knex(), async txn => {
-        const { riskArea } = await setup(txn);
+        const { riskArea, user } = await setup(txn);
         const query = `{
           riskAreas {
             id
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.riskAreas)).toMatchObject([
           {
             id: riskArea.id,
@@ -139,7 +155,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -173,7 +189,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -199,7 +215,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -256,7 +272,12 @@ describe('answer tests', () => {
             summary
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientRiskAreaSummary)).toMatchObject({
           summary: ['summary text!'],
         });
@@ -308,7 +329,12 @@ describe('answer tests', () => {
             summary
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientRiskAreaSummary)).toMatchObject({
           summary: ['the patient said: patient wrote this'],
         });
@@ -404,7 +430,12 @@ describe('answer tests', () => {
             forceHighRisk
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientRiskAreaRiskScore)).toMatchObject({
           score: 1,
           forceHighRisk: true,

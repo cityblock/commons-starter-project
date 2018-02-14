@@ -6,8 +6,8 @@ import {
 import { createTaskForTaskTemplate } from '../lib/create-task-for-task-template';
 import PatientTaskSuggestion from '../models/patient-task-suggestion';
 import TaskTemplate from '../models/task-template';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 interface IResolveTaskSuggestionsOptions {
   patientId: string;
@@ -24,10 +24,9 @@ interface IPatientTaskSuggestionDismissArgs {
 export async function resolvePatientTaskSuggestions(
   root: any,
   args: IResolveTaskSuggestionsOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<PatientTaskSuggestion[]> {
-  await accessControls.isAllowed(userRole, 'view', 'patientTaskSuggestion');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return PatientTaskSuggestion.getForPatient(args.patientId, txn);
 }
@@ -35,10 +34,16 @@ export async function resolvePatientTaskSuggestions(
 export async function patientTaskSuggestionDismiss(
   root: any,
   { input }: IPatientTaskSuggestionDismissArgs,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<PatientTaskSuggestion | undefined> {
-  await accessControls.isAllowed(userRole, 'edit', 'patientTaskSuggestion');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'patient',
+    txn,
+    input.patientTaskSuggestionId,
+  );
 
   return PatientTaskSuggestion.dismiss(
     {
@@ -53,11 +58,16 @@ export async function patientTaskSuggestionDismiss(
 export async function patientTaskSuggestionAccept(
   root: any,
   { input }: IPatientTaskSuggestionAcceptArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientTaskSuggestionAccept']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'edit', 'patientTaskSuggestion');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'patient',
+    txn,
+    input.patientTaskSuggestionId,
+  );
 
   const patientTaskSuggestion = await PatientTaskSuggestion.get(input.patientTaskSuggestionId, txn);
 

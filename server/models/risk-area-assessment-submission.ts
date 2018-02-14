@@ -214,5 +214,16 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     }
     return riskAreaAssessmentSubmission;
   }
+
+  static async getPatientIdForResource(
+    riskAreaAssessmentSubmissionId: string,
+    txn: Transaction,
+  ): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(riskAreaAssessmentSubmissionId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

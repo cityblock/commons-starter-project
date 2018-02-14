@@ -4,6 +4,7 @@ import {
   patientAllActionsAllowedResources,
   patientCreatableAndDeletableOnlyResoruces,
   patientCreatableOnlyResources,
+  patientEditableOnlyResources,
   patientNotDeletableResources,
   patientViewOnlyResources,
   userResources,
@@ -189,10 +190,16 @@ export default [
       { resources: patientCreatableAndDeletableOnlyResoruces, permissions: ['view'] },
       { resources: patientCreatableOnlyResources, permissions: ['view'] },
       { resources: patientNotDeletableResources, permissions: ['view'] },
+      { resources: patientEditableOnlyResources, permissions: ['view'] },
     ],
   },
   {
-    roles: ['canViewAllMembers', 'canEditAllMembers', 'canViewMembersOnPanel', 'canEditMembersOnPanel'],
+    roles: [
+      'canViewAllMembers',
+      'canEditAllMembers',
+      'canViewMembersOnPanel',
+      'canEditMembersOnPanel',
+    ],
     allows: [{ resources: ['allPatients'], permissions: ['view'] }],
   },
   {
@@ -209,6 +216,7 @@ export default [
       },
       { resources: patientCreatableOnlyResources, permissions: ['create', 'view'] },
       { resources: patientNotDeletableResources, permissions: ['create', 'view', 'edit'] },
+      { resources: patientEditableOnlyResources, permissions: ['view', 'edit'] },
     ],
   },
   {

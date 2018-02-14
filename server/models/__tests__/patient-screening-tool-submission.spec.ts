@@ -708,4 +708,74 @@ describe('patient screening tool submission model', () => {
       );
     });
   });
+
+  it('gets associated patient id for a screening tool submission', async () => {
+    await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+      const { screeningTool1, patient1, user, riskArea } = await setup(txn);
+      const submission = await PatientScreeningToolSubmission.create(
+        {
+          screeningToolId: screeningTool1.id,
+          patientId: patient1.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const question = await Question.create(
+        {
+          title: 'Question Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '1',
+          value: '1',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      const patientAnswers = await PatientAnswer.create(
+        {
+          patientId: patient1.id,
+          patientScreeningToolSubmissionId: submission.id,
+          type: 'patientScreeningToolSubmission',
+          questionIds: [question.id],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: '1',
+              patientId: patient1.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+
+      const finalSubmission = await PatientScreeningToolSubmission.submitScore(
+        submission.id,
+        {
+          patientAnswers,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await PatientScreeningToolSubmission.getPatientIdForResource(
+        finalSubmission.id,
+        txn,
+      );
+
+      expect(fetchedPatientId).toBe(patient1.id);
+    });
+  });
 });

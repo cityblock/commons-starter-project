@@ -33,6 +33,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -186,7 +187,7 @@ describe('progress note resolver', () => {
           carePlanUpdateEvents { id }
         }
       }`;
-      const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
       const clonedResults = cloneDeep(result.data!.progressNoteActivityForProgressNote);
       expect(clonedResults.taskEvents.length).toEqual(1);
       expect(clonedResults.patientAnswerEvents.length).toEqual(1);

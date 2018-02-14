@@ -30,6 +30,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -77,14 +78,19 @@ describe('patient screening tool submission resolver tests', () => {
   describe('resolve patientScreeningToolSubmission', () => {
     it('can fetch a patientScreeningToolSubmission', async () => {
       await transaction(PatientScreeningToolSubmission.knex(), async txn => {
-        const { submission } = await setup(txn);
+        const { submission, user } = await setup(txn);
         const query = `{
           patientScreeningToolSubmission(patientScreeningToolSubmissionId: "${submission.id}") {
             id
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientScreeningToolSubmission)).toMatchObject({
           id: submission.id,
           score: submission.score,
@@ -94,13 +100,19 @@ describe('patient screening tool submission resolver tests', () => {
 
     it('errors if a patientScreeningToolSubmission cannot be found', async () => {
       await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{
           patientScreeningToolSubmission(patientScreeningToolSubmissionId: "${fakeId}") {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(
           `No such patient screening tool submission: ${fakeId}`,
         );
@@ -132,7 +144,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const clonedResult = cloneDeep(result.data!.patientScreeningToolSubmissions);
         const mappedResults = clonedResult.map((sub: any) => ({ id: sub.id, score: sub.score }));
         expect(
@@ -182,7 +199,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsForPatient);
         const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
         const mappedResults = submissions.map((sub: any) => ({ id: sub.id, score: sub.score }));
@@ -235,7 +257,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsFor360);
         const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
         const mappedResults = submissions.map((sub: any) => ({ id: sub.id, score: sub.score }));
@@ -291,7 +318,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsForPatient);
         const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
         expect(submissions.length).toEqual(2);
@@ -346,7 +378,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const resultSubmission = cloneDeep(
           result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
         );
@@ -384,7 +421,12 @@ describe('patient screening tool submission resolver tests', () => {
             score
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const resultSubmission = cloneDeep(
           result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
         );
@@ -476,7 +518,7 @@ describe('patient screening tool submission resolver tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -502,7 +544,7 @@ describe('patient screening tool submission resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

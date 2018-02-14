@@ -4,8 +4,8 @@ import PatientAnswerEvent from '../models/patient-answer-event';
 import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
 import QuickCall from '../models/quick-call';
 import TaskEvent from '../models/task-event';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 interface IResolveProgressNoteActivityOptions {
   progressNoteId: string;
@@ -14,11 +14,11 @@ interface IResolveProgressNoteActivityOptions {
 export async function resolveProgressNoteActivityForProgressNote(
   root: any,
   args: IResolveProgressNoteActivityOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['progressNoteActivityForProgressNote']> {
   const { progressNoteId } = args;
-  await accessControls.isAllowed(userRole, 'view', 'progressNote');
-  checkUserLoggedIn(userId);
+
+  await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, progressNoteId);
 
   const taskEvents = await TaskEvent.getAllForProgressNote(progressNoteId, txn);
   const patientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(progressNoteId, txn);

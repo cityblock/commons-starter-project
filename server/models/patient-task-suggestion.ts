@@ -160,5 +160,14 @@ export default class PatientTaskSuggestion extends BaseModel {
         dismissedAt: new Date().toISOString(),
       });
   }
+
+  static async getPatientIdForResource(
+    patientTaskSuggestionId: string,
+    txn: Transaction,
+  ): Promise<string> {
+    const result = await this.query(txn).findById(patientTaskSuggestionId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

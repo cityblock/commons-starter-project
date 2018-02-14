@@ -221,5 +221,25 @@ describe('patient task suggestion', () => {
         expect(patientPatientTaskSuggestions[0].id).toEqual(patientTaskSuggestion3.id);
       });
     });
+
+    it('gets patient id for a given patient task suggestion', async () => {
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate } = await setup(txn);
+        const patientTaskSuggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
+
+        const fetchedPatientId = await PatientTaskSuggestion.getPatientIdForResource(
+          patientTaskSuggestion.id,
+          txn,
+        );
+
+        expect(fetchedPatientId).toBe(patient.id);
+      });
+    });
   });
 });

@@ -17,6 +17,7 @@ interface ISetup {
   clinic: Clinic;
 }
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -66,7 +67,7 @@ describe('progress note resolver', () => {
         progressNote(
           progressNoteId: "${progressNote.id}"
         ) { id } }`;
-      const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
       expect(cloneDeep(result.data!.progressNote)).toMatchObject({
         id: progressNote.id,
       });
@@ -84,7 +85,7 @@ describe('progress note resolver', () => {
           userId, patientId
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
       expect(cloneDeep(result.data!.progressNoteCreate)).toMatchObject({
         userId: user.id,
         patientId: patient.id,
@@ -111,7 +112,7 @@ describe('progress note resolver', () => {
           id
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
       expect(cloneDeep(result.data!.progressNoteComplete)).toMatchObject({
         id: progressNote.id,
       });
@@ -149,7 +150,7 @@ describe('progress note resolver', () => {
           needsSupervisorReview
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
       expect(cloneDeep(result.data!.progressNoteEdit.progressNoteTemplate.id)).toEqual(
         progressNoteTemplate2.id,
       );
@@ -190,7 +191,7 @@ describe('progress note resolver', () => {
         }
       }`;
       const resultWithError = await graphql(schema, mutation, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -199,7 +200,7 @@ describe('progress note resolver', () => {
       );
 
       const result = await graphql(schema, mutation, null, {
-        userRole,
+        permissions,
         userId: supervisor.id,
         txn,
       });
@@ -248,7 +249,7 @@ describe('progress note resolver', () => {
         }
       }`;
       const resultWithError = await graphql(schema, mutation, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -257,7 +258,7 @@ describe('progress note resolver', () => {
       );
 
       const result = await graphql(schema, mutation, null, {
-        userRole,
+        permissions,
         userId: supervisor.id,
         txn,
       });
@@ -302,7 +303,7 @@ describe('progress note resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          permissions,
           userId: user.id,
           txn,
         });
@@ -344,7 +345,7 @@ describe('progress note resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          permissions,
           userId: user.id,
           txn,
         });
@@ -384,7 +385,7 @@ describe('progress note resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          permissions,
           userId: user2.id,
           txn,
         });

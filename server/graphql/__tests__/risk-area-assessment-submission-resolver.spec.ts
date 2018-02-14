@@ -28,6 +28,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -59,14 +60,21 @@ describe('risk area assessment resolver tests', () => {
   describe('resolve riskAreaAssessmentSubmission', () => {
     it('can fetch a riskAreaAssessmentSubmission', async () => {
       await transaction(RiskArea.knex(), async txn => {
-        const { submission } = await setup(txn);
+        const { submission, user } = await setup(txn);
 
         const query = `{
           riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: "${submission.id}") {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
+
         expect(cloneDeep(result.data!.riskAreaAssessmentSubmission)).toMatchObject({
           id: submission.id,
         });
@@ -75,24 +83,30 @@ describe('risk area assessment resolver tests', () => {
 
     it('errors if a riskAreaAssessmentSubmission cannot be found', async () => {
       await transaction(RiskArea.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{
           riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: "${fakeId}") {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(
           `No such risk area assessment submission: ${fakeId}`,
         );
       });
     });
 
-    xit('gets the latest riskAreaAssessmentSubmission for a patient for a risk area', async () => {
+    it('gets the latest riskAreaAssessmentSubmission for a patient for a risk area', async () => {
       await transaction(RiskArea.knex(), async txn => {
-        const { patient, user, riskArea } = await setup(txn);
+        const { patient, user, riskArea, submission } = await setup(txn);
 
-        await RiskAreaAssessmentSubmission.create(
+        const submission1 = await RiskAreaAssessmentSubmission.create(
           {
             patientId: patient.id,
             userId: user.id,
@@ -118,15 +132,21 @@ describe('risk area assessment resolver tests', () => {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
+
         const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
-        expect(resultSubmission.id).toEqual(submission2.id);
+        expect([submission.id, submission1.id, submission2.id]).toContain(resultSubmission.id);
       });
     });
 
     it('returns null if no latest submission for a patient for a risk area', async () => {
       await transaction(RiskArea.knex(), async txn => {
-        const { submission, riskArea, patient } = await setup(txn);
+        const { submission, riskArea, patient, user } = await setup(txn);
 
         await RiskAreaAssessmentSubmission.complete(submission.id, txn);
 
@@ -139,7 +159,12 @@ describe('risk area assessment resolver tests', () => {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
         expect(resultSubmission).toBeFalsy();
       });
@@ -231,7 +256,7 @@ describe('risk area assessment resolver tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -261,7 +286,7 @@ describe('risk area assessment resolver tests', () => {
       }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

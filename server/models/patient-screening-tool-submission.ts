@@ -358,5 +358,16 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       .eager(EAGER_QUERY)
       .where('progressNoteId', progressNoteId);
   }
+
+  static async getPatientIdForResource(
+    patientScreeningToolId: string,
+    txn: Transaction,
+  ): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(patientScreeningToolId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

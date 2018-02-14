@@ -6,8 +6,8 @@ import {
   IRootQueryType,
 } from 'schema';
 import QuestionCondition from '../models/question-condition';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IQuestionConditionCreateArgs {
   input: IQuestionConditionCreateInput;
@@ -28,11 +28,9 @@ export interface IDeleteQuestionConditionOptions {
 export async function questionConditionCreate(
   root: any,
   { input }: IQuestionConditionCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['questionConditionCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'questionCondition');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'questionCondition', txn);
 
   return QuestionCondition.create(input, txn);
 }
@@ -40,9 +38,9 @@ export async function questionConditionCreate(
 export async function resolveQuestionCondition(
   root: any,
   args: { questionConditionId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['questionCondition']> {
-  await accessControls.isAllowed(userRole, 'view', 'questionCondition');
+  await checkUserPermissions(userId, permissions, 'view', 'questionCondition', txn);
 
   return QuestionCondition.get(args.questionConditionId, txn);
 }
@@ -50,10 +48,9 @@ export async function resolveQuestionCondition(
 export async function questionConditionEdit(
   root: any,
   args: IEditQuestionConditionOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['questionConditionEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'questionCondition', txn);
 
   return QuestionCondition.edit(args.input, args.input.questionConditionId, txn);
 }
@@ -61,10 +58,9 @@ export async function questionConditionEdit(
 export async function questionConditionDelete(
   root: any,
   args: IDeleteQuestionConditionOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['questionConditionDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'questionCondition', txn);
 
   return QuestionCondition.delete(args.input.questionConditionId, txn);
 }

@@ -22,6 +22,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 const title = 'Night King Breached the Wall!';
 const shortTitle = 'FML';
 const mockTitle = "Littlefinger's treachery";
@@ -62,7 +63,12 @@ describe('risk area group resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const riskAreaGroups = cloneDeep(result.data!.riskAreaGroups);
         const ids = riskAreaGroups.map((group: RiskAreaGroup) => group.id);
         const titles = riskAreaGroups.map((group: RiskAreaGroup) => group.title);
@@ -77,14 +83,19 @@ describe('risk area group resolver', () => {
 
     it('fetches a single risk area group', async () => {
       await transaction(RiskAreaGroup.knex(), async txn => {
-        const { riskAreaGroup } = await setup(txn);
+        const { riskAreaGroup, user } = await setup(txn);
         const query = `{
           riskAreaGroup(riskAreaGroupId: "${riskAreaGroup.id}") {
             id
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.riskAreaGroup)).toMatchObject({
           id: riskAreaGroup.id,
           title: mockTitle,
@@ -94,9 +105,15 @@ describe('risk area group resolver', () => {
 
     it('throws an error if risk area group not found', async () => {
       await transaction(RiskAreaGroup.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ riskAreaGroup(riskAreaGroupId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such risk area group: ${fakeId}`);
       });
     });
@@ -134,7 +151,7 @@ describe('risk area group resolver', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
         const clonedResult = cloneDeep(result.data!.riskAreaGroupForPatient);
 
         expect(clonedResult).toMatchObject({
@@ -172,7 +189,7 @@ describe('risk area group resolver', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -208,7 +225,7 @@ describe('risk area group resolver', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -234,7 +251,7 @@ describe('risk area group resolver', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

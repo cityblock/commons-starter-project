@@ -30,6 +30,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -127,7 +128,12 @@ describe('patient task suggestion resolver tests', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientTaskSuggestions)).toMatchObject([
           {
             id: suggestion.id,
@@ -166,7 +172,7 @@ describe('patient task suggestion resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -210,7 +216,7 @@ describe('patient task suggestion resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
         expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
@@ -280,7 +286,7 @@ describe('patient task suggestion resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
         expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();

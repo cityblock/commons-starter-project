@@ -307,5 +307,13 @@ export default class ProgressNote extends BaseModel {
     }
     return progressNote;
   }
+
+  static async getPatientIdForResource(progressNoteId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(progressNoteId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

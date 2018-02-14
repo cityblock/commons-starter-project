@@ -6,8 +6,8 @@ import {
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
 import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IPatientScreeningToolSubmissionCreateArgs {
   input: IPatientScreeningToolSubmissionCreateInput;
@@ -29,11 +29,9 @@ export interface IResolvePatientScreeningToolSubmissionsOptions {
 export async function patientScreeningToolSubmissionCreate(
   root: any,
   { input }: IPatientScreeningToolSubmissionCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientScreeningToolSubmissionCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   return PatientScreeningToolSubmission.autoOpenIfRequired(
     {
@@ -47,11 +45,16 @@ export async function patientScreeningToolSubmissionCreate(
 export async function patientScreeningToolSubmissionScore(
   root: any,
   { input }: IPatientScreeningToolSubmissionScoreArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientScreeningToolSubmissionScore']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'patientScreeningToolSubmission',
+    txn,
+    input.patientScreeningToolSubmissionId,
+  );
 
   const patientAnswers = await PatientAnswer.getForScreeningToolSubmission(
     input.patientScreeningToolSubmissionId,
@@ -70,9 +73,16 @@ export async function patientScreeningToolSubmissionScore(
 export async function resolvePatientScreeningToolSubmission(
   root: any,
   args: { patientScreeningToolSubmissionId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmission']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'patientScreeningToolSubmission',
+    txn,
+    args.patientScreeningToolSubmissionId,
+  );
 
   return PatientScreeningToolSubmission.get(args.patientScreeningToolSubmissionId, txn);
 }
@@ -80,9 +90,9 @@ export async function resolvePatientScreeningToolSubmission(
 export async function resolvePatientScreeningToolSubmissionForPatientAndScreeningTool(
   root: any,
   args: { screeningToolId: string; patientId: string; scored: boolean },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmissionForPatientAndScreeningTool']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
     args.screeningToolId,
@@ -95,9 +105,9 @@ export async function resolvePatientScreeningToolSubmissionForPatientAndScreenin
 export async function resolvePatientScreeningToolSubmissionsForPatient(
   root: any,
   args: IResolvePatientScreeningToolSubmissionsOptions,
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmissionsForPatient']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   if (args.screeningToolId) {
     return PatientScreeningToolSubmission.getForPatientAndScreeningTool(
@@ -113,18 +123,18 @@ export async function resolvePatientScreeningToolSubmissionsForPatient(
 export async function resolvePatientScreeningToolSubmissionsFor360(
   root: any,
   args: { patientId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmissionsFor360']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
   return PatientScreeningToolSubmission.getFor360(args.patientId, txn);
 }
 
 export async function resolvePatientScreeningToolSubmissions(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmissions']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return PatientScreeningToolSubmission.getAll(txn);
 }

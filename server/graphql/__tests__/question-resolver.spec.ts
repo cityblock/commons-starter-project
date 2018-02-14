@@ -22,6 +22,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -67,14 +68,19 @@ describe('question tests', () => {
   describe('resolve question', () => {
     it('can fetch question', async () => {
       await transaction(Question.knex(), async txn => {
-        const { question } = await setup(txn);
+        const { question, user } = await setup(txn);
 
         const query = `{
           question(questionId: "${question.id}") {
             id, title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.question)).toMatchObject({
           id: question.id,
           title: 'like writing tests?',
@@ -84,9 +90,15 @@ describe('question tests', () => {
 
     it('errors if an question cannot be found', async () => {
       await transaction(Question.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ question(questionId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such question: ${fakeId}`);
       });
     });
@@ -108,7 +120,7 @@ describe('question tests', () => {
       }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -145,7 +157,7 @@ describe('question tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -180,7 +192,7 @@ describe('question tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -199,7 +211,12 @@ describe('question tests', () => {
             title, answerType, order, answers { id }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.questions)).toMatchObject([
           {
             title: 'like writing tests?',
@@ -238,7 +255,12 @@ describe('question tests', () => {
           title, answerType, order, answers { id }
         }
       }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.questions)).toMatchObject([
           {
             title: 'hate writing tests?',
@@ -271,7 +293,12 @@ describe('question tests', () => {
           title, answerType, order, answers { id }
         }
       }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.questions)).toMatchObject([
           {
             title: 'hate writing tests?',
@@ -302,7 +329,7 @@ describe('question tests', () => {
       }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -351,7 +378,7 @@ describe('question tests', () => {
       }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -395,7 +422,7 @@ describe('question tests', () => {
       }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -427,7 +454,7 @@ describe('question tests', () => {
       }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -456,7 +483,7 @@ describe('question tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

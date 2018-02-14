@@ -108,4 +108,27 @@ describe('quick call model', () => {
       }
     });
   });
+
+  it('retreives associated patient id for a quick call', async () => {
+    await transaction(QuickCall.knex(), async txn => {
+      const { user, patient } = await setup(txn);
+      const createdCall = await QuickCall.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason: 'Had to call the son',
+          summary: 'package is on the way',
+          startTime: new Date().toISOString(),
+          direction: 'Outbound',
+          callRecipient: 'The son',
+          wasSuccessful: true,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await QuickCall.getPatientIdForResource(createdCall.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

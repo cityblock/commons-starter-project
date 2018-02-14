@@ -5,8 +5,8 @@ import {
   IRootQueryType,
 } from 'schema';
 import RiskAreaAssessmentSubmission from '../models/risk-area-assessment-submission';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IRiskAreaAssessmentSubmissionCreateArgs {
   input: IRiskAreaAssessmentSubmissionCreateInput;
@@ -28,11 +28,9 @@ export interface IResolveRiskAreaAssessmentSubmissionsOptions {
 export async function riskAreaAssessmentSubmissionCreate(
   root: any,
   { input }: IRiskAreaAssessmentSubmissionCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['riskAreaAssessmentSubmissionCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   return RiskAreaAssessmentSubmission.autoOpenIfRequired(
     {
@@ -46,12 +44,16 @@ export async function riskAreaAssessmentSubmissionCreate(
 export async function riskAreaAssessmentSubmissionComplete(
   root: any,
   { input }: IRiskAreaAssessmentSubmissionCompleteArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['riskAreaAssessmentSubmissionComplete']> {
-  const { userRole, userId, txn } = context;
-
-  await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'riskAreaAssessmentSubmission',
+    txn,
+    input.riskAreaAssessmentSubmissionId,
+  );
 
   return RiskAreaAssessmentSubmission.complete(input.riskAreaAssessmentSubmissionId, txn);
 }
@@ -59,9 +61,16 @@ export async function riskAreaAssessmentSubmissionComplete(
 export async function resolveRiskAreaAssessmentSubmission(
   root: any,
   args: { riskAreaAssessmentSubmissionId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['riskAreaAssessmentSubmission']> {
-  await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'riskAreaAssessmentSubmission',
+    txn,
+    args.riskAreaAssessmentSubmissionId,
+  );
 
   return RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId, txn);
 }
@@ -69,9 +78,9 @@ export async function resolveRiskAreaAssessmentSubmission(
 export async function resolveRiskAreaAssessmentSubmissionForPatient(
   root: any,
   args: { riskAreaId: string; patientId: string; completed: boolean },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['riskAreaAssessmentSubmissionForPatient']> {
-  await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return RiskAreaAssessmentSubmission.getLatestForPatient(
     args.riskAreaId,

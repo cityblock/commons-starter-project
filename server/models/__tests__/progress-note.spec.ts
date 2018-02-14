@@ -399,4 +399,29 @@ describe('progress note model', () => {
       expect(secondAutoProgressNote.id).toEqual(autoProgressNote.id);
     });
   });
+
+  it('gets patient id for a given progress note', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+      const createdNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+      const progressNote = await ProgressNote.get(createdNote.id, txn);
+      expect(progressNote).toMatchObject({
+        id: progressNote.id,
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      });
+
+      const fetchedPatientId = await ProgressNote.getPatientIdForResource(progressNote.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

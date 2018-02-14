@@ -7,8 +7,8 @@ import {
   IRootQueryType,
 } from 'schema';
 import Question from '../models/question';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IQuestionCreateArgs {
   input: IQuestionCreateInput;
@@ -29,11 +29,9 @@ export interface IDeleteQuestionOptions {
 export async function questionCreate(
   root: any,
   { input }: IQuestionCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['questionCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'question');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'question', txn);
 
   const question = {
     order: input.order,
@@ -80,9 +78,9 @@ export async function questionCreate(
 export async function resolveQuestions(
   root: any,
   args: { filterId: string; filterType: IQuestionFilterTypeEnum },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['questions']> {
-  await accessControls.isAllowed(userRole, 'view', 'question');
+  await checkUserPermissions(userId, permissions, 'view', 'question', txn);
 
   if (args.filterType === 'riskArea') {
     return Question.getAllForRiskArea(args.filterId, txn);
@@ -98,9 +96,9 @@ export async function resolveQuestions(
 export async function resolveQuestion(
   root: any,
   args: { questionId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['question']> {
-  await accessControls.isAllowed(userRole, 'view', 'question');
+  await checkUserPermissions(userId, permissions, 'view', 'question', txn);
 
   return Question.get(args.questionId, txn);
 }
@@ -108,10 +106,9 @@ export async function resolveQuestion(
 export async function questionEdit(
   root: any,
   args: IEditQuestionOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['questionEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'question');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'question', txn);
 
   // TODO: fix typings here
   return Question.edit(args.input as any, args.input.questionId, txn);
@@ -120,10 +117,9 @@ export async function questionEdit(
 export async function questionDelete(
   root: any,
   args: IDeleteQuestionOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['questionEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'question');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'question', txn);
 
   return Question.delete(args.input.questionId, txn);
 }

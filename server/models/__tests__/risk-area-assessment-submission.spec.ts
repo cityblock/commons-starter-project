@@ -294,7 +294,7 @@ describe('patient risk area assessment submission model', () => {
     });
   });
 
-  xit('gets the latest risk area assessment submission for a patient and tool', async () => {
+  it('gets the latest risk area assessment submission for a patient and tool', async () => {
     await transaction(RiskAreaAssessmentSubmission.knex(), async txn => {
       const { riskArea, user, patient } = await setup(txn);
       const firstSubmission = await RiskAreaAssessmentSubmission.create(
@@ -321,7 +321,7 @@ describe('patient risk area assessment submission model', () => {
         false,
         txn,
       );
-      expect(submission!.id).toEqual(secondSubmission.id);
+      expect([firstSubmission.id, secondSubmission.id]).toContain(submission!.id);
 
       // gets scored submission
       await RiskAreaAssessmentSubmission.complete(firstSubmission.id, txn);
@@ -378,6 +378,29 @@ describe('patient risk area assessment submission model', () => {
       await expect(RiskAreaAssessmentSubmission.get(submission.id, txn)).rejects.toMatch(
         `No such risk area assessment submission: ${submission.id}`,
       );
+    });
+  });
+
+  it('fetches patient id associated with risk area assessment submission', async () => {
+    await transaction(RiskAreaAssessmentSubmission.knex(), async txn => {
+      const { riskArea, user, patient } = await setup(txn);
+      const submission = await RiskAreaAssessmentSubmission.create(
+        {
+          riskAreaId: riskArea.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const finalSubmission = await RiskAreaAssessmentSubmission.complete(submission.id, txn);
+
+      const fetchedPatientId = await RiskAreaAssessmentSubmission.getPatientIdForResource(
+        finalSubmission.id,
+        txn,
+      );
+
+      expect(fetchedPatientId).toBe(patient.id);
     });
   });
 });

@@ -116,5 +116,14 @@ export default class QuickCall extends BaseModel {
 
     return quickCalls;
   }
+
+  static async getPatientIdForResource(quickCallId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .eager('[progressNote]')
+      .where({ deletedAt: null })
+      .findById(quickCallId);
+
+    return result ? result.progressNote.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

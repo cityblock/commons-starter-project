@@ -15,6 +15,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -58,7 +59,7 @@ describe('quick call resolver', () => {
         quickCall(
           quickCallId: "${createdCall.id}"
         ) { id } }`;
-      const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
 
       expect(cloneDeep(result.data!.quickCall)).toMatchObject({
         id: createdCall.id,
@@ -84,7 +85,7 @@ describe('quick call resolver', () => {
             id, progressNoteId
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
       expect(cloneDeep(result.data!.quickCallCreate.id)).not.toBeFalsy();
       expect(cloneDeep(result.data!.quickCallCreate.progressNoteId)).not.toBeFalsy();
     });
@@ -128,7 +129,7 @@ describe('quick call resolver', () => {
           quickCallsForProgressNote(
             progressNoteId: "${createdCall.progressNoteId}"
           ) { id } }`;
-        const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
         expect(result.data!.quickCallsForProgressNote.length).toBe(2);
       });
     });

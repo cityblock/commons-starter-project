@@ -50,7 +50,6 @@ export const patientAllActionsAllowedResources: Resource[] = [
   'patientConcern',
   'carePlanSuggestion',
   'patientGoal',
-  'patientTaskSuggestion',
   'progressNote',
   'CBOReferral',
   'eventNotification',
@@ -59,9 +58,13 @@ export const patientAllActionsAllowedResources: Resource[] = [
 
 export const patientCreatableAndDeletableOnlyResoruces: Resource[] = [
   'patientScreeningToolSubmission',
-  'riskAreaAssessmentSubmission',
 ];
 
 export const patientCreatableOnlyResources: Resource[] = ['computedFieldFlag', 'quickCall'];
+
+export const patientEditableOnlyResources: Resource[] = [
+  'patientTaskSuggestion',
+  'riskAreaAssessmentSubmission',
+];
 
 export const patientNotDeletableResources: Resource[] = ['patient'];

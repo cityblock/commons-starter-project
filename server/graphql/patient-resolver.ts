@@ -13,8 +13,8 @@ import {
 } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from '../models/patient';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   patientId: string;
@@ -31,10 +31,12 @@ export interface IPatientComputedListOptions extends IPaginationOptions {
 export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId, logger, txn }: IContext,
+  { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootQueryType['patient']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+
   logger.log(`GET patient ${patientId} by ${userId}`, 2);
+
   return Patient.get(patientId, txn);
 }
 
@@ -45,9 +47,9 @@ export interface IPatientEditOptions {
 export async function patientEdit(
   source: any,
   { input }: IPatientEditOptions,
-  { userRole, userId, logger, txn }: IContext,
+  { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootMutationType['patientEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
@@ -61,9 +63,9 @@ export interface IEditPatientRequiredFields {
 export async function resolvePatientScratchPad(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IPatientScratchPad> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   const patient = await Patient.get(patientId, txn);
 
@@ -80,10 +82,10 @@ export interface IPatientScratchPadEditOptions {
 export async function patientScratchPadEdit(
   root: any,
   { input }: IPatientScratchPadEditOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScratchPad']> {
   const { patientId, text } = input;
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientId, userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
   const patient = await Patient.edit({ scratchPad: text }, patientId, txn);
 
@@ -93,12 +95,11 @@ export async function patientScratchPadEdit(
 export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientSearch']> {
   let patients: IPaginatedResults<IPatientTableRow>;
 
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
   patients = await Patient.search(query, { pageNumber, pageSize }, userId!, txn);
 
@@ -126,10 +127,9 @@ interface IPatientFilterInput extends IPaginationOptions {
 export async function resolvePatientPanel(
   root: any,
   { pageNumber, pageSize, filters }: IPatientFilterInput,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IPatientTableRowEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'user', userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
   const patients = await Patient.filter(userId!, { pageNumber, pageSize }, filters, txn);
 
@@ -153,15 +153,14 @@ export async function resolvePatientPanel(
 export async function resolvePatientDashboardBuilder(
   root: any,
   { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
   patientEndpoint: (
     pageOptions: IPaginationOptions,
     userId: string,
     txn: Transaction,
   ) => Promise<IPaginatedResults<Patient>>,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
   const patients = await patientEndpoint.bind(Patient)({ pageNumber, pageSize }, userId!, txn);
 
@@ -277,10 +276,9 @@ export async function resolvePatientsWithOpenCBOReferrals(
 export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientsForComputedList']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
   const patients = await Patient.getPatientsForComputedList(
     { pageNumber, pageSize },

@@ -90,12 +90,10 @@ export const isUserOnPatientCareTeam = async (
   // if resource id needed but not provided, do not allow action
   if (!resourceId) return false;
 
-   // call getPatientIdForResource on the relevant model to get patient id
+  // call getPatientIdForResource on the relevant model to get patient id
   const patientId = await (model as any).getPatientIdForResource(resourceId, txn);
   // check that relevant patient is on user's care team
-  const isOnCareTeam = patientId
-    ? await CareTeam.isOnCareTeam({ userId, patientId }, txn)
-    : false;
+  const isOnCareTeam = patientId ? await CareTeam.isOnCareTeam({ userId, patientId }, txn) : false;
 
   return isOnCareTeam;
 };

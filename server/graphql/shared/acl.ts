@@ -195,6 +195,10 @@ export default [
     ],
   },
   {
+    roles: ['canViewAllMembers', 'canEditAllMembers', 'canViewMembersOnPanel', 'canEditMembersOnPanel'],
+    allows: [{ resources: ['allPatients'], permissions: ['view'] }],
+  },
+  {
     roles: ['canEditAllMembers', 'canEditMembersOnPanel'],
     allows: [
       { resources: patientViewOnlyResources, permissions: ['view'] },

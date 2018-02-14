@@ -9,8 +9,8 @@ import {
 import Concern from '../models/concern';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IPatientGoalCreateArgs {
   input: IPatientGoalCreateInput;
@@ -31,13 +31,12 @@ export interface IDeletePatientGoalOptions {
 export async function patientGoalCreate(
   root: any,
   { input }: IPatientGoalCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientGoalCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'patientGoal');
-  checkUserLoggedIn(userId);
-
   const { concernTitle, concernId, patientId, startedAt } = input;
+
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
+
   const validInput: any = omit(input, ['concernTitle, concernId, startedAt']);
 
   // A new concern is getting created
@@ -75,9 +74,9 @@ export async function patientGoalCreate(
 export async function resolvePatientGoal(
   root: any,
   args: { patientGoalId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientGoal']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientGoal');
+  await checkUserPermissions(userId, permissions, 'view', 'patientGoal', txn, args.patientGoalId);
 
   return PatientGoal.get(args.patientGoalId, txn);
 }
@@ -85,9 +84,9 @@ export async function resolvePatientGoal(
 export async function resolvePatientGoalsForPatient(
   root: any,
   args: { patientId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientGoals']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientGoal');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return PatientGoal.getForPatient(args.patientId, txn);
 }
@@ -95,10 +94,16 @@ export async function resolvePatientGoalsForPatient(
 export async function patientGoalEdit(
   root: any,
   args: IEditPatientGoalOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientGoalEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'patientGoal',
+    txn,
+    args.input.patientGoalId,
+  );
 
   return PatientGoal.update(args.input.patientGoalId, args.input, userId!, txn);
 }
@@ -106,10 +111,16 @@ export async function patientGoalEdit(
 export async function patientGoalDelete(
   root: any,
   args: IDeletePatientGoalOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientGoalDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'delete',
+    'patientGoal',
+    txn,
+    args.input.patientGoalId,
+  );
 
   return PatientGoal.delete(args.input.patientGoalId, userId!, txn);
 }

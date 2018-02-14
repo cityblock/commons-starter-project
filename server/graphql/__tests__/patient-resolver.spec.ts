@@ -26,6 +26,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
@@ -141,7 +142,7 @@ describe('patient', () => {
         const result = await graphql(schema, query, null, {
           db,
           userId: user.id,
-          userRole,
+          permissions,
           logger,
           txn,
         });
@@ -158,14 +159,20 @@ describe('patient', () => {
   describe('patientEdit', () => {
     it('edits patient', async () => {
       await transaction(Patient.knex(), async txn => {
-        const { patient } = await setup(txn);
+        const { patient, user } = await setup(txn);
         const query = `mutation {
           patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
             id, firstName
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, logger, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
         expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
           id: patient.id,
           firstName: 'first',
@@ -187,7 +194,12 @@ describe('patient', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
           text: 'Test Scratch Pad',
@@ -210,7 +222,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           logger,
           txn,
@@ -234,7 +246,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -265,7 +277,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -308,7 +320,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -339,7 +351,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -363,7 +375,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: '',
           txn,
         });
@@ -384,7 +396,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -407,7 +419,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: '',
           txn,
         });
@@ -444,7 +456,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -481,7 +493,7 @@ describe('patient', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -505,7 +517,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -526,7 +538,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -564,7 +576,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -601,7 +613,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -639,7 +651,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -676,7 +688,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -714,7 +726,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user2.id,
           txn,
         });
@@ -752,7 +764,7 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -820,7 +832,7 @@ describe('patient', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -850,7 +862,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -875,7 +887,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -900,7 +912,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -928,7 +940,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -953,7 +965,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -978,7 +990,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });
@@ -1007,7 +1019,7 @@ describe('patient', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });

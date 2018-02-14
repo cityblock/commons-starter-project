@@ -12,13 +12,7 @@ export async function resolveConcernsForAnswer(
   args: { answerId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concernsForAnswer']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'concernSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'concernSuggestion', txn);
 
   return ConcernSuggestion.getForAnswer(args.answerId, txn);
 }
@@ -28,13 +22,7 @@ export async function concernSuggestionCreate(
   args: IConcernSuggestOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernSuggestionCreate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'create',
-    'concernSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'create', 'concernSuggestion', txn);
 
   return ConcernSuggestion.create(
     {
@@ -51,13 +39,7 @@ export async function concernSuggestionDelete(
   args: IConcernSuggestOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernSuggestionDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'concernSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'delete', 'concernSuggestion', txn);
 
   return ConcernSuggestion.delete(
     {

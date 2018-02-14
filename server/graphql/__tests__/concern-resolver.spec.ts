@@ -6,10 +6,7 @@ import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import DiagnosisCode from '../../models/diagnosis-code';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockUser,
-} from '../../spec-helpers';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';

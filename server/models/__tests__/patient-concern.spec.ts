@@ -547,4 +547,22 @@ describe('patient concern model', () => {
       expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for delete
     });
   });
+
+  it('gets associted patient id for a patient concern', async () => {
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await PatientConcern.getPatientIdForResource(patientConcern.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

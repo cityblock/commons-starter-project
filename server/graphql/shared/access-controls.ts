@@ -6,6 +6,7 @@ import aclJson from './acl';
 export type Action = 'view' | 'edit' | 'delete' | 'create' | 'disenroll';
 export type Resource =
   | 'patient'
+  | 'allPatients'
   | 'note'
   | 'patientEvents'
   | 'user'

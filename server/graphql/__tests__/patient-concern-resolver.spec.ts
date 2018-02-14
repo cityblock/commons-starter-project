@@ -17,6 +17,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -59,7 +60,7 @@ describe('patient concern resolver', () => {
         const query = `{ patientConcern(patientConcernId: "${patientConcern.id}") {
           concernId, patientId, order
         } }`;
-        const result = await graphql(schema, query, null, { userRole, txn });
+        const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.patientConcern)).toMatchObject({
           patientId: patient.id,
           concernId: concern.id,
@@ -80,7 +81,7 @@ describe('patient concern resolver', () => {
             patientId, concernId, order
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.patientConcernCreate)).toMatchObject({
           patientId: patient.id,
           concernId: concern.id,
@@ -108,7 +109,7 @@ describe('patient concern resolver', () => {
             order
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.patientConcernEdit)).toMatchObject({
           order: 3,
         });
@@ -164,7 +165,7 @@ describe('patient concern resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
 
         expect(result.data!.patientConcernBulkEdit.length).toBe(4);
         expect(result.data!.patientConcernBulkEdit[1]).toMatchObject({
@@ -204,7 +205,7 @@ describe('patient concern resolver', () => {
             deletedAt
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
+        const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
         expect(cloneDeep(result.data!.patientConcernDelete).deletedAt).not.toBeFalsy();
       });
     });
@@ -229,7 +230,8 @@ describe('patient concern resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          userId: user.id,
+          permissions,
           txn,
         });
         expect(cloneDeep(result.data!.patientConcerns)).toMatchObject([

@@ -225,5 +225,13 @@ export default class PatientGoal extends BaseModel {
 
     return patientGoal;
   }
+
+  static async getPatientIdForResource(patientGoalId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(patientGoalId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

@@ -1,7 +1,7 @@
 import { IPatientDataFlagCreateInput, IRootMutationType, IRootQueryType } from 'schema';
 import PatientDataFlag from '../models/patient-data-flag';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IPatientDataFlagCreateArgs {
   input: IPatientDataFlagCreateInput;
@@ -14,10 +14,9 @@ export interface IResolvePatientDataFlagsForPatientOptions {
 export async function patientDataFlagCreate(
   root: any,
   { input }: IPatientDataFlagCreateArgs,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientDataFlagCreate']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   return PatientDataFlag.create(
     {
@@ -31,10 +30,9 @@ export async function patientDataFlagCreate(
 export async function resolvePatientDataFlagsForPatient(
   root: any,
   { patientId }: IResolvePatientDataFlagsForPatientOptions,
-  { userRole, txn, userId }: IContext,
+  { permissions, txn, userId }: IContext,
 ): Promise<IRootQueryType['patientDataFlagsForPatient']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   return PatientDataFlag.getAllForPatient(patientId, txn);
 }

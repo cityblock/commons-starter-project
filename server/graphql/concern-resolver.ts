@@ -40,13 +40,7 @@ export async function concernCreate(
   { input }: IConcernCreateArgs,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernCreate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'create',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'create', 'concern', txn);
 
   return Concern.create(input, txn);
 }
@@ -56,13 +50,7 @@ export async function resolveConcern(
   args: { concernId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concern']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
 
   return Concern.get(args.concernId, txn);
 }
@@ -72,13 +60,7 @@ export async function resolveConcerns(
   args: any,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['concerns']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
 
   const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
     orderBy: 'createdAt',
@@ -93,13 +75,7 @@ export async function concernEdit(
   args: IEditConcernOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
 
   return Concern.edit(args.input.concernId, args.input, txn);
 }
@@ -109,13 +85,7 @@ export async function concernDelete(
   args: IDeleteConcernOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'delete', 'concern', txn);
 
   return Concern.delete(args.input.concernId, txn);
 }
@@ -125,13 +95,7 @@ export async function concernAddDiagnosisCode(
   { input }: IAddDiagnosisCodeArgs,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernAddDiagnosisCode']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
   const { concernId, codesetName, code, version } = input;
 
   return Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
@@ -142,13 +106,7 @@ export async function concernRemoveDiagnosisCode(
   { input }: IRemoveDiagnosisCodeArgs,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['concernRemoveDiagnosisCode']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'concern',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
   const { concernId, diagnosisCodeId } = input;
 
   return Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);

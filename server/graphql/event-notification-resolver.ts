@@ -195,13 +195,7 @@ export async function resolveEventNotificationsForCurrentUser(
   { permissions, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
   const { taskEventNotificationsOnly } = args;
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'user',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'user', txn);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 0;
@@ -252,14 +246,7 @@ export async function resolveEventNotificationsForTask(
   args: ITaskEventNotificationOptions,
   { permissions, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'task',
-    txn,
-    args.taskId,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -298,13 +285,7 @@ export async function eventNotificationDismiss(
   { input }: IDismissEventNotificationOptions,
   { userId, permissions, txn }: IContext,
 ) {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'eventNotification',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
 
   return EventNotification.dismiss(input.eventNotificationId, txn);
 }
@@ -314,14 +295,7 @@ export async function resolveEventNotificationsForUserTask(
   { taskId }: IEventNotificationsForUserTaskOptions,
   { userId, permissions, txn }: IContext,
 ) {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'task',
-    txn,
-    taskId,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'task', txn, taskId);
 
   const notifications = await EventNotification.getForUserTask(taskId, userId!, txn);
 
@@ -338,13 +312,7 @@ export async function eventNotificationsForTaskDismiss(
   { input }: IDismissTaskNotificationsOptions,
   { userId, permissions, txn }: IContext,
 ) {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'eventNotification',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
 
   return EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
 }

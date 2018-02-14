@@ -54,10 +54,10 @@ export const patientAllActionsAllowedResources: Resource[] = [
   'progressNote',
   'CBOReferral',
   'eventNotification',
+  'patientAnswer',
 ];
 
 export const patientCreatableAndDeletableOnlyResoruces: Resource[] = [
-  'patientAnswer',
   'patientScreeningToolSubmission',
   'riskAreaAssessmentSubmission',
 ];

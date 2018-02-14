@@ -18,6 +18,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
@@ -77,7 +78,7 @@ describe('patient info resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           logger,
           txn,
@@ -95,11 +96,12 @@ describe('patient info resolver', () => {
 
         const result2 = await graphql(schema, query, null, {
           db,
-          userRole: 'familyMember',
+          userId: user.id,
+          permissions: 'red',
           logger,
           txn,
         });
-        expect(result2.errors![0].message).toBe('familyMember not able to edit patient');
+        expect(result2.errors![0].message).toBe('red not able to edit patient');
       });
     });
   });

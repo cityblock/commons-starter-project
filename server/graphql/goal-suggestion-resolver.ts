@@ -12,13 +12,7 @@ export async function resolveGoalSuggestionTemplatesForAnswer(
   args: { answerId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplatesForAnswer']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'goalSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'goalSuggestion', txn);
 
   return GoalSuggestion.getForAnswer(args.answerId, txn);
 }
@@ -28,13 +22,7 @@ export async function goalSuggestionCreate(
   args: IGoalSuggestOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionCreate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'create',
-    'goalSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'create', 'goalSuggestion', txn);
 
   return GoalSuggestion.create(
     {
@@ -51,13 +39,7 @@ export async function goalSuggestionDelete(
   args: IGoalSuggestOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'goalSuggestion',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'delete', 'goalSuggestion', txn);
 
   return GoalSuggestion.delete(
     {

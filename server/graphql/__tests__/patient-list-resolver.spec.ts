@@ -10,6 +10,7 @@ import { createAnswerAssociations, createMockClinic, createMockUser } from '../.
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
+const permissions = 'green';
 const title = 'The Faith Militant';
 const order = 11;
 
@@ -68,7 +69,7 @@ describe('patient list resolver', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -107,7 +108,7 @@ describe('patient list resolver', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -127,7 +128,7 @@ describe('patient list resolver', () => {
         const query = `{ patientList(patientListId: "${fakeId}") { id } }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -153,7 +154,7 @@ describe('patient list resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -196,7 +197,7 @@ describe('patient list resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -230,7 +231,7 @@ describe('patient list resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

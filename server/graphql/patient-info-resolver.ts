@@ -1,8 +1,8 @@
 import { isNil, omitBy } from 'lodash';
 import { IPatientInfoEditInput, IRootMutationType } from 'schema';
 import PatientInfo from '../models/patient-info';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IPatientInfoEditOptions {
   input: IPatientInfoEditInput;
@@ -11,11 +11,11 @@ export interface IPatientInfoEditOptions {
 export async function patientInfoEdit(
   source: any,
   { input }: IPatientInfoEditOptions,
-  { userRole, userId, logger, txn }: IContext,
+  { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootMutationType['patientInfoEdit']> {
   const patientInfo = await PatientInfo.get(input.patientInfoId, txn);
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientInfo.patientId, userId);
-  checkUserLoggedIn(userId);
+
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
 
   const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
   logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`, 2);

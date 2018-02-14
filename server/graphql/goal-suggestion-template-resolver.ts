@@ -32,13 +32,7 @@ export async function goalSuggestionTemplateCreate(
   { input }: IGoalSuggestionTemplatesCreateArgs,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateCreate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'create',
-    'goalSuggestionTemplate',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'create', 'goalSuggestionTemplate', txn);
 
   return GoalSuggestionTemplate.create(input, txn);
 }
@@ -48,13 +42,7 @@ export async function resolveGoalSuggestionTemplates(
   args: any,
   { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplates']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'goalSuggestionTemplate',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 
   const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(args.orderBy, {
     orderBy: 'createdAt',
@@ -69,13 +57,7 @@ export async function resolveGoalSuggestionTemplate(
   args: { goalSuggestionTemplateId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'goalSuggestionTemplate',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 
   return GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
 }
@@ -85,13 +67,7 @@ export async function goalSuggestionTemplateEdit(
   args: IEditGoalSuggestionTemplateOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'goalSuggestionTemplate',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'edit', 'goalSuggestionTemplate', txn);
 
   return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input, txn);
 }
@@ -101,13 +77,7 @@ export async function goalSuggestionTemplateDelete(
   args: IDeleteGoalSuggestionTemplateOptions,
   { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'goalSuggestionTemplate',
-    txn,
-  );
+  await checkUserPermissions(userId, permissions, 'delete', 'goalSuggestionTemplate', txn);
 
   return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId, txn);
 }

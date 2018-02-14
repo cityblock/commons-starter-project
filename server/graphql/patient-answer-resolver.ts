@@ -7,8 +7,8 @@ import {
   IRootQueryType,
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IPatientAnswersCreateArgs {
   input: IPatientAnswersCreateInput;
@@ -29,11 +29,9 @@ export interface IDeletePatientAnswerOptions {
 export async function patientAnswersCreate(
   root: any,
   { input }: IPatientAnswersCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['patientAnswersCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const {
     patientAnswers,
@@ -97,9 +95,9 @@ export async function patientAnswersCreate(
 export async function resolvePatientAnswers(
   root: any,
   args: { filterId: string; filterType: IAnswerFilterTypeEnum; patientId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['patientAnswers']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   if (args.filterType === 'question') {
     return PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
@@ -119,9 +117,9 @@ export async function resolvePatientAnswers(
 export async function resolvePreviousPatientAnswersForQuestion(
   root: any,
   args: { questionId: string; patientId: string },
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientPreviousAnswersForQuestion']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
 }
@@ -129,9 +127,16 @@ export async function resolvePreviousPatientAnswersForQuestion(
 export async function resolvePatientAnswer(
   root: any,
   args: { patientAnswerId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['patientAnswer']> {
-  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'view',
+    'patientAnswer',
+    txn,
+    args.patientAnswerId,
+  );
 
   return PatientAnswer.get(args.patientAnswerId, txn);
 }
@@ -139,10 +144,16 @@ export async function resolvePatientAnswer(
 export async function patientAnswerEdit(
   root: any,
   args: IEditPatientAnswerOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['patientAnswerEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'patientAnswer',
+    txn,
+    args.input.patientAnswerId,
+  );
 
   return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId, txn);
 }
@@ -150,10 +161,16 @@ export async function patientAnswerEdit(
 export async function patientAnswerDelete(
   root: any,
   args: IDeletePatientAnswerOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['patientAnswerDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'delete',
+    'patientAnswer',
+    txn,
+    args.input.patientAnswerId,
+  );
 
   return PatientAnswer.delete(args.input.patientAnswerId, txn);
 }

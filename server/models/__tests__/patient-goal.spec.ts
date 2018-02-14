@@ -711,4 +711,22 @@ describe('patient goal model', () => {
       expect(expectedEventTypes).toEqual(expect.arrayContaining(['delete_patient_goal']));
     });
   });
+
+  it('gets associated patient id for a patient goal', async () => {
+    await transaction(PatientGoal.knex(), async txn => {
+      const { patient, user } = await setup(txn);
+      const patientGoal = await PatientGoal.create(
+        {
+          title: 'title',
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await PatientGoal.getPatientIdForResource(patientGoal.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

@@ -184,6 +184,7 @@ export default compose(
         patientId: props.match.params.patientId,
         completed: true,
       },
+      fetchPolicy: 'cache-and-network', // Always get the latest progress notes
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

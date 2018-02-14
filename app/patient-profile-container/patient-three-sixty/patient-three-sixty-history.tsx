@@ -56,7 +56,10 @@ export default graphql<IGraphqlProps, IProps, allProps>(
   {
     options: (props: IProps) => {
       const { patientId } = props;
-      return { variables: { patientId } };
+      return {
+        variables: { patientId },
+        fetchPolicy: 'cache-and-network', // Always get the latest submissions
+      };
     },
     props: ({ data }) => ({
       loading: data ? data.loading : false,

@@ -20,6 +20,7 @@ import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
+import PatientDataFlag from '../patient-data-flag';
 import User from '../user';
 
 const userRole = 'physician';
@@ -213,10 +214,10 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
         const birthday = new Date('02/02/1902');
-        const patientUuid = uuid();
+        const patientId = uuid();
         const patient = await Patient.create(
           {
-            patientId: patientUuid,
+            patientId,
             cityblockId: 123456,
             firstName: 'first',
             middleName: 'middle',
@@ -230,7 +231,7 @@ describe('patient model', () => {
         );
 
         expect(patient).toMatchObject({
-          id: patientUuid,
+          id: patientId,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -241,7 +242,7 @@ describe('patient model', () => {
 
         await Patient.updateFromAttribution(
           {
-            patientId: patientUuid,
+            patientId,
             firstName: 'New First Name',
           },
           txn,
@@ -249,6 +250,137 @@ describe('patient model', () => {
 
         const fetchedPatient = await Patient.get(patient.id, txn);
         expect(fetchedPatient.firstName).toEqual('New First Name');
+      });
+    });
+
+    it('should clear any PatientDataFlags', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patientId = uuid();
+        await Patient.create(
+          {
+            patientId,
+            cityblockId: 123456,
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            homeClinicId: clinic.id,
+            gender: 'female',
+            language: 'english',
+          },
+          txn,
+        );
+        await PatientDataFlag.create({ patientId, userId: user.id, fieldName: 'firstName' }, txn);
+
+        const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
+        expect(patientDataFlags.length).toEqual(1);
+
+        await Patient.updateFromAttribution(
+          {
+            patientId,
+            firstName: 'A Change That Does Not Matter',
+          },
+          txn,
+        );
+
+        const refetchedPatientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
+        expect(refetchedPatientDataFlags.length).toEqual(0);
+      });
+    });
+
+    it('should reset core identity verification', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patientId = uuid();
+        await Patient.create(
+          {
+            patientId,
+            cityblockId: 123456,
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            homeClinicId: clinic.id,
+            gender: 'female',
+            language: 'english',
+          },
+          txn,
+        );
+        await Patient.edit(
+          {
+            coreIdentityVerifiedById: user.id,
+            coreIdentityVerifiedAt: new Date().toISOString(),
+          },
+          patientId,
+          txn,
+        );
+
+        const patient = await Patient.get(patientId, txn);
+        expect(patient.coreIdentityVerifiedById).toEqual(user.id);
+        expect(patient.coreIdentityVerifiedAt).not.toBeNull();
+
+        await Patient.updateFromAttribution(
+          {
+            patientId,
+            firstName: 'A Change That Does Not Matter',
+          },
+          txn,
+        );
+
+        const refetchedPatient = await Patient.get(patientId, txn);
+        expect(refetchedPatient.coreIdentityVerifiedById).toBeNull();
+        expect(refetchedPatient.coreIdentityVerifiedAt).toBeNull();
+      });
+    });
+
+    it('should update ComputedPatientStatus', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patientId = uuid();
+        await Patient.create(
+          {
+            patientId,
+            cityblockId: 123456,
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            homeClinicId: clinic.id,
+            gender: 'female',
+            language: 'english',
+          },
+          txn,
+        );
+        await Patient.edit(
+          {
+            coreIdentityVerifiedById: user.id,
+            coreIdentityVerifiedAt: new Date().toISOString(),
+          },
+          patientId,
+          txn,
+        );
+
+        await ComputedPatientStatus.updateForPatient(patientId, user.id, txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patientId, txn);
+        expect(computedPatientStatus!.coreIdVerified).toEqual(true);
+
+        await Patient.updateFromAttribution(
+          {
+            patientId,
+            firstName: 'A Change That Does Not Matter',
+          },
+          txn,
+        );
+
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patientId,
+          txn,
+        );
+        expect(refetchedComputedPatientStatus!.coreIdVerified).toEqual(false);
       });
     });
   });

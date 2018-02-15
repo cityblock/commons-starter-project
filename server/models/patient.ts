@@ -51,6 +51,8 @@ export interface IPatientEditableFields {
   dateOfBirth: string; // mm/dd/yy
   consentToCall: boolean;
   consentToText: boolean;
+  coreIdentityVerifiedAt: string;
+  coreIdentityVerifiedById: string;
 }
 
 export interface IPatientInfoOptions {
@@ -90,6 +92,8 @@ export default class Patient extends Model {
   patientInfo: PatientInfo;
   careTeam: User[];
   patientDataFlags: PatientDataFlag[];
+  coreIdentityVerifiedAt: string;
+  coreIdentityVerifiedById: string;
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();
@@ -115,6 +119,8 @@ export default class Patient extends Model {
       scratchPad: { type: 'text' },
       consentToCall: { type: 'boolean' },
       consentToText: { type: 'boolean' },
+      coreIdentityVerifiedAt: { type: ['string', 'null'] },
+      coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
@@ -273,11 +279,16 @@ export default class Patient extends Model {
 
     // TODO: Figure out what should *actually* happen here
     await PatientDataFlag.deleteAllForPatient(patientId, txn);
+    const updateInput = {
+      ...omit<IPatientUpdateFields>(input, 'patientId'),
+      coreIdentityVerifiedById: null,
+      coreIdentityVerifiedAt: null,
+    };
+    const updatedPatient = await this.query(txn).patchAndFetchById(patientId, updateInput as any);
+    const attributionUser = await User.findOrCreateAttributionUser(txn);
+    await ComputedPatientStatus.updateForPatient(patientId, attributionUser.id, txn);
 
-    return this.query(txn).patchAndFetchById(
-      patientId,
-      omit<IPatientUpdateFields>(input, 'patientId'),
-    );
+    return updatedPatient;
   }
 
   static async createAllPatientInfo(userId: string, txn: Transaction) {

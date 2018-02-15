@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import CareTeam from './care-team';
 import Patient from './patient';
+import PatientDataFlag from './patient-data-flag';
 import ProgressNote from './progress-note';
 import User from './user';
 
@@ -81,9 +82,14 @@ export default class ComputedPatientStatus extends BaseModel {
 
   static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
     // TODO: When possible, actually calculate all of these values
+    const patient = await Patient.get(patientId, txn);
+    const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
+
     const hasCareTeamMember = (await CareTeam.getCountForPatient(patientId, txn)) > 0;
     const hasProgressNote = (await ProgressNote.getCountForPatient(patientId, txn)) > 0;
-    const coreIdVerified = false;
+    const coreIdVerified =
+      (!!patient.coreIdentityVerifiedAt && !!patient.coreIdentityVerifiedById) ||
+      patientDataFlags.length > 0;
     const consentsSigned = false;
     const hasPcp = false;
     const isIneligible = false;

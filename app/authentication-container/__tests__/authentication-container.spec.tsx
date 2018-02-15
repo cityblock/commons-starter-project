@@ -28,6 +28,7 @@ describe('shallow rendered', () => {
   const idleStart = jest.fn();
   const idleEnd = jest.fn();
   const selectLocal = jest.fn();
+  const setCurrentUser = jest.fn();
   let instance: any;
 
   beforeEach(() => {
@@ -39,6 +40,7 @@ describe('shallow rendered', () => {
         idleStart={idleStart}
         idleEnd={idleEnd}
         selectLocale={selectLocal}
+        setCurrentUser={setCurrentUser}
       >
         <div />
       </Component>,
@@ -56,12 +58,14 @@ describe('shallow rendered', () => {
     expect(idleStart).toBeCalled();
   });
 
-  it('updates locale', async () => {
+  it('updates locale and current user', async () => {
     const newCurrentUser = clone(currentUser);
+    newCurrentUser.id = 'newUserId';
     newCurrentUser.locale = 'es';
     await instance.componentWillReceiveProps({
       currentUser: newCurrentUser,
     });
     expect(selectLocal).toBeCalled();
+    expect(setCurrentUser).toBeCalled();
   });
 });

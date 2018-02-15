@@ -4,6 +4,7 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import { browserReducer, Size } from './reducers/browser-reducer';
+import { currentUserReducer, IState as CurrentUserState } from './reducers/current-user-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
@@ -27,6 +28,7 @@ export interface IState {
     isIdle: boolean;
   };
   popup: PopupReducerState;
+  currentUser: CurrentUserState;
 }
 
 async function setLastAction() {
@@ -49,6 +51,7 @@ export default (history: History) => {
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
     popup: popupReducer,
+    currentUser: currentUserReducer,
   });
 
   const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

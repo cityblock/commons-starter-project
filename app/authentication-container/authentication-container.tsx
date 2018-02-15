@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
+import { setCurrentUser } from '../actions/current-user-action';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
@@ -17,16 +18,19 @@ interface IStateProps {
   isIdle: boolean;
 }
 
+type CurrentUser = getCurrentUserQuery['currentUser'];
+
 export interface IDispatchProps {
-  idleStart: () => any;
-  idleEnd: () => any;
-  selectLocale: (locale: Lang) => any;
+  idleStart: () => void;
+  idleEnd: () => void;
+  selectLocale: (locale: Lang) => void;
+  setCurrentUser: (currentUser: CurrentUser) => void;
 }
 
 interface IProps {
   error?: string | null;
   loading?: boolean;
-  currentUser?: getCurrentUserQuery['currentUser'];
+  currentUser?: CurrentUser;
   children: any;
   data?: any;
 }
@@ -43,8 +47,15 @@ export class AuthenticationContainer extends React.Component<allProps> {
     const currentLocale = this.props.currentUser ? this.props.currentUser.locale : null;
     if (!newProps.loading && this.props.loading && !newProps.currentUser) {
       this.logout();
-    } else if (newProps.currentUser && newProps.currentUser.locale !== currentLocale) {
-      this.props.selectLocale(newProps.currentUser.locale as Lang);
+    } else if (newProps.currentUser) {
+      // update current user if needed
+      if (!this.props.currentUser || this.props.currentUser.id !== newProps.currentUser.id) {
+        this.props.setCurrentUser(newProps.currentUser);
+      }
+      // change locale if needed
+      if (newProps.currentUser.locale !== currentLocale) {
+        this.props.selectLocale(newProps.currentUser.locale as Lang);
+      }
     }
   }
 
@@ -58,6 +69,7 @@ export class AuthenticationContainer extends React.Component<allProps> {
 
   logout = async (): Promise<void> => {
     await localStorage.removeItem('authToken');
+    this.props.setCurrentUser(null);
     window.location.pathname = '/';
   };
 
@@ -110,6 +122,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
     selectLocale: (lang: Lang) => dispatch(selectLocale(lang)),
     idleStart: () => dispatch(idleStart()),
     idleEnd: () => dispatch(idleEnd()),
+    setCurrentUser: (currentUser: CurrentUser) => dispatch(setCurrentUser(currentUser)),
   };
 }
 

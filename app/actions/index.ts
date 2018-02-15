@@ -1,4 +1,5 @@
 import { IBrowserChanged } from './browser-action';
+import { ISetCurrentUser } from './current-user-action';
 import { IEventNotificationsCountUpdated } from './event-notifications-action';
 import { IIdleEnd, IIdleStart } from './idle-action';
 import { ILocaleSelected } from './locale-action';
@@ -11,5 +12,6 @@ export type Action =
   | IIdleStart
   | IIdleEnd
   | IPopupOpen
-  | IPopupClose;
+  | IPopupClose
+  | ISetCurrentUser;
 export type ActionType = Action['type'];

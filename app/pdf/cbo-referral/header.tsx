@@ -7,7 +7,7 @@ import HeaderText from './header-text';
 import variables from './variables/variables';
 
 // TODO: Replace with our hosted path to image
-export const LOGO_PATH = `https://rockhealth.com/wp-content/uploads/2017/12/Cityblock-Health-logo.png`;
+export const LOGO_PATH = `https://www.cityblock.com/static/images/cityblock_logo_blue.png`;
 
 interface IProps {
   referredOn: string | null;
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 });
 
 const Header: React.StatelessComponent<IProps> = ({ referredOn }) => {
-  const referredOnDate = format(referredOn || new Date().toISOString(), 'MMM DD, YYYY');
+  const referredOnDate = format(referredOn || new Date().toISOString(), 'MMM D, YYYY');
 
   return (
     <View style={styles.container}>

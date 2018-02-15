@@ -28,7 +28,7 @@ describe('CBO Referral PDF Header', () => {
 
   it('renders referred on date', () => {
     expect(wrapper.find(BodyText).length).toBe(1);
-    expect(wrapper.find(BodyText).props().label).toBe(format(referredOn, 'MMM DD, YYYY'));
+    expect(wrapper.find(BodyText).props().label).toBe(format(referredOn, 'MMM D, YYYY'));
     expect(wrapper.find(BodyText).props().noMargin).toBeTruthy();
   });
 });

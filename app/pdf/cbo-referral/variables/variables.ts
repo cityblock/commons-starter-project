@@ -31,7 +31,7 @@ const bodyMarginTop = 8;
 const bodyMarginLeft = 5;
 const titleFontSize = 16;
 const CBONameFontSize = 20;
-const imageHeight = 60;
+const imageHeight = 50;
 
 export default {
   whiteColor,

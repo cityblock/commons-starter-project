@@ -154,7 +154,7 @@
     "@types/lodash": "4.14.102",
     "@types/lodash-es": "4.17.0",
     "@types/morgan": "1.7.35",
-    "@types/node": "8.9.3",
+    "@types/node": "8.9.4",
     "@types/qs": "6.5.1",
     "@types/react-beautiful-dnd": "2.3.2",
     "@types/react-copy-to-clipboard": "4.2.5",

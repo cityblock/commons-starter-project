@@ -425,6 +425,7 @@ declare module 'schema' {
     googleProfileImageUrl: string | null;
     createdAt: string;
     updatedAt: string;
+    permissions: IPermissionsEnum;
   }
 
   /**
@@ -439,6 +440,9 @@ declare module 'schema' {
 
 
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'primaryCarePhysician' | 'communityHealthPartner' | 'psychiatrist' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
+
+
+  type IPermissionsEnum = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red' | 'black';
 
   /**
     Page info for paginated responses

@@ -60,6 +60,7 @@ export default [
       { resources: patientCreatableOnlyResources, permissions: ['view'] },
       { resources: patientNotDeletableResources, permissions: ['view'] },
       { resources: patientEditableOnlyResources, permissions: ['view'] },
+      { resources: ['eventNotification'], permissions: ['view', 'edit'] },
     ],
   },
   {
@@ -86,6 +87,7 @@ export default [
       { resources: patientCreatableOnlyResources, permissions: ['create', 'view'] },
       { resources: patientNotDeletableResources, permissions: ['create', 'view', 'edit'] },
       { resources: patientEditableOnlyResources, permissions: ['view', 'edit'] },
+      { resources: ['eventNotification'], permissions: ['view', 'edit'] },
     ],
   },
   {

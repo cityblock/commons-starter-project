@@ -69,6 +69,7 @@ exports[`renders comments 1`] = `
             "id": "id",
             "lastName": "last",
             "locale": "en",
+            "permissions": "orange",
             "phone": "(212) 555-8394",
             "updatedAt": "2017-09-07T13:45:14.532Z",
             "userRole": "physician",

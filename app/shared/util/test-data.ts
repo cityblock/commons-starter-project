@@ -15,6 +15,7 @@ export const currentUser = {
   googleProfileImageUrl: null,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
+  permissions: 'orange' as any,
 };
 
 export const user = {
@@ -29,6 +30,7 @@ export const user = {
   googleProfileImageUrl: null,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
+  permissions: 'blue' as any,
 };
 
 export const patient = {

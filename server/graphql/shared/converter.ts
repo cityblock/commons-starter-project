@@ -32,6 +32,7 @@ export function convertUser(user: User): IUser {
     locale: user.locale,
     phone: user.phone,
     googleProfileImageUrl: user.googleProfileImageUrl,
+    permissions: user.permissions,
     ...convertGenerated(user),
   };
 }

@@ -39,12 +39,6 @@ type allProps = IProps & IStateProps & IDispatchProps;
 export class AuthenticationContainer extends React.Component<allProps> {
   idleInterval: NodeJS.Timer;
 
-  constructor(props: IProps & IStateProps & IDispatchProps) {
-    super(props);
-    this.logout = this.logout.bind(this);
-    this.checkIdle = this.checkIdle.bind(this);
-  }
-
   async componentWillReceiveProps(newProps: IProps) {
     const currentLocale = this.props.currentUser ? this.props.currentUser.locale : null;
     if (!newProps.loading && this.props.loading && !newProps.currentUser) {
@@ -62,12 +56,12 @@ export class AuthenticationContainer extends React.Component<allProps> {
     clearInterval(this.idleInterval);
   }
 
-  async logout() {
+  logout = async (): Promise<void> => {
     await localStorage.removeItem('authToken');
     window.location.pathname = '/';
-  }
+  };
 
-  async checkIdle() {
+  checkIdle = async (): Promise<void> => {
     const { isIdle } = this.props;
     if (!this.props.currentUser) {
       return;
@@ -79,10 +73,11 @@ export class AuthenticationContainer extends React.Component<allProps> {
     } else if (!isIdle && lastAction > IDLE_TIME) {
       this.props.idleStart();
     }
-  }
+  };
 
   render() {
     const { isIdle, currentUser } = this.props;
+
     let header = null;
     let app = null;
     let idle = null;

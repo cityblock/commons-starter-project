@@ -55,7 +55,6 @@ export const patientAllActionsAllowedResources: Resource[] = [
   'patientGoal',
   'progressNote',
   'CBOReferral',
-  'eventNotification',
   'patientAnswer',
 ];
 

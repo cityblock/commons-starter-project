@@ -169,6 +169,16 @@ enum Gender {
   nonbinary
 }
 
+enum Permissions {
+  green
+  pink
+  orange
+  blue
+  yellow
+  red
+  black
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -182,6 +192,7 @@ type User implements uniqueId {
   googleProfileImageUrl: String
   createdAt: String!
   updatedAt: String!
+  permissions: Permissions!
 }
 
 type UserWithCount {

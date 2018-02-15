@@ -118,6 +118,17 @@ export enum UserRole {
 }
 
 
+export enum Permissions {
+  green = "green",
+  pink = "pink",
+  orange = "orange",
+  blue = "blue",
+  yellow = "yellow",
+  red = "red",
+  black = "black",
+}
+
+
 export enum ComputedFieldOrderOptions {
   labelDesc = "labelDesc",
   labelAsc = "labelAsc",
@@ -1102,6 +1113,7 @@ export interface currentUserEditMutation {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -1127,6 +1139,7 @@ export interface eventNotificationDismissMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskEvent:  {
       id: string,
@@ -1149,6 +1162,7 @@ export interface eventNotificationDismissMutation {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       eventType: TaskEventTypes | null,
       eventCommentId: string | null,
@@ -1167,6 +1181,7 @@ export interface eventNotificationDismissMutation {
           googleProfileImageUrl: string | null,
           createdAt: string,
           updatedAt: string,
+          permissions: Permissions,
         },
         taskId: string,
         createdAt: string,
@@ -1185,6 +1200,7 @@ export interface eventNotificationDismissMutation {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       } | null,
       createdAt: string,
       updatedAt: string,
@@ -1221,6 +1237,7 @@ export interface eventNotificationsForTaskDismissMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskEvent:  {
       id: string,
@@ -1243,6 +1260,7 @@ export interface eventNotificationsForTaskDismissMutation {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       eventType: TaskEventTypes | null,
       eventCommentId: string | null,
@@ -1261,6 +1279,7 @@ export interface eventNotificationsForTaskDismissMutation {
           googleProfileImageUrl: string | null,
           createdAt: string,
           updatedAt: string,
+          permissions: Permissions,
         },
         taskId: string,
         createdAt: string,
@@ -1279,6 +1298,7 @@ export interface eventNotificationsForTaskDismissMutation {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       } | null,
       createdAt: string,
       updatedAt: string,
@@ -1548,6 +1568,7 @@ export interface getCurrentUserQuery {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -1577,6 +1598,7 @@ export interface getEventNotificationsForCurrentUserQuery {
           googleProfileImageUrl: string | null,
           createdAt: string,
           updatedAt: string,
+          permissions: Permissions,
         },
         taskEvent:  {
           id: string,
@@ -1599,6 +1621,7 @@ export interface getEventNotificationsForCurrentUserQuery {
             googleProfileImageUrl: string | null,
             createdAt: string,
             updatedAt: string,
+            permissions: Permissions,
           },
           eventType: TaskEventTypes | null,
           eventCommentId: string | null,
@@ -1617,6 +1640,7 @@ export interface getEventNotificationsForCurrentUserQuery {
               googleProfileImageUrl: string | null,
               createdAt: string,
               updatedAt: string,
+              permissions: Permissions,
             },
             taskId: string,
             createdAt: string,
@@ -1635,6 +1659,7 @@ export interface getEventNotificationsForCurrentUserQuery {
             googleProfileImageUrl: string | null,
             createdAt: string,
             updatedAt: string,
+            permissions: Permissions,
           } | null,
           createdAt: string,
           updatedAt: string,
@@ -2123,6 +2148,7 @@ export interface getPatientCareTeamQuery {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null >,
 };
 
@@ -2920,6 +2946,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       eventType: TaskEventTypes | null,
       eventCommentId: string | null,
@@ -2938,6 +2965,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           googleProfileImageUrl: string | null,
           createdAt: string,
           updatedAt: string,
+          permissions: Permissions,
         },
         taskId: string,
         createdAt: string,
@@ -2956,6 +2984,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       } | null,
       createdAt: string,
       updatedAt: string,
@@ -2996,6 +3025,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       patientAnswerId: string,
       patientAnswer:  {
@@ -3178,6 +3208,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       patientConcernId: string | null,
       patientConcern:  {
@@ -3372,6 +3403,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       progressNoteId: string,
       reason: string,
@@ -3561,6 +3593,7 @@ export interface getProgressNoteQuery {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -3629,6 +3662,7 @@ export interface getProgressNotesForCurrentUserQuery {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -3698,6 +3732,7 @@ export interface getProgressNotesForPatientQuery {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -3762,6 +3797,7 @@ export interface getProgressNotesForSupervisorReviewQuery {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -4628,6 +4664,7 @@ export interface getTaskCommentQuery {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskId: string,
     createdAt: string,
@@ -4660,6 +4697,7 @@ export interface getTaskCommentsQuery {
           googleProfileImageUrl: string | null,
           createdAt: string,
           updatedAt: string,
+          permissions: Permissions,
         },
         taskId: string,
         createdAt: string,
@@ -4847,6 +4885,7 @@ export interface getUsersQuery {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       } | null,
     } | null > | null,
     pageInfo:  {
@@ -5034,6 +5073,7 @@ export interface logInUserMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
   } | null,
 };
@@ -6029,6 +6069,7 @@ export interface progressNoteAddSupervisorNotesMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -6097,6 +6138,7 @@ export interface progressNoteCompleteMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -6165,6 +6207,7 @@ export interface progressNoteCompleteSupervisorReviewMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -6233,6 +6276,7 @@ export interface progressNoteCreateMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -6308,6 +6352,7 @@ export interface progressNoteEditMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patient:  {
       id: string,
@@ -6751,6 +6796,7 @@ export interface quickCallCreateMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     progressNoteId: string,
     reason: string,
@@ -7509,6 +7555,7 @@ export interface taskCommentCreateMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskId: string,
     createdAt: string,
@@ -7538,6 +7585,7 @@ export interface taskCommentEditMutation {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskId: string,
     createdAt: string,
@@ -8264,6 +8312,7 @@ export interface userCreateMutation {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -8285,6 +8334,7 @@ export interface userDeleteMutation {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -8307,6 +8357,7 @@ export interface userEditRoleMutation {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -8493,6 +8544,7 @@ export interface FullCarePlanUpdateEventFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   patientConcernId: string | null,
   patientConcern:  {
@@ -8777,6 +8829,7 @@ export interface FullEventNotificationFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   taskEvent:  {
     id: string,
@@ -8799,6 +8852,7 @@ export interface FullEventNotificationFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     eventType: TaskEventTypes | null,
     eventCommentId: string | null,
@@ -8817,6 +8871,7 @@ export interface FullEventNotificationFragment {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       taskId: string,
       createdAt: string,
@@ -8835,6 +8890,7 @@ export interface FullEventNotificationFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -8905,6 +8961,7 @@ export interface FullPatientAnswerEventFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   patientAnswerId: string,
   patientAnswer:  {
@@ -9249,6 +9306,7 @@ export interface FullPatientForCBOReferralFormPDFFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } > | null,
   patientInfo:  {
     gender: string | null,
@@ -9505,6 +9563,7 @@ export interface FullProgressNoteActivityFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     eventType: TaskEventTypes | null,
     eventCommentId: string | null,
@@ -9523,6 +9582,7 @@ export interface FullProgressNoteActivityFragment {
         googleProfileImageUrl: string | null,
         createdAt: string,
         updatedAt: string,
+        permissions: Permissions,
       },
       taskId: string,
       createdAt: string,
@@ -9541,6 +9601,7 @@ export interface FullProgressNoteActivityFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -9581,6 +9642,7 @@ export interface FullProgressNoteActivityFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patientAnswerId: string,
     patientAnswer:  {
@@ -9763,6 +9825,7 @@ export interface FullProgressNoteActivityFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     patientConcernId: string | null,
     patientConcern:  {
@@ -9957,6 +10020,7 @@ export interface FullProgressNoteActivityFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     progressNoteId: string,
     reason: string,
@@ -10122,6 +10186,7 @@ export interface FullProgressNoteFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   patient:  {
     id: string,
@@ -10272,6 +10337,7 @@ export interface FullQuickCallFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   progressNoteId: string,
   reason: string,
@@ -10625,6 +10691,7 @@ export interface FullTaskCommentFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   taskId: string,
   createdAt: string,
@@ -10652,6 +10719,7 @@ export interface FullTaskEventFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   eventType: TaskEventTypes | null,
   eventCommentId: string | null,
@@ -10670,6 +10738,7 @@ export interface FullTaskEventFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     },
     taskId: string,
     createdAt: string,
@@ -10688,6 +10757,7 @@ export interface FullTaskEventFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
   createdAt: string,
   updatedAt: string,
@@ -10722,6 +10792,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
       googleProfileImageUrl: string | null,
       createdAt: string,
       updatedAt: string,
+      permissions: Permissions,
     } > | null,
     patientInfo:  {
       gender: string | null,
@@ -10741,6 +10812,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   } | null,
   createdBy:  {
     id: string,
@@ -10754,6 +10826,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
+    permissions: Permissions,
   },
   CBOReferralId: string | null,
   CBOReferral:  {
@@ -10889,6 +10962,7 @@ export interface FullUserFragment {
   googleProfileImageUrl: string | null,
   createdAt: string,
   updatedAt: string,
+  permissions: Permissions,
 };
 
 export interface ShortCBOFragment {

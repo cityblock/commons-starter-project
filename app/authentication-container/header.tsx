@@ -4,18 +4,17 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { FullUserFragment } from '../graphql/types';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/header.css';
 
-interface IProps {
-  currentUser: FullUserFragment;
+interface IProps extends IInjectedProps {
   mutate?: any;
   location: History.LocationState;
 }
 
 type allProps = IProps & RouteComponentProps<IProps>;
 
-class Header extends React.Component<allProps> {
+export class Header extends React.Component<allProps> {
   logout = async (): Promise<void> => {
     await localStorage.removeItem('authToken');
     window.location.href = '/';
@@ -31,14 +30,15 @@ class Header extends React.Component<allProps> {
   }
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, featureFlags } = this.props;
+
     const name =
       currentUser.firstName && currentUser.lastName
         ? `${currentUser.firstName} ${currentUser.lastName}`
         : null;
     let builderLink = null;
     let managerLink = null;
-    if (currentUser.userRole === 'admin') {
+    if (featureFlags.isBuilderEnabled) {
       builderLink = (
         <Link to={'/builder'} className={this.getNavItemClassnames('/builder')}>
           <div className={styles.tasksIcon} />
@@ -47,6 +47,8 @@ class Header extends React.Component<allProps> {
           </FormattedMessage>
         </Link>
       );
+    }
+    if (featureFlags.isManagerEnabled) {
       managerLink = (
         <Link to={'/manager'} className={this.getNavItemClassnames('/manager')}>
           <div className={styles.tasksIcon} />
@@ -115,4 +117,4 @@ class Header extends React.Component<allProps> {
   }
 }
 
-export default withRouter(Header);
+export default withRouter(withCurrentUser()(Header));

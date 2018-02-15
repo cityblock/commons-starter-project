@@ -93,11 +93,11 @@ describe('user tests', () => {
         const result = await graphql(schema, query, null, {
           db,
           userId: user.id,
-          permissions: 'blue',
+          permissions: 'red',
           txn,
         });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to view allUsers');
+        expect(cloneDeep(result.errors![0].message)).toMatch('red not able to view allUsers');
       });
     });
   });
@@ -137,12 +137,12 @@ describe('user tests', () => {
         const query = `{ users { edges { node { id, firstName } } } }`;
         const result = await graphql(schema, query, null, {
           db,
-          permissions: 'blue',
+          permissions: 'red',
           userId: user.id,
           txn,
         });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to view allUsers');
+        expect(cloneDeep(result.errors![0].message)).toMatch('red not able to view allUsers');
       });
     });
 

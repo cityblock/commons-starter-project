@@ -24,6 +24,6 @@ describe('Current User Reducer', () => {
 
     const newState = currentUserReducer(initialState, action);
     expect(newState.currentUser).toBeNull();
-    expect(newState.featureFlags).toEqual({});
+    expect(newState.featureFlags).toBeNull();
   });
 });

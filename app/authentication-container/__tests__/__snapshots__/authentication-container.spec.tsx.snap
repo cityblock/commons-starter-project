@@ -4,24 +4,7 @@ exports[`renders authentication container correctly 1`] = `<div />`;
 
 exports[`shallow rendered renders authentication container correctly with current user 1`] = `
 <div>
-  <withRouter(Header)
-    currentUser={
-      Object {
-        "createdAt": "2017-09-07T13:45:14.532Z",
-        "email": "a@b.com",
-        "firstName": "first",
-        "googleProfileImageUrl": null,
-        "homeClinicId": "clinic-id",
-        "id": "id",
-        "lastName": "last",
-        "locale": "en",
-        "permissions": "orange",
-        "phone": "(212) 555-8394",
-        "updatedAt": "2017-09-07T13:45:14.532Z",
-        "userRole": "physician",
-      }
-    }
-  />
+  <withRouter(Connect(WithCurrentUser)) />
   <div
     className="app"
   >

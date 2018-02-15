@@ -18,6 +18,22 @@ export const currentUser = {
   permissions: 'orange' as any,
 };
 
+export const featureFlags = {
+  isBuilderEnabled: false,
+  isManagerEnabled: false,
+  canChangeUserPermissions: false,
+  canDeleteUsers: false,
+  canBulkAssign: false,
+  canEditCareTeam: true,
+  canViewAllMembers: true,
+  canEditAllMembers: true,
+  canViewMembersOnPanel: true,
+  canEditMembersOnPanel: true,
+  canShowAllMembersInPatientPanel: true,
+  canDisenrollPatient: true,
+  canAutoBreakGlass: false,
+};
+
 export const user = {
   id: 'id2',
   locale: 'en',

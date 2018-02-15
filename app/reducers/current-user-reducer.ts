@@ -7,12 +7,12 @@ import { CurrentUser, SET_CURRENT_USER } from '../actions/current-user-action';
 
 export interface IState {
   currentUser: CurrentUser;
-  featureFlags: PermissionsMapping | {};
+  featureFlags: PermissionsMapping | null;
 }
 
 export const initialState: IState = {
   currentUser: null,
-  featureFlags: {},
+  featureFlags: null,
 };
 
 export const currentUserReducer = (state = initialState, action: Action): IState => {
@@ -20,7 +20,7 @@ export const currentUserReducer = (state = initialState, action: Action): IState
     case SET_CURRENT_USER:
       const featureFlags = !!action.currentUser
         ? permissionsMappings[action.currentUser.permissions]
-        : {};
+        : null;
 
       return {
         currentUser: action.currentUser,

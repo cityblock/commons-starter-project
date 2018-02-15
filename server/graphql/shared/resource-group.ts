@@ -23,7 +23,7 @@ export const builderResources: Resource[] = [
 
 export const userResources: Resource[] = ['allUsers', 'user'];
 
-export const careTeamMemberResources: Resource[] = ['user', 'patient'];
+export const careTeamMemberResources: Resource[] = ['allUsers', 'user', 'patient'];
 
 export const patientViewOnlyResources: Resource[] = [
   'clinic',

@@ -6,8 +6,8 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { currentUser } from '../../shared/util/test-data';
-import Header from '../header';
+import { currentUser, featureFlags } from '../../shared/util/test-data';
+import { Header } from '../header';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const eventNotifications = { count: 0 };
@@ -19,7 +19,13 @@ it('renders header', () => {
       <Provider store={mockStore({ locale, eventNotifications })}>
         <ReduxConnectedIntlProvider>
           <BrowserRouter>
-            <Header currentUser={currentUser} />
+            <Header
+              currentUser={currentUser}
+              location="/tasks"
+              featureFlags={featureFlags}
+              match={{} as any}
+              history={{} as any}
+            />
           </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

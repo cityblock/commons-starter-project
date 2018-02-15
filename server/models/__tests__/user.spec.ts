@@ -326,6 +326,20 @@ describe('user model', () => {
     });
   });
 
+  it('updates user permissions', async () => {
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user1 = await User.create(
+        createMockUser(1, clinic.id, userRole, 'user@place.com'),
+        txn,
+      );
+      expect(user1.permissions).toBe('red');
+      await User.updateUserPermissions(user1.id, 'blue', txn);
+      const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
+      expect(fetchedUser1!.permissions).toBe('blue');
+    });
+  });
+
   it('marks a user as deleted', async () => {
     await transaction(User.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);

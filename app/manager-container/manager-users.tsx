@@ -9,7 +9,7 @@ import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as usersQuery from '../graphql/queries/get-users.graphql';
 import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
-import * as userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
+import * as userEditPermissionsMutationGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
 import {
   getUsersQuery,
   getUsersQueryVariables,
@@ -17,9 +17,10 @@ import {
   userCreateMutationVariables,
   userDeleteMutation,
   userDeleteMutationVariables,
-  userEditRoleMutation,
-  userEditRoleMutationVariables,
+  userEditPermissionsMutation,
+  userEditPermissionsMutationVariables,
   FullUserFragment,
+  Permissions,
   UserOrderOptions,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
@@ -60,9 +61,9 @@ export interface IGraphqlProps {
   deleteUser?: (
     options: { variables: userDeleteMutationVariables },
   ) => { data: userDeleteMutation };
-  editUserRole?: (
-    options: { variables: userEditRoleMutationVariables },
-  ) => { data: userEditRoleMutation };
+  editUserPermissions?: (
+    options: { variables: userEditPermissionsMutationVariables },
+  ) => { data: userEditPermissionsMutation };
   createUser?: (
     options: { variables: userCreateMutationVariables },
   ) => { data: userCreateMutation };
@@ -75,15 +76,6 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
   constructor(props: IProps & IGraphqlProps) {
     super(props);
 
-    this.renderUsers = this.renderUsers.bind(this);
-    this.renderUser = this.renderUser.bind(this);
-    this.onDeleteUser = this.onDeleteUser.bind(this);
-    this.onEditUserRole = this.onEditUserRole.bind(this);
-    this.showInviteUser = this.showInviteUser.bind(this);
-    this.hideInviteUser = this.hideInviteUser.bind(this);
-    this.onInviteUser = this.onInviteUser.bind(this);
-    this.onSortChange = this.onSortChange.bind(this);
-
     const pageParams = getPageParams(props);
 
     this.state = {
@@ -92,13 +84,13 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
     };
   }
 
-  showInviteUser() {
+  showInviteUser = () => {
     this.setState({ showInviteUser: true });
-  }
+  };
 
-  hideInviteUser() {
+  hideInviteUser = () => {
     this.setState({ showInviteUser: false });
-  }
+  };
 
   renderUsers(users: FullUserFragment[]) {
     const { loading, error } = this.props;
@@ -115,7 +107,7 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
     }
   }
 
-  onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  onSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as OrderByOptions;
     this.setState({
       orderBy: value,
@@ -123,36 +115,36 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
 
     const cleanedPageParams = pickBy<IPageParams>({ orderBy: value });
     this.props.history.push({ search: querystring.stringify(cleanedPageParams) });
-  }
+  };
 
-  renderUser(user: FullUserFragment) {
+  renderUser = (user: FullUserFragment) => {
     return (
       <UserRow
         key={user.id}
         user={user}
         deleteUser={this.onDeleteUser}
-        editUserRole={this.onEditUserRole}
+        editUserPermissions={this.onEditUserPermissions}
       />
     );
-  }
+  };
 
-  async onEditUserRole(userRole: string, userEmail: string) {
-    const { editUserRole } = this.props;
+  onEditUserPermissions = async (permissions: Permissions, userEmail: string) => {
+    const { editUserPermissions } = this.props;
 
-    if (editUserRole) {
-      await editUserRole({ variables: { userRole, email: userEmail } });
+    if (editUserPermissions) {
+      await editUserPermissions({ variables: { permissions, email: userEmail } });
     }
-  }
+  };
 
-  async onDeleteUser(userEmail: string) {
+  onDeleteUser = async (userEmail: string) => {
     const { deleteUser } = this.props;
 
     if (deleteUser) {
       await deleteUser({ variables: { email: userEmail } });
     }
-  }
+  };
 
-  async onInviteUser(localPartOfEmail: string) {
+  onInviteUser = async (localPartOfEmail: string) => {
     const { createUser, currentUser } = this.props;
 
     if (createUser && currentUser) {
@@ -163,7 +155,7 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
         },
       });
     }
-  }
+  };
 
   render() {
     const { usersResponse, hasLoggedIn, loading, error, fetchMoreUsers } = this.props;
@@ -241,7 +233,9 @@ export default compose(
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(userEditRoleMutationGraphql as any, { name: 'editUserRole' }),
+  graphql<IGraphqlProps, IProps>(userEditPermissionsMutationGraphql as any, {
+    name: 'editUserPermissions',
+  }),
   graphql<IGraphqlProps, IProps>(userCreateMutationGraphql as any, {
     name: 'createUser',
     options: {

@@ -1157,6 +1157,12 @@ input UserEditRoleInput {
   email: String!
 }
 
+# params for editing a user - only supports permissions
+input UserEditPermissionsInput {
+  permissions: Permissions!
+  email: String!
+}
+
 # params for deleting a user
 input UserDeleteInput {
   email: String!
@@ -1783,8 +1789,10 @@ type RootMutationType {
   userCreate(input: UserCreateInput): User
   # Login user
   userLogin(input: UserLoginInput): UserWithAuthToken
-  # Edit user
+  # Edit user - role
   userEditRole(input: UserEditRoleInput): User
+  # Edit user - permissions
+  userEditPermissions(input: UserEditPermissionsInput): User
   # Delete user
   userDelete(input: UserDeleteInput): User
   # Edit current user

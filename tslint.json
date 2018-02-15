@@ -6,7 +6,7 @@
     "curly": false,
     "quotemark": false, // handled by prettier
     "indent": [true, "spaces"],
-    "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
+    "check-is-allowed": true, // our custom rule to check if we run checkUserPermissions in GraphQL resolvers
     "triple-equals": true,
     "max-line-length": false, // handeled by prettier
     "ordered-imports": [

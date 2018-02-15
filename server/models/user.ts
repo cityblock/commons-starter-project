@@ -191,6 +191,14 @@ export default class User extends BaseModel {
     return this.query(txn).patchAndFetchById(userId, { userRole });
   }
 
+  static async updateUserPermissions(
+    userId: string,
+    permissions: Permissions,
+    txn: Transaction,
+  ): Promise<User> {
+    return this.query(txn).patchAndFetchById(userId, { permissions });
+  }
+
   static async get(userId: string, txn: Transaction): Promise<User> {
     const user = await this.query(txn).findOne({ id: userId, deletedAt: null });
     if (!user) {

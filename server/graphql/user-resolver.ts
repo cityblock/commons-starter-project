@@ -4,6 +4,7 @@ import {
   IRootQueryType,
   IUserCreateInput,
   IUserDeleteInput,
+  IUserEditPermissionsInput,
   IUserEditRoleInput,
   IUserLoginInput,
   IUserNode,
@@ -36,6 +37,10 @@ export interface IUserLoginOptions {
 
 export interface IUserEditRoleOptions {
   input: IUserEditRoleInput;
+}
+
+export interface IUserEditPermissionsOptions {
+  input: IUserEditPermissionsInput;
 }
 
 export interface IUserDeleteOptions {
@@ -85,6 +90,21 @@ export async function userEditRole(
   }
 
   return User.updateUserRole(user.id, userRole as UserRole, txn);
+}
+
+export async function userEditPermissions(
+  root: any,
+  { input }: IUserEditPermissionsOptions,
+  { userId, permissions, txn }: IContext,
+): Promise<IRootMutationType['userEditPermissions']> {
+  await checkUserPermissions(userId, permissions, 'edit', 'user', txn);
+
+  const user = await User.getBy({ fieldName: 'email', field: input.email }, txn);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return User.updateUserPermissions(user.id, input.permissions, txn);
 }
 
 export async function userDelete(

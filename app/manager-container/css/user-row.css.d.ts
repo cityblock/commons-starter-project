@@ -10,3 +10,4 @@ export const button: string;
 export const buttonInverted: string;
 export const popupHeading: string;
 export const buttons: string;
+export const select: string;

@@ -8338,13 +8338,36 @@ export interface userDeleteMutation {
   } | null,
 };
 
+export interface userEditPermissionsMutationVariables {
+  email: string,
+  permissions: Permissions,
+};
+
+export interface userEditPermissionsMutation {
+  // Edit user - permissions
+  userEditPermissions:  {
+    id: string,
+    locale: string | null,
+    phone: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+    permissions: Permissions,
+  } | null,
+};
+
 export interface userEditRoleMutationVariables {
   email: string,
   userRole: string,
 };
 
 export interface userEditRoleMutation {
-  // Edit user
+  // Edit user - role
   userEditRole:  {
     id: string,
     locale: string | null,

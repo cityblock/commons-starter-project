@@ -487,6 +487,48 @@ describe('user tests', () => {
     });
   });
 
+  describe('userEditPermissions', () => {
+    it('edits user permissions', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const mutation = `mutation {
+          userEditPermissions(input: { email: "a@b.com", permissions: blue }) {
+            email, permissions
+          } }`;
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.userEditPermissions)).toEqual({
+          email: 'a@b.com',
+          permissions: 'blue',
+        });
+      });
+    });
+
+    it('error if user not able to edit user permissions for other users', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const mutation = `mutation {
+          userEditPermissions(input: { email: "a@b.com", permissions: green }) {
+            email, userRole
+          } }`;
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to edit user');
+      });
+    });
+  });
+
   describe('userDelete', () => {
     it('deletes user', async () => {
       await transaction(User.knex(), async txn => {

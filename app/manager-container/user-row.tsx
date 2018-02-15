@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
-import { FullUserFragment } from '../graphql/types';
+import { FullUserFragment, Permissions } from '../graphql/types';
 import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import { Popup } from '../shared/popup/popup';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/user-row.css';
@@ -9,7 +11,7 @@ import * as styles from './css/user-row.css';
 interface IProps extends IInjectedProps {
   user: FullUserFragment;
   deleteUser: (userEmail: string) => void;
-  editUserRole: (userRole: string, userEmail: string) => void;
+  editUserPermissions: (permissions: Permissions, userEmail: string) => void;
 }
 
 interface IState {
@@ -70,10 +72,10 @@ export class UserRow extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user, editUserRole, featureFlags } = this.props;
+    const { user, editUserPermissions, featureFlags } = this.props;
     const popup = this.renderPopup();
-    const onChangeUserRole = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      editUserRole(event.target.value, user.email!);
+    const onChangeUserPermissions = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      editUserPermissions(event.target.value as Permissions, user.email!);
     };
     const formattedCreatedAt = (
       <FormattedRelative value={user.createdAt}>
@@ -90,16 +92,21 @@ export class UserRow extends React.Component<IProps, IState> {
         <div className={styles.title}>{this.formatUser()}</div>
         <div className={styles.meta}>
           <div className={styles.dateSection}>
-            <select value={user.userRole} onChange={onChangeUserRole}>
-              <option value="physician">Physician</option>
-              <option value="nurseCareManager">Nurse Care Manager</option>
-              <option value="healthCoach">Health Coach</option>
-              <option value="familyMember">Family Memeber</option>
-              <option value="primaryCarePhysician">Primary Care Physician</option>
-              <option value="communityHealthPartner">Community Health Partner</option>
-              <option value="psychiatrist">Psychiatrist</option>
-              <option value="admin">Admin</option>
-            </select>
+            {featureFlags.canChangeUserPermissions && (
+              <Select
+                value={user.permissions}
+                onChange={onChangeUserPermissions}
+                className={styles.select}
+              >
+                <Option value="green">Green</Option>
+                <Option value="pink">pink</Option>
+                <Option value="orange">Orange</Option>
+                <Option value="blue">Blue</Option>
+                <Option value="yellow">Yellow</Option>
+                <Option value="red">Red</Option>
+                <Option value="black">Black</Option>
+              </Select>
+            )}
           </div>
           <div className={styles.dateSection}>
             <FormattedMessage id="user.createdAt">

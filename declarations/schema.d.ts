@@ -1451,9 +1451,13 @@ declare module 'schema' {
   */
     userLogin: IUserWithAuthToken | null;
     /**
-    Edit user
+    Edit user - role
   */
     userEditRole: IUser | null;
+    /**
+    Edit user - permissions
+  */
+    userEditPermissions: IUser | null;
     /**
     Delete user
   */
@@ -1892,6 +1896,14 @@ declare module 'schema' {
   */
   interface IUserEditRoleInput {
     userRole: string;
+    email: string;
+  }
+
+  /**
+    params for editing a user - only supports permissions
+  */
+  interface IUserEditPermissionsInput {
+    permissions: IPermissionsEnum;
     email: string;
   }
 

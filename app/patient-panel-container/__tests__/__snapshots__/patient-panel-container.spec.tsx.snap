@@ -45,19 +45,6 @@ exports[`renders patient panel container correctly 1`] = `
             </span>
           </span>
         </button>
-        <button
-          className="button disabled button"
-          disabled={true}
-          onClick={[Function]}
-        >
-          <span
-            className="flex"
-          >
-            <span>
-              Assign Members
-            </span>
-          </span>
-        </button>
       </div>
     </div>
   </div>

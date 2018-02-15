@@ -16,7 +16,7 @@ interface IProps {
   isQueried: boolean;
   messageIdPrefix: string;
   onRetryClick: () => any;
-  onSelectToggle?: (selectState: object) => any;
+  onSelectToggle?: ((selectState: object) => any) | null;
   onSelectAll?: (isSelected: boolean) => any;
   isGloballySelected?: boolean;
   error?: string;

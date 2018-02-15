@@ -17,6 +17,7 @@ import {
 import Button from '../shared/library/button/button';
 import PatientTable, { IFormattedPatient } from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/patient-panel.css';
 import PatientAssignModal, { filterPatientState, IPatientState } from './patient-assign-modal';
 import PatientFilterPanel from './patient-filter-panel';
@@ -39,7 +40,7 @@ interface IStateProps {
   pageSize: number;
 }
 
-interface IProps {
+interface IProps extends IInjectedProps {
   mutate?: any;
   history: History;
   location: Location;
@@ -181,7 +182,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   };
 
   renderButtons() {
-    const { filters } = this.props;
+    const { filters, featureFlags } = this.props;
     const { patientSelectState } = this.state;
 
     const numberPatientsSelected = filterPatientState(patientSelectState).length;
@@ -202,18 +203,28 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             );
           }}
         </FormattedMessage>
-        <Button
-          messageId="patientPanel.assignMembers"
-          onClick={this.handleAssignMembersClick}
-          className={styles.button}
-          disabled={!numberPatientsSelected}
-        />
+        {featureFlags.canBulkAssign && (
+          <Button
+            messageId="patientPanel.assignMembers"
+            onClick={this.handleAssignMembersClick}
+            className={styles.button}
+            disabled={!numberPatientsSelected}
+          />
+        )}
       </div>
     );
   }
 
   render(): JSX.Element {
-    const { loading, filters, patientPanel, pageSize, pageNumber, error } = this.props;
+    const {
+      loading,
+      filters,
+      patientPanel,
+      pageSize,
+      pageNumber,
+      error,
+      featureFlags,
+    } = this.props;
     const {
       isPanelOpen,
       isGloballySelected,
@@ -241,7 +252,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             isGloballySelected={isGloballySelected}
             error={error}
             onRetryClick={this.reloadCurrentPage}
-            onSelectToggle={this.handlePatientSelectToggle}
+            onSelectToggle={featureFlags.canBulkAssign ? this.handlePatientSelectToggle : null}
             onSelectAll={this.handleSelectAllToggle}
           />
           {!!patientPanel && (
@@ -291,6 +302,7 @@ const mapStateToProps = (state: IState, props: IProps): IStateProps => {
 
 export default compose(
   withRouter,
+  withCurrentUser(),
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientPanelQuery as any, {
     options: ({ pageNumber, pageSize, filters }) => ({

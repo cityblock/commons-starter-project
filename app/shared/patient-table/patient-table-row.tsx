@@ -15,7 +15,7 @@ interface IFormattedPatient extends FullPatientTableRowFragment {
 interface IProps {
   patient: IFormattedPatient;
   query?: string;
-  onSelectToggle?: (selectState: object) => any;
+  onSelectToggle?: ((selectState: object) => any) | null;
 }
 
 const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onSelectToggle }) => {

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { FullUserFragment } from '../graphql/types';
+import Button from '../shared/library/button/button';
 import { Popup } from '../shared/popup/popup';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/user-row.css';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   user: FullUserFragment;
   deleteUser: (userEmail: string) => void;
   editUserRole: (userRole: string, userEmail: string) => void;
@@ -14,7 +16,7 @@ interface IState {
   popupVisible: boolean;
 }
 
-class UserRow extends React.Component<IProps, IState> {
+export class UserRow extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -68,7 +70,7 @@ class UserRow extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user, editUserRole } = this.props;
+    const { user, editUserRole, featureFlags } = this.props;
     const popup = this.renderPopup();
     const onChangeUserRole = (event: React.ChangeEvent<HTMLSelectElement>) => {
       editUserRole(event.target.value, user.email!);
@@ -111,15 +113,11 @@ class UserRow extends React.Component<IProps, IState> {
             </FormattedMessage>
             {formattedUpdatedAt}
           </div>
-          <div className={styles.userDel}>
-            <FormattedMessage id="user.delete">
-              {(message: string) => (
-                <span onClick={this.onOpenClick} className={styles.button}>
-                  {message}
-                </span>
-              )}
-            </FormattedMessage>
-          </div>
+          {featureFlags.canDeleteUsers && (
+            <div className={styles.userDel}>
+              <Button messageId="user.delete" onClick={this.onOpenClick} />
+            </div>
+          )}
           {popup}
         </div>
       </div>
@@ -127,4 +125,4 @@ class UserRow extends React.Component<IProps, IState> {
   }
 }
 
-export default UserRow;
+export default withCurrentUser()(UserRow);

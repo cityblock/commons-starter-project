@@ -6,6 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { currentUser, featureFlags } from '../../shared/util/test-data';
 import PatientPanelContainer from '../patient-panel-container';
 
 it('renders patient panel container correctly', () => {
@@ -14,7 +15,7 @@ it('renders patient panel container correctly', () => {
   const locale = { messages: ENGLISH_TRANSLATION.messages };
   const tree = create(
     <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale })}>
+      <Provider store={mockStore({ locale, currentUser: { currentUser, featureFlags } })}>
         <ReduxConnectedIntlProvider>
           <BrowserRouter>
             <PatientPanelContainer />

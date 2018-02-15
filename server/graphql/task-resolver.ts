@@ -8,8 +8,8 @@ import {
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
+import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
+import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface ITaskCreateArgs {
   input: ITaskCreateInput;
@@ -47,9 +47,8 @@ export interface IResolveUrgentTasksForPatientOptions {
 export async function taskCreate(
   root: any,
   { input }: ITaskCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskCreate']> {
-  const { userRole, userId, txn } = context;
   const {
     title,
     description,
@@ -60,8 +59,8 @@ export async function taskCreate(
     priority,
     CBOReferralId,
   } = input;
-  await accessControls.isAllowed(userRole, 'create', 'task');
-  checkUserLoggedIn(userId);
+
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
   // TODO: once we allow adding followers on create, create the associated TaskEvent records
   const task = await Task.create(
@@ -106,20 +105,18 @@ export async function taskCreate(
 export async function resolveTask(
   root: any,
   args: IResolveTaskOptions,
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['task']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
+  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
   return Task.get(args.taskId, txn);
 }
 
 export async function taskEdit(
   root: any,
   args: IEditTaskOptions,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskEdit']> {
-  const { userId, userRole, txn } = context;
-  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
   const task = await Task.get(args.input.taskId, txn);
   const { priority, dueAt, assignedToId, title, description } = task;
@@ -188,11 +185,9 @@ export async function taskEdit(
 export async function taskDelete(
   root: any,
   args: IDeleteTaskOptions,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskDelete']> {
-  const { userId, userRole, txn } = context;
-  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'task', txn, args.input.taskId);
 
   const task = await Task.delete(args.input.taskId, txn);
 
@@ -211,11 +206,9 @@ export async function taskDelete(
 export async function taskComplete(
   root: any,
   args: IEditTaskOptions,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskComplete']> {
-  const { userId, userRole, txn } = context;
-  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
   const task = Task.complete(args.input.taskId, userId!, txn);
 
@@ -234,11 +227,9 @@ export async function taskComplete(
 export async function taskUncomplete(
   root: any,
   args: IEditTaskOptions,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskUncomplete']> {
-  const { userId, userRole, txn } = context;
-  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
   const task = Task.uncomplete(args.input.taskId, userId!, txn);
 
@@ -257,9 +248,9 @@ export async function taskUncomplete(
 export async function resolvePatientTasks(
   root: any,
   args: IPatientTasksFilterOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['tasksForPatient']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -295,10 +286,9 @@ export async function resolvePatientTasks(
 export async function resolveTasksDueSoonForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['tasksDueSoonForPatient']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   return Task.getTasksDueSoonForPatient(patientId, userId!, txn);
 }
@@ -306,21 +296,21 @@ export async function resolveTasksDueSoonForPatient(
 export async function resolveTasksWithNotificationsForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['tasksWithNotificationsForPatient']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   return Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
 }
 
+/* tslint:disable:check-is-allowed */
 export async function resolveTaskIdsWithNotifications(
   root: any,
-  args: any,
-  { db, userRole, userId, txn }: IContext,
+  args: {},
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['taskIdsWithNotifications']> {
-  await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
-  checkUserLoggedIn(userId);
+  checkLoggedInWithPermissions(userId, permissions);
 
   return Task.getTaskIdsWithNotifications(userId!, txn);
 }
+/* tslint:enable:check-is-allowed */

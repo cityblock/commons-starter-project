@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Our custom rule to check if `accessControls.isAllowed` is run in graphql resolvers
+ * Our custom rule to check if `checkUserPermissions` is run in graphql resolvers
  *
  * NOTE: Recompile this after editing it
  *      cd rules
@@ -43,7 +43,7 @@ var CheckIsAllowed = /** @class */ (function (_super) {
             var text = node.getText();
             // TODO: Check for root: specifically in the parameter list
             if (text.indexOf('root:') > -1) {
-                if (text.indexOf('accessControls.isAllowed') < 0 && text.indexOf('checkUserPermissions') < 0) {
+                if (text.indexOf('checkUserPermissions') < 0) {
                     this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING));
                 }
             }

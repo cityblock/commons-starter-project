@@ -1990,8 +1990,6 @@ type RootMutationType {
 }
 
 type RootQueryType {
-  # A single User
-  user(userId: ID!): User!
   # All Users (admin only)
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges!
   # List of all Users with care roles

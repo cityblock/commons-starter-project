@@ -27,6 +27,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -94,7 +95,12 @@ describe('task tests', () => {
             patient { id }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.task)).toMatchObject({
           id: task1.id,
           title: 'Task 1 Title',
@@ -108,9 +114,15 @@ describe('task tests', () => {
 
     it('errors if a task cannot be found', async () => {
       await transaction(Task.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ task(taskId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such task: ${fakeId}`);
       });
     });
@@ -119,7 +131,7 @@ describe('task tests', () => {
   describe('resolve patient tasks', () => {
     it('resolves patient tasks', async () => {
       await transaction(Task.knex(), async txn => {
-        const { patient, task2 } = await setup(txn);
+        const { patient, task2, user } = await setup(txn);
         const query = `{
           tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
             edges {
@@ -129,7 +141,12 @@ describe('task tests', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
           edges: [
@@ -146,7 +163,7 @@ describe('task tests', () => {
 
     it('returns correct page information', async () => {
       await transaction(Task.knex(), async txn => {
-        const { patient, task1 } = await setup(txn);
+        const { patient, task1, user } = await setup(txn);
         const query = `{
           tasksForPatient(
             patientId: "${patient.id}", pageNumber: 0, pageSize: 1, orderBy: titleAsc
@@ -164,7 +181,12 @@ describe('task tests', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
           edges: [
@@ -185,7 +207,7 @@ describe('task tests', () => {
 
     it('can alter sort order', async () => {
       await transaction(Task.knex(), async txn => {
-        const { patient, task2 } = await setup(txn);
+        const { patient, task2, user } = await setup(txn);
         const query = `{
           tasksForPatient(
             patientId: "${patient.id}", pageNumber: 0, pageSize: 1, orderBy: createdAtDesc
@@ -203,7 +225,12 @@ describe('task tests', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
           edges: [
             {
@@ -233,7 +260,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -255,7 +282,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -281,7 +308,7 @@ describe('task tests', () => {
         }`;
         const result2 = await graphql(schema, query2, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -308,7 +335,7 @@ describe('task tests', () => {
         }`;
         const result3 = await graphql(schema, query3, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -334,7 +361,7 @@ describe('task tests', () => {
         }`;
         const result4 = await graphql(schema, query4, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -358,7 +385,7 @@ describe('task tests', () => {
         }`;
         const result5 = await graphql(schema, query5, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -398,7 +425,7 @@ describe('task tests', () => {
         }`;
         const result6 = await graphql(schema, query6, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -428,7 +455,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -444,7 +471,7 @@ describe('task tests', () => {
             completedAt
           }
         }`;
-        await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, query, null, { db, permissions, userId: user.id, txn });
         const taskEvents = await TaskEvent.getTaskEvents(
           task1.id,
           {
@@ -472,7 +499,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -488,7 +515,7 @@ describe('task tests', () => {
             completedAt
           }
         }`;
-        await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, query, null, { db, permissions, userId: user.id, txn });
         const taskEvents = await TaskEvent.getTaskEvents(
           task1.id,
           {
@@ -514,7 +541,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -552,7 +579,7 @@ describe('task tests', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -588,7 +615,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -638,7 +665,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -671,7 +698,7 @@ describe('task tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -704,7 +731,7 @@ describe('task tests', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -727,7 +754,7 @@ describe('task tests', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -750,7 +777,7 @@ describe('task tests', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

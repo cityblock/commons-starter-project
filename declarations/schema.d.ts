@@ -18,10 +18,6 @@ declare module 'schema' {
 
   interface IRootQueryType {
     /**
-    A single User
-  */
-    user: IUser;
-    /**
     All Users (admin only)
   */
     users: IUserEdges;
@@ -395,6 +391,25 @@ declare module 'schema' {
     patientDataFlagsForPatient: Array<IPatientDataFlag>;
   }
 
+
+  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';
+
+  /**
+    User edges
+  */
+  interface IUserEdges {
+    edges: Array<IUserNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /**
+    User node
+  */
+  interface IUserNode {
+    node: IUser | null;
+    cursor: string;
+  }
+
   /**
     User account model
   */
@@ -424,25 +439,6 @@ declare module 'schema' {
 
 
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'primaryCarePhysician' | 'communityHealthPartner' | 'psychiatrist' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
-
-
-  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';
-
-  /**
-    User edges
-  */
-  interface IUserEdges {
-    edges: Array<IUserNode> | null;
-    pageInfo: IPageInfo;
-  }
-
-  /**
-    User node
-  */
-  interface IUserNode {
-    node: IUser | null;
-    cursor: string;
-  }
 
   /**
     Page info for paginated responses

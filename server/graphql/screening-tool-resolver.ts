@@ -6,8 +6,8 @@ import {
   IScreeningToolEditInput,
 } from 'schema';
 import ScreeningTool from '../models/screening-tool';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IScreeningToolCreateArgs {
   input: IScreeningToolCreateInput;
@@ -28,11 +28,9 @@ export interface IDeleteScreeningToolOptions {
 export async function screeningToolCreate(
   root: any,
   { input }: IScreeningToolCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'screeningTool', txn);
 
   return ScreeningTool.create(input as any, txn);
 }
@@ -40,10 +38,9 @@ export async function screeningToolCreate(
 export async function resolveScreeningTools(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningTools']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
-
+  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
   const screeningTools = await ScreeningTool.getAll(txn);
 
   return screeningTools.map(screeningTool =>
@@ -54,9 +51,9 @@ export async function resolveScreeningTools(
 export async function resolveScreeningToolsForRiskArea(
   root: any,
   args: { riskAreaId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningToolsForRiskArea']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
 
   const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId, txn);
 
@@ -68,9 +65,9 @@ export async function resolveScreeningToolsForRiskArea(
 export async function resolveScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningTool']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
 
   const screeningTool = await ScreeningTool.get(args.screeningToolId, txn);
 
@@ -80,10 +77,9 @@ export async function resolveScreeningTool(
 export async function screeningToolEdit(
   rot: any,
   args: IEditScreeningToolOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'screeningTool', txn);
 
   // TODO: fix typings here
   const screeningTool = await ScreeningTool.edit(
@@ -98,10 +94,9 @@ export async function screeningToolEdit(
 export async function screeningToolDelete(
   root: any,
   args: IDeleteScreeningToolOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'screeningTool', txn);
 
   const screeningTool = await ScreeningTool.delete(args.input.screeningToolId, txn);
 

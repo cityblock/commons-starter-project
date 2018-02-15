@@ -6,8 +6,8 @@ import {
   IScreeningToolScoreRangeEditInput,
 } from 'schema';
 import ScreeningToolScoreRange from '../models/screening-tool-score-range';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IScreeningToolScoreRangeCreateArgs {
   input: IScreeningToolScoreRangeCreateInput;
@@ -28,11 +28,9 @@ export interface IDeleteScreeningToolScoreRangeOptions {
 export async function screeningToolScoreRangeCreate(
   root: any,
   { input }: IScreeningToolScoreRangeCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any, txn);
 
@@ -42,9 +40,9 @@ export async function screeningToolScoreRangeCreate(
 export async function resolveScreeningToolScoreRanges(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRanges']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll(txn);
 
@@ -56,9 +54,9 @@ export async function resolveScreeningToolScoreRanges(
 export async function resolveScreeningToolScoreRangesForScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRangesForScreeningTool']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRanges = await ScreeningToolScoreRange.getForScreeningTool(
     args.screeningToolId,
@@ -73,9 +71,9 @@ export async function resolveScreeningToolScoreRangesForScreeningTool(
 export async function resolveScreeningToolScoreRange(
   root: any,
   args: { screeningToolScoreRangeId: string },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRange']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.get(
     args.screeningToolScoreRangeId,
@@ -88,9 +86,9 @@ export async function resolveScreeningToolScoreRange(
 export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
   root: any,
   args: { screeningToolId: string; score: number },
-  { db, userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRangeForScoreAndScreeningTool']> {
-  await accessControls.isAllowed(userRole, 'view', 'screeningTool');
+  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
     args.score,
@@ -108,10 +106,9 @@ export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
 export async function screeningToolScoreRangeEdit(
   rot: any,
   args: IEditScreeningToolScoreRangeOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'screeningToolScoreRange', txn);
 
   // TODO: fix typings here
   const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
@@ -126,10 +123,9 @@ export async function screeningToolScoreRangeEdit(
 export async function screeningToolScoreRangeDelete(
   root: any,
   args: IDeleteScreeningToolScoreRangeOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'screeningToolScoreRange', txn);
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.delete(
     args.input.screeningToolScoreRangeId,

@@ -1,6 +1,6 @@
 import { IRootMutationType, IRootQueryType, ITaskSuggestInput } from 'schema';
 import TaskSuggestion from '../models/task-suggestion';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface ITaskSuggestOptions {
@@ -10,19 +10,18 @@ export interface ITaskSuggestOptions {
 export async function resolveTaskSuggestionTemplatesForAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['taskTemplatesForAnswer']> {
-  await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
-
+  await checkUserPermissions(userId, permissions, 'view', 'taskSuggestion', txn);
   return TaskSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function taskSuggestionCreate(
   root: any,
   args: ITaskSuggestOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskSuggestionCreate']> {
-  await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
+  await checkUserPermissions(userId, permissions, 'create', 'taskSuggestion', txn);
 
   return TaskSuggestion.create(
     {
@@ -36,9 +35,9 @@ export async function taskSuggestionCreate(
 export async function taskSuggestionDelete(
   root: any,
   args: ITaskSuggestOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskSuggestionDelete']> {
-  await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
+  await checkUserPermissions(userId, permissions, 'delete', 'taskSuggestion', txn);
 
   return TaskSuggestion.delete(
     {

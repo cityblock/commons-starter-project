@@ -17,6 +17,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -64,7 +65,7 @@ describe('task comments', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -88,7 +89,7 @@ describe('task comments', () => {
         }`;
         await graphql(schema, deleteMutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -101,7 +102,9 @@ describe('task comments', () => {
           txn,
         );
         expect(taskEvents2.total).toEqual(2);
-        expect(taskEvents2.results[1].eventType).toEqual('delete_comment');
+        expect(
+          taskEvents2.results.find(event => event.eventType === 'delete_comment'),
+        ).toBeTruthy();
 
         // get comments
         const getComments = `{ taskComments(taskId: "${task.id}") {
@@ -114,7 +117,7 @@ describe('task comments', () => {
         }`;
         const taskComments = await graphql(schema, getComments, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -135,7 +138,7 @@ describe('task comments', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -152,7 +155,7 @@ describe('task comments', () => {
         }`;
         const editedComment = await graphql(schema, editMutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -167,7 +170,7 @@ describe('task comments', () => {
           txn,
         );
         expect(taskEvents.total).toEqual(2);
-        expect(taskEvents.results[1].eventType).toEqual('edit_comment');
+        expect(taskEvents.results.find(event => event.eventType === 'edit_comment')).toBeTruthy();
       });
     });
 
@@ -182,7 +185,7 @@ describe('task comments', () => {
             id, body
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const query = `{
           taskComments(taskId: "${task.id}",pageNumber: 0, pageSize: 1) {
@@ -199,7 +202,7 @@ describe('task comments', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -241,7 +244,7 @@ describe('task comments', () => {
 
       const result = await graphql(schema, query, null, {
         db,
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });

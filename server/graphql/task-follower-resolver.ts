@@ -3,8 +3,8 @@ import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskFollower from '../models/task-follower';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
+import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
+import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   taskId: string;
@@ -17,13 +17,10 @@ export interface ITaskFollowersOptions {
 export async function taskUserFollow(
   source: any,
   { input }: ITaskFollowersOptions,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskUserFollow']> {
-  const { userRole, userId, txn } = context;
   const { taskId } = input;
-
-  await accessControls.isAllowed(userRole, 'edit', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, taskId);
 
   await TaskFollower.followTask(
     {
@@ -49,12 +46,10 @@ export async function taskUserFollow(
 export async function taskUserUnfollow(
   source: any,
   { input }: ITaskFollowersOptions,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskUserUnfollow']> {
-  const { userRole, userId, txn } = context;
   const { taskId } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, taskId);
 
   await TaskFollower.unfollowTask(
     {
@@ -82,13 +77,13 @@ export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
   orderBy: string;
 }
 
+/* tslint:disable:check-is-allowed */
 export async function resolveCurrentUserTasks(
   root: any,
   args: ICurrentUserTasksFilterOptions,
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['tasksForCurrentUser']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  checkLoggedInWithPermissions(userId, permissions);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -120,3 +115,4 @@ export async function resolveCurrentUserTasks(
     },
   };
 }
+/* tslint:enable:check-is-allowed */

@@ -204,4 +204,36 @@ describe('task comment model', () => {
       });
     });
   });
+
+  it('should retrieve associated patient id with task comment', async () => {
+    await transaction(Task.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const dueAt = new Date().toISOString();
+      const task = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt,
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user.id,
+        },
+        txn,
+      );
+      const taskComment = await TaskComment.create(
+        {
+          taskId: task.id,
+          userId: user.id,
+          body: 'omg a comment',
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await TaskComment.getPatientIdForResource(taskComment.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

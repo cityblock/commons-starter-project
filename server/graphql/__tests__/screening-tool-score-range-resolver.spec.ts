@@ -21,6 +21,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -75,7 +76,7 @@ describe('screening tool score range resolver tests', () => {
   describe('resolve screeningToolScoreRange', () => {
     it('can fetch a screeningToolScoreRange', async () => {
       await transaction(ScreeningToolScoreRange.knex(), async txn => {
-        const { screeningToolScoreRange } = await setup(txn);
+        const { screeningToolScoreRange, user } = await setup(txn);
         const query = `{
           screeningToolScoreRange(screeningToolScoreRangeId: "${screeningToolScoreRange.id}") {
             id
@@ -84,7 +85,12 @@ describe('screening tool score range resolver tests', () => {
             maximumScore
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.screeningToolScoreRange)).toMatchObject({
           id: screeningToolScoreRange.id,
           description: screeningToolScoreRange.description,
@@ -96,16 +102,22 @@ describe('screening tool score range resolver tests', () => {
 
     it('errors if a screeningToolScoreRange cannot be found', async () => {
       await transaction(ScreeningToolScoreRange.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ screeningToolScoreRange(screeningToolScoreRangeId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such screening tool score range: ${fakeId}`);
       });
     });
 
     it('gets all screeningToolScoreRanges', async () => {
       await transaction(ScreeningToolScoreRange.knex(), async txn => {
-        const { screeningTool, screeningToolScoreRange } = await setup(txn);
+        const { screeningTool, screeningToolScoreRange, user } = await setup(txn);
         const screeningToolScoreRange2 = await ScreeningToolScoreRange.create(
           {
             description: 'Screening Tool Score Range 2',
@@ -124,7 +136,12 @@ describe('screening tool score range resolver tests', () => {
             maximumScore
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.screeningToolScoreRanges)).toMatchObject([
           {
             id: screeningToolScoreRange.id,
@@ -144,7 +161,7 @@ describe('screening tool score range resolver tests', () => {
 
     it('gets all screeningToolScoreRanges for a screeningTool', async () => {
       await transaction(ScreeningToolScoreRange.knex(), async txn => {
-        const { screeningTool, screeningTool2, screeningToolScoreRange } = await setup(txn);
+        const { screeningTool, screeningTool2, screeningToolScoreRange, user } = await setup(txn);
         const screeningToolScoreRange2 = await ScreeningToolScoreRange.create(
           {
             description: 'Screening Tool Score Range 2',
@@ -171,7 +188,12 @@ describe('screening tool score range resolver tests', () => {
             maximumScore
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const screeningToolScoreRanges = cloneDeep(
           result.data!.screeningToolScoreRangesForScreeningTool,
         );
@@ -196,7 +218,7 @@ describe('screening tool score range resolver tests', () => {
 
     it('gets a screeningToolScoreRange for a score on a screeningTool', async () => {
       await transaction(ScreeningToolScoreRange.knex(), async txn => {
-        const { screeningTool } = await setup(txn);
+        const { screeningTool, user } = await setup(txn);
         const screeningToolScoreRange2 = await ScreeningToolScoreRange.create(
           {
             description: 'Screening Tool Score Range 2',
@@ -217,7 +239,12 @@ describe('screening tool score range resolver tests', () => {
             maximumScore
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const resultScoreRange = cloneDeep(
           result.data!.screeningToolScoreRangeForScoreAndScreeningTool,
         );
@@ -244,7 +271,7 @@ describe('screening tool score range resolver tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -275,7 +302,7 @@ describe('screening tool score range resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -305,7 +332,7 @@ describe('screening tool score range resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

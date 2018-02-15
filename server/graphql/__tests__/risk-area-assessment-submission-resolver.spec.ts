@@ -138,7 +138,6 @@ describe('risk area assessment resolver tests', () => {
           permissions,
           txn,
         });
-
         const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
         expect([submission.id, submission1.id, submission2.id]).toContain(resultSubmission.id);
       });

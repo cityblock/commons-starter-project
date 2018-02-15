@@ -13,14 +13,8 @@ import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
 import User, { IUserFilterOptions, Locale, UserOrderOptions, UserRole } from '../models/user';
-import accessControls from './shared/access-controls';
-import {
-  checkUserLoggedIn,
-  formatOrderOptions,
-  formatRelayEdge,
-  signJwt,
-  IContext,
-} from './shared/utils';
+import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
+import { formatOrderOptions, formatRelayEdge, signJwt, IContext } from './shared/utils';
 
 const GENERATE_PDF_EXPIRY = '5m'; // 5 minutes
 
@@ -55,11 +49,10 @@ export interface IEditCurrentUserOptions {
 export async function userCreate(
   root: any,
   { input }: IUserCreateArgs,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['userCreate']> {
-  const { userRole, txn } = context;
   const { email, homeClinicId } = input;
-  await accessControls.isAllowed(userRole, 'create', 'user');
+  await checkUserPermissions(userId, permissions, 'create', 'user', txn);
 
   const user = await User.getBy({ fieldName: 'email', field: email }, txn);
 
@@ -80,16 +73,11 @@ export async function userCreate(
 export async function userEditRole(
   root: any,
   { input }: IUserEditRoleOptions,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['userEditRole']> {
-  const { txn } = context;
   const { userRole, email } = input;
-  await accessControls.isAllowed(context.userRole, 'edit', 'user');
 
-  // Special case - only admin can edit this field
-  if (context.userRole !== 'admin') {
-    throw new Error(`${context.userRole} not able to edit user role`);
-  }
+  await checkUserPermissions(userId, permissions, 'edit', 'user', txn);
 
   const user = await User.getBy({ fieldName: 'email', field: email }, txn);
   if (!user) {
@@ -102,10 +90,11 @@ export async function userEditRole(
 export async function userDelete(
   root: any,
   { input }: IUserDeleteOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['userDelete']> {
   const { email } = input;
-  await accessControls.isAllowed(userRole, 'delete', 'user');
+
+  await checkUserPermissions(userId, permissions, 'delete', 'user', txn);
 
   const user = await User.getBy({ fieldName: 'email', field: email }, txn);
   if (!user) {
@@ -116,23 +105,13 @@ export async function userDelete(
   return user;
 }
 
-export async function resolveUser(
-  root: any,
-  args: IResolveUserOptions,
-  { db, userRole, txn }: IContext,
-): Promise<IRootQueryType['user']> {
-  await accessControls.isAllowed(userRole, 'view', 'user');
-
-  return User.get(args.userId, txn);
-}
-
+/* tslint:disable:check-is-allowed */
 export async function resolveCurrentUser(
   root: any,
   args: any,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['currentUser']> {
-  await accessControls.isAllowed(userRole, 'view', 'user');
-  checkUserLoggedIn(userId);
+  checkLoggedInWithPermissions(userId, permissions);
 
   return User.get(userId!, txn);
 }
@@ -140,10 +119,9 @@ export async function resolveCurrentUser(
 export async function currentUserEdit(
   root: any,
   args: IEditCurrentUserOptions,
-  { db, userId, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['currentUserEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
-  checkUserLoggedIn(userId);
+  checkLoggedInWithPermissions(userId, permissions);
 
   return User.update(
     userId!,
@@ -156,13 +134,14 @@ export async function currentUserEdit(
     txn,
   );
 }
+/* tslint:enable:check-is-allowed */
 
 export async function resolveUsers(
   root: any,
   args: Partial<IUserFilterOptions>,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['users']> {
-  await accessControls.isAllowed(userRole, 'view', 'allUsers');
+  await checkUserPermissions(userId, permissions, 'view', 'allUsers', txn);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -199,9 +178,10 @@ export async function resolveUsers(
 export async function resolveUserSummaryList(
   root: any,
   { userRoleFilters }: IUserSummaryOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['userSummaryList']> {
-  await accessControls.isAllowed(userRole, 'view', 'allUsers');
+  await checkUserPermissions(userId, permissions, 'view', 'allUsers', txn);
+
   return User.getUserSummaryList(userRoleFilters, txn);
 }
 
@@ -253,7 +233,6 @@ export async function userLogin(
   const authToken = signJwt({
     userId: user.id,
     permissions: user.permissions,
-    userRole: user.userRole,
     lastLoginAt,
   });
 
@@ -264,10 +243,9 @@ export async function userLogin(
 export async function JWTForPDFCreate(
   root: {},
   input: {},
-  { db, userRole, userId }: IContext,
+  { permissions, userId }: IContext,
 ): Promise<IRootMutationType['JWTForPDFCreate']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  checkLoggedInWithPermissions(userId, permissions);
 
   const jwtData = {
     type: GENERATE_PDF_JWT_TYPE,

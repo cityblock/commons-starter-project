@@ -260,7 +260,6 @@ import {
 import {
   currentUserEdit,
   resolveCurrentUser,
-  resolveUser,
   resolveUsers,
   resolveUserSummaryList,
   userCreate,
@@ -290,7 +289,6 @@ const resolveFunctions = {
     patientsWithOutOfDateMAP: resolvePatientsWithOutOfDateMAP,
     patientsWithOpenCBOReferrals: resolvePatientsWithOpenCBOReferrals,
     patientsForComputedList: resolvePatientsForComputedList,
-    user: resolveUser,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
     task: resolveTask,

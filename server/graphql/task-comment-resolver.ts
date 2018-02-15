@@ -9,8 +9,8 @@ import {
 import { IPaginationOptions } from '../db';
 import TaskComment from '../models/task-comment';
 import TaskEvent from '../models/task-event';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   taskId: string;
@@ -23,13 +23,11 @@ export interface ITaskCommentCreateOptions {
 export async function taskCommentCreate(
   source: any,
   { input }: ITaskCommentCreateOptions,
-  context: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskCommentCreate']> {
   const { taskId, body } = input;
-  const { userId, userRole, txn } = context;
 
-  await accessControls.isAllowed(userRole, 'edit', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, taskId);
 
   const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
@@ -53,12 +51,11 @@ export interface ITaskCommentEditOptions {
 export async function taskCommentEdit(
   source: any,
   { input }: ITaskCommentEditOptions,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskCommentEdit']> {
-  const { userRole, userId, txn } = context;
   const { taskCommentId, body } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'task');
-  checkUserLoggedIn(userId);
+
+  await checkUserPermissions(userId, permissions, 'edit', 'taskComment', txn, taskCommentId);
 
   const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
@@ -82,13 +79,10 @@ export interface ITaskCommentDeleteOptions {
 export async function taskCommentDelete(
   source: any,
   { input }: ITaskCommentDeleteOptions,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['taskCommentDelete']> {
-  const { userRole, userId, txn } = context;
   const { taskCommentId } = input;
-
-  await accessControls.isAllowed(userRole, 'edit', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'taskComment', txn, taskCommentId);
 
   const taskComment = await TaskComment.delete(taskCommentId, txn);
 
@@ -108,10 +102,9 @@ export async function taskCommentDelete(
 export async function resolveTaskComments(
   root: any,
   args: IPaginationOptions & { taskId: string },
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['taskComments']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -143,10 +136,9 @@ export async function resolveTaskComments(
 export async function resolveTaskComment(
   rot: any,
   args: { taskCommentId: string },
-  { db, userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['taskComment']> {
-  await accessControls.isAllowed(userRole, 'view', 'task');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'taskComment', txn, args.taskCommentId);
 
   return TaskComment.get(args.taskCommentId, txn);
 }

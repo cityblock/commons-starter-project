@@ -5,6 +5,7 @@ import Clinic from '../../../models/clinic';
 import User from '../../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../../spec-helpers';
 import checkUserPermissions, {
+  checkLoggedInWithPermissions,
   getBusinessToggles,
   isAllowedForPermissions,
   isUserOnPatientCareTeam,
@@ -193,6 +194,24 @@ describe('User Permissions Check', () => {
 
         expect(result).toBe(true);
       });
+    });
+  });
+
+  describe('checkLoggedInWithPermissions', () => {
+    it('throws error if user not logged in', async () => {
+      expect(() => {
+        checkLoggedInWithPermissions('', 'green');
+      }).toThrowError('not logged in');
+    });
+
+    it('throws error if no user permissions given', () => {
+      expect(() => {
+        checkLoggedInWithPermissions(userId, '' as any);
+      }).toThrowError('No user permissions level provided');
+    });
+
+    it('returns true if user logged in and permissions specified', () => {
+      expect(checkLoggedInWithPermissions(userId, 'blue')).toBe(true);
     });
   });
 });

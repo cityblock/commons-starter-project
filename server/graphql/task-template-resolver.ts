@@ -6,7 +6,7 @@ import {
   ITaskTemplateEditInput,
 } from 'schema';
 import TaskTemplate from '../models/task-template';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface ITaskTemplateCreateArgs {
@@ -28,9 +28,9 @@ export interface IDeleteTaskTemplateOptions {
 export async function taskTemplateCreate(
   root: any,
   { input }: ITaskTemplateCreateArgs,
-  { userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskTemplateCreate']> {
-  await accessControls.isAllowed(userRole, 'create', 'taskTemplate');
+  await checkUserPermissions(userId, permissions, 'create', 'taskTemplate', txn);
 
   return TaskTemplate.create(input as any, txn);
 }
@@ -38,9 +38,9 @@ export async function taskTemplateCreate(
 export async function resolveTaskTemplate(
   root: any,
   args: { taskTemplateId: string },
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['taskTemplate']> {
-  await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
+  await checkUserPermissions(userId, permissions, 'view', 'taskTemplate', txn);
 
   return TaskTemplate.get(args.taskTemplateId, txn);
 }
@@ -48,9 +48,9 @@ export async function resolveTaskTemplate(
 export async function resolveTaskTemplates(
   root: any,
   args: any,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['taskTemplates']> {
-  await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
+  await checkUserPermissions(userId, permissions, 'view', 'taskTemplate', txn);
 
   return TaskTemplate.getAll(txn);
 }
@@ -58,9 +58,9 @@ export async function resolveTaskTemplates(
 export async function taskTemplateEdit(
   root: any,
   args: IEditTaskTemplateOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskTemplateEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
+  await checkUserPermissions(userId, permissions, 'edit', 'taskTemplate', txn);
 
   // TODO: fix typings here
   return TaskTemplate.edit(args.input.taskTemplateId, args.input as any, txn);
@@ -69,8 +69,9 @@ export async function taskTemplateEdit(
 export async function taskTemplateDelete(
   root: any,
   args: IDeleteTaskTemplateOptions,
-  { db, userRole, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['taskTemplateDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
+  await checkUserPermissions(userId, permissions, 'delete', 'taskTemplate', txn);
+
   return TaskTemplate.delete(args.input.taskTemplateId, txn);
 }

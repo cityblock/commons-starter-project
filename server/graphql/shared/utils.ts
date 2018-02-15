@@ -6,7 +6,7 @@ import { transaction, Transaction } from 'objection';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
 import Db from '../../db';
-import User, { UserRole } from '../../models/user';
+import User from '../../models/user';
 
 export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 
@@ -16,7 +16,6 @@ export interface ILogger {
 
 export interface IContext {
   db: Db;
-  userRole: UserRole;
   permissions: Permissions;
   userId?: string;
   logger: ILogger;
@@ -33,7 +32,6 @@ export function formatRelayEdge(node: any, id: string) {
 
 export interface IJWTData {
   userId: string;
-  userRole: UserRole;
   permissions: Permissions;
   lastLoginAt: string;
 }
@@ -90,7 +88,6 @@ export async function getGraphQLContext(
 
   const datadogContext = dataDog ? dataDog.context(request) : null;
   const txn = existingTxn || (await transaction.start(User));
-  let userRole: UserRole = 'anonymousUser';
   let permissions: Permissions = 'black';
   let userId;
 
@@ -98,12 +95,10 @@ export async function getGraphQLContext(
     try {
       const parsedToken = await parseAndVerifyJwt(authToken, txn);
       userId = parsedToken.userId;
-      userRole = parsedToken.userRole;
       permissions = parsedToken.permissions;
     } catch (e) {
       return {
         db,
-        userRole: 'anonymousUser' as UserRole,
         permissions: 'black' as Permissions,
         logger,
         txn,
@@ -113,7 +108,6 @@ export async function getGraphQLContext(
   }
   return {
     userId,
-    userRole,
     permissions,
     db,
     logger,

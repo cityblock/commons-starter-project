@@ -2,17 +2,24 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import TaskTemplate from '../../models/task-template';
+import User from '../../models/user';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
   goalSuggestionTemplate: GoalSuggestionTemplate;
+  user: User;
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
     {
       title: 'Housing',
@@ -20,7 +27,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { goalSuggestionTemplate };
+  return { goalSuggestionTemplate, user };
 }
 
 describe('task template resolver', () => {
@@ -38,7 +45,7 @@ describe('task template resolver', () => {
   describe('resolve task template', () => {
     it('fetches a taskTemplate', async () => {
       await transaction(TaskTemplate.knex(), async txn => {
-        const { goalSuggestionTemplate } = await setup(txn);
+        const { goalSuggestionTemplate, user } = await setup(txn);
         const taskTemplate = await TaskTemplate.create(
           {
             title: 'Housing',
@@ -50,7 +57,7 @@ describe('task template resolver', () => {
           txn,
         );
         const query = `{ taskTemplate(taskTemplateId: "${taskTemplate.id}") { title } }`;
-        const result = await graphql(schema, query, null, { userRole, txn });
+        const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.taskTemplate)).toMatchObject({
           title: 'Housing',
         });
@@ -61,7 +68,7 @@ describe('task template resolver', () => {
   describe('task template create', () => {
     it('creates a task template', async () => {
       await transaction(TaskTemplate.knex(), async txn => {
-        const { goalSuggestionTemplate } = await setup(txn);
+        const { goalSuggestionTemplate, user } = await setup(txn);
         const mutation = `mutation {
           taskTemplateCreate(input: {
             title: "Housing",
@@ -73,7 +80,7 @@ describe('task template resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
 
         expect(cloneDeep(result.data!.taskTemplateCreate)).toMatchObject({
           title: 'Housing',
@@ -85,7 +92,7 @@ describe('task template resolver', () => {
   describe('task template edit', () => {
     it('edits a task template', async () => {
       await transaction(TaskTemplate.knex(), async txn => {
-        const { goalSuggestionTemplate } = await setup(txn);
+        const { goalSuggestionTemplate, user } = await setup(txn);
         const taskTemplate = await TaskTemplate.create(
           {
             title: 'Housing',
@@ -101,7 +108,7 @@ describe('task template resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.taskTemplateEdit)).toMatchObject({
           title: 'Medical',
         });
@@ -112,7 +119,7 @@ describe('task template resolver', () => {
   describe('task template delete', () => {
     it('deletes a task template', async () => {
       await transaction(TaskTemplate.knex(), async txn => {
-        const { goalSuggestionTemplate } = await setup(txn);
+        const { goalSuggestionTemplate, user } = await setup(txn);
         const taskTemplate = await TaskTemplate.create(
           {
             title: 'Housing',
@@ -128,7 +135,7 @@ describe('task template resolver', () => {
             title, deletedAt
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userRole, txn });
+        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
         expect(cloneDeep(result.data!.taskTemplateDelete).deletedAt).not.toBeFalsy();
       });
     });
@@ -137,7 +144,7 @@ describe('task template resolver', () => {
   describe('task templates', () => {
     it('returns task templates', async () => {
       await transaction(TaskTemplate.knex(), async txn => {
-        const { goalSuggestionTemplate } = await setup(txn);
+        const { goalSuggestionTemplate, user } = await setup(txn);
         const taskTemplate1 = await TaskTemplate.create(
           {
             title: 'Housing 1',
@@ -164,7 +171,8 @@ describe('task template resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          userId: user.id,
+          permissions,
           txn,
         });
         const taskTemplates = cloneDeep(result.data!.taskTemplates);

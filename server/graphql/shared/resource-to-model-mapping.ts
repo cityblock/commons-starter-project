@@ -10,6 +10,7 @@ import ProgressNote from '../../models/progress-note';
 import QuickCall from '../../models/quick-call';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import Task from '../../models/task';
+import TaskComment from '../../models/task-comment';
 
 export type ResourceWithPatientIdMethod =
   | 'carePlanSuggestion'
@@ -22,7 +23,8 @@ export type ResourceWithPatientIdMethod =
   | 'progressNote'
   | 'quickCall'
   | 'riskAreaAssessmentSubmission'
-  | 'task';
+  | 'task'
+  | 'taskComment';
 
 type ResourceToModelMapping = { [K in ResourceWithPatientIdMethod]: ModelClass<any> };
 
@@ -38,6 +40,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   quickCall: QuickCall,
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission,
   task: Task,
+  taskComment: TaskComment,
 };
 
 export default resourceToModelMapping;

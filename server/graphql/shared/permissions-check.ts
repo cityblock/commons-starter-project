@@ -21,8 +21,7 @@ const checkUserPermissions = async (
   txn: Transaction,
   resourceId?: string,
 ): Promise<boolean> => {
-  checkUserLoggedIn(userId);
-  checkUserPermissionsExists(permissions);
+  checkLoggedInWithPermissions(userId, permissions);
 
   const isAllowedWithoutCareTeamCheck = await isAllowedForPermissions(
     permissions,
@@ -51,6 +50,16 @@ const checkUserPermissions = async (
   if (isPassingCareTeamCheck) return true;
 
   throw new Error(`${permissions} not able to ${action} ${resource}`);
+};
+
+export const checkLoggedInWithPermissions = (
+  userId: string | undefined,
+  permissions: Permissions,
+): boolean => {
+  checkUserLoggedIn(userId);
+  checkUserPermissionsExists(permissions);
+
+  return true;
 };
 
 const checkUserPermissionsExists = (permissions: Permissions) => {

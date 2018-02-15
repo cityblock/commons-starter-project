@@ -19,6 +19,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -69,7 +70,7 @@ describe('task follower', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -97,7 +98,7 @@ describe('task follower', () => {
         }`;
         const unfollowResult = await graphql(schema, unfollowMutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -136,7 +137,7 @@ describe('task follower', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -188,7 +189,7 @@ describe('task follower', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -239,7 +240,7 @@ describe('task follower', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

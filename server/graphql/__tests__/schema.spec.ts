@@ -27,10 +27,9 @@ describe('util tests', () => {
       const authToken = signJwt({
         userId: uuid(),
         permissions: 'green',
-        userRole: 'physician',
         lastLoginAt: new Date().toISOString(),
       });
-      const { userId, userRole } = await parseAndVerifyJwt(authToken, txn);
+      const { userId, permissions } = await parseAndVerifyJwt(authToken, txn);
       const context = await getGraphQLContext(
         {
           headers: {
@@ -42,7 +41,7 @@ describe('util tests', () => {
       );
       expect(context).toMatchObject({
         userId,
-        userRole,
+        permissions,
         txn,
       });
     });
@@ -53,7 +52,6 @@ describe('util tests', () => {
       const authToken = signJwt({
         userId: uuid(),
         permissions: 'green',
-        userRole: 'physician',
         lastLoginAt: new Date('01/01/2010').toISOString(),
       });
       const context = await getGraphQLContext(
@@ -66,7 +64,7 @@ describe('util tests', () => {
         txn,
       );
       expect(context).toMatchObject({
-        userRole: 'anonymousUser',
+        permissions: 'black',
         txn,
       });
     });
@@ -93,7 +91,6 @@ describe('util tests', () => {
         const authToken = signJwt({
           userId: user.id,
           permissions: 'green',
-          userRole: 'physician',
           lastLoginAt: new Date(now.valueOf() - 10000).toISOString(),
         });
         await expect(parseAndVerifyJwt(authToken, txn)).rejects.toMatchObject(
@@ -107,7 +104,6 @@ describe('util tests', () => {
         const now = new Date();
         const authToken = signJwt({
           userId: uuid(),
-          userRole: 'physician',
           permissions: 'green',
           lastLoginAt: new Date(
             now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),

@@ -11,6 +11,7 @@ export const builderResources: Resource[] = [
   'goalSuggestionTemplate',
   'goalSuggestion',
   'screeningTool',
+  'screeningToolScoreRange',
   'taskTemplate',
   'taskSuggestion',
   'progressNoteTemplate',
@@ -20,7 +21,7 @@ export const builderResources: Resource[] = [
   'patientList',
 ];
 
-export const userResources: Resource[] = ['user', 'allUsers'];
+export const userResources: Resource[] = ['allUsers', 'user'];
 
 export const careTeamMemberResources: Resource[] = ['user', 'patient'];
 
@@ -38,6 +39,7 @@ export const patientViewOnlyResources: Resource[] = [
   'goalSuggestionTemplate',
   'taskTemplate',
   'screeningTool',
+  'screeningToolScoreRange',
   'progressNoteTemplate',
   'computedField',
   'patientList',
@@ -47,6 +49,7 @@ export const patientViewOnlyResources: Resource[] = [
 
 export const patientAllActionsAllowedResources: Resource[] = [
   'task',
+  'taskComment',
   'patientConcern',
   'carePlanSuggestion',
   'patientGoal',

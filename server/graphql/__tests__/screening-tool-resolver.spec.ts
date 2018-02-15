@@ -18,6 +18,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -54,14 +55,19 @@ describe('screening tool resolver tests', () => {
   describe('resolve screeningTool', () => {
     it('can fetch a screeningTool', async () => {
       await transaction(ScreeningTool.knex(), async txn => {
-        const { screeningTool } = await setup(txn);
+        const { screeningTool, user } = await setup(txn);
         const query = `{
           screeningTool(screeningToolId: "${screeningTool.id}") {
             id
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.screeningTool)).toMatchObject({
           id: screeningTool.id,
           title: screeningTool.title,
@@ -71,16 +77,22 @@ describe('screening tool resolver tests', () => {
 
     it('errors if a screeningTool cannot be found', async () => {
       await transaction(ScreeningTool.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ screeningTool(screeningToolId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such screening tool: ${fakeId}`);
       });
     });
 
     it('gets all screeningTools', async () => {
       await transaction(ScreeningTool.knex(), async txn => {
-        const { riskArea, screeningTool } = await setup(txn);
+        const { riskArea, screeningTool, user } = await setup(txn);
         const screeningTool2 = await ScreeningTool.create(
           {
             title: 'Screening Tool 2',
@@ -95,7 +107,12 @@ describe('screening tool resolver tests', () => {
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const screeningTools = cloneDeep(result.data!.screeningTools);
         const ids = screeningTools.map((tool: ScreeningTool) => tool.id);
         const titles = screeningTools.map((tool: ScreeningTool) => tool.title);
@@ -110,7 +127,7 @@ describe('screening tool resolver tests', () => {
 
     it('gets all screeningTools for a riskArea', async () => {
       await transaction(ScreeningTool.knex(), async txn => {
-        const { riskArea, screeningTool } = await setup(txn);
+        const { riskArea, screeningTool, user } = await setup(txn);
         const riskArea2 = await createRiskArea({ title: 'Risk Area 2', order: 2 }, txn);
         const screeningTool2 = await ScreeningTool.create(
           {
@@ -133,7 +150,12 @@ describe('screening tool resolver tests', () => {
             title
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const screeningTools = cloneDeep(result.data!.screeningToolsForRiskArea);
         const screeningToolIds = screeningTools.map((st: ScreeningTool) => st.id);
         expect(screeningTools.length).toEqual(2);
@@ -155,7 +177,7 @@ describe('screening tool resolver tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -180,7 +202,7 @@ describe('screening tool resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -203,7 +225,7 @@ describe('screening tool resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

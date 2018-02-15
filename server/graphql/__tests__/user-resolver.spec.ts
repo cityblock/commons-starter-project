@@ -21,6 +21,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('user tests', () => {
   let db: Db;
   const userRole = 'physician';
+  const permissions = 'green';
   const log = jest.fn();
   const logger = { log };
 
@@ -31,32 +32,6 @@ describe('user tests', () => {
 
   afterAll(async () => {
     await Db.release();
-  });
-
-  describe('resolve user', () => {
-    it('can fetch user', async () => {
-      await transaction(User.knex(), async txn => {
-        const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
-        const query = `{ user(userId: "${user.id}") { email, firstName, lastName } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
-        expect(cloneDeep(result.data!.user)).toMatchObject({
-          email: 'a@b.com',
-          firstName: 'dan',
-          lastName: 'plant',
-        });
-      });
-    });
-
-    it('errors if a user cannot be found', async () => {
-      await transaction(User.knex(), async txn => {
-        const fakeId = uuid();
-        const query = `{ user(userId: "${fakeId}") { firstName } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
-
-        expect(result.errors![0].message).toMatch(`No such user: ${fakeId}`);
-      });
-    });
   });
 
   describe('resolves a limited set of shortened user objects given some user role filters', () => {
@@ -71,7 +46,12 @@ describe('user tests', () => {
         const query = `{ userSummaryList(userRoleFilters: [${
           user.userRole
         }]) { id, userRole, firstName, lastName } }`;
-        const result = await graphql(schema, query, null, { db, userRole: 'admin', txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([
           {
@@ -89,11 +69,16 @@ describe('user tests', () => {
         const { clinic } = await setup(txn);
         const userRole2 = 'admin';
 
-        await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
         await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
 
         const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
-        const result = await graphql(schema, query, null, { db, userRole: 'admin', txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([]);
       });
@@ -102,12 +87,17 @@ describe('user tests', () => {
     it('does not resolve set of shortened user objects for non-admins', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
         const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch('physician not able to view allUsers');
+        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to view allUsers');
       });
     });
   });
@@ -121,7 +111,8 @@ describe('user tests', () => {
         const query = `{ users { edges { node { id, firstName } } } }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          userId: user.id,
+          permissions,
           txn,
         });
 
@@ -141,12 +132,17 @@ describe('user tests', () => {
     it('does not resolve all users for non-admins', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
         const query = `{ users { edges { node { id, firstName } } } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch('physician not able to view allUsers');
+        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to view allUsers');
       });
     });
 
@@ -177,7 +173,8 @@ describe('user tests', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole: 'admin',
+          userId: user1.id,
+          permissions,
           txn,
         });
 
@@ -226,7 +223,7 @@ describe('user tests', () => {
         const result = await graphql(schema, query, null, {
           db,
           userId: user.id,
-          userRole,
+          permissions: 'blue',
           txn,
         });
         expect(cloneDeep(result.data!.currentUser)).toMatchObject({
@@ -240,7 +237,7 @@ describe('user tests', () => {
     it('errors if there is no logged in user', async () => {
       await transaction(User.knex(), async txn => {
         const query = `{ currentUser { email, firstName, lastName } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, { db, userId: '', permissions, txn });
 
         expect(cloneDeep(result.errors![0].message)).toMatch('not logged in');
       });
@@ -253,7 +250,7 @@ describe('user tests', () => {
         const result = await graphql(schema, query, null, {
           db,
           userId: fakeId,
-          userRole,
+          permissions,
           txn,
         });
 
@@ -274,7 +271,7 @@ describe('user tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -345,7 +342,7 @@ describe('user tests', () => {
             authToken
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const freshUser = await User.query(txn).findById(user.id);
         expect(freshUser!.lastLoginAt).not.toBeFalsy();
@@ -375,7 +372,12 @@ describe('user tests', () => {
             user { firstName, lastName }
           }
         }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userId: 'sansaStark',
+          permissions,
+          txn,
+        });
         expect(result.errors![0].message).toMatch('Auth failed: Email not verified');
       });
     });
@@ -389,7 +391,12 @@ describe('user tests', () => {
             user { firstName, lastName }
           }
         }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: 'aryaStark',
+          txn,
+        });
         expect(result.errors![0].message).toMatch('Email must have a @cityblock.com domain');
       });
     });
@@ -399,12 +406,18 @@ describe('user tests', () => {
     it('creates a new user', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
         const mutation = `mutation {
           userCreate(input: { email: "a@b.com", homeClinicId: "${clinic.id}" }) {
             email
           }
         }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.userCreate)).toMatchObject({
           email: 'a@b.com',
@@ -415,12 +428,17 @@ describe('user tests', () => {
     it('errors if email already exists', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const mutation = `mutation {
           userCreate(input: { email: "a@b.com", homeClinicId: "${clinic.id}" }) {
             email
         } }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.errors![0].message)).toMatch(
           'Cannot create account: Email already exists',
         );
@@ -432,12 +450,17 @@ describe('user tests', () => {
     it('edits user role', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const mutation = `mutation {
           userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
             email, userRole
           } }`;
-        const result = await graphql(schema, mutation, null, { db, userRole: 'admin', txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.userEditRole)).toEqual({
           email: 'a@b.com',
           userRole: 'nurseCareManager',
@@ -448,15 +471,18 @@ describe('user tests', () => {
     it('error if user not able to edit user role for other users', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const mutation = `mutation {
           userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
             email, userRole
           } }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
-        expect(cloneDeep(result.errors![0].message)).toMatch(
-          `${userRole} not able to edit user role`,
-        );
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to edit user');
       });
     });
   });
@@ -465,13 +491,18 @@ describe('user tests', () => {
     it('deletes user', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const mutation = `mutation {
           userDelete(input: { email: "a@b.com" }) {
             email, userRole
           } }`;
 
-        const result = await graphql(schema, mutation, null, { db, userRole: 'admin', txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.userDelete)).toEqual({
           email: 'a@b.com',
           userRole,
@@ -482,13 +513,18 @@ describe('user tests', () => {
     it('error if user not able to delete user', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const mutation = `mutation {
           userDelete(input: { email: "a@b.com" }) {
             email, userRole
           } }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
-        expect(cloneDeep(result.errors![0].message)).toMatch(`${userRole} not able to delete user`);
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to delete user');
       });
     });
   });
@@ -507,7 +543,7 @@ describe('user tests', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           txn,
           userId: user.id,
         });

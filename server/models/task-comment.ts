@@ -114,5 +114,14 @@ export default class TaskComment extends BaseModel {
       total: patientsResult.total,
     };
   }
+
+  static async getPatientIdForResource(taskCommentId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .eager('[task]')
+      .where({ deletedAt: null })
+      .findById(taskCommentId);
+
+    return result ? result.task.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

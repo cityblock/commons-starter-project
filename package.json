@@ -156,7 +156,7 @@
     "@types/morgan": "1.7.35",
     "@types/node": "8.9.4",
     "@types/qs": "6.5.1",
-    "@types/react-beautiful-dnd": "2.3.2",
+    "@types/react-beautiful-dnd": "3.0.1",
     "@types/react-copy-to-clipboard": "4.2.5",
     "@types/react-dom": "16.0.4",
     "@types/react-hot-loader": "3.0.6",

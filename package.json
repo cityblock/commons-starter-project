@@ -239,7 +239,7 @@
     "style-loader": "0.20.1",
     "ts-loader": "3.5.0",
     "ts-node": "4.1.0",
-    "typescript": "2.7.1",
+    "typescript": "2.7.2",
     "typings-for-css-modules-loader": "1.7.0",
     "uglifyjs-webpack-plugin": "1.1.8",
     "url-loader": "0.6.2",

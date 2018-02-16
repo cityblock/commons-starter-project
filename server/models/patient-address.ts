@@ -17,6 +17,8 @@ export default class PatientAddress extends BaseModel {
 
   static tableName = 'patient_address';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

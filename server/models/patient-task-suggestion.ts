@@ -37,6 +37,8 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static tableName = 'patient_task_suggestion';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

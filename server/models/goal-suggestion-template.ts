@@ -20,6 +20,8 @@ export default class GoalSuggestionTemplate extends BaseModel {
 
   static tableName = 'goal_suggestion_template';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

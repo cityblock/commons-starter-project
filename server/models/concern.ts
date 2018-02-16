@@ -29,6 +29,8 @@ export default class Concern extends BaseModel {
 
   static tableName = 'concern';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

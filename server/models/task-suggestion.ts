@@ -18,6 +18,8 @@ export default class TaskSuggestion extends BaseModel {
 
   static tableName = 'task_suggestion';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

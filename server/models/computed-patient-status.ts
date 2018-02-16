@@ -32,6 +32,8 @@ export default class ComputedPatientStatus extends BaseModel {
 
   static tableName = 'computed_patient_status';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

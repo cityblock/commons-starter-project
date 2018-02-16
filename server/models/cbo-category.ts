@@ -13,6 +13,8 @@ export default class CBOCategory extends BaseModel {
 
   static tableName = 'cbo_category';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

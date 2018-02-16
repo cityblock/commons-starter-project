@@ -1,6 +1,7 @@
 import { Model } from 'objection';
 import * as uuid from 'uuid/v4';
 
+/* tslint:disable:check-model-variable */
 export default class BaseModel extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
@@ -20,3 +21,4 @@ export default class BaseModel extends Model {
     this.updatedAt = new Date().toISOString();
   }
 }
+/* tslint:enable:check-model-variable */

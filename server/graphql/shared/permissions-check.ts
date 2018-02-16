@@ -10,7 +10,7 @@ import {
 } from '../../../shared/permissions/permissions-mapping';
 import CareTeam from '../../models/care-team';
 import accessControls, { Action, Resource } from './access-controls';
-import resourceToModelMapping, { ResourceWithPatientIdMethod } from './resource-to-model-mapping';
+import resourceToModelMapping, { ModelResource } from './resource-to-model-mapping';
 import { checkUserLoggedIn } from './utils';
 
 const checkUserPermissions = async (
@@ -93,14 +93,17 @@ export const isUserOnPatientCareTeam = async (
   resourceId: string | null,
   txn: Transaction,
 ): Promise<boolean> => {
-  const model = resourceToModelMapping[resource as ResourceWithPatientIdMethod];
+  const model = resourceToModelMapping[resource as ModelResource] as any;
+  const customResoruce = /^all[a-zA-Z]+/.test(resource) || resource.includes('Bulk');
+  // deny action if model does not map to resource and it's not a custom resource
+  if (!model && !customResoruce) return false;
   // if model does not have association with an individual patient, allow action
-  if (!model) return true;
+  if (customResoruce || !model.hasPHI) return true;
   // if resource id needed but not provided, do not allow action
   if (!resourceId) return false;
 
   // call getPatientIdForResource on the relevant model to get patient id
-  const patientId = await (model as any).getPatientIdForResource(resourceId, txn);
+  const patientId = await model.getPatientIdForResource(resourceId, txn);
   // check that relevant patient is on user's care team
   const isOnCareTeam = patientId ? await CareTeam.isOnCareTeam({ userId, patientId }, txn) : false;
 

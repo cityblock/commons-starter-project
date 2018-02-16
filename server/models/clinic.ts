@@ -26,6 +26,8 @@ export default class Clinic extends BaseModel {
 
   static tableName = 'clinic';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

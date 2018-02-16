@@ -66,6 +66,8 @@ export default class Task extends BaseModel {
 
   static tableName = 'task';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

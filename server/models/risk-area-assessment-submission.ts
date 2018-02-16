@@ -30,6 +30,8 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static tableName = 'risk_area_assessment_submission';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

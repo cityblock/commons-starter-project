@@ -137,6 +137,12 @@ describe('User Permissions Check', () => {
       });
     });
 
+    it('returns true if resource does not map to a specific model instance', async () => {
+      await transaction(User.knex(), async txn => {
+        expect(await isUserOnPatientCareTeam(userId, 'allPatients', '', txn)).toBe(true);
+      });
+    });
+
     it('returns false if check required but no resource id provided', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);

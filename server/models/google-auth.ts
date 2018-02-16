@@ -14,6 +14,8 @@ export default class GoogleAuth extends BaseModel {
 
   static tableName = 'google_auth';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     required: ['accessToken', 'userId'],

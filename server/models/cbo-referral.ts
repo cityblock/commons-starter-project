@@ -39,6 +39,8 @@ export default class CBOReferral extends BaseModel {
 
   static tableName = 'cbo_referral';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

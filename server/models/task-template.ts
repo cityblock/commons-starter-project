@@ -29,6 +29,8 @@ export default class TaskTemplate extends BaseModel {
 
   static tableName = 'task_template';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

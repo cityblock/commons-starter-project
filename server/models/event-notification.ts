@@ -31,6 +31,8 @@ export default class EventNotification extends BaseModel {
 
   static tableName = 'event_notification';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

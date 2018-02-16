@@ -33,6 +33,8 @@ export default class PatientConcern extends BaseModel {
 
   static tableName = 'patient_concern';
 
+  static hasPHI = true;
+
   static modelPaths = [__dirname];
 
   static pickJsonSchemaProperties = true;

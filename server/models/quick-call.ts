@@ -34,6 +34,8 @@ export default class QuickCall extends BaseModel {
 
   static tableName = 'quick_call';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

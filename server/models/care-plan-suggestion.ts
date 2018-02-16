@@ -82,6 +82,8 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static tableName = 'care_plan_suggestion';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

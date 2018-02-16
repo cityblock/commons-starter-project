@@ -26,6 +26,8 @@ export default class ComputedField extends BaseModel {
 
   static tableName = 'computed_field';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

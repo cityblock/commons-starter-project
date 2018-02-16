@@ -23,6 +23,8 @@ export default class TaskComment extends BaseModel {
 
   static tableName = 'task_comment';
 
+  static hasPHI = true;
+
   static modelPaths = [__dirname];
 
   static pickJsonSchemaProperties = true;

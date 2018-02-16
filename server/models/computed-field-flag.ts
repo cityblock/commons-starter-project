@@ -20,6 +20,8 @@ export default class ComputedFieldFlag extends BaseModel {
 
   static tableName = 'computed_field_flag';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

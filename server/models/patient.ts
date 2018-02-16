@@ -106,6 +106,8 @@ export default class Patient extends Model {
 
   static tableName = 'patient';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

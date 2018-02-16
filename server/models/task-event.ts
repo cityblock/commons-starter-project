@@ -74,6 +74,8 @@ export default class TaskEvent extends BaseModel {
 
   static tableName = 'task_event';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

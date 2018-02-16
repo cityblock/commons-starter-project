@@ -41,6 +41,8 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static tableName = 'screening_tool_score_range';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

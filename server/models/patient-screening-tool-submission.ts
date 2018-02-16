@@ -42,6 +42,8 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
   static tableName = 'patient_screening_tool_submission';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

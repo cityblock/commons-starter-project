@@ -27,6 +27,7 @@ export default class GoalSuggestion extends Model {
   screeningToolScoreRange: ScreeningToolScoreRange;
 
   static tableName = 'goal_suggestion';
+  static hasPHI = false;
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 

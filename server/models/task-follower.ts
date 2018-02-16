@@ -17,6 +17,8 @@ export default class TaskFollower extends BaseModel {
 
   static tableName = 'task_follower';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

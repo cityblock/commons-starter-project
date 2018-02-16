@@ -42,6 +42,8 @@ export default class RiskArea extends BaseModel {
 
   static tableName = 'risk_area';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

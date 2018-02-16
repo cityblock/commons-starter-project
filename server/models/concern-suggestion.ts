@@ -23,6 +23,8 @@ export default class ConcernSuggestion extends Model {
   answer: Answer;
 
   static tableName = 'concern_suggestion';
+  static hasPHI = false;
+
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 

@@ -46,6 +46,8 @@ export default class CarePlanUpdateEvent extends BaseModel {
 
   static tableName = 'care_plan_update_event';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

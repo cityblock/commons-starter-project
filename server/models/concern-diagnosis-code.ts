@@ -17,6 +17,8 @@ export default class ConcernDiagnosisCode extends BaseModel {
 
   static tableName = 'concern_diagnosis_code';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

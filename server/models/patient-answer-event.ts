@@ -41,6 +41,8 @@ export default class PatientAnswerEvent extends BaseModel {
 
   static tableName = 'patient_answer_event';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

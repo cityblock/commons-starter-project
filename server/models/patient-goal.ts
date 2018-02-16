@@ -34,6 +34,8 @@ export default class PatientGoal extends BaseModel {
 
   static tableName = 'patient_goal';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

@@ -29,6 +29,8 @@ export default class CareTeam extends BaseModel {
 
   static tableName = 'care_team';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

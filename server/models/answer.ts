@@ -53,6 +53,8 @@ export default class Answer extends BaseModel {
 
   static tableName = 'answer';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

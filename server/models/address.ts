@@ -30,6 +30,8 @@ export default class Address extends BaseModel {
 
   static tableName = 'address';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

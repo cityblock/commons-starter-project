@@ -45,6 +45,8 @@ export default class ProgressNote extends BaseModel {
 
   static tableName = 'progress_note';
 
+  static hasPHI = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

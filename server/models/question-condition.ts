@@ -14,6 +14,8 @@ export default class QuestionCondition extends BaseModel {
 
   static tableName = 'question_condition';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

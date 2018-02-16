@@ -99,6 +99,8 @@ export default class User extends BaseModel {
 
   static pickJsonSchemaProperties = true;
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

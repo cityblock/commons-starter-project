@@ -28,6 +28,8 @@ export default class ScreeningTool extends BaseModel {
 
   static tableName = 'screening_tool';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

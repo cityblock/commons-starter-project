@@ -21,6 +21,8 @@ export default class PatientDataFlag extends BaseModel {
 
   static tableName = 'patient_data_flag';
 
+  static hasPHI = false;
+
   static jsonSchema = {
     type: 'object',
     properties: {

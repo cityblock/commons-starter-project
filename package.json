@@ -123,7 +123,7 @@
     "stylefmt": "6.0.0",
     "stylelint": "8.4.0",
     "stylelint-config-lost": "0.0.3",
-    "stylelint-config-standard": "18.0.0",
+    "stylelint-config-standard": "18.1.0",
     "ts-jest": "22.0.4",
     "tslint": "5.9.1",
     "tslint-microsoft-contrib": "5.0.3",

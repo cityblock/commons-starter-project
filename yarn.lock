@@ -6639,9 +6639,9 @@ node-libs-browser@^2.0.0:
     util "^0.10.3"
     vm-browserify "0.0.4"
 
-node-mocks-http@1.6.6:
-  version "1.6.6"
-  resolved "https://registry.yarnpkg.com/node-mocks-http/-/node-mocks-http-1.6.6.tgz#0fdeef866cc122a80051bbd89a876d3c4cd21e13"
+node-mocks-http@1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/node-mocks-http/-/node-mocks-http-1.6.7.tgz#89f31c12586585c3812e6bd725d417710d7632e3"
   dependencies:
     accepts "^1.3.3"
     depd "^1.1.0"

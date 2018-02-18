@@ -2,16 +2,16 @@
 //  This file was automatically generated and should not be edited.
 
 export enum AnswerValueTypeOptions {
-  string = "string",
   boolean = "boolean",
   number = "number",
+  string = "string",
 }
 
 
 export enum RiskAdjustmentTypeOptions {
+  forceHighRisk = "forceHighRisk",
   inactive = "inactive",
   increment = "increment",
-  forceHighRisk = "forceHighRisk",
 }
 
 
@@ -23,18 +23,18 @@ export enum CarePlanSuggestionType {
 
 export enum CarePlanUpdateEventTypes {
   create_patient_concern = "create_patient_concern",
-  edit_patient_concern = "edit_patient_concern",
-  delete_patient_concern = "delete_patient_concern",
   create_patient_goal = "create_patient_goal",
-  edit_patient_goal = "edit_patient_goal",
+  delete_patient_concern = "delete_patient_concern",
   delete_patient_goal = "delete_patient_goal",
+  edit_patient_concern = "edit_patient_concern",
+  edit_patient_goal = "edit_patient_goal",
 }
 
 
 export enum ComputedFieldDataTypes {
   boolean = "boolean",
-  string = "string",
   number = "number",
+  string = "string",
 }
 
 
@@ -45,9 +45,9 @@ export enum PatientAnswerEventTypes {
 
 export enum AnswerTypeOptions {
   dropdown = "dropdown",
-  radio = "radio",
   freetext = "freetext",
   multiselect = "multiselect",
+  radio = "radio",
 }
 
 
@@ -70,100 +70,100 @@ export enum AssessmentType {
 
 
 export enum Priority {
+  high = "high",
   low = "low",
   medium = "medium",
-  high = "high",
 }
 
 
 export enum TaskEventTypes {
-  create_task = "create_task",
-  add_follower = "add_follower",
-  remove_follower = "remove_follower",
-  complete_task = "complete_task",
-  uncomplete_task = "uncomplete_task",
-  delete_task = "delete_task",
   add_comment = "add_comment",
-  edit_comment = "edit_comment",
-  delete_comment = "delete_comment",
-  edit_priority = "edit_priority",
-  edit_due_date = "edit_due_date",
-  edit_assignee = "edit_assignee",
-  edit_title = "edit_title",
-  edit_description = "edit_description",
-  cbo_referral_edit_sent_at = "cbo_referral_edit_sent_at",
+  add_follower = "add_follower",
   cbo_referral_edit_acknowledged_at = "cbo_referral_edit_acknowledged_at",
+  cbo_referral_edit_sent_at = "cbo_referral_edit_sent_at",
+  complete_task = "complete_task",
+  create_task = "create_task",
+  delete_comment = "delete_comment",
+  delete_task = "delete_task",
+  edit_assignee = "edit_assignee",
+  edit_comment = "edit_comment",
+  edit_description = "edit_description",
+  edit_due_date = "edit_due_date",
+  edit_priority = "edit_priority",
+  edit_title = "edit_title",
+  remove_follower = "remove_follower",
+  uncomplete_task = "uncomplete_task",
 }
 
 
 export enum CompletedWithinInterval {
-  hour = "hour",
   day = "day",
-  week = "week",
+  hour = "hour",
   month = "month",
+  week = "week",
   year = "year",
 }
 
 
 export enum UserRole {
-  physician = "physician",
-  nurseCareManager = "nurseCareManager",
-  primaryCarePhysician = "primaryCarePhysician",
-  communityHealthPartner = "communityHealthPartner",
-  psychiatrist = "psychiatrist",
-  healthCoach = "healthCoach",
-  familyMember = "familyMember",
-  anonymousUser = "anonymousUser",
   admin = "admin",
+  anonymousUser = "anonymousUser",
+  communityHealthPartner = "communityHealthPartner",
+  familyMember = "familyMember",
+  healthCoach = "healthCoach",
+  nurseCareManager = "nurseCareManager",
+  physician = "physician",
+  primaryCarePhysician = "primaryCarePhysician",
+  psychiatrist = "psychiatrist",
 }
 
 
 export enum Permissions {
-  green = "green",
-  pink = "pink",
-  orange = "orange",
-  blue = "blue",
-  yellow = "yellow",
-  red = "red",
   black = "black",
+  blue = "blue",
+  green = "green",
+  orange = "orange",
+  pink = "pink",
+  red = "red",
+  yellow = "yellow",
 }
 
 
 export enum ComputedFieldOrderOptions {
-  labelDesc = "labelDesc",
   labelAsc = "labelAsc",
-  slugDesc = "slugDesc",
+  labelDesc = "labelDesc",
   slugAsc = "slugAsc",
+  slugDesc = "slugDesc",
 }
 
 
 export enum ConcernOrderOptions {
-  createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
-  titleDesc = "titleDesc",
+  createdAtDesc = "createdAtDesc",
   titleAsc = "titleAsc",
-  updatedAtDesc = "updatedAtDesc",
+  titleDesc = "titleDesc",
   updatedAtAsc = "updatedAtAsc",
+  updatedAtDesc = "updatedAtDesc",
 }
 
 
 export enum GoalSuggestionOrderOptions {
-  createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
-  titleDesc = "titleDesc",
+  createdAtDesc = "createdAtDesc",
   titleAsc = "titleAsc",
-  updatedAtDesc = "updatedAtDesc",
+  titleDesc = "titleDesc",
   updatedAtAsc = "updatedAtAsc",
+  updatedAtDesc = "updatedAtDesc",
 }
 
 
 export enum AnswerFilterType {
-  question = "question",
-  progressNote = "progressNote",
-  riskArea = "riskArea",
-  screeningTool = "screeningTool",
   patientScreeningToolSubmission = "patientScreeningToolSubmission",
+  progressNote = "progressNote",
+  question = "question",
+  riskArea = "riskArea",
   riskAreaAssessmentSubmission = "riskAreaAssessmentSubmission",
+  screeningTool = "screeningTool",
 }
 
 
@@ -176,22 +176,22 @@ export interface PatientFilterOptions {
 };
 
 export enum Gender {
-  male = "male",
   female = "female",
-  transgender = "transgender",
+  male = "male",
   nonbinary = "nonbinary",
+  transgender = "transgender",
 }
 
 
 export enum TaskOrderOptions {
-  createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
-  dueAtDesc = "dueAtDesc",
+  createdAtDesc = "createdAtDesc",
   dueAtAsc = "dueAtAsc",
-  updatedAtDesc = "updatedAtDesc",
-  updatedAtAsc = "updatedAtAsc",
+  dueAtDesc = "dueAtDesc",
   titleAsc = "titleAsc",
   titleDesc = "titleDesc",
+  updatedAtAsc = "updatedAtAsc",
+  updatedAtDesc = "updatedAtDesc",
 }
 
 
@@ -203,13 +203,13 @@ export enum QuestionFilterType {
 
 
 export enum UserOrderOptions {
-  createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
-  lastLoginAtDesc = "lastLoginAtDesc",
-  lastLoginAtAsc = "lastLoginAtAsc",
-  updatedAtDesc = "updatedAtDesc",
-  updatedAtAsc = "updatedAtAsc",
+  createdAtDesc = "createdAtDesc",
   emailAsc = "emailAsc",
+  lastLoginAtAsc = "lastLoginAtAsc",
+  lastLoginAtDesc = "lastLoginAtDesc",
+  updatedAtAsc = "updatedAtAsc",
+  updatedAtDesc = "updatedAtDesc",
 }
 
 

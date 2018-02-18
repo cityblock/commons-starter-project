@@ -10,7 +10,7 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@babel/generator@^7.0.0-beta.35":
+"@babel/generator@7.0.0-beta.38":
   version "7.0.0-beta.38"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.0.0-beta.38.tgz#6115a66663e3adfd1d6844029ffb2354680182eb"
   dependencies:
@@ -20,7 +20,7 @@
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/types@7.0.0-beta.38", "@babel/types@^7.0.0-beta.35":
+"@babel/types@7.0.0-beta.38":
   version "7.0.0-beta.38"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.0.0-beta.38.tgz#2ce2443f7dc6ad535a67db4940cbd34e64035a6f"
   dependencies:
@@ -642,12 +642,12 @@ apollo-client@2.2.5:
   optionalDependencies:
     "@types/async" "2.0.47"
 
-apollo-codegen@0.18.3:
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.18.3.tgz#b60698562670443fe4d14b4c1cb3d030e4e9f2d0"
+apollo-codegen@0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.18.5.tgz#68d546c65f2d9d0136c9316901bac381b8665d27"
   dependencies:
-    "@babel/generator" "^7.0.0-beta.35"
-    "@babel/types" "^7.0.0-beta.35"
+    "@babel/generator" "7.0.0-beta.38"
+    "@babel/types" "7.0.0-beta.38"
     change-case "^3.0.1"
     common-tags "^1.5.1"
     core-js "^2.5.3"
@@ -655,7 +655,6 @@ apollo-codegen@0.18.3:
     graphql "^0.12.3"
     graphql-config "^1.1.1"
     inflected "^2.0.3"
-    mkdirp "^0.5.1"
     node-fetch "^1.7.3"
     rimraf "^2.6.2"
     source-map-support "^0.5.0"

@@ -5786,9 +5786,9 @@ knex-migrate@1.5.1:
     req-from "^1.0.1"
     umzug "^1.11.0"
 
-knex@0.14.3:
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.3.tgz#79914106e17d3a8b8c7616b06d75be9079d4b153"
+knex@0.14.4:
+  version "0.14.4"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.4.tgz#d974b7e0355244260c703731c8d90f662bfe798a"
   dependencies:
     babel-runtime "^6.26.0"
     bluebird "^3.5.1"

@@ -1,4 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
+import { getHomeRoute } from '../authentication-container/helpers';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/dashboard-container.css';
 import DashboardPatients from './dashboard-patients';
 import DashboardNavigation from './navigation/navigation';
@@ -14,28 +17,45 @@ export type Selected =
   | 'computed'
   | 'loading';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   match: {
     params: {
       list: Selected;
       answerId?: string;
     };
   };
+  history: History;
 }
 
-const DashboardContainer: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { match: { params: { list, answerId } } } = props;
+export class DashboardContainer extends React.Component<IProps> {
+  componentDidMount(): void {
+    this.redirectIfNeeded();
+  }
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.leftPane}>
-        <DashboardNavigation selected={list} answerId={answerId || null} />
-      </div>
-      <div className={styles.rightPane}>
-        <DashboardPatients selected={list} answerId={answerId || null} />
-      </div>
-    </div>
-  );
-};
+  redirectIfNeeded(): void {
+    const { featureFlags, history } = this.props;
 
-export default DashboardContainer;
+    const homeRoute = getHomeRoute(featureFlags);
+
+    if (homeRoute !== '/dashboard/tasks') {
+      history.push(homeRoute);
+    }
+  }
+
+  render(): JSX.Element {
+    const { match: { params: { list, answerId } } } = this.props;
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.leftPane}>
+          <DashboardNavigation selected={list} answerId={answerId || null} />
+        </div>
+        <div className={styles.rightPane}>
+          <DashboardPatients selected={list} answerId={answerId || null} />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withCurrentUser()(DashboardContainer);

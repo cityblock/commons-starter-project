@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DashboardContainer, { Selected } from '../dashboard-container';
+import { currentUser, featureFlags } from '../../shared/util/test-data';
+import { DashboardContainer, Selected } from '../dashboard-container';
 import DashboardPatients, { IProps } from '../dashboard-patients';
 import DashboardNavigation from '../navigation/navigation';
 
@@ -13,7 +14,14 @@ describe('Dashboard Container', () => {
     },
   };
 
-  const wrapper = shallow(<DashboardContainer match={match} />);
+  const wrapper = shallow(
+    <DashboardContainer
+      match={match}
+      currentUser={currentUser}
+      featureFlags={featureFlags}
+      history={{} as any}
+    />,
+  );
 
   it('renders dashboard navigation', () => {
     expect(wrapper.find(DashboardNavigation).length).toBe(1);

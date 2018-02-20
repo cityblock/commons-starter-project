@@ -7,8 +7,9 @@ it('renders login form correctly', () => {
   const tree = shallow(
     <Component
       history={history}
+      featureFlags={null as any}
       logIn={(() => false) as any}
-      currentUser={null}
+      currentUser={null as any}
       loading={false}
       error={null}
     />,

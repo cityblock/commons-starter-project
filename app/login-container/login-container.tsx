@@ -4,20 +4,20 @@ import { compose, graphql } from 'react-apollo';
 import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import { getHomeRoute } from '../authentication-container/helpers';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
-import { getCurrentUserQuery, logInUserMutationVariables } from '../graphql/types';
+import { logInUserMutationVariables } from '../graphql/types';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/login.css';
 import Footer from './footer';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   mutate?: any;
   history: History;
 }
 
 interface IGraphqlProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
-  currentUser?: getCurrentUserQuery['currentUser'];
   loading: boolean;
   error: string | null;
 }
@@ -46,7 +46,7 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
   componentWillReceiveProps(newProps: allProps) {
     if (newProps.currentUser) {
       // Log in succeeded. Navigate to the patients list scene.
-      this.props.history.push(HOME_ROUTE);
+      this.props.history.push(getHomeRoute(newProps.featureFlags));
       document.title = LOGGED_IN_TITLE;
     }
   }
@@ -59,7 +59,6 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
-
       this.props.history.push(HOME_ROUTE);
       document.title = LOGGED_IN_TITLE;
     } catch (e) {
@@ -118,12 +117,6 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      currentUser: data ? (data as any).currentUser : null,
-    }),
-  }),
+  withCurrentUser(),
   graphql<IGraphqlProps, IProps, allProps>(loginMutation as any, { name: 'logIn' }),
 )(LoginContainer);

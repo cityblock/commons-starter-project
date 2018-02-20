@@ -6,6 +6,7 @@ import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/header.css';
+import { getHomeRoute } from './helpers';
 
 interface IProps extends IInjectedProps {
   mutate?: any;
@@ -36,8 +37,45 @@ export class Header extends React.Component<allProps> {
       currentUser.firstName && currentUser.lastName
         ? `${currentUser.firstName} ${currentUser.lastName}`
         : null;
+    let searchLink = null;
+    let patientLink = null;
+    let taskLink = null;
     let builderLink = null;
     let managerLink = null;
+    if (featureFlags.canViewAllMembers) {
+      searchLink = (
+        <Link to={'/search'} className={this.getNavItemClassnames('/search')}>
+          <div className={styles.searchIcon} />
+          <FormattedMessage id="header.search">
+            {(message: string) => <div className={styles.navText}>{message}</div>}
+          </FormattedMessage>
+        </Link>
+      );
+    }
+    if (featureFlags.canViewAllMembers || featureFlags.canViewMembersOnPanel) {
+      patientLink = (
+        <Link to={'/patients'} className={this.getNavItemClassnames('/patients')}>
+          <div className={styles.patientsIcon} />
+          <FormattedMessage id="header.patients">
+            {(message: string) => <div className={styles.navText}>{message}</div>}
+          </FormattedMessage>
+        </Link>
+      );
+    }
+    if (featureFlags.canViewAllMembers || featureFlags.canViewMembersOnPanel) {
+      taskLink = (
+        <Link
+          to={'/tasks'}
+          className={classNames(this.getNavItemClassnames('/tasks'), styles.relativeNavItem)}
+        >
+          <div className={styles.tasksIcon} />
+          <FormattedMessage id="header.tasks">
+            {(message: string) => <div className={styles.navText}>{message}</div>}
+          </FormattedMessage>
+          <div className={styles.notificationBadge} />
+        </Link>
+      );
+    }
     if (featureFlags.isBuilderEnabled) {
       builderLink = (
         <Link to={'/builder'} className={this.getNavItemClassnames('/builder')}>
@@ -63,31 +101,12 @@ export class Header extends React.Component<allProps> {
       <div className={styles.header}>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Link className={styles.link} to="/dashboard/tasks">
+            <Link className={styles.link} to={getHomeRoute(featureFlags)}>
               <div className={styles.mark} />
             </Link>
-            <Link to={'/search'} className={this.getNavItemClassnames('/search')}>
-              <div className={styles.searchIcon} />
-              <FormattedMessage id="header.search">
-                {(message: string) => <div className={styles.navText}>{message}</div>}
-              </FormattedMessage>
-            </Link>
-            <Link to={'/patients'} className={this.getNavItemClassnames('/patients')}>
-              <div className={styles.patientsIcon} />
-              <FormattedMessage id="header.patients">
-                {(message: string) => <div className={styles.navText}>{message}</div>}
-              </FormattedMessage>
-            </Link>
-            <Link
-              to={'/tasks'}
-              className={classNames(this.getNavItemClassnames('/tasks'), styles.relativeNavItem)}
-            >
-              <div className={styles.tasksIcon} />
-              <FormattedMessage id="header.tasks">
-                {(message: string) => <div className={styles.navText}>{message}</div>}
-              </FormattedMessage>
-              <div className={styles.notificationBadge} />
-            </Link>
+            {searchLink}
+            {patientLink}
+            {taskLink}
             {builderLink}
             {managerLink}
           </div>

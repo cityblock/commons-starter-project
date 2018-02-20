@@ -62,6 +62,9 @@ class CreatePrimaryAddressModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createPrimaryAddressMutationGraphql as any, {
-  name: 'createPrimaryAddressMutation',
-})(CreatePrimaryAddressModal);
+export default graphql<IGraphqlProps, IProps, allProps>(
+  createPrimaryAddressMutationGraphql as any,
+  {
+    name: 'createPrimaryAddressMutation',
+  },
+)(CreatePrimaryAddressModal);

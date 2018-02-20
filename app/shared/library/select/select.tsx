@@ -47,13 +47,11 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     <Option disabled={!isUnselectable} messageId={`${name}.placeholder`} value="" />
   ) : null;
 
-  const optionsComponent = options ? (
-    options.map(option => <Option
-      value={option}
-      messageId={`${name}.${option}`}
-      key={`${name}-option-${option}`}
-    />)
-  ) : null;
+  const optionsComponent = options
+    ? options.map(option => (
+        <Option value={option} messageId={`${name}.${option}`} key={`${name}-option-${option}`} />
+      ))
+    : null;
 
   return (
     <select

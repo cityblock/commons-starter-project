@@ -25,6 +25,7 @@ import PatientAnswer from '../../models/patient-answer';
 import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
 import PatientDataFlag from '../../models/patient-data-flag';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientGoal from '../../models/patient-goal';
 import PatientInfo from '../../models/patient-info';
 import PatientList from '../../models/patient-list';
@@ -75,6 +76,7 @@ export type ModelResource =
   | 'patientAnswerEvent'
   | 'patientConcern'
   | 'patientDataFlag'
+  | 'patientGlassBreak'
   | 'patientGoal'
   | 'patientInfo'
   | 'patientList'
@@ -127,6 +129,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientAnswerEvent: PatientAnswerEvent,
   patientConcern: PatientConcern,
   patientDataFlag: PatientDataFlag,
+  patientGlassBreak: PatientGlassBreak,
   patientGoal: PatientGoal,
   patientInfo: PatientInfo,
   patientList: PatientList,

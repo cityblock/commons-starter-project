@@ -1,0 +1,19 @@
+@import '../../../shared/css/sizes';
+
+.fieldRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field {
+  margin-right: var(--gutter);
+  display: inline-block;
+  width: 100%;
+  margin-bottom: var(--small-gutter);
+}
+
+.modalBody {
+  padding: var(--medium-gutter);
+}

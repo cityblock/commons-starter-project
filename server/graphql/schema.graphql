@@ -257,7 +257,7 @@ type PatientInfo implements uniqueId {
   gender: String
   language: String
   primaryAddress: Address
-  addresses: [Address]
+  addresses: [Address!]
 }
 
 input PatientFilterOptions {
@@ -1129,9 +1129,7 @@ type JWTForPDF {
 type PatientDataFlag implements uniqueId {
   id: ID!
   patientId: ID!
-  patient: Patient!
   userId: ID!
-  user: User!
   fieldName: String!
   suggestedValue: String
 }

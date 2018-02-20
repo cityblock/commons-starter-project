@@ -1,15 +1,16 @@
 import * as classNames from 'classnames';
+import { values } from 'lodash-es';
 import * as React from 'react';
 import { Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
+import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import AgeRangeSelect, { formatAgeValue } from './age-range-select';
 import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-filter-panel.css';
-import { FilterSelect } from './filter-select';
 
 interface IProps {
   onClick: (filters: PatientFilterOptions) => any;
@@ -105,13 +106,13 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
 
           <div className={styles.inputGroup}>
             <FormLabel messageId="patientFilter.gender" />
-            <FilterSelect
+            <Select
               name="gender"
-              isLarge={true}
+              large={true}
               isUnselectable={true}
               onChange={this.handleChange}
-              value={gender || null}
-              options={Object.values(Gender)}
+              value={gender || ''}
+              options={values(Gender)}
             />
           </div>
 

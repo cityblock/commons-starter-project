@@ -480,7 +480,7 @@ declare module 'schema' {
     gender: string | null;
     language: string | null;
     primaryAddress: IAddress | null;
-    addresses: Array<IAddress> | null;
+    addresses: Array<IAddress>;
   }
 
   /**
@@ -501,9 +501,7 @@ declare module 'schema' {
   interface IPatientDataFlag {
     id: string;
     patientId: string;
-    patient: IPatient;
     userId: string;
-    user: IUser;
     fieldName: string;
     suggestedValue: string | null;
   }

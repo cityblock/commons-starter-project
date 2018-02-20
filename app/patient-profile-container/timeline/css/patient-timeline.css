@@ -108,3 +108,9 @@
 .buttonSpacing {
   margin-right: 10px;
 }
+
+.saveButtonGroup {
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}

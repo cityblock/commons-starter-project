@@ -1,0 +1,19 @@
+#import "./full-patient-info.graphql"
+#import "./full-patient-data-flag.graphql"
+
+fragment FullPatientForProfile on Patient {
+  id
+  firstName
+  middleName
+  lastName
+  dateOfBirth
+  createdAt
+  consentToText
+  consentToCall
+  patientInfo {
+    ...FullPatientInfo
+  }
+  patientDataFlags {
+    ...FullPatientDataFlag
+  }
+}

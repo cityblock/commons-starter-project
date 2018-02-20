@@ -1,0 +1,32 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  border: 1px solid var(--border-color);
+  background-color: var(--white-color);
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 var(--medium-gutter);
+}
+
+.title {
+  color: black;
+  font-family: var(--basetica-medium);
+  font-weight: var(--default-font-weight);
+  padding-top: var(--small-gutter);
+}
+
+.body {
+  padding: var(--small-gutter) 50px var(--small-gutter) var(--medium-gutter);
+}
+
+.menu {
+  position: absolute;
+  right: var(--medium-gutter);
+  top: var(--small-gutter);
+}

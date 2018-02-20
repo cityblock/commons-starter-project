@@ -1,20 +1,36 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import Option from '../option/option';
 import * as styles from './css/select.css';
 
 interface IProps {
   value: string;
   onChange: (e?: any) => void;
+  options?: string[];
+  hasPlaceholder?: boolean;
   children?: any;
   className?: string;
   disabled?: boolean;
   name?: string;
   required?: boolean;
   large?: boolean; // makes select 50px tall
+  isUnselectable?: boolean;
 }
 
 const Select: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, className, children, disabled, name, required, large } = props;
+  const {
+    value,
+    onChange,
+    className,
+    children,
+    disabled,
+    name,
+    required,
+    large,
+    options,
+    isUnselectable,
+    hasPlaceholder,
+  } = props;
 
   const selectStyles = classNames(
     styles.select,
@@ -27,6 +43,18 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     className,
   );
 
+  const placeholderComponent = hasPlaceholder ? (
+    <Option disabled={!isUnselectable} messageId={`${name}.placeholder`} value="" />
+  ) : null;
+
+  const optionsComponent = options ? (
+    options.map(option => <Option
+      value={option}
+      messageId={`${name}.${option}`}
+      key={`${name}-option-${option}`}
+    />)
+  ) : null;
+
   return (
     <select
       name={name}
@@ -36,6 +64,8 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
       onChange={onChange}
       disabled={disabled}
     >
+      {placeholderComponent}
+      {optionsComponent}
       {children}
     </select>
   );

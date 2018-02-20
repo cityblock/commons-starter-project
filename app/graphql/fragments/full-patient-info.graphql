@@ -1,0 +1,13 @@
+#import "./full-address.graphql"
+
+fragment FullPatientInfo on PatientInfo {
+  id
+  gender
+  language
+  primaryAddress {
+    ...FullAddress
+  }
+  addresses {
+    ...FullAddress
+  }
+}

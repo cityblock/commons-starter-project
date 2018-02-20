@@ -1,0 +1,66 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  border: 1px solid var(--border-color);
+  background-color: var(--white-color);
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--small-gutter) var(--medium-gutter) 0 var(--medium-gutter);
+}
+
+.title {
+  color: black;
+  font-family: var(--basetica-medium);
+  font-weight: var(--default-font-weight);
+}
+
+.body {
+  padding: var(--small-gutter) var(--medium-gutter);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.container.flagged {
+  border-color: var(--yellow-color);
+}
+
+.container.confirm {
+  border-color: var(--red-color);
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--extra-small-gutter) var(--medium-gutter);
+}
+
+.flagged .footer {
+  background-color: var(--yellow-color);
+}
+
+.confirm .footer {
+  background-color: var(--red-color);
+}
+
+.footerDescription {
+  padding-right: var(--gutter);
+  line-height: var(--medium-font-line-height);
+}
+
+.date {
+  color: gray;
+}
+
+.button {
+  flex-shrink: 0;
+}

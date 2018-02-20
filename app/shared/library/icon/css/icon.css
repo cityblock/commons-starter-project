@@ -5,3 +5,7 @@ svg.icon {
   height: 22px;
   fill: var(--border-color);
 }
+
+svg.icon.white {
+  fill: var(--white-color);
+}

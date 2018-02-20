@@ -40,7 +40,6 @@
 .check {
   display: inline-block;
   margin-left: var(--small-gutter);
-  padding: 15px;
 }
 
 .name {

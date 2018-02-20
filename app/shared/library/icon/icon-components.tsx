@@ -12,13 +12,16 @@ import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
+import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
+import Create from 'material-ui-icons/Create';
 import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorIcon from 'material-ui-icons/Error';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
 import EventIcon from 'material-ui-icons/Event';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+import Flag from 'material-ui-icons/Flag';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
@@ -53,7 +56,9 @@ const components: IconComponents = {
   arrowBack: ArrowBackIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
+  checkCircle: CheckCircleIcon,
   close: CloseIcon,
+  create: Create,
   delete: DeleteIcon,
   error: ErrorIcon,
   errorOutline: ErrorOutlineIcon,
@@ -61,6 +66,7 @@ const components: IconComponents = {
   expandArrow: ExpandArrowIcon,
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
+  flag: Flag,
   highlightOff: HighlightOffIcon,
   home: HomeIcon,
   inbox: InboxIcon,

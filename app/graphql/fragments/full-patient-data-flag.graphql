@@ -1,0 +1,7 @@
+fragment FullPatientDataFlag on PatientDataFlag {
+  id
+  patientId
+  userId
+  fieldName
+  suggestedValue
+}

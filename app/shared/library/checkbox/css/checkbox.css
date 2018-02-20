@@ -1,0 +1,6 @@
+@import '../../../css/sizes';
+
+.label {
+  margin-left: var(--extra-small-gutter);
+  display: inline-block;
+}

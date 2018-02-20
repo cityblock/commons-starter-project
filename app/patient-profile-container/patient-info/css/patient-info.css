@@ -1,0 +1,18 @@
+@import '../../../shared/css/sizes';
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.saveMessage {
+  display: inline-block;
+  padding-right: 15px;
+}
+
+.saveError {
+  padding-left: 3px;
+}
+
+svg.successIcon {
+  fill: var(--blue-color);
+}

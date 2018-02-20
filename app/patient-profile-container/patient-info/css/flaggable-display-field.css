@@ -1,0 +1,21 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  display: inline-block;
+  padding-right: 80px;
+}
+
+.value {
+  font-size: var(--medium-font-size);
+  line-height: var(--large-font-line-height);
+}
+
+.correctedValue {
+  color: var(--red-color);
+  font-size: var(--small-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.isFlagged {
+  color: red;
+}

@@ -2695,9 +2695,28 @@ export interface getPatientQuery {
       language: string | null,
       primaryAddress:  {
         id: string,
+        city: string | null,
+        state: string | null,
+        street: string | null,
         zip: string | null,
+        description: string | null,
       } | null,
+      addresses:  Array< {
+        id: string,
+        city: string | null,
+        state: string | null,
+        street: string | null,
+        zip: string | null,
+        description: string | null,
+      } > | null,
     },
+    patientDataFlags:  Array< {
+      id: string,
+      patientId: string,
+      userId: string,
+      fieldName: string,
+      suggestedValue: string | null,
+    } > | null,
   },
 };
 
@@ -9311,6 +9330,14 @@ export interface FullPatientConcernFragment {
   deletedAt: string | null,
 };
 
+export interface FullPatientDataFlagFragment {
+  id: string,
+  patientId: string,
+  userId: string,
+  fieldName: string,
+  suggestedValue: string | null,
+};
+
 export interface FullPatientForCBOReferralFormPDFFragment {
   id: string,
   createdAt: string,
@@ -9345,6 +9372,45 @@ export interface FullPatientForDashboardFragment {
   patientInfo:  {
     gender: string | null,
   },
+};
+
+export interface FullPatientForProfileFragment {
+  id: string,
+  firstName: string,
+  middleName: string | null,
+  lastName: string,
+  dateOfBirth: string | null,
+  createdAt: string,
+  consentToText: boolean | null,
+  consentToCall: boolean | null,
+  patientInfo:  {
+    id: string,
+    gender: string | null,
+    language: string | null,
+    primaryAddress:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    addresses:  Array< {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street: string | null,
+      zip: string | null,
+      description: string | null,
+    } > | null,
+  },
+  patientDataFlags:  Array< {
+    id: string,
+    patientId: string,
+    userId: string,
+    fieldName: string,
+    suggestedValue: string | null,
+  } > | null,
 };
 
 export interface FullPatientGoalFragment {
@@ -9409,6 +9475,28 @@ export interface FullPatientGoalFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullPatientInfoFragment {
+  id: string,
+  gender: string | null,
+  language: string | null,
+  primaryAddress:  {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street: string | null,
+    zip: string | null,
+    description: string | null,
+  } | null,
+  addresses:  Array< {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street: string | null,
+    zip: string | null,
+    description: string | null,
+  } > | null,
 };
 
 export interface FullPatientListFragment {

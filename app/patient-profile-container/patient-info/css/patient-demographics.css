@@ -1,0 +1,74 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  padding: 0;
+}
+
+.section {
+  padding: var(--medium-gutter);
+  background: var(--gray-background-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section:nth-child(even) {
+  background: var(--highlight-background-color);
+}
+
+.section h2 {
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
+  font-family: var(--basetica-black);
+}
+
+.section h3 {
+  font-family: var(--basetica-medium);
+  font-weight: var(--default-font-weight);
+}
+
+.subSection {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--medium-gutter);
+  margin-top: var(--gutter);
+}
+
+.subSection:last-of-type {
+  border-width: 0;
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field {
+  margin-right: var(--gutter);
+  display: inline-block;
+  width: 100%;
+  margin-bottom: var(--small-gutter);
+}
+
+.checkboxField {
+  margin-right: var(--gutter);
+  display: inline-block;
+  width: 100%;
+  margin-bottom: var(--medium-gutter);
+}
+
+.short {
+  max-width: 500px;
+}
+
+.field:last-child {
+  margin-right: 0;
+}
+
+.deleteLink {
+  cursor: pointer;
+  padding-bottom: var(--small-gutter);
+}
+
+.deleteLink:hover {
+  color: var(--gray-font-color);
+}

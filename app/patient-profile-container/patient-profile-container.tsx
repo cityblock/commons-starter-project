@@ -11,7 +11,7 @@ import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
-import PatientInfo from './patient-info';
+import PatientInfo from './patient-info/patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
 import ScreeningTool from './screening-tool/screening-tool';

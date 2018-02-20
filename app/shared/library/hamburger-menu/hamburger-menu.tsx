@@ -10,6 +10,7 @@ interface IProps extends OnClickOutProps {
   open: boolean;
   onMenuToggle: (e?: any) => void; // event handler for clicking on menu icon
   children?: any; // use HamburgerMenuOption component in same library folder
+  className?: string;
 }
 
 export class HamburgerMenu extends React.Component<IProps> {
@@ -25,7 +26,7 @@ export class HamburgerMenu extends React.Component<IProps> {
   };
 
   render(): JSX.Element {
-    const { open, onMenuToggle, children } = this.props;
+    const { open, onMenuToggle, children, className } = this.props;
 
     let menuOptions: JSX.Element[] | JSX.Element = [];
     // children can either be array or element - if array (multiple options), add dividers
@@ -39,12 +40,13 @@ export class HamburgerMenu extends React.Component<IProps> {
       menuOptions = children;
     }
 
+    const containerStyles = classNames(className, styles.container);
     const iconStyles = classNames(styles.icon, {
       [styles.open]: open,
     });
 
     return (
-      <div onClick={this.onMenuClick} className={styles.container}>
+      <div onClick={this.onMenuClick} className={containerStyles}>
         <Icon name="moreVert" className={iconStyles} onClick={onMenuToggle} />
         {open && <div className={styles.menu}>{menuOptions}</div>}
       </div>

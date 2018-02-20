@@ -16,6 +16,7 @@ interface IProps {
   smallInput?: boolean;
   inputType?: 'datetime-local'; // default is text
   required?: boolean;
+  pattern?: string;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -32,6 +33,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
     smallInput,
     inputType,
     required,
+    pattern,
   } = props;
   const inputStyles = classNames(styles.input, className, {
     [styles.small]: !!smallInput,
@@ -55,6 +57,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
             name={name || ''}
             required={req}
             id={id || ''}
+            pattern={pattern}
           />
         )}
       </FormattedMessage>

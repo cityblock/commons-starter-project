@@ -1,0 +1,15 @@
+@import '../../../css/sizes';
+
+.container {
+  background-color: var(--red-color);
+  padding: 0 var(--medium-gutter);
+}
+
+.container svg {
+  vertical-align: middle;
+}
+
+.label,
+.message {
+  padding: 15px;
+}

@@ -70,3 +70,5 @@ export const patientEditableOnlyResources: Resource[] = [
 ];
 
 export const patientNotDeletableResources: Resource[] = ['patient'];
+
+export const glassBreakResources: Resource[] = ['patientGlassBreak', 'progressNoteGlassBreak'];

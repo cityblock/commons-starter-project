@@ -1,6 +1,7 @@
 import {
   builderResources,
   careTeamMemberResources,
+  glassBreakResources,
   patientAllActionsAllowedResources,
   patientCreatableAndDeletableOnlyResoruces,
   patientCreatableOnlyResources,
@@ -61,6 +62,7 @@ export default [
       { resources: patientNotDeletableResources, permissions: ['view'] },
       { resources: patientEditableOnlyResources, permissions: ['view'] },
       { resources: ['eventNotification'], permissions: ['view', 'edit'] },
+      { resources: glassBreakResources, permissions: ['view', 'create'] },
     ],
   },
   {
@@ -88,6 +90,7 @@ export default [
       { resources: patientNotDeletableResources, permissions: ['create', 'view', 'edit'] },
       { resources: patientEditableOnlyResources, permissions: ['view', 'edit'] },
       { resources: ['eventNotification'], permissions: ['view', 'edit'] },
+      { resources: glassBreakResources, permissions: ['view', 'create'] },
     ],
   },
   {

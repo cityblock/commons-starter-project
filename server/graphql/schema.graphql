@@ -1152,6 +1152,24 @@ type PatientDataFlag implements uniqueId {
   suggestedValue: String
 }
 
+# Patient Glass Break
+type PatientGlassBreak implements uniqueId {
+  id: ID!
+  userId: ID!
+  patientId: ID!
+  reason: String!
+  note: String
+}
+
+# Progress Note Glass Break
+type ProgressNoteGlassBreak implements uniqueId {
+  id: ID!
+  userId: ID!
+  progressNoteId: ID!
+  reason: String!
+  note: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1800,6 +1818,20 @@ input PatientDataFlagCreateInput {
   suggestedValue: String
 }
 
+# params for creating a patient glass break
+input PatientGlassBreakCreateInput {
+  patientId: ID!
+  reason: String!
+  note: String
+}
+
+# params for creating a progress note glass break
+input ProgressNoteGlassBreakCreateInput {
+  progressNoteId: ID!
+  reason: String!
+  note: String
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2022,6 +2054,10 @@ type RootMutationType {
   JWTForPDFCreate: JWTForPDF!
   # creates a patient data flag
   patientDataFlagCreate(input: PatientDataFlagCreateInput): PatientDataFlag
+  # creates a patient glass break
+  patientGlassBreakCreate(input: PatientGlassBreakCreateInput): PatientGlassBreak
+  # creates a progress note glass break
+  progressNoteGlassBreakCreate(input: ProgressNoteGlassBreakCreateInput): ProgressNoteGlassBreak
 }
 
 type RootQueryType {
@@ -2245,6 +2281,10 @@ type RootQueryType {
   CBOsForCategory(categoryId: ID!): [CBO!]!
   # patient data flags for a patient
   patientDataFlagsForPatient(patientId: ID!): [PatientDataFlag!]!
+  # patient glass breaks for user during current session
+  patientGlassBreaksForUser: [PatientGlassBreak!]!
+  # progress note glass breaks for a user during current session
+  progressNoteGlassBreaksForUser: [ProgressNoteGlassBreak!]!
 }
 
 schema {

@@ -389,6 +389,14 @@ declare module 'schema' {
     patient data flags for a patient
   */
     patientDataFlagsForPatient: Array<IPatientDataFlag>;
+    /**
+    patient glass breaks for user during current session
+  */
+    patientGlassBreaksForUser: Array<IPatientGlassBreak>;
+    /**
+    progress note glass breaks for a user during current session
+  */
+    progressNoteGlassBreaksForUser: Array<IProgressNoteGlassBreak>;
   }
 
 
@@ -1458,6 +1466,28 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
+  /**
+    Patient Glass Break
+  */
+  interface IPatientGlassBreak {
+    id: string;
+    userId: string;
+    patientId: string;
+    reason: string;
+    note: string | null;
+  }
+
+  /**
+    Progress Note Glass Break
+  */
+  interface IProgressNoteGlassBreak {
+    id: string;
+    userId: string;
+    progressNoteId: string;
+    reason: string;
+    note: string | null;
+  }
+
 
   interface IRootMutationType {
     /**
@@ -1881,6 +1911,14 @@ declare module 'schema' {
     creates a patient data flag
   */
     patientDataFlagCreate: IPatientDataFlag | null;
+    /**
+    creates a patient glass break
+  */
+    patientGlassBreakCreate: IPatientGlassBreak | null;
+    /**
+    creates a progress note glass break
+  */
+    progressNoteGlassBreakCreate: IProgressNoteGlassBreak | null;
   }
 
   /**
@@ -2728,6 +2766,24 @@ declare module 'schema' {
     userId: string;
     fieldName: string;
     suggestedValue: string | null;
+  }
+
+  /**
+    params for creating a patient glass break
+  */
+  interface IPatientGlassBreakCreateInput {
+    patientId: string;
+    reason: string;
+    note: string | null;
+  }
+
+  /**
+    params for creating a progress note glass break
+  */
+  interface IProgressNoteGlassBreakCreateInput {
+    progressNoteId: string;
+    reason: string;
+    note: string | null;
   }
 
   /**

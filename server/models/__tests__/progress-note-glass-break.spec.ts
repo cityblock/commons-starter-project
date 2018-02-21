@@ -17,7 +17,6 @@ const note = 'New phone who dis';
 interface ISetup {
   user: User;
   patient: Patient;
-  clinic: Clinic;
   progressNoteTemplate: ProgressNoteTemplate;
   progressNote: ProgressNote;
 }
@@ -41,7 +40,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { clinic, user, patient, progressNote, progressNoteTemplate };
+  return { user, patient, progressNote, progressNoteTemplate };
 }
 
 describe('Progress Note Glass Break Model', () => {

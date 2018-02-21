@@ -100,6 +100,10 @@ import {
   resolvePatientDataFlagsForPatient,
 } from './patient-data-flag-resolver';
 import {
+  patientGlassBreakCreate,
+  resolvePatientGlassBreaksForUser,
+} from './patient-glass-break-resolver';
+import {
   patientGoalCreate,
   patientGoalDelete,
   patientGoalEdit,
@@ -145,6 +149,10 @@ import {
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
+import {
+  progressNoteGlassBreakCreate,
+  resolveProgressNoteGlassBreaksForUser,
+} from './progress-note-glass-break-resolver';
 import {
   progressNoteAddSupervisorNotes,
   progressNoteComplete,
@@ -367,6 +375,8 @@ const resolveFunctions = {
     CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
     patientDataFlagsForPatient: resolvePatientDataFlagsForPatient,
+    patientGlassBreaksForUser: resolvePatientGlassBreaksForUser,
+    progressNoteGlassBreaksForUser: resolveProgressNoteGlassBreaksForUser,
   },
 
   RootMutationType: {
@@ -475,6 +485,8 @@ const resolveFunctions = {
     CBOReferralEdit,
     JWTForPDFCreate,
     patientDataFlagCreate,
+    patientGlassBreakCreate,
+    progressNoteGlassBreakCreate,
   },
 };
 

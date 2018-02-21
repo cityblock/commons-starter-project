@@ -18,5 +18,6 @@ export default {
   REDIS_HOST: '127.0.0.1',
   REDIS_PORT: 6379,
   REDIS_PASSWORD: undefined, // Null breaks things, unfortunately
+  PERMISSIONS_SESSION_IN_HOURS: 8,
   ...process.env,
 };

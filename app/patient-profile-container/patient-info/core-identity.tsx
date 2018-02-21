@@ -52,7 +52,7 @@ export default class CoreIdentity extends React.Component<IProps, IState> {
   render() {
     const { patientIdentity } = this.props;
     const { firstName, middleName, lastName, dateOfBirth, patientDataFlags } = patientIdentity;
-    const isFlagged = patientDataFlags ? !!patientDataFlags.length : false;
+    const footerState = patientDataFlags && patientDataFlags.length ? 'flagged' : 'confirm';
     const birthday = dateOfBirth ? format(new Date(dateOfBirth), 'MM/DD/YYYY') : '';
 
     return (
@@ -62,11 +62,9 @@ export default class CoreIdentity extends React.Component<IProps, IState> {
         </FormattedMessage>
         <FlaggableDisplayCard
           titleMessageId="coreIdentity.title"
-          isFlagged={isFlagged}
+          footerState={footerState}
           onFlagClick={this.handleCoreIdentityFlagging}
-          flaggedOn=""
           flaggedMessageId="coreIdentity.flaggedDescription"
-          needsConfirmation={true}
           onConfirmClick={this.handleConfirmIdentity}
           confirmMessageId="coreIdentity.confirmDescription"
         >

@@ -49,6 +49,39 @@ export const user = {
   permissions: 'blue' as any,
 };
 
+export const address1 = {
+  id: 'address-1-id',
+  street: '55 Washington St',
+  city: 'Brooklyn',
+  state: 'NY',
+  description: 'work',
+  zip: '11201',
+};
+
+export const address2 = {
+  id: 'address-2-id',
+  street: '101 Fake St',
+  city: 'Cambridge',
+  state: 'MA',
+  zip: '02139',
+};
+
+export const address3 = {
+  id: 'address-3-id',
+  street: '20 Main St',
+  zip: '12345',
+  description: 'generic',
+};
+
+interface IAddress {
+  id: string;
+  street: string | null;
+  state: string | null;
+  zip: string | null;
+  city: string | null;
+  description: string | null;
+}
+
 export const patient = {
   id: 'patient-id',
   firstName: 'Bob',
@@ -64,11 +97,10 @@ export const patient = {
     id: 'patient-info-id',
     gender: 'male',
     language: 'en',
-    primaryAddress: {
-      id: 'primary-address-id',
-      zip: '11238',
-    },
+    primaryAddress: address1,
+    addresses: [address1, address2, address3] as IAddress[],
   },
+  patientDataFlags: [],
 };
 
 export const concern = {
@@ -777,4 +809,21 @@ export const taskWithComment = {
   patientGoal,
   CBOReferral,
   CBOReferralId: CBOReferral.id,
+};
+
+export const basicInfo = {
+  patientId: patient.id,
+  patientInfoId: patient.patientInfo.id,
+  gender: patient.patientInfo.gender,
+  language: patient.patientInfo.language,
+  primaryAddress: patient.patientInfo.primaryAddress,
+  addresses: [address2, address3],
+};
+
+export const coreIdentity = {
+  firstName: patient.firstName,
+  middleName: patient.middleName,
+  lastName: patient.lastName,
+  dateOfBirth: patient.dateOfBirth,
+  patientDataFlags: patient.patientDataFlags,
 };

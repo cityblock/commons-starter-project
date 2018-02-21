@@ -20,7 +20,7 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-class EditAddressModal extends React.Component<allProps> {
+export class EditAddressModal extends React.Component<allProps> {
   editAddress = async (address: IAddress) => {
     if (!address.id) {
       return;

@@ -16,7 +16,7 @@ import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import * as styles from './css/patient-info.css';
 import PatientDemographics, { IDemographics } from './patient-demographics';
 
-type SelectableTabs = 'demographics' | 'documents';
+export type SelectableTabs = 'demographics' | 'documents';
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
 interface IProps {
@@ -49,7 +49,7 @@ interface IState {
   saveSuccess?: boolean;
 }
 
-class PatientInfo extends React.Component<allProps, IState> {
+export class PatientInfo extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
     this.state = {

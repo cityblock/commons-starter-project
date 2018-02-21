@@ -91,7 +91,7 @@ export default class BasicInformation extends React.Component<IProps> {
 
           <div className={styles.field}>
             <FormLabel messageId="patientInfo.maritalStatus" />
-            <Select name="martitalStatus" large={true} onChange={this.handleValueChange} value="" />
+            <Select name="maritalStatus" large={true} onChange={this.handleValueChange} value="" />
           </div>
 
           <div className={styles.field}>

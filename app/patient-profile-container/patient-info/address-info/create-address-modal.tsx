@@ -22,7 +22,7 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-class CreateAddressModal extends React.Component<allProps> {
+export class CreateAddressModal extends React.Component<allProps> {
   createAddress = async (address: IAddress) => {
     if (address.id) {
       return;

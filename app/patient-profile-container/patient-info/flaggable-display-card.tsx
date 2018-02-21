@@ -8,14 +8,15 @@ import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import SmallText from '../../shared/library/small-text/small-text';
 import * as styles from './css/flaggable-display-card.css';
 
+export type FooterState = 'flagged' | 'confirm' | 'none';
+
 interface IProps {
   children?: any;
   titleMessageId: string;
-  isFlagged: boolean;
+  footerState: FooterState;
   onFlagClick: () => void;
-  flaggedMessageId: string;
-  flaggedOn: string; // date
-  needsConfirmation?: boolean;
+  flaggedMessageId?: string;
+  flaggedOn?: string; // date
   onConfirmClick?: () => void;
   confirmMessageId?: string;
 }
@@ -36,26 +37,30 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
   };
 
   renderFlaggedFooter() {
-    const { isFlagged, flaggedMessageId, flaggedOn } = this.props;
+    const { footerState, flaggedMessageId, flaggedOn } = this.props;
+
+    const flaggedOnMessage = flaggedOn ? (
+      <FormattedMessage id="flaggableDisplayCard.flaggedOn">
+        {(message: string) => (
+          <div className={styles.date}>
+            {message} {format(new Date(flaggedOn), 'MM/DD/YYYY')}
+          </div>
+        )}
+      </FormattedMessage>
+    ) : null;
 
     const footer = (
       <div className={classNames(styles.footer, styles.flagged)}>
         <SmallText messageId={flaggedMessageId} color="black" size="medium" />
-        <FormattedMessage id="flaggableDisplayCard.flaggedOn">
-          {(message: string) => (
-            <div className={styles.date}>
-              {message} {format(new Date(flaggedOn), 'MM/DD/YYYY')}
-            </div>
-          )}
-        </FormattedMessage>
+        {flaggedOnMessage}
       </div>
     );
 
-    return isFlagged ? footer : null;
+    return footerState === 'flagged' ? footer : null;
   }
 
   renderConfirmFooter() {
-    const { confirmMessageId, onConfirmClick, needsConfirmation } = this.props;
+    const { footerState, confirmMessageId, onConfirmClick } = this.props;
 
     const confirmMessage = confirmMessageId ? (
       <SmallText
@@ -81,15 +86,15 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
       </div>
     );
 
-    return needsConfirmation ? footer : null;
+    return footerState === 'confirm' ? footer : null;
   }
 
   render() {
-    const { children, titleMessageId, onFlagClick, isFlagged, needsConfirmation } = this.props;
+    const { children, titleMessageId, onFlagClick, footerState } = this.props;
     const { isMenuVisible } = this.state;
     const containerStyles = classNames(styles.container, {
-      [styles.confirm]: !!needsConfirmation,
-      [styles.flagged]: !!isFlagged,
+      [styles.confirm]: footerState === 'confirm',
+      [styles.flagged]: footerState === 'flagged',
     });
 
     return (

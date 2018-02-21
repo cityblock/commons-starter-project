@@ -75,7 +75,7 @@ describe('task followers', () => {
         );
 
         const error =
-          'insert into "task_follower" ("id", "taskId", "updatedAt", "userId") values ($1, $2, $3, $4) returning "id" - insert or update on table "task_follower" violates foreign key constraint "task_follower_userid_foreign"';
+          'insert into "task_follower" ("createdAt", "id", "taskId", "updatedAt", "userId") values ($1, $2, $3, $4, $5) returning "id" - insert or update on table "task_follower" violates foreign key constraint "task_follower_userid_foreign"';
 
         await expect(
           TaskFollower.followTask({ userId: uuid(), taskId: task.id }, txn),

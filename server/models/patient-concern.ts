@@ -50,6 +50,7 @@ export default class PatientConcern extends BaseModel {
       updatedAt: { type: 'string' },
       startedAt: { type: 'string | null' },
       completedAt: { type: 'string | null' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'concernId'],
   };

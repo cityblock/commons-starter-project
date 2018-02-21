@@ -33,6 +33,7 @@ export default class PatientDataFlag extends BaseModel {
       suggestedValue: { type: 'string' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'userId', 'fieldName'],
   };

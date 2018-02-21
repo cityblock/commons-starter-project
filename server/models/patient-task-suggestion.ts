@@ -51,6 +51,7 @@ export default class PatientTaskSuggestion extends BaseModel {
       acceptedAt: { type: 'string' },
       acceptedById: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'taskTemplateId'],
   };

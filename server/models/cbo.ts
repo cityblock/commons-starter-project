@@ -48,6 +48,7 @@ export default class CBO extends BaseModel {
       url: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['name', 'categoryId', 'address', 'city', 'state', 'zip', 'phone', 'url'],
   };

@@ -39,6 +39,7 @@ export default class GoalSuggestion extends Model {
       screeningToolScoreRangeId: { type: 'string' },
       goalSuggestionTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['goalSuggestionTemplateId'],
     oneOf: [{ required: ['answerId'] }, { required: ['screeningToolScoreRangeId'] }],

@@ -38,6 +38,7 @@ export default class TaskComment extends BaseModel {
       body: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['taskId', 'userId', 'body'],
   };

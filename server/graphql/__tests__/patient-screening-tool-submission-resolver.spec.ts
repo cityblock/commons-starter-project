@@ -328,16 +328,8 @@ describe('patient screening tool submission resolver tests', () => {
         const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
         expect(submissions.length).toEqual(2);
         expect(submissionIds).not.toContain(submission.id);
-        expect(submissions).toMatchObject([
-          {
-            id: submission3.id,
-            score: submission3.score,
-          },
-          {
-            id: submission2.id,
-            score: submission2.score,
-          },
-        ]);
+        expect(submissionIds).toContain(submission2.id);
+        expect(submissionIds).toContain(submission3.id);
       });
     });
 

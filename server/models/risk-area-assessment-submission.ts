@@ -42,6 +42,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       completedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['riskAreaId', 'patientId', 'userId'],
   };

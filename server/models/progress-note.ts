@@ -65,6 +65,7 @@ export default class ProgressNote extends BaseModel {
       supervisorId: { type: 'string' },
       needsSupervisorReview: { type: 'boolean' },
       reviewedBySupervisorAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'userId'],
   };

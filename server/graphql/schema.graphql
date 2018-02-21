@@ -248,16 +248,34 @@ type Patient implements uniqueId {
   consentToText: Boolean
   careTeam: [User!]
   patientDataFlags: [PatientDataFlag!]
+  computedPatientStatus: ComputedPatientStatus!
+  coreIdentityVerifiedAt: String
+  coreIdentityVerifiedById: ID
 }
 
 # Patient info that is editable in Commons
 type PatientInfo implements uniqueId {
   id: ID!
-  patientId: ID
+  patientId: ID!
   gender: String
   language: String
   primaryAddress: Address
   addresses: [Address!]
+}
+
+# ComputedPatientStatus
+type ComputedPatientStatus implements uniqueId {
+  id: ID!
+  patientId: ID!
+  updatedById: ID!
+  isCoreIdentityVerified: Boolean!
+  isDemographicInfoUpdated: Boolean!
+  isEmergencyContactAdded: Boolean!
+  isAdvancedDirectivesAdded: Boolean!
+  isConsentSigned: Boolean!
+  isPhotoAddedOrDeclined: Boolean!
+  isIneligible: Boolean!
+  isDisenrolled: Boolean!
 }
 
 input PatientFilterOptions {

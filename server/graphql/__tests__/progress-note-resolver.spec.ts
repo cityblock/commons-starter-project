@@ -307,14 +307,10 @@ describe('progress note resolver', () => {
           userId: user.id,
           txn,
         });
-        expect(cloneDeep(result.data!.progressNotesForPatient)).toMatchObject([
-          {
-            id: progressNote1.id,
-          },
-          {
-            id: progressNote2.id,
-          },
-        ]);
+        const progressNotes = cloneDeep(result.data!.progressNotesForPatient);
+        const progressNoteIds = progressNotes.map((progressNote: ProgressNote) => progressNote.id);
+        expect(progressNoteIds).toContain(progressNote1.id);
+        expect(progressNoteIds).toContain(progressNote2.id);
       });
     });
 
@@ -349,14 +345,10 @@ describe('progress note resolver', () => {
           userId: user.id,
           txn,
         });
-        expect(cloneDeep(result.data!.progressNotesForCurrentUser)).toMatchObject([
-          {
-            id: progressNote1.id,
-          },
-          {
-            id: progressNote2.id,
-          },
-        ]);
+        const progressNotes = cloneDeep(result.data!.progressNotesForCurrentUser);
+        const progressNoteIds = progressNotes.map((progressNote: ProgressNote) => progressNote.id);
+        expect(progressNoteIds).toContain(progressNote1.id);
+        expect(progressNoteIds).toContain(progressNote2.id);
       });
     });
 

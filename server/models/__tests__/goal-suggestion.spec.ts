@@ -117,8 +117,8 @@ describe('goal suggestion model', () => {
         const { answer } = await setup(txn);
 
         const error =
-          'insert into "goal_suggestion" ("answerId", "goalSuggestionTemplateId",' +
-          ' "id") values ($1, $2, $3) returning "id" - insert or update on table ' +
+          'insert into "goal_suggestion" ("answerId", "createdAt", "goalSuggestionTemplateId",' +
+          ' "id") values ($1, $2, $3, $4) returning "id" - insert or update on table ' +
           '"goal_suggestion" violates foreign key constraint ' +
           '"goal_suggestion_goalsuggestiontemplateid_foreign"';
 

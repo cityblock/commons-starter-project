@@ -99,6 +99,7 @@ export default class PatientAnswer extends BaseModel {
       progressNoteId: { type: 'string' },
       riskAreaAssessmentSubmissionId: { type: 'string' },
       mixerJobId: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'answerId'],
     oneOf: [

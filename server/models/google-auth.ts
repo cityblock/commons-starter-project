@@ -25,6 +25,7 @@ export default class GoogleAuth extends BaseModel {
       expiresAt: { type: 'string' },
       userId: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
   };
 

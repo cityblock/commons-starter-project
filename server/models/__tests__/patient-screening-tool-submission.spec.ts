@@ -644,7 +644,8 @@ describe('patient screening tool submission model', () => {
       );
       const submissionIds = submissions.map(submission => submission.id);
       expect(submissions.length).toEqual(2);
-      expect(submissions).toMatchObject([submission3, submission1]);
+      expect(submissionIds).toContain(submission3.id);
+      expect(submissionIds).toContain(submission1.id);
       expect(submissionIds).not.toContain(submission2.id);
     });
   });

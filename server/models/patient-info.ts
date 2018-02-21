@@ -1,7 +1,7 @@
 import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Address from './address';
-import BaseModel from './base-model';
 import Patient from './patient';
 
 export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
@@ -29,7 +29,11 @@ interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientInfo extends BaseModel {
+export default class PatientInfo extends Model {
+  static modelPaths = [__dirname];
+  static pickJsonSchemaProperties = true;
+
+  id: string;
   patientId: string;
   patient: Patient;
   gender: string;
@@ -37,6 +41,18 @@ export default class PatientInfo extends BaseModel {
   primaryAddressId: string;
   primaryAddress: Address;
   addresses: Address[];
+  createdAt: string;
+  updatedAt: string;
+
+  $beforeInsert() {
+    this.id = uuid();
+    // NOTE: We are NOT setting updatedAt on insert. This is so we can know when first updated.
+    this.createdAt = new Date().toISOString();
+  }
+
+  $beforeUpdate() {
+    this.updatedAt = new Date().toISOString();
+  }
 
   static tableName = 'patient_info';
 
@@ -52,6 +68,7 @@ export default class PatientInfo extends BaseModel {
       primaryAddressId: { type: 'string', format: 'uuid' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'updatedById'],
   };

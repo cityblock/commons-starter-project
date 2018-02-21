@@ -35,6 +35,7 @@ export default class RiskAreaGroup extends BaseModel {
       highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['title', 'shortTitle', 'order', 'mediumRiskThreshold', 'highRiskThreshold'],
   };

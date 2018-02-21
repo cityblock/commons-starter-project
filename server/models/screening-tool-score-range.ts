@@ -53,6 +53,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
       riskAdjustmentType: { type: 'string', enum: ['inactive', 'increment', 'forceHighRisk'] },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['screeningToolId', 'description', 'range'],
   };

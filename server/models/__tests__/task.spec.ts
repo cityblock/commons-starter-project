@@ -345,7 +345,16 @@ describe('task model', () => {
         txn,
       );
       expect(
-        await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1, order, orderBy }, txn),
+        await Task.getPatientTasks(
+          patient.id,
+          {
+            pageNumber: 0,
+            pageSize: 1,
+            order: 'desc',
+            orderBy: 'title',
+          },
+          txn,
+        ),
       ).toMatchObject({
         results: [
           {
@@ -356,7 +365,16 @@ describe('task model', () => {
         total: 2,
       });
       expect(
-        await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1, order, orderBy }, txn),
+        await Task.getPatientTasks(
+          patient.id,
+          {
+            pageNumber: 1,
+            pageSize: 1,
+            order: 'desc',
+            orderBy: 'title',
+          },
+          txn,
+        ),
       ).toMatchObject({
         results: [
           {

@@ -36,6 +36,7 @@ export default class ConcernSuggestion extends Model {
       screeningToolScoreRangeId: { type: 'string' },
       concernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['concernId'],
     oneOf: [{ required: ['answerId'] }, { required: ['screeningToolScoreRangeId'] }],

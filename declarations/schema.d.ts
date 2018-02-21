@@ -469,6 +469,9 @@ declare module 'schema' {
     consentToText: boolean | null;
     careTeam: Array<IUser>;
     patientDataFlags: Array<IPatientDataFlag>;
+    computedPatientStatus: IComputedPatientStatus;
+    coreIdentityVerifiedAt: string | null;
+    coreIdentityVerifiedById: string | null;
   }
 
   /**
@@ -476,7 +479,7 @@ declare module 'schema' {
   */
   interface IPatientInfo {
     id: string;
-    patientId: string | null;
+    patientId: string;
     gender: string | null;
     language: string | null;
     primaryAddress: IAddress | null;
@@ -504,6 +507,23 @@ declare module 'schema' {
     userId: string;
     fieldName: string;
     suggestedValue: string | null;
+  }
+
+  /**
+    ComputedPatientStatus
+  */
+  interface IComputedPatientStatus {
+    id: string;
+    patientId: string;
+    updatedById: string;
+    isCoreIdentityVerified: boolean;
+    isDemographicInfoUpdated: boolean;
+    isEmergencyContactAdded: boolean;
+    isAdvancedDirectivesAdded: boolean;
+    isConsentSigned: boolean;
+    isPhotoAddedOrDeclined: boolean;
+    isIneligible: boolean;
+    isDisenrolled: boolean;
   }
 
   /**

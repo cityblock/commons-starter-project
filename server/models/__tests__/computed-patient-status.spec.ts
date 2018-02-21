@@ -6,7 +6,7 @@ import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientDataFlag from '../patient-data-flag';
-import ProgressNote from '../progress-note';
+import PatientInfo from '../patient-info';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
@@ -53,13 +53,13 @@ describe('computed patient status model', () => {
 
   it('updates and gets a computed patient status for a patient', async () => {
     await transaction(ComputedPatientStatus.knex(), async txn => {
-      const { patient, user, progressNoteTemplate } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-      await ProgressNote.create(
+      await PatientDataFlag.create(
         {
-          patientId: patient.id,
           userId: user.id,
-          progressNoteTemplateId: progressNoteTemplate.id,
+          patientId: patient.id,
+          fieldName: 'firstName',
         },
         txn,
       );
@@ -69,7 +69,7 @@ describe('computed patient status model', () => {
         user.id,
         txn,
       );
-      expect(updatedComputedPatientStatus.hasProgressNote).toEqual(true);
+      expect(updatedComputedPatientStatus.isCoreIdentityVerified).toEqual(true);
 
       const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
         patient.id,
@@ -87,72 +87,45 @@ describe('computed patient status model', () => {
       const computedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
       const computedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);
 
-      expect(computedPatientStatus1!.hasCareTeamMember).toEqual(false);
-      expect(computedPatientStatus2!.hasCareTeamMember).toEqual(false);
+      expect(computedPatientStatus1!.isCoreIdentityVerified).toEqual(false);
+      expect(computedPatientStatus2!.isCoreIdentityVerified).toEqual(false);
 
       await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
       await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+      await PatientDataFlag.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          fieldName: 'firstName',
+        },
+        txn,
+      );
+      await Patient.edit(
+        {
+          coreIdentityVerifiedAt: new Date().toISOString(),
+          coreIdentityVerifiedById: user.id,
+        },
+        patient2.id,
+        txn,
+      );
 
       await ComputedPatientStatus.updateForAllPatients(user.id, txn);
 
       const refetchedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
       const refetchedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);
 
-      expect(refetchedPatientStatus1!.hasCareTeamMember).toEqual(true);
-      expect(refetchedPatientStatus2!.hasCareTeamMember).toEqual(true);
+      expect(refetchedPatientStatus1!.isCoreIdentityVerified).toEqual(true);
+      expect(refetchedPatientStatus2!.isCoreIdentityVerified).toEqual(true);
     });
   });
 
-  it('correctly calculates hasCareTeamMember', async () => {
-    await transaction(ComputedPatientStatus.knex(), async txn => {
-      const { user, patient } = await setup(txn);
-      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
-
-      expect(computedPatientStatus!.hasCareTeamMember).toEqual(false);
-
-      await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
-      await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
-      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-        patient.id,
-        txn,
-      );
-
-      expect(refetchedComputedPatientStatus!.hasCareTeamMember).toEqual(true);
-    });
-  });
-
-  it('correctly calculates hasProgresNote', async () => {
-    await transaction(ComputedPatientStatus.knex(), async txn => {
-      const { user, patient, progressNoteTemplate } = await setup(txn);
-      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
-
-      expect(computedPatientStatus!.hasProgressNote).toEqual(false);
-
-      await ProgressNote.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          progressNoteTemplateId: progressNoteTemplate.id,
-        },
-        txn,
-      );
-      await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
-      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-        patient.id,
-        txn,
-      );
-
-      expect(refetchedComputedPatientStatus!.hasProgressNote).toEqual(true);
-    });
-  });
-
-  describe('coreIdVerified', () => {
-    it('correctly calculates coreIdVerified when verified', async () => {
+  describe('coreIdentityVerified', () => {
+    it('correctly calculates coreIdentityVerified when verified', async () => {
       await transaction(ComputedPatientStatus.knex(), async txn => {
         const { user, patient } = await setup(txn);
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-        expect(computedPatientStatus!.coreIdVerified).toEqual(false);
+        expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(false);
 
         await Patient.edit(
           {
@@ -168,16 +141,16 @@ describe('computed patient status model', () => {
           txn,
         );
 
-        expect(refetchedComputedPatientStatus!.coreIdVerified).toEqual(true);
+        expect(refetchedComputedPatientStatus!.isCoreIdentityVerified).toEqual(true);
       });
     });
 
-    it('correctly calculates coreIdVerified when flagged', async () => {
+    it('correctly calculates coreIdentityVerified when flagged', async () => {
       await transaction(ComputedPatientStatus.knex(), async txn => {
         const { user, patient } = await setup(txn);
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-        expect(computedPatientStatus!.coreIdVerified).toEqual(false);
+        expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(false);
 
         await PatientDataFlag.create(
           {
@@ -193,8 +166,37 @@ describe('computed patient status model', () => {
           txn,
         );
 
-        expect(refetchedComputedPatientStatus!.coreIdVerified).toEqual(true);
+        expect(refetchedComputedPatientStatus!.isCoreIdentityVerified).toEqual(true);
       });
     });
   });
+
+  it('correctly calculates demographicInfoUpdated', async () => {
+    await transaction(ComputedPatientStatus.knex(), async txn => {
+      const { user, patient } = await setup(txn);
+      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+      expect(computedPatientStatus!.isDemographicInfoUpdated).toEqual(false);
+
+      await PatientInfo.edit(
+        {
+          gender: 'nonbinary',
+          updatedById: user.id,
+        },
+        patient.patientInfo.id,
+        txn,
+      );
+      await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
+
+      expect(refetchedComputedPatientStatus!.isDemographicInfoUpdated).toEqual(true);
+    });
+  });
+
+  /* TODO: Once it's possible, test emergencyContactAdded, advancedDirectivesAdded, consentsSigned,
+   *       photoAddedOrDeclined, isIneligible, and isDisenrolled
+   */
 });

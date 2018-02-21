@@ -1,17 +1,16 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
-import CareTeam from './care-team';
 import Patient from './patient';
 import PatientDataFlag from './patient-data-flag';
-import ProgressNote from './progress-note';
 import User from './user';
 
 interface IComputedStatus {
-  hasCareTeamMember: boolean;
-  hasProgressNote: boolean;
-  coreIdVerified: boolean;
-  consentsSigned: boolean;
-  hasPcp: boolean;
+  isCoreIdentityVerified: boolean;
+  isDemographicInfoUpdated: boolean;
+  isEmergencyContactAdded: boolean;
+  isAdvancedDirectivesAdded: boolean;
+  isConsentSigned: boolean;
+  isPhotoAddedOrDeclined: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
 }
@@ -22,11 +21,12 @@ export default class ComputedPatientStatus extends BaseModel {
   patient: Patient;
   updatedById: string;
   updatedBy: User;
-  hasCareTeamMember: boolean;
-  hasProgressNote: boolean;
-  coreIdVerified: boolean;
-  consentsSigned: boolean;
-  hasPcp: boolean;
+  isCoreIdentityVerified: boolean;
+  isDemographicInfoUpdated: boolean;
+  isEmergencyContactAdded: boolean;
+  isAdvancedDirectivesAdded: boolean;
+  isConsentSigned: boolean;
+  isPhotoAddedOrDeclined: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
 
@@ -40,25 +40,29 @@ export default class ComputedPatientStatus extends BaseModel {
       id: { type: 'string' },
       patientId: { type: 'string', minLength: 1 },
       updatedById: { type: 'string', minLength: 1 },
-      hasCareTeamMember: { type: 'boolean' },
-      hasProgressNote: { type: 'boolean' },
-      coreIdVerified: { type: 'boolean' },
-      consentsSigned: { type: 'boolean' },
-      hasPcp: { type: 'boolean' },
+      isCoreIdentityVerified: { type: 'boolean' },
+      isDemographicInfoUpdated: { type: 'boolean' },
+      isEmergencyContactAdded: { type: 'boolean' },
+      isAdvancedDirectivesAdded: { type: 'boolean' },
+      isConsentSigned: { type: 'boolean' },
+      isPhotoAddedOrDeclined: { type: 'boolean' },
       isIneligible: { type: 'boolean' },
       isDisenrolled: { type: 'boolean' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: [
       'patientId',
-      'hasCareTeamMember',
-      'coreIdVerified',
-      'consentsSigned',
-      'hasPcp',
+      'updatedById',
+      'isCoreIdentityVerified',
+      'isDemographicInfoUpdated',
+      'isEmergencyContactAdded',
+      'isAdvancedDirectivesAdded',
+      'isConsentSigned',
+      'isPhotoAddedOrDeclined',
       'isIneligible',
       'isDisenrolled',
-      'updatedById',
     ],
   };
 
@@ -85,24 +89,27 @@ export default class ComputedPatientStatus extends BaseModel {
   static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
     // TODO: When possible, actually calculate all of these values
     const patient = await Patient.get(patientId, txn);
+    const { patientInfo } = patient;
     const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
 
-    const hasCareTeamMember = (await CareTeam.getCountForPatient(patientId, txn)) > 0;
-    const hasProgressNote = (await ProgressNote.getCountForPatient(patientId, txn)) > 0;
-    const coreIdVerified =
+    const isCoreIdentityVerified =
       (!!patient.coreIdentityVerifiedAt && !!patient.coreIdentityVerifiedById) ||
       patientDataFlags.length > 0;
-    const consentsSigned = false;
-    const hasPcp = false;
+    const isDemographicInfoUpdated = !!patientInfo.updatedAt;
+    const isEmergencyContactAdded = false;
+    const isAdvancedDirectivesAdded = false;
+    const isConsentSigned = false;
+    const isPhotoAddedOrDeclined = false;
     const isIneligible = false;
     const isDisenrolled = false;
 
     return {
-      hasCareTeamMember,
-      hasProgressNote,
-      coreIdVerified,
-      consentsSigned,
-      hasPcp,
+      isCoreIdentityVerified,
+      isDemographicInfoUpdated,
+      isEmergencyContactAdded,
+      isAdvancedDirectivesAdded,
+      isConsentSigned,
+      isPhotoAddedOrDeclined,
       isIneligible,
       isDisenrolled,
     };
@@ -134,63 +141,13 @@ export default class ComputedPatientStatus extends BaseModel {
       .patch({ deletedAt: new Date().toISOString() });
 
     // Next, calculate all required datapoints
-    const {
-      hasCareTeamMember,
-      hasProgressNote,
-      coreIdVerified,
-      consentsSigned,
-      hasPcp,
-      isIneligible,
-      isDisenrolled,
-    } = await this.computeCurrentStatus(patientId, txn);
+    const currentStatus = await this.computeCurrentStatus(patientId, txn);
 
     // Finally, create and return a new record
     return this.query(txn).insertAndFetch({
       patientId,
       updatedById,
-      hasCareTeamMember,
-      hasProgressNote,
-      coreIdVerified,
-      consentsSigned,
-      hasPcp,
-      isIneligible,
-      isDisenrolled,
-    });
-  }
-
-  /* NOTE: only use within Patient.create. This function is just for safety to ensure this is the
-   *       place where we don't pass in an updatedById
-   */
-  static async createInitialComputedStatusForPatient(
-    patientId: string,
-    updatedById: string,
-    txn: Transaction,
-  ): Promise<ComputedPatientStatus> {
-    // Just to be extra safe
-    await this.query(txn)
-      .where({ patientId, deletedAt: null })
-      .patch({ deletedAt: new Date().toISOString() });
-
-    const {
-      hasCareTeamMember,
-      hasProgressNote,
-      coreIdVerified,
-      consentsSigned,
-      hasPcp,
-      isIneligible,
-      isDisenrolled,
-    } = await this.computeCurrentStatus(patientId, txn);
-
-    return this.query(txn).insertAndFetch({
-      patientId,
-      hasCareTeamMember,
-      hasProgressNote,
-      coreIdVerified,
-      consentsSigned,
-      hasPcp,
-      isIneligible,
-      isDisenrolled,
-      updatedById,
+      ...currentStatus,
     });
   }
 

@@ -53,6 +53,7 @@ export default class CBOReferral extends BaseModel {
       deletedAt: { type: 'string' },
       sentAt: { type: ['string', 'null'] },
       acknowledgedAt: { type: ['string', 'null'] },
+      createdAt: { type: 'string' },
     },
     required: ['categoryId'],
   };

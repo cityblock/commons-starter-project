@@ -46,6 +46,7 @@ export default class PatientGoal extends BaseModel {
       patientConcernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'title'],
   };

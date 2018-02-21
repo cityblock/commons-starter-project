@@ -57,6 +57,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       scoredAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['screeningToolId', 'patientId', 'userId'],
   };

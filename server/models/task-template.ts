@@ -45,6 +45,7 @@ export default class TaskTemplate extends BaseModel {
       priority: { type: 'string', enum: PRIORITY },
       careTeamAssigneeRole: { type: 'string', enum: USER_ROLE },
       CBOCategoryId: { type: 'string', format: 'uuid' },
+      createdAt: { type: 'string' },
     },
     // TODO: make goalSuggestionTemplateId required?
     required: ['title'],

@@ -92,6 +92,7 @@ export default class Question extends BaseModel {
       validatedSource: { type: 'string' },
       computedFieldId: { type: 'string' },
       otherTextAnswerId: { type: ['string', 'null'] },
+      createdAt: { type: 'string' },
     },
     required: ['title', 'answerType', 'order'],
   };

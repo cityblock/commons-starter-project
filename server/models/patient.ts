@@ -19,7 +19,8 @@ import User from './user';
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.2;
 
-const EAGER_QUERY = '[patientInfo.[primaryAddress, addresses], patientDataFlags]';
+const EAGER_QUERY =
+  '[patientInfo.[primaryAddress, addresses], computedPatientStatus, patientDataFlags]';
 
 export interface IPatientCreateFields {
   patientId: string;
@@ -94,6 +95,7 @@ export default class Patient extends Model {
   patientDataFlags: PatientDataFlag[];
   coreIdentityVerifiedAt: string;
   coreIdentityVerifiedById: string;
+  computedPatientStatus: ComputedPatientStatus;
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();
@@ -125,6 +127,7 @@ export default class Patient extends Model {
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['id', 'cityblockId', 'firstName', 'lastName', 'dateOfBirth'],
   };
@@ -175,6 +178,15 @@ export default class Patient extends Model {
       modelClass: 'patient-data-flag',
       join: {
         from: 'patient_data_flag.patientId',
+        to: 'patient.id',
+      },
+    },
+
+    computedPatientStatus: {
+      relation: Model.HasOneRelation,
+      modelClass: 'computed-patient-status',
+      join: {
+        from: 'computed_patient_status.patientId',
         to: 'patient.id',
       },
     },
@@ -267,11 +279,7 @@ export default class Patient extends Model {
       txn,
     );
 
-    await ComputedPatientStatus.createInitialComputedStatusForPatient(
-      patientId,
-      attributionUser.id,
-      txn,
-    );
+    await ComputedPatientStatus.updateForPatient(patientId, attributionUser.id, txn);
 
     return this.get(patient.id, txn);
   }

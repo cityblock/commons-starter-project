@@ -60,6 +60,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
       eventType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'userId', 'eventType'],
   };

@@ -69,6 +69,7 @@ export default class Answer extends BaseModel {
       order: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['displayValue', 'value', 'valueType', 'questionId', 'order'],
   };

@@ -35,6 +35,7 @@ export default class Clinic extends BaseModel {
       name: { type: 'string', minLength: 1 }, // cannot be blank
       departmentId: { type: 'integer', minLength: 1 }, // cannot be blank
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['name', 'departmentId'],
   };

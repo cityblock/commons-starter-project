@@ -122,6 +122,7 @@ export default class User extends BaseModel {
       updatedAt: { type: 'string' },
       phone: { type: 'string' },
       permissions: { type: 'string', enum: PERMISSIONS },
+      createdAt: { type: 'string' },
     },
     required: ['email', 'homeClinicId', 'userRole'],
   };

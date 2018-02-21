@@ -156,28 +156,7 @@ describe('task comment model', () => {
       expect(taskComments.total).toEqual(2);
       expect(taskCommentIds).toContain(taskComment1.id);
       expect(taskCommentIds).toContain(taskComment2.id);
-
-      // Make sure pagination works correctly
-      expect(
-        await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 1 }, txn),
-      ).toMatchObject({
-        results: [
-          {
-            body: 'omg a comment',
-          },
-        ],
-        total: 2,
-      });
-      expect(
-        await TaskComment.getTaskComments(task.id, { pageNumber: 1, pageSize: 1 }, txn),
-      ).toMatchObject({
-        results: [
-          {
-            body: 'omg another comment',
-          },
-        ],
-        total: 2,
-      });
+      expect(taskCommentIds).not.toContain(deletedComment.id);
     });
   });
 

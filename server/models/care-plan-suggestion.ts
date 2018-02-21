@@ -102,6 +102,7 @@ export default class CarePlanSuggestion extends BaseModel {
       computedFieldId: { type: 'string' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['patientId', 'suggestionType'],
     oneOf: [

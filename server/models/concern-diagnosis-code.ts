@@ -27,6 +27,7 @@ export default class ConcernDiagnosisCode extends BaseModel {
       diagnosisCodeId: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['concernId', 'diagnosisCodeId'],
   };

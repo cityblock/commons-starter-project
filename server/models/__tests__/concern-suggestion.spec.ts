@@ -111,8 +111,8 @@ describe('concern suggestion model', () => {
       await transaction(Question.knex(), async txn => {
         const { answer } = await setup(txn);
         const error =
-          'insert into "concern_suggestion" ("answerId", "concernId", "id") values ' +
-          '($1, $2, $3) returning "id" - insert or update on table "concern_suggestion" ' +
+          'insert into "concern_suggestion" ("answerId", "concernId", "createdAt", "id") values ' +
+          '($1, $2, $3, $4) returning "id" - insert or update on table "concern_suggestion" ' +
           'violates foreign key constraint "concern_suggestion_concernid_foreign"';
 
         await expect(

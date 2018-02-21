@@ -27,6 +27,7 @@ export default class TaskFollower extends BaseModel {
       userId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['taskId', 'userId'],
   };

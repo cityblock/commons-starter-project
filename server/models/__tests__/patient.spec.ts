@@ -366,7 +366,7 @@ describe('patient model', () => {
 
         await ComputedPatientStatus.updateForPatient(patientId, user.id, txn);
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patientId, txn);
-        expect(computedPatientStatus!.coreIdVerified).toEqual(true);
+        expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(true);
 
         await Patient.updateFromAttribution(
           {
@@ -380,7 +380,7 @@ describe('patient model', () => {
           patientId,
           txn,
         );
-        expect(refetchedComputedPatientStatus!.coreIdVerified).toEqual(false);
+        expect(refetchedComputedPatientStatus!.isCoreIdentityVerified).toEqual(false);
       });
     });
   });

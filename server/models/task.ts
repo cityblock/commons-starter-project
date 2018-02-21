@@ -85,6 +85,7 @@ export default class Task extends BaseModel {
       CBOReferralId: { type: 'string', format: 'uuid' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['title', 'patientId'],
   };

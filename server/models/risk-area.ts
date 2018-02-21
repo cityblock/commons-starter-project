@@ -56,6 +56,7 @@ export default class RiskArea extends BaseModel {
       order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       mediumRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      createdAt: { type: 'string' },
     },
     required: [
       'title',

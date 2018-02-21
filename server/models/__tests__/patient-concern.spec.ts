@@ -83,7 +83,7 @@ describe('patient concern model', () => {
         ),
       ).rejects.toMatchObject(
         new Error(
-          'insert into "patient_concern" ("concernId", "id", "order", "patientId", "updatedAt") values ($1, $2, (select coalesce(max("order"), 0) + 1 from "patient_concern" where "patientId" = $3 and "deletedAt" is null), $4, $5) returning "id" - duplicate key value violates unique constraint "patientconcern_patientid_deletedat"',
+          'insert into "patient_concern" ("concernId", "createdAt", "id", "order", "patientId", "updatedAt") values ($1, $2, $3, (select coalesce(max("order"), 0) + 1 from "patient_concern" where "patientId" = $4 and "deletedAt" is null), $5, $6) returning "id" - duplicate key value violates unique constraint "patientconcern_patientid_deletedat"',
         ),
       );
     });

@@ -24,6 +24,7 @@ export default class ProgressNoteTemplate extends BaseModel {
       requiresGlassBreak: { type: 'boolean' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: ['title'],
   };

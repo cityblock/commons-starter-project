@@ -42,6 +42,7 @@ export default class Address extends BaseModel {
       city: { type: 'string' },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
       updatedBy: { type: 'string', format: 'uuid' },
     },
     required: ['zip', 'updatedBy'],

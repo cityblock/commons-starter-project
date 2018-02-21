@@ -2152,6 +2152,14 @@ export interface getPatientCareTeamQuery {
   } | null >,
 };
 
+export interface getPatientGlassBreaksForUserQuery {
+  // patient glass breaks for user during current session
+  patientGlassBreaksForUser:  Array< {
+    id: string,
+    patientId: string,
+  } >,
+};
+
 export interface getPatientListQueryVariables {
   patientListId: string,
 };
@@ -3565,6 +3573,14 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       } | null,
     } >,
   },
+};
+
+export interface getProgessNoteGlassBreaksForUserQuery {
+  // progress note glass breaks for a user during current session
+  progressNoteGlassBreaksForUser:  Array< {
+    id: string,
+    progressNoteId: string,
+  } >,
 };
 
 export interface getProgressNoteTemplateQueryVariables {
@@ -5560,6 +5576,20 @@ export interface patientEditMutation {
   } | null,
 };
 
+export interface patientGlassBreakCreateMutationVariables {
+  patientId: string,
+  reason: string,
+  note?: string | null,
+};
+
+export interface patientGlassBreakCreateMutation {
+  // creates a patient glass break
+  patientGlassBreakCreate:  {
+    id: string,
+    patientId: string,
+  } | null,
+};
+
 export interface patientGoalCreateMutationVariables {
   title?: string | null,
   patientId: string,
@@ -6416,6 +6446,20 @@ export interface progressNoteEditMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+  } | null,
+};
+
+export interface progressNoteGlassBreakCreateMutationVariables {
+  progressNoteId: string,
+  reason: string,
+  note?: string | null,
+};
+
+export interface progressNoteGlassBreakCreateMutation {
+  // creates a progress note glass break
+  progressNoteGlassBreakCreate:  {
+    id: string,
+    progressNoteId: string,
   } | null,
 };
 
@@ -11095,6 +11139,11 @@ export interface ShortEventNotificationsForUserTaskFragment {
   createdAt: string,
 };
 
+export interface ShortPatientGlassBreakFragment {
+  id: string,
+  patientId: string,
+};
+
 export interface ShortPatientInfoFragment {
   id: string,
   gender: string | null,
@@ -11166,6 +11215,11 @@ export interface ShortPatientFragment {
       zip: string | null,
     } | null,
   },
+};
+
+export interface ShortProgressNoteGlassBreakFragment {
+  id: string,
+  progressNoteId: string,
 };
 
 export interface ShortTaskFragment {

@@ -9,6 +9,7 @@ interface IProgressNoteTemplateEditableFields {
 /* tslint:disable:member-ordering */
 export default class ProgressNoteTemplate extends BaseModel {
   title: string;
+  requiresGlassBreak: boolean;
   questions: Question[];
 
   static tableName = 'progress_note_template';
@@ -20,6 +21,7 @@ export default class ProgressNoteTemplate extends BaseModel {
     properties: {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 },
+      requiresGlassBreak: { type: 'boolean' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
     },

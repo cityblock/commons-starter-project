@@ -46,6 +46,7 @@ describe('progress note template model', () => {
       expect(progressNoteTemplate).toMatchObject({
         id: progressNoteTemplate.id,
         title: 'title',
+        requiresGlassBreak: false,
       });
 
       expect(progressNoteTemplate.createdAt).not.toBeFalsy();

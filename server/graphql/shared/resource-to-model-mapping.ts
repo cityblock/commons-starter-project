@@ -104,6 +104,8 @@ export type ModelResource =
 
 type ResourceToModelMapping = { [K in ModelResource]: ModelClass<any> };
 
+export const glassBreakResources: ModelResource[] = ['patientGlassBreak', 'progressNoteGlassBreak'];
+
 const resourceToModelMapping: ResourceToModelMapping = {
   address: Address,
   answer: Answer,

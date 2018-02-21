@@ -2,6 +2,7 @@ import { isBefore, subHours } from 'date-fns';
 import { Transaction } from 'objection';
 import config from '../config';
 import BaseModel from './base-model';
+import CareTeam from './care-team';
 
 interface IPatientGlassBreakCreateFields {
   userId: string;
@@ -53,8 +54,22 @@ export default class PatientGlassBreak extends BaseModel {
     return patientGlassBreak;
   }
 
-  static async validateGlassBreak(patientGlassBreakId: string, txn: Transaction): Promise<boolean> {
-    const glassBreak = await this.get(patientGlassBreakId, txn);
+  static async validateGlassBreak(
+    patientGlassBreakId: string,
+    userId: string,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<boolean> {
+    const glassBreak = await this.query(txn).findOne({
+      id: patientGlassBreakId,
+      userId,
+      patientId,
+      deletedAt: null,
+    });
+
+    if (!glassBreak) {
+      return Promise.reject(`No such glass break: ${patientGlassBreakId}`);
+    }
 
     if (isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))) {
       return Promise.reject(`Glass break ${patientGlassBreakId} occurred too long ago`);
@@ -75,6 +90,22 @@ export default class PatientGlassBreak extends BaseModel {
       `,
       )
       .andWhere({ userId, deletedAt: null });
+  }
+
+  static async validateGlassBreakNotNeeded(
+    userId: string,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<boolean> {
+    const isOnCareTeam = await CareTeam.isOnCareTeam({ userId, patientId }, txn);
+
+    if (!isOnCareTeam) {
+      return Promise.reject(
+        `User ${userId} cannot automatically break the glass for patient ${patientId}`,
+      );
+    }
+
+    return true;
   }
 }
 /* tslint:enable:member-ordering */

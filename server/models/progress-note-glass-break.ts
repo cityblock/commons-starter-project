@@ -2,6 +2,7 @@ import { isBefore, subHours } from 'date-fns';
 import { Transaction } from 'objection';
 import config from '../config';
 import BaseModel from './base-model';
+import ProgressNote from './progress-note';
 
 interface IProgressNoteGlassBreakCreateFields {
   userId: string;
@@ -58,9 +59,20 @@ export default class ProgressNoteGlassBreak extends BaseModel {
 
   static async validateGlassBreak(
     progressNoteGlassBreakId: string,
+    userId: string,
+    progressNoteId: string,
     txn: Transaction,
   ): Promise<boolean> {
-    const glassBreak = await this.get(progressNoteGlassBreakId, txn);
+    const glassBreak = await this.query(txn).findOne({
+      id: progressNoteGlassBreakId,
+      userId,
+      progressNoteId,
+      deletedAt: null,
+    });
+
+    if (!glassBreak) {
+      return Promise.reject(`No such glass break: ${progressNoteGlassBreakId}`);
+    }
 
     if (isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))) {
       return Promise.reject(`Glass break ${progressNoteGlassBreakId} occurred too long ago`);
@@ -81,6 +93,30 @@ export default class ProgressNoteGlassBreak extends BaseModel {
       `,
       )
       .andWhere({ userId, deletedAt: null });
+  }
+
+  static async validateGlassBreakNotNeeded(
+    userId: string,
+    progressNoteId: string,
+    txn: Transaction,
+  ): Promise<boolean> {
+    const progressNote = await ProgressNote.getForGlassBreak(progressNoteId, txn);
+
+    // if template does not require a glass break action is valid
+    if (
+      progressNote.progressNoteTemplate &&
+      !progressNote.progressNoteTemplate.requiresGlassBreak
+    ) {
+      return true;
+    }
+    // action is valid also if current user is the author of the note
+    if (progressNote.userId === userId) {
+      return true;
+    }
+
+    return Promise.reject(
+      `User ${userId} cannot automatically break the glass for progress note ${progressNoteId}`,
+    );
   }
 }
 /* tslint:enable:member-ordering */

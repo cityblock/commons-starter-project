@@ -2,7 +2,10 @@ import { camelCase } from 'lodash';
 import { transaction } from 'objection';
 import Db from '../../../db';
 import User from '../../../models/user';
-import resourceToModelMappings, { ModelResource } from '../resource-to-model-mapping';
+import resourceToModelMappings, {
+  glassBreakResources,
+  ModelResource,
+} from '../resource-to-model-mapping';
 
 describe('Resource to Model Mappings', () => {
   beforeEach(async () => {
@@ -50,6 +53,16 @@ describe('Resource to Model Mappings', () => {
           expect(model.hasPHI).toBe(true);
         }
       });
+    });
+  });
+
+  it('ensures that glass break resources have needed methods', () => {
+    glassBreakResources.forEach(resource => {
+      const model = resourceToModelMappings[resource] as any;
+
+      expect(model.validateGlassBreak).toBeTruthy();
+      expect(model.validateGlassBreakNotNeeded).toBeTruthy();
+      expect(model.getForCurrentUserSession).toBeTruthy();
     });
   });
 });

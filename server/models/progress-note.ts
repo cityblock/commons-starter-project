@@ -318,5 +318,18 @@ export default class ProgressNote extends BaseModel {
 
     return result ? result.patientId : '';
   }
+
+  static async getForGlassBreak(progressNoteId: string, txn: Transaction): Promise<ProgressNote> {
+    const progressNote = await this.query(txn)
+      .eager('[progressNoteTemplate]')
+      .findOne({
+        id: progressNoteId,
+        deletedAt: null,
+      });
+    if (!progressNote) {
+      return Promise.reject(`No such progress note: ${progressNoteId}`);
+    }
+    return progressNote;
+  }
 }
 /* tslint:enable:member-ordering */

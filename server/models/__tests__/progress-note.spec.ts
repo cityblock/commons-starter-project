@@ -411,6 +411,7 @@ describe('progress note model', () => {
         },
         txn,
       );
+
       const progressNote = await ProgressNote.get(createdNote.id, txn);
       expect(progressNote).toMatchObject({
         id: progressNote.id,
@@ -422,6 +423,40 @@ describe('progress note model', () => {
       const fetchedPatientId = await ProgressNote.getPatientIdForResource(progressNote.id, txn);
 
       expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
+
+  it('creates and retrieves progress note for glass break', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+      const createdNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+      await ProgressNote.complete(createdNote.id, txn);
+      const progressNote = await ProgressNote.getForGlassBreak(createdNote.id, txn);
+
+      expect(progressNote).toMatchObject({
+        id: progressNote.id,
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      });
+
+      expect(progressNote.progressNoteTemplate).toBeTruthy();
+    });
+  });
+
+  it('throws an error when getting an invalid id', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const fakeId = uuid();
+      await expect(ProgressNote.getForGlassBreak(fakeId, txn)).rejects.toMatch(
+        `No such progress note: ${fakeId}`,
+      );
     });
   });
 });

@@ -1,23 +1,38 @@
 import { transaction, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import { permissionsMappings } from '../../../../shared/permissions/permissions-mapping';
 import Db from '../../../db';
 import Clinic from '../../../models/clinic';
+import Patient from '../../../models/patient';
+import PatientGlassBreak from '../../../models/patient-glass-break';
 import User from '../../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../../spec-helpers';
 import checkUserPermissions, {
   checkLoggedInWithPermissions,
   getBusinessToggles,
+  getGlassBreakModel,
   isAllowedForPermissions,
   isUserOnPatientCareTeam,
+  validateGlassBreak,
 } from '../permissions-check';
+
+const reason = "Demogorgon says it's cool";
 
 interface ISetup {
   clinic: Clinic;
+  user: User;
+  patient: Patient;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  return { clinic };
+  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const patient = await createPatient(
+    { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
+    txn,
+  );
+
+  return { user, patient, clinic };
 }
 
 describe('User Permissions Check', () => {
@@ -204,7 +219,7 @@ describe('User Permissions Check', () => {
   });
 
   describe('checkLoggedInWithPermissions', () => {
-    it('throws error if user not logged in', async () => {
+    it('throws error if user not logged in', () => {
       expect(() => {
         checkLoggedInWithPermissions('', 'green');
       }).toThrowError('not logged in');
@@ -218,6 +233,106 @@ describe('User Permissions Check', () => {
 
     it('returns true if user logged in and permissions specified', () => {
       expect(checkLoggedInWithPermissions(userId, 'blue')).toBe(true);
+    });
+  });
+
+  describe('getGlassBreakModel', () => {
+    it('returns mapped glass break resource if it exists', () => {
+      expect(getGlassBreakModel('patient')).toEqual(PatientGlassBreak);
+    });
+
+    it('throws an error if resource not mapped', () => {
+      const error = 'Resource does not have required glass break methods or not mapped properly';
+
+      expect(() => {
+        getGlassBreakModel('CBO');
+      }).toThrowError(error);
+    });
+  });
+
+  describe('validateGlassBreak', () => {
+    it('validates glass break id if provided', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason,
+            note: null,
+          },
+          txn,
+        );
+
+        const result = await validateGlassBreak(
+          user.id,
+          'blue',
+          'patient',
+          patient.id,
+          txn,
+          patientGlassBreak.id,
+        );
+
+        expect(result).toBeTruthy();
+      });
+    });
+
+    it('invalidates invalid glass break id', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const fakeId = uuid();
+        const { user, patient } = await setup(txn);
+
+        try {
+          await validateGlassBreak(user.id, 'blue', 'patient', patient.id, txn, fakeId);
+        } catch (err) {
+          expect(err).toBe(`No such glass break: ${fakeId}`);
+        }
+      });
+    });
+
+    it('creates a glass break for a user that can auto break glass', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+
+        const result = await validateGlassBreak(user.id, 'green', 'patient', patient.id, txn, null);
+
+        expect(result).toBeTruthy();
+
+        const glassBreak = await PatientGlassBreak.query(txn).findOne({
+          userId: user.id,
+          patientId: patient.id,
+        });
+
+        expect(glassBreak).toMatchObject({
+          userId: user.id,
+          patientId: patient.id,
+        });
+      });
+    });
+
+    it('validates glass break not needed if user on patient care team', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+
+        const result = await validateGlassBreak(user.id, 'blue', 'patient', patient.id, txn, null);
+
+        expect(result).toBeTruthy();
+      });
+    });
+
+    it('invalidates glass break not needed if user not on patient care team', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { patient, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+
+        try {
+          await validateGlassBreak(user2.id, 'blue', 'patient', patient.id, txn, null);
+        } catch (err) {
+          expect(err).toBe(
+            `User ${user2.id} cannot automatically break the glass for patient ${patient.id}`,
+          );
+        }
+      });
     });
   });
 });

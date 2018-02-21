@@ -19,6 +19,7 @@ interface ISetup {
   patient: Patient;
   progressNoteTemplate: ProgressNoteTemplate;
   progressNote: ProgressNote;
+  clinic: Clinic;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -40,7 +41,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { user, patient, progressNote, progressNoteTemplate };
+  return { user, patient, progressNote, progressNoteTemplate, clinic };
 }
 
 describe('Progress Note Glass Break Model', () => {
@@ -105,17 +106,26 @@ describe('Progress Note Glass Break Model', () => {
         txn,
       );
 
-      expect(await ProgressNoteGlassBreak.validateGlassBreak(progressNoteGlassBreak.id, txn)).toBe(
-        true,
-      );
+      expect(
+        await ProgressNoteGlassBreak.validateGlassBreak(
+          progressNoteGlassBreak.id,
+          user.id,
+          progressNote.id,
+          txn,
+        ),
+      ).toBe(true);
     });
   });
 
   it('invalidates a glass break with a fake id', async () => {
     await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { user, progressNote } = await setup(txn);
+
       const fakeId = uuid();
-      const error = `No such progress note glass break: ${fakeId}`;
-      await expect(ProgressNoteGlassBreak.validateGlassBreak(fakeId, txn)).rejects.toMatch(error);
+      const error = `No such glass break: ${fakeId}`;
+      await expect(
+        ProgressNoteGlassBreak.validateGlassBreak(fakeId, user.id, progressNote.id, txn),
+      ).rejects.toMatch(error);
     });
   });
 
@@ -140,7 +150,12 @@ describe('Progress Note Glass Break Model', () => {
       const error = `Glass break ${patientGlassBreak.id} occurred too long ago`;
 
       await expect(
-        ProgressNoteGlassBreak.validateGlassBreak(patientGlassBreak.id, txn),
+        ProgressNoteGlassBreak.validateGlassBreak(
+          patientGlassBreak.id,
+          user.id,
+          progressNote.id,
+          txn,
+        ),
       ).rejects.toMatch(error);
     });
   });
@@ -203,6 +218,48 @@ describe('Progress Note Glass Break Model', () => {
       ).toMatchObject({
         ...otherProgressNoteGlassBreak,
       });
+    });
+  });
+
+  it('validates glass break not needed for progress notes whose templates do not require glass break', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { progressNote, clinic } = await setup(txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      expect(
+        await ProgressNoteGlassBreak.validateGlassBreakNotNeeded(user2.id, progressNote.id, txn),
+      ).toBeTruthy();
+    });
+  });
+
+  it('validates glass break not needed for progress notes authored by given user', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { user, progressNote, progressNoteTemplate } = await setup(txn);
+      await ProgressNoteTemplate.query(txn)
+        .where({ id: progressNoteTemplate.id })
+        .patch({ requiresGlassBreak: true });
+
+      expect(
+        await ProgressNoteGlassBreak.validateGlassBreakNotNeeded(user.id, progressNote.id, txn),
+      ).toBeTruthy();
+    });
+  });
+
+  it('invalidates glass break by non-author when template requires glass break', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { progressNote, progressNoteTemplate, clinic } = await setup(txn);
+      await ProgressNoteTemplate.query(txn)
+        .where({ id: progressNoteTemplate.id })
+        .patch({ requiresGlassBreak: true });
+
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+      const error = `User ${user2.id} cannot automatically break the glass for progress note ${
+        progressNote.id
+      }`;
+
+      await expect(
+        ProgressNoteGlassBreak.validateGlassBreakNotNeeded(user2.id, progressNote.id, txn),
+      ).rejects.toMatch(error);
     });
   });
 });

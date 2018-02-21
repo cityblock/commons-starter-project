@@ -32,6 +32,7 @@ import PatientList from '../../models/patient-list';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import ProgressNote from '../../models/progress-note';
+import ProgressNoteGlassBreak from '../../models/progress-note-glass-break';
 import ProgressNoteTemplate from '../../models/progress-note-template';
 import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
@@ -83,6 +84,7 @@ export type ModelResource =
   | 'patientScreeningToolSubmission'
   | 'patientTaskSuggestion'
   | 'progressNote'
+  | 'progressNoteGlassBreak'
   | 'progressNoteTemplate'
   | 'question'
   | 'questionCondition'
@@ -135,8 +137,9 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientList: PatientList,
   patientScreeningToolSubmission: PatientScreeningToolSubmission,
   patientTaskSuggestion: PatientTaskSuggestion,
-  progressNoteTemplate: ProgressNoteTemplate,
   progressNote: ProgressNote,
+  progressNoteGlassBreak: ProgressNoteGlassBreak,
+  progressNoteTemplate: ProgressNoteTemplate,
   question: Question,
   questionCondition: QuestionCondition,
   quickCall: QuickCall,

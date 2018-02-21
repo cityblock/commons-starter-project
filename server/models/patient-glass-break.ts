@@ -33,7 +33,10 @@ export default class PatientGlassBreak extends BaseModel {
     required: ['userId', 'patientId', 'reason'],
   };
 
-  static async create(input: IPatientGlassBreakCreateFields, txn: Transaction): Promise<PatientGlassBreak> {
+  static async create(
+    input: IPatientGlassBreakCreateFields,
+    txn: Transaction,
+  ): Promise<PatientGlassBreak> {
     return this.query(txn).insertAndFetch(input);
   }
 
@@ -60,11 +63,17 @@ export default class PatientGlassBreak extends BaseModel {
     return true;
   }
 
-  static async getForCurrentUserSession(userId: string, txn: Transaction): Promise<PatientGlassBreak[]> {
+  static async getForCurrentUserSession(
+    userId: string,
+    txn: Transaction,
+  ): Promise<PatientGlassBreak[]> {
     return this.query(txn)
-      .whereRaw(`
-        patient_glass_break."createdAt" > now() - interval \'${config.PERMISSIONS_SESSION_IN_HOURS - 1} hours\'
-      `)
+      .whereRaw(
+        `
+        patient_glass_break."createdAt" > now() - interval \'${config.PERMISSIONS_SESSION_IN_HOURS -
+          1} hours\'
+      `,
+      )
       .andWhere({ userId, deletedAt: null });
   }
 }

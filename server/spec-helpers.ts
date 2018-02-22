@@ -104,6 +104,14 @@ export function createMockAddress(userId: string) {
   };
 }
 
+export function createMockEmail(userId: string) {
+  return {
+    email: 'spam@email.com',
+    description: 'spam email',
+    updatedBy: userId,
+  };
+}
+
 export function createMockPatient(
   cityblockId: number,
   homeClinicId: string,

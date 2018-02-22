@@ -1,8 +1,14 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockEmail,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
+import Email from '../email';
 import Patient from '../patient';
 import PatientInfo from '../patient-info';
 import User from '../user';
@@ -115,6 +121,34 @@ describe('patient info model', () => {
             zip: '10010',
             state: 'NY',
             city: 'Brooklyn',
+            updatedBy: user.id,
+          },
+        });
+      });
+    });
+
+    it('should add email to patient info', async () => {
+      await transaction(PatientInfo.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const email = await Email.create(createMockEmail(user.id), txn);
+
+        const result = await PatientInfo.edit(
+          {
+            primaryEmailId: email.id,
+            updatedById: user.id,
+          },
+          patient.patientInfo.id,
+          txn,
+        );
+
+        expect(result).toMatchObject({
+          patientId: patient.id,
+          id: patient.patientInfo.id,
+          gender: 'male',
+          language: 'en',
+          primaryEmail: {
+            email: 'spam@email.com',
+            description: 'spam email',
             updatedBy: user.id,
           },
         });

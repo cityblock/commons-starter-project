@@ -1127,6 +1127,38 @@ export interface currentUserEditMutation {
   } | null,
 };
 
+export interface emailCreateForPatientMutationVariables {
+  patientId: string,
+  email: string,
+  description?: string | null,
+  isPrimary?: boolean | null,
+};
+
+export interface emailCreateForPatientMutation {
+  // Create an email for a Patient
+  emailCreateForPatient:  {
+    id: string,
+    email: string | null,
+    description: string | null,
+  } | null,
+};
+
+export interface emailEditMutationVariables {
+  emailId: string,
+  patientId: string,
+  email: string,
+  description?: string | null,
+};
+
+export interface emailEditMutation {
+  // Edit an email
+  emailEdit:  {
+    id: string,
+    email: string | null,
+    description: string | null,
+  } | null,
+};
+
 export interface eventNotificationDismissMutationVariables {
   eventNotificationId: string,
 };
@@ -9058,6 +9090,12 @@ export interface FullDiagnosisCodeFragment {
   codesetName: string,
   label: string,
   version: string,
+};
+
+export interface FullEmailFragment {
+  id: string,
+  email: string | null,
+  description: string | null,
 };
 
 export interface FullEventNotificationFragment {

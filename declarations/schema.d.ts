@@ -500,6 +500,8 @@ declare module 'schema' {
     language: string | null;
     primaryAddress: IAddress | null;
     addresses: Array<IAddress>;
+    primaryEmail: IEmail | null;
+    emails: Array<IEmail>;
   }
 
   /**
@@ -511,6 +513,15 @@ declare module 'schema' {
     street: string | null;
     state: string | null;
     city: string | null;
+    description: string | null;
+  }
+
+  /**
+    Email
+  */
+  interface IEmail {
+    id: string;
+    email: string | null;
     description: string | null;
   }
 
@@ -1567,6 +1578,14 @@ declare module 'schema' {
   */
     addressEdit: IAddress | null;
     /**
+    Create an email for a Patient
+  */
+    emailCreateForPatient: IEmail | null;
+    /**
+    Edit an email
+  */
+    emailEdit: IEmail | null;
+    /**
     Edit fields on patient stored in the db
   */
     patientEdit: IPatient | null;
@@ -2074,6 +2093,26 @@ declare module 'schema' {
     street: string | null;
     state: string | null;
     city: string | null;
+    description: string | null;
+  }
+
+  /**
+    params for creating and email for a patient in the db
+  */
+  interface IEmailCreateForPatientInput {
+    patientId: string;
+    email: string;
+    description: string | null;
+    isPrimary: boolean | null;
+  }
+
+  /**
+    Editable fields on an email
+  */
+  interface IEmailEditInput {
+    emailId: string;
+    patientId: string;
+    email: string;
     description: string | null;
   }
 

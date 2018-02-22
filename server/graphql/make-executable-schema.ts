@@ -61,6 +61,7 @@ import {
   concernSuggestionDelete,
   resolveConcernsForAnswer,
 } from './concern-suggestion-resolver';
+import { emailCreateForPatient, emailEdit } from './email-resolver';
 import {
   eventNotificationsForTaskDismiss,
   eventNotificationDismiss,
@@ -391,6 +392,8 @@ const resolveFunctions = {
     careTeamAddUser,
     careTeamAssignPatients,
     careTeamRemoveUser,
+    emailCreateForPatient,
+    emailEdit,
     patientEdit,
     patientCoreIdentityVerify,
     patientInfoEdit,

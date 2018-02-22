@@ -268,6 +268,8 @@ type PatientInfo implements uniqueId {
   language: String
   primaryAddress: Address
   addresses: [Address!]
+  primaryEmail: Email
+  emails: [Email!]
 }
 
 # ComputedPatientStatus
@@ -335,6 +337,29 @@ input AddressCreatePrimaryForPatientInput {
   state: String
   city: String
   description: String
+}
+
+# Email
+type Email implements uniqueId {
+  id: ID!
+  email: String
+  description: String
+}
+
+# Editable fields on an email
+input EmailEditInput {
+  emailId: ID!
+  patientId: ID!
+  email: String!
+  description: String
+}
+
+# params for creating and email for a patient in the db
+input EmailCreateForPatientInput {
+  patientId: ID!
+  email: String!
+  description: String
+  isPrimary: Boolean
 }
 
 # Patient node
@@ -1882,6 +1907,10 @@ type RootMutationType {
   addressCreatePrimaryForPatient(input: AddressCreatePrimaryForPatientInput): Address
   # Edit an address
   addressEdit(input: AddressEditInput): Address
+  # Create an email for a Patient
+  emailCreateForPatient(input: EmailCreateForPatientInput): Email
+  # Edit an email
+  emailEdit(input: EmailEditInput): Email
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
   # mark core identity verified on patient stored in the db

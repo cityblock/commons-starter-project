@@ -15,6 +15,7 @@ import Concern from '../../models/concern';
 import ConcernDiagnosisCode from '../../models/concern-diagnosis-code';
 import ConcernSuggestion from '../../models/concern-suggestion';
 import DiagnosisCode from '../../models/diagnosis-code';
+import Email from '../../models/email';
 import EventNotification from '../../models/event-notification';
 import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
@@ -25,6 +26,7 @@ import PatientAnswer from '../../models/patient-answer';
 import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
 import PatientDataFlag from '../../models/patient-data-flag';
+import PatientEmail from '../../models/patient-email';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientGoal from '../../models/patient-goal';
 import PatientInfo from '../../models/patient-info';
@@ -67,6 +69,7 @@ export type ModelResource =
   | 'concernSuggestion'
   | 'concern'
   | 'diagnosisCode'
+  | 'email'
   | 'eventNotification'
   | 'goalSuggestionTemplate'
   | 'goalSuggestion'
@@ -77,6 +80,7 @@ export type ModelResource =
   | 'patientAnswerEvent'
   | 'patientConcern'
   | 'patientDataFlag'
+  | 'patientEmail'
   | 'patientGlassBreak'
   | 'patientGoal'
   | 'patientInfo'
@@ -123,6 +127,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   concernSuggestion: ConcernSuggestion,
   concern: Concern,
   diagnosisCode: DiagnosisCode,
+  email: Email,
   eventNotification: EventNotification,
   goalSuggestionTemplate: GoalSuggestionTemplate,
   goalSuggestion: GoalSuggestion,
@@ -133,6 +138,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientAnswerEvent: PatientAnswerEvent,
   patientConcern: PatientConcern,
   patientDataFlag: PatientDataFlag,
+  patientEmail: PatientEmail,
   patientGlassBreak: PatientGlassBreak,
   patientGoal: PatientGoal,
   patientInfo: PatientInfo,

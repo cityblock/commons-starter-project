@@ -2,6 +2,7 @@ import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Address from './address';
+import Email from './email';
 import Patient from './patient';
 
 export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
@@ -19,6 +20,7 @@ export interface IPatientInfoOptions {
   gender?: string;
   language?: string;
   primaryAddressId?: string;
+  primaryEmailId?: string;
 }
 
 interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
@@ -26,6 +28,7 @@ interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
   gender?: string;
   language?: string;
   primaryAddressId?: string;
+  primaryEmailId?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -41,6 +44,9 @@ export default class PatientInfo extends Model {
   primaryAddressId: string;
   primaryAddress: Address;
   addresses: Address[];
+  primaryEmailId: string;
+  primaryEmail: Email;
+  emails: Email[];
   createdAt: string;
   updatedAt: string;
 
@@ -66,6 +72,7 @@ export default class PatientInfo extends Model {
       language: { type: 'string' },
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
       primaryAddressId: { type: 'string', format: 'uuid' },
+      primaryEmailId: { type: 'string', format: 'uuid' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
@@ -104,6 +111,28 @@ export default class PatientInfo extends Model {
         to: 'patient_info.primaryAddressId',
       },
     },
+
+    emails: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'email',
+      join: {
+        from: 'patient_info.patientId',
+        through: {
+          from: 'patient_email.patientId',
+          to: 'patient_email.emailId',
+        },
+        to: 'email.id',
+      },
+    },
+
+    primaryEmail: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'email',
+      join: {
+        from: 'email.id',
+        to: 'patient_info.primaryEmailId',
+      },
+    },
   };
 
   static async get(patientInfoId: string, txn: Transaction): Promise<PatientInfo> {
@@ -136,7 +165,7 @@ export default class PatientInfo extends Model {
     txn: Transaction,
   ): Promise<PatientInfo> {
     return this.query(txn)
-      .eager('primaryAddress')
+      .eager('[primaryAddress, primaryEmail]')
       .patchAndFetchById(patientInfoId, patientInfo);
   }
 }

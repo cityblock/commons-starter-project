@@ -1,0 +1,9 @@
+#import "../fragments/full-email.graphql"
+
+mutation emailCreateForPatient($patientId: ID!, $email: String!, $description: String, $isPrimary: Boolean) {
+  emailCreateForPatient(
+    input: { patientId: $patientId, email: $email, description: $description, isPrimary: $isPrimary }
+  ) {
+    ...FullEmail
+  }
+}

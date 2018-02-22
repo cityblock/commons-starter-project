@@ -1,20 +1,20 @@
-import { get as httpGet, IncomingMessage } from 'http';
+import request from 'axios';
+import { transaction } from 'objection';
 import config from '../config';
 import Db from '../db';
+import { signJwt } from '../graphql/shared/utils';
 import { main } from '../index';
+import Clinic from '../models/clinic';
+import User from '../models/user';
 
 config.PORT = '3001'; // Use a different route for testing than serving.
 
 const GRAPHQL_ROUTE = '/graphql';
 
-const getFromServer = async (uri: string, basicAuthString?: string) =>
-  new Promise<IncomingMessage>((resolve, reject) => {
-    httpGet(`http://localhost:${config.PORT}${uri}`, resolve).on('error', reject);
-  });
-
 describe('main', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -22,14 +22,117 @@ describe('main', () => {
   });
 
   it('should be able to Initialize a server (production)', async () => {
-    const server = await main({ env: 'production' });
-    server.close();
+    const server = await main({ env: 'production', allowCrossDomainRequests: true });
+    return server.close();
   });
 
-  it('should have a working GET graphql (production)', async () => {
-    const server = await main({ env: 'production' });
-    const res = await getFromServer(GRAPHQL_ROUTE);
-    expect(res.statusCode).toBe(400);
-    server.close();
+  it('should be able to place graphql queries', async () => {
+    return transaction(User.knex(), async txn => {
+      const user = await transaction(User.knex(), async innerTxn => {
+        const clinic = await Clinic.create(
+          {
+            name: 'foo',
+            departmentId: 1,
+          },
+          innerTxn,
+        );
+        return User.create(
+          { homeClinicId: clinic.id, email: 'a@b.com', userRole: 'admin' },
+          innerTxn,
+        );
+      });
+
+      const authToken = signJwt({
+        userId: user.id,
+        permissions: 'green',
+        lastLoginAt: new Date().toISOString(),
+      });
+
+      const server = await main({
+        env: 'test',
+        transaction: txn,
+        allowCrossDomainRequests: true,
+      });
+      const query = `query {
+        currentUser {
+          id, email
+        }
+      }`;
+
+      const res = await request.post(
+        `http://localhost:${config.PORT}${GRAPHQL_ROUTE}`,
+        { query },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            origin: `http://localhost:${config.PORT}`,
+            'accept-encoding': 'gzip, deflate, br',
+            auth_token: authToken,
+          },
+        },
+      );
+
+      expect(res.status).toBe(200);
+      expect(res.data.data).toEqual({
+        currentUser: {
+          id: user.id,
+          email: 'a@b.com',
+        },
+      });
+      return server.close();
+    });
+  });
+
+  it('returns errors from graphql mutations that throw an error', async () => {
+    return transaction(User.knex(), async txn => {
+      const email = 'a@b.com';
+      const user = await transaction(User.knex(), async innerTxn => {
+        const clinic = await Clinic.create(
+          {
+            name: 'foo',
+            departmentId: 1,
+          },
+          innerTxn,
+        );
+        return User.create({ homeClinicId: clinic.id, email, userRole: 'admin' }, innerTxn);
+      });
+      const authToken = signJwt({
+        userId: user.id,
+        permissions: 'green',
+        lastLoginAt: new Date().toISOString(),
+      });
+
+      const server = await main({
+        env: 'test',
+        transaction: txn,
+        allowCrossDomainRequests: true,
+      });
+      const mutation = `mutation userCreate($email: String!, $homeClinicId: ID!) {
+        userCreate(input: {email: $email, homeClinicId: $homeClinicId}) {
+          id, email
+        }
+      }`;
+      const variables = {
+        email,
+        homeClinicId: user.homeClinicId,
+      };
+      const res = await request.post(
+        `http://localhost:${config.PORT}${GRAPHQL_ROUTE}`,
+        { query: mutation, variables },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            origin: `http://localhost:${config.PORT}`,
+            'accept-encoding': 'gzip, deflate, br',
+            auth_token: authToken,
+          },
+        },
+      );
+      expect(res.data.errors[0].message).toEqual(
+        'Cannot create account: Email already exists for a@b.com',
+      );
+      expect(res.status).toBe(200);
+      return server.close();
+    });
   });
 });

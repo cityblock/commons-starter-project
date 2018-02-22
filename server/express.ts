@@ -6,6 +6,7 @@ import GraphQLDog from 'graphql-dog';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
+import { Transaction } from 'objection';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
@@ -36,6 +37,19 @@ export const checkAuth = (username: string, password: string) => (
   next();
 };
 
+export const allowCrossDomainMiddleware = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, auth_token');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else next();
+};
+
 export const addHeadersMiddleware = (
   req: express.Request,
   res: express.Response,
@@ -50,7 +64,12 @@ export const addHeadersMiddleware = (
   next();
 };
 
-export default async (app: express.Application, logger: Console) => {
+export default async (
+  app: express.Application,
+  logger: Console,
+  txn?: Transaction,
+  allowCrossDomainRequests?: boolean,
+) => {
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
     // enable webpack dev middleware
@@ -84,8 +103,6 @@ export default async (app: express.Application, logger: Console) => {
   }
 
   app.use('/assets', express.static(path.join(__dirname, '..', '..', 'public')));
-  // Note: eventually we should add an asset hash, and cache our assets but currently causes problems
-  // ie: add { maxAge: '24h', },
 
   // should be near in this list to when we add the graphql middleware
   if (process.env.DATADOG_API_KEY) {
@@ -96,15 +113,22 @@ export default async (app: express.Application, logger: Console) => {
   if (config.NODE_ENV === 'development') {
     app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   }
+
+  // Used for integration tests
+  if (allowCrossDomainRequests && config.NODE_ENV === 'test') {
+    app.use(allowCrossDomainMiddleware);
+  }
+
   app.use(
     '/graphql',
+    addHeadersMiddleware,
     bodyParser.json(),
     graphqlExpress(async (request: express.Request | undefined) => ({
       schema: schema as any,
       context: await getGraphQLContext(
         request!,
         logger,
-        undefined,
+        txn || undefined,
         process.env.DATADOG_API_KEY ? GraphQLDog : null,
       ),
       formatResponse,

@@ -8,7 +8,9 @@ describe('Library Select Component', () => {
   const onChange = () => true as any;
   const className = 'grassPokemon';
 
-  const wrapper = shallow(<Select value={value} onChange={onChange} className={className} name="test" />);
+  const wrapper = shallow(
+    <Select value={value} onChange={onChange} className={className} name="test" />,
+  );
 
   it('renders a select tag with correct props', () => {
     const select = wrapper.find('select');
@@ -58,10 +60,30 @@ describe('Library Select Component', () => {
     wrapper.setProps({ hasPlaceholder: false, options: ['what', 'else'] });
 
     expect(wrapper.find(Option).length).toBe(2);
-    expect(wrapper.find(Option).at(0).props().value).toBe('what');
-    expect(wrapper.find(Option).at(0).props().messageId).toBe('test.what');
+    expect(
+      wrapper
+        .find(Option)
+        .at(0)
+        .props().value,
+    ).toBe('what');
+    expect(
+      wrapper
+        .find(Option)
+        .at(0)
+        .props().messageId,
+    ).toBe('test.what');
 
-    expect(wrapper.find(Option).at(1).props().value).toBe('else');
-    expect(wrapper.find(Option).at(1).props().messageId).toBe('test.else');
+    expect(
+      wrapper
+        .find(Option)
+        .at(1)
+        .props().value,
+    ).toBe('else');
+    expect(
+      wrapper
+        .find(Option)
+        .at(1)
+        .props().messageId,
+    ).toBe('test.else');
   });
 });

@@ -132,7 +132,6 @@ export async function resolveCurrentUser(
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['currentUser']> {
   checkLoggedInWithPermissions(userId, permissions);
-
   return User.get(userId!, txn);
 }
 

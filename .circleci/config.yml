@@ -39,7 +39,7 @@ jobs:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: yarn coverage:frontend
+      - run: yarn test:frontend
 
   test_api:
     working_directory: ~/repo
@@ -65,7 +65,7 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: yarn coverage:api
+      - run: yarn test:api
 
   test_models:
     working_directory: ~/repo
@@ -91,7 +91,7 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: yarn coverage:models
+      - run: yarn test:models
 
   deploy_staging:
     working_directory: ~/repo

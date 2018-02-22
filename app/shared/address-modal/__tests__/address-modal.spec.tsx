@@ -81,5 +81,4 @@ describe('Render Address Info Component', () => {
     wrapper.setState({ saveError: 'this is messed up' });
     expect(wrapper.find(ModalError).length).toBe(1);
   });
-
 });

@@ -137,8 +137,7 @@ Creek code review][] docs. You should respond within ~2 business hours to reques
 * We scan software installed on our servers using [AppCanary][]
 * In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
   daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
-  Lifecycle][] through security focused ts-lint rules- We maintain 80% test coverage to reduce the
-  chance of unintended disclosure of PHI
+  Lifecycle][] through security focused ts-lint rules.
 * We prefer standard or popular libraries with institutional backing
 * Commiting directly to master is disabled via Github 'Protected Branches'
 * All commits to master must be made through a pull request that is approved by another engineer

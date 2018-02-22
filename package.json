@@ -22,10 +22,9 @@
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
-    "coverage": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
-    "coverage:frontend": "jest app/ --runInBand",
-    "coverage:api": "NODE_ENV=test node initialize-test-db.js && jest server/graphql server/handlers server/lib server/apis --runInBand",
-    "coverage:models": "NODE_ENV=test node initialize-test-db.js && jest server/models --runInBand",
+    "test:frontend": "jest app/ --runInBand",
+    "test:api": "NODE_ENV=test node initialize-test-db.js && jest server/graphql server/handlers server/lib server/apis --runInBand",
+    "test:models": "NODE_ENV=test node initialize-test-db.js && jest server/models --runInBand",
     "migrate": "knex migrate:latest --knexfile=server/models/knexfile.js",
     "migrate:rollback": "knex-migrate down --knexfile=server/models/knexfile.js",
     "test:watch": "yarn test --watch",
@@ -61,17 +60,6 @@
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
     },
-    "collectCoverageFrom": [
-      "app/**/*.{ts,tsx}",
-      "server/**/*.{ts,tsx}",
-      "!app/spec.helpers.ts",
-      "!app/assets/**",
-      "!app/**/*.css.d.ts",
-      "!app/graphql/**",
-      "!server/lib/capture-output.ts",
-      "!server/apis/**/types.ts"
-    ],
-    "mapCoverage": true,
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
@@ -102,7 +90,7 @@
     "@types/react-test-renderer": "16.0.1",
     "@types/redux-mock-store": "0.0.13",
     "apollo-codegen": "0.18.6",
-    "coveralls": "3.0.0",
+    "axios": "^0.18.0",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "expect": "22.4.0",

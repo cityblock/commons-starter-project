@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import * as compression from 'compression';
 import * as express from 'express';
+import { Transaction } from 'objection';
 import expressConfig from './express';
 
 let logger = console;
@@ -29,10 +30,12 @@ export type Env = 'production' | 'development' | 'test';
 
 export interface IMainOptions {
   env: Env;
+  transaction?: Transaction;
+  allowCrossDomainRequests?: boolean;
 }
 
 export async function main(options: IMainOptions) {
-  await expressConfig(app, logger);
+  await expressConfig(app, logger, options.transaction, options.allowCrossDomainRequests);
   return (app as any).listen(app.get('port'));
 }
 

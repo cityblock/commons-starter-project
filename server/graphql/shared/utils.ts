@@ -117,7 +117,14 @@ export async function getGraphQLContext(
 }
 
 export async function formatResponse(response: any, { context }: any): Promise<any> {
-  await context.txn.commit();
+  try {
+    await context.txn.commit();
+  } catch (err) {
+    await context.trx.rollback();
+    /* tslint:disable no-console */
+    console.log('Transaction failed with error: ', err);
+    /* tslint:enable no-console */
+  }
   return response;
 }
 

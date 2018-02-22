@@ -25,11 +25,5 @@
     "./app/**/*.tsx",
     "./declarations/*"
   ],
-  "exclude": [
-    "public",
-    "server-compiled",
-    "coverage",
-    "server/models/migrations",
-    "server/models/seeds"
-  ]
+  "exclude": ["public", "server-compiled", "server/models/migrations", "server/models/seeds"]
 }

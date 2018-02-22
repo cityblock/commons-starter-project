@@ -34,7 +34,7 @@ interface ICreateUser {
   homeClinicId: string;
   firstName?: string;
   lastName?: string;
-  userRole?: UserRole;
+  userRole: UserRole;
   athenaProviderId?: number;
   phone?: string;
 }

@@ -14,9 +14,6 @@ npm-debug.log*
 # dotenv file for local development
 .env
 
-# Coverage directory used by tools like istanbul
-coverage
-
 # build
 public
 

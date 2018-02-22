@@ -33,8 +33,23 @@ describe('Library Modal Error Component', () => {
 
     expect(wrapper.find(Icon).length).toBe(1);
     expect(wrapper.find(SmallText).length).toBe(2);
-    expect(wrapper.find(SmallText).at(0).props().messageId).toBe(errorMessageId);
-    expect(wrapper.find(SmallText).at(0).props().color).toBe('white');
-    expect(wrapper.find(SmallText).at(0).props().size).toBe('medium');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(0)
+        .props().messageId,
+    ).toBe(errorMessageId);
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(0)
+        .props().color,
+    ).toBe('white');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(0)
+        .props().size,
+    ).toBe('medium');
   });
 });

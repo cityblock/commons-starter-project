@@ -42,7 +42,7 @@ svg.icon {
   background: var(--red-color);
 
   &:hover {
-    background: var(--red-color);
+    background: var(--red-hover-color);
   }
 }
 

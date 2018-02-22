@@ -185,34 +185,4 @@ describe('Patient Glass Break Model', () => {
       });
     });
   });
-
-  it("validates that glass break not needed if user on patient's care team", async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
-
-      expect(
-        await PatientGlassBreak.validateGlassBreakNotNeeded(user.id, patient.id, txn),
-      ).toBeTruthy();
-    });
-  });
-
-  it('throws an error if cannot automatically break glass for given patient', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, clinic } = await setup(txn);
-
-      const user2 = await User.create(createMockUser(111, clinic.id, userRole), txn);
-      const patient2 = await createPatient(
-        { cityblockId: 12, homeClinicId: clinic.id, userId: user2.id },
-        txn,
-      );
-
-      const error = `User ${user.id} cannot automatically break the glass for patient ${
-        patient2.id
-      }`;
-
-      await expect(
-        PatientGlassBreak.validateGlassBreakNotNeeded(user.id, patient2.id, txn),
-      ).rejects.toMatch(error);
-    });
-  });
 });

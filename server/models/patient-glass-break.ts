@@ -2,7 +2,6 @@ import { isBefore, subHours } from 'date-fns';
 import { Transaction } from 'objection';
 import config from '../config';
 import BaseModel from './base-model';
-import CareTeam from './care-team';
 
 interface IPatientGlassBreakCreateFields {
   userId: string;
@@ -90,22 +89,6 @@ export default class PatientGlassBreak extends BaseModel {
       `,
       )
       .andWhere({ userId, deletedAt: null });
-  }
-
-  static async validateGlassBreakNotNeeded(
-    userId: string,
-    patientId: string,
-    txn: Transaction,
-  ): Promise<boolean> {
-    const isOnCareTeam = await CareTeam.isOnCareTeam({ userId, patientId }, txn);
-
-    if (!isOnCareTeam) {
-      return Promise.reject(
-        `User ${userId} cannot automatically break the glass for patient ${patientId}`,
-      );
-    }
-
-    return true;
   }
 }
 /* tslint:enable:member-ordering */

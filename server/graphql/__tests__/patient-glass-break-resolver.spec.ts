@@ -23,7 +23,10 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id }, txn);
+  const patient = await createPatient(
+    { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
+    txn,
+  );
 
   return { user, patient, clinic };
 }
@@ -143,6 +146,57 @@ describe('Patient Glass Break Resolver', () => {
         id: otherPatientGlassBreak.id,
         patientId: patient2.id,
         userId: user.id,
+      });
+    });
+  });
+
+  it('resolves glass break check for patient on care team', async () => {
+    await transaction(PatientGlassBreak.knex(), async txn => {
+      const { user, patient } = await setup(txn);
+
+      const query = `{
+        patientGlassBreakCheck(patientId: "${patient.id}") {
+          patientId
+          isGlassBreakNotNeeded
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.data!.patientGlassBreakCheck).toMatchObject({
+        patientId: patient.id,
+        isGlassBreakNotNeeded: true,
+      });
+    });
+  });
+
+  it('resolves glass break check for patient not on care team', async () => {
+    await transaction(PatientGlassBreak.knex(), async txn => {
+      const { user, clinic } = await setup(txn);
+      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+
+      const query = `{
+        patientGlassBreakCheck(patientId: "${patient2.id}") {
+          patientId
+          isGlassBreakNotNeeded
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.data!.patientGlassBreakCheck).toMatchObject({
+        patientId: patient2.id,
+        isGlassBreakNotNeeded: false,
       });
     });
   });

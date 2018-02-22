@@ -1,7 +1,11 @@
 import { IPatientGlassBreakCreateInput, IRootMutationType, IRootQueryType } from 'schema';
 import PatientGlassBreak from '../models/patient-glass-break';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreakNotNeeded } from './shared/permissions-check';
 import { IContext } from './shared/utils';
+
+export interface IQuery {
+  patientId: string;
+}
 
 export interface IPatientGlassBreakCreateArgs {
   input: IPatientGlassBreakCreateInput;
@@ -33,4 +37,24 @@ export async function resolvePatientGlassBreaksForUser(
   await checkUserPermissions(userId, permissions, 'view', 'patientGlassBreak', txn);
 
   return PatientGlassBreak.getForCurrentUserSession(userId!, txn);
+}
+
+export async function resolvePatientGlassBreakCheck(
+  root: any,
+  { patientId }: IQuery,
+  { userId, permissions, txn }: IContext,
+): Promise<IRootQueryType['patientGlassBreakCheck']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patientGlassBreak', txn);
+
+  const isGlassBreakNotNeeded = await validateGlassBreakNotNeeded(
+    userId!,
+    'patient',
+    patientId,
+    txn,
+  );
+
+  return {
+    patientId,
+    isGlassBreakNotNeeded,
+  };
 }

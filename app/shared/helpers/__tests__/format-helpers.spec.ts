@@ -9,6 +9,7 @@ import {
   formatFullName,
   formatGender,
   formatInputDate,
+  formatPatientName,
   formatScreeningToolScore,
   isDueSoon,
   isPastDue,
@@ -32,12 +33,34 @@ describe('Shared Component Helpers', () => {
     const firstName = 'Arya';
     const lastName = 'Stark';
 
-    it('renders a patients full name properly', () => {
+    it('renders a users full name properly', () => {
       expect(formatFullName(firstName, lastName)).toBe('Arya Stark');
     });
 
     it('renders unknown if full name not present', () => {
       expect(formatFullName('', lastName)).toBe('Unknown Stark');
+    });
+  });
+
+  describe('formatPatientName', () => {
+    it('renders a patient full name properly', () => {
+      const patient = {
+        firstName: 'Sansa',
+        middleName: null,
+        lastName: 'Stark',
+      } as any;
+
+      expect(formatPatientName(patient)).toBe('Sansa Stark');
+    });
+
+    it('renders a patient full name with middle name properly', () => {
+      const patient = {
+        firstName: 'Mother',
+        middleName: 'of',
+        lastName: 'Dragons',
+      } as any;
+
+      expect(formatPatientName(patient)).toBe('Mother of Dragons');
     });
   });
 

@@ -1,0 +1,53 @@
+@import '../../css/sizes';
+
+.container,
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  height: calc(100vh - 60px);
+  width: 100%;
+  padding-top: 20%;
+  flex-direction: column;
+}
+
+.container h1,
+.container p {
+  margin: 0;
+  margin-top: var(--extra-small-gutter);
+  line-height: var(--medium-font-line-height);
+}
+
+.container h1 {
+  font-family: var(--basetica-black);
+  color: var(--black-color);
+  font-size: var(--medium-font-size);
+}
+
+.container h3 {
+  color: var(--red-color);
+}
+
+.container p {
+  color: var(--gray-font-color);
+  font-size: var(--default-font-size);
+  margin-bottom: var(--gutter);
+  max-width: 450px;
+  text-align: center;
+}
+
+svg.icon {
+  height: 35px;
+  width: 35px;
+}
+
+.button {
+  width: 215px;
+}
+
+.container h1.red {
+  color: var(--red-color);
+  margin-right: 5px;
+}

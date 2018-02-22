@@ -25,6 +25,7 @@ export type IconName =
   | 'keyboardArrowLeft'
   | 'keyboardArrowRight'
   | 'labelOutline'
+  | 'lockOutline'
   | 'moreVert'
   | 'notifications'
   | 'pauseCircleOutline'

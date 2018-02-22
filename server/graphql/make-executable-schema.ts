@@ -103,6 +103,7 @@ import {
 import {
   patientGlassBreakCreate,
   resolvePatientGlassBreaksForUser,
+  resolvePatientGlassBreakCheck,
 } from './patient-glass-break-resolver';
 import {
   patientGoalCreate,
@@ -379,6 +380,7 @@ const resolveFunctions = {
     patientDataFlagsForPatient: resolvePatientDataFlagsForPatient,
     patientGlassBreaksForUser: resolvePatientGlassBreaksForUser,
     progressNoteGlassBreaksForUser: resolveProgressNoteGlassBreaksForUser,
+    patientGlassBreakCheck: resolvePatientGlassBreakCheck,
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
   },
 

@@ -398,6 +398,10 @@ declare module 'schema' {
   */
     progressNoteGlassBreaksForUser: Array<IProgressNoteGlassBreak>;
     /**
+    check if don't need to break glass for given patient
+  */
+    patientGlassBreakCheck: IPatientGlassBreakCheck;
+    /**
     computed patient status for a patient
   */
     patientComputedPatientStatus: IComputedPatientStatus;
@@ -1498,6 +1502,14 @@ declare module 'schema' {
     progressNoteId: string;
     reason: string;
     note: string | null;
+  }
+
+  /**
+    Patient Glass Break - not needed check
+  */
+  interface IPatientGlassBreakCheck {
+    patientId: string;
+    isGlassBreakNotNeeded: boolean;
   }
 
 

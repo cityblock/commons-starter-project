@@ -1182,6 +1182,12 @@ type ProgressNoteGlassBreak implements uniqueId {
   note: String
 }
 
+# Patient Glass Break - not needed check
+type PatientGlassBreakCheck {
+  patientId: ID!
+  isGlassBreakNotNeeded: Boolean!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -2304,6 +2310,8 @@ type RootQueryType {
   patientGlassBreaksForUser: [PatientGlassBreak!]!
   # progress note glass breaks for a user during current session
   progressNoteGlassBreaksForUser: [ProgressNoteGlassBreak!]!
+  # check if don't need to break glass for given patient
+  patientGlassBreakCheck(patientId: ID!): PatientGlassBreakCheck!
   # computed patient status for a patient
   patientComputedPatientStatus(patientId: ID!): ComputedPatientStatus!
 }

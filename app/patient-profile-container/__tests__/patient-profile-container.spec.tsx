@@ -25,6 +25,7 @@ describe('patient profile container', () => {
         tab={'map' as any}
         browserSize={'large'}
         loading={false}
+        glassBreakId={null}
       />,
     );
     const instance = component.instance() as Component;

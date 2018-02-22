@@ -4,8 +4,10 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
-import { getPatientQuery, ShortPatientFragment } from '../graphql/types';
+import { getPatientQuery } from '../graphql/types';
 import { Size } from '../reducers/browser-reducer';
+import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
+import { formatPatientName } from '../shared/helpers/format-helpers';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
@@ -20,7 +22,7 @@ import PatientTimeline from './timeline/patient-timeline';
 
 export type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   match: {
     params: {
       patientId: string;
@@ -43,13 +45,10 @@ interface IGraphqlProps {
 
 type allProps = IStateProps & IProps & IGraphqlProps;
 
-export const getPatientName = (patient: ShortPatientFragment) =>
-  [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
-
 export class PatientProfileContainer extends React.Component<allProps> {
   componentWillReceiveProps(newProps: allProps) {
     if (newProps.patient) {
-      document.title = `${getPatientName(newProps.patient)} | Commons`;
+      document.title = `${formatPatientName(newProps.patient)} | Commons`;
     }
   }
 
@@ -134,4 +133,5 @@ export default compose(
       patient: data ? (data as any).patient : null,
     }),
   }),
+  patientGlassBreak(),
 )(PatientProfileContainer);

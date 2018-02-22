@@ -61,7 +61,6 @@ describe('Resource to Model Mappings', () => {
       const model = resourceToModelMappings[resource] as any;
 
       expect(model.validateGlassBreak).toBeTruthy();
-      expect(model.validateGlassBreakNotNeeded).toBeTruthy();
       expect(model.getForCurrentUserSession).toBeTruthy();
     });
   });

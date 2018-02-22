@@ -4,7 +4,7 @@ import * as styles from './css/icon.css';
 import iconComponents from './icon-components';
 import { IconName } from './icon-types';
 
-export type Color = 'gray' | 'white'; // default is gray
+export type Color = 'gray' | 'white' | 'red'; // default is gray
 
 interface IProps {
   name: IconName;
@@ -21,6 +21,7 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
     styles.icon,
     {
       [styles.white]: color && color === 'white',
+      [styles.red]: color && color === 'red',
       [styles.large]: isLarge,
     },
     className,

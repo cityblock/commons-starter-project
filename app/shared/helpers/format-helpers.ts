@@ -1,10 +1,16 @@
 import { differenceInYears, format } from 'date-fns';
-import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
+import {
+  ShortPatientFragment,
+  ShortPatientScreeningToolSubmission360Fragment,
+} from '../../graphql/types';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 export const formatFullName = (firstName?: string | null, lastName?: string | null): string =>
   `${firstName || 'Unknown'} ${lastName || 'Unknown'}`;
+
+export const formatPatientName = (patient: ShortPatientFragment) =>
+  [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
 export const formatInputDate = (dueDate?: string): string =>
   format(dueDate || Date.now(), 'YYYY-MM-DD');

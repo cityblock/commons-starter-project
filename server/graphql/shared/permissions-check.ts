@@ -9,6 +9,7 @@ import {
   PermissionsMapping,
 } from '../../../shared/permissions/permissions-mapping';
 import CareTeam from '../../models/care-team';
+import ProgressNote from '../../models/progress-note';
 import accessControls, { Action, Resource } from './access-controls';
 import resourceToModelMapping, {
   glassBreakResources,
@@ -149,10 +150,48 @@ export const validateGlassBreak = async (
     );
     // otherwise check if glass break not required (such as if user on patient's care team)
   } else {
-    await model.validateGlassBreakNotNeeded(userId, resourceId, txn);
+    const isGlassBreakNotNeeded = await validateGlassBreakNotNeeded(
+      userId,
+      resource,
+      resourceId,
+      txn,
+    );
+
+    if (!isGlassBreakNotNeeded) {
+      throw new Error(
+        `User ${userId} cannot automatically break the glass for ${resource} ${resourceId}`,
+      );
+    }
   }
 
   return true;
+};
+
+export const validateGlassBreakNotNeeded = async (
+  userId: string,
+  resource: Resource,
+  resourceId: string,
+  txn: Transaction,
+): Promise<boolean> => {
+  if (resource === 'patient') {
+    return CareTeam.isOnCareTeam({ userId, patientId: resourceId }, txn);
+  }
+  if (resource === 'progressNote') {
+    const progressNote = await ProgressNote.getForGlassBreak(resourceId, txn);
+    // if template does not require a glass break action is valid
+    if (
+      progressNote.progressNoteTemplate &&
+      !progressNote.progressNoteTemplate.requiresGlassBreak
+    ) {
+      return true;
+    }
+    // action is valid also if current user is the author of the note
+    if (progressNote.userId === userId) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 export default checkUserPermissions;

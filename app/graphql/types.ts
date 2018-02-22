@@ -2190,6 +2190,18 @@ export interface getPatientComputedPatientStatusQuery {
   },
 };
 
+export interface getPatientGlassBreakCheckQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientGlassBreakCheckQuery {
+  // check if don't need to break glass for given patient
+  patientGlassBreakCheck:  {
+    patientId: string,
+    isGlassBreakNotNeeded: boolean,
+  },
+};
+
 export interface getPatientGlassBreaksForUserQuery {
   // patient glass breaks for user during current session
   patientGlassBreaksForUser:  Array< {
@@ -9613,6 +9625,11 @@ export interface FullPatientForProfileFragment {
     notes: string | null,
     updatedAt: string | null,
   } > | null,
+};
+
+export interface FullPatientGlassBreakCheckFragment {
+  patientId: string,
+  isGlassBreakNotNeeded: boolean,
 };
 
 export interface FullPatientGoalFragment {

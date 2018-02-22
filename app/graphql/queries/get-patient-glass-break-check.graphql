@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-glass-break-check.graphql"
+
+query getPatientGlassBreakCheck($patientId: ID!) {
+  patientGlassBreakCheck(patientId: $patientId) {
+    ...FullPatientGlassBreakCheck
+  }
+}

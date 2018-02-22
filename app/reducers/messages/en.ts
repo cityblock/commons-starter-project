@@ -298,6 +298,13 @@ export const ENGLISH_TRANSLATION = {
     'CBO.noFax': 'Not available',
     'CBO.phone': 'Tel',
     'CBO.viewForm': 'View referral form',
+    'glassBreak.breakGlass': 'Break the glass',
+    'glassBreak.patientnote':
+      'In order to access this member’s profile, you have to break the glass and provide a reason for requiring access',
+    'glassBreak.patientprivate': 'Private profile:',
+    'glassBreak.progressNotenote': 'Private progress note',
+    'glassBreak.progressNoteprivate':
+      'In order to access this note, you have to break the glass and provide a reason for requiring access',
     'header.settings': 'Settings',
     'header.search': 'Search',
     'header.patients': 'Members',

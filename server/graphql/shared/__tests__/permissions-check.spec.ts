@@ -5,6 +5,8 @@ import Db from '../../../db';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
 import PatientGlassBreak from '../../../models/patient-glass-break';
+import ProgressNote from '../../../models/progress-note';
+import ProgressNoteTemplate from '../../../models/progress-note-template';
 import User from '../../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../../spec-helpers';
 import checkUserPermissions, {
@@ -14,6 +16,7 @@ import checkUserPermissions, {
   isAllowedForPermissions,
   isUserOnPatientCareTeam,
   validateGlassBreak,
+  validateGlassBreakNotNeeded,
 } from '../permissions-check';
 
 const reason = "Demogorgon says it's cool";
@@ -22,6 +25,8 @@ interface ISetup {
   clinic: Clinic;
   user: User;
   patient: Patient;
+  progressNoteTemplate: ProgressNoteTemplate;
+  progressNote: ProgressNote;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -31,8 +36,22 @@ async function setup(txn: Transaction): Promise<ISetup> {
     { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
     txn,
   );
+  const progressNoteTemplate = await ProgressNoteTemplate.create(
+    {
+      title: 'title',
+    },
+    txn,
+  );
+  const progressNote = await ProgressNote.create(
+    {
+      patientId: patient.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    },
+    txn,
+  );
 
-  return { user, patient, clinic };
+  return { user, patient, clinic, progressNoteTemplate, progressNote };
 }
 
 describe('User Permissions Check', () => {
@@ -328,10 +347,76 @@ describe('User Permissions Check', () => {
         try {
           await validateGlassBreak(user2.id, 'blue', 'patient', patient.id, txn, null);
         } catch (err) {
-          expect(err).toBe(
-            `User ${user2.id} cannot automatically break the glass for patient ${patient.id}`,
+          expect(err).toEqual(
+            new Error(
+              `User ${user2.id} cannot automatically break the glass for patient ${patient.id}`,
+            ),
           );
         }
+      });
+    });
+  });
+
+  describe('validateGlassBreakNotNeeded', () => {
+    describe('patient', () => {
+      it('returns true if patient on care team', async () => {
+        await transaction(PatientGlassBreak.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+
+          const result = await validateGlassBreakNotNeeded(user.id, 'patient', patient.id, txn);
+
+          expect(result).toBeTruthy();
+        });
+      });
+
+      it('returns false if patient not on care team', async () => {
+        await transaction(PatientGlassBreak.knex(), async txn => {
+          const { patient, clinic } = await setup(txn);
+          const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+
+          const result = await validateGlassBreakNotNeeded(user2.id, 'patient', patient.id, txn);
+
+          expect(result).toBeFalsy();
+        });
+      });
+    });
+
+    it('validates glass break not needed for progress notes whose templates do not require glass break', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { progressNote, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+
+        expect(
+          await validateGlassBreakNotNeeded(user2.id, 'progressNote', progressNote.id, txn),
+        ).toBeTruthy();
+      });
+    });
+
+    it('validates glass break not needed for progress notes authored by given user', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { user, progressNote, progressNoteTemplate } = await setup(txn);
+        await ProgressNoteTemplate.query(txn)
+          .where({ id: progressNoteTemplate.id })
+          .patch({ requiresGlassBreak: true });
+
+        expect(
+          await validateGlassBreakNotNeeded(user.id, 'progressNote', progressNote.id, txn),
+        ).toBeTruthy();
+      });
+    });
+
+    it('invalidates glass break by non-author when template requires glass break', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { progressNote, progressNoteTemplate, clinic } = await setup(txn);
+        await ProgressNoteTemplate.query(txn)
+          .where({ id: progressNoteTemplate.id })
+          .patch({ requiresGlassBreak: true });
+
+        const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+
+        expect(
+          await validateGlassBreakNotNeeded(user2.id, 'progressNote', progressNote.id, txn),
+        ).toBeFalsy();
       });
     });
   });

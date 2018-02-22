@@ -1,0 +1,4 @@
+fragment FullPatientGlassBreakCheck on PatientGlassBreakCheck {
+  patientId
+  isGlassBreakNotNeeded
+}

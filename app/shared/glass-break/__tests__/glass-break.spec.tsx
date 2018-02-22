@@ -9,7 +9,13 @@ describe('Glass Break Component', () => {
   const resource = 'patient';
   const patientName = 'Arya Stark';
 
-  const wrapper = shallow(<GlassBreak resource={resource} patientName={patientName} />);
+  const wrapper = shallow(
+    <GlassBreak
+      resource={resource}
+      patientName={patientName}
+      createGlassBreak={() => true as any}
+    />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

@@ -88,7 +88,8 @@ export default class PatientGlassBreak extends BaseModel {
           1} hours\'
       `,
       )
-      .andWhere({ userId, deletedAt: null });
+      .andWhere({ userId, deletedAt: null })
+      .orderBy('createdAt', 'DESC');
   }
 }
 /* tslint:enable:member-ordering */

@@ -12,6 +12,9 @@ exports[`patient profile container renders patient profile container 1`] = `
   <div
     className="mainBody"
   >
+    <Apollo(PatientIntakeChecklist)
+      patientId="patient-1"
+    />
     <UnderlineTabs
       color="white"
     >

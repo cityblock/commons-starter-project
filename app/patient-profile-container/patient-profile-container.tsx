@@ -12,6 +12,7 @@ import { IState as IAppState } from '../store';
 import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info/patient-info';
+import PatientIntakeChecklist from './patient-intake-checklist';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
 import ScreeningTool from './screening-tool/screening-tool';
@@ -62,6 +63,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
       <div className={styles.container}>
         <PatientProfileLeftNav browserSize={browserSize} patientId={patientId} patient={patient} />
         <div className={mainBodyStyle}>
+          <PatientIntakeChecklist patientId={patientId} />
           <UnderlineTabs color="white">
             <UnderlineTab
               messageId="patient.threeSixty"

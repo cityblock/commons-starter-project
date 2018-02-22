@@ -37,6 +37,7 @@ import PeopleIcon from 'material-ui-icons/People';
 import PhoneIcon from 'material-ui-icons/Phone';
 import PictureAsPDFIcon from 'material-ui-icons/PictureAsPdf';
 import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
+import ReportIcon from 'material-ui-icons/Report';
 import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
@@ -85,6 +86,7 @@ const components: IconComponents = {
   search: SearchIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,
+  report: ReportIcon,
 };
 
 export default components;

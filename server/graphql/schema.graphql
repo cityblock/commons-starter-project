@@ -276,6 +276,9 @@ type ComputedPatientStatus implements uniqueId {
   isPhotoAddedOrDeclined: Boolean!
   isIneligible: Boolean!
   isDisenrolled: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
 }
 
 input PatientFilterOptions {
@@ -2285,6 +2288,8 @@ type RootQueryType {
   patientGlassBreaksForUser: [PatientGlassBreak!]!
   # progress note glass breaks for a user during current session
   progressNoteGlassBreaksForUser: [ProgressNoteGlassBreak!]!
+  # computed patient status for a patient
+  patientComputedPatientStatus(patientId: ID!): ComputedPatientStatus!
 }
 
 schema {

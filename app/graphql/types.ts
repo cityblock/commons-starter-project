@@ -2152,6 +2152,30 @@ export interface getPatientCareTeamQuery {
   } | null >,
 };
 
+export interface getPatientComputedPatientStatusQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientComputedPatientStatusQuery {
+  // computed patient status for a patient
+  patientComputedPatientStatus:  {
+    id: string,
+    patientId: string,
+    updatedById: string,
+    isCoreIdentityVerified: boolean,
+    isDemographicInfoUpdated: boolean,
+    isEmergencyContactAdded: boolean,
+    isAdvancedDirectivesAdded: boolean,
+    isConsentSigned: boolean,
+    isPhotoAddedOrDeclined: boolean,
+    isIneligible: boolean,
+    isDisenrolled: boolean,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  },
+};
+
 export interface getPatientGlassBreaksForUserQuery {
   // patient glass breaks for user during current session
   patientGlassBreaksForUser:  Array< {
@@ -8871,6 +8895,23 @@ export interface FullComputedFieldFragment {
   label: string,
   slug: string,
   dataType: ComputedFieldDataTypes,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export interface FullComputedPatientStatusFragment {
+  id: string,
+  patientId: string,
+  updatedById: string,
+  isCoreIdentityVerified: boolean,
+  isDemographicInfoUpdated: boolean,
+  isEmergencyContactAdded: boolean,
+  isAdvancedDirectivesAdded: boolean,
+  isConsentSigned: boolean,
+  isPhotoAddedOrDeclined: boolean,
+  isIneligible: boolean,
+  isDisenrolled: boolean,
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,

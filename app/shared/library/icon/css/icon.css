@@ -9,3 +9,8 @@ svg.icon {
 svg.icon.white {
   fill: var(--white-color);
 }
+
+svg.icon.large {
+  width: 27px;
+  height: 27px;
+}

@@ -397,6 +397,10 @@ declare module 'schema' {
     progress note glass breaks for a user during current session
   */
     progressNoteGlassBreaksForUser: Array<IProgressNoteGlassBreak>;
+    /**
+    computed patient status for a patient
+  */
+    patientComputedPatientStatus: IComputedPatientStatus;
   }
 
 
@@ -532,6 +536,9 @@ declare module 'schema' {
     isPhotoAddedOrDeclined: boolean;
     isIneligible: boolean;
     isDisenrolled: boolean;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
   }
 
   /**

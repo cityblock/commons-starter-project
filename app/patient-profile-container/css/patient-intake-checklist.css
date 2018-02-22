@@ -1,0 +1,85 @@
+@import '../../shared/css/sizes';
+
+.checklist {
+  z-index: 1;
+  lost-center: var(--max-width);
+  background-color: var(--white-color);
+}
+
+.checklist.hidden {
+  display: none;
+}
+
+.checklistContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  z-index: 1;
+  background-color: var(--white-color);
+}
+
+.checklistHeader {
+  height: 80px;
+  border-bottom: 1px solid var(--dark-border-color);
+  margin-bottom: 10px;
+}
+
+.checklistHeader h2.checklistHeaderText {
+  margin: 0;
+  padding-top: var(--medium-gutter);
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
+}
+
+.checklistDrawer {
+  padding: 0 var(--medium-gutter);
+  height: 0;
+  overflow-y: hidden;
+  background-color: var(--white-color);
+  transition: height 0.3s ease-in-out;
+}
+
+.checklistDrawer.hidden {
+  display: none;
+}
+
+.checklistDrawer.expanded {
+  height: calc(100vh - 110px);
+}
+
+.checklistBanner {
+  padding: 0 var(--medium-gutter);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--purple-color);
+  height: 50px;
+}
+
+.checklistBanner button {
+  width: 160px;
+  font-size: var(--small-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.checklistBannerLabel {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.checklistBannerLabel svg {
+  margin-right: 10px;
+}
+
+.checklistBannerText {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

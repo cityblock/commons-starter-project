@@ -1,0 +1,16 @@
+fragment FullComputedPatientStatus on ComputedPatientStatus {
+  id
+  patientId
+  updatedById
+  isCoreIdentityVerified
+  isDemographicInfoUpdated
+  isEmergencyContactAdded
+  isAdvancedDirectivesAdded
+  isConsentSigned
+  isPhotoAddedOrDeclined
+  isIneligible
+  isDisenrolled
+  createdAt
+  updatedAt
+  deletedAt
+}

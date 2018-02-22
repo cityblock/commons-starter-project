@@ -29,3 +29,12 @@
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
 }
+
+.largeFontSize {
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.bold {
+  font-weight: var(--bold-font-weight);
+}

@@ -37,4 +37,5 @@ export type IconName =
   | 'syncProblem'
   | 'warning'
   | 'accountCircle'
-  | 'accountBox';
+  | 'accountBox'
+  | 'report';

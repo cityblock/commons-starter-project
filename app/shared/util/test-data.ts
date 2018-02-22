@@ -827,3 +827,37 @@ export const coreIdentity = {
   dateOfBirth: patient.dateOfBirth,
   patientDataFlags: patient.patientDataFlags,
 };
+
+export const completeComputedPatientStatus = {
+  id: 'computedPatientStatusId',
+  patientId: 'patientId',
+  updatedById: 'userId',
+  isCoreIdentityVerified: true,
+  isDemographicInfoUpdated: true,
+  isEmergencyContactAdded: true,
+  isAdvancedDirectivesAdded: true,
+  isConsentSigned: true,
+  isPhotoAddedOrDeclined: true,
+  isIneligible: false,
+  isDisenrolled: false,
+  createdAt: '2017-11-07T13:45:14.532Z',
+  updatedAt: '2017-11-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
+export const incompleteComputedPatientStatus = {
+  id: 'computedPatientStatusId',
+  patientId: 'patientId',
+  updatedById: 'userId',
+  isCoreIdentityVerified: true,
+  isDemographicInfoUpdated: true,
+  isEmergencyContactAdded: true,
+  isAdvancedDirectivesAdded: true,
+  isConsentSigned: false,
+  isPhotoAddedOrDeclined: false,
+  isIneligible: false,
+  isDisenrolled: false,
+  createdAt: '2017-11-07T13:45:14.532Z',
+  updatedAt: '2017-11-07T13:45:14.532Z',
+  deletedAt: null,
+};

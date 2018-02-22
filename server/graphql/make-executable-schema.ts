@@ -46,6 +46,7 @@ import {
   resolveComputedFields,
 } from './computed-field-resolver';
 import { resolveComputedFieldsSchema } from './computed-field-schema-resolver';
+import { resolvePatientComputedPatientStatus } from './computed-patient-status-resolver';
 import {
   concernAddDiagnosisCode,
   concernCreate,
@@ -377,6 +378,7 @@ const resolveFunctions = {
     patientDataFlagsForPatient: resolvePatientDataFlagsForPatient,
     patientGlassBreaksForUser: resolvePatientGlassBreaksForUser,
     progressNoteGlassBreaksForUser: resolveProgressNoteGlassBreaksForUser,
+    patientComputedPatientStatus: resolvePatientComputedPatientStatus,
   },
 
   RootMutationType: {

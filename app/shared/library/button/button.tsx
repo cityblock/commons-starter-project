@@ -5,7 +5,8 @@ import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
 import * as styles from './css/button.css';
 
-export type Color = 'blue' | 'white' | 'red' | 'teal';
+export type Color = 'blue' | 'white' | 'red' | 'teal' | 'gray';
+export type IconFillColor = 'white' | 'blue' | 'green';
 
 export interface IProps {
   onClick: () => void;
@@ -17,10 +18,22 @@ export interface IProps {
   disabled?: boolean; // optional flag to disable button
   className?: string | null;
   icon?: IconName | null; // WIP, use at own risk
+  iconFillColor?: IconFillColor | null;
 }
 
 const Button: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, label, onClick, color, small, icon, className, fullWidth, disabled } = props;
+  const {
+    messageId,
+    label,
+    onClick,
+    color,
+    small,
+    icon,
+    className,
+    fullWidth,
+    disabled,
+    iconFillColor,
+  } = props;
 
   const buttonStyles = classNames(
     {
@@ -29,6 +42,10 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
       [styles.teal]: color === 'teal',
+      [styles.gray]: color === 'gray',
+      [styles.iconFillWhite]: iconFillColor === 'white',
+      [styles.iconFillBlue]: iconFillColor === 'blue',
+      [styles.iconFillGreen]: iconFillColor === 'green',
       [styles.small]: small,
       [styles.fullWidth]: fullWidth,
       [styles.disabled]: !!disabled,

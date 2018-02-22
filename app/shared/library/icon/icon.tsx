@@ -11,15 +11,17 @@ interface IProps {
   className?: string; // optional styles to be applied over defaults
   onClick?: () => void; // optional click handler for icon
   color?: Color;
+  isLarge?: boolean;
 }
 
 const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { name, className, onClick, color } = props;
+  const { name, className, onClick, color, isLarge } = props;
   const IconComponent = iconComponents[name];
   const iconStyles = classNames(
     styles.icon,
     {
       [styles.white]: color && color === 'white',
+      [styles.large]: isLarge,
     },
     className,
   );

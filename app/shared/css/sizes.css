@@ -11,6 +11,7 @@
   --tablet: 700;
   --max-width: 1600px;
   --border-color: #ccc;
+  --dark-border-color: #666;
   --gray-background-color: #f2f2f2;
   --lightbox-background-color: #131c34;
   --dark-gray-background-color: #e6e6e6;
@@ -51,6 +52,7 @@
   --roboto: 'Roboto', Helvetica, sans-serif;
   --roboto-medium-weight: 500;
   --default-font-weight: 400;
+  --bold-font-weight: 500;
   --box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   --big-box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
   --drop-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.15);

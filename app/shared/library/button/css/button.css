@@ -70,6 +70,25 @@ svg.icon {
   fill: var(--blue-color);
 }
 
+.iconFillWhite svg.icon {
+  fill: var(--white-color);
+}
+
+.iconFillBlue svg.icon {
+  fill: var(--blue-color);
+}
+
+.iconFillGreen svg.icon {
+  fill: var(--green-color);
+}
+
+.gray {
+  background: var(--gray-background-color);
+  color: var(--gray-font-color);
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+}
+
 .small {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

@@ -521,5 +521,34 @@ export const ENGLISH_TRANSLATION = {
     'careWorker.nurseCareManager': 'Nurses',
     'careWorker.healthCoach': 'Health Coaches',
     'careWorkerSelect.placeholder': 'Select the care worker',
+    'patientIntakeChecklist.coreIdentityLabel': 'Verify core identifying info',
+    'patientIntakeChecklist.coreIdentitySubtext':
+      "Verify the key identifying information we collected from this member's health records.",
+    'patientIntakeChecklist.coreIdentityButton': 'Verify information',
+    'patientIntakeChecklist.demographicInfoLabel': 'Member demographic info',
+    'patientIntakeChecklist.demographicInfoSubtext':
+      "Enter the member's basic information and/or verify any information we collected from their health records.",
+    'patientIntakeChecklist.demographicInfoButton': 'Add information',
+    'patientIntakeChecklist.emergencyContactLabel': 'Existing care team info and emergency contact',
+    'patientIntakeChecklist.emergencyContactSubtext':
+      'Add any existing care team members this member had prior to Cityblock as well as at least one emergency contact.',
+    'patientIntakeChecklist.emergencyContactButton': 'Add team',
+    'patientIntakeChecklist.advancedDirectivesLabel': 'Advanced directives',
+    'patientIntakeChecklist.advancedDirectivesSubtext':
+      'Ask the member about their advanced directives and add that information to their profile.',
+    'patientIntakeChecklist.advancedDirectivesButton': 'Add directives',
+    'patientIntakeChecklist.consentSignedLabel': 'Collect member consents',
+    'patientIntakeChecklist.consentSignedSubtext':
+      'Walk the member through our consent forms and have them digitally sign each one.',
+    'patientIntakeChecklist.consentSignedButton': 'Sign consents',
+    'patientIntakeChecklist.photoUploadedLabel': 'Add member photo',
+    'patientIntakeChecklist.photoUploadedSubtext':
+      'Including a member photo will make their profile more personal.',
+    'patientIntakeChecklist.photoUploadedButton': 'Add photo',
+    'patientIntakeChecklist.closeChecklist': 'Close checklist',
+    'patientIntakeChecklist.openChecklist': 'Open checklist',
+    'patientIntakeChecklist.bannerLabel': 'Member intake incomplete',
+    'patientIntakeChecklist.completed': 'Completed',
+    'patientIntakeChecklist.headerText': 'Member intake checklist',
   },
 };

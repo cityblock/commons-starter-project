@@ -371,6 +371,27 @@ describe('patient model', () => {
     });
   });
 
+  describe('coreIdentityVerify', () => {
+    it('updates the computedPatientStatus', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await createPatient({ cityblockId: 987, homeClinicId: clinic.id }, txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(false);
+
+        await Patient.coreIdentityVerify(patient.id, user.id, txn);
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.isCoreIdentityVerified).toEqual(true);
+      });
+    });
+  });
+
   describe('patients', () => {
     interface IPatientsSetup {
       user: User;

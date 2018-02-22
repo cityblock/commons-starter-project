@@ -2,6 +2,7 @@ import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Address from './address';
+import ComputedPatientStatus from './computed-patient-status';
 import Email from './email';
 import Patient from './patient';
 
@@ -164,9 +165,17 @@ export default class PatientInfo extends Model {
     patientInfoId: string,
     txn: Transaction,
   ): Promise<PatientInfo> {
-    return this.query(txn)
+    const updatedPatientInfo = await this.query(txn)
       .eager('[primaryAddress, primaryEmail]')
       .patchAndFetchById(patientInfoId, patientInfo);
+
+    await ComputedPatientStatus.updateForPatient(
+      updatedPatientInfo.patientId,
+      patientInfo.updatedById,
+      txn,
+    );
+
+    return updatedPatientInfo;
   }
 }
 /* tslint:enable:member-ordering */

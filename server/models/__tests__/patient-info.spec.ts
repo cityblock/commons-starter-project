@@ -8,6 +8,7 @@ import {
 } from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
+import ComputedPatientStatus from '../computed-patient-status';
 import Email from '../email';
 import Patient from '../patient';
 import PatientInfo from '../patient-info';
@@ -124,6 +125,31 @@ describe('patient info model', () => {
             updatedBy: user.id,
           },
         });
+      });
+    });
+
+    it('should update computed patient status', async () => {
+      await transaction(PatientInfo.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus!.isDemographicInfoUpdated).toEqual(false);
+
+        await PatientInfo.edit(
+          {
+            gender: 'female',
+            language: 'ch',
+            updatedById: user.id,
+          },
+          patient.patientInfo.id,
+          txn,
+        );
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.isDemographicInfoUpdated).toEqual(true);
       });
     });
 

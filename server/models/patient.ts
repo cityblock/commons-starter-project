@@ -324,12 +324,16 @@ export default class Patient extends Model {
     txn: Transaction,
   ): Promise<Patient> {
     await PatientDataFlag.deleteAllForPatient(patientId, txn);
-    return this.query(txn)
+    const patient = await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientId, {
         coreIdentityVerifiedAt: new Date(Date.now()).toISOString(),
         coreIdentityVerifiedById: userId,
       });
+
+    await ComputedPatientStatus.updateForPatient(patientId, userId, txn);
+
+    return patient;
   }
 
   static async search(

@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';
 
@@ -73,7 +74,11 @@ export default class PatientDataFlag extends BaseModel {
       .patch({ deletedAt: new Date().toISOString() });
 
     // Then, insert and return a new flag
-    return this.query(txn).insertAndFetch(input);
+    const patientDataFlag = await this.query(txn).insertAndFetch(input);
+
+    await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
+
+    return patientDataFlag;
   }
 
   static async get(patientDataFlagId: string, txn: Transaction): Promise<PatientDataFlag> {

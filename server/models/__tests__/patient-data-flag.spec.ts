@@ -3,6 +3,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
+import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientDataFlag from '../patient-data-flag';
 import User from '../user';
@@ -47,6 +48,31 @@ describe('computed patient status model', () => {
       const fetchedPatientDataFlag = await PatientDataFlag.get(patientDataFlag.id, txn);
 
       expect(fetchedPatientDataFlag).toMatchObject(patientDataFlag);
+    });
+  });
+
+  it('updates the computed patient status when creating a data flag', async () => {
+    await transaction(PatientDataFlag.knex(), async txn => {
+      const { user, patient } = await setup(txn);
+      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+      expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(false);
+
+      await PatientDataFlag.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          fieldName: 'firstName',
+          suggestedValue: 'Bob',
+        },
+        txn,
+      );
+      const refecthedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
+
+      expect(refecthedComputedPatientStatus!.isCoreIdentityVerified).toEqual(true);
     });
   });
 

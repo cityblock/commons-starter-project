@@ -20,6 +20,6 @@ export async function patientInfoEdit(
   const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
   logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`, 2);
 
-  return PatientInfo.edit(filtered as any, input.patientInfoId, txn);
+  return PatientInfo.edit({ ...(filtered as any), updatedById: userId }, input.patientInfoId, txn);
 }
 /* tslint:enable check-is-allowed */

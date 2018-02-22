@@ -517,9 +517,14 @@ declare module 'schema' {
     id: string;
     patientId: string;
     userId: string;
-    fieldName: string;
+    fieldName: ICoreIdentityOptionsEnum;
     suggestedValue: string | null;
+    notes: string | null;
+    updatedAt: string | null;
   }
+
+
+  type ICoreIdentityOptionsEnum = 'firstName' | 'middleName' | 'lastName' | 'dateOfBirth';
 
   /**
     ComputedPatientStatus
@@ -1554,6 +1559,10 @@ declare module 'schema' {
   */
     patientEdit: IPatient | null;
     /**
+    mark core identity verified on patient stored in the db
+  */
+    patientCoreIdentityVerify: IPatient | null;
+    /**
     Edit fields on patient info stored in the db
   */
     patientInfoEdit: IPatientInfo | null;
@@ -2067,6 +2076,13 @@ declare module 'schema' {
     dateOfBirth: string | null;
     consentToCall: boolean | null;
     consentToText: boolean | null;
+  }
+
+  /**
+    params for editing a patient in the db
+  */
+  interface IPatientCoreIdentityVerifyInput {
+    patientId: string;
   }
 
   /**
@@ -2770,9 +2786,9 @@ declare module 'schema' {
 
   interface IPatientDataFlagCreateInput {
     patientId: string;
-    userId: string;
-    fieldName: string;
+    fieldName: ICoreIdentityOptionsEnum;
     suggestedValue: string | null;
+    notes: string | null;
   }
 
   /**

@@ -1,0 +1,19 @@
+#import "../fragments/full-patient-data-flag.graphql"
+
+mutation patientDataFlagCreate(
+  $patientId: ID!
+  $fieldName: CoreIdentityOptions!
+  $suggestedValue: String
+  $notes: String
+) {
+  patientDataFlagCreate(
+    input: {
+      patientId: $patientId
+      fieldName: $fieldName
+      suggestedValue: $suggestedValue
+      notes: $notes
+    }
+  ) {
+    ...FullPatientDataFlag
+  }
+}

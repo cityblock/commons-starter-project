@@ -20,7 +20,7 @@ class PatientDemographics extends React.Component<IProps> {
 
     return (
       <div className={styles.container}>
-        <CoreIdentity patientIdentity={patient.core} />
+        <CoreIdentity patientIdentity={patient.core} onChange={onChange} />
         <BasicInformation patientInformation={patient.basic} onChange={onChange} />
       </div>
     );

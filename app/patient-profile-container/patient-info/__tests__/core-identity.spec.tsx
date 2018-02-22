@@ -1,12 +1,19 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { coreIdentity, patient, user } from '../../../shared/util/test-data';
-import CoreIdentity from '../core-identity';
+import { CoreIdentity } from '../core-identity';
 import FlaggableDisplayCard from '../flaggable-display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 
 describe('Render Core Idenity Component', () => {
-  const wrapper = shallow(<CoreIdentity patientIdentity={coreIdentity} />);
+  const verifyCoreIdentity = jest.fn();
+  const wrapper = shallow(
+    <CoreIdentity
+      patientIdentity={coreIdentity}
+      onChange={() => true}
+      verifyCoreIdentity={verifyCoreIdentity}
+    />,
+  );
 
   it('renders core identity card', () => {
     const card = wrapper.find(FlaggableDisplayCard);

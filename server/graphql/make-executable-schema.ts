@@ -120,6 +120,7 @@ import {
   resolvePatientLists,
 } from './patient-list-resolver';
 import {
+  patientCoreIdentityVerify,
   patientEdit,
   patientScratchPadEdit,
   resolvePatient,
@@ -389,6 +390,7 @@ const resolveFunctions = {
     careTeamAssignPatients,
     careTeamRemoveUser,
     patientEdit,
+    patientCoreIdentityVerify,
     patientInfoEdit,
     patientScratchPadEdit,
     currentUserEdit,

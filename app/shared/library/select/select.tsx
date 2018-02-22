@@ -7,6 +7,7 @@ interface IProps {
   value: string;
   onChange: (e?: any) => void;
   options?: string[];
+  prefix?: string;
   hasPlaceholder?: boolean;
   children?: any;
   className?: string;
@@ -43,13 +44,18 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     className,
   );
 
+  const prefix = props.prefix || name || '';
   const placeholderComponent = hasPlaceholder ? (
-    <Option disabled={!isUnselectable} messageId={`${name}.placeholder`} value="" />
+    <Option disabled={!isUnselectable} messageId={`${prefix}.placeholder`} value="" />
   ) : null;
 
   const optionsComponent = options
     ? options.map(option => (
-        <Option value={option} messageId={`${name}.${option}`} key={`${name}-option-${option}`} />
+        <Option
+          value={option}
+          messageId={`${prefix}.${option}`}
+          key={`${prefix}-option-${option}`}
+        />
       ))
     : null;
 

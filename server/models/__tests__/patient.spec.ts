@@ -309,14 +309,7 @@ describe('patient model', () => {
           },
           txn,
         );
-        await Patient.edit(
-          {
-            coreIdentityVerifiedById: user.id,
-            coreIdentityVerifiedAt: new Date().toISOString(),
-          },
-          patientId,
-          txn,
-        );
+        await Patient.coreIdentityVerify(patientId, user.id, txn);
 
         const patient = await Patient.get(patientId, txn);
         expect(patient.coreIdentityVerifiedById).toEqual(user.id);
@@ -355,14 +348,7 @@ describe('patient model', () => {
           },
           txn,
         );
-        await Patient.edit(
-          {
-            coreIdentityVerifiedById: user.id,
-            coreIdentityVerifiedAt: new Date().toISOString(),
-          },
-          patientId,
-          txn,
-        );
+        await Patient.coreIdentityVerify(patientId, user.id, txn);
 
         await ComputedPatientStatus.updateForPatient(patientId, user.id, txn);
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patientId, txn);

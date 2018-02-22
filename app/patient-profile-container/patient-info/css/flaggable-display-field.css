@@ -16,6 +16,14 @@
   line-height: var(--medium-large-font-line-height);
 }
 
-.isFlagged {
-  color: red;
+.label {
+  display: inline-block;
+}
+
+svg.flag {
+  fill: var(--red-color);
+  width: 15px;
+  height: 17px;
+  vertical-align: bottom;
+  margin-left: 5px;
 }

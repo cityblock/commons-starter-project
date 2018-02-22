@@ -91,8 +91,7 @@ describe('computed field resolver', () => {
         const mutation = `mutation {
           patientDataFlagCreate(input: {
             patientId: "${patient.id}"
-            userId: "${user.id}"
-            fieldName: "firstName"
+            fieldName: firstName
             suggestedValue: "${suggestedValue}"
           }) {
             suggestedValue
@@ -116,8 +115,7 @@ describe('computed field resolver', () => {
         const mutation = `mutation {
           patientDataFlagCreate(input: {
             patientId: "${patient.id}"
-            userId: "${user.id}"
-            fieldName: "${fieldName}"
+            fieldName: ${fieldName}
           }) {
             fieldName
             suggestedValue

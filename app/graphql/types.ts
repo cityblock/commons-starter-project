@@ -43,6 +43,14 @@ export enum PatientAnswerEventTypes {
 }
 
 
+export enum CoreIdentityOptions {
+  dateOfBirth = "dateOfBirth",
+  firstName = "firstName",
+  lastName = "lastName",
+  middleName = "middleName",
+}
+
+
 export enum AnswerTypeOptions {
   dropdown = "dropdown",
   freetext = "freetext",
@@ -514,6 +522,7 @@ export interface carePlanSuggestionAcceptMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -606,6 +615,7 @@ export interface carePlanSuggestionDismissMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -1877,6 +1887,7 @@ export interface getPatientCarePlanSuggestionsQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -1985,6 +1996,7 @@ export interface getPatientCarePlanQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -2008,6 +2020,7 @@ export interface getPatientCarePlanQuery {
           createdAt: string,
           consentToText: boolean | null,
           consentToCall: boolean | null,
+          coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
             gender: string | null,
@@ -2077,6 +2090,7 @@ export interface getPatientCarePlanQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -2302,6 +2316,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -2337,6 +2352,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -2467,6 +2483,7 @@ export interface getPatientScreeningToolSubmissionQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -2502,6 +2519,7 @@ export interface getPatientScreeningToolSubmissionQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -2721,6 +2739,8 @@ export interface getPatientQuery {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
+    coreIdentityVerifiedById: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -2746,8 +2766,10 @@ export interface getPatientQuery {
       id: string,
       patientId: string,
       userId: string,
-      fieldName: string,
+      fieldName: CoreIdentityOptions,
       suggestedValue: string | null,
+      notes: string | null,
+      updatedAt: string | null,
     } > | null,
   },
 };
@@ -3053,6 +3075,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -3236,6 +3259,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -3290,6 +3314,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           createdAt: string,
           consentToText: boolean | null,
           consentToCall: boolean | null,
+          coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
             gender: string | null,
@@ -3313,6 +3338,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             createdAt: string,
             consentToText: boolean | null,
             consentToCall: boolean | null,
+            coreIdentityVerifiedAt: string | null,
             patientInfo:  {
               id: string,
               gender: string | null,
@@ -3383,6 +3409,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           createdAt: string,
           consentToText: boolean | null,
           consentToCall: boolean | null,
+          coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
             gender: string | null,
@@ -3484,6 +3511,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -3519,6 +3547,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           createdAt: string,
           consentToText: boolean | null,
           consentToCall: boolean | null,
+          coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
             gender: string | null,
@@ -3663,6 +3692,7 @@ export interface getProgressNoteQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -3732,6 +3762,7 @@ export interface getProgressNotesForCurrentUserQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -3802,6 +3833,7 @@ export interface getProgressNotesForPatientQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -3867,6 +3899,7 @@ export interface getProgressNotesForSupervisorReviewQuery {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -4176,6 +4209,7 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -4277,6 +4311,7 @@ export interface getRiskAreaAssessmentSubmissionQuery {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -5254,6 +5289,7 @@ export interface patientConcernBulkEditMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5277,6 +5313,7 @@ export interface patientConcernBulkEditMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -5371,6 +5408,7 @@ export interface patientConcernCreateMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5394,6 +5432,7 @@ export interface patientConcernCreateMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -5486,6 +5525,7 @@ export interface patientConcernDeleteMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5509,6 +5549,7 @@ export interface patientConcernDeleteMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -5567,6 +5608,54 @@ export interface patientConcernDeleteMutation {
   } | null,
 };
 
+export interface patientCoreIdentityVerifyMutationVariables {
+  patientId: string,
+};
+
+export interface patientCoreIdentityVerifyMutation {
+  // mark core identity verified on patient stored in the db
+  patientCoreIdentityVerify:  {
+    id: string,
+    firstName: string,
+    middleName: string | null,
+    lastName: string,
+    dateOfBirth: string | null,
+    createdAt: string,
+    consentToText: boolean | null,
+    consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
+    patientInfo:  {
+      id: string,
+      gender: string | null,
+      language: string | null,
+      primaryAddress:  {
+        id: string,
+        zip: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export interface patientDataFlagCreateMutationVariables {
+  patientId: string,
+  fieldName: CoreIdentityOptions,
+  suggestedValue?: string | null,
+  notes?: string | null,
+};
+
+export interface patientDataFlagCreateMutation {
+  // creates a patient data flag
+  patientDataFlagCreate:  {
+    id: string,
+    patientId: string,
+    userId: string,
+    fieldName: CoreIdentityOptions,
+    suggestedValue: string | null,
+    notes: string | null,
+    updatedAt: string | null,
+  } | null,
+};
+
 export interface patientEditMutationVariables {
   patientId: string,
   firstName?: string | null,
@@ -5588,6 +5677,7 @@ export interface patientEditMutation {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -5640,6 +5730,7 @@ export interface patientGoalCreateMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5711,6 +5802,7 @@ export interface patientGoalDeleteMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5869,6 +5961,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -5904,6 +5997,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -6006,6 +6100,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6041,6 +6136,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -6153,6 +6249,7 @@ export interface progressNoteAddSupervisorNotesMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6222,6 +6319,7 @@ export interface progressNoteCompleteMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6291,6 +6389,7 @@ export interface progressNoteCompleteSupervisorReviewMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6360,6 +6459,7 @@ export interface progressNoteCreateMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6436,6 +6536,7 @@ export interface progressNoteEditMutation {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -6925,6 +7026,7 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -7027,6 +7129,7 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -8547,6 +8650,7 @@ export interface FullCarePlanSuggestionFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -8631,6 +8735,7 @@ export interface FullCarePlanUpdateEventFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -8685,6 +8790,7 @@ export interface FullCarePlanUpdateEventFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -8708,6 +8814,7 @@ export interface FullCarePlanUpdateEventFragment {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -8778,6 +8885,7 @@ export interface FullCarePlanUpdateEventFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -9065,6 +9173,7 @@ export interface FullPatientAnswerEventFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -9335,6 +9444,7 @@ export interface FullPatientConcernFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -9358,6 +9468,7 @@ export interface FullPatientConcernFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -9419,8 +9530,10 @@ export interface FullPatientDataFlagFragment {
   id: string,
   patientId: string,
   userId: string,
-  fieldName: string,
+  fieldName: CoreIdentityOptions,
   suggestedValue: string | null,
+  notes: string | null,
+  updatedAt: string | null,
 };
 
 export interface FullPatientForCBOReferralFormPDFFragment {
@@ -9468,6 +9581,8 @@ export interface FullPatientForProfileFragment {
   createdAt: string,
   consentToText: boolean | null,
   consentToCall: boolean | null,
+  coreIdentityVerifiedAt: string | null,
+  coreIdentityVerifiedById: string | null,
   patientInfo:  {
     id: string,
     gender: string | null,
@@ -9493,8 +9608,10 @@ export interface FullPatientForProfileFragment {
     id: string,
     patientId: string,
     userId: string,
-    fieldName: string,
+    fieldName: CoreIdentityOptions,
     suggestedValue: string | null,
+    notes: string | null,
+    updatedAt: string | null,
   } > | null,
 };
 
@@ -9511,6 +9628,7 @@ export interface FullPatientGoalFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -9613,6 +9731,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -9648,6 +9767,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -9815,6 +9935,7 @@ export interface FullProgressNoteActivityFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -9998,6 +10119,7 @@ export interface FullProgressNoteActivityFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -10052,6 +10174,7 @@ export interface FullProgressNoteActivityFragment {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -10075,6 +10198,7 @@ export interface FullProgressNoteActivityFragment {
           createdAt: string,
           consentToText: boolean | null,
           consentToCall: boolean | null,
+          coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
             gender: string | null,
@@ -10145,6 +10269,7 @@ export interface FullProgressNoteActivityFragment {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -10246,6 +10371,7 @@ export interface FullProgressNoteActivityFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -10281,6 +10407,7 @@ export interface FullProgressNoteActivityFragment {
         createdAt: string,
         consentToText: boolean | null,
         consentToCall: boolean | null,
+        coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
           gender: string | null,
@@ -10393,6 +10520,7 @@ export interface FullProgressNoteFragment {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+    coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
       gender: string | null,
@@ -10568,6 +10696,7 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
       createdAt: string,
       consentToText: boolean | null,
       consentToCall: boolean | null,
+      coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
         gender: string | null,
@@ -11247,6 +11376,7 @@ export interface ShortPatientFragment {
   createdAt: string,
   consentToText: boolean | null,
   consentToCall: boolean | null,
+  coreIdentityVerifiedAt: string | null,
   patientInfo:  {
     id: string,
     gender: string | null,

@@ -1,6 +1,7 @@
 import { isNil, omitBy } from 'lodash';
 import { Transaction } from 'objection';
 import {
+  IPatientCoreIdentityVerifyInput,
   IPatientEditInput,
   IPatientFilterOptions,
   IPatientForDashboardEdges,
@@ -54,6 +55,21 @@ export async function patientEdit(
   const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
   return Patient.edit(filtered as any, input.patientId, txn);
+}
+
+export interface IPatientCoreIdentityVerifyOptions {
+  input: IPatientCoreIdentityVerifyInput;
+}
+
+export async function patientCoreIdentityVerify(
+  source: any,
+  { input }: IPatientCoreIdentityVerifyOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['patientCoreIdentityVerify']> {
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+
+  logger.log(`VERIFY patient ${input.patientId} by ${userId}`, 2);
+  return Patient.coreIdentityVerify(input.patientId, userId!, txn);
 }
 
 export interface IEditPatientRequiredFields {

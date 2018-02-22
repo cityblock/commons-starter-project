@@ -10,6 +10,8 @@ fragment FullPatientForProfile on Patient {
   createdAt
   consentToText
   consentToCall
+  coreIdentityVerifiedAt
+  coreIdentityVerifiedById
   patientInfo {
     ...FullPatientInfo
   }

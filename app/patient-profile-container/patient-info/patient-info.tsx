@@ -44,6 +44,8 @@ interface IState {
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress;
   addresses?: ISavedAddress[];
+  flags?: getPatientQuery['patient']['patientDataFlags'];
+  verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
   isSaving?: boolean;
   saveError: string | null;
   saveSuccess?: boolean;
@@ -81,8 +83,9 @@ export class PatientInfo extends React.Component<allProps, IState> {
       dateOfBirth,
       patientDataFlags,
       patientInfo,
+      coreIdentityVerifiedAt,
     } = patient;
-    const { language, gender, primaryAddress, addresses } = this.state;
+    const { language, gender, primaryAddress, addresses, flags, verifiedAt } = this.state;
 
     // remove primary address to create list of additional addresses
     const savedAddresses =
@@ -92,11 +95,13 @@ export class PatientInfo extends React.Component<allProps, IState> {
 
     return {
       core: {
+        patientId: id,
         firstName,
         lastName,
         middleName,
         dateOfBirth,
-        patientDataFlags,
+        patientDataFlags: flags || patientDataFlags,
+        coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
       },
       basic: {
         patientId: id,

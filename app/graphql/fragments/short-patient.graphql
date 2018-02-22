@@ -9,6 +9,7 @@ fragment ShortPatient on Patient {
   createdAt
   consentToText
   consentToCall
+  coreIdentityVerifiedAt
   patientInfo {
     ...ShortPatientInfo
   }

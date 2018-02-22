@@ -99,6 +99,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,
+            "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
+            "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
             "dateOfBirth": "01/01/1999",
             "firstName": "Bob",
@@ -251,6 +253,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,
+            "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
+            "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
             "dateOfBirth": "01/01/1999",
             "firstName": "Bob",
@@ -434,6 +438,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,
+            "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
+            "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
             "dateOfBirth": "01/01/1999",
             "firstName": "Bob",
@@ -586,6 +592,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,
+            "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
+            "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
             "dateOfBirth": "01/01/1999",
             "firstName": "Bob",

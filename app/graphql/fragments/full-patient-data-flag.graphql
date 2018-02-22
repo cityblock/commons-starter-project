@@ -4,4 +4,6 @@ fragment FullPatientDataFlag on PatientDataFlag {
   userId
   fieldName
   suggestedValue
+  notes
+  updatedAt
 }

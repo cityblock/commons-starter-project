@@ -93,6 +93,8 @@ export const patient = {
   scratchPad: 'Note',
   consentToCall: true,
   consentToText: true,
+  coreIdentityVerifiedAt: '2017-09-07T13:45:14.532Z',
+  coreIdentityVerifiedById: user.id,
   patientInfo: {
     id: 'patient-info-id',
     gender: 'male',
@@ -826,6 +828,7 @@ export const coreIdentity = {
   lastName: patient.lastName,
   dateOfBirth: patient.dateOfBirth,
   patientDataFlags: patient.patientDataFlags,
+  patientId: patient.id,
 };
 
 export const completeComputedPatientStatus = {

@@ -3,11 +3,14 @@ import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
 
+type CoreIdentityOptions = 'firstName' | 'middleName' | 'lastName' | 'dateOfBirth';
+
 interface IPatientDataFlagCreateFields {
   patientId: string;
   userId: string;
-  fieldName: string;
+  fieldName: CoreIdentityOptions;
   suggestedValue?: string;
+  notes?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -16,8 +19,9 @@ export default class PatientDataFlag extends BaseModel {
   patient: Patient;
   userId: string;
   user: User;
-  fieldName: string;
+  fieldName: CoreIdentityOptions;
   suggestedValue: string;
+  notes: string;
 
   static tableName = 'patient_data_flag';
 
@@ -29,8 +33,9 @@ export default class PatientDataFlag extends BaseModel {
       id: { type: 'string' },
       patientId: { type: 'string', minLength: 1 },
       userId: { type: 'string', minLength: 1 },
-      fieldName: { type: 'string', minLength: 1 },
+      fieldName: { type: 'string', enum: ['firstName', 'middleName', 'lastName', 'dateOfBirth'] },
       suggestedValue: { type: 'string' },
+      notes: { type: 'string' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },

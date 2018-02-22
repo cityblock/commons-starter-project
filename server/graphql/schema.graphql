@@ -179,6 +179,13 @@ enum Permissions {
   black
 }
 
+enum CoreIdentityOptions {
+  firstName
+  middleName
+  lastName
+  dateOfBirth
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -1151,8 +1158,10 @@ type PatientDataFlag implements uniqueId {
   id: ID!
   patientId: ID!
   userId: ID!
-  fieldName: String!
+  fieldName: CoreIdentityOptions!
   suggestedValue: String
+  notes: String
+  updatedAt: String
 }
 
 # Patient Glass Break
@@ -1232,6 +1241,11 @@ input PatientEditInput {
   dateOfBirth: String
   consentToCall: Boolean
   consentToText: Boolean
+}
+
+# params for editing a patient in the db
+input PatientCoreIdentityVerifyInput {
+  patientId: ID!
 }
 
 # params for editing a patient in the db
@@ -1816,9 +1830,9 @@ input CBOReferralEditInput {
 
 input PatientDataFlagCreateInput {
   patientId: ID!
-  userId: ID!
-  fieldName: String!
+  fieldName: CoreIdentityOptions!
   suggestedValue: String
+  notes: String
 }
 
 # params for creating a patient glass break
@@ -1864,6 +1878,8 @@ type RootMutationType {
   addressEdit(input: AddressEditInput): Address
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
+  # mark core identity verified on patient stored in the db
+  patientCoreIdentityVerify(input: PatientCoreIdentityVerifyInput): Patient
   # Edit fields on patient info stored in the db
   patientInfoEdit(input: PatientInfoEditInput): PatientInfo
   # Edit a patient scratch pad

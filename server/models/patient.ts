@@ -93,8 +93,8 @@ export default class Patient extends Model {
   patientInfo: PatientInfo;
   careTeam: User[];
   patientDataFlags: PatientDataFlag[];
-  coreIdentityVerifiedAt: string;
-  coreIdentityVerifiedById: string;
+  coreIdentityVerifiedAt: string | null;
+  coreIdentityVerifiedById: string | null;
   computedPatientStatus: ComputedPatientStatus;
 
   $beforeInsert() {
@@ -316,6 +316,20 @@ export default class Patient extends Model {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientId, patient);
+  }
+
+  static async coreIdentityVerify(
+    patientId: string,
+    userId: string,
+    txn: Transaction,
+  ): Promise<Patient> {
+    await PatientDataFlag.deleteAllForPatient(patientId, txn);
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .patchAndFetchById(patientId, {
+        coreIdentityVerifiedAt: new Date(Date.now()).toISOString(),
+        coreIdentityVerifiedById: userId,
+      });
   }
 
   static async search(

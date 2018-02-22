@@ -46,6 +46,7 @@
 
 .flagged .footer {
   background-color: var(--yellow-color);
+  padding: 15px var(--medium-gutter);
 }
 
 .confirm .footer {

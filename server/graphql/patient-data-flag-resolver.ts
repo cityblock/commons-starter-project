@@ -21,7 +21,9 @@ export async function patientDataFlagCreate(
   return PatientDataFlag.create(
     {
       ...input,
+      userId: userId!,
       suggestedValue: input.suggestedValue || undefined,
+      notes: input.notes || undefined,
     },
     txn,
   );

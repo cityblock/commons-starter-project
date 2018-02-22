@@ -1,10 +1,19 @@
 import { format } from 'date-fns';
+import { filter } from 'lodash-es';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { getPatientQuery } from '../../graphql/types';
+import * as patientVerifyMutationGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
+import {
+  getPatientQuery,
+  patientCoreIdentityVerifyMutation,
+  patientCoreIdentityVerifyMutationVariables,
+  patientDataFlagCreateMutation,
+} from '../../graphql/types';
 import * as styles from './css/patient-demographics.css';
-import FlaggableDisplayCard from './flaggable-display-card';
+import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
+import FlaggingModal from './flagging-modal';
 
 export interface ICoreIdentity {
   firstName: getPatientQuery['patient']['firstName'];
@@ -12,18 +21,29 @@ export interface ICoreIdentity {
   lastName: getPatientQuery['patient']['lastName'];
   dateOfBirth: getPatientQuery['patient']['dateOfBirth'];
   patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
+  patientId: string;
+  coreIdentityVerifiedAt?: string | null;
 }
 
 interface IProps {
   patientIdentity: ICoreIdentity;
+  onChange: (field: { name: string; value: string | object | boolean | null }) => void;
 }
+
+interface IGraphqlProps {
+  verifyCoreIdentity: (
+    options: { variables: patientCoreIdentityVerifyMutationVariables },
+  ) => { data: patientCoreIdentityVerifyMutation };
+}
+
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isModalVisible: boolean;
 }
 
-export default class CoreIdentity extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class CoreIdentity extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
     this.state = { isModalVisible: false };
   }
@@ -39,20 +59,61 @@ export default class CoreIdentity extends React.Component<IProps, IState> {
     return flagInfo ? flagInfo.suggestedValue : null;
   }
 
-  handleCoreIdentityFlagging = () => {
-    // TODO: finish this functionality
-    return;
+  handleFlagCreation = (savedFlag: patientDataFlagCreateMutation['patientDataFlagCreate']) => {
+    const { onChange, patientIdentity } = this.props;
+    const flags = patientIdentity.patientDataFlags || [];
+
+    if (savedFlag) {
+      const updatedFlags = filter(flags, flag => flag.fieldName !== savedFlag.fieldName);
+      updatedFlags.push(savedFlag);
+      onChange({ name: 'flags', value: updatedFlags });
+    }
   };
 
-  handleConfirmIdentity = () => {
-    // TODO: finish this functionality
-    return;
+  handleConfirmIdentity = async () => {
+    const { patientIdentity, verifyCoreIdentity, onChange } = this.props;
+    const response = await verifyCoreIdentity({
+      variables: {
+        patientId: patientIdentity.patientId,
+      },
+    });
+
+    if (response.data.patientCoreIdentityVerify) {
+      onChange({
+        name: 'verifiedAt',
+        value: response.data.patientCoreIdentityVerify.coreIdentityVerifiedAt,
+      });
+    }
+  };
+
+  handleShowModal = () => {
+    this.setState({ isModalVisible: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ isModalVisible: false });
   };
 
   render() {
     const { patientIdentity } = this.props;
-    const { firstName, middleName, lastName, dateOfBirth, patientDataFlags } = patientIdentity;
-    const footerState = patientDataFlags && patientDataFlags.length ? 'flagged' : 'confirm';
+    const {
+      firstName,
+      middleName,
+      lastName,
+      dateOfBirth,
+      patientDataFlags,
+      patientId,
+      coreIdentityVerifiedAt,
+    } = patientIdentity;
+    const { isModalVisible } = this.state;
+
+    let footerState: FooterState = 'confirm';
+    if (patientDataFlags && patientDataFlags.length) {
+      footerState = 'flagged';
+    } else if (coreIdentityVerifiedAt) {
+      footerState = 'none';
+    }
+
     const birthday = dateOfBirth ? format(new Date(dateOfBirth), 'MM/DD/YYYY') : '';
 
     return (
@@ -63,7 +124,7 @@ export default class CoreIdentity extends React.Component<IProps, IState> {
         <FlaggableDisplayCard
           titleMessageId="coreIdentity.title"
           footerState={footerState}
-          onFlagClick={this.handleCoreIdentityFlagging}
+          onFlagClick={this.handleShowModal}
           flaggedMessageId="coreIdentity.flaggedDescription"
           onConfirmClick={this.handleConfirmIdentity}
           confirmMessageId="coreIdentity.confirmDescription"
@@ -89,7 +150,17 @@ export default class CoreIdentity extends React.Component<IProps, IState> {
             correctedValue={this.findFlag('dateOfBirth')}
           />
         </FlaggableDisplayCard>
+        <FlaggingModal
+          isVisible={isModalVisible}
+          patientId={patientId}
+          closePopup={this.handleCloseModal}
+          onSaved={this.handleFlagCreation}
+        />
       </div>
     );
   }
 }
+
+export default graphql<IGraphqlProps, IProps, allProps>(patientVerifyMutationGraphql as any, {
+  name: 'verifyCoreIdentity',
+})(CoreIdentity);

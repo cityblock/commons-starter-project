@@ -327,16 +327,7 @@ input AddressCreateForPatientInput {
   state: String
   city: String
   description: String
-}
-
-# params for creating and address for a patient in the db
-input AddressCreatePrimaryForPatientInput {
-  patientInfoId: ID!
-  zip: String
-  street: String
-  state: String
-  city: String
-  description: String
+  isPrimary: Boolean
 }
 
 # Email
@@ -1903,8 +1894,6 @@ type RootMutationType {
   careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
   # Create an address for a Patient
   addressCreateForPatient(input: AddressCreateForPatientInput): Address
-  # Create an primary address for a Patient
-  addressCreatePrimaryForPatient(input: AddressCreatePrimaryForPatientInput): Address
   # Edit an address
   addressEdit(input: AddressEditInput): Address
   # Create an email for a Patient

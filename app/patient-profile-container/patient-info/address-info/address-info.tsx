@@ -7,14 +7,12 @@ import DefaultText from '../../../shared/library/default-text/default-text';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import CreateAddressModal from './create-address-modal';
-import CreatePrimaryAddressModal from './create-primary-address-modal';
 import * as styles from './css/address-info.css';
 import EditAddressModal from './edit-address-modal';
 
 interface IProps {
   onChange: (field: { name: string; value: string | object | boolean | null }) => void;
   patientId: string;
-  patientInfoId: string;
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
   className?: string;
@@ -23,7 +21,7 @@ interface IProps {
 interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
-  isCreatePrimaryModalVisible: boolean;
+  isPrimary: boolean;
   currentAddress?: ISavedAddress | null;
 }
 
@@ -34,7 +32,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     this.state = {
       isEditModalVisible: false,
       isCreateModalVisible: false,
-      isCreatePrimaryModalVisible: false,
+      isPrimary: false,
     };
   }
 
@@ -47,14 +45,14 @@ export default class AddressInfo extends React.Component<IProps, IState> {
   };
 
   handleAddPrimaryAddressClick = () => {
-    this.setState({ isCreatePrimaryModalVisible: true });
+    this.setState({ isPrimary: true, isCreateModalVisible: true });
   };
 
   handleCloseModal = () => {
     this.setState({
       isEditModalVisible: false,
       isCreateModalVisible: false,
-      isCreatePrimaryModalVisible: false,
+      isPrimary: false,
     });
   };
 
@@ -70,18 +68,36 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     const addresses = this.props.addresses || [];
     const index = findIndex(addresses, address => address.id === savedAddress.id);
 
-    let updatedAddresses;
+    if (index < 0) {
+      const updatedAddresses = [...addresses, savedAddress];
+      onChange({ name: 'addresses', value: updatedAddresses });
+    }
+  };
+
+  handleEditSuccess = (savedAddress: ISavedAddress) => {
+    const { onChange, primaryAddress } = this.props;
+
+    if (primaryAddress && savedAddress.id === primaryAddress.id) {
+      onChange({ name: 'primaryAddress', value: savedAddress });
+      return;
+    }
+
+    const addresses = this.props.addresses || [];
+    const index = findIndex(addresses, address => address.id === savedAddress.id);
+
     if (index > -1) {
-      updatedAddresses = concat(
+      const updatedAddresses = concat(
         slice(addresses, 0, index),
         savedAddress,
         slice(addresses, index + 1),
       );
-    } else {
-      updatedAddresses = [...addresses, savedAddress];
+      onChange({ name: 'addresses', value: updatedAddresses });
     }
+  };
 
-    onChange({ name: 'addresses', value: updatedAddresses });
+  handleSavePrimarySuccess = (savedAddress: ISavedAddress) => {
+    const { onChange } = this.props;
+    onChange({ name: 'primaryAddress', value: savedAddress });
   };
 
   renderAddressDisplayCard(address: ISavedAddress) {
@@ -129,13 +145,8 @@ export default class AddressInfo extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { addresses, patientId, patientInfoId, primaryAddress } = this.props;
-    const {
-      isEditModalVisible,
-      isCreateModalVisible,
-      isCreatePrimaryModalVisible,
-      currentAddress,
-    } = this.state;
+    const { addresses, patientId, primaryAddress } = this.props;
+    const { isEditModalVisible, isCreateModalVisible, isPrimary, currentAddress } = this.state;
 
     const addressCards =
       addresses && addresses.length ? (
@@ -156,25 +167,22 @@ export default class AddressInfo extends React.Component<IProps, IState> {
       />
     ) : null;
 
+    const onSavedFn = isPrimary ? this.handleSavePrimarySuccess : this.handleSaveSuccess;
+
     return (
       <div>
         <CreateAddressModal
           isVisible={isCreateModalVisible}
+          isPrimary={isPrimary}
           closePopup={this.handleCloseModal}
           patientId={patientId}
-          onSaved={this.handleSaveSuccess}
-        />
-        <CreatePrimaryAddressModal
-          isVisible={isCreatePrimaryModalVisible}
-          closePopup={this.handleCloseModal}
-          patientInfoId={patientInfoId}
-          onSaved={this.handleSaveSuccess}
+          onSaved={onSavedFn}
         />
         <EditAddressModal
           isVisible={isEditModalVisible}
           closePopup={this.handleCloseModal}
           patientId={patientId}
-          onSaved={this.handleSaveSuccess}
+          onSaved={this.handleEditSuccess}
           address={currentAddress}
         />
         {this.renderPrimaryAddress()}

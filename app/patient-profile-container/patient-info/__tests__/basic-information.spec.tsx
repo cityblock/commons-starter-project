@@ -16,7 +16,6 @@ describe('Render Basic Information Component', () => {
   it('renders address info', () => {
     expect(wrapper.find(AddressInfo).length).toBe(1);
     expect(wrapper.find(AddressInfo).props().patientId).toBe(basicInfo.patientId);
-    expect(wrapper.find(AddressInfo).props().patientInfoId).toBe(basicInfo.patientInfoId);
     expect(wrapper.find(AddressInfo).props().primaryAddress).toBe(basicInfo.primaryAddress);
     expect(wrapper.find(AddressInfo).props().addresses).toBe(basicInfo.addresses);
     expect(wrapper.find(AddressInfo).props().onChange).toBe(onChange);

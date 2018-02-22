@@ -3,11 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import {
-  addressCreateForPatient,
-  addressCreatePrimaryForPatient,
-  addressEdit,
-} from './address-resolver';
+import { addressCreateForPatient, addressEdit } from './address-resolver';
 import {
   answerCreate,
   answerDelete,
@@ -387,7 +383,6 @@ const resolveFunctions = {
 
   RootMutationType: {
     addressCreateForPatient,
-    addressCreatePrimaryForPatient,
     addressEdit,
     careTeamAddUser,
     careTeamAssignPatients,

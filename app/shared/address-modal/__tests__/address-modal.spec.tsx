@@ -23,14 +23,14 @@ describe('Render Address Info Component', () => {
   it('renders address modal popup', () => {
     expect(wrapper.find(Popup).length).toBe(1);
     expect(wrapper.find(Popup).props().visible).toBeFalsy();
-    expect(wrapper.find(Popup).props().closePopup).toBe(closePopup);
+    expect(wrapper.find(Popup).props().closePopup).not.toBe(closePopup);
     expect(wrapper.find(Popup).props().style).toBe('no-padding');
   });
 
   it('renders address modal header', () => {
     expect(wrapper.find(ModalHeader).length).toBe(1);
     expect(wrapper.find(ModalHeader).props().titleMessageId).toBe('title.id');
-    expect(wrapper.find(ModalHeader).props().closePopup).toBe(closePopup);
+    expect(wrapper.find(ModalHeader).props().closePopup).not.toBe(closePopup);
   });
 
   it('renders address modal form without an address', () => {
@@ -46,7 +46,7 @@ describe('Render Address Info Component', () => {
     expect(wrapper.find(ModalButtons).length).toBe(1);
     expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('address.cancel');
     expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('address.save');
-    expect(wrapper.find(ModalButtons).props().cancel).toBe(closePopup);
+    expect(wrapper.find(ModalButtons).props().cancel).not.toBe(closePopup);
   });
 
   it('renders address modal form with an address', () => {

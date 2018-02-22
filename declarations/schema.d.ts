@@ -1570,10 +1570,6 @@ declare module 'schema' {
   */
     addressCreateForPatient: IAddress | null;
     /**
-    Create an primary address for a Patient
-  */
-    addressCreatePrimaryForPatient: IAddress | null;
-    /**
     Edit an address
   */
     addressEdit: IAddress | null;
@@ -2069,18 +2065,7 @@ declare module 'schema' {
     state: string | null;
     city: string | null;
     description: string | null;
-  }
-
-  /**
-    params for creating and address for a patient in the db
-  */
-  interface IAddressCreatePrimaryForPatientInput {
-    patientInfoId: string;
-    zip: string | null;
-    street: string | null;
-    state: string | null;
-    city: string | null;
-    description: string | null;
+    isPrimary: boolean | null;
   }
 
   /**

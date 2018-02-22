@@ -243,32 +243,12 @@ export interface addressCreateForPatientMutationVariables {
   city?: string | null,
   state?: string | null,
   description?: string | null,
+  isPrimary?: boolean | null,
 };
 
 export interface addressCreateForPatientMutation {
   // Create an address for a Patient
   addressCreateForPatient:  {
-    id: string,
-    city: string | null,
-    state: string | null,
-    street: string | null,
-    zip: string | null,
-    description: string | null,
-  } | null,
-};
-
-export interface addressCreatePrimaryForPatientMutationVariables {
-  patientInfoId: string,
-  zip: string,
-  street?: string | null,
-  city?: string | null,
-  state?: string | null,
-  description?: string | null,
-};
-
-export interface addressCreatePrimaryForPatientMutation {
-  // Create an primary address for a Patient
-  addressCreatePrimaryForPatient:  {
     id: string,
     city: string | null,
     state: string | null,

@@ -7,19 +7,13 @@ import DisplayCard from '../../display-card';
 import FlaggableDisplayField from '../../flaggable-display-field';
 import AddressInfo from '../address-info';
 import CreateAddressModal from '../create-address-modal';
-import CreatePrimaryAddressModal from '../create-primary-address-modal';
 import EditAddressModal from '../edit-address-modal';
 
 describe('Render Address Info Component', () => {
   const onChange = (field: { name: string; value: string | object | boolean | null }) => true;
 
   const wrapper = shallow(
-    <AddressInfo
-      onChange={onChange}
-      patientId={patient.id}
-      patientInfoId={patient.patientInfo.id}
-      className="something"
-    />,
+    <AddressInfo onChange={onChange} patientId={patient.id} className="something" />,
   );
 
   it('renders address info without any addresses', () => {
@@ -174,18 +168,13 @@ describe('Render Address Info Component', () => {
     ).toBe(address3.description);
   });
 
-  it('creates the three modals', () => {
+  it('creates the two modals', () => {
     expect(wrapper.find(CreateAddressModal).length).toBe(1);
-    expect(wrapper.find(CreatePrimaryAddressModal).length).toBe(1);
     expect(wrapper.find(EditAddressModal).length).toBe(1);
 
     const createModal = wrapper.find(CreateAddressModal).props();
     expect(createModal.isVisible).toBeFalsy();
     expect(createModal.patientId).toBe(patient.id);
-
-    const createPrimaryModal = wrapper.find(CreatePrimaryAddressModal).props();
-    expect(createPrimaryModal.isVisible).toBeFalsy();
-    expect(createPrimaryModal.patientInfoId).toBe(patient.patientInfo.id);
 
     const editModal = wrapper.find(EditAddressModal).props();
     expect(editModal.isVisible).toBeFalsy();
@@ -200,9 +189,9 @@ describe('Render Address Info Component', () => {
   });
 
   it('shows the create primary modal', () => {
-    wrapper.setState({ isCreatePrimaryModalVisible: true });
-    expect(wrapper.find(CreatePrimaryAddressModal).length).toBe(1);
-    expect(wrapper.find(CreatePrimaryAddressModal).props().isVisible).toBeTruthy();
+    wrapper.setState({ isCreateModalVisible: true, isPrimary: true });
+    expect(wrapper.find(CreateAddressModal).length).toBe(1);
+    expect(wrapper.find(CreateAddressModal).props().isPrimary).toBeTruthy();
   });
 
   it('shows the edit modal', () => {

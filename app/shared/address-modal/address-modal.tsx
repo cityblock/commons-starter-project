@@ -1,3 +1,4 @@
+import { isNil } from 'lodash-es';
 import * as React from 'react';
 import ModalButtons from '../library/modal-buttons/modal-buttons';
 import ModalError from '../library/modal-error/modal-error';
@@ -60,7 +61,7 @@ class AddressModal extends React.Component<IProps, IState> {
   };
 
   handleSubmit = async () => {
-    const { address, saveAddress, closePopup, onSaved } = this.props;
+    const { address, saveAddress, onSaved } = this.props;
     const originalAddress = address || {};
     const { street, state, zip, city, description } = this.state;
 
@@ -76,38 +77,47 @@ class AddressModal extends React.Component<IProps, IState> {
     try {
       const response = await saveAddress(updatedAddress);
       onSaved(response);
-      closePopup();
-      this.clearState();
+      this.handleClose();
     } catch (err) {
       // TODO: do something with this error
       this.setState({ saveError: err.message });
     }
   };
 
+  handleClose = () => {
+    this.clearState();
+    this.props.closePopup();
+  };
+
   render() {
-    const { isVisible, closePopup, titleMessageId } = this.props;
+    const { isVisible, titleMessageId } = this.props;
     const address = this.props.address || {};
     const { saveError, street, state, zip, city, description } = this.state;
 
     const errorComponent = saveError ? <ModalError errorMessageId="address.saveError" /> : null;
+    const updatedStreet = isNil(street) ? address.street : street;
+    const updatedState = isNil(state) ? address.state : state;
+    const updatedCity = isNil(city) ? address.city : city;
+    const updatedZip = isNil(zip) ? address.zip : zip;
+    const updatedDescription = isNil(description) ? address.description : description;
 
     return (
-      <Popup visible={isVisible} closePopup={closePopup} style="no-padding">
-        <ModalHeader titleMessageId={titleMessageId} closePopup={closePopup} />
+      <Popup visible={isVisible} closePopup={this.handleClose} style="no-padding">
+        <ModalHeader titleMessageId={titleMessageId} closePopup={this.handleClose} />
         {errorComponent}
         <div className={styles.modalBody}>
           <AddressForm
-            street={street || address.street}
-            state={state || address.state}
-            city={city || address.city}
-            zip={zip || address.zip}
-            description={description || address.description}
+            street={updatedStreet}
+            state={updatedState}
+            city={updatedCity}
+            zip={updatedZip}
+            description={updatedDescription}
             onChange={this.handleChange}
           />
           <ModalButtons
             cancelMessageId="address.cancel"
             submitMessageId="address.save"
-            cancel={closePopup}
+            cancel={this.handleClose}
             submit={this.handleSubmit}
           />
         </div>

@@ -7,6 +7,7 @@ mutation addressCreateForPatient(
   $city: String
   $state: String
   $description: String
+  $isPrimary: Boolean
 ) {
   addressCreateForPatient(
     input: {
@@ -16,6 +17,7 @@ mutation addressCreateForPatient(
       city: $city
       state: $state
       description: $description
+      isPrimary: $isPrimary
     }
   ) {
     ...FullAddress

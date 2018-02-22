@@ -12,6 +12,7 @@ interface IProps {
   patientId: string;
   isVisible: boolean;
   closePopup: () => void;
+  isPrimary?: boolean;
 }
 
 interface IGraphqlProps {
@@ -28,7 +29,7 @@ export class CreateAddressModal extends React.Component<allProps> {
       return;
     }
 
-    const { createAddressMutation, patientId } = this.props;
+    const { createAddressMutation, patientId, isPrimary } = this.props;
     return createAddressMutation({
       variables: {
         patientId,
@@ -37,6 +38,7 @@ export class CreateAddressModal extends React.Component<allProps> {
         city: address.city,
         description: address.description,
         zip: address.zip || '',
+        isPrimary,
       },
     });
   };
@@ -48,7 +50,8 @@ export class CreateAddressModal extends React.Component<allProps> {
   };
 
   render() {
-    const { isVisible, closePopup } = this.props;
+    const { isVisible, closePopup, isPrimary } = this.props;
+    const titleMessageId = isPrimary ? 'address.addPrimary' : 'address.addAdditional';
 
     return (
       <AddressModal
@@ -56,7 +59,7 @@ export class CreateAddressModal extends React.Component<allProps> {
         saveAddress={this.createAddress}
         onSaved={this.handleAddressSaved}
         closePopup={closePopup}
-        titleMessageId="address.addAdditional"
+        titleMessageId={titleMessageId}
       />
     );
   }

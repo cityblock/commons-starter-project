@@ -35,4 +35,9 @@ describe('Render Create Address Modal', () => {
     const modal = wrapper.find(AddressModal).props();
     expect(modal.isVisible).toBeTruthy();
   });
+
+  it('renders address modal for primary address', () => {
+    wrapper.setProps({ isPrimary: true });
+    expect(wrapper.find(AddressModal).props().titleMessageId).toBe('address.addPrimary');
+  });
 });

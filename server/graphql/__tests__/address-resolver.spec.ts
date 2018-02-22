@@ -99,13 +99,14 @@ describe('address resolver', () => {
       await transaction(Address.knex(), async txn => {
         const { patient, user } = await setup(txn);
         const query = `mutation {
-          addressCreatePrimaryForPatient(input: {
-            patientInfoId: "${patient.patientInfo.id}",
+          addressCreateForPatient(input: {
+            patientId: "${patient.id}",
             zip: "11238",
             state: "NY",
             city: "Brooklyn",
             street: "600 Vanderbilt Ave",
             description: "Some building",
+            isPrimary: true,
           }) {
             id, zip, state, city, street, description
           }
@@ -118,7 +119,7 @@ describe('address resolver', () => {
           logger,
           txn,
         });
-        expect(cloneDeep(result.data!.addressCreatePrimaryForPatient)).toMatchObject({
+        expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
           street: '600 Vanderbilt Ave',
           zip: '11238',
           state: 'NY',
@@ -132,7 +133,7 @@ describe('address resolver', () => {
         expect(patientAddress.length).toBe(1);
 
         const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreatePrimaryForPatient.id);
+        expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreateForPatient.id);
       });
     });
   });

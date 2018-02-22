@@ -14,7 +14,6 @@ import * as styles from './css/patient-demographics.css';
 
 export interface IBasicInformation {
   patientId: string;
-  patientInfoId: string;
   gender: getPatientQuery['patient']['patientInfo']['gender'];
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
@@ -105,7 +104,7 @@ export default class BasicInformation extends React.Component<IProps> {
 
   render() {
     const { patientInformation, onChange } = this.props;
-    const { primaryAddress, addresses, patientId, patientInfoId } = patientInformation;
+    const { primaryAddress, addresses, patientId } = patientInformation;
 
     return (
       <div className={styles.section}>
@@ -115,7 +114,6 @@ export default class BasicInformation extends React.Component<IProps> {
         {this.renderPatientInfo()}
         <AddressInformation
           patientId={patientId}
-          patientInfoId={patientInfoId}
           primaryAddress={primaryAddress}
           addresses={addresses}
           onChange={onChange}

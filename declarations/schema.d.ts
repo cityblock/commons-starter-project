@@ -500,6 +500,8 @@ declare module 'schema' {
     language: string | null;
     primaryAddress: IAddress | null;
     addresses: Array<IAddress>;
+    primaryPhone: IPhone | null;
+    phones: Array<IPhone>;
     primaryEmail: IEmail | null;
     emails: Array<IEmail>;
   }
@@ -517,11 +519,24 @@ declare module 'schema' {
   }
 
   /**
+    Phone
+  */
+  interface IPhone {
+    id: string;
+    phoneNumber: string;
+    type: IPhoneTypeOptionsEnum | null;
+    description: string | null;
+  }
+
+
+  type IPhoneTypeOptionsEnum = 'home' | 'work' | 'mobile' | 'other';
+
+  /**
     Email
   */
   interface IEmail {
     id: string;
-    email: string | null;
+    email: string;
     description: string | null;
   }
 
@@ -1574,6 +1589,14 @@ declare module 'schema' {
   */
     addressEdit: IAddress | null;
     /**
+    Create a phone number for a Patient
+  */
+    phoneCreateForPatient: IPhone | null;
+    /**
+    Edit a phone number
+  */
+    phoneEdit: IPhone | null;
+    /**
     Create an email for a Patient
   */
     emailCreateForPatient: IEmail | null;
@@ -2078,6 +2101,28 @@ declare module 'schema' {
     street: string | null;
     state: string | null;
     city: string | null;
+    description: string | null;
+  }
+
+  /**
+    params for creating a phone for a patient in the db
+  */
+  interface IPhoneCreateForPatientInput {
+    patientId: string;
+    phoneNumber: string;
+    type: IPhoneTypeOptionsEnum | null;
+    description: string | null;
+    isPrimary: boolean | null;
+  }
+
+  /**
+    Editable fields on a phone
+  */
+  interface IPhoneEditInput {
+    phoneId: string;
+    patientId: string;
+    phoneNumber: string;
+    type: IPhoneTypeOptionsEnum | null;
     description: string | null;
   }
 

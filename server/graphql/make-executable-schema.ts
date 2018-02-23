@@ -148,6 +148,7 @@ import {
   patientTaskSuggestionDismiss,
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
+import { phoneCreateForPatient, phoneEdit } from './phone-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteGlassBreakCreate,
@@ -393,6 +394,8 @@ const resolveFunctions = {
     patientCoreIdentityVerify,
     patientInfoEdit,
     patientScratchPadEdit,
+    phoneCreateForPatient,
+    phoneEdit,
     currentUserEdit,
     userCreate,
     userLogin,

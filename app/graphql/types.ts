@@ -51,6 +51,14 @@ export enum CoreIdentityOptions {
 }
 
 
+export enum PhoneTypeOptions {
+  home = "home",
+  mobile = "mobile",
+  other = "other",
+  work = "work",
+}
+
+
 export enum AnswerTypeOptions {
   dropdown = "dropdown",
   freetext = "freetext",
@@ -1118,7 +1126,7 @@ export interface emailCreateForPatientMutation {
   // Create an email for a Patient
   emailCreateForPatient:  {
     id: string,
-    email: string | null,
+    email: string,
     description: string | null,
   } | null,
 };
@@ -1134,7 +1142,7 @@ export interface emailEditMutation {
   // Edit an email
   emailEdit:  {
     id: string,
-    email: string | null,
+    email: string,
     description: string | null,
   } | null,
 };
@@ -6240,6 +6248,42 @@ export interface patientScreeningToolSubmissionScoreMutation {
   } | null,
 };
 
+export interface phoneCreateForPatientMutationVariables {
+  patientId: string,
+  phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
+  isPrimary?: boolean | null,
+};
+
+export interface phoneCreateForPatientMutation {
+  // Create a phone number for a Patient
+  phoneCreateForPatient:  {
+    id: string,
+    phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
+  } | null,
+};
+
+export interface phoneEditMutationVariables {
+  phoneId: string,
+  patientId: string,
+  phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
+};
+
+export interface phoneEditMutation {
+  // Edit a phone number
+  phoneEdit:  {
+    id: string,
+    phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
+  } | null,
+};
+
 export interface progressNoteAddSupervisorNotesMutationVariables {
   progressNoteId: string,
   supervisorNotes: string,
@@ -9074,7 +9118,7 @@ export interface FullDiagnosisCodeFragment {
 
 export interface FullEmailFragment {
   id: string,
-  email: string | null,
+  email: string,
   description: string | null,
 };
 
@@ -9890,6 +9934,13 @@ export interface FullPatientTableRowFragment {
   patientInfo:  {
     gender: string | null,
   },
+};
+
+export interface FullPhoneFragment {
+  id: string,
+  phoneNumber: string,
+  type: PhoneTypeOptions | null,
+  description: string | null,
 };
 
 export interface FullProgressNoteActivityFragment {

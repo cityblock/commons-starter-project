@@ -31,8 +31,10 @@ import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientGoal from '../../models/patient-goal';
 import PatientInfo from '../../models/patient-info';
 import PatientList from '../../models/patient-list';
+import PatientPhone from '../../models/patient-phone';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
+import Phone from '../../models/phone';
 import ProgressNote from '../../models/progress-note';
 import ProgressNoteGlassBreak from '../../models/progress-note-glass-break';
 import ProgressNoteTemplate from '../../models/progress-note-template';
@@ -85,8 +87,10 @@ export type ModelResource =
   | 'patientGoal'
   | 'patientInfo'
   | 'patientList'
+  | 'patientPhone'
   | 'patientScreeningToolSubmission'
   | 'patientTaskSuggestion'
+  | 'phone'
   | 'progressNote'
   | 'progressNoteGlassBreak'
   | 'progressNoteTemplate'
@@ -143,8 +147,10 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientGoal: PatientGoal,
   patientInfo: PatientInfo,
   patientList: PatientList,
+  patientPhone: PatientPhone,
   patientScreeningToolSubmission: PatientScreeningToolSubmission,
   patientTaskSuggestion: PatientTaskSuggestion,
+  phone: Phone,
   progressNote: ProgressNote,
   progressNoteGlassBreak: ProgressNoteGlassBreak,
   progressNoteTemplate: ProgressNoteTemplate,

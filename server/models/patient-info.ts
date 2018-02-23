@@ -5,6 +5,7 @@ import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';
 import Email from './email';
 import Patient from './patient';
+import Phone from './phone';
 
 export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
 
@@ -22,6 +23,7 @@ export interface IPatientInfoOptions {
   language?: string;
   primaryAddressId?: string;
   primaryEmailId?: string;
+  primaryPhoneId?: string;
 }
 
 interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
@@ -30,6 +32,7 @@ interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
   language?: string;
   primaryAddressId?: string;
   primaryEmailId?: string;
+  primaryPhoneId?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -48,6 +51,9 @@ export default class PatientInfo extends Model {
   primaryEmailId: string;
   primaryEmail: Email;
   emails: Email[];
+  primaryPhoneId: string;
+  primaryPhone: Phone;
+  phones: Phone[];
   createdAt: string;
   updatedAt: string;
 
@@ -74,6 +80,7 @@ export default class PatientInfo extends Model {
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
       primaryAddressId: { type: 'string', format: 'uuid' },
       primaryEmailId: { type: 'string', format: 'uuid' },
+      primaryPhoneId: { type: 'string', format: 'uuid' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
@@ -132,6 +139,28 @@ export default class PatientInfo extends Model {
       join: {
         from: 'email.id',
         to: 'patient_info.primaryEmailId',
+      },
+    },
+
+    phones: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'phone',
+      join: {
+        from: 'patient_info.patientId',
+        through: {
+          from: 'patient_phone.patientId',
+          to: 'patient_phone.phoneId',
+        },
+        to: 'phone.id',
+      },
+    },
+
+    primaryPhone: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'phone',
+      join: {
+        from: 'phone.id',
+        to: 'patient_info.primaryPhoneId',
       },
     },
   };

@@ -1,0 +1,6 @@
+fragment FullPhone on Phone {
+  id
+  phoneNumber
+  type
+  description
+}

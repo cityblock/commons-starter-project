@@ -186,6 +186,13 @@ enum CoreIdentityOptions {
   dateOfBirth
 }
 
+enum PhoneTypeOptions {
+  home
+  work
+  mobile
+  other
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -268,6 +275,8 @@ type PatientInfo implements uniqueId {
   language: String
   primaryAddress: Address
   addresses: [Address!]
+  primaryPhone: Phone
+  phones: [Phone!]
   primaryEmail: Email
   emails: [Email!]
 }
@@ -330,10 +339,36 @@ input AddressCreateForPatientInput {
   isPrimary: Boolean
 }
 
+# Phone
+type Phone implements uniqueId {
+  id: ID!
+  phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
+}
+
+# Editable fields on a phone
+input PhoneEditInput {
+  phoneId: ID!
+  patientId: ID!
+  phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
+}
+
+# params for creating a phone for a patient in the db
+input PhoneCreateForPatientInput {
+  patientId: ID!
+  phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
+  isPrimary: Boolean
+}
+
 # Email
 type Email implements uniqueId {
   id: ID!
-  email: String
+  email: String!
   description: String
 }
 
@@ -1896,6 +1931,10 @@ type RootMutationType {
   addressCreateForPatient(input: AddressCreateForPatientInput): Address
   # Edit an address
   addressEdit(input: AddressEditInput): Address
+  # Create a phone number for a Patient
+  phoneCreateForPatient(input: PhoneCreateForPatientInput): Phone
+  # Edit a phone number
+  phoneEdit(input: PhoneEditInput): Phone
   # Create an email for a Patient
   emailCreateForPatient(input: EmailCreateForPatientInput): Email
   # Edit an email

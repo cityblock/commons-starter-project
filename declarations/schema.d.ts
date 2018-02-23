@@ -318,9 +318,9 @@ declare module 'schema' {
   */
     progressNote: IProgressNote;
     /**
-    progress notes for patient
+    progress note ids for patient
   */
-    progressNotesForPatient: Array<IProgressNote>;
+    progressNoteIdsForPatient: Array<string>;
     /**
     progress notes for current user
   */

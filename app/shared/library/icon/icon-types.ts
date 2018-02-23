@@ -14,6 +14,7 @@ export type IconName =
   | 'error'
   | 'errorOutline'
   | 'event'
+  | 'eventNote'
   | 'expandArrow'
   | 'expandLess'
   | 'expandMore'

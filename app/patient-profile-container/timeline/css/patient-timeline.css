@@ -15,37 +15,8 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.emptyMessage {
-  border: 1px dashed var(--border-color);
-  border-radius: 4px;
-  padding: 50px 0;
+.empty {
   margin-top: var(--medium-gutter);
-}
-
-.emptyLogo {
-  background-image: url('../../../assets/calendar-event-grey.svg');
-  background-position: center center;
-  height: 30px;
-  width: 30px;
-  margin: 0 auto 25px;
-}
-
-.emptyLabel {
-  margin: 0 auto 10px;
-  text-align: center;
-  color: var(--light-gray-font-color);
-  font-family: var(--basetica-medium);
-  font-size: var(--medium-font-size);
-  line-height: var(--medium-font-line-height);
-}
-
-.emptySubtext {
-  margin: 0 auto;
-  text-align: center;
-  color: var(--light-gray-font-color);
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--default-line-height);
 }
 
 .loading {

@@ -153,6 +153,25 @@ export default class ProgressNote extends BaseModel {
     return query;
   }
 
+  static async getAllIdsForPatient(
+    patientId: string,
+    completed: boolean,
+    txn: Transaction,
+  ): Promise<string[]> {
+    const query = this.query(txn)
+      .pluck('id')
+      .eager(EAGER_QUERY)
+      .orderBy('createdAt', 'desc')
+      .where({ deletedAt: null, patientId });
+
+    if (completed) {
+      query.whereNotNull('completedAt');
+    } else {
+      query.whereNull('completedAt');
+    }
+    return query as any;
+  }
+
   static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {
     const progressNoteCount = (await this.query(txn)
       .where({ patientId, deletedAt: null })

@@ -27,21 +27,13 @@ exports[`renders timeline 1`] = `
       className="progressNotes"
     >
       <div
-        className="emptyMessage"
+        className="empty"
       >
-        <div
-          className="emptyLogo"
+        <EmptyPlaceholder
+          detailMessageId="progressNote.emptyDetail"
+          headerMessageId="progressNote.emptyHeader"
+          icon="eventNote"
         />
-        <div
-          className="emptyLabel"
-        >
-          No encounter history for this patient
-        </div>
-        <div
-          className="emptySubtext"
-        >
-          Future encounters with this patient will be displayed here.
-        </div>
       </div>
     </div>
   </div>

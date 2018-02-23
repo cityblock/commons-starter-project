@@ -478,6 +478,8 @@ export const ENGLISH_TRANSLATION = {
     'progressNote.newTasks': 'New Tasks: ',
     'progressNote.screeningToolResults': 'Results:',
     'progressNote.close': 'Close',
+    'progressNote.emptyDetail': 'Future encounters with this patient will be displayed here',
+    'progressNote.emptyHeader': 'No encounter history for this patient',
     'quickCallNote.new': '+ Quick call note',
     'quickCallForm.title': 'Quick call note',
     'quickCallForm.submit': 'Save call',

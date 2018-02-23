@@ -162,8 +162,8 @@ import {
   progressNoteEdit,
   resolveProgressNote,
   resolveProgressNotesForCurrentUser,
-  resolveProgressNotesForPatient,
   resolveProgressNotesForSupervisorReview,
+  resolveProgressNoteIdsForPatient,
 } from './progress-note-resolver';
 import {
   progressNoteTemplateCreate,
@@ -360,7 +360,7 @@ const resolveFunctions = {
     progressNoteTemplate: resolveProgressNoteTemplate,
     progressNoteTemplates: resolveProgressNoteTemplates,
     progressNote: resolveProgressNote,
-    progressNotesForPatient: resolveProgressNotesForPatient,
+    progressNoteIdsForPatient: resolveProgressNoteIdsForPatient,
     progressNotesForSupervisorReview: resolveProgressNotesForSupervisorReview,
     progressNotesForCurrentUser: resolveProgressNotesForCurrentUser,
     progressNoteActivityForProgressNote: resolveProgressNoteActivityForProgressNote,

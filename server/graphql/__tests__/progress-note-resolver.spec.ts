@@ -301,7 +301,7 @@ describe('progress note resolver', () => {
         );
 
         const query = `{
-          progressNotesForPatient(patientId: "${patient.id}", completed: false) { id }
+          progressNoteIdsForPatient(patientId: "${patient.id}", completed: false)
         }`;
 
         const result = await graphql(schema, query, null, {
@@ -310,8 +310,8 @@ describe('progress note resolver', () => {
           userId: user.id,
           txn,
         });
-        const progressNotes = cloneDeep(result.data!.progressNotesForPatient);
-        const progressNoteIds = progressNotes.map((progressNote: ProgressNote) => progressNote.id);
+        const progressNoteIds = cloneDeep(result.data!.progressNoteIdsForPatient);
+
         expect(progressNoteIds).toContain(progressNote1.id);
         expect(progressNoteIds).toContain(progressNote2.id);
       });
@@ -329,9 +329,9 @@ describe('progress note resolver', () => {
         );
 
         const query = `{
-          progressNotesForPatient(patientId: "${
+          progressNoteIdsForPatient(patientId: "${
             patient2.id
-          }", completed: false, glassBreakId: "${uuid()}") { id }
+          }", completed: false, glassBreakId: "${uuid()}")
         }`;
 
         const result = await graphql(schema, query, null, {
@@ -373,9 +373,9 @@ describe('progress note resolver', () => {
           .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
         const query = `{
-          progressNotesForPatient(patientId: "${patient2.id}", completed: false, glassBreakId: "${
+          progressNoteIdsForPatient(patientId: "${patient2.id}", completed: false, glassBreakId: "${
           patientGlassBreak.id
-        }") { id }
+        }")
         }`;
 
         const result = await graphql(schema, query, null, {

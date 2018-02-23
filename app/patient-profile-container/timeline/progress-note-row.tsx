@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedDate, FormattedTime } from 'react-intl';
+import * as progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
@@ -12,8 +14,14 @@ import ProgressNoteSupervisorBadge from './progress-note-supervisor-badge';
 import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
 
 interface IProps {
-  progressNote: FullProgressNoteFragment;
+  progressNoteId: string;
   patientId: string;
+}
+
+interface IGraphqlProps {
+  progressNote: FullProgressNoteFragment;
+  loading?: boolean;
+  error?: string | null;
 }
 
 type Tab = 'context' | 'activity' | 'supervisor-review';
@@ -22,8 +30,10 @@ interface IState {
   tab: Tab | null;
 }
 
-export default class ProgressNoteRow extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+export class ProgressNoteRow extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
     this.state = {
       tab: null,
@@ -37,7 +47,9 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { progressNote, patientId } = this.props;
+    const { progressNote, patientId, loading, error } = this.props;
+    if (loading || error) return null;
+
     const { tab } = this.state;
     const title = progressNote.progressNoteTemplate ? progressNote.progressNoteTemplate.title : '';
 
@@ -129,3 +141,16 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     );
   }
 }
+
+export default graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      progressNoteId: props.progressNoteId,
+    },
+  }),
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    progressNote: data ? (data as any).progressNote : null,
+  }),
+})(ProgressNoteRow);

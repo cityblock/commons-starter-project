@@ -162,15 +162,15 @@ export async function resolveProgressNote(
   return ProgressNote.get(args.progressNoteId, txn);
 }
 
-export async function resolveProgressNotesForPatient(
+export async function resolveProgressNoteIdsForPatient(
   root: any,
   args: IResolveProgressNotesForPatientOptions,
   { permissions, userId, txn }: IContext,
-): Promise<IRootQueryType['progressNotesForPatient']> {
+): Promise<IRootQueryType['progressNoteIdsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
   await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
-  return ProgressNote.getAllForPatient(args.patientId, args.completed, txn);
+  return ProgressNote.getAllIdsForPatient(args.patientId, args.completed, txn);
 }
 
 export async function resolveProgressNotesForCurrentUser(

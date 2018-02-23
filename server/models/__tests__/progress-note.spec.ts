@@ -97,6 +97,22 @@ describe('progress note model', () => {
     });
   });
 
+  it('gets progress note ids for a patient', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+      const createdNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+      const progressNotes = await ProgressNote.getAllIdsForPatient(patient.id, false, txn);
+      expect(progressNotes).toEqual([createdNote.id]);
+    });
+  });
+
   it('gets progress notes for a user', async () => {
     await transaction(ProgressNote.knex(), async txn => {
       const { patient, user, progressNoteTemplate } = await setup(txn);

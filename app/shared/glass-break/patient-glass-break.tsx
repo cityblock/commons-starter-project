@@ -52,18 +52,8 @@ const patientGlassBreak = () => <P extends {}>(
 
   class PatientGlassBreak extends React.Component<resultProps> {
     isLoading(): boolean {
-      const {
-        loading,
-        loadingGlassBreakCheck,
-        error,
-        errorGlassBreakCheck,
-      } = this.props;
-      return (
-        !!loading ||
-        !!loadingGlassBreakCheck ||
-        !!error ||
-        !!errorGlassBreakCheck
-      );
+      const { loading, loadingGlassBreakCheck, error, errorGlassBreakCheck } = this.props;
+      return !!loading || !!loadingGlassBreakCheck || !!error || !!errorGlassBreakCheck;
     }
 
     getWrappedComponentProps() {
@@ -82,7 +72,9 @@ const patientGlassBreak = () => <P extends {}>(
 
     getGlassBreakId(): string | null {
       const { glassBreaks, patientId } = this.props;
-      const foundGlassBreak = (glassBreaks || []).find(glassBreak => glassBreak.patientId === patientId);
+      const foundGlassBreak = (glassBreaks || []).find(
+        glassBreak => glassBreak.patientId === patientId,
+      );
 
       return foundGlassBreak ? foundGlassBreak.id : null;
     }

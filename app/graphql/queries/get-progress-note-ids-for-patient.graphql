@@ -1,0 +1,7 @@
+query getProgressNoteIdsForPatient($patientId: ID!, $completed: Boolean!, $glassBreakId: ID) {
+  progressNoteIdsForPatient(
+    patientId: $patientId
+    completed: $completed
+    glassBreakId: $glassBreakId
+  )
+}

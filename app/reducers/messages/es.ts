@@ -475,6 +475,8 @@ export const SPANISH_TRANSLATION = {
     'progressNote.newTasks': 'New Tasks: ',
     'progressNote.screeningToolResults': 'Results',
     'progressNote.close': 'Close',
+    'progressNote.emptyDetail': 'Future encounters with this patient will be displayed here',
+    'progressNote.emptyHeader': 'No encounter history for this patient',
     'quickCallNote.new': '+ Nota de llamada rápida',
     'quickCallForm.title': 'Nota de llamada rápida',
     'quickCallForm.submit': 'Guardar llamada',

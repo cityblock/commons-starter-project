@@ -3,16 +3,16 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import * as progressNotesQuery from '../../graphql/queries/get-progress-notes-for-patient.graphql';
+import * as progressNoteIdsQuery from '../../graphql/queries/get-progress-note-ids-for-patient.graphql';
 import * as progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
 import {
-  getProgressNotesForPatientQuery,
+  getProgressNoteIdsForPatientQuery,
   progressNoteCreateMutation,
   progressNoteCreateMutationVariables,
-  FullProgressNoteFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
+import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNoteRow from './progress-note-row';
@@ -34,7 +34,7 @@ interface IDispatchProps {
 interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
-  progressNotes?: getProgressNotesForPatientQuery['progressNotesForPatient'];
+  progressNoteIds?: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'];
   progressNoteCreate?: (
     options: { variables: progressNoteCreateMutationVariables },
   ) => { data: progressNoteCreateMutation };
@@ -65,21 +65,19 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 
   renderProgressNotes = (
-    progressNotes: getProgressNotesForPatientQuery['progressNotesForPatient'],
+    progressNoteIds: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'],
   ) => {
     const { loading, error } = this.state;
-    if (progressNotes && progressNotes.length) {
-      return progressNotes
-        .filter(progressNote => progressNote && progressNote.completedAt)
-        .map(this.renderPatientEncounter);
+    if (progressNoteIds && progressNoteIds.length) {
+      return progressNoteIds.map(this.renderPatientEncounter);
     } else if (!loading && !error) {
       return (
-        <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo} />
-          <div className={styles.emptyLabel}>No encounter history for this patient</div>
-          <div className={styles.emptySubtext}>
-            Future encounters with this patient will be displayed here.
-          </div>
+        <div className={styles.empty}>
+          <EmptyPlaceholder
+            icon="eventNote"
+            headerMessageId="progressNote.emptyHeader"
+            detailMessageId="progressNote.emptyDetail"
+          />
         </div>
       );
     } else {
@@ -87,12 +85,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  renderPatientEncounter = (progressNote: FullProgressNoteFragment | null, index: number) => {
-    if (progressNote) {
+  renderPatientEncounter = (progressNoteId: string, index: number) => {
+    if (progressNoteId) {
       return (
         <ProgressNoteRow
           key={index}
-          progressNote={progressNote}
+          progressNoteId={progressNoteId}
           patientId={this.props.match.params.patientId}
         />
       );
@@ -128,9 +126,9 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
   render() {
     const { isQuickCallPopupVisible } = this.state;
-    const { progressNotes, match } = this.props;
+    const { progressNoteIds, match } = this.props;
     const patientId = match.params.patientId;
-    const progressNotesList = progressNotes || [];
+    const progressNotesList = progressNoteIds || [];
 
     return (
       <div>
@@ -178,19 +176,19 @@ export default compose(
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteIdsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,
         glassBreakId: props.glassBreakId,
         completed: true,
       },
-      fetchPolicy: 'cache-and-network', // Always get the latest progress notes
+      fetchPolicy: 'cache-and-network', // Always get the latest progress note ids
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
-      progressNotes: data ? (data as any).progressNotesForPatient : null,
+      progressNoteIds: data ? (data as any).progressNoteIdsForPatient : null,
     }),
   }),
 )(PatientTimeline);

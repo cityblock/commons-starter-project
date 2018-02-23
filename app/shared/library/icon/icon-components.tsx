@@ -19,6 +19,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorIcon from 'material-ui-icons/Error';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
 import EventIcon from 'material-ui-icons/Event';
+import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import Flag from 'material-ui-icons/Flag';
@@ -65,6 +66,7 @@ const components: IconComponents = {
   error: ErrorIcon,
   errorOutline: ErrorOutlineIcon,
   event: EventIcon,
+  eventNote: EventNoteIcon,
   expandArrow: ExpandArrowIcon,
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,

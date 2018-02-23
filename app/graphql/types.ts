@@ -3671,6 +3671,17 @@ export interface getProgessNoteGlassBreaksForUserQuery {
   } >,
 };
 
+export interface getProgressNoteIdsForPatientQueryVariables {
+  patientId: string,
+  completed: boolean,
+  glassBreakId?: string | null,
+};
+
+export interface getProgressNoteIdsForPatientQuery {
+  // progress note ids for patient
+  progressNoteIdsForPatient: Array< string >,
+};
+
 export interface getProgressNoteTemplateQueryVariables {
   progressNoteTemplateId: string,
 };
@@ -3772,78 +3783,6 @@ export interface getProgressNotesForCurrentUserQueryVariables {
 export interface getProgressNotesForCurrentUserQuery {
   // progress notes for current user
   progressNotesForCurrentUser:  Array< {
-    id: string,
-    patientId: string,
-    user:  {
-      id: string,
-      locale: string | null,
-      phone: string | null,
-      firstName: string | null,
-      lastName: string | null,
-      userRole: UserRole,
-      email: string | null,
-      homeClinicId: string,
-      googleProfileImageUrl: string | null,
-      createdAt: string,
-      updatedAt: string,
-      permissions: Permissions,
-    },
-    patient:  {
-      id: string,
-      firstName: string,
-      middleName: string | null,
-      lastName: string,
-      dateOfBirth: string | null,
-      createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
-      coreIdentityVerifiedAt: string | null,
-      patientInfo:  {
-        id: string,
-        gender: string | null,
-        language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-      },
-    },
-    completedAt: string | null,
-    createdAt: string,
-    updatedAt: string,
-    summary: string | null,
-    memberConcern: string | null,
-    startedAt: string | null,
-    location: string | null,
-    deletedAt: string | null,
-    needsSupervisorReview: boolean | null,
-    reviewedBySupervisorAt: string | null,
-    supervisorNotes: string | null,
-    supervisor:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      userRole: UserRole,
-      googleProfileImageUrl: string | null,
-    } | null,
-    progressNoteTemplate:  {
-      id: string,
-      title: string,
-      createdAt: string,
-      deletedAt: string | null,
-    } | null,
-  } | null >,
-};
-
-export interface getProgressNotesForPatientQueryVariables {
-  patientId: string,
-  completed: boolean,
-  glassBreakId?: string | null,
-};
-
-export interface getProgressNotesForPatientQuery {
-  // progress notes for patient
-  progressNotesForPatient:  Array< {
     id: string,
     patientId: string,
     user:  {

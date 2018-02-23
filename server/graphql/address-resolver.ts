@@ -19,7 +19,7 @@ export async function addressCreateForPatient(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
-  filtered.updatedBy = userId;
+  filtered.updatedById = userId;
   logger.log(`CREATE address for patient ${input.patientId} by ${userId}`, 2);
 
   const address = await Address.create(filtered, txn);

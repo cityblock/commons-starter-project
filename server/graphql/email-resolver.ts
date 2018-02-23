@@ -19,7 +19,7 @@ export async function emailCreateForPatient(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IEmailCreateForPatientInput>(input, isNil) as any;
-  filtered.updatedBy = userId;
+  filtered.updatedById = userId;
   logger.log(`CREATE email for patient ${input.patientId} by ${userId}`, 2);
 
   const email = await Email.create(filtered, txn);

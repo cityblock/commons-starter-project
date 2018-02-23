@@ -40,7 +40,7 @@ describe('address', () => {
           state: 'NY',
           city: 'Brooklyn',
           description: 'Office',
-          updatedBy: user.id,
+          updatedById: user.id,
         });
       });
     });
@@ -57,7 +57,7 @@ describe('address', () => {
             state: 'MA',
             city: 'Boston',
             description: "Sister's house",
-            updatedBy: user.id,
+            updatedById: user.id,
           },
           address.id,
           txn,
@@ -68,7 +68,7 @@ describe('address', () => {
           state: 'MA',
           city: 'Boston',
           description: "Sister's house",
-          updatedBy: user.id,
+          updatedById: user.id,
         });
       });
     });

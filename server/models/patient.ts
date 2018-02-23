@@ -306,7 +306,7 @@ export default class Patient extends Model {
     const patientRows = patientIds.map(id => {
       return {
         patientId: id,
-        updatedBy: userId,
+        updatedById: userId,
       };
     });
     return PatientInfo.query(txn).insert(patientRows as any);

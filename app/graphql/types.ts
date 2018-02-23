@@ -1117,7 +1117,7 @@ export interface currentUserEditMutation {
 
 export interface emailCreateForPatientMutationVariables {
   patientId: string,
-  email: string,
+  emailAddress: string,
   description?: string | null,
   isPrimary?: boolean | null,
 };
@@ -1126,7 +1126,7 @@ export interface emailCreateForPatientMutation {
   // Create an email for a Patient
   emailCreateForPatient:  {
     id: string,
-    email: string,
+    emailAddress: string,
     description: string | null,
   } | null,
 };
@@ -1134,7 +1134,7 @@ export interface emailCreateForPatientMutation {
 export interface emailEditMutationVariables {
   emailId: string,
   patientId: string,
-  email: string,
+  emailAddress: string,
   description?: string | null,
 };
 
@@ -1142,7 +1142,7 @@ export interface emailEditMutation {
   // Edit an email
   emailEdit:  {
     id: string,
-    email: string,
+    emailAddress: string,
     description: string | null,
   } | null,
 };
@@ -9123,7 +9123,7 @@ export interface FullDiagnosisCodeFragment {
 
 export interface FullEmailFragment {
   id: string,
-  email: string,
+  emailAddress: string,
   description: string | null,
 };
 

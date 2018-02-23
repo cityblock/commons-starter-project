@@ -76,7 +76,7 @@ export async function createAddressForPatient(
   userId: string,
   txn: Transaction,
 ): Promise<Address> {
-  const address = await Address.create({ zip, street, updatedBy: userId }, txn);
+  const address = await Address.create({ zip, street, updatedById: userId }, txn);
   await PatientAddress.create({ addressId: address.id, patientId }, txn);
   return address;
 }
@@ -88,7 +88,7 @@ export async function createPrimaryAddressForPatient(
   userId: string,
   txn: Transaction,
 ): Promise<Address> {
-  const address = await Address.create({ zip, updatedBy: userId }, txn);
+  const address = await Address.create({ zip, updatedById: userId }, txn);
   await PatientAddress.create({ addressId: address.id, patientId }, txn);
   await PatientInfo.edit({ primaryAddressId: address.id, updatedById: userId }, patientInfoId, txn);
   return address;
@@ -101,7 +101,7 @@ export function createMockAddress(userId: string) {
     state: 'NY',
     city: 'Brooklyn',
     description: 'Office',
-    updatedBy: userId,
+    updatedById: userId,
   };
 }
 
@@ -116,9 +116,9 @@ export function createMockPhone(userId: string) {
 
 export function createMockEmail(userId: string) {
   return {
-    email: 'spam@email.com',
+    emailAddress: 'spam@email.com',
     description: 'spam email',
-    updatedBy: userId,
+    updatedById: userId,
   };
 }
 

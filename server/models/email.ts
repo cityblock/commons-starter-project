@@ -2,22 +2,22 @@ import { Transaction } from 'objection';
 import BaseModel from './base-model';
 
 export interface IEmailOptions {
-  updatedBy: string;
-  email: string;
+  updatedById: string;
+  emailAddress: string;
   description?: string;
 }
 
 export interface IEmailEdit {
-  updatedBy: string;
-  email: string;
+  updatedById: string;
+  emailAddress: string;
   description?: string;
 }
 
 /* tslint:disable:member-ordering */
 export default class Email extends BaseModel {
-  email: string;
+  emailAddress: string;
   description: string;
-  updatedBy: string;
+  updatedById: string;
 
   static tableName = 'email';
 
@@ -27,13 +27,13 @@ export default class Email extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      email: { type: 'string', minLength: 1 },
+      emailAddress: { type: 'string', minLength: 1 },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
-      updatedBy: { type: 'string', format: 'uuid' },
+      updatedById: { type: 'string', format: 'uuid' },
     },
-    required: ['email', 'updatedBy'],
+    required: ['emailAddress', 'updatedById'],
   };
 
   static async create(input: IEmailOptions, txn: Transaction) {

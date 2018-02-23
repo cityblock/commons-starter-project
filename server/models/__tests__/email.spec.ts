@@ -35,9 +35,9 @@ describe('email', () => {
       await transaction(Email.knex(), async txn => {
         const { email, user } = await setup(txn);
         expect(email).toMatchObject({
-          email: 'spam@email.com',
+          emailAddress: 'spam@email.com',
           description: 'spam email',
-          updatedBy: user.id,
+          updatedById: user.id,
         });
       });
     });
@@ -49,17 +49,17 @@ describe('email', () => {
         const { email, user } = await setup(txn);
         const editedEmail = await Email.edit(
           {
-            email: 'new@email.edu',
+            emailAddress: 'new@email.edu',
             description: 'new',
-            updatedBy: user.id,
+            updatedById: user.id,
           },
           email.id,
           txn,
         );
         expect(editedEmail).toMatchObject({
-          email: 'new@email.edu',
+          emailAddress: 'new@email.edu',
           description: 'new',
-          updatedBy: user.id,
+          updatedById: user.id,
         });
       });
     });

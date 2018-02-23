@@ -536,7 +536,7 @@ declare module 'schema' {
   */
   interface IEmail {
     id: string;
-    email: string;
+    emailAddress: string;
     description: string | null;
   }
 
@@ -2131,7 +2131,7 @@ declare module 'schema' {
   */
   interface IEmailCreateForPatientInput {
     patientId: string;
-    email: string;
+    emailAddress: string;
     description: string | null;
     isPrimary: boolean | null;
   }
@@ -2142,7 +2142,7 @@ declare module 'schema' {
   interface IEmailEditInput {
     emailId: string;
     patientId: string;
-    email: string;
+    emailAddress: string;
     description: string | null;
   }
 

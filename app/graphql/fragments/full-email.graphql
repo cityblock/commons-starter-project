@@ -1,5 +1,5 @@
 fragment FullEmail on Email {
   id
-  email
+  emailAddress
   description
 }

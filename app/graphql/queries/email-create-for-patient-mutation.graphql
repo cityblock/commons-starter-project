@@ -2,14 +2,14 @@
 
 mutation emailCreateForPatient(
   $patientId: ID!
-  $email: String!
+  $emailAddress: String!
   $description: String
   $isPrimary: Boolean
 ) {
   emailCreateForPatient(
     input: {
       patientId: $patientId
-      email: $email
+      emailAddress: $emailAddress
       description: $description
       isPrimary: $isPrimary
     }

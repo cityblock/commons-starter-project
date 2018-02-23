@@ -3,7 +3,7 @@ import BaseModel from './base-model';
 
 export interface IAddressOptions {
   zip: string;
-  updatedBy: string;
+  updatedById: string;
   street?: string;
   state?: string;
   city?: string;
@@ -11,7 +11,7 @@ export interface IAddressOptions {
 }
 
 export interface IAddressEdit {
-  updatedBy: string;
+  updatedById: string;
   zip: string;
   street?: string;
   state?: string;
@@ -26,7 +26,7 @@ export default class Address extends BaseModel {
   state: string;
   city: string;
   description: string;
-  updatedBy: string;
+  updatedById: string;
 
   static tableName = 'address';
 
@@ -43,9 +43,9 @@ export default class Address extends BaseModel {
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
-      updatedBy: { type: 'string', format: 'uuid' },
+      updatedById: { type: 'string', format: 'uuid' },
     },
-    required: ['zip', 'updatedBy'],
+    required: ['zip', 'updatedById'],
   };
 
   static async create(input: IAddressOptions, txn: Transaction) {

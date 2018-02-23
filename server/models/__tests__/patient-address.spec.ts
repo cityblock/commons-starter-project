@@ -105,14 +105,14 @@ describe('patient address model', () => {
 
         // second address for the same patient
         const address2 = await Address.create(
-          { zip: '11201', street: '50 Main St', updatedBy: user.id },
+          { zip: '11201', street: '50 Main St', updatedById: user.id },
           txn,
         );
         await PatientAddress.create({ patientId: patient.id, addressId: address2.id }, txn);
 
         // third address for the same patient that gets deleted
         const address3 = await Address.create(
-          { zip: '11301', street: '52 Main St', updatedBy: user.id },
+          { zip: '11301', street: '52 Main St', updatedById: user.id },
           txn,
         );
         await PatientAddress.create({ patientId: patient.id, addressId: address3.id }, txn);
@@ -121,7 +121,7 @@ describe('patient address model', () => {
         // address for another patient
         const patient2 = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
         const address4 = await Address.create(
-          { zip: '11401', street: '54 Main St', updatedBy: user.id },
+          { zip: '11401', street: '54 Main St', updatedById: user.id },
           txn,
         );
         await PatientAddress.create({ patientId: patient2.id, addressId: address4.id }, txn);

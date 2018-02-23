@@ -368,7 +368,7 @@ input PhoneCreateForPatientInput {
 # Email
 type Email implements uniqueId {
   id: ID!
-  email: String!
+  emailAddress: String!
   description: String
 }
 
@@ -376,14 +376,14 @@ type Email implements uniqueId {
 input EmailEditInput {
   emailId: ID!
   patientId: ID!
-  email: String!
+  emailAddress: String!
   description: String
 }
 
 # params for creating and email for a patient in the db
 input EmailCreateForPatientInput {
   patientId: ID!
-  email: String!
+  emailAddress: String!
   description: String
   isPrimary: Boolean
 }

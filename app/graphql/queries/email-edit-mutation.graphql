@@ -1,8 +1,13 @@
 #import "../fragments/full-email.graphql"
 
-mutation emailEdit($emailId: ID!, $patientId: ID!, $email: String!, $description: String) {
+mutation emailEdit($emailId: ID!, $patientId: ID!, $emailAddress: String!, $description: String) {
   emailEdit(
-    input: { emailId: $emailId, patientId: $patientId, email: $email, description: $description }
+    input: {
+      emailId: $emailId
+      patientId: $patientId
+      emailAddress: $emailAddress
+      description: $description
+    }
   ) {
     ...FullEmail
   }

@@ -98,7 +98,7 @@ describe('patient info model', () => {
             zip: '10010',
             state: 'NY',
             city: 'Brooklyn',
-            updatedBy: user.id,
+            updatedById: user.id,
           },
           txn,
         );
@@ -122,7 +122,7 @@ describe('patient info model', () => {
             zip: '10010',
             state: 'NY',
             city: 'Brooklyn',
-            updatedBy: user.id,
+            updatedById: user.id,
           },
         });
       });
@@ -173,9 +173,9 @@ describe('patient info model', () => {
           gender: 'male',
           language: 'en',
           primaryEmail: {
-            email: 'spam@email.com',
+            emailAddress: 'spam@email.com',
             description: 'spam email',
-            updatedBy: user.id,
+            updatedById: user.id,
           },
         });
       });

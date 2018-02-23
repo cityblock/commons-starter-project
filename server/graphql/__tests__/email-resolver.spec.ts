@@ -63,10 +63,10 @@ describe('email resolver', () => {
         const query = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
-            email: "patient@email.com",
+            emailAddress: "patient@email.com",
             description: "Some email",
           }) {
-            id, email, description
+            id, emailAddress, description
           }
         }`;
 
@@ -79,7 +79,7 @@ describe('email resolver', () => {
         });
 
         expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
-          email: 'patient@email.com',
+          emailAddress: 'patient@email.com',
           description: 'Some email',
         });
         expect(log).toBeCalled();
@@ -96,11 +96,11 @@ describe('email resolver', () => {
         const query = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
-            email: "patient@email.com",
+            emailAddress: "patient@email.com",
             description: "Some email",
             isPrimary: true,
           }) {
-            id, email, description
+            id, emailAddress, description
           }
         }`;
 
@@ -113,7 +113,7 @@ describe('email resolver', () => {
         });
 
         expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
-          email: 'patient@email.com',
+          emailAddress: 'patient@email.com',
           description: 'Some email',
         });
         expect(log).toBeCalled();
@@ -137,10 +137,10 @@ describe('email resolver', () => {
           emailEdit(input: {
             emailId: "${email.id}",
             patientId: "${patient.id}",
-            email: "patient@email.com",
+            emailAddress: "patient@email.com",
             description: "Some email",
           }) {
-            id, email, description
+            id, emailAddress, description
           }
         }`;
 
@@ -152,7 +152,7 @@ describe('email resolver', () => {
           txn,
         });
         expect(cloneDeep(result.data!.emailEdit)).toMatchObject({
-          email: 'patient@email.com',
+          emailAddress: 'patient@email.com',
           description: 'Some email',
         });
         expect(log).toBeCalled();

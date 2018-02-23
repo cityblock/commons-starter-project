@@ -54,7 +54,7 @@ describe('patient email model', () => {
 
         expect(patientEmail.length).toBe(1);
         expect(patientEmail[0]).toMatchObject({
-          email: 'spam@email.com',
+          emailAddress: 'spam@email.com',
           description: 'spam email',
         });
       });
@@ -75,7 +75,7 @@ describe('patient email model', () => {
 
         expect(patientEmail.length).toBe(1);
         expect(patientEmail[0]).toMatchObject({
-          email: 'spam@email.com',
+          emailAddress: 'spam@email.com',
           description: 'spam email',
         });
 
@@ -98,26 +98,35 @@ describe('patient email model', () => {
         await PatientEmail.create({ patientId: patient.id, emailId: email.id }, txn);
 
         // second email for the same patient
-        const email2 = await Email.create({ email: 'joe@email.edu', updatedBy: user.id }, txn);
+        const email2 = await Email.create(
+          { emailAddress: 'joe@email.edu', updatedById: user.id },
+          txn,
+        );
         await PatientEmail.create({ patientId: patient.id, emailId: email2.id }, txn);
 
         // third email for the same patient that gets deleted
-        const email3 = await Email.create({ email: 'jane@email.com', updatedBy: user.id }, txn);
+        const email3 = await Email.create(
+          { emailAddress: 'jane@email.com', updatedById: user.id },
+          txn,
+        );
         await PatientEmail.create({ patientId: patient.id, emailId: email3.id }, txn);
         await PatientEmail.delete({ patientId: patient.id, emailId: email3.id }, txn);
 
         // email for another patient
         const patient2 = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
-        const email4 = await Email.create({ email: 'test@email.com', updatedBy: user.id }, txn);
+        const email4 = await Email.create(
+          { emailAddress: 'test@email.com', updatedById: user.id },
+          txn,
+        );
         await PatientEmail.create({ patientId: patient2.id, emailId: email4.id }, txn);
 
         const emails = await PatientEmail.getForPatient(patient.id, txn);
         expect(emails.length).toBe(2);
         expect(emails[0]).toMatchObject({
-          email: 'spam@email.com',
+          emailAddress: 'spam@email.com',
           description: 'spam email',
         });
-        expect(emails[1]).toMatchObject({ email: 'joe@email.edu' });
+        expect(emails[1]).toMatchObject({ emailAddress: 'joe@email.edu' });
       });
     });
   });

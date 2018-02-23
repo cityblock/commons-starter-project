@@ -9,6 +9,7 @@ import PatientMap, { IProps } from '../patient-map';
 
 describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
+  const glassBreakId = 'lady';
   const routeBase = '/patients';
   const placeholderFn = () => true as any;
   const match = { params: { patientId: patient.id, subTab: 'active' as any } };
@@ -18,6 +19,7 @@ describe('Patient Care Plan View Component', () => {
       addConcern={placeholderFn}
       isPopupOpen={false}
       closePopup={placeholderFn}
+      glassBreakId={glassBreakId}
     />,
   );
 
@@ -49,6 +51,7 @@ describe('Patient Care Plan View Component', () => {
         addConcern={placeholderFn}
         isPopupOpen={false}
         closePopup={placeholderFn}
+        glassBreakId={glassBreakId}
       />,
     );
 

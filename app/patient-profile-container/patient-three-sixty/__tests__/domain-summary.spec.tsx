@@ -11,6 +11,7 @@ import DomainSummaryBullets from '../domain-summary-bullets';
 describe('Patient 360 Domain Summary', () => {
   const routeBase = '/needle';
   const patientId = 'aryaStark';
+  const glassBreakId = 'nymeria';
   const risk = 'high';
   const placeholderFn = () => true as any;
 
@@ -22,6 +23,7 @@ describe('Patient 360 Domain Summary', () => {
       riskAreaGroupId={riskAreaGroup.id}
       risk={risk}
       updateRiskAreaGroupScore={placeholderFn}
+      glassBreakId={glassBreakId}
     />,
   );
 

@@ -1891,6 +1891,7 @@ export interface getPatientAnswersQuery {
 
 export interface getPatientCarePlanSuggestionsQueryVariables {
   patientId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getPatientCarePlanSuggestionsQuery {
@@ -1983,6 +1984,7 @@ export interface getPatientCarePlanSuggestionsQuery {
 
 export interface getPatientCarePlanQueryVariables {
   patientId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getPatientCarePlanQuery {
@@ -2466,6 +2468,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
 
 export interface getPatientScreeningToolSubmissionsFor360QueryVariables {
   patientId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getPatientScreeningToolSubmissionsFor360Query {
@@ -3835,6 +3838,7 @@ export interface getProgressNotesForCurrentUserQuery {
 export interface getProgressNotesForPatientQueryVariables {
   patientId: string,
   completed: boolean,
+  glassBreakId?: string | null,
 };
 
 export interface getProgressNotesForPatientQuery {
@@ -4421,6 +4425,7 @@ export interface getRiskAreaAssessmentSubmissionQuery {
 export interface getRiskAreaGroupForPatientQueryVariables {
   riskAreaGroupId: string,
   patientId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getRiskAreaGroupForPatientQuery {

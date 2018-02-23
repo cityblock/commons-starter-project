@@ -9,6 +9,7 @@ describe('risk area assessment questions component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/assessment';
   const patientRoute = '/patients/sansaStark';
+  const glassBreakId = 'lady';
 
   const wrapper = shallow(
     <RiskAreaAssessmentQuestions
@@ -19,6 +20,7 @@ describe('risk area assessment questions component', () => {
       inProgress={true}
       riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
       riskAreaQuestions={[question]}
+      glassBreakId={glassBreakId}
     />,
   );
 

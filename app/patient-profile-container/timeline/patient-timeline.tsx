@@ -24,6 +24,7 @@ interface IProps {
       patientId: string;
     };
   };
+  glassBreakId: string | null;
 }
 
 interface IDispatchProps {
@@ -181,6 +182,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,
+        glassBreakId: props.glassBreakId,
         completed: true,
       },
       fetchPolicy: 'cache-and-network', // Always get the latest progress notes

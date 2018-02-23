@@ -101,7 +101,7 @@ describe('Patient Glass Break Model', () => {
     await transaction(PatientGlassBreak.knex(), async txn => {
       const { user, patient } = await setup(txn);
       const fakeId = uuid();
-      const error = `No such glass break: ${fakeId}`;
+      const error = 'You must break the glass again to view this patient. Please refresh the page.';
       await expect(
         PatientGlassBreak.validateGlassBreak(fakeId, user.id, patient.id, txn),
       ).rejects.toMatch(error);
@@ -126,7 +126,7 @@ describe('Patient Glass Break Model', () => {
         .where({ userId: user.id, patientId: patient.id })
         .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const error = `Glass break ${patientGlassBreak.id} occurred too long ago`;
+      const error = 'You must break the glass again to view this patient. Please refresh the page.';
 
       await expect(
         PatientGlassBreak.validateGlassBreak(patientGlassBreak.id, user.id, patient.id, txn),

@@ -6,7 +6,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import RiskAreaGroup from '../models/risk-area-group';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface IRiskAreaGroupCreateArgs {
@@ -47,10 +47,11 @@ export async function resolveRiskAreaGroup(
 
 export async function resolveRiskAreaGroupForPatient(
   root: any,
-  args: { riskAreaGroupId: string; patientId: string },
+  args: { riskAreaGroupId: string; patientId: string; glassBreakId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['riskAreaGroupForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
   return RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, txn);
 }

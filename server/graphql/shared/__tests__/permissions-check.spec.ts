@@ -304,7 +304,9 @@ describe('User Permissions Check', () => {
         try {
           await validateGlassBreak(user.id, 'blue', 'patient', patient.id, txn, fakeId);
         } catch (err) {
-          expect(err).toBe(`No such glass break: ${fakeId}`);
+          expect(err).toBe(
+            'You must break the glass again to view this patient. Please refresh the page.',
+          );
         }
       });
     });

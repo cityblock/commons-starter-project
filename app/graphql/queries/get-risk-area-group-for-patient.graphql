@@ -1,7 +1,11 @@
 #import "../fragments/full-risk-area-for-patient.graphql"
 
-query getRiskAreaGroupForPatient($riskAreaGroupId: ID!, $patientId: ID!) {
-  riskAreaGroupForPatient(riskAreaGroupId: $riskAreaGroupId, patientId: $patientId) {
+query getRiskAreaGroupForPatient($riskAreaGroupId: ID!, $patientId: ID!, $glassBreakId: ID) {
+  riskAreaGroupForPatient(
+    riskAreaGroupId: $riskAreaGroupId
+    patientId: $patientId
+    glassBreakId: $glassBreakId
+  ) {
     id
     title
     shortTitle

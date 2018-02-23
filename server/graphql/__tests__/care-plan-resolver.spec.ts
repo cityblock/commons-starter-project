@@ -1,6 +1,8 @@
+import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
@@ -9,6 +11,7 @@ import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
@@ -192,6 +195,82 @@ describe('care plan resolver tests', () => {
         });
       });
     });
+
+    it('blocks resolving care plan for patient if glass break needed', async () => {
+      await transaction(PatientConcern.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+
+        const query = `{
+          carePlanForPatient(patientId: "${patient.id}", glassBreakId: "${uuid()}") {
+            concerns {
+              id
+              concern {
+                title
+              }
+            }
+            goals {
+              id
+              title
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
+
+    it('blocks resolving care plan for patient with too old glass break', async () => {
+      await transaction(PatientConcern.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason: 'Needed for routine care',
+            note: null,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.query(txn)
+          .where({ userId: user.id, patientId: patient.id })
+          .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+        const query = `{
+          carePlanForPatient(patientId: "${patient.id}", glassBreakId: "${patientGlassBreak.id}") {
+            concerns {
+              id
+              concern {
+                title
+              }
+            }
+            goals {
+              id
+              title
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
   });
 
   describe('resolve care plan suggestions', () => {
@@ -267,6 +346,78 @@ describe('care plan resolver tests', () => {
               sug.goalSuggestionTemplateId === goalSuggestionTemplate.id,
           ),
         ).toEqual(true);
+      });
+    });
+
+    it('blocks getting care plan suggetsions for a patient with invalid glass break', async () => {
+      await transaction(CarePlanSuggestion.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+
+        const query = `{
+          carePlanSuggestionsForPatient(patientId: "${patient.id}", glassBreakId: "${uuid()}") {
+            id
+            concern {
+              id
+            }
+            goalSuggestionTemplate {
+              id
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
+
+    it('blocks getting care plan suggetsions for a patient with too old glass break', async () => {
+      await transaction(CarePlanSuggestion.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason: 'Needed for routine care',
+            note: null,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.query(txn)
+          .where({ userId: user.id, patientId: patient.id })
+          .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+        const query = `{
+          carePlanSuggestionsForPatient(patientId: "${patient.id}", glassBreakId: "${
+          patientGlassBreak.id
+        }") {
+            id
+            concern {
+              id
+            }
+            goalSuggestionTemplate {
+              id
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
       });
     });
   });

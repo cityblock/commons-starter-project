@@ -9,6 +9,7 @@ import ScreeningToolHistory from './screening-tool-history';
 
 interface IProps {
   patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -55,9 +56,9 @@ export default graphql<IGraphqlProps, IProps, allProps>(
   patientScreeningToolSubmissionsFor360Query as any,
   {
     options: (props: IProps) => {
-      const { patientId } = props;
+      const { patientId, glassBreakId } = props;
       return {
-        variables: { patientId },
+        variables: { patientId, glassBreakId },
         fetchPolicy: 'cache-and-network', // Always get the latest submissions
       };
     },

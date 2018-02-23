@@ -11,10 +11,11 @@ interface IProps {
       riskAreaId?: string;
     };
   };
+  glassBreakId: string | null;
 }
 
 const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
-  const { match } = props;
+  const { match, glassBreakId } = props;
   const patientId = match.params.patientId;
   const riskAreaGroupId = match.params.riskAreaGroupId;
   const riskAreaId = match.params.riskAreaId;
@@ -27,6 +28,7 @@ const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
         patientId={patientId}
         routeBase={routeBase}
         history={!!riskAreaGroupId}
+        glassBreakId={glassBreakId}
       />
     );
   } else if (!riskAreaId) {
@@ -35,6 +37,7 @@ const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
         routeBase={routeBase}
         patientId={patientId}
         riskAreaGroupId={riskAreaGroupId}
+        glassBreakId={glassBreakId}
       />
     );
   }
@@ -46,6 +49,7 @@ const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
       riskAreaId={riskAreaId}
       patientId={patientId}
       riskAreaGroupId={riskAreaGroupId}
+      glassBreakId={glassBreakId}
     />
   );
 };

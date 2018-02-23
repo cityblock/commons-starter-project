@@ -41,14 +41,14 @@ exports[`patient profile container renders patient profile container 1`] = `
     </UnderlineTabs>
     <Switch>
       <Route
-        component={[Function]}
         exact={true}
         path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
+        render={[Function]}
       />
       <Route
-        component={[Function]}
         exact={true}
         path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
+        render={[Function]}
       />
       <Route
         component={[Function]}
@@ -56,9 +56,9 @@ exports[`patient profile container renders patient profile container 1`] = `
         path="/patients/:patientId/tools/:screeningToolId?"
       />
       <Route
-        component={[Function]}
         exact={true}
         path="/patients/:patientId/timeline"
+        render={[Function]}
       />
       <Route
         component={[Function]}

@@ -6,7 +6,7 @@ import {
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
 import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface IPatientScreeningToolSubmissionCreateArgs {
@@ -122,10 +122,12 @@ export async function resolvePatientScreeningToolSubmissionsForPatient(
 
 export async function resolvePatientScreeningToolSubmissionsFor360(
   root: any,
-  args: { patientId: string },
+  args: { patientId: string; glassBreakId: string | null },
   { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientScreeningToolSubmissionsFor360']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+
   return PatientScreeningToolSubmission.getFor360(args.patientId, txn);
 }
 

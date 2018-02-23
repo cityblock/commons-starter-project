@@ -108,6 +108,7 @@ export async function resolveTask(
   { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['task']> {
   await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
+
   return Task.get(args.taskId, txn);
 }
 

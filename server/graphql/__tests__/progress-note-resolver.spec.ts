@@ -1,9 +1,12 @@
+import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import ProgressNote from '../../models/progress-note';
 import ProgressNoteTemplate from '../../models/progress-note-template';
 import User from '../../models/user';
@@ -311,6 +314,80 @@ describe('progress note resolver', () => {
         const progressNoteIds = progressNotes.map((progressNote: ProgressNote) => progressNote.id);
         expect(progressNoteIds).toContain(progressNote1.id);
         expect(progressNoteIds).toContain(progressNote2.id);
+      });
+    });
+
+    it('blocks progress notes for patient with invalid glass break', async () => {
+      await transaction(ProgressNote.knex(), async txn => {
+        const { clinic, user } = await setup(txn);
+        const patient2 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+          },
+          txn,
+        );
+
+        const query = `{
+          progressNotesForPatient(patientId: "${
+            patient2.id
+          }", completed: false, glassBreakId: "${uuid()}") { id }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
+
+    it('blocks progress notes for patient with too old glass break', async () => {
+      await transaction(ProgressNote.knex(), async txn => {
+        const { clinic, user } = await setup(txn);
+        const patient2 = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+          },
+          txn,
+        );
+
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient2.id,
+            reason: 'Needed for routine care',
+            note: null,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.query(txn)
+          .where({ userId: user.id, patientId: patient2.id })
+          .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+        const query = `{
+          progressNotesForPatient(patientId: "${patient2.id}", completed: false, glassBreakId: "${
+          patientGlassBreak.id
+        }") { id }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
       });
     });
 

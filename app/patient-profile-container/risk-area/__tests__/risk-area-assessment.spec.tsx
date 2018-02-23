@@ -15,6 +15,7 @@ describe('risk area assessment questions component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/assessment';
   const patientRoute = '/patients/sansaStark';
+  const glassBreakId = 'lady';
 
   const wrapper = shallow(
     <RiskAreaAssessment
@@ -29,6 +30,7 @@ describe('risk area assessment questions component', () => {
       riskAreaAssessmentSubmissionComplete={jest.fn() as any}
       riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
       riskAreaAssessmentSubmissionError={null}
+      glassBreakId={glassBreakId}
     />,
   );
 

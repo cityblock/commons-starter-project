@@ -8,7 +8,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import ProgressNote from '../models/progress-note';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 interface IProgressNoteCreateArgs {
@@ -22,6 +22,7 @@ interface IResolveProgressNoteOptions {
 interface IResolveProgressNotesForPatientOptions {
   patientId: string;
   completed: boolean;
+  glassBreakId: string | null;
 }
 
 interface IResolveProgressNotesForCurrentUserOptions {
@@ -167,6 +168,7 @@ export async function resolveProgressNotesForPatient(
   { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['progressNotesForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
   return ProgressNote.getAllForPatient(args.patientId, args.completed, txn);
 }

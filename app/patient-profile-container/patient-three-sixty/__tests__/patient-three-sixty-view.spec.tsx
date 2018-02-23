@@ -10,6 +10,7 @@ describe('Patient 360 View Component', () => {
   const riskAreaGroupId = 'winterfell';
   const riskAreaId = 'theNorth';
   const routeBase = `/patients/${patientId}/360`;
+  const glassBreakId = 'lady';
 
   const match = {
     params: {
@@ -17,7 +18,7 @@ describe('Patient 360 View Component', () => {
     },
   };
 
-  const wrapper = shallow(<PatientThreeSixtyView match={match} />);
+  const wrapper = shallow(<PatientThreeSixtyView match={match} glassBreakId={glassBreakId} />);
 
   it('renders 360 domains view if not viewing domain or assessment', () => {
     expect(wrapper.find(PatientThreeSixtyDomains).length).toBe(1);

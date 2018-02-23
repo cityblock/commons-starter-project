@@ -7,7 +7,12 @@ const match = { params: { patientId: patient.id } };
 
 it('renders timeline', () => {
   const component = shallow(
-    <Component match={match} openProgressNotePopup={jest.fn() as any} error={null} />,
+    <Component
+      match={match}
+      openProgressNotePopup={jest.fn() as any}
+      error={null}
+      glassBreakId="glassBreakId"
+    />,
   );
   const instance = component.instance() as Component;
   const result = instance.render();

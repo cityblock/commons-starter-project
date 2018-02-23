@@ -9,16 +9,18 @@ import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface IResolveCarePlanSuggestionsOptions {
   patientId: string;
   riskAreaId?: string;
+  glassBreakId: string | null;
 }
 
 export interface IResolveCarePlanOptions {
   patientId: string;
+  glassBreakId: string | null;
 }
 
 export interface ISuggestionsForPatient {
@@ -40,6 +42,7 @@ export async function resolveCarePlanSuggestionsForPatient(
   { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
   return CarePlanSuggestion.getForPatient(args.patientId, txn);
 }
@@ -50,6 +53,7 @@ export async function resolveCarePlanForPatient(
   { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
   const concerns = await PatientConcern.getForPatient(args.patientId, txn);
   const goals = await PatientGoal.getForPatient(args.patientId, txn);

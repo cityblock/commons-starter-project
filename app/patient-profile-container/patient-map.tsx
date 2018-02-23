@@ -19,6 +19,7 @@ export interface IProps {
   taskIdsWithNotifications?: string[];
   taskId: string | null;
   history: History;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -54,7 +55,6 @@ export class PatientMap extends React.Component<allProps, {}> {
       taskIdsWithNotifications,
       taskId,
     } = this.props;
-
     const mainStyles = classNames({
       [styles.full]: !taskId,
       [styles.split]: !!taskId,
@@ -92,6 +92,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
+        glassBreakId: props.glassBreakId,
       },
       fetchPolicy: 'cache-and-network', // Always get the latest care plan
     }),

@@ -1,3 +1,4 @@
+import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
@@ -7,6 +8,7 @@ import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
@@ -278,6 +280,70 @@ describe('patient screening tool submission resolver tests', () => {
             (res: any) => res.id === submission2.id && res.score === submission2.score,
           ),
         ).toEqual(true);
+      });
+    });
+
+    it('blocks getting submisisons for patient 360 if invalid glass break', async () => {
+      await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+
+        const query = `{
+          patientScreeningToolSubmissionsFor360(patientId: "${
+            patient.id
+          }", glassBreakId: "${uuid()}") {
+            id
+            score
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
+
+    it('blocks getting submisisons for patient 360 if too old glass break', async () => {
+      await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason: 'Needed for routine care',
+            note: null,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.query(txn)
+          .where({ userId: user.id, patientId: patient.id })
+          .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+        const query = `{
+          patientScreeningToolSubmissionsFor360(patientId: "${patient.id}", glassBreakId: "${
+          patientGlassBreak.id
+        }") {
+            id
+            score
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
       });
     });
 

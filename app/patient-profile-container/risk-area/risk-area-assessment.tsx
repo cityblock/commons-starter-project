@@ -35,6 +35,7 @@ export interface IProps {
   patientId: string;
   routeBase: string;
   patientRoute: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -219,6 +220,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       error,
       riskAreaAssessmentSubmission,
       riskAreaAssessmentSubmissionLoading,
+      glassBreakId,
     } = this.props;
     const {
       inProgress,
@@ -238,6 +240,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         inProgress={inProgress}
         riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
         onEditableChange={this.onEditableChangeRequest}
+        glassBreakId={glassBreakId}
       />
     ) : null;
 
@@ -365,8 +368,8 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
     options: (props: IProps) => {
-      const { riskAreaGroupId, patientId } = props;
-      return { variables: { riskAreaGroupId, patientId } };
+      const { riskAreaGroupId, patientId, glassBreakId } = props;
+      return { variables: { riskAreaGroupId, patientId, glassBreakId } };
     },
     props: ({ data }) => ({
       loading: data ? data.loading : false,

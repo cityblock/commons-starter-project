@@ -8,6 +8,7 @@ interface IProps {
   riskAreaId: string;
   riskAreaGroupId: string;
   patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -36,8 +37,8 @@ export const RiskAreaAssessmentHeader: React.StatelessComponent<allProps> = (pro
 
 export default graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
   options: (props: IProps) => {
-    const { riskAreaGroupId, patientId } = props;
-    return { variables: { riskAreaGroupId, patientId } };
+    const { riskAreaGroupId, patientId, glassBreakId } = props;
+    return { variables: { riskAreaGroupId, patientId, glassBreakId } };
   },
   props: ({ data }) => ({
     loading: data ? data.loading : false,

@@ -56,7 +56,12 @@ describe('Patient 360 Domain Summaries', () => {
   ] as any;
 
   const wrapper = shallow(
-    <DomainSummaries patientId={patientId} routeBase={routeBase} riskAreaGroups={riskAreaGroups} />,
+    <DomainSummaries
+      patientId={patientId}
+      routeBase={routeBase}
+      riskAreaGroups={riskAreaGroups}
+      glassBreakId="lady"
+    />,
   );
 
   wrapper.setState(riskAreaGroupScores);

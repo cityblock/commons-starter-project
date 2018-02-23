@@ -55,18 +55,14 @@ const patientGlassBreak = () => <P extends {}>(
       const {
         loading,
         loadingGlassBreakCheck,
-        loadingGlassBreaks,
         error,
         errorGlassBreakCheck,
-        errorGlassBreaks,
       } = this.props;
       return (
         !!loading ||
         !!loadingGlassBreakCheck ||
         !!error ||
-        !!errorGlassBreakCheck ||
-        !!loadingGlassBreaks ||
-        !!errorGlassBreaks
+        !!errorGlassBreakCheck
       );
     }
 
@@ -86,7 +82,7 @@ const patientGlassBreak = () => <P extends {}>(
 
     getGlassBreakId(): string | null {
       const { glassBreaks, patientId } = this.props;
-      const foundGlassBreak = glassBreaks.find(glassBreak => glassBreak.patientId === patientId);
+      const foundGlassBreak = (glassBreaks || []).find(glassBreak => glassBreak.patientId === patientId);
 
       return foundGlassBreak ? foundGlassBreak.id : null;
     }
@@ -94,7 +90,7 @@ const patientGlassBreak = () => <P extends {}>(
     createGlassBreak = async (reason: string, note: string | null) => {
       const { createPatientGlassBreak, patientId } = this.props;
       return createPatientGlassBreak({ variables: { patientId, reason, note } });
-    }
+    };
 
     render(): JSX.Element {
       if (this.isLoading()) return <Spinner className={styles.spinner} />;
@@ -131,6 +127,10 @@ const patientGlassBreak = () => <P extends {}>(
       }),
     }),
     graphql<IGraphqlProps, IProps, resultProps>(patientGlassBreaksForUserQuery as any, {
+      options: () => ({
+        // Lazy load to ensure cache always has updated session glass breaks
+        fetchPolicy: 'cache-and-network',
+      }),
       props: ({ data }) => ({
         loadingGlassBreaks: data ? data.loading : false,
         errorGlassBreaks: data ? data.error : null,

@@ -30,6 +30,7 @@ interface IProps {
   inProgress: boolean;
   riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
   onEditableChange?: () => any;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -112,7 +113,13 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   };
 
   render() {
-    const { riskArea, patientAnswersLoading, riskAreaQuestionsLoading, patientId } = this.props;
+    const {
+      riskArea,
+      patientAnswersLoading,
+      riskAreaQuestionsLoading,
+      patientId,
+      glassBreakId,
+    } = this.props;
 
     if (patientAnswersLoading || riskAreaQuestionsLoading) {
       return <Spinner />;
@@ -123,6 +130,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
           riskAreaId={riskArea.id}
           riskAreaGroupId={riskArea.riskAreaGroupId}
           patientId={patientId}
+          glassBreakId={glassBreakId}
         />
         {this.renderQuestions()}
       </div>

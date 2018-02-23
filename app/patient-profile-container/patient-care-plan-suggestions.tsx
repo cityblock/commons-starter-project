@@ -25,6 +25,7 @@ export type SuggestionTypes = 'goal' | 'concern';
 interface IProps {
   patientId: string;
   routeBase: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -228,6 +229,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
+        glassBreakId: props.glassBreakId,
       },
       fetchPolicy: 'cache-and-network', // Always get the latest suggestions, but return cache first
     }),

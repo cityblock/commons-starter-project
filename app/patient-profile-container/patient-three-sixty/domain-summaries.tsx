@@ -20,6 +20,7 @@ interface IProps {
   patientId: string;
   routeBase: string;
   riskAreaGroups: getRiskAreaGroupsQuery['riskAreaGroups'];
+  glassBreakId: string | null;
 }
 
 interface IState {
@@ -60,7 +61,7 @@ class DomainSummaries extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const { patientId, routeBase, riskAreaGroups } = this.props;
+    const { patientId, routeBase, riskAreaGroups, glassBreakId } = this.props;
 
     const domainSummaries = riskAreaGroups.map(group => {
       const { mediumRiskThreshold, highRiskThreshold } = group;
@@ -76,6 +77,7 @@ class DomainSummaries extends React.Component<IProps, IState> {
           riskAreaGroupId={group.id}
           risk={risk}
           updateRiskAreaGroupScore={this.updateRiskAreaGroupScore}
+          glassBreakId={glassBreakId}
         />
       );
     });

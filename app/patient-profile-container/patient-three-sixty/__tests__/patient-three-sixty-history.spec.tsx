@@ -11,11 +11,13 @@ import ScreeningToolHistory from '../screening-tool-history';
 
 describe('Patient 360 History Component', () => {
   const patientId = 'shaggydog';
+  const glassBreakId = 'lady';
 
   const wrapper = shallow(
     <PatientThreeSixtyHistory
       patientId={patientId}
       submissions={[shortPatientScreeningToolSubmission, shortPatientScreeningToolSubmission2]}
+      glassBreakId={glassBreakId}
     />,
   );
 

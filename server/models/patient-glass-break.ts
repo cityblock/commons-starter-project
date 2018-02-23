@@ -66,12 +66,13 @@ export default class PatientGlassBreak extends BaseModel {
       deletedAt: null,
     });
 
-    if (!glassBreak) {
-      return Promise.reject(`No such glass break: ${patientGlassBreakId}`);
-    }
-
-    if (isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))) {
-      return Promise.reject(`Glass break ${patientGlassBreakId} occurred too long ago`);
+    if (
+      !glassBreak ||
+      isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))
+    ) {
+      return Promise.reject(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
     }
 
     return true;

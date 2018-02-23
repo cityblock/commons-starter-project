@@ -9,6 +9,7 @@ import { RiskAreaAssessmentHeader } from '../risk-area-assessment-header';
 
 describe('Risk Area Assessment Header', () => {
   const patientId = 'jonSnow';
+  const glassBreakId = 'ghost';
   const riskArea = {
     ...rawRiskArea,
     riskAreaAssessmentSubmissions: [],
@@ -28,6 +29,7 @@ describe('Risk Area Assessment Header', () => {
       riskAreaGroupId={riskArea.riskAreaGroupId}
       riskAreaId={riskArea.id}
       riskAreaGroup={riskAreaGroup}
+      glassBreakId={glassBreakId}
     />,
   );
 

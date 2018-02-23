@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
-import { getPatientCarePlanQuery } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
@@ -20,13 +19,7 @@ interface IProps {
       taskId?: string;
     };
   };
-}
-
-interface IGraphqlProps {
-  patientCarePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  refetchPatientCarePlan?: () => any;
-  loading?: boolean;
-  error?: string | null;
+  glassBreakId: string | null;
 }
 
 interface IStateProps {
@@ -38,7 +31,7 @@ interface IDispatchProps {
   closePopup: () => void;
 }
 
-export type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
+export type allProps = IProps & IStateProps & IDispatchProps;
 
 export class PatientCarePlanView extends React.Component<allProps> {
   onContainerClick = () => {
@@ -47,19 +40,27 @@ export class PatientCarePlanView extends React.Component<allProps> {
   };
 
   render(): JSX.Element {
-    const { match, addConcern } = this.props;
+    const { match, addConcern, glassBreakId } = this.props;
     const patientId = match.params.patientId;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/map`;
     const taskId = match.params.taskId;
-
     const isSuggestions = subTab === 'suggestions';
 
     const carePlanSuggestions = isSuggestions ? (
-      <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
+      <PatientCarePlanSuggestions
+        routeBase={routeBase}
+        patientId={patientId}
+        glassBreakId={glassBreakId}
+      />
     ) : null;
     const carePlan = !isSuggestions ? (
-      <PatientMap routeBase={`${routeBase}/active`} patientId={patientId} taskId={taskId || null} />
+      <PatientMap
+        routeBase={`${routeBase}/active`}
+        patientId={patientId}
+        taskId={taskId || null}
+        glassBreakId={glassBreakId}
+      />
     ) : null;
 
     return (

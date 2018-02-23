@@ -1,9 +1,11 @@
+import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
 import {
@@ -163,6 +165,112 @@ describe('risk area group resolver', () => {
         expect(clonedResult.riskAreas[0].questions.length).toBe(3);
         expect(clonedResult.riskAreas[0].questions[0].answers.length).toBe(1);
         expect(clonedResult.riskAreas[0].questions[0].answers[0].patientAnswers.length).toBe(1);
+      });
+    });
+
+    it('blocks fetching a risk area group for a patient with invalid glass break', async () => {
+      await transaction(RiskAreaGroup.knex(), async txn => {
+        const { clinic, user } = await setup(txn);
+        const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
+        const title2 = 'Night King Breach of Wall';
+        const riskAreaTitle = 'Zombie Viscerion';
+        const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2), txn);
+        await createFullRiskAreaGroupAssociations(
+          riskAreaGroup2.id,
+          patient.id,
+          user.id,
+          riskAreaTitle,
+          txn,
+        );
+        const query = `{
+          riskAreaGroupForPatient(
+            riskAreaGroupId: "${riskAreaGroup2.id}",
+            patientId: "${patient.id}",
+            glassBreakId: "${uuid()}"
+          ) {
+            id
+            title
+            riskAreas {
+              title
+              questions {
+                answers {
+                  patientAnswers {
+                    patientId
+                  }
+                }
+              }
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
+      });
+    });
+
+    it('blocks fetching a risk area group for a patient with too old glass break', async () => {
+      await transaction(RiskAreaGroup.knex(), async txn => {
+        const { clinic, user } = await setup(txn);
+        const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
+        const title2 = 'Night King Breach of Wall';
+        const riskAreaTitle = 'Zombie Viscerion';
+        const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2), txn);
+        await createFullRiskAreaGroupAssociations(
+          riskAreaGroup2.id,
+          patient.id,
+          user.id,
+          riskAreaTitle,
+          txn,
+        );
+        const patientGlassBreak = await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason: 'Needed for routine care',
+            note: null,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.query(txn)
+          .where({ userId: user.id, patientId: patient.id })
+          .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+        const query = `{
+          riskAreaGroupForPatient(
+            riskAreaGroupId: "${riskAreaGroup2.id}",
+            patientId: "${patient.id}",
+            glassBreakId: "${patientGlassBreak.id}"
+          ) {
+            id
+            title
+            riskAreas {
+              title
+              questions {
+                answers {
+                  patientAnswers {
+                    patientId
+                  }
+                }
+              }
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe(
+          'You must break the glass again to view this patient. Please refresh the page.',
+        );
       });
     });
   });

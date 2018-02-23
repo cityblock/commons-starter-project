@@ -13,6 +13,7 @@ interface IProps {
   routeBase: string;
   patientId: string;
   riskAreaGroupId: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -60,8 +61,8 @@ export class DomainAssessments extends React.Component<allProps, {}> {
 
 export default graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
   options: (props: IProps) => {
-    const { riskAreaGroupId, patientId } = props;
-    return { variables: { riskAreaGroupId, patientId } };
+    const { riskAreaGroupId, patientId, glassBreakId } = props;
+    return { variables: { riskAreaGroupId, patientId, glassBreakId } };
   },
   props: ({ data }) => ({
     loading: data ? data.loading : false,

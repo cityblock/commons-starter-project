@@ -2211,7 +2211,11 @@ type RootQueryType {
   # RiskAreaGroup
   riskAreaGroup(riskAreaGroupId: ID!): RiskAreaGroup!
   # Risk Area Group with associated patient answers
-  riskAreaGroupForPatient(riskAreaGroupId: ID!, patientId: ID!): RiskAreaGroupForPatient!
+  riskAreaGroupForPatient(
+    riskAreaGroupId: ID!
+    patientId: ID!
+    glassBreakId: ID
+  ): RiskAreaGroupForPatient!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea
@@ -2277,9 +2281,9 @@ type RootQueryType {
   # patient task suggestions
   patientTaskSuggestions(patientId: ID!): [PatientTaskSuggestion]!
   # Care Plan Suggestions
-  carePlanSuggestionsForPatient(patientId: ID!): [CarePlanSuggestion]!
+  carePlanSuggestionsForPatient(patientId: ID!, glassBreakId: ID): [CarePlanSuggestion]!
   # Care Plan
-  carePlanForPatient(patientId: ID!): CarePlan!
+  carePlanForPatient(patientId: ID!, glassBreakId: ID): CarePlan!
   # screening tool
   screeningTool(screeningToolId: ID!): ScreeningTool!
   # screening tools
@@ -2314,7 +2318,10 @@ type RootQueryType {
     scored: Boolean!
   ): [PatientScreeningToolSubmission]!
   # patient screening tool submissions for patient 360 (history tab)
-  patientScreeningToolSubmissionsFor360(patientId: ID!): [PatientScreeningToolSubmission!]!
+  patientScreeningToolSubmissionsFor360(
+    patientId: ID!
+    glassBreakId: ID
+  ): [PatientScreeningToolSubmission!]!
   # patient screening tool submissions
   patientScreeningToolSubmissions: [PatientScreeningToolSubmission]!
   # progress note template
@@ -2324,7 +2331,7 @@ type RootQueryType {
   # progress note
   progressNote(progressNoteId: ID!): ProgressNote!
   # progress notes for patient
-  progressNotesForPatient(patientId: ID!, completed: Boolean!): [ProgressNote]!
+  progressNotesForPatient(patientId: ID!, completed: Boolean!, glassBreakId: ID): [ProgressNote]!
   # progress notes for current user
   progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]!
   # progress notes for supervisor review

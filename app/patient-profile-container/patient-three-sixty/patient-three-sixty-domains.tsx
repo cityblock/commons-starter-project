@@ -15,6 +15,7 @@ interface IProps {
   patientId: string;
   routeBase: string;
   history: boolean;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -31,17 +32,25 @@ export interface IRiskAreaGroupScore {
 }
 
 export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { patientId, routeBase, riskAreaGroups, riskAreaGroupsLoading, history } = props;
+  const {
+    patientId,
+    routeBase,
+    riskAreaGroups,
+    riskAreaGroupsLoading,
+    history,
+    glassBreakId,
+  } = props;
   if (riskAreaGroupsLoading) return <Spinner />;
 
   const body = history ? (
-    <PatientThreeSixtyHistory patientId={patientId} />
+    <PatientThreeSixtyHistory patientId={patientId} glassBreakId={glassBreakId} />
   ) : (
     <div>
       <DomainSummaries
         patientId={patientId}
         routeBase={routeBase}
         riskAreaGroups={riskAreaGroups}
+        glassBreakId={glassBreakId}
       />
     </div>
   );

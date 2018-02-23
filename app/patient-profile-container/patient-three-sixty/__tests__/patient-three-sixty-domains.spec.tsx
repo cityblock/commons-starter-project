@@ -18,6 +18,7 @@ describe('Patient 360 Domains Component', () => {
       routeBase={routeBase}
       riskAreaGroups={[riskAreaGroup]}
       history={false}
+      glassBreakId="nymeria"
     />,
   );
 

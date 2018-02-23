@@ -53,7 +53,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { patientId, patient, tab, browserSize } = this.props;
+    const { patientId, patient, tab, browserSize, glassBreakId } = this.props;
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
@@ -89,19 +89,27 @@ export class PatientProfileContainer extends React.Component<allProps> {
             <Route
               exact
               path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
-              component={PatientCarePlanView as any}
+              render={(props: any) => (
+                <PatientCarePlanView {...props} glassBreakId={glassBreakId} />
+              )}
             />
             <Route
               exact
               path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
-              component={PatientThreeSixtyView as any}
+              render={(props: any) => (
+                <PatientThreeSixtyView {...props} glassBreakId={glassBreakId} />
+              )}
             />
             <Route
               exact
               path="/patients/:patientId/tools/:screeningToolId?"
               component={ScreeningTool}
             />
-            <Route exact path="/patients/:patientId/timeline" component={PatientTimeline} />
+            <Route
+              exact
+              path="/patients/:patientId/timeline"
+              render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
+            />
             <Route exact path="/patients/:patientId/patientInfo" component={PatientInfo} />
           </Switch>
         </div>

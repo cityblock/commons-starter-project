@@ -44,11 +44,6 @@ module.exports = (env = '') => {
     },
     plugins: plugins({ production: isProduction }),
     resolve,
-    optimization: {
-      splitChunks: {
-        name: 'common',
-      },
-    },
     target: 'web',
   };
 

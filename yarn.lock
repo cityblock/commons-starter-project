@@ -689,7 +689,15 @@ apollo-link-http@1.4.0:
     apollo-link "^1.2.0"
     apollo-link-http-common "^0.2.1"
 
-apollo-link@1.2.0, apollo-link@^1.0.0, apollo-link@^1.1.0, apollo-link@^1.2.0:
+apollo-link@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.1.tgz#c120b16059f9bd93401b9f72b94d2f80f3f305d2"
+  dependencies:
+    "@types/node" "^9.4.6"
+    apollo-utilities "^1.0.0"
+    zen-observable-ts "^0.8.6"
+
+apollo-link@^1.0.0, apollo-link@^1.1.0, apollo-link@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.0.tgz#1abba5456eb35fc8b8a79f3be421e683a9ecfc41"
   dependencies:
@@ -11147,6 +11155,12 @@ yoga-layout@^1.6.0:
     autogypi "^0.2.2"
     nbind "^0.3.14"
     node-gyp "^3.6.2"
+
+zen-observable-ts@^0.8.6:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.8.tgz#1a586dc204fa5632a88057f879500e0d2ba06869"
+  dependencies:
+    zen-observable "^0.7.0"
 
 zen-observable@^0.7.0:
   version "0.7.1"

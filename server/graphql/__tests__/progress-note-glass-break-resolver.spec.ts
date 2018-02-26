@@ -21,18 +21,23 @@ interface ISetup {
   patient: Patient;
   progressNoteTemplate: ProgressNoteTemplate;
   progressNote: ProgressNote;
+  clinic: Clinic;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id }, txn);
+  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id, userId: user.id }, txn);
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
       title: 'title',
     },
     txn,
   );
+  await ProgressNoteTemplate.query(txn)
+    .where({ id: progressNoteTemplate.id })
+    .patch({ requiresGlassBreak: true });
+
   const progressNote = await ProgressNote.create(
     {
       patientId: patient.id,
@@ -42,7 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { user, patient, progressNote, progressNoteTemplate };
+  return { user, patient, progressNote, progressNoteTemplate, clinic };
 }
 
 describe('Progress Note Glass Break Resolver', () => {
@@ -167,6 +172,98 @@ describe('Progress Note Glass Break Resolver', () => {
         id: otherProgressNoteGlassBreak.id,
         progressNoteId: progressNote2.id,
         userId: user.id,
+      });
+    });
+  });
+
+  it('resolves glass break check for progress note not requiring glass break', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { clinic, user, patient } = await setup(txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+      const progressNoteTemplate2 = await ProgressNoteTemplate.create(
+        {
+          title: 'title',
+        },
+        txn,
+      );
+
+      const progressNote2 = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate2.id,
+        },
+        txn,
+      );
+
+      const query = `{
+        progressNoteGlassBreakCheck(progressNoteId: "${progressNote2.id}") {
+          progressNoteId
+          isGlassBreakNotNeeded
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions: 'blue',
+        userId: user2.id,
+        txn,
+      });
+
+      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+        progressNoteId: progressNote2.id,
+        isGlassBreakNotNeeded: true,
+      });
+    });
+  });
+
+  it('resolves glass break check for progress note written by user', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { user, progressNote } = await setup(txn);
+
+      const query = `{
+        progressNoteGlassBreakCheck(progressNoteId: "${progressNote.id}") {
+          progressNoteId
+          isGlassBreakNotNeeded
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions: 'blue',
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+        progressNoteId: progressNote.id,
+        isGlassBreakNotNeeded: true,
+      });
+    });
+  });
+
+  it('resolves glass break check for progress note requiring glass break', async () => {
+    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
+      const { clinic, progressNote } = await setup(txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      const query = `{
+        progressNoteGlassBreakCheck(progressNoteId: "${progressNote.id}") {
+          progressNoteId
+          isGlassBreakNotNeeded
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions: 'blue',
+        userId: user2.id,
+        txn,
+      });
+
+      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+        progressNoteId: progressNote.id,
+        isGlassBreakNotNeeded: false,
       });
     });
   });

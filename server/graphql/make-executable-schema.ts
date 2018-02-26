@@ -153,6 +153,7 @@ import { resolveProgressNoteActivityForProgressNote } from './progress-note-acti
 import {
   progressNoteGlassBreakCreate,
   resolveProgressNoteGlassBreaksForUser,
+  resolveProgressNoteGlassBreakCheck,
 } from './progress-note-glass-break-resolver';
 import {
   progressNoteAddSupervisorNotes,
@@ -379,6 +380,7 @@ const resolveFunctions = {
     patientGlassBreaksForUser: resolvePatientGlassBreaksForUser,
     progressNoteGlassBreaksForUser: resolveProgressNoteGlassBreaksForUser,
     patientGlassBreakCheck: resolvePatientGlassBreakCheck,
+    progressNoteGlassBreakCheck: resolveProgressNoteGlassBreakCheck,
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
   },
 

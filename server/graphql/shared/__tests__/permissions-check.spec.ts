@@ -407,6 +407,25 @@ describe('User Permissions Check', () => {
       });
     });
 
+    it('validates glass break not needed for progress notes supervised by given user', async () => {
+      await transaction(PatientGlassBreak.knex(), async txn => {
+        const { progressNote, progressNoteTemplate, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+
+        await ProgressNoteTemplate.query(txn)
+          .where({ id: progressNoteTemplate.id })
+          .patch({ requiresGlassBreak: true });
+
+        await ProgressNote.query(txn)
+          .where({ id: progressNote.id })
+          .patch({ supervisorId: user2.id });
+
+        expect(
+          await validateGlassBreakNotNeeded(user2.id, 'progressNote', progressNote.id, txn),
+        ).toBeTruthy();
+      });
+    });
+
     it('invalidates glass break by non-author when template requires glass break', async () => {
       await transaction(PatientGlassBreak.knex(), async txn => {
         const { progressNote, progressNoteTemplate, clinic } = await setup(txn);

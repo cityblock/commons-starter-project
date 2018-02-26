@@ -402,6 +402,10 @@ declare module 'schema' {
   */
     patientGlassBreakCheck: IPatientGlassBreakCheck;
     /**
+    check if don't need to break glass for given progress note
+  */
+    progressNoteGlassBreakCheck: IProgressNoteGlassBreakCheck;
+    /**
     computed patient status for a patient
   */
     patientComputedPatientStatus: IComputedPatientStatus;
@@ -1535,6 +1539,14 @@ declare module 'schema' {
   */
   interface IPatientGlassBreakCheck {
     patientId: string;
+    isGlassBreakNotNeeded: boolean;
+  }
+
+  /**
+    Progress Note Glass Break - not needed check
+  */
+  interface IProgressNoteGlassBreakCheck {
+    progressNoteId: string;
     isGlassBreakNotNeeded: boolean;
   }
 

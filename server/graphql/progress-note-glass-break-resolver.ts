@@ -1,7 +1,11 @@
 import { IProgressNoteGlassBreakCreateInput, IRootMutationType, IRootQueryType } from 'schema';
 import ProgressNoteGlassBreak from '../models/progress-note-glass-break';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { validateGlassBreakNotNeeded } from './shared/permissions-check';
 import { IContext } from './shared/utils';
+
+export interface IQuery {
+  progressNoteId: string;
+}
 
 export interface IProgressNoteGlassBreakCreateArgs {
   input: IProgressNoteGlassBreakCreateInput;
@@ -33,4 +37,24 @@ export async function resolveProgressNoteGlassBreaksForUser(
   await checkUserPermissions(userId, permissions, 'view', 'progressNoteGlassBreak', txn);
 
   return ProgressNoteGlassBreak.getForCurrentUserSession(userId!, txn);
+}
+
+export async function resolveProgressNoteGlassBreakCheck(
+  root: any,
+  { progressNoteId }: IQuery,
+  { userId, permissions, txn }: IContext,
+): Promise<IRootQueryType['progressNoteGlassBreakCheck']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patientGlassBreak', txn);
+
+  const isGlassBreakNotNeeded = await validateGlassBreakNotNeeded(
+    userId!,
+    'progressNote',
+    progressNoteId,
+    txn,
+  );
+
+  return {
+    progressNoteId,
+    isGlassBreakNotNeeded,
+  };
 }

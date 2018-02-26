@@ -1239,6 +1239,12 @@ type PatientGlassBreakCheck {
   isGlassBreakNotNeeded: Boolean!
 }
 
+# Progress Note Glass Break - not needed check
+type ProgressNoteGlassBreakCheck {
+  progressNoteId: ID!
+  isGlassBreakNotNeeded: Boolean!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -2376,6 +2382,8 @@ type RootQueryType {
   progressNoteGlassBreaksForUser: [ProgressNoteGlassBreak!]!
   # check if don't need to break glass for given patient
   patientGlassBreakCheck(patientId: ID!): PatientGlassBreakCheck!
+  # check if don't need to break glass for given progress note
+  progressNoteGlassBreakCheck(progressNoteId: ID!): ProgressNoteGlassBreakCheck!
   # computed patient status for a patient
   patientComputedPatientStatus(patientId: ID!): ComputedPatientStatus!
 }

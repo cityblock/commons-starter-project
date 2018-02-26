@@ -1,0 +1,7 @@
+#import "../fragments/full-progress-note-glass-break-check.graphql"
+
+query getProgressNoteGlassBreakCheck($progressNoteId: ID!) {
+  progressNoteGlassBreakCheck(progressNoteId: $progressNoteId) {
+    ...FullProgressNoteGlassBreakCheck
+  }
+}

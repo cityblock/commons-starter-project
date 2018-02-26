@@ -3663,6 +3663,18 @@ export interface getProgressNoteActivityForProgressNoteQuery {
   },
 };
 
+export interface getProgressNoteGlassBreakCheckQueryVariables {
+  progressNoteId: string,
+};
+
+export interface getProgressNoteGlassBreakCheckQuery {
+  // check if don't need to break glass for given progress note
+  progressNoteGlassBreakCheck:  {
+    progressNoteId: string,
+    isGlassBreakNotNeeded: boolean,
+  },
+};
+
 export interface getProgessNoteGlassBreaksForUserQuery {
   // progress note glass breaks for a user during current session
   progressNoteGlassBreaksForUser:  Array< {
@@ -10515,6 +10527,11 @@ export interface FullProgressNoteActivityFragment {
       description: string,
     } | null,
   } >,
+};
+
+export interface FullProgressNoteGlassBreakCheckFragment {
+  progressNoteId: string,
+  isGlassBreakNotNeeded: boolean,
 };
 
 export interface FullProgressNoteTemplateFragment {

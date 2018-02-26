@@ -185,8 +185,8 @@ export const validateGlassBreakNotNeeded = async (
     ) {
       return true;
     }
-    // action is valid also if current user is the author of the note
-    if (progressNote.userId === userId) {
+    // action is valid also if current user is the author or supervisor of the note
+    if (progressNote.userId === userId || progressNote.supervisorId === userId) {
       return true;
     }
   }

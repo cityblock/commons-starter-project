@@ -95,7 +95,7 @@
     "enzyme-adapter-react-16": "1.1.1",
     "expect": "22.4.0",
     "foreman": "2.0.0",
-    "gql2ts": "1.4.1",
+    "gql2ts": "1.4.3",
     "graphql-document-collector": "0.2.1",
     "husky": "0.14.3",
     "identity-obj-proxy": "3.0.0",

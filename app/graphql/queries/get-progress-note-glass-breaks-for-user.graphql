@@ -1,6 +1,6 @@
 #import "../fragments/short-progress-note-glass-break.graphql"
 
-query getProgessNoteGlassBreaksForUser {
+query getProgressNoteGlassBreaksForUser {
   progressNoteGlassBreaksForUser {
     ...ShortProgressNoteGlassBreak
   }

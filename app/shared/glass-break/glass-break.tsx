@@ -27,9 +27,13 @@ class GlassBreak extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const { resource, patientName, createGlassBreak } = this.props;
+    const containerStyles = classNames(styles.container, {
+      [styles.fullScreen]: resource === 'patient',
+      [styles.listItem]: resource === 'progressNote',
+    });
 
     return (
-      <div className={styles.container}>
+      <div className={containerStyles}>
         <GlassBreakModal
           isPopupVisible={this.state.isPopupVisible}
           createGlassBreak={createGlassBreak}

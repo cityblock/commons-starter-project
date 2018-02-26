@@ -7,10 +7,21 @@
 }
 
 .container {
-  height: calc(100vh - 60px);
-  width: 100%;
-  padding-top: 20%;
   flex-direction: column;
+  width: 100%;
+  background: var(--white-color);
+}
+
+.fullScreen {
+  height: calc(100vh - 60px);
+  padding-top: 20%;
+}
+
+.listItem {
+  height: 220px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--big-border-radius);
+  justify-content: center;
 }
 
 .title,
@@ -29,9 +40,13 @@
 .text {
   color: var(--gray-font-color);
   font-size: var(--default-font-size);
-  margin-bottom: var(--gutter);
+  margin-bottom: var(--small-gutter);
   max-width: 450px;
   text-align: center;
+}
+
+.fullScreen .text {
+  margin-bottom: var(--gutter);
 }
 
 svg.icon {

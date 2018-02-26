@@ -38,6 +38,8 @@ class GlassBreakModal extends React.Component<IProps, IState> {
         this.setState({ loading: true, error: null });
         await createGlassBreak(reason, note || null);
         this.setState({ loading: false, error: null });
+
+        this.onClose();
       } catch (err) {
         this.setState({ error: err.message, loading: false });
       }

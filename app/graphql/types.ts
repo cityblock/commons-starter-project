@@ -3675,7 +3675,7 @@ export interface getProgressNoteGlassBreakCheckQuery {
   },
 };
 
-export interface getProgessNoteGlassBreaksForUserQuery {
+export interface getProgressNoteGlassBreaksForUserQuery {
   // progress note glass breaks for a user during current session
   progressNoteGlassBreaksForUser:  Array< {
     id: string,

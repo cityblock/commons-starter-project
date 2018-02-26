@@ -5,16 +5,15 @@ declare module 'schema' {
   }
 
   interface IGraphQLResponseError {
-    message: string;            // Required for all errors
+    message: string; // Required for all errors
     locations?: Array<IGraphQLResponseErrorLocation>;
-    [propName: string]: any;    // 7.2.2 says 'GraphQL servers may provide additional entries to error'
+    [propName: string]: any; // 7.2.2 says 'GraphQL servers may provide additional entries to error'
   }
 
   interface IGraphQLResponseErrorLocation {
     line: number;
     column: number;
   }
-
 
   interface IRootQueryType {
     /**
@@ -296,11 +295,15 @@ declare module 'schema' {
     /**
     patient screening tool submissions for patient and screening tool (optioanlly)
   */
-    patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission>;
+    patientScreeningToolSubmissionsForPatient: Array<
+      IPatientScreeningToolSubmission
+    >;
     /**
     patient screening tool submissions for patient 360 (history tab)
   */
-    patientScreeningToolSubmissionsFor360: Array<IPatientScreeningToolSubmission>;
+    patientScreeningToolSubmissionsFor360: Array<
+      IPatientScreeningToolSubmission
+    >;
     /**
     patient screening tool submissions
   */
@@ -411,8 +414,14 @@ declare module 'schema' {
     patientComputedPatientStatus: IComputedPatientStatus;
   }
 
-
-  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';
+  type IUserOrderOptionsEnum =
+    | 'createdAtDesc'
+    | 'createdAtAsc'
+    | 'lastLoginAtDesc'
+    | 'lastLoginAtAsc'
+    | 'updatedAtDesc'
+    | 'updatedAtAsc'
+    | 'emailAsc';
 
   /**
     User edges
@@ -458,11 +467,25 @@ declare module 'schema' {
     id: string;
   }
 
+  type IUserRoleEnum =
+    | 'physician'
+    | 'nurseCareManager'
+    | 'primaryCarePhysician'
+    | 'communityHealthPartner'
+    | 'psychiatrist'
+    | 'healthCoach'
+    | 'familyMember'
+    | 'anonymousUser'
+    | 'admin';
 
-  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'primaryCarePhysician' | 'communityHealthPartner' | 'psychiatrist' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
-
-
-  type IPermissionsEnum = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red' | 'black';
+  type IPermissionsEnum =
+    | 'green'
+    | 'pink'
+    | 'orange'
+    | 'blue'
+    | 'yellow'
+    | 'red'
+    | 'black';
 
   /**
     Page info for paginated responses
@@ -532,7 +555,6 @@ declare module 'schema' {
     description: string | null;
   }
 
-
   type IPhoneTypeOptionsEnum = 'home' | 'work' | 'mobile' | 'other';
 
   /**
@@ -557,8 +579,11 @@ declare module 'schema' {
     updatedAt: string | null;
   }
 
-
-  type ICoreIdentityOptionsEnum = 'firstName' | 'middleName' | 'lastName' | 'dateOfBirth';
+  type ICoreIdentityOptionsEnum =
+    | 'firstName'
+    | 'middleName'
+    | 'lastName'
+    | 'dateOfBirth';
 
   /**
     ComputedPatientStatus
@@ -616,7 +641,6 @@ declare module 'schema' {
     patientInfo: IPatientInfo;
   }
 
-
   interface IPatientFilterOptions {
     ageMin: number | null;
     ageMax: number | null;
@@ -624,7 +648,6 @@ declare module 'schema' {
     zip: string | null;
     careWorkerId: string | null;
   }
-
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
 
@@ -709,9 +732,7 @@ declare module 'schema' {
     CBOReferral: ICBOReferral | null;
   }
 
-
   type IPriorityEnum = 'low' | 'medium' | 'high';
-
 
   interface IPatientGoalShort {
     id: string;
@@ -724,7 +745,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
   }
-
 
   interface IPatientConcern {
     id: string;
@@ -767,7 +787,6 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
   interface IPatientGoal {
     id: string;
     title: string;
@@ -783,7 +802,6 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
   interface IGoalSuggestionTemplate {
     id: string;
     title: string;
@@ -792,7 +810,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
   }
-
 
   interface ITaskTemplate {
     id: string;
@@ -809,9 +826,12 @@ declare module 'schema' {
     CBOCategoryId: string | null;
   }
 
-
-  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
-
+  type ICompletedWithinIntervalEnum =
+    | 'hour'
+    | 'day'
+    | 'week'
+    | 'month'
+    | 'year';
 
   interface ICBOReferral {
     id: string;
@@ -829,7 +849,6 @@ declare module 'schema' {
     acknowledgedAt: string | null;
   }
 
-
   interface ICBOCategory {
     id: string;
     title: string;
@@ -837,7 +856,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
   }
-
 
   interface ICBO {
     id: string;
@@ -856,8 +874,15 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
-  type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'titleAsc' | 'titleDesc';
+  type ITaskOrderOptionsEnum =
+    | 'createdAtDesc'
+    | 'createdAtAsc'
+    | 'dueAtDesc'
+    | 'dueAtAsc'
+    | 'updatedAtDesc'
+    | 'updatedAtAsc'
+    | 'titleAsc'
+    | 'titleDesc';
 
   /**
     Task edges
@@ -944,7 +969,6 @@ declare module 'schema' {
     screeningTools: Array<IScreeningTool>;
   }
 
-
   type IAssessmentTypeEnum = 'automated' | 'manual';
 
   /**
@@ -992,26 +1016,28 @@ declare module 'schema' {
     screeningTool: IScreeningToolShort | null;
   }
 
-
   type IAnswerValueTypeOptionsEnum = 'string' | 'boolean' | 'number';
 
-
-  type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
-
+  type IRiskAdjustmentTypeOptionsEnum =
+    | 'inactive'
+    | 'increment'
+    | 'forceHighRisk';
 
   interface IRiskAreaShort {
     id: string;
     title: string;
   }
 
-
   interface IScreeningToolShort {
     id: string;
     title: string;
   }
 
-
-  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
+  type IAnswerTypeOptionsEnum =
+    | 'dropdown'
+    | 'radio'
+    | 'freetext'
+    | 'multiselect';
 
   /**
     QuestionCondition
@@ -1025,9 +1051,7 @@ declare module 'schema' {
     questionId: string;
   }
 
-
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
-
 
   interface IComputedField {
     id: string;
@@ -1039,21 +1063,20 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
   type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
-
 
   interface IScreeningTool {
     id: string;
     title: string;
     riskAreaId: string;
     screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
-    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmissionShort>;
+    patientScreeningToolSubmissions: Array<
+      IPatientScreeningToolSubmissionShort
+    >;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
   }
-
 
   interface IScreeningToolScoreRange {
     id: string;
@@ -1068,7 +1091,6 @@ declare module 'schema' {
     concernSuggestions: Array<IConcern>;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
-
 
   interface IPatientScreeningToolSubmissionShort {
     id: string;
@@ -1086,7 +1108,6 @@ declare module 'schema' {
     screeningToolScoreRangeId: string | null;
   }
 
-
   interface IRiskAreaGroupForPatient {
     id: string;
     createdAt: string;
@@ -1099,7 +1120,6 @@ declare module 'schema' {
     highRiskThreshold: number;
     riskAreas: Array<IRiskAreaForPatient>;
   }
-
 
   interface IRiskAreaForPatient {
     id: string;
@@ -1184,7 +1204,6 @@ declare module 'schema' {
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
   }
 
-
   interface IPatientScreeningToolSubmission {
     id: string;
     progressNoteId: string;
@@ -1204,7 +1223,6 @@ declare module 'schema' {
     screeningToolScoreRange: IScreeningToolScoreRangeForPatientScreeningToolSubmission | null;
     patientAnswers: Array<IPatientAnswer>;
   }
-
 
   interface ICarePlanSuggestion {
     id: string;
@@ -1230,9 +1248,7 @@ declare module 'schema' {
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
   }
 
-
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
-
 
   interface IRiskAreaAssessmentSubmission {
     id: string;
@@ -1248,7 +1264,6 @@ declare module 'schema' {
     carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
 
-
   interface IScreeningToolScoreRangeForPatientScreeningToolSubmission {
     id: string;
     description: string;
@@ -1257,7 +1272,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
   }
-
 
   interface IScreeningToolForPatient {
     id: string;
@@ -1268,19 +1282,24 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
+  type IQuestionFilterTypeEnum =
+    | 'progressNoteTemplate'
+    | 'riskArea'
+    | 'screeningTool';
 
-  type IQuestionFilterTypeEnum = 'progressNoteTemplate' | 'riskArea' | 'screeningTool';
-
-
-  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool' | 'patientScreeningToolSubmission' | 'riskAreaAssessmentSubmission';
-
+  type IAnswerFilterTypeEnum =
+    | 'question'
+    | 'progressNote'
+    | 'riskArea'
+    | 'screeningTool'
+    | 'patientScreeningToolSubmission'
+    | 'riskAreaAssessmentSubmission';
 
   interface IRiskAreaSummary {
     summary: Array<string>;
     started: boolean;
     lastUpdated: string | null;
   }
-
 
   interface IRiskScore {
     score: number;
@@ -1342,9 +1361,23 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
-  type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description' | 'cbo_referral_edit_sent_at' | 'cbo_referral_edit_acknowledged_at';
-
+  type ITaskEventTypesEnum =
+    | 'create_task'
+    | 'add_follower'
+    | 'remove_follower'
+    | 'complete_task'
+    | 'uncomplete_task'
+    | 'delete_task'
+    | 'add_comment'
+    | 'edit_comment'
+    | 'delete_comment'
+    | 'edit_priority'
+    | 'edit_due_date'
+    | 'edit_assignee'
+    | 'edit_title'
+    | 'edit_description'
+    | 'cbo_referral_edit_sent_at'
+    | 'cbo_referral_edit_acknowledged_at';
 
   interface IProgressNote {
     id: string;
@@ -1369,7 +1402,6 @@ declare module 'schema' {
     supervisorNotes: string | null;
   }
 
-
   interface IProgressNoteTemplate {
     id: string;
     title: string;
@@ -1378,12 +1410,21 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
+  type IConcernOrderOptionsEnum =
+    | 'createdAtDesc'
+    | 'createdAtAsc'
+    | 'titleDesc'
+    | 'titleAsc'
+    | 'updatedAtDesc'
+    | 'updatedAtAsc';
 
-  type IConcernOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'titleDesc' | 'titleAsc' | 'updatedAtDesc' | 'updatedAtAsc';
-
-
-  type IGoalSuggestionOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'titleDesc' | 'titleAsc' | 'updatedAtDesc' | 'updatedAtAsc';
-
+  type IGoalSuggestionOrderOptionsEnum =
+    | 'createdAtDesc'
+    | 'createdAtAsc'
+    | 'titleDesc'
+    | 'titleAsc'
+    | 'updatedAtDesc'
+    | 'updatedAtAsc';
 
   interface IPatientTaskSuggestion {
     id: string;
@@ -1402,12 +1443,10 @@ declare module 'schema' {
     acceptedAt: string | null;
   }
 
-
   interface ICarePlan {
     goals: Array<IPatientGoal>;
     concerns: Array<IPatientConcern>;
   }
-
 
   interface IProgressNoteActivity {
     taskEvents: Array<ITaskEvent>;
@@ -1438,7 +1477,6 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
   type IPatientAnswerEventTypesEnum = 'create_patient_answer';
 
   /**
@@ -1462,9 +1500,13 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
-  type ICarePlanUpdateEventTypesEnum = 'create_patient_concern' | 'edit_patient_concern' | 'delete_patient_concern' | 'create_patient_goal' | 'edit_patient_goal' | 'delete_patient_goal';
-
+  type ICarePlanUpdateEventTypesEnum =
+    | 'create_patient_concern'
+    | 'edit_patient_concern'
+    | 'delete_patient_concern'
+    | 'create_patient_goal'
+    | 'edit_patient_goal'
+    | 'delete_patient_goal';
 
   interface IQuickCall {
     id: string;
@@ -1483,24 +1525,23 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-
   type IQuickCallDirectionEnum = 'Inbound' | 'Outbound';
 
-
-  type IComputedFieldOrderOptionsEnum = 'labelDesc' | 'labelAsc' | 'slugDesc' | 'slugAsc';
-
+  type IComputedFieldOrderOptionsEnum =
+    | 'labelDesc'
+    | 'labelAsc'
+    | 'slugDesc'
+    | 'slugAsc';
 
   interface IComputedFieldsSchema {
     computedFields: Array<IComputedFieldSchema>;
   }
-
 
   interface IComputedFieldSchema {
     slug: string;
     dataType: IComputedFieldDataTypesEnum;
     values: Array<string>;
   }
-
 
   interface IPatientList {
     id: string;
@@ -1549,7 +1590,6 @@ declare module 'schema' {
     progressNoteId: string;
     isGlassBreakNotNeeded: boolean;
   }
-
 
   interface IRootMutationType {
     /**
@@ -2082,7 +2122,6 @@ declare module 'schema' {
     patientIds: Array<string>;
   }
 
-
   interface IUserWithCount {
     id: string;
     firstName: string | null;
@@ -2298,7 +2337,6 @@ declare module 'schema' {
     riskAreaGroupId: string;
   }
 
-
   interface IRiskAreaCreateInput {
     title: string;
     assessmentType: IAssessmentTypeEnum;
@@ -2308,7 +2346,6 @@ declare module 'schema' {
     highRiskThreshold: number;
   }
 
-
   interface IRiskAreaEditInput {
     riskAreaId: string;
     title: string | null;
@@ -2317,11 +2354,9 @@ declare module 'schema' {
     highRiskThreshold: number | null;
   }
 
-
   interface IRiskAreaDeleteInput {
     riskAreaId: string;
   }
-
 
   interface IQuestionCreateInput {
     title: string;
@@ -2336,7 +2371,6 @@ declare module 'schema' {
     hasOtherTextAnswer: boolean | null;
   }
 
-
   interface IQuestionEditInput {
     questionId: string;
     title: string | null;
@@ -2347,11 +2381,9 @@ declare module 'schema' {
     hasOtherTextAnswer: boolean | null;
   }
 
-
   interface IQuestionDeleteInput {
     questionId: string;
   }
-
 
   interface IAnswerCreateInput {
     displayValue: string;
@@ -2364,7 +2396,6 @@ declare module 'schema' {
     order: number;
   }
 
-
   interface IAnswerEditInput {
     displayValue: string | null;
     value: string | null;
@@ -2376,11 +2407,9 @@ declare module 'schema' {
     answerId: string;
   }
 
-
   interface IAnswerDeleteInput {
     answerId: string;
   }
-
 
   interface IPatientAnswersCreateInput {
     patientId: string;
@@ -2391,7 +2420,6 @@ declare module 'schema' {
     progressNoteId: string | null;
   }
 
-
   interface IPatientAnswerInput {
     answerId: string;
     answerValue: string;
@@ -2400,17 +2428,14 @@ declare module 'schema' {
     questionId: string;
   }
 
-
   interface IPatientAnswerEditInput {
     applicable: boolean;
     patientAnswerId: string;
   }
 
-
   interface IPatientAnswerDeleteInput {
     patientAnswerId: string;
   }
-
 
   interface IQuestionConditionCreateInput {
     questionId: string;
@@ -2426,7 +2451,6 @@ declare module 'schema' {
     answerId: string;
   }
 
-
   interface IQuestionConditionDeleteInput {
     questionConditionId: string;
   }
@@ -2438,27 +2462,22 @@ declare module 'schema' {
     eventNotificationId: string;
   }
 
-
   interface IUserTaskNotificationsEditInput {
     taskId: string;
   }
 
-
   interface IConcernCreateInput {
     title: string;
   }
-
 
   interface IConcernEditInput {
     title: string;
     concernId: string;
   }
 
-
   interface IConcernDeleteInput {
     concernId: string;
   }
-
 
   interface IConcernAddDiagnosisCodeInput {
     concernId: string;
@@ -2467,12 +2486,10 @@ declare module 'schema' {
     version: string;
   }
 
-
   interface IConcernRemoveDiagnosisCodeInput {
     concernId: string;
     diagnosisCodeId: string;
   }
-
 
   interface IConcernSuggestInput {
     concernId: string;
@@ -2480,29 +2497,24 @@ declare module 'schema' {
     screeningToolScoreRangeId: string | null;
   }
 
-
   interface IGoalSuggestionTemplateCreateInput {
     title: string;
   }
-
 
   interface IGoalSuggestionTemplateEditInput {
     title: string;
     goalSuggestionTemplateId: string;
   }
 
-
   interface IGoalSuggestionTemplateDeleteInput {
     goalSuggestionTemplateId: string;
   }
-
 
   interface IGoalSuggestInput {
     answerId: string | null;
     screeningToolScoreRangeId: string | null;
     goalSuggestionTemplateId: string;
   }
-
 
   interface ITaskTemplateCreateInput {
     title: string;
@@ -2514,7 +2526,6 @@ declare module 'schema' {
     careTeamAssigneeRole: string | null;
     CBOCategoryId: string | null;
   }
-
 
   interface ITaskTemplateEditInput {
     title: string;
@@ -2528,28 +2539,23 @@ declare module 'schema' {
     taskTemplateId: string;
   }
 
-
   interface ITaskTemplateDeleteInput {
     taskTemplateId: string;
   }
-
 
   interface ITaskSuggestInput {
     answerId: string;
     taskTemplateId: string;
   }
 
-
   interface IPatientTaskSuggestionAcceptInput {
     patientTaskSuggestionId: string;
   }
-
 
   interface IPatientTaskSuggestionDismissInput {
     patientTaskSuggestionId: string;
     dismissedReason: string;
   }
-
 
   interface IPatientGoalCreateInput {
     title: string | null;
@@ -2562,7 +2568,6 @@ declare module 'schema' {
     startedAt: string | null;
   }
 
-
   interface IPatientGoalEditInput {
     patientGoalId: string;
     title: string;
@@ -2570,11 +2575,9 @@ declare module 'schema' {
     goalSuggestionTemplateId: string | null;
   }
 
-
   interface IPatientGoalDeleteInput {
     patientGoalId: string;
   }
-
 
   interface IPatientConcernCreateInput {
     concernId: string;
@@ -2582,7 +2585,6 @@ declare module 'schema' {
     startedAt: string | null;
     completedAt: string | null;
   }
-
 
   interface IPatientConcernEditInput {
     order: number | null;
@@ -2593,12 +2595,10 @@ declare module 'schema' {
     patientConcernId: string;
   }
 
-
   interface IPatientConcernBulkEditInput {
     patientConcerns: Array<IPatientConcernBulkEditFields>;
     patientId: string;
   }
-
 
   interface IPatientConcernBulkEditFields {
     id: string;
@@ -2607,11 +2607,9 @@ declare module 'schema' {
     completedAt: string | null;
   }
 
-
   interface IPatientConcernDeleteInput {
     patientConcernId: string;
   }
-
 
   interface ICarePlanSuggestionAcceptInput {
     carePlanSuggestionId: string;
@@ -2621,18 +2619,15 @@ declare module 'schema' {
     taskTemplateIds: Array<string> | null;
   }
 
-
   interface ICarePlanSuggestionDismissInput {
     carePlanSuggestionId: string;
     dismissedReason: string;
   }
 
-
   interface IScreeningToolCreateInput {
     title: string;
     riskAreaId: string;
   }
-
 
   interface IScreeningToolEditInput {
     screeningToolId: string;
@@ -2640,11 +2635,9 @@ declare module 'schema' {
     riskAreaId: string | null;
   }
 
-
   interface IScreeningToolDeleteInput {
     screeningToolId: string;
   }
-
 
   interface IScreeningToolScoreRangeCreateInput {
     screeningToolId: string;
@@ -2653,7 +2646,6 @@ declare module 'schema' {
     maximumScore: number;
     riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum;
   }
-
 
   interface IScreeningToolScoreRangeEditInput {
     screeningToolScoreRangeId: string;
@@ -2665,48 +2657,39 @@ declare module 'schema' {
     riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
   }
 
-
   interface IScreeningToolScoreRangeDeleteInput {
     screeningToolScoreRangeId: string;
   }
-
 
   interface IPatientScreeningToolSubmissionCreateInput {
     screeningToolId: string;
     patientId: string;
   }
 
-
   interface IPatientScreeningToolSubmissionScoreInput {
     patientScreeningToolSubmissionId: string;
   }
 
-
   interface IProgressNoteTemplateCreateInput {
     title: string;
   }
-
 
   interface IProgressNoteTemplateEditInput {
     progressNoteTemplateId: string;
     title: string;
   }
 
-
   interface IProgressNoteTemplateDeleteInput {
     progressNoteTemplateId: string;
   }
-
 
   interface IProgressNoteCreateInput {
     patientId: string;
   }
 
-
   interface IProgressNoteCompleteInput {
     progressNoteId: string;
   }
-
 
   interface IProgressNoteEditInput {
     progressNoteId: string;
@@ -2719,17 +2702,14 @@ declare module 'schema' {
     needsSupervisorReview: boolean | null;
   }
 
-
   interface IProgressNoteAddSupervisorNotesInput {
     progressNoteId: string;
     supervisorNotes: string;
   }
 
-
   interface IProgressNoteCompleteSupervisorReviewInput {
     progressNoteId: string;
   }
-
 
   interface IQuickCallCreateInput {
     patientId: string;
@@ -2741,23 +2721,19 @@ declare module 'schema' {
     startTime: string;
   }
 
-
   interface IComputedFieldCreateInput {
     label: string;
     dataType: IComputedFieldDataTypesEnum;
   }
 
-
   interface IComputedFieldDeleteInput {
     computedFieldId: string;
   }
-
 
   interface IRiskAreaAssessmentSubmissionCreateInput {
     riskAreaId: string;
     patientId: string;
   }
-
 
   interface IRiskAreaAssessmentSubmissionCompleteInput {
     riskAreaAssessmentSubmissionId: string;
@@ -2770,7 +2746,6 @@ declare module 'schema' {
     patientAnswerId: string;
     reason: string | null;
   }
-
 
   interface IComputedFieldFlag {
     id: string;
@@ -2876,7 +2851,6 @@ declare module 'schema' {
     authToken: string;
   }
 
-
   interface IPatientDataFlagCreateInput {
     patientId: string;
     fieldName: ICoreIdentityOptionsEnum;
@@ -2927,13 +2901,11 @@ declare module 'schema' {
     description: string;
   }
 
-
   interface IRiskAreaStatistic {
     riskArea: IRiskArea;
     summaryData: IRiskAreaSummary;
     scoreData: IRiskScore;
   }
-
 
   interface IThreeSixtySummary {
     riskAreas: Array<IRiskAreaStatistic>;
@@ -2951,3 +2923,4 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 }
+

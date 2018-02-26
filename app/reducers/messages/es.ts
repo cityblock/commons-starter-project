@@ -311,9 +311,9 @@ export const SPANISH_TRANSLATION = {
     'glassBreak.patientprivate': 'Private profile:',
     'glassBreak.popupBody': 'Provide the following information in order to access this note',
     'glassBreak.popupTitle': 'Breaking the glass',
-    'glassBreak.progressNotenote': 'Private progress note',
-    'glassBreak.progressNoteprivate':
+    'glassBreak.progressNotenote':
       'In order to access this note, you have to break the glass and provide a reason for requiring access',
+    'glassBreak.progressNoteprivate': 'Private progress note',
     'glassBreak.reason': 'Reason for breaking the glass?',
     'glassBreak.selectReason': 'Select reason...',
     'header.settings': 'Ajustes',

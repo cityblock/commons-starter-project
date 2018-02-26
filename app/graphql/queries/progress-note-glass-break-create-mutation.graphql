@@ -1,4 +1,4 @@
-#import "../fragments/short-progress-note-glass-break-cbo.graphql"
+#import "../fragments/short-progress-note-glass-break.graphql"
 
 mutation progressNoteGlassBreakCreate($progressNoteId: ID!, $reason: String!, $note: String) {
   progressNoteGlassBreakCreate(

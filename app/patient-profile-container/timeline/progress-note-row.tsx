@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import * as progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment } from '../../graphql/types';
+import progressNoteGlassBreak from '../../shared/glass-break/progress-note-glass-break';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
@@ -142,15 +143,18 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      progressNoteId: props.progressNoteId,
-    },
+export default compose(
+  progressNoteGlassBreak(),
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        progressNoteId: props.progressNoteId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      progressNote: data ? (data as any).progressNote : null,
+    }),
   }),
-  props: ({ data }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    progressNote: data ? (data as any).progressNote : null,
-  }),
-})(ProgressNoteRow);
+)(ProgressNoteRow);

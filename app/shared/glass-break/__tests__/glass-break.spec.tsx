@@ -21,6 +21,10 @@ describe('Glass Break Component', () => {
     expect(wrapper.find('.container').length).toBe(1);
   });
 
+  it('applies correct container styles for patient', () => {
+    expect(wrapper.find('.container').props().className).toBe('container fullScreen');
+  });
+
   it('renders lock icon', () => {
     expect(wrapper.find(Icon).props().name).toBe('lockOutline');
     expect(wrapper.find(Icon).props().color).toBe('red');
@@ -54,5 +58,11 @@ describe('Glass Break Component', () => {
     expect(wrapper.find(Button).props().messageId).toBe('glassBreak.breakGlass');
     expect(wrapper.find(Button).props().color).toBe('red');
     expect(wrapper.find(Button).props().className).toBe('button');
+  });
+
+  it('applies correct styles for progress note glass break', () => {
+    wrapper.setProps({ resource: 'progressNote' });
+
+    expect(wrapper.find('.container').props().className).toBe('container listItem');
   });
 });

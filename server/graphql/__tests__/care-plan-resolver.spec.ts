@@ -271,6 +271,39 @@ describe('care plan resolver tests', () => {
         );
       });
     });
+
+    it('blocks resolving care plan for patient when needed glass break id not provided', async () => {
+      await transaction(PatientConcern.knex(), async txn => {
+        const { patient, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(12, clinic.id), txn);
+
+        const query = `{
+          carePlanForPatient(patientId: "${patient.id}") {
+            concerns {
+              id
+              concern {
+                title
+              }
+            }
+            goals {
+              id
+              title
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user2.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        const error = `User ${user2.id} cannot automatically break the glass for patient ${
+          patient.id
+        }`;
+        expect(result.errors![0].message).toBe(error);
+      });
+    });
   });
 
   describe('resolve care plan suggestions', () => {

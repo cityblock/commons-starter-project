@@ -122,7 +122,8 @@ describe('Progress Note Glass Break Model', () => {
       const { user, progressNote } = await setup(txn);
 
       const fakeId = uuid();
-      const error = `No such glass break: ${fakeId}`;
+      const error =
+        'You must break the glass again to view this progress note. Please refresh the page.';
       await expect(
         ProgressNoteGlassBreak.validateGlassBreak(fakeId, user.id, progressNote.id, txn),
       ).rejects.toMatch(error);
@@ -147,7 +148,8 @@ describe('Progress Note Glass Break Model', () => {
         .where({ userId: user.id, progressNoteId: progressNote.id })
         .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const error = `Glass break ${patientGlassBreak.id} occurred too long ago`;
+      const error =
+        'You must break the glass again to view this progress note. Please refresh the page.';
 
       await expect(
         ProgressNoteGlassBreak.validateGlassBreak(

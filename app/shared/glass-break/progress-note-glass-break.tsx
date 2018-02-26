@@ -10,7 +10,9 @@ import {
   progressNoteGlassBreakCreateMutation,
   progressNoteGlassBreakCreateMutationVariables,
 } from '../../graphql/types';
-import withCurrentUser, { IInjectedProps as ICurrentUserProps } from '../with-current-user/with-current-user';
+import withCurrentUser, {
+  IInjectedProps as ICurrentUserProps,
+} from '../with-current-user/with-current-user';
 import GlassBreak from './glass-break';
 
 export interface IInjectedProps {
@@ -73,8 +75,8 @@ const progressNoteGlassBreak = () => <P extends {}>(
 
     createGlassBreak = async (reason: string, note: string | null) => {
       const { createProgressNoteGlassBreak, progressNoteId } = this.props;
-      return createProgressNoteGlassBreak({ variables: { progressNoteId, reason, note }});
-    }
+      return createProgressNoteGlassBreak({ variables: { progressNoteId, reason, note } });
+    };
 
     render(): JSX.Element | null {
       if (this.isLoading()) return null;
@@ -86,12 +88,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         return <Component {...this.getWrappedComponentProps()} glassBreakId={glassBreakId} />;
       }
       // otherwise render glass break screen
-      return (
-        <GlassBreak
-          resource='progressNote'
-          createGlassBreak={this.createGlassBreak}
-        />
-      );
+      return <GlassBreak resource="progressNote" createGlassBreak={this.createGlassBreak} />;
     }
   }
 
@@ -120,12 +117,15 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreaks: data ? (data as any).progressNoteGlassBreaksForUser : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(createProgressNoteGlassBreakMutationGraphql as any, {
-      name: 'createProgressNoteGlassBreak',
-      options: {
-        refetchQueries: ['getProgressNoteGlassBreaksForUser'],
+    graphql<IGraphqlProps, IProps, resultProps>(
+      createProgressNoteGlassBreakMutationGraphql as any,
+      {
+        name: 'createProgressNoteGlassBreak',
+        options: {
+          refetchQueries: ['getProgressNoteGlassBreaksForUser'],
+        },
       },
-    }),
+    ),
   )(ProgressNoteGlassBreak);
 };
 

@@ -2335,7 +2335,7 @@ type RootQueryType {
   # progress note templates
   progressNoteTemplates: [ProgressNoteTemplate]!
   # progress note
-  progressNote(progressNoteId: ID!): ProgressNote!
+  progressNote(progressNoteId: ID!, glassBreakId: ID): ProgressNote!
   # progress note ids for patient
   progressNoteIdsForPatient(patientId: ID!, completed: Boolean!, glassBreakId: ID): [ID!]!
   # progress notes for current user

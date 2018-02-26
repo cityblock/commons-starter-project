@@ -17,6 +17,7 @@ interface IProgressNoteCreateArgs {
 
 interface IResolveProgressNoteOptions {
   progressNoteId: string;
+  glassBreakId: string | null;
 }
 
 interface IResolveProgressNotesForPatientOptions {
@@ -158,6 +159,14 @@ export async function resolveProgressNote(
   { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['progressNote']> {
   await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, args.progressNoteId);
+  await validateGlassBreak(
+    userId!,
+    permissions,
+    'progressNote',
+    args.progressNoteId,
+    txn,
+    args.glassBreakId,
+  );
 
   return ProgressNote.get(args.progressNoteId, txn);
 }

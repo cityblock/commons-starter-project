@@ -4,7 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import * as progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment } from '../../graphql/types';
-import progressNoteGlassBreak from '../../shared/glass-break/progress-note-glass-break';
+import progressNoteGlassBreak, {
+  IInjectedProps,
+} from '../../shared/glass-break/progress-note-glass-break';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
@@ -14,7 +16,7 @@ import ProgressNoteRowQuestions from './progress-note-row-questions';
 import ProgressNoteSupervisorBadge from './progress-note-supervisor-badge';
 import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   progressNoteId: string;
   patientId: string;
 }
@@ -149,6 +151,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
+        glassBreakId: props.glassBreakId,
       },
     }),
     props: ({ data }) => ({

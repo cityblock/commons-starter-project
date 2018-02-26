@@ -27,7 +27,10 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id, userId: user.id }, txn);
+  const patient = await createPatient(
+    { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
+    txn,
+  );
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
       title: 'title',

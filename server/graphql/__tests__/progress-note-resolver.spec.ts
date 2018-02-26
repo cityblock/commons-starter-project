@@ -8,6 +8,7 @@ import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import ProgressNote from '../../models/progress-note';
+import ProgressNoteGlassBreak from '../../models/progress-note-glass-break';
 import ProgressNoteTemplate from '../../models/progress-note-template';
 import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -70,10 +71,126 @@ describe('progress note resolver', () => {
         progressNote(
           progressNoteId: "${progressNote.id}"
         ) { id } }`;
-      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, query, null, {
+        permissions: 'blue',
+        userId: user.id,
+        txn,
+      });
       expect(cloneDeep(result.data!.progressNote)).toMatchObject({
         id: progressNote.id,
       });
+    });
+  });
+
+  it('blocks resolving a progress note with invalid glass break', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+      const query = `{
+        progressNote(
+          progressNoteId: "${progressNote.id}"
+          glassBreakId: "${uuid()}"
+        ) { id } }`;
+      const result = await graphql(schema, query, null, {
+        permissions: 'blue',
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this progress note. Please refresh the page.',
+      );
+    });
+  });
+
+  it('blocks resolving progress note with too old glass break', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+
+      const progressNoteGlassBreak = await ProgressNoteGlassBreak.create(
+        {
+          userId: user.id,
+          progressNoteId: progressNote.id,
+          reason: 'Needed for routine care',
+          note: null,
+        },
+        txn,
+      );
+
+      await ProgressNoteGlassBreak.query(txn)
+        .where({ userId: user.id, progressNoteId: progressNote.id })
+        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+      const query = `{
+        progressNote(
+          progressNoteId: "${progressNote.id}"
+          glassBreakId: "${progressNoteGlassBreak.id}"
+        ) { id } }`;
+      const result = await graphql(schema, query, null, {
+        permissions: 'blue',
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this progress note. Please refresh the page.',
+      );
+    });
+  });
+
+  it('blocks resolving progress note with no glass break when one needed', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
+      const user2 = await User.create(
+        createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+        txn,
+      );
+
+      await ProgressNoteTemplate.query(txn)
+        .where({ id: progressNoteTemplate.id })
+        .patch({ requiresGlassBreak: true });
+
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+
+      const query = `{
+        progressNote(
+          progressNoteId: "${progressNote.id}"
+        ) { id } }`;
+
+      const result = await graphql(schema, query, null, {
+        permissions: 'blue',
+        userId: user2.id,
+        txn,
+      });
+      const error = `User ${user2.id} cannot automatically break the glass for progressNote ${
+        progressNote.id
+      }`;
+
+      expect(result.errors![0].message).toBe(error);
     });
   });
 

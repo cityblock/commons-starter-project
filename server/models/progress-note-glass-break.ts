@@ -69,12 +69,13 @@ export default class ProgressNoteGlassBreak extends BaseModel {
       deletedAt: null,
     });
 
-    if (!glassBreak) {
-      return Promise.reject(`No such glass break: ${progressNoteGlassBreakId}`);
-    }
-
-    if (isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))) {
-      return Promise.reject(`Glass break ${progressNoteGlassBreakId} occurred too long ago`);
+    if (
+      !glassBreak ||
+      isBefore(glassBreak.createdAt, subHours(Date.now(), config.PERMISSIONS_SESSION_IN_HOURS))
+    ) {
+      return Promise.reject(
+        'You must break the glass again to view this progress note. Please refresh the page.',
+      );
     }
 
     return true;

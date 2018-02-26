@@ -3720,6 +3720,7 @@ export interface getProgressNoteTemplatesQuery {
 
 export interface getProgressNoteQueryVariables {
   progressNoteId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getProgressNoteQuery {

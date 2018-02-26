@@ -67,6 +67,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
+        glassBreakId: null,
       },
     }),
     props: ({ data }) => ({

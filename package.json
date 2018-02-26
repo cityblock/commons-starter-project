@@ -162,7 +162,7 @@
     "apollo-client": "2.2.5",
     "apollo-link": "1.2.1",
     "apollo-link-context": "1.0.6",
-    "apollo-link-http": "1.4.0",
+    "apollo-link-http": "1.5.1",
     "base-64": "0.1.0",
     "basic-auth": "2.0.0",
     "body-parser": "1.18.2",

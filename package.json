@@ -99,7 +99,7 @@
     "graphql-document-collector": "0.2.1",
     "husky": "0.14.3",
     "identity-obj-proxy": "3.0.0",
-    "jest": "22.4.0",
+    "jest": "22.4.2",
     "jest-transform-graphql": "2.1.0",
     "knex-migrate": "1.5.1",
     "nock": "9.2.1",

@@ -9,12 +9,7 @@ module.exports = ({ production = false } = {}) => {
   const plugins = [
     new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
     new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
-    new webpack.NamedModulesPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-    new webpack.NoEmitOnErrorsPlugin(), // do not emit compiled assets that include errors
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-    }),
   ];
   if (!production) {
     plugins.push(
@@ -26,7 +21,6 @@ module.exports = ({ production = false } = {}) => {
     );
   } else {
     plugins.push(
-      new webpack.optimize.ModuleConcatenationPlugin(),
       new ExtractTextPlugin({
         allChunks: true,
         filename: 'styles/main.css',

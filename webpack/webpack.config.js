@@ -33,6 +33,7 @@ module.exports = (env = '') => {
     entry: {
       app,
     },
+    mode: isProduction ? 'production' : 'development',
     module: { rules: rules({ production: isProduction }) },
     node,
     output: {
@@ -43,6 +44,11 @@ module.exports = (env = '') => {
     },
     plugins: plugins({ production: isProduction }),
     resolve,
+    optimization: {
+      splitChunks: {
+        name: 'common',
+      },
+    },
     target: 'web',
   };
 

@@ -55,6 +55,7 @@
 
 .summary {
   margin-top: 10px;
+  white-space: pre-line;
 }
 
 .tabs {

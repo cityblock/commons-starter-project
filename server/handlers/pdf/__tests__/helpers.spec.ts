@@ -1,5 +1,13 @@
-import { taskWithComment as task, CBOReferralOther } from '../../../../app/shared/util/test-data';
-import { formatCBOReferralTaskPDFFileName, formatFilename } from '../helpers';
+import {
+  patient,
+  taskWithComment as task,
+  CBOReferralOther,
+} from '../../../../app/shared/util/test-data';
+import {
+  formatCBOReferralTaskPdfFileName,
+  formatFilename,
+  formatPrintableMAPPdfFileName,
+} from '../helpers';
 
 describe('PDF Handler Helpers', () => {
   describe('formatFileName', () => {
@@ -10,13 +18,13 @@ describe('PDF Handler Helpers', () => {
     });
   });
 
-  describe('formatCBOReferralTaskPDFFileName', () => {
+  describe('formatCBOReferralTaskPdfFileName', () => {
     it('returns empty string if no CBO referral', () => {
-      expect(formatCBOReferralTaskPDFFileName({ id: 'jonSnow' } as any)).toBe('');
+      expect(formatCBOReferralTaskPdfFileName({ id: 'jonSnow' } as any)).toBe('');
     });
 
     it('returns formatted file name for task with defined CBO', () => {
-      expect(formatCBOReferralTaskPDFFileName(task as any)).toBe(
+      expect(formatCBOReferralTaskPdfFileName(task as any)).toBe(
         `${task.patient.firstName}_${task.patient.lastName}_${task.CBOReferral.CBO.name}`,
       );
     });
@@ -27,11 +35,27 @@ describe('PDF Handler Helpers', () => {
         CBOReferral: CBOReferralOther,
       };
 
-      expect(formatCBOReferralTaskPDFFileName(otherTask as any)).toBe(
+      expect(formatCBOReferralTaskPdfFileName(otherTask as any)).toBe(
         `${otherTask.patient.firstName}_${otherTask.patient.lastName}_${
           otherTask.CBOReferral.name
         }`,
       );
+    });
+  });
+
+  describe('formatPrintableMAPPdfFileName', () => {
+    it('formats file name for patient with no middle name', () => {
+      expect(formatPrintableMAPPdfFileName(patient as any)).toBe('Bob_Smith_MAP');
+    });
+
+    it('formats file name for patient with middle name', () => {
+      const patient2 = {
+        firstName: 'Brienne',
+        middleName: 'of',
+        lastName: 'Tarth',
+      };
+
+      expect(formatPrintableMAPPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_MAP');
     });
   });
 });

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
-import variables from './variables/variables';
+import variables from '../shared/variables/variables';
 
 const styles = StyleSheet.create({
   container: {

@@ -2,9 +2,9 @@ import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientForCBOReferralFormPDFFragment } from '../../graphql/types';
 import { formatDateOfBirth, formatGender } from '../../shared/helpers/format-helpers';
+import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import TextGroup from './text-group';
-import variables from './variables/variables';
 
 interface IProps {
   patient: FullPatientForCBOReferralFormPDFFragment;

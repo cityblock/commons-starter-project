@@ -1,13 +1,13 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullTaskForCBOReferralFormPDFFragment } from '../../graphql/types';
+import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import Footer from './footer';
 import Header from './header';
 import Introduction from './introduction';
 import PatientInfo from './patient-info';
 import Title from './title';
-import variables from './variables/variables';
 
 interface IProps {
   task: FullTaskForCBOReferralFormPDFFragment;

@@ -90,6 +90,8 @@ export const patient = {
   dateOfBirth: '01/01/1999',
   homeClinicId: clinic.id,
   createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
   scratchPad: 'Note',
   consentToCall: true,
   consentToText: true,
@@ -103,6 +105,7 @@ export const patient = {
     addresses: [address1, address2, address3] as IAddress[],
   },
   patientDataFlags: [],
+  cityblockId: 123,
 };
 
 export const concern = {

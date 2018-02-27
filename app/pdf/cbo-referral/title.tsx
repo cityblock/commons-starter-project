@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
+import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import Divider from './divider';
-import variables from './variables/variables';
 
 interface IProps {
   CBOName: string;

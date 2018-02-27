@@ -1,8 +1,8 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
+import variables from '../shared/variables/variables';
 import BodyText from './body-text';
 import HeaderText from './header-text';
-import variables from './variables/variables';
 
 interface IProps {
   headerLabel: string;

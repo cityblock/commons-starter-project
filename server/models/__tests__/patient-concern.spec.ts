@@ -221,6 +221,16 @@ describe('patient concern model', () => {
         },
         txn,
       );
+      const deletedTask = await Task.create(
+        {
+          title: 'Deleted Task',
+          patientId: patient.id,
+          patientGoalId: patientGoal.id,
+          createdById: user.id,
+        },
+        txn,
+      );
+      await Task.delete(deletedTask.id, txn);
 
       await Task.complete(completeTask.id, user.id, txn);
 

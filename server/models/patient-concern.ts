@@ -48,8 +48,8 @@ export default class PatientConcern extends BaseModel {
       concernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
-      startedAt: { type: 'string | null' },
-      completedAt: { type: 'string | null' },
+      startedAt: { type: ['string', 'null'] },
+      completedAt: { type: ['string', 'null'] },
       createdAt: { type: 'string' },
     },
     required: ['patientId', 'concernId'],
@@ -169,13 +169,12 @@ export default class PatientConcern extends BaseModel {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals', builder => {
-        builder.where('deletedAt', null);
+        builder.where({ deletedAt: null });
       })
       .modifyEager('patientGoals.tasks', builder => {
-        builder.where('task.completedAt', null);
+        builder.where({ 'task.completedAt': null, 'task.deletedAt': null });
       })
-      .where('deletedAt', null)
-      .andWhere('patientId', patientId)
+      .where({ patientId, deletedAt: null })
       .orderBy('order');
   }
 

@@ -1,10 +1,10 @@
 import { Image, StyleSheet, View } from '@react-pdf/core';
 import { format } from 'date-fns';
 import * as React from 'react';
+import variables from '../shared/variables/variables';
 import BodyText from './body-text';
 import copy from './copy/copy';
 import HeaderText from './header-text';
-import variables from './variables/variables';
 
 // TODO: Replace with our hosted path to image
 export const LOGO_PATH = `https://www.cityblock.com/static/images/cityblock_logo_blue.png`;

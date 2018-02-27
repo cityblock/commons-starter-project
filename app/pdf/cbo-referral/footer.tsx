@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from '@react-pdf/core';
 import * as React from 'react';
+import variables from '../shared/variables/variables';
 import copy from './copy/copy';
-import variables from './variables/variables';
 
 const styles = StyleSheet.create({
   footer: {

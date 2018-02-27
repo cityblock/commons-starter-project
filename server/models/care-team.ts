@@ -65,8 +65,7 @@ export default class CareTeam extends BaseModel {
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<User[]> {
     const careTeam = await CareTeam.query(txn)
-      .where('patientId', patientId)
-      .andWhere('deletedAt', null)
+      .where({ patientId, deletedAt: null })
       .eager('user')
       .orderBy('createdAt', 'asc');
     return careTeam.map((ct: CareTeam) => ct.user);

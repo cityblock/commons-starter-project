@@ -1,6 +1,6 @@
 import { StyleSheet, Text } from '@react-pdf/core';
 import * as React from 'react';
-import variables from './variables/variables';
+import variables from '../shared/variables/variables';
 
 interface IProps {
   label: string;

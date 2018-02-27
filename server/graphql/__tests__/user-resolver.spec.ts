@@ -571,14 +571,14 @@ describe('user tests', () => {
     });
   });
 
-  describe('resolveJWTForPDF', () => {
+  describe('resolveJwtForPdf', () => {
     it('generates a Jwt token for PDF viewing', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
         const mutation = `mutation {
-          JWTForPDFCreate {
+          JwtForPdfCreate {
             authToken
           }
         }`;
@@ -590,7 +590,7 @@ describe('user tests', () => {
           userId: user.id,
         });
 
-        expect(result.data!.JWTForPDFCreate.authToken).toBeTruthy();
+        expect(result.data!.JwtForPdfCreate.authToken).toBeTruthy();
       });
     });
   });

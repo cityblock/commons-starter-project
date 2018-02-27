@@ -12,7 +12,7 @@ import Task from '../../models/task';
 import {
   formatCBOReferralTaskPdfFileName,
   formatFilename,
-  formatPrintableMAPPdfFileName,
+  formatPrintableMapPdfFileName,
 } from './helpers';
 import { clearFonts, registerFonts } from './register-fonts';
 
@@ -87,7 +87,7 @@ export const renderCBOReferralFormPdf = async (req: express.Request, res: expres
   }
 };
 
-export const renderPrintableMAPPdf = async (req: express.Request, res: express.Response) => {
+export const renderPrintableMapPdf = async (req: express.Request, res: express.Response) => {
   const existingTxn = res.locals.existingTxn;
   const { patientId } = req.params;
   let result: any[] = [];
@@ -117,7 +117,7 @@ export const renderPrintableMAPPdf = async (req: express.Request, res: express.R
       req,
       res,
       <PrintableMAP carePlan={carePlan} careTeam={careTeam} patient={patient} />,
-      formatPrintableMAPPdfFileName(patient),
+      formatPrintableMapPdfFileName(patient),
     );
   } catch (err) {
     console.warn(err);

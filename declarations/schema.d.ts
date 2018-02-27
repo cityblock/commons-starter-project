@@ -2024,7 +2024,7 @@ declare module 'schema' {
     /**
     Jwt token to view a PDF
   */
-    JWTForPDFCreate: IJWTForPDF;
+    JwtForPdfCreate: IJwtForPdf;
     /**
     creates a patient data flag
   */
@@ -2847,7 +2847,7 @@ declare module 'schema' {
   /**
     JWT token for PDF viewing
   */
-  interface IJWTForPDF {
+  interface IJwtForPdf {
     authToken: string;
   }
 

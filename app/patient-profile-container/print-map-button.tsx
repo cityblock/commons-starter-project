@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as JwtForPdfCreate from '../../graphql/queries/jwt-for-pdf-create.graphql';
-import { JwtForPdfCreateMutation } from '../../graphql/types';
-import { getCBOReferralPdfRoute } from '../helpers/route-helpers';
-import Button from '../library/button/button';
-import * as styles from './css/task-cbo-referral-view.css';
+import * as JwtForPdfCreate from '../graphql/queries/jwt-for-pdf-create.graphql';
+import { JwtForPdfCreateMutation } from '../graphql/types';
+import { getPrintableMapPdfRoute } from '../shared/helpers/route-helpers';
+import Button from '../shared/library/button/button';
+import * as styles from './css/print-map-button.css';
 
 interface IProps {
-  taskId: string;
+  patientId: string;
 }
 
 interface IGraphqlProps {
@@ -16,13 +16,13 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-export class TaskCBOReferralView extends React.Component<allProps> {
+export class PrintMapButton extends React.Component<allProps> {
   handleClick = async (): Promise<void> => {
-    const { generateJwtForPdf, taskId } = this.props;
+    const { generateJwtForPdf, patientId } = this.props;
     const JwtForPdf = await generateJwtForPdf();
 
     const win = window.open(
-      getCBOReferralPdfRoute(taskId, JwtForPdf.data.JwtForPdfCreate.authToken),
+      getPrintableMapPdfRoute(patientId, JwtForPdf.data.JwtForPdfCreate.authToken),
       '_blank',
     );
 
@@ -35,10 +35,9 @@ export class TaskCBOReferralView extends React.Component<allProps> {
     return (
       <Button
         color="white"
-        className={styles.button}
         onClick={this.handleClick}
-        messageId="CBO.viewForm"
-        icon="pictureAsPDF"
+        messageId="patient.printMap"
+        className={styles.button}
       />
     );
   }
@@ -46,4 +45,4 @@ export class TaskCBOReferralView extends React.Component<allProps> {
 
 export default graphql<IGraphqlProps, IProps, allProps>(JwtForPdfCreate as any, {
   name: 'generateJwtForPdf',
-})(TaskCBOReferralView);
+})(PrintMapButton);

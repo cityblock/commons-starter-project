@@ -15,11 +15,11 @@ import {
   createMockUser,
   createPatient,
 } from '../../../spec-helpers';
-import { formatCBOReferralTaskPdfFileName, formatPrintableMAPPdfFileName } from '../helpers';
+import { formatCBOReferralTaskPdfFileName, formatPrintableMapPdfFileName } from '../helpers';
 import {
   renderCBOReferralFormPdf,
   renderPdf,
-  renderPrintableMAPPdf,
+  renderPrintableMapPdf,
   validateJWTForPdf,
   GENERATE_PDF_JWT_TYPE,
 } from '../render-pdf';
@@ -183,7 +183,7 @@ describe('handling PDF requests', () => {
     });
   });
 
-  describe('renderPrintableMAPPdf', () => {
+  describe('renderPrintableMapPdf', () => {
     it('returns a PDF for printable MAP', async () => {
       await transaction(Task.knex(), async txn => {
         const { patient } = await setup(txn);
@@ -193,8 +193,8 @@ describe('handling PDF requests', () => {
         const res = httpMocks.createResponse();
         res.locals = { existingTxn: txn };
 
-        const result = await renderPrintableMAPPdf(req, res);
-        const fileName = formatPrintableMAPPdfFileName(patient);
+        const result = await renderPrintableMapPdf(req, res);
+        const fileName = formatPrintableMapPdfFileName(patient);
 
         expect(result._headers).toMatchObject({
           'Content-type': 'application/pdf',
@@ -213,7 +213,7 @@ describe('handling PDF requests', () => {
         res.status = jest.fn();
         (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        await renderPrintableMAPPdf(req, res);
+        await renderPrintableMapPdf(req, res);
 
         expect(res.status).toBeCalledWith(404);
       });

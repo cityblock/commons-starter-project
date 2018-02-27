@@ -6,7 +6,7 @@ import {
 import {
   formatCBOReferralTaskPdfFileName,
   formatFilename,
-  formatPrintableMAPPdfFileName,
+  formatPrintableMapPdfFileName,
 } from '../helpers';
 
 describe('PDF Handler Helpers', () => {
@@ -43,9 +43,9 @@ describe('PDF Handler Helpers', () => {
     });
   });
 
-  describe('formatPrintableMAPPdfFileName', () => {
+  describe('formatPrintableMapPdfFileName', () => {
     it('formats file name for patient with no middle name', () => {
-      expect(formatPrintableMAPPdfFileName(patient as any)).toBe('Bob_Smith_MAP');
+      expect(formatPrintableMapPdfFileName(patient as any)).toBe('Bob_Smith_MAP');
     });
 
     it('formats file name for patient with middle name', () => {
@@ -55,7 +55,7 @@ describe('PDF Handler Helpers', () => {
         lastName: 'Tarth',
       };
 
-      expect(formatPrintableMAPPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_MAP');
+      expect(formatPrintableMapPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_MAP');
     });
   });
 });

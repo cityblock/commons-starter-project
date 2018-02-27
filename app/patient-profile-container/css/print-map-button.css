@@ -1,0 +1,5 @@
+@import '../../shared/css/sizes';
+
+.button {
+  margin-right: var(--extra-small-gutter);
+}

@@ -1,5 +1,5 @@
-mutation JWTForPDFCreate {
-  JWTForPDFCreate {
+mutation JwtForPdfCreate {
+  JwtForPdfCreate {
     authToken
   }
 }

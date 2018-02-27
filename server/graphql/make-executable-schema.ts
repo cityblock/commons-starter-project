@@ -277,7 +277,7 @@ import {
   userEditPermissions,
   userEditRole,
   userLogin,
-  JWTForPDFCreate,
+  JwtForPdfCreate,
 } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -492,7 +492,7 @@ const resolveFunctions = {
     CBODelete,
     CBOReferralCreate,
     CBOReferralEdit,
-    JWTForPDFCreate,
+    JwtForPdfCreate,
     patientDataFlagCreate,
     patientGlassBreakCreate,
     progressNoteGlassBreakCreate,

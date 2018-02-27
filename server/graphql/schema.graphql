@@ -1200,7 +1200,7 @@ type CBOReferral implements uniqueId {
 }
 
 # JWT token for PDF viewing
-type JWTForPDF {
+type JwtForPdf {
   authToken: String!
 }
 
@@ -2139,7 +2139,7 @@ type RootMutationType {
   # Edit a CBO Referral
   CBOReferralEdit(input: CBOReferralEditInput): CBOReferral
   # Jwt token to view a PDF
-  JWTForPDFCreate: JWTForPDF!
+  JwtForPdfCreate: JwtForPdf!
   # creates a patient data flag
   patientDataFlagCreate(input: PatientDataFlagCreateInput): PatientDataFlag
   # creates a patient glass break

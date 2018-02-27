@@ -45,6 +45,7 @@ export const SPANISH_TRANSLATION = {
     'patient.language': 'Idioma',
     'patient.location': 'Ubicación',
     'patient.joinedAt': 'Paciente desde',
+    'patient.printMap': 'Print MAP',
     'patient.tasks': 'Tareas',
     'patient.timeline': 'Timeline',
     'patient.threeSixty': 'Vista de 360°',

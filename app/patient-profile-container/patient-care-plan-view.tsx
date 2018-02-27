@@ -8,6 +8,7 @@ import { IState as IAppState } from '../store';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 import PatientMap from './patient-map';
+import PrintMapButton from './print-map-button';
 
 type SelectableTabs = 'active' | 'suggestions';
 
@@ -80,6 +81,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
           </div>
           {!isSuggestions && (
             <div>
+              <PrintMapButton patientId={patientId} />
               <Button messageId="concernCreate.addConcern" onClick={addConcern} />
             </div>
           )}

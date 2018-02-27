@@ -14,7 +14,7 @@ import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
 import { formatResponse, getGraphQLContext } from './graphql/shared/utils';
-import { renderCBOReferralFormPdf, renderPrintableMAPPdf } from './handlers/pdf/render-pdf';
+import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
@@ -154,7 +154,7 @@ export default async (
 
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPdf);
-  app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMAPPdf);
+  app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMapPdf);
 
   app.get('*', addHeadersMiddleware, renderApp);
 

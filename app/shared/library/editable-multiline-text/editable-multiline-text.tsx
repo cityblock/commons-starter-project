@@ -5,7 +5,7 @@ import * as styles from './css/editable-multiline-text.css';
 
 const FOCUS_TIMEOUT = 100; // ms
 const BASE_TEXT_HEIGHT = '2px';
-const SHORT_TITLE_CUTOFF = 42;
+const SHORT_TITLE_CUTOFF = 38;
 const SHORT_TITLE_HEIGHT = '28px';
 
 interface IProps {

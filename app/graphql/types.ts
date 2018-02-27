@@ -5128,9 +5128,9 @@ export interface goalSuggestionTemplateEditMutation {
   } | null,
 };
 
-export interface JWTForPDFCreateMutation {
+export interface JwtForPdfCreateMutation {
   // Jwt token to view a PDF
-  JWTForPDFCreate:  {
+  JwtForPdfCreate:  {
     authToken: string,
   },
 };

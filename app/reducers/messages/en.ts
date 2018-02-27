@@ -45,6 +45,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.language': 'Preferred language',
     'patient.location': 'Location',
     'patient.joinedAt': 'Patient since',
+    'patient.printMap': 'Print MAP',
     'patient.tasks': 'Tasks',
     'patient.timeline': 'Timeline',
     'patient.threeSixty': '360° View',

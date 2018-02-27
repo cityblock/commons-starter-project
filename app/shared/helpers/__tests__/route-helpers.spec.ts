@@ -1,4 +1,4 @@
-import { getActiveMapRoute, getCBOReferralPDFRoute, getMapTaskRoute } from '../route-helpers';
+import { getActiveMapRoute, getCBOReferralPdfRoute, getMapTaskRoute } from '../route-helpers';
 
 describe('Shared Route Helpers', () => {
   const patientId = 'danyTargaryen';
@@ -17,7 +17,7 @@ describe('Shared Route Helpers', () => {
   it('returns a route to CBO referral form', () => {
     const authToken = 'abc123';
 
-    expect(getCBOReferralPDFRoute(taskId, authToken)).toBe(
+    expect(getCBOReferralPdfRoute(taskId, authToken)).toBe(
       `/pdf/${taskId}/referral-form.pdf?token=${authToken}`,
     );
   });

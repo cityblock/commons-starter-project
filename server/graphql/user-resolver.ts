@@ -259,11 +259,11 @@ export async function userLogin(
   return { authToken, user: updatedUser };
 }
 
-export async function JWTForPDFCreate(
+export async function JwtForPdfCreate(
   root: {},
   input: {},
   { permissions, userId }: IContext,
-): Promise<IRootMutationType['JWTForPDFCreate']> {
+): Promise<IRootMutationType['JwtForPdfCreate']> {
   checkLoggedInWithPermissions(userId, permissions);
 
   const jwtData = {

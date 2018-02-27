@@ -6,6 +6,7 @@ import { patient } from '../../shared/util/test-data';
 import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
 import { PatientCarePlanView } from '../patient-care-plan-view';
 import PatientMap, { IProps } from '../patient-map';
+import PrintMapButton from '../print-map-button';
 
 describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
@@ -43,6 +44,10 @@ describe('Patient Care Plan View Component', () => {
     expect(wrapper.find(Button).props().messageId).toBe('concernCreate.addConcern');
   });
 
+  it('renders button to print MAP', () => {
+    expect(wrapper.find(PrintMapButton).props().patientId).toBe(patientId);
+  });
+
   it('renders patient suggestions when on suggestions tab', () => {
     const match2 = { params: { patientId: patient.id, subTab: 'suggestions' as any } };
     const wrapper2 = shallow(
@@ -57,5 +62,8 @@ describe('Patient Care Plan View Component', () => {
 
     expect(wrapper2.find(PatientCarePlanSuggestions).length).toBe(1);
     expect(wrapper2.find(PatientMap).length).toBe(0);
+
+    expect(wrapper2.find(Button).length).toBe(0);
+    expect(wrapper2.find(PrintMapButton).length).toBe(0);
   });
 });

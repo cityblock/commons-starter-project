@@ -13,7 +13,7 @@ export const formatCBOReferralTaskPdfFileName = (task: Task): string => {
   return `${firstName}_${lastName}_${CBOName}`;
 };
 
-export const formatPrintableMAPPdfFileName = (patient: Patient): string => {
+export const formatPrintableMapPdfFileName = (patient: Patient): string => {
   const { firstName, middleName, lastName } = patient;
   const formattedMiddle = middleName ? `${middleName}_` : '';
 

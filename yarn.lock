@@ -654,9 +654,9 @@ apollo-client@2.2.5:
   optionalDependencies:
     "@types/async" "2.0.47"
 
-apollo-codegen@0.18.7:
-  version "0.18.7"
-  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.18.7.tgz#851ed3a438332d370a638eba4372117d098b5197"
+apollo-codegen@0.18.8:
+  version "0.18.8"
+  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.18.8.tgz#26eee31a721a424d5c8aca6a5e4e3a14d50597ac"
   dependencies:
     "@babel/generator" "7.0.0-beta.38"
     "@babel/types" "7.0.0-beta.38"

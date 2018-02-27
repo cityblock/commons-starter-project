@@ -17,7 +17,7 @@ export interface IProps {
   riskAreaGroups: IRiskAreaGroupRadar[];
 }
 
-class ThreeSixtyRadar extends React.Component<IProps, {}> {
+export class ThreeSixtyRadar extends React.Component<IProps, {}> {
   getRadarData() {
     const { riskAreaGroups } = this.props;
     const labels: string[] = [];

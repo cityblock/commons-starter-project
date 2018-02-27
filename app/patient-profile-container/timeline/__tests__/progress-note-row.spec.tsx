@@ -9,7 +9,7 @@ it('renders the progress note row', () => {
       progressNote={progressNote}
       patientId={patient.id}
       progressNoteId={progressNote.id}
-      glassBreakId='lady'
+      glassBreakId="lady"
     />,
   );
   expect(component.find('.title').length).toBe(1);

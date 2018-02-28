@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DomainSummaries from '../domain-summaries';
+import DomainSummaries, { LoadableThreeSixtyRadar } from '../domain-summaries';
 import DomainSummary from '../domain-summary';
-import { IProps, ThreeSixtyRadar } from '../three-sixty-radar/three-sixty-radar';
+import { IProps } from '../three-sixty-radar/three-sixty-radar';
 
 describe('Patient 360 Domain Summaries', () => {
   const patientId = 'sansaStark';
@@ -154,7 +154,7 @@ describe('Patient 360 Domain Summaries', () => {
   it('renders three sixty radar chart', () => {
     wrapper.setState({ ...riskAreaGroupScores });
 
-    const radar = wrapper.find<IProps>(ThreeSixtyRadar as any);
+    const radar = wrapper.find<IProps>(LoadableThreeSixtyRadar);
     expect(radar.length).toBe(1);
     expect(radar.props().riskAreaGroups).toEqual([
       {

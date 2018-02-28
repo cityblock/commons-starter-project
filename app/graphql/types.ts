@@ -43,6 +43,14 @@ export enum PatientAnswerEventTypes {
 }
 
 
+export enum AnswerTypeOptions {
+  dropdown = "dropdown",
+  freetext = "freetext",
+  multiselect = "multiselect",
+  radio = "radio",
+}
+
+
 export enum CoreIdentityOptions {
   dateOfBirth = "dateOfBirth",
   firstName = "firstName",
@@ -77,14 +85,6 @@ export enum PhoneTypeOptions {
   mobile = "mobile",
   other = "other",
   work = "work",
-}
-
-
-export enum AnswerTypeOptions {
-  dropdown = "dropdown",
-  freetext = "freetext",
-  multiselect = "multiselect",
-  radio = "radio",
 }
 
 
@@ -1905,7 +1905,8 @@ export interface getPatientAnswersQuery {
     question:  {
       id: string,
       title: string,
-    } | null,
+      answerType: AnswerTypeOptions,
+    },
     patientScreeningToolSubmissionId: string | null,
   } >,
 };
@@ -3259,7 +3260,8 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         question:  {
           id: string,
           title: string,
-        } | null,
+          answerType: AnswerTypeOptions,
+        },
         patientScreeningToolSubmissionId: string | null,
       },
       previousPatientAnswerId: string | null,
@@ -3329,7 +3331,8 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         question:  {
           id: string,
           title: string,
-        } | null,
+          answerType: AnswerTypeOptions,
+        },
         patientScreeningToolSubmissionId: string | null,
       } | null,
       eventType: PatientAnswerEventTypes,
@@ -5316,7 +5319,8 @@ export interface patientAnswersCreateMutation {
     question:  {
       id: string,
       title: string,
-    } | null,
+      answerType: AnswerTypeOptions,
+    },
     patientScreeningToolSubmissionId: string | null,
   } | null > | null,
 };
@@ -9440,7 +9444,8 @@ export interface FullPatientAnswerEventFragment {
     question:  {
       id: string,
       title: string,
-    } | null,
+      answerType: AnswerTypeOptions,
+    },
     patientScreeningToolSubmissionId: string | null,
   },
   previousPatientAnswerId: string | null,
@@ -9510,7 +9515,8 @@ export interface FullPatientAnswerEventFragment {
     question:  {
       id: string,
       title: string,
-    } | null,
+      answerType: AnswerTypeOptions,
+    },
     patientScreeningToolSubmissionId: string | null,
   } | null,
   eventType: PatientAnswerEventTypes,
@@ -9586,7 +9592,8 @@ export interface FullPatientAnswerFragment {
   question:  {
     id: string,
     title: string,
-  } | null,
+    answerType: AnswerTypeOptions,
+  },
   patientScreeningToolSubmissionId: string | null,
 };
 
@@ -10262,7 +10269,8 @@ export interface FullProgressNoteActivityFragment {
       question:  {
         id: string,
         title: string,
-      } | null,
+        answerType: AnswerTypeOptions,
+      },
       patientScreeningToolSubmissionId: string | null,
     },
     previousPatientAnswerId: string | null,
@@ -10332,7 +10340,8 @@ export interface FullProgressNoteActivityFragment {
       question:  {
         id: string,
         title: string,
-      } | null,
+        answerType: AnswerTypeOptions,
+      },
       patientScreeningToolSubmissionId: string | null,
     } | null,
     eventType: PatientAnswerEventTypes,

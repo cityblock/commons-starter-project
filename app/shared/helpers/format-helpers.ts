@@ -1,5 +1,6 @@
 import { differenceInYears, format } from 'date-fns';
 import {
+  FullPatientAnswerFragment,
   ShortPatientFragment,
   ShortPatientScreeningToolSubmission360Fragment,
 } from '../../graphql/types';
@@ -98,4 +99,12 @@ export const formatScreeningToolScore = (
   return submission.screeningToolScoreRange
     ? `${submission.score} - ${submission.screeningToolScoreRange.description}`
     : `${submission.score}`;
+};
+
+export const formatPatientAnswer = (patientAnswer: FullPatientAnswerFragment): string => {
+  if (patientAnswer.question.answerType === 'freetext') {
+    return patientAnswer.answerValue;
+  } else {
+    return patientAnswer.answer.displayValue;
+  }
 };

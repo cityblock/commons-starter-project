@@ -542,6 +542,25 @@ export const patientAnswer = {
   question: {
     id: question.id,
     title: question.title,
+    answerType: 'radio' as any,
+  },
+  answer,
+};
+
+export const patientAnswerFreetext = {
+  id: 'patient-answer',
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+  answerId: answer.id,
+  answerValue: 'a custom written in answer!',
+  patientId: patient.id,
+  applicable: true,
+  patientScreeningToolSubmissionId: null,
+  question: {
+    id: question.id,
+    title: question.title,
+    answerType: 'freetext' as any,
   },
   answer,
 };

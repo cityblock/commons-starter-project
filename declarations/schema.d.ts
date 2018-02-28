@@ -1207,7 +1207,7 @@ declare module 'schema' {
     patientId: string;
     applicable: boolean | null;
     questionId: string | null;
-    question: IQuestion | null;
+    question: IQuestion;
     patientScreeningToolSubmissionId: string | null;
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
     riskAreaAssessmentSubmissionId: string | null;

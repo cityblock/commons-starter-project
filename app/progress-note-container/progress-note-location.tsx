@@ -11,13 +11,18 @@ interface IProps {
   onLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function getLocations(clinics: getClinicsQuery['clinics']) {
-  const locations = ["Patient's Home"];
-  // Add clinics
+function getLocations(clinics: getClinicsQuery['clinics']): string[] {
   const clinicItems = clinics && clinics.edges ? clinics.edges : [];
-  clinicItems.forEach(item => locations.push(item.node.name));
-  // Add other
-  locations.push('Other');
+  const locations = clinicItems.map(item => item.node.name);
+
+  locations.push(
+    'Member’s home',
+    'Community',
+    'Outside appointment',
+    'CBO or social service agency',
+    'Other',
+  );
+
   return locations;
 }
 

@@ -15,6 +15,7 @@ fragment FullPatientAnswer on PatientAnswer {
   question {
     id
     title
+    answerType
   }
   patientScreeningToolSubmissionId
 }

@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { FullPatientAnswerEventFragment } from '../../graphql/types';
+import { formatPatientAnswer } from '../../shared/helpers/format-helpers';
 import * as styles from './css/progress-note-activity.css';
 
 interface IProps {
@@ -12,15 +13,7 @@ interface IProps {
 class ProgressNoteActivityPatientAnswer extends React.Component<IProps> {
   getQuestionTitle = () => {
     const { patientAnswerEvent } = this.props;
-
-    // TODO: Figure out if bad data is requiring this defensiveness or it's something else
-    const question = patientAnswerEvent.patientAnswer.question;
-
-    if (question) {
-      return question.title;
-    } else {
-      return 'Unknown question text';
-    }
+    return patientAnswerEvent.patientAnswer.question.title;
   };
 
   renderPreviousAnswer = () => {
@@ -36,7 +29,7 @@ class ProgressNoteActivityPatientAnswer extends React.Component<IProps> {
       />
     ) : null;
     const answerText = previousPatientAnswer ? (
-      <div className={styles.previousAnswerText}>{previousPatientAnswer.answerValue}</div>
+      <div className={styles.previousAnswerText}>{formatPatientAnswer(previousPatientAnswer)}</div>
     ) : (
       <div className={styles.noPreviousAnswer}>
         <div className={styles.noPreviousAnswerLabel}>N/A</div>
@@ -59,14 +52,13 @@ class ProgressNoteActivityPatientAnswer extends React.Component<IProps> {
     const { patientAnswerEvent } = this.props;
     const { patientAnswer } = patientAnswerEvent;
     const labelStyles = classNames(styles.answerLabel, styles.current);
-
     return (
       <div className={styles.answer}>
         <div className={labelStyles}>
           <div className={styles.answerLabelText}>Updated answer:</div>
         </div>
         <div className={styles.answerBody}>
-          <div className={styles.answerText}>{patientAnswer.answerValue}</div>
+          <div className={styles.answerText}>{formatPatientAnswer(patientAnswer)}</div>
         </div>
       </div>
     );

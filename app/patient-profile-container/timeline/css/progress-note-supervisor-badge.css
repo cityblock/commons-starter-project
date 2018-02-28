@@ -20,3 +20,8 @@ svg.icon {
   fill: var(--green-color);
   vertical-align: middle;
 }
+
+.supervisorName {
+  color: var(--gray-font-color);
+  display: inline-block;
+}

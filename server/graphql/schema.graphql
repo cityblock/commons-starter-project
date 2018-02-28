@@ -613,7 +613,7 @@ type PatientAnswer implements uniqueId {
   patientId: ID!
   applicable: Boolean
   questionId: String
-  question: Question
+  question: Question!
   patientScreeningToolSubmissionId: ID
   patientScreeningToolSubmission: PatientScreeningToolSubmission
   riskAreaAssessmentSubmissionId: ID

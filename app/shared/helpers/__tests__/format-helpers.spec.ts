@@ -1,4 +1,8 @@
-import { shortPatientScreeningToolSubmission } from '../../util/test-data';
+import {
+  patientAnswer,
+  patientAnswerFreetext,
+  shortPatientScreeningToolSubmission,
+} from '../../util/test-data';
 import {
   formatAddress,
   formatAge,
@@ -9,6 +13,7 @@ import {
   formatFullName,
   formatGender,
   formatInputDate,
+  formatPatientAnswer,
   formatPatientName,
   formatScreeningToolScore,
   isDueSoon,
@@ -196,6 +201,15 @@ describe('Shared Component Helpers', () => {
     it('returns just score if no score range', () => {
       const score = 11;
       expect(formatScreeningToolScore({ score } as any)).toBe(`${score}`);
+    });
+  });
+
+  describe('formatPatientAnswer', () => {
+    it('returns the display value for non-freetext answers', () => {
+      expect(formatPatientAnswer(patientAnswer)).toEqual('answer value');
+    });
+    it('returns the answerValue freetext answers', () => {
+      expect(formatPatientAnswer(patientAnswerFreetext)).toEqual('a custom written in answer!');
     });
   });
 });

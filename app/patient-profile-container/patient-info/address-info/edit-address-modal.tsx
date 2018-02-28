@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as editAddressMutationGraphql from '../../../graphql/queries/address-edit-mutation.graphql';
-import { addressEditMutation, addressEditMutationVariables } from '../../../graphql/types';
+import * as editPatientInfoMutationGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
+import {
+  addressEditMutation,
+  addressEditMutationVariables,
+  patientInfoEditMutation,
+  patientInfoEditMutationVariables,
+} from '../../../graphql/types';
 import AddressModal, { IAddress, ISavedAddress } from '../../../shared/address-modal/address-modal';
 
 interface IProps {
   onSaved: (address: ISavedAddress) => void;
   patientId: string;
+  patientInfoId: string;
   address?: ISavedAddress | null;
   isVisible: boolean;
+  isPrimary?: boolean;
   closePopup: () => void;
 }
 
@@ -16,17 +24,36 @@ interface IGraphqlProps {
   editAddressMutation: (
     options: { variables: addressEditMutationVariables },
   ) => { data: addressEditMutation };
+  editPatientInfoMutation: (
+    options: { variables: patientInfoEditMutationVariables },
+  ) => { data: patientInfoEditMutation };
 }
 
 type allProps = IProps & IGraphqlProps;
 
 export class EditAddressModal extends React.Component<allProps> {
-  editAddress = async (address: IAddress) => {
+  editAddress = async (address: IAddress, updatedIsPrimary: boolean) => {
     if (!address.id) {
       return;
     }
 
-    const { editAddressMutation, patientId } = this.props;
+    const {
+      editAddressMutation,
+      editPatientInfoMutation,
+      patientId,
+      patientInfoId,
+      isPrimary,
+    } = this.props;
+
+    if (updatedIsPrimary !== isPrimary) {
+      await editPatientInfoMutation({
+        variables: {
+          patientInfoId,
+          primaryAddressId: address.id,
+        },
+      });
+    }
+
     return editAddressMutation({
       variables: {
         patientId,
@@ -62,6 +89,11 @@ export class EditAddressModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(editAddressMutationGraphql as any, {
-  name: 'editAddressMutation',
-})(EditAddressModal);
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(editAddressMutationGraphql as any, {
+    name: 'editAddressMutation',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+    name: 'editPatientInfoMutation',
+  }),
+)(EditAddressModal);

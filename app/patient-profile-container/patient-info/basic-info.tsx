@@ -13,8 +13,9 @@ import AddressInformation from './address-info/address-info';
 import * as styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
-export interface IBasicInformation {
+export interface IBasicInfo {
   patientId: string;
+  patientInfoId: string;
   gender: getPatientQuery['patient']['patientInfo']['gender'];
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
@@ -22,12 +23,12 @@ export interface IBasicInformation {
 }
 
 interface IProps {
-  patientInformation: IBasicInformation;
+  patientInformation: IBasicInfo;
   onChange: (fields: IEditableFieldState) => void;
   className?: string;
 }
 
-export default class BasicInformation extends React.Component<IProps> {
+export default class BasicInfo extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props);
     this.state = { isModalVisible: false };
@@ -105,7 +106,7 @@ export default class BasicInformation extends React.Component<IProps> {
 
   render() {
     const { patientInformation, onChange } = this.props;
-    const { primaryAddress, addresses, patientId } = patientInformation;
+    const { primaryAddress, addresses, patientId, patientInfoId } = patientInformation;
 
     return (
       <div className={styles.section}>
@@ -115,6 +116,7 @@ export default class BasicInformation extends React.Component<IProps> {
         {this.renderPatientInfo()}
         <AddressInformation
           patientId={patientId}
+          patientInfoId={patientInfoId}
           primaryAddress={primaryAddress}
           addresses={addresses}
           onChange={onChange}

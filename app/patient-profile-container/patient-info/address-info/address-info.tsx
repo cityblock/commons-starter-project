@@ -14,6 +14,7 @@ import EditAddressModal from './edit-address-modal';
 interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
+  patientInfoId: string;
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
   className?: string;
@@ -106,12 +107,17 @@ export default class AddressInfo extends React.Component<IProps, IState> {
       <FlaggableDisplayField labelMessageId="address.description" value={address.description} />
     ) : null;
 
+    const isStarred = !!this.props.primaryAddress && this.props.primaryAddress.id === address.id;
+    const titleMessageId = isStarred ? 'address.primaryAddress' : 'address.additionalAddress';
+
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(address)}
         onDeleteClick={() => this.handleAddressDelete(address.id)}
         key={`card-${address.id}`}
         className={styles.fieldMargin}
+        isStarred={isStarred}
+        titleMessageId={titleMessageId}
       >
         <div className={styles.fieldRow}>
           <FlaggableDisplayField labelMessageId="address.street1" value={address.street1 || null} />
@@ -135,29 +141,17 @@ export default class AddressInfo extends React.Component<IProps, IState> {
       </div>
     );
 
-    return (
-      <div>
-        <FormattedMessage id="address.primaryAddress">
-          {(message: string) => <h3 className={styles.addressTitle}>{message}</h3>}
-        </FormattedMessage>
-        {addressComponent}
-      </div>
-    );
+    return addressComponent;
   }
 
   render() {
-    const { addresses, patientId, primaryAddress } = this.props;
+    const { addresses, patientId, patientInfoId, primaryAddress } = this.props;
     const { isEditModalVisible, isCreateModalVisible, isPrimary, currentAddress } = this.state;
 
     const addressCards =
-      addresses && addresses.length ? (
-        <div>
-          <FormattedMessage id="address.additionalAddresses">
-            {(message: string) => <h3 className={styles.addressTitle}>{message}</h3>}
-          </FormattedMessage>
-          {values(addresses).map(address => this.renderAddressDisplayCard(address))}
-        </div>
-      ) : null;
+      addresses && addresses.length
+        ? values(addresses).map(address => this.renderAddressDisplayCard(address))
+        : null;
 
     const addAddressButon = primaryAddress ? (
       <Button
@@ -181,11 +175,16 @@ export default class AddressInfo extends React.Component<IProps, IState> {
         />
         <EditAddressModal
           isVisible={isEditModalVisible}
+          isPrimary={isPrimary}
           closePopup={this.handleCloseModal}
           patientId={patientId}
+          patientInfoId={patientInfoId}
           onSaved={this.handleEditSuccess}
           address={currentAddress}
         />
+        <FormattedMessage id="address.addresses">
+          {(message: string) => <h3 className={styles.addressTitle}>{message}</h3>}
+        </FormattedMessage>
         {this.renderPrimaryAddress()}
         {addressCards}
         {addAddressButon}

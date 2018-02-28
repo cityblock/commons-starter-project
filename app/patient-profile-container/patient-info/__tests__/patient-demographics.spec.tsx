@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { basicInfo, contactInfo, coreIdentity } from '../../../shared/util/test-data';
-import BasicInformation from '../basic-information';
+import BasicInfo from '../basic-info';
 import ContactInfo from '../contact-info';
 import CoreIdentity from '../core-identity';
 import PatientDemographics from '../patient-demographics';
@@ -21,9 +21,9 @@ describe('Render Patient Demographics Component', () => {
   );
 
   it('renders basic info', () => {
-    expect(wrapper.find(BasicInformation)).toHaveLength(1);
-    expect(wrapper.find(BasicInformation).props().patientInformation).toBe(basicInfo);
-    expect(wrapper.find(BasicInformation).props().onChange).toBe(onChange);
+    expect(wrapper.find(BasicInfo)).toHaveLength(1);
+    expect(wrapper.find(BasicInfo).props().patientInformation).toBe(basicInfo);
+    expect(wrapper.find(BasicInfo).props().onChange).toBe(onChange);
   });
 
   it('renders core identity', () => {

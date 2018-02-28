@@ -153,6 +153,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       },
       basic: {
         patientId: id,
+        patientInfoId: patientInfo.id,
         gender: gender || patientInfo.gender,
         language: language || patientInfo.language,
         primaryAddress: primaryAddress || patientInfo.primaryAddress,

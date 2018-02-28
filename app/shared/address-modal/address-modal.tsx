@@ -1,11 +1,7 @@
 import { isNil } from 'lodash-es';
 import * as React from 'react';
-import ModalButtons from '../library/modal-buttons/modal-buttons';
-import ModalError from '../library/modal-error/modal-error';
-import ModalHeader from '../library/modal-header/modal-header';
-import { Popup } from '../popup/popup';
+import Modal from '../library/modal/modal';
 import AddressForm from './address-form';
-import * as styles from './css/address-modal.css';
 
 export interface IAddress {
   street1?: string | null;
@@ -21,10 +17,11 @@ export interface ISavedAddress extends IAddress {
 }
 
 interface IProps {
-  saveAddress: (address: IAddress) => Promise<any>;
+  saveAddress: (address: IAddress, isPrimary: boolean) => Promise<any>;
   closePopup: () => void;
   onSaved: (response: any) => void;
   isVisible: boolean;
+  isPrimary?: boolean;
   address?: IAddress | null;
   titleMessageId?: string;
 }
@@ -36,6 +33,7 @@ interface IState {
   city?: string | null;
   description?: string | null;
   saveError?: string | null;
+  updatedIsPrimary?: boolean | null;
 }
 
 class AddressModal extends React.Component<IProps, IState> {
@@ -52,6 +50,7 @@ class AddressModal extends React.Component<IProps, IState> {
       city: null,
       description: null,
       saveError: null,
+      updatedIsPrimary: null,
     });
   }
 
@@ -60,10 +59,16 @@ class AddressModal extends React.Component<IProps, IState> {
     this.setState({ [name]: value });
   };
 
+  handlePrimaryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    const updatedIsPrimary = value === 'true';
+    this.setState({ updatedIsPrimary });
+  };
+
   handleSubmit = async () => {
     const { address, saveAddress, onSaved } = this.props;
     const originalAddress = address || {};
-    const { street1, state, zip, city, description } = this.state;
+    const { street1, state, zip, city, description, updatedIsPrimary } = this.state;
 
     const updatedAddress = {
       id: originalAddress.id,
@@ -75,7 +80,7 @@ class AddressModal extends React.Component<IProps, IState> {
     };
 
     try {
-      const response = await saveAddress(updatedAddress);
+      const response = await saveAddress(updatedAddress, !!updatedIsPrimary);
       onSaved(response);
       this.handleClose();
     } catch (err) {
@@ -90,38 +95,40 @@ class AddressModal extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { isVisible, titleMessageId } = this.props;
+    const { isVisible, isPrimary, titleMessageId } = this.props;
     const address = this.props.address || {};
-    const { saveError, street1, state, zip, city, description } = this.state;
+    const { saveError, updatedIsPrimary, street1, state, zip, city, description } = this.state;
 
-    const errorComponent = saveError ? <ModalError errorMessageId="address.saveError" /> : null;
     const updatedStreet1 = isNil(street1) ? address.street1 : street1;
     const updatedState = isNil(state) ? address.state : state;
     const updatedCity = isNil(city) ? address.city : city;
     const updatedZip = isNil(zip) ? address.zip : zip;
     const updatedDescription = isNil(description) ? address.description : description;
+    const currentIsPrimary = isNil(updatedIsPrimary) ? isPrimary : updatedIsPrimary;
+    const onPrimaryChange = address.id && !isPrimary ? this.handlePrimaryChange : undefined;
 
     return (
-      <Popup visible={isVisible} closePopup={this.handleClose} style="no-padding">
-        <ModalHeader titleMessageId={titleMessageId} closePopup={this.handleClose} />
-        {errorComponent}
-        <div className={styles.modalBody}>
-          <AddressForm
-            street1={updatedStreet1}
-            state={updatedState}
-            city={updatedCity}
-            zip={updatedZip}
-            description={updatedDescription}
-            onChange={this.handleChange}
-          />
-          <ModalButtons
-            cancelMessageId="address.cancel"
-            submitMessageId="address.save"
-            cancel={this.handleClose}
-            submit={this.handleSubmit}
-          />
-        </div>
-      </Popup>
+      <Modal
+        isVisible={isVisible}
+        titleMessageId={titleMessageId}
+        cancelMessageId="address.cancel"
+        submitMessageId="address.save"
+        errorMessageId="address.saveError"
+        error={saveError}
+        onClose={this.handleClose}
+        onSubmit={this.handleSubmit}
+      >
+        <AddressForm
+          street1={updatedStreet1}
+          state={updatedState}
+          city={updatedCity}
+          zip={updatedZip}
+          description={updatedDescription}
+          onChange={this.handleChange}
+          onPrimaryChange={onPrimaryChange}
+          isPrimary={currentIsPrimary}
+        />
+      </Modal>
     );
   }
 }

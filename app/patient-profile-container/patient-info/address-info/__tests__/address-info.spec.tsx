@@ -14,7 +14,12 @@ describe('Render Address Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
 
   const wrapper = shallow(
-    <AddressInfo onChange={onChange} patientId={patient.id} className="something" />,
+    <AddressInfo
+      onChange={onChange}
+      patientId={patient.id}
+      patientInfoId={patient.id}
+      className="something"
+    />,
   );
 
   it('renders address info without any addresses', () => {
@@ -176,11 +181,6 @@ describe('Render Address Info Component', () => {
     const createModal = wrapper.find(CreateAddressModal).props();
     expect(createModal.isVisible).toBeFalsy();
     expect(createModal.patientId).toBe(patient.id);
-
-    const editModal = wrapper.find(EditAddressModal).props();
-    expect(editModal.isVisible).toBeFalsy();
-    expect(editModal.patientId).toBe(patient.id);
-    expect(editModal.address).toBe(undefined);
   });
 
   it('shows the create modal', () => {
@@ -193,12 +193,5 @@ describe('Render Address Info Component', () => {
     wrapper.setState({ isCreateModalVisible: true, isPrimary: true });
     expect(wrapper.find(CreateAddressModal).length).toBe(1);
     expect(wrapper.find(CreateAddressModal).props().isPrimary).toBeTruthy();
-  });
-
-  it('shows the edit modal', () => {
-    wrapper.setState({ isEditModalVisible: true, currentAddress: address2 });
-    expect(wrapper.find(EditAddressModal).length).toBe(1);
-    expect(wrapper.find(EditAddressModal).props().isVisible).toBeTruthy();
-    expect(wrapper.find(EditAddressModal).props().address).toMatchObject(address2);
   });
 });

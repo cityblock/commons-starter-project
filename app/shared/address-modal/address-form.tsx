@@ -1,7 +1,9 @@
 import * as React from 'react';
 import FormLabel from '../../shared/library/form-label/form-label';
+import * as styles from '../../shared/library/form/css/form.css';
+import RadioGroup from '../../shared/library/radio-group/radio-group';
+import RadioInput from '../../shared/library/radio-input/radio-input';
 import TextInput from '../../shared/library/text-input/text-input';
-import * as styles from './css/address-modal.css';
 
 interface IProps {
   street1?: string | null;
@@ -9,11 +11,35 @@ interface IProps {
   zip?: string | null;
   city?: string | null;
   description?: string | null;
+  isPrimary?: boolean;
   onChange: (e?: any) => void;
+  onPrimaryChange?: (e?: any) => void;
 }
 
 const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onChange, street1, state, zip, city, description } = props;
+  const { onChange, onPrimaryChange, isPrimary, street1, state, zip, city, description } = props;
+
+  const isPrimaryComponent = onPrimaryChange ? (
+    <div className={styles.field}>
+      <FormLabel messageId="address.isPrimary" />
+      <RadioGroup>
+        <RadioInput
+          name="isPrimary"
+          value="false"
+          checked={!isPrimary}
+          label="No"
+          onChange={onPrimaryChange}
+        />
+        <RadioInput
+          name="isPrimary"
+          value="true"
+          checked={!!isPrimary}
+          label="Yes"
+          onChange={onPrimaryChange}
+        />
+      </RadioGroup>
+    </div>
+  ) : null;
 
   return (
     <div>
@@ -45,6 +71,8 @@ const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
         <FormLabel messageId="address.description" />
         <TextInput name="description" value={description || ''} onChange={onChange} />
       </div>
+
+      {isPrimaryComponent}
     </div>
   );
 };

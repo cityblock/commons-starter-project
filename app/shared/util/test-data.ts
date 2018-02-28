@@ -881,6 +881,7 @@ export const taskWithComment = {
 
 export const basicInfo = {
   patientId: patient.id,
+  patientInfoId: patient.patientInfo.id,
   gender: patient.patientInfo.gender,
   language: patient.patientInfo.language,
   primaryAddress: patient.patientInfo.primaryAddress,

@@ -5,12 +5,12 @@ import Select from '../../../shared/library/select/select';
 import TextInput from '../../../shared/library/text-input/text-input';
 import { basicInfo } from '../../../shared/util/test-data';
 import AddressInfo from '../address-info/address-info';
-import BasicInformation from '../basic-information';
+import BasicInfo from '../basic-info';
 
 describe('Render Basic Information Component', () => {
   const onChange = () => true;
   const wrapper = shallow(
-    <BasicInformation patientInformation={basicInfo} onChange={onChange} className="infoStyles" />,
+    <BasicInfo patientInformation={basicInfo} onChange={onChange} className="infoStyles" />,
   );
 
   it('renders address info', () => {

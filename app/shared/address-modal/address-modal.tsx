@@ -8,7 +8,7 @@ import AddressForm from './address-form';
 import * as styles from './css/address-modal.css';
 
 export interface IAddress {
-  street?: string | null;
+  street1?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
@@ -30,7 +30,7 @@ interface IProps {
 }
 
 interface IState {
-  street?: string | null;
+  street1?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
@@ -46,7 +46,7 @@ class AddressModal extends React.Component<IProps, IState> {
 
   clearState() {
     this.setState({
-      street: null,
+      street1: null,
       state: null,
       zip: null,
       city: null,
@@ -63,11 +63,11 @@ class AddressModal extends React.Component<IProps, IState> {
   handleSubmit = async () => {
     const { address, saveAddress, onSaved } = this.props;
     const originalAddress = address || {};
-    const { street, state, zip, city, description } = this.state;
+    const { street1, state, zip, city, description } = this.state;
 
     const updatedAddress = {
       id: originalAddress.id,
-      street: street || originalAddress.street,
+      street1: street1 || originalAddress.street1,
       state: state || originalAddress.state,
       zip: zip || originalAddress.zip,
       city: city || originalAddress.city,
@@ -92,10 +92,10 @@ class AddressModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, titleMessageId } = this.props;
     const address = this.props.address || {};
-    const { saveError, street, state, zip, city, description } = this.state;
+    const { saveError, street1, state, zip, city, description } = this.state;
 
     const errorComponent = saveError ? <ModalError errorMessageId="address.saveError" /> : null;
-    const updatedStreet = isNil(street) ? address.street : street;
+    const updatedStreet1 = isNil(street1) ? address.street1 : street1;
     const updatedState = isNil(state) ? address.state : state;
     const updatedCity = isNil(city) ? address.city : city;
     const updatedZip = isNil(zip) ? address.zip : zip;
@@ -107,7 +107,7 @@ class AddressModal extends React.Component<IProps, IState> {
         {errorComponent}
         <div className={styles.modalBody}>
           <AddressForm
-            street={updatedStreet}
+            street1={updatedStreet1}
             state={updatedState}
             city={updatedCity}
             zip={updatedZip}

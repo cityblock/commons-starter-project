@@ -17,7 +17,7 @@ describe('Render Address Form', () => {
         .find(FormLabel)
         .at(0)
         .props().messageId,
-    ).toBe('address.street');
+    ).toBe('address.street1');
     expect(
       wrapper
         .find(TextInput)
@@ -122,7 +122,7 @@ describe('Render Address Form', () => {
 
   it('renders filled out address form', () => {
     wrapper.setProps({
-      street: 'A',
+      street1: 'A',
       city: 'B',
       state: 'C',
       zip: '1',

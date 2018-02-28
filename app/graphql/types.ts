@@ -51,6 +51,27 @@ export enum CoreIdentityOptions {
 }
 
 
+export enum Gender {
+  female = "female",
+  male = "male",
+  nonbinary = "nonbinary",
+  transgender = "transgender",
+}
+
+
+export enum BirthSexOptions {
+  female = "female",
+  male = "male",
+}
+
+
+export enum ContactMethodOptions {
+  email = "email",
+  phone = "phone",
+  text = "text",
+}
+
+
 export enum PhoneTypeOptions {
   home = "home",
   mobile = "mobile",
@@ -191,14 +212,6 @@ export interface PatientFilterOptions {
   careWorkerId?: string | null,
 };
 
-export enum Gender {
-  female = "female",
-  male = "male",
-  nonbinary = "nonbinary",
-  transgender = "transgender",
-}
-
-
 export enum TaskOrderOptions {
   createdAtAsc = "createdAtAsc",
   createdAtDesc = "createdAtDesc",
@@ -247,7 +260,8 @@ export interface PatientConcernBulkEditFields {
 export interface addressCreateForPatientMutationVariables {
   patientId: string,
   zip: string,
-  street?: string | null,
+  street1?: string | null,
+  street2?: string | null,
   city?: string | null,
   state?: string | null,
   description?: string | null,
@@ -260,7 +274,8 @@ export interface addressCreateForPatientMutation {
     id: string,
     city: string | null,
     state: string | null,
-    street: string | null,
+    street1: string | null,
+    street2: string | null,
     zip: string | null,
     description: string | null,
   } | null,
@@ -270,7 +285,8 @@ export interface addressEditMutationVariables {
   addressId: string,
   patientId: string,
   zip?: string | null,
-  street?: string | null,
+  street1?: string | null,
+  street2?: string | null,
   city?: string | null,
   state?: string | null,
   description?: string | null,
@@ -282,7 +298,8 @@ export interface addressEditMutation {
     id: string,
     city: string | null,
     state: string | null,
-    street: string | null,
+    street1: string | null,
+    street2: string | null,
     zip: string | null,
     description: string | null,
   } | null,
@@ -508,12 +525,10 @@ export interface carePlanSuggestionAcceptMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -605,12 +620,10 @@ export interface carePlanSuggestionDismissMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -1914,12 +1927,10 @@ export interface getPatientCarePlanSuggestionsQuery {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -2028,12 +2039,10 @@ export interface getPatientCarePlanQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -2056,12 +2065,10 @@ export interface getPatientCarePlanQuery {
           lastName: string,
           dateOfBirth: string | null,
           createdAt: string,
-          consentToText: boolean | null,
-          consentToCall: boolean | null,
           coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
-            gender: string | null,
+            gender: Gender | null,
             language: string | null,
             primaryAddress:  {
               id: string,
@@ -2130,12 +2137,10 @@ export interface getPatientCarePlanQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -2299,7 +2304,7 @@ export interface getPatientPanelQuery {
         dateOfBirth: string | null,
         userCareTeam: boolean | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2372,12 +2377,10 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -2412,12 +2415,10 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -2548,12 +2549,10 @@ export interface getPatientScreeningToolSubmissionQuery {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -2588,12 +2587,10 @@ export interface getPatientScreeningToolSubmissionQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -2691,7 +2688,7 @@ export interface getPatientSearchQuery {
         dateOfBirth: string | null,
         userCareTeam: boolean | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2812,19 +2809,21 @@ export interface getPatientQuery {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     coreIdentityVerifiedById: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      preferredName: string | null,
+      gender: Gender | null,
+      sexAtBirth: BirthSexOptions | null,
       language: string | null,
+      isMarginallyHoused: boolean | null,
       primaryAddress:  {
         id: string,
         city: string | null,
         state: string | null,
-        street: string | null,
+        street1: string | null,
+        street2: string | null,
         zip: string | null,
         description: string | null,
       } | null,
@@ -2832,10 +2831,12 @@ export interface getPatientQuery {
         id: string,
         city: string | null,
         state: string | null,
-        street: string | null,
+        street1: string | null,
+        street2: string | null,
         zip: string | null,
         description: string | null,
       } > | null,
+      hasEmail: boolean | null,
       primaryEmail:  {
         id: string,
         emailAddress: string,
@@ -2846,6 +2847,9 @@ export interface getPatientQuery {
         emailAddress: string,
         description: string | null,
       } > | null,
+      preferredContactMethod: ContactMethodOptions | null,
+      canReceiveCalls: boolean | null,
+      canReceiveTexts: boolean | null,
     },
     patientDataFlags:  Array< {
       id: string,
@@ -2875,7 +2879,7 @@ export interface getPatientsForComputedListQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2902,7 +2906,7 @@ export interface getPatientsNewToCareTeamQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2929,7 +2933,7 @@ export interface getPatientsWithMissingInfoQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2956,7 +2960,7 @@ export interface getPatientsWithNoRecentEngagementQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -2983,7 +2987,7 @@ export interface getPatientsWithOpenCBOReferralsQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -3010,7 +3014,7 @@ export interface getPatientsWithOutOfDateMAPQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -3037,7 +3041,7 @@ export interface getPatientsWithPendingSuggestionsQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -3064,7 +3068,7 @@ export interface getPatientsWithUrgentTasksQuery {
         lastName: string,
         dateOfBirth: string | null,
         patientInfo:  {
-          gender: string | null,
+          gender: Gender | null,
         },
       } | null,
     } >,
@@ -3158,12 +3162,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -3346,12 +3348,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -3405,12 +3405,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           lastName: string,
           dateOfBirth: string | null,
           createdAt: string,
-          consentToText: boolean | null,
-          consentToCall: boolean | null,
           coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
-            gender: string | null,
+            gender: Gender | null,
             language: string | null,
             primaryAddress:  {
               id: string,
@@ -3433,12 +3431,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             lastName: string,
             dateOfBirth: string | null,
             createdAt: string,
-            consentToText: boolean | null,
-            consentToCall: boolean | null,
             coreIdentityVerifiedAt: string | null,
             patientInfo:  {
               id: string,
-              gender: string | null,
+              gender: Gender | null,
               language: string | null,
               primaryAddress:  {
                 id: string,
@@ -3508,12 +3504,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           lastName: string,
           dateOfBirth: string | null,
           createdAt: string,
-          consentToText: boolean | null,
-          consentToCall: boolean | null,
           coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
-            gender: string | null,
+            gender: Gender | null,
             language: string | null,
             primaryAddress:  {
               id: string,
@@ -3614,12 +3608,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -3654,12 +3646,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           lastName: string,
           dateOfBirth: string | null,
           createdAt: string,
-          consentToText: boolean | null,
-          consentToCall: boolean | null,
           coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
-            gender: string | null,
+            gender: Gender | null,
             language: string | null,
             primaryAddress:  {
               id: string,
@@ -3827,12 +3817,10 @@ export interface getProgressNoteQuery {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -3901,12 +3889,10 @@ export interface getProgressNotesForCurrentUserQuery {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -3971,12 +3957,10 @@ export interface getProgressNotesForSupervisorReviewQuery {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -4285,12 +4269,10 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -4391,12 +4373,10 @@ export interface getRiskAreaAssessmentSubmissionQuery {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -5374,12 +5354,10 @@ export interface patientConcernBulkEditMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -5402,12 +5380,10 @@ export interface patientConcernBulkEditMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -5501,12 +5477,10 @@ export interface patientConcernCreateMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -5529,12 +5503,10 @@ export interface patientConcernCreateMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -5626,12 +5598,10 @@ export interface patientConcernDeleteMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -5654,12 +5624,10 @@ export interface patientConcernDeleteMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -5732,12 +5700,10 @@ export interface patientCoreIdentityVerifyMutation {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -5777,8 +5743,6 @@ export interface patientEditMutationVariables {
   middleName?: string | null,
   lastName?: string | null,
   dateOfBirth?: string | null,
-  consentToCall?: boolean | null,
-  consentToText?: boolean | null,
 };
 
 export interface patientEditMutation {
@@ -5790,12 +5754,10 @@ export interface patientEditMutation {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -5847,12 +5809,10 @@ export interface patientGoalCreateMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -5923,12 +5883,10 @@ export interface patientGoalDeleteMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -5984,17 +5942,24 @@ export interface patientGoalDeleteMutation {
 
 export interface patientInfoEditMutationVariables {
   patientInfoId: string,
-  gender?: string | null,
+  preferredName?: string | null,
+  gender?: Gender | null,
+  sexAtBirth?: BirthSexOptions | null,
   language?: string | null,
+  isMarginallyHoused?: boolean | null,
   primaryAddressId?: string | null,
+  hasEmail?: boolean | null,
   primaryEmailId?: string | null,
+  preferredContactMethod?: ContactMethodOptions | null,
+  canReceiveCalls?: boolean | null,
+  canReceiveTexts?: boolean | null,
 };
 
 export interface patientInfoEditMutation {
   // Edit fields on patient info stored in the db
   patientInfoEdit:  {
     id: string,
-    gender: string | null,
+    gender: Gender | null,
     language: string | null,
     primaryAddress:  {
       id: string,
@@ -6091,12 +6056,10 @@ export interface patientScreeningToolSubmissionCreateMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6131,12 +6094,10 @@ export interface patientScreeningToolSubmissionCreateMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -6238,12 +6199,10 @@ export interface patientScreeningToolSubmissionScoreMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6278,12 +6237,10 @@ export interface patientScreeningToolSubmissionScoreMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -6431,12 +6388,10 @@ export interface progressNoteAddSupervisorNotesMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6505,12 +6460,10 @@ export interface progressNoteCompleteMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6579,12 +6532,10 @@ export interface progressNoteCompleteSupervisorReviewMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6653,12 +6604,10 @@ export interface progressNoteCreateMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -6734,12 +6683,10 @@ export interface progressNoteEditMutation {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -7228,12 +7175,10 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -7335,12 +7280,10 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -8790,7 +8733,8 @@ export interface FullAddressFragment {
   id: string,
   city: string | null,
   state: string | null,
-  street: string | null,
+  street1: string | null,
+  street2: string | null,
   zip: string | null,
   description: string | null,
 };
@@ -8860,12 +8804,10 @@ export interface FullCarePlanSuggestionFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -8949,12 +8891,10 @@ export interface FullCarePlanUpdateEventFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -9008,12 +8948,10 @@ export interface FullCarePlanUpdateEventFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -9036,12 +8974,10 @@ export interface FullCarePlanUpdateEventFragment {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -9111,12 +9047,10 @@ export interface FullCarePlanUpdateEventFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -9409,12 +9343,10 @@ export interface FullPatientAnswerEventFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -9684,12 +9616,10 @@ export interface FullPatientConcernFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -9712,12 +9642,10 @@ export interface FullPatientConcernFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -9807,7 +9735,7 @@ export interface FullPatientForCBOReferralFormPDFFragment {
     permissions: Permissions,
   } > | null,
   patientInfo:  {
-    gender: string | null,
+    gender: Gender | null,
     language: string | null,
   },
 };
@@ -9818,7 +9746,7 @@ export interface FullPatientForDashboardFragment {
   lastName: string,
   dateOfBirth: string | null,
   patientInfo:  {
-    gender: string | null,
+    gender: Gender | null,
   },
 };
 
@@ -9829,19 +9757,21 @@ export interface FullPatientForProfileFragment {
   lastName: string,
   dateOfBirth: string | null,
   createdAt: string,
-  consentToText: boolean | null,
-  consentToCall: boolean | null,
   coreIdentityVerifiedAt: string | null,
   coreIdentityVerifiedById: string | null,
   patientInfo:  {
     id: string,
-    gender: string | null,
+    preferredName: string | null,
+    gender: Gender | null,
+    sexAtBirth: BirthSexOptions | null,
     language: string | null,
+    isMarginallyHoused: boolean | null,
     primaryAddress:  {
       id: string,
       city: string | null,
       state: string | null,
-      street: string | null,
+      street1: string | null,
+      street2: string | null,
       zip: string | null,
       description: string | null,
     } | null,
@@ -9849,10 +9779,12 @@ export interface FullPatientForProfileFragment {
       id: string,
       city: string | null,
       state: string | null,
-      street: string | null,
+      street1: string | null,
+      street2: string | null,
       zip: string | null,
       description: string | null,
     } > | null,
+    hasEmail: boolean | null,
     primaryEmail:  {
       id: string,
       emailAddress: string,
@@ -9863,6 +9795,9 @@ export interface FullPatientForProfileFragment {
       emailAddress: string,
       description: string | null,
     } > | null,
+    preferredContactMethod: ContactMethodOptions | null,
+    canReceiveCalls: boolean | null,
+    canReceiveTexts: boolean | null,
   },
   patientDataFlags:  Array< {
     id: string,
@@ -9891,12 +9826,10 @@ export interface FullPatientGoalFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -9951,13 +9884,17 @@ export interface FullPatientGoalFragment {
 
 export interface FullPatientInfoFragment {
   id: string,
-  gender: string | null,
+  preferredName: string | null,
+  gender: Gender | null,
+  sexAtBirth: BirthSexOptions | null,
   language: string | null,
+  isMarginallyHoused: boolean | null,
   primaryAddress:  {
     id: string,
     city: string | null,
     state: string | null,
-    street: string | null,
+    street1: string | null,
+    street2: string | null,
     zip: string | null,
     description: string | null,
   } | null,
@@ -9965,10 +9902,12 @@ export interface FullPatientInfoFragment {
     id: string,
     city: string | null,
     state: string | null,
-    street: string | null,
+    street1: string | null,
+    street2: string | null,
     zip: string | null,
     description: string | null,
   } > | null,
+  hasEmail: boolean | null,
   primaryEmail:  {
     id: string,
     emailAddress: string,
@@ -9979,6 +9918,9 @@ export interface FullPatientInfoFragment {
     emailAddress: string,
     description: string | null,
   } > | null,
+  preferredContactMethod: ContactMethodOptions | null,
+  canReceiveCalls: boolean | null,
+  canReceiveTexts: boolean | null,
 };
 
 export interface FullPatientListFragment {
@@ -10008,12 +9950,10 @@ export interface FullPatientScreeningToolSubmissionFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -10048,12 +9988,10 @@ export interface FullPatientScreeningToolSubmissionFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -10140,7 +10078,7 @@ export interface FullPatientTableRowFragment {
   dateOfBirth: string | null,
   userCareTeam: boolean | null,
   patientInfo:  {
-    gender: string | null,
+    gender: Gender | null,
   },
 };
 
@@ -10227,12 +10165,10 @@ export interface FullProgressNoteActivityFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -10415,12 +10351,10 @@ export interface FullProgressNoteActivityFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -10474,12 +10408,10 @@ export interface FullProgressNoteActivityFragment {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -10502,12 +10434,10 @@ export interface FullProgressNoteActivityFragment {
           lastName: string,
           dateOfBirth: string | null,
           createdAt: string,
-          consentToText: boolean | null,
-          consentToCall: boolean | null,
           coreIdentityVerifiedAt: string | null,
           patientInfo:  {
             id: string,
-            gender: string | null,
+            gender: Gender | null,
             language: string | null,
             primaryAddress:  {
               id: string,
@@ -10577,12 +10507,10 @@ export interface FullProgressNoteActivityFragment {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -10683,12 +10611,10 @@ export interface FullProgressNoteActivityFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -10723,12 +10649,10 @@ export interface FullProgressNoteActivityFragment {
         lastName: string,
         dateOfBirth: string | null,
         createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
         coreIdentityVerifiedAt: string | null,
         patientInfo:  {
           id: string,
-          gender: string | null,
+          gender: Gender | null,
           language: string | null,
           primaryAddress:  {
             id: string,
@@ -10845,12 +10769,10 @@ export interface FullProgressNoteFragment {
     lastName: string,
     dateOfBirth: string | null,
     createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
     coreIdentityVerifiedAt: string | null,
     patientInfo:  {
       id: string,
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
       primaryAddress:  {
         id: string,
@@ -11025,12 +10947,10 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
       lastName: string,
       dateOfBirth: string | null,
       createdAt: string,
-      consentToText: boolean | null,
-      consentToCall: boolean | null,
       coreIdentityVerifiedAt: string | null,
       patientInfo:  {
         id: string,
-        gender: string | null,
+        gender: Gender | null,
         language: string | null,
         primaryAddress:  {
           id: string,
@@ -11455,7 +11375,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
       permissions: Permissions,
     } > | null,
     patientInfo:  {
-      gender: string | null,
+      gender: Gender | null,
       language: string | null,
     },
   },
@@ -11651,7 +11571,7 @@ export interface ShortPatientGlassBreakFragment {
 
 export interface ShortPatientInfoFragment {
   id: string,
-  gender: string | null,
+  gender: Gender | null,
   language: string | null,
   primaryAddress:  {
     id: string,
@@ -11713,12 +11633,10 @@ export interface ShortPatientFragment {
   lastName: string,
   dateOfBirth: string | null,
   createdAt: string,
-  consentToText: boolean | null,
-  consentToCall: boolean | null,
   coreIdentityVerifiedAt: string | null,
   patientInfo:  {
     id: string,
-    gender: string | null,
+    gender: Gender | null,
     language: string | null,
     primaryAddress:  {
       id: string,

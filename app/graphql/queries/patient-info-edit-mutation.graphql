@@ -2,18 +2,32 @@
 
 mutation patientInfoEdit(
   $patientInfoId: ID!
-  $gender: String
+  $preferredName: String
+  $gender: Gender
+  $sexAtBirth: BirthSexOptions
   $language: String
+  $isMarginallyHoused: Boolean
   $primaryAddressId: ID
+  $hasEmail: Boolean
   $primaryEmailId: ID
+  $preferredContactMethod: ContactMethodOptions
+  $canReceiveCalls: Boolean
+  $canReceiveTexts: Boolean
 ) {
   patientInfoEdit(
     input: {
       patientInfoId: $patientInfoId
+      preferredName: $preferredName
       gender: $gender
+      sexAtBirth: $sexAtBirth
       language: $language
+      isMarginallyHoused: $isMarginallyHoused
       primaryAddressId: $primaryAddressId
+      hasEmail: $hasEmail
       primaryEmailId: $primaryEmailId
+      preferredContactMethod: $preferredContactMethod
+      canReceiveCalls: $canReceiveCalls
+      canReceiveTexts: $canReceiveTexts
     }
   ) {
     ...ShortPatientInfo

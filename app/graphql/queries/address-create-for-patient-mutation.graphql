@@ -3,7 +3,8 @@
 mutation addressCreateForPatient(
   $patientId: ID!
   $zip: String!
-  $street: String
+  $street1: String
+  $street2: String
   $city: String
   $state: String
   $description: String
@@ -13,7 +14,8 @@ mutation addressCreateForPatient(
     input: {
       patientId: $patientId
       zip: $zip
-      street: $street
+      street1: $street1
+      street2: $street2
       city: $city
       state: $state
       description: $description

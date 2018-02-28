@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Gender } from '../../../graphql/types';
 import { formatAgeDetails, formatDateOfBirth } from '../../helpers/format-helpers';
 import * as styles from './css/patient-age.css';
 
 interface IProps {
   dateOfBirth: string | null;
-  gender: string | null;
+  gender: Gender | null;
 }
 
 const PatientSearchResult: React.StatelessComponent<IProps> = (props: IProps) => {

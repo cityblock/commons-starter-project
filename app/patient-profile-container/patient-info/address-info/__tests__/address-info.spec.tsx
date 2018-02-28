@@ -39,13 +39,13 @@ describe('Render Address Info Component', () => {
         .find(FlaggableDisplayField)
         .at(0)
         .props().labelMessageId,
-    ).toBe('address.street');
+    ).toBe('address.street1');
     expect(
       wrapper
         .find(FlaggableDisplayField)
         .at(0)
         .props().value,
-    ).toBe(patient.patientInfo.primaryAddress.street);
+    ).toBe(patient.patientInfo.primaryAddress.street1);
 
     expect(
       wrapper
@@ -116,7 +116,7 @@ describe('Render Address Info Component', () => {
         .find(FlaggableDisplayField)
         .at(5)
         .props().value,
-    ).toBe(address2.street);
+    ).toBe(address2.street1);
     expect(
       wrapper
         .find(FlaggableDisplayField)
@@ -142,7 +142,7 @@ describe('Render Address Info Component', () => {
         .find(FlaggableDisplayField)
         .at(9)
         .props().value,
-    ).toBe(address3.street);
+    ).toBe(address3.street1);
     expect(
       wrapper
         .find(FlaggableDisplayField)

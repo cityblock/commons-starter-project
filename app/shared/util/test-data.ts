@@ -1,3 +1,6 @@
+
+import { BirthSexOptions, ContactMethodOptions, Gender } from '../../graphql/types';
+
 export const clinic = {
   id: 'clinic-id',
   name: 'Home clinic',
@@ -51,7 +54,8 @@ export const user = {
 
 export const address1 = {
   id: 'address-1-id',
-  street: '55 Washington St',
+  street1: '55 Washington St',
+  street2: 'Unit 552',
   city: 'Brooklyn',
   state: 'NY',
   description: 'work',
@@ -60,7 +64,8 @@ export const address1 = {
 
 export const address2 = {
   id: 'address-2-id',
-  street: '101 Fake St',
+  street1: '101 Fake St',
+  street2: 'Apt 2',
   city: 'Cambridge',
   state: 'MA',
   zip: '02139',
@@ -68,7 +73,7 @@ export const address2 = {
 
 export const address3 = {
   id: 'address-3-id',
-  street: '20 Main St',
+  street1: '20 Main St',
   zip: '12345',
   description: 'generic',
 };
@@ -86,7 +91,8 @@ export const email2 = {
 
 interface IAddress {
   id: string;
-  street: string | null;
+  street1: string | null;
+  street2: string | null;
   state: string | null;
   zip: string | null;
   city: string | null;
@@ -110,18 +116,23 @@ export const patient = {
   updatedAt: '2017-09-07T13:45:14.532Z',
   deletedAt: null,
   scratchPad: 'Note',
-  consentToCall: true,
-  consentToText: true,
   coreIdentityVerifiedAt: '2017-09-07T13:45:14.532Z',
   coreIdentityVerifiedById: user.id,
   patientInfo: {
     id: 'patient-info-id',
-    gender: 'male',
+    preferredName: 'Bobby',
+    gender: Gender.male,
+    sexAtBirth: BirthSexOptions.male,
     language: 'en',
-    primaryAddress: address1 as IAddress,
+    isMarginallyHoused: false,
+    primaryAddress: address1,
     addresses: [address1, address2, address3] as IAddress[],
+    hasEmail: true,
     primaryEmail: email1 as IEmail,
     emails: [email1, email2] as IEmail[],
+    preferredContactMethod: ContactMethodOptions.phone,
+    canReceiveCalls: true,
+    canReceiveTexts: false,
   },
   patientDataFlags: [],
   cityblockId: 123,

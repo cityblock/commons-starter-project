@@ -2,7 +2,8 @@ fragment FullAddress on Address {
   id
   city
   state
-  street
+  street1
+  street2
   zip
   description
 }

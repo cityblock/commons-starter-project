@@ -66,10 +66,10 @@ describe('address resolver', () => {
             zip: "11238",
             state: "NY",
             city: "Brooklyn",
-            street: "600 Vanderbilt Ave",
+            street1: "600 Vanderbilt Ave",
             description: "Some building",
           }) {
-            id, zip, state, city, street, description
+            id, zip, state, city, street1, description
           }
         }`;
 
@@ -81,7 +81,7 @@ describe('address resolver', () => {
           txn,
         });
         expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
-          street: '600 Vanderbilt Ave',
+          street1: '600 Vanderbilt Ave',
           zip: '11238',
           state: 'NY',
           city: 'Brooklyn',
@@ -104,11 +104,11 @@ describe('address resolver', () => {
             zip: "11238",
             state: "NY",
             city: "Brooklyn",
-            street: "600 Vanderbilt Ave",
+            street1: "600 Vanderbilt Ave",
             description: "Some building",
             isPrimary: true,
           }) {
-            id, zip, state, city, street, description
+            id, zip, state, city, street1, description
           }
         }`;
 
@@ -120,7 +120,7 @@ describe('address resolver', () => {
           txn,
         });
         expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
-          street: '600 Vanderbilt Ave',
+          street1: '600 Vanderbilt Ave',
           zip: '11238',
           state: 'NY',
           city: 'Brooklyn',
@@ -150,10 +150,10 @@ describe('address resolver', () => {
             zip: "11238",
             state: "CT",
             city: "Haverford",
-            street: "600 Vanderbilt Ave",
+            street1: "600 Vanderbilt Ave",
             description: "Some building",
           }) {
-            id, zip, state, city, street, description
+            id, zip, state, city, street1, description
           }
         }`;
 
@@ -165,7 +165,7 @@ describe('address resolver', () => {
           txn,
         });
         expect(cloneDeep(result.data!.addressEdit)).toMatchObject({
-          street: '600 Vanderbilt Ave',
+          street1: '600 Vanderbilt Ave',
           zip: '11238',
           state: 'CT',
           city: 'Haverford',

@@ -33,7 +33,7 @@ export class CreateAddressModal extends React.Component<allProps> {
     return createAddressMutation({
       variables: {
         patientId,
-        street: address.street,
+        street1: address.street1,
         state: address.state,
         city: address.city,
         description: address.description,

@@ -68,7 +68,7 @@ describe('patient info resolver', () => {
         const query = `mutation {
           patientInfoEdit(input: {
             patientInfoId: "${patient.patientInfo.id}",
-            gender: "male",
+            gender: male,
             language: "ch",
             primaryAddressId: "${address.id}",
           }) {

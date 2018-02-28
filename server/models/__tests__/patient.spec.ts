@@ -154,8 +154,6 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: birthday,
-          consentToCall: false,
-          consentToText: false,
         });
       });
     });
@@ -236,8 +234,6 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: birthday,
-          consentToCall: false,
-          consentToText: false,
         });
 
         await Patient.updateFromAttribution(

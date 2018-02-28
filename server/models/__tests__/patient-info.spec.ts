@@ -94,7 +94,7 @@ describe('patient info model', () => {
         const { patient, user } = await setup(txn);
         const address = await Address.create(
           {
-            street: '44 Washington St',
+            street1: '44 Washington St',
             zip: '10010',
             state: 'NY',
             city: 'Brooklyn',
@@ -118,7 +118,7 @@ describe('patient info model', () => {
           gender: 'male',
           language: 'en',
           primaryAddress: {
-            street: '44 Washington St',
+            street1: '44 Washington St',
             zip: '10010',
             state: 'NY',
             city: 'Brooklyn',

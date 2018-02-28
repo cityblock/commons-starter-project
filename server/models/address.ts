@@ -4,7 +4,8 @@ import BaseModel from './base-model';
 export interface IAddressOptions {
   zip: string;
   updatedById: string;
-  street?: string;
+  street1?: string;
+  street2?: string;
   state?: string;
   city?: string;
   description?: string;
@@ -13,7 +14,8 @@ export interface IAddressOptions {
 export interface IAddressEdit {
   updatedById: string;
   zip: string;
-  street?: string;
+  street1?: string;
+  street2?: string;
   state?: string;
   city?: string;
   description?: string;
@@ -21,7 +23,8 @@ export interface IAddressEdit {
 
 /* tslint:disable:member-ordering */
 export default class Address extends BaseModel {
-  street: string;
+  street1: string;
+  street2: string;
   zip: string;
   state: string;
   city: string;
@@ -36,7 +39,8 @@ export default class Address extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      street: { type: 'string', minLength: 1 },
+      street1: { type: 'string', minLength: 1 },
+      street2: { type: 'string', minLength: 1 },
       zip: { type: 'string' },
       state: { type: 'string', minLength: 2, maxLength: 2 },
       city: { type: 'string' },

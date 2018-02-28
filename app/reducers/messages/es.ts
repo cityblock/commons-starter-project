@@ -233,7 +233,7 @@ export const SPANISH_TRANSLATION = {
     'address.state': 'State',
     'address.zip': 'Zip code',
     'address.description': 'Notes about this address',
-    'address.street': 'Street 1',
+    'address.street1': 'Street 1',
     'address.saveError': 'There was an error saving. Try again',
     'address.addAdditional': 'Add additional address',
     'address.addPrimary': 'Add a primary address',

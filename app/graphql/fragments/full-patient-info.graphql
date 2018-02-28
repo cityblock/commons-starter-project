@@ -3,18 +3,25 @@
 
 fragment FullPatientInfo on PatientInfo {
   id
+  preferredName
   gender
+  sexAtBirth
   language
+  isMarginallyHoused
   primaryAddress {
     ...FullAddress
   }
   addresses {
     ...FullAddress
   }
+  hasEmail
   primaryEmail {
     ...FullEmail
   }
   emails {
     ...FullEmail
   }
+  preferredContactMethod
+  canReceiveCalls
+  canReceiveTexts
 }

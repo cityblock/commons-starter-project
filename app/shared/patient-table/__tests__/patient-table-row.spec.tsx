@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { Gender } from '../../../graphql/types';
 import PatientAge from '../../library/patient-age/patient-age';
 import PatientTableRow from '../patient-table-row';
 
@@ -9,7 +10,7 @@ describe('Patient Table Row Component', () => {
   const lastName = 'Stark';
   const id = 'ladyOfWinterfell';
   const dateOfBirth = '2000-12-01 12:00:00+00:00';
-  const gender = 'female';
+  const gender = Gender.female;
 
   const getSearchResult = (userCareTeam: boolean) => ({
     firstName,

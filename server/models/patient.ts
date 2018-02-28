@@ -60,8 +60,6 @@ export interface IPatientEditableFields {
   lastName: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
-  consentToCall: boolean;
-  consentToText: boolean;
   coreIdentityVerifiedAt: string;
   coreIdentityVerifiedById: string;
 }
@@ -97,8 +95,6 @@ export default class Patient extends Model {
   homeClinicId: string;
   homeClinic: Clinic;
   scratchPad: string;
-  consentToCall: boolean;
-  consentToText: boolean;
   tasks: Task[];
   patientInfo: PatientInfo;
   careTeam: User[];
@@ -131,8 +127,6 @@ export default class Patient extends Model {
       lastName: { type: 'string', minLength: 1 }, // cannot be blank
       dateOfBirth: { type: 'string' },
       scratchPad: { type: 'text' },
-      consentToCall: { type: 'boolean' },
-      consentToText: { type: 'boolean' },
       coreIdentityVerifiedAt: { type: ['string', 'null'] },
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
@@ -267,8 +261,6 @@ export default class Patient extends Model {
       lastName,
       homeClinicId,
       dateOfBirth,
-      consentToCall: false,
-      consentToText: false,
     });
     await PatientInfo.createInitialPatientInfo(
       {

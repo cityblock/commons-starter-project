@@ -114,7 +114,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
         className={styles.fieldMargin}
       >
         <div className={styles.fieldRow}>
-          <FlaggableDisplayField labelMessageId="address.street" value={address.street || null} />
+          <FlaggableDisplayField labelMessageId="address.street1" value={address.street1 || null} />
           <FlaggableDisplayField labelMessageId="address.city" value={address.city || null} />
           <FlaggableDisplayField labelMessageId="address.state" value={address.state || null} />
           <FlaggableDisplayField labelMessageId="address.zip" value={address.zip || null} />

@@ -70,13 +70,13 @@ export async function createPatient(patient: ICreatePatient, txn: Transaction): 
 }
 
 export async function createAddressForPatient(
-  street: string,
+  street1: string,
   zip: string,
   patientId: string,
   userId: string,
   txn: Transaction,
 ): Promise<Address> {
-  const address = await Address.create({ zip, street, updatedById: userId }, txn);
+  const address = await Address.create({ zip, street1, updatedById: userId }, txn);
   await PatientAddress.create({ addressId: address.id, patientId }, txn);
   return address;
 }
@@ -96,7 +96,7 @@ export async function createPrimaryAddressForPatient(
 
 export function createMockAddress(userId: string) {
   return {
-    street: '55 Washington St',
+    street1: '55 Washington St',
     zip: '11201',
     state: 'NY',
     city: 'Brooklyn',
@@ -145,7 +145,7 @@ export function createMockPatient(
 
 export function createMockPatientInfo(primaryAddressId?: string) {
   return {
-    gender: 'male',
+    gender: 'male' as PatientGenderOptions,
     language: 'en',
     primaryAddressId,
   };

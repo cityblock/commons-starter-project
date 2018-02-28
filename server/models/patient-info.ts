@@ -8,6 +8,8 @@ import Patient from './patient';
 import Phone from './phone';
 
 export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
+export type BirthSexOptions = 'male' | 'female' | null;
+export type ContactMethodOptions = 'phone' | 'text' | 'email';
 
 export interface IInitialPatientInfoOptions {
   patientId: string;
@@ -19,20 +21,34 @@ export interface IInitialPatientInfoOptions {
 export interface IPatientInfoOptions {
   patientId: string;
   updatedById: string;
-  gender?: string;
+  preferredName?: string;
+  gender?: PatientGenderOptions;
+  sexAtBirth?: BirthSexOptions;
   language?: string;
+  isMarginallyHoused?: boolean;
   primaryAddressId?: string;
+  hasEmail?: boolean;
   primaryEmailId?: string;
   primaryPhoneId?: string;
+  preferredContactMethod?: ContactMethodOptions;
+  canReceiveCalls?: boolean;
+  canReceiveTexts?: boolean;
 }
 
 interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
   updatedById: string;
-  gender?: string;
+  preferredName?: string;
+  gender?: PatientGenderOptions;
+  sexAtBirth?: BirthSexOptions;
   language?: string;
+  isMarginallyHoused?: boolean;
   primaryAddressId?: string;
+  hasEmail?: boolean;
   primaryEmailId?: string;
   primaryPhoneId?: string;
+  preferredContactMethod?: ContactMethodOptions;
+  canReceiveCalls?: boolean;
+  canReceiveTexts?: boolean;
 }
 
 /* tslint:disable:member-ordering */
@@ -43,17 +59,24 @@ export default class PatientInfo extends Model {
   id: string;
   patientId: string;
   patient: Patient;
-  gender: string;
+  preferredName: string;
+  gender: PatientGenderOptions;
+  sexAtBirth: BirthSexOptions;
   language: string;
+  isMarginallyHoused: boolean;
   primaryAddressId: string;
   primaryAddress: Address;
   addresses: Address[];
+  hasEmail: boolean;
   primaryEmailId: string;
   primaryEmail: Email;
   emails: Email[];
   primaryPhoneId: string;
   primaryPhone: Phone;
   phones: Phone[];
+  preferredContactMethod: ContactMethodOptions;
+  canReceiveCalls: boolean;
+  canReceiveTexts: boolean;
   createdAt: string;
   updatedAt: string;
 
@@ -76,11 +99,18 @@ export default class PatientInfo extends Model {
     properties: {
       id: { type: 'string', format: 'uuid' },
       patientId: { type: 'string', format: 'uuid' },
+      preferredName: { type: 'string', minLength: 1 },
       language: { type: 'string' },
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
+      sexAtBirth: { type: 'string', enum: ['female', 'male'] },
+      isMarginallyHoused: { type: 'boolean' },
       primaryAddressId: { type: 'string', format: 'uuid' },
+      hasEmail: { type: 'boolean' },
       primaryEmailId: { type: 'string', format: 'uuid' },
       primaryPhoneId: { type: 'string', format: 'uuid' },
+      preferredContactMethod: { type: 'string', enum: ['text', 'phone', 'email'] },
+      canReceiveCalls: { type: 'boolean' },
+      canReceiveTexts: { type: 'boolean' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },

@@ -193,6 +193,17 @@ enum PhoneTypeOptions {
   other
 }
 
+enum BirthSexOptions {
+  male
+  female
+}
+
+enum ContactMethodOptions {
+  phone
+  text
+  email
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -258,8 +269,6 @@ type Patient implements uniqueId {
   homeClinicId: ID
   createdAt: String!
   scratchPad: String
-  consentToCall: Boolean
-  consentToText: Boolean
   careTeam: [User!]
   patientDataFlags: [PatientDataFlag!]
   computedPatientStatus: ComputedPatientStatus!
@@ -271,14 +280,21 @@ type Patient implements uniqueId {
 type PatientInfo implements uniqueId {
   id: ID!
   patientId: ID!
-  gender: String
+  preferredName: String
+  gender: Gender
+  sexAtBirth: BirthSexOptions
   language: String
+  isMarginallyHoused: Boolean
   primaryAddress: Address
   addresses: [Address!]
   primaryPhone: Phone
   phones: [Phone!]
+  hasEmail: Boolean
   primaryEmail: Email
   emails: [Email!]
+  preferredContactMethod: ContactMethodOptions
+  canReceiveCalls: Boolean
+  canReceiveTexts: Boolean
 }
 
 # ComputedPatientStatus
@@ -311,7 +327,8 @@ input PatientFilterOptions {
 type Address implements uniqueId {
   id: ID!
   zip: String
-  street: String
+  street1: String
+  street2: String
   state: String
   city: String
   description: String
@@ -322,7 +339,8 @@ input AddressEditInput {
   addressId: ID!
   patientId: ID!
   zip: String
-  street: String
+  street1: String
+  street2: String
   state: String
   city: String
   description: String
@@ -332,7 +350,8 @@ input AddressEditInput {
 input AddressCreateForPatientInput {
   patientId: ID!
   zip: String
-  street: String
+  street1: String
+  street2: String
   state: String
   city: String
   description: String
@@ -1302,8 +1321,6 @@ input PatientEditInput {
   middleName: String
   lastName: String
   dateOfBirth: String
-  consentToCall: Boolean
-  consentToText: Boolean
 }
 
 # params for editing a patient in the db
@@ -1314,10 +1331,18 @@ input PatientCoreIdentityVerifyInput {
 # params for editing a patient in the db
 input PatientInfoEditInput {
   patientInfoId: ID!
-  gender: String
+  preferredName: String
+  gender: Gender
+  sexAtBirth: BirthSexOptions
   language: String
+  isMarginallyHoused: Boolean
   primaryAddressId: ID
+  hasEmail: Boolean
   primaryEmailId: ID
+  primaryPhoneId: ID
+  preferredContactMethod: ContactMethodOptions
+  canReceiveCalls: Boolean
+  canReceiveTexts: Boolean
 }
 
 # params for editing a patient scratch pad

@@ -35,7 +35,7 @@ describe('address', () => {
       await transaction(Address.knex(), async txn => {
         const { address, user } = await setup(txn);
         expect(address).toMatchObject({
-          street: '55 Washington St',
+          street1: '55 Washington St',
           zip: '11201',
           state: 'NY',
           city: 'Brooklyn',
@@ -52,7 +52,7 @@ describe('address', () => {
         const { address, user } = await setup(txn);
         const editedAddress = await Address.edit(
           {
-            street: '44 Washington St',
+            street1: '44 Washington St',
             zip: '10010',
             state: 'MA',
             city: 'Boston',
@@ -63,7 +63,7 @@ describe('address', () => {
           txn,
         );
         expect(editedAddress).toMatchObject({
-          street: '44 Washington St',
+          street1: '44 Washington St',
           zip: '10010',
           state: 'MA',
           city: 'Boston',

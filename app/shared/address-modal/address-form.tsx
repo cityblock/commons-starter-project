@@ -4,7 +4,7 @@ import TextInput from '../../shared/library/text-input/text-input';
 import * as styles from './css/address-modal.css';
 
 interface IProps {
-  street?: string | null;
+  street1?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
@@ -13,14 +13,14 @@ interface IProps {
 }
 
 const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onChange, street, state, zip, city, description } = props;
+  const { onChange, street1, state, zip, city, description } = props;
 
   return (
     <div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <FormLabel messageId="address.street" />
-          <TextInput name="street" value={street || ''} onChange={onChange} />
+          <FormLabel messageId="address.street1" />
+          <TextInput name="street1" value={street1 || ''} onChange={onChange} />
         </div>
       </div>
 

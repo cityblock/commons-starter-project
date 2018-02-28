@@ -31,7 +31,7 @@ export class EditAddressModal extends React.Component<allProps> {
       variables: {
         patientId,
         addressId: address.id,
-        street: address.street,
+        street1: address.street1,
         state: address.state,
         city: address.city,
         description: address.description,

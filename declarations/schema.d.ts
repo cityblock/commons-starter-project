@@ -508,8 +508,6 @@ declare module 'schema' {
     homeClinicId: string | null;
     createdAt: string;
     scratchPad: string | null;
-    consentToCall: boolean | null;
-    consentToText: boolean | null;
     careTeam: Array<IUser>;
     patientDataFlags: Array<IPatientDataFlag>;
     computedPatientStatus: IComputedPatientStatus;
@@ -523,15 +521,26 @@ declare module 'schema' {
   interface IPatientInfo {
     id: string;
     patientId: string;
-    gender: string | null;
+    preferredName: string | null;
+    gender: IGenderEnum | null;
+    sexAtBirth: IBirthSexOptionsEnum | null;
     language: string | null;
+    isMarginallyHoused: boolean | null;
     primaryAddress: IAddress | null;
     addresses: Array<IAddress>;
     primaryPhone: IPhone | null;
     phones: Array<IPhone>;
+    hasEmail: boolean | null;
     primaryEmail: IEmail | null;
     emails: Array<IEmail>;
+    preferredContactMethod: IContactMethodOptionsEnum | null;
+    canReceiveCalls: boolean | null;
+    canReceiveTexts: boolean | null;
   }
+
+  type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
+
+  type IBirthSexOptionsEnum = 'male' | 'female';
 
   /**
     Address
@@ -539,7 +548,8 @@ declare module 'schema' {
   interface IAddress {
     id: string;
     zip: string | null;
-    street: string | null;
+    street1: string | null;
+    street2: string | null;
     state: string | null;
     city: string | null;
     description: string | null;
@@ -565,6 +575,8 @@ declare module 'schema' {
     emailAddress: string;
     description: string | null;
   }
+
+  type IContactMethodOptionsEnum = 'phone' | 'text' | 'email';
 
   /**
     Patient Data Flag
@@ -648,8 +660,6 @@ declare module 'schema' {
     zip: string | null;
     careWorkerId: string | null;
   }
-
-  type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
 
   /**
     Patient dashboard item edges
@@ -2135,7 +2145,8 @@ declare module 'schema' {
   interface IAddressCreateForPatientInput {
     patientId: string;
     zip: string | null;
-    street: string | null;
+    street1: string | null;
+    street2: string | null;
     state: string | null;
     city: string | null;
     description: string | null;
@@ -2149,7 +2160,8 @@ declare module 'schema' {
     addressId: string;
     patientId: string;
     zip: string | null;
-    street: string | null;
+    street1: string | null;
+    street2: string | null;
     state: string | null;
     city: string | null;
     description: string | null;
@@ -2206,8 +2218,6 @@ declare module 'schema' {
     middleName: string | null;
     lastName: string | null;
     dateOfBirth: string | null;
-    consentToCall: boolean | null;
-    consentToText: boolean | null;
   }
 
   /**
@@ -2222,10 +2232,18 @@ declare module 'schema' {
   */
   interface IPatientInfoEditInput {
     patientInfoId: string;
-    gender: string | null;
+    preferredName: string | null;
+    gender: IGenderEnum | null;
+    sexAtBirth: IBirthSexOptionsEnum | null;
     language: string | null;
+    isMarginallyHoused: boolean | null;
     primaryAddressId: string | null;
+    hasEmail: boolean | null;
     primaryEmailId: string | null;
+    primaryPhoneId: string | null;
+    preferredContactMethod: IContactMethodOptionsEnum | null;
+    canReceiveCalls: boolean | null;
+    canReceiveTexts: boolean | null;
   }
 
   /**

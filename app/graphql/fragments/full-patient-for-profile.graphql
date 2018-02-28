@@ -8,8 +8,6 @@ fragment FullPatientForProfile on Patient {
   lastName
   dateOfBirth
   createdAt
-  consentToText
-  consentToCall
   coreIdentityVerifiedAt
   coreIdentityVerifiedById
   patientInfo {

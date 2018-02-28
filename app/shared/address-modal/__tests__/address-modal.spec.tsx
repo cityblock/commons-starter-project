@@ -35,7 +35,7 @@ describe('Render Address Info Component', () => {
 
   it('renders address modal form without an address', () => {
     expect(wrapper.find(AddressForm).length).toBe(1);
-    expect(wrapper.find(AddressForm).props().street).toBe(undefined);
+    expect(wrapper.find(AddressForm).props().street1).toBe(undefined);
     expect(wrapper.find(AddressForm).props().state).toBe(undefined);
     expect(wrapper.find(AddressForm).props().city).toBe(undefined);
     expect(wrapper.find(AddressForm).props().zip).toBe(undefined);
@@ -53,14 +53,14 @@ describe('Render Address Info Component', () => {
     wrapper.setProps({ address: address1 });
 
     expect(wrapper.find(AddressForm).length).toBe(1);
-    expect(wrapper.find(AddressForm).props().street).toBe(address1.street);
+    expect(wrapper.find(AddressForm).props().street1).toBe(address1.street1);
     expect(wrapper.find(AddressForm).props().state).toBe(address1.state);
     expect(wrapper.find(AddressForm).props().city).toBe(address1.city);
     expect(wrapper.find(AddressForm).props().zip).toBe(address1.zip);
     expect(wrapper.find(AddressForm).props().description).toBe(address1.description);
 
     wrapper.setState({
-      street: '111 First Ave',
+      street1: '111 First Ave',
       state: 'CA',
       city: 'San Francisco',
       zip: '99999',
@@ -68,7 +68,7 @@ describe('Render Address Info Component', () => {
     });
 
     expect(wrapper.find(AddressForm).length).toBe(1);
-    expect(wrapper.find(AddressForm).props().street).toBe('111 First Ave');
+    expect(wrapper.find(AddressForm).props().street1).toBe('111 First Ave');
     expect(wrapper.find(AddressForm).props().state).toBe('CA');
     expect(wrapper.find(AddressForm).props().city).toBe('San Francisco');
     expect(wrapper.find(AddressForm).props().zip).toBe('99999');

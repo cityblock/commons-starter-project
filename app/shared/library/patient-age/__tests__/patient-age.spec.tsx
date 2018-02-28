@@ -1,11 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { Gender } from '../../../../graphql/types';
 import { formatAgeDetails, formatDateOfBirth } from '../../../helpers/format-helpers';
 import PatientAge from '../patient-age';
 
 describe('Library Patient Age Component', () => {
   const dateOfBirth = '2000-12-01 12:00:00+00:00';
-  const gender = 'F';
+  const gender = Gender.female;
 
   const wrapper = shallow(<PatientAge dateOfBirth={dateOfBirth} gender={gender} />);
 

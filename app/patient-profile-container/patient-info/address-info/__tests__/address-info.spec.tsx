@@ -5,12 +5,13 @@ import DefaultText from '../../../../shared/library/default-text/default-text';
 import { address2, address3, patient } from '../../../../shared/util/test-data';
 import DisplayCard from '../../display-card';
 import FlaggableDisplayField from '../../flaggable-display-field';
+import { IEditableFieldState } from '../../patient-info';
 import AddressInfo from '../address-info';
 import CreateAddressModal from '../create-address-modal';
 import EditAddressModal from '../edit-address-modal';
 
 describe('Render Address Info Component', () => {
-  const onChange = (field: { name: string; value: string | object | boolean | null }) => true;
+  const onChange = (fields: IEditableFieldState) => true;
 
   const wrapper = shallow(
     <AddressInfo onChange={onChange} patientId={patient.id} className="something" />,

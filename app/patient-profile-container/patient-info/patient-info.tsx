@@ -1,3 +1,4 @@
+import { filter, get } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
@@ -8,6 +9,7 @@ import {
   patientInfoEditMutationVariables,
 } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
+import { ISavedEmail } from '../../shared/email-modal/email-modal';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
 import SmallText from '../../shared/library/small-text/small-text';
@@ -39,24 +41,29 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-interface IState {
-  gender: getPatientQuery['patient']['patientInfo']['gender'];
-  language: getPatientQuery['patient']['patientInfo']['language'];
-  primaryAddress?: ISavedAddress;
-  addresses?: ISavedAddress[];
+export interface IEditableFieldState {
+  gender?: getPatientQuery['patient']['patientInfo']['gender'];
+  language?: getPatientQuery['patient']['patientInfo']['language'];
+  primaryAddress?: ISavedAddress | null;
+  addresses?: ISavedAddress[] | null;
+  primaryEmail?: ISavedEmail | null;
+  emails?: ISavedEmail[] | null;
   flags?: getPatientQuery['patient']['patientDataFlags'];
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
+}
+
+interface IState {
   isSaving?: boolean;
   saveError: string | null;
   saveSuccess?: boolean;
 }
 
-export class PatientInfo extends React.Component<allProps, IState> {
+type allState = IState & IEditableFieldState;
+
+export class PatientInfo extends React.Component<allProps, allState> {
   constructor(props: allProps) {
     super(props);
     this.state = {
-      language: null,
-      gender: null,
       saveError: null,
     };
   }
@@ -66,11 +73,37 @@ export class PatientInfo extends React.Component<allProps, IState> {
       return;
     }
 
-    const { gender, language } = nextProps.patient.patientInfo;
+    const { gender, language, primaryEmail, primaryAddress } = nextProps.patient.patientInfo;
+
+    const oldPrimaryEmail = get(this.props, 'patient.patientInfo.primaryEmail');
+    const oldPrimaryAddress = get(this.props, 'patient.patientInfo.primaryAddress');
+
+    // if the primary address changed, swap it with addiitonal address in the addresses array
+    let addresses = this.state.addresses;
+    if (
+      oldPrimaryAddress &&
+      primaryAddress &&
+      addresses &&
+      oldPrimaryAddress.id !== primaryAddress.id
+    ) {
+      addresses = filter(addresses, address => address.id !== primaryAddress.id);
+      addresses.push(oldPrimaryAddress);
+    }
+
+    // if the primary email changed, swap it with addiitonal email in the emails array
+    let emails = this.state.emails;
+    if (oldPrimaryEmail && primaryEmail && emails && oldPrimaryEmail.id !== primaryEmail.id) {
+      emails = filter(emails, email => email.id !== primaryEmail.id);
+      emails.push(oldPrimaryEmail);
+    }
 
     this.setState({
       gender,
       language,
+      primaryEmail,
+      primaryAddress,
+      addresses,
+      emails,
     });
   }
 
@@ -85,12 +118,27 @@ export class PatientInfo extends React.Component<allProps, IState> {
       patientInfo,
       coreIdentityVerifiedAt,
     } = patient;
-    const { language, gender, primaryAddress, addresses, flags, verifiedAt } = this.state;
+    const {
+      language,
+      gender,
+      primaryAddress,
+      addresses,
+      primaryEmail,
+      emails,
+      flags,
+      verifiedAt,
+    } = this.state;
 
     // remove primary address to create list of additional addresses
     const savedAddresses =
       patientInfo.primaryAddress && patientInfo.addresses
         ? patientInfo.addresses.filter(address => address.id !== patientInfo.primaryAddress!.id)
+        : [];
+
+    // remove primary email to create list of additional emails
+    const savedEmailAddresses =
+      patientInfo.primaryEmail && patientInfo.emails
+        ? patientInfo.emails.filter(email => email.id !== patientInfo.primaryEmail!.id)
         : [];
 
     return {
@@ -109,6 +157,12 @@ export class PatientInfo extends React.Component<allProps, IState> {
         language: language || patientInfo.language,
         primaryAddress: primaryAddress || patientInfo.primaryAddress,
         addresses: addresses || savedAddresses,
+      },
+      contact: {
+        patientId: id,
+        patientInfoId: patientInfo.id,
+        primaryEmail: primaryEmail || patientInfo.primaryEmail,
+        emails: emails || savedEmailAddresses,
       },
     };
   }
@@ -139,14 +193,8 @@ export class PatientInfo extends React.Component<allProps, IState> {
     }
   };
 
-  handleFieldChange = ({
-    name,
-    value,
-  }: {
-    name: string;
-    value: string | boolean | object | null;
-  }) => {
-    this.setState({ [name as any]: value });
+  handleFieldChange = (changedValues: IEditableFieldState) => {
+    this.setState(changedValues as any);
   };
 
   renderSaveButton() {

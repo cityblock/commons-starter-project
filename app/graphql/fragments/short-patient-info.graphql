@@ -6,4 +6,8 @@ fragment ShortPatientInfo on PatientInfo {
     id
     zip
   }
+  primaryEmail {
+    id
+    emailAddress
+  }
 }

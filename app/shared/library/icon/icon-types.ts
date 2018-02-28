@@ -36,6 +36,7 @@ export type IconName =
   | 'playlistAdd'
   | 'rotateRight'
   | 'search'
+  | 'stars'
   | 'syncProblem'
   | 'warning'
   | 'accountCircle'

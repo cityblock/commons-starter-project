@@ -14,6 +14,7 @@ import * as styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';
+import { IEditableFieldState } from './patient-info';
 
 export interface ICoreIdentity {
   firstName: getPatientQuery['patient']['firstName'];
@@ -27,7 +28,7 @@ export interface ICoreIdentity {
 
 interface IProps {
   patientIdentity: ICoreIdentity;
-  onChange: (field: { name: string; value: string | object | boolean | null }) => void;
+  onChange: (fields: IEditableFieldState) => void;
 }
 
 interface IGraphqlProps {
@@ -66,7 +67,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
     if (savedFlag) {
       const updatedFlags = filter(flags, flag => flag.fieldName !== savedFlag.fieldName);
       updatedFlags.push(savedFlag);
-      onChange({ name: 'flags', value: updatedFlags });
+      onChange({ flags: updatedFlags });
     }
   };
 
@@ -80,8 +81,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
 
     if (response.data.patientCoreIdentityVerify) {
       onChange({
-        name: 'verifiedAt',
-        value: response.data.patientCoreIdentityVerify.coreIdentityVerifiedAt,
+        verifiedAt: response.data.patientCoreIdentityVerify.coreIdentityVerifiedAt,
       });
     }
   };

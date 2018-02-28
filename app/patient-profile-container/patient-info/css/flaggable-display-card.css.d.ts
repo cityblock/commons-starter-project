@@ -8,3 +8,4 @@ export const footer: string;
 export const footerDescription: string;
 export const date: string;
 export const button: string;
+export const menu: string;

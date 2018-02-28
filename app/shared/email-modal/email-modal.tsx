@@ -1,0 +1,118 @@
+import { isNil } from 'lodash-es';
+import * as React from 'react';
+import Modal from '../library/modal/modal';
+import EmailForm from './email-form';
+
+export interface IEmail {
+  emailAddress?: string | null;
+  description?: string | null;
+  id?: string;
+}
+
+export interface ISavedEmail extends IEmail {
+  id: string;
+}
+
+interface IProps {
+  saveEmail: (email: IEmail, isPrimary: boolean) => Promise<any>;
+  closePopup: () => void;
+  onSaved: (response: any) => void;
+  isVisible: boolean;
+  isPrimary?: boolean;
+  email?: IEmail | null;
+  titleMessageId?: string;
+}
+
+interface IState {
+  emailAddress?: string | null;
+  description?: string | null;
+  saveError?: string | null;
+  updatedIsPrimary?: boolean | null;
+}
+
+class EmailModal extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = {};
+  }
+
+  clearState() {
+    this.setState({
+      emailAddress: null,
+      description: null,
+      saveError: null,
+      updatedIsPrimary: null,
+    });
+  }
+
+  handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    this.setState({ [name as any]: value });
+  };
+
+  handlePrimaryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    const updatedIsPrimary = value === 'true';
+    this.setState({ updatedIsPrimary });
+  };
+
+  handleSubmit = async () => {
+    const { email, saveEmail, onSaved } = this.props;
+    const originalEmail = email || {};
+    const { emailAddress, description, updatedIsPrimary } = this.state;
+
+    const updatedEmail = {
+      id: originalEmail.id,
+      emailAddress: emailAddress || originalEmail.emailAddress,
+      description: description || originalEmail.description,
+    };
+
+    try {
+      const response = await saveEmail(updatedEmail, !!updatedIsPrimary);
+      onSaved(response);
+      this.handleClose();
+    } catch (err) {
+      // TODO: do something with this error
+      this.setState({ saveError: err.message });
+    }
+  };
+
+  handleClose = () => {
+    this.clearState();
+    this.props.closePopup();
+  };
+
+  render() {
+    const { isVisible, titleMessageId, isPrimary } = this.props;
+    const email = this.props.email || {};
+    const { saveError, emailAddress, description, updatedIsPrimary } = this.state;
+
+    const updatedEmailAddress = isNil(emailAddress) ? email.emailAddress : emailAddress;
+    const updatedDescription = isNil(description) ? email.description : description;
+    const currentIsPrimary = isNil(updatedIsPrimary) ? isPrimary : updatedIsPrimary;
+    const onPrimaryChange = email.id && !isPrimary ? this.handlePrimaryChange : undefined;
+
+    return (
+      <Modal
+        isVisible={isVisible}
+        titleMessageId={titleMessageId}
+        cancelMessageId="email.cancel"
+        submitMessageId="email.save"
+        errorMessageId="email.saveError"
+        error={saveError}
+        onClose={this.handleClose}
+        onSubmit={this.handleSubmit}
+      >
+        <EmailForm
+          emailAddress={updatedEmailAddress}
+          description={updatedDescription}
+          onChange={this.handleChange}
+          onPrimaryChange={onPrimaryChange}
+          isPrimary={currentIsPrimary}
+        />
+      </Modal>
+    );
+  }
+}
+
+export default EmailModal;

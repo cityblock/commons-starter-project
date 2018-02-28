@@ -3,7 +3,6 @@
 .container {
   border: 1px solid var(--border-color);
   background-color: var(--white-color);
-  position: relative;
 }
 
 .header {
@@ -12,6 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: var(--small-gutter) var(--medium-gutter) 0 var(--medium-gutter);
+  position: relative;
 }
 
 .title {
@@ -64,4 +64,10 @@
 
 .button {
   flex-shrink: 0;
+}
+
+.menu {
+  position: absolute;
+  right: var(--medium-gutter);
+  top: var(--medium-gutter);
 }

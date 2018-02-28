@@ -1317,6 +1317,7 @@ input PatientInfoEditInput {
   gender: String
   language: String
   primaryAddressId: ID
+  primaryEmailId: ID
 }
 
 # params for editing a patient scratch pad

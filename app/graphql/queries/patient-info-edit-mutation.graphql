@@ -5,6 +5,7 @@ mutation patientInfoEdit(
   $gender: String
   $language: String
   $primaryAddressId: ID
+  $primaryEmailId: ID
 ) {
   patientInfoEdit(
     input: {
@@ -12,6 +13,7 @@ mutation patientInfoEdit(
       gender: $gender
       language: $language
       primaryAddressId: $primaryAddressId
+      primaryEmailId: $primaryEmailId
     }
   ) {
     ...ShortPatientInfo

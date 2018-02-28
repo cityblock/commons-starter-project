@@ -14,6 +14,10 @@ svg.icon.red {
   fill: var(--red-color);
 }
 
+svg.icon.blue {
+  fill: var(--blue-color);
+}
+
 svg.icon.large {
   width: 27px;
   height: 27px;

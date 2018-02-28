@@ -2225,6 +2225,7 @@ declare module 'schema' {
     gender: string | null;
     language: string | null;
     primaryAddressId: string | null;
+    primaryEmailId: string | null;
   }
 
   /**

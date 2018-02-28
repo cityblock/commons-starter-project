@@ -19,8 +19,18 @@ import User from './user';
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.15;
 
-const EAGER_QUERY =
-  '[patientInfo.[primaryAddress, addresses], computedPatientStatus, patientDataFlags]';
+const EAGER_QUERY = `[
+  patientInfo.[
+    primaryAddress,
+    addresses,
+    primaryEmail,
+    emails,
+    primaryPhone,
+    phones
+  ],
+  computedPatientStatus,
+  patientDataFlags,
+]`;
 
 export interface IPatientCreateFields {
   patientId: string;

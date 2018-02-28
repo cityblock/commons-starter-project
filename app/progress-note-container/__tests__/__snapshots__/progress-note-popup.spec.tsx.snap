@@ -135,6 +135,17 @@ exports[`builder concerns renders progress note popup with templates renders pro
                   "zip": "12345",
                 },
               ],
+              "emails": Array [
+                Object {
+                  "emailAddress": "test@email.com",
+                  "id": "email-1-id",
+                },
+                Object {
+                  "description": "some test email",
+                  "emailAddress": "test2@email.com",
+                  "id": "email-2-id",
+                },
+              ],
               "gender": "male",
               "id": "patient-info-id",
               "language": "en",
@@ -145,6 +156,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "state": "NY",
                 "street": "55 Washington St",
                 "zip": "11201",
+              },
+              "primaryEmail": Object {
+                "emailAddress": "test@email.com",
+                "id": "email-1-id",
               },
             },
             "scratchPad": "Note",
@@ -292,6 +307,17 @@ exports[`builder concerns renders progress note popup with templates renders pro
                   "zip": "12345",
                 },
               ],
+              "emails": Array [
+                Object {
+                  "emailAddress": "test@email.com",
+                  "id": "email-1-id",
+                },
+                Object {
+                  "description": "some test email",
+                  "emailAddress": "test2@email.com",
+                  "id": "email-2-id",
+                },
+              ],
               "gender": "male",
               "id": "patient-info-id",
               "language": "en",
@@ -302,6 +328,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "state": "NY",
                 "street": "55 Washington St",
                 "zip": "11201",
+              },
+              "primaryEmail": Object {
+                "emailAddress": "test@email.com",
+                "id": "email-1-id",
               },
             },
             "scratchPad": "Note",
@@ -480,6 +510,17 @@ exports[`builder concerns renders progress note popup with templates renders pro
                   "zip": "12345",
                 },
               ],
+              "emails": Array [
+                Object {
+                  "emailAddress": "test@email.com",
+                  "id": "email-1-id",
+                },
+                Object {
+                  "description": "some test email",
+                  "emailAddress": "test2@email.com",
+                  "id": "email-2-id",
+                },
+              ],
               "gender": "male",
               "id": "patient-info-id",
               "language": "en",
@@ -490,6 +531,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "state": "NY",
                 "street": "55 Washington St",
                 "zip": "11201",
+              },
+              "primaryEmail": Object {
+                "emailAddress": "test@email.com",
+                "id": "email-1-id",
               },
             },
             "scratchPad": "Note",
@@ -637,6 +682,17 @@ exports[`builder concerns renders progress note popup with templates renders pro
                   "zip": "12345",
                 },
               ],
+              "emails": Array [
+                Object {
+                  "emailAddress": "test@email.com",
+                  "id": "email-1-id",
+                },
+                Object {
+                  "description": "some test email",
+                  "emailAddress": "test2@email.com",
+                  "id": "email-2-id",
+                },
+              ],
               "gender": "male",
               "id": "patient-info-id",
               "language": "en",
@@ -647,6 +703,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "state": "NY",
                 "street": "55 Washington St",
                 "zip": "11201",
+              },
+              "primaryEmail": Object {
+                "emailAddress": "test@email.com",
+                "id": "email-1-id",
               },
             },
             "scratchPad": "Note",

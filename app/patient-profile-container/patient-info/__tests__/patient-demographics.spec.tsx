@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { basicInfo, coreIdentity } from '../../../shared/util/test-data';
+import { basicInfo, contactInfo, coreIdentity } from '../../../shared/util/test-data';
 import BasicInformation from '../basic-information';
+import ContactInfo from '../contact-info';
 import CoreIdentity from '../core-identity';
 import PatientDemographics from '../patient-demographics';
 
@@ -12,6 +13,7 @@ describe('Render Patient Demographics Component', () => {
       patient={{
         core: coreIdentity,
         basic: basicInfo,
+        contact: contactInfo,
       }}
       routeBase={'/foo/bar'}
       onChange={onChange}
@@ -19,13 +21,18 @@ describe('Render Patient Demographics Component', () => {
   );
 
   it('renders basic info', () => {
-    expect(wrapper.find(BasicInformation).length).toBe(1);
+    expect(wrapper.find(BasicInformation)).toHaveLength(1);
     expect(wrapper.find(BasicInformation).props().patientInformation).toBe(basicInfo);
     expect(wrapper.find(BasicInformation).props().onChange).toBe(onChange);
   });
 
   it('renders core identity', () => {
-    expect(wrapper.find(CoreIdentity).length).toBe(1);
+    expect(wrapper.find(CoreIdentity)).toHaveLength(1);
     expect(wrapper.find(CoreIdentity).props().patientIdentity).toBe(coreIdentity);
+  });
+
+  it('renders contact info', () => {
+    expect(wrapper.find(ContactInfo)).toHaveLength(1);
+    expect(wrapper.find(ContactInfo).props().contactInfo).toBe(contactInfo);
   });
 });

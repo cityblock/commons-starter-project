@@ -11,6 +11,7 @@ import Select from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
 import AddressInformation from './address-info/address-info';
 import * as styles from './css/patient-demographics.css';
+import { IEditableFieldState } from './patient-info';
 
 export interface IBasicInformation {
   patientId: string;
@@ -22,7 +23,7 @@ export interface IBasicInformation {
 
 interface IProps {
   patientInformation: IBasicInformation;
-  onChange: (field: { name: string; value: string | object | boolean | null }) => void;
+  onChange: (fields: IEditableFieldState) => void;
   className?: string;
 }
 
@@ -35,13 +36,13 @@ export default class BasicInformation extends React.Component<IProps> {
   handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { onChange } = this.props;
     const { name, value } = event.target;
-    onChange({ name, value });
+    onChange({ [name]: value });
   };
 
   handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { onChange } = this.props;
     const { name, checked } = event.target;
-    onChange({ name, value: checked });
+    onChange({ [name]: checked });
   };
 
   renderLanguageSelect() {

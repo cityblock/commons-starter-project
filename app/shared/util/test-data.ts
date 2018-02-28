@@ -73,12 +73,29 @@ export const address3 = {
   description: 'generic',
 };
 
+export const email1 = {
+  id: 'email-1-id',
+  emailAddress: 'test@email.com',
+};
+
+export const email2 = {
+  id: 'email-2-id',
+  emailAddress: 'test2@email.com',
+  description: 'some test email',
+};
+
 interface IAddress {
   id: string;
   street: string | null;
   state: string | null;
   zip: string | null;
   city: string | null;
+  description: string | null;
+}
+
+interface IEmail {
+  id: string;
+  emailAddress: string;
   description: string | null;
 }
 
@@ -101,8 +118,10 @@ export const patient = {
     id: 'patient-info-id',
     gender: 'male',
     language: 'en',
-    primaryAddress: address1,
+    primaryAddress: address1 as IAddress,
     addresses: [address1, address2, address3] as IAddress[],
+    primaryEmail: email1 as IEmail,
+    emails: [email1, email2] as IEmail[],
   },
   patientDataFlags: [],
   cityblockId: 123,
@@ -831,6 +850,13 @@ export const coreIdentity = {
   dateOfBirth: patient.dateOfBirth,
   patientDataFlags: patient.patientDataFlags,
   patientId: patient.id,
+};
+
+export const contactInfo = {
+  patientId: patient.id,
+  patientInfoId: patient.patientInfo.id,
+  primaryEmail: patient.patientInfo.primaryEmail,
+  emails: patient.patientInfo.emails,
 };
 
 export const completeComputedPatientStatus = {

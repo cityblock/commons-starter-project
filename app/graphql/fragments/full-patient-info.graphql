@@ -1,4 +1,5 @@
 #import "./full-address.graphql"
+#import "./full-email.graphql"
 
 fragment FullPatientInfo on PatientInfo {
   id
@@ -9,5 +10,11 @@ fragment FullPatientInfo on PatientInfo {
   }
   addresses {
     ...FullAddress
+  }
+  primaryEmail {
+    ...FullEmail
+  }
+  emails {
+    ...FullEmail
   }
 }

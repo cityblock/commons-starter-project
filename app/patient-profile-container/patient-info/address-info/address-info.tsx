@@ -6,12 +6,13 @@ import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
+import { IEditableFieldState } from '../patient-info';
 import CreateAddressModal from './create-address-modal';
 import * as styles from './css/address-info.css';
 import EditAddressModal from './edit-address-modal';
 
 interface IProps {
-  onChange: (field: { name: string; value: string | object | boolean | null }) => void;
+  onChange: (field: IEditableFieldState) => void;
   patientId: string;
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
@@ -70,7 +71,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
 
     if (index < 0) {
       const updatedAddresses = [...addresses, savedAddress];
-      onChange({ name: 'addresses', value: updatedAddresses });
+      onChange({ addresses: updatedAddresses });
     }
   };
 
@@ -78,7 +79,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     const { onChange, primaryAddress } = this.props;
 
     if (primaryAddress && savedAddress.id === primaryAddress.id) {
-      onChange({ name: 'primaryAddress', value: savedAddress });
+      onChange({ primaryAddress: savedAddress });
       return;
     }
 
@@ -91,13 +92,13 @@ export default class AddressInfo extends React.Component<IProps, IState> {
         savedAddress,
         slice(addresses, index + 1),
       );
-      onChange({ name: 'addresses', value: updatedAddresses });
+      onChange({ addresses: updatedAddresses });
     }
   };
 
   handleSavePrimarySuccess = (savedAddress: ISavedAddress) => {
     const { onChange } = this.props;
-    onChange({ name: 'primaryAddress', value: savedAddress });
+    onChange({ primaryAddress: savedAddress });
   };
 
   renderAddressDisplayCard(address: ISavedAddress) {

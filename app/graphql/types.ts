@@ -519,6 +519,10 @@ export interface carePlanSuggestionAcceptMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     suggestionType: CarePlanSuggestionType,
@@ -611,6 +615,10 @@ export interface carePlanSuggestionDismissMutation {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -1917,6 +1925,10 @@ export interface getPatientCarePlanSuggestionsQuery {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     suggestionType: CarePlanSuggestionType,
@@ -2027,6 +2039,10 @@ export interface getPatientCarePlanQuery {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       patientGoals:  Array< {
@@ -2050,6 +2066,10 @@ export interface getPatientCarePlanQuery {
             primaryAddress:  {
               id: string,
               zip: string | null,
+            } | null,
+            primaryEmail:  {
+              id: string,
+              emailAddress: string,
             } | null,
           },
         },
@@ -2120,6 +2140,10 @@ export interface getPatientCarePlanQuery {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -2359,6 +2383,10 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -2394,6 +2422,10 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -2527,6 +2559,10 @@ export interface getPatientScreeningToolSubmissionQuery {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -2562,6 +2598,10 @@ export interface getPatientScreeningToolSubmissionQuery {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -2794,6 +2834,16 @@ export interface getPatientQuery {
         state: string | null,
         street: string | null,
         zip: string | null,
+        description: string | null,
+      } > | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+        description: string | null,
+      } | null,
+      emails:  Array< {
+        id: string,
+        emailAddress: string,
         description: string | null,
       } > | null,
     },
@@ -3119,6 +3169,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       userId: string,
@@ -3303,6 +3357,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       userId: string,
@@ -3358,6 +3416,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               id: string,
               zip: string | null,
             } | null,
+            primaryEmail:  {
+              id: string,
+              emailAddress: string,
+            } | null,
           },
         },
         patientGoals:  Array< {
@@ -3381,6 +3443,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               primaryAddress:  {
                 id: string,
                 zip: string | null,
+              } | null,
+              primaryEmail:  {
+                id: string,
+                emailAddress: string,
               } | null,
             },
           },
@@ -3452,6 +3518,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             primaryAddress:  {
               id: string,
               zip: string | null,
+            } | null,
+            primaryEmail:  {
+              id: string,
+              emailAddress: string,
             } | null,
           },
         },
@@ -3555,6 +3625,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       userId: string,
@@ -3590,6 +3664,10 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             primaryAddress:  {
               id: string,
               zip: string | null,
+            } | null,
+            primaryEmail:  {
+              id: string,
+              emailAddress: string,
             } | null,
           },
         },
@@ -3760,6 +3838,10 @@ export interface getProgressNoteQuery {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     completedAt: string | null,
@@ -3830,6 +3912,10 @@ export interface getProgressNotesForCurrentUserQuery {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     completedAt: string | null,
@@ -3895,6 +3981,10 @@ export interface getProgressNotesForSupervisorReviewQuery {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -4206,6 +4296,10 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       suggestionType: CarePlanSuggestionType,
@@ -4307,6 +4401,10 @@ export interface getRiskAreaAssessmentSubmissionQuery {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -5287,6 +5385,10 @@ export interface patientConcernBulkEditMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     patientGoals:  Array< {
@@ -5310,6 +5412,10 @@ export interface patientConcernBulkEditMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -5406,6 +5512,10 @@ export interface patientConcernCreateMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     patientGoals:  Array< {
@@ -5429,6 +5539,10 @@ export interface patientConcernCreateMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -5523,6 +5637,10 @@ export interface patientConcernDeleteMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     patientGoals:  Array< {
@@ -5546,6 +5664,10 @@ export interface patientConcernDeleteMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -5621,6 +5743,10 @@ export interface patientCoreIdentityVerifyMutation {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   } | null,
 };
@@ -5675,6 +5801,10 @@ export interface patientEditMutation {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   } | null,
 };
@@ -5727,6 +5857,10 @@ export interface patientGoalCreateMutation {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -5800,6 +5934,10 @@ export interface patientGoalDeleteMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     patientConcernId: string | null,
@@ -5849,6 +5987,7 @@ export interface patientInfoEditMutationVariables {
   gender?: string | null,
   language?: string | null,
   primaryAddressId?: string | null,
+  primaryEmailId?: string | null,
 };
 
 export interface patientInfoEditMutation {
@@ -5860,6 +5999,10 @@ export interface patientInfoEditMutation {
     primaryAddress:  {
       id: string,
       zip: string | null,
+    } | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
     } | null,
   } | null,
 };
@@ -5959,6 +6102,10 @@ export interface patientScreeningToolSubmissionCreateMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -5994,6 +6141,10 @@ export interface patientScreeningToolSubmissionCreateMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -6098,6 +6249,10 @@ export interface patientScreeningToolSubmissionScoreMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -6133,6 +6288,10 @@ export interface patientScreeningToolSubmissionScoreMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -6283,6 +6442,10 @@ export interface progressNoteAddSupervisorNotesMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     completedAt: string | null,
@@ -6352,6 +6515,10 @@ export interface progressNoteCompleteMutation {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -6423,6 +6590,10 @@ export interface progressNoteCompleteSupervisorReviewMutation {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     completedAt: string | null,
@@ -6492,6 +6663,10 @@ export interface progressNoteCreateMutation {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -6569,6 +6744,10 @@ export interface progressNoteEditMutation {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -7060,6 +7239,10 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       suggestionType: CarePlanSuggestionType,
@@ -7162,6 +7345,10 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -8684,6 +8871,10 @@ export interface FullCarePlanSuggestionFragment {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   },
   suggestionType: CarePlanSuggestionType,
@@ -8769,6 +8960,10 @@ export interface FullCarePlanUpdateEventFragment {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   },
   userId: string,
@@ -8824,6 +9019,10 @@ export interface FullCarePlanUpdateEventFragment {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     patientGoals:  Array< {
@@ -8847,6 +9046,10 @@ export interface FullCarePlanUpdateEventFragment {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -8918,6 +9121,10 @@ export interface FullCarePlanUpdateEventFragment {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -9213,6 +9420,10 @@ export interface FullPatientAnswerEventFragment {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   },
   userId: string,
@@ -9484,6 +9695,10 @@ export interface FullPatientConcernFragment {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   },
   patientGoals:  Array< {
@@ -9507,6 +9722,10 @@ export interface FullPatientConcernFragment {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -9634,6 +9853,16 @@ export interface FullPatientForProfileFragment {
       zip: string | null,
       description: string | null,
     } > | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
+      description: string | null,
+    } | null,
+    emails:  Array< {
+      id: string,
+      emailAddress: string,
+      description: string | null,
+    } > | null,
   },
   patientDataFlags:  Array< {
     id: string,
@@ -9672,6 +9901,10 @@ export interface FullPatientGoalFragment {
       primaryAddress:  {
         id: string,
         zip: string | null,
+      } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
       } | null,
     },
   },
@@ -9736,6 +9969,16 @@ export interface FullPatientInfoFragment {
     zip: string | null,
     description: string | null,
   } > | null,
+  primaryEmail:  {
+    id: string,
+    emailAddress: string,
+    description: string | null,
+  } | null,
+  emails:  Array< {
+    id: string,
+    emailAddress: string,
+    description: string | null,
+  } > | null,
 };
 
 export interface FullPatientListFragment {
@@ -9776,6 +10019,10 @@ export interface FullPatientScreeningToolSubmissionFragment {
         id: string,
         zip: string | null,
       } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
     },
   },
   userId: string,
@@ -9811,6 +10058,10 @@ export interface FullPatientScreeningToolSubmissionFragment {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -9986,6 +10237,10 @@ export interface FullProgressNoteActivityFragment {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -10171,6 +10426,10 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -10226,6 +10485,10 @@ export interface FullProgressNoteActivityFragment {
             id: string,
             zip: string | null,
           } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
+          } | null,
         },
       },
       patientGoals:  Array< {
@@ -10249,6 +10512,10 @@ export interface FullProgressNoteActivityFragment {
             primaryAddress:  {
               id: string,
               zip: string | null,
+            } | null,
+            primaryEmail:  {
+              id: string,
+              emailAddress: string,
             } | null,
           },
         },
@@ -10320,6 +10587,10 @@ export interface FullProgressNoteActivityFragment {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -10423,6 +10694,10 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           zip: string | null,
         } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
+        } | null,
       },
     },
     userId: string,
@@ -10458,6 +10733,10 @@ export interface FullProgressNoteActivityFragment {
           primaryAddress:  {
             id: string,
             zip: string | null,
+          } | null,
+          primaryEmail:  {
+            id: string,
+            emailAddress: string,
           } | null,
         },
       },
@@ -10576,6 +10855,10 @@ export interface FullProgressNoteFragment {
       primaryAddress:  {
         id: string,
         zip: string | null,
+      } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
       } | null,
     },
   },
@@ -10752,6 +11035,10 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
         primaryAddress:  {
           id: string,
           zip: string | null,
+        } | null,
+        primaryEmail:  {
+          id: string,
+          emailAddress: string,
         } | null,
       },
     },
@@ -11370,6 +11657,10 @@ export interface ShortPatientInfoFragment {
     id: string,
     zip: string | null,
   } | null,
+  primaryEmail:  {
+    id: string,
+    emailAddress: string,
+  } | null,
 };
 
 export interface ShortPatientScreeningToolSubmission360Fragment {
@@ -11432,6 +11723,10 @@ export interface ShortPatientFragment {
     primaryAddress:  {
       id: string,
       zip: string | null,
+    } | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
     } | null,
   },
 };

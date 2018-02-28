@@ -103,7 +103,11 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
           <FormattedMessage id={titleMessageId}>
             {(message: string) => <h3 className={styles.title}>{message}</h3>}
           </FormattedMessage>
-          <HamburgerMenu open={isMenuVisible} onMenuToggle={this.handleMenuToggle}>
+          <HamburgerMenu
+            open={isMenuVisible}
+            onMenuToggle={this.handleMenuToggle}
+            className={styles.menu}
+          >
             <HamburgerMenuOption
               messageId="flaggableDisplayCard.flag"
               icon="flag"

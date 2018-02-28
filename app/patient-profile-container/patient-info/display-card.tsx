@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
+import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/display-card.css';
 
 interface IProps {
@@ -11,6 +12,7 @@ interface IProps {
   onEditClick?: () => void;
   onDeleteClick?: () => void;
   className?: string;
+  isStarred?: boolean;
 }
 
 interface IState {
@@ -53,11 +55,19 @@ export default class DisplayCard extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { children, titleMessageId, className } = this.props;
+    const { children, titleMessageId, className, isStarred } = this.props;
+    const iconComponent = isStarred ? (
+      <Icon name="stars" color="blue" className={styles.star} />
+    ) : null;
 
     const titleComponent = titleMessageId ? (
       <FormattedMessage id={titleMessageId}>
-        {(message: string) => <h3 className={styles.title}>{message}</h3>}
+        {(message: string) => (
+          <h3 className={styles.title}>
+            {message}
+            {iconComponent}
+          </h3>
+        )}
       </FormattedMessage>
     ) : null;
 

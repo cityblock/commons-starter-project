@@ -42,6 +42,7 @@ import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
 import ReportIcon from 'material-ui-icons/Report';
 import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
+import StarsIcon from 'material-ui-icons/Stars';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import WarningIcon from 'material-ui-icons/Warning';
 import { SvgIconProps } from 'material-ui/SvgIcon';
@@ -88,6 +89,7 @@ const components: IconComponents = {
   playlistAdd: PlaylistAddIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
+  stars: StarsIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,
   report: ReportIcon,

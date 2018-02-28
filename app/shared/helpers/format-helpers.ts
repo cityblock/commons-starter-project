@@ -1,8 +1,10 @@
 import { differenceInYears, format } from 'date-fns';
+import { startCase } from 'lodash';
 import {
   FullPatientAnswerFragment,
   ShortPatientFragment,
   ShortPatientScreeningToolSubmission360Fragment,
+  UserRole,
 } from '../../graphql/types';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
@@ -12,6 +14,14 @@ export const formatFullName = (firstName?: string | null, lastName?: string | nu
 
 export const formatPatientName = (patient: ShortPatientFragment) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
+
+export const formatCareTeamMemberRole = (role: UserRole): string => {
+  if (role === 'admin') {
+    return 'Behavioral Health Specialist';
+  }
+
+  return startCase(role);
+};
 
 export const formatInputDate = (dueDate?: string): string =>
   format(dueDate || Date.now(), 'YYYY-MM-DD');

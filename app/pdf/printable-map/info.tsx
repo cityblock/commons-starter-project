@@ -7,6 +7,7 @@ import {
 } from '../../graphql/types';
 import Divider from '../shared/divider';
 import variables from '../shared/variables/variables';
+import CareTeam from './care-team';
 import PatientInfo from './patient-info';
 
 interface IProps {
@@ -33,6 +34,7 @@ const Info: React.StatelessComponent<IProps> = ({ patient, careTeam, carePlan })
       <Divider color="darkGray" />
       <View style={styles.main}>
         <PatientInfo patient={patient} carePlan={carePlan} />
+        <CareTeam careTeam={careTeam} />
       </View>
     </View>
   );

@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: variables.flexColumn,
     justifyContent: variables.flexSpaceBetween,
     paddingRight: variables.extraSmallGutter,
+    paddingBottom: variables.smallGutter,
   },
 });
 

@@ -1,7 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullUserFragment, UserRole } from '../graphql/types';
+import { FullUserFragment } from '../graphql/types';
+import { formatCareTeamMemberRole } from '../shared/helpers/format-helpers';
 import * as styles from './css/care-team-widget-member.css';
 
 interface IProps {
@@ -18,26 +19,12 @@ const phoneIconStyles = generateIconStyles(styles.careTeamPhoneIcon);
 const emailIconStyles = generateIconStyles(styles.careTeamEmailIcon);
 
 export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
-  formatCareTeamMemberRole(role: UserRole): string {
-    const roleToStringHash: { [key: string]: string } = {
-      admin: 'Behavioral Health Specialist', // TODO: remove
-      physician: 'Physician',
-      nurseCareManager: 'Nurse Care Manager',
-      healthCoach: 'Health Coach',
-      familyMember: 'Family Member',
-      primaryCarePhysician: 'Primary Care Physician',
-      communityHealthPartner: 'Community Health Partner',
-      psychiatrist: 'Psychiatrist',
-    };
-    return roleToStringHash[role] || '';
-  }
-
   render() {
     const { careTeamMember, onClick, selected } = this.props;
 
     const careTeamMemberPhotoUrl = careTeamMember.googleProfileImageUrl || '';
     const careTeamMemberFullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
-    const careTeamMemberRole = this.formatCareTeamMemberRole(careTeamMember.userRole);
+    const careTeamMemberRole = formatCareTeamMemberRole(careTeamMember.userRole);
     const careTeamPhoneNumber = careTeamMember.phone;
 
     const contactStyles = classNames(styles.careTeamMemberContact, {

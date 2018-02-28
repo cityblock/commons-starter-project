@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient, patientConcern, user } from '../../../shared/util/test-data';
 import Divider from '../../shared/divider';
+import CareTeam from '../care-team';
 import Info from '../info';
 import PatientInfo from '../patient-info';
 
@@ -20,5 +21,9 @@ describe('Printable MAP information component', () => {
   it('renders patient info component', () => {
     expect(wrapper.find(PatientInfo).props().patient).toEqual(patient);
     expect(wrapper.find(PatientInfo).props().carePlan).toEqual([patientConcern]);
+  });
+
+  it('renders care team component', () => {
+    expect(wrapper.find(CareTeam).props().careTeam).toEqual([user]);
   });
 });

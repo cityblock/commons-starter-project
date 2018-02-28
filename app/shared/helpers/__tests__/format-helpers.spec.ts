@@ -7,6 +7,7 @@ import {
   formatAddress,
   formatAge,
   formatAgeDetails,
+  formatCareTeamMemberRole,
   formatCBOReferralTaskTitle,
   formatDateAsTimestamp,
   formatDateOfBirth,
@@ -66,6 +67,16 @@ describe('Shared Component Helpers', () => {
       } as any;
 
       expect(formatPatientName(patient)).toBe('Mother of Dragons');
+    });
+  });
+
+  describe('formatCareTeamMemberRole', () => {
+    it('returns special title for admin', () => {
+      expect(formatCareTeamMemberRole('admin' as any)).toBe('Behavioral Health Specialist');
+    });
+
+    it('returns titleized user role otherwise', () => {
+      expect(formatCareTeamMemberRole('nurseCareManager' as any)).toBe('Nurse Care Manager');
     });
   });
 

@@ -2,9 +2,13 @@ import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import variables from '../shared/variables/variables';
 
+type ValueColor = 'blue' | 'gray';
+
 interface IProps {
   label: string;
   value: string | number;
+  valueColor?: ValueColor; // default is blue
+  fullWidth?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -28,13 +32,34 @@ const styles = StyleSheet.create({
     fontSize: variables.smallFontSize,
     height: variables.smallFontSize,
   },
+  gray: {
+    color: variables.darkGrayColor,
+  },
+  fullWidth: {
+    width: variables.full,
+  },
 });
 
-const TextGroup: React.StatelessComponent<IProps> = ({ label, value }) => {
+const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { label, value, valueColor, fullWidth } = props;
+
+  const containerStyle = fullWidth
+    ? {
+        ...styles.container,
+        ...styles.fullWidth,
+      }
+    : styles.container;
+  const valueStyle = valueColor
+    ? {
+        ...styles.value,
+        ...styles[valueColor],
+      }
+    : styles.value;
+
   return (
-    <View style={styles.container}>
+    <View style={containerStyle}>
       <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
+      <Text style={valueStyle}>{value}</Text>
     </View>
   );
 };

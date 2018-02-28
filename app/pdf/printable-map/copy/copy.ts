@@ -2,6 +2,8 @@ export default {
   activeConcerns: 'Total active concerns:',
   activeGoals: 'Total active goals:',
   activeTasks: 'Total active tasks:',
+  careTeam: 'Care Team:',
+  contact: 'Contact:',
   documentTitle: 'Printable MAP',
   map: 'Member Action Plan',
   mapInfo:
@@ -9,4 +11,5 @@ export default {
   mapSummary: 'MAP Summary:',
   member: 'Member:',
   printedOn: 'Printed on:',
+  textOrCall: 'Text or call',
 };

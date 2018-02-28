@@ -1,4 +1,4 @@
-import { Document, Page, StyleSheet, Text, View } from '@react-pdf/core';
+import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import {
   FullPatientConcernFragment,
@@ -7,6 +7,7 @@ import {
 } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
+import Header from './header';
 
 interface IProps {
   carePlan: FullPatientConcernFragment[];
@@ -15,6 +16,13 @@ interface IProps {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: variables.whiteColor,
+    paddingTop: variables.mediumGutter,
+    paddingBottom: variables.mediumGutter,
+    paddingRight: variables.smallGutter,
+    paddingLeft: variables.smallGutter,
+  },
   border: {
     backgroundColor: variables.blueColor,
     height: variables.bigBorder,
@@ -25,9 +33,9 @@ const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, patient }) =
   return (
     <Document title={copy.documentTitle}>
       <Page size="A4">
-        <View style={styles.border} />
-        <View>
-          <Text>Printable MAP Placeholder</Text>
+        <View style={styles.border} fixed />
+        <View style={styles.container}>
+          <Header />
         </View>
       </Page>
     </Document>

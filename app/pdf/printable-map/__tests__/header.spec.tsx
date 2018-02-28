@@ -1,4 +1,4 @@
-import { Image, View } from '@react-pdf/core';
+import { Image, Text, View } from '@react-pdf/core';
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
@@ -7,10 +7,11 @@ import HeaderText from '../../shared/header-text';
 import copy from '../copy/copy';
 import Header, { LOGO_PATH } from '../header';
 
-describe('CBO Referral PDF Header', () => {
-  const referredOn = '2017-11-07T13:45:14.532Z';
+describe('Printable MAP Header', () => {
+  const oldDate = Date.now;
+  Date.now = () => 1519836435207;
 
-  const wrapper = shallow(<Header referredOn={referredOn} />);
+  const wrapper = shallow(<Header />);
 
   it('renders view containers', () => {
     expect(wrapper.find(View).length).toBe(2);
@@ -21,14 +22,20 @@ describe('CBO Referral PDF Header', () => {
     expect(wrapper.find<{ src: string }>(Image).props().src).toBe(LOGO_PATH);
   });
 
-  it('renders referred on header', () => {
-    expect(wrapper.find(HeaderText).length).toBe(1);
-    expect(wrapper.find(HeaderText).props().label).toBe(copy.referredOn);
+  it('renders text for page title', () => {
+    expect(wrapper.find(Text).length).toBe(1);
+    expect(wrapper.find(Text).text()).toBe(copy.map);
   });
 
-  it('renders referred on date', () => {
-    expect(wrapper.find(BodyText).length).toBe(1);
-    expect(wrapper.find(BodyText).props().label).toBe(format(referredOn, 'MMM D, YYYY'));
-    expect(wrapper.find(BodyText).props().noMargin).toBeTruthy();
+  it('renders printed on header', () => {
+    expect(wrapper.find(HeaderText).length).toBe(1);
+    expect(wrapper.find(HeaderText).props().label).toBe(copy.printedOn);
   });
+
+  it('renders printedOn on date', () => {
+    expect(wrapper.find(BodyText).length).toBe(1);
+    expect(wrapper.find(BodyText).props().label).toBe(format(Date.now(), 'MMM D, YYYY'));
+  });
+
+  Date.now = oldDate;
 });

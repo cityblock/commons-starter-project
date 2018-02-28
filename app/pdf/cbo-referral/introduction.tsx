@@ -2,11 +2,11 @@ import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullTaskForCBOReferralFormPDFFragment, FullUserFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
+import BodyText from '../shared/body-text';
+import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';
-import BodyText from './body-text';
 import copy from './copy/copy';
 import Divider from './divider';
-import HeaderText from './header-text';
 import TextGroup from './text-group';
 
 interface IProps {

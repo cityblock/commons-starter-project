@@ -3,10 +3,10 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import { patient, taskWithComment, user } from '../../../shared/util/test-data';
-import BodyText from '../body-text';
+import BodyText from '../../shared/body-text';
+import HeaderText from '../../shared/header-text';
 import copy from '../copy/copy';
 import Divider from '../divider';
-import HeaderText from '../header-text';
 import Introduction from '../introduction';
 import TextGroup from '../text-group';
 

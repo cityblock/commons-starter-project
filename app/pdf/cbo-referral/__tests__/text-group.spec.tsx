@@ -1,8 +1,8 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import BodyText from '../body-text';
-import HeaderText from '../header-text';
+import BodyText from '../../shared/body-text';
+import HeaderText from '../../shared/header-text';
 import TextGroup from '../text-group';
 
 describe('CBO Referral PDF Text Group', () => {

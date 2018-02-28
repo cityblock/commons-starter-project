@@ -13,6 +13,7 @@ const bigBorder = 5;
 const smallBorder = 1;
 const borderStyle = 'solid';
 const full = '100%';
+const half = '50%';
 const oneThird = '33.3%';
 const twoThirds = '66.6%';
 const flexRow = 'row';
@@ -32,6 +33,7 @@ const bodyMarginLeft = 5;
 const titleFontSize = 16;
 const CBONameFontSize = 20;
 const imageHeight = 50;
+const imageHeightSmall = 40;
 
 export default {
   whiteColor,
@@ -49,6 +51,7 @@ export default {
   smallBorder,
   borderStyle,
   full,
+  half,
   oneThird,
   twoThirds,
   flexRow,
@@ -68,4 +71,5 @@ export default {
   titleFontSize,
   CBONameFontSize,
   imageHeight,
+  imageHeightSmall,
 };

@@ -1,5 +1,4 @@
 import { Image, Text, View } from '@react-pdf/core';
-import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import BodyText from '../../shared/body-text';
@@ -34,7 +33,7 @@ describe('Printable MAP Header', () => {
 
   it('renders printedOn on date', () => {
     expect(wrapper.find(BodyText).length).toBe(1);
-    expect(wrapper.find(BodyText).props().label).toBe(format(Date.now(), 'MMM D, YYYY'));
+    expect(wrapper.find(BodyText).props().label).toBe('Feb 28, 2018');
   });
 
   Date.now = oldDate;

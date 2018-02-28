@@ -2,6 +2,7 @@ const whiteColor = '#fff';
 const blackColor = '#000';
 const blueColor = '#2962ff';
 const grayColor = '#ccc';
+const darkGrayColor = '#666';
 const roboto = 'Roboto';
 const robotoBold = 'Roboto Bold';
 const basetica = 'Basetica';
@@ -9,6 +10,7 @@ const baseticaBold = 'Basetica Bold';
 const gutter = 40;
 const mediumGutter = 25;
 const smallGutter = 15;
+const extraSmallGutter = 10;
 const bigBorder = 5;
 const smallBorder = 1;
 const borderStyle = 'solid';
@@ -27,6 +29,7 @@ const headerFontSize = 10.5;
 const headerLineHeight = 14;
 const bodyFontSize = 12;
 const bodyLineHeight = 16;
+const mediumFontSize = 10;
 const smallFontSize = 8;
 const bodyMarginTop = 8;
 const bodyMarginLeft = 5;
@@ -40,6 +43,7 @@ export default {
   blackColor,
   blueColor,
   grayColor,
+  darkGrayColor,
   roboto,
   robotoBold,
   basetica,
@@ -47,6 +51,7 @@ export default {
   gutter,
   mediumGutter,
   smallGutter,
+  extraSmallGutter,
   bigBorder,
   smallBorder,
   borderStyle,
@@ -65,6 +70,7 @@ export default {
   headerLineHeight,
   bodyFontSize,
   bodyLineHeight,
+  mediumFontSize,
   smallFontSize,
   bodyMarginTop,
   bodyMarginLeft,

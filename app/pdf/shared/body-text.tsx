@@ -5,6 +5,7 @@ import variables from '../shared/variables/variables';
 interface IProps {
   label: string;
   noMargin?: boolean;
+  small?: boolean; // sets font size to smaller
 }
 
 const styles = StyleSheet.create({
@@ -21,10 +22,14 @@ const styles = StyleSheet.create({
     lineHeight: variables.bodyLineHeight,
     color: variables.blackColor,
   },
+  small: {
+    fontSize: variables.smallFontSize,
+  },
 });
 
-const BodyText: React.StatelessComponent<IProps> = ({ label, noMargin }) => {
-  const style = noMargin ? styles.textNoMargin : styles.text;
+const BodyText: React.StatelessComponent<IProps> = ({ label, noMargin, small }) => {
+  let style = noMargin ? styles.textNoMargin : styles.text;
+  if (small) style = { ...style, ...styles.small };
 
   return <Text style={style}>{label}</Text>;
 };

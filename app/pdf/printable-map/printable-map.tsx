@@ -8,6 +8,7 @@ import {
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import Header from './header';
+import Info from './info';
 
 interface IProps {
   carePlan: FullPatientConcernFragment[];
@@ -29,13 +30,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, patient }) => {
+const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, careTeam, patient }) => {
+  // only get active concerns (have been started but not completed)
+  const activeConcerns = carePlan.filter(concern => !!concern.startedAt && !concern.completedAt);
+
   return (
     <Document title={copy.documentTitle}>
       <Page size="A4">
         <View style={styles.border} fixed />
         <View style={styles.container}>
           <Header />
+          <Info patient={patient} careTeam={careTeam} carePlan={activeConcerns} />
         </View>
       </Page>
     </Document>

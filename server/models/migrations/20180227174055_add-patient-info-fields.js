@@ -16,7 +16,7 @@ exports.up = function(knex, Promise) {
       table.bool('hasEmail');
       table.bool('isMarginallyHoused');
       table.enu('preferredContactMethod', ['text', 'phone', 'email']);
-      table.enu('sexAtBirth', ['male', 'female'])
+      table.enu('sexAtBirth', ['male', 'female']);
       table.string('preferredName');
     });
 };

@@ -1,8 +1,8 @@
 import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Divider from '../../shared/divider';
 import copy from '../copy/copy';
-import Divider from '../divider';
 import Title from '../title';
 
 describe('CBO Referral PDF Title', () => {

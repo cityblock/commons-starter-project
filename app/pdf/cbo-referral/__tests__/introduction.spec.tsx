@@ -4,9 +4,9 @@ import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import { patient, taskWithComment, user } from '../../../shared/util/test-data';
 import BodyText from '../../shared/body-text';
+import Divider from '../../shared/divider';
 import HeaderText from '../../shared/header-text';
 import copy from '../copy/copy';
-import Divider from '../divider';
 import Introduction from '../introduction';
 import TextGroup from '../text-group';
 

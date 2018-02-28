@@ -1,4 +1,3 @@
-
 import { BirthSexOptions, ContactMethodOptions, Gender } from '../../graphql/types';
 
 export const clinic = {
@@ -523,6 +522,21 @@ export const patientConcern = {
   patientId: 'patient-id',
   patient,
   startedAt: null,
+  completedAt: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
+export const patientConcernActive = {
+  id: 'patient-concern-id-active',
+  order: 2,
+  concernId: 'concern-id-active',
+  concern,
+  patientGoals: [patientGoal],
+  patientId: 'patient-id',
+  patient,
+  startedAt: '2017-09-07T13:45:14.532Z',
   completedAt: null,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',

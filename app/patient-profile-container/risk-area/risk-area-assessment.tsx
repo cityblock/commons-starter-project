@@ -167,8 +167,9 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     this.setState({ editPopupVisible: true });
   };
 
-  onEditableChangeConfirm = () => {
-    this.setState({ inProgress: true, editPopupVisible: false });
+  onEditableChangeConfirm = async () => {
+    this.setState({ editPopupVisible: false });
+    await this.onStart();
   };
 
   onEditPopupClose = () => {

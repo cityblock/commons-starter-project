@@ -14,7 +14,3 @@ export const registerFonts = (): void => {
     family: 'Basetica Bold',
   });
 };
-
-export const clearFonts = (): void => {
-  Font.clear();
-};

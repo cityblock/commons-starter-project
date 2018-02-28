@@ -4,6 +4,7 @@ import { FullUserFragment } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import CareTeamList from './care-team-list';
 import ContactList from './contact-list';
+import copy from './copy/copy';
 
 interface IProps {
   careTeam: FullUserFragment[];
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const CareTeam: React.StatelessComponent<IProps> = ({ careTeam }) => {
-  const leadFirstName = careTeam.length ? careTeam[0].firstName || 'Unknown' : 'No lead';
+  const leadFirstName = careTeam.length ? careTeam[0].firstName || copy.unknown : copy.noLead;
 
   return (
     <View style={styles.container}>

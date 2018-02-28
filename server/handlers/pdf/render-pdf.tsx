@@ -14,7 +14,7 @@ import {
   formatFilename,
   formatPrintableMapPdfFileName,
 } from './helpers';
-import { clearFonts, registerFonts } from './register-fonts';
+import { registerFonts } from './register-fonts';
 
 export const GENERATE_PDF_JWT_TYPE = 'generatePDFJwt';
 const SERVER_ERROR_MESSAGE = 'Something went wrong, please try again';
@@ -51,10 +51,9 @@ export const renderPdf = async (
   res.setHeader('Content-type', 'application/pdf');
   res.setHeader('Content-Transfer-Encoding', 'binary');
 
-  // For now have to load and clear fonts each time, otherwise crashes on multiple loads
+  // Ensure fonts are registered
   registerFonts();
   const pdf = await ReactPDF.renderToStream(component);
-  clearFonts();
 
   return pdf.pipe(res);
 };

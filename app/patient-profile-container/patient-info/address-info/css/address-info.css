@@ -5,6 +5,7 @@
   border: 1px solid var(--border-color);
   color: var(--black-color);
   height: 40px;
+  margin-bottom: var(--small-gutter);
 }
 
 .addressTitle {

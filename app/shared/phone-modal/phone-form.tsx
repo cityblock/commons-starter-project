@@ -1,24 +1,28 @@
+import { values } from 'lodash-es';
 import * as React from 'react';
+import { PhoneTypeOptions } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import * as styles from '../../shared/library/form/css/form.css';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
+import Select from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
 
 interface IProps {
-  emailAddress?: string | null;
+  phoneNumber?: string | null;
+  type?: PhoneTypeOptions | null;
   description?: string | null;
   isPrimary?: boolean;
   onChange: (e?: any) => void;
   onPrimaryChange?: (e?: any) => void;
 }
 
-const EmailForm: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onChange, onPrimaryChange, emailAddress, description, isPrimary } = props;
+const PhoneForm: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { onChange, onPrimaryChange, phoneNumber, type, description, isPrimary } = props;
 
   const isPrimaryComponent = onPrimaryChange ? (
     <div className={styles.field}>
-      <FormLabel messageId="email.isPrimary" />
+      <FormLabel messageId="phone.isPrimary" />
       <RadioGroup>
         <RadioInput
           name="isPrimary"
@@ -40,13 +44,27 @@ const EmailForm: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div>
-      <div className={styles.field}>
-        <FormLabel messageId="email.emailAddress" />
-        <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <FormLabel messageId="phone.phoneNumber" />
+          <TextInput name="phoneNumber" value={phoneNumber || ''} onChange={onChange} />
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="phone.type" />
+          <Select
+            name="type"
+            value={type || ''}
+            prefix="phone"
+            onChange={onChange}
+            options={values(PhoneTypeOptions)}
+            large={true}
+          />
+        </div>
       </div>
 
       <div className={styles.field}>
-        <FormLabel messageId="email.description" />
+        <FormLabel messageId="phone.description" />
         <TextInput name="description" value={description || ''} onChange={onChange} />
       </div>
 
@@ -55,4 +73,4 @@ const EmailForm: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 };
 
-export default EmailForm;
+export default PhoneForm;

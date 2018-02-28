@@ -153,6 +153,19 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "phones": Array [
+                Object {
+                  "description": "main phone number",
+                  "id": "phone-1-id",
+                  "phoneNumber": "555-555-5555",
+                  "type": "mobile",
+                },
+                Object {
+                  "id": "phone-2-id",
+                  "phoneNumber": "222-222-2222",
+                  "type": "work",
+                },
+              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -167,6 +180,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "primaryEmail": Object {
                 "emailAddress": "test@email.com",
                 "id": "email-1-id",
+              },
+              "primaryPhone": Object {
+                "description": "main phone number",
+                "id": "phone-1-id",
+                "phoneNumber": "555-555-5555",
+                "type": "mobile",
               },
               "sexAtBirth": "male",
             },
@@ -333,6 +352,19 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "phones": Array [
+                Object {
+                  "description": "main phone number",
+                  "id": "phone-1-id",
+                  "phoneNumber": "555-555-5555",
+                  "type": "mobile",
+                },
+                Object {
+                  "id": "phone-2-id",
+                  "phoneNumber": "222-222-2222",
+                  "type": "work",
+                },
+              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -347,6 +379,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "primaryEmail": Object {
                 "emailAddress": "test@email.com",
                 "id": "email-1-id",
+              },
+              "primaryPhone": Object {
+                "description": "main phone number",
+                "id": "phone-1-id",
+                "phoneNumber": "555-555-5555",
+                "type": "mobile",
               },
               "sexAtBirth": "male",
             },
@@ -544,6 +582,19 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "phones": Array [
+                Object {
+                  "description": "main phone number",
+                  "id": "phone-1-id",
+                  "phoneNumber": "555-555-5555",
+                  "type": "mobile",
+                },
+                Object {
+                  "id": "phone-2-id",
+                  "phoneNumber": "222-222-2222",
+                  "type": "work",
+                },
+              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -558,6 +609,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "primaryEmail": Object {
                 "emailAddress": "test@email.com",
                 "id": "email-1-id",
+              },
+              "primaryPhone": Object {
+                "description": "main phone number",
+                "id": "phone-1-id",
+                "phoneNumber": "555-555-5555",
+                "type": "mobile",
               },
               "sexAtBirth": "male",
             },
@@ -724,6 +781,19 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "phones": Array [
+                Object {
+                  "description": "main phone number",
+                  "id": "phone-1-id",
+                  "phoneNumber": "555-555-5555",
+                  "type": "mobile",
+                },
+                Object {
+                  "id": "phone-2-id",
+                  "phoneNumber": "222-222-2222",
+                  "type": "work",
+                },
+              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -738,6 +808,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "primaryEmail": Object {
                 "emailAddress": "test@email.com",
                 "id": "email-1-id",
+              },
+              "primaryPhone": Object {
+                "description": "main phone number",
+                "id": "phone-1-id",
+                "phoneNumber": "555-555-5555",
+                "type": "mobile",
               },
               "sexAtBirth": "male",
             },

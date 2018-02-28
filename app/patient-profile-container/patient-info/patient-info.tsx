@@ -15,6 +15,7 @@ import Icon from '../../shared/library/icon/icon';
 import SmallText from '../../shared/library/small-text/small-text';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
+import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
 import * as styles from './css/patient-info.css';
 import PatientDemographics, { IDemographics } from './patient-demographics';
 
@@ -48,6 +49,8 @@ export interface IEditableFieldState {
   addresses?: ISavedAddress[] | null;
   primaryEmail?: ISavedEmail | null;
   emails?: ISavedEmail[] | null;
+  primaryPhone?: ISavedPhone | null;
+  phones?: ISavedPhone[] | null;
   flags?: getPatientQuery['patient']['patientDataFlags'];
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
 }
@@ -73,10 +76,17 @@ export class PatientInfo extends React.Component<allProps, allState> {
       return;
     }
 
-    const { gender, language, primaryEmail, primaryAddress } = nextProps.patient.patientInfo;
+    const {
+      gender,
+      language,
+      primaryEmail,
+      primaryAddress,
+      primaryPhone,
+    } = nextProps.patient.patientInfo;
 
     const oldPrimaryEmail = get(this.props, 'patient.patientInfo.primaryEmail');
     const oldPrimaryAddress = get(this.props, 'patient.patientInfo.primaryAddress');
+    const oldPrimaryPhone = get(this.props, 'patient.patientInfo.primaryPhone');
 
     // if the primary address changed, swap it with addiitonal address in the addresses array
     let addresses = this.state.addresses;
@@ -95,6 +105,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
     if (oldPrimaryEmail && primaryEmail && emails && oldPrimaryEmail.id !== primaryEmail.id) {
       emails = filter(emails, email => email.id !== primaryEmail.id);
       emails.push(oldPrimaryEmail);
+    }
+
+    // if the primary phone changed, swap it with addiitonal phone in the phones array
+    let phones = this.state.phones;
+    if (oldPrimaryPhone && primaryPhone && phones && oldPrimaryPhone.id !== primaryPhone.id) {
+      phones = filter(phones, phone => phone.id !== primaryPhone.id);
+      phones.push(oldPrimaryPhone);
     }
 
     this.setState({
@@ -125,6 +142,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
       addresses,
       primaryEmail,
       emails,
+      primaryPhone,
+      phones,
       flags,
       verifiedAt,
     } = this.state;
@@ -139,6 +158,12 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const savedEmailAddresses =
       patientInfo.primaryEmail && patientInfo.emails
         ? patientInfo.emails.filter(email => email.id !== patientInfo.primaryEmail!.id)
+        : [];
+
+    // remove primary phone number to create list of additional phone numbers
+    const savedPhoneAddresses =
+      patientInfo.primaryPhone && patientInfo.phones
+        ? patientInfo.phones.filter(phone => phone.id !== patientInfo.primaryPhone!.id)
         : [];
 
     return {
@@ -164,6 +189,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
         patientInfoId: patientInfo.id,
         primaryEmail: primaryEmail || patientInfo.primaryEmail,
         emails: emails || savedEmailAddresses,
+        primaryPhone: primaryPhone || patientInfo.primaryPhone,
+        phones: phones || savedPhoneAddresses,
       },
     };
   }

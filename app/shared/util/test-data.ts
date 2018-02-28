@@ -1,4 +1,9 @@
-import { BirthSexOptions, ContactMethodOptions, Gender } from '../../graphql/types';
+import {
+  BirthSexOptions,
+  ContactMethodOptions,
+  Gender,
+  PhoneTypeOptions,
+} from '../../graphql/types';
 
 export const clinic = {
   id: 'clinic-id',
@@ -88,6 +93,19 @@ export const email2 = {
   description: 'some test email',
 };
 
+export const phone1 = {
+  id: 'phone-1-id',
+  phoneNumber: '555-555-5555',
+  type: 'mobile' as PhoneTypeOptions,
+  description: 'main phone number',
+};
+
+export const phone2 = {
+  id: 'phone-2-id',
+  phoneNumber: '222-222-2222',
+  type: 'work' as PhoneTypeOptions,
+};
+
 interface IAddress {
   id: string;
   street1: string | null;
@@ -101,6 +119,13 @@ interface IAddress {
 interface IEmail {
   id: string;
   emailAddress: string;
+  description: string | null;
+}
+
+interface IPhone {
+  id: string;
+  phoneNumber: string;
+  type: PhoneTypeOptions | null;
   description: string | null;
 }
 
@@ -129,6 +154,8 @@ export const patient = {
     hasEmail: true,
     primaryEmail: email1 as IEmail,
     emails: [email1, email2] as IEmail[],
+    primaryPhone: phone1 as IPhone,
+    phones: [phone1, phone2] as IPhone[],
     preferredContactMethod: ContactMethodOptions.phone,
     canReceiveCalls: true,
     canReceiveTexts: false,
@@ -902,6 +929,8 @@ export const contactInfo = {
   patientInfoId: patient.patientInfo.id,
   primaryEmail: patient.patientInfo.primaryEmail,
   emails: patient.patientInfo.emails,
+  primaryPhone: patient.patientInfo.primaryPhone,
+  phones: patient.patientInfo.phones,
 };
 
 export const completeComputedPatientStatus = {

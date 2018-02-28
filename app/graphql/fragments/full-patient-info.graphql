@@ -1,5 +1,6 @@
 #import "./full-address.graphql"
 #import "./full-email.graphql"
+#import "./full-phone.graphql"
 
 fragment FullPatientInfo on PatientInfo {
   id
@@ -20,6 +21,12 @@ fragment FullPatientInfo on PatientInfo {
   }
   emails {
     ...FullEmail
+  }
+  primaryPhone {
+    ...FullPhone
+  }
+  phones {
+    ...FullPhone
   }
   preferredContactMethod
   canReceiveCalls

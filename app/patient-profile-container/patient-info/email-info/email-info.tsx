@@ -146,7 +146,7 @@ export default class EmailInfo extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { emails, patientId, patientInfoId, primaryEmail } = this.props;
+    const { emails, patientId, patientInfoId, primaryEmail, className } = this.props;
     const { isEditModalVisible, isCreateModalVisible, isPrimary, currentEmail } = this.state;
 
     const emailCards =
@@ -166,7 +166,7 @@ export default class EmailInfo extends React.Component<IProps, IState> {
     const onSavedFn = isPrimary ? this.handleSavePrimarySuccess : this.handleSaveSuccess;
 
     return (
-      <div>
+      <div className={className}>
         <CreateEmailModal
           isVisible={isCreateModalVisible}
           isPrimary={isPrimary}

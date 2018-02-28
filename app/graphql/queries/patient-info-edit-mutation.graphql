@@ -10,6 +10,7 @@ mutation patientInfoEdit(
   $primaryAddressId: ID
   $hasEmail: Boolean
   $primaryEmailId: ID
+  $primaryPhoneId: ID
   $preferredContactMethod: ContactMethodOptions
   $canReceiveCalls: Boolean
   $canReceiveTexts: Boolean
@@ -25,6 +26,7 @@ mutation patientInfoEdit(
       primaryAddressId: $primaryAddressId
       hasEmail: $hasEmail
       primaryEmailId: $primaryEmailId
+      primaryPhoneId: $primaryPhoneId
       preferredContactMethod: $preferredContactMethod
       canReceiveCalls: $canReceiveCalls
       canReceiveTexts: $canReceiveTexts

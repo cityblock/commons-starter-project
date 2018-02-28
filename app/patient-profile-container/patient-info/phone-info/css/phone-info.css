@@ -1,6 +1,6 @@
 @import '../../../../shared/css/sizes';
 
-.emailButton {
+.phoneButton {
   background-color: var(--dark-gray-background-color);
   border: 1px solid var(--border-color);
   color: var(--black-color);
@@ -8,7 +8,7 @@
   margin-bottom: var(--small-gutter);
 }
 
-.emailTitle {
+.phoneTitle {
   padding-top: var(--small-gutter);
   text-transform: capitalize;
 }
@@ -40,4 +40,9 @@
 
 .fieldRow:last-child {
   margin-bottom: 0;
+}
+
+.hiddenField {
+  visibility: hidden;
+  opacity: 0;
 }

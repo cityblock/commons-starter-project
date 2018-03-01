@@ -310,7 +310,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
   render(): JSX.Element {
     const { match, patient } = this.props;
     const subTab = match.params.subTab;
-    const routeBase = `/patients/${match.params.patientId}/patientInfo`;
+    const routeBase = `/patients/${match.params.patientId}/member-info`;
 
     const isDocuments = subTab === 'documents';
 
@@ -332,7 +332,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           <div>
             <UnderlineTab
               messageId="patientInfo.demographics"
-              href={`${routeBase}/active`}
+              href={`${routeBase}/demographics`}
               selected={!isDocuments}
             />
             <UnderlineTab

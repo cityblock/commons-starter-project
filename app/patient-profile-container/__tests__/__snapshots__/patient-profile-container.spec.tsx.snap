@@ -33,8 +33,13 @@ exports[`patient profile container renders patient profile container 1`] = `
         selected={false}
       />
       <UnderlineTab
-        href="/patients/patient-1/patientInfo"
+        href="/patients/patient-1/member-info"
         messageId="patient.patientInfo"
+        selected={false}
+      />
+      <UnderlineTab
+        href="/patients/patient-1/team"
+        messageId="patient.patientTeam"
         selected={false}
       />
     </UnderlineTabs>
@@ -62,7 +67,12 @@ exports[`patient profile container renders patient profile container 1`] = `
       <Route
         component={[Function]}
         exact={true}
-        path="/patients/:patientId/patientInfo/:subTab?"
+        path="/patients/:patientId/member-info/:subTab?"
+      />
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/team/:subTab?"
       />
     </Switch>
   </div>

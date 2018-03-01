@@ -31,13 +31,13 @@ describe('Render Patient Info Component', () => {
     expect(wrapper.find(UnderlineTab).length).toBe(2);
     expect(wrapper.find(Button).length).toBe(1);
 
-    const routeBase = `/patients/${patient.id}/patientInfo`;
+    const routeBase = `/patients/${patient.id}/member-info`;
     const tab1 = wrapper
       .find(UnderlineTab)
       .at(0)
       .props();
     expect(tab1.messageId).toBe('patientInfo.demographics');
-    expect(tab1.href).toBe(`${routeBase}/active`);
+    expect(tab1.href).toBe(`${routeBase}/demographics`);
     expect(tab1.selected).toBeTruthy();
 
     const tab2 = wrapper
@@ -54,7 +54,7 @@ describe('Render Patient Info Component', () => {
   it('renders demographics tab body', () => {
     expect(wrapper.find(PatientDemographics).length).toBe(1);
 
-    const routeBase = `/patients/${patient.id}/patientInfo`;
+    const routeBase = `/patients/${patient.id}/member-info`;
     expect(wrapper.find(PatientDemographics).props().routeBase).toBe(routeBase);
     expect(wrapper.find(PatientDemographics).props().patient).toMatchObject({
       core: coreIdentity,

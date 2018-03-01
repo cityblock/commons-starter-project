@@ -1,0 +1,5 @@
+@import '../../../shared/css/sizes';
+
+::-webkit-scrollbar {
+  display: none;
+}

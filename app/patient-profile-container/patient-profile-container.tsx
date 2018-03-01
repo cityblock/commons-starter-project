@@ -14,11 +14,19 @@ import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info/patient-info';
 import PatientIntakeChecklist from './patient-intake-checklist';
 import PatientProfileLeftNav from './patient-profile-left-nav';
+import PatientTeam from './patient-team/patient-team';
 import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
 import ScreeningTool from './screening-tool/screening-tool';
 import PatientTimeline from './timeline/patient-timeline';
 
-export type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';
+export type SelectableTabs =
+  | 'timeline'
+  | 'member-info'
+  | '360'
+  | 'map'
+  | 'tasks'
+  | 'tools'
+  | 'team';
 
 interface IProps extends IInjectedProps {
   match: {
@@ -74,8 +82,13 @@ export class PatientProfileContainer extends React.Component<allProps> {
             />
             <UnderlineTab
               messageId="patient.patientInfo"
-              href={`/patients/${patientId}/patientInfo`}
-              selected={tab === 'patientInfo'}
+              href={`/patients/${patientId}/member-info`}
+              selected={tab === 'member-info'}
+            />
+            <UnderlineTab
+              messageId="patient.patientTeam"
+              href={`/patients/${patientId}/team`}
+              selected={tab === 'team'}
             />
           </UnderlineTabs>
           <Switch>
@@ -103,7 +116,8 @@ export class PatientProfileContainer extends React.Component<allProps> {
               path="/patients/:patientId/timeline"
               render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
             />
-            <Route exact path="/patients/:patientId/patientInfo/:subTab?" component={PatientInfo} />
+            <Route exact path="/patients/:patientId/member-info/:subTab?" component={PatientInfo} />
+            <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
           </Switch>
         </div>
       </div>

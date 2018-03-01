@@ -166,7 +166,7 @@
     "basic-auth": "2.0.0",
     "body-parser": "1.18.2",
     "caniuse-lite": "1.0.30000810",
-    "chart.js": "2.7.1",
+    "chart.js": "2.7.2",
     "classnames": "2.2.5",
     "compression": "1.7.2",
     "copy-webpack-plugin": "4.4.2",

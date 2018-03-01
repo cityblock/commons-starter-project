@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View } from '@react-pdf/core';
+import { Image, StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import variables from '../shared/variables/variables';
+
+export const STAR_PATH = `https://www.cityblock.com/static/images/care_team_lead_star.png`;
 
 type ValueColor = 'blue' | 'gray';
 
@@ -9,6 +11,7 @@ interface IProps {
   value: string | number;
   valueColor?: ValueColor; // default is blue
   fullWidth?: boolean;
+  starImage?: boolean; // if true, add star image for care team lead
 }
 
 const styles = StyleSheet.create({
@@ -19,6 +22,11 @@ const styles = StyleSheet.create({
     height: variables.mediumFontSize,
     width: 125,
     marginTop: 5,
+  },
+  labelContainer: {
+    flexDirection: variables.flexRow,
+    justifyContent: variables.flexStart,
+    alignItems: variables.flexCenter,
   },
   label: {
     fontFamily: variables.roboto,
@@ -38,10 +46,15 @@ const styles = StyleSheet.create({
   fullWidth: {
     width: variables.full,
   },
+  image: {
+    height: variables.imageIconHeight,
+    marginTop: 2, // goose it a bit to make it look right
+    marginLeft: 5,
+  },
 });
 
 const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { label, value, valueColor, fullWidth } = props;
+  const { label, value, valueColor, fullWidth, starImage } = props;
 
   const containerStyle = fullWidth
     ? {
@@ -58,7 +71,10 @@ const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <View style={containerStyle}>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{label}</Text>
+        {!!starImage && <Image src={STAR_PATH} style={styles.image} />}
+      </View>
       <Text style={valueStyle}>{value}</Text>
     </View>
   );

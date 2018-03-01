@@ -1,7 +1,7 @@
-import { Text, View } from '@react-pdf/core';
+import { Image, Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import TextGroup from '../text-group';
+import TextGroup, { STAR_PATH } from '../text-group';
 
 describe('Printable MAP text group', () => {
   const label = 'King in the North';
@@ -9,8 +9,8 @@ describe('Printable MAP text group', () => {
 
   const wrapper = shallow(<TextGroup label={label} value={value} />);
 
-  it('renders container', () => {
-    expect(wrapper.find(View).length).toBe(1);
+  it('renders view containers', () => {
+    expect(wrapper.find(View).length).toBe(2);
   });
 
   it('renders label text', () => {
@@ -31,5 +31,15 @@ describe('Printable MAP text group', () => {
         .at(1)
         .text(),
     ).toBe(value);
+  });
+
+  it('does not render star image for lead by default', () => {
+    expect(wrapper.find(Image).length).toBe(0);
+  });
+
+  it('renders star image for lead if specified', () => {
+    wrapper.setProps({ starImage: true });
+
+    expect(wrapper.find<{ src: string }>(Image).props().src).toBe(STAR_PATH);
   });
 });

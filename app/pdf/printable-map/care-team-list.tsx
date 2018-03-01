@@ -14,8 +14,18 @@ const CareTeamList: React.StatelessComponent<IProps> = ({ careTeam }) => {
   const careTeamMembers = careTeam.map((user, i) => {
     const label = formatFullName(user.firstName, user.lastName);
     const value = formatCareTeamMemberRole(user.userRole);
+    const isLead = i === 0; // eventually swap out
 
-    return <TextGroup key={i} label={label} value={value} valueColor="gray" fullWidth={true} />;
+    return (
+      <TextGroup
+        key={i}
+        label={label}
+        value={value}
+        valueColor="gray"
+        fullWidth={true}
+        starImage={isLead}
+      />
+    );
   });
 
   return (

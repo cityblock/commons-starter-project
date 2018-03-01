@@ -24,5 +24,6 @@ describe('Printable MAP Care Team List', () => {
     expect(wrapper.find(TextGroup).props().value).toBe('Physician');
     expect(wrapper.find(TextGroup).props().valueColor).toBe('gray');
     expect(wrapper.find(TextGroup).props().fullWidth).toBeTruthy();
+    expect(wrapper.find(TextGroup).props().starImage).toBeTruthy();
   });
 });

@@ -23,6 +23,7 @@ const flexColumn = 'column';
 const flexCenter = 'center';
 const flexEnd = 'flex-end';
 const flexSpaceBetween = 'space-between';
+const flexStart = 'flex-start';
 const flexWrap = 'wrap';
 const flexGrow = 1;
 const headerFontSize = 10.5;
@@ -37,6 +38,7 @@ const titleFontSize = 16;
 const CBONameFontSize = 20;
 const imageHeight = 50;
 const imageHeightSmall = 40;
+const imageIconHeight = 8;
 
 export default {
   whiteColor,
@@ -64,6 +66,7 @@ export default {
   flexCenter,
   flexEnd,
   flexSpaceBetween,
+  flexStart,
   flexWrap,
   flexGrow,
   headerFontSize,
@@ -78,4 +81,5 @@ export default {
   CBONameFontSize,
   imageHeight,
   imageHeightSmall,
+  imageIconHeight,
 };

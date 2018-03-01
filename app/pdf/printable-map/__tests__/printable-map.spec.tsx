@@ -7,6 +7,7 @@ import {
   patientConcernActive,
   user,
 } from '../../../shared/util/test-data';
+import Footer from '../footer';
 import Header from '../header';
 import Info from '../info';
 import PrintableMap from '../printable-map';
@@ -40,5 +41,9 @@ describe('Printable MAP Component', () => {
     expect(wrapper.find(Info).props().patient).toEqual(patient);
     expect(wrapper.find(Info).props().careTeam).toEqual([user]);
     expect(wrapper.find(Info).props().carePlan).toEqual([patientConcernActive]);
+  });
+
+  it('renders footer', () => {
+    expect(wrapper.find(Footer).props().patient).toEqual(patient);
   });
 });

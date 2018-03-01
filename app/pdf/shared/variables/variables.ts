@@ -39,6 +39,7 @@ const CBONameFontSize = 20;
 const imageHeight = 50;
 const imageHeightSmall = 40;
 const imageIconHeight = 8;
+const absolute = 'absolute';
 
 export default {
   whiteColor,
@@ -82,4 +83,5 @@ export default {
   imageHeight,
   imageHeightSmall,
   imageIconHeight,
+  absolute,
 };

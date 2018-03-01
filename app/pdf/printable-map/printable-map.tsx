@@ -7,6 +7,7 @@ import {
 } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
+import Footer from './footer';
 import Header from './header';
 import Info from './info';
 
@@ -42,6 +43,7 @@ const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, careTeam, pa
           <Header />
           <Info patient={patient} careTeam={careTeam} carePlan={activeConcerns} />
         </View>
+        <Footer patient={patient} />
       </Page>
     </Document>
   );

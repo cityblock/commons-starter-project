@@ -176,9 +176,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/chart.js@2.7.7":
-  version "2.7.7"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.7.tgz#6127a09149437c22f86eb151ad9e9b1430ee6928"
+"@types/chart.js@2.7.9":
+  version "2.7.9"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.9.tgz#e6479d2bc2023702c735694ee72e46f1705e2d5f"
 
 "@types/cheerio@*":
   version "0.22.7"

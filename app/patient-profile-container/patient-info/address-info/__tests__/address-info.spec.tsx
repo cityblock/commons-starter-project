@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Button from '../../../../shared/library/button/button';
+import Checkbox from '../../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../../shared/library/default-text/default-text';
 import { address2, address3, patient } from '../../../../shared/util/test-data';
 import DisplayCard from '../../display-card';
@@ -23,11 +24,14 @@ describe('Render Address Info Component', () => {
   );
 
   it('renders address info without any addresses', () => {
-    expect(wrapper.find(DisplayCard).length).toBe(0);
-    expect(wrapper.find(FlaggableDisplayField).length).toBe(0);
-    expect(wrapper.find(Button).length).toBe(0);
-    expect(wrapper.find(DefaultText).length).toBe(1);
+    expect(wrapper.find(DisplayCard)).toHaveLength(0);
+    expect(wrapper.find(FlaggableDisplayField)).toHaveLength(0);
+    expect(wrapper.find(Button)).toHaveLength(0);
+    expect(wrapper.find(DefaultText)).toHaveLength(1);
     expect(wrapper.find(DefaultText).props().messageId).toBe('address.addPrimary');
+    expect(wrapper.find(Checkbox)).toHaveLength(1);
+
+    expect(wrapper.find(Checkbox).props().isChecked).toBeFalsy();
   });
 
   it('renders section with primary address', () => {
@@ -35,9 +39,9 @@ describe('Render Address Info Component', () => {
       primaryAddress: patient.patientInfo.primaryAddress,
     });
 
-    expect(wrapper.find(DisplayCard).length).toBe(1);
-    expect(wrapper.find(FlaggableDisplayField).length).toBe(5);
-    expect(wrapper.find(Button).length).toBe(1);
+    expect(wrapper.find(DisplayCard)).toHaveLength(1);
+    expect(wrapper.find(FlaggableDisplayField)).toHaveLength(5);
+    expect(wrapper.find(Button)).toHaveLength(1);
 
     expect(
       wrapper
@@ -111,9 +115,9 @@ describe('Render Address Info Component', () => {
       addresses: [address2, address3],
     });
 
-    expect(wrapper.find(DisplayCard).length).toBe(3);
-    expect(wrapper.find(FlaggableDisplayField).length).toBe(14);
-    expect(wrapper.find(Button).length).toBe(1);
+    expect(wrapper.find(DisplayCard)).toHaveLength(3);
+    expect(wrapper.find(FlaggableDisplayField)).toHaveLength(14);
+    expect(wrapper.find(Button)).toHaveLength(1);
 
     // first additional address
     expect(
@@ -175,8 +179,8 @@ describe('Render Address Info Component', () => {
   });
 
   it('creates the two modals', () => {
-    expect(wrapper.find(CreateAddressModal).length).toBe(1);
-    expect(wrapper.find(EditAddressModal).length).toBe(1);
+    expect(wrapper.find(CreateAddressModal)).toHaveLength(1);
+    expect(wrapper.find(EditAddressModal)).toHaveLength(1);
 
     const createModal = wrapper.find(CreateAddressModal).props();
     expect(createModal.isVisible).toBeFalsy();
@@ -185,13 +189,21 @@ describe('Render Address Info Component', () => {
 
   it('shows the create modal', () => {
     wrapper.setState({ isCreateModalVisible: true });
-    expect(wrapper.find(CreateAddressModal).length).toBe(1);
+    expect(wrapper.find(CreateAddressModal)).toHaveLength(1);
     expect(wrapper.find(CreateAddressModal).props().isVisible).toBeTruthy();
   });
 
   it('shows the create primary modal', () => {
     wrapper.setState({ isCreateModalVisible: true, isPrimary: true });
-    expect(wrapper.find(CreateAddressModal).length).toBe(1);
+    expect(wrapper.find(CreateAddressModal)).toHaveLength(1);
     expect(wrapper.find(CreateAddressModal).props().isPrimary).toBeTruthy();
+  });
+
+  it('toggles the marginally housed checkbox', () => {
+    wrapper.setProps({ isMarginallyHoused: true });
+    expect(wrapper.find(Checkbox).props().isChecked).toBeTruthy();
+
+    wrapper.setProps({ isMarginallyHoused: false });
+    expect(wrapper.find(Checkbox).props().isChecked).toBeFalsy();
   });
 });

@@ -4,6 +4,7 @@ import RadioInput from '../../radio-input/radio-input';
 import RadioGroup from '../radio-group';
 
 describe('Library Radio Group Component', () => {
+  const name = 'got';
   const value1 = 'greyWind';
   const label1 = "Robb Stark's Direwolf";
   const value2 = 'ghost';
@@ -12,8 +13,8 @@ describe('Library Radio Group Component', () => {
 
   const wrapper = shallow(
     <RadioGroup>
-      <RadioInput value={value1} onChange={placeholderFn} label={label1} checked={false} />
-      <RadioInput value={value2} onChange={placeholderFn} label={label2} checked={true} />
+      <RadioInput name={name} value={value1} onChange={placeholderFn} label={label1} checked={false} />
+      <RadioInput name={name} value={value2} onChange={placeholderFn} label={label2} checked={true} />
     </RadioGroup>,
   );
 

@@ -310,7 +310,7 @@ exports[`renders patient panel container correctly 1`] = `
             <input
               checked={true}
               disabled={false}
-              id="false"
+              id="inNetwork-false"
               name="inNetwork"
               onChange={undefined}
               onClick={[Function]}
@@ -319,7 +319,7 @@ exports[`renders patient panel container correctly 1`] = `
               value="false"
             />
             <label
-              htmlFor="false"
+              htmlFor="inNetwork-false"
             >
               No
             </label>
@@ -330,7 +330,7 @@ exports[`renders patient panel container correctly 1`] = `
             <input
               checked={false}
               disabled={false}
-              id="true"
+              id="inNetwork-true"
               name="inNetwork"
               onChange={undefined}
               onClick={[Function]}
@@ -339,7 +339,7 @@ exports[`renders patient panel container correctly 1`] = `
               value="true"
             />
             <label
-              htmlFor="true"
+              htmlFor="inNetwork-true"
             >
               Yes
             </label>

@@ -4,10 +4,13 @@ import RadioInput from '../radio-input';
 
 describe('Library Radio Input Component', () => {
   const value = 'sansaStark';
+  const name = 'got';
   const label = 'Lady of Winterfell';
   const placeholderFn = () => true as any;
 
-  const wrapper = shallow(<RadioInput value={value} onChange={placeholderFn} checked={false} />);
+  const wrapper = shallow(
+    <RadioInput value={value} onChange={placeholderFn} checked={false} name={name} />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('div').props().className).toBe('container enabled');
@@ -16,7 +19,7 @@ describe('Library Radio Input Component', () => {
   it('renders radio input', () => {
     expect(wrapper.find('input').length).toBe(1);
     expect(wrapper.find('input').props().type).toBe('radio');
-    expect(wrapper.find('input').props().id).toBe(value);
+    expect(wrapper.find('input').props().id).toBe(`${name}-${value}`);
     expect(wrapper.find('input').props().value).toBe(value);
     expect(wrapper.find('input').props().checked).toBeFalsy();
     expect(wrapper.find('input').props().disabled).toBeFalsy();
@@ -24,7 +27,7 @@ describe('Library Radio Input Component', () => {
 
   it('renders label using value if no display label provided', () => {
     expect(wrapper.find('label').length).toBe(1);
-    expect(wrapper.find('label').props().htmlFor).toBe(value);
+    expect(wrapper.find('label').props().htmlFor).toBe(`${name}-${value}`);
     expect(wrapper.find('label').text()).toBe(value);
   });
 

@@ -3,13 +3,13 @@ import * as langs from 'langs';
 import { values } from 'lodash-es';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { getPatientQuery, Gender } from '../../graphql/types';
+import { getPatientQuery, BirthSexOptions, Gender } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
-import AddressInformation from './address-info/address-info';
+import AddressInfo from './address-info/address-info';
 import * as styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
@@ -20,6 +20,9 @@ export interface IBasicInfo {
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
+  isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
+  preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
+  sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
 }
 
 interface IProps {
@@ -68,13 +71,29 @@ export default class BasicInfo extends React.Component<IProps> {
   }
 
   renderPatientInfo() {
-    const { gender } = this.props.patientInformation;
+    const { gender, sexAtBirth, preferredName } = this.props.patientInformation;
 
     return (
       <div className={styles.subSection}>
         <div className={classNames(styles.field, styles.short)}>
           <FormLabel messageId="patientInfo.preferredName" />
-          <TextInput name="preferredName" value="" onChange={this.handleValueChange} />
+          <TextInput
+            name="preferredName"
+            value={preferredName || ''}
+            onChange={this.handleValueChange}
+          />
+        </div>
+
+        <div className={styles.fieldRow}>
+          <div className={styles.field}>
+            <FormLabel messageId="patientInfo.maritalStatus" />
+            <Select name="maritalStatus" large={true} onChange={this.handleValueChange} value="" />
+          </div>
+
+          <div className={styles.field}>
+            <FormLabel messageId="patientInfo.language" />
+            {this.renderLanguageSelect()}
+          </div>
         </div>
 
         <div className={styles.fieldRow}>
@@ -91,13 +110,15 @@ export default class BasicInfo extends React.Component<IProps> {
           </div>
 
           <div className={styles.field}>
-            <FormLabel messageId="patientInfo.maritalStatus" />
-            <Select name="maritalStatus" large={true} onChange={this.handleValueChange} value="" />
-          </div>
-
-          <div className={styles.field}>
-            <FormLabel messageId="patientInfo.language" />
-            {this.renderLanguageSelect()}
+            <FormLabel messageId="patientInfo.sexAtBirth" />
+            <Select
+              name="sexAtBirth"
+              large={true}
+              onChange={this.handleValueChange}
+              value={sexAtBirth || ''}
+              options={values(BirthSexOptions)}
+              hasPlaceholder={true}
+            />
           </div>
         </div>
       </div>
@@ -106,20 +127,27 @@ export default class BasicInfo extends React.Component<IProps> {
 
   render() {
     const { patientInformation, onChange } = this.props;
-    const { primaryAddress, addresses, patientId, patientInfoId } = patientInformation;
+    const {
+      primaryAddress,
+      addresses,
+      patientId,
+      patientInfoId,
+      isMarginallyHoused,
+    } = patientInformation;
 
     return (
       <div className={styles.section}>
-        <FormattedMessage id="basicInformation.sectionTitle">
+        <FormattedMessage id="basicInfo.sectionTitle">
           {(message: string) => <h2>{message}</h2>}
         </FormattedMessage>
         {this.renderPatientInfo()}
-        <AddressInformation
+        <AddressInfo
           patientId={patientId}
           patientInfoId={patientInfoId}
           primaryAddress={primaryAddress}
           addresses={addresses}
           onChange={onChange}
+          isMarginallyHoused={isMarginallyHoused}
         />
       </div>
     );

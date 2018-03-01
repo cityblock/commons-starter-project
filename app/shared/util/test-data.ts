@@ -913,6 +913,9 @@ export const basicInfo = {
   language: patient.patientInfo.language,
   primaryAddress: patient.patientInfo.primaryAddress,
   addresses: [address2, address3],
+  sexAtBirth: patient.patientInfo.sexAtBirth,
+  isMarginallyHoused: patient.patientInfo.isMarginallyHoused,
+  preferredName: patient.patientInfo.preferredName,
 };
 
 export const coreIdentity = {
@@ -931,6 +934,10 @@ export const contactInfo = {
   emails: patient.patientInfo.emails,
   primaryPhone: patient.patientInfo.primaryPhone,
   phones: patient.patientInfo.phones,
+  hasEmail: patient.patientInfo.hasEmail,
+  canReceiveCalls: patient.patientInfo.canReceiveCalls,
+  canReceiveTexts: patient.patientInfo.canReceiveTexts,
+  preferredContactMethod: patient.patientInfo.preferredContactMethod,
 };
 
 export const completeComputedPatientStatus = {

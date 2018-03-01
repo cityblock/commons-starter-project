@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ISavedEmail } from '../../../shared/email-modal/email-modal';
 import Button from '../../../shared/library/button/button';
+import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
@@ -15,6 +16,7 @@ interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
+  hasEmail?: boolean | null;
   primaryEmail?: ISavedEmail | null;
   emails?: ISavedEmail[];
   className?: string;
@@ -103,6 +105,12 @@ export default class EmailInfo extends React.Component<IProps, IState> {
     onChange({ primaryEmail: savedEmail });
   };
 
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { onChange } = this.props;
+    const { name, checked } = event.target;
+    onChange({ [name]: !checked });
+  };
+
   renderEmailDisplayCard(email: ISavedEmail, isPrimary?: boolean) {
     const description = email.description ? (
       <FlaggableDisplayField labelMessageId="email.description" value={email.description} />
@@ -132,21 +140,24 @@ export default class EmailInfo extends React.Component<IProps, IState> {
   }
 
   renderPrimaryEmail() {
-    const { primaryEmail } = this.props;
+    const { primaryEmail, hasEmail } = this.props;
 
-    const emailComponent = primaryEmail ? (
-      this.renderEmailDisplayCard(primaryEmail)
-    ) : (
-      <div className={styles.emptyRequiredBlock} onClick={this.handleAddPrimaryEmailClick}>
-        <DefaultText messageId="email.addPrimary" />
-      </div>
-    );
+    const emptyComponent =
+      hasEmail !== false ? (
+        <div className={styles.emptyRequiredBlock} onClick={this.handleAddPrimaryEmailClick}>
+          <DefaultText messageId="email.addPrimary" />
+        </div>
+      ) : null;
+
+    const emailComponent = primaryEmail
+      ? this.renderEmailDisplayCard(primaryEmail)
+      : emptyComponent;
 
     return emailComponent;
   }
 
   render() {
-    const { emails, patientId, patientInfoId, primaryEmail, className } = this.props;
+    const { emails, patientId, patientInfoId, primaryEmail, hasEmail, className } = this.props;
     const { isEditModalVisible, isCreateModalVisible, isPrimary, currentEmail } = this.state;
 
     const emailCards =
@@ -186,6 +197,13 @@ export default class EmailInfo extends React.Component<IProps, IState> {
         <FormattedMessage id="email.emailAddresses">
           {(message: string) => <h3 className={styles.emailTitle}>{message}</h3>}
         </FormattedMessage>
+        <Checkbox
+          name="hasEmail"
+          isChecked={hasEmail === false}
+          labelMessageId="email.hasEmail"
+          onChange={this.handleChange}
+          className={styles.fieldMargin}
+        />
         {this.renderPrimaryEmail()}
         {emailCards}
         {addEmailButon}

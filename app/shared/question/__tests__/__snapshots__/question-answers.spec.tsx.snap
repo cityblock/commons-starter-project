@@ -10,8 +10,8 @@ exports[`renders question answers 1`] = `
     <input
       checked={false}
       disabled={false}
-      id="answer-id"
-      name={undefined}
+      id="answer-id-answer-id"
+      name="answer-id"
       onChange={[Function]}
       onClick={undefined}
       readOnly={false}
@@ -19,7 +19,7 @@ exports[`renders question answers 1`] = `
       value="answer-id"
     />
     <label
-      htmlFor="answer-id"
+      htmlFor="answer-id-answer-id"
     >
       answer value
     </label>

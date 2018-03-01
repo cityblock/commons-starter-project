@@ -19,6 +19,7 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
 
     return (
       <RadioInput
+        name={answer.id}
         key={`${answer.id}-${index}`}
         value={answer.id}
         checked={!!currentAnswer && currentAnswer.id === answer.id}

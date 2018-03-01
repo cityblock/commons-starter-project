@@ -72,3 +72,7 @@
 .deleteLink:hover {
   color: var(--gray-font-color);
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

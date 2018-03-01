@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ISavedAddress } from '../../../shared/address-modal/address-modal';
 import Button from '../../../shared/library/button/button';
+import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
@@ -15,6 +16,7 @@ interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
+  isMarginallyHoused?: boolean | null;
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
   className?: string;
@@ -102,6 +104,12 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     onChange({ primaryAddress: savedAddress });
   };
 
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { onChange } = this.props;
+    const { name, checked } = event.target;
+    onChange({ [name]: checked });
+  };
+
   renderAddressDisplayCard(address: ISavedAddress) {
     const description = address.description ? (
       <FlaggableDisplayField labelMessageId="address.description" value={address.description} />
@@ -145,7 +153,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { addresses, patientId, patientInfoId, primaryAddress } = this.props;
+    const { addresses, patientId, patientInfoId, primaryAddress, isMarginallyHoused } = this.props;
     const { isEditModalVisible, isCreateModalVisible, isPrimary, currentAddress } = this.state;
 
     const addressCards =
@@ -153,7 +161,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
         ? values(addresses).map(address => this.renderAddressDisplayCard(address))
         : null;
 
-    const addAddressButon = primaryAddress ? (
+    const addAddressButton = primaryAddress ? (
       <Button
         className={styles.addressButton}
         onClick={this.handleAddAddressClick}
@@ -185,9 +193,16 @@ export default class AddressInfo extends React.Component<IProps, IState> {
         <FormattedMessage id="address.addresses">
           {(message: string) => <h3 className={styles.addressTitle}>{message}</h3>}
         </FormattedMessage>
+        <Checkbox
+          name="isMarginallyHoused"
+          isChecked={!!isMarginallyHoused}
+          labelMessageId="patientInfo.marginal"
+          onChange={this.handleChange}
+          className={styles.fieldMargin}
+        />
         {this.renderPrimaryAddress()}
         {addressCards}
-        {addAddressButon}
+        {addAddressButton}
       </div>
     );
   }

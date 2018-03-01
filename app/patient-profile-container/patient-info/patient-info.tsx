@@ -1,4 +1,4 @@
-import { filter, get } from 'lodash-es';
+import { filter, get, isNil } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
@@ -47,12 +47,19 @@ export interface IEditableFieldState {
   language?: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[] | null;
+  hasEmail?: getPatientQuery['patient']['patientInfo']['hasEmail'];
   primaryEmail?: ISavedEmail | null;
   emails?: ISavedEmail[] | null;
   primaryPhone?: ISavedPhone | null;
   phones?: ISavedPhone[] | null;
   flags?: getPatientQuery['patient']['patientDataFlags'];
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
+  canReceiveTexts?: getPatientQuery['patient']['patientInfo']['canReceiveTexts'];
+  canReceiveCalls?: getPatientQuery['patient']['patientInfo']['canReceiveCalls'];
+  preferredContactMethod?: getPatientQuery['patient']['patientInfo']['preferredContactMethod'];
+  isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
+  preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
+  sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
 }
 
 interface IState {
@@ -62,6 +69,10 @@ interface IState {
 }
 
 type allState = IState & IEditableFieldState;
+
+function checkDefined<T>(preferred?: T | null, secondary?: T | null) {
+  return isNil(preferred) ? secondary : preferred;
+}
 
 export class PatientInfo extends React.Component<allProps, allState> {
   constructor(props: allProps) {
@@ -146,6 +157,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
       phones,
       flags,
       verifiedAt,
+      hasEmail,
+      canReceiveCalls,
+      canReceiveTexts,
+      preferredContactMethod,
+      isMarginallyHoused,
+      preferredName,
+      sexAtBirth,
     } = this.state;
 
     // remove primary address to create list of additional addresses
@@ -183,12 +201,22 @@ export class PatientInfo extends React.Component<allProps, allState> {
         language: language || patientInfo.language,
         primaryAddress: primaryAddress || patientInfo.primaryAddress,
         addresses: addresses || savedAddresses,
+        isMarginallyHoused: checkDefined<boolean>(
+          isMarginallyHoused,
+          patientInfo.isMarginallyHoused,
+        ),
+        preferredName: checkDefined<string>(preferredName, patientInfo.preferredName),
+        sexAtBirth: sexAtBirth || patientInfo.sexAtBirth,
       },
       contact: {
         patientId: id,
         patientInfoId: patientInfo.id,
+        hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
         primaryEmail: primaryEmail || patientInfo.primaryEmail,
         emails: emails || savedEmailAddresses,
+        canReceiveCalls: checkDefined<boolean>(canReceiveCalls, patientInfo.canReceiveCalls),
+        canReceiveTexts: checkDefined<boolean>(canReceiveTexts, patientInfo.canReceiveTexts),
+        preferredContactMethod: preferredContactMethod || patientInfo.preferredContactMethod,
         primaryPhone: primaryPhone || patientInfo.primaryPhone,
         phones: phones || savedPhoneAddresses,
       },
@@ -199,7 +227,17 @@ export class PatientInfo extends React.Component<allProps, allState> {
 
   handleSaveClick = async () => {
     const { patient, editPatientInfoMutation } = this.props;
-    const { language, gender } = this.state;
+    const {
+      language,
+      gender,
+      preferredContactMethod,
+      canReceiveCalls,
+      canReceiveTexts,
+      hasEmail,
+      isMarginallyHoused,
+      preferredName,
+      sexAtBirth,
+    } = this.state;
     if (!patient) {
       return;
     }
@@ -211,6 +249,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
           patientInfoId: patient.patientInfo.id,
           gender,
           language,
+          preferredContactMethod,
+          canReceiveCalls,
+          canReceiveTexts,
+          hasEmail,
+          isMarginallyHoused,
+          preferredName,
+          sexAtBirth,
         },
       });
 

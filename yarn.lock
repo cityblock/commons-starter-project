@@ -658,9 +658,9 @@ apollo-client@2.2.5:
   optionalDependencies:
     "@types/async" "2.0.47"
 
-apollo-codegen@0.18.8:
-  version "0.18.8"
-  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.18.8.tgz#26eee31a721a424d5c8aca6a5e4e3a14d50597ac"
+apollo-codegen@0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.19.0.tgz#00d2272628a7c296b5aa57d9a02f10ca6d3e676a"
   dependencies:
     "@babel/generator" "7.0.0-beta.38"
     "@babel/types" "7.0.0-beta.38"
@@ -668,7 +668,7 @@ apollo-codegen@0.18.8:
     common-tags "^1.5.1"
     core-js "^2.5.3"
     glob "^7.1.2"
-    graphql "^0.12.3"
+    graphql "^0.13.1"
     graphql-config "^1.1.1"
     inflected "^2.0.3"
     node-fetch "^1.7.3"
@@ -4690,7 +4690,7 @@ graphql-tools@^1:
   optionalDependencies:
     "@types/graphql" "^0.9.0"
 
-graphql@0.13.1, graphql@^0.13.0:
+graphql@0.13.1, graphql@^0.13.0, graphql@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.1.tgz#9b3db3d8e40d1827e4172404bfdd2e4e17a58b55"
   dependencies:

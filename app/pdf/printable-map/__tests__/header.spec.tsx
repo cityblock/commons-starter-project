@@ -13,7 +13,7 @@ describe('Printable MAP Header', () => {
   const wrapper = shallow(<Header />);
 
   it('renders view containers', () => {
-    expect(wrapper.find(View).length).toBe(2);
+    expect(wrapper.find(View).length).toBe(4);
   });
 
   it('renders Cityblock logo image', () => {

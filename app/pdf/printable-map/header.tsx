@@ -9,10 +9,18 @@ import copy from './copy/copy';
 export const LOGO_PATH = `https://www.cityblock.com/static/images/cityblock_logo_blue.png`;
 
 const styles = StyleSheet.create({
-  container: {
+  border: {
+    backgroundColor: variables.blueColor,
+    height: variables.bigBorder,
+    marginBottom: variables.mediumGutter,
+  },
+  main: {
     flexDirection: variables.flexRow,
     justifyContent: variables.flexSpaceBetween,
     alignItems: variables.flexCenter,
+    paddingBottom: variables.mediumGutter,
+    paddingRight: variables.smallGutter,
+    paddingLeft: variables.smallGutter,
   },
   image: {
     height: variables.imageHeightSmall,
@@ -26,6 +34,7 @@ const styles = StyleSheet.create({
   printedOn: {
     flexDirection: variables.flexColumn,
     alignItems: variables.flexEnd,
+    minWidth: 65,
   },
 });
 
@@ -33,12 +42,17 @@ const Header: React.StatelessComponent = () => {
   const printDate = format(Date.now(), 'MMM D, YYYY');
 
   return (
-    <View style={styles.container} fixed>
-      <Image src={LOGO_PATH} style={styles.image} />
-      <Text style={styles.title}>{copy.map}</Text>
-      <View style={styles.printedOn}>
-        <HeaderText label={copy.printedOn} />
-        <BodyText label={printDate} />
+    <View fixed>
+      <View style={styles.border} fixed />
+      <View style={styles.main} fixed>
+        <Image src={LOGO_PATH} style={styles.image} fixed />
+        <Text style={styles.title} fixed>
+          {copy.map}
+        </Text>
+        <View style={styles.printedOn} fixed>
+          <HeaderText label={copy.printedOn} />
+          <BodyText label={printDate} />
+        </View>
       </View>
     </View>
   );

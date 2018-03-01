@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import { formatPatientName } from '../../shared/helpers/format-helpers';
@@ -24,11 +25,15 @@ const styles = StyleSheet.create({
 
 const Footer: React.StatelessComponent<IProps> = ({ patient }) => {
   const patientName = formatPatientName(patient);
-  const footerText = `${copy.mapAbbrev} ${patientName}`;
+  const formattedDate = format(Date.now(), 'MMM D, YYYY');
+
+  const footerText = `${copy.mapAbbrev} ${patientName}  |  ${copy.printedOn} ${formattedDate}`;
 
   return (
     <View style={styles.container} fixed>
-      <Text style={styles.text}>{footerText}</Text>
+      <Text style={styles.text} fixed>
+        {footerText}
+      </Text>
     </View>
   );
 };

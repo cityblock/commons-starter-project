@@ -1,7 +1,6 @@
-import { StyleSheet, View } from '@react-pdf/core';
+import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientConcernFragment, FullPatientForProfileFragment } from '../../graphql/types';
-import BodyText from '../shared/body-text';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import MapSummary from './map-summary';
@@ -22,6 +21,13 @@ const styles = StyleSheet.create({
     paddingRight: variables.extraSmallGutter,
     paddingBottom: variables.smallGutter,
   },
+  info: {
+    fontFamily: variables.roboto,
+    fontSize: variables.headerFontSize,
+    lineHeight: variables.infoLineHeight,
+    color: variables.blackColor,
+    marginTop: variables.bodyMarginTop,
+  },
 });
 
 const PatientInfo: React.StatelessComponent<IProps> = ({ patient, carePlan }) => {
@@ -29,7 +35,7 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, carePlan }) =>
     <View style={styles.container}>
       <View>
         <PatientHeader patient={patient} />
-        <BodyText label={copy.mapInfo} small={true} noMargin={true} />
+        <Text style={styles.info}>{copy.mapInfo}</Text>
       </View>
       <MapSummary carePlan={carePlan} />
     </View>

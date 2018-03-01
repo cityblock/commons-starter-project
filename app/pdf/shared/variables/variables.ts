@@ -1,8 +1,13 @@
 const whiteColor = '#fff';
 const blackColor = '#000';
 const blueColor = '#2962ff';
+const lightBlueColor = '#8fadff';
+const lighterGrayColor = '#fafafa';
+const lightGrayColor = '#f2f2f2';
 const grayColor = '#ccc';
 const darkGrayColor = '#666';
+const redColor = '#ff715b';
+const yellowColor = '#ffd900';
 const roboto = 'Roboto';
 const robotoBold = 'Roboto Bold';
 const basetica = 'Basetica';
@@ -12,6 +17,7 @@ const mediumGutter = 25;
 const smallGutter = 15;
 const extraSmallGutter = 10;
 const bigBorder = 5;
+const mediumBorder = 3;
 const smallBorder = 1;
 const borderStyle = 'solid';
 const full = '100%';
@@ -31,22 +37,30 @@ const headerLineHeight = 14;
 const bodyFontSize = 12;
 const bodyLineHeight = 16;
 const mediumFontSize = 10;
-const smallFontSize = 8;
+const smallFontSize = 9;
 const bodyMarginTop = 8;
 const bodyMarginLeft = 5;
 const titleFontSize = 16;
 const CBONameFontSize = 20;
+const infoLineHeight = 20;
 const imageHeight = 50;
 const imageHeightSmall = 40;
 const imageIconHeight = 8;
 const absolute = 'absolute';
+const dashed = 'dashed';
+const solid = 'solid';
 
 export default {
   whiteColor,
   blackColor,
   blueColor,
+  lightBlueColor,
+  lighterGrayColor,
+  lightGrayColor,
   grayColor,
   darkGrayColor,
+  redColor,
+  yellowColor,
   roboto,
   robotoBold,
   basetica,
@@ -56,6 +70,7 @@ export default {
   smallGutter,
   extraSmallGutter,
   bigBorder,
+  mediumBorder,
   smallBorder,
   borderStyle,
   full,
@@ -80,8 +95,11 @@ export default {
   bodyMarginLeft,
   titleFontSize,
   CBONameFontSize,
+  infoLineHeight,
   imageHeight,
   imageHeightSmall,
   imageIconHeight,
   absolute,
+  dashed,
+  solid,
 };

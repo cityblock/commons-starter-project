@@ -1,8 +1,7 @@
-import { View } from '@react-pdf/core';
+import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient, patientConcern } from '../../../shared/util/test-data';
-import BodyText from '../../shared/body-text';
 import copy from '../copy/copy';
 import MapSummary from '../map-summary';
 import PatientHeader from '../patient-header';
@@ -20,9 +19,7 @@ describe('Printable MAP patient info (left pane)', () => {
   });
 
   it('renders overview of MAP', () => {
-    expect(wrapper.find(BodyText).props().label).toBe(copy.mapInfo);
-    expect(wrapper.find(BodyText).props().small).toBeTruthy();
-    expect(wrapper.find(BodyText).props().noMargin).toBeTruthy();
+    expect(wrapper.find(Text).text()).toBe(copy.mapInfo);
   });
 
   it('renders MAP summary counts component', () => {

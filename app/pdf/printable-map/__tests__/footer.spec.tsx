@@ -13,6 +13,12 @@ describe('Printable MAP footer component', () => {
   });
 
   it('renders text with correct copy', () => {
-    expect(wrapper.find(Text).text()).toBe(`${copy.mapAbbrev} Bob Smith`);
+    const oldDateFn = Date.now;
+    Date.now = () => 1519940493877;
+
+    const expected = `${copy.mapAbbrev} Bob Smith  |  ${copy.printedOn} Mar 1, 2018`;
+    expect(wrapper.find(Text).text()).toBe(expected);
+
+    Date.now = oldDateFn;
   });
 });

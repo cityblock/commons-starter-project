@@ -5,7 +5,6 @@ import {
   FullPatientForProfileFragment,
   FullUserFragment,
 } from '../../graphql/types';
-import Divider from '../shared/divider';
 import variables from '../shared/variables/variables';
 import CareTeam from './care-team';
 import PatientInfo from './patient-info';
@@ -17,25 +16,19 @@ interface IProps {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: variables.smallGutter,
-  },
   main: {
-    marginTop: variables.smallGutter,
-    marginBottom: variables.smallGutter,
     flexDirection: variables.flexRow,
     justifyContent: variables.flexSpaceBetween,
+    paddingTop: variables.smallGutter,
+    marginBottom: variables.smallGutter,
   },
 });
 
 const Info: React.StatelessComponent<IProps> = ({ patient, careTeam, carePlan }) => {
   return (
-    <View style={styles.container}>
-      <Divider color="darkGray" />
-      <View style={styles.main}>
-        <PatientInfo patient={patient} carePlan={carePlan} />
-        <CareTeam careTeam={careTeam} />
-      </View>
+    <View style={styles.main}>
+      <PatientInfo patient={patient} carePlan={carePlan} />
+      <CareTeam careTeam={careTeam} />
     </View>
   );
 };

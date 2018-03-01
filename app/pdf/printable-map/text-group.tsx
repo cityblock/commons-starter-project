@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
   gray: {
     color: variables.darkGrayColor,
   },
+  blue: {
+    color: variables.blueColor,
+  },
   fullWidth: {
     width: variables.full,
   },
@@ -62,6 +65,12 @@ const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
         ...styles.fullWidth,
       }
     : styles.container;
+  const labelStyle = starImage
+    ? {
+        ...styles.label,
+        ...styles.blue,
+      }
+    : styles.label;
   const valueStyle = valueColor
     ? {
         ...styles.value,
@@ -72,7 +81,7 @@ const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <View style={containerStyle}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={labelStyle}>{label}</Text>
         {!!starImage && <Image src={STAR_PATH} style={styles.image} />}
       </View>
       <Text style={valueStyle}>{value}</Text>

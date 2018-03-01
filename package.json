@@ -234,6 +234,6 @@
     "uuid": "3.2.1",
     "webpack": "4.0.1",
     "webpack-cli": "2.0.9",
-    "webpack-hot-middleware": "2.21.0"
+    "webpack-hot-middleware": "2.21.1"
   }
 }

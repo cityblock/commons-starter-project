@@ -973,3 +973,39 @@ export const incompleteComputedPatientStatus = {
   updatedAt: '2017-11-07T13:45:14.532Z',
   deletedAt: null,
 };
+
+export const signedPatientAdvancedDirectiveForm = {
+  patientAdvancedDirectiveFormId: 'patientAdvancedDirectiveFormId',
+  patientId: 'patientId',
+  userId: 'userId',
+  formId: 'advancedDirectiveFormId',
+  title: 'Advanced Directive Form Title',
+  signedAt: '2017-11-07T13:45:14.532Z',
+};
+
+export const unsignedPatientAdvancedDirectiveForm = {
+  patientAdvancedDirectiveFormId: null,
+  patientId: 'patientId',
+  userId: 'userId',
+  formId: 'advancedDirectiveFormId',
+  title: 'Advanced Directive Form Title',
+  signedAt: null,
+};
+
+export const signedPatientConsentForm = {
+  patientConsentFormId: 'patientConsentFormId',
+  patientId: 'patientId',
+  userId: 'userId',
+  formId: 'consentFormId',
+  title: 'Consent Form Title',
+  signedAt: '2017-11-07T13:45:14.532Z',
+};
+
+export const unsignedPatientConsentForm = {
+  patientConsentFormId: null,
+  patientId: 'patientId',
+  userId: 'userId',
+  formId: 'consentFormId',
+  title: 'Consent Form Title',
+  signedAt: null,
+};

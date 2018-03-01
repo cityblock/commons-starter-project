@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-advanced-directive-form.graphql"
+
+query getPatientAdvancedDirectiveForms($patientId: ID!) {
+  patientAdvancedDirectiveFormsForPatient(patientId: $patientId) {
+    ...FullPatientAdvancedDirectiveForm
+  }
+}

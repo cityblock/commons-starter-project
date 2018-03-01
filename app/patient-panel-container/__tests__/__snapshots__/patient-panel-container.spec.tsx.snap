@@ -319,6 +319,7 @@ exports[`renders patient panel container correctly 1`] = `
               value="false"
             />
             <label
+              className=""
               htmlFor="inNetwork-false"
             >
               No
@@ -339,6 +340,7 @@ exports[`renders patient panel container correctly 1`] = `
               value="true"
             />
             <label
+              className=""
               htmlFor="inNetwork-true"
             >
               Yes

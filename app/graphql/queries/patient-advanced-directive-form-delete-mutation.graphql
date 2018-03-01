@@ -1,0 +1,9 @@
+#import "../fragments/full-patient-advanced-directive-form.graphql"
+
+mutation patientAdvancedDirectiveFormDelete($patientAdvancedDirectiveFormId: ID!) {
+  patientAdvancedDirectiveFormDelete(
+    input: { patientAdvancedDirectiveFormId: $patientAdvancedDirectiveFormId }
+  ) {
+    ...FullPatientAdvancedDirectiveForm
+  }
+}

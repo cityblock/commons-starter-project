@@ -624,5 +624,9 @@ export const ENGLISH_TRANSLATION = {
     'patientIntakeChecklist.bannerLabel': 'Member intake incomplete',
     'patientIntakeChecklist.completed': 'Completed',
     'patientIntakeChecklist.headerText': 'Member intake checklist',
+    'patientDocuments.patientConsents': 'Consent forms',
+    'patientDocuments.patientAdvancedDirectives': 'Advanced Directive forms',
+    'patientDocuments.cancel': 'Cancel',
+    'patientDocuments.save': 'Save',
   },
 };

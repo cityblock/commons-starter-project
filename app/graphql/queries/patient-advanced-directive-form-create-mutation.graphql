@@ -1,0 +1,9 @@
+#import "../fragments/full-patient-advanced-directive-form.graphql"
+
+mutation patientAdvancedDirectiveFormCreate($patientId: ID!, $formId: ID!, $signedAt: String!) {
+  patientAdvancedDirectiveFormCreate(
+    input: { patientId: $patientId, formId: $formId, signedAt: $signedAt }
+  ) {
+    ...FullPatientAdvancedDirectiveForm
+  }
+}

@@ -18,6 +18,13 @@
   }
 }
 
+.dateInput.disabled {
+  &:focus,
+  &:hover {
+    border-color: var(--border-color);
+  }
+}
+
 .dateInput::-webkit-inner-spin-button {
   display: none;
 }

@@ -412,6 +412,16 @@ declare module 'schema' {
     computed patient status for a patient
   */
     patientComputedPatientStatus: IComputedPatientStatus;
+    /**
+    patient consent forms
+  */
+    patientConsentFormsForPatient: Array<IPatientConsentForm>;
+    /**
+    patient advanced directive forms
+  */
+    patientAdvancedDirectiveFormsForPatient: Array<
+      IPatientAdvancedDirectiveForm
+    >;
   }
 
   type IUserOrderOptionsEnum =
@@ -1601,6 +1611,30 @@ declare module 'schema' {
     isGlassBreakNotNeeded: boolean;
   }
 
+  /**
+    Patient Consent Form
+  */
+  interface IPatientConsentForm {
+    patientConsentFormId: string | null;
+    patientId: string;
+    userId: string | null;
+    formId: string;
+    title: string;
+    signedAt: string | null;
+  }
+
+  /**
+    Patient Advanced Directive Form
+  */
+  interface IPatientAdvancedDirectiveForm {
+    patientAdvancedDirectiveFormId: string | null;
+    patientId: string;
+    userId: string | null;
+    formId: string;
+    title: string;
+    signedAt: string | null;
+  }
+
   interface IRootMutationType {
     /**
     Create a new user
@@ -2047,6 +2081,22 @@ declare module 'schema' {
     creates a progress note glass break
   */
     progressNoteGlassBreakCreate: IProgressNoteGlassBreak | null;
+    /**
+    creates a patient consent form
+  */
+    patientConsentFormCreate: IPatientConsentForm | null;
+    /**
+    deletes a patient consent form
+  */
+    patientConsentFormDelete: IPatientConsentForm | null;
+    /**
+    creates a patient advanced directive form
+  */
+    patientAdvancedDirectiveFormCreate: IPatientAdvancedDirectiveForm | null;
+    /**
+    deletes a patient advanced directive form
+  */
+    patientAdvancedDirectiveFormDelete: IPatientAdvancedDirectiveForm | null;
   }
 
   /**
@@ -2893,6 +2943,38 @@ declare module 'schema' {
     progressNoteId: string;
     reason: string;
     note: string | null;
+  }
+
+  /**
+    params for creating a patient consent form
+  */
+  interface IPatientConsentFormCreateInput {
+    patientId: string;
+    formId: string;
+    signedAt: string;
+  }
+
+  /**
+    params for deleting a patient consent form
+  */
+  interface IPatientConsentFormDeleteInput {
+    patientConsentFormId: string;
+  }
+
+  /**
+    params for creating a patient advanced directive form
+  */
+  interface IPatientAdvancedDirectiveFormCreateInput {
+    patientId: string;
+    formId: string;
+    signedAt: string;
+  }
+
+  /**
+    params for deleting a patient advanced directive form
+  */
+  interface IPatientAdvancedDirectiveFormDeleteInput {
+    patientAdvancedDirectiveFormId: string;
   }
 
   /**

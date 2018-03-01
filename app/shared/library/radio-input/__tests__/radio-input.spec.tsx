@@ -4,8 +4,8 @@ import RadioInput from '../radio-input';
 
 describe('Library Radio Input Component', () => {
   const value = 'sansaStark';
-  const name = 'got';
   const label = 'Lady of Winterfell';
+  const name = 'GoT';
   const placeholderFn = () => true as any;
 
   const wrapper = shallow(

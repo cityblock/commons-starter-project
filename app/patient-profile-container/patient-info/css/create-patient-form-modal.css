@@ -1,0 +1,14 @@
+@import '../../../shared/css/sizes';
+
+.modalBody {
+  padding: var(--medium-gutter);
+}
+
+.field {
+  width: 100%;
+  margin-bottom: var(--gutter);
+}
+
+.field:last-child {
+  margin-bottom: var(--extra-small-gutter);
+}

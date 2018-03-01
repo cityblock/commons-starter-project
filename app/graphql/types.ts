@@ -1831,6 +1831,22 @@ export interface getGoalSuggestionsForAnswerQuery {
   } | null >,
 };
 
+export interface getPatientAdvancedDirectiveFormsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientAdvancedDirectiveFormsQuery {
+  // patient advanced directive forms
+  patientAdvancedDirectiveFormsForPatient:  Array< {
+    patientAdvancedDirectiveFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
+  } >,
+};
+
 export interface getPatientAnswersQueryVariables {
   filterType: AnswerFilterType,
   filterId: string,
@@ -2240,6 +2256,22 @@ export interface getPatientComputedPatientStatusQuery {
     updatedAt: string,
     deletedAt: string | null,
   },
+};
+
+export interface getPatientConsentFormsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientConsentFormsQuery {
+  // patient consent forms
+  patientConsentFormsForPatient:  Array< {
+    patientConsentFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
+  } >,
 };
 
 export interface getPatientGlassBreakCheckQueryVariables {
@@ -5254,6 +5286,40 @@ export interface logInUserMutation {
   } | null,
 };
 
+export interface patientAdvancedDirectiveFormCreateMutationVariables {
+  patientId: string,
+  formId: string,
+  signedAt: string,
+};
+
+export interface patientAdvancedDirectiveFormCreateMutation {
+  // creates a patient advanced directive form
+  patientAdvancedDirectiveFormCreate:  {
+    patientAdvancedDirectiveFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
+  } | null,
+};
+
+export interface patientAdvancedDirectiveFormDeleteMutationVariables {
+  patientAdvancedDirectiveFormId: string,
+};
+
+export interface patientAdvancedDirectiveFormDeleteMutation {
+  // deletes a patient advanced directive form
+  patientAdvancedDirectiveFormDelete:  {
+    patientAdvancedDirectiveFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
+  } | null,
+};
+
 export interface patientAnswersCreateMutationVariables {
   patientId: string,
   patientAnswers: Array< PatientAnswerInput | null >,
@@ -5700,6 +5766,40 @@ export interface patientConcernDeleteMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+  } | null,
+};
+
+export interface patientConsentFormCreateMutationVariables {
+  patientId: string,
+  formId: string,
+  signedAt: string,
+};
+
+export interface patientConsentFormCreateMutation {
+  // creates a patient consent form
+  patientConsentFormCreate:  {
+    patientConsentFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
+  } | null,
+};
+
+export interface patientConsentFormDeleteMutationVariables {
+  patientConsentFormId: string,
+};
+
+export interface patientConsentFormDeleteMutation {
+  // deletes a patient consent form
+  patientConsentFormDelete:  {
+    patientConsentFormId: string | null,
+    patientId: string,
+    userId: string | null,
+    formId: string,
+    title: string,
+    signedAt: string | null,
   } | null,
 };
 
@@ -9350,6 +9450,15 @@ export interface FullGoalSuggestionTemplateFragment {
   deletedAt: string | null,
 };
 
+export interface FullPatientAdvancedDirectiveFormFragment {
+  patientAdvancedDirectiveFormId: string | null,
+  patientId: string,
+  userId: string | null,
+  formId: string,
+  title: string,
+  signedAt: string | null,
+};
+
 export interface FullPatientAnswerEventFragment {
   id: string,
   patientId: string,
@@ -9722,6 +9831,15 @@ export interface FullPatientConcernFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullPatientConsentFormFragment {
+  patientConsentFormId: string | null,
+  patientId: string,
+  userId: string | null,
+  formId: string,
+  title: string,
+  signedAt: string | null,
 };
 
 export interface FullPatientDataFlagFragment {

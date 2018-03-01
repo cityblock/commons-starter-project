@@ -36,9 +36,18 @@
   border-color: var(--black-color);
 }
 
+.container input[type='radio']:checked + label.blueColor {
+  border-color: var(--blue-color);
+}
+
 .checked + .container input[type='radio'] + label {
   /* Update color of shared border, needed since having own border makes middle borders too thick */
   border-left-color: var(--black-color);
+}
+
+.checked + .container input[type='radio'] + label.blueColor {
+  /* Update color of shared border, needed since having own border makes middle borders too thick */
+  border-left-color: var(--blue-color);
 }
 
 .container input[type='radio']:disabled + label {

@@ -1,0 +1,22 @@
+@import '../../../shared/css/sizes';
+
+.section {
+  padding: var(--medium-gutter) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+h2.header {
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
+  color: var(--default-font-color);
+  margin: 0;
+}
+
+.patientForms {
+  padding-top: var(--medium-gutter);
+}

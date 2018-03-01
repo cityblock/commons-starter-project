@@ -43,23 +43,35 @@ describe('Render Basic Information Component', () => {
   it('renders patient info selects', () => {
     expect(wrapper.find(Select)).toHaveLength(4);
 
-    const select1Props = wrapper.find(Select).at(0).props();
+    const select1Props = wrapper
+      .find(Select)
+      .at(0)
+      .props();
     expect(select1Props.name).toBe('maritalStatus');
     expect(select1Props.large).toBeTruthy();
 
-    const select2Props = wrapper.find(Select).at(1).props();
+    const select2Props = wrapper
+      .find(Select)
+      .at(1)
+      .props();
     expect(select2Props.name).toBe('language');
     expect(select2Props.large).toBeTruthy();
     expect(select2Props.value).toBe(basicInfo.language);
     expect(select2Props.hasPlaceholder).toBeTruthy();
 
-    const select3Props = wrapper.find(Select).at(2).props();
+    const select3Props = wrapper
+      .find(Select)
+      .at(2)
+      .props();
     expect(select3Props.name).toBe('gender');
     expect(select3Props.large).toBeTruthy();
     expect(select3Props.value).toBe(basicInfo.gender);
     expect(select3Props.hasPlaceholder).toBeTruthy();
 
-    const select4Props = wrapper.find(Select).at(3).props();
+    const select4Props = wrapper
+      .find(Select)
+      .at(3)
+      .props();
     expect(select4Props.name).toBe('sexAtBirth');
     expect(select4Props.large).toBeTruthy();
     expect(select4Props.value).toBe(basicInfo.sexAtBirth);

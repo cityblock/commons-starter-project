@@ -1264,6 +1264,26 @@ type ProgressNoteGlassBreakCheck {
   isGlassBreakNotNeeded: Boolean!
 }
 
+# Patient Consent Form
+type PatientConsentForm {
+  patientConsentFormId: ID
+  patientId: ID!
+  userId: ID
+  formId: ID!
+  title: String!
+  signedAt: String
+}
+
+# Patient Advanced Directive Form
+type PatientAdvancedDirectiveForm {
+  patientAdvancedDirectiveFormId: ID
+  patientId: ID!
+  userId: ID
+  formId: ID!
+  title: String!
+  signedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1938,6 +1958,30 @@ input ProgressNoteGlassBreakCreateInput {
   note: String
 }
 
+# params for creating a patient consent form
+input PatientConsentFormCreateInput {
+  patientId: ID!
+  formId: ID!
+  signedAt: String!
+}
+
+# params for deleting a patient consent form
+input PatientConsentFormDeleteInput {
+  patientConsentFormId: ID!
+}
+
+# params for creating a patient advanced directive form
+input PatientAdvancedDirectiveFormCreateInput {
+  patientId: ID!
+  formId: ID!
+  signedAt: String!
+}
+
+# params for deleting a patient advanced directive form
+input PatientAdvancedDirectiveFormDeleteInput {
+  patientAdvancedDirectiveFormId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2172,6 +2216,18 @@ type RootMutationType {
   patientGlassBreakCreate(input: PatientGlassBreakCreateInput): PatientGlassBreak
   # creates a progress note glass break
   progressNoteGlassBreakCreate(input: ProgressNoteGlassBreakCreateInput): ProgressNoteGlassBreak
+  # creates a patient consent form
+  patientConsentFormCreate(input: PatientConsentFormCreateInput): PatientConsentForm
+  # deletes a patient consent form
+  patientConsentFormDelete(input: PatientConsentFormDeleteInput): PatientConsentForm
+  # creates a patient advanced directive form
+  patientAdvancedDirectiveFormCreate(
+    input: PatientAdvancedDirectiveFormCreateInput
+  ): PatientAdvancedDirectiveForm
+  # deletes a patient advanced directive form
+  patientAdvancedDirectiveFormDelete(
+    input: PatientAdvancedDirectiveFormDeleteInput
+  ): PatientAdvancedDirectiveForm
 }
 
 type RootQueryType {
@@ -2412,6 +2468,10 @@ type RootQueryType {
   progressNoteGlassBreakCheck(progressNoteId: ID!): ProgressNoteGlassBreakCheck!
   # computed patient status for a patient
   patientComputedPatientStatus(patientId: ID!): ComputedPatientStatus!
+  # patient consent forms
+  patientConsentFormsForPatient(patientId: ID!): [PatientConsentForm!]!
+  # patient advanced directive forms
+  patientAdvancedDirectiveFormsForPatient(patientId: ID!): [PatientAdvancedDirectiveForm!]!
 }
 
 schema {

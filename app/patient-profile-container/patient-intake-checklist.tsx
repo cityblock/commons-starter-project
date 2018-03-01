@@ -155,7 +155,7 @@ export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlPro
           labelId="patientIntakeChecklist.consentSignedLabel"
           subtextId="patientIntakeChecklist.consentSignedSubtext"
           buttonTextId="patientIntakeChecklist.consentSignedButton"
-          buttonLink={`/patients/${patientId}/patientInfo`}
+          buttonLink={`/patients/${patientId}/patientInfo/documents`}
           onClick={this.onChecklistItemClick}
         />
         <PatientIntakeChecklistItem

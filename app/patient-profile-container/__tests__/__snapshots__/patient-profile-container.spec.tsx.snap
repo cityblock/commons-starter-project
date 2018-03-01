@@ -62,7 +62,7 @@ exports[`patient profile container renders patient profile container 1`] = `
       <Route
         component={[Function]}
         exact={true}
-        path="/patients/:patientId/patientInfo"
+        path="/patients/:patientId/patientInfo/:subTab?"
       />
     </Switch>
   </div>

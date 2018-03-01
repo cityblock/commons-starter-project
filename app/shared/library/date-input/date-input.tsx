@@ -10,6 +10,7 @@ interface IProps {
   onChange: (newDate: string | null) => void;
   className?: string;
   small?: boolean; // optionally apply small styles
+  disabled?: boolean;
 }
 
 interface IState {
@@ -41,7 +42,7 @@ export class DateInput extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { value, className, small } = this.props;
+    const { value, className, small, disabled } = this.props;
     const { loading, error } = this.state;
 
     const formattedValue = value ? format(value, DEFAULT_FORMAT) : '';
@@ -51,6 +52,7 @@ export class DateInput extends React.Component<IProps, IState> {
         [styles.empty]: !value && !loading,
         [styles.error]: !!error,
         [styles.small]: !!small,
+        [styles.disabled]: !!disabled,
       },
       className,
     );
@@ -60,6 +62,7 @@ export class DateInput extends React.Component<IProps, IState> {
         type="date"
         value={formattedValue}
         onChange={this.handleChange}
+        disabled={disabled}
         className={inputStyles}
       />
     );

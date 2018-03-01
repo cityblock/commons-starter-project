@@ -1,6 +1,9 @@
+import { find } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ConsentForm from './consent-form';
 import Patient from './patient';
+import PatientConsentForm from './patient-consent-form';
 import PatientDataFlag from './patient-data-flag';
 import User from './user';
 
@@ -98,7 +101,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const isDemographicInfoUpdated = !!patientInfo.updatedAt;
     const isEmergencyContactAdded = false;
     const isAdvancedDirectivesAdded = false;
-    const isConsentSigned = false;
+    const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
     const isPhotoAddedOrDeclined = false;
     const isIneligible = false;
     const isDisenrolled = false;
@@ -113,6 +116,27 @@ export default class ComputedPatientStatus extends BaseModel {
       isIneligible,
       isDisenrolled,
     };
+  }
+
+  static async isConsentSignedForPatient(patientId: string, txn: Transaction): Promise<boolean> {
+    let isConsentSignedForPatient = true;
+    const consentForms = await ConsentForm.getAll(txn);
+
+    if (!consentForms.length) {
+      return false;
+    }
+
+    const patientConsentForms = await PatientConsentForm.getAllForPatient(patientId, txn);
+
+    consentForms.forEach(consentForm => {
+      const patientConsentForm = find(patientConsentForms, ['formId', consentForm.id]);
+
+      if (!patientConsentForm) {
+        isConsentSignedForPatient = false;
+      }
+    });
+
+    return isConsentSignedForPatient;
   }
 
   static async getForPatient(

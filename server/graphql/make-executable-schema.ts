@@ -78,6 +78,11 @@ import {
   resolveGoalSuggestionTemplates,
 } from './goal-suggestion-template-resolver';
 import {
+  patientAdvancedDirectiveFormCreate,
+  patientAdvancedDirectiveFormDelete,
+  resolvePatientAdvancedDirectiveFormsForPatient,
+} from './patient-advanced-directive-form-resolver';
+import {
   patientAnswersCreate,
   patientAnswerDelete,
   patientAnswerEdit,
@@ -93,6 +98,11 @@ import {
   resolvePatientConcern,
   resolvePatientConcernsForPatient,
 } from './patient-concern-resolver';
+import {
+  patientConsentFormCreate,
+  patientConsentFormDelete,
+  resolvePatientConsentFormsForPatient,
+} from './patient-consent-form-resolver';
 import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
@@ -382,6 +392,8 @@ const resolveFunctions = {
     patientGlassBreakCheck: resolvePatientGlassBreakCheck,
     progressNoteGlassBreakCheck: resolveProgressNoteGlassBreakCheck,
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
+    patientConsentFormsForPatient: resolvePatientConsentFormsForPatient,
+    patientAdvancedDirectiveFormsForPatient: resolvePatientAdvancedDirectiveFormsForPatient,
   },
 
   RootMutationType: {
@@ -496,6 +508,10 @@ const resolveFunctions = {
     patientDataFlagCreate,
     patientGlassBreakCreate,
     progressNoteGlassBreakCreate,
+    patientConsentFormCreate,
+    patientConsentFormDelete,
+    patientAdvancedDirectiveFormCreate,
+    patientAdvancedDirectiveFormDelete,
   },
 };
 

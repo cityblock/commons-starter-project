@@ -1,0 +1,8 @@
+fragment FullPatientConsentForm on PatientConsentForm {
+  patientConsentFormId
+  patientId
+  userId
+  formId
+  title
+  signedAt
+}

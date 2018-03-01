@@ -1,5 +1,6 @@
 import { ModelClass } from 'objection';
 import Address from '../../models/address';
+import AdvancedDirectiveForm from '../../models/advanced-directive-form';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import CarePlanUpdateEvent from '../../models/care-plan-update-event';
@@ -14,6 +15,7 @@ import ComputedPatientStatus from '../../models/computed-patient-status';
 import Concern from '../../models/concern';
 import ConcernDiagnosisCode from '../../models/concern-diagnosis-code';
 import ConcernSuggestion from '../../models/concern-suggestion';
+import ConsentForm from '../../models/consent-form';
 import DiagnosisCode from '../../models/diagnosis-code';
 import Email from '../../models/email';
 import EventNotification from '../../models/event-notification';
@@ -22,9 +24,11 @@ import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import GoogleAuth from '../../models/google-auth';
 import Patient from '../../models/patient';
 import PatientAddress from '../../models/patient-address';
+import PatientAdvancedDirectiveForm from '../../models/patient-advanced-directive-form';
 import PatientAnswer from '../../models/patient-answer';
 import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
+import PatientConsentForm from '../../models/patient-consent-form';
 import PatientDataFlag from '../../models/patient-data-flag';
 import PatientEmail from '../../models/patient-email';
 import PatientGlassBreak from '../../models/patient-glass-break';
@@ -56,6 +60,7 @@ import User from '../../models/user';
 
 export type ModelResource =
   | 'address'
+  | 'advancedDirectiveForm'
   | 'answer'
   | 'carePlanSuggestion'
   | 'carePlanUpdateEvent'
@@ -70,6 +75,7 @@ export type ModelResource =
   | 'concernDiagnosisCode'
   | 'concernSuggestion'
   | 'concern'
+  | 'consentForm'
   | 'diagnosisCode'
   | 'email'
   | 'eventNotification'
@@ -78,9 +84,11 @@ export type ModelResource =
   | 'googleAuth'
   | 'patient'
   | 'patientAddress'
+  | 'patientAdvancedDirectiveForm'
   | 'patientAnswer'
   | 'patientAnswerEvent'
   | 'patientConcern'
+  | 'patientConsentForm'
   | 'patientDataFlag'
   | 'patientEmail'
   | 'patientGlassBreak'
@@ -116,6 +124,7 @@ export const glassBreakResources: ModelResource[] = ['patientGlassBreak', 'progr
 
 const resourceToModelMapping: ResourceToModelMapping = {
   address: Address,
+  advancedDirectiveForm: AdvancedDirectiveForm,
   answer: Answer,
   carePlanSuggestion: CarePlanSuggestion,
   carePlanUpdateEvent: CarePlanUpdateEvent,
@@ -130,6 +139,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   concernDiagnosisCode: ConcernDiagnosisCode,
   concernSuggestion: ConcernSuggestion,
   concern: Concern,
+  consentForm: ConsentForm,
   diagnosisCode: DiagnosisCode,
   email: Email,
   eventNotification: EventNotification,
@@ -138,9 +148,11 @@ const resourceToModelMapping: ResourceToModelMapping = {
   googleAuth: GoogleAuth,
   patient: Patient,
   patientAddress: PatientAddress,
+  patientAdvancedDirectiveForm: PatientAdvancedDirectiveForm,
   patientAnswer: PatientAnswer,
   patientAnswerEvent: PatientAnswerEvent,
   patientConcern: PatientConcern,
+  patientConsentForm: PatientConsentForm,
   patientDataFlag: PatientDataFlag,
   patientEmail: PatientEmail,
   patientGlassBreak: PatientGlassBreak,

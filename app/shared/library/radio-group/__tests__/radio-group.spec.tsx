@@ -13,8 +13,20 @@ describe('Library Radio Group Component', () => {
 
   const wrapper = shallow(
     <RadioGroup>
-      <RadioInput name={name} value={value1} onChange={placeholderFn} label={label1} checked={false} />
-      <RadioInput name={name} value={value2} onChange={placeholderFn} label={label2} checked={true} />
+      <RadioInput
+        name={name}
+        value={value1}
+        onChange={placeholderFn}
+        label={label1}
+        checked={false}
+      />
+      <RadioInput
+        name={name}
+        value={value2}
+        onChange={placeholderFn}
+        label={label2}
+        checked={true}
+      />
     </RadioGroup>,
   );
 

@@ -12,14 +12,29 @@ interface IProps {
   disabled?: boolean;
   fullWidth?: boolean;
   readOnly?: boolean;
+  borderColor?: 'blue' | 'black'; // Defaults to black
 }
 
 const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, checked, onChange, onClick, label, disabled, name, fullWidth, readOnly } = props;
+  const {
+    value,
+    checked,
+    onChange,
+    onClick,
+    label,
+    disabled,
+    name,
+    fullWidth,
+    readOnly,
+    borderColor,
+  } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
     [styles.enabled]: !disabled,
     [styles.fullWidth]: fullWidth,
+  });
+  const labelStyles = classNames({
+    [styles.blueColor]: borderColor === 'blue',
   });
 
   return (
@@ -35,7 +50,9 @@ const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
         disabled={!!disabled}
         readOnly={!!readOnly}
       />
-      <label htmlFor={`${name}-${value}`}>{label || value}</label>
+      <label className={labelStyles} htmlFor={`${name}-${value}`}>
+        {label || value}
+      </label>
     </div>
   );
 };

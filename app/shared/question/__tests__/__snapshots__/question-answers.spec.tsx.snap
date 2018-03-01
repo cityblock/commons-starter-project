@@ -19,6 +19,7 @@ exports[`renders question answers 1`] = `
       value="answer-id"
     />
     <label
+      className=""
       htmlFor="answer-id-answer-id"
     >
       answer value

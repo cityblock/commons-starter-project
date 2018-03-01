@@ -1,0 +1,6 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  padding: 0 var(--medium-gutter);
+  background-color: var(--gray-background-color);
+}

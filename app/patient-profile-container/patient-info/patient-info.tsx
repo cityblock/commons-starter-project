@@ -18,6 +18,7 @@ import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
 import * as styles from './css/patient-info.css';
 import PatientDemographics, { IDemographics } from './patient-demographics';
+import PatientDocuments from './patient-documents';
 
 export type SelectableTabs = 'demographics' | 'documents';
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
@@ -322,7 +323,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
         />
       ) : null;
 
-    const documents = isDocuments ? <div /> : null;
+    const documents = isDocuments ? <PatientDocuments patientId={match.params.patientId} /> : null;
     const saveButton = !isDocuments ? this.renderSaveButton() : null;
 
     return (

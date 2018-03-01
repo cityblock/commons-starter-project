@@ -4,7 +4,9 @@ import { createMockClinic, createMockUser, createPatient } from '../../spec-help
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
+import ConsentForm from '../consent-form';
 import Patient from '../patient';
+import PatientConsentForm from '../patient-consent-form';
 import PatientDataFlag from '../patient-data-flag';
 import PatientInfo from '../patient-info';
 import ProgressNoteTemplate from '../progress-note-template';
@@ -196,7 +198,35 @@ describe('computed patient status model', () => {
     });
   });
 
-  /* TODO: Once it's possible, test emergencyContactAdded, advancedDirectivesAdded, consentsSigned,
+  it('correctly calculates isConsentSigned', async () => {
+    await transaction(ComputedPatientStatus.knex(), async txn => {
+      const { user, patient } = await setup(txn);
+      const consentForm = await ConsentForm.create('Cityblock', txn);
+      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+      expect(computedPatientStatus!.isConsentSigned).toEqual(false);
+
+      await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+
+      await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
+
+      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
+    });
+  });
+
+  /* TODO: Once it's possible, test emergencyContactAdded, advancedDirectivesAdded,
    *       photoAddedOrDeclined, isIneligible, and isDisenrolled
    */
 });

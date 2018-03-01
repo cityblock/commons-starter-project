@@ -193,7 +193,7 @@
     "le_node": "1.7.1",
     "lodash": "4.17.5",
     "lodash-es": "4.17.5",
-    "lost": "8.2.0",
+    "lost": "8.2.1",
     "material-ui": "1.0.0-beta.35",
     "material-ui-icons": "1.0.0-beta.35",
     "morgan": "1.9.0",

@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { ShortPatientFragment } from '../graphql/types';
-import { Size } from '../reducers/browser-reducer';
 import CareTeamWidget from './care-team-widget';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientLeftNavInfo from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 import PatientProblemList from './patient-problem-list';
-import PatientProfileIpadNav from './patient-profile-ipad-nav';
 
 interface IProps {
-  browserSize: Size;
   patient?: ShortPatientFragment | null;
   patientId: string;
 }
@@ -37,19 +34,15 @@ export default class PatientProfileLeftNav extends React.Component<IProps, IStat
   };
 
   render() {
-    const { browserSize, patient, patientId } = this.props;
+    const { patient, patientId } = this.props;
 
-    if (browserSize === 'small') {
-      return <PatientProfileIpadNav patientId={patientId} patient={patient} />;
-    } else {
-      return (
-        <div className={styles.leftPane}>
-          <PatientLeftNavInfo patientId={patientId} patient={patient} />
-          <PatientMedications patientId={patientId} />
-          <PatientProblemList patientId={patientId} />
-          <CareTeamWidget patientId={patientId} />
-        </div>
-      );
-    }
+    return (
+      <div className={styles.leftPane}>
+        <PatientLeftNavInfo patientId={patientId} patient={patient} />
+        <PatientMedications patientId={patientId} />
+        <PatientProblemList patientId={patientId} />
+        <CareTeamWidget patientId={patientId} />
+      </div>
+    );
   }
 }

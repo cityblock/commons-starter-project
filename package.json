@@ -111,7 +111,7 @@
     "stylefmt": "6.0.0",
     "stylelint": "9.1.1",
     "stylelint-config-lost": "0.0.3",
-    "stylelint-config-standard": "18.1.0",
+    "stylelint-config-standard": "18.2.0",
     "ts-jest": "22.4.0",
     "tslint": "5.9.1",
     "tslint-microsoft-contrib": "5.0.3",

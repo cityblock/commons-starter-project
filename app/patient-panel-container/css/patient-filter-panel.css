@@ -24,7 +24,7 @@
   z-index: 20;
   position: absolute;
   top: 0;
-  right: 0;
+  right: -10px;
   width: 450px;
   transform: translateX(450px);
   background-color: var(--highlight-background-color);

@@ -3,7 +3,6 @@ import { debounce } from 'lodash-es';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
-import { browserReducer, Size } from './reducers/browser-reducer';
 import { currentUserReducer, IState as CurrentUserState } from './reducers/current-user-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
@@ -14,9 +13,6 @@ export interface IState {
   locale: {
     lang: Lang;
     messages: any;
-  };
-  browser: {
-    size: Size;
   };
   task: {
     taskId?: string;
@@ -46,7 +42,6 @@ export default (history: History) => {
   }
 
   const reducers = combineReducers<IState>({
-    browser: browserReducer,
     locale: localeReducer,
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,

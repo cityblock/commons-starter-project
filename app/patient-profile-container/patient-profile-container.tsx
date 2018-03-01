@@ -1,11 +1,9 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { getPatientQuery } from '../graphql/types';
-import { Size } from '../reducers/browser-reducer';
 import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
 import { formatPatientName } from '../shared/helpers/format-helpers';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
@@ -34,7 +32,6 @@ interface IProps extends IInjectedProps {
 interface IStateProps {
   patientId: string;
   tab?: SelectableTabs;
-  browserSize: Size;
 }
 
 interface IGraphqlProps {
@@ -53,15 +50,11 @@ export class PatientProfileContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { patientId, patient, tab, browserSize, glassBreakId } = this.props;
-    const mainBodyStyle = classNames({
-      [styles.mainBody]: browserSize === 'large',
-      [styles.mainBodySmall]: browserSize === 'small',
-    });
+    const { patientId, patient, tab, glassBreakId } = this.props;
     return (
       <div className={styles.container}>
-        <PatientProfileLeftNav browserSize={browserSize} patientId={patientId} patient={patient} />
-        <div className={mainBodyStyle}>
+        <PatientProfileLeftNav patientId={patientId} patient={patient} />
+        <div className={styles.mainBody}>
           <PatientIntakeChecklist patientId={patientId} />
           <UnderlineTabs color="white">
             <UnderlineTab
@@ -119,9 +112,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
 }
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  const { browser } = state;
   return {
-    browserSize: browser ? browser.size : 'large',
     patientId: ownProps.match.params.patientId,
     tab: ownProps.match.params.tab,
   };

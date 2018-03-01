@@ -23,7 +23,6 @@ describe('patient profile container', () => {
         match={match}
         patientId={'patient-1'}
         tab={'map' as any}
-        browserSize={'large'}
         loading={false}
         glassBreakId={null}
       />,

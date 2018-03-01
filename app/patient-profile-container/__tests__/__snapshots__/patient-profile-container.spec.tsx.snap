@@ -5,7 +5,6 @@ exports[`patient profile container renders patient profile container 1`] = `
   className="container"
 >
   <PatientProfileLeftNav
-    browserSize="large"
     patient={undefined}
     patientId="patient-1"
   />

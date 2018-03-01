@@ -12,8 +12,8 @@
 
 .tasksList {
   display: inline-block;
-  height: calc(100vh - 223px);
-  overflow-y: scroll;
+  height: calc(100vh - 188px);
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
   transition: width 0.3s ease-out;
@@ -48,7 +48,7 @@
   width: 0%;
   overflow: hidden;
   display: inline-block;
-  height: calc(100vh - 223px);
+  height: calc(100vh - 188px);
   vertical-align: top;
   transition: width 0.3s ease-out;
 }
@@ -56,7 +56,7 @@
 .taskContainer.visible {
   width: 50%;
   padding: 0 10px;
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 

@@ -6,13 +6,13 @@
   overflow: auto;
   justify-content: center;
   height: 100%;
-  lost-center: var(--max-width);
+  display: flex;
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 .mainBody {
   flex-basis: 75%;
-}
-
-.mainBodySmall {
-  flex-basis: 92.2%;
+  max-height: calc(100vh - 60px);
+  overflow: auto;
 }

@@ -10934,15 +10934,15 @@ stylelint-config-lost@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/stylelint-config-lost/-/stylelint-config-lost-0.0.3.tgz#eaea4cb077b5ca9e98c1e5234ae3e4920958279b"
 
-stylelint-config-recommended@^2.0.0:
+stylelint-config-recommended@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/stylelint-config-recommended/-/stylelint-config-recommended-2.1.0.tgz#f526d5c771c6811186d9eaedbed02195fee30858"
 
-stylelint-config-standard@18.1.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/stylelint-config-standard/-/stylelint-config-standard-18.1.0.tgz#e4d977063f5bca77970033d2f76941c3cc19fd9c"
+stylelint-config-standard@18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/stylelint-config-standard/-/stylelint-config-standard-18.2.0.tgz#6283149aba7f64f18731aef8f0abfb35cf619e06"
   dependencies:
-    stylelint-config-recommended "^2.0.0"
+    stylelint-config-recommended "^2.1.0"
 
 stylelint-order@^0.4.4:
   version "0.4.4"

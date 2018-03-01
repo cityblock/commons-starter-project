@@ -376,7 +376,7 @@ exports[`renders answer create-edit 1`] = `
           <input
             checked={true}
             disabled={false}
-            id="true"
+            id="inSummary-true"
             name="inSummary"
             onChange={[Function]}
             onClick={undefined}
@@ -385,7 +385,8 @@ exports[`renders answer create-edit 1`] = `
             value="true"
           />
           <label
-            htmlFor="true"
+            className=""
+            htmlFor="inSummary-true"
           >
             Yes
           </label>
@@ -396,7 +397,7 @@ exports[`renders answer create-edit 1`] = `
           <input
             checked={false}
             disabled={false}
-            id="false"
+            id="inSummary-false"
             name="inSummary"
             onChange={[Function]}
             onClick={undefined}
@@ -405,7 +406,8 @@ exports[`renders answer create-edit 1`] = `
             value="false"
           />
           <label
-            htmlFor="false"
+            className=""
+            htmlFor="inSummary-false"
           >
             No
           </label>

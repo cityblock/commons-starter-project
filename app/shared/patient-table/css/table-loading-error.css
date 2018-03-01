@@ -5,7 +5,8 @@
   padding: 150px var(--gutter);
   justify-content: center;
   align-items: center;
-  lost-flex-container: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .errorIcon {

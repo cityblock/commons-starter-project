@@ -2,7 +2,6 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const postcssImport = require('postcss-import');
 const postcssCssnext = require('postcss-cssnext');
-const lost = require('lost');
 const postcssReporter = require('postcss-reporter');
 const cssnano = require('cssnano');
 const PATHS = require('../paths');
@@ -25,7 +24,6 @@ module.exports = ({ production = false } = {}) => {
       loader: 'postcss-loader',
       options: {
         plugins: [
-          lost(),
           postcssImport({ path: path.resolve(PATHS.app, './css') }),
           postcssCssnext({ browsers: ['last 2 versions'], warnForDuplicates: false }),
           // cssnano in prod and reporter (for errors) in dev

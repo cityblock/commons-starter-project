@@ -71,10 +71,6 @@
   justify-content: space-between;
 }
 
-.flexInputItem {
-  lost-column: 1/2 2 20px;
-}
-
 .submitButton {
   @apply --button;
   @apply --small-button;

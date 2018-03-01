@@ -4,8 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import * as userMutation from '../graphql/queries/current-user-edit-mutation.graphql';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { currentUserEditMutationVariables, FullUserFragment } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import Button from '../shared/library/button/button';
+import FormLabel from '../shared/library/form-label/form-label';
+import * as formStyles from '../shared/library/form/css/form.css';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import * as styles from './css/settings.css';
 
 interface IProps {
@@ -114,43 +118,34 @@ class SettingsContainer extends React.Component<allProps, IState> {
             {(message: string) => <div className={styles.heading}>{message}</div>}
           </FormattedMessage>
           <div className={styles.form}>
-            <div className={formStyles.multiInputFormRow}>
-              <div className={formStyles.inputGroup}>
-                <div className={formStyles.inputLabel}>Locale</div>
-                <select
-                  required
-                  name="locale"
-                  value={locale}
-                  onChange={this.updateUserLocale}
-                  className={formStyles.select}
-                >
-                  <option value="" disabled hidden>
+            <div className={formStyles.fieldRow}>
+              <div className={formStyles.field}>
+                <FormLabel htmlFor="local" messageId="settings.locale" />
+                <Select required name="locale" value={locale} onChange={this.updateUserLocale}>
+                  <Option value="" disabled>
                     Select Locale
-                  </option>
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                </select>
+                  </Option>
+                  <Option value="en">English</Option>
+                  <Option value="es">Spanish</Option>
+                </Select>
               </div>
             </div>
-            <div className={formStyles.multiInputFormRow}>
-              <div className={formStyles.inputGroup}>
-                <div className={formStyles.inputLabel}>Phone</div>
-                <input
+            <div className={formStyles.fieldRow}>
+              <div className={formStyles.field}>
+                <FormLabel htmlFor="local" messageId="settings.phone" />
+                <TextInput
                   name="editedPhone"
                   value={editedPhone}
-                  placeholder={'Enter phone number'}
-                  className={formStyles.input}
+                  placeholderMessageId="settings.enterPhone"
                   onChange={this.onChange}
                 />
               </div>
-              <div className={formStyles.inputGroup}>
-                <Button
-                  messageId="settings.save"
-                  onClick={this.updateUserPhone}
-                  className={styles.saveButton}
-                />
-              </div>
             </div>
+            <Button
+              messageId="settings.save"
+              onClick={this.updateUserPhone}
+              className={styles.saveButton}
+            />
           </div>
         </div>
       </div>

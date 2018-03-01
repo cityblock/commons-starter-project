@@ -70,7 +70,7 @@
 }
 
 .flexInputItem {
-  lost-column: 1/2 2 20px;
+  display: flex;
 }
 
 .submitButton {

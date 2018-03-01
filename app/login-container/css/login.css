@@ -11,8 +11,9 @@
 
 .container {
   width: 100%;
-  lost-flex-container: row;
-  lost-center: var(--max-width);
+  display: flex;
+  margin: 0 auto;
+  max-width: var(--max-width);
 }
 
 .title {

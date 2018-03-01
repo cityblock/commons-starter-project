@@ -16,7 +16,7 @@
   background-color: var(--dark-gray-background-color);
   align-items: center;
   justify-content: space-between;
-  lost-flex-container: row;
+  display: flex;
 }
 
 .itemsList {

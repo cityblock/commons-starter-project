@@ -11,7 +11,8 @@
 .container {
   width: 100%;
   padding: 0 var(--medium-gutter) 0 0;
-  lost-center: var(--max-width);
+  max-width: var(--max-width);
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   display: flex;

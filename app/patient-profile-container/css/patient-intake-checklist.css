@@ -2,7 +2,8 @@
 
 .checklist {
   z-index: 1;
-  lost-center: var(--max-width);
+  margin: 0 auto;
+  max-width: var(--max-width);
   background-color: var(--white-color);
 }
 

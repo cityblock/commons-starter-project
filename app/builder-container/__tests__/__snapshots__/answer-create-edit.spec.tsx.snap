@@ -1,9 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders answer create-edit 1`] = `
-<form
+<div
   className="borderContainer"
-  onSubmit={[Function]}
 >
   <div
     className="error"
@@ -32,166 +31,197 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
         Order:
-      </div>
+      </label>
       <select
-        className="select inputSmall"
+        className="select"
+        disabled={undefined}
         name="order"
         onChange={[Function]}
-        value={1}
+        required={undefined}
+        value="1"
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select Answer order
+          
         </option>
         <option
-          value={1}
+          disabled={undefined}
+          value="1"
         >
           1
         </option>
         <option
-          value={2}
+          disabled={undefined}
+          value="2"
         >
           2
         </option>
         <option
-          value={3}
+          disabled={undefined}
+          value="3"
         >
           3
         </option>
         <option
-          value={4}
+          disabled={undefined}
+          value="4"
         >
           4
         </option>
         <option
-          value={5}
+          disabled={undefined}
+          value="5"
         >
           5
         </option>
         <option
-          value={6}
+          disabled={undefined}
+          value="6"
         >
           6
         </option>
         <option
-          value={7}
+          disabled={undefined}
+          value="7"
         >
           7
         </option>
         <option
-          value={8}
+          disabled={undefined}
+          value="8"
         >
           8
         </option>
         <option
-          value={9}
+          disabled={undefined}
+          value="9"
         >
           9
         </option>
         <option
-          value={10}
+          disabled={undefined}
+          value="10"
         >
           10
         </option>
         <option
-          value={11}
+          disabled={undefined}
+          value="11"
         >
           11
         </option>
         <option
-          value={12}
+          disabled={undefined}
+          value="12"
         >
           12
         </option>
         <option
-          value={13}
+          disabled={undefined}
+          value="13"
         >
           13
         </option>
         <option
-          value={14}
+          disabled={undefined}
+          value="14"
         >
           14
         </option>
         <option
-          value={15}
+          disabled={undefined}
+          value="15"
         >
           15
         </option>
         <option
-          value={16}
+          disabled={undefined}
+          value="16"
         >
           16
         </option>
         <option
-          value={17}
+          disabled={undefined}
+          value="17"
         >
           17
         </option>
         <option
-          value={18}
+          disabled={undefined}
+          value="18"
         >
           18
         </option>
         <option
-          value={19}
+          disabled={undefined}
+          value="19"
         >
           19
         </option>
         <option
-          value={20}
+          disabled={undefined}
+          value="20"
         >
           20
         </option>
         <option
-          value={21}
+          disabled={undefined}
+          value="21"
         >
           21
         </option>
         <option
-          value={22}
+          disabled={undefined}
+          value="22"
         >
           22
         </option>
         <option
-          value={23}
+          disabled={undefined}
+          value="23"
         >
           23
         </option>
         <option
-          value={24}
+          disabled={undefined}
+          value="24"
         >
           24
         </option>
         <option
-          value={25}
+          disabled={undefined}
+          value="25"
         >
           25
         </option>
         <option
-          value={26}
+          disabled={undefined}
+          value="26"
         >
           26
         </option>
         <option
-          value={27}
+          disabled={undefined}
+          value="27"
         >
           27
         </option>
         <option
-          value={28}
+          disabled={undefined}
+          value="28"
         >
           28
         </option>
         <option
-          value={29}
+          disabled={undefined}
+          value="29"
         >
           29
         </option>
@@ -200,27 +230,36 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
-        Display Value:
-      </div>
+        Display value
+      </label>
       <input
-        className="input inputSmall"
+        className="input"
+        id=""
         name="displayValue"
+        onBlur={undefined}
         onChange={[Function]}
+        onFocus={undefined}
+        onKeyDown={undefined}
+        pattern={undefined}
         placeholder="Enter answer display value"
+        required={false}
+        type="text"
         value="answer value"
       />
     </div>
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
-        Backend Value:
-      </div>
+        Backend value
+      </label>
       <div
         className="largeText"
       >
@@ -230,18 +269,22 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
         Backend value type:
-      </div>
+      </label>
       <select
-        className="select inputSmall"
+        className="select"
+        disabled={undefined}
         name="valueType"
         onChange={[Function]}
+        required={undefined}
         value="boolean"
       >
         <option
+          disabled={undefined}
           value="boolean"
         >
           boolean
@@ -251,13 +294,14 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
         Risk adjustment type:
-      </div>
+      </label>
       <select
-        className="select select inputSmall"
+        className="select"
         disabled={undefined}
         name="riskAdjustmentType"
         onChange={[Function]}
@@ -293,79 +337,80 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="inlineInputGroup"
     >
-      <div
-        className="smallText"
+      <label
+        className="label"
+        htmlFor={undefined}
       >
-        Summary Text:
-      </div>
+        Summary text
+      </label>
       <input
-        className="input inputSmall"
+        className="input"
+        id=""
         name="summaryText"
+        onBlur={undefined}
         onChange={[Function]}
+        onFocus={undefined}
+        onKeyDown={undefined}
+        pattern={undefined}
         placeholder="Enter summary text"
+        required={false}
+        type="text"
         value="summary text"
       />
     </div>
     <div
-      className="radioGroup"
+      className="inlineInputGroup"
     >
-      <div
-        className="radioGroupLabel"
+      <label
+        className="label"
+        htmlFor={undefined}
+      >
+        Display in summary?
+      </label>
+      <form
+        className="container"
       >
         <div
-          className="smallText"
+          className="container checked enabled"
         >
-          Display in summary?
-        </div>
-      </div>
-      <div
-        className="radioGroupOptions radioGroup"
-      >
-        <div
-          className="radioGroupItem"
-        >
-          <div
-            className="radioGroupContainer"
-          >
-            <input
-              checked={true}
-              className="radio"
-              name="inSummary"
-              onChange={[Function]}
-              type="radio"
-              value="true"
-            />
-            <label />
-          </div>
-          <span
-            className="radioLabel"
+          <input
+            checked={true}
+            disabled={false}
+            id="true"
+            name="inSummary"
+            onChange={[Function]}
+            onClick={undefined}
+            readOnly={false}
+            type="radio"
+            value="true"
+          />
+          <label
+            htmlFor="true"
           >
             Yes
-          </span>
+          </label>
         </div>
         <div
-          className="radioGroupItem"
+          className="container enabled"
         >
-          <div
-            className="radioGroupContainer"
-          >
-            <input
-              checked={false}
-              className="radio"
-              name="inSummary"
-              onChange={[Function]}
-              type="radio"
-              value="false"
-            />
-            <label />
-          </div>
-          <span
-            className="radioLabel"
+          <input
+            checked={false}
+            disabled={false}
+            id="false"
+            name="inSummary"
+            onChange={[Function]}
+            onClick={undefined}
+            readOnly={false}
+            type="radio"
+            value="false"
+          />
+          <label
+            htmlFor="false"
           >
             No
-          </span>
+          </label>
         </div>
-      </div>
+      </form>
     </div>
   </div>
   <div>
@@ -469,11 +514,17 @@ exports[`renders answer create-edit 1`] = `
     <div
       className="formBottomContent"
     >
-      <input
-        className="submitButton"
-        type="submit"
-        value="Save"
-      />
+      <button
+        className="button"
+        disabled={false}
+        onClick={[Function]}
+      >
+        <span
+          className="flex"
+        >
+          <span />
+        </span>
+      </button>
       <div
         onClick={[Function]}
       >
@@ -481,5 +532,5 @@ exports[`renders answer create-edit 1`] = `
       </div>
     </div>
   </div>
-</form>
+</div>
 `;

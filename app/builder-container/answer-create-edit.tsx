@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy, range } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -16,11 +15,15 @@ import {
   ComputedFieldDataTypes,
   FullAnswerFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as answerStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import FormLabel from '../shared/library/form-label/form-label';
 import Option from '../shared/library/option/option';
+import RadioGroup from '../shared/library/radio-group/radio-group';
+import RadioInput from '../shared/library/radio-input/radio-input';
 import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
@@ -134,8 +137,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     try {
       this.setState({ loading: true, error: null });
       const filtered = omitBy<answerCreateMutationVariables>(this.state.answer, isNil);
@@ -181,25 +183,25 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     const { answer } = this.state;
 
     if (screeningToolAnswer) {
-      return <option value="number">number</option>;
+      return <Option value="number">number</Option>;
     } else if (dataType) {
-      return <option value={dataType}>{dataType}</option>;
+      return <Option value={dataType}>{dataType}</Option>;
     } else if (this.props.answer) {
-      return <option value={answer.valueType}>{answer.valueType}</option>;
+      return <Option value={answer.valueType}>{answer.valueType}</Option>;
     } else {
       return [
-        <option key={'default-option'} value="" disabled hidden>
+        <Option key={'default-option'} value="" disabled>
           Select Answer value type
-        </option>,
-        <option key={'string-option'} value="string">
+        </Option>,
+        <Option key={'string-option'} value="string">
           text
-        </option>,
-        <option key={'boolean-option'} value="boolean">
+        </Option>,
+        <Option key={'boolean-option'} value="boolean">
           true / false
-        </option>,
-        <option key={'number-option'} value="number">
+        </Option>,
+        <Option key={'number-option'} value="number">
           number
-        </option>,
+        </Option>,
       ];
     }
   }
@@ -216,9 +218,9 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       <div className={answerStyles.smallText}>New Answer!</div>
     );
     const orders = range(1, 30).map(num => (
-      <option key={`${num}-select`} value={num}>
+      <Option key={`${num}-select`} value={num.toString()}>
         {num}
-      </option>
+      </Option>
     ));
     const carePlanSuggestionsHtml = this.props.answer ? (
       <CarePlanSuggestions answer={this.props.answer} />
@@ -227,16 +229,15 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     const backendValueHtml = this.props.answer ? (
       <div className={answerStyles.largeText}>{answer.value}</div>
     ) : (
-      <input
+      <TextInput
         name="value"
         value={answer.value}
-        placeholder={'Enter answer value'}
-        className={classNames(formStyles.input, formStyles.inputSmall)}
+        placeholderMessageId="builder.enterAnswerValue"
         onChange={this.onChange}
       />
     );
     return (
-      <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
+      <div className={answerStyles.borderContainer}>
         <div className={styles.error}>{error}</div>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
@@ -247,52 +248,40 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           {answerId}
           <br />
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Order:</div>
-            <select
-              name="order"
-              value={answer.order || 1}
-              onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
-            >
-              <option value="" disabled hidden>
+            <FormLabel messageId="builder.order" />
+            <Select name="order" value={answer.order.toString() || '1'} onChange={this.onChange}>
+              <Option value="" disabled>
                 Select Answer order
-              </option>
+              </Option>
               {orders}
-            </select>
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Display Value:</div>
-            <input
+            <FormLabel messageId="builder.displayValue" />
+            <TextInput
               name="displayValue"
               value={answer.displayValue}
-              placeholder={'Enter answer display value'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
+              placeholderMessageId="builder.enterDisplayValue"
               onChange={this.onChange}
             />
           </div>
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Backend Value:</div>
+            <FormLabel messageId="builder.backendValue" />
             {backendValueHtml}
           </div>
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Backend value type:</div>
-            <select
-              name="valueType"
-              value={valueType}
-              onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
-            >
+            <FormLabel messageId="builder.backendValueType" />
+            <Select name="valueType" value={valueType} onChange={this.onChange}>
               {this.getValueTypeOptions()}
-            </select>
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Risk adjustment type:</div>
+            <FormLabel messageId="builder.riskAdjustmentType" />
             <Select
               required
               name="riskAdjustmentType"
               value={answer.riskAdjustmentType || ''}
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
               <Option
                 value=""
@@ -305,59 +294,42 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
             </Select>
           </div>
           <div className={styles.inlineInputGroup}>
-            <div className={answerStyles.smallText}>Summary Text:</div>
-            <input
+            <FormLabel messageId="builder.summaryText" />
+            <TextInput
               name="summaryText"
-              placeholder={'Enter summary text'}
+              placeholderMessageId="builder.enterSummary"
               value={answer.summaryText || ''}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
               onChange={this.onChange}
             />
           </div>
-          <div className={formStyles.radioGroup}>
-            <div className={formStyles.radioGroupLabel}>
-              <div className={answerStyles.smallText}>Display in summary?</div>
-            </div>
-            <div className={classNames(formStyles.radioGroupOptions, styles.radioGroup)}>
-              <div className={formStyles.radioGroupItem}>
-                <div className={formStyles.radioGroupContainer}>
-                  <input
-                    className={formStyles.radio}
-                    type="radio"
-                    name="inSummary"
-                    onChange={this.onChange}
-                    checked={answer.inSummary ? answer.inSummary === true : false}
-                    value="true"
-                  />
-                  <label />
-                </div>
-                <span className={formStyles.radioLabel}>Yes</span>
-              </div>
-              <div className={formStyles.radioGroupItem}>
-                <div className={formStyles.radioGroupContainer}>
-                  <input
-                    className={formStyles.radio}
-                    type="radio"
-                    name="inSummary"
-                    onChange={this.onChange}
-                    checked={answer.inSummary ? false : true}
-                    value="false"
-                  />
-                  <label />
-                </div>
-                <span className={formStyles.radioLabel}>No</span>
-              </div>
-            </div>
+          <div className={styles.inlineInputGroup}>
+            <FormLabel messageId="builder.displayInSummary" />
+            <RadioGroup>
+              <RadioInput
+                name="inSummary"
+                onChange={this.onChange}
+                checked={answer.inSummary ? answer.inSummary === true : false}
+                value="true"
+                label="Yes"
+              />
+              <RadioInput
+                name="inSummary"
+                onChange={this.onChange}
+                checked={answer.inSummary ? false : true}
+                value="false"
+                label="No"
+              />
+            </RadioGroup>
           </div>
         </div>
         {carePlanSuggestionsHtml}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input type="submit" className={styles.submitButton} value={createEditText} />
+            <Button onClick={this.onSubmit}>{createEditText}</Button>
             {deleteHtml}
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }

@@ -1,8 +1,5 @@
 @import '../../shared/css/sizes';
 
-@lost gutter 30px;
-@lost flexbox flex;
-
 @font-face {
   font-family: 'BaseticaBlackItalic';
   src: url('../../assets/fonts/basetica-black-italic.woff2') format('woff2');

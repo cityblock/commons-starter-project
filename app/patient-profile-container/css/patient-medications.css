@@ -13,7 +13,7 @@
   margin: 0 var(--medium-gutter);
   padding-bottom: var(--small-gutter);
   border-bottom: 1px solid var(--border-color);
-  lost-flex-container: row;
+  display: block;
 }
 
 .medicationsTitle {

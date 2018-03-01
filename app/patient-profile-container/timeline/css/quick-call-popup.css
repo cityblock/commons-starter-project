@@ -24,6 +24,11 @@
   background: var(--white-font-color);
 }
 
+.container {
+  max-height: 90vh;
+  overflow: auto;
+}
+
 .error {
   color: var(--red-color);
   padding: 12px;

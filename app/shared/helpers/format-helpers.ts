@@ -112,7 +112,7 @@ export const formatScreeningToolScore = (
 };
 
 export const formatPatientAnswer = (patientAnswer: FullPatientAnswerFragment): string => {
-  if (patientAnswer.question.answerType === 'freetext') {
+  if (patientAnswer.question && patientAnswer.question.answerType === 'freetext') {
     return patientAnswer.answerValue;
   } else {
     return patientAnswer.answer.displayValue;

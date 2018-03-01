@@ -1,6 +1,7 @@
 export const topBar: string;
 export const topBarLabel: string;
 export const middleBar: string;
+export const container: string;
 export const error: string;
 export const patientContainer: string;
 export const patientContainerRight: string;

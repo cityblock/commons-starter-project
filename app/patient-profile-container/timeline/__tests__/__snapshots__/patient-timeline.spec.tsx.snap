@@ -37,7 +37,7 @@ exports[`renders timeline 1`] = `
       </div>
     </div>
   </div>
-  <Apollo(Apollo(QuickCallPopup))
+  <Apollo(Apollo(Apollo(QuickCallPopup)))
     close={[Function]}
     patientId="patient-id"
     visible={false}

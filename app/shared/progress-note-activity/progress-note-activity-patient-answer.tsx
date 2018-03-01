@@ -13,7 +13,9 @@ interface IProps {
 class ProgressNoteActivityPatientAnswer extends React.Component<IProps> {
   getQuestionTitle = () => {
     const { patientAnswerEvent } = this.props;
-    return patientAnswerEvent.patientAnswer.question.title;
+    return patientAnswerEvent.patientAnswer.question
+      ? patientAnswerEvent.patientAnswer.question.title
+      : '';
   };
 
   renderPreviousAnswer = () => {

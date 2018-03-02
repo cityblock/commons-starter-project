@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import Patient from '../../models/patient';
 import Task from '../../models/task';
 
@@ -16,6 +17,7 @@ export const formatCBOReferralTaskPdfFileName = (task: Task): string => {
 export const formatPrintableMapPdfFileName = (patient: Patient): string => {
   const { firstName, middleName, lastName } = patient;
   const formattedMiddle = middleName ? `${middleName}_` : '';
+  const formattedDate = format(Date.now(), 'MMM_D_YYYY');
 
-  return `${firstName || ''}_${formattedMiddle}${lastName || ''}_MAP`;
+  return `${firstName || ''}_${formattedMiddle}${lastName || ''}_${formattedDate}_MAP`;
 };

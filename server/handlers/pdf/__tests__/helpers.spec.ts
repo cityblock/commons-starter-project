@@ -1,3 +1,4 @@
+import { getTime } from 'date-fns';
 import {
   patient,
   taskWithComment as task,
@@ -44,8 +45,19 @@ describe('PDF Handler Helpers', () => {
   });
 
   describe('formatPrintableMapPdfFileName', () => {
+    let oldDateFn: () => number;
+
+    beforeEach(() => {
+      oldDateFn = Date.now;
+      Date.now = () => getTime(new Date('2018-01-01 12:00 PM'));
+    });
+
+    afterAll(() => {
+      Date.now = oldDateFn;
+    });
+
     it('formats file name for patient with no middle name', () => {
-      expect(formatPrintableMapPdfFileName(patient as any)).toBe('Bob_Smith_MAP');
+      expect(formatPrintableMapPdfFileName(patient as any)).toBe('Bob_Smith_Jan_1_2018_MAP');
     });
 
     it('formats file name for patient with middle name', () => {
@@ -55,7 +67,7 @@ describe('PDF Handler Helpers', () => {
         lastName: 'Tarth',
       };
 
-      expect(formatPrintableMapPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_MAP');
+      expect(formatPrintableMapPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_Jan_1_2018_MAP');
     });
   });
 });

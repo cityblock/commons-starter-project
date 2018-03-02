@@ -6,6 +6,7 @@ import PatientConcern from '../../shared/concerns/patient-concern';
 interface IProps {
   patientConcern: FullPatientConcernFragment;
   selected: boolean;
+  index: number;
   onClick: () => void;
   inactive: boolean;
   selectedTaskId: string;
@@ -22,12 +23,13 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
     selectedTaskId,
     taskIdsWithNotifications,
     currentUserId,
+    index,
   } = props;
 
   return (
     <Draggable
       draggableId={patientConcern.id}
-      type="CONCERN"
+      index={index}
       isDragDisabled={!!selectedTaskId || selected}
     >
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
@@ -50,7 +52,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
           <div>
             <div
               ref={provided.innerRef}
-              style={provided.draggableStyle}
+              {...provided.draggableProps as any}
               {...provided.dragHandleProps}
             >
               <PatientConcern

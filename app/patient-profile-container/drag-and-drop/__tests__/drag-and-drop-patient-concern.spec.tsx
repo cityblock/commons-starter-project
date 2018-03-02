@@ -6,12 +6,14 @@ import DnDPatientConcern from '../drag-and-drop-patient-concern';
 describe('Drag and Drop Patient Concern', () => {
   const placeholderFn = () => true as any;
   const id = 'vulpix';
+  const index = 11;
   const userId = 'growlithe';
 
   const wrapper = shallow(
     <DnDPatientConcern
       patientConcern={{ id } as any}
       selected={false}
+      index={index}
       onClick={placeholderFn}
       inactive={false}
       selectedTaskId=""
@@ -22,7 +24,7 @@ describe('Drag and Drop Patient Concern', () => {
   it('returns draggable component with correct props', () => {
     expect(wrapper.find(Draggable).length).toBe(1);
     expect(wrapper.find(Draggable).props().draggableId).toBe(id);
-    expect(wrapper.find(Draggable).props().type).toBe('CONCERN');
+    expect(wrapper.find(Draggable).props().index).toBe(index);
     expect(wrapper.find(Draggable).props().isDragDisabled).toBeFalsy();
   });
 
@@ -31,6 +33,7 @@ describe('Drag and Drop Patient Concern', () => {
       <DnDPatientConcern
         patientConcern={{ id } as any}
         selected={false}
+        index={1}
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId="ninetales"
@@ -46,6 +49,7 @@ describe('Drag and Drop Patient Concern', () => {
       <DnDPatientConcern
         patientConcern={{ id } as any}
         selected={true}
+        index={1}
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId=""

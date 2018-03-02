@@ -65,6 +65,19 @@ describe('Patient Care Plan Concerns Component', () => {
       expect(renderedConcern1Props.selected).toBeTruthy();
       expect(renderedConcern1Props.optionsOpen).toBeFalsy();
       expect(renderedConcern1Props.patientConcern).toBe(concern1);
+      expect(renderedConcern1Props.index).toBe(0);
+    });
+
+    it('passes correct props to selected concern', () => {
+      const renderedConcern1Props = wrapper
+        .find(DnDPatientConcern)
+        .at(1)
+        .props();
+
+      expect(renderedConcern1Props.selected).toBeFalsy();
+      expect(renderedConcern1Props.optionsOpen).toBeFalsy();
+      expect(renderedConcern1Props.patientConcern).toBe(concern2);
+      expect(renderedConcern1Props.index).toBe(1);
     });
   });
 });

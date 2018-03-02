@@ -51,6 +51,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
     return (
       <DnDPatientConcern
         key={concern.id}
+        index={index}
         selected={selected}
         patientConcern={concern}
         onClick={() => onClick(concern.id)}

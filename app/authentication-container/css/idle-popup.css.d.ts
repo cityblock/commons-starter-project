@@ -1,3 +1,3 @@
-export const idlePopupTitle: string;
-export const idleSubheading: string;
-export const idleButton: string;
+export const heading: string;
+export const body: string;
+export const icon: string;

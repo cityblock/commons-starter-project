@@ -1,18 +1,19 @@
 @import '../../shared/css/sizes';
 
-.idlePopupTitle {
-  font-family: var(--basetica-black);
-  font-size: var(--medium-large-font-size);
-  line-height: var(--medium-large-font-line-height);
+.heading {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  text-align: center;
 }
 
-.idleSubheading {
-  line-height: 20px;
-  margin-top: 11px;
+.body {
+  color: var(--gray-font-color);
+  margin-top: 10px;
+  text-align: center;
 }
 
-.idleButton {
-  @apply --button;
-
-  margin-top: 40px;
+svg.icon {
+  margin: 0 auto 10px;
+  display: block;
 }

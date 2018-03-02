@@ -9,6 +9,7 @@ import AddAlertIcon from 'material-ui-icons/AddAlert';
 import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
+import AlarmIcon from 'material-ui-icons/Alarm';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
@@ -92,6 +93,7 @@ const components: IconComponents = {
   stars: StarsIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,
+  alarm: AlarmIcon,
   report: ReportIcon,
 };
 

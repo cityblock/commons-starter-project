@@ -41,4 +41,5 @@ export type IconName =
   | 'warning'
   | 'accountCircle'
   | 'accountBox'
+  | 'alarm'
   | 'report';

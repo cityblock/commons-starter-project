@@ -315,6 +315,7 @@ describe('care plan resolver tests', () => {
           riskAreaAssessmentSubmission,
           goalSuggestionTemplate,
           user,
+          riskArea,
         } = await setup(txn);
 
         const suggestion1 = await CarePlanSuggestion.create(
@@ -347,6 +348,19 @@ describe('care plan resolver tests', () => {
             goalSuggestionTemplate {
               id
             }
+            riskAreaAssessmentSubmission {
+              id
+              riskArea {
+                id
+                title
+              }
+            }
+            computedField {
+              id
+            }
+            patientScreeningToolSubmission {
+              id
+            }
           }
         }`;
         const result = await graphql(schema, query, null, {
@@ -355,6 +369,7 @@ describe('care plan resolver tests', () => {
           permissions,
           txn,
         });
+
         const clonedResult = cloneDeep(result.data!.carePlanSuggestionsForPatient);
         const suggestions = clonedResult.map((suggestion: any) => ({
           id: suggestion.id,
@@ -362,7 +377,12 @@ describe('care plan resolver tests', () => {
           goalSuggestionTemplateId: suggestion.goalSuggestionTemplate
             ? suggestion.goalSuggestionTemplate.id
             : null,
+          goalSuggestionTemplate: suggestion.goalSuggestionTemplate,
+          computedField: suggestion.computedField,
+          patientScreeningToolSubmission: suggestion.patientScreeningToolSubmission,
+          riskAreaAssessmentSubmission: suggestion.riskAreaAssessmentSubmission,
         }));
+
         expect(
           suggestions.some(
             (sug: any) =>
@@ -379,6 +399,26 @@ describe('care plan resolver tests', () => {
               sug.goalSuggestionTemplateId === goalSuggestionTemplate.id,
           ),
         ).toEqual(true);
+
+        expect(suggestions[0].riskAreaAssessmentSubmission).toMatchObject({
+          id: riskAreaAssessmentSubmission.id,
+          riskArea: {
+            id: riskArea.id,
+            title: riskArea.title,
+          },
+        });
+        expect(suggestions[0].computedField).toBeNull();
+        expect(suggestions[0].patientScreeningToolSubmission).toBeNull();
+
+        expect(suggestions[1].riskAreaAssessmentSubmission).toMatchObject({
+          id: riskAreaAssessmentSubmission.id,
+          riskArea: {
+            id: riskArea.id,
+            title: riskArea.title,
+          },
+        });
+        expect(suggestions[1].computedField).toBeNull();
+        expect(suggestions[1].patientScreeningToolSubmission).toBeNull();
       });
     });
 

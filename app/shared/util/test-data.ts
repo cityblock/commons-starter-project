@@ -417,6 +417,9 @@ export const carePlanSuggestionWithConcern = {
   createdAt: '2017-08-16T19:27:36.378Z',
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
+  computedField: null,
+  riskAreaAssessmentSubmission: null,
+  patientScreeningToolSubmission: null,
 };
 
 export const carePlanSuggestionWithGoal = {
@@ -460,6 +463,9 @@ export const carePlanSuggestionWithGoal = {
   createdAt: '2017-08-16T19:27:36.378Z',
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
+  computedField: null,
+  riskAreaAssessmentSubmission: null,
+  patientScreeningToolSubmission: null,
 };
 
 export const task = {

@@ -36,9 +36,9 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      riskAreaId: { type: 'string', minLength: 1 }, // cannot be blank
-      patientId: { type: 'string', minLength: 1 }, // cannot be blank
-      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      riskAreaId: { type: 'string', format: 'uuid' },
+      patientId: { type: 'string', format: 'uuid' },
+      userId: { type: 'string', format: 'uuid' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       completedAt: { type: 'string' },

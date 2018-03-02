@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ComputedField from './computed-field';
 import Concern from './concern';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
@@ -58,6 +59,9 @@ interface ICarePlanSuggestionDismissArgs {
 export const EAGER_QUERY =
   '[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy]';
 
+export const SUPER_EAGER_QUERY =
+  '[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy, patientScreeningToolSubmission.[screeningTool], riskAreaAssessmentSubmission.[riskArea], computedField]';
+
 /* tslint:disable:member-ordering */
 export default class CarePlanSuggestion extends BaseModel {
   patientId: string;
@@ -78,7 +82,8 @@ export default class CarePlanSuggestion extends BaseModel {
   patientScreeningToolSubmission: PatientScreeningToolSubmission | null;
   riskAreaAssessmentSubmissionId: string | null;
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission | null;
-  computedFieldId?: string;
+  computedFieldId: string | null;
+  computedField: ComputedField | null;
 
   static tableName = 'care_plan_suggestion';
 
@@ -88,18 +93,18 @@ export default class CarePlanSuggestion extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
+      patientId: { type: 'string', format: 'uuid' },
       suggestionType: { type: 'string' },
-      concernId: { type: 'string' },
-      goalSuggestionTemplateId: { type: 'string' },
-      dismissedById: { type: 'string' },
+      concernId: { type: 'string', format: 'uuid' },
+      goalSuggestionTemplateId: { type: 'string', format: 'uuid' },
+      dismissedById: { type: 'string', format: 'uuid' },
       dismissedReason: { type: 'string' },
       dismissedAt: { type: 'string' },
       acceptedAt: { type: 'string' },
-      acceptedById: { type: 'string' },
-      patientScreeningToolSubmissionId: { type: 'string' },
-      riskAreaAssessmentSubmissionId: { type: 'string' },
-      computedFieldId: { type: 'string' },
+      acceptedById: { type: 'string', format: 'uuid' },
+      patientScreeningToolSubmissionId: { type: 'string', format: 'uuid' },
+      riskAreaAssessmentSubmissionId: { type: 'string', format: 'uuid' },
+      computedFieldId: { type: 'string', format: 'uuid' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
@@ -114,7 +119,7 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static relationMappings: RelationMappings = {
     patient: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'patient',
       join: {
         from: 'care_plan_suggestion.patientId',
@@ -122,7 +127,7 @@ export default class CarePlanSuggestion extends BaseModel {
       },
     },
     concern: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'concern',
       join: {
         from: 'care_plan_suggestion.concernId',
@@ -130,7 +135,7 @@ export default class CarePlanSuggestion extends BaseModel {
       },
     },
     goalSuggestionTemplate: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'goal-suggestion-template',
       join: {
         from: 'care_plan_suggestion.goalSuggestionTemplateId',
@@ -138,7 +143,7 @@ export default class CarePlanSuggestion extends BaseModel {
       },
     },
     acceptedBy: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'user',
       join: {
         from: 'care_plan_suggestion.acceptedById',
@@ -146,7 +151,7 @@ export default class CarePlanSuggestion extends BaseModel {
       },
     },
     dismissedBy: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'user',
       join: {
         from: 'care_plan_suggestion.dismissedById',
@@ -154,11 +159,27 @@ export default class CarePlanSuggestion extends BaseModel {
       },
     },
     patientScreeningToolSubmission: {
-      relation: Model.HasOneRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: 'patient-screening-tool-submission',
       join: {
         from: 'care_plan_suggestion.patientScreeningToolSubmissionId',
         to: 'patient_screening_tool_submission.id',
+      },
+    },
+    riskAreaAssessmentSubmission: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'risk-area-assessment-submission',
+      join: {
+        from: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
+        to: 'risk_area_assessment_submission.id',
+      },
+    },
+    computedField: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'computed-field',
+      join: {
+        from: 'care_plan_suggestion.computedFieldId',
+        to: 'computed_field.id',
       },
     },
   };
@@ -213,7 +234,7 @@ export default class CarePlanSuggestion extends BaseModel {
       .orderBy('createdAt', 'asc');
 
     return this.query(txn)
-      .eager(EAGER_QUERY)
+      .eager(SUPER_EAGER_QUERY)
       .where({
         dismissedAt: null,
         acceptedAt: null,

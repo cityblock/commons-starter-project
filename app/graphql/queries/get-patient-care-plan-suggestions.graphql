@@ -3,5 +3,23 @@
 query getPatientCarePlanSuggestions($patientId: ID!, $glassBreakId: ID) {
   carePlanSuggestionsForPatient(patientId: $patientId, glassBreakId: $glassBreakId) {
     ...FullCarePlanSuggestion
+    computedField {
+      id
+      label
+    }
+    riskAreaAssessmentSubmission {
+      id
+      riskArea {
+        id
+        title
+      }
+    }
+    patientScreeningToolSubmission {
+      id
+      screeningTool {
+        id
+        title
+      }
+    }
   }
 }

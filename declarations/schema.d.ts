@@ -1266,6 +1266,8 @@ declare module 'schema' {
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
     riskAreaAssessmentSubmissionId: string | null;
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
+    computedFieldId: string | null;
+    computedField: IComputedField | null;
   }
 
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
@@ -1282,6 +1284,7 @@ declare module 'schema' {
     deletedAt: string | null;
     completedAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
+    riskArea: IRiskArea | null;
   }
 
   interface IScreeningToolScoreRangeForPatientScreeningToolSubmission {

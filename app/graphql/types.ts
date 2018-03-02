@@ -2019,6 +2019,24 @@ export interface getPatientCarePlanSuggestionsQuery {
     dismissedAt: string | null,
     acceptedAt: string | null,
     patientScreeningToolSubmissionId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+    } | null,
+    riskAreaAssessmentSubmission:  {
+      id: string,
+      riskArea:  {
+        id: string,
+        title: string,
+      } | null,
+    } | null,
+    patientScreeningToolSubmission:  {
+      id: string,
+      screeningTool:  {
+        id: string,
+        title: string,
+      },
+    } | null,
   } | null >,
 };
 

@@ -979,6 +979,8 @@ type CarePlanSuggestion implements uniqueId {
   patientScreeningToolSubmission: PatientScreeningToolSubmission
   riskAreaAssessmentSubmissionId: ID
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
+  computedFieldId: ID
+  computedField: ComputedField
 }
 
 type CarePlan {
@@ -1082,6 +1084,7 @@ type RiskAreaAssessmentSubmission implements uniqueId {
   deletedAt: String
   completedAt: String
   carePlanSuggestions: [CarePlanSuggestion!]!
+  riskArea: RiskArea
 }
 
 type ProgressNoteTemplate implements uniqueId {

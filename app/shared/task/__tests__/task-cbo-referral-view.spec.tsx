@@ -8,7 +8,11 @@ describe('Task CBO Referral view button', () => {
   const placeholderFn = () => true as any;
 
   const wrapper = shallow(
-    <TaskCBOReferralView generateJwtForPdf={placeholderFn} taskId={taskId} />,
+    <TaskCBOReferralView
+      generateJwtForPdf={placeholderFn}
+      taskId={taskId}
+      patientId="sansaStark"
+    />,
   );
 
   it('renders a button to view CBO referral', () => {

@@ -18,12 +18,13 @@ interface IProps {
   description: string;
   concern: string;
   goal: string;
+  patientId: string;
   CBOReferral: FullCBOReferralFragment | null;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
 const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { title, description, taskId, concern, goal, editTask, CBOReferral } = props;
+  const { title, description, taskId, concern, goal, editTask, CBOReferral, patientId } = props;
   let CBOReferralStatus = 'notCBOReferral';
   if (!!CBOReferral) {
     CBOReferralStatus = isCBOReferralRequiringAction(CBOReferral)
@@ -40,7 +41,9 @@ const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
         editTask={editTask}
         CBOReferralStatus={CBOReferralStatus as CBOReferralStatusType}
       />
-      {!!CBOReferral && <TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} />}
+      {!!CBOReferral && (
+        <TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} patientId={patientId} />
+      )}
       <Divider />
       <div className={styles.associations}>
         <div className={styles.detail}>

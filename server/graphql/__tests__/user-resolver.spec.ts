@@ -4,8 +4,14 @@ import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import User from '../../models/user';
-import { createMockClinic, createMockUser, mockGoogleOauthAuthorize } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockUser,
+  createPatient,
+  mockGoogleOauthAuthorize,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -576,21 +582,105 @@ describe('user tests', () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-
+        const patient = await createPatient(
+          { cityblockId: 123, homeClinicId: clinic.id, userId: user.id },
+          txn,
+        );
         const mutation = `mutation {
-          JwtForPdfCreate {
+          JwtForPdfCreate(input: { patientId: "${patient.id}"}) {
             authToken
           }
         }`;
 
         const result = await graphql(schema, mutation, null, {
           db,
-          permissions,
+          permissions: 'blue',
           txn,
           userId: user.id,
         });
 
         expect(result.data!.JwtForPdfCreate.authToken).toBeTruthy();
+      });
+    });
+
+    it('does not allow generating Jwt token for PDF if no relevant permissions', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+        const mutation = `mutation {
+          JwtForPdfCreate(input: { patientId: "${patient.id}"}) {
+            authToken
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'red',
+          txn,
+          userId: user.id,
+        });
+
+        expect(result.errors![0].message).toBe('red not able to view patient');
+      });
+    });
+
+    it('validates glass break for generating Jwt token for PDF', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+        await PatientGlassBreak.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reason: 'The Wall Came Down',
+            note: 'You know nothing Jon Snow',
+          },
+          txn,
+        );
+
+        const mutation = `mutation {
+          JwtForPdfCreate(input: { patientId: "${patient.id}"}) {
+            authToken
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'blue',
+          txn,
+          userId: user.id,
+        });
+
+        expect(result.data!.JwtForPdfCreate.authToken).toBeTruthy();
+      });
+    });
+
+    it('validates blocks generating JWT for PDF if no glass break provided', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+
+        const mutation = `mutation {
+          JwtForPdfCreate(input: { patientId: "${patient.id}"}) {
+            authToken
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions: 'blue',
+          txn,
+          userId: user.id,
+        });
+
+        const message = `User ${user.id} cannot automatically break the glass for patient ${
+          patient.id
+        }`;
+
+        expect(result.errors![0].message).toBe(message);
       });
     });
   });

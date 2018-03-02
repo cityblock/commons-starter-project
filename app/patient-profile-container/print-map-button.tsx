@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as JwtForPdfCreate from '../graphql/queries/jwt-for-pdf-create.graphql';
-import { JwtForPdfCreateMutation } from '../graphql/types';
+import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../graphql/types';
 import { getPrintableMapPdfRoute } from '../shared/helpers/route-helpers';
 import Button from '../shared/library/button/button';
 import * as styles from './css/print-map-button.css';
@@ -11,23 +11,46 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  generateJwtForPdf: () => { data: JwtForPdfCreateMutation };
+  generateJwtForPdf: (
+    options: { variables: JwtForPdfCreateMutationVariables },
+  ) => { data: JwtForPdfCreateMutation };
 }
 
 type allProps = IProps & IGraphqlProps;
 
-export class PrintMapButton extends React.Component<allProps> {
+interface IState {
+  loading: boolean;
+  error: string | null;
+}
+
+export class PrintMapButton extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
+    super(props);
+
+    this.state = { loading: false, error: null };
+  }
+
   handleClick = async (): Promise<void> => {
     const { generateJwtForPdf, patientId } = this.props;
-    const JwtForPdf = await generateJwtForPdf();
 
-    const win = window.open(
-      getPrintableMapPdfRoute(patientId, JwtForPdf.data.JwtForPdfCreate.authToken),
-      '_blank',
-    );
+    if (!this.state.loading) {
+      try {
+        this.setState({ loading: true, error: null });
+        const JwtForPdf = await generateJwtForPdf({ variables: { patientId } });
 
-    if (win) {
-      win.focus();
+        const win = window.open(
+          getPrintableMapPdfRoute(patientId, JwtForPdf.data.JwtForPdfCreate.authToken),
+          '_blank',
+        );
+
+        if (win) {
+          win.focus();
+        }
+
+        this.setState({ loading: false, error: null });
+      } catch (err) {
+        this.setState({ loading: false, error: err.message });
+      }
     }
   };
 

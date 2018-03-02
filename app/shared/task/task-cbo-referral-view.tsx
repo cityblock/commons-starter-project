@@ -1,33 +1,57 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as JwtForPdfCreate from '../../graphql/queries/jwt-for-pdf-create.graphql';
-import { JwtForPdfCreateMutation } from '../../graphql/types';
+import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../../graphql/types';
 import { getCBOReferralPdfRoute } from '../helpers/route-helpers';
 import Button from '../library/button/button';
 import * as styles from './css/task-cbo-referral-view.css';
 
 interface IProps {
   taskId: string;
+  patientId: string;
 }
 
 interface IGraphqlProps {
-  generateJwtForPdf: () => { data: JwtForPdfCreateMutation };
+  generateJwtForPdf: (
+    options: { variables: JwtForPdfCreateMutationVariables },
+  ) => { data: JwtForPdfCreateMutation };
 }
 
 type allProps = IProps & IGraphqlProps;
 
-export class TaskCBOReferralView extends React.Component<allProps> {
+interface IState {
+  loading: boolean;
+  error: string | null;
+}
+
+export class TaskCBOReferralView extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
+    super(props);
+
+    this.state = { loading: false, error: null };
+  }
+
   handleClick = async (): Promise<void> => {
-    const { generateJwtForPdf, taskId } = this.props;
-    const JwtForPdf = await generateJwtForPdf();
+    const { generateJwtForPdf, taskId, patientId } = this.props;
 
-    const win = window.open(
-      getCBOReferralPdfRoute(taskId, JwtForPdf.data.JwtForPdfCreate.authToken),
-      '_blank',
-    );
+    if (!this.state.loading) {
+      try {
+        this.setState({ loading: true, error: null });
+        const JwtForPdf = await generateJwtForPdf({ variables: { patientId } });
 
-    if (win) {
-      win.focus();
+        const win = window.open(
+          getCBOReferralPdfRoute(taskId, JwtForPdf.data.JwtForPdfCreate.authToken),
+          '_blank',
+        );
+
+        if (win) {
+          win.focus();
+        }
+
+        this.setState({ loading: false, error: null });
+      } catch (err) {
+        this.setState({ loading: false, error: err.message });
+      }
     }
   };
 

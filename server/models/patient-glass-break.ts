@@ -82,6 +82,22 @@ export default class PatientGlassBreak extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<PatientGlassBreak[]> {
+    const query = this.buildSessionQuery(userId, txn);
+
+    return (query as any).orderBy('createdAt', 'DESC');
+  }
+
+  static async getForCurrentUserPatientSession(
+    userId: string,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientGlassBreak[]> {
+    const query = this.buildSessionQuery(userId, txn);
+
+    return (query as any).andWhere({ patientId }).orderBy('createdAt', 'DESC');
+  }
+
+  static buildSessionQuery(userId: string, txn: Transaction) {
     return this.query(txn)
       .whereRaw(
         `
@@ -89,8 +105,7 @@ export default class PatientGlassBreak extends BaseModel {
           1} hours\'
       `,
       )
-      .andWhere({ userId, deletedAt: null })
-      .orderBy('createdAt', 'DESC');
+      .andWhere({ userId, deletedAt: null });
   }
 }
 /* tslint:enable:member-ordering */

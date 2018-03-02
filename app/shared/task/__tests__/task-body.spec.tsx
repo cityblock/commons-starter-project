@@ -23,6 +23,7 @@ describe('Task Body Component', () => {
       concern={concern}
       editTask={editTask}
       CBOReferral={null}
+      patientId="sansaStark"
     />,
   );
 

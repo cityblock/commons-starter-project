@@ -10,10 +10,11 @@ import TaskCBOReferralView from './task-cbo-referral-view';
 interface IProps {
   CBOReferral: FullCBOReferralFragment;
   taskId: string;
+  patientId: string;
 }
 
 const TaskCBOReferral: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { CBOReferral, taskId } = props;
+  const { CBOReferral, taskId, patientId } = props;
   const isActionRequired = isCBOReferralRequiringAction(CBOReferral);
 
   if (isActionRequired) {
@@ -23,7 +24,7 @@ const TaskCBOReferral: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <div>
       <TaskCBODetail CBOReferral={CBOReferral} />
-      <TaskCBOReferralView taskId={taskId} />
+      <TaskCBOReferralView taskId={taskId} patientId={patientId} />
       <Divider />
       <TaskCBOReferralDates CBOReferral={CBOReferral} taskId={taskId} />
     </div>

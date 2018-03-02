@@ -10,7 +10,9 @@ import TaskCBOReferralView from '../task-cbo-referral-view';
 
 describe('Task CBO Referral', () => {
   const taskId = 'defeatNightKing';
-  const wrapper = shallow(<TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} />);
+  const wrapper = shallow(
+    <TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} patientId="aryaStark" />,
+  );
 
   it('renders task CBO detail', () => {
     expect(wrapper.find(TaskCBODetail).length).toBe(1);

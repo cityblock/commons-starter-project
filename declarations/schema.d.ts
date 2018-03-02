@@ -2914,6 +2914,13 @@ declare module 'schema' {
   }
 
   /**
+    check patient id for permissioning generating JWT for PDF
+  */
+  interface IJwtForPdfCreateInput {
+    patientId: string;
+  }
+
+  /**
     JWT token for PDF viewing
   */
   interface IJwtForPdf {

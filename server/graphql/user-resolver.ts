@@ -1,5 +1,6 @@
 import {
   ICurrentUserEditInput,
+  IJwtForPdfCreateInput,
   IRootMutationType,
   IRootQueryType,
   IUserCreateInput,
@@ -13,8 +14,12 @@ import { GENERATE_PDF_JWT_TYPE } from '../../server/handlers/pdf/render-pdf';
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
+import PatientGlassBreak from '../models/patient-glass-break';
 import User, { IUserFilterOptions, Locale, UserOrderOptions, UserRole } from '../models/user';
-import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
+import checkUserPermissions, {
+  checkLoggedInWithPermissions,
+  validateGlassBreak,
+} from './shared/permissions-check';
 import { formatOrderOptions, formatRelayEdge, signJwt, IContext } from './shared/utils';
 
 const GENERATE_PDF_EXPIRY = '5m'; // 5 minutes
@@ -49,6 +54,10 @@ export interface IUserDeleteOptions {
 
 export interface IEditCurrentUserOptions {
   input: ICurrentUserEditInput;
+}
+
+export interface IUserJwtForPdfArgs {
+  input: IJwtForPdfCreateInput;
 }
 
 export async function userCreate(
@@ -204,6 +213,33 @@ export async function resolveUserSummaryList(
   return User.getUserSummaryList(userRoleFilters, txn);
 }
 
+export async function JwtForPdfCreate(
+  root: {},
+  { input }: IUserJwtForPdfArgs,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootMutationType['JwtForPdfCreate']> {
+  checkLoggedInWithPermissions(userId, permissions);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, input.patientId);
+
+  // load the current glass break for user and patient
+  const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+    userId!,
+    input.patientId,
+    txn,
+  );
+  const glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
+
+  await validateGlassBreak(userId!, permissions, 'patient', input.patientId, txn, glassBreakId);
+  const jwtData = {
+    type: GENERATE_PDF_JWT_TYPE,
+    createdAt: new Date().toISOString(),
+    userId: userId!,
+  };
+
+  const authToken = signJwt(jwtData, GENERATE_PDF_EXPIRY);
+  return { authToken };
+}
+
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
 export async function userLogin(
@@ -257,22 +293,5 @@ export async function userLogin(
 
   logger.log(`User login for ${user.id}`, 2);
   return { authToken, user: updatedUser };
-}
-
-export async function JwtForPdfCreate(
-  root: {},
-  input: {},
-  { permissions, userId }: IContext,
-): Promise<IRootMutationType['JwtForPdfCreate']> {
-  checkLoggedInWithPermissions(userId, permissions);
-
-  const jwtData = {
-    type: GENERATE_PDF_JWT_TYPE,
-    createdAt: new Date().toISOString(),
-    userId: userId!,
-  };
-
-  const authToken = signJwt(jwtData, GENERATE_PDF_EXPIRY);
-  return { authToken };
 }
 /* tslint:enable check-is-allowed */

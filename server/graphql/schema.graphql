@@ -1982,6 +1982,11 @@ input PatientAdvancedDirectiveFormDeleteInput {
   patientAdvancedDirectiveFormId: ID!
 }
 
+# check patient id for permissioning generating JWT for PDF
+input JwtForPdfCreateInput {
+  patientId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2209,7 +2214,7 @@ type RootMutationType {
   # Edit a CBO Referral
   CBOReferralEdit(input: CBOReferralEditInput): CBOReferral
   # Jwt token to view a PDF
-  JwtForPdfCreate: JwtForPdf!
+  JwtForPdfCreate(input: JwtForPdfCreateInput): JwtForPdf!
   # creates a patient data flag
   patientDataFlagCreate(input: PatientDataFlagCreateInput): PatientDataFlag
   # creates a patient glass break

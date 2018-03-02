@@ -63,6 +63,7 @@ describe('Task Component', () => {
     expect(body.props().title).toBe(taskWithComment.title);
     expect(body.props().description).toBeFalsy();
     expect(body.props().CBOReferral).toEqual(CBOReferral);
+    expect(body.props().patientId).toBe(patientId);
   });
 
   it('renders task assignee with correct props', () => {

@@ -5253,6 +5253,10 @@ export interface goalSuggestionTemplateEditMutation {
   } | null,
 };
 
+export interface JwtForPdfCreateMutationVariables {
+  patientId: string,
+};
+
 export interface JwtForPdfCreateMutation {
   // Jwt token to view a PDF
   JwtForPdfCreate:  {

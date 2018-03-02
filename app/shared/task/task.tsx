@@ -119,6 +119,7 @@ export class Task extends React.Component<allProps, IState> {
       : 'No Patient';
     const goal = task.patientGoal;
     const concern = goal && goal.patientConcern && goal.patientConcern.concern;
+
     return (
       <div className={styles.container}>
         <div className={styles.task}>
@@ -145,6 +146,7 @@ export class Task extends React.Component<allProps, IState> {
             goal={(goal && goal.title) || ''}
             CBOReferral={task.CBOReferral}
             editTask={editTask}
+            patientId={task.patientId}
           />
           <TaskAssignee
             patientId={task.patientId}

@@ -185,4 +185,55 @@ describe('Patient Glass Break Model', () => {
       });
     });
   });
+
+  it('gets all patient glass breaks for the current user and patient combination', async () => {
+    await transaction(PatientGlassBreak.knex(), async txn => {
+      const { user, patient, clinic } = await setup(txn);
+      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+
+      const patientGlassBreak = await PatientGlassBreak.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason,
+          note,
+        },
+        txn,
+      );
+      const tooOldGlassBreak = await PatientGlassBreak.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason,
+          note,
+        },
+        txn,
+      );
+      await PatientGlassBreak.create(
+        {
+          userId: user.id,
+          patientId: patient2.id,
+          reason,
+          note,
+        },
+        txn,
+      );
+
+      await PatientGlassBreak.query(txn)
+        .where({ id: tooOldGlassBreak.id })
+        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+      const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+        user.id,
+        patient.id,
+        txn,
+      );
+
+      expect(glassBreaks.length).toBe(1);
+
+      expect(glassBreaks[0]).toMatchObject({
+        ...patientGlassBreak,
+      });
+    });
+  });
 });

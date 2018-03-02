@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from '@react-pdf/core';
+import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import variables from '../shared/variables/variables';
 
@@ -82,7 +82,6 @@ const TextGroup: React.StatelessComponent<IProps> = (props: IProps) => {
     <View style={containerStyle}>
       <View style={styles.labelContainer}>
         <Text style={labelStyle}>{label}</Text>
-        {!!starImage && <Image src={STAR_PATH} style={styles.image} />}
       </View>
       <Text style={valueStyle}>{value}</Text>
     </View>

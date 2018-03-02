@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: variables.mediumBorder,
     borderLeftColor: variables.whiteColor,
     borderLeftStyle: variables.solid,
+    borderRightWidth: variables.smallBorder,
+    borderRightColor: variables.grayColor,
+    borderRightStyle: variables.solid,
     padding: variables.bodyMarginTop,
   },
   high: {

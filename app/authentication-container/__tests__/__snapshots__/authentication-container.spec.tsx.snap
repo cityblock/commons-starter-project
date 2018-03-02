@@ -29,7 +29,7 @@ exports[`shallow rendered renders authentication container correctly with curren
     }
   />
   <Unknown
-    idleEnd={[MockFunction]}
+    idleEnd={[Function]}
     isIdle={false}
   />
 </div>

@@ -1,5 +1,5 @@
 import { addLocaleData, IntlProvider } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { IState } from './store';
 
 // NOTE: ReactIntlLocaleData is loaded in app.ts
@@ -26,8 +26,4 @@ function mapStateToProps(state: IState): Partial<IProps> {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
-  return {};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(IntlProvider);
+export default connect(mapStateToProps)(IntlProvider);

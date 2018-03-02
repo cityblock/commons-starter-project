@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { PermissionsMapping } from '../../../shared/permissions/permissions-mapping';
-import { FullUserFragment } from '../../graphql/types';
+import {
+  permissionsMappings,
+  PermissionsMapping,
+} from '../../../shared/permissions/permissions-mapping';
+import { getCurrentUserQuery } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 
 export interface IInjectedProps {
-  currentUser: FullUserFragment;
+  currentUser: getCurrentUserQuery['currentUser'];
   featureFlags: PermissionsMapping;
 }
 
@@ -22,8 +25,8 @@ const withCurrentUser = () => <P extends {}>(
 
   const mapStateToProps = (state: IAppState): IInjectedProps => {
     return {
-      currentUser: state.currentUser.currentUser!,
-      featureFlags: state.currentUser.featureFlags!,
+      currentUser: state.currentUser.currentUser,
+      featureFlags: state.currentUser.featureFlags || permissionsMappings.black,
     };
   };
 

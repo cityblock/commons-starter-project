@@ -4,6 +4,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import { formatFullName } from '../shared/helpers/format-helpers';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/header.css';
 import { getHomeRoute } from './helpers';
@@ -33,10 +34,7 @@ export class Header extends React.Component<allProps> {
   render() {
     const { currentUser, featureFlags } = this.props;
 
-    const name =
-      currentUser.firstName && currentUser.lastName
-        ? `${currentUser.firstName} ${currentUser.lastName}`
-        : null;
+    const name = currentUser ? formatFullName(currentUser.firstName, currentUser.lastName) : null;
     let searchLink = null;
     let patientLink = null;
     let taskLink = null;
@@ -113,11 +111,13 @@ export class Header extends React.Component<allProps> {
           <div className={styles.right}>
             <div className={styles.userInfo}>
               <div className={styles.userName}>{name}</div>
-              <div className={styles.userRole}>{currentUser.userRole}</div>
+              <div className={styles.userRole}>{currentUser ? currentUser.userRole : ''}</div>
             </div>
             <div
               className={styles.userPhoto}
-              style={{ backgroundImage: `url('${currentUser.googleProfileImageUrl}')` }}
+              style={{
+                backgroundImage: `url('${currentUser ? currentUser.googleProfileImageUrl : ''}')`,
+              }}
             />
             <div className={styles.dropdown}>
               <Link to={'/settings'}>

@@ -87,6 +87,18 @@ export class AuthenticationContainer extends React.Component<allProps> {
     }
   };
 
+  idleEnd = async (): Promise<void> => {
+    const { isIdle } = this.props;
+    const lastAction = new Date().valueOf() - Number(await localStorage.getItem('lastAction'));
+
+    // Log out if last action was not recent enough
+    if (isIdle && lastAction > LOGOUT_TIME) {
+      this.logout();
+    } else {
+      this.props.idleEnd();
+    }
+  };
+
   render() {
     const { isIdle, currentUser } = this.props;
 
@@ -97,7 +109,7 @@ export class AuthenticationContainer extends React.Component<allProps> {
     if (currentUser) {
       header = <Header />;
       app = <div className={styles.app}>{this.props.children}</div>;
-      idle = <IdlePopup idleEnd={this.props.idleEnd} isIdle={isIdle} />;
+      idle = <IdlePopup idleEnd={this.idleEnd} isIdle={isIdle} />;
       progressNote = <ProgressNoteContainer currentUser={currentUser} />;
     }
     return (

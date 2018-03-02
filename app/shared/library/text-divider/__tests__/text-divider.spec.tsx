@@ -20,7 +20,7 @@ describe('Text Divider Component', () => {
     });
 
     it('styles text as gray if specified', () => {
-      wrapper.setProps({ gray: true });
+      wrapper.setProps({ color: 'gray' });
       expect(
         wrapper
           .find('div')

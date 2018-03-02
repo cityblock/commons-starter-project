@@ -58,7 +58,7 @@ class DomainAssessmentsList extends React.Component<IProps, IState> {
 
     return (
       <div>
-        <TextDivider messageId={`threeSixty.${assessmentType}Detail`} gray={true} />
+        <TextDivider messageId={`threeSixty.${assessmentType}Detail`} color="gray" />
         {list}
       </div>
     );

@@ -3,14 +3,16 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/text-divider.css';
 
+type Color = 'lightBlue' | 'gray' | 'navy' | 'black'; // default is light blue
+
 interface IProps {
   messageId?: string; // strongly prefer using messageId over label
   label?: string;
-  gray?: boolean; // optional flag to make text gray
+  color?: Color; // changes text color
   hasPadding?: boolean; // optional flag to add medium gutter margins
 }
 
-const TextDivider: React.StatelessComponent<IProps> = ({ messageId, label, gray, hasPadding }) => {
+const TextDivider: React.StatelessComponent<IProps> = ({ messageId, label, color, hasPadding }) => {
   const text = messageId ? (
     <FormattedMessage id={messageId}>{(message: string) => <p>{message}</p>}</FormattedMessage>
   ) : (
@@ -18,7 +20,9 @@ const TextDivider: React.StatelessComponent<IProps> = ({ messageId, label, gray,
   );
 
   const containerStyles = classNames(styles.container, {
-    [styles.gray]: !!gray,
+    [styles.gray]: color === 'gray',
+    [styles.navy]: color === 'navy',
+    [styles.black]: color === 'black',
     [styles.padding]: !!hasPadding,
   });
 

@@ -8,6 +8,8 @@ import {
   FullCarePlanSuggestionFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
+import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
+import TextDivider from '../shared/library/text-divider/text-divider';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestion from './patient-care-plan-suggestion';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
@@ -159,19 +161,11 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
     return (
       <div>
         <div className={styles.section}>
-          <div className={styles.sectionHeading}>
-            <div className={styles.sectionTitle}>Suggested Concerns</div>
-            <div className={styles.sectionDivider} />
-            <div className={styles.sectionHamburger} />
-          </div>
+          <TextDivider messageId="carePlanSuggestions.concerns" color="navy" />
           <div>{this.renderSuggestions('concern')}</div>
         </div>
         <div className={styles.section}>
-          <div className={styles.sectionHeading}>
-            <div className={styles.sectionTitle}>Suggested Goals</div>
-            <div className={styles.sectionDivider} />
-            <div className={styles.sectionHamburger} />
-          </div>
+          <TextDivider messageId="carePlanSuggestions.goals" color="black" />
           <div>{this.renderSuggestions('goal')}</div>
         </div>
         <PopupPatientCarePlanSuggestionAccepted
@@ -199,14 +193,11 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
         <div className={styles.loadingLabel}>Loading...</div>
       </div>
     ) : (
-      <div className={styles.emptyCarePlanSuggestionsContainer}>
-        <div className={styles.emptyCarePlanSuggestionsLogo} />
-        <div className={styles.emptyCarePlanSuggestionsLabel}>
-          No Care Plan suggestions for this patient
-        </div>
-        <div className={styles.emptyCarePlanSuggestionsSubtext}>
-          Any new suggestions will be displayed here
-        </div>
+      <div className={styles.empty}>
+        <EmptyPlaceholder
+          headerMessageId="carePlanSuggestions.emptyTitle"
+          detailMessageId="carePlanSuggestions.emptyBody"
+        />
       </div>
     );
 

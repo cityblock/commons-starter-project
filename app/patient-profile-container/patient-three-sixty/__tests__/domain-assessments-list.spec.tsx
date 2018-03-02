@@ -15,7 +15,7 @@ describe('Patient 360 Domain Assessments List', () => {
 
   it('renders text divider for assessments', () => {
     expect(wrapper.find(TextDivider).length).toBe(1);
-    expect(wrapper.find(TextDivider).props().gray).toBeTruthy();
+    expect(wrapper.find(TextDivider).props().color).toBe('gray');
     expect(wrapper.find(TextDivider).props().messageId).toBe(`threeSixty.${assessmentType}Detail`);
   });
 

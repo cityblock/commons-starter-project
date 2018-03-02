@@ -27,6 +27,14 @@
   color: var(--light-gray-font-color);
 }
 
+.navy p {
+  color: var(--navy-color);
+}
+
+.black p {
+  color: var(--black-color);
+}
+
 .padding {
   padding: 0 var(--medium-gutter);
 }

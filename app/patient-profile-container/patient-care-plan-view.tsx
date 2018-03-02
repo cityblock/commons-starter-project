@@ -56,12 +56,14 @@ export class PatientCarePlanView extends React.Component<allProps> {
       />
     ) : null;
     const carePlan = !isSuggestions ? (
-      <PatientMap
-        routeBase={`${routeBase}/active`}
-        patientId={patientId}
-        taskId={taskId || null}
-        glassBreakId={glassBreakId}
-      />
+      <div className={styles.paddingTop}>
+        <PatientMap
+          routeBase={`${routeBase}/active`}
+          patientId={patientId}
+          taskId={taskId || null}
+          glassBreakId={glassBreakId}
+        />
+      </div>
     ) : null;
 
     return (

@@ -35,11 +35,22 @@ interface IProps {
   data?: any;
 }
 
-const LOGOUT_TIME = 1800000; // 30 minutes
 const IDLE_TIME = 1000000; // 18 minutes
 
 type allProps = IProps & IStateProps & IDispatchProps;
 
+/**
+ * Logs user out if idle
+ *
+ * Idle popup is displayed if no action taken since IDLE_TIME
+ * Logout if no action taken since idle popup displayed + IDLE_TIME
+ *
+ * Both the Redux Store and Apollo middleware update a local storage value for the user's lastAction
+ * Every second, this component reads lastAction and checks the gap between the current time and the last action
+ * If gap is more than IDLE_TIME, this component dispatches a redux action to set isIdle to true
+ * NOTE: Updating isIdle in the Redux store also updates most recent action in local storage
+ * If no action is taken since the idle popup is displayed for IDLE_TIMEms, logout and redirect to '/'
+ */
 export class AuthenticationContainer extends React.Component<allProps> {
   idleInterval: NodeJS.Timer;
 
@@ -80,9 +91,9 @@ export class AuthenticationContainer extends React.Component<allProps> {
     }
 
     const lastAction = new Date().valueOf() - Number(await localStorage.getItem('lastAction'));
-    if (isIdle && lastAction > LOGOUT_TIME) {
+    if (isIdle && lastAction > IDLE_TIME) {
       this.logout();
-    } else if (!isIdle && lastAction > IDLE_TIME) {
+    } else if (lastAction > IDLE_TIME) {
       this.props.idleStart();
     }
   };
@@ -92,7 +103,7 @@ export class AuthenticationContainer extends React.Component<allProps> {
     const lastAction = new Date().valueOf() - Number(await localStorage.getItem('lastAction'));
 
     // Log out if last action was not recent enough
-    if (isIdle && lastAction > LOGOUT_TIME) {
+    if (isIdle && lastAction > IDLE_TIME) {
       this.logout();
     } else {
       this.props.idleEnd();

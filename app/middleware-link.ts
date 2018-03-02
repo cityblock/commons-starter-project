@@ -1,13 +1,16 @@
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
-import { debounce } from 'lodash-es';
+import { throttle } from 'lodash-es';
 
 async function setLastAction() {
   await localStorage.setItem('lastAction', new Date().valueOf().toString());
 }
 
-export const debouncedSetLastAction = debounce(setLastAction, 500);
+export const debouncedSetLastAction = throttle(setLastAction, 500, {
+  leading: true,
+  trailing: true,
+});
 
 export const getMiddlewareLink = () => {
   const httpLink = new HttpLink({ uri: '/graphql' });

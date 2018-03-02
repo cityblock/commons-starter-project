@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
-import { formatPatientName } from '../../shared/helpers/format-helpers';
+import { formatFullName } from '../../shared/helpers/format-helpers';
 import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 });
 
 const PatientHeader: React.StatelessComponent<IProps> = ({ patient }) => {
-  const patientName = formatPatientName(patient);
+  const patientName = formatFullName(patient.firstName, patient.lastName);
 
   return (
     <View style={styles.container}>

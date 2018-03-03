@@ -4,7 +4,7 @@ import Spinner from '../../../shared/library/spinner/spinner';
 import { calculateRisk } from '../helpers';
 import { IRiskAreaGroupScore } from '../patient-three-sixty-domains';
 import * as styles from './css/three-sixty-radar.css';
-import { chartOptions, dataOptions, pointColors, pointData } from './radar-options';
+import { black, dataOptions, getChartOptions, gray, pointColors, pointData } from './radar-options';
 
 interface IRiskAreaGroupRadar extends IRiskAreaGroupScore {
   id: string;
@@ -23,6 +23,7 @@ export class ThreeSixtyRadar extends React.Component<IProps, {}> {
     const labels: string[] = [];
     const data: number[] = [];
     const pointBackgroundColor: string[] = [];
+    const pointLabelColor: string[] = [];
 
     riskAreaGroups.forEach(group => {
       labels.push(group.title);
@@ -37,9 +38,10 @@ export class ThreeSixtyRadar extends React.Component<IProps, {}> {
 
       data.push(risk ? pointData[risk] : NaN);
       pointBackgroundColor.push(risk ? pointColors[risk] : '');
+      pointLabelColor.push(risk ? black : gray);
     });
 
-    return { labels, data, pointBackgroundColor };
+    return { labels, data, pointBackgroundColor, pointLabelColor };
   }
 
   render(): JSX.Element {
@@ -61,7 +63,7 @@ export class ThreeSixtyRadar extends React.Component<IProps, {}> {
               },
             ],
           }}
-          options={chartOptions}
+          options={getChartOptions(formattedData.pointLabelColor)}
           width={100}
           height={100}
         />

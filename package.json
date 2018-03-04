@@ -223,7 +223,7 @@
     "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2",
     "style-loader": "0.20.2",
-    "ts-loader": "4.0.0",
+    "ts-loader": "4.0.1",
     "ts-node": "5.0.1",
     "typescript": "2.7.2",
     "typings-for-css-modules-loader": "1.7.0",

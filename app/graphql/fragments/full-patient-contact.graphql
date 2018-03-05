@@ -1,0 +1,23 @@
+fragment FullPatientContact on PatientContact {
+  id
+  patientId
+  relationToPatient
+  firstName
+  lastName
+  isEmergencyContact
+  isHealthcareProxy
+  canContact
+  description
+  primaryAddress {
+    id
+    zip
+  }
+  primaryEmail {
+    id
+    emailAddress
+  }
+  primaryPhone {
+    id
+    phoneNumber
+  }
+}

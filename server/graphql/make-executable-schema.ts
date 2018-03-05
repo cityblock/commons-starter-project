@@ -3,7 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import { addressCreateForPatient, addressEdit } from './address-resolver';
+import { addressCreate, addressCreateForPatient, addressEdit } from './address-resolver';
 import {
   answerCreate,
   answerDelete,
@@ -57,7 +57,7 @@ import {
   concernSuggestionDelete,
   resolveConcernsForAnswer,
 } from './concern-suggestion-resolver';
-import { emailCreateForPatient, emailEdit } from './email-resolver';
+import { emailCreate, emailCreateForPatient, emailEdit } from './email-resolver';
 import {
   eventNotificationsForTaskDismiss,
   eventNotificationDismiss,
@@ -103,6 +103,7 @@ import {
   patientConsentFormDelete,
   resolvePatientConsentFormsForPatient,
 } from './patient-consent-form-resolver';
+import { patientContactCreate, patientContactEdit } from './patient-contact-resolver';
 import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
@@ -158,7 +159,7 @@ import {
   patientTaskSuggestionDismiss,
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
-import { phoneCreateForPatient, phoneEdit } from './phone-resolver';
+import { phoneCreate, phoneCreateForPatient, phoneEdit } from './phone-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteGlassBreakCreate,
@@ -397,17 +398,22 @@ const resolveFunctions = {
   },
 
   RootMutationType: {
+    addressCreate,
     addressCreateForPatient,
     addressEdit,
     careTeamAddUser,
     careTeamAssignPatients,
     careTeamRemoveUser,
+    emailCreate,
     emailCreateForPatient,
     emailEdit,
+    patientContactCreate,
+    patientContactEdit,
     patientEdit,
     patientCoreIdentityVerify,
     patientInfoEdit,
     patientScratchPadEdit,
+    phoneCreate,
     phoneCreateForPatient,
     phoneEdit,
     currentUserEdit,

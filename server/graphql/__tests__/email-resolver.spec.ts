@@ -56,6 +56,36 @@ describe('email resolver', () => {
     await Db.release();
   });
 
+  describe('create email', async () => {
+    it('should create email', async () => {
+      await transaction(Email.knex(), async txn => {
+        const { user } = await setup(txn);
+        const query = `mutation {
+          emailCreate(input: {
+            emailAddress: "patient@email.com",
+            description: "Some email",
+          }) {
+            id, emailAddress, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.emailCreate)).toMatchObject({
+          emailAddress: 'patient@email.com',
+          description: 'Some email',
+        });
+        expect(log).toBeCalled();
+      });
+    });
+  });
+
   describe('create email for patient', async () => {
     it('should create email with patient and associate it with patient', async () => {
       await transaction(Email.knex(), async txn => {

@@ -1680,6 +1680,10 @@ declare module 'schema' {
   */
     careTeamAssignPatients: IUserWithCount | null;
     /**
+    Create an address
+  */
+    addressCreate: IAddress | null;
+    /**
     Create an address for a Patient
   */
     addressCreateForPatient: IAddress | null;
@@ -1692,6 +1696,10 @@ declare module 'schema' {
   */
     phoneCreateForPatient: IPhone | null;
     /**
+    Create a phone number
+  */
+    phoneCreate: IPhone | null;
+    /**
     Edit a phone number
   */
     phoneEdit: IPhone | null;
@@ -1699,6 +1707,10 @@ declare module 'schema' {
     Create an email for a Patient
   */
     emailCreateForPatient: IEmail | null;
+    /**
+    Create an email
+  */
+    emailCreate: IEmail | null;
     /**
     Edit an email
   */
@@ -1715,6 +1727,14 @@ declare module 'schema' {
     Edit fields on patient info stored in the db
   */
     patientInfoEdit: IPatientInfo | null;
+    /**
+    Create patient contact
+  */
+    patientContactCreate: IPatientContact | null;
+    /**
+    Edit fields on patient contact stored in the db
+  */
+    patientContactEdit: IPatientContact | null;
     /**
     Edit a patient scratch pad
   */
@@ -2193,6 +2213,18 @@ declare module 'schema' {
   }
 
   /**
+    params for creating an address in the db
+  */
+  interface IAddressCreateInput {
+    zip: string | null;
+    street1: string | null;
+    street2: string | null;
+    state: string | null;
+    city: string | null;
+    description: string | null;
+  }
+
+  /**
     params for creating and address for a patient in the db
   */
   interface IAddressCreateForPatientInput {
@@ -2232,6 +2264,15 @@ declare module 'schema' {
   }
 
   /**
+    params for creating a phone
+  */
+  interface IPhoneCreateInput {
+    phoneNumber: string;
+    type: IPhoneTypeOptionsEnum | null;
+    description: string | null;
+  }
+
+  /**
     Editable fields on a phone
   */
   interface IPhoneEditInput {
@@ -2250,6 +2291,14 @@ declare module 'schema' {
     emailAddress: string;
     description: string | null;
     isPrimary: boolean | null;
+  }
+
+  /**
+    params for creating an email
+  */
+  interface IEmailCreateInput {
+    emailAddress: string;
+    description: string | null;
   }
 
   /**
@@ -2297,6 +2346,57 @@ declare module 'schema' {
     preferredContactMethod: IContactMethodOptionsEnum | null;
     canReceiveCalls: boolean | null;
     canReceiveTexts: boolean | null;
+  }
+
+  /**
+    params for creating a patient contact in the db
+  */
+  interface IPatientContactCreateInput {
+    patientId: string;
+    relationToPatient: string;
+    firstName: string;
+    lastName: string;
+    primaryPhoneId: string;
+    isEmergencyContact: boolean | null;
+    isHealthcareProxy: boolean | null;
+    canContact: boolean | null;
+    description: string | null;
+    primaryAddressId: string | null;
+    primaryEmailId: string | null;
+  }
+
+  /**
+    Patient contact that is editable in Commons
+  */
+  interface IPatientContact {
+    id: string;
+    patientId: string;
+    relationToPatient: string;
+    firstName: string;
+    lastName: string;
+    isEmergencyContact: boolean;
+    isHealthcareProxy: boolean;
+    canContact: boolean;
+    primaryPhone: IPhone | null;
+    description: string | null;
+    primaryAddress: IAddress | null;
+    primaryEmail: IEmail | null;
+  }
+
+  /**
+    params for editing a patient contact in the db
+  */
+  interface IPatientContactEditInput {
+    patientContactId: string;
+    relationToPatient: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    isEmergencyContact: boolean | null;
+    isHealthcareProxy: boolean | null;
+    canContact: boolean | null;
+    description: string | null;
+    primaryAddressId: string | null;
+    primaryEmailId: string | null;
   }
 
   /**

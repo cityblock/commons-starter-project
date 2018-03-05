@@ -5825,6 +5825,87 @@ export interface patientConsentFormDeleteMutation {
   } | null,
 };
 
+export interface patientContactCreateMutationVariables {
+  patientId: string,
+  relationToPatient: string,
+  firstName: string,
+  lastName: string,
+  primaryPhoneId: string,
+  isEmergencyContact?: boolean | null,
+  isHealthcareProxy?: boolean | null,
+  canContact?: boolean | null,
+  description?: string | null,
+  primaryAddressId?: string | null,
+  primaryEmailId?: string | null,
+};
+
+export interface patientContactCreateMutation {
+  // Create patient contact
+  patientContactCreate:  {
+    id: string,
+    patientId: string,
+    relationToPatient: string,
+    firstName: string,
+    lastName: string,
+    isEmergencyContact: boolean,
+    isHealthcareProxy: boolean,
+    canContact: boolean,
+    description: string | null,
+    primaryAddress:  {
+      id: string,
+      zip: string | null,
+    } | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    primaryPhone:  {
+      id: string,
+      phoneNumber: string,
+    } | null,
+  } | null,
+};
+
+export interface patientContactEditMutationVariables {
+  patientContactId: string,
+  relationToPatient?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  isEmergencyContact?: boolean | null,
+  isHealthcareProxy?: boolean | null,
+  canContact?: boolean | null,
+  description?: string | null,
+  primaryAddressId?: string | null,
+  primaryEmailId?: string | null,
+};
+
+export interface patientContactEditMutation {
+  // Edit fields on patient contact stored in the db
+  patientContactEdit:  {
+    id: string,
+    patientId: string,
+    relationToPatient: string,
+    firstName: string,
+    lastName: string,
+    isEmergencyContact: boolean,
+    isHealthcareProxy: boolean,
+    canContact: boolean,
+    description: string | null,
+    primaryAddress:  {
+      id: string,
+      zip: string | null,
+    } | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    primaryPhone:  {
+      id: string,
+      phoneNumber: string,
+    } | null,
+  } | null,
+};
+
 export interface patientCoreIdentityVerifyMutationVariables {
   patientId: string,
 };
@@ -9862,6 +9943,30 @@ export interface FullPatientConsentFormFragment {
   formId: string,
   title: string,
   signedAt: string | null,
+};
+
+export interface FullPatientContactFragment {
+  id: string,
+  patientId: string,
+  relationToPatient: string,
+  firstName: string,
+  lastName: string,
+  isEmergencyContact: boolean,
+  isHealthcareProxy: boolean,
+  canContact: boolean,
+  description: string | null,
+  primaryAddress:  {
+    id: string,
+    zip: string | null,
+  } | null,
+  primaryEmail:  {
+    id: string,
+    emailAddress: string,
+  } | null,
+  primaryPhone:  {
+    id: string,
+    phoneNumber: string,
+  } | null,
 };
 
 export interface FullPatientDataFlagFragment {

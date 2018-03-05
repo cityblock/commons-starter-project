@@ -1,0 +1,33 @@
+#import "../fragments/full-patient-contact.graphql"
+
+mutation patientContactCreate(
+  $patientId: ID!
+  $relationToPatient: String!
+  $firstName: String!
+  $lastName: String!
+  $primaryPhoneId: String!
+  $isEmergencyContact: Boolean
+  $isHealthcareProxy: Boolean
+  $canContact: Boolean
+  $description: String
+  $primaryAddressId: String
+  $primaryEmailId: String
+) {
+  patientContactCreate(
+    input: {
+      patientId: $patientId
+      relationToPatient: $relationToPatient
+      firstName: $firstName
+      lastName: $lastName
+      isEmergencyContact: $isEmergencyContact
+      isHealthcareProxy: $isHealthcareProxy
+      canContact: $canContact
+      primaryPhoneId: $primaryPhoneId
+      description: $description
+      primaryAddressId: $primaryAddressId
+      primaryEmailId: $primaryEmailId
+    }
+  ) {
+    ...FullPatientContact
+  }
+}

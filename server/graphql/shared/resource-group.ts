@@ -56,6 +56,9 @@ export const patientAllActionsAllowedResources: Resource[] = [
   'progressNote',
   'CBOReferral',
   'patientAnswer',
+  'address',
+  'email',
+  'phone',
 ];
 
 export const patientCreatableAndDeletableOnlyResoruces: Resource[] = [

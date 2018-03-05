@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { get, isNil } from 'lodash-es';
 import * as nock from 'nock';
 import { Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
@@ -140,6 +141,42 @@ export function createMockPatient(
     language: language || 'en',
     homeClinicId,
     dateOfBirth: dateOfBirth || '01/01/1900',
+  };
+}
+
+export function createMockPatientContact(
+  patientId: string,
+  userId: string,
+  primaryPhoneId: string,
+  options?: {
+    primaryEmailId?: string;
+    primaryAddressId?: string;
+    firstName?: string;
+    lastName?: string;
+    relationToPatient?: string;
+    isEmergencyContact?: boolean;
+    isHealthcareProxy?: boolean;
+    canContact?: boolean;
+    description?: string;
+  },
+) {
+  const isEmergencyContact = get(options, 'isEmergencyContact');
+  const isHealthcareProxy = get(options, 'isHealthcareProxy');
+  const canContact = get(options, 'canContact');
+
+  return {
+    primaryPhoneId,
+    updatedById: userId,
+    patientId,
+    firstName: get(options, 'firstName') || 'harry',
+    lastName: get(options, 'lastName') || 'potter',
+    relationToPatient: get(options, 'relationToPatient') || 'wizarding tutor',
+    isEmergencyContact: isNil(isEmergencyContact) ? false : isEmergencyContact,
+    isHealthcareProxy: isNil(isHealthcareProxy) ? false : isHealthcareProxy,
+    canContact: isNil(canContact) ? false : canContact,
+    primaryEmailId: get(options, 'primaryEmailId'),
+    primaryAddressId: get(options, 'primaryAddressId'),
+    description: get(options, 'description') || 'some contact description',
   };
 }
 

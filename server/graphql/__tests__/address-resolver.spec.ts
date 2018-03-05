@@ -56,6 +56,42 @@ describe('address resolver', () => {
     await Db.release();
   });
 
+  describe('create address', async () => {
+    it('should create address', async () => {
+      await transaction(Address.knex(), async txn => {
+        const { user } = await setup(txn);
+        const query = `mutation {
+          addressCreate(input: {
+            zip: "11238",
+            state: "NY",
+            city: "Brooklyn",
+            street1: "600 Vanderbilt Ave",
+            description: "Some building",
+          }) {
+            id, zip, state, city, street1, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.addressCreate)).toMatchObject({
+          street1: '600 Vanderbilt Ave',
+          zip: '11238',
+          state: 'NY',
+          city: 'Brooklyn',
+          description: 'Some building',
+        });
+        expect(log).toBeCalled();
+      });
+    });
+  });
+
   describe('create address for patient', async () => {
     it('should create address with patient and associate it with patient', async () => {
       await transaction(Address.knex(), async txn => {

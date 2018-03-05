@@ -49,7 +49,10 @@ export type Resource =
   | 'CBOReferral'
   | 'eventNotification'
   | 'patientGlassBreak'
-  | 'progressNoteGlassBreak';
+  | 'progressNoteGlassBreak'
+  | 'address'
+  | 'phone'
+  | 'email';
 
 /*
 ACL SPEC:

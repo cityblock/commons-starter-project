@@ -56,6 +56,38 @@ describe('phone resolver', () => {
     await Db.release();
   });
 
+  describe('create phone', async () => {
+    it('should create phone', async () => {
+      await transaction(Phone.knex(), async txn => {
+        const { user } = await setup(txn);
+        const query = `mutation {
+          phoneCreate(input: {
+            phoneNumber: "123-456-7890",
+            type: home,
+            description: "moms home phone",
+          }) {
+            id, phoneNumber, type, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
+          phoneNumber: '123-456-7890',
+          type: 'home',
+          description: 'moms home phone',
+        });
+        expect(log).toBeCalled();
+      });
+    });
+  });
+
   describe('create phone for patient', async () => {
     it('should create phone with patient and associate it with patient', async () => {
       await transaction(Phone.knex(), async txn => {

@@ -29,6 +29,10 @@ import PatientAnswer from '../../models/patient-answer';
 import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
 import PatientConsentForm from '../../models/patient-consent-form';
+import PatientContact from '../../models/patient-contact';
+import PatientContactAddress from '../../models/patient-contact-address';
+import PatientContactEmail from '../../models/patient-contact-email';
+import PatientContactPhone from '../../models/patient-contact-phone';
 import PatientDataFlag from '../../models/patient-data-flag';
 import PatientEmail from '../../models/patient-email';
 import PatientGlassBreak from '../../models/patient-glass-break';
@@ -89,6 +93,10 @@ export type ModelResource =
   | 'patientAnswerEvent'
   | 'patientConcern'
   | 'patientConsentForm'
+  | 'patientContact'
+  | 'patientContactAddress'
+  | 'patientContactEmail'
+  | 'patientContactPhone'
   | 'patientDataFlag'
   | 'patientEmail'
   | 'patientGlassBreak'
@@ -153,6 +161,10 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientAnswerEvent: PatientAnswerEvent,
   patientConcern: PatientConcern,
   patientConsentForm: PatientConsentForm,
+  patientContact: PatientContact,
+  patientContactAddress: PatientContactAddress,
+  patientContactEmail: PatientContactEmail,
+  patientContactPhone: PatientContactPhone,
   patientDataFlag: PatientDataFlag,
   patientEmail: PatientEmail,
   patientGlassBreak: PatientGlassBreak,

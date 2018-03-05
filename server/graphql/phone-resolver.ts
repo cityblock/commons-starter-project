@@ -1,5 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import { IPhoneCreateForPatientInput, IPhoneEditInput, IRootMutationType } from 'schema';
+import { IPhoneCreateForPatientInput, IPhoneCreateInput, IPhoneEditInput, IRootMutationType } from 'schema';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
 import PatientPhone from '../models/patient-phone';
@@ -35,6 +35,24 @@ export async function phoneCreateForPatient(
   }
 
   return phone;
+}
+
+export interface IPhoneCreateOptions {
+  input: IPhoneCreateInput;
+}
+
+export async function phoneCreate(
+  source: any,
+  { input }: IPhoneCreateOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['phoneCreate']> {
+  await checkUserPermissions(userId, permissions, 'create', 'phone', txn);
+
+  const filtered = omitBy<IPhoneCreateInput>(input, isNil) as any;
+  filtered.updatedById = userId;
+  logger.log(`CREATE phone by ${userId}`, 2);
+
+  return Phone.create(filtered, txn);
 }
 
 export interface IPhoneEditOptions {

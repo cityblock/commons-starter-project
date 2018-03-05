@@ -1,5 +1,10 @@
 import { isNil, omitBy } from 'lodash';
-import { IAddressCreateForPatientInput, IAddressEditInput, IRootMutationType } from 'schema';
+import {
+  IAddressCreateForPatientInput,
+  IAddressCreateInput,
+  IAddressEditInput,
+  IRootMutationType,
+} from 'schema';
 import Address from '../models/address';
 import Patient from '../models/patient';
 import PatientAddress from '../models/patient-address';
@@ -35,6 +40,24 @@ export async function addressCreateForPatient(
   }
 
   return address;
+}
+
+export interface IAddressCreateOptions {
+  input: IAddressCreateInput;
+}
+
+export async function addressCreate(
+  source: any,
+  { input }: IAddressCreateOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['addressCreate']> {
+  await checkUserPermissions(userId, permissions, 'create', 'address', txn);
+
+  const filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
+  filtered.updatedById = userId;
+  logger.log(`CREATE address by ${userId}`, 2);
+
+  return Address.create(filtered, txn);
 }
 
 export interface IAddressEditOptions {

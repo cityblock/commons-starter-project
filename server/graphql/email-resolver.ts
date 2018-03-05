@@ -1,5 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import { IEmailCreateForPatientInput, IEmailEditInput, IRootMutationType } from 'schema';
+import { IEmailCreateForPatientInput, IEmailCreateInput, IEmailEditInput, IRootMutationType } from 'schema';
 import Email from '../models/email';
 import Patient from '../models/patient';
 import PatientEmail from '../models/patient-email';
@@ -35,6 +35,24 @@ export async function emailCreateForPatient(
   }
 
   return email;
+}
+
+export interface IEmailCreateOptions {
+  input: IEmailCreateInput;
+}
+
+export async function emailCreate(
+  source: any,
+  { input }: IEmailCreateOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['emailCreate']> {
+  await checkUserPermissions(userId, permissions, 'create', 'email', txn);
+
+  const filtered = omitBy<IEmailCreateInput>(input, isNil) as any;
+  filtered.updatedById = userId;
+  logger.log(`CREATE email by ${userId}`, 2);
+
+  return Email.create(filtered, txn);
 }
 
 export interface IEmailEditOptions {

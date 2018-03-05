@@ -297,6 +297,22 @@ type PatientInfo implements uniqueId {
   canReceiveTexts: Boolean
 }
 
+# Patient contact that is editable in Commons
+type PatientContact implements uniqueId {
+  id: ID!
+  patientId: ID!
+  relationToPatient: String!
+  firstName: String!
+  lastName: String!
+  isEmergencyContact: Boolean!
+  isHealthcareProxy: Boolean!
+  canContact: Boolean!
+  primaryPhone: Phone
+  description: String
+  primaryAddress: Address
+  primaryEmail: Email
+}
+
 # ComputedPatientStatus
 type ComputedPatientStatus implements uniqueId {
   id: ID!
@@ -346,6 +362,16 @@ input AddressEditInput {
   description: String
 }
 
+# params for creating an address in the db
+input AddressCreateInput {
+  zip: String
+  street1: String
+  street2: String
+  state: String
+  city: String
+  description: String
+}
+
 # params for creating and address for a patient in the db
 input AddressCreateForPatientInput {
   patientId: ID!
@@ -375,6 +401,13 @@ input PhoneEditInput {
   description: String
 }
 
+# params for creating a phone
+input PhoneCreateInput {
+  phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
+}
+
 # params for creating a phone for a patient in the db
 input PhoneCreateForPatientInput {
   patientId: ID!
@@ -395,6 +428,12 @@ type Email implements uniqueId {
 input EmailEditInput {
   emailId: ID!
   patientId: ID!
+  emailAddress: String!
+  description: String
+}
+
+# params for creating an email
+input EmailCreateInput {
   emailAddress: String!
   description: String
 }
@@ -1368,6 +1407,35 @@ input PatientInfoEditInput {
   canReceiveTexts: Boolean
 }
 
+# params for creating a patient contact in the db
+input PatientContactCreateInput {
+  patientId: ID!
+  relationToPatient: String!
+  firstName: String!
+  lastName: String!
+  primaryPhoneId: String!
+  isEmergencyContact: Boolean
+  isHealthcareProxy: Boolean
+  canContact: Boolean
+  description: String
+  primaryAddressId: String
+  primaryEmailId: String
+}
+
+# params for editing a patient contact in the db
+input PatientContactEditInput {
+  patientContactId: ID!
+  relationToPatient: String
+  firstName: String
+  lastName: String
+  isEmergencyContact: Boolean
+  isHealthcareProxy: Boolean
+  canContact: Boolean
+  description: String
+  primaryAddressId: String
+  primaryEmailId: String
+}
+
 # params for editing a patient scratch pad
 input PatientScratchPadEditInput {
   patientId: ID!
@@ -2011,16 +2079,22 @@ type RootMutationType {
   careTeamRemoveUser(input: CareTeamInput): [User]
   # Add multiple patients to careTeam
   careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
+  # Create an address
+  addressCreate(input: AddressCreateInput): Address
   # Create an address for a Patient
   addressCreateForPatient(input: AddressCreateForPatientInput): Address
   # Edit an address
   addressEdit(input: AddressEditInput): Address
   # Create a phone number for a Patient
   phoneCreateForPatient(input: PhoneCreateForPatientInput): Phone
+  # Create a phone number
+  phoneCreate(input: PhoneCreateInput): Phone
   # Edit a phone number
   phoneEdit(input: PhoneEditInput): Phone
   # Create an email for a Patient
   emailCreateForPatient(input: EmailCreateForPatientInput): Email
+  # Create an email
+  emailCreate(input: EmailCreateInput): Email
   # Edit an email
   emailEdit(input: EmailEditInput): Email
   # Edit fields on patient stored in the db
@@ -2029,6 +2103,10 @@ type RootMutationType {
   patientCoreIdentityVerify(input: PatientCoreIdentityVerifyInput): Patient
   # Edit fields on patient info stored in the db
   patientInfoEdit(input: PatientInfoEditInput): PatientInfo
+  # Create patient contact
+  patientContactCreate(input: PatientContactCreateInput): PatientContact
+  # Edit fields on patient contact stored in the db
+  patientContactEdit(input: PatientContactEditInput): PatientContact
   # Edit a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
   # Create a task

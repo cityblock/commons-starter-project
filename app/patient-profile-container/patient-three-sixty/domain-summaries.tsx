@@ -1,20 +1,13 @@
 import * as classNames from 'classnames';
 import { size } from 'lodash';
 import * as React from 'react';
-import * as Loadable from 'react-loadable';
 import { getRiskAreaGroupsQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import * as styles from './css/shared.css';
 import DomainSummary from './domain-summary';
 import { calculateRisk } from './helpers';
 import { IRiskAreaGroupScore } from './patient-three-sixty-domains';
-
-export const LoadableThreeSixtyRadar = (Loadable as any)({
-  loader: async () =>
-    import(/* webpackChunkName: "radarChart" */
-    './three-sixty-radar/three-sixty-radar'),
-  loading: () => null,
-});
+import ThreeSixtyRadar from './three-sixty-radar/three-sixty-radar';
 
 interface IProps {
   patientId: string;
@@ -85,7 +78,7 @@ class DomainSummaries extends React.Component<IProps, IState> {
     const radarChart = this.isCalculating() ? (
       <Spinner className={styles.spinner} />
     ) : (
-      <LoadableThreeSixtyRadar riskAreaGroups={this.getRiskAreaGroupsForRadar()} />
+      <ThreeSixtyRadar riskAreaGroups={this.getRiskAreaGroupsForRadar()} />
     );
 
     return (

@@ -3,7 +3,7 @@
 .list {
   display: inline-block;
   height: calc(100vh - 223px);
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
   transition: width 0.3s ease-out;

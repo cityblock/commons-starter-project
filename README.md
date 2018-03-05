@@ -17,8 +17,10 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
   `cityblock/commons#master` are automatically deployed to staging
 * **Point People:** @zamiang, @loganhasson
 * **Pingdom:** [http://stats.pingdom.com/8uqm3ndqqgmh](http://stats.pingdom.com/8uqm3ndqqgmh)
-* **AppCanary:** [https://appcanary.com/monitors/2283](https://appcanary.com/monitors/2283)
+* **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
 * **Logentries:** [https://logentries.com/app/87be99c5#/sets](https://logentries.com/app/87be99c5#/sets)
+* **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
+* **Stackdriver:** [https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607](https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607)
 * **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
 * **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
 
@@ -84,12 +86,12 @@ We use a ‘pipeline’ deployment process which means we have well defined step
 
 The pipeline steps are:
 
-1. submit a pull request
-1. run the automated tests [automatic via circleci]
-1. merge the pull request
-1. release on test/qa/staging environment [automatic via circleci]
-1. create a release using github releases
-1. release on production [automatic via circleci]
+1.  submit a pull request
+1.  run the automated tests [automatic via circleci]
+1.  merge the pull request
+1.  release on test/qa/staging environment [automatic via circleci]
+1.  create a release using github releases
+1.  release on production [automatic via circleci]
 
 ### Performing code review
 
@@ -151,20 +153,20 @@ and on production at
 [https://commons.cityblock.com/graphiql](https://commons.cityblock.com/graphiql). All endpoints
 except login require you to be authenticated. In order to pass auth information we need to...
 
-1. create a user (NOTE: You may need to disable authentication checks locally in the `createUser`
-   mutation resolver.) `mutation { createUser(input: {email: "your-name@cityblock.com"}) { user { id } } }`
-1. log in via your google account
-1. copy `authToken` from local storage
-1. pass auth information via [modheader][] for future requests
-1. add `auth_token` to the request header (note underscore!)
+1.  create a user (NOTE: You may need to disable authentication checks locally in the `createUser`
+    mutation resolver.) `mutation { createUser(input: {email: "your-name@cityblock.com"}) { user { id } } }`
+1.  log in via your google account
+1.  copy `authToken` from local storage
+1.  pass auth information via [modheader][] for future requests
+1.  add `auth_token` to the request header (note underscore!)
 
 ### Revert a PR merge into master
 
-1. As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to
-   production.
-1. Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
-1. GitHub will generate a revert PR on your behalf.
-1. Merge the generated PR.
+1.  As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to
+    production.
+1.  Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
+1.  GitHub will generate a revert PR on your behalf.
+1.  Merge the generated PR.
 
 ### To automatically fix linter errors, run
 
@@ -220,17 +222,17 @@ A good description of what all of these different settings can be found in the [
 Documentation][]. All of these settings are modified by running the following statements against the
 database:
 
-1. `ALTER SYSTEM SET desired_setting = value;`
-1. `SELECT pg_reload_conf();`
+1.  `ALTER SYSTEM SET desired_setting = value;`
+1.  `SELECT pg_reload_conf();`
 
 The settings are as follows:
 
-1. `log_statement = 'all'`
-1. `log_connections = true`
-1. `log_disconnections = true`
-1. `log_duration = true`
-1. `log_min_duration_statement = -1`
-1. `log_min_messages = 'DEBUG2'`
+1.  `log_statement = 'all'`
+1.  `log_connections = true`
+1.  `log_disconnections = true`
+1.  `log_duration = true`
+1.  `log_min_duration_statement = -1`
+1.  `log_min_messages = 'DEBUG2'`
 
 #### Spotlight Optimization
 
@@ -245,15 +247,15 @@ We are able to run the application locally using Docker and Docker Compose. For 
 running the web application with a postgres database. To get started, download and
 install [Docker][]. After you have Docker installed and running, follow these steps:
 
-1. Start the application and database by running `yarn run docker-prod:start`. The first time you do
-   this, you will have to wait a little while.
-1. In a separate terminal window, run: `yarn run docker-prod:migrate`.
-1. To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
-   1. Alternatively, connect to the database using Postico (user is 'postgres' and port is '5431').
-1. Visit `localhost:3000` in your browser.
-1. If you make changes to the application and wish to see them, the application container will need
-   to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
-1. To stop the application, run: `yarn run docker-prod:stop`.
+1.  Start the application and database by running `yarn run docker-prod:start`. The first time you do
+    this, you will have to wait a little while.
+1.  In a separate terminal window, run: `yarn run docker-prod:migrate`.
+1.  To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
+    1.  Alternatively, connect to the database using Postico (user is 'postgres' and port is '5431').
+1.  Visit `localhost:3000` in your browser.
+1.  If you make changes to the application and wish to see them, the application container will need
+    to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
+1.  To stop the application, run: `yarn run docker-prod:stop`.
 
 ### Copying staging database to local database
 

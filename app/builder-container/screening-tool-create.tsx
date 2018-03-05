@@ -139,9 +139,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
               value={screeningTool.riskAreaId}
               onChange={this.onChange}
             >
-              <Option value="" disabled>
-                Select Assessment
-              </Option>
+              <Option value="" disabled label="Select Assessment" />
               {this.renderRiskAreaOptions()}
             </Select>
           </div>

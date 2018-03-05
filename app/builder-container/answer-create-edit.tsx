@@ -183,25 +183,17 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     const { answer } = this.state;
 
     if (screeningToolAnswer) {
-      return <Option value="number">number</Option>;
+      return <Option value="number" />;
     } else if (dataType) {
-      return <Option value={dataType}>{dataType}</Option>;
+      return <Option value={dataType} />;
     } else if (this.props.answer) {
-      return <Option value={answer.valueType}>{answer.valueType}</Option>;
+      return <Option value={answer.valueType} />;
     } else {
       return [
-        <Option key={'default-option'} value="" disabled>
-          Select Answer value type
-        </Option>,
-        <Option key={'string-option'} value="string">
-          text
-        </Option>,
-        <Option key={'boolean-option'} value="boolean">
-          true / false
-        </Option>,
-        <Option key={'number-option'} value="number">
-          number
-        </Option>,
+        <Option key={'default-option'} value="" disabled label="Select Answer value type" />,
+        <Option key={'string-option'} value="string" label="text" />,
+        <Option key={'boolean-option'} value="boolean" label="true / false" />,
+        <Option key={'number-option'} value="number" />,
       ];
     }
   }
@@ -217,11 +209,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     ) : (
       <div className={answerStyles.smallText}>New Answer!</div>
     );
-    const orders = range(1, 30).map(num => (
-      <Option key={`${num}-select`} value={num.toString()}>
-        {num}
-      </Option>
-    ));
+    const orders = range(1, 30).map(num => <Option key={`${num}-select`} value={num.toString()} />);
     const carePlanSuggestionsHtml = this.props.answer ? (
       <CarePlanSuggestions answer={this.props.answer} />
     ) : null;
@@ -250,9 +238,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <FormLabel messageId="builder.order" />
             <Select name="order" value={answer.order.toString() || '1'} onChange={this.onChange}>
-              <Option value="" disabled>
-                Select Answer order
-              </Option>
+              <Option value="" disabled label="Select Answer order" />
               {orders}
             </Select>
           </div>
@@ -325,7 +311,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         {carePlanSuggestionsHtml}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <Button onClick={this.onSubmit}>{createEditText}</Button>
+            <Button onClick={this.onSubmit} label={createEditText} />
             {deleteHtml}
           </div>
         </div>

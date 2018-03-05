@@ -48,25 +48,25 @@ exports[`renders popup for concern suggestion 1`] = `
               disabled={true}
               value=""
             >
-              
+              Select a reason
             </option>
             <option
               disabled={undefined}
               value="not applicable"
             >
-              not applicable
+              Not applicable to this patient
             </option>
             <option
               disabled={undefined}
               value="too much work"
             >
-              too much work
+              This suggestion requires too much work
             </option>
             <option
               disabled={undefined}
               value="dangerous"
             >
-              dangerous
+              Tackling this suggestion would be dangerous for the patient
             </option>
           </select>
         </div>
@@ -154,25 +154,25 @@ exports[`renders popup for goal suggestion 1`] = `
               disabled={true}
               value=""
             >
-              
+              Select a reason
             </option>
             <option
               disabled={undefined}
               value="not applicable"
             >
-              not applicable
+              Not applicable to this patient
             </option>
             <option
               disabled={undefined}
               value="too much work"
             >
-              too much work
+              This suggestion requires too much work
             </option>
             <option
               disabled={undefined}
               value="dangerous"
             >
-              dangerous
+              Tackling this suggestion would be dangerous for the patient
             </option>
           </select>
         </div>

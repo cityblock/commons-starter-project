@@ -43,19 +43,19 @@ exports[`renders popup for concern suggestion 1`] = `
               disabled={true}
               value=""
             >
-              
+              Select a concern type
             </option>
             <option
               disabled={undefined}
               value="active"
             >
-              active
+              Active concern
             </option>
             <option
               disabled={undefined}
               value="inactive"
             >
-              inactive
+              Inactive concern
             </option>
           </select>
         </div>
@@ -142,7 +142,7 @@ exports[`renders popup for goal suggestion 1`] = `
               disabled={true}
               value=""
             >
-              
+              Select a concern
             </option>
           </select>
         </div>
@@ -161,19 +161,19 @@ exports[`renders popup for goal suggestion 1`] = `
               disabled={true}
               value=""
             >
-              
+              Select a concern type
             </option>
             <option
               disabled={undefined}
               value="active"
             >
-              active
+              Active concern
             </option>
             <option
               disabled={undefined}
               value="inactive"
             >
-              inactive
+              Inactive concern
             </option>
           </select>
         </div>

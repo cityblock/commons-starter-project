@@ -55,7 +55,7 @@ exports[`renders screening tool screate 1`] = `
           disabled={true}
           value=""
         >
-          
+          Select Assessment
         </option>
         <option
           value="cool-risk-area-id"

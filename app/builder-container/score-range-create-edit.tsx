@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -15,12 +14,12 @@ import {
   FullScreeningToolScoreRangeFragment,
   RiskAdjustmentTypeOptions,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as scoreRangeStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
@@ -169,31 +168,28 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
           <br />
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Description:</div>
-            <input
+            <TextInput
               name="description"
               value={scoreRange.description}
-              placeholder={'Enter score range description'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
+              placeholderMessageId="builder.enterScoreRangeDescription"
               onChange={this.onChange}
             />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Minimum Score:</div>
-            <input
+            <TextInput
               name="minimumScore"
-              value={scoreRange.minimumScore}
-              placeholder={'Enter minimum score'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
+              value={scoreRange.minimumScore.toString()}
+              placeholderMessageId="builder.enterMinimumScore"
               onChange={this.onChange}
             />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Maximum Score:</div>
-            <input
+            <TextInput
               name="maximumScore"
-              value={scoreRange.maximumScore}
-              placeholder={'Enter maximum score'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
+              value={scoreRange.maximumScore.toString()}
+              placeholderMessageId="builder.enterMaxiumumScore"
               onChange={this.onChange}
             />
           </div>
@@ -204,7 +200,6 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
               name="riskAdjustmentType"
               value={scoreRange.riskAdjustmentType}
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
               <Option value="inactive" messageId="riskAdjustmentType.inactive" />
               <Option value="increment" messageId="riskAdjustmentType.increment" />

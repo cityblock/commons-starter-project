@@ -122,11 +122,9 @@ class SettingsContainer extends React.Component<allProps, IState> {
               <div className={formStyles.field}>
                 <FormLabel htmlFor="local" messageId="settings.locale" />
                 <Select required name="locale" value={locale} onChange={this.updateUserLocale}>
-                  <Option value="" disabled>
-                    Select Locale
-                  </Option>
-                  <Option value="en">English</Option>
-                  <Option value="es">Spanish</Option>
+                  <Option value="" disabled label="Select Locale" />
+                  <Option value="en" label="English" />
+                  <Option value="es" label="Spanish" />
                 </Select>
               </div>
             </div>

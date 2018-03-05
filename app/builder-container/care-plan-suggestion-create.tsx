@@ -157,11 +157,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
         .filter(id => !!id);
     }
 
-    return (goals || []).filter(goal => existingGoalIds.indexOf(goal.id) === -1).map(goal => (
-      <Option key={goal.id} value={goal.id}>
-        {goal.title}
-      </Option>
-    ));
+    return (goals || [])
+      .filter(goal => existingGoalIds.indexOf(goal.id) === -1)
+      .map(goal => <Option key={goal.id} value={goal.id} label={goal.title} />);
   }
 
   getConcernOptions() {
@@ -180,20 +178,15 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
     return (concerns || [])
       .filter(concern => existingConcernIds.indexOf(concern.id) === -1)
-      .map(concern => (
-        <Option key={concern.id} value={concern.id}>
-          {concern.title}
-        </Option>
-      ));
+      .map(concern => <Option key={concern.id} value={concern.id} label={concern.title} />);
   }
 
   render() {
     const { loading, suggestionType, suggestionId } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
-    const goalOptions = this.getGoalOptions();
-    const concernOptions = this.getConcernOptions();
-    const suggestionOptions = suggestionType === 'concern' ? concernOptions : goalOptions;
+    const suggestionOptions =
+      suggestionType === 'concern' ? this.getConcernOptions() : this.getGoalOptions();
     let secondaryDropdownHtml = null;
 
     if (!!suggestionType && !suggestionOptions.length) {
@@ -206,9 +199,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       secondaryDropdownHtml = (
         <div className={styles.flexInputGroup}>
           <Select name="suggestionId" value={suggestionId || ''} onChange={this.onChange}>
-            <Option value="" disabled>
-              Select a suggestion
-            </Option>
+            <Option value="" disabled label="Select a suggestion" />
             {suggestionOptions}
           </Select>
         </div>
@@ -227,11 +218,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
             value={suggestionType || ''}
             onChange={this.onUpdateSuggestionType}
           >
-            <Option value="" disabled>
-              Select a type
-            </Option>
-            <Option value="concern">Concern</Option>
-            <Option value="goal">Goal/Tasks</Option>
+            <Option value="" disabled label="Select a type" />
+            <Option value="concern" label="Concern" />
+            <Option value="goal" label="Goal/Tasks" />
           </Select>
         </div>
         {secondaryDropdownHtml}

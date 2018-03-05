@@ -76,11 +76,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
         <div className={styles.acceptModalTitle}>Add as active or inactive concern?</div>
         <div className={styles.acceptModalDropdown}>
           <Select name="concernType" onChange={onChange} value={concernType}>
-            <Option value="" disabled>
-              Select a concern type
-            </Option>
-            <Option value="active">Active concern</Option>
-            <Option value="inactive">Inactive concern</Option>
+            <Option value="" disabled label="Select a concern type" />
+            <Option value="active" label="Active concern" />
+            <Option value="inactive" label="Inactive concern" />
           </Select>
         </div>
         <div className={styles.acceptModalButtons}>
@@ -100,9 +98,7 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
         </div>
         <div className={styles.acceptModalDropdown}>
           <Select name="concernId" onChange={onChange} value={concernId}>
-            <Option value="" disabled>
-              Select a concern
-            </Option>
+            <Option value="" disabled label="Select a concern" />
             <PatientCarePlanSuggestionOptionGroup
               optionType={'suggested'}
               carePlan={carePlan}
@@ -128,11 +124,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
         </div>
         <div className={selectConcernTypeInputDivStyles}>
           <Select name="concernType" onChange={onChange} value={concernType}>
-            <Option value="" disabled>
-              Select a concern type
-            </Option>
-            <Option value="active">Active concern</Option>
-            <Option value="inactive">Inactive concern</Option>
+            <Option value="" disabled label="Select a concern type" />
+            <Option value="active" label="Active concern" />
+            <Option value="inactive" label="Inactive concern" />
           </Select>
         </div>
         <div className={styles.acceptModalButtons}>

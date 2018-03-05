@@ -16,14 +16,6 @@ interface IProps {
 }
 
 class CarePlanSuggestions extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.renderCarePlanSuggestions = this.renderCarePlanSuggestions.bind(this);
-    this.renderConcernSuggestions = this.renderConcernSuggestions.bind(this);
-    this.renderGoalSuggestions = this.renderGoalSuggestions.bind(this);
-  }
-
   renderConcernSuggestions() {
     const { answer, scoreRange } = this.props;
 

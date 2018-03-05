@@ -41,16 +41,10 @@ type allProps = IProps & IGraphqlProps;
 class CarePlanSuggestion extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-
-    this.onClickDelete = this.onClickDelete.bind(this);
-    this.renderGoalSuggestion = this.renderGoalSuggestion.bind(this);
-    this.renderConcernSuggestion = this.renderConcernSuggestion.bind(this);
-    this.renderGoalTaskTemplates = this.renderGoalTaskTemplates.bind(this);
-
     this.state = { loading: false, error: null };
   }
 
-  async onClickDelete() {
+  onClickDelete = async () => {
     const {
       suggestionType,
       suggestion,
@@ -81,16 +75,14 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
     } catch (err) {
       this.setState({ loading: false, error: err.message });
     }
-  }
+  };
 
   renderGoalTaskTemplates(goalSuggestion: FullGoalSuggestionTemplateFragment) {
-    return (goalSuggestion.taskTemplates || [])
-      .map(taskTemplate => {
-        if (taskTemplate) {
-          return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
-        }
-      })
-      .filter(li => !!li); // Really not sure why taskTemplate can be null
+    return (goalSuggestion.taskTemplates || []).map(taskTemplate => {
+      if (taskTemplate) {
+        return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
+      }
+    });
   }
 
   renderGoalSuggestion() {

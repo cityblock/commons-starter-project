@@ -26,14 +26,13 @@ const PopupPatientCarePlanSuggestionDismissedModalBody = (props: IProps) => {
       <div className={styles.acceptModalSubtitle}>Select from one of the available options</div>
       <div className={styles.acceptModalDropdown}>
         <Select name="dismissedReason" onChange={onChange} value={dismissedReason}>
-          <Option value="" disabled>
-            Select a reason
-          </Option>
-          <Option value="not applicable">Not applicable to this patient</Option>
-          <Option value="too much work">This suggestion requires too much work</Option>
-          <Option value="dangerous">
-            Tackling this suggestion would be dangerous for the patient
-          </Option>
+          <Option value="" disabled label="Select a reason" />
+          <Option value="not applicable" label="Not applicable to this patient" />
+          <Option value="too much work" label="This suggestion requires too much work" />
+          <Option
+            value="dangerous"
+            label="Tackling this suggestion would be dangerous for the patient"
+          />
         </Select>
       </div>
       <div className={styles.acceptModalButtons}>

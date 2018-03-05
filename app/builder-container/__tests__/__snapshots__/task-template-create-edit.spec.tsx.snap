@@ -71,25 +71,25 @@ exports[`renders task template create-edit 1`] = `
           disabled={true}
           value=""
         >
-          
+          Select Priority
         </option>
         <option
           disabled={undefined}
           value="low"
         >
-          low
+          Low
         </option>
         <option
           disabled={undefined}
           value="medium"
         >
-          medium
+          Medium
         </option>
         <option
           disabled={undefined}
           value="high"
         >
-          high
+          High
         </option>
       </select>
     </div>
@@ -113,13 +113,13 @@ exports[`renders task template create-edit 1`] = `
           disabled={undefined}
           value="true"
         >
-          true
+          Yes
         </option>
         <option
           disabled={undefined}
           value="false"
         >
-          false
+          No
         </option>
       </select>
     </div>
@@ -132,45 +132,48 @@ exports[`renders task template create-edit 1`] = `
         Completed Within Interval:
       </div>
       <select
+        className="select"
+        disabled={undefined}
         name="completedWithinInterval"
         onChange={[Function]}
+        required={undefined}
         value="hour"
       >
         <option
           disabled={true}
           value=""
         >
-          
+          Select interval
         </option>
         <option
           disabled={undefined}
           value="hour"
         >
-          hour
+          Hour
         </option>
         <option
           disabled={undefined}
           value="day"
         >
-          day
+          Day
         </option>
         <option
           disabled={undefined}
           value="week"
         >
-          week
+          Week
         </option>
         <option
           disabled={undefined}
           value="month"
         >
-          month
+          Month
         </option>
         <option
           disabled={undefined}
           value="year"
         >
-          year
+          Year
         </option>
       </select>
     </div>
@@ -183,15 +186,18 @@ exports[`renders task template create-edit 1`] = `
         Completed Within Number:
       </div>
       <select
+        className="select"
+        disabled={undefined}
         name="completedWithinNumber"
         onChange={[Function]}
+        required={undefined}
         value="1"
       >
         <option
           disabled={true}
           value=""
         >
-          
+          Select number
         </option>
         <option
           disabled={undefined}
@@ -275,49 +281,49 @@ exports[`renders task template create-edit 1`] = `
           disabled={true}
           value=""
         >
-          
+          Select role
         </option>
         <option
           disabled={undefined}
           value="physician"
         >
-          physician
+          Physician
         </option>
         <option
           disabled={undefined}
           value="nurseCareManager"
         >
-          nurseCareManager
+          Nurse Care Manager
         </option>
         <option
           disabled={undefined}
           value="healthCoach"
         >
-          healthCoach
+          Health Coach
         </option>
         <option
           disabled={undefined}
           value="familyMember"
         >
-          familyMember
+          Family Member
         </option>
         <option
           disabled={undefined}
           value="primaryCarePhysician"
         >
-          primaryCarePhysician
+          Primary Care Physician
         </option>
         <option
           disabled={undefined}
           value="communityHealthPartner"
         >
-          communityHealthPartner
+          Community Health Partner
         </option>
         <option
           disabled={undefined}
           value="psychiatrist"
         >
-          psychiatrist
+          Psychiatrist
         </option>
       </select>
     </div>

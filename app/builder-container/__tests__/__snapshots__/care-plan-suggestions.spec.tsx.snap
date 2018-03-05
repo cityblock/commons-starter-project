@@ -122,19 +122,19 @@ exports[`renders care plan suggestions 1`] = `
           disabled={true}
           value=""
         >
-          
+          Select a type
         </option>
         <option
           disabled={undefined}
           value="concern"
         >
-          concern
+          Concern
         </option>
         <option
           disabled={undefined}
           value="goal"
         >
-          goal
+          Goal/Tasks
         </option>
       </select>
     </div>

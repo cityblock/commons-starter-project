@@ -94,13 +94,13 @@ export class UserRow extends React.Component<IProps, IState> {
                 onChange={onChangeUserPermissions}
                 className={styles.select}
               >
-                <Option value="green">Green</Option>
-                <Option value="pink">pink</Option>
-                <Option value="orange">Orange</Option>
-                <Option value="blue">Blue</Option>
-                <Option value="yellow">Yellow</Option>
-                <Option value="red">Red</Option>
-                <Option value="black">Black</Option>
+                <Option value="green" label="Green" />
+                <Option value="pink" label="Pink" />
+                <Option value="orange" label="Orange" />
+                <Option value="blue" label="Blue" />
+                <Option value="yellow" label="Yellow" />
+                <Option value="red" label="Red" />
+                <Option value="black" label="Black" />
               </Select>
             )}
           </div>

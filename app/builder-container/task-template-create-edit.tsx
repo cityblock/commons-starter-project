@@ -234,12 +234,10 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Priority:</div>
             <Select name="priority" value={taskTemplate.priority || ''} onChange={this.onChange}>
-              <Option value="" disabled>
-                Select Priority
-              </Option>
-              <Option value="low">Low</Option>
-              <Option value="medium">Medium</Option>
-              <Option value="high">High</Option>
+              <Option value="" disabled label="Select Priority" />
+              <Option value="low" label="Low" />
+              <Option value="medium" label="Medium" />
+              <Option value="high" label="High" />
             </Select>
           </div>
           <div className={styles.inlineInputGroup}>
@@ -250,30 +248,28 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               value={taskTemplate.repeating ? taskTemplate.repeating.toString() : 'false'}
               onChange={this.onChange}
             >
-              <Option value="true">Yes</Option>
-              <Option value="false">No</Option>
+              <Option value="true" label="Yes" />
+              <Option value="false" label="No" />
             </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Completed Within Interval:</div>
-            <select
+            <Select
               name="completedWithinInterval"
               value={taskTemplate.completedWithinInterval || ''}
               onChange={this.onChange}
             >
-              <Option value="" disabled>
-                Select interval
-              </Option>
-              <Option value="hour">Hour</Option>
-              <Option value="day">Day</Option>
-              <Option value="week">Week</Option>
-              <Option value="month">Month</Option>
-              <Option value="year">Year</Option>
-            </select>
+              <Option value="" disabled label="Select interval" />
+              <Option value="hour" label="Hour" />
+              <Option value="day" label="Day" />
+              <Option value="week" label="Week" />
+              <Option value="month" label="Month" />
+              <Option value="year" label="Year" />
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Completed Within Number:</div>
-            <select
+            <Select
               name="completedWithinNumber"
               value={
                 taskTemplate.completedWithinNumber
@@ -282,20 +278,18 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               }
               onChange={this.onChange}
             >
-              <Option value="" disabled>
-                Select number
-              </Option>
-              <Option value="1">1</Option>
-              <Option value="2">2</Option>
-              <Option value="3">3</Option>
-              <Option value="4">4</Option>
-              <Option value="5">5</Option>
-              <Option value="6">6</Option>
-              <Option value="7">7</Option>
-              <Option value="8">8</Option>
-              <Option value="9">9</Option>
-              <Option value="10">10</Option>
-            </select>
+              <Option value="" disabled label="Select number" />
+              <Option value="1" />
+              <Option value="2" />
+              <Option value="3" />
+              <Option value="4" />
+              <Option value="5" />
+              <Option value="6" />
+              <Option value="7" />
+              <Option value="8" />
+              <Option value="9" />
+              <Option value="10" />
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Default Assignee Role:</div>
@@ -304,16 +298,14 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               value={taskTemplate.careTeamAssigneeRole || ''}
               onChange={this.onChange}
             >
-              <Option value="" disabled>
-                Select role
-              </Option>
-              <Option value="physician">Physician</Option>
-              <Option value="nurseCareManager">Nurse Care Manager</Option>
-              <Option value="healthCoach">Health Coach</Option>
-              <Option value="familyMember">Family Member</Option>
-              <Option value="primaryCarePhysician">Primary Care Physician</Option>
-              <Option value="communityHealthPartner">Community Health Partner</Option>
-              <Option value="psychiatrist">Psychiatrist</Option>
+              <Option value="" disabled label="Select role" />
+              <Option value="physician" label="Physician" />
+              <Option value="nurseCareManager" label="Nurse Care Manager" />
+              <Option value="healthCoach" label="Health Coach" />
+              <Option value="familyMember" label="Family Member" />
+              <Option value="primaryCarePhysician" label="Primary Care Physician" />
+              <Option value="communityHealthPartner" label="Community Health Partner" />
+              <Option value="psychiatrist" label="Psychiatrist" />
             </Select>
           </div>
           <div className={taskTemplateStyles.smallText}>

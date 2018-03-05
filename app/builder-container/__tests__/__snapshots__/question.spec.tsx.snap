@@ -106,6 +106,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
         className="largeTextEditor hidden"
       >
         <TextInput
+          inputRef={[Function]}
           name="editedTitle"
           onBlur={[Function]}
           onChange={[Function]}
@@ -128,6 +129,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
         className="largeTextEditor hidden"
       >
         <TextInput
+          inputRef={[Function]}
           name="editedOrder"
           onBlur={[Function]}
           onChange={[Function]}
@@ -164,30 +166,21 @@ exports[`shallow rendered renders with screening tool 1`] = `
       >
         <Option
           disabled={true}
+          label="Select one (Required!)"
           value="Select one"
-        >
-          Select one (Required!)
-        </Option>
+        />
         <Option
           value="dropdown"
-        >
-          dropdown
-        </Option>
+        />
         <Option
           value="radio"
-        >
-          radio
-        </Option>
+        />
         <Option
           value="freetext"
-        >
-          freetext
-        </Option>
+        />
         <Option
           value="multiselect"
-        >
-          multiselect
-        </Option>
+        />
       </Select>
       <br />
       <div
@@ -245,20 +238,17 @@ exports[`shallow rendered renders with screening tool 1`] = `
       >
         <Option
           disabled={true}
+          label="Select one (Required!)"
           value="Select one"
-        >
-          Select one (Required!)
-        </Option>
+        />
         <Option
+          label="one true"
           value="oneTrue"
-        >
-          one true
-        </Option>
+        />
         <Option
+          label="all true"
           value="allTrue"
-        >
-          all true
-        </Option>
+        />
       </Select>
       <br />
       <QuestionConditions

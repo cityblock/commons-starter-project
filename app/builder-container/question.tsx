@@ -321,13 +321,11 @@ export class Question extends React.Component<allProps, IState> {
           value={question.answerType || 'Select one'}
           onChange={this.onSelectChange}
         >
-          <Option value={'Select one'} disabled>
-            Select one (Required!)
-          </Option>
-          <Option value="dropdown">dropdown</Option>
-          <Option value="radio">radio</Option>
-          <Option value="freetext">freetext</Option>
-          <Option value="multiselect">multiselect</Option>
+          <Option value={'Select one'} disabled label="Select one (Required!)" />
+          <Option value="dropdown" />
+          <Option value="radio" />
+          <Option value="freetext" />
+          <Option value="multiselect" />
         </Select>
       );
       return (
@@ -376,7 +374,7 @@ export class Question extends React.Component<allProps, IState> {
               <div className={titleEditStyles}>
                 <TextInput
                   name="editedTitle"
-                  ref={area => {
+                  inputRef={area => {
                     this.editTitleInput = area;
                   }}
                   value={editedTitle}
@@ -398,7 +396,7 @@ export class Question extends React.Component<allProps, IState> {
               <div className={orderEditStyles}>
                 <TextInput
                   name="editedOrder"
-                  ref={area => {
+                  inputRef={area => {
                     this.editOrderInput = area;
                   }}
                   value={editedOrder.toString()}
@@ -433,11 +431,9 @@ export class Question extends React.Component<allProps, IState> {
                 value={question.applicableIfType || 'Select one'}
                 onChange={this.onSelectChange}
               >
-                <Option value={'Select one'} disabled={true}>
-                  Select one (Required!)
-                </Option>
-                <Option value="oneTrue">one true</Option>
-                <Option value="allTrue">all true</Option>
+                <Option value={'Select one'} disabled={true} label="Select one (Required!)" />
+                <Option value="oneTrue" label="one true" />
+                <Option value="allTrue" label="all true" />
               </Select>
               <br />
               <QuestionConditions

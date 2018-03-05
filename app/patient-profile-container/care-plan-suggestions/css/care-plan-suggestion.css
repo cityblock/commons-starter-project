@@ -1,0 +1,48 @@
+@import '../../../shared/css/sizes';
+
+.container,
+.header,
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  justify-content: space-between;
+  background: var(--highlight-background-color);
+  border-radius: var(--big-border-radius);
+  border: 1px dashed var(--navy-color);
+  padding: var(--extra-small-gutter) var(--small-gutter);
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.container:last-child {
+  margin-bottom: 0;
+}
+
+.container h1,
+.title {
+  margin: 0;
+  padding: 0;
+}
+
+.container h1 {
+  color: var(--black-color);
+  font-size: var(--medium-large-font-size);
+  font-weight: var(--roboto-medium-weight);
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.header {
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.title {
+  color: var(--light-blue-color);
+  font-size: var(--small-font-size);
+  font-weight: var(--roboto-medium-weight);
+}
+
+svg.icon {
+  margin-left: var(--gutter);
+}

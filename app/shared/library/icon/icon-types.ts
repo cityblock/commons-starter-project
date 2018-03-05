@@ -7,6 +7,7 @@ export type IconName =
   | 'arrowBack'
   | 'assignmentInd'
   | 'assignmentTurnedIn'
+  | 'check'
   | 'checkCircle'
   | 'close'
   | 'create'

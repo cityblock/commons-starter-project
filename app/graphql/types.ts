@@ -9014,6 +9014,111 @@ export interface FullAnswerFragment {
   } | null,
 };
 
+export interface FullCarePlanSuggestionForPatientFragment {
+  id: string,
+  patientId: string,
+  patient:  {
+    id: string,
+    firstName: string,
+    middleName: string | null,
+    lastName: string,
+    dateOfBirth: string | null,
+    createdAt: string,
+    coreIdentityVerifiedAt: string | null,
+    patientInfo:  {
+      id: string,
+      gender: Gender | null,
+      language: string | null,
+      primaryAddress:  {
+        id: string,
+        zip: string | null,
+      } | null,
+      primaryEmail:  {
+        id: string,
+        emailAddress: string,
+      } | null,
+    },
+  },
+  suggestionType: CarePlanSuggestionType,
+  concernId: string | null,
+  concern:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
+  } | null,
+  goalSuggestionTemplateId: string | null,
+  goalSuggestionTemplate:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      CBOCategoryId: string | null,
+    } >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+  acceptedById: string | null,
+  acceptedBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    googleProfileImageUrl: string | null,
+  } | null,
+  dismissedById: string | null,
+  dismissedBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    googleProfileImageUrl: string | null,
+  } | null,
+  dismissedReason: string | null,
+  createdAt: string,
+  updatedAt: string,
+  dismissedAt: string | null,
+  acceptedAt: string | null,
+  patientScreeningToolSubmissionId: string | null,
+  computedField:  {
+    id: string,
+    label: string,
+  } | null,
+  riskAreaAssessmentSubmission:  {
+    id: string,
+    riskArea:  {
+      id: string,
+      title: string,
+    } | null,
+  } | null,
+  patientScreeningToolSubmission:  {
+    id: string,
+    screeningTool:  {
+      id: string,
+      title: string,
+    },
+  } | null,
+};
+
 export interface FullCarePlanSuggestionFragment {
   id: string,
   patientId: string,

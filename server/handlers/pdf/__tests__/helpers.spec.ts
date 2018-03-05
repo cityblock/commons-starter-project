@@ -67,7 +67,9 @@ describe('PDF Handler Helpers', () => {
         lastName: 'Tarth',
       };
 
-      expect(formatPrintableMapPdfFileName(patient2 as any)).toBe('Brienne_of_Tarth_Jan_1_2018_MAP');
+      expect(formatPrintableMapPdfFileName(patient2 as any)).toBe(
+        'Brienne_of_Tarth_Jan_1_2018_MAP',
+      );
     });
   });
 });

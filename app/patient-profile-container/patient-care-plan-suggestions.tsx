@@ -5,11 +5,12 @@ import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.
 import {
   getPatientCarePlanSuggestionsQuery,
   getPatientCareTeamQuery,
-  FullCarePlanSuggestionFragment,
+  FullCarePlanSuggestionForPatientFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
 import TextDivider from '../shared/library/text-divider/text-divider';
+import CarePlanSuggestion from './care-plan-suggestions/care-plan-suggestion';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestion from './patient-care-plan-suggestion';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
@@ -40,24 +41,15 @@ interface IGraphqlProps {
 
 interface IState {
   acceptModalVisible: boolean;
-  acceptedSuggestion: FullCarePlanSuggestionFragment | null;
+  acceptedSuggestion: FullCarePlanSuggestionForPatientFragment | null;
   acceptedTaskTemplateIds: string[];
   dismissModalVisible: boolean;
-  dismissedSuggestion: FullCarePlanSuggestionFragment | null;
+  dismissedSuggestion: FullCarePlanSuggestionForPatientFragment | null;
 }
 
 export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps, IState> {
   constructor(props: IProps & IGraphqlProps) {
     super(props);
-
-    this.renderSuggestions = this.renderSuggestions.bind(this);
-    this.defaultSuggestionsHtml = this.defaultSuggestionsHtml.bind(this);
-    this.onAcceptSuggestion = this.onAcceptSuggestion.bind(this);
-    this.onAcceptModalDismiss = this.onAcceptModalDismiss.bind(this);
-    this.onDismissSuggestion = this.onDismissSuggestion.bind(this);
-    this.onDismissModalDismiss = this.onDismissModalDismiss.bind(this);
-    this.renderSuggestionsHtml = this.renderSuggestionsHtml.bind(this);
-    this.renderEmptySuggestionsHtml = this.renderEmptySuggestionsHtml.bind(this);
 
     this.state = {
       acceptModalVisible: false,
@@ -68,10 +60,10 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
     };
   }
 
-  onAcceptSuggestion(
-    acceptedSuggestion: FullCarePlanSuggestionFragment,
+  onAcceptSuggestion = (
+    acceptedSuggestion: FullCarePlanSuggestionForPatientFragment,
     taskTemplateIds?: string[],
-  ) {
+  ) => {
     this.setState({
       acceptModalVisible: true,
       acceptedSuggestion,
@@ -79,17 +71,17 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
       dismissedSuggestion: null,
       dismissModalVisible: false,
     });
-  }
+  };
 
-  onAcceptModalDismiss() {
+  onAcceptModalDismiss = () => {
     this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: null,
       acceptedTaskTemplateIds: [],
     });
-  }
+  };
 
-  onDismissSuggestion(dismissedSuggestion: FullCarePlanSuggestionFragment) {
+  onDismissSuggestion = (dismissedSuggestion: FullCarePlanSuggestionForPatientFragment) => {
     this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: null,
@@ -97,16 +89,16 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
       dismissModalVisible: true,
       dismissedSuggestion,
     });
-  }
+  };
 
-  onDismissModalDismiss() {
+  onDismissModalDismiss = () => {
     this.setState({
       dismissModalVisible: false,
       dismissedSuggestion: null,
     });
-  }
+  };
 
-  defaultSuggestionsHtml(suggestionType: SuggestionTypes) {
+  defaultSuggestionsHtml = (suggestionType: SuggestionTypes) => {
     const { loading } = this.props;
 
     return (
@@ -114,6 +106,17 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
         {loading ? 'Loading...' : `No suggested ${suggestionType}s.`}
       </div>
     );
+  };
+
+  renderConcerns(suggestions: FullCarePlanSuggestionForPatientFragment[]) {
+    return suggestions.map(suggestion => (
+      <CarePlanSuggestion
+        key={suggestion.id}
+        suggestion={suggestion}
+        onAccept={() => this.onAcceptSuggestion(suggestion)}
+        onDismiss={() => this.onDismissSuggestion(suggestion)}
+      />
+    ));
   }
 
   renderSuggestions(suggestionType: SuggestionTypes) {
@@ -130,7 +133,9 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
         carePlanSuggestion && carePlanSuggestion.suggestionType === suggestionType,
     );
 
-    if (suggestionsToUse.length) {
+    if (suggestionsToUse.length && suggestionType === 'concern') {
+      return this.renderConcerns(suggestionsToUse as FullCarePlanSuggestionForPatientFragment[]);
+    } else if (suggestionsToUse.length) {
       return suggestionsToUse.map(
         suggestion =>
           suggestion ? (

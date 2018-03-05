@@ -13,6 +13,7 @@ import AlarmIcon from 'material-ui-icons/Alarm';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
+import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
 import Create from 'material-ui-icons/Create';
@@ -61,6 +62,7 @@ const components: IconComponents = {
   arrowBack: ArrowBackIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
+  check: CheckIcon,
   checkCircle: CheckCircleIcon,
   close: CloseIcon,
   create: Create,

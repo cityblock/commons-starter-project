@@ -1,0 +1,23 @@
+#import "../fragments/full-care-plan-suggestion.graphql"
+
+fragment FullCarePlanSuggestionForPatient on CarePlanSuggestion {
+  ...FullCarePlanSuggestion
+  computedField {
+    id
+    label
+  }
+  riskAreaAssessmentSubmission {
+    id
+    riskArea {
+      id
+      title
+    }
+  }
+  patientScreeningToolSubmission {
+    id
+    screeningTool {
+      id
+      title
+    }
+  }
+}

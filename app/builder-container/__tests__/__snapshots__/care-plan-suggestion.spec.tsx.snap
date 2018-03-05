@@ -10,7 +10,7 @@ exports[`renders a care plan suggestion 1`] = `
     >
       <svg
         aria-hidden="true"
-        className="MuiSvgIcon-root-1 icon"
+        className="MuiSvgIcon-root-1 icon hover"
         color={undefined}
         focusable="false"
         onClick={[Function]}

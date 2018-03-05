@@ -6,7 +6,7 @@ import { isDueSoon } from '../../helpers/format-helpers';
 import TextInfo from '../text-info/text-info';
 import * as styles from './css/date-info.css';
 
-type Label = 'created' | 'updated' | 'due'; // predefined translate message ids
+type Label = 'created' | 'updated' | 'due' | 'suggested'; // predefined translate message ids
 type Units = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year';
 
 interface IProps {

@@ -18,7 +18,15 @@ svg.icon.blue {
   fill: var(--blue-color);
 }
 
+svg.icon.green {
+  fill: var(--green-color);
+}
+
 svg.icon.large {
   width: 27px;
   height: 27px;
+}
+
+svg.icon.hover {
+  cursor: pointer;
 }

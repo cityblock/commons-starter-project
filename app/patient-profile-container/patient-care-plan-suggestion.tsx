@@ -1,15 +1,21 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
-import { getPatientCareTeamQuery, FullCarePlanSuggestionFragment } from '../graphql/types';
+import {
+  getPatientCareTeamQuery,
+  FullCarePlanSuggestionForPatientFragment,
+} from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
 import TaskTemplate from './task-template';
 
 interface IProps {
-  suggestion: FullCarePlanSuggestionFragment;
+  suggestion: FullCarePlanSuggestionForPatientFragment;
   careTeam?: getPatientCareTeamQuery['patientCareTeam'];
-  onAccept: (suggestion: FullCarePlanSuggestionFragment, taskTemplateIds?: string[]) => any;
-  onDismiss: (suggestion: FullCarePlanSuggestionFragment) => any;
+  onAccept: (
+    suggestion: FullCarePlanSuggestionForPatientFragment,
+    taskTemplateIds?: string[],
+  ) => any;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => any;
 }
 
 interface IState {

@@ -422,6 +422,33 @@ export const carePlanSuggestionWithConcern = {
   patientScreeningToolSubmission: null,
 };
 
+export const fullCarePlanSuggestionWithConcern = {
+  id: 'care-plan-suggestion-id',
+  patientId: 'patient-id',
+  patient,
+  suggestionType: 'concern' as any,
+  concernId: 'concern-id',
+  concern,
+  goalSuggestionTemplateId: null,
+  goalSuggestionTemplate: null,
+  acceptedById: null,
+  acceptedBy: null,
+  dismissedById: null,
+  dismissedBy: null,
+  dismissedReason: null,
+  dismissedAt: null,
+  acceptedAt: null,
+  createdAt: '2017-08-16T19:27:36.378Z',
+  updatedAt: '2017-08-16T19:27:36.378Z',
+  patientScreeningToolSubmissionId: null,
+  computedField: null,
+  riskAreaAssessmentSubmission: {
+    ...riskAreaAssessmentSubmission,
+    riskArea,
+  },
+  patientScreeningToolSubmission: null,
+};
+
 export const carePlanSuggestionWithGoal = {
   id: 'care-plan-suggestion-id',
   patientId: 'patient-id',

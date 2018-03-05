@@ -14,5 +14,4 @@ export const resultRow: string;
 export const resultLabel: string;
 export const resultCount: string;
 export const buttons: string;
-export const button: string;
 export const smallButton: string;

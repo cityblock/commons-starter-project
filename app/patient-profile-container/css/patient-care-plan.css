@@ -4,14 +4,6 @@
   margin-left: 10px;
 }
 
-.invertedButton {
-  @apply --inverted-button;
-}
-
-.button {
-  @apply --button;
-}
-
 .hidden {
   display: none;
 }
@@ -24,10 +16,6 @@
 
 .paddingTop {
   padding-top: var(--small-gutter);
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 .carePlanSuggestions,

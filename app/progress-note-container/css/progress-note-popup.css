@@ -67,13 +67,6 @@
   background: var(--white-font-color);
 }
 
-.button {
-  @apply --button;
-
-  height: 32px;
-  padding: 8px 33px 7px;
-}
-
 .buttonInactive {
   opacity: 0.5;
 }

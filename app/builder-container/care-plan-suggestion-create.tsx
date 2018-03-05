@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
@@ -15,9 +14,11 @@ import {
   FullGoalSuggestionTemplateFragment,
   FullScreeningToolScoreRangeFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import * as styles from './css/risk-area-create.css';
 
 interface IProps {
@@ -50,7 +51,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
   constructor(props: allProps) {
     super(props);
 
-    this.onClick = this.onClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.renderMetadata = this.renderMetadata.bind(this);
     this.onUpdateSuggestionType = this.onUpdateSuggestionType.bind(this);
@@ -70,9 +71,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     this.setState({ suggestionId: value });
   }
 
-  async onClick(event: React.MouseEvent<HTMLInputElement>) {
-    event.preventDefault();
-
+  async onSubmit() {
     const { suggestionType, suggestionId } = this.state;
     const {
       createGoalSuggestion,
@@ -159,9 +158,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     }
 
     return (goals || []).filter(goal => existingGoalIds.indexOf(goal.id) === -1).map(goal => (
-      <option key={goal.id} value={goal.id}>
+      <Option key={goal.id} value={goal.id}>
         {goal.title}
-      </option>
+      </Option>
     ));
   }
 
@@ -182,9 +181,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     return (concerns || [])
       .filter(concern => existingConcernIds.indexOf(concern.id) === -1)
       .map(concern => (
-        <option key={concern.id} value={concern.id}>
+        <Option key={concern.id} value={concern.id}>
           {concern.title}
-        </option>
+        </Option>
       ));
   }
 
@@ -206,17 +205,12 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     } else if (!!suggestionType) {
       secondaryDropdownHtml = (
         <div className={styles.flexInputGroup}>
-          <select
-            name="suggestionId"
-            value={suggestionId || ''}
-            onChange={this.onChange}
-            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
-          >
-            <option value="" disabled hidden>
+          <Select name="suggestionId" value={suggestionId || ''} onChange={this.onChange}>
+            <Option value="" disabled>
               Select a suggestion
-            </option>
+            </Option>
             {suggestionOptions}
-          </select>
+          </Select>
         </div>
       );
     }
@@ -228,29 +222,23 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
           </div>
         </div>
         <div className={styles.flexInputGroup}>
-          <select
+          <Select
             name="suggestionType"
             value={suggestionType || ''}
             onChange={this.onUpdateSuggestionType}
-            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
           >
-            <option value="" disabled hidden>
+            <Option value="" disabled>
               Select a type
-            </option>
-            <option value="concern">Concern</option>
-            <option value="goal">Goal/Tasks</option>
-          </select>
+            </Option>
+            <Option value="concern">Concern</Option>
+            <Option value="goal">Goal/Tasks</Option>
+          </Select>
         </div>
         {secondaryDropdownHtml}
         {this.renderMetadata()}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input
-              type="submit"
-              onClick={this.onClick}
-              className={styles.submitButton}
-              value={'Add care plan suggestion'}
-            />
+            <Button onClick={this.onSubmit} label={'Add care plan suggestion'} />
           </div>
         </div>
       </div>

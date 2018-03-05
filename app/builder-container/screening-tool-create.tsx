@@ -8,9 +8,12 @@ import {
   screeningToolCreateMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as screeningToolStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
@@ -74,8 +77,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     const { history, routeBase } = this.props;
     if (this.props.createScreeningTool) {
       try {
@@ -115,47 +117,41 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={screeningToolStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={this.props.onClose} />
-          </div>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
-            </div>
-            <div className={styles.inputGroup}>
-              <input
-                name="title"
-                value={screeningTool.title}
-                placeholder={'Enter screening tool title'}
-                className={formStyles.input}
-                onChange={this.onChange}
-              />
-              <select
-                required
-                name="riskAreaId"
-                value={screeningTool.riskAreaId}
-                onChange={this.onChange}
-                className={formStyles.select}
-              >
-                <option value="" disabled hidden>
-                  Select Assessment
-                </option>
-                {this.renderRiskAreaOptions()}
-              </select>
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={this.props.onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={loadingClass}>
+            <div className={styles.loadingContainer}>
+              <div className={loadingStyles.loadingSpinner} />
             </div>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>
-                Cancel
-              </div>
-              <input type="submit" className={styles.submitButton} value="Add screening tool" />
-            </div>
+          <div className={styles.inputGroup}>
+            <TextInput
+              name="title"
+              value={screeningTool.title}
+              placeholderMessageId="builder.screeningToolTitle"
+              onChange={this.onChange}
+            />
+            <Select
+              required
+              name="riskAreaId"
+              value={screeningTool.riskAreaId}
+              onChange={this.onChange}
+            >
+              <Option value="" disabled>
+                Select Assessment
+              </Option>
+              {this.renderRiskAreaOptions()}
+            </Select>
           </div>
-        </form>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" onClick={this.props.onClose} messageId="builder.cancel" />
+            <Button onClick={this.onSubmit} label="Add screening tool" />
+          </div>
+        </div>
       </div>
     );
   }

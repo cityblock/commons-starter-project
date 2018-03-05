@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Waypoint from 'react-waypoint';
+import Button from '../library/button/button';
 import * as styles from './css/infinite-scroll.css';
 
 interface IProps {
@@ -34,11 +35,7 @@ class InfiniteScroll extends React.Component<IProps, {}> {
 
     let fetchMoreButton = null;
     if (hasNextPage && !loading) {
-      fetchMoreButton = (
-        <div onClick={this.getNextPage} className={styles.button}>
-          Fetch More
-        </div>
-      );
+      fetchMoreButton = <Button onClick={this.getNextPage} label="Fetch More" />;
     }
     return (
       <div className={listClassName}>

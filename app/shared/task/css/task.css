@@ -73,10 +73,6 @@
   padding: 0 var(--small-gutter);
 }
 
-.invertedButton {
-  @apply --inverted-button;
-}
-
 .loadingErrorButton {
   width: 94px;
   height: 32px;
@@ -689,14 +685,6 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 .deleteConfirmButton {
   height: 32px;
   width: 94px;
-  padding: 9px;
-  font-size: var(--small-font-size);
-  line-height: var(--small-font-line-height);
-}
-
-.deleteConfirmButton {
-  @apply --red-button;
-
   padding: 9px;
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

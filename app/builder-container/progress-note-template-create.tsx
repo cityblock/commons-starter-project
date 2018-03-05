@@ -7,9 +7,10 @@ import {
   progressNoteTemplateCreateMutation,
   progressNoteTemplateCreateMutationVariables,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as progressNoteTemplateStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import TextInput from '../shared/library/text-input/text-input';
 import * as styles from './css/risk-area-create.css';
 
 export interface IOptions {
@@ -60,8 +61,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
     this.setState({ progressNoteTemplate });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     const { history, routeBase } = this.props;
     if (this.props.createProgressNoteTemplate) {
       try {
@@ -89,39 +89,30 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 
     return (
       <div className={progressNoteTemplateStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={this.props.onClose} />
-          </div>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
-            </div>
-            <div className={styles.inputGroup}>
-              <input
-                name="title"
-                value={progressNoteTemplate.title}
-                placeholder={'Enter progress note template title'}
-                className={formStyles.input}
-                onChange={this.onChange}
-              />
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={this.props.onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={loadingClass}>
+            <div className={styles.loadingContainer}>
+              <div className={loadingStyles.loadingSpinner} />
             </div>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>
-                Cancel
-              </div>
-              <input
-                type="submit"
-                className={styles.submitButton}
-                value="Add progress note template"
-              />
-            </div>
+          <div className={styles.inputGroup}>
+            <TextInput
+              name="title"
+              value={progressNoteTemplate.title}
+              placeholderMessageId="builder.enterProgressNoteTemplateTitle"
+              onChange={this.onChange}
+            />
           </div>
-        </form>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" messageId="builder.cancel" onClick={this.props.onClose} />
+            <Button onClick={this.onSubmit} label="Add progress note template" />
+          </div>
+        </div>
       </div>
     );
   }

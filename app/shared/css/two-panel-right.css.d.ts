@@ -8,7 +8,6 @@ export const loadingErrorIcon: string;
 export const deleteConfirmationIcon: string;
 export const loadingErrorLabel: string;
 export const loadingErrorSubheading: string;
-export const invertedButton: string;
 export const loadingErrorButton: string;
 export const borderTop: string;
 export const infoRow: string;

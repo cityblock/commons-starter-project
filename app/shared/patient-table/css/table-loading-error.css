@@ -30,10 +30,3 @@
   color: var(--gray-font-color);
   margin-bottom: 30px;
 }
-
-.errorButton {
-  @apply --inverted-button;
-
-  padding: 10px 20px 8px;
-  font-size: var(--small-font-size);
-}

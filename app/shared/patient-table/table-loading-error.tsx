@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Button from '../../shared/library/button/button';
 import * as styles from './css/table-loading-error.css';
 
 interface IProps {
@@ -16,13 +17,7 @@ export const TableLoadingError: React.StatelessComponent<IProps> = props => {
       <FormattedMessage id="error.tableLoadingMessage">
         {(message: string) => <div className={styles.errorMessage}>{message}</div>}
       </FormattedMessage>
-      <FormattedMessage id="error.tableLoadingButton">
-        {(message: string) => (
-          <div className={styles.errorButton} onClick={props.onRetryClick}>
-            {message}
-          </div>
-        )}
-      </FormattedMessage>
+      <Button messageId="error.tableLoadingButton" onClick={props.onRetryClick} />
     </div>
   );
 };

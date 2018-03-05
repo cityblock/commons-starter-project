@@ -1,7 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullCarePlanSuggestionFragment } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
+import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import * as styles from './css/patient-care-plan.css';
 
 interface IProps {
@@ -15,14 +17,7 @@ interface IProps {
 const PopupPatientCarePlanSuggestionDismissedModalBody = (props: IProps) => {
   const { dismissedReason, onChange, onDismiss, onSubmit, suggestion } = props;
 
-  const cancelButtonStyles = classNames(
-    styles.invertedButton,
-    styles.rightSmallGutter,
-    styles.smallButton,
-  );
-  const addButtonStyles = classNames(styles.button, styles.smallButton, styles.redButton);
   const dismissDisplayText = suggestion ? suggestion.suggestionType : '';
-
   return (
     <div className={styles.acceptModalBody}>
       <div className={classNames(styles.acceptModalTitle, styles.noMargin)}>
@@ -30,29 +25,20 @@ const PopupPatientCarePlanSuggestionDismissedModalBody = (props: IProps) => {
       </div>
       <div className={styles.acceptModalSubtitle}>Select from one of the available options</div>
       <div className={styles.acceptModalDropdown}>
-        <select
-          name="dismissedReason"
-          className={classNames(formStyles.select, styles.roundedInput)}
-          onChange={onChange}
-          value={dismissedReason}
-        >
-          <option value="" disabled hidden>
+        <Select name="dismissedReason" onChange={onChange} value={dismissedReason}>
+          <Option value="" disabled>
             Select a reason
-          </option>
-          <option value="not applicable">Not applicable to this patient</option>
-          <option value="too much work">This suggestion requires too much work</option>
-          <option value="dangerous">
+          </Option>
+          <Option value="not applicable">Not applicable to this patient</Option>
+          <Option value="too much work">This suggestion requires too much work</Option>
+          <Option value="dangerous">
             Tackling this suggestion would be dangerous for the patient
-          </option>
-        </select>
+          </Option>
+        </Select>
       </div>
       <div className={styles.acceptModalButtons}>
-        <div className={cancelButtonStyles} onClick={onDismiss}>
-          Cancel
-        </div>
-        <div className={addButtonStyles} onClick={onSubmit}>
-          {`Dismiss ${dismissDisplayText}`}
-        </div>
+        <Button messageId="builder.cancel" small color="white" onClick={onDismiss} />
+        <Button label={`Dismiss ${dismissDisplayText}`} small onClick={onSubmit} />
       </div>
     </div>
   );

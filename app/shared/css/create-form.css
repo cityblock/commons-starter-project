@@ -71,18 +71,6 @@
   justify-content: space-between;
 }
 
-.submitButton {
-  @apply --button;
-  @apply --small-button;
-}
-
-.cancelButton {
-  @apply --inverted-button;
-  @apply --small-button;
-
-  margin-right: 20px;
-}
-
 .smallSection {
   display: flex;
   align-items: center;

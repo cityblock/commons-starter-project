@@ -6,7 +6,6 @@ export const topBar: string;
 export const topBarLabel: string;
 export const closeButton: string;
 export const middleBar: string;
-export const button: string;
 export const buttonInactive: string;
 export const patientContainer: string;
 export const patientContainerRight: string;

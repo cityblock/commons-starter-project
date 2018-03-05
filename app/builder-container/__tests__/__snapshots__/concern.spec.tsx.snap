@@ -18,18 +18,15 @@ exports[`shallow rendered renders with concern 1`] = `
     <div
       className="deleteConfirmationButtons"
     >
-      <div
-        className="deleteCancelButton invertedButton"
+      <Button
+        color="white"
+        messageId="builder.cancel"
         onClick={[Function]}
-      >
-        Cancel
-      </div>
-      <div
-        className="deleteConfirmButton"
+      />
+      <Button
+        messageId="computedField.confirmDelete"
         onClick={[Function]}
-      >
-        Yes, delete
-      </div>
+      />
     </div>
     <div
       className="deleteError hidden"

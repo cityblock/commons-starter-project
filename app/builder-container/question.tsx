@@ -10,8 +10,11 @@ import {
   questionEditMutationVariables,
   FullQuestionFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as styles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
 import QuestionConditions from './question-conditions';
@@ -312,21 +315,20 @@ export class Question extends React.Component<allProps, IState> {
       const answerDisplayHtml = question.computedField ? (
         <div className={styles.largeText}>{question.answerType}</div>
       ) : (
-        <select
+        <Select
           required
           name="answerType"
           value={question.answerType || 'Select one'}
           onChange={this.onSelectChange}
-          className={classNames(formStyles.select, formStyles.inputSmall)}
         >
-          <option value={'Select one'} disabled={true}>
+          <Option value={'Select one'} disabled>
             Select one (Required!)
-          </option>
-          <option value="dropdown">dropdown</option>
-          <option value="radio">radio</option>
-          <option value="freetext">freetext</option>
-          <option value="multiselect">multiselect</option>
-        </select>
+          </Option>
+          <Option value="dropdown">dropdown</Option>
+          <Option value="radio">radio</Option>
+          <Option value="freetext">freetext</Option>
+          <Option value="multiselect">multiselect</Option>
+        </Select>
       );
       return (
         <div className={outerContainerStyles}>
@@ -336,15 +338,8 @@ export class Question extends React.Component<allProps, IState> {
               Are you sure you want to delete this question?
             </div>
             <div className={styles.deleteConfirmationButtons}>
-              <div
-                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}
-              >
-                Cancel
-              </div>
-              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
-                Yes, delete
-              </div>
+              <Button color="white" onClick={this.onCancelDelete} messageId="builder.cancel" />
+              <Button onClick={this.onConfirmDelete} messageId="computedField.confirmDelete" />
             </div>
             <div className={deleteErrorStyles}>
               <div className={classNames(styles.redText, styles.smallText)}>
@@ -379,7 +374,7 @@ export class Question extends React.Component<allProps, IState> {
                 {question.title}
               </div>
               <div className={titleEditStyles}>
-                <input
+                <TextInput
                   name="editedTitle"
                   ref={area => {
                     this.editTitleInput = area;
@@ -401,13 +396,12 @@ export class Question extends React.Component<allProps, IState> {
                 {question.order}
               </div>
               <div className={orderEditStyles}>
-                <input
-                  type="number"
+                <TextInput
                   name="editedOrder"
                   ref={area => {
                     this.editOrderInput = area;
                   }}
-                  value={editedOrder}
+                  value={editedOrder.toString()}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
                   onBlur={this.onBlur}
@@ -434,18 +428,17 @@ export class Question extends React.Component<allProps, IState> {
               />
               <div className={styles.smallText}>Applicable if type:</div>
               <br />
-              <select
+              <Select
                 name="applicableIfType"
                 value={question.applicableIfType || 'Select one'}
                 onChange={this.onSelectChange}
-                className={classNames(formStyles.select, formStyles.inputSmall)}
               >
-                <option value={'Select one'} disabled={true}>
+                <Option value={'Select one'} disabled={true}>
                   Select one (Required!)
-                </option>
-                <option value="oneTrue">one true</option>
-                <option value="allTrue">all true</option>
-              </select>
+                </Option>
+                <Option value="oneTrue">one true</Option>
+                <Option value="allTrue">all true</Option>
+              </Select>
               <br />
               <QuestionConditions
                 questions={this.getQuestionsForConditions()}
@@ -473,12 +466,7 @@ export class Question extends React.Component<allProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <div
-                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadQuestion}
-              >
-                Try again
-              </div>
+              <Button onClick={this.reloadQuestion} label="Try again" />
             </div>
           </div>
         );

@@ -37,50 +37,68 @@ exports[`renders popup for concern suggestion 1`] = `
           className="acceptModalDropdown"
         >
           <select
-            className="select roundedInput"
+            className="select noValue"
+            disabled={undefined}
             name="dismissedReason"
             onChange={[Function]}
+            required={undefined}
             value=""
           >
             <option
               disabled={true}
-              hidden={true}
               value=""
             >
-              Select a reason
+              
             </option>
             <option
+              disabled={undefined}
               value="not applicable"
             >
-              Not applicable to this patient
+              not applicable
             </option>
             <option
+              disabled={undefined}
               value="too much work"
             >
-              This suggestion requires too much work
+              too much work
             </option>
             <option
+              disabled={undefined}
               value="dangerous"
             >
-              Tackling this suggestion would be dangerous for the patient
+              dangerous
             </option>
           </select>
         </div>
         <div
           className="acceptModalButtons"
         >
-          <div
-            className="invertedButton rightSmallGutter smallButton"
+          <button
+            className="button white small"
+            disabled={false}
             onClick={[Function]}
           >
-            Cancel
-          </div>
-          <div
-            className="button smallButton redButton"
+            <span
+              className="flex"
+            >
+              <span>
+                Cancel
+              </span>
+            </span>
+          </button>
+          <button
+            className="button small"
+            disabled={false}
             onClick={[Function]}
           >
-            Dismiss concern
-          </div>
+            <span
+              className="flex"
+            >
+              <span>
+                Dismiss concern
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </div>
@@ -125,50 +143,68 @@ exports[`renders popup for goal suggestion 1`] = `
           className="acceptModalDropdown"
         >
           <select
-            className="select roundedInput"
+            className="select noValue"
+            disabled={undefined}
             name="dismissedReason"
             onChange={[Function]}
+            required={undefined}
             value=""
           >
             <option
               disabled={true}
-              hidden={true}
               value=""
             >
-              Select a reason
+              
             </option>
             <option
+              disabled={undefined}
               value="not applicable"
             >
-              Not applicable to this patient
+              not applicable
             </option>
             <option
+              disabled={undefined}
               value="too much work"
             >
-              This suggestion requires too much work
+              too much work
             </option>
             <option
+              disabled={undefined}
               value="dangerous"
             >
-              Tackling this suggestion would be dangerous for the patient
+              dangerous
             </option>
           </select>
         </div>
         <div
           className="acceptModalButtons"
         >
-          <div
-            className="invertedButton rightSmallGutter smallButton"
+          <button
+            className="button white small"
+            disabled={false}
             onClick={[Function]}
           >
-            Cancel
-          </div>
-          <div
-            className="button smallButton redButton"
+            <span
+              className="flex"
+            >
+              <span>
+                Cancel
+              </span>
+            </span>
+          </button>
+          <button
+            className="button small"
+            disabled={false}
             onClick={[Function]}
           >
-            Dismiss goal
-          </div>
+            <span
+              className="flex"
+            >
+              <span>
+                Dismiss goal
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </div>

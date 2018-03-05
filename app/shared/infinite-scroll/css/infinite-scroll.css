@@ -9,18 +9,6 @@
   transition: width 0.3s ease-out;
 }
 
-.button {
-  @apply --inverted-button;
-
-  width: 94px;
-  height: 32px;
-  margin: 0 auto;
-  padding: 9px 0 0 0;
-  text-align: center;
-  font-size: var(--small-font-size);
-  line-height: var(--small-font-line-height);
-}
-
 .compressed {
   width: 50%;
 }

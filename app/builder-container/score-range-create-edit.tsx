@@ -18,6 +18,7 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as scoreRangeStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import { IUpdatedField } from '../shared/util/updated-fields';
@@ -104,8 +105,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     try {
       this.setState({ loading: true });
       const filtered = omitBy<screeningToolScoreRangeCreateMutationVariables>(
@@ -158,7 +158,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
       <CarePlanSuggestions scoreRange={this.props.scoreRange} />
     ) : null;
     return (
-      <form onSubmit={this.onSubmit} className={scoreRangeStyles.borderContainer}>
+      <div className={scoreRangeStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner} />
@@ -215,11 +215,11 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
         {carePlanSuggestionsHtml}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input type="submit" className={styles.submitButton} value={createEditText} />
+            <Button label={createEditText} onClick={this.onSubmit} />
             {deleteHtml}
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }

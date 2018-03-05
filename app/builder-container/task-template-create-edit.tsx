@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -14,10 +13,13 @@ import {
   taskTemplateEditMutationVariables,
   FullTaskTemplateFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as taskTemplateStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import CBOCategorySelect from '../shared/library/cbo-category-select/cbo-category-select';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
@@ -125,15 +127,13 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   };
 
-  onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  onSubmit = async () => {
     const {
       goalSuggestionTemplateId,
       editTaskTemplate,
       createTaskTemplate,
       taskTemplate,
     } = this.props;
-
-    event.preventDefault();
     try {
       this.setState({ loading: true });
       const filtered = omitBy<taskTemplateCreateMutationVariables>(
@@ -212,7 +212,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
       <div className={taskTemplateStyles.smallText}>New Task!</div>
     );
     return (
-      <form onSubmit={this.onSubmit} className={taskTemplateStyles.borderContainer}>
+      <div className={taskTemplateStyles.borderContainer}>
         <div className={styles.error}>{error}</div>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
@@ -224,42 +224,35 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
           <br />
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Title:</div>
-            <input
+            <TextInput
               name="title"
               value={taskTemplate.title}
-              placeholder={'Enter task title'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
+              placeholderMessageId="builder.enterTaskTitle"
               onChange={this.onChange}
             />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Priority:</div>
-            <select
-              name="priority"
-              value={taskTemplate.priority || ''}
-              onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
-            >
-              <option value="" disabled hidden>
+            <Select name="priority" value={taskTemplate.priority || ''} onChange={this.onChange}>
+              <Option value="" disabled>
                 Select Priority
-              </option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
+              </Option>
+              <Option value="low">Low</Option>
+              <Option value="medium">Medium</Option>
+              <Option value="high">High</Option>
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Repeating:</div>
-            <select
+            <Select
               required
               name="repeating"
               value={taskTemplate.repeating ? taskTemplate.repeating.toString() : 'false'}
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Completed Within Interval:</div>
@@ -267,16 +260,15 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               name="completedWithinInterval"
               value={taskTemplate.completedWithinInterval || ''}
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
-              <option value="" disabled hidden>
+              <Option value="" disabled>
                 Select interval
-              </option>
-              <option value="hour">Hour</option>
-              <option value="day">Day</option>
-              <option value="week">Week</option>
-              <option value="month">Month</option>
-              <option value="year">Year</option>
+              </Option>
+              <Option value="hour">Hour</Option>
+              <Option value="day">Day</Option>
+              <Option value="week">Week</Option>
+              <Option value="month">Month</Option>
+              <Option value="year">Year</Option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
@@ -289,42 +281,40 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
                   : ''
               }
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
-              <option value="" disabled hidden>
+              <Option value="" disabled>
                 Select number
-              </option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
+              </Option>
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+              <Option value="6">6</Option>
+              <Option value="7">7</Option>
+              <Option value="8">8</Option>
+              <Option value="9">9</Option>
+              <Option value="10">10</Option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Default Assignee Role:</div>
-            <select
+            <Select
               name="careTeamAssigneeRole"
               value={taskTemplate.careTeamAssigneeRole || ''}
               onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall)}
             >
-              <option value="" disabled hidden>
+              <Option value="" disabled>
                 Select role
-              </option>
-              <option value="physician">Physician</option>
-              <option value="nurseCareManager">Nurse Care Manager</option>
-              <option value="healthCoach">Health Coach</option>
-              <option value="familyMember">Family Member</option>
-              <option value="primaryCarePhysician">Primary Care Physician</option>
-              <option value="communityHealthPartner">Community Health Partner</option>
-              <option value="psychiatrist">Psychiatrist</option>
-            </select>
+              </Option>
+              <Option value="physician">Physician</Option>
+              <Option value="nurseCareManager">Nurse Care Manager</Option>
+              <Option value="healthCoach">Health Coach</Option>
+              <Option value="familyMember">Family Member</Option>
+              <Option value="primaryCarePhysician">Primary Care Physician</Option>
+              <Option value="communityHealthPartner">Community Health Partner</Option>
+              <Option value="psychiatrist">Psychiatrist</Option>
+            </Select>
           </div>
           <div className={taskTemplateStyles.smallText}>
             Select a CBO category to make task template a CBO referral task:
@@ -336,11 +326,11 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input type="submit" className={styles.submitButton} value={createEditText} />
+            <Button label={createEditText} onClick={this.onSubmit} />
             {deleteHtml}
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }

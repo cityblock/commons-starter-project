@@ -70,9 +70,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   };
 
-  onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  onSubmit = async () => {
     const { createComputedField, onClose, history, routeBase } = this.props;
     const { computedField } = this.state;
     const { label, dataType } = computedField;
@@ -113,38 +111,36 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={computedFieldStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={onClose} />
-          </div>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
-            </div>
-            <div className={styles.inputGroup}>
-              <TextInput
-                name="label"
-                value={computedField.label}
-                placeholderMessageId="computedFieldCreate.createLabelPlaceholder"
-                onChange={this.onChange}
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <FormLabel htmlFor="dataType" messageId="computedFieldCreate.createDataTypeLabel" />
-              <Select name="dataType" value={computedField.dataType} onChange={this.onChange}>
-                {dataTypeOptions}
-              </Select>
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={loadingClass}>
+            <div className={styles.loadingContainer}>
+              <div className={loadingStyles.loadingSpinner} />
             </div>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <Button color="white" onClick={onClose} messageId="computedFieldCreate.cancel" />
-              <input type="submit" className={styles.submitButton} value="Add computed field" />
-            </div>
+          <div className={styles.inputGroup}>
+            <TextInput
+              name="label"
+              value={computedField.label}
+              placeholderMessageId="computedFieldCreate.createLabelPlaceholder"
+              onChange={this.onChange}
+            />
           </div>
-        </form>
+          <div className={styles.inputGroup}>
+            <FormLabel htmlFor="dataType" messageId="computedFieldCreate.createDataTypeLabel" />
+            <Select name="dataType" value={computedField.dataType} onChange={this.onChange}>
+              {dataTypeOptions}
+            </Select>
+          </div>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" onClick={onClose} messageId="computedFieldCreate.cancel" />
+            <Button onClick={this.onSubmit} label="Add computed field" />
+          </div>
+        </div>
       </div>
     );
   }

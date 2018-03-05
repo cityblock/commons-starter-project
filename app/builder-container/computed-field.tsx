@@ -112,11 +112,9 @@ export class ComputedField extends React.Component<allProps, IState> {
                 onClick={this.onCancelDelete}
                 color="white"
                 messageId="computedFieldCreate.cancel"
-                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
               />
               <Button
                 onClick={this.onConfirmDelete}
-                className={styles.deleteConfirmButton}
                 messageId="computedField.confirmDelete"
                 color="red"
               />
@@ -170,12 +168,7 @@ export class ComputedField extends React.Component<allProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <div
-                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadComputedField}
-              >
-                Try again
-              </div>
+              <Button onClick={this.reloadComputedField} label="Try again" />
             </div>
           </div>
         );

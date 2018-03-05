@@ -34,9 +34,16 @@ exports[`renders concern create 1`] = `
       >
         <input
           className="input"
+          id=""
           name="title"
+          onBlur={undefined}
           onChange={[Function]}
+          onFocus={undefined}
+          onKeyDown={undefined}
+          pattern={undefined}
           placeholder="Enter concern title"
+          required={false}
+          type="text"
           value=""
         />
       </div>
@@ -47,17 +54,32 @@ exports[`renders concern create 1`] = `
       <div
         className="formBottomContent"
       >
-        <div
-          className="cancelButton"
+        <button
+          className="button white"
+          disabled={false}
           onClick={[Function]}
         >
-          Cancel
-        </div>
-        <input
-          className="submitButton"
-          type="submit"
-          value="Add concern"
-        />
+          <span
+            className="flex"
+          >
+            <span>
+              Cancel
+            </span>
+          </span>
+        </button>
+        <button
+          className="button"
+          disabled={false}
+          onClick={[Function]}
+        >
+          <span
+            className="flex"
+          >
+            <span>
+              Add concern
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   </form>

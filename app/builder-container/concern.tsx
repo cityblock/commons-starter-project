@@ -11,6 +11,7 @@ import {
   FullConcernFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import ConcernDiagnosisCodes from './concern-diagnosis-codes';
 
@@ -212,15 +213,8 @@ export class Concern extends React.Component<allProps, IState> {
               Are you sure you want to delete this concern?
             </div>
             <div className={styles.deleteConfirmationButtons}>
-              <div
-                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}
-              >
-                Cancel
-              </div>
-              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
-                Yes, delete
-              </div>
+              <Button color="white" onClick={this.onCancelDelete} messageId="builder.cancel" />
+              <Button onClick={this.onConfirmDelete} messageId="computedField.confirmDelete" />
             </div>
             <div className={deleteErrorStyles}>
               <div className={classNames(styles.redText, styles.smallText)}>
@@ -291,12 +285,7 @@ export class Concern extends React.Component<allProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <div
-                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadConcern}
-              >
-                Try again
-              </div>
+              <Button onClick={this.reloadConcern} label="Try again" />
             </div>
           </div>
         );

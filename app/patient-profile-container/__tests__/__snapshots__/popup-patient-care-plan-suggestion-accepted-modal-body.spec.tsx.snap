@@ -13,45 +13,61 @@ exports[`renders popup modal body for concern suggestion 1`] = `
     className="acceptModalDropdown"
   >
     <select
-      className="select roundedInput"
+      className="select"
+      disabled={undefined}
       name="concernType"
       onChange={[Function]}
+      required={undefined}
       value="active"
     >
       <option
         disabled={true}
-        hidden={true}
         value=""
       >
-        Select a concern type
+        
       </option>
       <option
+        disabled={undefined}
         value="active"
       >
-        Active concern
+        active
       </option>
       <option
+        disabled={undefined}
         value="inactive"
       >
-        Inactive concern
+        inactive
       </option>
     </select>
   </div>
   <div
     className="acceptModalButtons"
   >
-    <div
-      className="invertedButton rightSmallGutter smallButton"
+    <button
+      className="button small"
+      disabled={false}
       onClick={[Function]}
     >
-      Cancel
-    </div>
-    <div
-      className="button smallButton"
+      <span
+        className="flex"
+      >
+        <span>
+          Cancel
+        </span>
+      </span>
+    </button>
+    <button
+      className="button small"
+      disabled={false}
       onClick={[Function]}
     >
-      Add to Care Plan
-    </div>
+      <span
+        className="flex"
+      >
+        <span />
+      </span>
+    </button>
+    &gt;
   </div>
 </div>
 `;
@@ -74,17 +90,18 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     className="acceptModalDropdown"
   >
     <select
-      className="select roundedInput"
+      className="select"
+      disabled={undefined}
       name="concernId"
       onChange={[Function]}
+      required={undefined}
       value="concern-id"
     >
       <option
         disabled={true}
-        hidden={true}
         value=""
       >
-        Select a concern
+        
       </option>
       <optgroup
         label="Suggested concerns"
@@ -110,45 +127,62 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     className="acceptModalInput"
   >
     <select
-      className="select roundedInput"
+      className="select"
+      disabled={undefined}
       name="concernType"
       onChange={[Function]}
+      required={undefined}
       value="active"
     >
       <option
         disabled={true}
-        hidden={true}
         value=""
       >
-        Select a concern type
+        
       </option>
       <option
+        disabled={undefined}
         value="active"
       >
-        Active concern
+        active
       </option>
       <option
+        disabled={undefined}
         value="inactive"
       >
-        Inactive concern
+        inactive
       </option>
     </select>
   </div>
   <div
     className="acceptModalButtons"
   >
-    <div
-      className="invertedButton rightSmallGutter smallButton"
+    <button
+      className="button white"
+      disabled={false}
       onClick={[Function]}
     >
-      Cancel
-    </div>
-    <div
-      className="button smallButton"
+      <span
+        className="flex"
+      >
+        <span>
+          Cancel
+        </span>
+      </span>
+    </button>
+    <button
+      className="button"
+      disabled={false}
       onClick={[Function]}
     >
-      Add to Care Plan
-    </div>
+      <span
+        className="flex"
+      >
+        <span>
+          Add to care plan
+        </span>
+      </span>
+    </button>
   </div>
 </div>
 `;

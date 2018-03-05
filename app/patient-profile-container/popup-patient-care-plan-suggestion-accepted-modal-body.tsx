@@ -7,7 +7,9 @@ import {
   getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
+import Button from '../shared/library/button/button';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
@@ -62,16 +64,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
     newConcernSelected = !includes(existingConcernIds, concernId);
   }
 
-  const cancelButtonStyles = classNames(
-    styles.invertedButton,
-    styles.rightSmallGutter,
-    styles.smallButton,
-  );
   const selectConcernTypeInputDivStyles = classNames(styles.acceptModalInput, {
     [styles.hidden]: isSuggestedConcern || (!newConcernSelected && !suggestedConcernSelected),
   });
-
-  const addButtonStyles = classNames(styles.button, styles.smallButton);
 
   let bodyHtml: JSX.Element | null = null;
 
@@ -80,26 +75,17 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
       <div className={styles.acceptModalBody}>
         <div className={styles.acceptModalTitle}>Add as active or inactive concern?</div>
         <div className={styles.acceptModalDropdown}>
-          <select
-            name="concernType"
-            className={classNames(formStyles.select, styles.roundedInput)}
-            onChange={onChange}
-            value={concernType}
-          >
-            <option value="" disabled hidden>
+          <Select name="concernType" onChange={onChange} value={concernType}>
+            <Option value="" disabled>
               Select a concern type
-            </option>
-            <option value="active">Active concern</option>
-            <option value="inactive">Inactive concern</option>
-          </select>
+            </Option>
+            <Option value="active">Active concern</Option>
+            <Option value="inactive">Inactive concern</Option>
+          </Select>
         </div>
         <div className={styles.acceptModalButtons}>
-          <div className={cancelButtonStyles} onClick={onDismiss}>
-            Cancel
-          </div>
-          <div className={addButtonStyles} onClick={onSubmit}>
-            Add to Care Plan
-          </div>
+          <Button messageId="builder.cancel" small onClick={onDismiss} />
+          <Button color="blue" small onClick={onSubmit} />>
         </div>
       </div>
     );
@@ -113,15 +99,10 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
           Select an existing patient concern, a suggested concern, or create a new one
         </div>
         <div className={styles.acceptModalDropdown}>
-          <select
-            name="concernId"
-            className={classNames(formStyles.select, styles.roundedInput)}
-            onChange={onChange}
-            value={concernId}
-          >
-            <option value="" disabled hidden>
+          <Select name="concernId" onChange={onChange} value={concernId}>
+            <Option value="" disabled>
               Select a concern
-            </option>
+            </Option>
             <PatientCarePlanSuggestionOptionGroup
               optionType={'suggested'}
               carePlan={carePlan}
@@ -143,29 +124,20 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
               carePlanSuggestions={carePlanSuggestions}
               concerns={concerns}
             />
-          </select>
+          </Select>
         </div>
         <div className={selectConcernTypeInputDivStyles}>
-          <select
-            name="concernType"
-            className={classNames(formStyles.select, styles.roundedInput)}
-            onChange={onChange}
-            value={concernType}
-          >
-            <option value="" disabled hidden>
+          <Select name="concernType" onChange={onChange} value={concernType}>
+            <Option value="" disabled>
               Select a concern type
-            </option>
-            <option value="active">Active concern</option>
-            <option value="inactive">Inactive concern</option>
-          </select>
+            </Option>
+            <Option value="active">Active concern</Option>
+            <Option value="inactive">Inactive concern</Option>
+          </Select>
         </div>
         <div className={styles.acceptModalButtons}>
-          <div className={cancelButtonStyles} onClick={onDismiss}>
-            Cancel
-          </div>
-          <div className={addButtonStyles} onClick={onSubmit}>
-            Add to Care Plan
-          </div>
+          <Button onClick={onDismiss} color="white" messageId="builder.cancel" />
+          <Button onClick={onSubmit} messageId="patient.addToCarePlan" />
         </div>
       </div>
     );

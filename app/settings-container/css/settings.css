@@ -6,8 +6,9 @@
 }
 
 .heading {
-  @apply --title;
-
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
   margin: 50px 0;
 }
 

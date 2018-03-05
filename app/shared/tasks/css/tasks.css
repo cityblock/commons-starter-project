@@ -89,16 +89,6 @@
   margin: 50px var(--gutter) 0;
 }
 
-.tasksErrorIcon {
-  background-image: url('../../../assets/error-circle.svg');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 20px;
-  width: 20px;
-  margin: 0 auto 13px;
-}
-
 .tasksErrorLabel {
   color: var(--default-font-color);
   font-family: var(--basetica-black);
@@ -118,18 +108,6 @@
   padding: 0 var(--small-gutter);
 }
 
-.tasksErrorButton {
-  @apply --inverted-button;
-
-  width: 94px;
-  height: 32px;
-  margin: 0 auto;
-  padding: 9px 0 0 0;
-  text-align: center;
-  font-size: var(--small-font-size);
-  line-height: var(--small-font-line-height);
-}
-
 .tasksLoading {
   margin: 0 auto;
   text-align: center;
@@ -146,9 +124,4 @@
 
 .createContainer {
   align-self: center;
-}
-
-.createButton {
-  @apply --button;
-  @apply --small-button;
 }

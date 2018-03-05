@@ -18,50 +18,68 @@ exports[`renders popup modal body for concern suggestion 1`] = `
     className="acceptModalDropdown"
   >
     <select
-      className="select roundedInput"
+      className="select"
+      disabled={undefined}
       name="dismissedReason"
       onChange={[Function]}
+      required={undefined}
       value="Because"
     >
       <option
         disabled={true}
-        hidden={true}
         value=""
       >
-        Select a reason
+        
       </option>
       <option
+        disabled={undefined}
         value="not applicable"
       >
-        Not applicable to this patient
+        not applicable
       </option>
       <option
+        disabled={undefined}
         value="too much work"
       >
-        This suggestion requires too much work
+        too much work
       </option>
       <option
+        disabled={undefined}
         value="dangerous"
       >
-        Tackling this suggestion would be dangerous for the patient
+        dangerous
       </option>
     </select>
   </div>
   <div
     className="acceptModalButtons"
   >
-    <div
-      className="invertedButton rightSmallGutter smallButton"
+    <button
+      className="button white small"
+      disabled={false}
       onClick={[Function]}
     >
-      Cancel
-    </div>
-    <div
-      className="button smallButton redButton"
+      <span
+        className="flex"
+      >
+        <span>
+          Cancel
+        </span>
+      </span>
+    </button>
+    <button
+      className="button small"
+      disabled={false}
       onClick={[Function]}
     >
-      Dismiss concern
-    </div>
+      <span
+        className="flex"
+      >
+        <span>
+          Dismiss concern
+        </span>
+      </span>
+    </button>
   </div>
 </div>
 `;
@@ -84,50 +102,68 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     className="acceptModalDropdown"
   >
     <select
-      className="select roundedInput"
+      className="select"
+      disabled={undefined}
       name="dismissedReason"
       onChange={[Function]}
+      required={undefined}
       value="Because"
     >
       <option
         disabled={true}
-        hidden={true}
         value=""
       >
-        Select a reason
+        
       </option>
       <option
+        disabled={undefined}
         value="not applicable"
       >
-        Not applicable to this patient
+        not applicable
       </option>
       <option
+        disabled={undefined}
         value="too much work"
       >
-        This suggestion requires too much work
+        too much work
       </option>
       <option
+        disabled={undefined}
         value="dangerous"
       >
-        Tackling this suggestion would be dangerous for the patient
+        dangerous
       </option>
     </select>
   </div>
   <div
     className="acceptModalButtons"
   >
-    <div
-      className="invertedButton rightSmallGutter smallButton"
+    <button
+      className="button white small"
+      disabled={false}
       onClick={[Function]}
     >
-      Cancel
-    </div>
-    <div
-      className="button smallButton redButton"
+      <span
+        className="flex"
+      >
+        <span>
+          Cancel
+        </span>
+      </span>
+    </button>
+    <button
+      className="button small"
+      disabled={false}
       onClick={[Function]}
     >
-      Dismiss goal
-    </div>
+      <span
+        className="flex"
+      >
+        <span>
+          Dismiss goal
+        </span>
+      </span>
+    </button>
   </div>
 </div>
 `;

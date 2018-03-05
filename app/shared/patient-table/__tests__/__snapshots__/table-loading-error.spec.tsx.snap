@@ -18,12 +18,19 @@ exports[`renders empty div 1`] = `
   >
     Sorry, something went wrong. Please try reloading the page again.
   </div>
-  <div
-    className="errorButton"
+  <button
+    className="button"
+    disabled={false}
     onClick={[Function]}
   >
-    Try Again
-  </div>
+    <span
+      className="flex"
+    >
+      <span>
+        Try Again
+      </span>
+    </span>
+  </button>
 </div>
 `;
 
@@ -45,12 +52,19 @@ exports[`renders error 1`] = `
   >
     Sorry, something went wrong. Please try reloading the page again.
   </div>
-  <div
-    className="errorButton"
+  <button
+    className="button"
+    disabled={false}
     onClick={[Function]}
   >
-    Try Again
-  </div>
+    <span
+      className="flex"
+    >
+      <span>
+        Try Again
+      </span>
+    </span>
+  </button>
 </div>
 `;
 
@@ -72,11 +86,18 @@ exports[`renders loading 1`] = `
   >
     Sorry, something went wrong. Please try reloading the page again.
   </div>
-  <div
-    className="errorButton"
+  <button
+    className="button"
+    disabled={false}
     onClick={[Function]}
   >
-    Try Again
-  </div>
+    <span
+      className="flex"
+    >
+      <span>
+        Try Again
+      </span>
+    </span>
+  </button>
 </div>
 `;

@@ -50,7 +50,9 @@
 }
 
 .title {
-  @apply --title;
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
 }
 
 .summary {

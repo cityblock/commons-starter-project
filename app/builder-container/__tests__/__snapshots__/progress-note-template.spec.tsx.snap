@@ -20,12 +20,10 @@ exports[`renders error without progress note template 1`] = `
     >
       Sorry, something went wrong. Please try again.
     </div>
-    <div
-      className="loadingErrorButton invertedButton"
+    <Button
+      label="Try again"
       onClick={[Function]}
-    >
-      Try again
-    </div>
+    />
   </div>
 </div>
 `;
@@ -60,18 +58,15 @@ exports[`renders progress note template 1`] = `
     <div
       className="deleteConfirmationButtons"
     >
-      <div
-        className="deleteCancelButton invertedButton"
+      <Button
+        color="white"
+        messageId="builder.cancel"
         onClick={[Function]}
-      >
-        Cancel
-      </div>
-      <div
-        className="deleteConfirmButton"
+      />
+      <Button
+        messageId="computedField.confirmDelete"
         onClick={[Function]}
-      >
-        Yes, delete
-      </div>
+      />
     </div>
     <div
       className="deleteError hidden"

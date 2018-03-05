@@ -1,6 +1,4 @@
 export const marginLeft: string;
-export const invertedButton: string;
-export const button: string;
 export const hidden: string;
 export const carePlanPanel: string;
 export const paddingTop: string;

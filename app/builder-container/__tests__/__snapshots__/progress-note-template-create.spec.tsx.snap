@@ -4,62 +4,55 @@ exports[`renders progress note template create 1`] = `
 <div
   className="container"
 >
-  <form
-    onSubmit={[Function]}
+  <div
+    className="formTop"
   >
     <div
-      className="formTop"
+      className="close"
+      onClick={[MockFunction]}
+    />
+  </div>
+  <div
+    className="formCenter"
+  >
+    <div
+      className="loadingHidden"
     >
       <div
-        className="close"
-        onClick={[MockFunction]}
+        className="loadingContainer"
+      >
+        <div
+          className="loadingSpinner"
+        />
+      </div>
+    </div>
+    <div
+      className="inputGroup"
+    >
+      <TextInput
+        name="title"
+        onChange={[Function]}
+        placeholderMessageId="builder.enterProgressNoteTemplateTitle"
+        value=""
       />
     </div>
+  </div>
+  <div
+    className="formBottom"
+  >
     <div
-      className="formCenter"
+      className="formBottomContent"
     >
-      <div
-        className="loadingHidden"
-      >
-        <div
-          className="loadingContainer"
-        >
-          <div
-            className="loadingSpinner"
-          />
-        </div>
-      </div>
-      <div
-        className="inputGroup"
-      >
-        <input
-          className="input"
-          name="title"
-          onChange={[Function]}
-          placeholder="Enter progress note template title"
-          value=""
-        />
-      </div>
+      <Button
+        color="white"
+        messageId="builder.cancel"
+        onClick={[MockFunction]}
+      />
+      <Button
+        label="Add progress note template"
+        onClick={[Function]}
+      />
     </div>
-    <div
-      className="formBottom"
-    >
-      <div
-        className="formBottomContent"
-      >
-        <div
-          className="cancelButton"
-          onClick={[MockFunction]}
-        >
-          Cancel
-        </div>
-        <input
-          className="submitButton"
-          type="submit"
-          value="Add progress note template"
-        />
-      </div>
-    </div>
-  </form>
+  </div>
 </div>
 `;

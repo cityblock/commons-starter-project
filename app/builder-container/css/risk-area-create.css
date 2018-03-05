@@ -73,18 +73,6 @@
   display: flex;
 }
 
-.submitButton {
-  @apply --button;
-  @apply --small-button;
-}
-
-.cancelButton {
-  @apply --inverted-button;
-  @apply --small-button;
-
-  margin-right: 20px;
-}
-
 .close {
   background: url('../../assets/close.svg');
   height: 18px;

@@ -127,10 +127,6 @@
   margin: 0 auto var(--medium-gutter);
 }
 
-.button {
-  @apply --button;
-}
-
 .smallButton {
   height: 32px;
   width: 148px;

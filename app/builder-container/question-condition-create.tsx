@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
@@ -8,9 +7,9 @@ import {
   FullAnswerFragment,
   FullQuestionConditionFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as questionConditionStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import * as styles from './css/risk-area-create.css';
@@ -66,8 +65,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
     this.setState({ questionCondition });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     try {
       this.setState({ loading: true });
       const questionCondition = this.state.questionCondition;
@@ -90,29 +88,24 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
     ));
     const selectedAnswer = questionCondition.answerId || '';
     return (
-      <form onSubmit={this.onSubmit} className={questionConditionStyles.borderContainer}>
+      <div className={questionConditionStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.flexInputGroup}>
-          <Select
-            name="answerId"
-            value={selectedAnswer}
-            onChange={this.onAnswerChange}
-            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
-          >
+          <Select name="answerId" value={selectedAnswer} onChange={this.onAnswerChange}>
             <Option value="" messageId="questionConditionCreate.selectAnswer" disabled={true} />
             {answerOptions}
           </Select>
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input type="submit" className={styles.submitButton} value={'Add question condition'} />
+            <Button onClick={this.onSubmit} label={'Add question condition'} />
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }

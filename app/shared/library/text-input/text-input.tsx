@@ -10,13 +10,14 @@ interface IProps {
   className?: string | null; // optional styles to apply over defaults
   name?: string; // optional name field for input
   id?: string; // optional id field for input, likely use with label
-  onBlur?: () => void;
-  onFocus?: () => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   smallInput?: boolean;
   inputType?: 'datetime-local'; // default is text
   required?: boolean;
   pattern?: string;
+  ref?: (ref: any) => void;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -34,6 +35,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
     inputType,
     required,
     pattern,
+    ref,
   } = props;
   const inputStyles = classNames(styles.input, className, {
     [styles.small]: !!smallInput,
@@ -57,6 +59,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
             name={name || ''}
             required={req}
             id={id || ''}
+            ref={ref}
             pattern={pattern}
           />
         )}
@@ -75,6 +78,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
       onChange={onChange}
       name={name || ''}
       required={req}
+      ref={ref}
       id={id || ''}
     />
   );

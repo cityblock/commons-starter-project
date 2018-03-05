@@ -1,9 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders task template create-edit 1`] = `
-<form
+<div
   className="borderContainer"
-  onSubmit={[Function]}
 >
   <div
     className="error"
@@ -38,10 +37,17 @@ exports[`renders task template create-edit 1`] = `
         Title:
       </div>
       <input
-        className="input inputSmall"
+        className="input"
+        id=""
         name="title"
+        onBlur={undefined}
         onChange={[Function]}
+        onFocus={undefined}
+        onKeyDown={undefined}
+        pattern={undefined}
         placeholder="Enter task title"
+        required={false}
+        type="text"
         value="Task Template Title"
       />
     </div>
@@ -54,32 +60,36 @@ exports[`renders task template create-edit 1`] = `
         Priority:
       </div>
       <select
-        className="select inputSmall"
+        className="select"
+        disabled={undefined}
         name="priority"
         onChange={[Function]}
+        required={undefined}
         value="high"
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select Priority
+          
         </option>
         <option
+          disabled={undefined}
           value="low"
         >
-          Low
+          low
         </option>
         <option
+          disabled={undefined}
           value="medium"
         >
-          Medium
+          medium
         </option>
         <option
+          disabled={undefined}
           value="high"
         >
-          High
+          high
         </option>
       </select>
     </div>
@@ -92,21 +102,24 @@ exports[`renders task template create-edit 1`] = `
         Repeating:
       </div>
       <select
-        className="select inputSmall"
+        className="select"
+        disabled={undefined}
         name="repeating"
         onChange={[Function]}
         required={true}
         value="false"
       >
         <option
+          disabled={undefined}
           value="true"
         >
-          Yes
+          true
         </option>
         <option
+          disabled={undefined}
           value="false"
         >
-          No
+          false
         </option>
       </select>
     </div>
@@ -119,42 +132,45 @@ exports[`renders task template create-edit 1`] = `
         Completed Within Interval:
       </div>
       <select
-        className="select inputSmall"
         name="completedWithinInterval"
         onChange={[Function]}
         value="hour"
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select interval
+          
         </option>
         <option
+          disabled={undefined}
           value="hour"
         >
-          Hour
+          hour
         </option>
         <option
+          disabled={undefined}
           value="day"
         >
-          Day
+          day
         </option>
         <option
+          disabled={undefined}
           value="week"
         >
-          Week
+          week
         </option>
         <option
+          disabled={undefined}
           value="month"
         >
-          Month
+          month
         </option>
         <option
+          disabled={undefined}
           value="year"
         >
-          Year
+          year
         </option>
       </select>
     </div>
@@ -167,64 +183,72 @@ exports[`renders task template create-edit 1`] = `
         Completed Within Number:
       </div>
       <select
-        className="select inputSmall"
         name="completedWithinNumber"
         onChange={[Function]}
         value="1"
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select number
+          
         </option>
         <option
+          disabled={undefined}
           value="1"
         >
           1
         </option>
         <option
+          disabled={undefined}
           value="2"
         >
           2
         </option>
         <option
+          disabled={undefined}
           value="3"
         >
           3
         </option>
         <option
+          disabled={undefined}
           value="4"
         >
           4
         </option>
         <option
+          disabled={undefined}
           value="5"
         >
           5
         </option>
         <option
+          disabled={undefined}
           value="6"
         >
           6
         </option>
         <option
+          disabled={undefined}
           value="7"
         >
           7
         </option>
         <option
+          disabled={undefined}
           value="8"
         >
           8
         </option>
         <option
+          disabled={undefined}
           value="9"
         >
           9
         </option>
         <option
+          disabled={undefined}
           value="10"
         >
           10
@@ -240,52 +264,60 @@ exports[`renders task template create-edit 1`] = `
         Default Assignee Role:
       </div>
       <select
-        className="select inputSmall"
+        className="select"
+        disabled={undefined}
         name="careTeamAssigneeRole"
         onChange={[Function]}
+        required={undefined}
         value="physician"
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select role
+          
         </option>
         <option
+          disabled={undefined}
           value="physician"
         >
-          Physician
+          physician
         </option>
         <option
+          disabled={undefined}
           value="nurseCareManager"
         >
-          Nurse Care Manager
+          nurseCareManager
         </option>
         <option
+          disabled={undefined}
           value="healthCoach"
         >
-          Health Coach
+          healthCoach
         </option>
         <option
+          disabled={undefined}
           value="familyMember"
         >
-          Family Member
+          familyMember
         </option>
         <option
+          disabled={undefined}
           value="primaryCarePhysician"
         >
-          Primary Care Physician
+          primaryCarePhysician
         </option>
         <option
+          disabled={undefined}
           value="communityHealthPartner"
         >
-          Community Health Partner
+          communityHealthPartner
         </option>
         <option
+          disabled={undefined}
           value="psychiatrist"
         >
-          Psychiatrist
+          psychiatrist
         </option>
       </select>
     </div>
@@ -316,11 +348,19 @@ exports[`renders task template create-edit 1`] = `
     <div
       className="formBottomContent"
     >
-      <input
-        className="submitButton"
-        type="submit"
-        value="Save"
-      />
+      <button
+        className="button"
+        disabled={false}
+        onClick={[Function]}
+      >
+        <span
+          className="flex"
+        >
+          <span>
+            Save
+          </span>
+        </span>
+      </button>
       <div
         onClick={[Function]}
       >
@@ -328,5 +368,5 @@ exports[`renders task template create-edit 1`] = `
       </div>
     </div>
   </div>
-</form>
+</div>
 `;

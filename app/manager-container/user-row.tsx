@@ -60,12 +60,8 @@ export class UserRow extends React.Component<IProps, IState> {
           Are you sure you want to delete {this.formatUser()}?
         </div>
         <div className={styles.buttons}>
-          <div className={styles.buttonInverted} onClick={this.onCloseClick}>
-            Close
-          </div>
-          <div className={styles.button} onClick={this.onConfirmClick}>
-            Confirm Delete
-          </div>
+          <Button onClick={this.onCloseClick} messageId="manager.cancel" />
+          <Button color="blue" onClick={this.onConfirmClick} messageId="manager.confirmDelete" />
         </div>
       </Popup>
     );

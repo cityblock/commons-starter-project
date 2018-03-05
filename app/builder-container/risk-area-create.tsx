@@ -11,6 +11,7 @@ import {
   FullRiskAreaGroupFragment,
 } from '../graphql/types';
 import * as riskAreaStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import Spinner from '../shared/library/spinner/spinner';
@@ -81,8 +82,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
     };
   };
 
-  onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  onSubmit = async () => {
     const {
       title,
       order,
@@ -152,49 +152,45 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={riskAreaStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={this.props.onClose} />
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={this.props.onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={styles.inputGroup}>
+            <TextInput
+              value={title}
+              onChange={this.onChange('title')}
+              placeholderMessageId="riskArea.title"
+            />
+            {this.renderRiskAreaGroupSelect()}
+            <Select value={assessmentType || ''} onChange={this.onChange('assessmentType')}>
+              <Option value="" messageId="riskArea.assessmentType" disabled={true} />
+              <Option value="automated" messageId="riskArea.automated" />
+              <Option value="manual" messageId="riskArea.manual" />
+            </Select>
+            <TextInput
+              value={order}
+              onChange={this.onChange('order')}
+              placeholderMessageId="riskArea.order"
+            />
+            <TextInput
+              value={mediumRiskThreshold}
+              onChange={this.onChange('mediumRiskThreshold')}
+              placeholderMessageId="riskArea.mediumRiskThreshold"
+            />
+            <TextInput
+              value={highRiskThreshold}
+              onChange={this.onChange('highRiskThreshold')}
+              placeholderMessageId="riskArea.highRiskThreshold"
+            />
           </div>
-          <div className={styles.formCenter}>
-            <div className={styles.inputGroup}>
-              <TextInput
-                value={title}
-                onChange={this.onChange('title')}
-                placeholderMessageId="riskArea.title"
-              />
-              {this.renderRiskAreaGroupSelect()}
-              <Select value={assessmentType || ''} onChange={this.onChange('assessmentType')}>
-                <Option value="" messageId="riskArea.assessmentType" disabled={true} />
-                <Option value="automated" messageId="riskArea.automated" />
-                <Option value="manual" messageId="riskArea.manual" />
-              </Select>
-              <TextInput
-                value={order}
-                onChange={this.onChange('order')}
-                placeholderMessageId="riskArea.order"
-              />
-              <TextInput
-                value={mediumRiskThreshold}
-                onChange={this.onChange('mediumRiskThreshold')}
-                placeholderMessageId="riskArea.mediumRiskThreshold"
-              />
-              <TextInput
-                value={highRiskThreshold}
-                onChange={this.onChange('highRiskThreshold')}
-                placeholderMessageId="riskArea.highRiskThreshold"
-              />
-            </div>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" messageId="builder.cancel" onClick={this.props.onClose} />
+            <Button messageId="builder.createAssessment" color="blue" onClick={this.onSubmit} />
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>
-                Cancel
-              </div>
-              <input type="submit" className={styles.submitButton} value="Add assessment" />
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Button from '../../shared/library/button/button';
 import * as styles from './css/tasks.css';
 
 interface IProps {
@@ -13,14 +14,11 @@ export const TasksLoadingError: React.StatelessComponent<IProps> = props => {
   if (error) {
     return (
       <div className={styles.tasksError}>
-        <div className={styles.tasksErrorIcon} />
         <div className={styles.tasksErrorLabel}>Unable to load active tasks</div>
         <div className={styles.tasksErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={styles.tasksErrorButton} onClick={onRetryClick}>
-          Try again
-        </div>
+        <Button onClick={onRetryClick} label="Try Again" />
       </div>
     );
   } else if (loading) {

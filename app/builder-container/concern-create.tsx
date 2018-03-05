@@ -4,9 +4,10 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as concernCreateMutationGraphql from '../graphql/queries/concern-create-mutation.graphql';
 import { concernCreateMutation, concernCreateMutationVariables } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as concernStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
@@ -65,8 +66,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async onSubmit() {
     const { history, routeBase } = this.props;
     if (this.props.createConcern) {
       try {
@@ -105,21 +105,18 @@ export class ConcernCreate extends React.Component<allProps, IState> {
               </div>
             </div>
             <div className={styles.inputGroup}>
-              <input
+              <TextInput
                 name="title"
                 value={concern.title}
-                placeholder={'Enter concern title'}
-                className={formStyles.input}
+                placeholderMessageId="builder.enterConcernTitle"
                 onChange={this.onChange}
               />
             </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>
-                Cancel
-              </div>
-              <input type="submit" className={styles.submitButton} value="Add concern" />
+              <Button color="white" messageId="builder.cancel" onClick={this.props.onClose} />
+              <Button onClick={this.onSubmit} label="Add concern" />
             </div>
           </div>
         </form>

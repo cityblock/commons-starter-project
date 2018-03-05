@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Button from '../../shared/library/button/button';
 import * as styles from './css/event-notifications.css';
 
 interface IProps {
@@ -13,14 +14,11 @@ export const EventNotificationsLoadingError: React.StatelessComponent<IProps> = 
   if (error) {
     return (
       <div className={styles.eventNotificationsError}>
-        <div className={styles.eventNotificationsErrorIcon} />
         <div className={styles.eventNotificationsErrorLabel}>Unable to load notifications</div>
         <div className={styles.eventNotificationsErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={styles.eventNotificationsErrorButton} onClick={onRetryClick}>
-          Try again
-        </div>
+        <Button onClick={onRetryClick} label="Try again" />
       </div>
     );
   } else if (loading) {

@@ -111,27 +111,30 @@ exports[`renders care plan suggestions 1`] = `
       className="flexInputGroup"
     >
       <select
-        className="select inputSmall flexInputItem"
+        className="select noValue"
+        disabled={undefined}
         name="suggestionType"
         onChange={[Function]}
+        required={undefined}
         value=""
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
-          Select a type
+          
         </option>
         <option
+          disabled={undefined}
           value="concern"
         >
-          Concern
+          concern
         </option>
         <option
+          disabled={undefined}
           value="goal"
         >
-          Goal/Tasks
+          goal
         </option>
       </select>
     </div>
@@ -141,12 +144,19 @@ exports[`renders care plan suggestions 1`] = `
       <div
         className="formBottomContent"
       >
-        <input
-          className="submitButton"
+        <button
+          className="button"
+          disabled={false}
           onClick={[Function]}
-          type="submit"
-          value="Add care plan suggestion"
-        />
+        >
+          <span
+            className="flex"
+          >
+            <span>
+              Add care plan suggestion
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   </div>

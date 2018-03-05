@@ -10,12 +10,13 @@ import {
   AssessmentType,
   FullComputedFieldFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as questionStyles from '../shared/css/two-panel-right.css';
 import * as builderStyles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
@@ -108,9 +109,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
     this.onFieldUpdate({ fieldName, fieldValue });
   }
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async onSubmit() {
     const { createQuestion, assessmentType, routeBase, history } = this.props;
     if (createQuestion) {
       // don't allow submitting automated assessment without computed field
@@ -197,65 +196,58 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={questionStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={this.props.onClose} />
-          </div>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={this.props.onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={loadingClass}>
+            <div className={styles.loadingContainer}>
+              <div className={loadingStyles.loadingSpinner} />
             </div>
-            <div className={styles.inputGroup}>
-              <input
-                name="title"
-                value={question.title}
-                placeholder={'Enter question title'}
-                className={formStyles.input}
-                onChange={this.onChange}
-              />
-              <input
-                type="number"
-                name="order"
-                placeholder={'Enter question order'}
-                value={question.order}
-                className={formStyles.input}
-                onChange={this.onChange}
-              />
-              {assessmentType === 'automated' && (
-                <Select
-                  name="computedFieldId"
-                  value={question.computedFieldId || ''}
-                  onChange={this.onChange}
-                >
-                  <Option value="" disabled={true} messageId="question.selectComputedField" />
-                  {computedFieldOptions}
-                </Select>
-              )}
+          </div>
+          <div className={styles.inputGroup}>
+            <TextInput
+              name="title"
+              value={question.title}
+              placeholderMessageId="builder.enterQuestionTitle"
+              onChange={this.onChange}
+            />
+            <TextInput
+              name="order"
+              placeholderMessageId="builder.enterQuestionOrder"
+              value={question.order.toString()}
+              onChange={this.onChange}
+            />
+            {assessmentType === 'automated' && (
               <Select
-                required
-                name="applicableIfType"
-                value={question.applicableIfType || ''}
+                name="computedFieldId"
+                value={question.computedFieldId || ''}
                 onChange={this.onChange}
               >
-                <Option value="" disabled={true} messageId="question.selectApplicable" />
-                <Option value="oneTrue" messageId="question.applicableOneTrue" />
-                <Option value="allTrue" messageId="question.applicableAllTrue" />
+                <Option value="" disabled={true} messageId="question.selectComputedField" />
+                {computedFieldOptions}
               </Select>
-              {this.renderAnswerType()}
-              {this.renderOtherTextAnswerOption()}
-            </div>
+            )}
+            <Select
+              required
+              name="applicableIfType"
+              value={question.applicableIfType || ''}
+              onChange={this.onChange}
+            >
+              <Option value="" disabled={true} messageId="question.selectApplicable" />
+              <Option value="oneTrue" messageId="question.applicableOneTrue" />
+              <Option value="allTrue" messageId="question.applicableAllTrue" />
+            </Select>
+            {this.renderAnswerType()}
+            {this.renderOtherTextAnswerOption()}
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>
-                Cancel
-              </div>
-              <input type="submit" className={styles.submitButton} value="Add question" />
-            </div>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" onClick={this.props.onClose} messageId="builder.cancel" />
+            <Button onClick={this.onSubmit} label="Add question" />
           </div>
-        </form>
+        </div>
       </div>
     );
   }

@@ -113,30 +113,6 @@
     user-select: none;
   }
 
-  --red-button: {
-    padding: 14px 64px 11px;
-    border: 1px solid var(--red-color);
-    cursor: pointer;
-    transition: background-color 0.3s;
-    outline: none;
-    background-color: var(--red-color);
-    color: var(--white-color);
-    font-family: var(--basetica-medium);
-    font-size: var(--default-font-size);
-    font-weight: 500;
-    line-height: 18px;
-    text-align: center;
-    border-radius: 2px;
-    -webkit-appearance: none;
-    user-select: none;
-  }
-
-  --title: {
-    font-family: var(--basetica-black);
-    font-size: var(--large-font-size);
-    line-height: var(--large-font-line-height);
-  }
-
   --select: {
     -webkit-appearance: none;
     border-radius: 0;

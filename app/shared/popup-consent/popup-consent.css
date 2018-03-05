@@ -14,9 +14,3 @@
   line-height: 20px;
   margin-top: 20px;
 }
-
-.button {
-  @apply --button;
-
-  margin-top: 40px;
-}

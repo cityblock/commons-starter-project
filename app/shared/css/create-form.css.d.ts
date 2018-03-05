@@ -8,8 +8,6 @@ export const formBottomContent: string;
 export const formTop: string;
 export const inputGroup: string;
 export const flexInputGroup: string;
-export const submitButton: string;
-export const cancelButton: string;
 export const smallSection: string;
 export const smallImage: string;
 export const smallText: string;

@@ -30,18 +30,15 @@ exports[`shallow rendered renders with screening tool 1`] = `
     <div
       className="deleteConfirmationButtons"
     >
-      <div
-        className="deleteCancelButton invertedButton"
+      <Button
+        color="white"
+        messageId="builder.cancel"
         onClick={[Function]}
-      >
-        Cancel
-      </div>
-      <div
-        className="deleteConfirmButton"
+      />
+      <Button
+        messageId="computedField.confirmDelete"
         onClick={[Function]}
-      >
-        Yes, delete
-      </div>
+      />
     </div>
     <div
       className="deleteError hidden"
@@ -108,7 +105,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       <div
         className="largeTextEditor hidden"
       >
-        <input
+        <TextInput
           name="editedTitle"
           onBlur={[Function]}
           onChange={[Function]}
@@ -130,13 +127,12 @@ exports[`shallow rendered renders with screening tool 1`] = `
       <div
         className="largeTextEditor hidden"
       >
-        <input
+        <TextInput
           name="editedOrder"
           onBlur={[Function]}
           onChange={[Function]}
           onKeyDown={[Function]}
-          type="number"
-          value={1}
+          value="1"
         />
       </div>
       <div
@@ -160,40 +156,39 @@ exports[`shallow rendered renders with screening tool 1`] = `
           Answer display:
         </div>
       </div>
-      <select
-        className="select inputSmall"
+      <Select
         name="answerType"
         onChange={[Function]}
         required={true}
         value="radio"
       >
-        <option
+        <Option
           disabled={true}
           value="Select one"
         >
           Select one (Required!)
-        </option>
-        <option
+        </Option>
+        <Option
           value="dropdown"
         >
           dropdown
-        </option>
-        <option
+        </Option>
+        <Option
           value="radio"
         >
           radio
-        </option>
-        <option
+        </Option>
+        <Option
           value="freetext"
         >
           freetext
-        </option>
-        <option
+        </Option>
+        <Option
           value="multiselect"
         >
           multiselect
-        </option>
-      </select>
+        </Option>
+      </Select>
       <br />
       <div
         className="smallText"
@@ -243,29 +238,28 @@ exports[`shallow rendered renders with screening tool 1`] = `
         Applicable if type:
       </div>
       <br />
-      <select
-        className="select inputSmall"
+      <Select
         name="applicableIfType"
         onChange={[Function]}
         value="allTrue"
       >
-        <option
+        <Option
           disabled={true}
           value="Select one"
         >
           Select one (Required!)
-        </option>
-        <option
+        </Option>
+        <Option
           value="oneTrue"
         >
           one true
-        </option>
-        <option
+        </Option>
+        <Option
           value="allTrue"
         >
           all true
-        </option>
-      </select>
+        </Option>
+      </Select>
       <br />
       <QuestionConditions
         questionConditions={

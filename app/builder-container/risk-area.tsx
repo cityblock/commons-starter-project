@@ -11,6 +11,7 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
+import Button from '../shared/library/button/button';
 import EditableMultilineText from '../shared/library/editable-multiline-text/editable-multiline-text';
 import { IState as IAppState } from '../store';
 
@@ -143,15 +144,8 @@ export class RiskArea extends React.Component<allProps, IState> {
               Are you sure you want to delete this assessment?
             </div>
             <div className={styles.deleteConfirmationButtons}>
-              <div
-                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}
-              >
-                Cancel
-              </div>
-              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
-                Yes, delete
-              </div>
+              <Button color="white" onClick={this.onCancelDelete} messageId="builder.cancel" />
+              <Button messageId="computedField.confirmDelete" onClick={this.onConfirmDelete} />
             </div>
             <div className={deleteErrorStyles}>
               <div className={classNames(styles.redText, styles.smallText)}>
@@ -222,12 +216,7 @@ export class RiskArea extends React.Component<allProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <div
-                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadRiskArea}
-              >
-                Try again
-              </div>
+              <Button onClick={this.reloadRiskArea} label="Try again" />
             </div>
           </div>
         );

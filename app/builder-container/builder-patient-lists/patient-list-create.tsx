@@ -109,7 +109,7 @@ export class PatientListCreate extends React.Component<allProps, IState> {
             color="white"
             small={true}
           />
-          <Button messageId="patientLists.create" onClick={this.onSubmit} small={true} />
+          <Button messageId="patientLists.create" onClick={this.onSubmit} small />
         </div>
       </div>
     );

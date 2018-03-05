@@ -55,7 +55,7 @@ export const permissionsMappings: PermissionsMappings = {
     isManagerEnabled: false,
     canChangeUserPermissions: false,
     canDeleteUsers: false,
-    canBulkAssign: false,
+    canBulkAssign: true,
     canEditCareTeam: true,
     canViewAllMembers: true,
     canEditAllMembers: true,

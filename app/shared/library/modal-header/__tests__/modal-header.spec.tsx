@@ -53,4 +53,10 @@ describe('Library Modal Header Component', () => {
     expect(wrapper2.find(Icon).props().className).toBe('icon navyIcon');
     expect(wrapper2.find('div').props().className).toBe('container navyContainer');
   });
+
+  it('does not render body message if none provided', () => {
+    wrapper.setProps({ bodyMessageId: null });
+
+    expect(wrapper.find('p').length).toBe(0);
+  });
 });

@@ -1,133 +1,75 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders popup modal body for concern suggestion 1`] = `
-<div
-  className="acceptModalBody"
+<select
+  className="select large"
+  disabled={undefined}
+  name="concernType"
+  onChange={[Function]}
+  required={undefined}
+  value="active"
 >
-  <div
-    className="acceptModalTitle"
+  <option
+    disabled={true}
+    value=""
   >
-    Add as active or inactive concern?
-  </div>
-  <div
-    className="acceptModalDropdown"
+    Select a concern type
+  </option>
+  <option
+    disabled={undefined}
+    value="active"
   >
-    <select
-      className="select"
-      disabled={undefined}
-      name="concernType"
-      onChange={[Function]}
-      required={undefined}
-      value="active"
-    >
-      <option
-        disabled={true}
-        value=""
-      >
-        Select a concern type
-      </option>
-      <option
-        disabled={undefined}
-        value="active"
-      >
-        Active concern
-      </option>
-      <option
-        disabled={undefined}
-        value="inactive"
-      >
-        Inactive concern
-      </option>
-    </select>
-  </div>
-  <div
-    className="acceptModalButtons"
+    Active concern
+  </option>
+  <option
+    disabled={undefined}
+    value="inactive"
   >
-    <button
-      className="button small"
-      disabled={false}
-      onClick={[Function]}
-    >
-      <span
-        className="flex"
-      >
-        <span>
-          Cancel
-        </span>
-      </span>
-    </button>
-    <button
-      className="button small"
-      disabled={false}
-      onClick={[Function]}
-    >
-      <span
-        className="flex"
-      >
-        <span />
-      </span>
-    </button>
-    &gt;
-  </div>
-</div>
+    Inactive concern
+  </option>
+</select>
 `;
 
 exports[`renders popup modal body for goal suggestion 1`] = `
-<div
-  className="acceptModalBody"
->
-  <div
-    className="acceptModalTitle noMargin"
+<div>
+  <select
+    className="select large"
+    disabled={undefined}
+    name="concernId"
+    onChange={[Function]}
+    required={undefined}
+    value="concern-id"
   >
-    Add this goal to a concern
-  </div>
-  <div
-    className="acceptModalSubtitle"
-  >
-    Select an existing patient concern, a suggested concern, or create a new one
-  </div>
-  <div
-    className="acceptModalDropdown"
-  >
-    <select
-      className="select"
-      disabled={undefined}
-      name="concernId"
-      onChange={[Function]}
-      required={undefined}
-      value="concern-id"
+    <option
+      disabled={true}
+      value=""
+    >
+      Select a concern
+    </option>
+    <optgroup
+      label="Suggested concerns"
     >
       <option
-        disabled={true}
-        value=""
+        value="concern-id"
       >
-        Select a concern
+        Concern Title
       </option>
-      <optgroup
-        label="Suggested concerns"
+    </optgroup>
+    <optgroup
+      label="All other concerns"
+    >
+      <option
+        value="concern-id"
       >
-        <option
-          value="concern-id"
-        >
-          Concern Title
-        </option>
-      </optgroup>
-      <optgroup
-        label="All other concerns"
-      >
-        <option
-          value="concern-id"
-        >
-          Concern Title
-        </option>
-      </optgroup>
-    </select>
-  </div>
+        Concern Title
+      </option>
+    </optgroup>
+  </select>
   <div
     className="acceptModalInput"
   >
     <select
-      className="select"
+      className="select large"
       disabled={undefined}
       name="concernType"
       onChange={[Function]}
@@ -153,36 +95,6 @@ exports[`renders popup modal body for goal suggestion 1`] = `
         Inactive concern
       </option>
     </select>
-  </div>
-  <div
-    className="acceptModalButtons"
-  >
-    <button
-      className="button white"
-      disabled={false}
-      onClick={[Function]}
-    >
-      <span
-        className="flex"
-      >
-        <span>
-          Cancel
-        </span>
-      </span>
-    </button>
-    <button
-      className="button"
-      disabled={false}
-      onClick={[Function]}
-    >
-      <span
-        className="flex"
-      >
-        <span>
-          Add to care plan
-        </span>
-      </span>
-    </button>
   </div>
 </div>
 `;

@@ -9,16 +9,15 @@ import {
   getConcernsQuery,
   getPatientCarePlanQuery,
   getPatientCarePlanSuggestionsQuery,
-  FullCarePlanSuggestionFragment,
+  FullCarePlanSuggestionForPatientFragment,
 } from '../graphql/types';
-import { Popup } from '../shared/popup/popup';
-import * as styles from './css/patient-care-plan.css';
+import Modal from '../shared/library/modal/modal';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-care-plan-suggestion-accepted-modal-body';
 
 export interface IProps {
   visible: boolean;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
-  suggestion?: FullCarePlanSuggestionFragment;
+  suggestion: FullCarePlanSuggestionForPatientFragment | null;
   taskTemplateIds: string | null[];
   patientId: string;
   onDismiss: () => any;
@@ -43,18 +42,14 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, IState> {
+export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-
-    this.onDismiss = this.onDismiss.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
 
     this.state = { concernType: '', concernId: '', loading: false, error: null };
   }
 
-  async onSubmit() {
+  onSubmit = async (): Promise<void> => {
     const {
       suggestion,
       acceptCarePlanSuggestion,
@@ -71,7 +66,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     const acceptingGoalSuggestion = suggestion && !!suggestion.goalSuggestionTemplate;
 
     if (!acceptingConcernSuggestion && !acceptingGoalSuggestion) {
-      return null;
+      return;
     }
 
     this.setState({ loading: true });
@@ -104,9 +99,9 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     } catch (err) {
       this.setState({ loading: false, error: err.message });
     }
-  }
+  };
 
-  onDismiss() {
+  onDismiss = (): void => {
     const { onDismiss } = this.props;
 
     this.setState({
@@ -117,37 +112,42 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     });
 
     onDismiss();
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
+  onChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
     const fieldValue = event.currentTarget.value;
     const fieldName = event.currentTarget.name;
     this.setState({ [fieldName as any]: fieldValue });
-  }
+  };
 
   render() {
     const { carePlan, carePlanSuggestions, concerns, suggestion, visible } = this.props;
-    const { concernId, concernType } = this.state;
+    const { concernId, concernType, error } = this.state;
+
+    const suggestionType = (suggestion && suggestion.suggestionType) || '';
+    const subTitleMessageId =
+      suggestion && suggestionType === 'goal' ? 'carePlanSuggestion.addgoalSub' : null;
 
     return (
-      <Popup visible={visible} style={'small-padding'}>
-        <div className={styles.acceptModalContent}>
-          <div className={styles.acceptModalHeader}>
-            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />
-          </div>
-          <PopupPatientCarePlanSuggestionAcceptedModalBody
-            carePlan={carePlan}
-            carePlanSuggestions={carePlanSuggestions}
-            concerns={concerns}
-            concernId={concernId}
-            concernType={concernType}
-            suggestion={suggestion}
-            onChange={this.onChange}
-            onDismiss={this.onDismiss}
-            onSubmit={this.onSubmit}
-          />
-        </div>
-      </Popup>
+      <Modal
+        isVisible={visible}
+        onClose={this.onDismiss}
+        onSubmit={this.onSubmit}
+        error={error}
+        titleMessageId={`carePlanSuggestion.add${suggestionType}`}
+        subTitleMessageId={subTitleMessageId}
+        submitMessageId="patient.addToCarePlan"
+      >
+        <PopupPatientCarePlanSuggestionAcceptedModalBody
+          carePlan={carePlan}
+          carePlanSuggestions={carePlanSuggestions}
+          concerns={concerns}
+          concernId={concernId}
+          concernType={concernType}
+          suggestion={suggestion}
+          onChange={this.onChange}
+        />
+      </Modal>
     );
   }
 }

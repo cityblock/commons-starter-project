@@ -39,70 +39,8 @@
   margin-bottom: 0;
 }
 
-.acceptModalContent {
-  display: flex;
-  flex-direction: column;
-}
-
-.acceptModalHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.acceptModalDismissButton {
-  height: 16px;
-  width: 16px;
-  background-image: url('../../assets/close-grey.svg');
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.acceptModalBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.acceptModalTitle {
-  font-family: var(--basetica-black);
-  font-size: var(--medium-font-size);
-  line-height: var(--medium-font-line-height);
-  color: var(--default-font-color);
-  margin-bottom: var(--gutter);
-}
-
-.acceptModalTitle.noMargin {
-  margin-bottom: 0;
-}
-
-.acceptModalSubtitle {
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--body-copy-line-height);
-  color: var(--gray-font-color);
-  margin-bottom: var(--gutter);
-}
-
-.acceptModalDropdown {
-  display: flex;
-  width: 90%;
-  margin-bottom: var(--gutter);
-}
-
 .acceptModalInput {
-  display: flex;
-  width: 90%;
-  margin-bottom: var(--gutter);
-  margin-top: -20px;
+  margin-top: var(--small-gutter);
 }
 
 .acceptModalInput.hidden {

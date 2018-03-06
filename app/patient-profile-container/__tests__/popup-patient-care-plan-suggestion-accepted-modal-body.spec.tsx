@@ -34,8 +34,6 @@ it('renders popup modal body for concern suggestion', () => {
               concernType={'active'}
               concerns={[concern]}
               suggestion={carePlanSuggestionWithConcern}
-              onDismiss={() => true}
-              onSubmit={() => true}
               onChange={(event: any) => true}
             />
           </BrowserRouter>
@@ -59,8 +57,6 @@ it('renders popup modal body for goal suggestion', () => {
               concernType={'active'}
               concerns={[concern]}
               suggestion={carePlanSuggestionWithGoal}
-              onDismiss={() => true}
-              onSubmit={() => true}
               onChange={(event: any) => true}
             />
           </BrowserRouter>

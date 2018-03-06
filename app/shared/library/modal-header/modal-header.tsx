@@ -9,7 +9,7 @@ type Color = 'gray' | 'navy' | 'white';
 interface IProps {
   titleMessageId?: string; // modal title translate id
   titleText?: string | null;
-  bodyMessageId?: string; // description under title translate id
+  bodyMessageId?: string | null; // description under title translate id
   bodyText?: string | null;
   color?: Color; // optional color, defaults to gray
   closePopup?: () => void; // optional handler, will render X to close
@@ -45,7 +45,7 @@ const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <div className={containerStyles}>
       {title}
-      {body}
+      {(!!bodyMessageId || !!bodyText) && body}
       {children}
       {closePopup && <Icon name="close" onClick={closePopup} className={iconStyles} />}
     </div>

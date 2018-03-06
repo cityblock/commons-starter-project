@@ -33,7 +33,7 @@ describe('Dismiss Care Plan Suggestion Modal', () => {
   });
 
   it('renders options for reasons', () => {
-    expect(wrapper.find(Option).length).toBe(4);
+    expect(wrapper.find(Option).length).toBe(5);
 
     expect(
       wrapper

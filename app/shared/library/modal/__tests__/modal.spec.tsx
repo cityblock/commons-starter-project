@@ -39,6 +39,7 @@ describe('Render Modal Component', () => {
   it('renders address modal header', () => {
     expect(wrapper.find(ModalHeader)).toHaveLength(1);
     expect(wrapper.find(ModalHeader).props().titleMessageId).toBe(titleMessageId);
+    expect(wrapper.find(ModalHeader).props().bodyMessageId).toBeFalsy();
     expect(wrapper.find(ModalHeader).props().closePopup).toBe(onClose);
   });
 
@@ -63,5 +64,12 @@ describe('Render Modal Component', () => {
 
   it('renders all children', () => {
     expect(wrapper.find('input')).toHaveLength(1);
+  });
+
+  it('renders subtitle if associated message id given', () => {
+    const subTitleMessageId = 'modal.subtitle';
+    wrapper.setProps({ subTitleMessageId });
+
+    expect(wrapper.find(ModalHeader).props().bodyMessageId).toBe(subTitleMessageId);
   });
 });

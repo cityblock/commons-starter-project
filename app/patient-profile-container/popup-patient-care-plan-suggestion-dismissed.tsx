@@ -96,8 +96,9 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
         <Select onChange={this.onChange} value={dismissedReason} large>
           <Option value="" disabled messageId="carePlanSuggestion.selectReason" />
           <Option value="not applicable" messageId="carePlanSuggestion.notApplicable" />
-          <Option value="too much work" messageId="carePlanSuggestion.tooMuchWork" />
-          <Option value="dangerous" messageId="carePlanSuggestion.dangerous" />
+          <Option value="captured by other suggestion" messageId="carePlanSuggestion.captured" />
+          <Option value="already resolved" messageId="carePlanSuggestion.resolved" />
+          <Option value="inappropriate suggestion" messageId="carePlanSuggestion.inappropriate" />
         </Select>
       </Modal>
     );

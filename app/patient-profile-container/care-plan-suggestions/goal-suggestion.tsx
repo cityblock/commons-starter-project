@@ -54,9 +54,11 @@ class GoalSuggestion extends React.Component<IProps, IState> {
       selectedGoalSuggestionId,
     } = this.props;
 
+    const isGoalSelected = selectedGoalSuggestionId === suggestion.id;
+
     const conatinerStyles = classNames(styles.container, {
-      [styles.opaque]: !!selectedGoalSuggestionId && selectedGoalSuggestionId !== suggestion.id,
-      [styles.shadow]: !!selectedGoalSuggestionId && selectedGoalSuggestionId === suggestion.id,
+      [styles.opaque]: !!selectedGoalSuggestionId && !isGoalSelected,
+      [styles.shadow]: !!selectedGoalSuggestionId && isGoalSelected,
     });
 
     const taskTemplates =
@@ -82,6 +84,7 @@ class GoalSuggestion extends React.Component<IProps, IState> {
           suggestion={suggestion}
           onAccept={() => onAccept(suggestion, this.state.taskTemplateIds)}
           onDismiss={() => onDismiss(suggestion)}
+          hideButtons={!isGoalSelected}
         />
         {taskTemplates}
       </div>

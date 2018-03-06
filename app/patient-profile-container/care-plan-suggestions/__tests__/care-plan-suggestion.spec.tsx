@@ -94,4 +94,10 @@ describe('Care Plan Suggestion Component', () => {
     expect(wrapper.find(TextInfo).props().messageId).toBe('carePlanSuggestion.tasks');
     expect(wrapper.find(TextInfo).props().text).toBe(1);
   });
+
+  it('hides buttons if specified', () => {
+    wrapper.setProps({ hideButtons: true });
+
+    expect(wrapper.find(Icon).length).toBe(0);
+  });
 });

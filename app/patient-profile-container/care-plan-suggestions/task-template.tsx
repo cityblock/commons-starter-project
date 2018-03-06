@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullTaskTemplateFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
@@ -21,10 +22,13 @@ class TaskTemplate extends React.Component<IProps> {
   render(): JSX.Element {
     const { taskTemplate, selected } = this.props;
     const iconName = selected ? 'highlightOff' : 'addCircle';
+    const textStyles = classNames({
+      [styles.opaque]: !selected,
+    });
 
     return (
       <div className={styles.container} onClick={this.handleClick}>
-        <h2>{taskTemplate.title}</h2>
+        <h2 className={textStyles}>{taskTemplate.title}</h2>
         <Icon name={iconName} color="darkGray" />
       </div>
     );

@@ -12,6 +12,7 @@ interface IProps {
   suggestion: FullCarePlanSuggestionForPatientFragment;
   onAccept: () => void;
   onDismiss: () => void;
+  hideButtons?: boolean;
 }
 
 class CarePlanSuggestion extends React.Component<IProps> {
@@ -27,7 +28,7 @@ class CarePlanSuggestion extends React.Component<IProps> {
   };
 
   render(): JSX.Element {
-    const { suggestion } = this.props;
+    const { suggestion, hideButtons } = this.props;
     const isGoal = suggestion.suggestionType === 'goal';
 
     const titleMessageId = `carePlanSuggestion.${suggestion.suggestionType}`;
@@ -60,10 +61,12 @@ class CarePlanSuggestion extends React.Component<IProps> {
             )}
           </div>
         </div>
-        <div className={styles.actions}>
-          <Icon name="close" color="red" onClick={this.onDismiss} className={styles.icon} />
-          <Icon name="check" color="green" onClick={this.onAccept} className={styles.icon} />
-        </div>
+        {!hideButtons && (
+          <div className={styles.actions}>
+            <Icon name="close" color="red" onClick={this.onDismiss} className={styles.icon} />
+            <Icon name="check" color="green" onClick={this.onAccept} className={styles.icon} />
+          </div>
+        )}
       </div>
     );
   }

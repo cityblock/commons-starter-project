@@ -35,6 +35,10 @@ describe('Care Plan Suggestion Goal Suggestion Component', () => {
     expect(wrapper.find(TaskTemplate).length).toBe(0);
   });
 
+  it('hides buttons by default', () => {
+    expect(wrapper.find(CarePlanSuggestion).props().hideButtons).toBeTruthy();
+  });
+
   it('renders task template if selected', () => {
     wrapper.setProps({ selectedGoalSuggestionId: suggestion.id });
 
@@ -57,6 +61,10 @@ describe('Care Plan Suggestion Goal Suggestion Component', () => {
         .at(0)
         .props().className,
     ).toBe('container shadow');
+  });
+
+  it('shows buttons if selected', () => {
+    expect(wrapper.find(CarePlanSuggestion).props().hideButtons).toBeFalsy();
   });
 
   it('makes the suggestion opaque and hides tasks if another suggestion selected', () => {

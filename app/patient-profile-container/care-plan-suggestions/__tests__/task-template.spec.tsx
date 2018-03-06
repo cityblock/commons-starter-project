@@ -17,6 +17,7 @@ describe('Care Plan Suggestion Task Template', () => {
 
   it('renders title of task template', () => {
     expect(wrapper.find('h2').text()).toBe(taskTemplate.title);
+    expect(wrapper.find('h2').props().className).toBe('opaque');
   });
 
   it('renders icon to accept task', () => {
@@ -28,5 +29,9 @@ describe('Care Plan Suggestion Task Template', () => {
     wrapper.setProps({ selected: true });
 
     expect(wrapper.find(Icon).props().name).toBe('highlightOff');
+  });
+
+  it('removes opacity if task selected', () => {
+    expect(wrapper.find('h2').props().className).toBeFalsy();
   });
 });

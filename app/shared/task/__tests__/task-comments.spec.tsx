@@ -58,7 +58,6 @@ it('renders comments', () => {
   instance.setState({
     comments: [comment],
     commentBody: '',
-    createCommentError: null,
   });
   expect(instance.renderComments()).toMatchSnapshot();
 });

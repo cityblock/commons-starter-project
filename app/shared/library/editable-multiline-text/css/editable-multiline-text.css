@@ -42,7 +42,3 @@
   border-color: transparent;
   cursor: text;
 }
-
-.edit.limitHeight {
-  height: var(--editable-title-height);
-}

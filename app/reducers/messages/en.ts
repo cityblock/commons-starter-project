@@ -462,6 +462,7 @@ export const ENGLISH_TRANSLATION = {
     'taskDescription.empty': 'Click to add a task description...',
     'taskDescription.emptyCBO': 'Click to add a referral note...',
     'taskDescription.emptyCBOAction': 'Add additional information to generate a CBO referral form',
+    'task.addComment': 'Add a comment...',
     'task.assign': 'Assign Task:',
     'task.CBO': 'Community based organization:',
     'task.CBOAddInfo': 'Add information',

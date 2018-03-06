@@ -14,6 +14,7 @@ import {
   taskCommentEditMutationVariables,
   FullTaskCommentFragment,
 } from '../../graphql/types';
+import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';
 import * as styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 
@@ -44,7 +45,6 @@ interface IGraphqlProps {
 
 interface IState {
   commentBody: string;
-  createCommentError: string | null;
   comments: FullTaskCommentFragment[];
 }
 
@@ -54,14 +54,7 @@ export class TaskComments extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.renderComments = this.renderComments.bind(this);
-    this.renderComment = this.renderComment.bind(this);
-    this.reloadComments = this.reloadComments.bind(this);
-    this.onCommentBodyChange = this.onCommentBodyChange.bind(this);
-    this.onCommentBodyKeyDown = this.onCommentBodyKeyDown.bind(this);
-    this.onCommentEdit = this.onCommentEdit.bind(this);
-
-    this.state = { comments: [], commentBody: '', createCommentError: null };
+    this.state = { comments: [], commentBody: '' };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -75,13 +68,13 @@ export class TaskComments extends React.Component<allProps, IState> {
     }
   }
 
-  onCommentBodyChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+  onCommentBodyChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const value = event.target.value;
 
     this.setState({ commentBody: value || '' });
-  }
+  };
 
-  async onCommentEdit(editedComment: taskCommentEditMutationVariables) {
+  onCommentEdit = async (editedComment: taskCommentEditMutationVariables): Promise<void> => {
     const { editComment, updateTaskComments } = this.props;
     const { taskCommentId, body } = editedComment;
 
@@ -116,43 +109,31 @@ export class TaskComments extends React.Component<allProps, IState> {
     } catch (err) {
       throw new Error(err.message);
     }
-  }
+  };
 
-  async onCommentBodyKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    const enterPressed = event.keyCode === 13;
-    const shiftPressed = event.shiftKey;
+  onCommentCreate = async (): Promise<void> => {
+    const { createComment, taskId, refetchTaskComments } = this.props;
+    const { commentBody } = this.state;
 
-    if (enterPressed && !shiftPressed) {
-      event.preventDefault();
+    if (taskId && commentBody) {
+      await createComment({ variables: { taskId, body: commentBody } });
+      this.setState({ commentBody: '' });
 
-      const { createComment, taskId, refetchTaskComments } = this.props;
-      const { commentBody } = this.state;
-
-      if (taskId && commentBody) {
-        try {
-          this.setState({ createCommentError: null });
-          await createComment({ variables: { taskId, body: commentBody } });
-          this.setState({ commentBody: '' });
-
-          refetchTaskComments();
-        } catch (err) {
-          this.setState({ createCommentError: err.message });
-        }
-      }
+      refetchTaskComments();
     }
-  }
+  };
 
-  renderComment(comment: FullTaskCommentFragment) {
+  renderComment = (comment: FullTaskCommentFragment): JSX.Element => {
     return <TaskComment key={comment.id} comment={comment} onEdit={this.onCommentEdit} />;
-  }
+  };
 
-  reloadComments() {
+  reloadComments = (): void => {
     const { refetchTaskComments } = this.props;
 
     if (refetchTaskComments) {
       refetchTaskComments();
     }
-  }
+  };
 
   renderComments() {
     const { taskCommentsError, taskCommentsLoading } = this.props;
@@ -160,7 +141,7 @@ export class TaskComments extends React.Component<allProps, IState> {
 
     if (taskCommentsLoading) {
       return (
-        <div>
+        <div className={styles.comments}>
           <div className={styles.smallText}>Loading comments...</div>
           <div className={styles.commentsList}>{comments.map(this.renderComment)}</div>
         </div>
@@ -179,7 +160,7 @@ export class TaskComments extends React.Component<allProps, IState> {
       );
     } else {
       return (
-        <div>
+        <div className={styles.comments}>
           <FormattedMessage id="taskComment.activity">
             {(message: string) => (
               <div className={classNames(styles.smallText, styles.divider)}>
@@ -194,30 +175,15 @@ export class TaskComments extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { commentBody, createCommentError } = this.state;
-
-    const addCommentErrorStyles = classNames(styles.addCommentError, {
-      [styles.hiddenError]: !createCommentError,
-    });
+    const { commentBody } = this.state;
 
     return (
       <div className={styles.taskComments}>
-        <div className={styles.addComment}>
-          <textarea
-            placeholder={'Add a comment...'}
-            value={commentBody}
-            onChange={this.onCommentBodyChange}
-            onKeyDown={this.onCommentBodyKeyDown}
-          />
-          <div className={addCommentErrorStyles}>
-            <FormattedMessage id="taskComment.error">
-              {(message: string) => (
-                <div className={classNames(styles.smallText, styles.redText)}>{message}</div>
-              )}
-            </FormattedMessage>
-            <div className={styles.smallText}>Please try again.</div>
-          </div>
-        </div>
+        <TextAreaWithButton
+          value={commentBody}
+          onChange={this.onCommentBodyChange}
+          onSubmit={this.onCommentCreate}
+        />
         {this.renderComments()}
       </div>
     );

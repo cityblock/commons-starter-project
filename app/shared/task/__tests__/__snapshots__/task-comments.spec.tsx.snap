@@ -5,30 +5,34 @@ exports[`correctly renders comments component 1`] = `
   className="taskComments"
 >
   <div
-    className="addComment"
+    className="container"
+    onClick={[Function]}
   >
     <textarea
+      className="textarea"
+      onBlur={[Function]}
       onChange={[Function]}
-      onKeyDown={[Function]}
+      onFocus={[Function]}
       placeholder="Add a comment..."
       value=""
     />
-    <div
-      className="addCommentError hiddenError"
+    <button
+      className="button white button"
+      disabled={false}
+      onClick={[Function]}
     >
-      <div
-        className="smallText redText"
+      <span
+        className="flex"
       >
-        Error adding comment
-      </div>
-      <div
-        className="smallText"
-      >
-        Please try again.
-      </div>
-    </div>
+        <span>
+          Submit
+        </span>
+      </span>
+    </button>
   </div>
-  <div>
+  <div
+    className="comments"
+  >
     <div
       className="smallText"
     >
@@ -42,7 +46,9 @@ exports[`correctly renders comments component 1`] = `
 `;
 
 exports[`renders comments 1`] = `
-<div>
+<div
+  className="comments"
+>
   <FormattedMessage
     id="taskComment.activity"
     values={Object {}}

@@ -9,7 +9,7 @@ export type Color = 'blue' | 'white' | 'red' | 'teal' | 'gray';
 export type IconFillColor = 'white' | 'blue' | 'green';
 
 export interface IProps {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   messageId?: string; // prefer using translate message ids
   label?: string; // use this if not translating
   color?: Color | null; // if not provided, defaults to blue

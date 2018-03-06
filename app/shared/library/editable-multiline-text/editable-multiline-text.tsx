@@ -5,8 +5,6 @@ import * as styles from './css/editable-multiline-text.css';
 
 const FOCUS_TIMEOUT = 100; // ms
 const BASE_TEXT_HEIGHT = '2px';
-const SHORT_TITLE_CUTOFF = 38;
-const SHORT_TITLE_HEIGHT = '28px';
 
 interface IProps {
   text: string;
@@ -52,10 +50,9 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
   }
 
   updateTextHeight(): void {
-    const height =
-      this.editText && this.state.editedText.length >= SHORT_TITLE_CUTOFF
-        ? `${this.editText.scrollHeight + 2}px`
-        : SHORT_TITLE_HEIGHT;
+    // reset height otherwise scrollHeight won't shrink if needed
+    if (this.editText) this.editText.style.height = BASE_TEXT_HEIGHT;
+    const height = this.editText ? `${this.editText.scrollHeight + 2}px` : BASE_TEXT_HEIGHT;
 
     if (this.editText && height !== BASE_TEXT_HEIGHT) {
       this.editText.style.height = height;
@@ -104,8 +101,6 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
         [styles.error]: !!error,
         [styles.descriptionEdit]: descriptionField,
         [styles.disabled]: !editMode,
-        // fixes short title height being too big
-        [styles.limitHeight]: editedText.length < SHORT_TITLE_CUTOFF,
       },
       editStyles,
     );

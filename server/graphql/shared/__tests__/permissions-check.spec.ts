@@ -313,20 +313,23 @@ describe('User Permissions Check', () => {
 
     it('creates a glass break for a user that can auto break glass', async () => {
       await transaction(PatientGlassBreak.knex(), async txn => {
-        const { user, patient } = await setup(txn);
-
-        const result = await validateGlassBreak(user.id, 'green', 'patient', patient.id, txn, null);
+        const { user, clinic } = await setup(txn);
+        const patient2 = await createPatient(
+          { cityblockId: 13, homeClinicId: clinic.id },
+          txn,
+        );
+        const result = await validateGlassBreak(user.id, 'green', 'patient', patient2.id, txn, null);
 
         expect(result).toBeTruthy();
 
         const glassBreak = await PatientGlassBreak.query(txn).findOne({
           userId: user.id,
-          patientId: patient.id,
+          patientId: patient2.id,
         });
 
         expect(glassBreak).toMatchObject({
           userId: user.id,
-          patientId: patient.id,
+          patientId: patient2.id,
         });
       });
     });

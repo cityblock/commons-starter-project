@@ -139,17 +139,8 @@ export const validateGlassBreak = async (
   if (glassBreakId) {
     await model.validateGlassBreak(glassBreakId, userId, resourceId, txn);
     // if user can auto break glass, simply record their viewing of the resource
-  } else if (businessToggles.canAutoBreakGlass) {
-    await model.create(
-      {
-        userId,
-        [`${resource}Id`]: resourceId,
-        reason: 'Can auto break glass',
-      },
-      txn,
-    );
-    // otherwise check if glass break not required (such as if user on patient's care team)
   } else {
+    // check if glass break not needed
     const isGlassBreakNotNeeded = await validateGlassBreakNotNeeded(
       userId,
       resource,
@@ -157,9 +148,20 @@ export const validateGlassBreak = async (
       txn,
     );
 
-    if (!isGlassBreakNotNeeded) {
+    // if glass break needed and cannot auto break glass, action not allowed
+    if (!isGlassBreakNotNeeded && !businessToggles.canAutoBreakGlass) {
       throw new Error(
         `User ${userId} cannot automatically break the glass for ${resource} ${resourceId}`,
+      );
+      // otherwise record glass break from auto breaking glass
+    } else if (!isGlassBreakNotNeeded && businessToggles.canAutoBreakGlass) {
+      await model.create(
+        {
+          userId,
+          [`${resource}Id`]: resourceId,
+          reason: 'Can auto break glass',
+        },
+        txn,
       );
     }
   }

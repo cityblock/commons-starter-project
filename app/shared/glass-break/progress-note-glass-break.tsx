@@ -84,7 +84,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
       const { featureFlags, glassBreakCheck } = this.props;
       const glassBreakId = this.getGlassBreakId();
       // render componetn if can auto break glass, don't need to break glass, or already broke glass
-      if (featureFlags.canBulkAssign || glassBreakCheck.isGlassBreakNotNeeded || glassBreakId) {
+      if (featureFlags.canAutoBreakGlass || glassBreakCheck.isGlassBreakNotNeeded || glassBreakId) {
         return <Component {...this.getWrappedComponentProps()} glassBreakId={glassBreakId} />;
       }
       // otherwise render glass break screen

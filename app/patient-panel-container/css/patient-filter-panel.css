@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 @keyframes slideIn {
   0% {
     transform: translateX(450px);

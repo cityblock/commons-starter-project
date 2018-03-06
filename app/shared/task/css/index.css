@@ -1,5 +1,3 @@
-@import '../../css/sizes';
-
 .container {
   background: var(--white-color);
   box-shadow: var(--drop-shadow);

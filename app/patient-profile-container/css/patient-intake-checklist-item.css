@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .checklistItem {
   display: flex;
   flex-direction: row;

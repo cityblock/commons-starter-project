@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .encounterTypeContainer {
   background: var(--white-font-color);
   padding: var(--small-gutter);

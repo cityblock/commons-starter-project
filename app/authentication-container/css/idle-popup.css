@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .heading {
   font-family: var(--basetica-medium);
   font-size: var(--medium-font-size);

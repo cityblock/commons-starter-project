@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .patientForm {
   display: flex;
   flex-direction: row;

@@ -1,5 +1,3 @@
-@import './sizes';
-
 .sortSearchBar {
   padding: 0 var(--medium-gutter);
   height: 50px;

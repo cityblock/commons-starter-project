@@ -1,5 +1,3 @@
-@import '../../css/sizes';
-
 .button {
   background: var(--blue-color);
   border: 1px solid var(--blue-color);

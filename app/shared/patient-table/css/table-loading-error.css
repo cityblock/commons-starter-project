@@ -1,5 +1,3 @@
-@import '../../css/sizes';
-
 .errorRow,
 .loadingRow {
   padding: 150px var(--gutter);

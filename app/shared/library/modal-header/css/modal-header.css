@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .container {
   background: var(--gray-background-color);
   text-align: center;

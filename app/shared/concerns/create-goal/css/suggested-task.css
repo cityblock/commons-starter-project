@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .container {
   border: 1px dashed var(--gray-font-color);
   border-radius: var(--big-border-radius);

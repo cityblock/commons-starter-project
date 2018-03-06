@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .container {
   margin-bottom: var(--extra-small-gutter);
   cursor: pointer;

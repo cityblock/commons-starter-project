@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .container {
   background: var(--white-color);
   display: flex;
@@ -21,7 +19,7 @@
 
 .container.redBorder,
 .container.redBorder .textarea {
-  border-color: var(--red-border);
+  border-color: var(--red-color);
 }
 
 .textarea {

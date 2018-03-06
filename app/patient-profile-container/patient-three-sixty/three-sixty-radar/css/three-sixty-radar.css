@@ -1,5 +1,3 @@
-@import '../../../../shared/css/sizes';
-
 .container {
   background: var(--white-color);
   border-radius: var(--big-border-radius);

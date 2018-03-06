@@ -69,7 +69,7 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
     if (this.textarea) {
       this.textarea.focus();
     }
-  }
+  };
 
   render(): JSX.Element {
     const { value, onChange, submitMessageId, placeholderMessageId } = this.props;

@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .screeningToolsPopupContent {
   display: flex;
   flex-direction: column;

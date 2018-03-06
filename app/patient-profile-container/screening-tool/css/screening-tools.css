@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .section {
   padding-bottom: var(--small-gutter);
   margin-bottom: var(--small-gutter);

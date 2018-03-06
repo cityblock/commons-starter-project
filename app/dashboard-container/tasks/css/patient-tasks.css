@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .container {
   box-shadow: var(--big-box-shadow);
 }

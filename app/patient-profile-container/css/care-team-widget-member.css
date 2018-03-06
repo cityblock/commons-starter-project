@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .careTeamMemberRow {
   &:hover {
     cursor: pointer;

@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .link {
   color: var(--light-blue-color);
   font-family: var(--basetica-medium);

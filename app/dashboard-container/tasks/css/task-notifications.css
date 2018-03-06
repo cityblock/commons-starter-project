@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .container {
   padding-bottom: var(--extra-small-gutter);
 }

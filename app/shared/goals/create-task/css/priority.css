@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .circle {
   background-position-x: 135px, calc(100% - 20px);
 }

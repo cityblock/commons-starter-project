@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .tabs {
   background: var(--dark-gray-background-color);
   height: 50px;

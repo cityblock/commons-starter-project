@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .dateInput {
   height: var(--input-height);
   width: 100%;

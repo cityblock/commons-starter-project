@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .title h2 {
   font-family: var(--basetica-black);
   color: var(--black-color);

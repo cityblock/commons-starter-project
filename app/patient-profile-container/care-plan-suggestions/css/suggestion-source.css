@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .container {
   background: var(--white-color);
   padding: 5px var(--extra-small-gutter);

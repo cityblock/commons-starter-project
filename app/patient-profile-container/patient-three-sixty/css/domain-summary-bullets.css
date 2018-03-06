@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .container h4 {
   margin: var(--extra-small-gutter) 0;
   color: var(--light-gray-font-color);

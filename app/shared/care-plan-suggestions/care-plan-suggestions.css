@@ -1,5 +1,3 @@
-@import '../css/sizes.css';
-
 .content {
   display: flex;
   flex-direction: column;

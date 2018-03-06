@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .popup {
   border-radius: var(--big-border-radius);
 }

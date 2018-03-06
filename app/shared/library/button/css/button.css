@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .button,
 .iconButton {
   font-size: var(--default-font-size);

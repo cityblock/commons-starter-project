@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .label {
   display: block;
   color: var(--light-gray-font-color);

@@ -1,5 +1,3 @@
-@import '../../../css/sizes';
-
 .fieldRow {
   display: flex;
   flex-direction: row;

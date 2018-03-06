@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .modalBody {
   padding: var(--medium-gutter);
 }

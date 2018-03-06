@@ -1,5 +1,3 @@
-@import '../../shared/css/sizes';
-
 .question {
   display: flex;
   flex-direction: column;

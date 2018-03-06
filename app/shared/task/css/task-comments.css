@@ -1,5 +1,3 @@
-@import '../../css/sizes';
-
 .smallText,
 .errorText {
   font-family: var(--roboto);

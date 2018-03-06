@@ -1,5 +1,3 @@
-@import '../../css/sizes.css';
-
 .list {
   display: inline-block;
   height: calc(100vh - 223px);

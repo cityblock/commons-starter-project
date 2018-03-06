@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .select {
   height: 52px;
   font-size: var(--medium-font-size);

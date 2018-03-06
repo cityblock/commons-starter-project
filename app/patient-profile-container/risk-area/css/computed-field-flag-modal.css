@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .popup,
 .fields {
   border-radius: var(--big-border-radius);

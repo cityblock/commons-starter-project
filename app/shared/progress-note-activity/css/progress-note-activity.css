@@ -1,5 +1,3 @@
-@import '../../css/sizes';
-
 .activity {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

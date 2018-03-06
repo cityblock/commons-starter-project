@@ -1,5 +1,3 @@
-@import '../../../shared/css/sizes';
-
 .buttons {
   border-bottom: 1px solid var(--gray-background-color);
   padding-bottom: var(--extra-small-gutter);

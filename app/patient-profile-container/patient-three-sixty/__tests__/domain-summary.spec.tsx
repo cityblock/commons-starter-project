@@ -51,6 +51,7 @@ describe('Patient 360 Domain Summary', () => {
     expect(wrapper.find(DomainSummaryBullets).length).toBe(1);
     expect(wrapper.find(DomainSummaryBullets).props().automatedSummaryText).toEqual([]);
     expect(wrapper.find(DomainSummaryBullets).props().manualSummaryText).toEqual([]);
+    expect(wrapper.find(DomainSummaryBullets).props().isRiskCalculated).toBeTruthy();
   });
 
   it('renders date info if last updated', () => {

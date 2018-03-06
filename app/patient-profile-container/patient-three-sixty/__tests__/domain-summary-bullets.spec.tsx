@@ -40,7 +40,11 @@ describe('Domain Summary Bullet Components', () => {
 
   describe('Domain Summary Bullets', () => {
     const wrapper = shallow(
-      <DomainSummaryBullets manualSummaryText={manualSummaryText} automatedSummaryText={[]} />,
+      <DomainSummaryBullets
+        manualSummaryText={manualSummaryText}
+        automatedSummaryText={[]}
+        isRiskCalculated={true}
+      />,
     );
 
     it('renders no labels and one list if only one list populated', () => {
@@ -83,10 +87,21 @@ describe('Domain Summary Bullet Components', () => {
     });
 
     it('renders empty message if no lists populated', () => {
-      wrapper.setProps({ automatedSummaryText: [], manualSummaryText: [] });
+      wrapper.setProps({
+        automatedSummaryText: [],
+        manualSummaryText: [],
+        isRiskCalculated: false,
+      });
 
       expect(wrapper.find(FormattedMessage).length).toBe(1);
       expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.noAssessments');
+    });
+
+    it('renders no summary message if no bullets but risk calculated', () => {
+      wrapper.setProps({ isRiskCalculated: true });
+
+      expect(wrapper.find(FormattedMessage).length).toBe(1);
+      expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.noSummary');
     });
   });
 });

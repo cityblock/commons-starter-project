@@ -101,6 +101,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
   render(): JSX.Element | null {
     const { routeBase, riskAreaGroupId, riskAreaGroup, risk, loading } = this.props;
     if (loading || !riskAreaGroup) return null;
+
     const domainStyles = classNames(styles.domain, {
       [styles.redBorder]: risk && risk === 'high',
       [styles.yellowBorder]: risk && risk === 'medium',
@@ -130,6 +131,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
         <DomainSummaryBullets
           automatedSummaryText={automatedSummaryText}
           manualSummaryText={manualSummaryText}
+          isRiskCalculated={!!risk}
         />
       </Link>
     );

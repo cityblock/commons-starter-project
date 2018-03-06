@@ -5,6 +5,7 @@ import * as styles from './css/domain-summary-bullets.css';
 interface IProps {
   automatedSummaryText: string[];
   manualSummaryText: string[];
+  isRiskCalculated: boolean;
 }
 
 export const DomainSummaryBulletItems: React.StatelessComponent<{ items: string[] }> = ({
@@ -22,14 +23,22 @@ export const DomainSummaryBulletItems: React.StatelessComponent<{ items: string[
 };
 
 const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { automatedSummaryText, manualSummaryText } = props;
+  const { automatedSummaryText, manualSummaryText, isRiskCalculated } = props;
 
   if (!automatedSummaryText.length && !manualSummaryText.length) {
-    return (
-      <FormattedMessage id="threeSixty.noAssessments">
-        {(message: string) => <p className={styles.noAssessments}>{message}</p>}
-      </FormattedMessage>
-    );
+    if (isRiskCalculated) {
+      return (
+        <FormattedMessage id="threeSixty.noSummary">
+          {(message: string) => <p className={styles.noAssessments}>{message}</p>}
+        </FormattedMessage>
+      );
+    } else {
+      return (
+        <FormattedMessage id="threeSixty.noAssessments">
+          {(message: string) => <p className={styles.noAssessments}>{message}</p>}
+        </FormattedMessage>
+      );
+    }
   }
 
   const onlyOneAssessmentType = !!automatedSummaryText.length !== !!manualSummaryText.length;

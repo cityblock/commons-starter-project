@@ -496,6 +496,7 @@ export const ENGLISH_TRANSLATION = {
     'threeSixty.manualEmpty': 'There are no manual assessments on record',
     'threeSixty.never': 'Not submitted',
     'threeSixty.noAssessments': 'No assessments on record',
+    'threeSixty.noSummary': 'Based on current assessment, nothing of concern in this domain',
     'threeSixty.notCompleted': 'Member has not completed this assessment.',
     'threeSixty.notCompletedShort': 'Not completed',
     'threeSixty.summary': 'Patient Summary',

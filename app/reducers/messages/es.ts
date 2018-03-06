@@ -503,6 +503,7 @@ export const SPANISH_TRANSLATION = {
     'threeSixty.never': 'No presentado',
     'threeSixty.manualEmpty': 'No hay evaluaciones manuales en el registro',
     'threeSixty.noAssessments': 'No hay evaluaciones registradas',
+    'threeSixty.noSummary': 'Based on current assessment, nothing of concern in this domain',
     'threeSixty.notCompleted': 'El miembro no ha completado esta evaluación.',
     'threeSixty.notCompletedShort': 'Sin completar',
     'threeSixty.summary': 'Resumen del paciente',

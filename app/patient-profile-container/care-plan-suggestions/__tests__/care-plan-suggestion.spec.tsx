@@ -3,7 +3,11 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DateInfo from '../../../shared/library/date-info/date-info';
 import Icon from '../../../shared/library/icon/icon';
-import { fullCarePlanSuggestionWithConcern as suggestion } from '../../../shared/util/test-data';
+import TextInfo from '../../../shared/library/text-info/text-info';
+import {
+  fullCarePlanSuggestionWithConcern as suggestion,
+  fullCarePlanSuggestionWithGoal as goalSuggestion,
+} from '../../../shared/util/test-data';
 import CarePlanSuggestion from '../care-plan-suggestion';
 import SuggestionSource from '../suggestion-source';
 
@@ -30,13 +34,17 @@ describe('Care Plan Suggestion Component', () => {
     expect(wrapper.find(SuggestionSource).props().suggestion).toEqual(suggestion);
   });
 
-  it('renders associated concern or goal title', () => {
+  it('renders associated concern title', () => {
     expect(wrapper.find('h1').text()).toBe(suggestion.concern.title);
   });
 
   it('renders date info for when suggestion was created', () => {
     expect(wrapper.find(DateInfo).props().label).toBe('suggested');
     expect(wrapper.find(DateInfo).props().date).toBe(suggestion.createdAt);
+  });
+
+  it('does not render text info if concern suggestion', () => {
+    expect(wrapper.find(TextInfo).length).toBe(0);
   });
 
   it('renders icon to dismiss suggestion', () => {
@@ -69,5 +77,21 @@ describe('Care Plan Suggestion Component', () => {
         .at(1)
         .props().color,
     ).toBe('green');
+  });
+
+  it('renders goal title if goal suggestion', () => {
+    wrapper.setProps({ suggestion: goalSuggestion });
+
+    expect(wrapper.find('h1').text()).toBe(goalSuggestion.goalSuggestionTemplate.title);
+    expect(wrapper.find(FormattedMessage).props().id).toBe('carePlanSuggestion.goal');
+  });
+
+  it('applies goal styles if goal suggestion', () => {
+    expect(wrapper.find('.container').props().className).toBe('container goal');
+  });
+
+  it('renders count of tasks if goal suggestion', () => {
+    expect(wrapper.find(TextInfo).props().messageId).toBe('carePlanSuggestion.tasks');
+    expect(wrapper.find(TextInfo).props().text).toBe(1);
   });
 });

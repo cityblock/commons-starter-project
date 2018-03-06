@@ -56,7 +56,7 @@ export default class PatientContactAddress extends BaseModel {
     txn: Transaction,
   ): Promise<Address[]> {
     return (await PatientContactAddress.query(txn)
-      .where({ patientContactId, deletedAt: null})
+      .where({ patientContactId, deletedAt: null })
       .eager('address')
       .orderBy('createdAt', 'asc')
       .pluck('address')) as any;
@@ -84,7 +84,7 @@ export default class PatientContactAddress extends BaseModel {
     txn: Transaction,
   ): Promise<Address[]> {
     await this.query(txn)
-      .where({ addressId, patientContactId, deletedAt: null})
+      .where({ addressId, patientContactId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
     return this.getForPatientContact(patientContactId, txn);
   }

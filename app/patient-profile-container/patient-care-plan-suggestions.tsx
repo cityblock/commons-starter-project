@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientCarePlanSuggestionsQuery from '../graphql/queries/get-patient-care-plan-suggestions.graphql';
-import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import {
   getPatientCarePlanSuggestionsQuery,
-  getPatientCareTeamQuery,
   FullCarePlanSuggestionForPatientFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
 import TextDivider from '../shared/library/text-divider/text-divider';
 import CarePlanSuggestion from './care-plan-suggestions/care-plan-suggestion';
+import GoalSuggestions from './care-plan-suggestions/goal-suggestions';
 import * as styles from './css/patient-care-plan.css';
-import PatientCarePlanSuggestion from './patient-care-plan-suggestion';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
 import PopupPatientCarePlanSuggestionDismissed from './popup-patient-care-plan-suggestion-dismissed';
 
@@ -36,7 +34,6 @@ interface IGraphqlProps {
   error: string | null;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   refetchCarePlanSuggestions?: () => any;
-  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
 
 interface IState {
@@ -119,8 +116,18 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
     ));
   }
 
+  renderGoals(suggestions: FullCarePlanSuggestionForPatientFragment[]) {
+    return (
+      <GoalSuggestions
+        suggestions={suggestions}
+        onAccept={this.onAcceptSuggestion}
+        onDismiss={this.onDismissSuggestion}
+      />
+    );
+  }
+
   renderSuggestions(suggestionType: SuggestionTypes) {
-    const { carePlanSuggestions, careTeam } = this.props;
+    const { carePlanSuggestions } = this.props;
 
     const defaultHtml = this.defaultSuggestionsHtml(suggestionType);
 
@@ -135,19 +142,8 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
 
     if (suggestionsToUse.length && suggestionType === 'concern') {
       return this.renderConcerns(suggestionsToUse as FullCarePlanSuggestionForPatientFragment[]);
-    } else if (suggestionsToUse.length) {
-      return suggestionsToUse.map(
-        suggestion =>
-          suggestion ? (
-            <PatientCarePlanSuggestion
-              key={suggestion.id}
-              onAccept={this.onAcceptSuggestion}
-              onDismiss={this.onDismissSuggestion}
-              careTeam={careTeam}
-              suggestion={suggestion}
-            />
-          ) : null,
-      );
+    } else if (suggestionsToUse.length && suggestionType === 'goal') {
+      return this.renderGoals(suggestionsToUse as FullCarePlanSuggestionForPatientFragment[]);
     } else {
       return defaultHtml;
     }
@@ -234,16 +230,6 @@ export default compose(
       error: data ? data.error : null,
       carePlanSuggestions: data ? (data as any).carePlanSuggestionsForPatient : null,
       refetchCarePlanSuggestions: data ? data.refetch : null,
-    }),
-  }),
-  graphql<IGraphqlProps, IProps>(patientCareTeamQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.patientId,
-      },
-    }),
-    props: ({ data }) => ({
-      careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
 )(PatientCarePlanSuggestions);

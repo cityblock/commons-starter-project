@@ -6,6 +6,10 @@ svg.icon {
   fill: var(--border-color);
 }
 
+svg.icon.darkGray {
+  fill: var(--gray-font-color);
+}
+
 svg.icon.white {
   fill: var(--white-color);
 }

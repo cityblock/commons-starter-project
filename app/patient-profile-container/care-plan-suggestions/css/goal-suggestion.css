@@ -1,0 +1,14 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  margin-bottom: var(--extra-small-gutter);
+  cursor: pointer;
+}
+
+.opaque {
+  opacity: 0.4;
+}
+
+.shadow {
+  box-shadow: var(--big-box-shadow);
+}

@@ -495,6 +495,55 @@ export const carePlanSuggestionWithGoal = {
   patientScreeningToolSubmission: null,
 };
 
+export const fullCarePlanSuggestionWithGoal = {
+  id: 'care-plan-suggestion-id',
+  patientId: 'patient-id',
+  patient,
+  suggestionType: 'goal' as any,
+  concernId: null,
+  concern: null,
+  goalSuggestionTemplateId: 'goal-suggestion-template-id',
+  goalSuggestionTemplate: {
+    id: 'goal-suggestion-template-id',
+    title: 'Goal Title',
+    taskTemplates: [
+      {
+        id: 'task-template-1',
+        title: 'Task Title',
+        priority: 'high' as any,
+        completedWithinNumber: 1,
+        completedWithinInterval: 'week' as any,
+        repeating: false,
+        goalSuggestionTemplateId: 'goal-suggestion-template-1',
+        careTeamAssigneeRole: 'physician' as any,
+        createdAt: '2017-08-16T19:27:36.378Z',
+        updatedAt: '2017-08-16T19:27:36.378Z',
+        deletedAt: null,
+        CBOCategoryId: null,
+      },
+    ],
+    createdAt: '2017-08-16T19:27:36.378Z',
+    updatedAt: '2017-08-16T19:27:36.378Z',
+    deletedAt: null,
+  },
+  acceptedById: null,
+  acceptedBy: null,
+  dismissedById: null,
+  dismissedBy: null,
+  dismissedReason: null,
+  dismissedAt: null,
+  acceptedAt: null,
+  createdAt: '2017-08-16T19:27:36.378Z',
+  updatedAt: '2017-08-16T19:27:36.378Z',
+  patientScreeningToolSubmissionId: null,
+  computedField: null,
+  riskAreaAssessmentSubmission: {
+    ...riskAreaAssessmentSubmission,
+    riskArea,
+  },
+  patientScreeningToolSubmission: null,
+};
+
 export const task = {
   id: 'task-id',
   title: 'Task Title',

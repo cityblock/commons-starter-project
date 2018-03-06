@@ -1,5 +1,10 @@
 import { isNil, omitBy } from 'lodash';
-import { IEmailCreateForPatientInput, IEmailCreateInput, IEmailEditInput, IRootMutationType } from 'schema';
+import {
+  IEmailCreateForPatientInput,
+  IEmailCreateInput,
+  IEmailEditInput,
+  IRootMutationType,
+} from 'schema';
 import Email from '../models/email';
 import Patient from '../models/patient';
 import PatientEmail from '../models/patient-email';

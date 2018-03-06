@@ -2,6 +2,7 @@
 
 .container,
 .header,
+.info,
 .actions {
   display: flex;
   align-items: center;
@@ -45,4 +46,21 @@
 
 svg.icon {
   margin-left: var(--gutter);
+}
+
+.goal {
+  border-color: var(--black-color);
+  margin-bottom: 0;
+}
+
+.goal h1 {
+  font-size: var(--default-font-size);
+}
+
+.goal .title {
+  color: var(--light-gray-font-color);
+}
+
+.marginLeft {
+  margin-left: var(--small-gutter);
 }

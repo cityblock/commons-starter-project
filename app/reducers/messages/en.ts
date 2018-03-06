@@ -565,6 +565,7 @@ export const ENGLISH_TRANSLATION = {
     'carePlanSuggestion.concern': 'Suggested Concern',
     'carePlanSuggestion.domainAssessment': 'Domain Assessment',
     'carePlanSuggestion.goal': 'Suggested Goal',
+    'carePlanSuggestion.tasks': 'Suggested tasks:',
     'carePlanSuggestion.tool': 'Tool',
     'carePlanSuggestions.seeSuggestions': 'See Suggestions',
     'carePlanSuggestions.concerns': 'Suggested Concerns',

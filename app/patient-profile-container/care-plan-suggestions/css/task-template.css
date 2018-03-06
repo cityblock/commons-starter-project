@@ -1,0 +1,20 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--small-gutter);
+  background: var(--highlight-background-color);
+  border: 1px dashed var(--black-color);
+  border-radius: var(--big-border-radius);
+  border-top: none;
+}
+
+.container h2 {
+  color: var(--black-color);
+  font-size: var(--default-font-size);
+  font-weight: var(--roboto-medium-weight);
+  margin: 0;
+  padding: 0;
+}

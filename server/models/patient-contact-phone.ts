@@ -53,7 +53,7 @@ export default class PatientContactPhone extends BaseModel {
 
   static async getForPatientContact(patientContactId: string, txn: Transaction): Promise<Phone[]> {
     return (await PatientContactPhone.query(txn)
-      .where({ patientContactId, deletedAt: null})
+      .where({ patientContactId, deletedAt: null })
       .eager('phone')
       .orderBy('createdAt', 'asc')
       .pluck('phone')) as any;
@@ -81,7 +81,7 @@ export default class PatientContactPhone extends BaseModel {
     txn: Transaction,
   ): Promise<Phone[]> {
     await this.query(txn)
-      .where({ phoneId, patientContactId, deletedAt: null})
+      .where({ phoneId, patientContactId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
     return this.getForPatientContact(patientContactId, txn);
   }

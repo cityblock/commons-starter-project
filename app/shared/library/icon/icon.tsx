@@ -4,12 +4,12 @@ import * as styles from './css/icon.css';
 import iconComponents from './icon-components';
 import { IconName } from './icon-types';
 
-export type Color = 'gray' | 'white' | 'red' | 'blue' | 'green'; // default is gray
+export type Color = 'gray' | 'darkGray' | 'white' | 'red' | 'blue' | 'green'; // default is gray
 
 interface IProps {
   name: IconName;
   className?: string; // optional styles to be applied over defaults
-  onClick?: () => void; // optional click handler for icon
+  onClick?: (e?: any) => void; // optional click handler for icon
   color?: Color;
   isLarge?: boolean;
 }
@@ -20,6 +20,7 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
   const iconStyles = classNames(
     styles.icon,
     {
+      [styles.darkGray]: color === 'darkGray',
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
       [styles.blue]: color === 'blue',

@@ -4,7 +4,7 @@ import * as styles from './css/text-info.css';
 
 export interface IProps {
   messageId: string; // translate id for label of information
-  text?: string; // what value of information is, use either text or textMessageId
+  text?: string | number; // what value of information is, use either text or textMessageId
   textMessageId?: string; // translate id for value of information
   className?: string; // optional styles to apply to container
   textStyles?: string; // optional styles to apply to value text
@@ -33,7 +33,7 @@ const TextInfo: React.StatelessComponent<IProps> = (props: IProps) => {
   if (textMessageId) {
     valueTextProps.messageId = textMessageId;
   } else {
-    valueTextProps.text = text || '';
+    valueTextProps.text = `${text}` || '';
   }
 
   return (

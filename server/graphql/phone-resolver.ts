@@ -1,5 +1,10 @@
 import { isNil, omitBy } from 'lodash';
-import { IPhoneCreateForPatientInput, IPhoneCreateInput, IPhoneEditInput, IRootMutationType } from 'schema';
+import {
+  IPhoneCreateForPatientInput,
+  IPhoneCreateInput,
+  IPhoneEditInput,
+  IRootMutationType,
+} from 'schema';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
 import PatientPhone from '../models/patient-phone';

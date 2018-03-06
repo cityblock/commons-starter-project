@@ -30,22 +30,28 @@ export async function patientContactCreate(
 
   const promises = [] as Array<Promise<any>>;
   if (filtered.primaryAddressId) {
-    promises.push(PatientContactAddress.create(
-      { patientContactId: patientContact.id, addressId: filtered.primaryAddressId },
-      txn,
-    ));
+    promises.push(
+      PatientContactAddress.create(
+        { patientContactId: patientContact.id, addressId: filtered.primaryAddressId },
+        txn,
+      ),
+    );
   }
   if (filtered.primaryEmailId) {
-    promises.push(PatientContactEmail.create(
-      { patientContactId: patientContact.id, emailId: filtered.primaryEmailId },
-      txn,
-    ));
+    promises.push(
+      PatientContactEmail.create(
+        { patientContactId: patientContact.id, emailId: filtered.primaryEmailId },
+        txn,
+      ),
+    );
   }
   if (filtered.primaryPhoneId) {
-    promises.push(PatientContactPhone.create(
-      { patientContactId: patientContact.id, phoneId: filtered.primaryPhoneId },
-      txn,
-    ));
+    promises.push(
+      PatientContactPhone.create(
+        { patientContactId: patientContact.id, phoneId: filtered.primaryPhoneId },
+        txn,
+      ),
+    );
   }
 
   await Promise.all(promises);
@@ -66,16 +72,20 @@ export async function patientContactEdit(
 
   const promises = [] as Array<Promise<any>>;
   if (filtered.primaryAddressId) {
-    promises.push(PatientContactAddress.create(
-      { patientContactId: patientContact.id, addressId: filtered.primaryAddressId },
-      txn,
-    ));
+    promises.push(
+      PatientContactAddress.create(
+        { patientContactId: patientContact.id, addressId: filtered.primaryAddressId },
+        txn,
+      ),
+    );
   }
   if (filtered.primaryEmailId) {
-    promises.push(PatientContactEmail.create(
-      { patientContactId: patientContact.id, emailId: filtered.primaryEmailId },
-      txn,
-    ));
+    promises.push(
+      PatientContactEmail.create(
+        { patientContactId: patientContact.id, emailId: filtered.primaryEmailId },
+        txn,
+      ),
+    );
   }
 
   await Promise.all(promises);

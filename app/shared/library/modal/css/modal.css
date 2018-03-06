@@ -3,3 +3,8 @@
 .body {
   padding: var(--medium-gutter);
 }
+
+.body,
+.popup {
+  border-radius: var(--big-border-radius);
+}

@@ -4,17 +4,16 @@ import * as carePlanSuggestionDismissMutationGraphql from '../graphql/queries/ca
 import {
   carePlanSuggestionDismissMutation,
   carePlanSuggestionDismissMutationVariables,
-  FullCarePlanSuggestionFragment,
+  FullCarePlanSuggestionForPatientFragment,
 } from '../graphql/types';
-import { Popup } from '../shared/popup/popup';
-import * as styles from './css/patient-care-plan.css';
-import PopupPatientCarePlanSuggestionDismissedModalBody from './popup-patient-care-plan-suggestion-dismissed-modal-body';
+import Modal from '../shared/library/modal/modal';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 
 interface IProps {
   visible: boolean;
-  suggestion?: FullCarePlanSuggestionFragment;
+  suggestion: FullCarePlanSuggestionForPatientFragment | null;
   onDismiss: () => any;
-  mutate?: any;
 }
 
 interface IGraphqlProps {
@@ -31,23 +30,19 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, IState> {
+export class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-
-    this.onDismiss = this.onDismiss.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
 
     this.state = { dismissedReason: '', loading: false, error: null };
   }
 
-  async onSubmit() {
+  onSubmit = async (): Promise<void> => {
     const { suggestion, dismissCarePlanSuggestion } = this.props;
 
     const { dismissedReason } = this.state;
 
-    if (suggestion && dismissedReason.length) {
+    if (suggestion) {
       this.setState({ loading: true });
 
       try {
@@ -65,9 +60,9 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
         this.setState({ loading: false, error: err.message });
       }
     }
-  }
+  };
 
-  onDismiss() {
+  onDismiss = (): void => {
     const { onDismiss } = this.props;
 
     this.setState({
@@ -77,33 +72,34 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
     });
 
     onDismiss();
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const fieldValue = event.currentTarget.value;
-    const fieldName = event.currentTarget.name;
-    this.setState({ [fieldName as any]: fieldValue });
-  }
+  onChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    this.setState({ dismissedReason: event.currentTarget.value });
+  };
 
   render() {
     const { suggestion, visible } = this.props;
-    const { dismissedReason } = this.state;
+    const { dismissedReason, error } = this.state;
+
+    const suggestionType = (suggestion && suggestion.suggestionType) || '';
 
     return (
-      <Popup visible={visible} style={'small-padding'}>
-        <div className={styles.acceptModalContent}>
-          <div className={styles.acceptModalHeader}>
-            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />
-          </div>
-          <PopupPatientCarePlanSuggestionDismissedModalBody
-            suggestion={suggestion}
-            dismissedReason={dismissedReason}
-            onChange={this.onChange}
-            onDismiss={this.onDismiss}
-            onSubmit={this.onSubmit}
-          />
-        </div>
-      </Popup>
+      <Modal
+        isVisible={visible}
+        onSubmit={this.onSubmit}
+        onClose={this.onDismiss}
+        titleMessageId="carePlanSuggestion.dismissReason"
+        submitMessageId={`carePlanSuggestion.dismiss${suggestionType}`}
+        error={error}
+      >
+        <Select onChange={this.onChange} value={dismissedReason} large>
+          <Option value="" disabled messageId="carePlanSuggestion.selectReason" />
+          <Option value="not applicable" messageId="carePlanSuggestion.notApplicable" />
+          <Option value="too much work" messageId="carePlanSuggestion.tooMuchWork" />
+          <Option value="dangerous" messageId="carePlanSuggestion.dangerous" />
+        </Select>
+      </Modal>
     );
   }
 }

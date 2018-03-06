@@ -35,7 +35,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
   ) : null;
 
   return (
-    <Popup visible={isVisible} closePopup={onClose} style="no-padding">
+    <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={styles.popup}>
       <ModalHeader titleMessageId={titleMessageId} closePopup={onClose} />
       {errorComponent}
       <div className={styles.body}>

@@ -98,7 +98,7 @@ export default class CarePlanSuggestion extends BaseModel {
       concernId: { type: 'string', format: 'uuid' },
       goalSuggestionTemplateId: { type: 'string', format: 'uuid' },
       dismissedById: { type: 'string', format: 'uuid' },
-      dismissedReason: { type: 'string' },
+      dismissedReason: { type: 'string', minLength: 1 },
       dismissedAt: { type: 'string' },
       acceptedAt: { type: 'string' },
       acceptedById: { type: 'string', format: 'uuid' },

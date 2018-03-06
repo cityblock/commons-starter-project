@@ -33,6 +33,7 @@ describe('Render Modal Component', () => {
     expect(wrapper.find(Popup).props().visible).toBeTruthy();
     expect(wrapper.find(Popup).props().closePopup).toBe(onClose);
     expect(wrapper.find(Popup).props().style).toBe('no-padding');
+    expect(wrapper.find(Popup).props().className).toBe('popup');
   });
 
   it('renders address modal header', () => {

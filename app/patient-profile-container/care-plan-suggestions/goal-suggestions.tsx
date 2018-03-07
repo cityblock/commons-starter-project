@@ -27,6 +27,14 @@ class GoalSuggestions extends React.Component<IProps, IState> {
     };
   }
 
+  componentWillReceiveProps(nextProps: IProps) {
+    // if number of goal suggestions has changed because of accepting/denying them,
+    // delect all goal suggestions
+    if (nextProps.suggestions.length !== this.props.suggestions.length) {
+      this.setState({ selectedGoalSuggestionId: '' });
+    }
+  }
+
   toggleSelectedGoalSuggestionId = (goalSuggestionId: string) => {
     if (this.state.selectedGoalSuggestionId === goalSuggestionId) {
       this.setState({ selectedGoalSuggestionId: '' });

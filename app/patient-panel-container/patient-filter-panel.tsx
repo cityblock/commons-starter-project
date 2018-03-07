@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { values } from 'lodash-es';
+import { values } from 'lodash';
 import * as React from 'react';
 import { Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';

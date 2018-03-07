@@ -1,4 +1,4 @@
-import { values } from 'lodash-es';
+import { values } from 'lodash';
 import * as React from 'react';
 import { PhoneTypeOptions } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';

@@ -1,5 +1,5 @@
 import { History } from 'history';
-import { isNil, omitBy } from 'lodash-es';
+import { isNil, omitBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';

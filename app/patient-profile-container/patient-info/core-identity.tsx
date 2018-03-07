@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { filter } from 'lodash-es';
+import { filter } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';

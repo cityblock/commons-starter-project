@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
-import { values } from 'lodash-es';
+import { values } from 'lodash';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getPatientQuery, BirthSexOptions, Gender } from '../../graphql/types';

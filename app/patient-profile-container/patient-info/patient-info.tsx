@@ -1,4 +1,4 @@
-import { filter, get, isNil } from 'lodash-es';
+import { filter, get, isNil } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';

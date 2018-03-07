@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 
-import { clone } from 'lodash-es';
+import { clone } from 'lodash';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';

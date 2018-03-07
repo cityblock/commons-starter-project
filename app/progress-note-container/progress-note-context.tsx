@@ -1,4 +1,4 @@
-import { debounce } from 'lodash-es';
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';

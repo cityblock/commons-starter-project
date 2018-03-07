@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';

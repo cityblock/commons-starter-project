@@ -1,4 +1,4 @@
-import { clone, isNil, omit, omitBy } from 'lodash-es';
+import { clone, isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';

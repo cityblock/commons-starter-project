@@ -1,4 +1,4 @@
-import { values } from 'lodash-es';
+import { values } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientFlagCreateMutationGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';

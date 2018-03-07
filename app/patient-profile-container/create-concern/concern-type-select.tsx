@@ -1,4 +1,4 @@
-import { capitalize } from 'lodash-es';
+import { capitalize } from 'lodash';
 import * as React from 'react';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Option from '../../shared/library/option/option';

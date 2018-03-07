@@ -1,7 +1,7 @@
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
-import { throttle } from 'lodash-es';
+import { throttle } from 'lodash';
 
 async function setLastAction() {
   await localStorage.setItem('lastAction', new Date().valueOf().toString());

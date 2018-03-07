@@ -1,4 +1,4 @@
-import { concat, findIndex, slice, values } from 'lodash-es';
+import { concat, findIndex, slice, values } from 'lodash';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ISavedAddress } from '../../../shared/address-modal/address-modal';

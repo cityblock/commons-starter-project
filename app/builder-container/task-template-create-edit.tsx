@@ -1,4 +1,4 @@
-import { clone, isNil, omit, omitBy } from 'lodash-es';
+import { clone, isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';

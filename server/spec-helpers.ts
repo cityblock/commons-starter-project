@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { get, isNil } from 'lodash-es';
+import { get, isNil } from 'lodash';
 import * as nock from 'nock';
 import { Transaction } from 'objection';
 import * as uuid from 'uuid/v4';

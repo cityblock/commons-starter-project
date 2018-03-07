@@ -1,4 +1,4 @@
-import { debounce } from 'lodash-es';
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as progressNoteAddSupervisorNotesMutationGraphql from '../graphql/queries/progress-note-add-supervisor-notes-mutation.graphql';

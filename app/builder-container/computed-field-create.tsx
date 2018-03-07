@@ -1,5 +1,5 @@
 import { History } from 'history';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';

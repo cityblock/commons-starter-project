@@ -1,5 +1,5 @@
 import { History } from 'history';
-import { pickBy } from 'lodash-es';
+import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';

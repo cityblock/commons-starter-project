@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es';
+import { isNil } from 'lodash';
 import * as React from 'react';
 import Modal from '../library/modal/modal';
 import AddressForm from './address-form';

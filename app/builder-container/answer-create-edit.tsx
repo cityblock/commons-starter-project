@@ -1,4 +1,4 @@
-import { clone, isNil, omit, omitBy, range } from 'lodash-es';
+import { clone, isNil, omit, omitBy, range } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';

@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';

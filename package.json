@@ -13,17 +13,23 @@
     "clean": "rimraf public server-compiled",
     "staging-db": "./scripts/aptible-psql.sh commons-staging",
     "prod-db": "./scripts/aptible-psql.sh commons-production",
-    "copy-prod-to-staging": "aptible db:execute commons-staging ./scripts/aptible-copy-production-to-staging.sql",
+    "copy-prod-to-staging":
+      "aptible db:execute commons-staging ./scripts/aptible-copy-production-to-staging.sql",
     "start": "NODE_ENV=production nodemon ./server-compiled/server/index.js",
-    "dev": "yarn check --verify-tree && yarn migrate && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
-    "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production webpack --colors --config ./webpack/webpack.config.js",
-    "build-stats": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js --profile --json > stats.json",
+    "dev":
+      "yarn check --verify-tree && yarn migrate && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
+    "build:dev":
+      "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
+    "build":
+      "yarn run clean && yarn run build-server && cross-env NODE_ENV=production webpack --colors --config ./webpack/webpack.config.js",
+    "build-stats":
+      "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js --profile --json > stats.json",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
     "test:frontend": "jest app/ --runInBand",
-    "test:api": "NODE_ENV=test node initialize-test-db.js && jest server/graphql server/handlers server/lib server/apis --runInBand",
+    "test:api":
+      "NODE_ENV=test node initialize-test-db.js && jest server/graphql server/handlers server/lib server/apis --runInBand",
     "test:models": "NODE_ENV=test node initialize-test-db.js && jest server/models --runInBand",
     "test:watch": "yarn test --watch",
     "test:notify": "yarn run test:watch --notify",
@@ -32,21 +38,31 @@
     "prepush": "yarn run lint && yarn typecheck",
     "update-schema": "yarn check --verify-tree && ./scripts/generate-schema-types.sh",
     "codegen": "yarn check --verify-tree && ./scripts/codegen.sh",
-    "typegen": "yarn check --verify-tree && ./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
+    "typegen":
+      "yarn check --verify-tree && ./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
     "docker-prod:start": "docker-compose stop 2>/dev/null; docker-compose up",
-    "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
+    "docker-prod:restart":
+      "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
     "docker-prod:stop": "docker-compose stop",
     "docker-prod:migrate": "docker-compose exec web yarn migrate --env=production",
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node -P tsconfig.server.json",
     "seed": "knex seed:run --knexfile=server/models/knexfile.js",
-    "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
-    "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
-    "import:icd:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
-    "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
-    "consume:computed-fields:dev": "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
-    "consume:computed-fields:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
-    "consume:member-attribution:dev": "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'",
-    "consume:member-attribution:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'"
+    "patients:add-admin-tasks-concern:dev":
+      "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
+    "patients:add-admin-tasks-concern:production":
+      "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
+    "import:icd:dev":
+      "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
+    "import:icd:production":
+      "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
+    "consume:computed-fields:dev":
+      "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
+    "consume:computed-fields:production":
+      "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
+    "consume:member-attribution:dev":
+      "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'",
+    "consume:member-attribution:production":
+      "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -54,9 +70,6 @@
       "\\.(gql|graphql)$": "jest-transform-graphql",
       "^.+\\.(j|t)sx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!lodash-es)"
-    ],
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
     },
@@ -64,18 +77,8 @@
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
     ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "setupFiles": [
-      "raf/polyfill",
-      "./browser-mocks.js",
-      "./enzyme-setup.js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+    "setupFiles": ["raf/polyfill", "./browser-mocks.js", "./enzyme-setup.js"],
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {
       "ts-jest": {
@@ -139,7 +142,6 @@
     "@types/knex": "0.14.8",
     "@types/kue": "0.11.8",
     "@types/lodash": "4.14.104",
-    "@types/lodash-es": "4.17.0",
     "@types/morgan": "1.7.35",
     "@types/node": "8.9.4",
     "@types/qs": "6.5.1",
@@ -190,7 +192,6 @@
     "langs": "2.0.0",
     "le_node": "1.7.1",
     "lodash": "4.17.5",
-    "lodash-es": "4.17.5",
     "material-ui": "1.0.0-beta.36",
     "material-ui-icons": "1.0.0-beta.36",
     "morgan": "1.9.0",

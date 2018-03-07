@@ -156,7 +156,7 @@
     "@types/validator": "9.4.0",
     "@types/webpack": "4.0.0",
     "acl": "0.4.11",
-    "apollo-cache-inmemory": "1.1.9",
+    "apollo-cache-inmemory": "1.1.10",
     "apollo-client": "2.2.6",
     "apollo-link": "1.2.1",
     "apollo-link-context": "1.0.7",

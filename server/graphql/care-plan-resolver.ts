@@ -8,6 +8,7 @@ import CarePlanSuggestion from '../models/care-plan-suggestion';
 import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';
 import PatientConcern from '../models/patient-concern';
+import PatientGlassBreak from '../models/patient-glass-break';
 import PatientGoal from '../models/patient-goal';
 import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -53,7 +54,20 @@ export async function resolveCarePlanForPatient(
   { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+
+  let glassBreakId = args.glassBreakId;
+
+  if (!glassBreakId) {
+    // load the current glass break for user and patient if none provided (refetch query)
+    const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+      userId!,
+      args.patientId,
+      txn,
+    );
+    glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
+  }
+
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
 
   const concerns = await PatientConcern.getForPatient(args.patientId, txn);
   const goals = await PatientGoal.getForPatient(args.patientId, txn);

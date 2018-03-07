@@ -95,7 +95,7 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
                   buttonText="Login"
                   scope={SCOPE}
                   responseType="code"
-                  prompt='select_account'
+                  prompt="select_account"
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
                   className={styles.button}

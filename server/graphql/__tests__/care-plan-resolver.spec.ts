@@ -196,6 +196,66 @@ describe('care plan resolver tests', () => {
       });
     });
 
+    it('validates glass break if glass break id not passed as in refetch query', async () => {
+      await transaction(PatientConcern.knex(), async txn => {
+        const { patient, user, concern, goalSuggestionTemplate } = await setup(txn);
+
+        const patientConcern = await PatientConcern.create(
+          {
+            patientId: patient.id,
+            concernId: concern.id,
+            startedAt: new Date().toISOString(),
+            userId: user.id,
+          },
+          txn,
+        );
+        const patientGoal = await PatientGoal.create(
+          {
+            patientId: patient.id,
+            title: 'Patient Goal',
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await PatientGlassBreak.create(
+          { userId: user.id, patientId: patient.id, reason: 'yo', note: null },
+          txn,
+        );
+
+        const query = `{
+          carePlanForPatient(patientId: "${patient.id}") {
+            concerns {
+              id
+              concern {
+                title
+              }
+            }
+            goals {
+              id
+              title
+            }
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
+          concerns: [
+            { concern: { title: 'Administrative Tasks' } },
+            { id: patientConcern.id, concern: { title: concern.title } },
+          ],
+          goals: [{ id: patientGoal.id, title: patientGoal.title }],
+        });
+      });
+    });
+
     it('blocks resolving care plan for patient if glass break needed', async () => {
       await transaction(PatientConcern.knex(), async txn => {
         const { patient, user } = await setup(txn);

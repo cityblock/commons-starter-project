@@ -13,6 +13,7 @@ fragment ShortPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   patientAnswers {
     updatedAt
     answer {
+      id
       riskAdjustmentType
       inSummary
       summaryText

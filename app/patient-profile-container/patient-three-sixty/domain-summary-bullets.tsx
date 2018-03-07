@@ -1,31 +1,20 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/domain-summary-bullets.css';
+import { DomainSummaryBulletItems } from './domain-summary-bullet-items';
+import { IScreeningToolResultSummary } from './helpers';
 
 interface IProps {
   automatedSummaryText: string[];
   manualSummaryText: string[];
   isRiskCalculated: boolean;
+  screeningToolResultSummaries: IScreeningToolResultSummary[];
 }
 
-export const DomainSummaryBulletItems: React.StatelessComponent<{ items: string[] }> = ({
-  items,
-}) => {
-  const listItems = items.map((item, i) => {
-    return (
-      <li key={i}>
-        <span>{item}</span>
-      </li>
-    );
-  });
-
-  return <ul>{listItems}</ul>;
-};
-
 const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { automatedSummaryText, manualSummaryText, isRiskCalculated } = props;
+  const { automatedSummaryText, manualSummaryText, isRiskCalculated, screeningToolResultSummaries } = props;
 
-  if (!automatedSummaryText.length && !manualSummaryText.length) {
+  if (!automatedSummaryText.length && !manualSummaryText.length && !screeningToolResultSummaries.length) {
     if (isRiskCalculated) {
       return (
         <FormattedMessage id="threeSixty.noSummary">
@@ -40,12 +29,18 @@ const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) =
       );
     }
   }
+  // Only one assessment type if both are empty or lengths are unequal
+  const bothEmpty = !automatedSummaryText.length && !manualSummaryText.length;
+  const onlyOneAssessmentType =
+    bothEmpty || !!automatedSummaryText.length !== !!manualSummaryText.length;
 
-  const onlyOneAssessmentType = !!automatedSummaryText.length !== !!manualSummaryText.length;
   if (onlyOneAssessmentType) {
     return (
       <div className={styles.container}>
-        <DomainSummaryBulletItems items={automatedSummaryText.concat(manualSummaryText)} />
+        <DomainSummaryBulletItems
+          items={automatedSummaryText.concat(manualSummaryText)}
+          screeningToolResultSummaries={screeningToolResultSummaries}
+        />
       </div>
     );
   }
@@ -59,7 +54,7 @@ const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) =
       <FormattedMessage id="threeSixty.manual">
         {(message: string) => <h4>{message}</h4>}
       </FormattedMessage>
-      <DomainSummaryBulletItems items={manualSummaryText} />
+      <DomainSummaryBulletItems items={manualSummaryText} screeningToolResultSummaries={screeningToolResultSummaries} />
     </div>
   );
 };

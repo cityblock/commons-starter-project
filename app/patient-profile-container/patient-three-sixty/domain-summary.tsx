@@ -8,7 +8,7 @@ import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/domain-summary.css';
 import DomainSummaryBullets from './domain-summary-bullets';
-import { calculateRiskAreaSummaryStats } from './helpers';
+import { calculateRiskAreaSummaryStats, IScreeningToolResultSummary } from './helpers';
 import { IRiskAreaGroupScore } from './patient-three-sixty-domains';
 
 type Risk = 'low' | 'medium' | 'high' | null;
@@ -37,6 +37,7 @@ type allProps = IGraphqlProps & IProps;
 interface IState {
   automatedSummaryText: string[];
   manualSummaryText: string[];
+  screeningToolResultSummaries: IScreeningToolResultSummary[];
   lastUpdated: string | null;
 }
 
@@ -48,6 +49,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       automatedSummaryText: [],
       manualSummaryText: [],
       lastUpdated: null,
+      screeningToolResultSummaries: [],
     };
   }
 
@@ -69,6 +71,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
     let forceHighRisk = false;
     let automatedSummaryText: string[] = [];
     let manualSummaryText: string[] = [];
+    let screeningToolResultSummaries: IScreeningToolResultSummary[] = [];
     let lastUpdated = '';
 
     if (!riskAreaGroup || !riskAreaGroup.riskAreas) return;
@@ -81,10 +84,12 @@ export class DomainSummary extends React.Component<allProps, IState> {
         totalScore,
         forceHighRisk,
         summaryText,
+        screeningToolResultSummaries,
       });
 
       totalScore = riskAreaSummaryStats.totalScore;
       forceHighRisk = riskAreaSummaryStats.forceHighRisk;
+      screeningToolResultSummaries = riskAreaSummaryStats.screeningToolResultSummaries || [];
       lastUpdated = riskAreaSummaryStats.lastUpdated;
 
       if (isAutomated) {
@@ -95,7 +100,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
     });
 
     updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
-    this.setState({ automatedSummaryText, manualSummaryText, lastUpdated });
+    this.setState({ automatedSummaryText, manualSummaryText, screeningToolResultSummaries, lastUpdated });
   }
 
   render(): JSX.Element | null {
@@ -107,7 +112,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       [styles.yellowBorder]: risk && risk === 'medium',
       [styles.greenBorder]: risk && risk === 'low',
     });
-    const { lastUpdated, automatedSummaryText, manualSummaryText } = this.state;
+    const { lastUpdated, automatedSummaryText, manualSummaryText, screeningToolResultSummaries } = this.state;
     const noAutomated =
       !!riskAreaGroup.riskAreas &&
       !!riskAreaGroup.riskAreas.length &&
@@ -129,6 +134,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
           {lastUpdated && <DateInfo label="updated" date={lastUpdated} />}
         </div>
         <DomainSummaryBullets
+          screeningToolResultSummaries={screeningToolResultSummaries}
           automatedSummaryText={automatedSummaryText}
           manualSummaryText={manualSummaryText}
           isRiskCalculated={!!risk}

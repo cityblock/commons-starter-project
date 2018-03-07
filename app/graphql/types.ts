@@ -4573,6 +4573,7 @@ export interface getRiskAreaGroupForPatientQuery {
           patientAnswers:  Array< {
             updatedAt: string,
             answer:  {
+              id: string,
               riskAdjustmentType: RiskAdjustmentTypeOptions | null,
               inSummary: boolean | null,
               summaryText: string | null,
@@ -11465,6 +11466,7 @@ export interface FullRiskAreaForPatientFragment {
       patientAnswers:  Array< {
         updatedAt: string,
         answer:  {
+          id: string,
           riskAdjustmentType: RiskAdjustmentTypeOptions | null,
           inSummary: boolean | null,
           summaryText: string | null,
@@ -11531,6 +11533,7 @@ export interface FullScreeningToolForPatientFragment {
     patientAnswers:  Array< {
       updatedAt: string,
       answer:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions | null,
         inSummary: boolean | null,
         summaryText: string | null,
@@ -12015,6 +12018,7 @@ export interface ShortPatientScreeningToolSubmissionFragment {
   patientAnswers:  Array< {
     updatedAt: string,
     answer:  {
+      id: string,
       riskAdjustmentType: RiskAdjustmentTypeOptions | null,
       inSummary: boolean | null,
       summaryText: string | null,

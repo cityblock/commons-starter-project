@@ -168,6 +168,7 @@ export const SPANISH_TRANSLATION = {
     'contactForm.consentToText': '¿El paciente acepta ser contactado vía texto?',
     'contactForm.consentToPhone': '¿El paciente acepta ser contactado por teléfono?',
     'contactForm.readConsentStatement': 'Leer declaración de consentimiento al paciente:',
+    'screeningTool.results': 'Results:',
     'editableText.default': 'Click here to enter text...',
     'screeningTool.submit': 'Submit',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',

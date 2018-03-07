@@ -168,6 +168,7 @@ export const ENGLISH_TRANSLATION = {
     'contactForm.readConsentStatement': 'Read consent statement to patient:',
     'editableText.default': 'Click here to enter text...',
     'screeningTool.submit': 'Submit',
+    'screeningTool.results': 'Results:',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',
     'screeningTool.resultsBody':
       "Based on the results of this tool, the following have been recommended as additions to the patient's care plan.",

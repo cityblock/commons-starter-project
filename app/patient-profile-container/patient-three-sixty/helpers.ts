@@ -3,11 +3,19 @@ import { FullRiskAreaForPatientFragment } from '../../graphql/types';
 import { IRiskAreaGroupScore } from './patient-three-sixty-domains';
 
 type Risk = 'low' | 'medium' | 'high' | null;
+
+export interface IScreeningToolResultSummary {
+  title: string;
+  score: number | null;
+  description: string;
+}
+
 interface ISummaryStats {
   lastUpdated: string;
   totalScore: number | null;
   forceHighRisk: boolean;
   summaryText: string[];
+  screeningToolResultSummaries?: IScreeningToolResultSummary[];
 }
 
 export const calculateRisk = (
@@ -26,7 +34,7 @@ export const calculateRiskAreaSummaryStats = (
   riskArea: FullRiskAreaForPatientFragment,
   summaryStats: ISummaryStats,
 ): ISummaryStats => {
-  let { lastUpdated, totalScore, forceHighRisk } = summaryStats;
+  let { lastUpdated, totalScore, forceHighRisk, screeningToolResultSummaries } = summaryStats;
   const { summaryText } = summaryStats;
 
   riskArea.questions.forEach(question => {
@@ -53,11 +61,14 @@ export const calculateRiskAreaSummaryStats = (
     });
   });
   riskArea.screeningTools.forEach(screeningTool => {
+    const { title } = screeningTool;
     screeningTool.patientScreeningToolSubmissions.forEach(submission => {
-      const { screeningToolScoreRange, patientAnswers } = submission;
+      const { screeningToolScoreRange, patientAnswers, score } = submission;
+      let toolDescription = '';
 
       if (screeningToolScoreRange) {
-        const { riskAdjustmentType } = screeningToolScoreRange;
+        const { riskAdjustmentType, description } = screeningToolScoreRange;
+        toolDescription = description;
 
         if (riskAdjustmentType === 'forceHighRisk') {
           forceHighRisk = true;
@@ -66,6 +77,13 @@ export const calculateRiskAreaSummaryStats = (
           totalScore++;
         }
       }
+
+      if (!screeningToolResultSummaries) screeningToolResultSummaries = [];
+      screeningToolResultSummaries.push({
+        score,
+        description: toolDescription,
+        title,
+      });
 
       if (patientAnswers && patientAnswers.length) {
         patientAnswers.forEach(patientAnswer => {
@@ -96,5 +114,6 @@ export const calculateRiskAreaSummaryStats = (
     totalScore,
     forceHighRisk,
     summaryText,
+    screeningToolResultSummaries: screeningToolResultSummaries || [],
   };
 };

@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Waypoint from 'react-waypoint';
+import Waypoint from 'react-waypoint';
 import Button from '../library/button/button';
 import * as styles from './css/infinite-scroll.css';
 

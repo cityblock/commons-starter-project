@@ -1,30 +1,42 @@
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import { Route } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import TasksContainer from '../tasks-container';
+import Tasks, { IProps } from '../../shared/tasks/tasks';
+import { taskWithComment } from '../../shared/util/test-data';
+import { TasksContainer } from '../tasks-container';
 
-it('renders tasks container', () => {
-  const mockStore = configureMockStore([]);
+describe('tasks container', () => {
+  const location = { search: '' } as any;
+  const match = {
+    isExact: false,
+    params: {
+      taskId: taskWithComment.id,
+    },
+    path: '/tasks',
+    url: 'localhost:3000',
+  };
+  const fetchMoreTasks = jest.fn() as any;
+  const history = [] as any;
+  const tasks = {
+    edges: [{ node: taskWithComment }],
+    pageInfo: {
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  };
+  const wrapper = shallow(
+    <TasksContainer
+      tasksLoading={false}
+      tasksError={null}
+      tasksResponse={tasks}
+      fetchMoreTasks={fetchMoreTasks}
+      location={location}
+      match={match}
+      history={history}
+    />,
+  );
 
-  const locale = { messages: ENGLISH_TRANSLATION.messages };
-  const task = { taskId: 'foo' };
-  const eventNotifications = { count: 0 };
-  const tree = create(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale, task, eventNotifications })}>
-        <ReduxConnectedIntlProvider>
-          <BrowserRouter>
-            <Route component={TasksContainer} />
-          </BrowserRouter>
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
+  it('renders tasks list', () => {
+    expect(wrapper.find('.container').length).toBe(1);
+    expect(wrapper.find<IProps>(Tasks).props().taskId).toBe(taskWithComment.id);
+  });
 });

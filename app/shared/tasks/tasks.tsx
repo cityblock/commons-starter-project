@@ -30,7 +30,7 @@ export interface IPageParams {
   orderBy: OrderByOptions;
 }
 
-interface IProps {
+export interface IProps {
   routeBase: string;
   patientGoals?: FullPatientGoalFragment[];
   tasks?: FullTaskFragment[];
@@ -72,7 +72,7 @@ const getPageParams = () => {
   };
 };
 
-class Tasks extends React.Component<allProps, IState> {
+export class Tasks extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 

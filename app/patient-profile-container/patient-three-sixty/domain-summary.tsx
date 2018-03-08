@@ -100,7 +100,12 @@ export class DomainSummary extends React.Component<allProps, IState> {
     });
 
     updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
-    this.setState({ automatedSummaryText, manualSummaryText, screeningToolResultSummaries, lastUpdated });
+    this.setState({
+      automatedSummaryText,
+      manualSummaryText,
+      screeningToolResultSummaries,
+      lastUpdated,
+    });
   }
 
   render(): JSX.Element | null {
@@ -112,7 +117,12 @@ export class DomainSummary extends React.Component<allProps, IState> {
       [styles.yellowBorder]: risk && risk === 'medium',
       [styles.greenBorder]: risk && risk === 'low',
     });
-    const { lastUpdated, automatedSummaryText, manualSummaryText, screeningToolResultSummaries } = this.state;
+    const {
+      lastUpdated,
+      automatedSummaryText,
+      manualSummaryText,
+      screeningToolResultSummaries,
+    } = this.state;
     const noAutomated =
       !!riskAreaGroup.riskAreas &&
       !!riskAreaGroup.riskAreas.length &&

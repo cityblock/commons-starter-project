@@ -4,6 +4,9 @@
   flex-basis: 25%;
   height: calc(100vh - 60px);
   overflow: auto;
+
+  /* Give a bit of extra room at bottom so not blocked by actions widget */
+  padding-bottom: var(--gutter);
 }
 
 .profileIcon,

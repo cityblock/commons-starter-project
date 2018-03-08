@@ -62,7 +62,9 @@ describe('Domain Summary Bullet Components', () => {
       expect(wrapper.find(FormattedMessage).length).toBe(0);
       expect(wrapper.find(DomainSummaryBulletItems).length).toBe(1);
       expect(wrapper.find(DomainSummaryBulletItems).props().items).toEqual(manualSummaryText);
-      expect(wrapper.find(DomainSummaryBulletItems).props().screeningToolResultSummaries).toEqual([]);
+      expect(wrapper.find(DomainSummaryBulletItems).props().screeningToolResultSummaries).toEqual(
+        [],
+      );
     });
 
     it('renders no labels and one list if both lists empty but screening tools present', () => {

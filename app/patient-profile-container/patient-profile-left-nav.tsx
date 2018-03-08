@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ShortPatientFragment } from '../graphql/types';
-import CareTeamWidget from './care-team-widget';
 import * as styles from './css/patient-profile-left-nav.css';
+import LeftNavWidget from './left-nav-widget/left-nav-widget';
 import PatientLeftNavInfo from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 import PatientProblemList from './patient-problem-list';
@@ -41,7 +41,7 @@ export default class PatientProfileLeftNav extends React.Component<IProps, IStat
         <PatientLeftNavInfo patientId={patientId} patient={patient} />
         <PatientMedications patientId={patientId} />
         <PatientProblemList patientId={patientId} />
-        <CareTeamWidget patientId={patientId} />
+        <LeftNavWidget patientId={patientId} />
       </div>
     );
   }

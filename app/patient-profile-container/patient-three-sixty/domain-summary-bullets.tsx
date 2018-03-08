@@ -12,9 +12,18 @@ interface IProps {
 }
 
 const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { automatedSummaryText, manualSummaryText, isRiskCalculated, screeningToolResultSummaries } = props;
+  const {
+    automatedSummaryText,
+    manualSummaryText,
+    isRiskCalculated,
+    screeningToolResultSummaries,
+  } = props;
 
-  if (!automatedSummaryText.length && !manualSummaryText.length && !screeningToolResultSummaries.length) {
+  if (
+    !automatedSummaryText.length &&
+    !manualSummaryText.length &&
+    !screeningToolResultSummaries.length
+  ) {
     if (isRiskCalculated) {
       return (
         <FormattedMessage id="threeSixty.noSummary">
@@ -54,7 +63,10 @@ const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) =
       <FormattedMessage id="threeSixty.manual">
         {(message: string) => <h4>{message}</h4>}
       </FormattedMessage>
-      <DomainSummaryBulletItems items={manualSummaryText} screeningToolResultSummaries={screeningToolResultSummaries} />
+      <DomainSummaryBulletItems
+        items={manualSummaryText}
+        screeningToolResultSummaries={screeningToolResultSummaries}
+      />
     </div>
   );
 };

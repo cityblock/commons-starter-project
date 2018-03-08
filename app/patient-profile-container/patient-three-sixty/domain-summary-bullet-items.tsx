@@ -13,7 +13,12 @@ export const DomainSummaryBulletItems: React.StatelessComponent<IProps> = ({
   screeningToolResultSummaries,
 }) => {
   const allListItems = (screeningToolResultSummaries || []).map(screeningToolResultSummary => {
-    return <DomainSummaryScreeningToolResultSummary key={screeningToolResultSummary.title} screeningToolResultSummary={screeningToolResultSummary} />;
+    return (
+      <DomainSummaryScreeningToolResultSummary
+        key={screeningToolResultSummary.title}
+        screeningToolResultSummary={screeningToolResultSummary}
+      />
+    );
   });
 
   const listItems = items.map((item, i) => {
@@ -30,7 +35,8 @@ export const DomainSummaryBulletItems: React.StatelessComponent<IProps> = ({
 export const DomainSummaryScreeningToolResultSummary: React.StatelessComponent<{
   screeningToolResultSummary: IScreeningToolResultSummary;
 }> = ({ screeningToolResultSummary }) => {
-  const score = screeningToolResultSummary.score !== null ? screeningToolResultSummary.score : 'N/A';
+  const score =
+    screeningToolResultSummary.score !== null ? screeningToolResultSummary.score : 'N/A';
 
   return (
     <li>

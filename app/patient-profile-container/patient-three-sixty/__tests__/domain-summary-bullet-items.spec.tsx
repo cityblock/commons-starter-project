@@ -47,16 +47,18 @@ describe('Domain Summary Bullet Item Components', () => {
     it('adds screening tool results if available', () => {
       wrapper.setProps({ screeningToolResultSummaries: [screeningTool] });
 
-      expect(wrapper.find(DomainSummaryScreeningToolResultSummary).props().screeningToolResultSummary).toEqual(
-        screeningTool,
-      );
+      expect(
+        wrapper.find(DomainSummaryScreeningToolResultSummary).props().screeningToolResultSummary,
+      ).toEqual(screeningTool);
       expect(wrapper.find('li').length).toBe(2);
       expect(wrapper.find('span').length).toBe(2);
     });
   });
 
   describe('Domain Summary Screening Tool Result', () => {
-    const wrapper = shallow(<DomainSummaryScreeningToolResultSummary screeningToolResultSummary={screeningTool} />);
+    const wrapper = shallow(
+      <DomainSummaryScreeningToolResultSummary screeningToolResultSummary={screeningTool} />,
+    );
 
     it('renders formatted message with title and result', () => {
       expect(wrapper.find(FormattedMessage).props().id).toBe('screeningTool.results');

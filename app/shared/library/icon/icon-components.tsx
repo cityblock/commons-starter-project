@@ -10,6 +10,7 @@ import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import AlarmIcon from 'material-ui-icons/Alarm';
+import AppsIcon from 'material-ui-icons/Apps';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
@@ -24,7 +25,8 @@ import EventIcon from 'material-ui-icons/Event';
 import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import Flag from 'material-ui-icons/Flag';
+import FlagIcon from 'material-ui-icons/Flag';
+import GestureIcon from 'material-ui-icons/Gesture';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
@@ -46,6 +48,7 @@ import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
 import StarsIcon from 'material-ui-icons/Stars';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
+import TextSmsIcon from 'material-ui-icons/Textsms';
 import WarningIcon from 'material-ui-icons/Warning';
 import { SvgIconProps } from 'material-ui/SvgIcon';
 
@@ -59,6 +62,8 @@ const components: IconComponents = {
   addBox: AddBoxIcon,
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
+  alarm: AlarmIcon,
+  apps: AppsIcon,
   arrowBack: ArrowBackIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
@@ -74,7 +79,8 @@ const components: IconComponents = {
   expandArrow: ExpandArrowIcon,
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
-  flag: Flag,
+  flag: FlagIcon,
+  gesture: GestureIcon,
   highlightOff: HighlightOffIcon,
   home: HomeIcon,
   inbox: InboxIcon,
@@ -90,13 +96,13 @@ const components: IconComponents = {
   phone: PhoneIcon,
   pictureAsPDF: PictureAsPDFIcon,
   playlistAdd: PlaylistAddIcon,
+  report: ReportIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
   stars: StarsIcon,
   syncProblem: SyncProblemIcon,
+  textSms: TextSmsIcon,
   warning: WarningIcon,
-  alarm: AlarmIcon,
-  report: ReportIcon,
 };
 
 export default components;

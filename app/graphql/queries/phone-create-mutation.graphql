@@ -1,0 +1,7 @@
+#import "../fragments/full-phone.graphql"
+
+mutation phoneCreate($phoneNumber: String!, $type: PhoneTypeOptions, $description: String) {
+  phoneCreate(input: { phoneNumber: $phoneNumber, type: $type, description: $description }) {
+    ...FullPhone
+  }
+}

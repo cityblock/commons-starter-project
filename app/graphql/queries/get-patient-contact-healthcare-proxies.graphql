@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-contact.graphql"
+
+query getPatientContactHealthcareProxies($patientId: ID!) {
+  patientContactHealthcareProxies(patientId: $patientId) {
+    ...FullPatientContact
+  }
+}

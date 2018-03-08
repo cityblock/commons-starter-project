@@ -988,6 +988,31 @@ export const taskWithComment = {
   CBOReferralId: CBOReferral.id,
 };
 
+export const healthcareProxy = {
+  id: 'patient-contact-id',
+  firstName: 'mary',
+  lastName: 'jane',
+  relationToPatient: 'mother',
+  patientId: patient.id,
+  primaryPhone: {
+    id: phone1.id,
+    phoneNumber: phone1.phoneNumber,
+  },
+  primaryEmail: {
+    id: email1.id,
+    emailAddress: email1.emailAddress,
+  },
+  primaryAddress: null,
+  isHealthcareProxy: true,
+  isEmergencyContact: false,
+  canContact: false,
+  description: 'some healthcare person',
+};
+
+export const advancedDirectives = {
+  patientId: patient.id,
+};
+
 export const basicInfo = {
   patientId: patient.id,
   patientInfoId: patient.patientInfo.id,

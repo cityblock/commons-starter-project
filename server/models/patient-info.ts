@@ -7,6 +7,12 @@ import Email from './email';
 import Patient from './patient';
 import Phone from './phone';
 
+const EAGER_QUERY = `[
+  primaryAddress,
+  primaryEmail,
+  primaryPhone,
+]`;
+
 export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
 export type BirthSexOptions = 'male' | 'female' | null;
 export type ContactMethodOptions = 'phone' | 'text' | 'email';
@@ -196,16 +202,14 @@ export default class PatientInfo extends Model {
   };
 
   static async get(patientInfoId: string, txn: Transaction): Promise<PatientInfo> {
-    const patientInfo = await this.query(txn).findById(patientInfoId);
+    const patientInfo = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(patientInfoId);
 
     if (!patientInfo) {
       return Promise.reject(`No such patient info: ${patientInfoId}`);
     }
     return patientInfo;
-  }
-
-  static async create(input: IPatientInfoOptions, txn: Transaction) {
-    return this.query(txn).insertAndFetch(input);
   }
 
   static async createInitialPatientInfo(input: IInitialPatientInfoOptions, txn: Transaction) {
@@ -225,7 +229,7 @@ export default class PatientInfo extends Model {
     txn: Transaction,
   ): Promise<PatientInfo> {
     const updatedPatientInfo = await this.query(txn)
-      .eager('[primaryAddress, primaryEmail]')
+      .eager(EAGER_QUERY)
       .patchAndFetchById(patientInfoId, patientInfo);
 
     await ComputedPatientStatus.updateForPatient(

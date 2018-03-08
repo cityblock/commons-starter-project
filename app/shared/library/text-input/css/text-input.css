@@ -26,3 +26,7 @@
   line-height: var(--small-font-line-height);
   padding: 5px 20px;
 }
+
+.input.error {
+  border-color: var(--red-color);
+}

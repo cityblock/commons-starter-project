@@ -221,6 +221,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
         primaryPhone: primaryPhone || patientInfo.primaryPhone,
         phones: phones || savedPhoneAddresses,
       },
+      advanced: {
+        patientId: id,
+      },
     };
   }
 

@@ -1,0 +1,7 @@
+#import "../fragments/full-email.graphql"
+
+mutation emailCreate($emailAddress: String!, $description: String) {
+  emailCreate(input: { emailAddress: $emailAddress, description: $description }) {
+    ...FullEmail
+  }
+}

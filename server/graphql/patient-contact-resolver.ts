@@ -1,5 +1,10 @@
 import { isNil, omitBy } from 'lodash';
-import { IPatientContactCreateInput, IPatientContactEditInput, IRootMutationType } from 'schema';
+import {
+  IPatientContactCreateInput,
+  IPatientContactEditInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import PatientContact from '../models/patient-contact';
 import PatientContactAddress from '../models/patient-contact-address';
 import PatientContactEmail from '../models/patient-contact-email';
@@ -13,6 +18,21 @@ export interface IPatientContactCreateOptions {
 
 export interface IPatientContactEditOptions {
   input: IPatientContactEditInput;
+}
+
+export interface IQuery {
+  patientId: string;
+}
+
+export async function resolveHealthcareProxiesForPatient(
+  source: any,
+  { patientId }: IQuery,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootQueryType['patientContactHealthcareProxies']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+
+  logger.log(`GET patient contact healthcare proxies for ${patientId} by ${userId}`, 2);
+  return PatientContact.getHealthcareProxiesForPatient(patientId, txn);
 }
 
 export async function patientContactCreate(

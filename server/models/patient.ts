@@ -26,7 +26,7 @@ const EAGER_QUERY = `[
     primaryEmail,
     emails,
     primaryPhone,
-    phones
+    phones,
   ],
   computedPatientStatus,
   patientDataFlags,

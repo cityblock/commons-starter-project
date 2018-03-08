@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AdvancedDirectives, { IAdvancedDirectives } from './advanced-directives';
 import BasicInfo, { IBasicInfo } from './basic-info';
 import ContactInfo, { IContactInfo } from './contact-info';
 import CoreIdentity, { ICoreIdentity } from './core-identity';
@@ -9,6 +10,7 @@ export interface IDemographics {
   core: ICoreIdentity;
   basic: IBasicInfo;
   contact: IContactInfo;
+  advanced: IAdvancedDirectives;
 }
 
 interface IProps {
@@ -19,13 +21,18 @@ interface IProps {
 
 class PatientDemographics extends React.Component<IProps> {
   render() {
-    const { patient, onChange } = this.props;
+    const { patient, onChange, routeBase } = this.props;
 
     return (
       <div className={styles.container}>
         <CoreIdentity patientIdentity={patient.core} onChange={onChange} />
         <BasicInfo patientInformation={patient.basic} onChange={onChange} />
         <ContactInfo contactInfo={patient.contact} onChange={onChange} />
+        <AdvancedDirectives
+          advancedDirectives={patient.advanced}
+          onChange={onChange}
+          routeBase={routeBase}
+        />
       </div>
     );
   }

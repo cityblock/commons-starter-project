@@ -281,6 +281,28 @@ export interface addressCreateForPatientMutation {
   } | null,
 };
 
+export interface addressCreateMutationVariables {
+  zip: string,
+  street1?: string | null,
+  street2?: string | null,
+  city?: string | null,
+  state?: string | null,
+  description?: string | null,
+};
+
+export interface addressCreateMutation {
+  // Create an address
+  addressCreate:  {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street1: string | null,
+    street2: string | null,
+    zip: string | null,
+    description: string | null,
+  } | null,
+};
+
 export interface addressEditMutationVariables {
   addressId: string,
   patientId: string,
@@ -1146,6 +1168,20 @@ export interface emailCreateForPatientMutationVariables {
 export interface emailCreateForPatientMutation {
   // Create an email for a Patient
   emailCreateForPatient:  {
+    id: string,
+    emailAddress: string,
+    description: string | null,
+  } | null,
+};
+
+export interface emailCreateMutationVariables {
+  emailAddress: string,
+  description?: string | null,
+};
+
+export interface emailCreateMutation {
+  // Create an email
+  emailCreate:  {
     id: string,
     emailAddress: string,
     description: string | null,
@@ -2290,6 +2326,37 @@ export interface getPatientConsentFormsQuery {
     title: string,
     signedAt: string | null,
   } >,
+};
+
+export interface getPatientContactHealthcareProxiesQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientContactHealthcareProxiesQuery {
+  // Patient contact healthcare proxies
+  patientContactHealthcareProxies:  Array< {
+    id: string,
+    patientId: string,
+    relationToPatient: string,
+    firstName: string,
+    lastName: string,
+    isEmergencyContact: boolean,
+    isHealthcareProxy: boolean,
+    canContact: boolean,
+    description: string | null,
+    primaryAddress:  {
+      id: string,
+      zip: string | null,
+    } | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    primaryPhone:  {
+      id: string,
+      phoneNumber: string,
+    },
+  } > | null,
 };
 
 export interface getPatientGlassBreakCheckQueryVariables {
@@ -5863,7 +5930,7 @@ export interface patientContactCreateMutation {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -5903,7 +5970,7 @@ export interface patientContactEditMutation {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -6553,6 +6620,22 @@ export interface phoneCreateForPatientMutationVariables {
 export interface phoneCreateForPatientMutation {
   // Create a phone number for a Patient
   phoneCreateForPatient:  {
+    id: string,
+    phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
+  } | null,
+};
+
+export interface phoneCreateMutationVariables {
+  phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
+};
+
+export interface phoneCreateMutation {
+  // Create a phone number
+  phoneCreate:  {
     id: string,
     phoneNumber: string,
     type: PhoneTypeOptions | null,
@@ -10072,7 +10155,7 @@ export interface FullPatientContactFragment {
   primaryPhone:  {
     id: string,
     phoneNumber: string,
-  } | null,
+  },
 };
 
 export interface FullPatientDataFlagFragment {

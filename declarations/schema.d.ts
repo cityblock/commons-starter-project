@@ -81,6 +81,10 @@ declare module 'schema' {
   */
     patientsForComputedList: IPatientForDashboardEdges;
     /**
+    Patient contact healthcare proxies
+  */
+    patientContactHealthcareProxies: Array<IPatientContact>;
+    /**
     A single clinic
   */
     clinic: IClinic;
@@ -697,6 +701,24 @@ declare module 'schema' {
     lastName: string;
     dateOfBirth: string | null;
     patientInfo: IPatientInfo;
+  }
+
+  /**
+    Patient contact that is editable in Commons
+  */
+  interface IPatientContact {
+    id: string;
+    patientId: string;
+    relationToPatient: string;
+    firstName: string;
+    lastName: string;
+    isEmergencyContact: boolean;
+    isHealthcareProxy: boolean;
+    canContact: boolean;
+    primaryPhone: IPhone;
+    description: string | null;
+    primaryAddress: IAddress | null;
+    primaryEmail: IEmail | null;
   }
 
   /**
@@ -2363,24 +2385,6 @@ declare module 'schema' {
     description: string | null;
     primaryAddressId: string | null;
     primaryEmailId: string | null;
-  }
-
-  /**
-    Patient contact that is editable in Commons
-  */
-  interface IPatientContact {
-    id: string;
-    patientId: string;
-    relationToPatient: string;
-    firstName: string;
-    lastName: string;
-    isEmergencyContact: boolean;
-    isHealthcareProxy: boolean;
-    canContact: boolean;
-    primaryPhone: IPhone | null;
-    description: string | null;
-    primaryAddress: IAddress | null;
-    primaryEmail: IEmail | null;
   }
 
   /**

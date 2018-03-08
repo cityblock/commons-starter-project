@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
+import SmallText from '../small-text/small-text';
 import * as styles from './css/text-input.css';
 
 interface IProps {
@@ -17,6 +19,8 @@ interface IProps {
   inputType?: 'datetime-local'; // default is text
   required?: boolean;
   pattern?: string;
+  errorMessageId?: string;
+  hasError?: boolean;
   inputRef?: (ref: any) => void;
 }
 
@@ -35,13 +39,18 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
     inputType,
     required,
     pattern,
+    errorMessageId,
+    hasError,
     inputRef,
   } = props;
   const inputStyles = classNames(styles.input, className, {
     [styles.small]: !!smallInput,
+    [styles.error]: hasError,
   });
   const type = inputType || 'text';
   const req = required || false;
+
+  const errorMessage = hasError ? <SmallText messageId={errorMessageId} color="red" /> : null;
 
   if (placeholderMessageId) {
     return (
@@ -68,19 +77,22 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
   }
 
   return (
-    <input
-      type={type}
-      value={value}
-      className={inputStyles}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-      onChange={onChange}
-      name={name || ''}
-      required={req}
-      ref={inputRef}
-      id={id || ''}
-    />
+    <Fragment>
+      <input
+        type={type}
+        value={value}
+        className={inputStyles}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        onChange={onChange}
+        name={name || ''}
+        required={req}
+        ref={inputRef}
+        id={id || ''}
+      />
+      {errorMessage}
+    </Fragment>
   );
 };
 

@@ -1,0 +1,88 @@
+.addButton {
+  background-color: var(--dark-gray-background-color);
+  border: 1px solid var(--border-color);
+  color: var(--black-color);
+  height: 40px;
+  margin-bottom: var(--small-gutter);
+}
+
+.proxyName {
+  font-family: var(--basetica-medium);
+  font-weight: var(--default-font-weight);
+  margin: 0;
+}
+
+.proxyFieldRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: top;
+}
+
+.proxyField {
+  margin-right: var(--gutter);
+  display: inline-block;
+  width: 100%;
+}
+
+.gray {
+  color: var(--gray-font-color);
+}
+
+.proxyField p:last-child {
+  margin: 0;
+}
+
+.proxyField > * {
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.fieldMargin {
+  margin: 0 0 var(--small-gutter);
+}
+
+.buttonLinkContainer {
+  width: 100%;
+  border: 1px solid var(--red-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--extra-small-gutter) var(--medium-gutter);
+  margin-bottom: var(--small-gutter);
+}
+
+.buttonLink {
+  color: var(--default-font-color);
+  font-weight: var(--default-font-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  font-family: var(--roboto);
+}
+
+.buttonLinkContainer:hover {
+  background-color: var(--red-hover-color);
+}
+
+.buttonLinkContainer:hover .buttonLinkDescriptor {
+  color: var(--gray-font-color);
+}
+
+.buttonLinkContainer:hover svg.buttonIcon {
+  fill: var(--gray-font-color);
+}
+
+.buttonLinkDescriptor {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  display: inline-block;
+}
+
+.buttonIcon {
+  vertical-align: middle;
+}
+
+.noShrink {
+  flex-shrink: 0;
+}

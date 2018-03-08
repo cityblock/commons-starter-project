@@ -103,7 +103,11 @@ import {
   patientConsentFormDelete,
   resolvePatientConsentFormsForPatient,
 } from './patient-consent-form-resolver';
-import { patientContactCreate, patientContactEdit } from './patient-contact-resolver';
+import {
+  patientContactCreate,
+  patientContactEdit,
+  resolveHealthcareProxiesForPatient,
+} from './patient-contact-resolver';
 import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
@@ -311,6 +315,7 @@ const resolveFunctions = {
     patientsWithOutOfDateMAP: resolvePatientsWithOutOfDateMAP,
     patientsWithOpenCBOReferrals: resolvePatientsWithOpenCBOReferrals,
     patientsForComputedList: resolvePatientsForComputedList,
+    patientContactHealthcareProxies: resolveHealthcareProxiesForPatient,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
     task: resolveTask,

@@ -141,12 +141,24 @@ export default class PatientContact extends Model {
   };
 
   static async get(patientContactId: string, txn: Transaction): Promise<PatientContact> {
-    const patientContact = await this.query(txn).findById(patientContactId);
+    const patientContact = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(patientContactId);
 
     if (!patientContact) {
       return Promise.reject(`No such patient contact: ${patientContactId}`);
     }
     return patientContact;
+  }
+
+  static async getHealthcareProxiesForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientContact[]> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, isHealthcareProxy: true })
+      .orderBy('createdAt', 'asc');
   }
 
   static async create(input: IPatientContactOptions, txn: Transaction) {

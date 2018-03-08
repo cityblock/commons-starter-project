@@ -307,7 +307,7 @@ type PatientContact implements uniqueId {
   isEmergencyContact: Boolean!
   isHealthcareProxy: Boolean!
   canContact: Boolean!
-  primaryPhone: Phone
+  primaryPhone: Phone!
   description: String
   primaryAddress: Address
   primaryEmail: Email
@@ -2357,6 +2357,8 @@ type RootQueryType {
     pageNumber: Int!
     pageSize: Int!
   ): PatientForDashboardEdges!
+  # Patient contact healthcare proxies
+  patientContactHealthcareProxies(patientId: ID!): [PatientContact!]
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

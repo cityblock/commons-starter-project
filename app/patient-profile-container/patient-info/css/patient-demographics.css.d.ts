@@ -7,3 +7,4 @@ export const checkboxField: string;
 export const short: string;
 export const deleteLink: string;
 export const capitalize: string;
+export const addButton: string;

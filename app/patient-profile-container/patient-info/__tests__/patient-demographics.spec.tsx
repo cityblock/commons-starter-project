@@ -1,6 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { basicInfo, contactInfo, coreIdentity } from '../../../shared/util/test-data';
+import {
+  advancedDirectives,
+  basicInfo,
+  contactInfo,
+  coreIdentity,
+} from '../../../shared/util/test-data';
 import BasicInfo from '../basic-info';
 import ContactInfo from '../contact-info';
 import CoreIdentity from '../core-identity';
@@ -14,6 +19,7 @@ describe('Render Patient Demographics Component', () => {
         core: coreIdentity,
         basic: basicInfo,
         contact: contactInfo,
+        advanced: advancedDirectives,
       }}
       routeBase={'/foo/bar'}
       onChange={onChange}

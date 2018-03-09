@@ -66,35 +66,35 @@
     is "^3.2.0"
     lodash.has "^4.5.2"
 
-"@gql2ts/from-query@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.4.3.tgz#ec0db17935f9c9c5f3b5be65f17327a0af4ec6d5"
+"@gql2ts/from-query@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.5.0.tgz#5f57e9570419665f342645d9cc56fe05edba7074"
   dependencies:
-    "@gql2ts/language-typescript" "^1.4.3"
-    "@gql2ts/util" "^1.4.3"
-    graphql ">= 0.10 <0.12"
+    "@gql2ts/language-typescript" "^1.5.0"
+    "@gql2ts/util" "^1.5.0"
+    graphql ">= 0.10 <1.0.0"
 
-"@gql2ts/from-schema@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.4.3.tgz#afb96babe7c96c4d4affad48440c2bac18fc0b4c"
+"@gql2ts/from-schema@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.5.0.tgz#ce45d55807db51e3299bee15bb84669109f01f5c"
   dependencies:
-    "@gql2ts/language-typescript" "^1.4.3"
-    "@gql2ts/util" "^1.4.3"
-    graphql ">= 0.10 <0.12"
+    "@gql2ts/language-typescript" "^1.5.0"
+    "@gql2ts/util" "^1.5.0"
+    graphql ">= 0.10 <1.0.0"
 
-"@gql2ts/language-typescript@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.4.3.tgz#52837b33c8cb9d35ff80ac69212172023c1055e0"
+"@gql2ts/language-typescript@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.5.0.tgz#b85ac547dd87244dd4dc558cdf7782a36b46c7ab"
   dependencies:
-    "@gql2ts/util" "^1.4.3"
+    "@gql2ts/util" "^1.5.0"
     humps "^2.0.0"
     typescript "^2.2.2"
 
-"@gql2ts/util@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.4.3.tgz#365ad149af213d08affea022bc2de1cace4f4c5e"
+"@gql2ts/util@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.5.0.tgz#03146a58efcb255c32aa7b640fa2ed3c42e4adba"
   dependencies:
-    graphql ">= 0.10 <0.12"
+    graphql ">= 0.10 <1.0.0"
 
 "@react-pdf/core@0.7.2", "@react-pdf/core@^0.7.2":
   version "0.7.2"
@@ -4632,13 +4632,13 @@ got@^8.2.0:
     url-parse-lax "^3.0.0"
     url-to-options "^1.0.1"
 
-gql2ts@1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.4.3.tgz#f9bc2dbec94aff4ed556222707121eb58e04faee"
+gql2ts@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.5.0.tgz#3954cc5dd25615118263d951fac6d484dde9f74e"
   dependencies:
-    "@gql2ts/from-query" "^1.4.3"
-    "@gql2ts/from-schema" "^1.4.3"
-    "@gql2ts/util" "^1.4.3"
+    "@gql2ts/from-query" "^1.5.0"
+    "@gql2ts/from-schema" "^1.5.0"
+    "@gql2ts/util" "^1.5.0"
     commander "^2.9.0"
 
 graceful-fs@4.1.4:
@@ -4735,13 +4735,13 @@ graphql-tools@^1:
   optionalDependencies:
     "@types/graphql" "^0.9.0"
 
-graphql@0.13.1, graphql@^0.13.0, graphql@^0.13.1:
+graphql@0.13.1, "graphql@>= 0.10 <1.0.0", graphql@^0.13.0, graphql@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.1.tgz#9b3db3d8e40d1827e4172404bfdd2e4e17a58b55"
   dependencies:
     iterall "^1.2.0"
 
-"graphql@>= 0.10 <0.12", graphql@^0.11.7:
+graphql@^0.11.7:
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
   dependencies:

@@ -7,8 +7,8 @@ import {
   patientNeedToKnowEditMutation,
   patientNeedToKnowEditMutationVariables,
 } from '../graphql/types';
-import * as styles from './css/patient-scratch-pad.css';
-import { PatientScratchPadStatus } from './patient-scratch-pad-status';
+import * as styles from './css/patient-need-to-know.css';
+import { PatientNeedToKnowStatus } from './patient-need-to-know-status';
 
 interface IProps {
   patientId: string;
@@ -40,7 +40,7 @@ type allProps = IProps & IGraphqlProps;
 const SAVE_TIMEOUT_MILLISECONDS = 500;
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
-class PatientScratchPad extends React.Component<allProps, IState> {
+class PatientNeedToKnow extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
@@ -141,12 +141,12 @@ class PatientScratchPad extends React.Component<allProps, IState> {
           placeholder={placeholderText}
           onChange={this.onChange}
         />
-        <PatientScratchPadStatus
+        <PatientNeedToKnowStatus
           saveSuccess={saveSuccess}
           saveError={saveError}
           loadingError={error}
-          reloadScratchPad={this.reloadPatientNeedToKnow}
-          resaveScratchPad={this.saveNeedToKnow}
+          reloadNeedToKnow={this.reloadPatientNeedToKnow}
+          resaveNeedToKnow={this.saveNeedToKnow}
         />
       </div>
     );
@@ -170,4 +170,4 @@ export default compose(
       refetchNeedToKnow: data ? data.refetch : null,
     }),
   }),
-)(PatientScratchPad);
+)(PatientNeedToKnow);

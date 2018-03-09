@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from './css/left-nav-open.css';
 import LeftNavHeader from './left-nav-header';
+import LeftNavScratchPad from './left-nav-scratchpad';
 import { Selected } from './left-nav-widget';
 
 interface IProps {
@@ -9,10 +10,11 @@ interface IProps {
   isOpen: boolean;
   selected: Selected | null;
   onClose: () => void;
+  glassBreakId: string | null;
 }
 
 const LeftNavOpen: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { selected, isOpen, onClose } = props;
+  const { patientId, selected, isOpen, onClose, glassBreakId } = props;
 
   const containerStyles = classNames(styles.container, {
     [styles.expanded]: isOpen,
@@ -22,6 +24,11 @@ const LeftNavOpen: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <div className={containerStyles}>
       {selected && <LeftNavHeader selected={selected} onClose={onClose} />}
+      <div className={styles.content}>
+        {selected === 'scratchPad' && (
+          <LeftNavScratchPad patientId={patientId} glassBreakId={glassBreakId} />
+        )}
+      </div>
     </div>
   );
 };

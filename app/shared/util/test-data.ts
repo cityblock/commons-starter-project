@@ -1116,3 +1116,10 @@ export const unsignedPatientConsentForm = {
   title: 'Consent Form Title',
   signedAt: null,
 };
+
+export const patientScratchPad = {
+  id: 'nightKing',
+  patientId: patient.id,
+  userId: user.id,
+  body: 'Concerned about Night King Breaching Wall',
+};

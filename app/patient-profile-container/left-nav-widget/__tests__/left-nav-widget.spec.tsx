@@ -6,8 +6,9 @@ import LeftNavWidget from '../left-nav-widget';
 
 describe('Patient Left Navigation Widget', () => {
   const patientId = 'sansaStark';
+  const glassBreakId = 'lady';
 
-  const wrapper = shallow(<LeftNavWidget patientId={patientId} />);
+  const wrapper = shallow(<LeftNavWidget patientId={patientId} glassBreakId={glassBreakId} />);
 
   it('renders left navigation component', () => {
     expect(wrapper.find(LeftNavOpen).props().patientId).toBe(patientId);
@@ -20,6 +21,8 @@ describe('Patient Left Navigation Widget', () => {
 
     expect(wrapper.find(LeftNavOpen).props().selected).toBe('careTeam');
     expect(wrapper.find(LeftNavOpen).props().isOpen).toBeTruthy();
+    expect(wrapper.find(LeftNavOpen).props().patientId).toBe(patientId);
+    expect(wrapper.find(LeftNavOpen).props().glassBreakId).toBe(glassBreakId);
   });
 
   it('renders left navigation action buttons', () => {

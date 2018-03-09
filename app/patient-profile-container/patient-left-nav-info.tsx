@@ -6,7 +6,7 @@ import { ShortPatientFragment } from '../graphql/types';
 import Avatar from '../shared/library/avatar/avatar';
 import { getPatientFirstAndMiddleName } from '../shared/util/patient-name';
 import * as styles from './css/patient-profile-left-nav.css';
-import PatientScratchPad from './patient-scratch-pad';
+import PatientNeedToKnow from './patient-need-to-know';
 
 interface IProps {
   patientId: string;
@@ -119,7 +119,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
               <div className={styles.patientBasicInfoRowData}>AB12345A</div>
             </div>
           </div>
-          <PatientScratchPad patientId={patientId} />
+          <PatientNeedToKnow patientId={patientId} />
         </div>
       </div>
     );

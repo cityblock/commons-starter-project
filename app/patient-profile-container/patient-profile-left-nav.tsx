@@ -9,6 +9,7 @@ import PatientProblemList from './patient-problem-list';
 interface IProps {
   patient?: ShortPatientFragment | null;
   patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IState {
@@ -34,14 +35,14 @@ export default class PatientProfileLeftNav extends React.Component<IProps, IStat
   };
 
   render() {
-    const { patient, patientId } = this.props;
+    const { patient, patientId, glassBreakId } = this.props;
 
     return (
       <div className={styles.leftPane}>
         <PatientLeftNavInfo patientId={patientId} patient={patient} />
         <PatientMedications patientId={patientId} />
         <PatientProblemList patientId={patientId} />
-        <LeftNavWidget patientId={patientId} />
+        <LeftNavWidget patientId={patientId} glassBreakId={glassBreakId} />
       </div>
     );
   }

@@ -18,3 +18,11 @@
 .collapsed {
   height: 0;
 }
+
+.content {
+  border-right: 1px solid var(--border-color);
+  margin-top: 68px;
+
+  /* Account for size of button */
+  height: calc(100% - 72px);
+}

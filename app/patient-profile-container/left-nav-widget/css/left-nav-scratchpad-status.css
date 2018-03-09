@@ -1,0 +1,17 @@
+.container,
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  justify-content: space-between;
+  margin-bottom: var(--small-gutter);
+  padding: 0 var(--medium-gutter);
+}
+
+svg.icon {
+  height: var(--extra-small-gutter);
+  width: var(--extra-small-gutter);
+  margin-right: 5px;
+}

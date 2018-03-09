@@ -61,7 +61,11 @@ export class PatientProfileContainer extends React.Component<allProps> {
     const { patientId, patient, tab, glassBreakId } = this.props;
     return (
       <div className={styles.container}>
-        <PatientProfileLeftNav patientId={patientId} patient={patient} />
+        <PatientProfileLeftNav
+          patientId={patientId}
+          patient={patient}
+          glassBreakId={glassBreakId}
+        />
         <div className={styles.mainBody}>
           <PatientIntakeChecklist patientId={patientId} />
           <UnderlineTabs color="white">

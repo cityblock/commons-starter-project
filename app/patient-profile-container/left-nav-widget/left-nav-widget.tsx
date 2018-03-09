@@ -6,6 +6,7 @@ export type Selected = 'careTeam' | 'scratchPad' | 'message' | 'quickActions';
 
 interface IProps {
   patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IState {
@@ -26,7 +27,7 @@ class LeftNavWidget extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { patientId } = this.props;
+    const { patientId, glassBreakId } = this.props;
     const { selected, isOpen } = this.state;
 
     return (
@@ -36,6 +37,7 @@ class LeftNavWidget extends React.Component<IProps, IState> {
           isOpen={isOpen}
           selected={selected}
           onClose={() => this.setState({ isOpen: false })}
+          glassBreakId={glassBreakId}
         />
         <LeftNavActions onClick={this.handleClick} />
       </div>

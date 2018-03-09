@@ -1,20 +1,20 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as styles from './css/patient-scratch-pad.css';
+import * as styles from './css/patient-need-to-know.css';
 
 interface IProps {
   saveSuccess: boolean;
   saveError: boolean;
   loadingError: string | null;
-  reloadScratchPad: () => any;
-  resaveScratchPad: () => any;
+  reloadNeedToKnow: () => any;
+  resaveNeedToKnow: () => any;
 }
 
 const saveSuccessStyles = classNames(styles.scratchPadStatus, styles.saveSuccess);
 const errorStyles = classNames(styles.scratchPadStatus, styles.error);
 
-export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props => {
-  const { saveError, saveSuccess, loadingError, reloadScratchPad, resaveScratchPad } = props;
+export const PatientNeedToKnowStatus: React.StatelessComponent<IProps> = props => {
+  const { saveError, saveSuccess, loadingError, reloadNeedToKnow, resaveNeedToKnow } = props;
 
   if (saveSuccess) {
     return (
@@ -25,7 +25,7 @@ export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props =
     );
   } else if (saveError) {
     return (
-      <div className={errorStyles} onClick={resaveScratchPad}>
+      <div className={errorStyles} onClick={resaveNeedToKnow}>
         <div className={styles.errorLabel}>
           <span className={styles.errorRedLabel}>Not saved. </span>Click here to try again
         </div>
@@ -34,7 +34,7 @@ export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props =
     );
   } else if (loadingError) {
     return (
-      <div className={errorStyles} onClick={reloadScratchPad}>
+      <div className={errorStyles} onClick={reloadNeedToKnow}>
         <div className={styles.errorLabel}>
           <span className={styles.errorRedLabel}>Error loading note. </span>Click here to try again
         </div>

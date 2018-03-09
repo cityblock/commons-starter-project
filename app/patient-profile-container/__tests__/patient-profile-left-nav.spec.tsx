@@ -8,7 +8,12 @@ import PatientProblemList from '../patient-problem-list';
 import PatientProfileLeftNav from '../patient-profile-left-nav';
 
 describe('Patient Profile Left Navigation', () => {
-  const wrapper = shallow(<PatientProfileLeftNav patient={patient} patientId={patient.id} />);
+  const glassBreakId = 'nymeria';
+  const wrapper = shallow(<PatientProfileLeftNav
+      patient={patient}
+      patientId={patient.id}
+      glassBreakId={glassBreakId}
+    />);
 
   it('renders container', () => {
     expect(wrapper.find('.leftPane').length).toBe(1);
@@ -29,5 +34,6 @@ describe('Patient Profile Left Navigation', () => {
 
   it('renders left navigation widget', () => {
     expect(wrapper.find(LeftNavWidget).props().patientId).toBe(patient.id);
+    expect(wrapper.find(LeftNavWidget).props().glassBreakId).toBe(glassBreakId);
   });
 });

@@ -224,6 +224,8 @@ type UserWithCount {
   id: ID!
   firstName: String
   lastName: String
+  userRole: UserRole!
+  googleProfileImageUrl: String
   patientCount: Int
 }
 
@@ -1370,6 +1372,12 @@ input CareTeamInput {
   patientId: ID!
 }
 
+input CareTeamReassignInput {
+  userId: ID!
+  patientId: ID!
+  reassignedToId: ID
+}
+
 # params for adding multiple patients to a user's care team
 input CareTeamAssignInput {
   userId: ID!
@@ -2074,9 +2082,11 @@ type RootMutationType {
   # Create a new clinic
   clinicCreate(input: ClinicCreateInput): Clinic
   # Add user to careTeam
-  careTeamAddUser(input: CareTeamInput): [User]
+  careTeamAddUser(input: CareTeamInput): User
   # Remove user from careTeam
   careTeamRemoveUser(input: CareTeamInput): [User]
+  # Reassign a user on a careTeam
+  careTeamReassignUser(input: CareTeamReassignInput): User
   # Add multiple patients to careTeam
   careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
   # Create an address
@@ -2320,13 +2330,13 @@ type RootQueryType {
   # All Users (admin only)
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges!
   # List of all Users with care roles
-  userSummaryList(userRoleFilters: [UserRole!]): [User!]!
+  userSummaryList(userRoleFilters: [UserRole!]): [UserWithCount!]!
   # The current User
   currentUser: User
   # A single Patient
   patient(patientId: ID!): Patient!
   # Users on a care team
-  patientCareTeam(patientId: ID!): [User]!
+  patientCareTeam(patientId: ID!): [User!]!
   # Patient scratch pad
   patientScratchPad(patientId: ID!): PatientScratchPad!
   # Patient search
@@ -2380,6 +2390,8 @@ type RootQueryType {
   tasksWithNotificationsForPatient(patientId: ID!): [Task!]!
   # Task IDs with notifications for current user - in care plan MAP and tasks panel
   taskIdsWithNotifications: [TaskId!]!
+  # Tasks assigned to or followed by a user for a patient
+  tasksForUserForPatient(userId: ID!, patientId: ID!): [Task!]!
   # List of task comments
   taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges!
   # Single task comment

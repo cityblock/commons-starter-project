@@ -1,0 +1,7 @@
+#import "../fragments/short-task-for-user-for-patient.graphql"
+
+query getTasksForUserForPatient($userId: ID!, $patientId: ID!) {
+  tasksForUserForPatient(userId: $userId, patientId: $patientId) {
+    ...ShortTaskForUserForPatient
+  }
+}

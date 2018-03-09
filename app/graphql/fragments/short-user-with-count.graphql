@@ -1,0 +1,8 @@
+fragment ShortUserWithCount on UserWithCount {
+  id
+  firstName
+  lastName
+  userRole
+  googleProfileImageUrl
+  patientCount
+}

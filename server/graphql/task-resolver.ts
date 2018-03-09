@@ -44,6 +44,11 @@ export interface IResolveUrgentTasksForPatientOptions {
   patientId: string;
 }
 
+export interface IResolveTasksForUserForPatientOptions {
+  userId: string;
+  patientId: string;
+}
+
 export async function taskCreate(
   root: any,
   { input }: ITaskCreateArgs,
@@ -282,6 +287,16 @@ export async function resolvePatientTasks(
       hasNextPage,
     },
   };
+}
+
+export async function resolveTasksForUserForPatient(
+  root: any,
+  args: IResolveTasksForUserForPatientOptions,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootQueryType['tasksForUserForPatient']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+
+  return Task.getAllUserPatientTasks({ userId: args.userId, patientId: args.patientId }, txn);
 }
 
 export async function resolveTasksDueSoonForPatient(

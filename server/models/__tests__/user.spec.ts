@@ -2,7 +2,8 @@ import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { attributionUserEmail } from '../../lib/consts';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
 import User, { UserRole } from '../user';
@@ -275,6 +276,44 @@ describe('user model', () => {
           userRole: userRole3,
         },
       ]);
+    });
+  });
+
+  it('returns the correct patient count in the summary list', async () => {
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const healthCoachUserRole = 'healthCoach';
+
+      const user1 = await User.create(
+        createMockUser(11, clinic.id, healthCoachUserRole, 'a@b.com'),
+        txn,
+      );
+      const user2 = await User.create(
+        createMockUser(11, clinic.id, healthCoachUserRole, 'b@c.com'),
+        txn,
+      );
+
+      const patient1 = await createPatient(
+        { cityblockId: 123, homeClinicId: clinic.id, userId: user1.id },
+        txn,
+      );
+      await createPatient({ cityblockId: 123, homeClinicId: clinic.id, userId: user1.id }, txn);
+
+      const userSummaryList = await User.getUserSummaryList([healthCoachUserRole], txn);
+      const user1Summary = userSummaryList.find(user => user.id === user1.id);
+      const user2Summary = userSummaryList.find(user => user.id === user2.id);
+
+      expect((user1Summary! as any).patientCount).toEqual(2);
+      expect((user2Summary! as any).patientCount).toEqual(0);
+
+      await CareTeam.delete({ userId: user1.id, patientId: patient1.id }, txn);
+
+      const refetchedUserSummaryList = await User.getUserSummaryList([healthCoachUserRole], txn);
+      const refetchedUser1Summary = refetchedUserSummaryList.find(user => user.id === user1.id);
+      const refetchedUser2Summary = refetchedUserSummaryList.find(user => user.id === user2.id);
+
+      expect((refetchedUser1Summary! as any).patientCount).toEqual(1);
+      expect((refetchedUser2Summary! as any).patientCount).toEqual(0);
     });
   });
 

@@ -28,6 +28,17 @@ interface ITaskPaginationOptions extends IPaginationOptions {
   order: 'asc' | 'desc';
 }
 
+interface IUserPatientTasksOptions {
+  userId: string;
+  patientId: string;
+}
+
+interface ITaskReassignOptions {
+  patientId: string;
+  userId: string;
+  reassignedToId: string;
+}
+
 export type Priority = 'low' | 'medium' | 'high';
 export const PRIORITY: Priority[] = ['low', 'medium', 'high'];
 
@@ -242,6 +253,23 @@ export default class Task extends BaseModel {
     };
   }
 
+  static async getAllUserPatientTasks(
+    { userId, patientId }: IUserPatientTasksOptions,
+    txn: Transaction,
+  ): Promise<Task[]> {
+    const subquery = TaskFollower.query(txn)
+      .joinRelation('task')
+      .where('task.patientId', patientId)
+      .select('task_follower.taskId')
+      .where('task_follower.userId', userId)
+      .andWhere('task_follower.deletedAt', null) as any;
+
+    return this.query(txn)
+      .where('id', 'in', subquery)
+      .andWhere({ patientId, deletedAt: null })
+      .orWhere({ assignedToId: userId, patientId, deletedAt: null });
+  }
+
   static async create(input: ITaskEditableFields, txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)
@@ -260,6 +288,15 @@ export default class Task extends BaseModel {
         builder.where('task_follower.deletedAt', null);
       })
       .patchAndFetchById(taskId, task);
+  }
+
+  static async reassignForUserForPatient(
+    { userId, patientId, reassignedToId }: ITaskReassignOptions,
+    txn: Transaction,
+  ): Promise<number> {
+    return this.query(txn)
+      .where({ patientId, assignedToId: userId, deletedAt: null })
+      .patch({ assignedToId: reassignedToId });
   }
 
   static async delete(taskId: string, txn: Transaction): Promise<Task | undefined> {

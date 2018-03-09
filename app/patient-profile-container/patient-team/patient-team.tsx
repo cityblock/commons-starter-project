@@ -2,7 +2,8 @@ import * as React from 'react';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
-import PatientCityblockCareTeam from './patient-cityblock-care-team';
+import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
+import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
 import PatientExternalCareTeam from './patient-external-care-team';
 import PatientFamilyAndSupportTeam from './patient-family-and-support-team';
 
@@ -23,7 +24,17 @@ interface ICurrentSubTab {
   isFamilyAndSupportTeam: boolean;
 }
 
-export class PatientTeam extends React.Component<IProps> {
+interface IState {
+  isModalVisible: boolean;
+}
+
+export class PatientTeam extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = { isModalVisible: false };
+  }
+
   getCurrentSubTab(): ICurrentSubTab {
     const { match } = this.props;
     const subTab = match.params.subTab;
@@ -39,6 +50,14 @@ export class PatientTeam extends React.Component<IProps> {
     };
   }
 
+  onClickAddButton = () => {
+    this.setState({ isModalVisible: true });
+  };
+
+  onClosePopup = () => {
+    this.setState({ isModalVisible: false });
+  };
+
   renderAddButton() {
     const currentSubTab = this.getCurrentSubTab();
     let messageId = 'patientTeam.addCityblockCareTeamButton';
@@ -49,7 +68,33 @@ export class PatientTeam extends React.Component<IProps> {
       messageId = 'patientTeam.addFamilyAndSupportTeamButton';
     }
 
-    return <Button messageId={messageId} onClick={() => true} />;
+    return <Button messageId={messageId} onClick={this.onClickAddButton} />;
+  }
+
+  renderAddModal() {
+    const { isModalVisible } = this.state;
+    const { match } = this.props;
+    const {
+      isCityblockCareTeam,
+      isExternalCareTeam,
+      isFamilyAndSupportTeam,
+    } = this.getCurrentSubTab();
+
+    if (isCityblockCareTeam) {
+      return (
+        <AddCareTeamMemberModal
+          isVisible={isModalVisible}
+          patientId={match.params.patientId}
+          closePopup={this.onClosePopup}
+        />
+      );
+    } else if (isExternalCareTeam) {
+      // TODO: add appropriate modal here
+      return null;
+    } else if (isFamilyAndSupportTeam) {
+      // TODO: add appropriate modal here
+      return null;
+    }
   }
 
   render(): JSX.Element {
@@ -58,7 +103,10 @@ export class PatientTeam extends React.Component<IProps> {
     const currentSubTab = this.getCurrentSubTab();
 
     const cityblockCareTeam = currentSubTab.isCityblockCareTeam ? (
-      <PatientCityblockCareTeam patientId={match.params.patientId} />
+      <PatientCityblockCareTeam
+        patientId={match.params.patientId}
+        onAddCareTeamMember={this.onClickAddButton}
+      />
     ) : null;
     const externalCareTeam = currentSubTab.isExternalCareTeam ? (
       <PatientExternalCareTeam patientId={match.params.patientId} />
@@ -93,6 +141,7 @@ export class PatientTeam extends React.Component<IProps> {
           {cityblockCareTeam}
           {externalCareTeam}
           {familyAndSupportTeam}
+          {this.renderAddModal()}
         </div>
       </div>
     );

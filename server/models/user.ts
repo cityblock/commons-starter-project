@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { IUserWithCount } from 'schema';
 import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import {
@@ -16,7 +17,9 @@ export type UserRole =
   | 'healthCoach'
   | 'familyMember'
   | 'anonymousUser'
-  | 'admin';
+  | 'admin'
+  | 'communityHealthPartner'
+  | 'primaryCarePhysician';
 export const USER_ROLE: UserRole[] = [
   'physician',
   'nurseCareManager',
@@ -24,6 +27,8 @@ export const USER_ROLE: UserRole[] = [
   'familyMember',
   'anonymousUser',
   'admin',
+  'communityHealthPartner',
+  'primaryCarePhysician',
 ];
 
 export type Locale = 'en' | 'es';
@@ -246,11 +251,27 @@ export default class User extends BaseModel {
     };
   }
 
-  static async getUserSummaryList(userRoleFilters: UserRole[], txn: Transaction) {
+  static async getUserSummaryList(
+    userRoleFilters: UserRole[],
+    txn: Transaction,
+  ): Promise<IUserWithCount[]> {
     return this.query(txn)
+      .leftOuterJoin(
+        this.raw(
+          `"care_team" as "patients_join" on "patients_join"."userId" = "user"."id" and "patients_join"."deletedAt" is null left outer join "patient" as "patients" on "patients_join"."patientId" = "patients"."id"`,
+        ),
+      )
       .whereIn('userRole', userRoleFilters)
-      .select(['userRole', 'id', 'firstName', 'lastName'])
-      .orderBy('lastName');
+      .where('user.deletedAt', null)
+      .select(
+        'userRole',
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        this.raw('count(patients.id)::integer as "patientCount"'),
+      )
+      .groupBy('user.id')
+      .orderBy('user.lastName') as any;
   }
 
   static async delete(userId: string, txn: Transaction): Promise<User> {

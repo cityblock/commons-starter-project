@@ -560,4 +560,158 @@ describe('task model', () => {
       expect(fetchedPatientId).toBe(patient.id);
     });
   });
+
+  describe('all user patient tasks', () => {
+    it('returns tasks which are assigned to or followed by a user for a patient', async () => {
+      await transaction(Task.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+        const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+        const assignedTask1 = await Task.create(
+          {
+            title: 'assigned task 1',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const assignedTask2 = await Task.create(
+          {
+            title: 'assigned task 2',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const assignedTaskWrongPatient = await Task.create(
+          {
+            title: 'assigned task wrong patient',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient2.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const nonAssignedTask = await Task.create(
+          {
+            title: 'non-assigned task',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user2.id,
+          },
+          txn,
+        );
+        const followedTask = await Task.create(
+          {
+            title: 'followed task',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user2.id,
+            assignedToId: user2.id,
+          },
+          txn,
+        );
+        await TaskFollower.followTask({ taskId: followedTask.id, userId: user.id }, txn);
+        const followedAndAssignedTask = await Task.create(
+          {
+            title: 'followed and assigned task',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user2.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        await TaskFollower.followTask({ taskId: followedTask.id, userId: user.id }, txn);
+
+        const userPatientTasks = await Task.getAllUserPatientTasks(
+          {
+            userId: user.id,
+            patientId: patient.id,
+          },
+          txn,
+        );
+        const userPatientTaskIds = userPatientTasks.map(task => task.id);
+
+        expect(userPatientTasks.length).toEqual(4);
+        expect(userPatientTaskIds).toContain(assignedTask1.id);
+        expect(userPatientTaskIds).toContain(assignedTask2.id);
+        expect(userPatientTaskIds).toContain(followedTask.id);
+        expect(userPatientTaskIds).toContain(followedAndAssignedTask.id);
+        expect(userPatientTaskIds).not.toContain(assignedTaskWrongPatient.id);
+        expect(userPatientTaskIds).not.toContain(nonAssignedTask.id);
+      });
+    });
+  });
+
+  describe('reassignForUserForPatient', () => {
+    it('reassigns tasks from one user to another', async () => {
+      await transaction(Task.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+        const task1 = await Task.create(
+          {
+            title: 'assigned task 1',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const task2 = await Task.create(
+          {
+            title: 'assigned task 2',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const userTasks = await Task.getAllUserPatientTasks(
+          { userId: user.id, patientId: patient.id },
+          txn,
+        );
+        expect(userTasks).toHaveLength(2);
+
+        await Task.reassignForUserForPatient(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            reassignedToId: user2.id,
+          },
+          txn,
+        );
+        const refetchedUserTasks = await Task.getAllUserPatientTasks(
+          { userId: user.id, patientId: patient.id },
+          txn,
+        );
+        expect(refetchedUserTasks).toHaveLength(0);
+
+        const user2UserTasks = await Task.getAllUserPatientTasks(
+          { userId: user2.id, patientId: patient.id },
+          txn,
+        );
+        const user2UserTaskIds = user2UserTasks.map(task => task.id);
+        expect(user2UserTasks).toHaveLength(2);
+        expect(user2UserTaskIds).toContain(task1.id);
+        expect(user2UserTaskIds).toContain(task2.id);
+      });
+    });
+  });
 });

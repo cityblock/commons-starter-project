@@ -20,6 +20,7 @@ import {
 import {
   careTeamAddUser,
   careTeamAssignPatients,
+  careTeamReassignUser,
   careTeamRemoveUser,
   resolvePatientCareTeam,
 } from './care-team-resolver';
@@ -262,6 +263,7 @@ import {
   resolvePatientTasks,
   resolveTask,
   resolveTasksDueSoonForPatient,
+  resolveTasksForUserForPatient,
   resolveTasksWithNotificationsForPatient,
   resolveTaskIdsWithNotifications,
   taskComplete,
@@ -324,6 +326,7 @@ const resolveFunctions = {
     tasksDueSoonForPatient: resolveTasksDueSoonForPatient,
     taskIdsWithNotifications: resolveTaskIdsWithNotifications,
     tasksWithNotificationsForPatient: resolveTasksWithNotificationsForPatient,
+    tasksForUserForPatient: resolveTasksForUserForPatient,
     taskComments: resolveTaskComments,
     taskComment: resolveTaskComment,
     riskAreaGroups: resolveRiskAreaGroups,
@@ -407,6 +410,7 @@ const resolveFunctions = {
     addressCreateForPatient,
     addressEdit,
     careTeamAddUser,
+    careTeamReassignUser,
     careTeamAssignPatients,
     careTeamRemoveUser,
     emailCreate,

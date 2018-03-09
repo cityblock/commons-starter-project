@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import * as styles from './css/small-text.css';
 
 export type Color = 'lightGray' | 'gray' | 'black' | 'white' | 'red'; // default is lightGray
-export type Size = 'small' | 'medium' | 'large';
+export type Size = 'small' | 'medium' | 'large' | 'largest';
 
 export interface IProps {
   messageId?: string; // provide either raw text or message id
@@ -25,6 +25,7 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.gray]: color && color === 'gray',
       [styles.mediumFontSize]: size && size === 'medium',
       [styles.largeFontSize]: size && size === 'large',
+      [styles.largestFontSize]: size && size === 'largest',
       [styles.white]: color && color === 'white',
       [styles.red]: color && color === 'red',
       [styles.bold]: isBold,

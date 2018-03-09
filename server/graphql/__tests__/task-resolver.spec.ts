@@ -7,6 +7,7 @@ import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
+import TaskFollower from '../../models/task-follower';
 import User from '../../models/user';
 import {
   createCBOReferral,
@@ -784,6 +785,43 @@ describe('task tests', () => {
 
         expect(result.data!.taskIdsWithNotifications.length).toBe(1);
         expect(result.data!.taskIdsWithNotifications[0].id).toBe(task.id);
+      });
+    });
+  });
+
+  describe('tasksForUserForPatient', () => {
+    it('retrieves a list of tasks assigned to or followed by a user for a patient', async () => {
+      await transaction(Task.knex(), async txn => {
+        const { user, user2, task1, task2, patient } = await setup(txn);
+        const followedTask = await Task.create(
+          {
+            title: 'Task 1 Title',
+            description: 'description',
+            dueAt: new Date().toISOString(),
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user2.id,
+            priority: 'low',
+          },
+          txn,
+        );
+        await TaskFollower.followTask({ userId: user.id, taskId: followedTask.id }, txn);
+
+        const query = `{
+          tasksForUserForPatient(userId: "${user.id}", patientId: "${patient.id}") {
+            id
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          permissions,
+          userId: user2.id,
+          txn,
+        });
+        const taskIds = result.data!.tasksForUserForPatient.map((task: Task) => task.id);
+
+        expect(taskIds).toContain(task1.id);
+        expect(taskIds).toContain(task2.id);
+        expect(taskIds).toContain(followedTask.id);
       });
     });
   });

@@ -56,7 +56,7 @@ export class PatientConsents extends React.Component<allProps, IState> {
   onCreate = async (formId: string, signedAt: string) => {
     const { patientId, createPatientConsentFormMutation } = this.props;
     try {
-      this.setState({ createLoading: true });
+      this.setState({ createLoading: true, createError: undefined });
       await createPatientConsentFormMutation({ variables: { patientId, formId, signedAt } });
       this.setState({ formId: null, formTitle: null, isModalVisible: false, createLoading: false });
     } catch (err) {

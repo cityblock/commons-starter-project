@@ -4,6 +4,10 @@ import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
+import ProgressNote from '../progress-note';
+import ProgressNoteTemplate from '../progress-note-template';
+import Task from '../task';
+import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
@@ -45,15 +49,17 @@ describe('care model', () => {
           txn,
         );
 
-        const careTeam = await CareTeam.create(
+        await CareTeam.create(
           {
             userId: user2.id,
             patientId: patient1.id,
           },
           txn,
         );
-        expect(careTeam[0].id).toEqual(user1.id);
-        expect(careTeam[1].id).toEqual(user2.id);
+        const careTeam = await CareTeam.getForPatient(patient1.id, txn);
+        const careTeamIds = careTeam.map(user => user.id);
+        expect(careTeamIds).toContain(user1.id);
+        expect(careTeamIds).toContain(user2.id);
       });
     });
 
@@ -283,6 +289,200 @@ describe('care model', () => {
           lastName: 'plant',
           patientCount: '3',
         });
+      });
+    });
+  });
+
+  describe('reassignUser', () => {
+    it('reassigns tasks and removes the user from a care team', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        const user3 = await User.create(
+          createMockUser(13, clinic.id, userRole, 'care3@care.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        await CareTeam.create({ userId: user3.id, patientId: patient.id }, txn);
+        const task1 = await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const task2 = await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            patientId: patient.id,
+            createdById: user2.id,
+            assignedToId: user2.id,
+          },
+          txn,
+        );
+        await TaskFollower.followTask(
+          {
+            userId: user.id,
+            taskId: task2.id,
+          },
+          txn,
+        );
+
+        const careTeam = await CareTeam.getForPatient(patient.id, txn);
+        const careTeamUserIds = careTeam.map(careTeamUser => careTeamUser.id);
+        const userTasks = await Task.getAllUserPatientTasks(
+          { userId: user.id, patientId: patient.id },
+          txn,
+        );
+        const user3Tasks = await Task.getAllUserPatientTasks(
+          { userId: user3.id, patientId: patient.id },
+          txn,
+        );
+        expect(careTeam).toHaveLength(3);
+        expect(careTeamUserIds).toContain(user.id);
+        expect(careTeamUserIds).toContain(user2.id);
+        expect(careTeamUserIds).toContain(user3.id);
+        expect(userTasks).toHaveLength(2);
+        expect(user3Tasks).toHaveLength(0);
+
+        await CareTeam.reassignUser(
+          { userId: user.id, patientId: patient.id, reassignedToId: user3.id },
+          txn,
+        );
+
+        const refetchedCareTeam = await CareTeam.getForPatient(patient.id, txn);
+        const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
+        const refetchedUserTasks = await Task.getAllUserPatientTasks(
+          { userId: user.id, patientId: patient.id },
+          txn,
+        );
+        const refetchedUser3Tasks = await Task.getAllUserPatientTasks(
+          { userId: user3.id, patientId: patient.id },
+          txn,
+        );
+        const refetchedUser3TaskIds = refetchedUser3Tasks.map(task => task.id);
+        expect(refetchedCareTeam).toHaveLength(2);
+        expect(refetchedCareTeamUserIds).toContain(user2.id);
+        expect(refetchedCareTeamUserIds).toContain(user3.id);
+        expect(refetchedUserTasks).toHaveLength(0);
+        expect(refetchedUser3Tasks).toHaveLength(2);
+        expect(refetchedUser3TaskIds).toContain(task1.id);
+        expect(refetchedUser3TaskIds).toContain(task2.id);
+      });
+    });
+
+    it('throws an error if there are tasks to be reassigned and no new user provided', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        const user3 = await User.create(
+          createMockUser(13, clinic.id, userRole, 'care3@care.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        await CareTeam.create({ userId: user3.id, patientId: patient.id }, txn);
+        await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const task2 = await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            patientId: patient.id,
+            createdById: user2.id,
+            assignedToId: user2.id,
+          },
+          txn,
+        );
+        await TaskFollower.followTask(
+          {
+            userId: user.id,
+            taskId: task2.id,
+          },
+          txn,
+        );
+
+        await expect(
+          CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn),
+        ).rejects.toMatch('Must provide a replacement user when there are tasks to reassign');
+      });
+    });
+
+    it('throws an error if the user has an open progress note for the patient', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const progressNoteTemplate = await ProgressNoteTemplate.create(
+          {
+            title: 'title',
+          },
+          txn,
+        );
+        await ProgressNote.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            progressNoteTemplateId: progressNoteTemplate.id,
+          },
+          txn,
+        );
+        await expect(
+          CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn),
+        ).rejects.toMatch(
+          'This user has an open Progress Note. Please submit before removing from care team.',
+        );
       });
     });
   });

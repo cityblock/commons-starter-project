@@ -735,6 +735,30 @@ export interface careTeamAssignPatientsMutation {
   } | null,
 };
 
+export interface careTeamReassignUserMutationVariables {
+  userId: string,
+  patientId: string,
+  reassignedToId?: string | null,
+};
+
+export interface careTeamReassignUserMutation {
+  // Reassign a user on a careTeam
+  careTeamReassignUser:  {
+    id: string,
+    locale: string | null,
+    phone: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+    permissions: Permissions,
+  } | null,
+};
+
 export interface CBOCreateMutationVariables {
   name: string,
   categoryId: string,
@@ -2285,7 +2309,7 @@ export interface getPatientCareTeamQuery {
     createdAt: string,
     updatedAt: string,
     permissions: Permissions,
-  } | null >,
+  } >,
 };
 
 export interface getPatientComputedPatientStatusQueryVariables {
@@ -5119,6 +5143,18 @@ export interface getTasksDueSoonForPatientQuery {
   } >,
 };
 
+export interface getTasksForUserForPatientQueryVariables {
+  userId: string,
+  patientId: string,
+};
+
+export interface getTasksForUserForPatientQuery {
+  // Tasks assigned to or followed by a user for a patient
+  tasksForUserForPatient:  Array< {
+    id: string,
+  } >,
+};
+
 export interface getTasksWithNotificationsForPatientQueryVariables {
   patientId: string,
 };
@@ -5153,6 +5189,7 @@ export interface getUserSummaryListQuery {
     lastName: string | null,
     userRole: UserRole,
     googleProfileImageUrl: string | null,
+    patientCount: number | null,
   } >,
 };
 
@@ -5491,6 +5528,29 @@ export interface patientAnswersCreateMutation {
     } | null,
     patientScreeningToolSubmissionId: string | null,
   } | null > | null,
+};
+
+export interface patientCareTeamAddUserMutationVariables {
+  patientId: string,
+  userId: string,
+};
+
+export interface patientCareTeamAddUserMutation {
+  // Add user to careTeam
+  careTeamAddUser:  {
+    id: string,
+    locale: string | null,
+    phone: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+    permissions: Permissions,
+  } | null,
 };
 
 export interface patientConcernBulkEditMutationVariables {
@@ -12137,6 +12197,10 @@ export interface ShortProgressNoteGlassBreakFragment {
   progressNoteId: string,
 };
 
+export interface ShortTaskForUserForPatientFragment {
+  id: string,
+};
+
 export interface ShortTaskFragment {
   id: string,
   title: string,
@@ -12185,6 +12249,15 @@ export interface ShortUrgentTaskForPatientFragment {
     userRole: UserRole,
     googleProfileImageUrl: string | null,
   } >,
+};
+
+export interface ShortUserWithCountFragment {
+  id: string,
+  firstName: string | null,
+  lastName: string | null,
+  userRole: UserRole,
+  googleProfileImageUrl: string | null,
+  patientCount: number | null,
 };
 
 export interface ShortUserFragment {

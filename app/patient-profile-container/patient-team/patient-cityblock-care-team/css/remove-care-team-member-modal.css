@@ -1,0 +1,11 @@
+.removeCareTeamMemberModal h2 {
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  margin-top: var(--small-gutter);
+  padding: 0 130px;
+}
+
+.removeCareTeamMemberModal p {
+  padding: 0 70px;
+  line-height: var(--medium-large-font-line-height);
+}

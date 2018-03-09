@@ -1,7 +1,7 @@
-#import "../fragments/short-user.graphql"
+#import "../fragments/short-user-with-count.graphql"
 
 query getUserSummaryList($userRoleFilters: [UserRole!]) {
   userSummaryList(userRoleFilters: $userRoleFilters) {
-    ...ShortUser
+    ...ShortUserWithCount
   }
 }

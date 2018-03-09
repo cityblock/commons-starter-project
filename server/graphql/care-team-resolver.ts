@@ -1,4 +1,10 @@
-import { ICareTeamAssignInput, ICareTeamInput, IRootMutationType, IRootQueryType } from 'schema';
+import {
+  ICareTeamAssignInput,
+  ICareTeamInput,
+  ICareTeamReassignInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import { IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
@@ -17,12 +23,16 @@ export interface ICareTeamAssignOptions {
   input: ICareTeamAssignInput;
 }
 
+export interface ICareTeamReassignOptions {
+  input: ICareTeamReassignInput;
+}
+
 export interface IUserPatientPanelOptions extends IPaginationOptions {
   userId: string;
 }
 
 export async function careTeamAddUser(
-  source: any,
+  root: any,
   { input }: ICareTeamOptions,
   { txn, userId, permissions }: IContext,
 ): Promise<IRootMutationType['careTeamAddUser']> {
@@ -32,13 +42,30 @@ export async function careTeamAddUser(
 }
 
 export async function careTeamRemoveUser(
-  source: any,
+  root: any,
   { input }: ICareTeamOptions,
   { txn, userId, permissions }: IContext,
 ): Promise<IRootMutationType['careTeamRemoveUser']> {
   await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
 
   return CareTeam.delete({ userId: input.userId, patientId: input.patientId }, txn);
+}
+
+export async function careTeamReassignUser(
+  root: any,
+  { input }: ICareTeamReassignOptions,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootMutationType['careTeamReassignUser']> {
+  await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
+
+  return CareTeam.reassignUser(
+    {
+      userId: input.userId,
+      patientId: input.patientId,
+      reassignedToId: input.reassignedToId,
+    },
+    txn,
+  );
 }
 
 export async function resolvePatientCareTeam(

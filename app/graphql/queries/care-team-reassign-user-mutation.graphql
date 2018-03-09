@@ -1,0 +1,9 @@
+#import "../fragments/full-user.graphql"
+
+mutation careTeamReassignUser($userId: ID!, $patientId: ID!, $reassignedToId: ID) {
+  careTeamReassignUser(
+    input: { userId: $userId, patientId: $patientId, reassignedToId: $reassignedToId }
+  ) {
+    ...FullUser
+  }
+}

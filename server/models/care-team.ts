@@ -4,7 +4,16 @@ import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
+import ProgressNote from './progress-note';
+import Task from './task';
+import TaskFollower from './task-follower';
 import User from './user';
+
+interface ICareTeamReassignOptions {
+  userId: string;
+  patientId: string;
+  reassignedToId?: string | null;
+}
 
 interface ICareTeamOptions {
   userId: string;
@@ -97,7 +106,7 @@ export default class CareTeam extends BaseModel {
     };
   }
 
-  static async create({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {
+  static async create({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     const relations = await CareTeam.query(txn).where({ userId, patientId, deletedAt: null });
 
@@ -105,7 +114,7 @@ export default class CareTeam extends BaseModel {
       await CareTeam.query(txn).insert({ patientId, userId });
     }
 
-    return this.getForPatient(patientId, txn);
+    return User.get(userId, txn);
   }
 
   static async createAllForUser(
@@ -130,6 +139,39 @@ export default class CareTeam extends BaseModel {
       .groupBy('user.id')) as any;
 
     return user[0];
+  }
+
+  static async reassignUser(
+    { userId, patientId, reassignedToId }: ICareTeamReassignOptions,
+    txn: Transaction,
+  ): Promise<User> {
+    const tasksToBeReassigned = await Task.getAllUserPatientTasks({ userId, patientId }, txn);
+    const openProgressNote = await ProgressNote.getForUserForPatient(userId, patientId, txn);
+
+    if (openProgressNote) {
+      return Promise.reject(
+        'This user has an open Progress Note. Please submit before removing from care team.',
+      );
+    }
+
+    if (tasksToBeReassigned.length && !reassignedToId) {
+      return Promise.reject('Must provide a replacement user when there are tasks to reassign');
+    }
+
+    if (reassignedToId) {
+      // Reassign all tasks
+      await Task.reassignForUserForPatient({ userId, patientId, reassignedToId }, txn);
+      // Unfollow all tasks and add reassignedTo as follower
+      await TaskFollower.unfollowPatientTasks(
+        { userId, patientId, newFollowerId: reassignedToId },
+        txn,
+      );
+    }
+
+    // Remove user from CareTeam
+    await this.delete({ userId, patientId }, txn);
+
+    return User.get(userId, txn);
   }
 
   static async delete({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {

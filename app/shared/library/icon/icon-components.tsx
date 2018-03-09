@@ -27,6 +27,7 @@ import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import FlagIcon from 'material-ui-icons/Flag';
+import GradeIcon from 'material-ui-icons/Grade';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
@@ -44,6 +45,7 @@ import PeopleIcon from 'material-ui-icons/People';
 import PhoneIcon from 'material-ui-icons/Phone';
 import PictureAsPDFIcon from 'material-ui-icons/PictureAsPdf';
 import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
+import RemoveCircleOutlineIcon from 'material-ui-icons/RemoveCircleOutline';
 import ReportIcon from 'material-ui-icons/Report';
 import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
@@ -98,10 +100,12 @@ const components: IconComponents = {
   phone: PhoneIcon,
   pictureAsPDF: PictureAsPDFIcon,
   playlistAdd: PlaylistAddIcon,
+  removeCircle: RemoveCircleOutlineIcon,
   report: ReportIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
   stars: StarsIcon,
+  star: GradeIcon,
   syncProblem: SyncProblemIcon,
   textSms: TextSmsIcon,
   warning: WarningIcon,

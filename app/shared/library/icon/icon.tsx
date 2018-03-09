@@ -12,10 +12,11 @@ interface IProps {
   onClick?: (e?: any) => void; // optional click handler for icon
   color?: Color;
   isLarge?: boolean;
+  isExtraLarge?: boolean;
 }
 
 const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { name, className, onClick, color, isLarge } = props;
+  const { name, className, onClick, color, isLarge, isExtraLarge } = props;
   const IconComponent = iconComponents[name];
   const iconStyles = classNames(
     styles.icon,
@@ -26,6 +27,7 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.blue]: color === 'blue',
       [styles.green]: color === 'green',
       [styles.large]: isLarge,
+      [styles.extraLarge]: isExtraLarge,
       [styles.hover]: !!onClick,
     },
     className,

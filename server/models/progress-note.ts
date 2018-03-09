@@ -350,5 +350,24 @@ export default class ProgressNote extends BaseModel {
     }
     return progressNote;
   }
+
+  static async getForUserForPatient(
+    userId: string,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<ProgressNote | null> {
+    const progressNote = await this.query(txn).findOne({
+      userId,
+      patientId,
+      deletedAt: null,
+      completedAt: null,
+    });
+
+    if (!progressNote) {
+      return null;
+    }
+
+    return progressNote;
+  }
 }
 /* tslint:enable:member-ordering */

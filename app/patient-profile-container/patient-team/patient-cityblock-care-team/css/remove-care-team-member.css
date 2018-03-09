@@ -1,0 +1,56 @@
+.removeCareTeamMember {
+  padding-top: 0;
+}
+
+.careTeamMemberInfo {
+  padding: var(--small-gutter);
+  background-color: var(--gray-background-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.careTeamMemberName p {
+  padding: 0;
+}
+
+.careTeamMemberStats p {
+  padding: 0;
+}
+
+.careTeamMemberNameLabel,
+.careTeamMemberTasksLabel {
+  font-family: var(--basetica-medium);
+}
+
+.careTeamMemberNameAndTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+
+.careTeamMemberTitle,
+.careTeamMemberTasksCount {
+  margin-left: 10px;
+}
+
+.careTeamMemberStats {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.careTeamMemberStats.hidden {
+  display: none;
+}
+
+.careTeamMemberReassignmentSection {
+  margin-top: var(--medium-gutter);
+}
+
+.careTeamMemberReassignmentSection.hidden {
+  display: none;
+}

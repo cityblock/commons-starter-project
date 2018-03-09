@@ -682,6 +682,12 @@ export const SPANISH_TRANSLATION = {
     'careWorkerSelect.physician': 'Physicians',
     'careWorkerSelect.nurseCareManager': 'Nurses',
     'careWorkerSelect.healthCoach': 'Health Coaches',
+    'careWorker.primaryCarePhysician': 'Primary Care Physicians',
+    'careWorker.admin': 'Admins',
+    'careWorker.anonymousUser': 'Anonymous Users',
+    'careWorker.familyMember': 'Family Members',
+    'careWorker.psychiatrist': 'Psychiatrists',
+    'careWorker.communityHealthPartner': 'Community Health Partners',
     'careWorkerSelect.placeholder': 'Select the care worker...',
     'patientIntakeChecklist.coreIdentityLabel': 'Verify core identifying info',
     'patientIntakeChecklist.coreIdentitySubtext':
@@ -722,5 +728,42 @@ export const SPANISH_TRANSLATION = {
     'patientDocuments.patientAdvancedDirectives': 'Advanced Directive forms',
     'patientDocuments.cancel': 'Cancel',
     'patientDocuments.save': 'Save',
+    'patientTeam.missingPcpHeader': 'Add a Primary Care Provider',
+    'patientTeam.missingPcpSubtext':
+      "A Primary Care Physician is required on this member's Ciityblock Care Team",
+    'patientTeam.missingChpHeader': 'Add a Community Health Partner',
+    'patientTeam.missingChpSubtext':
+      "A Community Health Partner is required on this member's Cityblock Care Team",
+    'patientTeam.makeTeamLead': 'Make team lead',
+    'patientTeam.removeFromTeam': 'Remove from team',
+    'patientTeam.removeCityblockTeamModalHeader':
+      "Are you sure you want to remove them from this member's care team?",
+    'patientTeam.removeCityblockTeamModalHeaderBody':
+      "Removing this care team member will result in them no longer having access to this member's profile.",
+    'patientTeam.removeCityblockTeamModalHeaderBodyWithTasks':
+      "Removing this care team member will result in them no longer having access to this member's profile. You will need to reassign their open tasks and/or progress note to another care team member.",
+    'patientTeam.removeCityblockTeamModalSubmitButton': 'Yes, remove',
+    'patientTeam.removeCityblockTeamModalSubmitButtonWithTasks': 'Yes, remove & reassign',
+    'patientTeam.careMemberToReassignTo': 'Select a care team member to reassign to',
+    'patientTeam.careMemberToReassignToPlaceholder': 'Select a care team member',
+    'patientTeam.careMemberToRemoveLabel': 'Care team member to be removed:',
+    'patientTeam.admin': 'Admin',
+    'patientTeam.communityHealthPartner': 'Community Health Partner',
+    'patientTeam.physician': 'Physician',
+    'patientTeam.primaryCarePhysician': 'Primary Care Physician',
+    'patientTeam.nurseCareManager': 'Nurse Care Manager',
+    'patientTeam.healthCoach': 'Health Coach',
+    'patientTeam.openTasks': 'Open tasks:',
+    'patientTeam.addCareTeamMemberModalHeader': 'Add Cityblock care team member',
+    'patientTeam.addCareTeamMemberModalHeaderBody':
+      "Select which care team member to add to this member's care team",
+    'patientTeam.addCareTeamMemberSelectPlaceholder': 'Select one',
+    'patientTeam.selectCareTeamMember': 'Select a care team member',
+    'patientTeam.cancelAdd': 'Cancel',
+    'patientTeam.submitAdd': 'Add to care team',
+    'patientTeam.doneAdd': 'Done',
+    'patientTeam.addCareTeamSuccessBodyText':
+      'Continue to the member profile or add another care team member',
+    'patientTeam.addAdditionalCareTeamMember': 'Add another care worker',
   },
 };

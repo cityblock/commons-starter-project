@@ -29,6 +29,11 @@ svg.icon.large {
   height: 27px;
 }
 
+svg.icon.extraLarge {
+  width: 30px;
+  height: 30px;
+}
+
 svg.icon.hover {
   cursor: pointer;
 }

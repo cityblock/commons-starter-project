@@ -5,4 +5,5 @@ export const red: string;
 export const blue: string;
 export const green: string;
 export const large: string;
+export const extraLarge: string;
 export const hover: string;

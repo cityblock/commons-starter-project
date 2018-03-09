@@ -23,7 +23,7 @@ declare module 'schema' {
     /**
     List of all Users with care roles
   */
-    userSummaryList: Array<IUser>;
+    userSummaryList: Array<IUserWithCount>;
     /**
     The current User
   */
@@ -116,6 +116,10 @@ declare module 'schema' {
     Task IDs with notifications for current user - in care plan MAP and tasks panel
   */
     taskIdsWithNotifications: Array<ITaskId>;
+    /**
+    Tasks assigned to or followed by a user for a patient
+  */
+    tasksForUserForPatient: Array<ITask>;
     /**
     List of task comments
   */
@@ -507,6 +511,15 @@ declare module 'schema' {
   interface IPageInfo {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+  }
+
+  interface IUserWithCount {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    userRole: IUserRoleEnum;
+    googleProfileImageUrl: string | null;
+    patientCount: number | null;
   }
 
   /**
@@ -1692,11 +1705,15 @@ declare module 'schema' {
     /**
     Add user to careTeam
   */
-    careTeamAddUser: Array<IUser> | null;
+    careTeamAddUser: IUser | null;
     /**
     Remove user from careTeam
   */
     careTeamRemoveUser: Array<IUser> | null;
+    /**
+    Reassign a user on a careTeam
+  */
+    careTeamReassignUser: IUser | null;
     /**
     Add multiple patients to careTeam
   */
@@ -2219,19 +2236,18 @@ declare module 'schema' {
     patientId: string;
   }
 
+  interface ICareTeamReassignInput {
+    userId: string;
+    patientId: string;
+    reassignedToId: string | null;
+  }
+
   /**
     params for adding multiple patients to a user's care team
   */
   interface ICareTeamAssignInput {
     userId: string;
     patientIds: Array<string>;
-  }
-
-  interface IUserWithCount {
-    id: string;
-    firstName: string | null;
-    lastName: string | null;
-    patientCount: number | null;
   }
 
   /**

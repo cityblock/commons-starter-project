@@ -55,10 +55,13 @@ describe('care team', () => {
           userId: user.id,
           txn,
         });
-        const careTeamUserIds = cloneDeep(result.data!.careTeamAddUser).map((u: any) => u.id);
 
-        expect(careTeamUserIds).toContain(user.id);
-        expect(careTeamUserIds).toContain(user2.id);
+        expect(cloneDeep(result.data!.careTeamAddUser).id).toEqual(user2.id);
+        const patientCareTeam = await CareTeam.getForPatient(patient.id, txn);
+        const patientCareTeamIds = patientCareTeam.map(teamMember => teamMember.id);
+
+        expect(patientCareTeamIds).toContain(user.id);
+        expect(patientCareTeamIds).toContain(user2.id);
       });
     });
 
@@ -151,6 +154,45 @@ describe('care team', () => {
           lastName: 'plant',
           patientCount: 2,
         });
+      });
+    });
+
+    it('reassigns a care team member', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        const careTeam = await CareTeam.getForPatient(patient.id, txn);
+        const careTeamUserIds = careTeam.map(careTeamUser => careTeamUser.id);
+        expect(careTeam).toHaveLength(2);
+        expect(careTeamUserIds).toContain(user.id);
+        expect(careTeamUserIds).toContain(user2.id);
+
+        const mutation = `mutation {
+          careTeamReassignUser(input: { userId: "${user.id}", patientId: "${
+          patient.id
+        }", reassignedToId: "${user2.id}" }) {
+            id
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          txn,
+          userId: user2.id,
+        });
+        expect(cloneDeep(result.data!.careTeamReassignUser)).toMatchObject({
+          id: user.id,
+        });
+
+        const refetchedCareTeam = await CareTeam.getForPatient(patient.id, txn);
+        const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
+        expect(refetchedCareTeam).toHaveLength(1);
+        expect(refetchedCareTeamUserIds).toContain(user2.id);
       });
     });
   });

@@ -33,6 +33,11 @@
   line-height: var(--default-line-height);
 }
 
+.largestFontSize {
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
 .bold {
   font-weight: var(--bold-font-weight);
 }

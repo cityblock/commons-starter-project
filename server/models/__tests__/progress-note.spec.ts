@@ -475,4 +475,38 @@ describe('progress note model', () => {
       );
     });
   });
+
+  describe('getting a progress note for a user for a patient', () => {
+    it('returns a progress note if there is one', async () => {
+      await transaction(ProgressNote.knex(), async txn => {
+        const { patient, user, progressNoteTemplate } = await setup(txn);
+        const progressNote = await ProgressNote.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            progressNoteTemplateId: progressNoteTemplate.id,
+          },
+          txn,
+        );
+        const progressNoteForUserForPatient = await ProgressNote.getForUserForPatient(
+          user.id,
+          patient.id,
+          txn,
+        );
+        expect(progressNoteForUserForPatient!.id).toEqual(progressNote.id);
+      });
+    });
+
+    it('returns null if there is not a progress note', async () => {
+      await transaction(ProgressNote.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const progressNoteForUserForPatient = await ProgressNote.getForUserForPatient(
+          user.id,
+          patient.id,
+          txn,
+        );
+        expect(progressNoteForUserForPatient).toBeNull();
+      });
+    });
+  });
 });

@@ -7,7 +7,12 @@ describe('Patient Left Navigation Open Component', () => {
   const patientId = 'khalDrogo';
 
   const wrapper = shallow(
-    <LeftNavOpen patientId={patientId} selected={null} onClose={() => true as any} isOpen={false} />,
+    <LeftNavOpen
+      patientId={patientId}
+      selected={null}
+      onClose={() => true as any}
+      isOpen={false}
+    />,
   );
 
   it('renders the closed left navigation', () => {

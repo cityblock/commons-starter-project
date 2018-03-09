@@ -46,5 +46,12 @@ export type IconName =
   | 'search'
   | 'stars'
   | 'syncProblem'
+  | 'warning'
+  | 'accountCircle'
+  | 'accountBox'
+  | 'alarm'
+  | 'report'
+  | 'removeCircle'
+  | 'star'
   | 'textSms'
   | 'warning';

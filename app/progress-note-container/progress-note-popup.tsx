@@ -15,8 +15,6 @@ import {
   progressNoteCompleteMutationVariables,
   progressNoteCompleteSupervisorReviewMutation,
   progressNoteCompleteSupervisorReviewMutationVariables,
-  progressNoteCreateMutation,
-  progressNoteCreateMutationVariables,
   progressNoteEditMutation,
   progressNoteEditMutationVariables,
   FullProgressNoteFragment,
@@ -63,9 +61,6 @@ interface IGraphqlProps {
   completeProgressNote: (
     options: { variables: progressNoteCompleteMutationVariables },
   ) => { data: progressNoteCompleteMutation };
-  createProgressNote: (
-    options: { variables: progressNoteCreateMutationVariables },
-  ) => { data: progressNoteCreateMutation };
   completeProgressNoteSupervisorReview: (
     options: { variables: progressNoteCompleteSupervisorReviewMutationVariables },
   ) => { data: progressNoteCompleteSupervisorReviewMutation };

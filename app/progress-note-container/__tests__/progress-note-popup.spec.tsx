@@ -11,7 +11,6 @@ import { ProgressNotePopup as Component } from '../progress-note-popup';
 const oldDate = Date.now;
 const editProgressNote = jest.fn();
 const completeProgressNote = jest.fn();
-const getOrCreateProgressNote = jest.fn();
 const completeProgressNoteSupervisorReview = jest.fn();
 const progressNoteTemplates = [progressNoteTemplate];
 
@@ -34,7 +33,6 @@ describe('builder concerns', () => {
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
           completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
-          createProgressNote={getOrCreateProgressNote}
           progressNoteTemplates={progressNoteTemplates}
         />,
       );
@@ -51,7 +49,6 @@ describe('builder concerns', () => {
           completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
-          createProgressNote={getOrCreateProgressNote}
           progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
         />,

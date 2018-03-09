@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
 
-# This script generates schema.d.ts from schema.graphql.
+# This script generates declarations/schema.d.ts from schema.graphql.
 
 BIN=./node_modules/.bin
 
@@ -19,3 +19,4 @@ $BIN/gql2ts $JSON_SCHEMA -e $OVERRIDES -n schema \
   > $TS_SCHEMA
 
 rm $JSON_SCHEMA
+

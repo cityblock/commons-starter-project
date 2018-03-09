@@ -49,3 +49,6 @@ rm schema.json
 
 # Set exit code to reflect whether this was a no-op (for CircleCI).
 diff -wB <(sort app/graphql/types.ts) <(git show HEAD:app/graphql/types.ts | sort -)
+
+# Set exit code to reflect whether declarations/schema.d.ts also changed (for CircleCI)
+diff -wB <(sort declarations/schema.d.ts) <(git show HEAD:declarations/schema.d.ts | sort -)

@@ -11,7 +11,7 @@ describe('Patient Left Navigation Action Button', () => {
   });
 
   it('renders appropriate icon', () => {
-    expect(wrapper.find(Icon).props().name).toBe('gesture');
+    expect(wrapper.find(Icon).props().name).toBe('contentPaste');
     expect(wrapper.find(Icon).props().color).toBe('white');
     expect(wrapper.find(Icon).props().className).toBe('icon');
   });

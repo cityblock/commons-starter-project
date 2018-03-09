@@ -5,7 +5,7 @@ type ActionIcons = { [K in Selected]: IconName };
 
 export const ActionIconsMapping: ActionIcons = {
   careTeam: 'people',
-  scratchPad: 'gesture',
+  scratchPad: 'contentPaste',
   message: 'textSms',
   quickActions: 'apps',
 };

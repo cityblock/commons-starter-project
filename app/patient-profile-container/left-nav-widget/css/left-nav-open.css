@@ -1,0 +1,20 @@
+.container {
+  background: var(--white-color);
+  width: 25%;
+  max-width: 400px;
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+  transition: height 0.3s ease-in-out;
+}
+
+.expanded {
+  /* Leave room for main navigation and patient info in left rail */
+  height: calc(100vh - 250px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.collapsed {
+  height: 0;
+}

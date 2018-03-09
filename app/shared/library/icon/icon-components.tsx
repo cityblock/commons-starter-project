@@ -17,6 +17,7 @@ import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
 import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
+import ContentPasteIcon from 'material-ui-icons/ContentPaste';
 import Create from 'material-ui-icons/Create';
 import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorIcon from 'material-ui-icons/Error';
@@ -26,12 +27,12 @@ import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import FlagIcon from 'material-ui-icons/Flag';
-import GestureIcon from 'material-ui-icons/Gesture';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
 import InfoOutlineIcon from 'material-ui-icons/InfoOutline';
 import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
+import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
@@ -70,6 +71,7 @@ const components: IconComponents = {
   check: CheckIcon,
   checkCircle: CheckCircleIcon,
   close: CloseIcon,
+  contentPaste: ContentPasteIcon,
   create: Create,
   delete: DeleteIcon,
   error: ErrorIcon,
@@ -80,11 +82,11 @@ const components: IconComponents = {
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
   flag: FlagIcon,
-  gesture: GestureIcon,
   highlightOff: HighlightOffIcon,
   home: HomeIcon,
   inbox: InboxIcon,
   infoOutline: InfoOutlineIcon,
+  keyboardArrowDown: KeyboardArrowDownIcon,
   keyboardArrowLeft: KeyboardArrowLeftIcon,
   keyboardArrowRight: KeyboardArrowRightIcon,
   labelOutline: LabelOutlineIcon,

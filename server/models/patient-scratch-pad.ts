@@ -83,7 +83,10 @@ export default class PatientScratchPad extends BaseModel {
     return this.query(txn).patchAndFetchById(patientScratchPadId, { body });
   }
 
-  static async getPatientIdForResource(patientScratchPadId: string, txn: Transaction): Promise<string> {
+  static async getPatientIdForResource(
+    patientScratchPadId: string,
+    txn: Transaction,
+  ): Promise<string> {
     const result = await this.query(txn)
       .where({ deletedAt: null })
       .findById(patientScratchPadId);

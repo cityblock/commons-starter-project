@@ -37,9 +37,9 @@ declare module 'schema' {
   */
     patientCareTeam: Array<IUser>;
     /**
-    Patient scratch pad
+    Patient need to know
   */
-    patientScratchPad: IPatientScratchPad;
+    patientNeedToKnow: IPatientNeedToKnow;
     /**
     Patient search
   */
@@ -430,6 +430,322 @@ declare module 'schema' {
     patientAdvancedDirectiveFormsForPatient: Array<
       IPatientAdvancedDirectiveForm
     >;
+    /**
+    gets a patient scratch pad for given user and patient
+  */
+    patientScratchPad: IPatientScratchPad;
+  }
+  interface IUsersOnRootQueryTypeArguments {
+    pageNumber?: number | null;
+    pageSize?: number | null;
+    hasLoggedIn?: boolean | null;
+    orderBy?: IUserOrderOptionsEnum | null;
+  }
+  interface IUserSummaryListOnRootQueryTypeArguments {
+    userRoleFilters: Array<IUserRoleEnum>;
+  }
+  interface IPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientCareTeamOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientNeedToKnowOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientSearchOnRootQueryTypeArguments {
+    query: string;
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientPanelOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+    filters: IPatientFilterOptions;
+  }
+  interface IPatientsWithUrgentTasksOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsNewToCareTeamOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithPendingSuggestionsOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithMissingInfoOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithNoRecentEngagementOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithOutOfDateMAPOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithOpenCBOReferralsOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsForComputedListOnRootQueryTypeArguments {
+    answerId: string;
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientContactHealthcareProxiesOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IClinicOnRootQueryTypeArguments {
+    clinicId: string;
+  }
+  interface IClinicsOnRootQueryTypeArguments {
+    pageNumber?: number | null;
+    pageSize?: number | null;
+  }
+  interface ITaskOnRootQueryTypeArguments {
+    taskId: string;
+  }
+  interface ITasksForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    pageNumber?: number | null;
+    pageSize?: number | null;
+    orderBy?: ITaskOrderOptionsEnum | null;
+  }
+  interface ITasksForCurrentUserOnRootQueryTypeArguments {
+    pageNumber?: number | null;
+    pageSize?: number | null;
+    orderBy?: ITaskOrderOptionsEnum | null;
+  }
+  interface ITasksDueSoonForPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface ITasksWithNotificationsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface ITasksForUserForPatientOnRootQueryTypeArguments {
+    userId: string;
+    patientId: string;
+  }
+  interface ITaskCommentsOnRootQueryTypeArguments {
+    pageNumber?: number | null;
+    pageSize?: number | null;
+    taskId: string;
+  }
+  interface ITaskCommentOnRootQueryTypeArguments {
+    taskCommentId: string;
+  }
+  interface IRiskAreaGroupOnRootQueryTypeArguments {
+    riskAreaGroupId: string;
+  }
+  interface IRiskAreaGroupForPatientOnRootQueryTypeArguments {
+    riskAreaGroupId: string;
+    patientId: string;
+    glassBreakId?: string | null;
+  }
+  interface IRiskAreaOnRootQueryTypeArguments {
+    riskAreaId: string;
+  }
+  interface IQuestionOnRootQueryTypeArguments {
+    questionId: string;
+  }
+  interface IQuestionsOnRootQueryTypeArguments {
+    filterId: string;
+    filterType: IQuestionFilterTypeEnum;
+  }
+  interface IAnswerOnRootQueryTypeArguments {
+    answerId: string;
+  }
+  interface IAnswersForQuestionOnRootQueryTypeArguments {
+    questionId: string;
+  }
+  interface IPatientAnswerOnRootQueryTypeArguments {
+    patientAnswerId: string;
+  }
+  interface IPatientAnswersOnRootQueryTypeArguments {
+    filterId: string;
+    filterType: IAnswerFilterTypeEnum;
+    patientId: string;
+  }
+  interface IPatientPreviousAnswersForQuestionOnRootQueryTypeArguments {
+    questionId: string;
+    patientId: string;
+  }
+  interface IPatientRiskAreaSummaryOnRootQueryTypeArguments {
+    riskAreaId: string;
+    patientId: string;
+  }
+  interface IPatientRiskAreaRiskScoreOnRootQueryTypeArguments {
+    riskAreaId: string;
+    patientId: string;
+  }
+  interface IQuestionConditionOnRootQueryTypeArguments {
+    questionConditionId: string;
+  }
+  interface IEventNotificationsForCurrentUserOnRootQueryTypeArguments {
+    pageNumber?: number | null;
+    pageSize?: number | null;
+    taskEventNotificationsOnly?: boolean | null;
+  }
+  interface IEventNotificationsForTaskOnRootQueryTypeArguments {
+    taskId: string;
+    pageNumber?: number | null;
+    pageSize?: number | null;
+  }
+  interface IEventNotificationsForUserTaskOnRootQueryTypeArguments {
+    taskId: string;
+  }
+  interface IConcernOnRootQueryTypeArguments {
+    concernId: string;
+  }
+  interface IConcernsOnRootQueryTypeArguments {
+    orderBy?: IConcernOrderOptionsEnum | null;
+  }
+  interface IConcernsForAnswerOnRootQueryTypeArguments {
+    answerId: string;
+  }
+  interface IPatientConcernOnRootQueryTypeArguments {
+    patientConcernId: string;
+  }
+  interface IPatientConcernsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientGoalOnRootQueryTypeArguments {
+    patientGoalId: string;
+  }
+  interface IPatientGoalsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IGoalSuggestionTemplateOnRootQueryTypeArguments {
+    goalSuggestionTemplateId: string;
+  }
+  interface IGoalSuggestionTemplatesOnRootQueryTypeArguments {
+    orderBy?: IGoalSuggestionOrderOptionsEnum | null;
+  }
+  interface IGoalSuggestionTemplatesForAnswerOnRootQueryTypeArguments {
+    answerId: string;
+  }
+  interface ITaskTemplateOnRootQueryTypeArguments {
+    taskTemplateId: string;
+  }
+  interface ITaskTemplatesForAnswerOnRootQueryTypeArguments {
+    answerId: string;
+  }
+  interface IPatientTaskSuggestionsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface ICarePlanSuggestionsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
+  interface ICarePlanForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
+  interface IScreeningToolOnRootQueryTypeArguments {
+    screeningToolId: string;
+  }
+  interface IScreeningToolsForRiskAreaOnRootQueryTypeArguments {
+    riskAreaId: string;
+  }
+  interface IScreeningToolScoreRangeOnRootQueryTypeArguments {
+    screeningToolScoreRangeId: string;
+  }
+  interface IScreeningToolScoreRangeForScoreAndScreeningToolOnRootQueryTypeArguments {
+    screeningToolId: string;
+    score: number;
+  }
+  interface IScreeningToolScoreRangesForScreeningToolOnRootQueryTypeArguments {
+    screeningToolId: string;
+  }
+  interface IPatientScreeningToolSubmissionOnRootQueryTypeArguments {
+    patientScreeningToolSubmissionId: string;
+  }
+  interface IPatientScreeningToolSubmissionForPatientAndScreeningToolOnRootQueryTypeArguments {
+    screeningToolId: string;
+    patientId: string;
+    scored: boolean;
+  }
+  interface IPatientScreeningToolSubmissionsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    screeningToolId?: string | null;
+    scored: boolean;
+  }
+  interface IPatientScreeningToolSubmissionsFor360OnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
+  interface IProgressNoteTemplateOnRootQueryTypeArguments {
+    progressNoteTemplateId: string;
+  }
+  interface IProgressNoteOnRootQueryTypeArguments {
+    progressNoteId: string;
+    glassBreakId?: string | null;
+  }
+  interface IProgressNoteIdsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    completed: boolean;
+    glassBreakId?: string | null;
+  }
+  interface IProgressNotesForCurrentUserOnRootQueryTypeArguments {
+    completed: boolean;
+  }
+  interface IProgressNoteActivityForProgressNoteOnRootQueryTypeArguments {
+    progressNoteId: string;
+  }
+  interface IQuickCallOnRootQueryTypeArguments {
+    quickCallId: string;
+  }
+  interface IQuickCallsForProgressNoteOnRootQueryTypeArguments {
+    progressNoteId: string;
+  }
+  interface IComputedFieldOnRootQueryTypeArguments {
+    computedFieldId: string;
+  }
+  interface IComputedFieldsOnRootQueryTypeArguments {
+    orderBy?: IComputedFieldOrderOptionsEnum | null;
+  }
+  interface IRiskAreaAssessmentSubmissionOnRootQueryTypeArguments {
+    riskAreaAssessmentSubmissionId: string;
+  }
+  interface IRiskAreaAssessmentSubmissionForPatientOnRootQueryTypeArguments {
+    riskAreaId: string;
+    patientId: string;
+    completed: boolean;
+  }
+  interface IPatientListOnRootQueryTypeArguments {
+    patientListId: string;
+  }
+  interface ICBOOnRootQueryTypeArguments {
+    CBOId: string;
+  }
+  interface ICBOsForCategoryOnRootQueryTypeArguments {
+    categoryId: string;
+  }
+  interface IPatientDataFlagsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientGlassBreakCheckOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IProgressNoteGlassBreakCheckOnRootQueryTypeArguments {
+    progressNoteId: string;
+  }
+  interface IPatientComputedPatientStatusOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientConsentFormsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientAdvancedDirectiveFormsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientScratchPadOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
   }
 
   type IUserOrderOptionsEnum =
@@ -474,6 +790,71 @@ declare module 'schema' {
     updatedAt: string;
     permissions: IPermissionsEnum;
   }
+
+  /**
+    An object with a Globally Unique ID
+  */
+  type uniqueId =
+    | IUser
+    | IPatient
+    | IPatientInfo
+    | IAddress
+    | IPhone
+    | IEmail
+    | IPatientDataFlag
+    | IComputedPatientStatus
+    | IPatientTableRow
+    | IPatientForDashboard
+    | IPatientContact
+    | IClinic
+    | ITask
+    | IPatientGoalShort
+    | IPatientConcern
+    | IConcern
+    | IDiagnosisCode
+    | IPatientGoal
+    | IGoalSuggestionTemplate
+    | ITaskTemplate
+    | ICBOReferral
+    | ICBOCategory
+    | ICBO
+    | ITaskId
+    | ITaskComment
+    | IRiskAreaGroup
+    | IRiskArea
+    | IQuestion
+    | IAnswer
+    | IRiskAreaShort
+    | IScreeningToolShort
+    | IQuestionCondition
+    | IComputedField
+    | IScreeningTool
+    | IScreeningToolScoreRange
+    | IPatientScreeningToolSubmissionShort
+    | IRiskAreaGroupForPatient
+    | IRiskAreaForPatient
+    | IQuestionWithPatientAnswer
+    | IAnswerWithPatientAnswer
+    | IPatientAnswer
+    | IPatientScreeningToolSubmission
+    | ICarePlanSuggestion
+    | IRiskAreaAssessmentSubmission
+    | IScreeningToolScoreRangeForPatientScreeningToolSubmission
+    | IScreeningToolForPatient
+    | IEventNotification
+    | ITaskEvent
+    | IProgressNote
+    | IProgressNoteTemplate
+    | IPatientTaskSuggestion
+    | IPatientAnswerEvent
+    | ICarePlanUpdateEvent
+    | IQuickCall
+    | IPatientList
+    | IPatientGlassBreak
+    | IProgressNoteGlassBreak
+    | IPatientScratchPad
+    | IComputedFieldFlag
+    | IConcernDiagnosisCode;
 
   /**
     An object with a Globally Unique ID
@@ -647,7 +1028,7 @@ declare module 'schema' {
   /**
     Patient Scratch Pad
   */
-  interface IPatientScratchPad {
+  interface IPatientNeedToKnow {
     text: string | null;
   }
 
@@ -681,11 +1062,11 @@ declare module 'schema' {
   }
 
   interface IPatientFilterOptions {
-    ageMin: number | null;
-    ageMax: number | null;
-    gender: IGenderEnum | null;
-    zip: string | null;
-    careWorkerId: string | null;
+    ageMin?: number | null;
+    ageMax?: number | null;
+    gender?: IGenderEnum | null;
+    zip?: string | null;
+    careWorkerId?: string | null;
   }
 
   /**
@@ -1673,6 +2054,16 @@ declare module 'schema' {
     signedAt: string | null;
   }
 
+  /**
+    Patient Scratch Pad
+  */
+  interface IPatientScratchPad {
+    id: string;
+    patientId: string;
+    userId: string;
+    body: string;
+  }
+
   interface IRootMutationType {
     /**
     Create a new user
@@ -1775,9 +2166,9 @@ declare module 'schema' {
   */
     patientContactEdit: IPatientContact | null;
     /**
-    Edit a patient scratch pad
+    Edit a patient need to know
   */
-    patientScratchPadEdit: IPatientScratchPad | null;
+    patientNeedToKnowEdit: IPatientNeedToKnow | null;
     /**
     Create a task
   */
@@ -2159,6 +2550,379 @@ declare module 'schema' {
     deletes a patient advanced directive form
   */
     patientAdvancedDirectiveFormDelete: IPatientAdvancedDirectiveForm | null;
+    /**
+    edits a patient scratch pad
+  */
+    patientScratchPadEdit: IPatientScratchPad | null;
+  }
+  interface IUserCreateOnRootMutationTypeArguments {
+    input?: IUserCreateInput | null;
+  }
+  interface IUserLoginOnRootMutationTypeArguments {
+    input?: IUserLoginInput | null;
+  }
+  interface IUserEditRoleOnRootMutationTypeArguments {
+    input?: IUserEditRoleInput | null;
+  }
+  interface IUserEditPermissionsOnRootMutationTypeArguments {
+    input?: IUserEditPermissionsInput | null;
+  }
+  interface IUserDeleteOnRootMutationTypeArguments {
+    input?: IUserDeleteInput | null;
+  }
+  interface ICurrentUserEditOnRootMutationTypeArguments {
+    input?: ICurrentUserEditInput | null;
+  }
+  interface IClinicCreateOnRootMutationTypeArguments {
+    input?: IClinicCreateInput | null;
+  }
+  interface ICareTeamAddUserOnRootMutationTypeArguments {
+    input?: ICareTeamInput | null;
+  }
+  interface ICareTeamRemoveUserOnRootMutationTypeArguments {
+    input?: ICareTeamInput | null;
+  }
+  interface ICareTeamReassignUserOnRootMutationTypeArguments {
+    input?: ICareTeamReassignInput | null;
+  }
+  interface ICareTeamAssignPatientsOnRootMutationTypeArguments {
+    input?: ICareTeamAssignInput | null;
+  }
+  interface IAddressCreateOnRootMutationTypeArguments {
+    input?: IAddressCreateInput | null;
+  }
+  interface IAddressCreateForPatientOnRootMutationTypeArguments {
+    input?: IAddressCreateForPatientInput | null;
+  }
+  interface IAddressEditOnRootMutationTypeArguments {
+    input?: IAddressEditInput | null;
+  }
+  interface IPhoneCreateForPatientOnRootMutationTypeArguments {
+    input?: IPhoneCreateForPatientInput | null;
+  }
+  interface IPhoneCreateOnRootMutationTypeArguments {
+    input?: IPhoneCreateInput | null;
+  }
+  interface IPhoneEditOnRootMutationTypeArguments {
+    input?: IPhoneEditInput | null;
+  }
+  interface IEmailCreateForPatientOnRootMutationTypeArguments {
+    input?: IEmailCreateForPatientInput | null;
+  }
+  interface IEmailCreateOnRootMutationTypeArguments {
+    input?: IEmailCreateInput | null;
+  }
+  interface IEmailEditOnRootMutationTypeArguments {
+    input?: IEmailEditInput | null;
+  }
+  interface IPatientEditOnRootMutationTypeArguments {
+    input?: IPatientEditInput | null;
+  }
+  interface IPatientCoreIdentityVerifyOnRootMutationTypeArguments {
+    input?: IPatientCoreIdentityVerifyInput | null;
+  }
+  interface IPatientInfoEditOnRootMutationTypeArguments {
+    input?: IPatientInfoEditInput | null;
+  }
+  interface IPatientContactCreateOnRootMutationTypeArguments {
+    input?: IPatientContactCreateInput | null;
+  }
+  interface IPatientContactEditOnRootMutationTypeArguments {
+    input?: IPatientContactEditInput | null;
+  }
+  interface IPatientNeedToKnowEditOnRootMutationTypeArguments {
+    input?: IPatientNeedToKnowEditInput | null;
+  }
+  interface ITaskCreateOnRootMutationTypeArguments {
+    input?: ITaskCreateInput | null;
+  }
+  interface ITaskDeleteOnRootMutationTypeArguments {
+    input?: ITaskDeleteInput | null;
+  }
+  interface ITaskEditOnRootMutationTypeArguments {
+    input?: ITaskEditInput | null;
+  }
+  interface ITaskCompleteOnRootMutationTypeArguments {
+    input?: ITaskCompleteInput | null;
+  }
+  interface ITaskUncompleteOnRootMutationTypeArguments {
+    input?: ITaskCompleteInput | null;
+  }
+  interface ITaskUserFollowOnRootMutationTypeArguments {
+    input?: ITaskFollowInput | null;
+  }
+  interface ITaskUserUnfollowOnRootMutationTypeArguments {
+    input?: ITaskFollowInput | null;
+  }
+  interface ITaskCommentCreateOnRootMutationTypeArguments {
+    input?: ITaskCommentCreateInput | null;
+  }
+  interface ITaskCommentEditOnRootMutationTypeArguments {
+    input?: ITaskCommentEditInput | null;
+  }
+  interface ITaskCommentDeleteOnRootMutationTypeArguments {
+    input?: ITaskCommentDeleteInput | null;
+  }
+  interface IRiskAreaGroupCreateOnRootMutationTypeArguments {
+    input?: IRiskAreaGroupCreateInput | null;
+  }
+  interface IRiskAreaGroupEditOnRootMutationTypeArguments {
+    input?: IRiskAreaGroupEditInput | null;
+  }
+  interface IRiskAreaGroupDeleteOnRootMutationTypeArguments {
+    input?: IRiskAreaGroupDeleteInput | null;
+  }
+  interface IRiskAreaCreateOnRootMutationTypeArguments {
+    input?: IRiskAreaCreateInput | null;
+  }
+  interface IRiskAreaEditOnRootMutationTypeArguments {
+    input?: IRiskAreaEditInput | null;
+  }
+  interface IRiskAreaDeleteOnRootMutationTypeArguments {
+    input?: IRiskAreaDeleteInput | null;
+  }
+  interface IQuestionCreateOnRootMutationTypeArguments {
+    input?: IQuestionCreateInput | null;
+  }
+  interface IQuestionEditOnRootMutationTypeArguments {
+    input?: IQuestionEditInput | null;
+  }
+  interface IQuestionDeleteOnRootMutationTypeArguments {
+    input?: IQuestionDeleteInput | null;
+  }
+  interface IAnswerCreateOnRootMutationTypeArguments {
+    input?: IAnswerCreateInput | null;
+  }
+  interface IAnswerEditOnRootMutationTypeArguments {
+    input?: IAnswerEditInput | null;
+  }
+  interface IAnswerDeleteOnRootMutationTypeArguments {
+    input?: IAnswerDeleteInput | null;
+  }
+  interface IPatientAnswersCreateOnRootMutationTypeArguments {
+    input?: IPatientAnswersCreateInput | null;
+  }
+  interface IPatientAnswerEditOnRootMutationTypeArguments {
+    input?: IPatientAnswerEditInput | null;
+  }
+  interface IPatientAnswerDeleteOnRootMutationTypeArguments {
+    input?: IPatientAnswerDeleteInput | null;
+  }
+  interface IQuestionConditionCreateOnRootMutationTypeArguments {
+    input?: IQuestionConditionCreateInput | null;
+  }
+  interface IQuestionConditionEditOnRootMutationTypeArguments {
+    input?: IQuestionConditionEditInput | null;
+  }
+  interface IQuestionConditionDeleteOnRootMutationTypeArguments {
+    input?: IQuestionConditionDeleteInput | null;
+  }
+  interface IEventNotificationDismissOnRootMutationTypeArguments {
+    input?: IEventNotificationEditInput | null;
+  }
+  interface IEventNotificationsForTaskDismissOnRootMutationTypeArguments {
+    input?: IUserTaskNotificationsEditInput | null;
+  }
+  interface IConcernCreateOnRootMutationTypeArguments {
+    input?: IConcernCreateInput | null;
+  }
+  interface IConcernEditOnRootMutationTypeArguments {
+    input?: IConcernEditInput | null;
+  }
+  interface IConcernDeleteOnRootMutationTypeArguments {
+    input?: IConcernDeleteInput | null;
+  }
+  interface IConcernAddDiagnosisCodeOnRootMutationTypeArguments {
+    input?: IConcernAddDiagnosisCodeInput | null;
+  }
+  interface IConcernRemoveDiagnosisCodeOnRootMutationTypeArguments {
+    input?: IConcernRemoveDiagnosisCodeInput | null;
+  }
+  interface IConcernSuggestionCreateOnRootMutationTypeArguments {
+    input?: IConcernSuggestInput | null;
+  }
+  interface IConcernSuggestionDeleteOnRootMutationTypeArguments {
+    input?: IConcernSuggestInput | null;
+  }
+  interface IGoalSuggestionTemplateCreateOnRootMutationTypeArguments {
+    input?: IGoalSuggestionTemplateCreateInput | null;
+  }
+  interface IGoalSuggestionTemplateEditOnRootMutationTypeArguments {
+    input?: IGoalSuggestionTemplateEditInput | null;
+  }
+  interface IGoalSuggestionTemplateDeleteOnRootMutationTypeArguments {
+    input?: IGoalSuggestionTemplateDeleteInput | null;
+  }
+  interface IGoalSuggestionCreateOnRootMutationTypeArguments {
+    input?: IGoalSuggestInput | null;
+  }
+  interface IGoalSuggestionDeleteOnRootMutationTypeArguments {
+    input?: IGoalSuggestInput | null;
+  }
+  interface ITaskTemplateCreateOnRootMutationTypeArguments {
+    input?: ITaskTemplateCreateInput | null;
+  }
+  interface ITaskTemplateEditOnRootMutationTypeArguments {
+    input?: ITaskTemplateEditInput | null;
+  }
+  interface ITaskTemplateDeleteOnRootMutationTypeArguments {
+    input?: ITaskTemplateDeleteInput | null;
+  }
+  interface ITaskSuggestionCreateOnRootMutationTypeArguments {
+    input?: ITaskSuggestInput | null;
+  }
+  interface ITaskSuggestionDeleteOnRootMutationTypeArguments {
+    input?: ITaskSuggestInput | null;
+  }
+  interface IPatientTaskSuggestionAcceptOnRootMutationTypeArguments {
+    input?: IPatientTaskSuggestionAcceptInput | null;
+  }
+  interface IPatientTaskSuggestionDismissOnRootMutationTypeArguments {
+    input?: IPatientTaskSuggestionDismissInput | null;
+  }
+  interface IPatientGoalCreateOnRootMutationTypeArguments {
+    input?: IPatientGoalCreateInput | null;
+  }
+  interface IPatientGoalEditOnRootMutationTypeArguments {
+    input?: IPatientGoalEditInput | null;
+  }
+  interface IPatientGoalDeleteOnRootMutationTypeArguments {
+    input?: IPatientGoalDeleteInput | null;
+  }
+  interface IPatientConcernCreateOnRootMutationTypeArguments {
+    input?: IPatientConcernCreateInput | null;
+  }
+  interface IPatientConcernEditOnRootMutationTypeArguments {
+    input?: IPatientConcernEditInput | null;
+  }
+  interface IPatientConcernBulkEditOnRootMutationTypeArguments {
+    input?: IPatientConcernBulkEditInput | null;
+  }
+  interface IPatientConcernDeleteOnRootMutationTypeArguments {
+    input?: IPatientConcernDeleteInput | null;
+  }
+  interface ICarePlanSuggestionAcceptOnRootMutationTypeArguments {
+    input?: ICarePlanSuggestionAcceptInput | null;
+  }
+  interface ICarePlanSuggestionDismissOnRootMutationTypeArguments {
+    input?: ICarePlanSuggestionDismissInput | null;
+  }
+  interface IScreeningToolCreateOnRootMutationTypeArguments {
+    input?: IScreeningToolCreateInput | null;
+  }
+  interface IScreeningToolEditOnRootMutationTypeArguments {
+    input?: IScreeningToolEditInput | null;
+  }
+  interface IScreeningToolDeleteOnRootMutationTypeArguments {
+    input?: IScreeningToolDeleteInput | null;
+  }
+  interface IScreeningToolScoreRangeCreateOnRootMutationTypeArguments {
+    input?: IScreeningToolScoreRangeCreateInput | null;
+  }
+  interface IScreeningToolScoreRangeEditOnRootMutationTypeArguments {
+    input?: IScreeningToolScoreRangeEditInput | null;
+  }
+  interface IScreeningToolScoreRangeDeleteOnRootMutationTypeArguments {
+    input?: IScreeningToolScoreRangeDeleteInput | null;
+  }
+  interface IPatientScreeningToolSubmissionCreateOnRootMutationTypeArguments {
+    input?: IPatientScreeningToolSubmissionCreateInput | null;
+  }
+  interface IPatientScreeningToolSubmissionScoreOnRootMutationTypeArguments {
+    input?: IPatientScreeningToolSubmissionScoreInput | null;
+  }
+  interface IProgressNoteTemplateCreateOnRootMutationTypeArguments {
+    input?: IProgressNoteTemplateCreateInput | null;
+  }
+  interface IProgressNoteTemplateEditOnRootMutationTypeArguments {
+    input?: IProgressNoteTemplateEditInput | null;
+  }
+  interface IProgressNoteTemplateDeleteOnRootMutationTypeArguments {
+    input?: IProgressNoteTemplateDeleteInput | null;
+  }
+  interface IProgressNoteCreateOnRootMutationTypeArguments {
+    input?: IProgressNoteCreateInput | null;
+  }
+  interface IProgressNoteCompleteOnRootMutationTypeArguments {
+    input?: IProgressNoteCompleteInput | null;
+  }
+  interface IProgressNoteEditOnRootMutationTypeArguments {
+    input?: IProgressNoteEditInput | null;
+  }
+  interface IProgressNoteAddSupervisorNotesOnRootMutationTypeArguments {
+    input?: IProgressNoteAddSupervisorNotesInput | null;
+  }
+  interface IProgressNoteCompleteSupervisorReviewOnRootMutationTypeArguments {
+    input?: IProgressNoteCompleteSupervisorReviewInput | null;
+  }
+  interface IQuickCallCreateOnRootMutationTypeArguments {
+    input?: IQuickCallCreateInput | null;
+  }
+  interface IComputedFieldCreateOnRootMutationTypeArguments {
+    input?: IComputedFieldCreateInput | null;
+  }
+  interface IComputedFieldDeleteOnRootMutationTypeArguments {
+    input?: IComputedFieldDeleteInput | null;
+  }
+  interface IRiskAreaAssessmentSubmissionCreateOnRootMutationTypeArguments {
+    input?: IRiskAreaAssessmentSubmissionCreateInput | null;
+  }
+  interface IRiskAreaAssessmentSubmissionCompleteOnRootMutationTypeArguments {
+    input?: IRiskAreaAssessmentSubmissionCompleteInput | null;
+  }
+  interface IComputedFieldFlagCreateOnRootMutationTypeArguments {
+    input?: IComputedFieldFlagCreateInput | null;
+  }
+  interface IPatientListCreateOnRootMutationTypeArguments {
+    input?: IPatientListCreateInput | null;
+  }
+  interface IPatientListEditOnRootMutationTypeArguments {
+    input?: IPatientListEditInput | null;
+  }
+  interface IPatientListDeleteOnRootMutationTypeArguments {
+    input?: IPatientListDeleteInput | null;
+  }
+  interface ICBOCreateOnRootMutationTypeArguments {
+    input?: ICBOCreateInput | null;
+  }
+  interface ICBOEditOnRootMutationTypeArguments {
+    input?: ICBOEditInput | null;
+  }
+  interface ICBODeleteOnRootMutationTypeArguments {
+    input?: ICBODeleteInput | null;
+  }
+  interface ICBOReferralCreateOnRootMutationTypeArguments {
+    input?: ICBOReferralCreateInput | null;
+  }
+  interface ICBOReferralEditOnRootMutationTypeArguments {
+    input?: ICBOReferralEditInput | null;
+  }
+  interface IJwtForPdfCreateOnRootMutationTypeArguments {
+    input?: IJwtForPdfCreateInput | null;
+  }
+  interface IPatientDataFlagCreateOnRootMutationTypeArguments {
+    input?: IPatientDataFlagCreateInput | null;
+  }
+  interface IPatientGlassBreakCreateOnRootMutationTypeArguments {
+    input?: IPatientGlassBreakCreateInput | null;
+  }
+  interface IProgressNoteGlassBreakCreateOnRootMutationTypeArguments {
+    input?: IProgressNoteGlassBreakCreateInput | null;
+  }
+  interface IPatientConsentFormCreateOnRootMutationTypeArguments {
+    input?: IPatientConsentFormCreateInput | null;
+  }
+  interface IPatientConsentFormDeleteOnRootMutationTypeArguments {
+    input?: IPatientConsentFormDeleteInput | null;
+  }
+  interface IPatientAdvancedDirectiveFormCreateOnRootMutationTypeArguments {
+    input?: IPatientAdvancedDirectiveFormCreateInput | null;
+  }
+  interface IPatientAdvancedDirectiveFormDeleteOnRootMutationTypeArguments {
+    input?: IPatientAdvancedDirectiveFormDeleteInput | null;
+  }
+  interface IPatientScratchPadEditOnRootMutationTypeArguments {
+    input?: IPatientScratchPadEditInput | null;
   }
 
   /**
@@ -2214,10 +2978,10 @@ declare module 'schema' {
     params for editing a current user
   */
   interface ICurrentUserEditInput {
-    locale: string | null;
-    phone: string | null;
-    firstName: string | null;
-    lastName: string | null;
+    locale?: string | null;
+    phone?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
   }
 
   /**
@@ -2239,7 +3003,7 @@ declare module 'schema' {
   interface ICareTeamReassignInput {
     userId: string;
     patientId: string;
-    reassignedToId: string | null;
+    reassignedToId?: string | null;
   }
 
   /**
@@ -2254,12 +3018,12 @@ declare module 'schema' {
     params for creating an address in the db
   */
   interface IAddressCreateInput {
-    zip: string | null;
-    street1: string | null;
-    street2: string | null;
-    state: string | null;
-    city: string | null;
-    description: string | null;
+    zip?: string | null;
+    street1?: string | null;
+    street2?: string | null;
+    state?: string | null;
+    city?: string | null;
+    description?: string | null;
   }
 
   /**
@@ -2267,13 +3031,13 @@ declare module 'schema' {
   */
   interface IAddressCreateForPatientInput {
     patientId: string;
-    zip: string | null;
-    street1: string | null;
-    street2: string | null;
-    state: string | null;
-    city: string | null;
-    description: string | null;
-    isPrimary: boolean | null;
+    zip?: string | null;
+    street1?: string | null;
+    street2?: string | null;
+    state?: string | null;
+    city?: string | null;
+    description?: string | null;
+    isPrimary?: boolean | null;
   }
 
   /**
@@ -2282,12 +3046,12 @@ declare module 'schema' {
   interface IAddressEditInput {
     addressId: string;
     patientId: string;
-    zip: string | null;
-    street1: string | null;
-    street2: string | null;
-    state: string | null;
-    city: string | null;
-    description: string | null;
+    zip?: string | null;
+    street1?: string | null;
+    street2?: string | null;
+    state?: string | null;
+    city?: string | null;
+    description?: string | null;
   }
 
   /**
@@ -2296,9 +3060,9 @@ declare module 'schema' {
   interface IPhoneCreateForPatientInput {
     patientId: string;
     phoneNumber: string;
-    type: IPhoneTypeOptionsEnum | null;
-    description: string | null;
-    isPrimary: boolean | null;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
+    isPrimary?: boolean | null;
   }
 
   /**
@@ -2306,8 +3070,8 @@ declare module 'schema' {
   */
   interface IPhoneCreateInput {
     phoneNumber: string;
-    type: IPhoneTypeOptionsEnum | null;
-    description: string | null;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**
@@ -2317,8 +3081,8 @@ declare module 'schema' {
     phoneId: string;
     patientId: string;
     phoneNumber: string;
-    type: IPhoneTypeOptionsEnum | null;
-    description: string | null;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**
@@ -2327,8 +3091,8 @@ declare module 'schema' {
   interface IEmailCreateForPatientInput {
     patientId: string;
     emailAddress: string;
-    description: string | null;
-    isPrimary: boolean | null;
+    description?: string | null;
+    isPrimary?: boolean | null;
   }
 
   /**
@@ -2336,7 +3100,7 @@ declare module 'schema' {
   */
   interface IEmailCreateInput {
     emailAddress: string;
-    description: string | null;
+    description?: string | null;
   }
 
   /**
@@ -2346,7 +3110,7 @@ declare module 'schema' {
     emailId: string;
     patientId: string;
     emailAddress: string;
-    description: string | null;
+    description?: string | null;
   }
 
   /**
@@ -2354,10 +3118,10 @@ declare module 'schema' {
   */
   interface IPatientEditInput {
     patientId: string;
-    firstName: string | null;
-    middleName: string | null;
-    lastName: string | null;
-    dateOfBirth: string | null;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    dateOfBirth?: string | null;
   }
 
   /**
@@ -2372,18 +3136,18 @@ declare module 'schema' {
   */
   interface IPatientInfoEditInput {
     patientInfoId: string;
-    preferredName: string | null;
-    gender: IGenderEnum | null;
-    sexAtBirth: IBirthSexOptionsEnum | null;
-    language: string | null;
-    isMarginallyHoused: boolean | null;
-    primaryAddressId: string | null;
-    hasEmail: boolean | null;
-    primaryEmailId: string | null;
-    primaryPhoneId: string | null;
-    preferredContactMethod: IContactMethodOptionsEnum | null;
-    canReceiveCalls: boolean | null;
-    canReceiveTexts: boolean | null;
+    preferredName?: string | null;
+    gender?: IGenderEnum | null;
+    sexAtBirth?: IBirthSexOptionsEnum | null;
+    language?: string | null;
+    isMarginallyHoused?: boolean | null;
+    primaryAddressId?: string | null;
+    hasEmail?: boolean | null;
+    primaryEmailId?: string | null;
+    primaryPhoneId?: string | null;
+    preferredContactMethod?: IContactMethodOptionsEnum | null;
+    canReceiveCalls?: boolean | null;
+    canReceiveTexts?: boolean | null;
   }
 
   /**
@@ -2395,12 +3159,12 @@ declare module 'schema' {
     firstName: string;
     lastName: string;
     primaryPhoneId: string;
-    isEmergencyContact: boolean | null;
-    isHealthcareProxy: boolean | null;
-    canContact: boolean | null;
-    description: string | null;
-    primaryAddressId: string | null;
-    primaryEmailId: string | null;
+    isEmergencyContact?: boolean | null;
+    isHealthcareProxy?: boolean | null;
+    canContact?: boolean | null;
+    description?: string | null;
+    primaryAddressId?: string | null;
+    primaryEmailId?: string | null;
   }
 
   /**
@@ -2408,21 +3172,21 @@ declare module 'schema' {
   */
   interface IPatientContactEditInput {
     patientContactId: string;
-    relationToPatient: string | null;
-    firstName: string | null;
-    lastName: string | null;
-    isEmergencyContact: boolean | null;
-    isHealthcareProxy: boolean | null;
-    canContact: boolean | null;
-    description: string | null;
-    primaryAddressId: string | null;
-    primaryEmailId: string | null;
+    relationToPatient?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    isEmergencyContact?: boolean | null;
+    isHealthcareProxy?: boolean | null;
+    canContact?: boolean | null;
+    description?: string | null;
+    primaryAddressId?: string | null;
+    primaryEmailId?: string | null;
   }
 
   /**
-    params for editing a patient scratch pad
+    params for editing a patient need to know
   */
-  interface IPatientScratchPadEditInput {
+  interface IPatientNeedToKnowEditInput {
     patientId: string;
     text: string;
   }
@@ -2432,13 +3196,13 @@ declare module 'schema' {
   */
   interface ITaskCreateInput {
     title: string;
-    description: string | null;
-    dueAt: string | null;
+    description?: string | null;
+    dueAt?: string | null;
     patientId: string;
-    assignedToId: string | null;
-    patientGoalId: string | null;
-    priority: IPriorityEnum | null;
-    CBOReferralId: string | null;
+    assignedToId?: string | null;
+    patientGoalId?: string | null;
+    priority?: IPriorityEnum | null;
+    CBOReferralId?: string | null;
   }
 
   /**
@@ -2453,12 +3217,12 @@ declare module 'schema' {
   */
   interface ITaskEditInput {
     taskId: string;
-    title: string | null;
-    description: string | null;
-    dueAt: string | null;
-    assignedToId: string | null;
-    priority: IPriorityEnum | null;
-    patientGoalId: string | null;
+    title?: string | null;
+    description?: string | null;
+    dueAt?: string | null;
+    assignedToId?: string | null;
+    priority?: IPriorityEnum | null;
+    patientGoalId?: string | null;
   }
 
   /**
@@ -2515,11 +3279,11 @@ declare module 'schema' {
   */
   interface IRiskAreaGroupEditInput {
     riskAreaGroupId: string;
-    title: string | null;
-    shortTitle: string | null;
-    order: number | null;
-    mediumRiskThreshold: number | null;
-    highRiskThreshold: number | null;
+    title?: string | null;
+    shortTitle?: string | null;
+    order?: number | null;
+    mediumRiskThreshold?: number | null;
+    highRiskThreshold?: number | null;
   }
 
   /**
@@ -2540,10 +3304,10 @@ declare module 'schema' {
 
   interface IRiskAreaEditInput {
     riskAreaId: string;
-    title: string | null;
-    order: number | null;
-    mediumRiskThreshold: number | null;
-    highRiskThreshold: number | null;
+    title?: string | null;
+    order?: number | null;
+    mediumRiskThreshold?: number | null;
+    highRiskThreshold?: number | null;
   }
 
   interface IRiskAreaDeleteInput {
@@ -2553,24 +3317,24 @@ declare module 'schema' {
   interface IQuestionCreateInput {
     title: string;
     answerType: IAnswerTypeOptionsEnum;
-    validatedSource: string | null;
-    riskAreaId: string | null;
-    screeningToolId: string | null;
-    progressNoteTemplateId: string | null;
+    validatedSource?: string | null;
+    riskAreaId?: string | null;
+    screeningToolId?: string | null;
+    progressNoteTemplateId?: string | null;
     order: number;
-    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
-    computedFieldId: string | null;
-    hasOtherTextAnswer: boolean | null;
+    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    computedFieldId?: string | null;
+    hasOtherTextAnswer?: boolean | null;
   }
 
   interface IQuestionEditInput {
     questionId: string;
-    title: string | null;
-    answerType: IAnswerTypeOptionsEnum | null;
-    validatedSource: string | null;
-    order: number | null;
-    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
-    hasOtherTextAnswer: boolean | null;
+    title?: string | null;
+    answerType?: IAnswerTypeOptionsEnum | null;
+    validatedSource?: string | null;
+    order?: number | null;
+    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    hasOtherTextAnswer?: boolean | null;
   }
 
   interface IQuestionDeleteInput {
@@ -2581,21 +3345,21 @@ declare module 'schema' {
     displayValue: string;
     value: string;
     valueType: IAnswerValueTypeOptionsEnum;
-    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary: boolean | null;
-    summaryText: string | null;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary?: boolean | null;
+    summaryText?: string | null;
     questionId: string;
     order: number;
   }
 
   interface IAnswerEditInput {
-    displayValue: string | null;
-    value: string | null;
-    valueType: IAnswerValueTypeOptionsEnum | null;
-    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary: boolean | null;
-    summaryText: string | null;
-    order: number | null;
+    displayValue?: string | null;
+    value?: string | null;
+    valueType?: IAnswerValueTypeOptionsEnum | null;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary?: boolean | null;
+    summaryText?: string | null;
+    order?: number | null;
     answerId: string;
   }
 
@@ -2607,9 +3371,9 @@ declare module 'schema' {
     patientId: string;
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
-    patientScreeningToolSubmissionId: string | null;
-    riskAreaAssessmentSubmissionId: string | null;
-    progressNoteId: string | null;
+    patientScreeningToolSubmissionId?: string | null;
+    riskAreaAssessmentSubmissionId?: string | null;
+    progressNoteId?: string | null;
   }
 
   interface IPatientAnswerInput {
@@ -2685,8 +3449,8 @@ declare module 'schema' {
 
   interface IConcernSuggestInput {
     concernId: string;
-    answerId: string | null;
-    screeningToolScoreRangeId: string | null;
+    answerId?: string | null;
+    screeningToolScoreRangeId?: string | null;
   }
 
   interface IGoalSuggestionTemplateCreateInput {
@@ -2703,31 +3467,31 @@ declare module 'schema' {
   }
 
   interface IGoalSuggestInput {
-    answerId: string | null;
-    screeningToolScoreRangeId: string | null;
+    answerId?: string | null;
+    screeningToolScoreRangeId?: string | null;
     goalSuggestionTemplateId: string;
   }
 
   interface ITaskTemplateCreateInput {
     title: string;
-    completedWithinNumber: number | null;
-    completedWithinInterval: string | null;
-    repeating: boolean | null;
+    completedWithinNumber?: number | null;
+    completedWithinInterval?: string | null;
+    repeating?: boolean | null;
     goalSuggestionTemplateId: string;
-    priority: IPriorityEnum | null;
-    careTeamAssigneeRole: string | null;
-    CBOCategoryId: string | null;
+    priority?: IPriorityEnum | null;
+    careTeamAssigneeRole?: string | null;
+    CBOCategoryId?: string | null;
   }
 
   interface ITaskTemplateEditInput {
     title: string;
-    completedWithinNumber: number | null;
-    completedWithinInterval: string | null;
-    repeating: boolean | null;
-    goalSuggestionTemplateId: string | null;
-    priority: IPriorityEnum | null;
-    careTeamAssigneeRole: string | null;
-    CBOCategoryId: string | null;
+    completedWithinNumber?: number | null;
+    completedWithinInterval?: string | null;
+    repeating?: boolean | null;
+    goalSuggestionTemplateId?: string | null;
+    priority?: IPriorityEnum | null;
+    careTeamAssigneeRole?: string | null;
+    CBOCategoryId?: string | null;
     taskTemplateId: string;
   }
 
@@ -2750,21 +3514,21 @@ declare module 'schema' {
   }
 
   interface IPatientGoalCreateInput {
-    title: string | null;
+    title?: string | null;
     patientId: string;
-    patientConcernId: string | null;
-    goalSuggestionTemplateId: string | null;
-    taskTemplateIds: Array<string> | null;
-    concernId: string | null;
-    concernTitle: string | null;
-    startedAt: string | null;
+    patientConcernId?: string | null;
+    goalSuggestionTemplateId?: string | null;
+    taskTemplateIds?: Array<string> | null;
+    concernId?: string | null;
+    concernTitle?: string | null;
+    startedAt?: string | null;
   }
 
   interface IPatientGoalEditInput {
     patientGoalId: string;
     title: string;
-    patientConcernId: string | null;
-    goalSuggestionTemplateId: string | null;
+    patientConcernId?: string | null;
+    goalSuggestionTemplateId?: string | null;
   }
 
   interface IPatientGoalDeleteInput {
@@ -2774,16 +3538,16 @@ declare module 'schema' {
   interface IPatientConcernCreateInput {
     concernId: string;
     patientId: string;
-    startedAt: string | null;
-    completedAt: string | null;
+    startedAt?: string | null;
+    completedAt?: string | null;
   }
 
   interface IPatientConcernEditInput {
-    order: number | null;
-    concernId: string | null;
-    patientId: string | null;
-    startedAt: string | null;
-    completedAt: string | null;
+    order?: number | null;
+    concernId?: string | null;
+    patientId?: string | null;
+    startedAt?: string | null;
+    completedAt?: string | null;
     patientConcernId: string;
   }
 
@@ -2794,9 +3558,9 @@ declare module 'schema' {
 
   interface IPatientConcernBulkEditFields {
     id: string;
-    order: number | null;
-    startedAt: string | null;
-    completedAt: string | null;
+    order?: number | null;
+    startedAt?: string | null;
+    completedAt?: string | null;
   }
 
   interface IPatientConcernDeleteInput {
@@ -2805,10 +3569,10 @@ declare module 'schema' {
 
   interface ICarePlanSuggestionAcceptInput {
     carePlanSuggestionId: string;
-    patientConcernId: string | null;
-    concernId: string | null;
-    startedAt: string | null;
-    taskTemplateIds: Array<string> | null;
+    patientConcernId?: string | null;
+    concernId?: string | null;
+    startedAt?: string | null;
+    taskTemplateIds?: Array<string> | null;
   }
 
   interface ICarePlanSuggestionDismissInput {
@@ -2823,8 +3587,8 @@ declare module 'schema' {
 
   interface IScreeningToolEditInput {
     screeningToolId: string;
-    title: string | null;
-    riskAreaId: string | null;
+    title?: string | null;
+    riskAreaId?: string | null;
   }
 
   interface IScreeningToolDeleteInput {
@@ -2841,12 +3605,12 @@ declare module 'schema' {
 
   interface IScreeningToolScoreRangeEditInput {
     screeningToolScoreRangeId: string;
-    description: string | null;
-    screeningToolId: string | null;
-    minimumScore: number | null;
-    maximumScore: number | null;
-    deletedAt: string | null;
-    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    description?: string | null;
+    screeningToolId?: string | null;
+    minimumScore?: number | null;
+    maximumScore?: number | null;
+    deletedAt?: string | null;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
   }
 
   interface IScreeningToolScoreRangeDeleteInput {
@@ -2885,13 +3649,13 @@ declare module 'schema' {
 
   interface IProgressNoteEditInput {
     progressNoteId: string;
-    progressNoteTemplateId: string | null;
-    startedAt: string | null;
-    location: string | null;
-    summary: string | null;
-    memberConcern: string | null;
-    supervisorId: string | null;
-    needsSupervisorReview: boolean | null;
+    progressNoteTemplateId?: string | null;
+    startedAt?: string | null;
+    location?: string | null;
+    summary?: string | null;
+    memberConcern?: string | null;
+    supervisorId?: string | null;
+    needsSupervisorReview?: boolean | null;
   }
 
   interface IProgressNoteAddSupervisorNotesInput {
@@ -2936,7 +3700,7 @@ declare module 'schema' {
   */
   interface IComputedFieldFlagCreateInput {
     patientAnswerId: string;
-    reason: string | null;
+    reason?: string | null;
   }
 
   interface IComputedFieldFlag {
@@ -2960,9 +3724,9 @@ declare module 'schema' {
   */
   interface IPatientListEditInput {
     patientListId: string;
-    title: string | null;
-    answerId: string | null;
-    order: number | null;
+    title?: string | null;
+    answerId?: string | null;
+    order?: number | null;
   }
 
   /**
@@ -2982,7 +3746,7 @@ declare module 'schema' {
     city: string;
     state: string;
     zip: string;
-    fax: string | null;
+    fax?: string | null;
     phone: string;
     url: string;
   }
@@ -2992,15 +3756,15 @@ declare module 'schema' {
   */
   interface ICBOEditInput {
     CBOId: string;
-    name: string | null;
-    categoryId: string | null;
-    address: string | null;
-    city: string | null;
-    state: string | null;
-    zip: string | null;
-    fax: string | null;
-    phone: string | null;
-    url: string | null;
+    name?: string | null;
+    categoryId?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zip?: string | null;
+    fax?: string | null;
+    phone?: string | null;
+    url?: string | null;
   }
 
   /**
@@ -3015,10 +3779,10 @@ declare module 'schema' {
   */
   interface ICBOReferralCreateInput {
     categoryId: string;
-    CBOId: string | null;
-    name: string | null;
-    url: string | null;
-    diagnosis: string | null;
+    CBOId?: string | null;
+    name?: string | null;
+    url?: string | null;
+    diagnosis?: string | null;
   }
 
   /**
@@ -3027,13 +3791,13 @@ declare module 'schema' {
   interface ICBOReferralEditInput {
     CBOReferralId: string;
     taskId: string;
-    categoryId: string | null;
-    CBOId: string | null;
-    name: string | null;
-    url: string | null;
-    diagnosis: string | null;
-    sentAt: string | null;
-    acknowledgedAt: string | null;
+    categoryId?: string | null;
+    CBOId?: string | null;
+    name?: string | null;
+    url?: string | null;
+    diagnosis?: string | null;
+    sentAt?: string | null;
+    acknowledgedAt?: string | null;
   }
 
   /**
@@ -3053,8 +3817,8 @@ declare module 'schema' {
   interface IPatientDataFlagCreateInput {
     patientId: string;
     fieldName: ICoreIdentityOptionsEnum;
-    suggestedValue: string | null;
-    notes: string | null;
+    suggestedValue?: string | null;
+    notes?: string | null;
   }
 
   /**
@@ -3063,7 +3827,7 @@ declare module 'schema' {
   interface IPatientGlassBreakCreateInput {
     patientId: string;
     reason: string;
-    note: string | null;
+    note?: string | null;
   }
 
   /**
@@ -3072,7 +3836,7 @@ declare module 'schema' {
   interface IProgressNoteGlassBreakCreateInput {
     progressNoteId: string;
     reason: string;
-    note: string | null;
+    note?: string | null;
   }
 
   /**
@@ -3105,6 +3869,14 @@ declare module 'schema' {
   */
   interface IPatientAdvancedDirectiveFormDeleteInput {
     patientAdvancedDirectiveFormId: string;
+  }
+
+  /**
+    params for editing patinet scratch pad
+  */
+  interface IPatientScratchPadEditInput {
+    patientScratchPadId: string;
+    body: string;
   }
 
   /**

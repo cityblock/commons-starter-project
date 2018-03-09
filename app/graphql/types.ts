@@ -2429,6 +2429,17 @@ export interface getPatientListsQuery {
   } >,
 };
 
+export interface getPatientNeedToKnowQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientNeedToKnowQuery {
+  // Patient need to know
+  patientNeedToKnow:  {
+    text: string | null,
+  },
+};
+
 export interface getPatientPanelQueryVariables {
   pageNumber: number,
   pageSize: number,
@@ -2487,12 +2498,16 @@ export interface getPatientRiskSummaryForRiskAreaQuery {
 
 export interface getPatientScratchPadQueryVariables {
   patientId: string,
+  glassBreakId?: string | null,
 };
 
 export interface getPatientScratchPadQuery {
-  // Patient scratch pad
+  // gets a patient scratch pad for given user and patient
   patientScratchPad:  {
-    text: string | null,
+    id: string,
+    patientId: string,
+    userId: string,
+    body: string,
   },
 };
 
@@ -6370,15 +6385,30 @@ export interface patientListEditMutation {
   } | null,
 };
 
-export interface patientScratchPadEditMutationVariables {
+export interface patientNeedToKnowEditMutationVariables {
   patientId: string,
   text: string,
 };
 
-export interface patientScratchPadEditMutation {
-  // Edit a patient scratch pad
-  patientScratchPadEdit:  {
+export interface patientNeedToKnowEditMutation {
+  // Edit a patient need to know
+  patientNeedToKnowEdit:  {
     text: string | null,
+  } | null,
+};
+
+export interface patientScratchPadEditMutationVariables {
+  patientScratchPadId: string,
+  body: string,
+};
+
+export interface patientScratchPadEditMutation {
+  // edits a patient scratch pad
+  patientScratchPadEdit:  {
+    id: string,
+    patientId: string,
+    userId: string,
+    body: string,
   } | null,
 };
 
@@ -10469,8 +10499,15 @@ export interface FullPatientListFragment {
   createdAt: string,
 };
 
-export interface FullPatientScratchPadFragment {
+export interface FullPatientNeedToKnowFragment {
   text: string | null,
+};
+
+export interface FullPatientScratchPadFragment {
+  id: string,
+  patientId: string,
+  userId: string,
+  body: string,
 };
 
 export interface FullPatientScreeningToolSubmissionFragment {

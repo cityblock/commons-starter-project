@@ -161,7 +161,10 @@ describe('patient scratch pad model', () => {
         txn,
       );
 
-      const fetchedPatientId = await PatientScratchPad.getPatientIdForResource(patientScratchPad.id, txn);
+      const fetchedPatientId = await PatientScratchPad.getPatientIdForResource(
+        patientScratchPad.id,
+        txn,
+      );
 
       expect(fetchedPatientId).toBe(patient.id);
     });

@@ -136,7 +136,7 @@ import {
 import {
   patientCoreIdentityVerify,
   patientEdit,
-  patientScratchPadEdit,
+  patientNeedToKnowEdit,
   resolvePatient,
   resolvePatientsForComputedList,
   resolvePatientsNewToCareTeam,
@@ -146,10 +146,11 @@ import {
   resolvePatientsWithOutOfDateMAP,
   resolvePatientsWithPendingSuggestions,
   resolvePatientsWithUrgentTasks,
+  resolvePatientNeedToKnow,
   resolvePatientPanel,
-  resolvePatientScratchPad,
   resolvePatientSearch,
 } from './patient-resolver';
+import { patientScratchPadEdit, resolvePatientScratchPad } from './patient-scratch-pad-resolver';
 import {
   patientScreeningToolSubmissionCreate,
   patientScreeningToolSubmissionScore,
@@ -306,7 +307,7 @@ const resolveFunctions = {
     currentUser: resolveCurrentUser,
     patient: resolvePatient,
     patientCareTeam: resolvePatientCareTeam,
-    patientScratchPad: resolvePatientScratchPad,
+    patientNeedToKnow: resolvePatientNeedToKnow,
     patientSearch: resolvePatientSearch,
     patientPanel: resolvePatientPanel,
     patientsWithUrgentTasks: resolvePatientsWithUrgentTasks,
@@ -403,6 +404,7 @@ const resolveFunctions = {
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
     patientConsentFormsForPatient: resolvePatientConsentFormsForPatient,
     patientAdvancedDirectiveFormsForPatient: resolvePatientAdvancedDirectiveFormsForPatient,
+    patientScratchPad: resolvePatientScratchPad,
   },
 
   RootMutationType: {
@@ -421,7 +423,7 @@ const resolveFunctions = {
     patientEdit,
     patientCoreIdentityVerify,
     patientInfoEdit,
-    patientScratchPadEdit,
+    patientNeedToKnowEdit,
     phoneCreate,
     phoneCreateForPatient,
     phoneEdit,
@@ -527,6 +529,7 @@ const resolveFunctions = {
     patientConsentFormDelete,
     patientAdvancedDirectiveFormCreate,
     patientAdvancedDirectiveFormDelete,
+    patientScratchPadEdit,
   },
 };
 

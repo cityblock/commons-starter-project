@@ -534,7 +534,7 @@ type PatientDiagnosis {
 }
 
 # Patient Scratch Pad
-type PatientScratchPad {
+type PatientNeedToKnow {
   text: String
 }
 
@@ -1328,6 +1328,14 @@ type PatientAdvancedDirectiveForm {
   signedAt: String
 }
 
+# Patient Scratch Pad
+type PatientScratchPad implements uniqueId {
+  id: ID!
+  patientId: ID!
+  userId: ID!
+  body: String!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1444,8 +1452,8 @@ input PatientContactEditInput {
   primaryEmailId: String
 }
 
-# params for editing a patient scratch pad
-input PatientScratchPadEditInput {
+# params for editing a patient need to know
+input PatientNeedToKnowEditInput {
   patientId: ID!
   text: String!
 }
@@ -2066,6 +2074,12 @@ input JwtForPdfCreateInput {
   patientId: ID!
 }
 
+# params for editing patinet scratch pad
+input PatientScratchPadEditInput {
+  patientScratchPadId: ID!
+  body: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2117,8 +2131,8 @@ type RootMutationType {
   patientContactCreate(input: PatientContactCreateInput): PatientContact
   # Edit fields on patient contact stored in the db
   patientContactEdit(input: PatientContactEditInput): PatientContact
-  # Edit a patient scratch pad
-  patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
+  # Edit a patient need to know
+  patientNeedToKnowEdit(input: PatientNeedToKnowEditInput): PatientNeedToKnow
   # Create a task
   taskCreate(input: TaskCreateInput): Task
   # Delete a task
@@ -2324,6 +2338,8 @@ type RootMutationType {
   patientAdvancedDirectiveFormDelete(
     input: PatientAdvancedDirectiveFormDeleteInput
   ): PatientAdvancedDirectiveForm
+  # edits a patient scratch pad
+  patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
 }
 
 type RootQueryType {
@@ -2337,8 +2353,8 @@ type RootQueryType {
   patient(patientId: ID!): Patient!
   # Users on a care team
   patientCareTeam(patientId: ID!): [User!]!
-  # Patient scratch pad
-  patientScratchPad(patientId: ID!): PatientScratchPad!
+  # Patient need to know
+  patientNeedToKnow(patientId: ID!): PatientNeedToKnow!
   # Patient search
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientTableRowEdges!
   # Patients filtered by options
@@ -2572,6 +2588,8 @@ type RootQueryType {
   patientConsentFormsForPatient(patientId: ID!): [PatientConsentForm!]!
   # patient advanced directive forms
   patientAdvancedDirectiveFormsForPatient(patientId: ID!): [PatientAdvancedDirectiveForm!]!
+  # gets a patient scratch pad for given user and patient
+  patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
 }
 
 schema {

@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-need-to-know.graphql"
+
+mutation patientNeedToKnowEdit($patientId: ID!, $text: String!) {
+  patientNeedToKnowEdit(input: { patientId: $patientId, text: $text }) {
+    ...FullPatientNeedToKnow
+  }
+}

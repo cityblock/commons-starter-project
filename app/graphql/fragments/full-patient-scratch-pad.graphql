@@ -1,3 +1,6 @@
 fragment FullPatientScratchPad on PatientScratchPad {
-  text
+  id
+  patientId
+  userId
+  body
 }

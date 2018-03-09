@@ -5,7 +5,7 @@ import {
   IPatientEditInput,
   IPatientFilterOptions,
   IPatientForDashboardEdges,
-  IPatientScratchPad,
+  IPatientNeedToKnow,
   IPatientTableRow,
   IPatientTableRowEdges,
   IPatientTableRowNode,
@@ -76,11 +76,11 @@ export interface IEditPatientRequiredFields {
   patientId: string;
 }
 
-export async function resolvePatientScratchPad(
+export async function resolvePatientNeedToKnow(
   root: any,
   { patientId }: IQuery,
   { permissions, userId, txn }: IContext,
-): Promise<IPatientScratchPad> {
+): Promise<IPatientNeedToKnow> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   const patient = await Patient.get(patientId, txn);
@@ -88,18 +88,18 @@ export async function resolvePatientScratchPad(
   return { text: patient.scratchPad };
 }
 
-export interface IPatientScratchPadEditOptions {
+export interface IPatientNeedToKnowEditOptions {
   input: {
     patientId: string;
     text: string;
   };
 }
 
-export async function patientScratchPadEdit(
+export async function patientNeedToKnowEdit(
   root: any,
-  { input }: IPatientScratchPadEditOptions,
+  { input }: IPatientNeedToKnowEditOptions,
   { permissions, userId, txn }: IContext,
-): Promise<IRootQueryType['patientScratchPad']> {
+): Promise<IRootQueryType['patientNeedToKnow']> {
   const { patientId, text } = input;
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 

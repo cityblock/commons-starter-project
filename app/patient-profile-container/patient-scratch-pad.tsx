@@ -1,11 +1,11 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
-import * as savePatientScratchPadMutationGraphql from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
+import * as patientNeedToKnowQuery from '../graphql/queries/get-patient-need-to-know.graphql';
+import * as savePatientNeedToKnowMutationGraphql from '../graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import {
-  patientScratchPadEditMutation,
-  patientScratchPadEditMutationVariables,
+  patientNeedToKnowEditMutation,
+  patientNeedToKnowEditMutationVariables,
 } from '../graphql/types';
 import * as styles from './css/patient-scratch-pad.css';
 import { PatientScratchPadStatus } from './patient-scratch-pad-status';
@@ -16,21 +16,21 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  scratchPad?: {
+  needToKnow?: {
     text: string;
   };
   loading?: boolean;
   error: string | null;
-  saveScratchPad: (
-    options: { variables: patientScratchPadEditMutationVariables },
-  ) => { data: patientScratchPadEditMutation };
-  refetchScratchPad: (variables: { patientId: string }) => any;
+  saveNeedToKnow: (
+    options: { variables: patientNeedToKnowEditMutationVariables },
+  ) => { data: patientNeedToKnowEditMutation };
+  refetchNeedToKnow: (variables: { patientId: string }) => any;
 }
 
 interface IState {
   loading?: boolean;
   error: string | null;
-  scratchPad: string | null;
+  needToKnow: string | null;
   saveSuccess: boolean;
   saveError: boolean;
 }
@@ -47,58 +47,58 @@ class PatientScratchPad extends React.Component<allProps, IState> {
     const { loading, error } = props;
 
     this.onChange = this.onChange.bind(this);
-    this.saveScratchPad = debounce(this.saveScratchPad.bind(this), SAVE_TIMEOUT_MILLISECONDS);
+    this.saveNeedToKnow = debounce(this.saveNeedToKnow.bind(this), SAVE_TIMEOUT_MILLISECONDS);
     this.clearSaveSuccess = this.clearSaveSuccess.bind(this);
-    this.reloadPatientScratchPad = this.reloadPatientScratchPad.bind(this);
+    this.reloadPatientNeedToKnow = this.reloadPatientNeedToKnow.bind(this);
 
     this.state = {
       saveSuccess: false,
       saveError: false,
       loading,
       error,
-      scratchPad: null,
+      needToKnow: null,
     };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
-    const { scratchPad } = this.state;
+    const { needToKnow } = this.state;
     const { loading, error } = nextProps;
 
-    if (!scratchPad) {
+    if (!needToKnow) {
       this.setState({
         loading,
         error,
-        scratchPad: this.getScratchPadTextFromProps(nextProps),
+        needToKnow: this.getneedToKnowTextFromProps(nextProps),
       });
     }
   }
 
-  getScratchPadTextFromProps(props: allProps) {
-    const { scratchPad } = props;
+  getneedToKnowTextFromProps(props: allProps) {
+    const { needToKnow } = props;
 
-    let scratchPadText: string = '';
+    let needToKnowText: string = '';
 
-    if (scratchPad) {
-      scratchPadText = scratchPad.text || scratchPadText;
+    if (needToKnow) {
+      needToKnowText = needToKnow.text || needToKnowText;
     }
 
-    return scratchPadText;
+    return needToKnowText;
   }
 
   clearSaveSuccess() {
     this.setState({ saveSuccess: false });
   }
 
-  async saveScratchPad() {
-    const { saveScratchPad, patientId } = this.props;
-    const { scratchPad } = this.state;
+  async saveNeedToKnow() {
+    const { saveNeedToKnow, patientId } = this.props;
+    const { needToKnow } = this.state;
 
     // TODO: you can't actually delete the scratch pad completely
-    if (scratchPad) {
+    if (needToKnow) {
       this.setState({ saveError: false, saveSuccess: false });
 
       try {
-        await saveScratchPad({ variables: { patientId, text: scratchPad } });
+        await saveNeedToKnow({ variables: { patientId, text: needToKnow } });
         this.setState({ saveSuccess: true, saveError: false });
         setTimeout(this.clearSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
       } catch (err) {
@@ -108,17 +108,17 @@ class PatientScratchPad extends React.Component<allProps, IState> {
   }
 
   onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    const scratchPad = event.target.value;
-    this.setState({ scratchPad, saveSuccess: false });
-    this.saveScratchPad();
+    const needToKnow = event.target.value;
+    this.setState({ needToKnow, saveSuccess: false });
+    this.saveNeedToKnow();
   }
 
-  async reloadPatientScratchPad() {
-    const { refetchScratchPad, patientId } = this.props;
+  async reloadPatientNeedToKnow() {
+    const { refetchNeedToKnow, patientId } = this.props;
 
     try {
       this.setState({ loading: true, error: null });
-      await refetchScratchPad({ patientId });
+      await refetchNeedToKnow({ patientId });
     } catch (err) {
       this.setState({ loading: false, error: err.message });
     }
@@ -137,7 +137,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
         <textarea
           disabled={disabled}
           className={styles.textArea}
-          value={this.state.scratchPad || ''}
+          value={this.state.needToKnow || ''}
           placeholder={placeholderText}
           onChange={this.onChange}
         />
@@ -145,8 +145,8 @@ class PatientScratchPad extends React.Component<allProps, IState> {
           saveSuccess={saveSuccess}
           saveError={saveError}
           loadingError={error}
-          reloadScratchPad={this.reloadPatientScratchPad}
-          resaveScratchPad={this.saveScratchPad}
+          reloadScratchPad={this.reloadPatientNeedToKnow}
+          resaveScratchPad={this.saveNeedToKnow}
         />
       </div>
     );
@@ -154,10 +154,10 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(savePatientScratchPadMutationGraphql as any, {
-    name: 'saveScratchPad',
+  graphql<IGraphqlProps, IProps, allProps>(savePatientNeedToKnowMutationGraphql as any, {
+    name: 'saveNeedToKnow',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientScratchPadQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientNeedToKnowQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -166,8 +166,8 @@ export default compose(
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
-      scratchPad: data ? (data as any).patientScratchPad : null,
-      refetchScratchPad: data ? data.refetch : null,
+      needToKnow: data ? (data as any).patientNeedToKnow : null,
+      refetchNeedToKnow: data ? data.refetch : null,
     }),
   }),
 )(PatientScratchPad);

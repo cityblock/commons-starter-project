@@ -182,14 +182,14 @@ describe('patient', () => {
     });
   });
 
-  describe('resolvePatientScratchPad', () => {
-    it('resolves a patient scratchPad', async () => {
+  describe('resolvePatientneedToKnow', () => {
+    it('resolves a patient needToKnow', async () => {
       await transaction(Patient.knex(), async txn => {
         const { patient, user } = await setup(txn);
         await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id, txn);
 
         const query = `{
-          patientScratchPad(patientId: "${patient.id}") {
+          patientNeedToKnow(patientId: "${patient.id}") {
             text
           }
         }`;
@@ -201,21 +201,21 @@ describe('patient', () => {
           txn,
         });
 
-        expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
+        expect(cloneDeep(result.data!.patientNeedToKnow)).toMatchObject({
           text: 'Test Scratch Pad',
         });
       });
     });
   });
 
-  describe('patientScratchPadEdit', () => {
-    it('saves a patient scratchPad', async () => {
+  describe('patientNeedToKnowEdit', () => {
+    it('saves a patient needToKnow', async () => {
       await transaction(Patient.knex(), async txn => {
         const { patient, user } = await setup(txn);
         await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id, txn);
 
         const query = `mutation {
-          patientScratchPadEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
+          patientNeedToKnowEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
             text
           }
         }`;
@@ -227,7 +227,7 @@ describe('patient', () => {
           logger,
           txn,
         });
-        expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
+        expect(cloneDeep(result.data!.patientNeedToKnowEdit)).toMatchObject({
           text: 'Edited Scratch Pad',
         });
       });

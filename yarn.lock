@@ -435,9 +435,9 @@
   version "9.4.0"
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-9.4.0.tgz#a4a80a31d3e4e094806ec446557808423379858d"
 
-"@types/webpack@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.0.0.tgz#c989df16d3fb6024491e35a51d38c513dca8d7f5"
+"@types/webpack@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.1.0.tgz#5af4d36ee464c85747c30629cb94f290a1195d7c"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"

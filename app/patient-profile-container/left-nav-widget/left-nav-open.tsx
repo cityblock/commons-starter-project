@@ -30,7 +30,11 @@ const LeftNavOpen: React.StatelessComponent<IProps> = (props: IProps) => {
           <LeftNavScratchPad patientId={patientId} glassBreakId={glassBreakId} />
         )}
         {selected === 'quickActions' && (
-          <LeftNavQuickActions patientId={patientId} glassBreakId={glassBreakId} />
+          <LeftNavQuickActions
+            patientId={patientId}
+            glassBreakId={glassBreakId}
+            onClose={onClose}
+          />
         )}
       </div>
     </div>

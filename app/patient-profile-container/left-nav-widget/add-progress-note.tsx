@@ -11,6 +11,7 @@ import LeftNavQuickAction from './left-nav-quick-action';
 
 export interface IProps {
   patientId: string;
+  onClose: () => void;
 }
 
 interface IDispatchProps {
@@ -39,8 +40,14 @@ export class AddProgressNote extends React.Component<allProps> {
   };
 
   render(): JSX.Element {
+    const { onClose } = this.props;
+
     return (
-      <LeftNavQuickAction quickAction="addProgressNote" onClick={this.showNewProgressNotePopup} />
+      <LeftNavQuickAction
+        quickAction="addProgressNote"
+        onClick={this.showNewProgressNotePopup}
+        onClose={onClose}
+      />
     );
   }
 }

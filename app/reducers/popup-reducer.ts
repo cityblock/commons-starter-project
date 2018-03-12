@@ -91,6 +91,15 @@ export interface IComputedFieldFlagPopupOptions {
   patientAnswerIds: string[];
 }
 
+export interface IQuickCallPopup {
+  name: 'QUICK_CALL';
+  options: IQuickCallPopupOptions;
+}
+
+export interface IQuickCallPopupOptions {
+  patientId: string;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -107,6 +116,7 @@ export type IState =
   | IPatientConcernDeletePopup
   | IPatientQuestionHamburgerMenu
   | IComputedFieldFlagPopup
+  | IQuickCallPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

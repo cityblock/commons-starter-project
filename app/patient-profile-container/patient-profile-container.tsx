@@ -13,6 +13,7 @@ import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info/patient-info';
 import PatientIntakeChecklist from './patient-intake-checklist';
+import PatientModals from './patient-modals';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientTeam from './patient-team/patient-team';
 import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
@@ -61,6 +62,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
     const { patientId, patient, tab, glassBreakId } = this.props;
     return (
       <div className={styles.container}>
+        <PatientModals />
         <PatientProfileLeftNav
           patientId={patientId}
           patient={patient}

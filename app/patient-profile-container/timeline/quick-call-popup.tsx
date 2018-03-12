@@ -2,6 +2,8 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
+import { closePopup } from '../../actions/popup-action';
 import * as patientCareTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 import * as quickCallCreateMutationGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
@@ -12,6 +14,7 @@ import {
   quickCallCreateMutationVariables,
   QuickCallDirection,
 } from '../../graphql/types';
+import { IQuickCallPopupOptions } from '../../reducers/popup-reducer';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import Button from '../../shared/library/button/button';
@@ -25,13 +28,16 @@ import TextInput from '../../shared/library/text-input/text-input';
 import TextArea from '../../shared/library/textarea/textarea';
 import { Popup } from '../../shared/popup/popup';
 import { getPatientFullName } from '../../shared/util/patient-name';
+import { IState as IAppState } from '../../store';
 import * as styles from './css/quick-call-popup.css';
 
-interface IProps {
-  close: () => void;
-  patientId: string;
+interface IStateProps {
   visible: boolean;
-  mutate?: any;
+  patientId: string;
+}
+
+interface IDispatchProps {
+  close: () => void;
 }
 
 interface IGraphqlProps {
@@ -48,7 +54,6 @@ interface IGraphqlProps {
 
 interface IState {
   quickCall: {
-    patientId: string;
     reason: string;
     summary: string;
     direction?: QuickCallDirection;
@@ -61,16 +66,15 @@ interface IState {
   readyToSubmit: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 export class QuickCallPopup extends React.Component<allProps, IState> {
-  static getInitialState = (patientId: string) => ({
+  static getInitialState = () => ({
     quickCall: {
       reason: '',
       summary: '',
       callRecipient: '',
       callRecipientOtherText: null,
       startTime: format(new Date(), 'YYYY-MM-DDTHH:MM'),
-      patientId,
     },
     error: null,
     readyToSubmit: false,
@@ -79,7 +83,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.state = QuickCallPopup.getInitialState(this.props.patientId);
+    this.state = QuickCallPopup.getInitialState();
   }
 
   onChange = (
@@ -128,7 +132,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       const callRecipient = this.getCallRecipient(quickCall);
       const quickCallResponse = await this.props.createQuickCall({
         variables: {
-          patientId: quickCall.patientId,
+          patientId: this.props.patientId,
           reason: quickCall.reason,
           summary: quickCall.summary,
           direction: quickCall.direction!,
@@ -139,7 +143,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       });
       if (quickCallResponse && quickCallResponse.data) {
         this.props.close();
-        this.setState(() => QuickCallPopup.getInitialState(this.props.patientId));
+        this.setState(() => QuickCallPopup.getInitialState());
       } else {
         this.setState({
           error: `Network error, please try again ${JSON.stringify(quickCallResponse.errors)}`,
@@ -290,12 +294,30 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
   }
 }
 
+const mapStateToProps = (state: IAppState): IStateProps => {
+  const visible = state.popup.name === 'QUICK_CALL';
+  const patientId = visible ? (state.popup.options as IQuickCallPopupOptions).patientId : '';
+
+  return { visible, patientId };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+  const close = () => dispatch(closePopup());
+
+  return { close };
+};
+
 export default compose(
-  graphql<IGraphqlProps, IProps>(quickCallCreateMutationGraphql as any, {
+  connect<IStateProps, IDispatchProps, {}>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
+  graphql<IGraphqlProps, IStateProps & IDispatchProps>(quickCallCreateMutationGraphql as any, {
     name: 'createQuickCall',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
-    options: (props: IProps) => ({
+  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(patientCareTeamQuery as any, {
+    skip: (props: IStateProps & IDispatchProps) => !props.patientId,
+    options: (props: IStateProps & IDispatchProps) => ({
       variables: {
         patientId: props.patientId,
       },
@@ -306,8 +328,9 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(patientQuery as any, {
-    options: (props: IProps) => ({
+  graphql<IGraphqlProps, IStateProps & IDispatchProps>(patientQuery as any, {
+    skip: (props: IStateProps & IDispatchProps) => !props.patientId,
+    options: (props: IStateProps & IDispatchProps) => ({
       variables: {
         patientId: props.patientId,
       },

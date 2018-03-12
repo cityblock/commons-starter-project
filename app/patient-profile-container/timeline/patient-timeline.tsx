@@ -1,15 +1,11 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as progressNoteIdsQuery from '../../graphql/queries/get-progress-note-ids-for-patient.graphql';
 import { getProgressNoteIdsForPatientQuery } from '../../graphql/types';
-import * as sortSearchStyles from '../../shared/css/sort-search.css';
-import Button from '../../shared/library/button/button';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNoteRow from './progress-note-row';
-import QuickCallPopup from './quick-call-popup';
 
 interface IProps {
   match: {
@@ -96,31 +92,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { isQuickCallPopupVisible } = this.state;
-    const { progressNoteIds, match } = this.props;
-    const patientId = match.params.patientId;
+    const { progressNoteIds } = this.props;
     const progressNotesList = progressNoteIds || [];
 
     return (
-      <div>
-        <div className={classNames(sortSearchStyles.sortSearchBar, styles.topBar)}>
-          <div className={styles.saveButtonGroup}>
-            <Button
-              color="teal"
-              messageId="quickCallNote.new"
-              onClick={this.showNewQuickCallPopup}
-              className={styles.buttonSpacing}
-            />
-          </div>
-        </div>
-        <div className={styles.progressNotesContainer}>
-          <div className={styles.progressNotes}>{this.renderProgressNotes(progressNotesList)}</div>
-        </div>
-        <QuickCallPopup
-          patientId={patientId}
-          visible={isQuickCallPopupVisible}
-          close={this.hideNewQuickCallPopup}
-        />
+      <div className={styles.progressNotesContainer}>
+        <div className={styles.progressNotes}>{this.renderProgressNotes(progressNotesList)}</div>
       </div>
     );
   }

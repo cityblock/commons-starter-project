@@ -7,8 +7,14 @@ import LeftNavQuickAction from '../left-nav-quick-action';
 
 describe('Patient Left Navigation Quick Action Button', () => {
   const quickAction = 'addQuickCall';
+  const placeholderFn = () => true as any;
+
   const wrapper = shallow(
-    <LeftNavQuickAction quickAction={quickAction} onClick={() => true as any} />,
+    <LeftNavQuickAction
+      quickAction={quickAction}
+      onClick={placeholderFn}
+      onClose={placeholderFn}
+    />,
   );
 
   it('renders button', () => {

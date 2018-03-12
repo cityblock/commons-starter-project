@@ -14,23 +14,33 @@ export type QuickAction =
 interface IProps {
   quickAction: QuickAction;
   onClick: () => void;
+  onClose: () => void;
 }
 
-const LeftNavQuickAction: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { quickAction, onClick } = props;
+class LeftNavQuickAction extends React.Component<IProps> {
+  handleClick = async (): Promise<void> => {
+    const { onClick, onClose } = this.props;
 
-  const iconName = QuickActionIconsMapping[quickAction];
-  const iconColor = QuickActionColorsMapping[quickAction];
+    await onClick();
+    onClose();
+  };
 
-  return (
-    <button className={styles.button} onClick={onClick}>
-      <div className={styles.flex}>
-        <Icon name={iconName} color={iconColor} className={styles.icon} />
-        <SmallText messageId={`quickActions.${quickAction}`} size="large" color="black" isBold />
-      </div>
-      <div className={styles.divider} />
-    </button>
-  );
-};
+  render(): JSX.Element {
+    const { quickAction } = this.props;
+
+    const iconName = QuickActionIconsMapping[quickAction];
+    const iconColor = QuickActionColorsMapping[quickAction];
+
+    return (
+      <button className={styles.button} onClick={this.handleClick}>
+        <div className={styles.flex}>
+          <Icon name={iconName} color={iconColor} className={styles.icon} />
+          <SmallText messageId={`quickActions.${quickAction}`} size="large" color="black" isBold />
+        </div>
+        <div className={styles.divider} />
+      </button>
+    );
+  }
+}
 
 export default LeftNavQuickAction;

@@ -1,15 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { openPopup } from '../../actions/popup-action';
 import * as progressNoteIdsQuery from '../../graphql/queries/get-progress-note-ids-for-patient.graphql';
-import * as progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
-import {
-  getProgressNoteIdsForPatientQuery,
-  progressNoteCreateMutation,
-  progressNoteCreateMutationVariables,
-} from '../../graphql/types';
+import { getProgressNoteIdsForPatientQuery } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
@@ -27,17 +20,10 @@ interface IProps {
   glassBreakId: string | null;
 }
 
-interface IDispatchProps {
-  openProgressNotePopup: (progressNoteId: string) => any;
-}
-
 interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
   progressNoteIds?: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'];
-  progressNoteCreate?: (
-    options: { variables: progressNoteCreateMutationVariables },
-  ) => { data: progressNoteCreateMutation };
 }
 
 interface IState {
@@ -46,7 +32,7 @@ interface IState {
   isQuickCallPopupVisible: boolean;
 }
 
-type allProps = IProps & IGraphqlProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps;
 
 export class PatientTimeline extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -97,21 +83,6 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  showNewProgressNotePopup = async () => {
-    const { progressNoteCreate, openProgressNotePopup } = this.props;
-    if (progressNoteCreate) {
-      const progressNote = await progressNoteCreate({
-        variables: {
-          patientId: this.props.match.params.patientId,
-        },
-      });
-      if (progressNote.data.progressNoteCreate) {
-        openProgressNotePopup(progressNote.data.progressNoteCreate.id);
-      }
-      // todo handle error
-    }
-  };
-
   showNewQuickCallPopup = () => {
     this.setState({
       isQuickCallPopupVisible: true,
@@ -140,7 +111,6 @@ export class PatientTimeline extends React.Component<allProps, IState> {
               onClick={this.showNewQuickCallPopup}
               className={styles.buttonSpacing}
             />
-            <Button messageId="progressNote.new" onClick={this.showNewProgressNotePopup} />
           </div>
         </div>
         <div className={styles.progressNotesContainer}>
@@ -156,26 +126,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
-  return {
-    openProgressNotePopup: (progressNoteId: string) =>
-      dispatch(
-        openPopup({
-          name: 'PROGRESS_NOTE',
-          options: {
-            progressNoteId,
-          },
-        }),
-      ),
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
-    name: 'progressNoteCreate',
-    options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
-  }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteIdsQuery as any, {
     options: (props: IProps) => ({
       variables: {

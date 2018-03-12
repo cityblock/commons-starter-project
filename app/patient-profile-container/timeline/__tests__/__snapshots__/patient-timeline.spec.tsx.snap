@@ -14,10 +14,6 @@ exports[`renders timeline 1`] = `
         messageId="quickCallNote.new"
         onClick={[Function]}
       />
-      <Button
-        messageId="progressNote.new"
-        onClick={[Function]}
-      />
     </div>
   </div>
   <div

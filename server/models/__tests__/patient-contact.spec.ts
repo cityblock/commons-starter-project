@@ -71,6 +71,19 @@ describe('patient info model', () => {
         expect(result[0]).toMatchObject(proxy);
       });
     });
+
+    it('should get patient contacts that are emergency contacts for a patient', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { user, patient, phone } = await setup(txn);
+        const emergencyContact = await PatientContact.create(
+          createMockPatientContact(patient.id, user.id, phone.id, { isEmergencyContact: true }),
+          txn,
+        );
+
+        const result = await PatientContact.getEmergencyContactsForPatient(patient.id, txn);
+        expect(result[0]).toMatchObject(emergencyContact);
+      });
+    });
   });
 
   describe('create', async () => {

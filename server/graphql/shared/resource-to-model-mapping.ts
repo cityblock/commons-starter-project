@@ -42,6 +42,7 @@ import PatientList from '../../models/patient-list';
 import PatientPhone from '../../models/patient-phone';
 import PatientScratchPad from '../../models/patient-scratch-pad';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
+import PatientState from '../../models/patient-state';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import Phone from '../../models/phone';
 import ProgressNote from '../../models/progress-note';
@@ -107,6 +108,7 @@ export type ModelResource =
   | 'patientPhone'
   | 'patientScratchPad'
   | 'patientScreeningToolSubmission'
+  | 'patientState'
   | 'patientTaskSuggestion'
   | 'phone'
   | 'progressNote'
@@ -176,6 +178,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientPhone: PatientPhone,
   patientScratchPad: PatientScratchPad,
   patientScreeningToolSubmission: PatientScreeningToolSubmission,
+  patientState: PatientState,
   patientTaskSuggestion: PatientTaskSuggestion,
   phone: Phone,
   progressNote: ProgressNote,

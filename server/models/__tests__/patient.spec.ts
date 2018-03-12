@@ -21,6 +21,7 @@ import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientDataFlag from '../patient-data-flag';
+import PatientState from '../patient-state';
 import User from '../user';
 
 const userRole = 'physician';
@@ -199,10 +200,33 @@ describe('patient model', () => {
           },
           txn,
         );
-
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
         expect(computedPatientStatus).not.toBeNull();
+      });
+    });
+
+    it('should create the initial PatientState', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const patient = await Patient.create(
+          {
+            patientId: uuid(),
+            cityblockId: 123456,
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            homeClinicId: clinic.id,
+            gender: 'male',
+            language: 'english',
+          },
+          txn,
+        );
+        const patientState = await PatientState.getForPatient(patient.id, txn);
+
+        expect(patientState).not.toBeNull();
+        expect(patientState!.currentState).toEqual('attributed');
       });
     });
   });

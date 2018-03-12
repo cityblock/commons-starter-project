@@ -3,6 +3,7 @@ enum UserRole {
   nurseCareManager
   primaryCarePhysician
   communityHealthPartner
+  outreachSpecialist
   psychiatrist
   healthCoach
   familyMember

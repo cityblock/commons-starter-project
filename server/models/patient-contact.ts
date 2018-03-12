@@ -161,6 +161,16 @@ export default class PatientContact extends Model {
       .orderBy('createdAt', 'asc');
   }
 
+  static async getEmergencyContactsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientContact[]> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, isEmergencyContact: true })
+      .orderBy('createdAt', 'asc');
+  }
+
   static async create(input: IPatientContactOptions, txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)

@@ -30,6 +30,7 @@ const EAGER_QUERY = `[
   ],
   computedPatientStatus,
   patientDataFlags,
+  patientState,
 ]`;
 
 export interface IPatientCreateFields {
@@ -193,6 +194,16 @@ export default class Patient extends Model {
         from: 'computed_patient_status.patientId',
         to: 'patient.id',
       },
+    },
+
+    patientState: {
+      relation: Model.HasOneRelation,
+      modelClass: 'patient-state',
+      join: {
+        from: 'patient_state.patientId',
+        to: 'patient.id',
+      },
+      modify: builder => builder.findOne({ deletedAt: null }),
     },
   };
 

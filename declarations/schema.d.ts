@@ -969,6 +969,7 @@ declare module 'schema' {
     | 'nurseCareManager'
     | 'primaryCarePhysician'
     | 'communityHealthPartner'
+    | 'outreachSpecialist'
     | 'psychiatrist'
     | 'healthCoach'
     | 'familyMember'

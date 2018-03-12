@@ -19,6 +19,7 @@ export type UserRole =
   | 'anonymousUser'
   | 'admin'
   | 'communityHealthPartner'
+  | 'outreachSpecialist'
   | 'primaryCarePhysician';
 export const USER_ROLE: UserRole[] = [
   'physician',
@@ -28,6 +29,7 @@ export const USER_ROLE: UserRole[] = [
   'anonymousUser',
   'admin',
   'communityHealthPartner',
+  'outreachSpecialist',
   'primaryCarePhysician',
 ];
 

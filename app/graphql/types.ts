@@ -149,6 +149,7 @@ export enum UserRole {
   familyMember = "familyMember",
   healthCoach = "healthCoach",
   nurseCareManager = "nurseCareManager",
+  outreachSpecialist = "outreachSpecialist",
   physician = "physician",
   primaryCarePhysician = "primaryCarePhysician",
   psychiatrist = "psychiatrist",

@@ -1,19 +1,28 @@
 import { find } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import CareTeam from './care-team';
 import ConsentForm from './consent-form';
 import Patient from './patient';
 import PatientConsentForm from './patient-consent-form';
+import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
-import User from './user';
+import PatientState, { CurrentState } from './patient-state';
+import ProgressNote from './progress-note';
+import User, { UserRole } from './user';
 
-interface IComputedStatus {
+export interface IComputedStatus {
   isCoreIdentityVerified: boolean;
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
   isConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
+  hasProgressNote: boolean;
+  hasChp: boolean;
+  hasOutreachSpecialist: boolean;
+  hasPcp: boolean;
+  isAssessed: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
 }
@@ -30,6 +39,11 @@ export default class ComputedPatientStatus extends BaseModel {
   isAdvancedDirectivesAdded: boolean;
   isConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
+  hasProgressNote: boolean;
+  hasChp: boolean;
+  hasOutreachSpecialist: boolean;
+  hasPcp: boolean;
+  isAssessed: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
 
@@ -49,6 +63,11 @@ export default class ComputedPatientStatus extends BaseModel {
       isAdvancedDirectivesAdded: { type: 'boolean' },
       isConsentSigned: { type: 'boolean' },
       isPhotoAddedOrDeclined: { type: 'boolean' },
+      hasProgressNote: { type: 'boolean' },
+      hasChp: { type: 'boolean' },
+      hasOutreachSpecialist: { type: 'boolean' },
+      hasPcp: { type: 'boolean' },
+      isAssessed: { type: 'boolean' },
       isIneligible: { type: 'boolean' },
       isDisenrolled: { type: 'boolean' },
       deletedAt: { type: 'string' },
@@ -64,6 +83,11 @@ export default class ComputedPatientStatus extends BaseModel {
       'isAdvancedDirectivesAdded',
       'isConsentSigned',
       'isPhotoAddedOrDeclined',
+      'hasProgressNote',
+      'hasChp',
+      'hasPcp',
+      'hasOutreachSpecialist',
+      'isAssessed',
       'isIneligible',
       'isDisenrolled',
     ],
@@ -94,14 +118,25 @@ export default class ComputedPatientStatus extends BaseModel {
     const patient = await Patient.get(patientId, txn);
     const { patientInfo } = patient;
     const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
+    const patientEmergencyContacts = await PatientContact.getEmergencyContactsForPatient(
+      patientId,
+      txn,
+    );
+    const patientProgressNoteCount = await ProgressNote.getCountForPatient(patientId, txn);
+    const patientCareTeam = await CareTeam.getForPatient(patientId, txn);
 
     const isCoreIdentityVerified =
       (!!patient.coreIdentityVerifiedAt && !!patient.coreIdentityVerifiedById) ||
       patientDataFlags.length > 0;
     const isDemographicInfoUpdated = !!patientInfo.updatedAt;
-    const isEmergencyContactAdded = false;
+    const isEmergencyContactAdded = !!patientEmergencyContacts.length;
     const isAdvancedDirectivesAdded = false;
     const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
+    const hasProgressNote = patientProgressNoteCount > 0;
+    const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'communityHealthPartner');
+    const hasOutreachSpecialist = this.isRoleOnCareTeam(patientCareTeam, 'outreachSpecialist');
+    const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician');
+    const isAssessed = false;
     const isPhotoAddedOrDeclined = false;
     const isIneligible = false;
     const isDisenrolled = false;
@@ -113,9 +148,20 @@ export default class ComputedPatientStatus extends BaseModel {
       isAdvancedDirectivesAdded,
       isConsentSigned,
       isPhotoAddedOrDeclined,
+      hasProgressNote,
+      hasChp,
+      hasOutreachSpecialist,
+      hasPcp,
+      isAssessed,
       isIneligible,
       isDisenrolled,
     };
+  }
+
+  static isRoleOnCareTeam(careTeam: User[], role: UserRole): boolean {
+    const user = find(careTeam, ['userRole', role]);
+
+    return !!user;
   }
 
   static async isConsentSignedForPatient(patientId: string, txn: Transaction): Promise<boolean> {
@@ -154,6 +200,26 @@ export default class ComputedPatientStatus extends BaseModel {
     return computedPatientStatus;
   }
 
+  static getCurrentPatientState(computedStatus: IComputedStatus, txn: Transaction): CurrentState {
+    let currentStatus = 'attributed';
+    const isAssigned = computedStatus.hasOutreachSpecialist || computedStatus.hasChp;
+    const isIntaking = isAssigned && computedStatus.hasProgressNote;
+    const isConsented = isIntaking && computedStatus.isConsentSigned;
+    const isEnrolled = isConsented && computedStatus.hasPcp;
+
+    if (isEnrolled) {
+      currentStatus = 'enrolled';
+    } else if (isConsented) {
+      currentStatus = 'consented';
+    } else if (isIntaking) {
+      currentStatus = 'intaking';
+    } else if (isAssigned) {
+      currentStatus = 'assigned';
+    }
+
+    return currentStatus as CurrentState;
+  }
+
   static async updateForPatient(
     patientId: string,
     updatedById: string,
@@ -166,6 +232,17 @@ export default class ComputedPatientStatus extends BaseModel {
 
     // Next, calculate all required datapoints
     const currentStatus = await this.computeCurrentStatus(patientId, txn);
+
+    // Next, update the Patient State
+    const currentState = this.getCurrentPatientState(currentStatus, txn);
+    await PatientState.updateForPatient(
+      {
+        patientId,
+        updatedById,
+        currentState,
+      },
+      txn,
+    );
 
     // Finally, create and return a new record
     return this.query(txn).insertAndFetch({

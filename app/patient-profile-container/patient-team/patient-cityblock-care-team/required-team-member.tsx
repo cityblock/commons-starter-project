@@ -1,4 +1,3 @@
-import { find } from 'lodash';
 import * as React from 'react';
 import { getPatientCareTeamQuery } from '../../../graphql/types';
 import SmallText from '../../../shared/library/small-text/small-text';
@@ -13,14 +12,15 @@ interface IProps {
   onClick: () => void;
 }
 
-function patientHasRequiredTeamMember(
+const patientHasRequiredTeamMember = (
   patientCareTeam: getPatientCareTeamQuery['patientCareTeam'],
   requiredRoleType: RequiredRoleTypes,
-): boolean {
-  const careTeamMember = find(patientCareTeam, ['userRole', requiredRoleType]);
-
-  return !!careTeamMember;
-}
+): boolean => {
+  return (
+    patientCareTeam.filter(careTeamMember => careTeamMember.userRole === requiredRoleType).length >
+    0
+  );
+};
 
 const RequiredTeamMember: React.StatelessComponent<IProps> = (props: IProps) => {
   const { patientCareTeam, isLoading, requiredRoleType, onClick } = props;
@@ -35,7 +35,7 @@ const RequiredTeamMember: React.StatelessComponent<IProps> = (props: IProps) => 
     subtextMessageId = 'patientTeam.missingPcpSubtext';
   }
 
-  if (isLoading || patientHasRequiredTeamMember(patientCareTeam!, requiredRoleType)) {
+  if (isLoading || patientHasRequiredTeamMember(patientCareTeam || [], requiredRoleType)) {
     return null;
   } else {
     return (

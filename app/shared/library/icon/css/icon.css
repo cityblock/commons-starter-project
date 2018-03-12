@@ -24,6 +24,22 @@ svg.icon.green {
   fill: var(--green-color);
 }
 
+svg.icon.lightBlue {
+  fill: var(--light-blue-color);
+}
+
+svg.icon.teal {
+  fill: var(--teal-color);
+}
+
+svg.icon.purple {
+  fill: var(--purple-color);
+}
+
+svg.icon.yellow {
+  fill: var(--yellow-color);
+}
+
 svg.icon.large {
   width: 27px;
   height: 27px;

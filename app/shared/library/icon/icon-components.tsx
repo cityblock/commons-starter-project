@@ -12,11 +12,13 @@ import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import AlarmIcon from 'material-ui-icons/Alarm';
 import AppsIcon from 'material-ui-icons/Apps';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
+import AssignmentIcon from 'material-ui-icons/Assignment';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
 import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
+import ContactPhoneIcon from 'material-ui-icons/ContactPhone';
 import ContentPasteIcon from 'material-ui-icons/ContentPaste';
 import Create from 'material-ui-icons/Create';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -27,6 +29,8 @@ import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import FlagIcon from 'material-ui-icons/Flag';
+import FolderOpenIcon from 'material-ui-icons/FolderOpen';
+import FolderSharedIcon from 'material-ui-icons/FolderShared';
 import GradeIcon from 'material-ui-icons/Grade';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
@@ -39,6 +43,7 @@ import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
 import LockOutlineIcon from 'material-ui-icons/LockOutline';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
+import NoteAddIcon from 'material-ui-icons/NoteAdd';
 import NotificationsIcon from 'material-ui-icons/Notifications';
 import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
 import PeopleIcon from 'material-ui-icons/People';
@@ -68,11 +73,13 @@ const components: IconComponents = {
   alarm: AlarmIcon,
   apps: AppsIcon,
   arrowBack: ArrowBackIcon,
+  assignment: AssignmentIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
   check: CheckIcon,
   checkCircle: CheckCircleIcon,
   close: CloseIcon,
+  contactPhone: ContactPhoneIcon,
   contentPaste: ContentPasteIcon,
   create: Create,
   delete: DeleteIcon,
@@ -84,6 +91,8 @@ const components: IconComponents = {
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
   flag: FlagIcon,
+  folderOpen: FolderOpenIcon,
+  folderShared: FolderSharedIcon,
   highlightOff: HighlightOffIcon,
   home: HomeIcon,
   inbox: InboxIcon,
@@ -94,6 +103,7 @@ const components: IconComponents = {
   labelOutline: LabelOutlineIcon,
   lockOutline: LockOutlineIcon,
   moreVert: MoreVertIcon,
+  noteAdd: NoteAddIcon,
   notifications: NotificationsIcon,
   pauseCircleOutline: PauseCircleOutlineIcon,
   people: PeopleIcon,

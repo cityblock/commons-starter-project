@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import LeftNavHeader from '../left-nav-header';
 import LeftNavOpen from '../left-nav-open';
+import LeftNavQuickActions from '../left-nav-quick-actions';
 import LeftNavScratchPad, { IProps } from '../left-nav-scratchpad';
 
 describe('Patient Left Navigation Open Component', () => {
@@ -46,5 +47,12 @@ describe('Patient Left Navigation Open Component', () => {
 
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().patientId).toBe(patientId);
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().glassBreakId).toBe(glassBreakId);
+  });
+
+  it('renders quick actions if selected', () => {
+    wrapper.setProps({ selected: 'quickActions' });
+
+    expect(wrapper.find(LeftNavQuickActions).props().patientId).toBe(patientId);
+    expect(wrapper.find(LeftNavQuickActions).props().glassBreakId).toBe(glassBreakId);
   });
 });

@@ -4,7 +4,17 @@ import * as styles from './css/icon.css';
 import iconComponents from './icon-components';
 import { IconName } from './icon-types';
 
-export type Color = 'gray' | 'darkGray' | 'white' | 'red' | 'blue' | 'green'; // default is gray
+export type Color =
+  | 'gray'
+  | 'darkGray'
+  | 'white'
+  | 'red'
+  | 'blue'
+  | 'green'
+  | 'lightBlue'
+  | 'teal'
+  | 'purple'
+  | 'yellow'; // default is gray
 
 interface IProps {
   name: IconName;
@@ -26,6 +36,10 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.red]: color === 'red',
       [styles.blue]: color === 'blue',
       [styles.green]: color === 'green',
+      [styles.lightBlue]: color === 'lightBlue',
+      [styles.teal]: color === 'teal',
+      [styles.purple]: color === 'purple',
+      [styles.yellow]: color === 'yellow',
       [styles.large]: isLarge,
       [styles.extraLarge]: isExtraLarge,
       [styles.hover]: !!onClick,

@@ -48,20 +48,6 @@ export async function resolveScreeningTools(
   );
 }
 
-export async function resolveScreeningToolsForRiskArea(
-  root: any,
-  args: { riskAreaId: string },
-  { permissions, userId, txn }: IContext,
-): Promise<IRootQueryType['screeningToolsForRiskArea']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
-
-  const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId, txn);
-
-  return screeningTools.map(screeningTool =>
-    ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
-  );
-}
-
 export async function resolveScreeningTool(
   root: any,
   args: { screeningToolId: string },

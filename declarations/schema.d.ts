@@ -340,11 +340,6 @@ declare module 'schema' {
     screeningTools: Array<IScreeningTool>;
 
     /**
-     * screening tools for risk area
-     */
-    screeningToolsForRiskArea: Array<IScreeningTool>;
-
-    /**
      * screening tool score range
      */
     screeningToolScoreRange: IScreeningToolScoreRange;
@@ -752,9 +747,6 @@ declare module 'schema' {
   }
   interface IScreeningToolOnRootQueryTypeArguments {
     screeningToolId: string;
-  }
-  interface IScreeningToolsForRiskAreaOnRootQueryTypeArguments {
-    riskAreaId: string;
   }
   interface IScreeningToolScoreRangeOnRootQueryTypeArguments {
     screeningToolScoreRangeId: string;

@@ -1,8 +1,17 @@
-import { getActiveMapRoute, getCBOReferralPdfRoute, getMapTaskRoute } from '../route-helpers';
+import {
+  getActiveMapRoute,
+  getCBOReferralPdfRoute,
+  getMapTaskRoute,
+  getPatientRoute,
+} from '../route-helpers';
 
 describe('Shared Route Helpers', () => {
   const patientId = 'danyTargaryen';
   const taskId = 'defeatCersei';
+
+  it('returns base route to patient profile', () => {
+    expect(getPatientRoute(patientId)).toBe(`/patients/${patientId}`);
+  });
 
   it('returns route to patient MAP active tab', () => {
     expect(getActiveMapRoute(patientId)).toBe(`/patients/${patientId}/map/active`);

@@ -2,18 +2,29 @@ import * as classNames from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as screeningToolsQuery from '../../graphql/queries/get-screening-tools-for-risk-area.graphql';
+import { closePopup } from '../../actions/popup-action';
+import * as screeningToolsQuery from '../../graphql/queries/get-screening-tools.graphql';
 import { getScreeningToolsQuery, FullScreeningToolFragment } from '../../graphql/types';
+import { IScreeningToolPopupOptions } from '../../reducers/popup-reducer';
+import { getPatientRoute } from '../../shared/helpers/route-helpers';
 import Button from '../../shared/library/button/button';
+import { Popup } from '../../shared/popup/popup';
+import { IState as IAppState } from '../../store';
 import * as styles from './css/screening-tools-popup.css';
 
 interface IProps {
-  screeningToolsLoading?: boolean;
-  onDismiss: () => any;
-  patientRoute: string;
-  riskAreaId: string;
   history: History;
+}
+
+interface IStateProps {
+  isVisible: boolean;
+  patientRoute: string | null;
+}
+
+interface IDispatchProps {
+  onDismiss: () => void;
 }
 
 interface IGraphqlProps {
@@ -22,11 +33,11 @@ interface IGraphqlProps {
   screeningToolsError?: string | null;
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
 
 class ScreeningToolsPopup extends React.Component<allProps> {
   renderScreeningTools() {
-    const { screeningTools, screeningToolsLoading, history, patientRoute } = this.props;
+    const { screeningTools, screeningToolsLoading, history, patientRoute, onDismiss } = this.props;
 
     if (screeningToolsLoading) {
       return <div className={styles.screeningToolOptionsLoading}>Loading...</div>;
@@ -41,7 +52,10 @@ class ScreeningToolsPopup extends React.Component<allProps> {
     }
 
     const redirectToScreeningTool = (screeningTool: FullScreeningToolFragment) => {
-      history.push(`${patientRoute}/tools/${screeningTool.id}`);
+      if (patientRoute) {
+        history.push(`${patientRoute}/tools/${screeningTool.id}`);
+        onDismiss();
+      }
     };
 
     return screeningTools.map(screeningTool => {
@@ -60,35 +74,52 @@ class ScreeningToolsPopup extends React.Component<allProps> {
   }
 
   render() {
-    const { onDismiss } = this.props;
+    const { onDismiss, isVisible } = this.props;
+
     return (
-      <div className={styles.screeningToolsPopupContent}>
-        <div className={styles.screeningToolsPopupHeader}>
-          <Button icon="close" onClick={onDismiss} />
-        </div>
-        <div className={styles.screeningToolsPopupBody}>
-          <div className={classNames(styles.screeningToolsPopupTitle, styles.noMargin)}>
-            Select a tool
+      <Popup visible={isVisible} style={'small-padding'} closePopup={onDismiss}>
+        <div className={styles.screeningToolsPopupContent}>
+          <div className={styles.screeningToolsPopupHeader}>
+            <Button icon="close" onClick={onDismiss} />
           </div>
-          <div className={styles.screeningToolOptions}>{this.renderScreeningTools()}</div>
+          <div className={styles.screeningToolsPopupBody}>
+            <div className={classNames(styles.screeningToolsPopupTitle, styles.noMargin)}>
+              Select a tool
+            </div>
+            <div className={styles.screeningToolOptions}>{this.renderScreeningTools()}</div>
+          </div>
         </div>
-      </div>
+      </Popup>
     );
   }
 }
 
+const mapStateToProps = (state: IAppState): IStateProps => {
+  const isVisible = state.popup.name === 'SCREENING_TOOL';
+  const patientId = isVisible ? (state.popup.options as IScreeningToolPopupOptions).patientId : '';
+
+  const patientRoute = patientId ? getPatientRoute(patientId) : null;
+
+  return { isVisible, patientRoute };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+  const onDismiss = () => dispatch(closePopup());
+
+  return { onDismiss };
+};
+
 export default compose(
   withRouter,
+  connect<IStateProps, IDispatchProps, {}>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        riskAreaId: props.riskAreaId,
-      },
-    }),
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
-      screeningTools: data ? (data as any).screeningToolsForRiskArea : null,
+      screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
 )(ScreeningToolsPopup);

@@ -100,6 +100,15 @@ export interface IQuickCallPopupOptions {
   patientId: string;
 }
 
+export interface IScreeningToolPopup {
+  name: 'SCREENING_TOOL';
+  options: IScreeningToolPopupOptions;
+}
+
+export interface IScreeningToolPopupOptions {
+  patientId: string;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -117,6 +126,7 @@ export type IState =
   | IPatientQuestionHamburgerMenu
   | IComputedFieldFlagPopup
   | IQuickCallPopup
+  | IScreeningToolPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

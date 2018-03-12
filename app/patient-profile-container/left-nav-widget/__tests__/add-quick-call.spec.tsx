@@ -3,7 +3,7 @@ import * as React from 'react';
 import { AddQuickCall } from '../add-quick-call';
 import LeftNavQuickAction from '../left-nav-quick-action';
 
-describe('Patient Left Navigation Quick Action: Add Progress Note', () => {
+describe('Patient Left Navigation Quick Action: Add Quick Call', () => {
   const placeholderFn = () => true as any;
   const patientId = 'aryaStark';
 
@@ -15,7 +15,7 @@ describe('Patient Left Navigation Quick Action: Add Progress Note', () => {
     />,
   );
 
-  it('renders a left nav quick action to open progress note', () => {
+  it('renders a left nav quick action to open quick call', () => {
     expect(wrapper.find(LeftNavQuickAction).props().quickAction).toBe('addQuickCall');
   });
 });

@@ -124,46 +124,6 @@ describe('screening tool resolver tests', () => {
         expect(titles).toContain(screeningTool2.title);
       });
     });
-
-    it('gets all screeningTools for a riskArea', async () => {
-      await transaction(ScreeningTool.knex(), async txn => {
-        const { riskArea, screeningTool, user } = await setup(txn);
-        const riskArea2 = await createRiskArea({ title: 'Risk Area 2', order: 2 }, txn);
-        const screeningTool2 = await ScreeningTool.create(
-          {
-            title: 'Screening Tool 2',
-            riskAreaId: riskArea.id,
-          },
-          txn,
-        );
-        const screeningTool3 = await ScreeningTool.create(
-          {
-            title: 'Screening Tool 3',
-            riskAreaId: riskArea2.id,
-          },
-          txn,
-        );
-
-        const query = `{
-          screeningToolsForRiskArea(riskAreaId: "${riskArea.id}") {
-            id
-            title
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
-        const screeningTools = cloneDeep(result.data!.screeningToolsForRiskArea);
-        const screeningToolIds = screeningTools.map((st: ScreeningTool) => st.id);
-        expect(screeningTools.length).toEqual(2);
-        expect(screeningToolIds).toContain(screeningTool.id);
-        expect(screeningToolIds).toContain(screeningTool2.id);
-        expect(screeningToolIds).not.toContain(screeningTool3.id);
-      });
-    });
   });
 
   describe('screeningTool edit', () => {

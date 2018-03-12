@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
@@ -24,7 +23,6 @@ import ModalHeader from '../../shared/library/modal-header/modal-header';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { Popup } from '../../shared/popup/popup';
-import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import ComputedFieldFlagModal from './computed-field-flag-modal';
 import * as styles from './css/risk-area-assessment.css';
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
@@ -58,7 +56,6 @@ type allProps = IGraphqlProps & IProps;
 
 interface IState {
   inProgress: boolean;
-  selectingScreeningTool: boolean;
   editPopupVisible: boolean;
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
 }
@@ -155,14 +152,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     }
   };
 
-  onClickToSelectScreeningTool = () => {
-    this.setState({ selectingScreeningTool: true });
-  };
-
-  onDismissScreeningToolSelect = () => {
-    this.setState({ selectingScreeningTool: false });
-  };
-
   onEditableChangeRequest = () => {
     this.setState({ editPopupVisible: true });
   };
@@ -213,7 +202,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const {
       riskArea,
       riskAreaGroup,
-      riskAreaId,
       patientId,
       routeBase,
       patientRoute,
@@ -223,12 +211,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       riskAreaAssessmentSubmissionLoading,
       glassBreakId,
     } = this.props;
-    const {
-      inProgress,
-      selectingScreeningTool,
-      editPopupVisible,
-      carePlanSuggestions,
-    } = this.state;
+    const { inProgress, editPopupVisible, carePlanSuggestions } = this.state;
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
@@ -269,12 +252,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       ) : (
         <div>
           <Button
-            color="white"
-            messageId="riskAreaAssessment.administer"
-            onClick={this.onClickToSelectScreeningTool}
-            className={classNames(styles.button, styles.marginRight)}
-          />
-          <Button
             messageId="riskAreaAssessment.start"
             onClick={this.onStart}
             disabled={loading || !!error}
@@ -306,13 +283,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         <Popup visible={popupVisible} style={'small-padding'}>
           {submissionPopupVisible && this.renderSubmissionPopup()}
           {editPopupVisible && this.renderEditPopup()}
-        </Popup>
-        <Popup visible={selectingScreeningTool} style={'small-padding'}>
-          <ScreeningToolsPopup
-            riskAreaId={riskAreaId}
-            onDismiss={this.onDismissScreeningToolSelect}
-            patientRoute={patientRoute}
-          />
         </Popup>
       </div>
     );

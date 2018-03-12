@@ -35,23 +35,10 @@ describe('risk area assessment questions component', () => {
   );
 
   it('renders buttons to edit answers and administer tools', () => {
-    expect(wrapper.find(Button).length).toBe(2);
     expect(
       wrapper
         .find(Button)
         .at(0)
-        .props().messageId,
-    ).toBe('riskAreaAssessment.administer');
-    expect(
-      wrapper
-        .find(Button)
-        .at(0)
-        .props().color,
-    ).toBe('white');
-    expect(
-      wrapper
-        .find(Button)
-        .at(1)
         .props().messageId,
     ).toBe('riskAreaAssessment.start');
   });

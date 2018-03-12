@@ -69,42 +69,6 @@ describe('screening tool model', () => {
     });
   });
 
-  it('gets all screening tools for a risk area', async () => {
-    await transaction(ScreeningTool.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-
-      const riskArea2 = await createRiskArea({ title: 'Food', order: 2 }, txn);
-      const screeningTool1 = await ScreeningTool.create(
-        {
-          title: 'Screening Tool 1',
-          riskAreaId: riskArea.id,
-        },
-        txn,
-      );
-      const screeningTool2 = await ScreeningTool.create(
-        {
-          title: 'Screening Tool 2',
-          riskAreaId: riskArea.id,
-        },
-        txn,
-      );
-      const screeningTool3 = await ScreeningTool.create(
-        {
-          title: 'Screening Tool 3',
-          riskAreaId: riskArea2.id,
-        },
-        txn,
-      );
-
-      const screeningTools = await ScreeningTool.getForRiskArea(riskArea.id, txn);
-      const screeningToolIds = screeningTools.map(tool => tool.id);
-      expect(screeningTools.length).toEqual(2);
-      expect(screeningToolIds).toContain(screeningTool1.id);
-      expect(screeningToolIds).toContain(screeningTool2.id);
-      expect(screeningToolIds).not.toContain(screeningTool3.id);
-    });
-  });
-
   it('gets all screening tools', async () => {
     await transaction(ScreeningTool.knex(), async txn => {
       const { riskArea } = await setup(txn);

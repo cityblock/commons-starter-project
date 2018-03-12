@@ -234,7 +234,6 @@ import {
 import {
   resolveScreeningTool,
   resolveScreeningTools,
-  resolveScreeningToolsForRiskArea,
   screeningToolCreate,
   screeningToolDelete,
   screeningToolEdit,
@@ -366,7 +365,6 @@ const resolveFunctions = {
     carePlanForPatient: resolveCarePlanForPatient,
     screeningTool: resolveScreeningTool,
     screeningTools: resolveScreeningTools,
-    screeningToolsForRiskArea: resolveScreeningToolsForRiskArea,
     screeningToolScoreRange: resolveScreeningToolScoreRange,
     screeningToolScoreRangeForScoreAndScreeningTool: resolveScreeningToolScoreRangeForScoreAndScreeningTool,
     screeningToolScoreRanges: resolveScreeningToolScoreRanges,

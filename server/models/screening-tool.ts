@@ -116,13 +116,6 @@ export default class ScreeningTool extends BaseModel {
     return screeningTool;
   }
 
-  static async getForRiskArea(riskAreaId: string, txn: Transaction): Promise<ScreeningTool[]> {
-    return this.query(txn)
-      .eager(EAGER_QUERY)
-      .where({ deletedAt: null, riskAreaId })
-      .orderBy('createdAt', 'asc');
-  }
-
   static async getAll(txn: Transaction): Promise<ScreeningTool[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)

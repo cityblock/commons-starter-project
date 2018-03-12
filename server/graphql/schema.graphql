@@ -2492,8 +2492,6 @@ type RootQueryType {
   screeningTool(screeningToolId: ID!): ScreeningTool!
   # screening tools
   screeningTools: [ScreeningTool]!
-  # screening tools for risk area
-  screeningToolsForRiskArea(riskAreaId: ID!): [ScreeningTool]!
   # screening tool score range
   screeningToolScoreRange(screeningToolScoreRangeId: ID!): ScreeningToolScoreRange!
   # screening tool score range for screening tool and score

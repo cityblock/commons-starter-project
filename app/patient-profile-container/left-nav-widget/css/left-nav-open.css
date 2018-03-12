@@ -4,7 +4,7 @@
   max-width: 400px;
   position: fixed;
   bottom: 0;
-  z-index: 5;
+  z-index: var(--popup-z-index);
   transition: height 0.3s ease-in-out;
 }
 

@@ -86,6 +86,7 @@
   --border-radius: 2px;
   --input-height: 52px;
   --editable-title-height: 28px;
+  --popup-z-index: 5;
 }
 
 /*

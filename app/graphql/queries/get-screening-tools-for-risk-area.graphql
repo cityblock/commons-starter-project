@@ -1,7 +1,0 @@
-#import "../fragments/full-screening-tool.graphql"
-
-query getScreeningToolsForRiskArea($riskAreaId: ID!) {
-  screeningToolsForRiskArea(riskAreaId: $riskAreaId) {
-    ...FullScreeningTool
-  }
-}

@@ -9416,9 +9416,9 @@ react-event-listener@^0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
-react-google-login@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-3.0.4.tgz#fe06a89047cfea0140fe086f923b77ac57b2c7fa"
+react-google-login@3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-3.0.9.tgz#af98fa890e7752e927c094725ba3f7d597ed92c1"
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.0"

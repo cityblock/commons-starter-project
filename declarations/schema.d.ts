@@ -5,9 +5,11 @@ declare module 'schema' {
   }
 
   interface IGraphQLResponseError {
-    message: string; // Required for all errors
+    /** Required for all errors */
+    message: string;
     locations?: Array<IGraphQLResponseErrorLocation>;
-    [propName: string]: any; // 7.2.2 says 'GraphQL servers may provide additional entries to error'
+    /** 7.2.2 says 'GraphQL servers may provide additional entries to error' */
+    [propName: string]: any;
   }
 
   interface IGraphQLResponseErrorLocation {
@@ -16,423 +18,526 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
+
     /**
-    All Users (admin only)
-  */
+     * All Users (admin only)
+     */
     users: IUserEdges;
+
     /**
-    List of all Users with care roles
-  */
+     * List of all Users with care roles
+     */
     userSummaryList: Array<IUserWithCount>;
+
     /**
-    The current User
-  */
+     * The current User
+     */
     currentUser: IUser | null;
+
     /**
-    A single Patient
-  */
+     * A single Patient
+     */
     patient: IPatient;
+
     /**
-    Users on a care team
-  */
+     * Users on a care team
+     */
     patientCareTeam: Array<IUser>;
+
     /**
-    Patient need to know
-  */
+     * Patient need to know
+     */
     patientNeedToKnow: IPatientNeedToKnow;
+
     /**
-    Patient search
-  */
+     * Patient search
+     */
     patientSearch: IPatientTableRowEdges;
+
     /**
-    Patients filtered by options
-  */
+     * Patients filtered by options
+     */
     patientPanel: IPatientTableRowEdges;
+
     /**
-    Patient dashboard - tasks due and notifications
-  */
+     * Patient dashboard - tasks due and notifications
+     */
     patientsWithUrgentTasks: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - new to user care team
-  */
+     * Patient dashboard - new to user care team
+     */
     patientsNewToCareTeam: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - pending MAP suggestions
-  */
+     * Patient dashboard - pending MAP suggestions
+     */
     patientsWithPendingSuggestions: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - lacking demographic information
-  */
+     * Patient dashboard - lacking demographic information
+     */
     patientsWithMissingInfo: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - no recent engagement
-  */
+     * Patient dashboard - no recent engagement
+     */
     patientsWithNoRecentEngagement: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - out of date MAP
-  */
+     * Patient dashboard - out of date MAP
+     */
     patientsWithOutOfDateMAP: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - open CBO referrals
-  */
+     * Patient dashboard - open CBO referrals
+     */
     patientsWithOpenCBOReferrals: IPatientForDashboardEdges;
+
     /**
-    Patient dashboard - computed list for answer
-  */
+     * Patient dashboard - computed list for answer
+     */
     patientsForComputedList: IPatientForDashboardEdges;
+
     /**
-    Patient contact healthcare proxies
-  */
+     * Patient contact healthcare proxies
+     */
     patientContactHealthcareProxies: Array<IPatientContact>;
+
     /**
-    A single clinic
-  */
+     * A single clinic
+     */
     clinic: IClinic;
+
     /**
-    Clinics
-  */
+     * Clinics
+     */
     clinics: IClinicEdges;
+
     /**
-    Task
-  */
+     * Task
+     */
     task: ITask;
+
     /**
-    Patient's Tasks
-  */
+     * Patient's Tasks
+     */
     tasksForPatient: ITaskEdges;
+
     /**
-    Current user's Tasks
-  */
+     * Current user's Tasks
+     */
     tasksForCurrentUser: ITaskEdges;
+
     /**
-    Tasks due soon for patient - in dashboard
-  */
+     * Tasks due soon for patient - in dashboard
+     */
     tasksDueSoonForPatient: Array<ITask>;
+
     /**
-    Tasks with notifications for patient - in dashboard
-  */
+     * Tasks with notifications for patient - in dashboard
+     */
     tasksWithNotificationsForPatient: Array<ITask>;
+
     /**
-    Task IDs with notifications for current user - in care plan MAP and tasks panel
-  */
+     * Task IDs with notifications for current user - in care plan MAP and tasks panel
+     */
     taskIdsWithNotifications: Array<ITaskId>;
+
     /**
-    Tasks assigned to or followed by a user for a patient
-  */
+     * Tasks assigned to or followed by a user for a patient
+     */
     tasksForUserForPatient: Array<ITask>;
+
     /**
-    List of task comments
-  */
+     * List of task comments
+     */
     taskComments: ITaskCommentEdges;
+
     /**
-    Single task comment
-  */
+     * Single task comment
+     */
     taskComment: ITaskComment;
+
     /**
-    RiskAreaGroup
-  */
+     * RiskAreaGroup
+     */
     riskAreaGroup: IRiskAreaGroup;
+
     /**
-    Risk Area Group with associated patient answers
-  */
+     * Risk Area Group with associated patient answers
+     */
     riskAreaGroupForPatient: IRiskAreaGroupForPatient;
+
     /**
-    RiskAreaGroups
-  */
+     * RiskAreaGroups
+     */
     riskAreaGroups: Array<IRiskAreaGroup>;
+
     /**
-    RiskArea
-  */
+     * RiskArea
+     */
     riskArea: IRiskArea;
+
     /**
-    RiskAreas
-  */
+     * RiskAreas
+     */
     riskAreas: Array<IRiskArea>;
+
     /**
-    Question
-  */
+     * Question
+     */
     question: IQuestion;
+
     /**
-    Questions for risk area, progress note template or screening tool
-  */
+     * Questions for risk area, progress note template or screening tool
+     */
     questions: Array<IQuestion>;
+
     /**
-    Answer
-  */
+     * Answer
+     */
     answer: IAnswer | null;
+
     /**
-    Answers
-  */
+     * Answers
+     */
     answersForQuestion: Array<IAnswer>;
+
     /**
-    PatientAnswer
-  */
+     * PatientAnswer
+     */
     patientAnswer: IPatientAnswer;
+
     /**
-    PatientAnswersForQuestion
-  */
+     * PatientAnswersForQuestion
+     */
     patientAnswers: Array<IPatientAnswer>;
+
     /**
-    PatientPreviousAnswersForQuestion
-  */
+     * PatientPreviousAnswersForQuestion
+     */
     patientPreviousAnswersForQuestion: Array<IPatientAnswer>;
+
     /**
-    PatientRiskAreaSummary
-  */
+     * PatientRiskAreaSummary
+     */
     patientRiskAreaSummary: IRiskAreaSummary;
+
     /**
-    PatientRiskAreaRiskScore
-  */
+     * PatientRiskAreaRiskScore
+     */
     patientRiskAreaRiskScore: IRiskScore;
+
     /**
-    QuestionCondition
-  */
+     * QuestionCondition
+     */
     questionCondition: IQuestionCondition;
+
     /**
-    Event notifications for a user
-  */
+     * Event notifications for a user
+     */
     eventNotificationsForCurrentUser: IEventNotificationEdges;
+
     /**
-    Event notifications for a task
-  */
+     * Event notifications for a task
+     */
     eventNotificationsForTask: IEventNotificationEdges;
+
     /**
-    Event notifications for a user's task - on dashboard
-  */
+     * Event notifications for a user's task - on dashboard
+     */
     eventNotificationsForUserTask: Array<IEventNotification>;
+
     /**
-    Concern
-  */
+     * Concern
+     */
     concern: IConcern;
+
     /**
-    Concerns
-  */
+     * Concerns
+     */
     concerns: Array<IConcern>;
+
     /**
-    Concerns for answer
-  */
+     * Concerns for answer
+     */
     concernsForAnswer: Array<IConcern>;
+
     /**
-    patient concern
-  */
+     * patient concern
+     */
     patientConcern: IPatientConcern;
+
     /**
-    patient concerns for patient
-  */
+     * patient concerns for patient
+     */
     patientConcerns: Array<IPatientConcern>;
+
     /**
-    Patient goal
-  */
+     * Patient goal
+     */
     patientGoal: IPatientGoal;
+
     /**
-    Patient goals for patient
-  */
+     * Patient goals for patient
+     */
     patientGoals: Array<IPatientGoal>;
+
     /**
-    Goal suggestion templates
-  */
+     * Goal suggestion templates
+     */
     goalSuggestionTemplate: IGoalSuggestionTemplate;
+
     /**
-    Goal suggestion templates
-  */
+     * Goal suggestion templates
+     */
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate>;
+
     /**
-    Goal suggestion for template for answer
-  */
+     * Goal suggestion for template for answer
+     */
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate>;
+
     /**
-    Task template
-  */
+     * Task template
+     */
     taskTemplate: ITaskTemplate;
+
     /**
-    Task templates
-  */
+     * Task templates
+     */
     taskTemplates: Array<ITaskTemplate>;
+
     /**
-    Task templates suggested for answer
-  */
+     * Task templates suggested for answer
+     */
     taskTemplatesForAnswer: Array<ITaskTemplate>;
+
     /**
-    patient task suggestions
-  */
+     * patient task suggestions
+     */
     patientTaskSuggestions: Array<IPatientTaskSuggestion>;
+
     /**
-    Care Plan Suggestions
-  */
+     * Care Plan Suggestions
+     */
     carePlanSuggestionsForPatient: Array<ICarePlanSuggestion>;
+
     /**
-    Care Plan
-  */
+     * Care Plan
+     */
     carePlanForPatient: ICarePlan;
+
     /**
-    screening tool
-  */
+     * screening tool
+     */
     screeningTool: IScreeningTool;
+
     /**
-    screening tools
-  */
+     * screening tools
+     */
     screeningTools: Array<IScreeningTool>;
+
     /**
-    screening tools for risk area
-  */
+     * screening tools for risk area
+     */
     screeningToolsForRiskArea: Array<IScreeningTool>;
+
     /**
-    screening tool score range
-  */
+     * screening tool score range
+     */
     screeningToolScoreRange: IScreeningToolScoreRange;
+
     /**
-    screening tool score range for screening tool and score
-  */
+     * screening tool score range for screening tool and score
+     */
     screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange | null;
+
     /**
-    screening tool score ranges
-  */
+     * screening tool score ranges
+     */
     screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
+
     /**
-    screening tool score ranges for screening tool
-  */
+     * screening tool score ranges for screening tool
+     */
     screeningToolScoreRangesForScreeningTool: Array<IScreeningToolScoreRange>;
+
     /**
-    patient screening tool submission
-  */
+     * patient screening tool submission
+     */
     patientScreeningToolSubmission: IPatientScreeningToolSubmission;
+
     /**
-    latest patient sreening tool submission for a screening tool
-  */
+     * latest patient sreening tool submission for a screening tool
+     */
     patientScreeningToolSubmissionForPatientAndScreeningTool: IPatientScreeningToolSubmission | null;
+
     /**
-    patient screening tool submissions for patient and screening tool (optioanlly)
-  */
+     * patient screening tool submissions for patient and screening tool (optioanlly)
+     */
     patientScreeningToolSubmissionsForPatient: Array<
       IPatientScreeningToolSubmission
     >;
+
     /**
-    patient screening tool submissions for patient 360 (history tab)
-  */
+     * patient screening tool submissions for patient 360 (history tab)
+     */
     patientScreeningToolSubmissionsFor360: Array<
       IPatientScreeningToolSubmission
     >;
+
     /**
-    patient screening tool submissions
-  */
+     * patient screening tool submissions
+     */
     patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission>;
+
     /**
-    progress note template
-  */
+     * progress note template
+     */
     progressNoteTemplate: IProgressNoteTemplate;
+
     /**
-    progress note templates
-  */
+     * progress note templates
+     */
     progressNoteTemplates: Array<IProgressNoteTemplate>;
+
     /**
-    progress note
-  */
+     * progress note
+     */
     progressNote: IProgressNote;
+
     /**
-    progress note ids for patient
-  */
+     * progress note ids for patient
+     */
     progressNoteIdsForPatient: Array<string>;
+
     /**
-    progress notes for current user
-  */
+     * progress notes for current user
+     */
     progressNotesForCurrentUser: Array<IProgressNote>;
+
     /**
-    progress notes for supervisor review
-  */
+     * progress notes for supervisor review
+     */
     progressNotesForSupervisorReview: Array<IProgressNote>;
+
     /**
-    progress note activities for progress note
-  */
+     * progress note activities for progress note
+     */
     progressNoteActivityForProgressNote: IProgressNoteActivity;
+
     /**
-    quick call
-  */
+     * quick call
+     */
     quickCall: IQuickCall;
+
     /**
-    quick calls for progress note
-  */
+     * quick calls for progress note
+     */
     quickCallsForProgressNote: Array<IQuickCall>;
+
     /**
-    computed field
-  */
+     * computed field
+     */
     computedField: IComputedField;
+
     /**
-    computed fields
-  */
+     * computed fields
+     */
     computedFields: Array<IComputedField>;
+
     /**
-    computed fields schema
-  */
+     * computed fields schema
+     */
     computedFieldsSchema: IComputedFieldsSchema;
+
     /**
-    risk area assessment submission
-  */
+     * risk area assessment submission
+     */
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission;
+
     /**
-    latest risk area assessment submission for a screening tool
-  */
+     * latest risk area assessment submission for a screening tool
+     */
     riskAreaAssessmentSubmissionForPatient: IRiskAreaAssessmentSubmission | null;
+
     /**
-    patient list
-  */
+     * patient list
+     */
     patientList: IPatientList;
+
     /**
-    all patient lists
-  */
+     * all patient lists
+     */
     patientLists: Array<IPatientList>;
+
     /**
-    all CBO categories
-  */
+     * all CBO categories
+     */
     CBOCategories: Array<ICBOCategory>;
+
     /**
-    CBO
-  */
+     * CBO
+     */
     CBO: ICBO;
+
     /**
-    all CBOs
-  */
+     * all CBOs
+     */
     CBOs: Array<ICBO>;
+
     /**
-    all CBOs for given category
-  */
+     * all CBOs for given category
+     */
     CBOsForCategory: Array<ICBO>;
+
     /**
-    patient data flags for a patient
-  */
+     * patient data flags for a patient
+     */
     patientDataFlagsForPatient: Array<IPatientDataFlag>;
+
     /**
-    patient glass breaks for user during current session
-  */
+     * patient glass breaks for user during current session
+     */
     patientGlassBreaksForUser: Array<IPatientGlassBreak>;
+
     /**
-    progress note glass breaks for a user during current session
-  */
+     * progress note glass breaks for a user during current session
+     */
     progressNoteGlassBreaksForUser: Array<IProgressNoteGlassBreak>;
+
     /**
-    check if don't need to break glass for given patient
-  */
+     * check if don't need to break glass for given patient
+     */
     patientGlassBreakCheck: IPatientGlassBreakCheck;
+
     /**
-    check if don't need to break glass for given progress note
-  */
+     * check if don't need to break glass for given progress note
+     */
     progressNoteGlassBreakCheck: IProgressNoteGlassBreakCheck;
+
     /**
-    computed patient status for a patient
-  */
+     * computed patient status for a patient
+     */
     patientComputedPatientStatus: IComputedPatientStatus;
+
     /**
-    patient consent forms
-  */
+     * patient consent forms
+     */
     patientConsentFormsForPatient: Array<IPatientConsentForm>;
+
     /**
-    patient advanced directive forms
-  */
+     * patient advanced directive forms
+     */
     patientAdvancedDirectiveFormsForPatient: Array<
       IPatientAdvancedDirectiveForm
     >;
+
     /**
-    gets a patient scratch pad for given user and patient
-  */
+     * gets a patient scratch pad for given user and patient
+     */
     patientScratchPad: IPatientScratchPad;
   }
   interface IUsersOnRootQueryTypeArguments {
@@ -758,24 +863,24 @@ declare module 'schema' {
     | 'emailAsc';
 
   /**
-    User edges
-  */
+   * User edges
+   */
   interface IUserEdges {
     edges: Array<IUserNode> | null;
     pageInfo: IPageInfo;
   }
 
   /**
-    User node
-  */
+   * User node
+   */
   interface IUserNode {
     node: IUser | null;
     cursor: string;
   }
 
   /**
-    User account model
-  */
+   * User account model
+   */
   interface IUser {
     id: string;
     locale: string | null;
@@ -792,8 +897,8 @@ declare module 'schema' {
   }
 
   /**
-    An object with a Globally Unique ID
-  */
+   * An object with a Globally Unique ID
+   */
   type uniqueId =
     | IUser
     | IPatient
@@ -857,12 +962,13 @@ declare module 'schema' {
     | IConcernDiagnosisCode;
 
   /**
-    An object with a Globally Unique ID
-  */
+   * An object with a Globally Unique ID
+   */
   interface IUniqueId {
+
     /**
-    The ID of the object.
-  */
+     * The ID of the object.
+     */
     id: string;
   }
 
@@ -887,8 +993,8 @@ declare module 'schema' {
     | 'black';
 
   /**
-    Page info for paginated responses
-  */
+   * Page info for paginated responses
+   */
   interface IPageInfo {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
@@ -904,8 +1010,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient combining data in athena and our database
-  */
+   * Patient combining data in athena and our database
+   */
   interface IPatient {
     id: string;
     patientInfo: IPatientInfo;
@@ -924,8 +1030,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient info that is editable in Commons
-  */
+   * Patient info that is editable in Commons
+   */
   interface IPatientInfo {
     id: string;
     patientId: string;
@@ -951,8 +1057,8 @@ declare module 'schema' {
   type IBirthSexOptionsEnum = 'male' | 'female';
 
   /**
-    Address
-  */
+   * Address
+   */
   interface IAddress {
     id: string;
     zip: string | null;
@@ -964,8 +1070,8 @@ declare module 'schema' {
   }
 
   /**
-    Phone
-  */
+   * Phone
+   */
   interface IPhone {
     id: string;
     phoneNumber: string;
@@ -976,8 +1082,8 @@ declare module 'schema' {
   type IPhoneTypeOptionsEnum = 'home' | 'work' | 'mobile' | 'other';
 
   /**
-    Email
-  */
+   * Email
+   */
   interface IEmail {
     id: string;
     emailAddress: string;
@@ -987,8 +1093,8 @@ declare module 'schema' {
   type IContactMethodOptionsEnum = 'phone' | 'text' | 'email';
 
   /**
-    Patient Data Flag
-  */
+   * Patient Data Flag
+   */
   interface IPatientDataFlag {
     id: string;
     patientId: string;
@@ -1006,8 +1112,8 @@ declare module 'schema' {
     | 'dateOfBirth';
 
   /**
-    ComputedPatientStatus
-  */
+   * ComputedPatientStatus
+   */
   interface IComputedPatientStatus {
     id: string;
     patientId: string;
@@ -1026,15 +1132,15 @@ declare module 'schema' {
   }
 
   /**
-    Patient Scratch Pad
-  */
+   * Patient Scratch Pad
+   */
   interface IPatientNeedToKnow {
     text: string | null;
   }
 
   /**
-    Patient table row edges
-  */
+   * Patient table row edges
+   */
   interface IPatientTableRowEdges {
     edges: Array<IPatientTableRowNode>;
     pageInfo: IPageInfo;
@@ -1042,16 +1148,16 @@ declare module 'schema' {
   }
 
   /**
-    Patient table row node
-  */
+   * Patient table row node
+   */
   interface IPatientTableRowNode {
     node: IPatientTableRow | null;
     cursor: string;
   }
 
   /**
-    Patient table row
-  */
+   * Patient table row
+   */
   interface IPatientTableRow {
     id: string;
     firstName: string;
@@ -1070,8 +1176,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient dashboard item edges
-  */
+   * Patient dashboard item edges
+   */
   interface IPatientForDashboardEdges {
     edges: Array<IPatientForDashboardNode>;
     pageInfo: IPageInfo;
@@ -1079,16 +1185,16 @@ declare module 'schema' {
   }
 
   /**
-    Patient dashboard item node
-  */
+   * Patient dashboard item node
+   */
   interface IPatientForDashboardNode {
     node: IPatientForDashboard | null;
     cursor: string;
   }
 
   /**
-    Patient dashboard item
-  */
+   * Patient dashboard item
+   */
   interface IPatientForDashboard {
     id: string;
     firstName: string;
@@ -1098,8 +1204,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient contact that is editable in Commons
-  */
+   * Patient contact that is editable in Commons
+   */
   interface IPatientContact {
     id: string;
     patientId: string;
@@ -1116,8 +1222,8 @@ declare module 'schema' {
   }
 
   /**
-    Clinic
-  */
+   * Clinic
+   */
   interface IClinic {
     id: string;
     name: string;
@@ -1127,24 +1233,24 @@ declare module 'schema' {
   }
 
   /**
-    Clinic edges
-  */
+   * Clinic edges
+   */
   interface IClinicEdges {
     edges: Array<IClinicNode>;
     pageInfo: IPageInfo;
   }
 
   /**
-    Clinic node
-  */
+   * Clinic node
+   */
   interface IClinicNode {
     node: IClinic;
     cursor: string;
   }
 
   /**
-    Task
-  */
+   * Task
+   */
   interface ITask {
     id: string;
     title: string;
@@ -1198,8 +1304,8 @@ declare module 'schema' {
   }
 
   /**
-    Concern
-  */
+   * Concern
+   */
   interface IConcern {
     id: string;
     title: string;
@@ -1210,8 +1316,8 @@ declare module 'schema' {
   }
 
   /**
-    DiagnosisCode
-  */
+   * DiagnosisCode
+   */
   interface IDiagnosisCode {
     id: string;
     codesetName: string;
@@ -1321,47 +1427,47 @@ declare module 'schema' {
     | 'titleDesc';
 
   /**
-    Task edges
-  */
+   * Task edges
+   */
   interface ITaskEdges {
     edges: Array<ITaskNode>;
     pageInfo: IPageInfo;
   }
 
   /**
-    Task node
-  */
+   * Task node
+   */
   interface ITaskNode {
     node: ITask | null;
     cursor: string;
   }
 
   /**
-    Task ID
-  */
+   * Task ID
+   */
   interface ITaskId {
     id: string;
   }
 
   /**
-    Task comment edges
-  */
+   * Task comment edges
+   */
   interface ITaskCommentEdges {
     edges: Array<ITaskCommentNode>;
     pageInfo: IPageInfo;
   }
 
   /**
-    Task comment node
-  */
+   * Task comment node
+   */
   interface ITaskCommentNode {
     node: ITaskComment | null;
     cursor: string;
   }
 
   /**
-    Task comment
-  */
+   * Task comment
+   */
   interface ITaskComment {
     id: string;
     body: string;
@@ -1372,8 +1478,8 @@ declare module 'schema' {
   }
 
   /**
-    Risk Area Group
-  */
+   * Risk Area Group
+   */
   interface IRiskAreaGroup {
     id: string;
     createdAt: string;
@@ -1388,8 +1494,8 @@ declare module 'schema' {
   }
 
   /**
-    Risk Area
-  */
+   * Risk Area
+   */
   interface IRiskArea {
     id: string;
     createdAt: string;
@@ -1408,8 +1514,8 @@ declare module 'schema' {
   type IAssessmentTypeEnum = 'automated' | 'manual';
 
   /**
-    Question
-  */
+   * Question
+   */
   interface IQuestion {
     id: string;
     createdAt: string;
@@ -1431,8 +1537,8 @@ declare module 'schema' {
   }
 
   /**
-    Answer
-  */
+   * Answer
+   */
   interface IAnswer {
     id: string;
     createdAt: string;
@@ -1476,8 +1582,8 @@ declare module 'schema' {
     | 'multiselect';
 
   /**
-    QuestionCondition
-  */
+   * QuestionCondition
+   */
   interface IQuestionCondition {
     id: string;
     createdAt: string;
@@ -1574,8 +1680,8 @@ declare module 'schema' {
   }
 
   /**
-    Question with patient answer
-  */
+   * Question with patient answer
+   */
   interface IQuestionWithPatientAnswer {
     id: string;
     createdAt: string;
@@ -1597,8 +1703,8 @@ declare module 'schema' {
   }
 
   /**
-    Answer with Patient answer
-  */
+   * Answer with Patient answer
+   */
   interface IAnswerWithPatientAnswer {
     id: string;
     createdAt: string;
@@ -1620,8 +1726,8 @@ declare module 'schema' {
   }
 
   /**
-    PatientAnswer
-  */
+   * PatientAnswer
+   */
   interface IPatientAnswer {
     id: string;
     createdAt: string;
@@ -1746,24 +1852,24 @@ declare module 'schema' {
   }
 
   /**
-    Event Notification edges
-  */
+   * Event Notification edges
+   */
   interface IEventNotificationEdges {
     edges: Array<IEventNotificationNode>;
     pageInfo: IPageInfo;
   }
 
   /**
-    Event Notification node
-  */
+   * Event Notification node
+   */
   interface IEventNotificationNode {
     node: IEventNotification | null;
     cursor: string;
   }
 
   /**
-    Event Notification
-  */
+   * Event Notification
+   */
   interface IEventNotification {
     id: string;
     title: string | null;
@@ -1780,8 +1886,8 @@ declare module 'schema' {
   }
 
   /**
-    Task Event
-  */
+   * Task Event
+   */
   interface ITaskEvent {
     id: string;
     taskId: string;
@@ -1896,8 +2002,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient Answer Event
-  */
+   * Patient Answer Event
+   */
   interface IPatientAnswerEvent {
     id: string;
     patientId: string;
@@ -1919,8 +2025,8 @@ declare module 'schema' {
   type IPatientAnswerEventTypesEnum = 'create_patient_answer';
 
   /**
-    Care Plan Update Event
-  */
+   * Care Plan Update Event
+   */
   interface ICarePlanUpdateEvent {
     id: string;
     patientId: string;
@@ -1993,8 +2099,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient Glass Break
-  */
+   * Patient Glass Break
+   */
   interface IPatientGlassBreak {
     id: string;
     userId: string;
@@ -2004,8 +2110,8 @@ declare module 'schema' {
   }
 
   /**
-    Progress Note Glass Break
-  */
+   * Progress Note Glass Break
+   */
   interface IProgressNoteGlassBreak {
     id: string;
     userId: string;
@@ -2015,24 +2121,24 @@ declare module 'schema' {
   }
 
   /**
-    Patient Glass Break - not needed check
-  */
+   * Patient Glass Break - not needed check
+   */
   interface IPatientGlassBreakCheck {
     patientId: string;
     isGlassBreakNotNeeded: boolean;
   }
 
   /**
-    Progress Note Glass Break - not needed check
-  */
+   * Progress Note Glass Break - not needed check
+   */
   interface IProgressNoteGlassBreakCheck {
     progressNoteId: string;
     isGlassBreakNotNeeded: boolean;
   }
 
   /**
-    Patient Consent Form
-  */
+   * Patient Consent Form
+   */
   interface IPatientConsentForm {
     patientConsentFormId: string | null;
     patientId: string;
@@ -2043,8 +2149,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient Advanced Directive Form
-  */
+   * Patient Advanced Directive Form
+   */
   interface IPatientAdvancedDirectiveForm {
     patientAdvancedDirectiveFormId: string | null;
     patientId: string;
@@ -2055,8 +2161,8 @@ declare module 'schema' {
   }
 
   /**
-    Patient Scratch Pad
-  */
+   * Patient Scratch Pad
+   */
   interface IPatientScratchPad {
     id: string;
     patientId: string;
@@ -2065,494 +2171,616 @@ declare module 'schema' {
   }
 
   interface IRootMutationType {
+
     /**
-    Create a new user
-  */
+     * Create a new user
+     */
     userCreate: IUser | null;
+
     /**
-    Login user
-  */
+     * Login user
+     */
     userLogin: IUserWithAuthToken | null;
+
     /**
-    Edit user - role
-  */
+     * Edit user - role
+     */
     userEditRole: IUser | null;
+
     /**
-    Edit user - permissions
-  */
+     * Edit user - permissions
+     */
     userEditPermissions: IUser | null;
+
     /**
-    Delete user
-  */
+     * Delete user
+     */
     userDelete: IUser | null;
+
     /**
-    Edit current user
-  */
+     * Edit current user
+     */
     currentUserEdit: IUser | null;
+
     /**
-    Create a new clinic
-  */
+     * Create a new clinic
+     */
     clinicCreate: IClinic | null;
+
     /**
-    Add user to careTeam
-  */
+     * Add user to careTeam
+     */
     careTeamAddUser: IUser | null;
+
     /**
-    Remove user from careTeam
-  */
+     * Remove user from careTeam
+     */
     careTeamRemoveUser: Array<IUser> | null;
+
     /**
-    Reassign a user on a careTeam
-  */
+     * Reassign a user on a careTeam
+     */
     careTeamReassignUser: IUser | null;
+
     /**
-    Add multiple patients to careTeam
-  */
+     * Add multiple patients to careTeam
+     */
     careTeamAssignPatients: IUserWithCount | null;
+
     /**
-    Create an address
-  */
+     * Create an address
+     */
     addressCreate: IAddress | null;
+
     /**
-    Create an address for a Patient
-  */
+     * Create an address for a Patient
+     */
     addressCreateForPatient: IAddress | null;
+
     /**
-    Edit an address
-  */
+     * Edit an address
+     */
     addressEdit: IAddress | null;
+
     /**
-    Create a phone number for a Patient
-  */
+     * Create a phone number for a Patient
+     */
     phoneCreateForPatient: IPhone | null;
+
     /**
-    Create a phone number
-  */
+     * Create a phone number
+     */
     phoneCreate: IPhone | null;
+
     /**
-    Edit a phone number
-  */
+     * Edit a phone number
+     */
     phoneEdit: IPhone | null;
+
     /**
-    Create an email for a Patient
-  */
+     * Create an email for a Patient
+     */
     emailCreateForPatient: IEmail | null;
+
     /**
-    Create an email
-  */
+     * Create an email
+     */
     emailCreate: IEmail | null;
+
     /**
-    Edit an email
-  */
+     * Edit an email
+     */
     emailEdit: IEmail | null;
+
     /**
-    Edit fields on patient stored in the db
-  */
+     * Edit fields on patient stored in the db
+     */
     patientEdit: IPatient | null;
+
     /**
-    mark core identity verified on patient stored in the db
-  */
+     * mark core identity verified on patient stored in the db
+     */
     patientCoreIdentityVerify: IPatient | null;
+
     /**
-    Edit fields on patient info stored in the db
-  */
+     * Edit fields on patient info stored in the db
+     */
     patientInfoEdit: IPatientInfo | null;
+
     /**
-    Create patient contact
-  */
+     * Create patient contact
+     */
     patientContactCreate: IPatientContact | null;
+
     /**
-    Edit fields on patient contact stored in the db
-  */
+     * Edit fields on patient contact stored in the db
+     */
     patientContactEdit: IPatientContact | null;
+
     /**
-    Edit a patient need to know
-  */
+     * Edit a patient need to know
+     */
     patientNeedToKnowEdit: IPatientNeedToKnow | null;
+
     /**
-    Create a task
-  */
+     * Create a task
+     */
     taskCreate: ITask | null;
+
     /**
-    Delete a task
-  */
+     * Delete a task
+     */
     taskDelete: ITask | null;
+
     /**
-    Edit a task
-  */
+     * Edit a task
+     */
     taskEdit: ITask | null;
+
     /**
-    Complete a task
-  */
+     * Complete a task
+     */
     taskComplete: ITask | null;
+
     /**
-    Uncomplete a task
-  */
+     * Uncomplete a task
+     */
     taskUncomplete: ITask | null;
+
     /**
-    Add user to task followers
-  */
+     * Add user to task followers
+     */
     taskUserFollow: ITask | null;
+
     /**
-    Remove user from task followers
-  */
+     * Remove user from task followers
+     */
     taskUserUnfollow: ITask | null;
+
     /**
-    Create a task
-  */
+     * Create a task
+     */
     taskCommentCreate: ITaskComment | null;
+
     /**
-    Edit a task
-  */
+     * Edit a task
+     */
     taskCommentEdit: ITaskComment | null;
+
     /**
-    Delete a task
-  */
+     * Delete a task
+     */
     taskCommentDelete: ITaskComment | null;
+
     /**
-    Create a RiskAreaGroup
-  */
+     * Create a RiskAreaGroup
+     */
     riskAreaGroupCreate: IRiskAreaGroup | null;
+
     /**
-    Edit a RiskAreaGroup
-  */
+     * Edit a RiskAreaGroup
+     */
     riskAreaGroupEdit: IRiskAreaGroup | null;
+
     /**
-    Delete a RiskAreaGroup
-  */
+     * Delete a RiskAreaGroup
+     */
     riskAreaGroupDelete: IRiskAreaGroup | null;
+
     /**
-    Create a RiskArea
-  */
+     * Create a RiskArea
+     */
     riskAreaCreate: IRiskArea | null;
+
     /**
-    Edit a RiskArea
-  */
+     * Edit a RiskArea
+     */
     riskAreaEdit: IRiskArea | null;
+
     /**
-    Deletes a RiskArea
-  */
+     * Deletes a RiskArea
+     */
     riskAreaDelete: IRiskArea | null;
+
     /**
-    Create a Question
-  */
+     * Create a Question
+     */
     questionCreate: IQuestion | null;
+
     /**
-    Edit a Question
-  */
+     * Edit a Question
+     */
     questionEdit: IQuestion | null;
+
     /**
-    Delete a question
-  */
+     * Delete a question
+     */
     questionDelete: IQuestion | null;
+
     /**
-    Create an Answer
-  */
+     * Create an Answer
+     */
     answerCreate: IAnswer | null;
+
     /**
-    Edit an Answer
-  */
+     * Edit an Answer
+     */
     answerEdit: IAnswer | null;
+
     /**
-    Deletes an Answer
-  */
+     * Deletes an Answer
+     */
     answerDelete: IAnswer | null;
+
     /**
-    Create a patient answer
-  */
+     * Create a patient answer
+     */
     patientAnswersCreate: Array<IPatientAnswer> | null;
+
     /**
-    Edit a patient answer
-  */
+     * Edit a patient answer
+     */
     patientAnswerEdit: IPatientAnswer | null;
+
     /**
-    Deletes a patient Answer
-  */
+     * Deletes a patient Answer
+     */
     patientAnswerDelete: IPatientAnswer | null;
+
     /**
-    Create a QuestionCondition
-  */
+     * Create a QuestionCondition
+     */
     questionConditionCreate: IQuestionCondition | null;
+
     /**
-    Edit a QuestionCondition
-  */
+     * Edit a QuestionCondition
+     */
     questionConditionEdit: IQuestionCondition | null;
+
     /**
-    Deletes a QuestionCondition
-  */
+     * Deletes a QuestionCondition
+     */
     questionConditionDelete: IQuestionCondition | null;
+
     /**
-    Dismisses (marks as seen) an EventNotification
-  */
+     * Dismisses (marks as seen) an EventNotification
+     */
     eventNotificationDismiss: IEventNotification | null;
+
     /**
-    Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
-  */
+     * Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
+     */
     eventNotificationsForTaskDismiss: Array<IEventNotification> | null;
+
     /**
-    Create a concern
-  */
+     * Create a concern
+     */
     concernCreate: IConcern | null;
+
     /**
-    Edit a concern
-  */
+     * Edit a concern
+     */
     concernEdit: IConcern | null;
+
     /**
-    Deletes a concern
-  */
+     * Deletes a concern
+     */
     concernDelete: IConcern | null;
+
     /**
-    Add a diagnosis code to a concern
-  */
+     * Add a diagnosis code to a concern
+     */
     concernAddDiagnosisCode: IConcern | null;
+
     /**
-    Remove a diagnosis code from a concern
-  */
+     * Remove a diagnosis code from a concern
+     */
     concernRemoveDiagnosisCode: IConcern | null;
+
     /**
-    suggest a concern for an answer
-  */
+     * suggest a concern for an answer
+     */
     concernSuggestionCreate: Array<IConcern> | null;
+
     /**
-    delete suggestion a concern for an answer
-  */
+     * delete suggestion a concern for an answer
+     */
     concernSuggestionDelete: Array<IConcern> | null;
+
     /**
-    goal suggestion template create
-  */
+     * goal suggestion template create
+     */
     goalSuggestionTemplateCreate: IGoalSuggestionTemplate | null;
+
     /**
-    Edit a goal suggestion template
-  */
+     * Edit a goal suggestion template
+     */
     goalSuggestionTemplateEdit: IGoalSuggestionTemplate | null;
+
     /**
-    Deletes a goal suggestion template
-  */
+     * Deletes a goal suggestion template
+     */
     goalSuggestionTemplateDelete: IGoalSuggestionTemplate | null;
+
     /**
-    Suggest a goal suggestion template for an answer
-  */
+     * Suggest a goal suggestion template for an answer
+     */
     goalSuggestionCreate: Array<IGoalSuggestionTemplate> | null;
+
     /**
-    unsuggest a goal suggestion template for an answer
-  */
+     * unsuggest a goal suggestion template for an answer
+     */
     goalSuggestionDelete: Array<IGoalSuggestionTemplate> | null;
+
     /**
-    task template create
-  */
+     * task template create
+     */
     taskTemplateCreate: ITaskTemplate | null;
+
     /**
-    Edit a task template
-  */
+     * Edit a task template
+     */
     taskTemplateEdit: ITaskTemplate | null;
+
     /**
-    Deletes a task template
-  */
+     * Deletes a task template
+     */
     taskTemplateDelete: ITaskTemplate | null;
+
     /**
-    Suggest a task template for an answer
-  */
+     * Suggest a task template for an answer
+     */
     taskSuggestionCreate: Array<ITaskTemplate> | null;
+
     /**
-    unsuggest a task template for an answer
-  */
+     * unsuggest a task template for an answer
+     */
     taskSuggestionDelete: Array<ITaskTemplate> | null;
+
     /**
-    patient task suggestion accept
-  */
+     * patient task suggestion accept
+     */
     patientTaskSuggestionAccept: IPatientTaskSuggestion | null;
+
     /**
-    patient task suggestion dismiss
-  */
+     * patient task suggestion dismiss
+     */
     patientTaskSuggestionDismiss: IPatientTaskSuggestion | null;
+
     /**
-    patient goal create
-  */
+     * patient goal create
+     */
     patientGoalCreate: IPatientGoal | null;
+
     /**
-    patient goal edit
-  */
+     * patient goal edit
+     */
     patientGoalEdit: IPatientGoal | null;
+
     /**
-    patient goal delete
-  */
+     * patient goal delete
+     */
     patientGoalDelete: IPatientGoal | null;
+
     /**
-    patient concern create
-  */
+     * patient concern create
+     */
     patientConcernCreate: IPatientConcern | null;
+
     /**
-    patient concern edit
-  */
+     * patient concern edit
+     */
     patientConcernEdit: IPatientConcern | null;
+
     /**
-    patient concern bulk edit
-  */
+     * patient concern bulk edit
+     */
     patientConcernBulkEdit: Array<IPatientConcern> | null;
+
     /**
-    patient concern delete
-  */
+     * patient concern delete
+     */
     patientConcernDelete: IPatientConcern | null;
+
     /**
-    care plan suggestion accept
-  */
+     * care plan suggestion accept
+     */
     carePlanSuggestionAccept: ICarePlanSuggestion | null;
+
     /**
-    care plan suggestion dismiss
-  */
+     * care plan suggestion dismiss
+     */
     carePlanSuggestionDismiss: ICarePlanSuggestion | null;
+
     /**
-    screening tool create
-  */
+     * screening tool create
+     */
     screeningToolCreate: IScreeningTool | null;
+
     /**
-    screening tool edit
-  */
+     * screening tool edit
+     */
     screeningToolEdit: IScreeningTool | null;
+
     /**
-    screening tool delete
-  */
+     * screening tool delete
+     */
     screeningToolDelete: IScreeningTool | null;
+
     /**
-    screening tool score range create
-  */
+     * screening tool score range create
+     */
     screeningToolScoreRangeCreate: IScreeningToolScoreRange | null;
+
     /**
-    screening tool score range edit
-  */
+     * screening tool score range edit
+     */
     screeningToolScoreRangeEdit: IScreeningToolScoreRange | null;
+
     /**
-    screening tool score range delete
-  */
+     * screening tool score range delete
+     */
     screeningToolScoreRangeDelete: IScreeningToolScoreRange | null;
+
     /**
-    patient screening tool submission create
-  */
+     * patient screening tool submission create
+     */
     patientScreeningToolSubmissionCreate: IPatientScreeningToolSubmission | null;
+
     /**
-    patient screening tool submission score
-  */
+     * patient screening tool submission score
+     */
     patientScreeningToolSubmissionScore: IPatientScreeningToolSubmission | null;
+
     /**
-    create a progress note template
-  */
+     * create a progress note template
+     */
     progressNoteTemplateCreate: IProgressNoteTemplate | null;
+
     /**
-    edits a progress note template
-  */
+     * edits a progress note template
+     */
     progressNoteTemplateEdit: IProgressNoteTemplate | null;
+
     /**
-    deletes a progress note template
-  */
+     * deletes a progress note template
+     */
     progressNoteTemplateDelete: IProgressNoteTemplate | null;
+
     /**
-    creates a progress note
-  */
+     * creates a progress note
+     */
     progressNoteCreate: IProgressNote | null;
+
     /**
-    completes a progress note
-  */
+     * completes a progress note
+     */
     progressNoteComplete: IProgressNote | null;
+
     /**
-    edits a progress note
-  */
+     * edits a progress note
+     */
     progressNoteEdit: IProgressNote | null;
+
     /**
-    add or edit supervisor notes
-  */
+     * add or edit supervisor notes
+     */
     progressNoteAddSupervisorNotes: IProgressNote | null;
+
     /**
-    closes out supervisor review
-  */
+     * closes out supervisor review
+     */
     progressNoteCompleteSupervisorReview: IProgressNote | null;
+
     /**
-    creates a quick call
-  */
+     * creates a quick call
+     */
     quickCallCreate: IQuickCall | null;
+
     /**
-    Create a computed field
-  */
+     * Create a computed field
+     */
     computedFieldCreate: IComputedField | null;
+
     /**
-    Delete a computed field
-  */
+     * Delete a computed field
+     */
     computedFieldDelete: IComputedField | null;
+
     /**
-    risk area assessment submission create
-  */
+     * risk area assessment submission create
+     */
     riskAreaAssessmentSubmissionCreate: IRiskAreaAssessmentSubmission | null;
+
     /**
-    risk area assessment submission complete
-  */
+     * risk area assessment submission complete
+     */
     riskAreaAssessmentSubmissionComplete: IRiskAreaAssessmentSubmission | null;
     computedFieldFlagCreate: IComputedFieldFlag | null;
+
     /**
-    Create a PatientList
-  */
+     * Create a PatientList
+     */
     patientListCreate: IPatientList | null;
+
     /**
-    Edit a PatientList
-  */
+     * Edit a PatientList
+     */
     patientListEdit: IPatientList | null;
+
     /**
-    Delete a PatientList
-  */
+     * Delete a PatientList
+     */
     patientListDelete: IPatientList | null;
+
     /**
-    Create a CBO
-  */
+     * Create a CBO
+     */
     CBOCreate: ICBO | null;
+
     /**
-    Edit a CBO
-  */
+     * Edit a CBO
+     */
     CBOEdit: ICBO | null;
+
     /**
-    Delete a CBO
-  */
+     * Delete a CBO
+     */
     CBODelete: ICBO | null;
+
     /**
-    Create a CBO Referral
-  */
+     * Create a CBO Referral
+     */
     CBOReferralCreate: ICBOReferral | null;
+
     /**
-    Edit a CBO Referral
-  */
+     * Edit a CBO Referral
+     */
     CBOReferralEdit: ICBOReferral | null;
+
     /**
-    Jwt token to view a PDF
-  */
+     * Jwt token to view a PDF
+     */
     JwtForPdfCreate: IJwtForPdf;
+
     /**
-    creates a patient data flag
-  */
+     * creates a patient data flag
+     */
     patientDataFlagCreate: IPatientDataFlag | null;
+
     /**
-    creates a patient glass break
-  */
+     * creates a patient glass break
+     */
     patientGlassBreakCreate: IPatientGlassBreak | null;
+
     /**
-    creates a progress note glass break
-  */
+     * creates a progress note glass break
+     */
     progressNoteGlassBreakCreate: IProgressNoteGlassBreak | null;
+
     /**
-    creates a patient consent form
-  */
+     * creates a patient consent form
+     */
     patientConsentFormCreate: IPatientConsentForm | null;
+
     /**
-    deletes a patient consent form
-  */
+     * deletes a patient consent form
+     */
     patientConsentFormDelete: IPatientConsentForm | null;
+
     /**
-    creates a patient advanced directive form
-  */
+     * creates a patient advanced directive form
+     */
     patientAdvancedDirectiveFormCreate: IPatientAdvancedDirectiveForm | null;
+
     /**
-    deletes a patient advanced directive form
-  */
+     * deletes a patient advanced directive form
+     */
     patientAdvancedDirectiveFormDelete: IPatientAdvancedDirectiveForm | null;
+
     /**
-    edits a patient scratch pad
-  */
+     * edits a patient scratch pad
+     */
     patientScratchPadEdit: IPatientScratchPad | null;
   }
   interface IUserCreateOnRootMutationTypeArguments {
@@ -2926,57 +3154,58 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a user
-  */
+   * params for creating a user
+   */
   interface IUserCreateInput {
     email: string;
     homeClinicId: string;
   }
 
   /**
-    params for logging in a user
-  */
+   * params for logging in a user
+   */
   interface IUserLoginInput {
     googleAuthCode: string;
   }
 
   /**
-    The user account with an optional auth token
-  */
+   * The user account with an optional auth token
+   */
   interface IUserWithAuthToken {
     user: IUser;
+
     /**
-    The auth token to allow for quick login. JWT passed back in via headers for further requests
-  */
+     * The auth token to allow for quick login. JWT passed back in via headers for further requests
+     */
     authToken: string | null;
   }
 
   /**
-    params for editing a user - only supports user role
-  */
+   * params for editing a user - only supports user role
+   */
   interface IUserEditRoleInput {
     userRole: string;
     email: string;
   }
 
   /**
-    params for editing a user - only supports permissions
-  */
+   * params for editing a user - only supports permissions
+   */
   interface IUserEditPermissionsInput {
     permissions: IPermissionsEnum;
     email: string;
   }
 
   /**
-    params for deleting a user
-  */
+   * params for deleting a user
+   */
   interface IUserDeleteInput {
     email: string;
   }
 
   /**
-    params for editing a current user
-  */
+   * params for editing a current user
+   */
   interface ICurrentUserEditInput {
     locale?: string | null;
     phone?: string | null;
@@ -2985,16 +3214,16 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a clinic
-  */
+   * params for creating a clinic
+   */
   interface IClinicCreateInput {
     departmentId: number;
     name: string;
   }
 
   /**
-    params for adding or removing patient from care team
-  */
+   * params for adding or removing patient from care team
+   */
   interface ICareTeamInput {
     userId: string;
     patientId: string;
@@ -3007,16 +3236,16 @@ declare module 'schema' {
   }
 
   /**
-    params for adding multiple patients to a user's care team
-  */
+   * params for adding multiple patients to a user's care team
+   */
   interface ICareTeamAssignInput {
     userId: string;
     patientIds: Array<string>;
   }
 
   /**
-    params for creating an address in the db
-  */
+   * params for creating an address in the db
+   */
   interface IAddressCreateInput {
     zip?: string | null;
     street1?: string | null;
@@ -3027,8 +3256,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating and address for a patient in the db
-  */
+   * params for creating and address for a patient in the db
+   */
   interface IAddressCreateForPatientInput {
     patientId: string;
     zip?: string | null;
@@ -3041,8 +3270,8 @@ declare module 'schema' {
   }
 
   /**
-    Editable fields on an address
-  */
+   * Editable fields on an address
+   */
   interface IAddressEditInput {
     addressId: string;
     patientId: string;
@@ -3055,8 +3284,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a phone for a patient in the db
-  */
+   * params for creating a phone for a patient in the db
+   */
   interface IPhoneCreateForPatientInput {
     patientId: string;
     phoneNumber: string;
@@ -3066,8 +3295,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a phone
-  */
+   * params for creating a phone
+   */
   interface IPhoneCreateInput {
     phoneNumber: string;
     type?: IPhoneTypeOptionsEnum | null;
@@ -3075,8 +3304,8 @@ declare module 'schema' {
   }
 
   /**
-    Editable fields on a phone
-  */
+   * Editable fields on a phone
+   */
   interface IPhoneEditInput {
     phoneId: string;
     patientId: string;
@@ -3086,8 +3315,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating and email for a patient in the db
-  */
+   * params for creating and email for a patient in the db
+   */
   interface IEmailCreateForPatientInput {
     patientId: string;
     emailAddress: string;
@@ -3096,16 +3325,16 @@ declare module 'schema' {
   }
 
   /**
-    params for creating an email
-  */
+   * params for creating an email
+   */
   interface IEmailCreateInput {
     emailAddress: string;
     description?: string | null;
   }
 
   /**
-    Editable fields on an email
-  */
+   * Editable fields on an email
+   */
   interface IEmailEditInput {
     emailId: string;
     patientId: string;
@@ -3114,8 +3343,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a patient in the db
-  */
+   * params for editing a patient in the db
+   */
   interface IPatientEditInput {
     patientId: string;
     firstName?: string | null;
@@ -3125,15 +3354,15 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a patient in the db
-  */
+   * params for editing a patient in the db
+   */
   interface IPatientCoreIdentityVerifyInput {
     patientId: string;
   }
 
   /**
-    params for editing a patient in the db
-  */
+   * params for editing a patient in the db
+   */
   interface IPatientInfoEditInput {
     patientInfoId: string;
     preferredName?: string | null;
@@ -3151,8 +3380,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a patient contact in the db
-  */
+   * params for creating a patient contact in the db
+   */
   interface IPatientContactCreateInput {
     patientId: string;
     relationToPatient: string;
@@ -3168,8 +3397,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a patient contact in the db
-  */
+   * params for editing a patient contact in the db
+   */
   interface IPatientContactEditInput {
     patientContactId: string;
     relationToPatient?: string | null;
@@ -3184,16 +3413,16 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a patient need to know
-  */
+   * params for editing a patient need to know
+   */
   interface IPatientNeedToKnowEditInput {
     patientId: string;
     text: string;
   }
 
   /**
-    params for creating a task
-  */
+   * params for creating a task
+   */
   interface ITaskCreateInput {
     title: string;
     description?: string | null;
@@ -3206,15 +3435,15 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a task
-  */
+   * params for deleting a task
+   */
   interface ITaskDeleteInput {
     taskId: string;
   }
 
   /**
-    params for creating a task
-  */
+   * params for creating a task
+   */
   interface ITaskEditInput {
     taskId: string;
     title?: string | null;
@@ -3226,46 +3455,46 @@ declare module 'schema' {
   }
 
   /**
-    params for completing a task
-  */
+   * params for completing a task
+   */
   interface ITaskCompleteInput {
     taskId: string;
   }
 
   /**
-    params for adding user to a task's followers
-  */
+   * params for adding user to a task's followers
+   */
   interface ITaskFollowInput {
     userId: string;
     taskId: string;
   }
 
   /**
-    params for creating a task comment
-  */
+   * params for creating a task comment
+   */
   interface ITaskCommentCreateInput {
     taskId: string;
     body: string;
   }
 
   /**
-    params for editing a task comment
-  */
+   * params for editing a task comment
+   */
   interface ITaskCommentEditInput {
     taskCommentId: string;
     body: string;
   }
 
   /**
-    params for deleting a task comment
-  */
+   * params for deleting a task comment
+   */
   interface ITaskCommentDeleteInput {
     taskCommentId: string;
   }
 
   /**
-    params for creating a risk area group
-  */
+   * params for creating a risk area group
+   */
   interface IRiskAreaGroupCreateInput {
     title: string;
     shortTitle: string;
@@ -3275,8 +3504,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a risk area group
-  */
+   * params for editing a risk area group
+   */
   interface IRiskAreaGroupEditInput {
     riskAreaGroupId: string;
     title?: string | null;
@@ -3287,8 +3516,8 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a risk area group
-  */
+   * params for deleting a risk area group
+   */
   interface IRiskAreaGroupDeleteInput {
     riskAreaGroupId: string;
   }
@@ -3399,8 +3628,8 @@ declare module 'schema' {
   }
 
   /**
-    QuestionCondition edit input - for validation, need to edit question and answer at the same time
-  */
+   * QuestionCondition edit input - for validation, need to edit question and answer at the same time
+   */
   interface IQuestionConditionEditInput {
     questionConditionId: string;
     questionId: string;
@@ -3412,8 +3641,8 @@ declare module 'schema' {
   }
 
   /**
-    EventNotification edit input
-  */
+   * EventNotification edit input
+   */
   interface IEventNotificationEditInput {
     eventNotificationId: string;
   }
@@ -3696,8 +3925,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a computed field flag
-  */
+   * params for creating a computed field flag
+   */
   interface IComputedFieldFlagCreateInput {
     patientAnswerId: string;
     reason?: string | null;
@@ -3711,8 +3940,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a patient list
-  */
+   * params for creating a patient list
+   */
   interface IPatientListCreateInput {
     title: string;
     answerId: string;
@@ -3720,8 +3949,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a patient list
-  */
+   * params for editing a patient list
+   */
   interface IPatientListEditInput {
     patientListId: string;
     title?: string | null;
@@ -3730,15 +3959,15 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a patient list
-  */
+   * params for deleting a patient list
+   */
   interface IPatientListDeleteInput {
     patientListId: string;
   }
 
   /**
-    params for creating a CBO
-  */
+   * params for creating a CBO
+   */
   interface ICBOCreateInput {
     name: string;
     categoryId: string;
@@ -3752,8 +3981,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a CBO
-  */
+   * params for editing a CBO
+   */
   interface ICBOEditInput {
     CBOId: string;
     name?: string | null;
@@ -3768,15 +3997,15 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a CBO
-  */
+   * params for deleting a CBO
+   */
   interface ICBODeleteInput {
     CBOId: string;
   }
 
   /**
-    params for creating a CBO referral
-  */
+   * params for creating a CBO referral
+   */
   interface ICBOReferralCreateInput {
     categoryId: string;
     CBOId?: string | null;
@@ -3786,8 +4015,8 @@ declare module 'schema' {
   }
 
   /**
-    params for editing a CBO referral
-  */
+   * params for editing a CBO referral
+   */
   interface ICBOReferralEditInput {
     CBOReferralId: string;
     taskId: string;
@@ -3801,15 +4030,15 @@ declare module 'schema' {
   }
 
   /**
-    check patient id for permissioning generating JWT for PDF
-  */
+   * check patient id for permissioning generating JWT for PDF
+   */
   interface IJwtForPdfCreateInput {
     patientId: string;
   }
 
   /**
-    JWT token for PDF viewing
-  */
+   * JWT token for PDF viewing
+   */
   interface IJwtForPdf {
     authToken: string;
   }
@@ -3822,8 +4051,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a patient glass break
-  */
+   * params for creating a patient glass break
+   */
   interface IPatientGlassBreakCreateInput {
     patientId: string;
     reason: string;
@@ -3831,8 +4060,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a progress note glass break
-  */
+   * params for creating a progress note glass break
+   */
   interface IProgressNoteGlassBreakCreateInput {
     progressNoteId: string;
     reason: string;
@@ -3840,8 +4069,8 @@ declare module 'schema' {
   }
 
   /**
-    params for creating a patient consent form
-  */
+   * params for creating a patient consent form
+   */
   interface IPatientConsentFormCreateInput {
     patientId: string;
     formId: string;
@@ -3849,15 +4078,15 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a patient consent form
-  */
+   * params for deleting a patient consent form
+   */
   interface IPatientConsentFormDeleteInput {
     patientConsentFormId: string;
   }
 
   /**
-    params for creating a patient advanced directive form
-  */
+   * params for creating a patient advanced directive form
+   */
   interface IPatientAdvancedDirectiveFormCreateInput {
     patientId: string;
     formId: string;
@@ -3865,39 +4094,39 @@ declare module 'schema' {
   }
 
   /**
-    params for deleting a patient advanced directive form
-  */
+   * params for deleting a patient advanced directive form
+   */
   interface IPatientAdvancedDirectiveFormDeleteInput {
     patientAdvancedDirectiveFormId: string;
   }
 
   /**
-    params for editing patinet scratch pad
-  */
+   * params for editing patinet scratch pad
+   */
   interface IPatientScratchPadEditInput {
     patientScratchPadId: string;
     body: string;
   }
 
   /**
-    Patient node
-  */
+   * Patient node
+   */
   interface IPatientNode {
     node: IPatient | null;
     cursor: string;
   }
 
   /**
-    Patient edges
-  */
+   * Patient edges
+   */
   interface IPatientEdges {
     edges: Array<IPatientNode>;
     pageInfo: IPageInfo;
   }
 
   /**
-    PatientDiagnosis
-  */
+   * PatientDiagnosis
+   */
   interface IPatientDiagnosis {
     code: string;
     codeSystem: string;
@@ -3915,8 +4144,8 @@ declare module 'schema' {
   }
 
   /**
-    ConcernDiagnosisCode
-  */
+   * ConcernDiagnosisCode
+   */
   interface IConcernDiagnosisCode {
     id: string;
     concernId: string;

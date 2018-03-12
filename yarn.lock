@@ -66,35 +66,33 @@
     is "^3.2.0"
     lodash.has "^4.5.2"
 
-"@gql2ts/from-query@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.5.0.tgz#5f57e9570419665f342645d9cc56fe05edba7074"
+"@gql2ts/from-query@^1.6.0-2":
+  version "1.6.0-2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.6.0-2.tgz#01ca1e7cb6f38a296ba42450e4f9f1b23b518fa1"
   dependencies:
-    "@gql2ts/language-typescript" "^1.5.0"
-    "@gql2ts/util" "^1.5.0"
+    "@gql2ts/language-typescript" "^1.6.0-2"
+    "@gql2ts/util" "^1.6.0-2"
+
+"@gql2ts/from-schema@^1.6.0-2":
+  version "1.6.0-2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.6.0-2.tgz#a03129de768b2239fcae8351634be87466bd28af"
+  dependencies:
+    "@gql2ts/language-typescript" "^1.6.0-2"
+    "@gql2ts/util" "^1.6.0-2"
+    dedent "^0.7.0"
     graphql ">= 0.10 <1.0.0"
 
-"@gql2ts/from-schema@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.5.0.tgz#ce45d55807db51e3299bee15bb84669109f01f5c"
+"@gql2ts/language-typescript@^1.6.0-2":
+  version "1.6.0-2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.6.0-2.tgz#a7decbccbe6e2b14966fc8f94dd99622a479788b"
   dependencies:
-    "@gql2ts/language-typescript" "^1.5.0"
-    "@gql2ts/util" "^1.5.0"
-    graphql ">= 0.10 <1.0.0"
-
-"@gql2ts/language-typescript@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.5.0.tgz#b85ac547dd87244dd4dc558cdf7782a36b46c7ab"
-  dependencies:
-    "@gql2ts/util" "^1.5.0"
+    "@gql2ts/util" "^1.6.0-2"
     humps "^2.0.0"
     typescript "^2.2.2"
 
-"@gql2ts/util@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.5.0.tgz#03146a58efcb255c32aa7b640fa2ed3c42e4adba"
-  dependencies:
-    graphql ">= 0.10 <1.0.0"
+"@gql2ts/util@^1.6.0-2":
+  version "1.6.0-2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.6.0-2.tgz#09939a284ee24456d8e788c1bf653a0ef8462f36"
 
 "@react-pdf/core@0.7.5", "@react-pdf/core@^0.7.5":
   version "0.7.5"
@@ -3114,6 +3112,10 @@ decompress-response@^3.2.0, decompress-response@^3.3.0:
   dependencies:
     mimic-response "^1.0.0"
 
+dedent@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
+
 deep-diff@^0.3.5:
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
@@ -4575,14 +4577,15 @@ got@^8.2.0:
     url-parse-lax "^3.0.0"
     url-to-options "^1.0.1"
 
-gql2ts@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.5.0.tgz#3954cc5dd25615118263d951fac6d484dde9f74e"
+gql2ts@1.6.0-2:
+  version "1.6.0-2"
+  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.6.0-2.tgz#ce13465f6b1f20bbad43d94e8f4f7a51a553db0d"
   dependencies:
-    "@gql2ts/from-query" "^1.5.0"
-    "@gql2ts/from-schema" "^1.5.0"
-    "@gql2ts/util" "^1.5.0"
+    "@gql2ts/from-query" "^1.6.0-2"
+    "@gql2ts/from-schema" "^1.6.0-2"
+    "@gql2ts/util" "^1.6.0-2"
     commander "^2.9.0"
+    graphql ">= 0.10 <1.0.0"
 
 graceful-fs@4.1.4:
   version "4.1.4"

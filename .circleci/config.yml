@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
     steps:
       - checkout
       - restore_cache:
@@ -26,7 +26,7 @@ jobs:
   test_frontend:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
     steps:
       - checkout
       - restore_cache:
@@ -44,7 +44,7 @@ jobs:
   test_api:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
       - image: postgres:10
         environment:
           POSTGRES_DB: commons_test
@@ -70,7 +70,7 @@ jobs:
   test_models:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
       - image: postgres:10
         environment:
           POSTGRES_DB: commons_test
@@ -96,7 +96,7 @@ jobs:
   deploy_staging:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
     steps:
       - checkout
       - run:
@@ -112,7 +112,7 @@ jobs:
   deploy_production:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node:8.10
     steps:
       - checkout
       - run:

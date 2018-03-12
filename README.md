@@ -26,7 +26,7 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 ### Installation
 
-* Install [nvm][] and node 8.9
+* Install [nvm][] and node 8.10
 * Install [yarn][]
 * Create a `.env` file in the project root (see: [.env][])
 * Install [Zenhub][]

@@ -26,6 +26,18 @@
   }
 }
 
+.select.blue:valid {
+  color: var(--blue-color);
+}
+
+.select.blue.disabled {
+  color: var(--black-color);
+}
+
+.select.blue.select.noValue {
+  color: var(--light-gray-font-color);
+}
+
 .large {
   height: var(--input-height);
   font-size: var(--medium-font-size);

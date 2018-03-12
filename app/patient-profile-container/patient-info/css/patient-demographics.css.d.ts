@@ -8,3 +8,4 @@ export const short: string;
 export const deleteLink: string;
 export const capitalize: string;
 export const addButton: string;
+export const unsaved: string;

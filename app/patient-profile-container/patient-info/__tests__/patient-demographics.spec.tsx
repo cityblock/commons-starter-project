@@ -28,8 +28,6 @@ describe('Render Patient Demographics Component', () => {
 
   it('renders basic info', () => {
     expect(wrapper.find(BasicInfo)).toHaveLength(1);
-    expect(wrapper.find(BasicInfo).props().patientInformation).toBe(basicInfo);
-    expect(wrapper.find(BasicInfo).props().onChange).toBe(onChange);
   });
 
   it('renders core identity', () => {

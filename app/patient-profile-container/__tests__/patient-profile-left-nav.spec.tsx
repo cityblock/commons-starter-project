@@ -9,11 +9,9 @@ import PatientProfileLeftNav from '../patient-profile-left-nav';
 
 describe('Patient Profile Left Navigation', () => {
   const glassBreakId = 'nymeria';
-  const wrapper = shallow(<PatientProfileLeftNav
-      patient={patient}
-      patientId={patient.id}
-      glassBreakId={glassBreakId}
-    />);
+  const wrapper = shallow(
+    <PatientProfileLeftNav patient={patient} patientId={patient.id} glassBreakId={glassBreakId} />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('.leftPane').length).toBe(1);

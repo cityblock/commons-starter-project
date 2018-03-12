@@ -82,3 +82,7 @@
   height: 40px;
   margin-bottom: var(--small-gutter);
 }
+
+.unsaved {
+  color: var(--blue-color);
+}

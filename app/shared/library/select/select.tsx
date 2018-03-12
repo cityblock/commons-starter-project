@@ -3,6 +3,8 @@ import * as React from 'react';
 import Option from '../option/option';
 import * as styles from './css/select.css';
 
+export type Color = 'black' | 'blue';
+
 interface IProps {
   value: string;
   onChange: (e?: any) => void;
@@ -16,6 +18,7 @@ interface IProps {
   required?: boolean;
   large?: boolean; // makes select 50px tall
   isUnselectable?: boolean;
+  color?: Color; // default is black
 }
 
 const Select: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -31,6 +34,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     options,
     isUnselectable,
     hasPlaceholder,
+    color,
   } = props;
 
   const selectStyles = classNames(
@@ -40,6 +44,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.noValue]: !value,
       [styles.disabled]: !!disabled,
       [styles.empty]: !!disabled && !value,
+      [styles.blue]: color && color === 'blue',
     },
     className,
   );

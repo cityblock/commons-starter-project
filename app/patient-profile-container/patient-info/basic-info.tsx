@@ -2,12 +2,19 @@ import * as classNames from 'classnames';
 import * as langs from 'langs';
 import { values } from 'lodash';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { getPatientQuery, BirthSexOptions, Gender } from '../../graphql/types';
+import * as computedPatientStatusQuery from '../../graphql/queries/get-patient-computed-patient-status.graphql';
+import {
+  getPatientComputedPatientStatusQuery,
+  getPatientQuery,
+  BirthSexOptions,
+  Gender,
+} from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Option from '../../shared/library/option/option';
-import Select from '../../shared/library/select/select';
+import Select, { Color } from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
 import AddressInfo from './address-info/address-info';
 import * as styles from './css/patient-demographics.css';
@@ -31,8 +38,16 @@ interface IProps {
   className?: string;
 }
 
-export default class BasicInfo extends React.Component<IProps> {
-  constructor(props: IProps) {
+interface IGraphqlProps {
+  loading?: boolean;
+  error?: string | null;
+  computedPatientStatus?: getPatientComputedPatientStatusQuery['patientComputedPatientStatus'];
+}
+
+type allProps = IGraphqlProps & IProps;
+
+export class BasicInfo extends React.Component<allProps> {
+  constructor(props: allProps) {
     super(props);
     this.state = { isModalVisible: false };
   }
@@ -49,7 +64,7 @@ export default class BasicInfo extends React.Component<IProps> {
     onChange({ [name]: checked });
   };
 
-  renderLanguageSelect() {
+  renderLanguageSelect(color?: Color) {
     const { language } = this.props.patientInformation;
     const languageOptions = langs
       .all()
@@ -64,6 +79,7 @@ export default class BasicInfo extends React.Component<IProps> {
         onChange={this.handleValueChange}
         hasPlaceholder={true}
         large={true}
+        color={color}
       >
         {languageOptions}
       </Select>
@@ -71,7 +87,16 @@ export default class BasicInfo extends React.Component<IProps> {
   }
 
   renderPatientInfo() {
-    const { gender, sexAtBirth, preferredName } = this.props.patientInformation;
+    const { computedPatientStatus, patientInformation } = this.props;
+    const { gender, sexAtBirth, preferredName } = patientInformation;
+
+    const isUnsaved = computedPatientStatus
+      ? !computedPatientStatus.isDemographicInfoUpdated
+      : false;
+    const unsavedClassname = classNames({
+      [styles.unsaved]: isUnsaved,
+    });
+    const color = isUnsaved ? 'blue' : undefined;
 
     return (
       <div className={styles.subSection}>
@@ -81,18 +106,25 @@ export default class BasicInfo extends React.Component<IProps> {
             name="preferredName"
             value={preferredName || ''}
             onChange={this.handleValueChange}
+            className={unsavedClassname}
           />
         </div>
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
             <FormLabel messageId="patientInfo.maritalStatus" />
-            <Select name="maritalStatus" large={true} onChange={this.handleValueChange} value="" />
+            <Select
+              name="maritalStatus"
+              large={true}
+              onChange={this.handleValueChange}
+              value=""
+              color={color}
+            />
           </div>
 
           <div className={styles.field}>
             <FormLabel messageId="patientInfo.language" />
-            {this.renderLanguageSelect()}
+            {this.renderLanguageSelect(color)}
           </div>
         </div>
 
@@ -106,6 +138,8 @@ export default class BasicInfo extends React.Component<IProps> {
               value={gender || ''}
               options={values(Gender)}
               hasPlaceholder={true}
+              className={unsavedClassname}
+              color={color}
             />
           </div>
 
@@ -118,6 +152,8 @@ export default class BasicInfo extends React.Component<IProps> {
               value={sexAtBirth || ''}
               options={values(BirthSexOptions)}
               hasPlaceholder={true}
+              className={unsavedClassname}
+              color={color}
             />
           </div>
         </div>
@@ -153,3 +189,16 @@ export default class BasicInfo extends React.Component<IProps> {
     );
   }
 }
+
+export default graphql<IGraphqlProps, IProps, allProps>(computedPatientStatusQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientInformation.patientId,
+    },
+  }),
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    computedPatientStatus: data ? (data as any).patientComputedPatientStatus : null,
+  }),
+})(BasicInfo);

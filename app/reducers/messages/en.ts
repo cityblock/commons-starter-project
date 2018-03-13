@@ -699,6 +699,7 @@ export const ENGLISH_TRANSLATION = {
     'careWorker.anonymousUser': 'Anonymous Users',
     'careWorker.familyMember': 'Family Members',
     'careWorker.psychiatrist': 'Psychiatrists',
+    'careWorker.outreachSpecialist': 'Outreach Specialists',
     'careWorkerSelect.placeholder': 'Select the care worker',
     'patientIntakeChecklist.coreIdentityLabel': 'Verify core identifying info',
     'patientIntakeChecklist.coreIdentitySubtext':
@@ -770,11 +771,13 @@ export const ENGLISH_TRANSLATION = {
       "Select which care team member to add to this member's care team",
     'patientTeam.selectCareTeamMember': 'Select a care team member',
     'patientTeam.addCareTeamMemberSelectPlaceholder': 'Select one',
+    'patientTeam.addCareTeamMemberNoneAvailable': '--',
     'patientTeam.cancelAdd': 'Cancel',
     'patientTeam.submitAdd': 'Add to care team',
     'patientTeam.doneAdd': 'Done',
     'patientTeam.addCareTeamSuccessBodyText':
       'Continue to the member profile or add another care team member',
+    'patientTeam.addCareTeamSuccessBodyTextNoAddAdditional': 'Continue to the member profile.',
     'patientTeam.addAdditionalCareTeamMember': 'Add another care worker',
   },
 };

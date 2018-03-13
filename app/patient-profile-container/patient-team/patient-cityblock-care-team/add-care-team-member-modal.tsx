@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { filter, includes } from 'lodash';
+import { filter, includes, sortBy } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -21,12 +21,14 @@ import OptGroup from '../../../shared/library/optgroup/optgroup';
 import Option from '../../../shared/library/option/option';
 import Select from '../../../shared/library/select/select';
 import { Popup } from '../../../shared/popup/popup';
+import { AddCareTeamMemberModalFilters } from '../patient-team';
 import * as styles from './css/add-care-team-member-modal.css';
 
 interface IProps {
   isVisible: boolean;
   closePopup: () => void;
   patientId: string;
+  careWorkerRolesFilter?: AddCareTeamMemberModalFilters | null;
 }
 
 interface IGraphqlProps {
@@ -122,6 +124,17 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
       user => !includes(patientCareTeamIds, user.id) && user.userRole === careTeamRole,
     );
 
+    if (!validUsers.length) {
+      return (
+        <Option
+          disabled={true}
+          key={`option-${careTeamRole}-none-available`}
+          messageId="patientTeam.addCareTeamMemberNoneAvailable"
+          value=""
+        />
+      );
+    }
+
     return validUsers.map(user => (
       <Option
         key={`option-${user.id}`}
@@ -132,14 +145,26 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
   }
 
   renderOptionGroups() {
-    const { patientCareTeam, userSummaryList } = this.props;
+    const { patientCareTeam, userSummaryList, careWorkerRolesFilter } = this.props;
     const careTeamRoles = Object.keys(UserRole);
 
     if (!patientCareTeam || !userSummaryList) {
       return;
     }
 
-    return careTeamRoles.map(careTeamRole => (
+    if (careWorkerRolesFilter) {
+      return (
+        <OptGroup
+          messageId={`careWorker.${careWorkerRolesFilter}`}
+          key={`optgroup-${careWorkerRolesFilter}`}
+        >
+          {this.renderUserOptions(careWorkerRolesFilter as UserRole)}
+        </OptGroup>
+      );
+    }
+
+    // Note: _.sortBy without a second argument, just does a default sort
+    return sortBy(careTeamRoles).map(careTeamRole => (
       <OptGroup messageId={`careWorker.${careTeamRole}`} key={`optgroup-${careTeamRole}`}>
         {this.renderUserOptions(careTeamRole as UserRole)}
       </OptGroup>
@@ -184,34 +209,40 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
 
   renderAddUserSuccessful() {
     const { addedCareMember } = this.state;
+    const { careWorkerRolesFilter } = this.props;
 
     if (!addedCareMember) {
       return null;
     }
 
     const addedCareMemberName = formatFullName(addedCareMember.firstName, addedCareMember.lastName);
-
     const titleText = `${addedCareMemberName} was successfully added`;
+    const buttonsHtml = !!careWorkerRolesFilter ? (
+      <ModalButtons cancel={this.handleClose} cancelMessageId="patientTeam.doneAdd" />
+    ) : (
+      <ModalButtons
+        submit={this.handleAddAdditional}
+        cancel={this.handleClose}
+        submitMessageId="patientTeam.addAdditionalCareTeamMember"
+        cancelMessageId="patientTeam.doneAdd"
+      />
+    );
+    const bodyMessageId = !!careWorkerRolesFilter
+      ? 'patientTeam.addCareTeamSuccessBodyTextNoAddAdditional'
+      : 'patientTeam.addCareTeamSuccessBodyText';
 
     return (
       <div className={styles.addCareTeamMemberModalSuccess}>
         <ModalHeader
           titleText={titleText}
-          bodyMessageId="patientTeam.addCareTeamSuccessBodyText"
+          bodyMessageId={bodyMessageId}
           closePopup={this.handleClose}
           color="white"
           headerIconName="checkCircle"
           headerIconSize="extraLarge"
           headerIconColor="green"
         />
-        <div className={classNames(styles.body, styles.noPaddingTop)}>
-          <ModalButtons
-            submit={this.handleAddAdditional}
-            cancel={this.handleClose}
-            submitMessageId="patientTeam.addAdditionalCareTeamMember"
-            cancelMessageId="patientTeam.doneAdd"
-          />
-        </div>
+        <div className={classNames(styles.body, styles.noPaddingTop)}>{buttonsHtml}</div>
       </div>
     );
   }

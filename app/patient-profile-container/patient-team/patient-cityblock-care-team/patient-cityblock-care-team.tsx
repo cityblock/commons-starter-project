@@ -2,6 +2,7 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
 import { getPatientCareTeamQuery, FullUserFragment } from '../../../graphql/types';
+import { AddCareTeamMemberModalFilters } from '../patient-team';
 import CareTeamMember from './care-team-member';
 import * as styles from './css/patient-cityblock-care-team.css';
 import RemoveCareTeamMemberModal from './remove-care-team-member-modal';
@@ -9,7 +10,7 @@ import RequiredTeamMember from './required-team-member';
 
 interface IProps {
   patientId: string;
-  onAddCareTeamMember: () => void;
+  onAddCareTeamMember: (filter: AddCareTeamMemberModalFilters) => void;
 }
 
 interface IGraphqlProps {
@@ -67,13 +68,13 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
           patientCareTeam={patientCareTeam}
           isLoading={isLoading}
           requiredRoleType="communityHealthPartner"
-          onClick={onAddCareTeamMember}
+          onClick={() => onAddCareTeamMember('communityHealthPartner')}
         />
         <RequiredTeamMember
           patientCareTeam={patientCareTeam}
           isLoading={isLoading}
           requiredRoleType="primaryCarePhysician"
-          onClick={onAddCareTeamMember}
+          onClick={() => onAddCareTeamMember('primaryCarePhysician')}
         />
         {this.renderCareTeamMembers()}
         <RemoveCareTeamMemberModal

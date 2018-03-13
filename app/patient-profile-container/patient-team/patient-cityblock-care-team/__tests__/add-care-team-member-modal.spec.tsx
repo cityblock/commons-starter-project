@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { UserRole } from '../../../../graphql/types';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
 import ModalHeader from '../../../../shared/library/modal-header/modal-header';
 import Option from '../../../../shared/library/option/option';
@@ -40,19 +41,15 @@ describe('Render Care Team Member Modal', () => {
   );
 
   it('renders the correct care team member options', () => {
-    expect(wrapper.find(Option)).toHaveLength(2);
+    const userRoleCount = Object.keys(UserRole).length;
+    // There is an empty option for all userRoles without users in them. Add 1 for placeholder
+    expect(wrapper.find(Option)).toHaveLength(userRoleCount + 1);
     expect(
       wrapper
         .find(Option)
         .at(0)
         .props().disabled,
     ).toBe(true);
-    expect(
-      wrapper
-        .find(Option)
-        .at(1)
-        .props().value,
-    ).toBe(user2.id);
     expect(
       wrapper
         .find(ModalHeader)

@@ -254,9 +254,13 @@ describe('user model', () => {
       const userRoleFilters: UserRole[] = [userRole, userRole2];
       const userRoleFilters2: UserRole[] = [userRole3];
 
-      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
-      await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
-      await User.create(createMockUser(11, clinic.id, userRole3, 'c@d.com'), txn);
+      const user1 = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+      const user3 = await User.create(createMockUser(11, clinic.id, userRole3, 'c@d.com'), txn);
+      // Must update lastLoginAt as getUserSummaryList does not return users who haven't logged in
+      await User.update(user1.id, { lastLoginAt: new Date().toISOString() }, txn);
+      await User.update(user2.id, { lastLoginAt: new Date().toISOString() }, txn);
+      await User.update(user3.id, { lastLoginAt: new Date().toISOString() }, txn);
 
       expect(
         (await User.getUserSummaryList(userRoleFilters, txn)).sort((a, b) => {
@@ -292,6 +296,9 @@ describe('user model', () => {
         createMockUser(11, clinic.id, healthCoachUserRole, 'b@c.com'),
         txn,
       );
+      // Must update lastLoginAt as getUserSummaryList does not return users who haven't logged in
+      await User.update(user1.id, { lastLoginAt: new Date().toISOString() }, txn);
+      await User.update(user2.id, { lastLoginAt: new Date().toISOString() }, txn);
 
       const patient1 = await createPatient(
         { cityblockId: 123, homeClinicId: clinic.id, userId: user1.id },
@@ -314,6 +321,34 @@ describe('user model', () => {
 
       expect((refetchedUser1Summary! as any).patientCount).toEqual(1);
       expect((refetchedUser2Summary! as any).patientCount).toEqual(0);
+    });
+  });
+
+  it('fetches a shortened list of user objects where the users have logged in', async () => {
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const userRole2 = 'healthCoach';
+      const userRole3 = 'nurseCareManager';
+      const userRoleFilters: UserRole[] = [userRole2, userRole3];
+
+      const user1 = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole3, 'b@c.com'), txn);
+
+      await User.update(user1.id, { lastLoginAt: new Date().toISOString() }, txn);
+
+      const userSummaryList = await User.getUserSummaryList(userRoleFilters, txn);
+      const userIds = userSummaryList.map(user => user.id);
+      expect(userSummaryList).toHaveLength(1);
+      expect(userIds).toContain(user1.id);
+      expect(userIds).not.toContain(user2.id);
+
+      // Now, let's have user2 log in
+      await User.update(user2.id, { lastLoginAt: new Date().toISOString() }, txn);
+      const refetchedUserSummaryList = await User.getUserSummaryList(userRoleFilters, txn);
+      const refetchedUserIds = refetchedUserSummaryList.map(user => user.id);
+      expect(refetchedUserSummaryList).toHaveLength(2);
+      expect(refetchedUserIds).toContain(user1.id);
+      expect(refetchedUserIds).toContain(user2.id);
     });
   });
 

@@ -47,7 +47,10 @@ describe('user tests', () => {
         const userRole2 = 'admin';
 
         const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
-        await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+        // Need to mark as having logged in once
+        await User.update(user.id, { lastLoginAt: new Date().toISOString() }, txn);
+        await User.update(user2.id, { lastLoginAt: new Date().toISOString() }, txn);
 
         const query = `{ userSummaryList(userRoleFilters: [${
           user.userRole
@@ -76,7 +79,10 @@ describe('user tests', () => {
         const userRole2 = 'admin';
 
         const user = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
-        await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+        // Need to mark as having logged in once
+        await User.update(user.id, { lastLoginAt: new Date().toISOString() }, txn);
+        await User.update(user2.id, { lastLoginAt: new Date().toISOString() }, txn);
 
         const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
         const result = await graphql(schema, query, null, {
@@ -94,6 +100,8 @@ describe('user tests', () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        // Need to mark as having logged in once
+        await User.update(user.id, { lastLoginAt: new Date().toISOString() }, txn);
 
         const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
         const result = await graphql(schema, query, null, {

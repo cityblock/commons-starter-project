@@ -265,6 +265,7 @@ export default class User extends BaseModel {
       )
       .whereIn('userRole', userRoleFilters)
       .where('user.deletedAt', null)
+      .whereNot('user.lastLoginAt', null)
       .select(
         'userRole',
         'user.id',

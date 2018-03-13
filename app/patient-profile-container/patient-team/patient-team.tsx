@@ -24,8 +24,11 @@ interface ICurrentSubTab {
   isFamilyAndSupportTeam: boolean;
 }
 
+export type AddCareTeamMemberModalFilters = 'primaryCarePhysician' | 'communityHealthPartner';
+
 interface IState {
   isModalVisible: boolean;
+  addCareTeamMemberModalFilter?: AddCareTeamMemberModalFilters | null;
 }
 
 export class PatientTeam extends React.Component<IProps, IState> {
@@ -54,8 +57,12 @@ export class PatientTeam extends React.Component<IProps, IState> {
     this.setState({ isModalVisible: true });
   };
 
+  onClickAddRequiredCareTeamMember = (filter: AddCareTeamMemberModalFilters) => {
+    this.setState({ isModalVisible: true, addCareTeamMemberModalFilter: filter });
+  };
+
   onClosePopup = () => {
-    this.setState({ isModalVisible: false });
+    this.setState({ isModalVisible: false, addCareTeamMemberModalFilter: null });
   };
 
   renderAddButton() {
@@ -72,7 +79,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
   }
 
   renderAddModal() {
-    const { isModalVisible } = this.state;
+    const { isModalVisible, addCareTeamMemberModalFilter } = this.state;
     const { match } = this.props;
     const {
       isCityblockCareTeam,
@@ -86,6 +93,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
           isVisible={isModalVisible}
           patientId={match.params.patientId}
           closePopup={this.onClosePopup}
+          careWorkerRolesFilter={addCareTeamMemberModalFilter}
         />
       );
     } else if (isExternalCareTeam) {
@@ -105,7 +113,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
     const cityblockCareTeam = currentSubTab.isCityblockCareTeam ? (
       <PatientCityblockCareTeam
         patientId={match.params.patientId}
-        onAddCareTeamMember={this.onClickAddButton}
+        onAddCareTeamMember={this.onClickAddRequiredCareTeamMember}
       />
     ) : null;
     const externalCareTeam = currentSubTab.isExternalCareTeam ? (

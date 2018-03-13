@@ -1,0 +1,33 @@
+.container {
+  background: var(--gray-background-color);
+  box-shadow: inset 0 4px 6px 0 rgba(0, 0, 0, 0.1);
+  transition: height 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  padding: var(--small-gutter) 0;
+}
+
+.flex:hover {
+  background: var(--dark-gray-background-color);
+  cursor: pointer;
+}
+
+.collapsed {
+  height: 0;
+}
+
+.expanded {
+  height: 120px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+svg.icon {
+  margin-left: var(--gutter);
+  margin-right: var(--small-gutter);
+  height: var(--small-gutter);
+  width: var(--small-gutter);
+}

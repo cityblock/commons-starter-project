@@ -8,6 +8,7 @@ export type Size = 'small' | 'medium' | 'large' | 'largest';
 
 export interface IProps {
   messageId?: string; // provide either raw text or message id
+  messageValues?: { [key: string]: string }; // optional variable values for translation
   text?: string;
   color?: Color; // optional color flag
   size?: Size;
@@ -17,7 +18,7 @@ export interface IProps {
 }
 
 const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, text, color, className, size, onClick, isBold } = props;
+  const { messageId, text, color, className, size, onClick, isBold, messageValues } = props;
   const textStyles = classNames(
     styles.text,
     {
@@ -35,7 +36,7 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
 
   if (messageId) {
     return (
-      <FormattedMessage id={messageId}>
+      <FormattedMessage id={messageId} values={messageValues}>
         {(message: string) => (
           <p className={textStyles} onClick={onClick}>
             {message}

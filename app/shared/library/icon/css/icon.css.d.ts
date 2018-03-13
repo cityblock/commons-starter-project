@@ -1,5 +1,6 @@
 export const icon: string;
 export const darkGray: string;
+export const black: string;
 export const white: string;
 export const red: string;
 export const blue: string;

@@ -7,6 +7,7 @@ import { IconName } from './icon-types';
 export type Color =
   | 'gray'
   | 'darkGray'
+  | 'black'
   | 'white'
   | 'red'
   | 'blue'
@@ -32,6 +33,7 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
     styles.icon,
     {
       [styles.darkGray]: color === 'darkGray',
+      [styles.black]: color === 'black',
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
       [styles.blue]: color === 'blue',

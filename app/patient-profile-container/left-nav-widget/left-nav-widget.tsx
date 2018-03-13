@@ -14,7 +14,6 @@ interface IState {
   isOpen: boolean;
 }
 
-// TODO: Deprecate Care Team Widget component and styles after finishing this
 class LeftNavWidget extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);

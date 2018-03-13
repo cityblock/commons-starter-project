@@ -50,6 +50,7 @@ export type IconName =
   | 'removeCircle'
   | 'rotateRight'
   | 'search'
+  | 'slackFull'
   | 'star'
   | 'stars'
   | 'syncProblem'

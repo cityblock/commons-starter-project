@@ -31,5 +31,13 @@ describe('Library Date Info Component', () => {
     wrapper.setProps({ messageId });
     expect(wrapper.find(FormattedMessage).length).toBe(1);
     expect(wrapper.find(FormattedMessage).props().id).toBe(messageId);
+    expect(wrapper.find(FormattedMessage).props().values).toEqual({});
+  });
+
+  it('passes values to translate message if specified', () => {
+    const messageValues = { name: 'Aegon Targaryen' };
+    wrapper.setProps({ messageValues });
+
+    expect(wrapper.find(FormattedMessage).props().values).toEqual(messageValues);
   });
 });

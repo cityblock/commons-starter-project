@@ -8,6 +8,10 @@ svg.icon.darkGray {
   fill: var(--gray-font-color);
 }
 
+svg.icon.black {
+  fill: var(--black-color);
+}
+
 svg.icon.white {
   fill: var(--white-color);
 }

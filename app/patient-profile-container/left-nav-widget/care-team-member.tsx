@@ -4,6 +4,7 @@ import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/f
 import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
 import SmallText from '../../shared/library/small-text/small-text';
+import CareTeamMemberContact from './care-team-member-contact';
 import * as styles from './css/care-team-member.css';
 
 interface IProps {
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 const CareTeamMember: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { careTeamMember, handleClick, isLead } = props;
+  const { careTeamMember, handleClick, isLead, isSelected } = props;
   const { firstName, lastName } = careTeamMember;
 
   return (
@@ -39,7 +40,12 @@ const CareTeamMember: React.StatelessComponent<IProps> = (props: IProps) => {
         </div>
         {isLead && <Icon name="stars" color="blue" />}
       </div>
-      <div className={styles.divider} />
+      <CareTeamMemberContact
+        careTeamMemberId={careTeamMember.id}
+        firstName={careTeamMember.firstName || 'Unknown'}
+        isVisible={isSelected}
+      />
+      {!isSelected && <div className={styles.divider} />}
     </div>
   );
 };

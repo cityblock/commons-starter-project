@@ -59,6 +59,7 @@ import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import TextSmsIcon from 'material-ui-icons/Textsms';
 import WarningIcon from 'material-ui-icons/Warning';
 import { SvgIconProps } from 'material-ui/SvgIcon';
+import SlackFullIcon from './custom/slack-full';
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
@@ -114,6 +115,7 @@ const components: IconComponents = {
   report: ReportIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
+  slackFull: SlackFullIcon,
   stars: StarsIcon,
   star: GradeIcon,
   syncProblem: SyncProblemIcon,

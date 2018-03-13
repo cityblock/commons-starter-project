@@ -5,6 +5,7 @@ import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { user } from '../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
+import CareTeamMemberContact from '../care-team-member-contact';
 
 describe('Patient Left Navigation Care Team Member', () => {
   const wrapper = shallow(
@@ -73,8 +74,24 @@ describe('Patient Left Navigation Care Team Member', () => {
     expect(wrapper.find(Icon).length).toBe(0);
   });
 
-  it('renders divider', () => {
+  it('renders divider if not selected', () => {
     expect(wrapper.find('.divider').length).toBe(1);
+  });
+
+  it('renders care team member contact', () => {
+    expect(wrapper.find(CareTeamMemberContact).props().careTeamMemberId).toBe(user.id);
+    expect(wrapper.find(CareTeamMemberContact).props().firstName).toBe(user.firstName);
+    expect(wrapper.find(CareTeamMemberContact).props().isVisible).toBeFalsy();
+  });
+
+  it('does not render divider if not selected', () => {
+    wrapper.setProps({ isSelected: true });
+
+    expect(wrapper.find('.divider').length).toBe(0);
+  });
+
+  it('makes contact information visible if selected', () => {
+    expect(wrapper.find(CareTeamMemberContact).props().isVisible).toBeTruthy();
   });
 
   it('renders star icon if care team lead', () => {

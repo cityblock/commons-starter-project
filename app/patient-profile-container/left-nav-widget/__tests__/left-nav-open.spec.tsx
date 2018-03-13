@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import LeftNavCareTeam from '../left-nav-care-team';
 import LeftNavHeader from '../left-nav-header';
 import LeftNavOpen from '../left-nav-open';
 import LeftNavQuickActions from '../left-nav-quick-actions';
@@ -42,11 +43,23 @@ describe('Patient Left Navigation Open Component', () => {
     expect(wrapper.find('.content').length).toBe(1);
   });
 
+  it('renders patient care team if selected', () => {
+    wrapper.setProps({ selected: 'careTeam' });
+
+    expect(wrapper.find(LeftNavCareTeam).props().patientId).toBe(patientId);
+
+    expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
+    expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
+  });
+
   it('renders scratch pad if selected', () => {
     wrapper.setProps({ selected: 'scratchPad' });
 
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().patientId).toBe(patientId);
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().glassBreakId).toBe(glassBreakId);
+
+    expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
+    expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
   });
 
   it('renders quick actions if selected', () => {
@@ -54,5 +67,8 @@ describe('Patient Left Navigation Open Component', () => {
 
     expect(wrapper.find(LeftNavQuickActions).props().patientId).toBe(patientId);
     expect(wrapper.find(LeftNavQuickActions).props().glassBreakId).toBe(glassBreakId);
+
+    expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
+    expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
   });
 });

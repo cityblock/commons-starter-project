@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from './css/left-nav-open.css';
+import LeftNavCareTeam from './left-nav-care-team';
 import LeftNavHeader from './left-nav-header';
 import LeftNavQuickActions from './left-nav-quick-actions';
 import LeftNavScratchPad from './left-nav-scratchpad';
@@ -26,6 +27,7 @@ const LeftNavOpen: React.StatelessComponent<IProps> = (props: IProps) => {
     <div className={containerStyles}>
       {selected && <LeftNavHeader selected={selected} onClose={onClose} />}
       <div className={styles.content}>
+        {selected === 'careTeam' && <LeftNavCareTeam patientId={patientId} />}
         {selected === 'scratchPad' && (
           <LeftNavScratchPad patientId={patientId} glassBreakId={glassBreakId} />
         )}

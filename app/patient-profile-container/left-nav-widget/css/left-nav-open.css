@@ -11,8 +11,6 @@
 .expanded {
   /* Leave room for main navigation and patient info in left rail */
   height: calc(100vh - 250px);
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
 }
 
 .collapsed {
@@ -22,7 +20,9 @@
 .content {
   border-right: 1px solid var(--border-color);
   margin-top: 68px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 
   /* Account for size of button */
-  height: calc(100% - 72px);
+  height: calc(100% - 70px);
 }

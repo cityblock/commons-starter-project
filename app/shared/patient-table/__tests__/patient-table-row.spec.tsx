@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Gender } from '../../../graphql/types';
 import PatientAge from '../../library/patient-age/patient-age';
+import { patientState } from '../../util/test-data';
 import PatientTableRow from '../patient-table-row';
 
 describe('Patient Table Row Component', () => {
@@ -21,6 +22,7 @@ describe('Patient Table Row Component', () => {
       gender,
     },
     userCareTeam,
+    patientState,
   });
   const query = 'sansa';
 

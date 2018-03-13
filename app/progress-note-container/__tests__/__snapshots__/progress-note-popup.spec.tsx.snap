@@ -189,6 +189,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
               },
               "sexAtBirth": "male",
             },
+            "patientState": Object {
+              "currentState": "outreach",
+              "id": "patientStateId",
+            },
             "scratchPad": "Note",
             "updatedAt": "2017-09-07T13:45:14.532Z",
           },
@@ -387,6 +391,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "type": "mobile",
               },
               "sexAtBirth": "male",
+            },
+            "patientState": Object {
+              "currentState": "outreach",
+              "id": "patientStateId",
             },
             "scratchPad": "Note",
             "updatedAt": "2017-09-07T13:45:14.532Z",
@@ -618,6 +626,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
               },
               "sexAtBirth": "male",
             },
+            "patientState": Object {
+              "currentState": "outreach",
+              "id": "patientStateId",
+            },
             "scratchPad": "Note",
             "updatedAt": "2017-09-07T13:45:14.532Z",
           },
@@ -816,6 +828,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "type": "mobile",
               },
               "sexAtBirth": "male",
+            },
+            "patientState": Object {
+              "currentState": "outreach",
+              "id": "patientStateId",
             },
             "scratchPad": "Note",
             "updatedAt": "2017-09-07T13:45:14.532Z",

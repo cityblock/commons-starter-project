@@ -900,6 +900,7 @@ declare module 'schema' {
     | IEmail
     | IPatientDataFlag
     | IComputedPatientStatus
+    | IPatientState
     | IPatientTableRow
     | IPatientForDashboard
     | IPatientContact
@@ -1018,6 +1019,7 @@ declare module 'schema' {
     careTeam: Array<IUser>;
     patientDataFlags: Array<IPatientDataFlag>;
     computedPatientStatus: IComputedPatientStatus;
+    patientState: IPatientState;
     coreIdentityVerifiedAt: string | null;
     coreIdentityVerifiedById: string | null;
   }
@@ -1125,6 +1127,28 @@ declare module 'schema' {
   }
 
   /**
+   * PatientState
+   */
+  interface IPatientState {
+    id: string;
+    patientId: string;
+    updatedById: string;
+    currentState: ICurrentPatientStateEnum;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  type ICurrentPatientStateEnum =
+    | 'attributed'
+    | 'assigned'
+    | 'outreach'
+    | 'consented'
+    | 'enrolled'
+    | 'disenrolled'
+    | 'ineligible';
+
+  /**
    * Patient Scratch Pad
    */
   interface IPatientNeedToKnow {
@@ -1158,6 +1182,7 @@ declare module 'schema' {
     dateOfBirth: string | null;
     userCareTeam: boolean | null;
     patientInfo: IPatientInfo;
+    patientState: IPatientState;
   }
 
   interface IPatientFilterOptions {
@@ -1194,6 +1219,7 @@ declare module 'schema' {
     lastName: string;
     dateOfBirth: string | null;
     patientInfo: IPatientInfo;
+    patientState: IPatientState;
   }
 
   /**

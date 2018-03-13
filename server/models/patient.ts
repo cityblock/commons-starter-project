@@ -13,6 +13,7 @@ import PatientConcern from './patient-concern';
 import PatientDataFlag from './patient-data-flag';
 import PatientInfo from './patient-info';
 import { PatientGenderOptions } from './patient-info';
+import PatientState from './patient-state';
 import Task from './task';
 import User from './user';
 
@@ -103,6 +104,7 @@ export default class Patient extends Model {
   coreIdentityVerifiedAt: string | null;
   coreIdentityVerifiedById: string | null;
   computedPatientStatus: ComputedPatientStatus;
+  patientState: PatientState;
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();

@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
+import { capitalize } from 'lodash';
 import * as React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
@@ -40,6 +41,8 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       );
     const gender =
       patient && patient.patientInfo.gender ? GENDER[patient.patientInfo.gender] : null;
+    const currentState =
+      patient && patient.patientState ? capitalize(patient.patientState.currentState) : null;
 
     if (condensedPatientInfo) {
       return (
@@ -62,7 +65,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
               <div>{lastName}</div>
             </div>
             <div className={styles.patientSubheading}>
-              {patientAge} • {gender}
+              {patientAge} • {gender} • {currentState}
             </div>
           </div>
         </div>

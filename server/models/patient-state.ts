@@ -4,7 +4,7 @@ import BaseModel from './base-model';
 export type CurrentState =
   | 'attributed'
   | 'assigned'
-  | 'intaking'
+  | 'outreach'
   | 'consented'
   | 'enrolled'
   | 'disenrolled'
@@ -13,7 +13,7 @@ export type CurrentState =
 const CURRENT_STATE: CurrentState[] = [
   'attributed',
   'assigned',
-  'intaking',
+  'outreach',
   'consented',
   'enrolled',
   'disenrolled',

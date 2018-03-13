@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import { capitalize } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientTableRowFragment } from '../../graphql/types';
@@ -19,9 +20,19 @@ interface IProps {
 }
 
 const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onSelectToggle }) => {
-  const { id, firstName, lastName, dateOfBirth, patientInfo, userCareTeam, isSelected } = patient;
+  const {
+    id,
+    firstName,
+    lastName,
+    dateOfBirth,
+    patientInfo,
+    userCareTeam,
+    isSelected,
+    patientState,
+  } = patient;
   const fullName = formatFullName(firstName, lastName);
   const formattedName = query ? formatSearchText(fullName, query) : fullName;
+  const formattedState = capitalize(patientState.currentState);
 
   return (
     <div className={classNames(styles.rowContainer, { [styles.hasCheck]: !!onSelectToggle })}>
@@ -35,7 +46,7 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
       <Link to={`/patients/${id}/map/active`} className={styles.result}>
         {query && userCareTeam && <div className={styles.userCareTeam} />}
         <h4 className={styles.name}>{formattedName}</h4>
-        <p className={styles.status}>Enrolled</p>
+        <p className={styles.status}>{formattedState}</p>
         <p className={styles.memberId}>CBH-1234567</p>
         <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
         <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>

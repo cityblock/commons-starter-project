@@ -203,16 +203,16 @@ export default class ComputedPatientStatus extends BaseModel {
   static getCurrentPatientState(computedStatus: IComputedStatus, txn: Transaction): CurrentState {
     let currentStatus = 'attributed';
     const isAssigned = computedStatus.hasOutreachSpecialist || computedStatus.hasChp;
-    const isIntaking = isAssigned && computedStatus.hasProgressNote;
-    const isConsented = isIntaking && computedStatus.isConsentSigned;
+    const isInOutreach = isAssigned && computedStatus.hasProgressNote;
+    const isConsented = isInOutreach && computedStatus.isConsentSigned;
     const isEnrolled = isConsented && computedStatus.hasPcp;
 
     if (isEnrolled) {
       currentStatus = 'enrolled';
     } else if (isConsented) {
       currentStatus = 'consented';
-    } else if (isIntaking) {
-      currentStatus = 'intaking';
+    } else if (isInOutreach) {
+      currentStatus = 'outreach';
     } else if (isAssigned) {
       currentStatus = 'assigned';
     }

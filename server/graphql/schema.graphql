@@ -205,6 +205,16 @@ enum ContactMethodOptions {
   email
 }
 
+enum CurrentPatientState {
+  attributed
+  assigned
+  outreach
+  consented
+  enrolled
+  disenrolled
+  ineligible
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -275,6 +285,7 @@ type Patient implements uniqueId {
   careTeam: [User!]
   patientDataFlags: [PatientDataFlag!]
   computedPatientStatus: ComputedPatientStatus!
+  patientState: PatientState!
   coreIdentityVerifiedAt: String
   coreIdentityVerifiedById: ID
 }
@@ -329,6 +340,17 @@ type ComputedPatientStatus implements uniqueId {
   isPhotoAddedOrDeclined: Boolean!
   isIneligible: Boolean!
   isDisenrolled: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# PatientState
+type PatientState implements uniqueId {
+  id: ID!
+  patientId: ID!
+  updatedById: ID!
+  currentState: CurrentPatientState!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -469,6 +491,7 @@ type PatientTableRow implements uniqueId {
   dateOfBirth: String
   userCareTeam: Boolean
   patientInfo: PatientInfo!
+  patientState: PatientState!
 }
 
 # Patient table row node
@@ -491,6 +514,7 @@ type PatientForDashboard implements uniqueId {
   lastName: String!
   dateOfBirth: String
   patientInfo: PatientInfo!
+  patientState: PatientState!
 }
 
 # Patient dashboard item node

@@ -235,7 +235,7 @@ describe('computed patient status model', () => {
       });
     });
 
-    it('appropriately calculates the intaking state', async () => {
+    it('appropriately calculates the outreach state', async () => {
       await transaction(ComputedPatientStatus.knex(), async txn => {
         const currentStatus: IComputedStatus = {
           isCoreIdentityVerified: true,
@@ -254,7 +254,7 @@ describe('computed patient status model', () => {
         };
         const currentState = ComputedPatientStatus.getCurrentPatientState(currentStatus, txn);
 
-        expect(currentState).toEqual('intaking');
+        expect(currentState).toEqual('outreach');
       });
     });
 

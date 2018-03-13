@@ -1,6 +1,7 @@
 import {
   BirthSexOptions,
   ContactMethodOptions,
+  CurrentPatientState,
   Gender,
   PhoneTypeOptions,
 } from '../../graphql/types';
@@ -129,6 +130,11 @@ interface IPhone {
   description: string | null;
 }
 
+export const patientState = {
+  id: 'patientStateId',
+  currentState: 'outreach' as CurrentPatientState,
+};
+
 export const patient = {
   id: 'patient-id',
   firstName: 'Bob',
@@ -162,6 +168,7 @@ export const patient = {
   },
   patientDataFlags: [],
   cityblockId: 123,
+  patientState,
 };
 
 export const concern = {

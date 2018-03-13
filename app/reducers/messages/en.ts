@@ -380,6 +380,8 @@ export const ENGLISH_TRANSLATION = {
     'CBO.phone': 'Tel',
     'CBO.viewForm': 'View referral form',
     'glassBreak.breakGlass': 'Break the glass',
+    'glassBreak.breakGlasspatient': 'Access profile',
+    'glassBreak.breakGlassprogressNote': 'Access progress note',
     'glassBreak.inputNote': 'Write a reason for breaking the glass...',
     'glassBreak.note': 'Additional note:',
     'glassBreak.optAdmin': 'Needed for administrative reasons',

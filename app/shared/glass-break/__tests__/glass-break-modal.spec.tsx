@@ -20,6 +20,7 @@ describe('Glass Break Modal', () => {
       isPopupVisible={true}
       createGlassBreak={placeholderFn}
       closePopup={placeholderFn}
+      resource="patient"
     />,
   );
 
@@ -102,6 +103,14 @@ describe('Glass Break Modal', () => {
   });
 
   it('renders modal buttons', () => {
-    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('glassBreak.breakGlass');
+    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('glassBreak.breakGlasspatient');
+  });
+
+  it('changes button message for progress note', () => {
+    wrapper.setProps({ resource: 'progressNote' });
+
+    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe(
+      'glassBreak.breakGlassprogressNote',
+    );
   });
 });

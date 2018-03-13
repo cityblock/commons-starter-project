@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../library/button/button';
 import Icon from '../../library/icon/icon';
 import GlassBreak from '../glass-break';
+import GlassBreakModal from '../glass-break-modal';
 
 describe('Glass Break Component', () => {
   const resource = 'patient';
@@ -60,9 +61,21 @@ describe('Glass Break Component', () => {
     expect(wrapper.find(Button).props().className).toBe('button');
   });
 
+  it('renders modal to break the glass', () => {
+    expect(wrapper.find(GlassBreakModal).props().resource).toBe('patient');
+    expect(wrapper.find(GlassBreakModal).props().isPopupVisible).toBeFalsy();
+  });
+
+  it('opens modal to break the glass', () => {
+    wrapper.setState({ isPopupVisible: true });
+
+    expect(wrapper.find(GlassBreakModal).props().isPopupVisible).toBeTruthy();
+  });
+
   it('applies correct styles for progress note glass break', () => {
     wrapper.setProps({ resource: 'progressNote' });
 
     expect(wrapper.find('.container').props().className).toBe('container listItem');
+    expect(wrapper.find(GlassBreakModal).props().resource).toBe('progressNote');
   });
 });

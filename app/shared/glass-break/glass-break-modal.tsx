@@ -7,12 +7,14 @@ import Select from '../library/select/select';
 import TextArea from '../library/textarea/textarea';
 import { Popup } from '../popup/popup';
 import * as styles from './css/glass-break-modal.css';
+import { Resource } from './glass-break';
 import { reasonOptions, OTHER_VALUE } from './reason-options';
 
 interface IProps {
   isPopupVisible: boolean;
   createGlassBreak: (reason: string, note: string | null) => any;
   closePopup: () => void;
+  resource: Resource;
 }
 
 interface IState {
@@ -71,7 +73,7 @@ class GlassBreakModal extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const { isPopupVisible } = this.props;
+    const { isPopupVisible, resource } = this.props;
 
     return (
       <Popup
@@ -95,7 +97,7 @@ class GlassBreakModal extends React.Component<IProps, IState> {
             placeholderMessageId="glassBreak.inputNote"
           />
           <ModalButtons
-            submitMessageId="glassBreak.breakGlass"
+            submitMessageId={`glassBreak.breakGlass${resource}`}
             submit={this.onSubmit}
             cancel={this.onClose}
           />

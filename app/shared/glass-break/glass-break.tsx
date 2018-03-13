@@ -6,7 +6,7 @@ import Icon from '../library/icon/icon';
 import * as styles from './css/glass-break.css';
 import GlassBreakModal from './glass-break-modal';
 
-type Resource = 'patient' | 'progressNote';
+export type Resource = 'patient' | 'progressNote';
 
 interface IProps {
   resource: Resource;
@@ -38,6 +38,7 @@ class GlassBreak extends React.Component<IProps, IState> {
           isPopupVisible={this.state.isPopupVisible}
           createGlassBreak={createGlassBreak}
           closePopup={() => this.setState({ isPopupVisible: false })}
+          resource={resource}
         />
         <Icon name="lockOutline" color="red" className={styles.icon} />
         <div className={styles.header}>

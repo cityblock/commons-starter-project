@@ -315,6 +315,25 @@ export interface addressCreateMutation {
   } | null,
 };
 
+export interface addressDeleteForPatientMutationVariables {
+  addressId: string,
+  patientId: string,
+  isPrimary?: boolean | null,
+};
+
+export interface addressDeleteForPatientMutation {
+  // Delete an address for a Patient
+  addressDeleteForPatient:  {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street1: string | null,
+    street2: string | null,
+    zip: string | null,
+    description: string | null,
+  } | null,
+};
+
 export interface addressEditMutationVariables {
   addressId: string,
   patientId: string,
@@ -1232,6 +1251,21 @@ export interface emailCreateMutation {
   } | null,
 };
 
+export interface emailDeleteForPatientMutationVariables {
+  emailId: string,
+  patientId: string,
+  isPrimary?: boolean | null,
+};
+
+export interface emailDeleteForPatientMutation {
+  // Delete an email for a Patient
+  emailDeleteForPatient:  {
+    id: string,
+    emailAddress: string,
+    description: string | null,
+  } | null,
+};
+
 export interface emailEditMutationVariables {
   emailId: string,
   patientId: string,
@@ -1911,6 +1945,23 @@ export interface getGoalSuggestionsForAnswerQuery {
   } | null >,
 };
 
+export interface getPatientAddressesQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientAddressesQuery {
+  // get all addresses for a patient
+  patientAddresses:  Array< {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street1: string | null,
+    street2: string | null,
+    zip: string | null,
+    description: string | null,
+  } > | null,
+};
+
 export interface getPatientAdvancedDirectiveFormsQueryVariables {
   patientId: string,
 };
@@ -2419,6 +2470,19 @@ export interface getPatientContactHealthcareProxiesQuery {
   } > | null,
 };
 
+export interface getPatientEmailsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientEmailsQuery {
+  // get all emails for a patient
+  patientEmails:  Array< {
+    id: string,
+    emailAddress: string,
+    description: string | null,
+  } > | null,
+};
+
 export interface getPatientGlassBreakCheckQueryVariables {
   patientId: string,
 };
@@ -2507,6 +2571,20 @@ export interface getPatientPanelQuery {
     },
     totalCount: number,
   },
+};
+
+export interface getPatientPhonesQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientPhonesQuery {
+  // get all phones for a patient
+  patientPhones:  Array< {
+    id: string,
+    phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
+  } > | null,
 };
 
 export interface getPatientRiskScoreForRiskAreaQueryVariables {
@@ -3044,38 +3122,18 @@ export interface getPatientQuery {
         zip: string | null,
         description: string | null,
       } | null,
-      addresses:  Array< {
-        id: string,
-        city: string | null,
-        state: string | null,
-        street1: string | null,
-        street2: string | null,
-        zip: string | null,
-        description: string | null,
-      } > | null,
       hasEmail: boolean | null,
       primaryEmail:  {
         id: string,
         emailAddress: string,
         description: string | null,
       } | null,
-      emails:  Array< {
-        id: string,
-        emailAddress: string,
-        description: string | null,
-      } > | null,
       primaryPhone:  {
         id: string,
         phoneNumber: string,
         type: PhoneTypeOptions | null,
         description: string | null,
       } | null,
-      phones:  Array< {
-        id: string,
-        phoneNumber: string,
-        type: PhoneTypeOptions | null,
-        description: string | null,
-      } > | null,
       preferredContactMethod: ContactMethodOptions | null,
       canReceiveCalls: boolean | null,
       canReceiveTexts: boolean | null,
@@ -6863,6 +6921,22 @@ export interface phoneCreateMutation {
   } | null,
 };
 
+export interface phoneDeleteForPatientMutationVariables {
+  phoneId: string,
+  patientId: string,
+  isPrimary?: boolean | null,
+};
+
+export interface phoneDeleteForPatientMutation {
+  // Delete a phone number for a Patient
+  phoneDeleteForPatient:  {
+    id: string,
+    phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
+  } | null,
+};
+
 export interface phoneEditMutationVariables {
   phoneId: string,
   patientId: string,
@@ -10517,38 +10591,18 @@ export interface FullPatientForProfileFragment {
       zip: string | null,
       description: string | null,
     } | null,
-    addresses:  Array< {
-      id: string,
-      city: string | null,
-      state: string | null,
-      street1: string | null,
-      street2: string | null,
-      zip: string | null,
-      description: string | null,
-    } > | null,
     hasEmail: boolean | null,
     primaryEmail:  {
       id: string,
       emailAddress: string,
       description: string | null,
     } | null,
-    emails:  Array< {
-      id: string,
-      emailAddress: string,
-      description: string | null,
-    } > | null,
     primaryPhone:  {
       id: string,
       phoneNumber: string,
       type: PhoneTypeOptions | null,
       description: string | null,
     } | null,
-    phones:  Array< {
-      id: string,
-      phoneNumber: string,
-      type: PhoneTypeOptions | null,
-      description: string | null,
-    } > | null,
     preferredContactMethod: ContactMethodOptions | null,
     canReceiveCalls: boolean | null,
     canReceiveTexts: boolean | null,
@@ -10660,38 +10714,18 @@ export interface FullPatientInfoFragment {
     zip: string | null,
     description: string | null,
   } | null,
-  addresses:  Array< {
-    id: string,
-    city: string | null,
-    state: string | null,
-    street1: string | null,
-    street2: string | null,
-    zip: string | null,
-    description: string | null,
-  } > | null,
   hasEmail: boolean | null,
   primaryEmail:  {
     id: string,
     emailAddress: string,
     description: string | null,
   } | null,
-  emails:  Array< {
-    id: string,
-    emailAddress: string,
-    description: string | null,
-  } > | null,
   primaryPhone:  {
     id: string,
     phoneNumber: string,
     type: PhoneTypeOptions | null,
     description: string | null,
   } | null,
-  phones:  Array< {
-    id: string,
-    phoneNumber: string,
-    type: PhoneTypeOptions | null,
-    description: string | null,
-  } > | null,
   preferredContactMethod: ContactMethodOptions | null,
   canReceiveCalls: boolean | null,
   canReceiveTexts: boolean | null,

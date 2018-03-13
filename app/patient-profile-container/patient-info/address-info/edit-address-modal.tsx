@@ -11,7 +11,7 @@ import {
 import AddressModal, { IAddress, ISavedAddress } from '../../../shared/address-modal/address-modal';
 
 interface IProps {
-  onSaved: (address: ISavedAddress) => void;
+  onSaved: (address: ISavedAddress, isPrimaryUpdatedToTrue: boolean) => void;
   patientId: string;
   patientInfoId: string;
   address?: ISavedAddress | null;
@@ -32,20 +32,14 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class EditAddressModal extends React.Component<allProps> {
-  editAddress = async (address: IAddress, updatedIsPrimary: boolean) => {
+  editAddress = async (address: IAddress, isPrimaryUpdatedToTrue: boolean) => {
     if (!address.id) {
       return;
     }
 
-    const {
-      editAddressMutation,
-      editPatientInfoMutation,
-      patientId,
-      patientInfoId,
-      isPrimary,
-    } = this.props;
+    const { editAddressMutation, editPatientInfoMutation, patientId, patientInfoId } = this.props;
 
-    if (updatedIsPrimary !== isPrimary) {
+    if (isPrimaryUpdatedToTrue) {
       await editPatientInfoMutation({
         variables: {
           patientInfoId,
@@ -67,18 +61,22 @@ export class EditAddressModal extends React.Component<allProps> {
     });
   };
 
-  handleAddressSaved = (response: { data: addressEditMutation }) => {
+  handleAddressSaved = (
+    response: { data: addressEditMutation },
+    isPrimaryUpdatedToTrue: boolean,
+  ) => {
     if (response.data.addressEdit) {
-      this.props.onSaved(response.data.addressEdit);
+      this.props.onSaved(response.data.addressEdit, isPrimaryUpdatedToTrue);
     }
   };
 
   render() {
-    const { address, isVisible, closePopup } = this.props;
+    const { address, isVisible, closePopup, isPrimary } = this.props;
 
     return (
       <AddressModal
         isVisible={isVisible}
+        isPrimary={isPrimary}
         address={address}
         saveAddress={this.editAddress}
         onSaved={this.handleAddressSaved}

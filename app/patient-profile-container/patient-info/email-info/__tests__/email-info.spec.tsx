@@ -8,10 +8,11 @@ import FlaggableDisplayField from '../../flaggable-display-field';
 import { IEditableFieldState } from '../../patient-info';
 import CreateEmailModal from '../create-email-modal';
 import EditEmailModal from '../edit-email-modal';
-import EmailInfo from '../email-info';
+import { EmailInfo } from '../email-info';
 
 describe('Render Email Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
+  const emailDeleteMutation = jest.fn();
 
   const wrapper = shallow(
     <EmailInfo
@@ -19,6 +20,8 @@ describe('Render Email Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.patientInfo.id}
       className="something"
+      emailDeleteMutation={emailDeleteMutation}
+      error={null}
     />,
   );
 
@@ -33,6 +36,7 @@ describe('Render Email Info Component', () => {
   it('renders section with primary email', () => {
     wrapper.setProps({
       primaryEmail: patient.patientInfo.primaryEmail,
+      emails: [patient.patientInfo.primaryEmail],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(1);
@@ -56,7 +60,7 @@ describe('Render Email Info Component', () => {
   it('renders section with additional emails', () => {
     wrapper.setProps({
       primaryEmail: patient.patientInfo.primaryEmail,
-      emails: [email2],
+      emails: [patient.patientInfo.primaryEmail, email2],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(2);

@@ -17,9 +17,9 @@ export interface ISavedAddress extends IAddress {
 }
 
 interface IProps {
-  saveAddress: (address: IAddress, isPrimary: boolean) => Promise<any>;
+  saveAddress: (address: IAddress, isPrimaryUpdatedToTrue: boolean) => Promise<any>;
   closePopup: () => void;
-  onSaved: (response: any) => void;
+  onSaved: (response: any, isPrimaryUpdatedToTrue: boolean) => void;
   isVisible: boolean;
   isPrimary?: boolean;
   address?: IAddress | null;
@@ -66,9 +66,10 @@ class AddressModal extends React.Component<IProps, IState> {
   };
 
   handleSubmit = async () => {
-    const { address, saveAddress, onSaved } = this.props;
+    const { address, saveAddress, onSaved, isPrimary } = this.props;
     const originalAddress = address || {};
     const { street1, state, zip, city, description, updatedIsPrimary } = this.state;
+    const isPrimaryUpdatedToTrue = updatedIsPrimary === true && updatedIsPrimary !== isPrimary;
 
     const updatedAddress = {
       id: originalAddress.id,
@@ -80,8 +81,8 @@ class AddressModal extends React.Component<IProps, IState> {
     };
 
     try {
-      const response = await saveAddress(updatedAddress, !!updatedIsPrimary);
-      onSaved(response);
+      const response = await saveAddress(updatedAddress, isPrimaryUpdatedToTrue);
+      onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error

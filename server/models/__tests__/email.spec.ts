@@ -30,6 +30,16 @@ describe('email', () => {
     await Db.release();
   });
 
+  describe('get', async () => {
+    it('should get email by id', async () => {
+      await transaction(Email.knex(), async txn => {
+        const { email } = await setup(txn);
+        const fetchedEmail = await Email.get(email.id, txn);
+        expect(fetchedEmail).toMatchObject(email);
+      });
+    });
+  });
+
   describe('create', async () => {
     it('should create email', async () => {
       await transaction(Email.knex(), async txn => {
@@ -39,6 +49,20 @@ describe('email', () => {
           description: 'spam email',
           updatedById: user.id,
         });
+      });
+    });
+  });
+
+  describe('delete', async () => {
+    it('should delete email', async () => {
+      await transaction(Email.knex(), async txn => {
+        const { email } = await setup(txn);
+        const deleted = await Email.delete(email.id, txn);
+
+        expect(deleted.deletedAt).toBeTruthy();
+        expect(deleted.id).toBe(email.id);
+
+        await expect(Email.get(email.id, txn)).rejects.toMatch(`No such email: ${email.id}`);
       });
     });
   });

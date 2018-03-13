@@ -11,7 +11,7 @@ import {
 import PhoneModal, { IPhone, ISavedPhone } from '../../../shared/phone-modal/phone-modal';
 
 interface IProps {
-  onSaved: (phone: ISavedPhone) => void;
+  onSaved: (phone: ISavedPhone, isPrimaryUpdatedToTrue: boolean) => void;
   patientId: string;
   patientInfoId: string;
   phone?: ISavedPhone | null;
@@ -32,19 +32,14 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class EditPhoneModal extends React.Component<allProps> {
-  editPhone = async (phone: IPhone, updatedIsPrimary: boolean) => {
+  editPhone = async (phone: IPhone, isPrimaryUpdatedToTrue: boolean) => {
     if (!phone.id || !phone.phoneNumber) {
       return;
     }
 
-    const {
-      editPhoneMutation,
-      editPatientInfoMutation,
-      patientId,
-      isPrimary,
-      patientInfoId,
-    } = this.props;
-    if (updatedIsPrimary !== isPrimary) {
+    const { editPhoneMutation, editPatientInfoMutation, patientId, patientInfoId } = this.props;
+
+    if (isPrimaryUpdatedToTrue) {
       await editPatientInfoMutation({
         variables: {
           patientInfoId,
@@ -64,9 +59,9 @@ export class EditPhoneModal extends React.Component<allProps> {
     });
   };
 
-  handlePhoneSaved = (response: { data: phoneEditMutation }) => {
+  handlePhoneSaved = (response: { data: phoneEditMutation }, isPrimaryUpdatedToTrue: boolean) => {
     if (response.data.phoneEdit) {
-      this.props.onSaved(response.data.phoneEdit);
+      this.props.onSaved(response.data.phoneEdit, isPrimaryUpdatedToTrue);
     }
   };
 

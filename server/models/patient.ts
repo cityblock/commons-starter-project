@@ -23,11 +23,8 @@ const SIMILARITY_THRESHOLD = 0.15;
 const EAGER_QUERY = `[
   patientInfo.[
     primaryAddress,
-    addresses,
     primaryEmail,
-    emails,
     primaryPhone,
-    phones,
   ],
   computedPatientStatus,
   patientDataFlags,

@@ -3,7 +3,12 @@ import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import { addressCreate, addressCreateForPatient, addressEdit } from './address-resolver';
+import {
+  addressCreate,
+  addressCreateForPatient,
+  addressDeleteForPatient,
+  addressEdit,
+} from './address-resolver';
 import {
   answerCreate,
   answerDelete,
@@ -58,7 +63,12 @@ import {
   concernSuggestionDelete,
   resolveConcernsForAnswer,
 } from './concern-suggestion-resolver';
-import { emailCreate, emailCreateForPatient, emailEdit } from './email-resolver';
+import {
+  emailCreate,
+  emailCreateForPatient,
+  emailDeleteForPatient,
+  emailEdit,
+} from './email-resolver';
 import {
   eventNotificationsForTaskDismiss,
   eventNotificationDismiss,
@@ -78,6 +88,7 @@ import {
   resolveGoalSuggestionTemplate,
   resolveGoalSuggestionTemplates,
 } from './goal-suggestion-template-resolver';
+import { resolveAddresses } from './patient-address-resolver';
 import {
   patientAdvancedDirectiveFormCreate,
   patientAdvancedDirectiveFormDelete,
@@ -113,6 +124,7 @@ import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
 } from './patient-data-flag-resolver';
+import { resolveEmails } from './patient-email-resolver';
 import {
   patientGlassBreakCreate,
   resolvePatientGlassBreaksForUser,
@@ -133,6 +145,7 @@ import {
   resolvePatientList,
   resolvePatientLists,
 } from './patient-list-resolver';
+import { resolvePhones } from './patient-phone-resolver';
 import {
   patientCoreIdentityVerify,
   patientEdit,
@@ -165,7 +178,12 @@ import {
   patientTaskSuggestionDismiss,
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
-import { phoneCreate, phoneCreateForPatient, phoneEdit } from './phone-resolver';
+import {
+  phoneCreate,
+  phoneCreateForPatient,
+  phoneDeleteForPatient,
+  phoneEdit,
+} from './phone-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteGlassBreakCreate,
@@ -402,12 +420,16 @@ const resolveFunctions = {
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
     patientConsentFormsForPatient: resolvePatientConsentFormsForPatient,
     patientAdvancedDirectiveFormsForPatient: resolvePatientAdvancedDirectiveFormsForPatient,
+    patientAddresses: resolveAddresses,
+    patientEmails: resolveEmails,
+    patientPhones: resolvePhones,
     patientScratchPad: resolvePatientScratchPad,
   },
 
   RootMutationType: {
     addressCreate,
     addressCreateForPatient,
+    addressDeleteForPatient,
     addressEdit,
     careTeamAddUser,
     careTeamReassignUser,
@@ -415,6 +437,7 @@ const resolveFunctions = {
     careTeamRemoveUser,
     emailCreate,
     emailCreateForPatient,
+    emailDeleteForPatient,
     emailEdit,
     patientContactCreate,
     patientContactEdit,
@@ -424,6 +447,7 @@ const resolveFunctions = {
     patientNeedToKnowEdit,
     phoneCreate,
     phoneCreateForPatient,
+    phoneDeleteForPatient,
     phoneEdit,
     currentUserEdit,
     userCreate,

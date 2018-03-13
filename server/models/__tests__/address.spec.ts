@@ -30,6 +30,16 @@ describe('address', () => {
     await Db.release();
   });
 
+  describe('get', async () => {
+    it('should get address by id', async () => {
+      await transaction(Address.knex(), async txn => {
+        const { address } = await setup(txn);
+        const fetchedAddress = await Address.get(address.id, txn);
+        expect(fetchedAddress).toMatchObject(address);
+      });
+    });
+  });
+
   describe('create', async () => {
     it('should create address', async () => {
       await transaction(Address.knex(), async txn => {
@@ -42,6 +52,22 @@ describe('address', () => {
           description: 'Office',
           updatedById: user.id,
         });
+      });
+    });
+  });
+
+  describe('delete', async () => {
+    it('should delete address', async () => {
+      await transaction(Address.knex(), async txn => {
+        const { address } = await setup(txn);
+        const deleted = await Address.delete(address.id, txn);
+
+        expect(deleted.deletedAt).toBeTruthy();
+        expect(deleted.id).toBe(address.id);
+
+        await expect(Address.get(address.id, txn)).rejects.toMatch(
+          `No such address: ${address.id}`,
+        );
       });
     });
   });

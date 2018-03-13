@@ -58,6 +58,7 @@ export default class PatientContact extends Model {
   primaryEmail: Email;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
 
   $beforeInsert() {
     this.id = uuid();
@@ -91,6 +92,7 @@ export default class PatientContact extends Model {
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
+      deletedAt: { type: 'string' },
     },
     required: [
       'patientId',

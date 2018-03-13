@@ -531,6 +531,21 @@ declare module 'schema' {
     >;
 
     /**
+     * get all emails for a patient
+     */
+    patientEmails: Array<IEmail>;
+
+    /**
+     * get all addresses for a patient
+     */
+    patientAddresses: Array<IAddress>;
+
+    /**
+     * get all phones for a patient
+     */
+    patientPhones: Array<IPhone>;
+
+    /**
      * gets a patient scratch pad for given user and patient
      */
     patientScratchPad: IPatientScratchPad;
@@ -840,6 +855,15 @@ declare module 'schema' {
   interface IPatientAdvancedDirectiveFormsForPatientOnRootQueryTypeArguments {
     patientId: string;
   }
+  interface IPatientEmailsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientAddressesOnRootQueryTypeArguments {
+    patientId: string;
+  }
+  interface IPatientPhonesOnRootQueryTypeArguments {
+    patientId: string;
+  }
   interface IPatientScratchPadOnRootQueryTypeArguments {
     patientId: string;
     glassBreakId?: string | null;
@@ -1036,12 +1060,9 @@ declare module 'schema' {
     language: string | null;
     isMarginallyHoused: boolean | null;
     primaryAddress: IAddress | null;
-    addresses: Array<IAddress>;
     primaryPhone: IPhone | null;
-    phones: Array<IPhone>;
     hasEmail: boolean | null;
     primaryEmail: IEmail | null;
-    emails: Array<IEmail>;
     preferredContactMethod: IContactMethodOptionsEnum | null;
     canReceiveCalls: boolean | null;
     canReceiveTexts: boolean | null;
@@ -2257,6 +2278,11 @@ declare module 'schema' {
     addressCreateForPatient: IAddress | null;
 
     /**
+     * Delete an address for a Patient
+     */
+    addressDeleteForPatient: IAddress | null;
+
+    /**
      * Edit an address
      */
     addressEdit: IAddress | null;
@@ -2272,6 +2298,11 @@ declare module 'schema' {
     phoneCreate: IPhone | null;
 
     /**
+     * Delete a phone number for a Patient
+     */
+    phoneDeleteForPatient: IPhone | null;
+
+    /**
      * Edit a phone number
      */
     phoneEdit: IPhone | null;
@@ -2285,6 +2316,11 @@ declare module 'schema' {
      * Create an email
      */
     emailCreate: IEmail | null;
+
+    /**
+     * Delete an email for a Patient
+     */
+    emailDeleteForPatient: IEmail | null;
 
     /**
      * Edit an email
@@ -2841,6 +2877,9 @@ declare module 'schema' {
   interface IAddressCreateForPatientOnRootMutationTypeArguments {
     input?: IAddressCreateForPatientInput | null;
   }
+  interface IAddressDeleteForPatientOnRootMutationTypeArguments {
+    input?: IAddressDeleteForPatientInput | null;
+  }
   interface IAddressEditOnRootMutationTypeArguments {
     input?: IAddressEditInput | null;
   }
@@ -2850,6 +2889,9 @@ declare module 'schema' {
   interface IPhoneCreateOnRootMutationTypeArguments {
     input?: IPhoneCreateInput | null;
   }
+  interface IPhoneDeleteForPatientOnRootMutationTypeArguments {
+    input?: IPhoneDeleteForPatientInput | null;
+  }
   interface IPhoneEditOnRootMutationTypeArguments {
     input?: IPhoneEditInput | null;
   }
@@ -2858,6 +2900,9 @@ declare module 'schema' {
   }
   interface IEmailCreateOnRootMutationTypeArguments {
     input?: IEmailCreateInput | null;
+  }
+  interface IEmailDeleteForPatientOnRootMutationTypeArguments {
+    input?: IEmailDeleteForPatientInput | null;
   }
   interface IEmailEditOnRootMutationTypeArguments {
     input?: IEmailEditInput | null;
@@ -3289,6 +3334,15 @@ declare module 'schema' {
   }
 
   /**
+   * params for deleting an address for a patient in the db
+   */
+  interface IAddressDeleteForPatientInput {
+    patientId: string;
+    addressId: string;
+    isPrimary?: boolean | null;
+  }
+
+  /**
    * Editable fields on an address
    */
   interface IAddressEditInput {
@@ -3323,6 +3377,15 @@ declare module 'schema' {
   }
 
   /**
+   * params for deleting a phone for a patient in the db
+   */
+  interface IPhoneDeleteForPatientInput {
+    patientId: string;
+    phoneId: string;
+    isPrimary?: boolean | null;
+  }
+
+  /**
    * Editable fields on a phone
    */
   interface IPhoneEditInput {
@@ -3349,6 +3412,15 @@ declare module 'schema' {
   interface IEmailCreateInput {
     emailAddress: string;
     description?: string | null;
+  }
+
+  /**
+   * params for deleting an email for a patient in the db
+   */
+  interface IEmailDeleteForPatientInput {
+    patientId: string;
+    emailId: string;
+    isPrimary?: boolean | null;
   }
 
   /**

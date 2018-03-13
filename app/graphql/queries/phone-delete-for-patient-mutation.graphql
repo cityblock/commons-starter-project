@@ -1,0 +1,9 @@
+#import "../fragments/full-phone.graphql"
+
+mutation phoneDeleteForPatient($phoneId: ID!, $patientId: ID!, $isPrimary: Boolean) {
+  phoneDeleteForPatient(
+    input: { phoneId: $phoneId, patientId: $patientId, isPrimary: $isPrimary }
+  ) {
+    ...FullPhone
+  }
+}

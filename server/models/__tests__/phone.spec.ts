@@ -30,6 +30,16 @@ describe('phone', () => {
     await Db.release();
   });
 
+  describe('get', async () => {
+    it('should get phone by id', async () => {
+      await transaction(Phone.knex(), async txn => {
+        const { phone } = await setup(txn);
+        const fetchedPhone = await Phone.get(phone.id, txn);
+        expect(fetchedPhone).toMatchObject(phone);
+      });
+    });
+  });
+
   describe('create', async () => {
     it('should create phone', async () => {
       await transaction(Phone.knex(), async txn => {
@@ -40,6 +50,20 @@ describe('phone', () => {
           description: 'moms home phone',
           updatedById: user.id,
         });
+      });
+    });
+  });
+
+  describe('delete', async () => {
+    it('should delete phone', async () => {
+      await transaction(Phone.knex(), async txn => {
+        const { phone } = await setup(txn);
+        const deleted = await Phone.delete(phone.id, txn);
+
+        expect(deleted.deletedAt).toBeTruthy();
+        expect(deleted.id).toBe(phone.id);
+
+        await expect(Phone.get(phone.id, txn)).rejects.toMatch(`No such phone: ${phone.id}`);
       });
     });
   });

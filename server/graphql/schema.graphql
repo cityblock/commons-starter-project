@@ -300,12 +300,9 @@ type PatientInfo implements uniqueId {
   language: String
   isMarginallyHoused: Boolean
   primaryAddress: Address
-  addresses: [Address!]
   primaryPhone: Phone
-  phones: [Phone!]
   hasEmail: Boolean
   primaryEmail: Email
-  emails: [Email!]
   preferredContactMethod: ContactMethodOptions
   canReceiveCalls: Boolean
   canReceiveTexts: Boolean
@@ -409,6 +406,13 @@ input AddressCreateForPatientInput {
   isPrimary: Boolean
 }
 
+# params for deleting an address for a patient in the db
+input AddressDeleteForPatientInput {
+  patientId: ID!
+  addressId: ID!
+  isPrimary: Boolean
+}
+
 # Phone
 type Phone implements uniqueId {
   id: ID!
@@ -442,6 +446,13 @@ input PhoneCreateForPatientInput {
   isPrimary: Boolean
 }
 
+# params for deleting a phone for a patient in the db
+input PhoneDeleteForPatientInput {
+  patientId: ID!
+  phoneId: ID!
+  isPrimary: Boolean
+}
+
 # Email
 type Email implements uniqueId {
   id: ID!
@@ -468,6 +479,13 @@ input EmailCreateForPatientInput {
   patientId: ID!
   emailAddress: String!
   description: String
+  isPrimary: Boolean
+}
+
+# params for deleting an email for a patient in the db
+input EmailDeleteForPatientInput {
+  patientId: ID!
+  emailId: ID!
   isPrimary: Boolean
 }
 
@@ -2132,18 +2150,24 @@ type RootMutationType {
   addressCreate(input: AddressCreateInput): Address
   # Create an address for a Patient
   addressCreateForPatient(input: AddressCreateForPatientInput): Address
+  # Delete an address for a Patient
+  addressDeleteForPatient(input: AddressDeleteForPatientInput): Address
   # Edit an address
   addressEdit(input: AddressEditInput): Address
   # Create a phone number for a Patient
   phoneCreateForPatient(input: PhoneCreateForPatientInput): Phone
   # Create a phone number
   phoneCreate(input: PhoneCreateInput): Phone
+  # Delete a phone number for a Patient
+  phoneDeleteForPatient(input: PhoneDeleteForPatientInput): Phone
   # Edit a phone number
   phoneEdit(input: PhoneEditInput): Phone
   # Create an email for a Patient
   emailCreateForPatient(input: EmailCreateForPatientInput): Email
   # Create an email
   emailCreate(input: EmailCreateInput): Email
+  # Delete an email for a Patient
+  emailDeleteForPatient(input: EmailDeleteForPatientInput): Email
   # Edit an email
   emailEdit(input: EmailEditInput): Email
   # Edit fields on patient stored in the db
@@ -2611,6 +2635,12 @@ type RootQueryType {
   patientConsentFormsForPatient(patientId: ID!): [PatientConsentForm!]!
   # patient advanced directive forms
   patientAdvancedDirectiveFormsForPatient(patientId: ID!): [PatientAdvancedDirectiveForm!]!
+  # get all emails for a patient
+  patientEmails(patientId: ID!): [Email!]
+  # get all addresses for a patient
+  patientAddresses(patientId: ID!): [Address!]
+  # get all phones for a patient
+  patientPhones(patientId: ID!): [Phone!]
   # gets a patient scratch pad for given user and patient
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
 }

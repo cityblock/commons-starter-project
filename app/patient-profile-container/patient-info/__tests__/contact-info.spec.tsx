@@ -16,24 +16,11 @@ describe('Render Patient Comtact Info Component', () => {
   it('renders email info', () => {
     const emailInfo = wrapper.find(EmailInfo);
     expect(emailInfo).toHaveLength(1);
-
-    expect(emailInfo.props().patientId).toBe(contactInfo.patientId);
-    expect(emailInfo.props().patientInfoId).toBe(contactInfo.patientInfoId);
-    expect(emailInfo.props().primaryEmail).toBe(contactInfo.primaryEmail);
-    expect(emailInfo.props().emails).toBe(contactInfo.emails);
-    expect(emailInfo.props().hasEmail).toBe(contactInfo.hasEmail);
-    expect(emailInfo.props().onChange).toBe(onChange);
   });
 
   it('renders phone info', () => {
     const phoneInfo = wrapper.find(PhoneInfo);
     expect(phoneInfo).toHaveLength(1);
-
-    expect(phoneInfo.props().patientId).toBe(contactInfo.patientId);
-    expect(phoneInfo.props().patientInfoId).toBe(contactInfo.patientInfoId);
-    expect(phoneInfo.props().primaryPhone).toBe(contactInfo.primaryPhone);
-    expect(phoneInfo.props().phones).toBe(contactInfo.phones);
-    expect(phoneInfo.props().onChange).toBe(onChange);
   });
 
   it('renders contact info header', () => {

@@ -7,12 +7,13 @@ import { address2, address3, patient } from '../../../../shared/util/test-data';
 import DisplayCard from '../../display-card';
 import FlaggableDisplayField from '../../flaggable-display-field';
 import { IEditableFieldState } from '../../patient-info';
-import AddressInfo from '../address-info';
+import { AddressInfo } from '../address-info';
 import CreateAddressModal from '../create-address-modal';
 import EditAddressModal from '../edit-address-modal';
 
 describe('Render Address Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
+  const addressDeleteMutation = jest.fn();
 
   const wrapper = shallow(
     <AddressInfo
@@ -20,6 +21,8 @@ describe('Render Address Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.id}
       className="something"
+      addressDeleteMutation={addressDeleteMutation}
+      error={null}
     />,
   );
 
@@ -37,6 +40,7 @@ describe('Render Address Info Component', () => {
   it('renders section with primary address', () => {
     wrapper.setProps({
       primaryAddress: patient.patientInfo.primaryAddress,
+      addresses: [patient.patientInfo.primaryAddress],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(1);
@@ -112,7 +116,7 @@ describe('Render Address Info Component', () => {
   it('renders section with additional addresses', () => {
     wrapper.setProps({
       primaryAddress: patient.patientInfo.primaryAddress,
-      addresses: [address2, address3],
+      addresses: [patient.patientInfo.primaryAddress, address2, address3],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(3);

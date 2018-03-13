@@ -47,13 +47,38 @@ export default class Address extends BaseModel {
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      deletedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
     },
     required: ['zip', 'updatedById'],
   };
 
+  static async get(addressId: string, txn: Transaction) {
+    const address = await this.query(txn).findOne({ id: addressId, deletedAt: null });
+
+    if (!address) {
+      return Promise.reject(`No such address: ${addressId}`);
+    }
+
+    return address;
+  }
+
   static async create(input: IAddressOptions, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
+  }
+
+  static async delete(addressId: string, txn: Transaction) {
+    await this.query(txn)
+      .where({ id: addressId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString() });
+
+    const deleted = await this.query(txn).findById(addressId);
+
+    if (!deleted) {
+      return Promise.reject(`No such address: ${addressId}`);
+    }
+
+    return deleted;
   }
 
   static async edit(address: IAddressEdit, addressId: string, txn: Transaction): Promise<Address> {

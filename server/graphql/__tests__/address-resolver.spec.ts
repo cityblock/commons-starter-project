@@ -125,7 +125,7 @@ describe('address resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientAddress = await PatientAddress.getForPatient(patient.id, txn);
+        const patientAddress = await PatientAddress.getAll(patient.id, txn);
         expect(patientAddress).not.toBeNull();
         expect(patientAddress.length).toBe(1);
       });
@@ -164,12 +164,118 @@ describe('address resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientAddress = await PatientAddress.getForPatient(patient.id, txn);
+        const patientAddress = await PatientAddress.getAll(patient.id, txn);
         expect(patientAddress).not.toBeNull();
         expect(patientAddress.length).toBe(1);
 
         const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
         expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreateForPatient.id);
+      });
+    });
+  });
+
+  describe('delete address', async () => {
+    it('should delete address', async () => {
+      await transaction(Address.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          addressCreateForPatient(input: {
+            patientId: "${patient.id}",
+            zip: "11238",
+            description: "Some address",
+          }) {
+            id, zip, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const address = createResult.data!.addressCreateForPatient;
+
+        const query = `mutation {
+          addressDeleteForPatient(input: {
+            addressId: "${address.id}",
+            patientId: "${patient.id}",
+          }) {
+            id, zip, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
+          id: address.id,
+          zip: address.zip,
+          description: address.description,
+        });
+        expect(log).toBeCalled();
+      });
+    });
+
+    it('should delete primary address', async () => {
+      await transaction(Address.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          addressCreateForPatient(input: {
+            patientId: "${patient.id}",
+            zip: "11238",
+            description: "Some address",
+            isPrimary: true,
+          }) {
+            id, zip, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const address = createResult.data!.addressCreateForPatient;
+
+        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(initialPatientInfo.primaryAddressId).toBe(address.id);
+
+        const query = `mutation {
+          addressDeleteForPatient(input: {
+            addressId: "${address.id}",
+            patientId: "${patient.id}",
+            isPrimary: true,
+          }) {
+            id, zip, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
+          id: address.id,
+          zip: address.zip,
+          description: address.description,
+        });
+        expect(log).toBeCalled();
+
+        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(patientInfo.primaryAddressId).toBeFalsy();
       });
     });
   });

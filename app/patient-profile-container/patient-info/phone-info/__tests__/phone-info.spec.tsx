@@ -9,10 +9,11 @@ import FlaggableDisplayField from '../../flaggable-display-field';
 import { IEditableFieldState } from '../../patient-info';
 import CreatePhoneModal from '../create-phone-modal';
 import EditPhoneModal from '../edit-phone-modal';
-import PhoneInfo from '../phone-info';
+import { PhoneInfo } from '../phone-info';
 
 describe('Render Phone Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
+  const phoneDeleteMutation = jest.fn();
 
   const wrapper = shallow(
     <PhoneInfo
@@ -20,6 +21,8 @@ describe('Render Phone Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.patientInfo.id}
       className="something"
+      phoneDeleteMutation={phoneDeleteMutation}
+      error={null}
     />,
   );
 
@@ -37,6 +40,7 @@ describe('Render Phone Info Component', () => {
   it('renders section with primary phone', () => {
     wrapper.setProps({
       primaryPhone: patient.patientInfo.primaryPhone,
+      phones: [patient.patientInfo.primaryPhone],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(1);
@@ -81,7 +85,7 @@ describe('Render Phone Info Component', () => {
   it('renders section with additional phones', () => {
     wrapper.setProps({
       primaryPhone: patient.patientInfo.primaryPhone,
-      phones: [phone2],
+      phones: [patient.patientInfo.primaryPhone, phone2],
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(2);

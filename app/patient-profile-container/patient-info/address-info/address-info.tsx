@@ -1,6 +1,14 @@
-import { concat, findIndex, slice, values } from 'lodash';
+import { concat, filter, findIndex, slice, values } from 'lodash';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import * as addressDeleteMutationGraphql from '../../../graphql/queries/address-delete-for-patient-mutation.graphql';
+import * as addressesQuery from '../../../graphql/queries/get-patient-addresses.graphql';
+import {
+  addressDeleteForPatientMutation,
+  addressDeleteForPatientMutationVariables,
+  getPatientAddressesQuery,
+} from '../../../graphql/types';
 import { ISavedAddress } from '../../../shared/address-modal/address-modal';
 import Button from '../../../shared/library/button/button';
 import Checkbox from '../../../shared/library/checkbox/checkbox';
@@ -18,31 +26,62 @@ interface IProps {
   patientInfoId: string;
   isMarginallyHoused?: boolean | null;
   primaryAddress?: ISavedAddress | null;
-  addresses?: ISavedAddress[];
   className?: string;
 }
+
+interface IGraphqlProps {
+  addressDeleteMutation: (
+    options: { variables: addressDeleteForPatientMutationVariables },
+  ) => { data: addressDeleteForPatientMutation };
+  addresses?: getPatientAddressesQuery['patientAddresses'];
+  loading?: boolean;
+  error: string | null;
+}
+
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   isPrimary: boolean;
   currentAddress?: ISavedAddress | null;
+  updatedAddresses: ISavedAddress[] | null;
 }
 
-export default class AddressInfo extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class AddressInfo extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
       isEditModalVisible: false,
       isCreateModalVisible: false,
       isPrimary: false,
+      updatedAddresses: null,
     };
   }
 
-  handleAddressDelete(addressId: string) {
-    // TODO: implement address delete
-  }
+  handleAddressDelete = async (addressId: string, isPrimary: boolean) => {
+    const { addressDeleteMutation, patientId, onChange, addresses } = this.props;
+    try {
+      await addressDeleteMutation({
+        variables: {
+          patientId,
+          addressId,
+          isPrimary,
+        },
+      });
+
+      const currentAddresses = this.state.updatedAddresses || addresses || [];
+      const updatedAddresses = filter(currentAddresses, address => address.id !== addressId);
+      this.setState({ updatedAddresses });
+
+      if (isPrimary) {
+        onChange({ primaryAddress: null });
+      }
+    } catch (err) {
+      // TODO: handle errors
+    }
+  };
 
   handleAddAddressClick = () => {
     this.setState({ isCreateModalVisible: true });
@@ -61,45 +100,50 @@ export default class AddressInfo extends React.Component<IProps, IState> {
   };
 
   handleOpenEditModal = (address: ISavedAddress) => {
+    const { primaryAddress } = this.props;
+    const isPrimary = !!(primaryAddress && primaryAddress.id === address.id);
+
     this.setState({
       currentAddress: address,
       isEditModalVisible: true,
+      isPrimary,
     });
   };
 
   handleSaveSuccess = (savedAddress: ISavedAddress) => {
-    const { onChange } = this.props;
-    const addresses = this.props.addresses || [];
-    const index = findIndex(addresses, address => address.id === savedAddress.id);
+    const { addresses } = this.props;
+    const currentAddresses = this.state.updatedAddresses || addresses || [];
+    const index = findIndex(currentAddresses, address => address.id === savedAddress.id);
 
     if (index < 0) {
-      const updatedAddresses = [...addresses, savedAddress];
-      onChange({ addresses: updatedAddresses });
+      const updatedAddresses = [...currentAddresses, savedAddress];
+      this.setState({ updatedAddresses });
     }
   };
 
-  handleEditSuccess = (savedAddress: ISavedAddress) => {
-    const { onChange, primaryAddress } = this.props;
+  handleEditSuccess = (savedAddress: ISavedAddress, isPrimaryUpdatedToTrue: boolean) => {
+    const { onChange, addresses } = this.props;
+    const currentAddresses = this.state.updatedAddresses || addresses || [];
 
-    if (primaryAddress && savedAddress.id === primaryAddress.id) {
-      onChange({ primaryAddress: savedAddress });
-      return;
+    const index = findIndex(currentAddresses, address => address.id === savedAddress.id);
+    if (index > -1) {
+      // insert updated address into the correct position in the array of addresses
+      const updatedAddresses = concat(
+        slice(currentAddresses, 0, index),
+        savedAddress,
+        slice(currentAddresses, index + 1),
+      );
+      this.setState({ updatedAddresses });
     }
 
-    const addresses = this.props.addresses || [];
-    const index = findIndex(addresses, address => address.id === savedAddress.id);
-
-    if (index > -1) {
-      const updatedAddresses = concat(
-        slice(addresses, 0, index),
-        savedAddress,
-        slice(addresses, index + 1),
-      );
-      onChange({ addresses: updatedAddresses });
+    if (isPrimaryUpdatedToTrue) {
+      onChange({ primaryAddress: savedAddress });
     }
   };
 
   handleSavePrimarySuccess = (savedAddress: ISavedAddress) => {
+    this.handleSaveSuccess(savedAddress);
+
     const { onChange } = this.props;
     onChange({ primaryAddress: savedAddress });
   };
@@ -121,7 +165,7 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(address)}
-        onDeleteClick={() => this.handleAddressDelete(address.id)}
+        onDeleteClick={async () => this.handleAddressDelete(address.id, isStarred)}
         key={`card-${address.id}`}
         className={styles.fieldMargin}
         isStarred={isStarred}
@@ -154,11 +198,22 @@ export default class AddressInfo extends React.Component<IProps, IState> {
 
   render() {
     const { addresses, patientId, patientInfoId, primaryAddress, isMarginallyHoused } = this.props;
-    const { isEditModalVisible, isCreateModalVisible, isPrimary, currentAddress } = this.state;
+    const {
+      isEditModalVisible,
+      isCreateModalVisible,
+      isPrimary,
+      currentAddress,
+      updatedAddresses,
+    } = this.state;
+
+    const currentAddresses = updatedAddresses || addresses;
+    const nonPrimaryAddresses = primaryAddress
+      ? filter(currentAddresses, address => address.id !== primaryAddress.id)
+      : currentAddresses;
 
     const addressCards =
-      addresses && addresses.length
-        ? values(addresses).map(address => this.renderAddressDisplayCard(address))
+      nonPrimaryAddresses && nonPrimaryAddresses.length
+        ? values(nonPrimaryAddresses).map(address => this.renderAddressDisplayCard(address))
         : null;
 
     const addAddressButton = primaryAddress ? (
@@ -207,3 +262,21 @@ export default class AddressInfo extends React.Component<IProps, IState> {
     );
   }
 }
+
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(addressDeleteMutationGraphql as any, {
+    name: 'addressDeleteMutation',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(addressesQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      addresses: data ? (data as any).patientAddresses : null,
+    }),
+  }),
+)(AddressInfo);

@@ -120,7 +120,7 @@ describe('patient email model', () => {
         );
         await PatientEmail.create({ patientId: patient2.id, emailId: email4.id }, txn);
 
-        const emails = await PatientEmail.getForPatient(patient.id, txn);
+        const emails = await PatientEmail.getAll(patient.id, txn);
         expect(emails.length).toBe(2);
         expect(emails[0]).toMatchObject({
           emailAddress: 'spam@email.com',

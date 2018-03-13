@@ -1,0 +1,7 @@
+#import "../fragments/full-phone.graphql"
+
+query getPatientPhones($patientId: ID!) {
+  patientPhones(patientId: $patientId) {
+    ...FullPhone
+  }
+}

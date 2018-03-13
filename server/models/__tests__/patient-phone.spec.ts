@@ -122,7 +122,7 @@ describe('patient phone model', () => {
         );
         await PatientPhone.create({ patientId: patient2.id, phoneId: phone4.id }, txn);
 
-        const phones = await PatientPhone.getForPatient(patient.id, txn);
+        const phones = await PatientPhone.getAll(patient.id, txn);
         expect(phones.length).toBe(2);
         expect(phones[0]).toMatchObject({
           phoneNumber: '123-456-7890',

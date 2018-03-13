@@ -16,9 +16,9 @@ export interface ISavedPhone extends IPhone {
 }
 
 interface IProps {
-  savePhone: (phone: IPhone, isPrimary: boolean) => Promise<any>;
+  savePhone: (phone: IPhone, isPrimaryUpdatedToTrue: boolean) => Promise<any>;
   closePopup: () => void;
-  onSaved: (response: any) => void;
+  onSaved: (response: any, isPrimaryUpdatedToTrue: boolean) => void;
   isVisible: boolean;
   isPrimary?: boolean;
   phone?: IPhone | null;
@@ -61,9 +61,10 @@ class PhoneModal extends React.Component<IProps, IState> {
   };
 
   handleSubmit = async () => {
-    const { phone, savePhone, onSaved } = this.props;
+    const { phone, savePhone, onSaved, isPrimary } = this.props;
     const originalPhone = phone || {};
     const { phoneNumber, type, description, updatedIsPrimary } = this.state;
+    const isPrimaryUpdatedToTrue = updatedIsPrimary === true && updatedIsPrimary !== isPrimary;
 
     const updatedPhone = {
       id: originalPhone.id,
@@ -74,7 +75,7 @@ class PhoneModal extends React.Component<IProps, IState> {
 
     try {
       const response = await savePhone(updatedPhone, !!updatedIsPrimary);
-      onSaved(response);
+      onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error

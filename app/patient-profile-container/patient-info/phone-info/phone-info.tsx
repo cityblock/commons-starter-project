@@ -1,6 +1,14 @@
-import { concat, findIndex, slice, values } from 'lodash';
+import { concat, filter, findIndex, slice, values } from 'lodash';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import * as phonesQuery from '../../../graphql/queries/get-patient-phones.graphql';
+import * as phoneDeleteMutationGraphql from '../../../graphql/queries/phone-delete-for-patient-mutation.graphql';
+import {
+  getPatientPhonesQuery,
+  phoneDeleteForPatientMutation,
+  phoneDeleteForPatientMutationVariables,
+} from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import { ISavedPhone } from '../../../shared/phone-modal/phone-modal';
@@ -16,31 +24,62 @@ interface IProps {
   patientId: string;
   patientInfoId: string;
   primaryPhone?: ISavedPhone | null;
-  phones?: ISavedPhone[];
   className?: string;
 }
+
+interface IGraphqlProps {
+  phoneDeleteMutation: (
+    options: { variables: phoneDeleteForPatientMutationVariables },
+  ) => { data: phoneDeleteForPatientMutation };
+  phones?: getPatientPhonesQuery['patientPhones'];
+  loading?: boolean;
+  error: string | null;
+}
+
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   isPrimary: boolean;
   currentPhone?: ISavedPhone | null;
+  updatedPhones: ISavedPhone[] | null;
 }
 
-export default class PhoneInfo extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class PhoneInfo extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
       isEditModalVisible: false,
       isCreateModalVisible: false,
       isPrimary: false,
+      updatedPhones: null,
     };
   }
 
-  handlePhoneDelete(phoneId: string) {
-    // TODO: implement phone delete
-  }
+  handlePhoneDelete = async (phoneId: string, isPrimary: boolean) => {
+    const { phoneDeleteMutation, patientId, onChange, phones } = this.props;
+    try {
+      await phoneDeleteMutation({
+        variables: {
+          patientId,
+          phoneId,
+          isPrimary,
+        },
+      });
+
+      const currentPhones = this.state.updatedPhones || phones || [];
+      const updatedPhones = filter(currentPhones, phone => phone.id !== phoneId);
+      this.setState({ updatedPhones });
+
+      if (isPrimary) {
+        onChange({ primaryPhone: null });
+      }
+    } catch (err) {
+      // TODO: handle errors
+    }
+  };
 
   handleAddPhoneClick = () => {
     this.setState({ isCreateModalVisible: true });
@@ -70,34 +109,39 @@ export default class PhoneInfo extends React.Component<IProps, IState> {
   };
 
   handleSaveSuccess = (savedPhone: ISavedPhone) => {
-    const { onChange } = this.props;
-    const phones = this.props.phones || [];
-    const index = findIndex(phones, phone => phone.id === savedPhone.id);
+    const { phones } = this.props;
+    const currentPhones = this.state.updatedPhones || phones || [];
+    const index = findIndex(currentPhones, phone => phone.id === savedPhone.id);
 
     if (index < 0) {
-      const updatedPhones = [...phones, savedPhone];
-      onChange({ phones: updatedPhones });
+      const updatedPhones = [...currentPhones, savedPhone];
+      this.setState({ updatedPhones });
     }
   };
 
-  handleEditSuccess = (savedPhone: ISavedPhone) => {
-    const { onChange, primaryPhone } = this.props;
+  handleEditSuccess = (savedPhone: ISavedPhone, isPrimaryUpdatedToTrue: boolean) => {
+    const { onChange, phones } = this.props;
+    const currentPhones = this.state.updatedPhones || phones || [];
 
-    if (primaryPhone && savedPhone.id === primaryPhone.id) {
-      onChange({ primaryPhone: savedPhone });
-      return;
+    const index = findIndex(currentPhones, phone => phone.id === savedPhone.id);
+    if (index > -1) {
+      // insert updated phone into the correct position in the array of phones
+      const updatedPhones = concat(
+        slice(currentPhones, 0, index),
+        savedPhone,
+        slice(currentPhones, index + 1),
+      );
+      this.setState({ updatedPhones });
     }
 
-    const phones = this.props.phones || [];
-    const index = findIndex(phones, phone => phone.id === savedPhone.id);
-
-    if (index > -1) {
-      const updatedPhones = concat(slice(phones, 0, index), savedPhone, slice(phones, index + 1));
-      onChange({ phones: updatedPhones });
+    if (isPrimaryUpdatedToTrue) {
+      onChange({ primaryPhone: savedPhone });
     }
   };
 
   handleSavePrimarySuccess = (savedPhone: ISavedPhone) => {
+    this.handleSaveSuccess(savedPhone);
+
     const { onChange } = this.props;
     onChange({ primaryPhone: savedPhone });
   };
@@ -125,7 +169,7 @@ export default class PhoneInfo extends React.Component<IProps, IState> {
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(phone)}
-        onDeleteClick={() => this.handlePhoneDelete(phone.id)}
+        onDeleteClick={async () => this.handlePhoneDelete(phone.id, isStarred)}
         key={`card-${phone.id}`}
         className={styles.fieldMargin}
         isStarred={isStarred}
@@ -163,11 +207,22 @@ export default class PhoneInfo extends React.Component<IProps, IState> {
 
   render() {
     const { phones, patientId, patientInfoId, primaryPhone, className } = this.props;
-    const { isEditModalVisible, isCreateModalVisible, isPrimary, currentPhone } = this.state;
+    const {
+      isEditModalVisible,
+      isCreateModalVisible,
+      isPrimary,
+      currentPhone,
+      updatedPhones,
+    } = this.state;
+
+    const currentPhones = updatedPhones || phones;
+    const nonPrimaryPhones = primaryPhone
+      ? filter(currentPhones, phone => phone.id !== primaryPhone.id)
+      : currentPhones;
 
     const phoneCards =
-      phones && phones.length
-        ? values(phones).map(phone => this.renderPhoneDisplayCard(phone))
+      nonPrimaryPhones && nonPrimaryPhones.length
+        ? values(nonPrimaryPhones).map(phone => this.renderPhoneDisplayCard(phone))
         : null;
 
     const addPhoneButon = primaryPhone ? (
@@ -209,3 +264,21 @@ export default class PhoneInfo extends React.Component<IProps, IState> {
     );
   }
 }
+
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(phoneDeleteMutationGraphql as any, {
+    name: 'phoneDeleteMutation',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(phonesQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      phones: data ? (data as any).patientPhones : null,
+    }),
+  }),
+)(PhoneInfo);

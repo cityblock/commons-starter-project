@@ -2,6 +2,7 @@ import { isNil, omitBy } from 'lodash';
 import {
   IAddressCreateForPatientInput,
   IAddressCreateInput,
+  IAddressDeleteForPatientInput,
   IAddressEditInput,
   IRootMutationType,
 } from 'schema';
@@ -58,6 +59,33 @@ export async function addressCreate(
   logger.log(`CREATE address by ${userId}`, 2);
 
   return Address.create(filtered, txn);
+}
+
+export interface IAddressDeleteOptions {
+  input: IAddressDeleteForPatientInput;
+}
+
+export async function addressDeleteForPatient(
+  root: any,
+  { input }: IAddressDeleteOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<Address> {
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+
+  logger.log(`DELETE address for patient ${input.patientId} by ${userId}`, 2);
+
+  await PatientAddress.delete({ patientId: input.patientId, addressId: input.addressId }, txn);
+
+  if (input.isPrimary) {
+    const patient = await Patient.get(input.patientId, txn);
+    await PatientInfo.edit(
+      { primaryAddressId: null, updatedById: userId! },
+      patient.patientInfo.id,
+      txn,
+    );
+  }
+
+  return Address.delete(input.addressId, txn);
 }
 
 export interface IAddressEditOptions {

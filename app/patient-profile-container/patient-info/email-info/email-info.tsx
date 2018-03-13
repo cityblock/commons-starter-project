@@ -1,6 +1,14 @@
-import { concat, findIndex, slice, values } from 'lodash';
+import { concat, filter, findIndex, slice, values } from 'lodash';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import * as emailDeleteMutationGraphql from '../../../graphql/queries/email-delete-for-patient-mutation.graphql';
+import * as emailsQuery from '../../../graphql/queries/get-patient-emails.graphql';
+import {
+  emailDeleteForPatientMutation,
+  emailDeleteForPatientMutationVariables,
+  getPatientEmailsQuery,
+} from '../../../graphql/types';
 import { ISavedEmail } from '../../../shared/email-modal/email-modal';
 import Button from '../../../shared/library/button/button';
 import Checkbox from '../../../shared/library/checkbox/checkbox';
@@ -18,31 +26,62 @@ interface IProps {
   patientInfoId: string;
   hasEmail?: boolean | null;
   primaryEmail?: ISavedEmail | null;
-  emails?: ISavedEmail[];
   className?: string;
 }
+
+interface IGraphqlProps {
+  emailDeleteMutation: (
+    options: { variables: emailDeleteForPatientMutationVariables },
+  ) => { data: emailDeleteForPatientMutation };
+  emails?: getPatientEmailsQuery['patientEmails'];
+  loading?: boolean;
+  error: string | null;
+}
+
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   isPrimary: boolean;
   currentEmail?: ISavedEmail | null;
+  updatedEmails: ISavedEmail[] | null;
 }
 
-export default class EmailInfo extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class EmailInfo extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
       isEditModalVisible: false,
       isCreateModalVisible: false,
       isPrimary: false,
+      updatedEmails: null,
     };
   }
 
-  handleEmailDelete(emailId: string) {
-    // TODO: implement email delete
-  }
+  handleEmailDelete = async (emailId: string, isPrimary: boolean) => {
+    const { emailDeleteMutation, patientId, onChange, emails } = this.props;
+    try {
+      await emailDeleteMutation({
+        variables: {
+          patientId,
+          emailId,
+          isPrimary,
+        },
+      });
+
+      const currentEmails = this.state.updatedEmails || emails || [];
+      const updatedEmails = filter(currentEmails, email => email.id !== emailId);
+      this.setState({ updatedEmails });
+
+      if (isPrimary) {
+        onChange({ primaryEmail: null });
+      }
+    } catch (err) {
+      // TODO: handle errors
+    }
+  };
 
   handleAddEmailClick = () => {
     this.setState({ isCreateModalVisible: true });
@@ -72,35 +111,39 @@ export default class EmailInfo extends React.Component<IProps, IState> {
   };
 
   handleSaveSuccess = (savedEmail: ISavedEmail) => {
-    const { onChange } = this.props;
-    const emails = this.props.emails || [];
-    const index = findIndex(emails, email => email.id === savedEmail.id);
+    const { emails } = this.props;
+    const currentEmails = this.state.updatedEmails || emails || [];
+    const index = findIndex(currentEmails, email => email.id === savedEmail.id);
 
     if (index < 0) {
-      const updatedEmails = [...emails, savedEmail];
-      onChange({ emails: updatedEmails });
+      const updatedEmails = [...currentEmails, savedEmail];
+      this.setState({ updatedEmails });
     }
   };
 
-  handleEditSuccess = (savedEmail: ISavedEmail) => {
-    const { onChange, primaryEmail } = this.props;
+  handleEditSuccess = (savedEmail: ISavedEmail, isPrimaryUpdatedToTrue: boolean) => {
+    const { onChange, emails } = this.props;
+    const currentEmails = this.state.updatedEmails || emails || [];
 
-    if (primaryEmail && savedEmail.id === primaryEmail.id) {
-      onChange({ primaryEmail: savedEmail });
-      return;
-    }
-
-    const emails = this.props.emails || [];
-    const index = findIndex(emails, email => email.id === savedEmail.id);
-
+    const index = findIndex(currentEmails, email => email.id === savedEmail.id);
     if (index > -1) {
       // insert updated email into the correct position in the array of emails
-      const updatedEmails = concat(slice(emails, 0, index), savedEmail, slice(emails, index + 1));
-      onChange({ emails: updatedEmails });
+      const updatedEmails = concat(
+        slice(currentEmails, 0, index),
+        savedEmail,
+        slice(currentEmails, index + 1),
+      );
+      this.setState({ updatedEmails });
+    }
+
+    if (isPrimaryUpdatedToTrue) {
+      onChange({ primaryEmail: savedEmail });
     }
   };
 
   handleSavePrimarySuccess = (savedEmail: ISavedEmail) => {
+    this.handleSaveSuccess(savedEmail);
+
     const { onChange } = this.props;
     onChange({ primaryEmail: savedEmail });
   };
@@ -111,7 +154,7 @@ export default class EmailInfo extends React.Component<IProps, IState> {
     onChange({ [name]: !checked });
   };
 
-  renderEmailDisplayCard(email: ISavedEmail, isPrimary?: boolean) {
+  renderEmailDisplayCard(email: ISavedEmail) {
     const description = email.description ? (
       <FlaggableDisplayField labelMessageId="email.description" value={email.description} />
     ) : null;
@@ -122,7 +165,7 @@ export default class EmailInfo extends React.Component<IProps, IState> {
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(email)}
-        onDeleteClick={() => this.handleEmailDelete(email.id)}
+        onDeleteClick={async () => this.handleEmailDelete(email.id, isStarred)}
         key={`card-${email.id}`}
         className={styles.fieldMargin}
         isStarred={isStarred}
@@ -158,11 +201,22 @@ export default class EmailInfo extends React.Component<IProps, IState> {
 
   render() {
     const { emails, patientId, patientInfoId, primaryEmail, hasEmail, className } = this.props;
-    const { isEditModalVisible, isCreateModalVisible, isPrimary, currentEmail } = this.state;
+    const {
+      isEditModalVisible,
+      isCreateModalVisible,
+      isPrimary,
+      currentEmail,
+      updatedEmails,
+    } = this.state;
+
+    const currentEmails = updatedEmails || emails;
+    const nonPrimaryEmails = primaryEmail
+      ? filter(currentEmails, email => email.id !== primaryEmail.id)
+      : currentEmails;
 
     const emailCards =
-      emails && emails.length
-        ? values(emails).map(email => this.renderEmailDisplayCard(email))
+      nonPrimaryEmails && nonPrimaryEmails.length
+        ? values(nonPrimaryEmails).map(email => this.renderEmailDisplayCard(email))
         : null;
 
     const addEmailButon = primaryEmail ? (
@@ -211,3 +265,21 @@ export default class EmailInfo extends React.Component<IProps, IState> {
     );
   }
 }
+
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(emailDeleteMutationGraphql as any, {
+    name: 'emailDeleteMutation',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(emailsQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      emails: data ? (data as any).patientEmails : null,
+    }),
+  }),
+)(EmailInfo);

@@ -1,0 +1,7 @@
+#import "../fragments/full-email.graphql"
+
+query getPatientEmails($patientId: ID!) {
+  patientEmails(patientId: $patientId) {
+    ...FullEmail
+  }
+}

@@ -110,62 +110,13 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "middleName": null,
             "patientDataFlags": Array [],
             "patientInfo": Object {
-              "addresses": Array [
-                Object {
-                  "city": "Brooklyn",
-                  "description": "work",
-                  "id": "address-1-id",
-                  "state": "NY",
-                  "street1": "55 Washington St",
-                  "street2": "Unit 552",
-                  "zip": "11201",
-                },
-                Object {
-                  "city": "Cambridge",
-                  "id": "address-2-id",
-                  "state": "MA",
-                  "street1": "101 Fake St",
-                  "street2": "Apt 2",
-                  "zip": "02139",
-                },
-                Object {
-                  "description": "generic",
-                  "id": "address-3-id",
-                  "street1": "20 Main St",
-                  "zip": "12345",
-                },
-              ],
               "canReceiveCalls": true,
               "canReceiveTexts": false,
-              "emails": Array [
-                Object {
-                  "emailAddress": "test@email.com",
-                  "id": "email-1-id",
-                },
-                Object {
-                  "description": "some test email",
-                  "emailAddress": "test2@email.com",
-                  "id": "email-2-id",
-                },
-              ],
               "gender": "male",
               "hasEmail": true,
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
-              "phones": Array [
-                Object {
-                  "description": "main phone number",
-                  "id": "phone-1-id",
-                  "phoneNumber": "555-555-5555",
-                  "type": "mobile",
-                },
-                Object {
-                  "id": "phone-2-id",
-                  "phoneNumber": "222-222-2222",
-                  "type": "work",
-                },
-              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -313,62 +264,13 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "middleName": null,
             "patientDataFlags": Array [],
             "patientInfo": Object {
-              "addresses": Array [
-                Object {
-                  "city": "Brooklyn",
-                  "description": "work",
-                  "id": "address-1-id",
-                  "state": "NY",
-                  "street1": "55 Washington St",
-                  "street2": "Unit 552",
-                  "zip": "11201",
-                },
-                Object {
-                  "city": "Cambridge",
-                  "id": "address-2-id",
-                  "state": "MA",
-                  "street1": "101 Fake St",
-                  "street2": "Apt 2",
-                  "zip": "02139",
-                },
-                Object {
-                  "description": "generic",
-                  "id": "address-3-id",
-                  "street1": "20 Main St",
-                  "zip": "12345",
-                },
-              ],
               "canReceiveCalls": true,
               "canReceiveTexts": false,
-              "emails": Array [
-                Object {
-                  "emailAddress": "test@email.com",
-                  "id": "email-1-id",
-                },
-                Object {
-                  "description": "some test email",
-                  "emailAddress": "test2@email.com",
-                  "id": "email-2-id",
-                },
-              ],
               "gender": "male",
               "hasEmail": true,
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
-              "phones": Array [
-                Object {
-                  "description": "main phone number",
-                  "id": "phone-1-id",
-                  "phoneNumber": "555-555-5555",
-                  "type": "mobile",
-                },
-                Object {
-                  "id": "phone-2-id",
-                  "phoneNumber": "222-222-2222",
-                  "type": "work",
-                },
-              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -547,62 +449,13 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "middleName": null,
             "patientDataFlags": Array [],
             "patientInfo": Object {
-              "addresses": Array [
-                Object {
-                  "city": "Brooklyn",
-                  "description": "work",
-                  "id": "address-1-id",
-                  "state": "NY",
-                  "street1": "55 Washington St",
-                  "street2": "Unit 552",
-                  "zip": "11201",
-                },
-                Object {
-                  "city": "Cambridge",
-                  "id": "address-2-id",
-                  "state": "MA",
-                  "street1": "101 Fake St",
-                  "street2": "Apt 2",
-                  "zip": "02139",
-                },
-                Object {
-                  "description": "generic",
-                  "id": "address-3-id",
-                  "street1": "20 Main St",
-                  "zip": "12345",
-                },
-              ],
               "canReceiveCalls": true,
               "canReceiveTexts": false,
-              "emails": Array [
-                Object {
-                  "emailAddress": "test@email.com",
-                  "id": "email-1-id",
-                },
-                Object {
-                  "description": "some test email",
-                  "emailAddress": "test2@email.com",
-                  "id": "email-2-id",
-                },
-              ],
               "gender": "male",
               "hasEmail": true,
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
-              "phones": Array [
-                Object {
-                  "description": "main phone number",
-                  "id": "phone-1-id",
-                  "phoneNumber": "555-555-5555",
-                  "type": "mobile",
-                },
-                Object {
-                  "id": "phone-2-id",
-                  "phoneNumber": "222-222-2222",
-                  "type": "work",
-                },
-              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -750,62 +603,13 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "middleName": null,
             "patientDataFlags": Array [],
             "patientInfo": Object {
-              "addresses": Array [
-                Object {
-                  "city": "Brooklyn",
-                  "description": "work",
-                  "id": "address-1-id",
-                  "state": "NY",
-                  "street1": "55 Washington St",
-                  "street2": "Unit 552",
-                  "zip": "11201",
-                },
-                Object {
-                  "city": "Cambridge",
-                  "id": "address-2-id",
-                  "state": "MA",
-                  "street1": "101 Fake St",
-                  "street2": "Apt 2",
-                  "zip": "02139",
-                },
-                Object {
-                  "description": "generic",
-                  "id": "address-3-id",
-                  "street1": "20 Main St",
-                  "zip": "12345",
-                },
-              ],
               "canReceiveCalls": true,
               "canReceiveTexts": false,
-              "emails": Array [
-                Object {
-                  "emailAddress": "test@email.com",
-                  "id": "email-1-id",
-                },
-                Object {
-                  "description": "some test email",
-                  "emailAddress": "test2@email.com",
-                  "id": "email-2-id",
-                },
-              ],
               "gender": "male",
               "hasEmail": true,
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
-              "phones": Array [
-                Object {
-                  "description": "main phone number",
-                  "id": "phone-1-id",
-                  "phoneNumber": "555-555-5555",
-                  "type": "mobile",
-                },
-                Object {
-                  "id": "phone-2-id",
-                  "phoneNumber": "222-222-2222",
-                  "type": "work",
-                },
-              ],
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {

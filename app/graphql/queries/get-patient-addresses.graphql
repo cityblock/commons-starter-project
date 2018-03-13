@@ -1,0 +1,7 @@
+#import "../fragments/full-address.graphql"
+
+query getPatientAddresses($patientId: ID!) {
+  patientAddresses(patientId: $patientId) {
+    ...FullAddress
+  }
+}

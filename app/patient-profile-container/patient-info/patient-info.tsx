@@ -1,4 +1,3 @@
-import { filter, get, isNil } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
@@ -47,12 +46,9 @@ export interface IEditableFieldState {
   gender?: getPatientQuery['patient']['patientInfo']['gender'];
   language?: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
-  addresses?: ISavedAddress[] | null;
   hasEmail?: getPatientQuery['patient']['patientInfo']['hasEmail'];
   primaryEmail?: ISavedEmail | null;
-  emails?: ISavedEmail[] | null;
   primaryPhone?: ISavedPhone | null;
-  phones?: ISavedPhone[] | null;
   flags?: getPatientQuery['patient']['patientDataFlags'];
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
   canReceiveTexts?: getPatientQuery['patient']['patientInfo']['canReceiveTexts'];
@@ -72,7 +68,7 @@ interface IState {
 type allState = IState & IEditableFieldState;
 
 function checkDefined<T>(preferred?: T | null, secondary?: T | null) {
-  return isNil(preferred) ? secondary : preferred;
+  return preferred === undefined ? secondary : preferred;
 }
 
 export class PatientInfo extends React.Component<allProps, allState> {
@@ -81,59 +77,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
     this.state = {
       saveError: null,
     };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    if (!nextProps.patient) {
-      return;
-    }
-
-    const {
-      gender,
-      language,
-      primaryEmail,
-      primaryAddress,
-      primaryPhone,
-    } = nextProps.patient.patientInfo;
-
-    const oldPrimaryEmail = get(this.props, 'patient.patientInfo.primaryEmail');
-    const oldPrimaryAddress = get(this.props, 'patient.patientInfo.primaryAddress');
-    const oldPrimaryPhone = get(this.props, 'patient.patientInfo.primaryPhone');
-
-    // if the primary address changed, swap it with addiitonal address in the addresses array
-    let addresses = this.state.addresses;
-    if (
-      oldPrimaryAddress &&
-      primaryAddress &&
-      addresses &&
-      oldPrimaryAddress.id !== primaryAddress.id
-    ) {
-      addresses = filter(addresses, address => address.id !== primaryAddress.id);
-      addresses.push(oldPrimaryAddress);
-    }
-
-    // if the primary email changed, swap it with addiitonal email in the emails array
-    let emails = this.state.emails;
-    if (oldPrimaryEmail && primaryEmail && emails && oldPrimaryEmail.id !== primaryEmail.id) {
-      emails = filter(emails, email => email.id !== primaryEmail.id);
-      emails.push(oldPrimaryEmail);
-    }
-
-    // if the primary phone changed, swap it with addiitonal phone in the phones array
-    let phones = this.state.phones;
-    if (oldPrimaryPhone && primaryPhone && phones && oldPrimaryPhone.id !== primaryPhone.id) {
-      phones = filter(phones, phone => phone.id !== primaryPhone.id);
-      phones.push(oldPrimaryPhone);
-    }
-
-    this.setState({
-      gender,
-      language,
-      primaryEmail,
-      primaryAddress,
-      addresses,
-      emails,
-    });
   }
 
   getPatientFields(patient: getPatientQuery['patient']): IDemographics {
@@ -151,11 +94,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
       language,
       gender,
       primaryAddress,
-      addresses,
       primaryEmail,
-      emails,
       primaryPhone,
-      phones,
       flags,
       verifiedAt,
       hasEmail,
@@ -166,24 +106,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
       preferredName,
       sexAtBirth,
     } = this.state;
-
-    // remove primary address to create list of additional addresses
-    const savedAddresses =
-      patientInfo.primaryAddress && patientInfo.addresses
-        ? patientInfo.addresses.filter(address => address.id !== patientInfo.primaryAddress!.id)
-        : [];
-
-    // remove primary email to create list of additional emails
-    const savedEmailAddresses =
-      patientInfo.primaryEmail && patientInfo.emails
-        ? patientInfo.emails.filter(email => email.id !== patientInfo.primaryEmail!.id)
-        : [];
-
-    // remove primary phone number to create list of additional phone numbers
-    const savedPhoneAddresses =
-      patientInfo.primaryPhone && patientInfo.phones
-        ? patientInfo.phones.filter(phone => phone.id !== patientInfo.primaryPhone!.id)
-        : [];
 
     return {
       core: {
@@ -200,8 +122,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
         patientInfoId: patientInfo.id,
         gender: gender || patientInfo.gender,
         language: language || patientInfo.language,
-        primaryAddress: primaryAddress || patientInfo.primaryAddress,
-        addresses: addresses || savedAddresses,
+        primaryAddress: checkDefined<ISavedAddress>(primaryAddress, patientInfo.primaryAddress),
         isMarginallyHoused: checkDefined<boolean>(
           isMarginallyHoused,
           patientInfo.isMarginallyHoused,
@@ -213,13 +134,11 @@ export class PatientInfo extends React.Component<allProps, allState> {
         patientId: id,
         patientInfoId: patientInfo.id,
         hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
-        primaryEmail: primaryEmail || patientInfo.primaryEmail,
-        emails: emails || savedEmailAddresses,
+        primaryEmail: checkDefined<ISavedEmail>(primaryEmail, patientInfo.primaryEmail),
         canReceiveCalls: checkDefined<boolean>(canReceiveCalls, patientInfo.canReceiveCalls),
         canReceiveTexts: checkDefined<boolean>(canReceiveTexts, patientInfo.canReceiveTexts),
         preferredContactMethod: preferredContactMethod || patientInfo.preferredContactMethod,
-        primaryPhone: primaryPhone || patientInfo.primaryPhone,
-        phones: phones || savedPhoneAddresses,
+        primaryPhone: checkDefined<ISavedPhone>(primaryPhone, patientInfo.primaryPhone),
       },
       advanced: {
         patientId: id,

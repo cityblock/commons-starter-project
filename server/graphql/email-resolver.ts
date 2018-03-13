@@ -2,6 +2,7 @@ import { isNil, omitBy } from 'lodash';
 import {
   IEmailCreateForPatientInput,
   IEmailCreateInput,
+  IEmailDeleteForPatientInput,
   IEmailEditInput,
   IRootMutationType,
 } from 'schema';
@@ -58,6 +59,33 @@ export async function emailCreate(
   logger.log(`CREATE email by ${userId}`, 2);
 
   return Email.create(filtered, txn);
+}
+
+export interface IEmailDeleteOptions {
+  input: IEmailDeleteForPatientInput;
+}
+
+export async function emailDeleteForPatient(
+  root: any,
+  { input }: IEmailDeleteOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<Email> {
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+
+  logger.log(`DELETE email for patient ${input.patientId} by ${userId}`, 2);
+
+  await PatientEmail.delete({ patientId: input.patientId, emailId: input.emailId }, txn);
+
+  if (input.isPrimary) {
+    const patient = await Patient.get(input.patientId, txn);
+    await PatientInfo.edit(
+      { primaryEmailId: null, updatedById: userId! },
+      patient.patientInfo.id,
+      txn,
+    );
+  }
+
+  return Email.delete(input.emailId, txn);
 }
 
 export interface IEmailEditOptions {

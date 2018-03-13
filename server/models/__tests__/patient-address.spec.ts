@@ -126,7 +126,7 @@ describe('patient address model', () => {
         );
         await PatientAddress.create({ patientId: patient2.id, addressId: address4.id }, txn);
 
-        const addresses = await PatientAddress.getForPatient(patient.id, txn);
+        const addresses = await PatientAddress.getAll(patient.id, txn);
         expect(addresses.length).toBe(2);
         expect(addresses[0]).toMatchObject({
           street1: '55 Washington St',

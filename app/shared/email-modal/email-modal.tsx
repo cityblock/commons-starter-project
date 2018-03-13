@@ -14,9 +14,9 @@ export interface ISavedEmail extends IEmail {
 }
 
 interface IProps {
-  saveEmail: (email: IEmail, isPrimary: boolean) => Promise<any>;
+  saveEmail: (email: IEmail, isPrimaryUpdatedToTrue: boolean) => Promise<any>;
   closePopup: () => void;
-  onSaved: (response: any) => void;
+  onSaved: (response: any, isPrimaryUpdatedToTrue: boolean) => void;
   isVisible: boolean;
   isPrimary?: boolean;
   email?: IEmail | null;
@@ -57,9 +57,10 @@ class EmailModal extends React.Component<IProps, IState> {
   };
 
   handleSubmit = async () => {
-    const { email, saveEmail, onSaved } = this.props;
+    const { email, saveEmail, onSaved, isPrimary } = this.props;
     const originalEmail = email || {};
     const { emailAddress, description, updatedIsPrimary } = this.state;
+    const isPrimaryUpdatedToTrue = updatedIsPrimary === true && updatedIsPrimary !== isPrimary;
 
     const updatedEmail = {
       id: originalEmail.id,
@@ -68,8 +69,8 @@ class EmailModal extends React.Component<IProps, IState> {
     };
 
     try {
-      const response = await saveEmail(updatedEmail, !!updatedIsPrimary);
-      onSaved(response);
+      const response = await saveEmail(updatedEmail, isPrimaryUpdatedToTrue);
+      onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error

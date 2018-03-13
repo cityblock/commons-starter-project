@@ -114,7 +114,7 @@ describe('email resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientEmail = await PatientEmail.getForPatient(patient.id, txn);
+        const patientEmail = await PatientEmail.getAll(patient.id, txn);
         expect(patientEmail).not.toBeNull();
         expect(patientEmail.length).toBe(1);
       });
@@ -148,12 +148,118 @@ describe('email resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientEmail = await PatientEmail.getForPatient(patient.id, txn);
+        const patientEmail = await PatientEmail.getAll(patient.id, txn);
         expect(patientEmail).not.toBeNull();
         expect(patientEmail.length).toBe(1);
 
         const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
         expect(editedInfo.primaryEmailId).toBe(result.data!.emailCreateForPatient.id);
+      });
+    });
+  });
+
+  describe('delete email', async () => {
+    it('should delete email', async () => {
+      await transaction(Email.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          emailCreateForPatient(input: {
+            patientId: "${patient.id}",
+            emailAddress: "patient@email.com",
+            description: "Some email",
+          }) {
+            id, emailAddress, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const email = createResult.data!.emailCreateForPatient;
+
+        const query = `mutation {
+          emailDeleteForPatient(input: {
+            emailId: "${email.id}",
+            patientId: "${patient.id}",
+          }) {
+            id, emailAddress, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
+          id: email.id,
+          emailAddress: email.emailAddress,
+          description: email.description,
+        });
+        expect(log).toBeCalled();
+      });
+    });
+
+    it('should delete primary email', async () => {
+      await transaction(Email.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          emailCreateForPatient(input: {
+            patientId: "${patient.id}",
+            emailAddress: "patient@email.com",
+            description: "Some email",
+            isPrimary: true,
+          }) {
+            id, emailAddress, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const email = createResult.data!.emailCreateForPatient;
+
+        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(initialPatientInfo.primaryEmailId).toBe(email.id);
+
+        const query = `mutation {
+          emailDeleteForPatient(input: {
+            emailId: "${email.id}",
+            patientId: "${patient.id}",
+            isPrimary: true,
+          }) {
+            id, emailAddress, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
+          id: email.id,
+          emailAddress: email.emailAddress,
+          description: email.description,
+        });
+        expect(log).toBeCalled();
+
+        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(patientInfo.primaryEmailId).toBeFalsy();
       });
     });
   });

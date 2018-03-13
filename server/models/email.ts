@@ -31,13 +31,38 @@ export default class Email extends BaseModel {
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      deletedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
     },
     required: ['emailAddress', 'updatedById'],
   };
 
+  static async get(emailId: string, txn: Transaction) {
+    const email = await this.query(txn).findOne({ id: emailId, deletedAt: null });
+
+    if (!email) {
+      return Promise.reject(`No such email: ${emailId}`);
+    }
+
+    return email;
+  }
+
   static async create(input: IEmailOptions, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
+  }
+
+  static async delete(emailId: string, txn: Transaction) {
+    await this.query(txn)
+      .where({ id: emailId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString() });
+
+    const deleted = await this.query(txn).findById(emailId);
+
+    if (!deleted) {
+      return Promise.reject(`No such email: ${emailId}`);
+    }
+
+    return deleted;
   }
 
   static async edit(email: IEmailEdit, emailId: string, txn: Transaction): Promise<Email> {

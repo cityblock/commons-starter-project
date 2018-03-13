@@ -2,6 +2,7 @@ import { isNil, omitBy } from 'lodash';
 import {
   IPhoneCreateForPatientInput,
   IPhoneCreateInput,
+  IPhoneDeleteForPatientInput,
   IPhoneEditInput,
   IRootMutationType,
 } from 'schema';
@@ -58,6 +59,33 @@ export async function phoneCreate(
   logger.log(`CREATE phone by ${userId}`, 2);
 
   return Phone.create(filtered, txn);
+}
+
+export interface IPhoneDeleteOptions {
+  input: IPhoneDeleteForPatientInput;
+}
+
+export async function phoneDeleteForPatient(
+  root: any,
+  { input }: IPhoneDeleteOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<Phone> {
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+
+  logger.log(`DELETE phone for patient ${input.patientId} by ${userId}`, 2);
+
+  await PatientPhone.delete({ patientId: input.patientId, phoneId: input.phoneId }, txn);
+
+  if (input.isPrimary) {
+    const patient = await Patient.get(input.patientId, txn);
+    await PatientInfo.edit(
+      { primaryPhoneId: null, updatedById: userId! },
+      patient.patientInfo.id,
+      txn,
+    );
+  }
+
+  return Phone.delete(input.phoneId, txn);
 }
 
 export interface IPhoneEditOptions {

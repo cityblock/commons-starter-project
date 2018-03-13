@@ -11,7 +11,7 @@ import {
 import EmailModal, { IEmail, ISavedEmail } from '../../../shared/email-modal/email-modal';
 
 interface IProps {
-  onSaved: (email: ISavedEmail) => void;
+  onSaved: (email: ISavedEmail, isPrimaryUpdatedToTrue: boolean) => void;
   patientId: string;
   patientInfoId: string;
   email?: ISavedEmail | null;
@@ -32,19 +32,14 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class EditEmailModal extends React.Component<allProps> {
-  editEmail = async (email: IEmail, updatedIsPrimary: boolean) => {
+  editEmail = async (email: IEmail, isPrimaryUpdatedToTrue: boolean) => {
     if (!email.id || !email.emailAddress) {
       return;
     }
 
-    const {
-      editEmailMutation,
-      editPatientInfoMutation,
-      patientId,
-      isPrimary,
-      patientInfoId,
-    } = this.props;
-    if (updatedIsPrimary !== isPrimary) {
+    const { editEmailMutation, editPatientInfoMutation, patientId, patientInfoId } = this.props;
+
+    if (isPrimaryUpdatedToTrue) {
       await editPatientInfoMutation({
         variables: {
           patientInfoId,
@@ -63,9 +58,9 @@ export class EditEmailModal extends React.Component<allProps> {
     });
   };
 
-  handleEmailSaved = (response: { data: emailEditMutation }) => {
+  handleEmailSaved = (response: { data: emailEditMutation }, isPrimaryUpdatedToTrue: boolean) => {
     if (response.data.emailEdit) {
-      this.props.onSaved(response.data.emailEdit);
+      this.props.onSaved(response.data.emailEdit, isPrimaryUpdatedToTrue);
     }
   };
 

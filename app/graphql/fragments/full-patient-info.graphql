@@ -12,20 +12,11 @@ fragment FullPatientInfo on PatientInfo {
   primaryAddress {
     ...FullAddress
   }
-  addresses {
-    ...FullAddress
-  }
   hasEmail
   primaryEmail {
     ...FullEmail
   }
-  emails {
-    ...FullEmail
-  }
   primaryPhone {
-    ...FullPhone
-  }
-  phones {
     ...FullPhone
   }
   preferredContactMethod

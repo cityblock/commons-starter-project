@@ -37,13 +37,38 @@ export default class Phone extends BaseModel {
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      deletedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
     },
     required: ['phoneNumber', 'updatedById'],
   };
 
+  static async get(phoneId: string, txn: Transaction) {
+    const phone = await this.query(txn).findOne({ id: phoneId, deletedAt: null });
+
+    if (!phone) {
+      return Promise.reject(`No such phone: ${phoneId}`);
+    }
+
+    return phone;
+  }
+
   static async create(input: IPhoneOptions, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
+  }
+
+  static async delete(phoneId: string, txn: Transaction) {
+    await this.query(txn)
+      .where({ id: phoneId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString() });
+
+    const deleted = await this.query(txn).findById(phoneId);
+
+    if (!deleted) {
+      return Promise.reject(`No such phone: ${phoneId}`);
+    }
+
+    return deleted;
   }
 
   static async edit(phone: IPhoneEdit, phoneId: string, txn: Transaction): Promise<Phone> {

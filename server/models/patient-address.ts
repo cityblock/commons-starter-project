@@ -59,7 +59,7 @@ export default class PatientAddress extends BaseModel {
     },
   };
 
-  static async getForPatient(patientId: string, txn: Transaction): Promise<Address[]> {
+  static async getAll(patientId: string, txn: Transaction): Promise<Address[]> {
     return (await PatientAddress.query(txn)
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
@@ -82,7 +82,7 @@ export default class PatientAddress extends BaseModel {
       await PatientAddress.query(txn).insert({ patientId, addressId });
     }
 
-    return this.getForPatient(patientId, txn);
+    return this.getAll(patientId, txn);
   }
 
   static async delete(
@@ -94,7 +94,7 @@ export default class PatientAddress extends BaseModel {
       .andWhere('patientId', patientId)
       .andWhere('deletedAt', null)
       .patch({ deletedAt: new Date().toISOString() });
-    return this.getForPatient(patientId, txn);
+    return this.getAll(patientId, txn);
   }
 }
 /* tslint:enable:member-ordering */

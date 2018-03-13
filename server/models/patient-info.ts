@@ -41,17 +41,17 @@ export interface IPatientInfoOptions {
   canReceiveTexts?: boolean;
 }
 
-interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
+interface IEditPatientInfo {
   updatedById: string;
   preferredName?: string;
   gender?: PatientGenderOptions;
   sexAtBirth?: BirthSexOptions;
   language?: string;
   isMarginallyHoused?: boolean;
-  primaryAddressId?: string;
+  primaryAddressId?: string | null;
   hasEmail?: boolean;
-  primaryEmailId?: string;
-  primaryPhoneId?: string;
+  primaryEmailId?: string | null;
+  primaryPhoneId?: string | null;
   preferredContactMethod?: ContactMethodOptions;
   canReceiveCalls?: boolean;
   canReceiveTexts?: boolean;
@@ -70,16 +70,13 @@ export default class PatientInfo extends Model {
   sexAtBirth: BirthSexOptions;
   language: string;
   isMarginallyHoused: boolean;
-  primaryAddressId: string;
+  primaryAddressId: string | null;
   primaryAddress: Address;
-  addresses: Address[];
   hasEmail: boolean;
-  primaryEmailId: string;
+  primaryEmailId: string | null;
   primaryEmail: Email;
-  emails: Email[];
-  primaryPhoneId: string;
+  primaryPhoneId: string | null;
   primaryPhone: Phone;
-  phones: Phone[];
   preferredContactMethod: ContactMethodOptions;
   canReceiveCalls: boolean;
   canReceiveTexts: boolean;
@@ -110,10 +107,10 @@ export default class PatientInfo extends Model {
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
       sexAtBirth: { type: 'string', enum: ['female', 'male'] },
       isMarginallyHoused: { type: 'boolean' },
-      primaryAddressId: { type: 'string', format: 'uuid' },
+      primaryAddressId: { type: ['string', 'null'], format: 'uuid' },
       hasEmail: { type: 'boolean' },
-      primaryEmailId: { type: 'string', format: 'uuid' },
-      primaryPhoneId: { type: 'string', format: 'uuid' },
+      primaryEmailId: { type: ['string', 'null'], format: 'uuid' },
+      primaryPhoneId: { type: ['string', 'null'], format: 'uuid' },
       preferredContactMethod: { type: 'string', enum: ['text', 'phone', 'email'] },
       canReceiveCalls: { type: 'boolean' },
       canReceiveTexts: { type: 'boolean' },
@@ -134,19 +131,6 @@ export default class PatientInfo extends Model {
       },
     },
 
-    addresses: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'address',
-      join: {
-        from: 'patient_info.patientId',
-        through: {
-          from: 'patient_address.patientId',
-          to: 'patient_address.addressId',
-        },
-        to: 'address.id',
-      },
-    },
-
     primaryAddress: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'address',
@@ -156,38 +140,12 @@ export default class PatientInfo extends Model {
       },
     },
 
-    emails: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_info.patientId',
-        through: {
-          from: 'patient_email.patientId',
-          to: 'patient_email.emailId',
-        },
-        to: 'email.id',
-      },
-    },
-
     primaryEmail: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'email',
       join: {
         from: 'email.id',
         to: 'patient_info.primaryEmailId',
-      },
-    },
-
-    phones: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'patient_info.patientId',
-        through: {
-          from: 'patient_phone.patientId',
-          to: 'patient_phone.phoneId',
-        },
-        to: 'phone.id',
       },
     },
 

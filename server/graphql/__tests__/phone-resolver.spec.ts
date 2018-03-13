@@ -118,7 +118,7 @@ describe('phone resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientPhone = await PatientPhone.getForPatient(patient.id, txn);
+        const patientPhone = await PatientPhone.getAll(patient.id, txn);
         expect(patientPhone).not.toBeNull();
         expect(patientPhone.length).toBe(1);
       });
@@ -154,12 +154,118 @@ describe('phone resolver', () => {
         });
         expect(log).toBeCalled();
 
-        const patientPhone = await PatientPhone.getForPatient(patient.id, txn);
+        const patientPhone = await PatientPhone.getAll(patient.id, txn);
         expect(patientPhone).not.toBeNull();
         expect(patientPhone.length).toBe(1);
 
         const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
         expect(editedInfo.primaryPhoneId).toBe(result.data!.phoneCreateForPatient.id);
+      });
+    });
+  });
+
+  describe('delete phone', async () => {
+    it('should delete phone', async () => {
+      await transaction(Phone.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          phoneCreateForPatient(input: {
+            patientId: "${patient.id}",
+            phoneNumber: "3332228899",
+            description: "Some phone",
+          }) {
+            id, phoneNumber, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const phone = createResult.data!.phoneCreateForPatient;
+
+        const query = `mutation {
+          phoneDeleteForPatient(input: {
+            phoneId: "${phone.id}",
+            patientId: "${patient.id}",
+          }) {
+            id, phoneNumber, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
+          id: phone.id,
+          phoneNumber: phone.phoneNumber,
+          description: phone.description,
+        });
+        expect(log).toBeCalled();
+      });
+    });
+
+    it('should delete primary phone', async () => {
+      await transaction(Phone.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const createQuery = `mutation {
+          phoneCreateForPatient(input: {
+            patientId: "${patient.id}",
+            phoneNumber: "3332228899",
+            description: "Some phone",
+            isPrimary: true,
+          }) {
+            id, phoneNumber, description
+          }
+        }`;
+
+        const createResult = await graphql(schema, createQuery, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const phone = createResult.data!.phoneCreateForPatient;
+
+        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(initialPatientInfo.primaryPhoneId).toBe(phone.id);
+
+        const query = `mutation {
+          phoneDeleteForPatient(input: {
+            phoneId: "${phone.id}",
+            patientId: "${patient.id}",
+            isPrimary: true,
+          }) {
+            id, phoneNumber, description
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
+          id: phone.id,
+          phoneNumber: phone.phoneNumber,
+          description: phone.description,
+        });
+        expect(log).toBeCalled();
+
+        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+        expect(patientInfo.primaryPhoneId).toBeFalsy();
       });
     });
   });

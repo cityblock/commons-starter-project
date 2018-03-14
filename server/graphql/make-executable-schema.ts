@@ -120,6 +120,7 @@ import {
   patientContactCreate,
   patientContactEdit,
   resolveHealthcareProxiesForPatient,
+  resolvePatientContactsForPatient,
 } from './patient-contact-resolver';
 import {
   patientDataFlagCreate,
@@ -336,6 +337,7 @@ const resolveFunctions = {
     patientsWithOutOfDateMAP: resolvePatientsWithOutOfDateMAP,
     patientsWithOpenCBOReferrals: resolvePatientsWithOpenCBOReferrals,
     patientsForComputedList: resolvePatientsForComputedList,
+    patientContacts: resolvePatientContactsForPatient,
     patientContactHealthcareProxies: resolveHealthcareProxiesForPatient,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,

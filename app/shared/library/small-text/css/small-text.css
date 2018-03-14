@@ -23,6 +23,10 @@
   color: var(--red-color);
 }
 
+.purple {
+  color: var(--purple-color);
+}
+
 .green {
   color: var(--green-color);
 }

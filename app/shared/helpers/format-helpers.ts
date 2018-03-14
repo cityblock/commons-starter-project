@@ -1,6 +1,7 @@
 import { differenceInYears, format } from 'date-fns';
 import { startCase } from 'lodash';
 import {
+  FullAddressFragment,
   FullPatientAnswerFragment,
   ShortPatientFragment,
   ShortPatientScreeningToolSubmission360Fragment,
@@ -107,6 +108,32 @@ export const formatAddress = (
   zip: string,
 ): string => {
   return `${address}, ${city}, ${state} ${zip}`;
+};
+
+export const formatAddressFirstLine = (address: FullAddressFragment): string | null => {
+  const { street1, street2 } = address;
+  if (!street1) {
+    return null;
+  }
+
+  if (street1 && street2) {
+    return `${street1}, ${street2}`;
+  }
+
+  return street1;
+};
+
+export const formatAddressSecondLine = (address: FullAddressFragment): string | null => {
+  const { state, city, zip } = address;
+  if (!(state || city || zip)) {
+    return null;
+  }
+
+  let formattedCity = city;
+  if (city && (zip || state)) {
+    formattedCity = `${city}, `;
+  }
+  return `${formattedCity}${state} ${zip}`;
 };
 
 export const formatCBOReferralTaskTitle = (CBOName: string): string => {

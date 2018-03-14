@@ -13,7 +13,7 @@ import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/h
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
-import * as styles from './css/care-team-member.css';
+import * as styles from '../css/team-member.css';
 
 interface IProps {
   careTeamMember: FullCareTeamUserFragment;
@@ -84,16 +84,16 @@ export class CareTeamMember extends React.Component<allProps, IState> {
         onClick={this.onMakeTeamLead}
       />
     );
-    const careTeamMemberNameStyles = classNames(styles.careTeamMemberName, {
+    const careTeamMemberNameStyles = classNames(styles.row, {
       [styles.hiddenStar]: !careTeamMember.isCareTeamLead,
     });
 
     return (
-      <div className={styles.careTeamMember}>
-        <div className={styles.careTeamMemberData}>
-          <div className={styles.careTeamMemberBasicInfo}>
+      <div className={styles.container}>
+        <div className={styles.row}>
+          <div className={styles.row}>
             <Avatar size="large" src={careTeamMember.googleProfileImageUrl} />
-            <div className={styles.careTeamMemberNameAndTitle}>
+            <div className={styles.column}>
               <div className={careTeamMemberNameStyles}>
                 <SmallText
                   text={formatFullName(careTeamMember.firstName, careTeamMember.lastName)}
@@ -110,7 +110,7 @@ export class CareTeamMember extends React.Component<allProps, IState> {
               />
             </div>
           </div>
-          <div className={styles.careTeamMemberContactInfo}>
+          <div className={styles.column}>
             <SmallText text={careTeamMember.phone || 'Unknown Phone'} color="black" size="medium" />
             <SmallText text={careTeamMember.email || 'Unknown Email'} color="black" size="medium" />
           </div>

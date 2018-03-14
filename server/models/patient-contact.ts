@@ -4,7 +4,7 @@ import Address from './address';
 import Email from './email';
 import Phone from './phone';
 
-const EAGER_QUERY = '[primaryAddress, primaryEmail, primaryPhone]';
+const EAGER_QUERY = '[address, email, phone]';
 
 export interface IPatientContactOptions {
   patientId: string;
@@ -15,10 +15,7 @@ export interface IPatientContactOptions {
   isEmergencyContact: boolean;
   isHealthcareProxy: boolean;
   canContact: boolean;
-  primaryPhoneId: string;
   description?: string;
-  primaryAddressId?: string;
-  primaryEmailId?: string;
 }
 
 interface IEditPatientContact extends Partial<IPatientContactOptions> {
@@ -29,10 +26,7 @@ interface IEditPatientContact extends Partial<IPatientContactOptions> {
   isEmergencyContact?: boolean;
   isHealthcareProxy?: boolean;
   canContact?: boolean;
-  primaryPhoneId?: string;
   description?: string;
-  primaryAddressId?: string;
-  primaryEmailId?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -49,15 +43,12 @@ export default class PatientContact extends Model {
   isEmergencyContact: boolean;
   isHealthcareProxy: boolean;
   canContact: boolean;
-  primaryPhoneId: string;
-  primaryPhone: Phone;
   description: string;
-  primaryAddressId: string;
-  primaryAddress: Address;
-  primaryEmailId: string;
-  primaryEmail: Email;
   createdAt: string;
   updatedAt: string;
+  address: Address;
+  email: Email;
+  phone: Phone;
   deletedAt: string;
 
   $beforeInsert() {
@@ -85,23 +76,13 @@ export default class PatientContact extends Model {
       isEmergencyContact: { type: 'boolean' },
       isHealthcareProxy: { type: 'boolean' },
       canContact: { type: 'boolean' },
-      primaryEmailId: { type: 'string', format: 'uuid' },
-      primaryPhoneId: { type: 'string', format: 'uuid' },
-      primaryAddressId: { type: 'string', format: 'uuid' },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: [
-      'patientId',
-      'updatedById',
-      'relationToPatient',
-      'firstName',
-      'lastName',
-      'primaryPhoneId',
-    ],
+    required: ['patientId', 'updatedById', 'relationToPatient', 'firstName', 'lastName'],
   };
 
   static relationMappings: RelationMappings = {
@@ -114,30 +95,47 @@ export default class PatientContact extends Model {
       },
     },
 
-    primaryAddress: {
-      relation: Model.BelongsToOneRelation,
+    // has only one non-deleted address
+    address: {
+      relation: Model.HasOneThroughRelation,
       modelClass: 'address',
       join: {
-        from: 'address.id',
-        to: 'patient_contact.primaryAddressId',
+        from: 'patient_contact.id',
+        through: {
+          modelClass: 'patient-contact-address',
+          from: 'patient_contact_address.patientContactId',
+          to: 'patient_contact_address.addressId',
+        },
+        to: 'address.id',
       },
     },
 
-    primaryEmail: {
-      relation: Model.BelongsToOneRelation,
+    // has only one non-deleted email
+    email: {
+      relation: Model.HasOneThroughRelation,
       modelClass: 'email',
       join: {
-        from: 'email.id',
-        to: 'patient_contact.primaryEmailId',
+        from: 'patient_contact.id',
+        through: {
+          modelClass: 'patient-contact-email',
+          from: 'patient_contact_email.patientContactId',
+          to: 'patient_contact_email.emailId',
+        },
+        to: 'email.id',
       },
     },
 
-    primaryPhone: {
-      relation: Model.BelongsToOneRelation,
+    phone: {
+      relation: Model.HasOneThroughRelation,
       modelClass: 'phone',
       join: {
-        from: 'phone.id',
-        to: 'patient_contact.primaryPhoneId',
+        from: 'patient_contact.id',
+        through: {
+          modelClass: 'patient-contact-phone',
+          from: 'patient_contact_phone.patientContactId',
+          to: 'patient_contact_phone.phoneId',
+        },
+        to: 'phone.id',
       },
     },
   };
@@ -145,6 +143,8 @@ export default class PatientContact extends Model {
   static async get(patientContactId: string, txn: Transaction): Promise<PatientContact> {
     const patientContact = await this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
       .findById(patientContactId);
 
     if (!patientContact) {
@@ -153,13 +153,24 @@ export default class PatientContact extends Model {
     return patientContact;
   }
 
+  static async getAllForPatient(patientId: string, txn: Transaction): Promise<PatientContact[]> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
+      .where({ patientId, deletedAt: null })
+      .orderBy('createdAt', 'asc');
+  }
+
   static async getHealthcareProxiesForPatient(
     patientId: string,
     txn: Transaction,
   ): Promise<PatientContact[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .where({ patientId, isHealthcareProxy: true })
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
+      .where({ patientId, isHealthcareProxy: true, deletedAt: null })
       .orderBy('createdAt', 'asc');
   }
 
@@ -169,6 +180,8 @@ export default class PatientContact extends Model {
   ): Promise<PatientContact[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
       .where({ patientId, isEmergencyContact: true })
       .orderBy('createdAt', 'asc');
   }
@@ -176,6 +189,8 @@ export default class PatientContact extends Model {
   static async create(input: IPatientContactOptions, txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
       .insertAndFetch(input);
   }
 
@@ -186,6 +201,8 @@ export default class PatientContact extends Model {
   ): Promise<PatientContact> {
     const updatedPatientContact = await this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('address', builder => builder.where('address.deletedAt', null))
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
       .patchAndFetchById(patientContactId, patientContact);
 
     return updatedPatientContact;

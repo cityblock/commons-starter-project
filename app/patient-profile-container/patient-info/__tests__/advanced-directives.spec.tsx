@@ -7,8 +7,6 @@ import RadioInput from '../../../shared/library/radio-input/radio-input';
 import { advancedDirectives, healthcareProxy } from '../../../shared/util/test-data';
 import { AdvancedDirectives } from '../advanced-directives';
 import DisplayCard from '../display-card';
-import CreatePatientProxyModal from '../patient-proxy/create-patient-proxy-modal';
-import EditPatientProxyModal from '../patient-proxy/edit-patient-proxy-modal';
 
 describe('Renders Advanced Directives Component', () => {
   const onChange = () => true;
@@ -65,10 +63,5 @@ describe('Renders Advanced Directives Component', () => {
         .at(1)
         .props().messageId,
     ).toBe('advancedDirectives.documents');
-  });
-
-  it('creates the two modals', () => {
-    expect(wrapper.find(CreatePatientProxyModal)).toHaveLength(1);
-    expect(wrapper.find(EditPatientProxyModal)).toHaveLength(1);
   });
 });

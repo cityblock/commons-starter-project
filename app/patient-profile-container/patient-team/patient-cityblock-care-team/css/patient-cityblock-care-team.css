@@ -1,9 +1,0 @@
-::-webkit-scrollbar {
-  display: none;
-}
-
-.container {
-  padding: var(--small-gutter) var(--medium-gutter);
-  background-color: var(--gray-background-color);
-  min-height: calc(100vh - 160px);
-}

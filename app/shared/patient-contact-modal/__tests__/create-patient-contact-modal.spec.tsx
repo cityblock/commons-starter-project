@@ -1,43 +1,41 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patientContactCreateMutation } from '../../../../graphql/types';
-import { patient } from '../../../../shared/util/test-data';
-import { CreatePatientProxyModal } from '../create-patient-proxy-modal';
-import PatientProxyModal from '../patient-proxy-modal';
+import { patientContactCreateMutation } from '../../../graphql/types';
+import { patient } from '../../../shared/util/test-data';
+import { CreatePatientContactModal } from '../create-patient-contact-modal';
+import PatientContactModal from '../patient-contact-modal';
 
 describe('Render Create Patient Proxy Modal', () => {
   const onSaved = (patientContact: patientContactCreateMutation['patientContactCreate']) => true;
   const closePopup = () => true;
-  const createPhoneMutation = jest.fn();
-  const createEmailMutation = jest.fn();
   const createPatientContactMutation = jest.fn();
 
   const wrapper = shallow(
-    <CreatePatientProxyModal
+    <CreatePatientContactModal
       onSaved={onSaved}
       patientId={patient.id}
       isVisible={false}
       closePopup={closePopup}
-      createPhoneMutation={createPhoneMutation}
-      createEmailMutation={createEmailMutation}
+      contactType="healthcareProxy"
+      titleMessageId="testTitle"
       createPatientContactMutation={createPatientContactMutation}
     />,
   );
 
   it('renders proxy modal in not visible state', () => {
-    expect(wrapper.find(PatientProxyModal).length).toBe(1);
+    expect(wrapper.find(PatientContactModal).length).toBe(1);
 
-    const modal = wrapper.find(PatientProxyModal).props();
+    const modal = wrapper.find(PatientContactModal).props();
     expect(modal.isVisible).toBeFalsy();
     expect(modal.closePopup).toBe(closePopup);
-    expect(modal.titleMessageId).toBe('patientContact.addHealthcareProxy');
+    expect(modal.titleMessageId).toBe('testTitle');
   });
 
   it('renders proxy modal in visible state', () => {
     wrapper.setProps({ isVisible: true });
-    expect(wrapper.find(PatientProxyModal).length).toBe(1);
+    expect(wrapper.find(PatientContactModal).length).toBe(1);
 
-    const modal = wrapper.find(PatientProxyModal).props();
+    const modal = wrapper.find(PatientContactModal).props();
     expect(modal.isVisible).toBeTruthy();
   });
 });

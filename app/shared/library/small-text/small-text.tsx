@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/small-text.css';
 
-export type Color = 'lightGray' | 'gray' | 'black' | 'white' | 'red' | 'green'; // default is lightGray
+export type Color = 'lightGray' | 'gray' | 'black' | 'white' | 'red' | 'purple' | 'green'; // default is lightGray
 export type Size = 'small' | 'medium' | 'large' | 'largest';
 
 export interface IProps {
@@ -29,6 +29,7 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.largestFontSize]: size && size === 'largest',
       [styles.white]: color && color === 'white',
       [styles.red]: color && color === 'red',
+      [styles.purple]: color && color === 'purple',
       [styles.green]: color && color === 'green',
       [styles.bold]: isBold,
     },

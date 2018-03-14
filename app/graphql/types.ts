@@ -269,6 +269,48 @@ export interface PatientConcernBulkEditFields {
   completedAt?: string | null,
 };
 
+export interface PhoneCreateInput {
+  phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
+};
+
+export interface AddressCreateInput {
+  zip?: string | null,
+  street1?: string | null,
+  street2?: string | null,
+  state?: string | null,
+  city?: string | null,
+  description?: string | null,
+};
+
+export interface EmailCreateInput {
+  emailAddress: string,
+  description?: string | null,
+};
+
+export interface AddressInput {
+  addressId?: string | null,
+  zip?: string | null,
+  street1?: string | null,
+  street2?: string | null,
+  state?: string | null,
+  city?: string | null,
+  description?: string | null,
+};
+
+export interface EmailInput {
+  emailAddress: string,
+  description?: string | null,
+};
+
+export interface PhoneInput {
+  phoneId?: string | null,
+  phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
+};
+
 export interface addressCreateForPatientMutationVariables {
   patientId: string,
   zip: string,
@@ -2485,15 +2527,56 @@ export interface getPatientContactHealthcareProxiesQuery {
     isHealthcareProxy: boolean,
     canContact: boolean,
     description: string | null,
-    primaryAddress:  {
+    address:  {
       id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
       zip: string | null,
+      description: string | null,
     } | null,
-    primaryEmail:  {
+    email:  {
       id: string,
       emailAddress: string,
     } | null,
-    primaryPhone:  {
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+  } > | null,
+};
+
+export interface getPatientContactsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientContactsQuery {
+  // Patient contacts for patient
+  patientContacts:  Array< {
+    id: string,
+    patientId: string,
+    relationToPatient: string,
+    firstName: string,
+    lastName: string,
+    isEmergencyContact: boolean,
+    isHealthcareProxy: boolean,
+    canContact: boolean,
+    description: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
       id: string,
       phoneNumber: string,
     },
@@ -6184,13 +6267,13 @@ export interface patientContactCreateMutationVariables {
   relationToPatient: string,
   firstName: string,
   lastName: string,
-  primaryPhoneId: string,
+  phone: PhoneCreateInput,
   isEmergencyContact?: boolean | null,
   isHealthcareProxy?: boolean | null,
   canContact?: boolean | null,
   description?: string | null,
-  primaryAddressId?: string | null,
-  primaryEmailId?: string | null,
+  address?: AddressCreateInput | null,
+  email?: EmailCreateInput | null,
 };
 
 export interface patientContactCreateMutation {
@@ -6205,15 +6288,20 @@ export interface patientContactCreateMutation {
     isHealthcareProxy: boolean,
     canContact: boolean,
     description: string | null,
-    primaryAddress:  {
+    address:  {
       id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
       zip: string | null,
+      description: string | null,
     } | null,
-    primaryEmail:  {
+    email:  {
       id: string,
       emailAddress: string,
     } | null,
-    primaryPhone:  {
+    phone:  {
       id: string,
       phoneNumber: string,
     },
@@ -6229,8 +6317,9 @@ export interface patientContactEditMutationVariables {
   isHealthcareProxy?: boolean | null,
   canContact?: boolean | null,
   description?: string | null,
-  primaryAddressId?: string | null,
-  primaryEmailId?: string | null,
+  address?: AddressInput | null,
+  email?: EmailInput | null,
+  phone?: PhoneInput | null,
 };
 
 export interface patientContactEditMutation {
@@ -6245,15 +6334,20 @@ export interface patientContactEditMutation {
     isHealthcareProxy: boolean,
     canContact: boolean,
     description: string | null,
-    primaryAddress:  {
+    address:  {
       id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
       zip: string | null,
+      description: string | null,
     } | null,
-    primaryEmail:  {
+    email:  {
       id: string,
       emailAddress: string,
     } | null,
-    primaryPhone:  {
+    phone:  {
       id: string,
       phoneNumber: string,
     },
@@ -10598,15 +10692,20 @@ export interface FullPatientContactFragment {
   isHealthcareProxy: boolean,
   canContact: boolean,
   description: string | null,
-  primaryAddress:  {
+  address:  {
     id: string,
+    city: string | null,
+    state: string | null,
+    street1: string | null,
+    street2: string | null,
     zip: string | null,
+    description: string | null,
   } | null,
-  primaryEmail:  {
+  email:  {
     id: string,
     emailAddress: string,
   } | null,
-  primaryPhone:  {
+  phone:  {
     id: string,
     phoneNumber: string,
   },

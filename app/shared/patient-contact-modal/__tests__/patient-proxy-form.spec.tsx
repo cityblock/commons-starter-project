@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import FormLabel from '../../../../shared/library/form-label/form-label';
-import TextInput from '../../../../shared/library/text-input/text-input';
+import FormLabel from '../../../shared/library/form-label/form-label';
+import TextInput from '../../../shared/library/text-input/text-input';
 import PatientProxyForm from '../patient-proxy-form';
 
 describe('Render Patient Proxy Form', () => {

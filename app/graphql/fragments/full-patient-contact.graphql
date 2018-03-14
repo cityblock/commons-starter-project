@@ -1,3 +1,5 @@
+#import "./full-address.graphql"
+
 fragment FullPatientContact on PatientContact {
   id
   patientId
@@ -8,15 +10,14 @@ fragment FullPatientContact on PatientContact {
   isHealthcareProxy
   canContact
   description
-  primaryAddress {
-    id
-    zip
+  address {
+    ...FullAddress
   }
-  primaryEmail {
+  email {
     id
     emailAddress
   }
-  primaryPhone {
+  phone {
     id
     phoneNumber
   }

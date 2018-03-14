@@ -9,8 +9,9 @@ mutation patientContactEdit(
   $isHealthcareProxy: Boolean
   $canContact: Boolean
   $description: String
-  $primaryAddressId: String
-  $primaryEmailId: String
+  $address: AddressInput
+  $email: EmailInput
+  $phone: PhoneInput
 ) {
   patientContactEdit(
     input: {
@@ -22,8 +23,9 @@ mutation patientContactEdit(
       isHealthcareProxy: $isHealthcareProxy
       canContact: $canContact
       description: $description
-      primaryAddressId: $primaryAddressId
-      primaryEmailId: $primaryEmailId
+      address: $address
+      phone: $phone
+      email: $email
     }
   ) {
     ...FullPatientContact

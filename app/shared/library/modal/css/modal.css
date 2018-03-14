@@ -1,5 +1,7 @@
 .body {
   padding: var(--medium-gutter);
+  max-height: 650px;
+  overflow: scroll;
 }
 
 .body,

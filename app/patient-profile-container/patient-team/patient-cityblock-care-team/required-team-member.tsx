@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { getPatientCareTeamQuery } from '../../../graphql/types';
-import SmallText from '../../../shared/library/small-text/small-text';
-import * as styles from './css/required-team-member.css';
+import RequiredPlaceholder from '../required-placeholder';
 
 type RequiredRoleTypes = 'communityHealthPartner' | 'primaryCarePhysician';
 
@@ -39,15 +38,11 @@ const RequiredTeamMember: React.StatelessComponent<IProps> = (props: IProps) => 
     return null;
   } else {
     return (
-      <div className={styles.requiredTeamMember} onClick={onClick}>
-        <SmallText
-          messageId={headerMessageId}
-          color="red"
-          size="medium"
-          className={styles.header}
-        />
-        <SmallText messageId={subtextMessageId} size="medium" />
-      </div>
+      <RequiredPlaceholder
+        onClick={onClick}
+        headerMessageId={headerMessageId}
+        subtextMessageId={subtextMessageId}
+      />
     );
   }
 };

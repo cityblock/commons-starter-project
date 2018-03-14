@@ -337,10 +337,10 @@ type PatientContact implements uniqueId {
   isEmergencyContact: Boolean!
   isHealthcareProxy: Boolean!
   canContact: Boolean!
-  primaryPhone: Phone!
   description: String
-  primaryAddress: Address
-  primaryEmail: Email
+  phone: Phone!
+  address: Address
+  email: Email
 }
 
 # ComputedPatientStatus
@@ -383,6 +383,17 @@ input PatientFilterOptions {
 # Address
 type Address implements uniqueId {
   id: ID!
+  zip: String
+  street1: String
+  street2: String
+  state: String
+  city: String
+  description: String
+}
+
+# params for creating or editing address in the db
+input AddressInput {
+  addressId: ID
   zip: String
   street1: String
   street2: String
@@ -440,6 +451,14 @@ type Phone implements uniqueId {
   description: String
 }
 
+# params for creating or editing phone in the db
+input PhoneInput {
+  phoneId: ID
+  phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
+}
+
 # Editable fields on a phone
 input PhoneEditInput {
   phoneId: ID!
@@ -475,6 +494,12 @@ input PhoneDeleteForPatientInput {
 # Email
 type Email implements uniqueId {
   id: ID!
+  emailAddress: String!
+  description: String
+}
+
+# params for creating or editing an email in the db
+input EmailInput {
   emailAddress: String!
   description: String
 }
@@ -1496,13 +1521,13 @@ input PatientContactCreateInput {
   relationToPatient: String!
   firstName: String!
   lastName: String!
-  primaryPhoneId: String!
+  phone: PhoneCreateInput!
   isEmergencyContact: Boolean
   isHealthcareProxy: Boolean
   canContact: Boolean
   description: String
-  primaryAddressId: String
-  primaryEmailId: String
+  address: AddressCreateInput
+  email: EmailCreateInput
 }
 
 # params for editing a patient contact in the db
@@ -1515,8 +1540,9 @@ input PatientContactEditInput {
   isHealthcareProxy: Boolean
   canContact: Boolean
   description: String
-  primaryAddressId: String
-  primaryEmailId: String
+  address: AddressInput
+  email: EmailInput
+  phone: PhoneInput
 }
 
 # params for editing a patient need to know
@@ -2458,6 +2484,8 @@ type RootQueryType {
     pageNumber: Int!
     pageSize: Int!
   ): PatientForDashboardEdges!
+  # Patient contacts for patient
+  patientContacts(patientId: ID!): [PatientContact!]
   # Patient contact healthcare proxies
   patientContactHealthcareProxies(patientId: ID!): [PatientContact!]
   # A single clinic

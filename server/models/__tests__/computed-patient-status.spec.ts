@@ -11,7 +11,6 @@ import PatientContact from '../patient-contact';
 import PatientDataFlag from '../patient-data-flag';
 import PatientInfo from '../patient-info';
 import PatientState from '../patient-state';
-import Phone from '../phone';
 import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
@@ -413,13 +412,7 @@ describe('computed patient status model', () => {
   it('correctly calculates isEmergencyContactAdded', async () => {
     await transaction(ComputedPatientStatus.knex(), async txn => {
       const { user, patient } = await setup(txn);
-      const phone = await Phone.create(
-        {
-          updatedById: user.id,
-          phoneNumber: '5555555555',
-        },
-        txn,
-      );
+
       // Create a non-emergency contact
       await PatientContact.create(
         {
@@ -431,7 +424,6 @@ describe('computed patient status model', () => {
           isEmergencyContact: false,
           isHealthcareProxy: false,
           canContact: true,
-          primaryPhoneId: phone.id,
         },
         txn,
       );
@@ -449,7 +441,6 @@ describe('computed patient status model', () => {
           isEmergencyContact: true,
           isHealthcareProxy: false,
           canContact: true,
-          primaryPhoneId: phone.id,
         },
         txn,
       );

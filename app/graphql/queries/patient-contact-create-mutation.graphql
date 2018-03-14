@@ -5,13 +5,13 @@ mutation patientContactCreate(
   $relationToPatient: String!
   $firstName: String!
   $lastName: String!
-  $primaryPhoneId: String!
+  $phone: PhoneCreateInput!
   $isEmergencyContact: Boolean
   $isHealthcareProxy: Boolean
   $canContact: Boolean
   $description: String
-  $primaryAddressId: String
-  $primaryEmailId: String
+  $address: AddressCreateInput
+  $email: EmailCreateInput
 ) {
   patientContactCreate(
     input: {
@@ -22,10 +22,10 @@ mutation patientContactCreate(
       isEmergencyContact: $isEmergencyContact
       isHealthcareProxy: $isHealthcareProxy
       canContact: $canContact
-      primaryPhoneId: $primaryPhoneId
+      phone: $phone
       description: $description
-      primaryAddressId: $primaryAddressId
-      primaryEmailId: $primaryEmailId
+      address: $address
+      email: $email
     }
   ) {
     ...FullPatientContact

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../../shared/library/small-text/small-text';
 import { clinic, user } from '../../../../shared/util/test-data';
+import RequiredPlaceholder from '../../required-placeholder';
 import RequiredTeamMember from '../required-team-member';
 
 const user2 = {
@@ -33,13 +33,13 @@ describe('Render Required Team Member Component', () => {
   it('renders the component when the required team member is missing', () => {
     wrapper.setProps({ patientCareTeam: [user] });
     expect(wrapper.isEmptyRender()).toBe(false);
-    expect(wrapper.find(SmallText)).toHaveLength(2);
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(0)
-        .props().messageId,
-    ).toBe('patientTeam.missingChpHeader');
+    expect(wrapper.find(RequiredPlaceholder)).toHaveLength(1);
+    expect(wrapper.find(RequiredPlaceholder).props().headerMessageId).toBe(
+      'patientTeam.missingChpHeader',
+    );
+    expect(wrapper.find(RequiredPlaceholder).props().subtextMessageId).toBe(
+      'patientTeam.missingChpSubtext',
+    );
   });
 
   it('renders null when the required team member is not missing', () => {

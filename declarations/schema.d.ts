@@ -100,6 +100,11 @@ declare module 'schema' {
     patientsForComputedList: IPatientForDashboardEdges;
 
     /**
+     * Patient contacts for patient
+     */
+    patientContacts: Array<IPatientContact>;
+
+    /**
      * Patient contact healthcare proxies
      */
     patientContactHealthcareProxies: Array<IPatientContact>;
@@ -610,6 +615,9 @@ declare module 'schema' {
     answerId: string;
     pageNumber: number;
     pageSize: number;
+  }
+  interface IPatientContactsOnRootQueryTypeArguments {
+    patientId: string;
   }
   interface IPatientContactHealthcareProxiesOnRootQueryTypeArguments {
     patientId: string;
@@ -1275,10 +1283,10 @@ declare module 'schema' {
     isEmergencyContact: boolean;
     isHealthcareProxy: boolean;
     canContact: boolean;
-    primaryPhone: IPhone;
     description: string | null;
-    primaryAddress: IAddress | null;
-    primaryEmail: IEmail | null;
+    phone: IPhone;
+    address: IAddress | null;
+    email: IEmail | null;
   }
 
   /**
@@ -3511,13 +3519,13 @@ declare module 'schema' {
     relationToPatient: string;
     firstName: string;
     lastName: string;
-    primaryPhoneId: string;
+    phone: IPhoneCreateInput;
     isEmergencyContact?: boolean | null;
     isHealthcareProxy?: boolean | null;
     canContact?: boolean | null;
     description?: string | null;
-    primaryAddressId?: string | null;
-    primaryEmailId?: string | null;
+    address?: IAddressCreateInput | null;
+    email?: IEmailCreateInput | null;
   }
 
   /**
@@ -3532,8 +3540,40 @@ declare module 'schema' {
     isHealthcareProxy?: boolean | null;
     canContact?: boolean | null;
     description?: string | null;
-    primaryAddressId?: string | null;
-    primaryEmailId?: string | null;
+    address?: IAddressInput | null;
+    email?: IEmailInput | null;
+    phone?: IPhoneInput | null;
+  }
+
+  /**
+   * params for creating or editing address in the db
+   */
+  interface IAddressInput {
+    addressId?: string | null;
+    zip?: string | null;
+    street1?: string | null;
+    street2?: string | null;
+    state?: string | null;
+    city?: string | null;
+    description?: string | null;
+  }
+
+  /**
+   * params for creating or editing an email in the db
+   */
+  interface IEmailInput {
+    emailAddress: string;
+    description?: string | null;
+  }
+
+  /**
+   * params for creating or editing phone in the db
+   */
+  interface IPhoneInput {
+    phoneId?: string | null;
+    phoneNumber: string;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**

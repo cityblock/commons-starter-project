@@ -1,7 +1,7 @@
 import * as React from 'react';
-import FormLabel from '../../../shared/library/form-label/form-label';
-import * as styles from '../../../shared/library/form/css/form.css';
-import TextInput from '../../../shared/library/text-input/text-input';
+import FormLabel from '../library/form-label/form-label';
+import * as styles from '../library/form/css/form.css';
+import TextInput from '../library/text-input/text-input';
 
 interface IProps {
   emailAddress?: string | null;

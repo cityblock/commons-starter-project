@@ -14,6 +14,9 @@ import Clinic from '../clinic';
 import Email from '../email';
 import Patient from '../patient';
 import PatientContact from '../patient-contact';
+import PatientContactAddress from '../patient-contact-address';
+import PatientContactEmail from '../patient-contact-email';
+import PatientContactPhone from '../patient-contact-phone';
 import Phone from '../phone';
 import User from '../user';
 
@@ -32,11 +35,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const phone = await Phone.create(createMockPhone(user.id), txn);
   const patientContact = await PatientContact.create(
-    createMockPatientContact(patient.id, user.id, phone.id),
+    createMockPatientContact(patient.id, user.id, phone),
     txn,
   );
+  await PatientContactPhone.create({ phoneId: phone.id, patientContactId: patientContact.id }, txn);
+  const fullPatientContact = await PatientContact.get(patientContact.id, txn);
 
-  return { patient, patientContact, user, phone };
+  return { patient, patientContact: fullPatientContact, user, phone };
 }
 
 describe('patient info model', () => {
@@ -63,7 +68,7 @@ describe('patient info model', () => {
       await transaction(PatientContact.knex(), async txn => {
         const { user, patient, phone } = await setup(txn);
         const proxy = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone.id, { isHealthcareProxy: true }),
+          createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
           txn,
         );
 
@@ -76,7 +81,7 @@ describe('patient info model', () => {
       await transaction(PatientContact.knex(), async txn => {
         const { user, patient, phone } = await setup(txn);
         const emergencyContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone.id, { isEmergencyContact: true }),
+          createMockPatientContact(patient.id, user.id, phone, { isEmergencyContact: true }),
           txn,
         );
 
@@ -92,7 +97,7 @@ describe('patient info model', () => {
         const { phone, patient, patientContact } = await setup(txn);
 
         expect(patientContact).toMatchObject({
-          primaryPhoneId: phone.id,
+          phone,
           patientId: patient.id,
           firstName: 'harry',
           lastName: 'potter',
@@ -100,8 +105,8 @@ describe('patient info model', () => {
           isEmergencyContact: false,
           isHealthcareProxy: false,
           canContact: false,
-          primaryEmailId: null,
-          primaryAddressId: null,
+          email: null,
+          address: null,
           description: 'some contact description',
         });
       });
@@ -113,9 +118,9 @@ describe('patient info model', () => {
         const address = await Address.create(createMockAddress(user.id), txn);
         const email = await Email.create(createMockEmail(user.id), txn);
         const patientContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone.id, {
-            primaryAddressId: address.id,
-            primaryEmailId: email.id,
+          createMockPatientContact(patient.id, user.id, phone, {
+            address,
+            email,
             isEmergencyContact: true,
             isHealthcareProxy: true,
             canContact: true,
@@ -123,10 +128,39 @@ describe('patient info model', () => {
           txn,
         );
 
+        await PatientContactPhone.create(
+          { phoneId: phone.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactEmail.create(
+          { emailId: email.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactAddress.create(
+          { addressId: address.id, patientContactId: patientContact.id },
+          txn,
+        );
+
         expect(patientContact).toMatchObject({
-          primaryPhoneId: phone.id,
-          primaryEmailId: email.id,
-          primaryAddressId: address.id,
+          phone: null,
+          email: null,
+          address: null,
+          patientId: patient.id,
+          firstName: 'harry',
+          lastName: 'potter',
+          relationToPatient: 'wizarding tutor',
+          isEmergencyContact: true,
+          isHealthcareProxy: true,
+          canContact: true,
+          description: 'some contact description',
+        });
+
+        const fullPatientContact = await PatientContact.get(patientContact.id, txn);
+
+        expect(fullPatientContact).toMatchObject({
+          phone,
+          email,
+          address,
           patientId: patient.id,
           firstName: 'harry',
           lastName: 'potter',
@@ -160,10 +194,7 @@ describe('patient info model', () => {
         );
 
         expect(result).toMatchObject({
-          primaryPhone: {
-            id: phone.id,
-            phoneNumber: phone.phoneNumber,
-          },
+          phone,
           patientId: patient.id,
           firstName: 'ron',
           lastName: 'weasley',
@@ -171,62 +202,9 @@ describe('patient info model', () => {
           isEmergencyContact: true,
           isHealthcareProxy: true,
           canContact: true,
-          primaryEmailId: null,
-          primaryAddressId: null,
+          email: null,
+          address: null,
           description: 'some magical thing',
-        });
-      });
-    });
-
-    it('should add address to patient contact', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, patientContact, user } = await setup(txn);
-        const address = await Address.create(createMockAddress(user.id), txn);
-
-        const result = await PatientContact.edit(
-          {
-            primaryAddressId: address.id,
-            updatedById: user.id,
-          },
-          patientContact.id,
-          txn,
-        );
-
-        expect(result).toMatchObject({
-          patientId: patient.id,
-          id: patientContact.id,
-          primaryAddress: {
-            street1: address.street1,
-            zip: address.zip,
-            state: address.state,
-            city: address.city,
-          },
-        });
-      });
-    });
-
-    it('should add email to patient contact', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, patientContact, user } = await setup(txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
-
-        const result = await PatientContact.edit(
-          {
-            primaryEmailId: email.id,
-            updatedById: user.id,
-          },
-          patientContact.id,
-          txn,
-        );
-
-        expect(result).toMatchObject({
-          patientId: patient.id,
-          id: patientContact.id,
-          primaryEmail: {
-            emailAddress: email.emailAddress,
-            description: email.description,
-            updatedById: user.id,
-          },
         });
       });
     });

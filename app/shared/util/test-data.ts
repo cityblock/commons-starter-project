@@ -1049,15 +1049,15 @@ export const healthcareProxy = {
   lastName: 'jane',
   relationToPatient: 'mother',
   patientId: patient.id,
-  primaryPhone: {
+  phone: {
     id: phone1.id,
     phoneNumber: phone1.phoneNumber,
   },
-  primaryEmail: {
+  email: {
     id: email1.id,
     emailAddress: email1.emailAddress,
   },
-  primaryAddress: null,
+  address: null,
   isHealthcareProxy: true,
   isEmergencyContact: false,
   canContact: false,

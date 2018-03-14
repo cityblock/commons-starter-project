@@ -1,19 +1,20 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Modal from '../../../../shared/library/modal/modal';
-import { healthcareProxy } from '../../../../shared/util/test-data';
+import Modal from '../../../shared/library/modal/modal';
+import { healthcareProxy } from '../../../shared/util/test-data';
+import PatientContactModal, { IPatientContact } from '../patient-contact-modal';
 import PatientProxyForm from '../patient-proxy-form';
-import PatientProxyModal, { IPatientProxy } from '../patient-proxy-modal';
 
 describe('Render Proxy Modal Component', () => {
   const closePopup = () => true;
   const wrapper = shallow(
-    <PatientProxyModal
-      saveProxy={async (patientProxy: IPatientProxy) => Promise.resolve()}
+    <PatientContactModal
+      saveContact={async (patientContact: IPatientContact) => Promise.resolve()}
       closePopup={closePopup}
       onSaved={(response: any) => true}
       isVisible={false}
       titleMessageId="title.id"
+      contactType="healthcareProxy"
     />,
   );
 
@@ -27,7 +28,7 @@ describe('Render Proxy Modal Component', () => {
     expect(wrapper.find(Modal).props().titleMessageId).toBe('title.id');
   });
 
-  it('renders proxy modal form without an patient contact', () => {
+  it('renders proxy modal form without a patient contact', () => {
     expect(wrapper.find(PatientProxyForm)).toHaveLength(1);
     expect(wrapper.find(PatientProxyForm).props().emailAddress).toBe(undefined);
     expect(wrapper.find(PatientProxyForm).props().phoneNumber).toBe(undefined);
@@ -38,14 +39,14 @@ describe('Render Proxy Modal Component', () => {
   });
 
   it('renders proxy modal form with a healthcare proxy patient contact', () => {
-    wrapper.setProps({ patientProxy: healthcareProxy });
+    wrapper.setProps({ patientContact: healthcareProxy });
 
     expect(wrapper.find(PatientProxyForm)).toHaveLength(1);
     expect(wrapper.find(PatientProxyForm).props().emailAddress).toBe(
-      healthcareProxy.primaryEmail.emailAddress,
+      healthcareProxy.email.emailAddress,
     );
     expect(wrapper.find(PatientProxyForm).props().phoneNumber).toBe(
-      healthcareProxy.primaryPhone.phoneNumber,
+      healthcareProxy.phone.phoneNumber,
     );
     expect(wrapper.find(PatientProxyForm).props().firstName).toBe(healthcareProxy.firstName);
     expect(wrapper.find(PatientProxyForm).props().lastName).toBe(healthcareProxy.lastName);

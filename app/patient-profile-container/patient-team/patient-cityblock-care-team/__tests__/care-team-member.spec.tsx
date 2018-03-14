@@ -54,7 +54,7 @@ describe('Render CareTeamMember component', () => {
 
   it('renders the make team lead button and no badge when not the care team lead', () => {
     wrapper.setProps({ careTeamMember: nonLeadUserForCareTeam });
-    expect(wrapper.find('.careTeamMemberName.hiddenStar')).toHaveLength(1);
+    expect(wrapper.find('.row.hiddenStar')).toHaveLength(1);
     expect(wrapper.find(Avatar)).toHaveLength(1);
     expect(wrapper.find(HamburgerMenu)).toHaveLength(1);
     expect(
@@ -85,7 +85,7 @@ describe('Render CareTeamMember component', () => {
 
   it('renders the team lead badge when the user is the care team lead', () => {
     wrapper.setProps({ careTeamMember: userForCareTeam });
-    expect(wrapper.find('.careTeamMemberName.hiddenStar')).toHaveLength(0);
-    expect(wrapper.find('.careTeamMemberName')).toHaveLength(1);
+    expect(wrapper.find('.row.hiddenStar')).toHaveLength(0);
+    expect(wrapper.find('.row')).toHaveLength(3);
   });
 });

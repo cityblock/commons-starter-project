@@ -29,16 +29,14 @@ const permissions = 'green';
 interface ISetup {
   patient: Patient;
   user: User;
-  phone: Phone;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
 
-  return { patient, user, phone };
+  return { patient, user };
 }
 
 describe('patient info model', () => {
@@ -58,10 +56,11 @@ describe('patient info model', () => {
   describe('patient contact resolvers', async () => {
     it('gets all patient contact healthcare proxies for patient with id', async () => {
       await transaction(PatientContact.knex(), async txn => {
-        const { user, patient, phone } = await setup(txn);
-        await PatientContact.create(createMockPatientContact(patient.id, user.id, phone.id), txn);
+        const { user, patient } = await setup(txn);
+        const phone = await Phone.create(createMockPhone(user.id), txn);
+        await PatientContact.create(createMockPatientContact(patient.id, user.id, phone), txn);
         const proxy = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone.id, { isHealthcareProxy: true }),
+          createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
           txn,
         );
 
@@ -92,7 +91,7 @@ describe('patient info model', () => {
   describe('create', async () => {
     it('should create a patient contact with minimal info', async () => {
       await transaction(PatientContact.knex(), async txn => {
-        const { phone, patient, user } = await setup(txn);
+        const { patient, user } = await setup(txn);
 
         const query = `mutation {
           patientContactCreate(input: {
@@ -100,7 +99,9 @@ describe('patient info model', () => {
             firstName: "Hermione",
             lastName: "Granger",
             relationToPatient: "friend",
-            primaryPhoneId: "${phone.id}",
+            phone: {
+              phoneNumber: "111-222-3344"
+            },
           }) {
             id,
             patientId,
@@ -110,9 +111,9 @@ describe('patient info model', () => {
             isHealthcareProxy,
             isEmergencyContact,
             canContact,
-            primaryPhone { id, phoneNumber },
-            primaryEmail { id, emailAddress },
-            primaryAddress { id, zip },
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip },
           }
         }`;
 
@@ -132,9 +133,9 @@ describe('patient info model', () => {
           isHealthcareProxy: false,
           isEmergencyContact: false,
           canContact: false,
-          primaryPhone: { id: phone.id, phoneNumber: phone.phoneNumber },
-          primaryEmail: null,
-          primaryAddress: null,
+          phone: { phoneNumber: '111-222-3344' },
+          email: null,
+          address: null,
         });
         expect(log).toBeCalled();
 
@@ -149,9 +150,7 @@ describe('patient info model', () => {
 
     it('should create a patient contact with all contact fields', async () => {
       await transaction(PatientContact.knex(), async txn => {
-        const { phone, patient, user } = await setup(txn);
-        const address = await Address.create(createMockAddress(user.id), txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
+        const { patient, user } = await setup(txn);
 
         const query = `mutation {
           patientContactCreate(input: {
@@ -162,9 +161,15 @@ describe('patient info model', () => {
             canContact: true,
             isHealthcareProxy: true,
             isEmergencyContact: true,
-            primaryPhoneId: "${phone.id}",
-            primaryEmailId: "${email.id}",
-            primaryAddressId: "${address.id}",
+            phone: {
+              phoneNumber: "111-222-3344",
+            },
+            email: {
+              emailAddress: "test@email.com",
+            },
+            address: {
+              zip: "11238",
+            },
           }) {
             id,
             patientId,
@@ -174,9 +179,9 @@ describe('patient info model', () => {
             isHealthcareProxy,
             isEmergencyContact,
             canContact,
-            primaryPhone { id, phoneNumber },
-            primaryEmail { id, emailAddress },
-            primaryAddress { id, zip },
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip },
           }
         }`;
 
@@ -196,9 +201,9 @@ describe('patient info model', () => {
           isHealthcareProxy: true,
           isEmergencyContact: true,
           canContact: true,
-          primaryPhone: { id: phone.id, phoneNumber: phone.phoneNumber },
-          primaryEmail: { id: email.id, emailAddress: email.emailAddress },
-          primaryAddress: { id: address.id, zip: address.zip },
+          phone: { phoneNumber: '111-222-3344' },
+          email: { emailAddress: 'test@email.com' },
+          address: { zip: '11238' },
         });
         expect(log).toBeCalled();
 
@@ -224,18 +229,105 @@ describe('patient info model', () => {
         expect(patientContactEmail).toHaveLength(1);
       });
     });
+
+    it('should create a patient contact but not empty address or email', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+
+        const query = `mutation {
+          patientContactCreate(input: {
+            patientId: "${patient.id}",
+            firstName: "Hermione",
+            lastName: "Granger",
+            relationToPatient: "friend",
+            canContact: true,
+            isHealthcareProxy: true,
+            isEmergencyContact: true,
+            phone: {
+              phoneNumber: "111-222-3344",
+            },
+            email: {
+              emailAddress: "",
+            },
+            address: {
+              zip: "",
+            },
+          }) {
+            id,
+            patientId,
+            firstName,
+            lastName,
+            relationToPatient,
+            isHealthcareProxy,
+            isEmergencyContact,
+            canContact,
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip },
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+          patientId: patient.id,
+          firstName: 'Hermione',
+          lastName: 'Granger',
+          relationToPatient: 'friend',
+          isHealthcareProxy: true,
+          isEmergencyContact: true,
+          canContact: true,
+          phone: { phoneNumber: '111-222-3344' },
+          email: null,
+          address: null,
+        });
+        expect(log).toBeCalled();
+
+        const patientContactPhone = await PatientContactPhone.getForPatientContact(
+          result.data!.patientContactCreate.id,
+          txn,
+        );
+        expect(patientContactPhone).not.toBeNull();
+        expect(patientContactPhone.length).toBe(1);
+
+        const patientContactAddress = await PatientContactAddress.getForPatientContact(
+          result.data!.patientContactCreate.id,
+          txn,
+        );
+        expect(patientContactAddress).not.toBeNull();
+        expect(patientContactAddress).toHaveLength(0);
+
+        const patientContactEmail = await PatientContactEmail.getForPatientContact(
+          result.data!.patientContactCreate.id,
+          txn,
+        );
+        expect(patientContactEmail).not.toBeNull();
+        expect(patientContactEmail).toHaveLength(0);
+      });
+    });
   });
 
   describe('edit', async () => {
-    it('should edit patient contact', async () => {
+    it('should edit patient contact and create email and address', async () => {
       await transaction(PatientContact.knex(), async txn => {
-        const { patient, user, phone } = await setup(txn);
+        const { patient, user } = await setup(txn);
+        const phone = await Phone.create(createMockPhone(user.id), txn);
+
         const patientContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone.id),
+          createMockPatientContact(patient.id, user.id, phone),
           txn,
         );
-        const address = await Address.create(createMockAddress(user.id), txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
+
+        await PatientContactPhone.create(
+          { phoneId: phone.id, patientContactId: patientContact.id },
+          txn,
+        );
 
         const query = `mutation {
           patientContactEdit(input: {
@@ -246,8 +338,16 @@ describe('patient info model', () => {
             canContact: true,
             isHealthcareProxy: true,
             isEmergencyContact: true,
-            primaryEmailId: "${email.id}",
-            primaryAddressId: "${address.id}",
+            phone: {
+              phoneNumber: "000-111-2255",
+            },
+            email: {
+              emailAddress: "changed@email.com",
+            },
+            address: {
+              zip: "02139",
+              state: "MA",
+            },
           }) {
             id,
             patientId,
@@ -257,9 +357,9 @@ describe('patient info model', () => {
             isHealthcareProxy,
             isEmergencyContact,
             canContact,
-            primaryPhone { id, phoneNumber },
-            primaryEmail { id, emailAddress },
-            primaryAddress { id, zip },
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip, state },
           }
         }`;
 
@@ -279,9 +379,9 @@ describe('patient info model', () => {
           isHealthcareProxy: true,
           isEmergencyContact: true,
           canContact: true,
-          primaryPhone: { id: phone.id, phoneNumber: phone.phoneNumber },
-          primaryEmail: { id: email.id, emailAddress: email.emailAddress },
-          primaryAddress: { id: address.id, zip: address.zip },
+          phone: { id: phone.id, phoneNumber: '000-111-2255' },
+          email: { emailAddress: 'changed@email.com' },
+          address: { zip: '02139', state: 'MA' },
         });
         expect(log).toBeCalled();
 
@@ -298,6 +398,200 @@ describe('patient info model', () => {
         );
         expect(patientContactEmail).not.toBeNull();
         expect(patientContactEmail).toHaveLength(1);
+      });
+    });
+
+    it('should edit patient contact and update email and address', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const phone = await Phone.create(createMockPhone(user.id), txn);
+        const address = await Address.create(createMockAddress(user.id), txn);
+        const email = await Email.create(createMockEmail(user.id), txn);
+
+        const patientContact = await PatientContact.create(
+          createMockPatientContact(patient.id, user.id, phone, { email, address }),
+          txn,
+        );
+
+        await PatientContactPhone.create(
+          { phoneId: phone.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactEmail.create(
+          { emailId: email.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactAddress.create(
+          { addressId: address.id, patientContactId: patientContact.id },
+          txn,
+        );
+
+        const query = `mutation {
+          patientContactEdit(input: {
+            patientContactId: "${patientContact.id}",
+            firstName: "Hermione",
+            lastName: "Granger",
+            relationToPatient: "friend",
+            canContact: true,
+            isHealthcareProxy: true,
+            isEmergencyContact: true,
+            phone: {
+              phoneNumber: "000-111-2255",
+            },
+            email: {
+              emailAddress: "changed@email.com",
+            },
+            address: {
+              zip: "02139",
+              state: "MA",
+            },
+          }) {
+            id,
+            patientId,
+            firstName,
+            lastName,
+            relationToPatient,
+            isHealthcareProxy,
+            isEmergencyContact,
+            canContact,
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip, state },
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
+          patientId: patient.id,
+          firstName: 'Hermione',
+          lastName: 'Granger',
+          relationToPatient: 'friend',
+          isHealthcareProxy: true,
+          isEmergencyContact: true,
+          canContact: true,
+          phone: { id: phone.id, phoneNumber: '000-111-2255' },
+          email: { emailAddress: 'changed@email.com' },
+          address: { zip: '02139', state: 'MA' },
+        });
+        expect(log).toBeCalled();
+
+        const patientContactAddress = await PatientContactAddress.getForPatientContact(
+          result.data!.patientContactEdit.id,
+          txn,
+        );
+        expect(patientContactAddress).not.toBeNull();
+        expect(patientContactAddress).toHaveLength(1);
+
+        const patientContactEmail = await PatientContactEmail.getForPatientContact(
+          result.data!.patientContactEdit.id,
+          txn,
+        );
+        expect(patientContactEmail).not.toBeNull();
+        expect(patientContactEmail).toHaveLength(1);
+      });
+    });
+
+    it('should edit patient contact and delete email and address', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const phone = await Phone.create(createMockPhone(user.id), txn);
+        const address = await Address.create(createMockAddress(user.id), txn);
+        const email = await Email.create(createMockEmail(user.id), txn);
+
+        const patientContact = await PatientContact.create(
+          createMockPatientContact(patient.id, user.id, phone, { email, address }),
+          txn,
+        );
+
+        await PatientContactPhone.create(
+          { phoneId: phone.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactEmail.create(
+          { emailId: email.id, patientContactId: patientContact.id },
+          txn,
+        );
+        await PatientContactAddress.create(
+          { addressId: address.id, patientContactId: patientContact.id },
+          txn,
+        );
+
+        const query = `mutation {
+          patientContactEdit(input: {
+            patientContactId: "${patientContact.id}",
+            firstName: "Hermione",
+            lastName: "Granger",
+            relationToPatient: "friend",
+            canContact: true,
+            isHealthcareProxy: true,
+            isEmergencyContact: true,
+            phone: {
+              phoneNumber: "000-111-2255",
+            },
+            email: {
+              emailAddress: "",
+            },
+            address: {
+              zip: "",
+              state: "",
+            },
+          }) {
+            id,
+            patientId,
+            firstName,
+            lastName,
+            relationToPatient,
+            isHealthcareProxy,
+            isEmergencyContact,
+            canContact,
+            phone { id, phoneNumber },
+            email { id, emailAddress },
+            address { id, zip, state },
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
+          patientId: patient.id,
+          firstName: 'Hermione',
+          lastName: 'Granger',
+          relationToPatient: 'friend',
+          isHealthcareProxy: true,
+          isEmergencyContact: true,
+          canContact: true,
+          phone: { id: phone.id, phoneNumber: '000-111-2255' },
+          email: null,
+          address: null,
+        });
+        expect(log).toBeCalled();
+
+        const patientContactAddress = await PatientContactAddress.getForPatientContact(
+          result.data!.patientContactEdit.id,
+          txn,
+        );
+        expect(patientContactAddress).not.toBeNull();
+        expect(patientContactAddress).toHaveLength(0);
+
+        const patientContactEmail = await PatientContactEmail.getForPatientContact(
+          result.data!.patientContactEdit.id,
+          txn,
+        );
+        expect(patientContactEmail).not.toBeNull();
+        expect(patientContactEmail).toHaveLength(0);
       });
     });
   });

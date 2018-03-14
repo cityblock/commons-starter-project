@@ -147,10 +147,10 @@ export function createMockPatient(
 export function createMockPatientContact(
   patientId: string,
   userId: string,
-  primaryPhoneId: string,
+  phone: { phoneNumber: string },
   options?: {
-    primaryEmailId?: string;
-    primaryAddressId?: string;
+    email?: { emailAddress: string };
+    address?: { zip: string; state?: string };
     firstName?: string;
     lastName?: string;
     relationToPatient?: string;
@@ -165,7 +165,7 @@ export function createMockPatientContact(
   const canContact = get(options, 'canContact');
 
   return {
-    primaryPhoneId,
+    phone,
     updatedById: userId,
     patientId,
     firstName: get(options, 'firstName') || 'harry',
@@ -174,8 +174,8 @@ export function createMockPatientContact(
     isEmergencyContact: isNil(isEmergencyContact) ? false : isEmergencyContact,
     isHealthcareProxy: isNil(isHealthcareProxy) ? false : isHealthcareProxy,
     canContact: isNil(canContact) ? false : canContact,
-    primaryEmailId: get(options, 'primaryEmailId'),
-    primaryAddressId: get(options, 'primaryAddressId'),
+    email: get(options, 'email'),
+    address: get(options, 'address'),
     description: get(options, 'description') || 'some contact description',
   };
 }

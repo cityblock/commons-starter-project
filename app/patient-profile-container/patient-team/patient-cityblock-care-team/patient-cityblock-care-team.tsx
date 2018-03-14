@@ -2,9 +2,9 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
 import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
+import * as styles from '../css/patient-team.css';
 import { AddCareTeamMemberModalFilters } from '../patient-team';
 import CareTeamMember from './care-team-member';
-import * as styles from './css/patient-cityblock-care-team.css';
 import RemoveCareTeamMemberModal from './remove-care-team-member-modal';
 import RequiredTeamMember from './required-team-member';
 

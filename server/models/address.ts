@@ -2,18 +2,8 @@ import { Transaction } from 'objection';
 import BaseModel from './base-model';
 
 export interface IAddressOptions {
-  zip: string;
   updatedById: string;
-  street1?: string;
-  street2?: string;
-  state?: string;
-  city?: string;
-  description?: string;
-}
-
-export interface IAddressEdit {
-  updatedById: string;
-  zip: string;
+  zip?: string;
   street1?: string;
   street2?: string;
   state?: string;
@@ -81,7 +71,11 @@ export default class Address extends BaseModel {
     return deleted;
   }
 
-  static async edit(address: IAddressEdit, addressId: string, txn: Transaction): Promise<Address> {
+  static async edit(
+    address: IAddressOptions,
+    addressId: string,
+    txn: Transaction,
+  ): Promise<Address> {
     return this.query(txn).patchAndFetchById(addressId, address);
   }
 }

@@ -7,17 +7,29 @@ import TextInput from '../../shared/library/text-input/text-input';
 
 interface IProps {
   street1?: string | null;
+  street2?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
   description?: string | null;
   isPrimary?: boolean;
+  hideDescription?: boolean;
   onChange: (e?: any) => void;
   onPrimaryChange?: (e?: any) => void;
 }
 
 const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onChange, onPrimaryChange, isPrimary, street1, state, zip, city, description } = props;
+  const {
+    onChange,
+    onPrimaryChange,
+    isPrimary,
+    street1,
+    state,
+    zip,
+    city,
+    description,
+    hideDescription,
+  } = props;
 
   const isPrimaryComponent = onPrimaryChange ? (
     <div className={styles.field}>
@@ -40,6 +52,13 @@ const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
       </RadioGroup>
     </div>
   ) : null;
+
+  const descriptionField = hideDescription ? null : (
+    <div className={styles.field}>
+      <FormLabel messageId="address.description" />
+      <TextInput name="description" value={description || ''} onChange={onChange} />
+    </div>
+  );
 
   return (
     <div>
@@ -66,12 +85,7 @@ const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
           <TextInput name="zip" value={zip || ''} onChange={onChange} pattern="[0-9]{5}" />
         </div>
       </div>
-
-      <div className={styles.field}>
-        <FormLabel messageId="address.description" />
-        <TextInput name="description" value={description || ''} onChange={onChange} />
-      </div>
-
+      {descriptionField}
       {isPrimaryComponent}
     </div>
   );

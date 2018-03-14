@@ -14,12 +14,12 @@ import FormLabel from '../../shared/library/form-label/form-label';
 import Icon from '../../shared/library/icon/icon';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
+import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
+import EditPatientContactModal from '../../shared/patient-contact-modal/edit-patient-contact-modal';
 import * as styles from './css/advanced-directives.css';
 import * as parentStyles from './css/patient-demographics.css';
 import DisplayCard from './display-card';
 import { IEditableFieldState } from './patient-info';
-import CreatePatientProxyModal from './patient-proxy/create-patient-proxy-modal';
-import EditPatientProxyModal from './patient-proxy/edit-patient-proxy-modal';
 
 export interface IAdvancedDirectives {
   patientId: string;
@@ -109,7 +109,8 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   };
 
   renderHealthcareProxyCard = (proxy: FullPatientContactFragment) => {
-    const emailHtml = proxy.primaryEmail ? <p>{proxy.primaryEmail.emailAddress}</p> : null;
+    const emailHtml = proxy.email ? <p>{proxy.email.emailAddress}</p> : <p>Unknown Email</p>;
+    const phoneHtml = proxy.phone ? <p>{proxy.phone.phoneNumber}</p> : <p>Unknown Phone</p>;
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(proxy)}
@@ -123,7 +124,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
             <p className={styles.gray}>{proxy.relationToPatient}</p>
           </div>
           <div className={styles.proxyField}>
-            <p>{proxy.primaryPhone.phoneNumber}</p>
+            {phoneHtml}
             {emailHtml}
           </div>
           <div className={classNames(styles.proxyField, styles.gray)}>{proxy.description}</div>
@@ -150,16 +151,31 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
     );
   }
 
+  renderEditModal() {
+    const { patientId } = this.props.advancedDirectives;
+    const { isEditModalVisible, currentProxy } = this.state;
+
+    if (currentProxy) {
+      return (
+        <EditPatientContactModal
+          isVisible={isEditModalVisible}
+          closePopup={this.handleModalClose}
+          patientContact={currentProxy}
+          patientId={patientId}
+          contactType="healthcareProxy"
+          onSaved={this.handleEditSuccess}
+          titleMessageId="patientContact.editHealthcareProxy"
+        />
+      );
+    }
+
+    return null;
+  }
+
   render() {
     const { healthcareProxies, advancedDirectives } = this.props;
     const { patientId } = advancedDirectives;
-    const {
-      hasProxiesChecked,
-      isCreateModalVisible,
-      isEditModalVisible,
-      currentProxy,
-      updatedHealthcareProxies,
-    } = this.state;
+    const { hasProxiesChecked, isCreateModalVisible, updatedHealthcareProxies } = this.state;
 
     const currentProxies = updatedHealthcareProxies || healthcareProxies;
     const hasProxiesSaved = !!(currentProxies && currentProxies.length);
@@ -181,19 +197,15 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
     return (
       <div className={parentStyles.section}>
-        <CreatePatientProxyModal
+        <CreatePatientContactModal
           isVisible={isCreateModalVisible}
           closePopup={this.handleModalClose}
           patientId={patientId}
+          contactType="healthcareProxy"
           onSaved={this.handleCreateSuccess}
+          titleMessageId="patientContact.addHealthcareProxy"
         />
-        <EditPatientProxyModal
-          isVisible={isEditModalVisible}
-          closePopup={this.handleModalClose}
-          patientProxy={currentProxy}
-          patientId={patientId}
-          onSaved={this.handleEditSuccess}
-        />
+        {this.renderEditModal()}
         <div className={parentStyles.field}>
           <FormLabel messageId="advancedDirectives.hasProxy" />
           <RadioGroup>

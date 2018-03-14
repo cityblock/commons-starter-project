@@ -2,10 +2,11 @@ import * as React from 'react';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
+import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
 import PatientExternalCareTeam from './patient-external-care-team';
-import PatientFamilyAndSupportTeam from './patient-family-and-support-team';
+import PatientFamilyTeam from './patient-family-team/patient-family-team';
 
 export type SelectableTabs = 'cityblock' | 'external' | 'family-and-support';
 
@@ -28,6 +29,7 @@ export type AddCareTeamMemberModalFilters = 'primaryCarePhysician' | 'communityH
 
 interface IState {
   isModalVisible: boolean;
+  isAddingEmergencyContact?: boolean;
   addCareTeamMemberModalFilter?: AddCareTeamMemberModalFilters | null;
 }
 
@@ -62,7 +64,15 @@ export class PatientTeam extends React.Component<IProps, IState> {
   };
 
   onClosePopup = () => {
-    this.setState({ isModalVisible: false, addCareTeamMemberModalFilter: null });
+    this.setState({
+      isModalVisible: false,
+      isAddingEmergencyContact: false,
+      addCareTeamMemberModalFilter: null,
+    });
+  };
+
+  handleAddEmergencyContact = () => {
+    this.setState({ isModalVisible: true, isAddingEmergencyContact: true });
   };
 
   renderAddButton() {
@@ -79,7 +89,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
   }
 
   renderAddModal() {
-    const { isModalVisible, addCareTeamMemberModalFilter } = this.state;
+    const { isModalVisible, isAddingEmergencyContact, addCareTeamMemberModalFilter } = this.state;
     const { match } = this.props;
     const {
       isCityblockCareTeam,
@@ -100,8 +110,20 @@ export class PatientTeam extends React.Component<IProps, IState> {
       // TODO: add appropriate modal here
       return null;
     } else if (isFamilyAndSupportTeam) {
-      // TODO: add appropriate modal here
-      return null;
+      const contactType = isAddingEmergencyContact ? 'emergencyContact' : 'familyMember';
+      return (
+        <CreatePatientContactModal
+          isVisible={isModalVisible}
+          closePopup={this.onClosePopup}
+          patientId={match.params.patientId}
+          contactType={contactType}
+          onSaved={() => {
+            return true;
+          }}
+          titleMessageId="patientContact.addFamily"
+          subTitleMessageId="patientContact.familySubtitle"
+        />
+      );
     }
   }
 
@@ -120,7 +142,10 @@ export class PatientTeam extends React.Component<IProps, IState> {
       <PatientExternalCareTeam patientId={match.params.patientId} />
     ) : null;
     const familyAndSupportTeam = currentSubTab.isFamilyAndSupportTeam ? (
-      <PatientFamilyAndSupportTeam patientId={match.params.patientId} />
+      <PatientFamilyTeam
+        patientId={match.params.patientId}
+        onAddEmergencyContact={this.handleAddEmergencyContact}
+      />
     ) : null;
 
     return (

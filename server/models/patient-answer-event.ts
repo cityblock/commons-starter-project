@@ -23,7 +23,7 @@ interface IMultiplePatientAnswerEventOptions {
 }
 
 const EAGER_QUERY =
-  '[patientAnswer.[answer.[riskArea, screeningTool.[riskArea]], question], previousPatientAnswer.[answer.[riskArea, screeningTool.[riskArea]]], patient.[patientInfo], user]';
+  '[patientAnswer.[answer.[riskArea, screeningTool.[riskArea]], question], previousPatientAnswer.[answer.[riskArea, screeningTool.[riskArea]]], patient.[patientInfo, patientState], user]';
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswerEvent extends BaseModel {

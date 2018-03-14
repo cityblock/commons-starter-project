@@ -19,7 +19,7 @@ interface IPatientTaskSuggestionDismissArgs {
   dismissedReason: string;
 }
 
-const EAGER_QUERY = '[patient.[patientInfo], taskTemplate, acceptedBy, dismissedBy]';
+const EAGER_QUERY = '[patient.[patientInfo, patientState], taskTemplate, acceptedBy, dismissedBy]';
 
 /* tslint:disable:member-ordering */
 export default class PatientTaskSuggestion extends BaseModel {

@@ -14,7 +14,7 @@ interface IRiskAreaAssessmentSubmissionCreateFields {
 }
 
 export const EAGER_QUERY =
-  '[patient.[patientInfo], user, riskArea, patientAnswers, carePlanSuggestions.[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates]]]';
+  '[patient.[patientInfo, patientState], user, riskArea, patientAnswers, carePlanSuggestions.[patient.[patientInfo, patientState], concern, goalSuggestionTemplate.[taskTemplates]]]';
 
 /* tslint:disable:member-ordering */
 export default class RiskAreaAssessmentSubmission extends BaseModel {

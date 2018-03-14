@@ -46,7 +46,7 @@ export const PRIORITY: Priority[] = ['low', 'medium', 'high'];
 const EAGER_QUERY = `[
   createdBy,
   assignedTo,
-  patient.[patientInfo],
+  patient.[patientInfo, patientState],
   completedBy,
   followers,
   patientGoal.[patientConcern.[concern]],
@@ -391,7 +391,7 @@ export default class Task extends BaseModel {
   static async getForCBOReferralFormPDF(taskId: string, txn: Transaction) {
     const task = await this.query(txn)
       .eager(
-        '[assignedTo, createdBy, patient.[careTeam, patientInfo], CBOReferral.[category, CBO]]',
+        '[assignedTo, createdBy, patient.[careTeam, patientInfo, patientState], CBOReferral.[category, CBO]]',
       )
       .findOne({ id: taskId, deletedAt: null });
 

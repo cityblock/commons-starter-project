@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import { getPatientCareTeamQuery, FullUserFragment } from '../../../graphql/types';
+import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
 import { AddCareTeamMemberModalFilters } from '../patient-team';
 import CareTeamMember from './care-team-member';
 import * as styles from './css/patient-cityblock-care-team.css';
@@ -23,7 +23,7 @@ export type allProps = IGraphqlProps & IProps;
 
 interface IState {
   isRemoveModalVisible: boolean;
-  careTeamMemberToRemove?: FullUserFragment | null;
+  careTeamMemberToRemove?: FullCareTeamUserFragment | null;
 }
 
 export class PatientCityblockCareTeam extends React.Component<allProps, IState> {
@@ -33,7 +33,7 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
     this.state = { isRemoveModalVisible: false };
   }
 
-  onShowRemoveModal = (careTeamMemberToRemove: FullUserFragment) => {
+  onShowRemoveModal = (careTeamMemberToRemove: FullCareTeamUserFragment) => {
     this.setState({ isRemoveModalVisible: true, careTeamMemberToRemove });
   };
 
@@ -42,7 +42,7 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   };
 
   renderCareTeamMembers() {
-    const { patientCareTeam, isLoading } = this.props;
+    const { patientCareTeam, isLoading, patientId } = this.props;
     const careTeam = patientCareTeam || [];
 
     if (isLoading || !careTeam.length) {
@@ -52,6 +52,7 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
     return careTeam.map(careTeamMember => (
       <CareTeamMember
         key={careTeamMember.id}
+        patientId={patientId}
         careTeamMember={careTeamMember}
         onClickToRemove={this.onShowRemoveModal}
       />

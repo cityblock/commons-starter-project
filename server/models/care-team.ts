@@ -29,12 +29,18 @@ interface IUserPatientCount {
   patientCount: number;
 }
 
+interface IMakeTeamLeadOptions {
+  userId: string;
+  patientId: string;
+}
+
 /* tslint:disable:member-ordering */
 export default class CareTeam extends BaseModel {
   patient: Patient;
   patientId: string;
   user: User;
   userId: string;
+  isCareTeamLead: boolean;
 
   static tableName = 'care_team';
 
@@ -46,6 +52,7 @@ export default class CareTeam extends BaseModel {
       id: { type: 'string' },
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       userId: { type: 'string', minLength: 1 }, // cannot be blank
+      isCareTeamLead: { type: 'boolean' },
       deletedAt: { type: 'string' },
       createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
@@ -73,11 +80,18 @@ export default class CareTeam extends BaseModel {
   };
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<User[]> {
-    const careTeam = await CareTeam.query(txn)
+    const careTeam = await this.getCareTeamRecordsForPatient(patientId, txn);
+    return careTeam.map((ct: CareTeam) => ct.user);
+  }
+
+  static async getCareTeamRecordsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<CareTeam[]> {
+    return CareTeam.query(txn)
       .where({ patientId, deletedAt: null })
       .eager('user')
       .orderBy('createdAt', 'asc');
-    return careTeam.map((ct: CareTeam) => ct.user);
   }
 
   static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {
@@ -174,10 +188,39 @@ export default class CareTeam extends BaseModel {
     return User.get(userId, txn);
   }
 
+  static async makeTeamLead(
+    { userId, patientId }: IMakeTeamLeadOptions,
+    txn: Transaction,
+  ): Promise<User> {
+    // First, unset current care team lead
+    await this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .patch({ isCareTeamLead: false });
+
+    // Next, set user as team lead
+    await this.query(txn)
+      .where({ patientId, userId, deletedAt: null })
+      .patch({ isCareTeamLead: true });
+
+    return User.get(userId, txn);
+  }
+
+  static async getTeamLeadForPatient(patientId: string, txn: Transaction): Promise<User | null> {
+    const careTeamUser = await this.query(txn)
+      .eager('user')
+      .findOne({ patientId, deletedAt: null, isCareTeamLead: true });
+
+    if (!careTeamUser) {
+      return null;
+    }
+
+    return careTeamUser.user;
+  }
+
   static async delete({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {
     await this.query(txn)
       .where({ userId, patientId, deletedAt: null })
-      .patch({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString(), isCareTeamLead: false });
     return this.getForPatient(patientId, txn);
   }
 

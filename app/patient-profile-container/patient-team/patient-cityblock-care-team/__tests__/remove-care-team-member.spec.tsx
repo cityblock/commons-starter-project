@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
 import SmallText from '../../../../shared/library/small-text/small-text';
-import { clinic, user } from '../../../../shared/util/test-data';
+import { clinic, userForCareTeam } from '../../../../shared/util/test-data';
 import RemoveCareTeamMember from '../remove-care-team-member';
 
 const user2 = {
@@ -18,6 +18,7 @@ const user2 = {
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'blue' as any,
+  isCareTeamLead: false,
 };
 
 describe('Render Remove Care Team Member Component', () => {
@@ -28,8 +29,8 @@ describe('Render Remove Care Team Member Component', () => {
       onChange={onChange}
       tasksCount={0}
       isLoading={false}
-      careTeamMember={user}
-      careTeam={[user, user2]}
+      careTeamMember={userForCareTeam}
+      careTeam={[userForCareTeam, user2]}
     />,
   );
 
@@ -45,13 +46,13 @@ describe('Render Remove Care Team Member Component', () => {
         .find(SmallText)
         .at(1)
         .props().text,
-    ).toBe(formatFullName(user.firstName, user.lastName));
+    ).toBe(formatFullName(userForCareTeam.firstName, userForCareTeam.lastName));
     expect(
       wrapper
         .find(SmallText)
         .at(2)
         .props().messageId,
-    ).toBe(`patientTeam.${user.userRole}`);
+    ).toBe(`patientTeam.${userForCareTeam.userRole}`);
   });
 
   it('renders task stats and the care team select when tasks need to be reassigned', () => {

@@ -42,3 +42,18 @@
 .careTeamMemberNameAndTitle {
   min-width: 175px;
 }
+
+.careTeamMemberName {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.careTeamMemberName svg {
+  margin-left: 10px;
+}
+
+.careTeamMemberName.hiddenStar svg {
+  display: none;
+}

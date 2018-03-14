@@ -4,7 +4,7 @@ import { UserRole } from '../../../../graphql/types';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
 import ModalHeader from '../../../../shared/library/modal-header/modal-header';
 import Option from '../../../../shared/library/option/option';
-import { clinic, patient, user } from '../../../../shared/util/test-data';
+import { clinic, patient, user, userForCareTeam } from '../../../../shared/util/test-data';
 import { AddCareTeamMemberModal } from '../add-care-team-member-modal';
 
 const userForSummary = { patientCount: 1, ...user };
@@ -23,6 +23,7 @@ const user2 = {
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'blue' as any,
   patientCount: 2,
+  isCareTeamLead: false,
 };
 
 describe('Render Care Team Member Modal', () => {
@@ -35,7 +36,7 @@ describe('Render Care Team Member Modal', () => {
       closePopup={closePopup}
       patientId={patient.id}
       addUserToPatientCareTeamMutation={addUser}
-      patientCareTeam={[user]}
+      patientCareTeam={[userForCareTeam]}
       userSummaryList={[userForSummary, user2]}
     />,
   );

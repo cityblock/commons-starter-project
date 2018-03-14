@@ -1,0 +1,7 @@
+#import "../fragments/full-user.graphql"
+
+mutation careTeamMakeTeamLead($userId: ID!, $patientId: ID!) {
+  careTeamMakeTeamLead(input: { userId: $userId, patientId: $patientId }) {
+    ...FullUser
+  }
+}

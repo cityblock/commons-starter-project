@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { clinic, patient, user } from '../../../../shared/util/test-data';
+import { clinic, patient, userForCareTeam } from '../../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
 import { PatientCityblockCareTeam } from '../patient-cityblock-care-team';
 import RemoveCareTeamMemberModal from '../remove-care-team-member-modal';
@@ -19,6 +19,7 @@ const user2 = {
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'blue' as any,
+  isCareTeamLead: false,
 };
 
 describe('Render Patient Cityblock Care Team', () => {
@@ -28,7 +29,7 @@ describe('Render Patient Cityblock Care Team', () => {
     <PatientCityblockCareTeam
       patientId={patient.id}
       onAddCareTeamMember={onAddCareTeamMember}
-      patientCareTeam={[user, user2]}
+      patientCareTeam={[userForCareTeam, user2]}
     />,
   );
 

@@ -1,13 +1,15 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patient, patientConcern, user } from '../../../shared/util/test-data';
+import { patient, patientConcern, userForCareTeam } from '../../../shared/util/test-data';
 import CareTeam from '../care-team';
 import Info from '../info';
 import PatientInfo from '../patient-info';
 
 describe('Printable MAP information component', () => {
-  const wrapper = shallow(<Info patient={patient} carePlan={[patientConcern]} careTeam={[user]} />);
+  const wrapper = shallow(
+    <Info patient={patient} carePlan={[patientConcern]} careTeam={[userForCareTeam]} />,
+  );
 
   it('renders container views', () => {
     expect(wrapper.find(View).length).toBe(1);
@@ -19,6 +21,6 @@ describe('Printable MAP information component', () => {
   });
 
   it('renders care team component', () => {
-    expect(wrapper.find(CareTeam).props().careTeam).toEqual([user]);
+    expect(wrapper.find(CareTeam).props().careTeam).toEqual([userForCareTeam]);
   });
 });

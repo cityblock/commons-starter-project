@@ -25,6 +25,7 @@ import {
 import {
   careTeamAddUser,
   careTeamAssignPatients,
+  careTeamMakeTeamLead,
   careTeamReassignUser,
   careTeamRemoveUser,
   resolvePatientCareTeam,
@@ -433,6 +434,7 @@ const resolveFunctions = {
     addressEdit,
     careTeamAddUser,
     careTeamReassignUser,
+    careTeamMakeTeamLead,
     careTeamAssignPatients,
     careTeamRemoveUser,
     emailCreate,

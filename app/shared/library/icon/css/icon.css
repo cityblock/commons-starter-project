@@ -44,6 +44,11 @@ svg.icon.yellow {
   fill: var(--yellow-color);
 }
 
+svg.icon.small {
+  width: 15px;
+  height: 15px;
+}
+
 svg.icon.large {
   width: 27px;
   height: 27px;

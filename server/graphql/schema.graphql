@@ -240,6 +240,22 @@ type UserWithCount {
   patientCount: Int
 }
 
+type CareTeamUser implements uniqueId {
+  id: ID!
+  locale: String
+  phone: String
+  firstName: String
+  lastName: String
+  email: String
+  userRole: UserRole!
+  homeClinicId: ID!
+  googleProfileImageUrl: String
+  createdAt: String!
+  updatedAt: String!
+  permissions: Permissions!
+  isCareTeamLead: Boolean!
+}
+
 # The user account with an optional auth token
 type UserWithAuthToken {
   user: User!
@@ -1429,6 +1445,11 @@ input CareTeamReassignInput {
   reassignedToId: ID
 }
 
+input CareTeamMakeTeamLeadInput {
+  userId: ID!
+  patientId: ID!
+}
+
 # params for adding multiple patients to a user's care team
 input CareTeamAssignInput {
   userId: ID!
@@ -2146,6 +2167,8 @@ type RootMutationType {
   careTeamReassignUser(input: CareTeamReassignInput): User
   # Add multiple patients to careTeam
   careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
+  # Make user team lead of careTeam
+  careTeamMakeTeamLead(input: CareTeamMakeTeamLeadInput): User
   # Create an address
   addressCreate(input: AddressCreateInput): Address
   # Create an address for a Patient
@@ -2401,7 +2424,7 @@ type RootQueryType {
   # A single Patient
   patient(patientId: ID!): Patient!
   # Users on a care team
-  patientCareTeam(patientId: ID!): [User!]!
+  patientCareTeam(patientId: ID!): [CareTeamUser!]!
   # Patient need to know
   patientNeedToKnow(patientId: ID!): PatientNeedToKnow!
   # Patient search

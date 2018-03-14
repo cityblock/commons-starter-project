@@ -169,6 +169,30 @@ describe('care model', () => {
     });
   });
 
+  describe('get raw care team records for patient', () => {
+    it('should fetch care team records', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const careTeam = await CareTeam.getCareTeamRecordsForPatient(patient.id, txn);
+
+        expect(careTeam).toHaveLength(1);
+        expect(careTeam[0].user).toMatchObject({ id: user.id });
+      });
+    });
+  });
+
   describe('get count of users for patient', () => {
     it('should return a count of care team members', async () => {
       await transaction(User.knex(), async txn => {
@@ -483,6 +507,61 @@ describe('care model', () => {
         ).rejects.toMatch(
           'This user has an open Progress Note. Please submit before removing from care team.',
         );
+      });
+    });
+  });
+
+  describe('making a care team user the team lead', () => {
+    it('sets and gets the team lead', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user1 = await User.create(
+          createMockUser(11, clinic.id, userRole, 'user1@cityblock.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'user2@cityblock.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user1.id,
+          },
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        await CareTeam.makeTeamLead({ userId: user1.id, patientId: patient.id }, txn);
+        const careTeamLead = await CareTeam.getTeamLeadForPatient(patient.id, txn);
+
+        expect(careTeamLead!.id).toEqual(user1.id);
+
+        await CareTeam.makeTeamLead({ userId: user2.id, patientId: patient.id }, txn);
+        const refetchedCareTeamLead = await CareTeam.getTeamLeadForPatient(patient.id, txn);
+
+        expect(refetchedCareTeamLead!.id).toEqual(user2.id);
+      });
+    });
+
+    it('returns null when fetching the team lead and there is none', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'user@cityblock.com'),
+          txn,
+        );
+        const patient = await createPatient(
+          {
+            cityblockId: 123,
+            homeClinicId: clinic.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const careTeamLead = await CareTeam.getTeamLeadForPatient(patient.id, txn);
+
+        expect(careTeamLead).toBeNull();
       });
     });
   });

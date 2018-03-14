@@ -26,6 +26,22 @@ export const currentUser = {
   permissions: 'orange' as any,
 };
 
+export const currentUserForCareTeam = {
+  id: 'id',
+  locale: 'en',
+  phone: '(212) 555-8394',
+  firstName: 'first',
+  lastName: 'last',
+  userRole: 'physician' as any,
+  email: 'a@b.com',
+  homeClinicId: clinic.id,
+  googleProfileImageUrl: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  permissions: 'orange' as any,
+  isCareTeamLead: false,
+};
+
 export const featureFlags = {
   isBuilderEnabled: false,
   isManagerEnabled: false,
@@ -55,6 +71,38 @@ export const user = {
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'blue' as any,
+};
+
+export const userForCareTeam = {
+  id: 'id2',
+  locale: 'en',
+  phone: '(212) 555-2828',
+  firstName: 'first',
+  lastName: 'last',
+  userRole: 'physician' as any,
+  email: 'b@c.com',
+  homeClinicId: clinic.id,
+  googleProfileImageUrl: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  permissions: 'blue' as any,
+  isCareTeamLead: true,
+};
+
+export const nonLeadUserForCareTeam = {
+  id: 'id3',
+  locale: 'en',
+  phone: '(212) 555-5555',
+  firstName: 'non lead first',
+  lastName: 'non lead last',
+  userRole: 'physician' as any,
+  email: 'b@c.com',
+  homeClinicId: clinic.id,
+  googleProfileImageUrl: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  permissions: 'blue' as any,
+  isCareTeamLead: false,
 };
 
 export const address1 = {

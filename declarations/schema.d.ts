@@ -42,7 +42,7 @@ declare module 'schema' {
     /**
      * Users on a care team
      */
-    patientCareTeam: Array<IUser>;
+    patientCareTeam: Array<ICareTeamUser>;
 
     /**
      * Patient need to know
@@ -925,6 +925,7 @@ declare module 'schema' {
     | IPatientDataFlag
     | IComputedPatientStatus
     | IPatientState
+    | ICareTeamUser
     | IPatientTableRow
     | IPatientForDashboard
     | IPatientContact
@@ -1168,6 +1169,22 @@ declare module 'schema' {
     | 'enrolled'
     | 'disenrolled'
     | 'ineligible';
+
+  interface ICareTeamUser {
+    id: string;
+    locale: string | null;
+    phone: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    userRole: IUserRoleEnum;
+    homeClinicId: string;
+    googleProfileImageUrl: string | null;
+    createdAt: string;
+    updatedAt: string;
+    permissions: IPermissionsEnum;
+    isCareTeamLead: boolean;
+  }
 
   /**
    * Patient Scratch Pad
@@ -2268,6 +2285,11 @@ declare module 'schema' {
     careTeamAssignPatients: IUserWithCount | null;
 
     /**
+     * Make user team lead of careTeam
+     */
+    careTeamMakeTeamLead: IUser | null;
+
+    /**
      * Create an address
      */
     addressCreate: IAddress | null;
@@ -2871,6 +2893,9 @@ declare module 'schema' {
   interface ICareTeamAssignPatientsOnRootMutationTypeArguments {
     input?: ICareTeamAssignInput | null;
   }
+  interface ICareTeamMakeTeamLeadOnRootMutationTypeArguments {
+    input?: ICareTeamMakeTeamLeadInput | null;
+  }
   interface IAddressCreateOnRootMutationTypeArguments {
     input?: IAddressCreateInput | null;
   }
@@ -3305,6 +3330,11 @@ declare module 'schema' {
   interface ICareTeamAssignInput {
     userId: string;
     patientIds: Array<string>;
+  }
+
+  interface ICareTeamMakeTeamLeadInput {
+    userId: string;
+    patientId: string;
   }
 
   /**

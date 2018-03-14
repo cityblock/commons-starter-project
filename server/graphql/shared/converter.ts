@@ -1,6 +1,6 @@
 // Utility code for converting between Db and GraphQL types.
 
-import { IUser } from 'schema';
+import { ICareTeamUser, IUser } from 'schema';
 import User from '../../models/user';
 
 interface IGeneratedFields {
@@ -33,6 +33,24 @@ export function convertUser(user: User): IUser {
     phone: user.phone,
     googleProfileImageUrl: user.googleProfileImageUrl,
     permissions: user.permissions,
+    ...convertGenerated(user),
+  };
+}
+
+export function convertCareTeamUser(user: User, isCareTeamLead: boolean): ICareTeamUser {
+  return {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    userRole: user.userRole,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    homeClinicId: user.homeClinicId,
+    locale: user.locale,
+    phone: user.phone,
+    googleProfileImageUrl: user.googleProfileImageUrl,
+    permissions: user.permissions,
+    isCareTeamLead,
     ...convertGenerated(user),
   };
 }

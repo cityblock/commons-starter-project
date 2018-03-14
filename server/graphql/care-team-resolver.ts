@@ -1,12 +1,13 @@
 import {
   ICareTeamAssignInput,
   ICareTeamInput,
+  ICareTeamMakeTeamLeadInput,
   ICareTeamReassignInput,
   IRootMutationType,
   IRootQueryType,
 } from 'schema';
 import { IPaginationOptions } from '../db';
-import { convertUser } from '../graphql/shared/converter';
+import { convertCareTeamUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -29,6 +30,10 @@ export interface ICareTeamReassignOptions {
 
 export interface IUserPatientPanelOptions extends IPaginationOptions {
   userId: string;
+}
+
+export interface ICareTeamMakeTeamLeadOptions {
+  input: ICareTeamMakeTeamLeadInput;
 }
 
 export async function careTeamAddUser(
@@ -75,12 +80,14 @@ export async function resolvePatientCareTeam(
 ): Promise<IRootQueryType['patientCareTeam']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  const users = await CareTeam.getForPatient(patientId, txn);
-  return users.map(convertUser);
+  const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
+  return careTeamRecords.map(careTeamRecord =>
+    convertCareTeamUser(careTeamRecord.user, careTeamRecord.isCareTeamLead),
+  );
 }
 
 export async function careTeamAssignPatients(
-  source: any,
+  root: any,
   { input }: ICareTeamAssignOptions,
   { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['careTeamAssignPatients']> {
@@ -88,4 +95,16 @@ export async function careTeamAssignPatients(
   await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
 
   return CareTeam.createAllForUser({ patientIds, userId: input.userId }, txn);
+}
+
+export async function careTeamMakeTeamLead(
+  root: any,
+  { input }: ICareTeamMakeTeamLeadOptions,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootMutationType['careTeamMakeTeamLead']> {
+  const { patientId } = input;
+  // TODO: why doesn't the edit permission work here for green?
+  await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
+
+  return CareTeam.makeTeamLead({ userId: input.userId, patientId }, txn);
 }

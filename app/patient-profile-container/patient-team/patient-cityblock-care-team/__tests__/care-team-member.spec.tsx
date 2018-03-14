@@ -9,17 +9,52 @@ import Avatar from '../../../../shared/library/avatar/avatar';
 import HamburgerMenuOption from '../../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../../shared/library/hamburger-menu/hamburger-menu';
 import SmallText from '../../../../shared/library/small-text/small-text';
-import { user } from '../../../../shared/util/test-data';
-import CareTeamMember from '../care-team-member';
+import {
+  nonLeadUserForCareTeam,
+  patient,
+  userForCareTeam,
+} from '../../../../shared/util/test-data';
+import { CareTeamMember } from '../care-team-member';
 
 describe('Render CareTeamMember component', () => {
   const onClickToRemove = (careTeamMemberToREmove: FullUserFragment) => true;
+  const careTeamMakeTeamLead = jest.fn();
 
   const wrapper = shallow(
-    <CareTeamMember onClickToRemove={onClickToRemove} careTeamMember={user} />,
+    <CareTeamMember
+      careTeamMakeTeamLead={careTeamMakeTeamLead}
+      patientId={patient.id}
+      onClickToRemove={onClickToRemove}
+      careTeamMember={userForCareTeam}
+    />,
   );
 
   it('renders a care team member', () => {
+    expect(wrapper.find(Avatar)).toHaveLength(1);
+    expect(wrapper.find(HamburgerMenu)).toHaveLength(1);
+    expect(
+      wrapper
+        .find(HamburgerMenuOption)
+        .at(0)
+        .props().messageId,
+    ).toBe('patientTeam.removeFromTeam');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(0)
+        .props().text,
+    ).toBe(formatFullName(userForCareTeam.firstName, userForCareTeam.lastName));
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().text,
+    ).toBe(formatCareTeamMemberRole(userForCareTeam.userRole));
+  });
+
+  it('renders the make team lead button and no badge when not the care team lead', () => {
+    wrapper.setProps({ careTeamMember: nonLeadUserForCareTeam });
+    expect(wrapper.find('.careTeamMemberName.hiddenStar')).toHaveLength(1);
     expect(wrapper.find(Avatar)).toHaveLength(1);
     expect(wrapper.find(HamburgerMenu)).toHaveLength(1);
     expect(
@@ -39,12 +74,18 @@ describe('Render CareTeamMember component', () => {
         .find(SmallText)
         .at(0)
         .props().text,
-    ).toBe(formatFullName(user.firstName, user.lastName));
+    ).toBe(formatFullName(nonLeadUserForCareTeam.firstName, nonLeadUserForCareTeam.lastName));
     expect(
       wrapper
         .find(SmallText)
         .at(1)
         .props().text,
-    ).toBe(formatCareTeamMemberRole(user.userRole));
+    ).toBe(formatCareTeamMemberRole(nonLeadUserForCareTeam.userRole));
+  });
+
+  it('renders the team lead badge when the user is the care team lead', () => {
+    wrapper.setProps({ careTeamMember: userForCareTeam });
+    expect(wrapper.find('.careTeamMemberName.hiddenStar')).toHaveLength(0);
+    expect(wrapper.find('.careTeamMemberName')).toHaveLength(1);
   });
 });

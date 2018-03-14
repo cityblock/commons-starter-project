@@ -1,0 +1,15 @@
+fragment FullCareTeamUser on CareTeamUser {
+  id
+  locale
+  phone
+  firstName
+  lastName
+  userRole
+  email
+  homeClinicId
+  googleProfileImageUrl
+  createdAt
+  updatedAt
+  permissions
+  isCareTeamLead
+}

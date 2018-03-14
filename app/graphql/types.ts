@@ -31,6 +31,31 @@ export enum CarePlanUpdateEventTypes {
 }
 
 
+export enum UserRole {
+  admin = "admin",
+  anonymousUser = "anonymousUser",
+  communityHealthPartner = "communityHealthPartner",
+  familyMember = "familyMember",
+  healthCoach = "healthCoach",
+  nurseCareManager = "nurseCareManager",
+  outreachSpecialist = "outreachSpecialist",
+  physician = "physician",
+  primaryCarePhysician = "primaryCarePhysician",
+  psychiatrist = "psychiatrist",
+}
+
+
+export enum Permissions {
+  black = "black",
+  blue = "blue",
+  green = "green",
+  orange = "orange",
+  pink = "pink",
+  red = "red",
+  yellow = "yellow",
+}
+
+
 export enum ComputedFieldDataTypes {
   boolean = "boolean",
   number = "number",
@@ -139,31 +164,6 @@ export enum CompletedWithinInterval {
   month = "month",
   week = "week",
   year = "year",
-}
-
-
-export enum UserRole {
-  admin = "admin",
-  anonymousUser = "anonymousUser",
-  communityHealthPartner = "communityHealthPartner",
-  familyMember = "familyMember",
-  healthCoach = "healthCoach",
-  nurseCareManager = "nurseCareManager",
-  outreachSpecialist = "outreachSpecialist",
-  physician = "physician",
-  primaryCarePhysician = "primaryCarePhysician",
-  psychiatrist = "psychiatrist",
-}
-
-
-export enum Permissions {
-  black = "black",
-  blue = "blue",
-  green = "green",
-  orange = "orange",
-  pink = "pink",
-  red = "red",
-  yellow = "yellow",
 }
 
 
@@ -771,6 +771,29 @@ export interface careTeamAssignPatientsMutation {
     firstName: string | null,
     lastName: string | null,
     patientCount: number | null,
+  } | null,
+};
+
+export interface careTeamMakeTeamLeadMutationVariables {
+  userId: string,
+  patientId: string,
+};
+
+export interface careTeamMakeTeamLeadMutation {
+  // Make user team lead of careTeam
+  careTeamMakeTeamLead:  {
+    id: string,
+    locale: string | null,
+    phone: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+    permissions: Permissions,
   } | null,
 };
 
@@ -2396,6 +2419,7 @@ export interface getPatientCareTeamQuery {
     createdAt: string,
     updatedAt: string,
     permissions: Permissions,
+    isCareTeamLead: boolean,
   } >,
 };
 
@@ -9862,6 +9886,22 @@ export interface FullCarePlanUpdateEventFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullCareTeamUserFragment {
+  id: string,
+  locale: string | null,
+  phone: string | null,
+  firstName: string | null,
+  lastName: string | null,
+  userRole: UserRole,
+  email: string | null,
+  homeClinicId: string,
+  googleProfileImageUrl: string | null,
+  createdAt: string,
+  updatedAt: string,
+  permissions: Permissions,
+  isCareTeamLead: boolean,
 };
 
 export interface FullCBOCategoryFragment {

@@ -1,14 +1,14 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { user } from '../../../shared/util/test-data';
+import { userForCareTeam } from '../../../shared/util/test-data';
 import HeaderText from '../../shared/header-text';
 import CareTeamList from '../care-team-list';
 import copy from '../copy/copy';
 import TextGroup from '../text-group';
 
 describe('Printable MAP Care Team List', () => {
-  const wrapper = shallow(<CareTeamList careTeam={[user]} />);
+  const wrapper = shallow(<CareTeamList careTeam={[userForCareTeam]} />);
 
   it('renders container view', () => {
     expect(wrapper.find(View).length).toBe(1);

@@ -1,7 +1,7 @@
-#import "../fragments/full-user.graphql"
+#import "../fragments/full-care-team-user.graphql"
 
 query getPatientCareTeam($patientId: ID!) {
   patientCareTeam(patientId: $patientId) {
-    ...FullUser
+    ...FullCareTeamUser
   }
 }

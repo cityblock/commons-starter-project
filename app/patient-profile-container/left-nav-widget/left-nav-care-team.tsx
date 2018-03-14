@@ -51,7 +51,7 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
         careTeamMember={member}
         handleClick={this.handleClick}
         isSelected={member.id === selectedCareTeamMemberId}
-        isLead={i === 0}
+        isLead={member.isCareTeamLead}
       />
     ));
 

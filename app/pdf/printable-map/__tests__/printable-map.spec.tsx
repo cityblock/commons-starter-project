@@ -5,7 +5,7 @@ import {
   patient,
   patientConcern,
   patientConcernActive,
-  user,
+  userForCareTeam,
 } from '../../../shared/util/test-data';
 import Divider from '../../shared/divider';
 import Concern from '../concern';
@@ -21,7 +21,7 @@ describe('Printable MAP Component', () => {
     <PrintableMap
       patient={patient}
       carePlan={[patientConcern, patientConcernActive]}
-      careTeam={[user]}
+      careTeam={[userForCareTeam]}
     />,
   );
 
@@ -47,7 +47,7 @@ describe('Printable MAP Component', () => {
 
   it('renders information about MAP', () => {
     expect(wrapper.find(Info).props().patient).toEqual(patient);
-    expect(wrapper.find(Info).props().careTeam).toEqual([user]);
+    expect(wrapper.find(Info).props().careTeam).toEqual([userForCareTeam]);
     expect(wrapper.find(Info).props().carePlan).toEqual([patientConcernActive]);
   });
 

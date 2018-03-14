@@ -95,7 +95,7 @@ export const renderPrintableMapPdf = async (req: express.Request, res: express.R
     await transaction(Patient.knex(), async txn => {
       const promises = [
         PatientConcern.getForPatient(patientId, existingTxn || txn),
-        CareTeam.getForPatient(patientId, existingTxn || txn),
+        CareTeam.getCareTeamRecordsForPatient(patientId, existingTxn || txn),
         Patient.get(patientId, existingTxn || txn),
       ];
 
@@ -104,7 +104,12 @@ export const renderPrintableMapPdf = async (req: express.Request, res: express.R
   }
 
   const carePlan = result[0];
-  const careTeam = result[1];
+  const careTeam = result[1]
+    ? result[1].map((careTeamRecord: CareTeam) => ({
+        ...careTeamRecord.user,
+        isCareTeamLead: careTeamRecord.isCareTeamLead,
+      }))
+    : null;
   const patient = result[2];
 
   if (!patientId || !carePlan || !careTeam || !patient) {

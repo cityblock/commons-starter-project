@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Modal from '../../../../shared/library/modal/modal';
-import { patient, task, user } from '../../../../shared/util/test-data';
+import { patient, task, userForCareTeam } from '../../../../shared/util/test-data';
 import RemoveCareTeamMember from '../remove-care-team-member';
 import { RemoveCareTeamMemberModal } from '../remove-care-team-member-modal';
 
@@ -14,8 +14,8 @@ describe('Render Remove Care Team Member Modal Component', () => {
       closePopup={closePopup}
       isVisible={true}
       patientId={patient.id}
-      careTeamMember={user}
-      careTeam={[user]}
+      careTeamMember={userForCareTeam}
+      careTeam={[userForCareTeam]}
       careTeamMemberTasks={[task]}
       careTeamReassignUser={careTeamReassignUser}
     />,

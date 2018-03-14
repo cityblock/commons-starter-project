@@ -24,10 +24,11 @@ interface IProps {
   color?: Color;
   isLarge?: boolean;
   isExtraLarge?: boolean;
+  isSmall?: boolean;
 }
 
 const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { name, className, onClick, color, isLarge, isExtraLarge } = props;
+  const { name, className, onClick, color, isSmall, isLarge, isExtraLarge } = props;
   const IconComponent = iconComponents[name];
   const iconStyles = classNames(
     styles.icon,
@@ -42,6 +43,7 @@ const Icon: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.teal]: color === 'teal',
       [styles.purple]: color === 'purple',
       [styles.yellow]: color === 'yellow',
+      [styles.small]: isSmall,
       [styles.large]: isLarge,
       [styles.extraLarge]: isExtraLarge,
       [styles.hover]: !!onClick,

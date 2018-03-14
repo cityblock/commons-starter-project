@@ -9,6 +9,7 @@ export const lightBlue: string;
 export const teal: string;
 export const purple: string;
 export const yellow: string;
+export const small: string;
 export const large: string;
 export const extraLarge: string;
 export const hover: string;

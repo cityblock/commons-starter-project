@@ -1,9 +1,9 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import {
+  FullCareTeamUserFragment,
   FullPatientConcernFragment,
   FullPatientForProfileFragment,
-  FullUserFragment,
 } from '../../graphql/types';
 import Divider from '../shared/divider';
 import variables from '../shared/variables/variables';
@@ -18,7 +18,7 @@ import Task from './task';
 
 interface IProps {
   carePlan: FullPatientConcernFragment[];
-  careTeam: FullUserFragment[];
+  careTeam: FullCareTeamUserFragment[];
   patient: FullPatientForProfileFragment;
 }
 

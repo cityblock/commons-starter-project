@@ -1,23 +1,42 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
-import { FullUserFragment } from '../../../graphql/types';
+import { graphql } from 'react-apollo';
+import * as careTeamMakeTeamLeadMutationGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
+import {
+  careTeamMakeTeamLeadMutation,
+  careTeamMakeTeamLeadMutationVariables,
+  FullCareTeamUserFragment,
+} from '../../../graphql/types';
 import { formatCareTeamMemberRole, formatFullName } from '../../../shared/helpers/format-helpers';
 import Avatar from '../../../shared/library/avatar/avatar';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
+import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
 import * as styles from './css/care-team-member.css';
 
 interface IProps {
-  careTeamMember: FullUserFragment;
-  onClickToRemove: (careTeamMemberToRemove: FullUserFragment) => void;
+  careTeamMember: FullCareTeamUserFragment;
+  patientId: string;
+  onClickToRemove: (careTeamMemberToRemove: FullCareTeamUserFragment) => void;
 }
+
+interface IGraphqlProps {
+  careTeamMakeTeamLead: (
+    options: { variables: careTeamMakeTeamLeadMutationVariables },
+  ) => { data: careTeamMakeTeamLeadMutation };
+}
+
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isMenuOpen: boolean;
+  isMakeTeamLeadLoading?: boolean;
+  makeTeamLeadError?: string | null;
 }
 
-export class CareTeamMember extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class CareTeamMember extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = { isMenuOpen: false };
@@ -29,9 +48,24 @@ export class CareTeamMember extends React.Component<IProps, IState> {
     this.setState({ isMenuOpen: !isMenuOpen });
   };
 
-  onMakeTeamLead = () => {
-    // TODO: implement this
-    return true;
+  onMakeTeamLead = async () => {
+    const { careTeamMember, patientId } = this.props;
+    const { careTeamMakeTeamLead } = this.props;
+
+    try {
+      this.setState({ isMakeTeamLeadLoading: false, makeTeamLeadError: null });
+
+      await careTeamMakeTeamLead({
+        variables: {
+          patientId,
+          userId: careTeamMember.id,
+        },
+      });
+
+      this.setState({ isMakeTeamLeadLoading: false, makeTeamLeadError: null, isMenuOpen: false });
+    } catch (err) {
+      this.setState({ isMakeTeamLeadLoading: false, makeTeamLeadError: err.message });
+    }
   };
 
   onRemoveFromTeam = () => {
@@ -43,6 +77,16 @@ export class CareTeamMember extends React.Component<IProps, IState> {
   render() {
     const { careTeamMember } = this.props;
     const { isMenuOpen } = this.state;
+    const makeTeamLeadHamburgerOption = careTeamMember.isCareTeamLead ? null : (
+      <HamburgerMenuOption
+        messageId="patientTeam.makeTeamLead"
+        icon="stars"
+        onClick={this.onMakeTeamLead}
+      />
+    );
+    const careTeamMemberNameStyles = classNames(styles.careTeamMemberName, {
+      [styles.hiddenStar]: !careTeamMember.isCareTeamLead,
+    });
 
     return (
       <div className={styles.careTeamMember}>
@@ -50,12 +94,15 @@ export class CareTeamMember extends React.Component<IProps, IState> {
           <div className={styles.careTeamMemberBasicInfo}>
             <Avatar size="large" src={careTeamMember.googleProfileImageUrl} />
             <div className={styles.careTeamMemberNameAndTitle}>
-              <SmallText
-                text={formatFullName(careTeamMember.firstName, careTeamMember.lastName)}
-                color="black"
-                size="largest"
-                isBold={true}
-              />
+              <div className={careTeamMemberNameStyles}>
+                <SmallText
+                  text={formatFullName(careTeamMember.firstName, careTeamMember.lastName)}
+                  color="black"
+                  size="largest"
+                  isBold={true}
+                />
+                <Icon name="stars" color="blue" isSmall={true} />
+              </div>
               <SmallText
                 text={formatCareTeamMemberRole(careTeamMember.userRole)}
                 color="gray"
@@ -69,11 +116,7 @@ export class CareTeamMember extends React.Component<IProps, IState> {
           </div>
         </div>
         <HamburgerMenu open={isMenuOpen} onMenuToggle={this.onMenuToggle}>
-          <HamburgerMenuOption
-            messageId="patientTeam.makeTeamLead"
-            icon="star"
-            onClick={this.onMakeTeamLead}
-          />
+          {makeTeamLeadHamburgerOption}
           <HamburgerMenuOption
             messageId="patientTeam.removeFromTeam"
             icon="removeCircle"
@@ -85,4 +128,12 @@ export class CareTeamMember extends React.Component<IProps, IState> {
   }
 }
 
-export default CareTeamMember;
+export default graphql<IGraphqlProps, IProps, allProps>(
+  careTeamMakeTeamLeadMutationGraphql as any,
+  {
+    name: 'careTeamMakeTeamLead',
+    options: {
+      refetchQueries: ['getPatientCareTeam'],
+    },
+  },
+)(CareTeamMember);

@@ -1,13 +1,13 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
-import { currentUser, user } from '../../../shared/util/test-data';
+import { currentUserForCareTeam, userForCareTeam } from '../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
 import { LeftNavCareTeam } from '../left-nav-care-team';
 
 describe('Patient Left Navigation Care Team View', () => {
   const wrapper = shallow(
-    <LeftNavCareTeam patientId="sansaStark" careTeam={[user, currentUser]} />,
+    <LeftNavCareTeam patientId="sansaStark" careTeam={[userForCareTeam, currentUserForCareTeam]} />,
   );
 
   it('renders container', () => {
@@ -22,7 +22,7 @@ describe('Patient Left Navigation Care Team View', () => {
         .find(CareTeamMember)
         .at(0)
         .props().careTeamMember,
-    ).toEqual(user);
+    ).toEqual(userForCareTeam);
     expect(
       wrapper
         .find(CareTeamMember)
@@ -41,7 +41,7 @@ describe('Patient Left Navigation Care Team View', () => {
         .find(CareTeamMember)
         .at(1)
         .props().careTeamMember,
-    ).toEqual(currentUser);
+    ).toEqual(currentUserForCareTeam);
     expect(
       wrapper
         .find(CareTeamMember)
@@ -57,7 +57,7 @@ describe('Patient Left Navigation Care Team View', () => {
   });
 
   it('selects a care team member', () => {
-    wrapper.setState({ selectedCareTeamMemberId: currentUser.id });
+    wrapper.setState({ selectedCareTeamMemberId: currentUserForCareTeam.id });
 
     expect(
       wrapper

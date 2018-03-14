@@ -1,4 +1,5 @@
 import { graphql } from 'graphql';
+import { find } from 'lodash';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
@@ -106,6 +107,36 @@ describe('care team', () => {
       });
     });
 
+    it('resolves a patient care team with the correct team lead', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        await CareTeam.makeTeamLead({ userId: user.id, patientId: patient.id }, txn);
+
+        const query = `{
+          patientCareTeam(patientId: "${patient.id}") {
+            id
+            isCareTeamLead
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
+        const patientCareTeam = cloneDeep(result.data!.patientCareTeam);
+        const userCareTeamResult = find(patientCareTeam, ['id', user.id]);
+        const user2CareTeamResult = find(patientCareTeam, ['id', user2.id]);
+
+        expect(patientCareTeam).toHaveLength(2);
+        expect(userCareTeamResult.isCareTeamLead).toEqual(true);
+        expect(user2CareTeamResult.isCareTeamLead).toEqual(false);
+      });
+    });
+
     it('bulk assigns patients to have a user on their care team', async () => {
       await transaction(CareTeam.knex(), async txn => {
         const { patient, user, clinic } = await setup(txn);
@@ -193,6 +224,39 @@ describe('care team', () => {
         const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
         expect(refetchedCareTeam).toHaveLength(1);
         expect(refetchedCareTeamUserIds).toContain(user2.id);
+      });
+    });
+
+    it('makes a user the care team lead for a patient', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        await CareTeam.makeTeamLead({ userId: user.id, patientId: patient.id }, txn);
+        const careTeamLead = await CareTeam.getTeamLeadForPatient(patient.id, txn);
+
+        expect(careTeamLead!.id).toEqual(user.id);
+
+        const mutation = `mutation {
+          careTeamMakeTeamLead(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
+            id
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          txn,
+          userId: user.id,
+        });
+        expect(cloneDeep(result.data!.careTeamMakeTeamLead)).toMatchObject({
+          id: user2.id,
+        });
+
+        const refetchedCareTeamLead = await CareTeam.getTeamLeadForPatient(patient.id, txn);
+        expect(refetchedCareTeamLead!.id).toEqual(user2.id);
       });
     });
   });

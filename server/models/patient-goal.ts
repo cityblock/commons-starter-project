@@ -19,7 +19,7 @@ interface IPatientGoalEditableFields {
 }
 
 export const EAGER_QUERY =
-  '[patient.[patientInfo], tasks.[createdBy, followers], goalSuggestionTemplate]';
+  '[patient.[patientInfo, patientState], tasks.[createdBy, followers], goalSuggestionTemplate]';
 
 /* tslint:disable:member-ordering */
 export default class PatientGoal extends BaseModel {

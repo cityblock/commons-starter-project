@@ -18,7 +18,7 @@ interface IPatientConcernEditableFields {
 }
 
 export const EAGER_QUERY =
-  '[patient.[patientInfo], concern, patientGoals.[patient.[patientInfo], tasks.[assignedTo, createdBy, followers]]]';
+  '[patient.[patientInfo, patientState], concern, patientGoals.[patient.[patientInfo, patientState], tasks.[assignedTo, createdBy, followers]]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientConcern extends BaseModel {

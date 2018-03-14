@@ -1067,6 +1067,9 @@ declare module 'schema' {
     preferredContactMethod: IContactMethodOptionsEnum | null;
     canReceiveCalls: boolean | null;
     canReceiveTexts: boolean | null;
+    hasHealthcareProxy: boolean | null;
+    hasMolst: boolean | null;
+    hasDeclinedPhotoUpload: boolean | null;
   }
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';

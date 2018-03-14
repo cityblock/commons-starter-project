@@ -322,6 +322,9 @@ type PatientInfo implements uniqueId {
   preferredContactMethod: ContactMethodOptions
   canReceiveCalls: Boolean
   canReceiveTexts: Boolean
+  hasHealthcareProxy: Boolean
+  hasMolst: Boolean
+  hasDeclinedPhotoUpload: Boolean
 }
 
 # Patient contact that is editable in Commons

@@ -39,6 +39,9 @@ export interface IPatientInfoOptions {
   preferredContactMethod?: ContactMethodOptions;
   canReceiveCalls?: boolean;
   canReceiveTexts?: boolean;
+  hasHealthcareProxy?: boolean;
+  hasMolst?: boolean;
+  hasDeclinedPhotoUpload?: boolean;
 }
 
 interface IEditPatientInfo {
@@ -55,6 +58,9 @@ interface IEditPatientInfo {
   preferredContactMethod?: ContactMethodOptions;
   canReceiveCalls?: boolean;
   canReceiveTexts?: boolean;
+  hasHealthcareProxy?: boolean;
+  hasMolst?: boolean;
+  hasDeclinedPhotoUpload?: boolean;
 }
 
 /* tslint:disable:member-ordering */
@@ -80,6 +86,9 @@ export default class PatientInfo extends Model {
   preferredContactMethod: ContactMethodOptions;
   canReceiveCalls: boolean;
   canReceiveTexts: boolean;
+  hasHealthcareProxy: boolean;
+  hasMolst: boolean;
+  hasDeclinedPhotoUpload: boolean;
   createdAt: string;
   updatedAt: string;
 
@@ -114,6 +123,9 @@ export default class PatientInfo extends Model {
       preferredContactMethod: { type: 'string', enum: ['text', 'phone', 'email'] },
       canReceiveCalls: { type: 'boolean' },
       canReceiveTexts: { type: 'boolean' },
+      hasHealthcareProxy: { type: 'boolean' },
+      hasMolst: { type: 'boolean' },
+      hasDeclinedPhotoUpload: { type: 'boolean' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },

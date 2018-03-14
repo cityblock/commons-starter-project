@@ -22,4 +22,7 @@ fragment FullPatientInfo on PatientInfo {
   preferredContactMethod
   canReceiveCalls
   canReceiveTexts
+  hasHealthcareProxy
+  hasMolst
+  hasDeclinedPhotoUpload
 }

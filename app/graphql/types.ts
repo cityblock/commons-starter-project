@@ -3171,6 +3171,9 @@ export interface getPatientQuery {
       preferredContactMethod: ContactMethodOptions | null,
       canReceiveCalls: boolean | null,
       canReceiveTexts: boolean | null,
+      hasHealthcareProxy: boolean | null,
+      hasMolst: boolean | null,
+      hasDeclinedPhotoUpload: boolean | null,
     },
     patientDataFlags:  Array< {
       id: string,
@@ -10699,6 +10702,9 @@ export interface FullPatientForProfileFragment {
     preferredContactMethod: ContactMethodOptions | null,
     canReceiveCalls: boolean | null,
     canReceiveTexts: boolean | null,
+    hasHealthcareProxy: boolean | null,
+    hasMolst: boolean | null,
+    hasDeclinedPhotoUpload: boolean | null,
   },
   patientDataFlags:  Array< {
     id: string,
@@ -10823,6 +10829,9 @@ export interface FullPatientInfoFragment {
   preferredContactMethod: ContactMethodOptions | null,
   canReceiveCalls: boolean | null,
   canReceiveTexts: boolean | null,
+  hasHealthcareProxy: boolean | null,
+  hasMolst: boolean | null,
+  hasDeclinedPhotoUpload: boolean | null,
 };
 
 export interface FullPatientListFragment {

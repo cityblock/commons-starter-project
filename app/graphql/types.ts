@@ -591,6 +591,7 @@ export interface carePlanSuggestionAcceptMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -690,6 +691,7 @@ export interface carePlanSuggestionDismissMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -2111,6 +2113,7 @@ export interface getPatientCarePlanSuggestionsQuery {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -2245,6 +2248,7 @@ export interface getPatientCarePlanQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -2275,6 +2279,7 @@ export interface getPatientCarePlanQuery {
               id: string,
               emailAddress: string,
             } | null,
+            preferredName: string | null,
           },
           patientState:  {
             id: string,
@@ -2351,6 +2356,7 @@ export interface getPatientCarePlanQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -2689,6 +2695,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -2731,6 +2738,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -2869,6 +2877,7 @@ export interface getPatientScreeningToolSubmissionQuery {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -2911,6 +2920,7 @@ export interface getPatientScreeningToolSubmissionQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -3522,6 +3532,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -3714,6 +3725,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -3775,6 +3787,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               id: string,
               emailAddress: string,
             } | null,
+            preferredName: string | null,
           },
           patientState:  {
             id: string,
@@ -3805,6 +3818,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
                 id: string,
                 emailAddress: string,
               } | null,
+              preferredName: string | null,
             },
             patientState:  {
               id: string,
@@ -3882,6 +3896,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               id: string,
               emailAddress: string,
             } | null,
+            preferredName: string | null,
           },
           patientState:  {
             id: string,
@@ -3990,6 +4005,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -4032,6 +4048,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               id: string,
               emailAddress: string,
             } | null,
+            preferredName: string | null,
           },
           patientState:  {
             id: string,
@@ -4207,6 +4224,7 @@ export interface getProgressNoteQuery {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -4283,6 +4301,7 @@ export interface getProgressNotesForCurrentUserQuery {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -4355,6 +4374,7 @@ export interface getProgressNotesForSupervisorReviewQuery {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -4671,6 +4691,7 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -4779,6 +4800,7 @@ export interface getRiskAreaAssessmentSubmissionQuery {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -5770,6 +5792,7 @@ export interface patientConcernBulkEditMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -5800,6 +5823,7 @@ export interface patientConcernBulkEditMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -5901,6 +5925,7 @@ export interface patientConcernCreateMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -5931,6 +5956,7 @@ export interface patientConcernCreateMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -6030,6 +6056,7 @@ export interface patientConcernDeleteMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -6060,6 +6087,7 @@ export interface patientConcernDeleteMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -6255,6 +6283,7 @@ export interface patientCoreIdentityVerifyMutation {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -6313,6 +6342,7 @@ export interface patientEditMutation {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -6372,6 +6402,7 @@ export interface patientGoalCreateMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -6450,6 +6481,7 @@ export interface patientGoalDeleteMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -6528,6 +6560,7 @@ export interface patientInfoEditMutation {
       id: string,
       emailAddress: string,
     } | null,
+    preferredName: string | null,
   } | null,
 };
 
@@ -6643,6 +6676,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -6685,6 +6719,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -6794,6 +6829,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -6836,6 +6872,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -7023,6 +7060,7 @@ export interface progressNoteAddSupervisorNotesMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -7099,6 +7137,7 @@ export interface progressNoteCompleteMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -7175,6 +7214,7 @@ export interface progressNoteCompleteSupervisorReviewMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -7251,6 +7291,7 @@ export interface progressNoteCreateMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -7334,6 +7375,7 @@ export interface progressNoteEditMutation {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -7830,6 +7872,7 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -7939,6 +7982,7 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -9467,6 +9511,7 @@ export interface FullCarePlanSuggestionForPatientFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -9576,6 +9621,7 @@ export interface FullCarePlanSuggestionFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -9667,6 +9713,7 @@ export interface FullCarePlanUpdateEventFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -9728,6 +9775,7 @@ export interface FullCarePlanUpdateEventFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -9758,6 +9806,7 @@ export interface FullCarePlanUpdateEventFragment {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -9835,6 +9884,7 @@ export interface FullCarePlanUpdateEventFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -10160,6 +10210,7 @@ export interface FullPatientAnswerEventFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -10440,6 +10491,7 @@ export interface FullPatientConcernFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -10470,6 +10522,7 @@ export interface FullPatientConcernFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -10691,6 +10744,7 @@ export interface FullPatientGoalFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -10818,6 +10872,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -10860,6 +10915,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -11045,6 +11101,7 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -11237,6 +11294,7 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -11298,6 +11356,7 @@ export interface FullProgressNoteActivityFragment {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -11328,6 +11387,7 @@ export interface FullProgressNoteActivityFragment {
               id: string,
               emailAddress: string,
             } | null,
+            preferredName: string | null,
           },
           patientState:  {
             id: string,
@@ -11405,6 +11465,7 @@ export interface FullProgressNoteActivityFragment {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -11513,6 +11574,7 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -11555,6 +11617,7 @@ export interface FullProgressNoteActivityFragment {
             id: string,
             emailAddress: string,
           } | null,
+          preferredName: string | null,
         },
         patientState:  {
           id: string,
@@ -11679,6 +11742,7 @@ export interface FullProgressNoteFragment {
         id: string,
         emailAddress: string,
       } | null,
+      preferredName: string | null,
     },
     patientState:  {
       id: string,
@@ -11861,6 +11925,7 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
           id: string,
           emailAddress: string,
         } | null,
+        preferredName: string | null,
       },
       patientState:  {
         id: string,
@@ -12488,6 +12553,7 @@ export interface ShortPatientInfoFragment {
     id: string,
     emailAddress: string,
   } | null,
+  preferredName: string | null,
 };
 
 export interface ShortPatientScreeningToolSubmission360Fragment {
@@ -12559,6 +12625,7 @@ export interface ShortPatientFragment {
       id: string,
       emailAddress: string,
     } | null,
+    preferredName: string | null,
   },
   patientState:  {
     id: string,

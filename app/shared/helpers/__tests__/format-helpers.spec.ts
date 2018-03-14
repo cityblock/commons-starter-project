@@ -16,6 +16,7 @@ import {
   formatInputDate,
   formatPatientAnswer,
   formatPatientName,
+  formatPatientNameForProfile,
   formatScreeningToolScore,
   isDueSoon,
   isPastDue,
@@ -67,6 +68,28 @@ describe('Shared Component Helpers', () => {
       } as any;
 
       expect(formatPatientName(patient)).toBe('Mother of Dragons');
+    });
+  });
+
+  describe('formatPatientNameForProfile', () => {
+    it('renders a patient full name properly', () => {
+      const patient = {
+        firstName: 'Sansa',
+        middleName: null,
+        lastName: 'Stark',
+      } as any;
+
+      expect(formatPatientNameForProfile(patient)).toBe('Sansa Stark');
+    });
+
+    it('renders a patient full name with middle name properly', () => {
+      const patient = {
+        firstName: 'Daenerys',
+        middleName: 'MotherOfDragons',
+        lastName: 'Targaryen',
+      } as any;
+
+      expect(formatPatientNameForProfile(patient)).toBe('Daenerys M. Targaryen');
     });
   });
 

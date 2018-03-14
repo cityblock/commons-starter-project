@@ -1,49 +1,25 @@
 import * as React from 'react';
-import { ShortPatientFragment } from '../graphql/types';
+import { FullPatientForProfileFragment } from '../graphql/types';
 import * as styles from './css/patient-profile-left-nav.css';
 import LeftNavWidget from './left-nav-widget/left-nav-widget';
-import PatientLeftNavInfo from './patient-left-nav-info';
-import PatientMedications from './patient-medications';
-import PatientProblemList from './patient-problem-list';
+import LeftNav from './left-nav/left-nav';
 
 interface IProps {
-  patient?: ShortPatientFragment | null;
+  patient: FullPatientForProfileFragment | null;
   patientId: string;
   glassBreakId: string | null;
 }
 
-interface IState {
-  selectedItem: string | null;
-}
+// TODO: Deprecate old left nav info, medications, and patient problem list
+const PatientProfileLeftNav: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { patient, patientId, glassBreakId } = props;
 
-type SelectableItem = 'profile' | 'medications' | 'chat';
+  return (
+    <div className={styles.leftPane}>
+      <LeftNav patient={patient} />
+      <LeftNavWidget patientId={patientId} glassBreakId={glassBreakId} />
+    </div>
+  );
+};
 
-export default class PatientProfileLeftNav extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { selectedItem: null };
-  }
-
-  onClick = (clickedItem: SelectableItem) => {
-    const { selectedItem } = this.state;
-
-    if (clickedItem === selectedItem) {
-      this.setState({ selectedItem: null });
-    } else {
-      this.setState({ selectedItem: clickedItem });
-    }
-  };
-
-  render() {
-    const { patient, patientId, glassBreakId } = this.props;
-
-    return (
-      <div className={styles.leftPane}>
-        <PatientLeftNavInfo patientId={patientId} patient={patient} />
-        <PatientMedications patientId={patientId} />
-        <PatientProblemList patientId={patientId} />
-        <LeftNavWidget patientId={patientId} glassBreakId={glassBreakId} />
-      </div>
-    );
-  }
-}
+export default PatientProfileLeftNav;

@@ -23,6 +23,10 @@
   color: var(--red-color);
 }
 
+.green {
+  color: var(--green-color);
+}
+
 .mediumFontSize {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

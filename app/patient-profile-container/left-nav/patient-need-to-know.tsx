@@ -1,16 +1,16 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientNeedToKnowQuery from '../graphql/queries/get-patient-need-to-know.graphql';
-import * as savePatientNeedToKnowMutationGraphql from '../graphql/queries/patient-need-to-know-edit-mutation.graphql';
+import * as patientNeedToKnowQuery from '../../graphql/queries/get-patient-need-to-know.graphql';
+import * as savePatientNeedToKnowMutationGraphql from '../../graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import {
   patientNeedToKnowEditMutation,
   patientNeedToKnowEditMutationVariables,
-} from '../graphql/types';
+} from '../../graphql/types';
 import * as styles from './css/patient-need-to-know.css';
 import { PatientNeedToKnowStatus } from './patient-need-to-know-status';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   mutate?: any;
 }

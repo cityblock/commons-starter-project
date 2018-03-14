@@ -15,6 +15,17 @@ export const formatFullName = (firstName?: string | null, lastName?: string | nu
 export const formatPatientName = (patient: ShortPatientFragment) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
+export const formatPatientNameForProfile = (patient: ShortPatientFragment) => {
+  const names = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean);
+
+  // abbreviate middle name if it is present
+  if (names.length === 3 && names[1]) {
+    names[1] = `${names[1]![0]}.`;
+  }
+
+  return names.join(' ');
+};
+
 export const formatCareTeamMemberRole = (role: UserRole): string => {
   if (role === 'admin') {
     return 'Behavioral Health Specialist';

@@ -40,7 +40,7 @@
 }
 
 .saveSuccess .saveSuccessIcon {
-  background-image: url('../../assets/blue-check-mark-circle.svg');
+  background-image: url('../../../assets/blue-check-mark-circle.svg');
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
@@ -68,7 +68,7 @@
 }
 
 .error .errorIcon {
-  background-image: url('../../assets/refresh-icon-grey.svg');
+  background-image: url('../../../assets/refresh-icon-grey.svg');
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;

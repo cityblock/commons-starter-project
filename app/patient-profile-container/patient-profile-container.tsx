@@ -65,7 +65,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
         <PatientModals />
         <PatientProfileLeftNav
           patientId={patientId}
-          patient={patient}
+          patient={patient || null}
           glassBreakId={glassBreakId}
         />
         <div className={styles.mainBody}>

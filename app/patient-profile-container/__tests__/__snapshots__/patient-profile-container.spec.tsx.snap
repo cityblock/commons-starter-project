@@ -7,7 +7,7 @@ exports[`patient profile container renders patient profile container 1`] = `
   <PatientModals />
   <PatientProfileLeftNav
     glassBreakId={null}
-    patient={undefined}
+    patient={null}
     patientId="patient-1"
   />
   <div

@@ -10,4 +10,5 @@ fragment ShortPatientInfo on PatientInfo {
     id
     emailAddress
   }
+  preferredName
 }

@@ -57,10 +57,10 @@ interface ICarePlanSuggestionDismissArgs {
 }
 
 export const EAGER_QUERY =
-  '[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy]';
+  '[patient.[patientInfo, patientState], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy]';
 
 export const SUPER_EAGER_QUERY =
-  '[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy, patientScreeningToolSubmission.[screeningTool], riskAreaAssessmentSubmission.[riskArea], computedField]';
+  '[patient.[patientInfo, patientState], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy, patientScreeningToolSubmission.[screeningTool], riskAreaAssessmentSubmission.[riskArea], computedField]';
 
 /* tslint:disable:member-ordering */
 export default class CarePlanSuggestion extends BaseModel {

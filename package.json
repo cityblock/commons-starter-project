@@ -192,7 +192,7 @@
     "material-ui": "1.0.0-beta.37",
     "material-ui-icons": "1.0.0-beta.36",
     "morgan": "1.9.0",
-    "nodemon": "1.17.1",
+    "nodemon": "1.17.2",
     "objection": "1.0.0",
     "pg": "7.4.1",
     "postcss-cssnext": "3.1.0",

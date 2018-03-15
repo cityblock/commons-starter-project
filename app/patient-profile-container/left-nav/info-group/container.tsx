@@ -15,7 +15,7 @@ const InfoGroupContainer: React.StatelessComponent<IProps> = (props: IProps) => 
   // if only one child, the count is 1 as long as child as truthy
   if (React.isValidElement(children)) {
     nonNullChildrenCount = children ? 1 : 0;
-  // otherwise count number of non-null children in array
+    // otherwise count number of non-null children in array
   } else {
     nonNullChildrenCount = children.filter((child: JSX.Element | null) => !!child).length;
   }

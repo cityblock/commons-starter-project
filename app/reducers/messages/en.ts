@@ -820,5 +820,10 @@ export const ENGLISH_TRANSLATION = {
     'contact.email': 'Email:',
     'contact.preferredMethod': 'Preferred method:',
     'contact.address': 'Address:',
+    'plan.cityblockId': 'CBH Member ID:',
+    'plan.insurance': 'Insurance:',
+    'plan.planId': 'Plan ID:',
+    'plan.planType': 'Plan Type:',
+    'plan.cin': 'CIN:',
   },
 };

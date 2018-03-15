@@ -29,6 +29,6 @@ describe('Patient Left Navigation Info Group Container', () => {
   it('sets height appropriately if open', () => {
     wrapper.setProps({ isOpen: true });
 
-    expect(wrapper.find('.container').props().style!.height === '0').toBeFalsy();
+    expect(wrapper.find('.container').props().style!.height).toBe('58px');
   });
 });

@@ -1,6 +1,9 @@
 import { Transaction } from 'objection';
 import Form from './form';
 
+export const HEALTHCARE_PROXY_FORM_TITLE = 'HCP';
+export const MOLST_FORM_TITLE = 'MOLST';
+
 export default class AdvancedDirectiveForm extends Form {
   static tableName = 'advanced_directive_form';
   static hasPHI = false;

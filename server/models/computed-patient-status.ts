@@ -1,9 +1,14 @@
 import { find } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import AdvancedDirectiveForm, {
+  HEALTHCARE_PROXY_FORM_TITLE,
+  MOLST_FORM_TITLE,
+} from './advanced-directive-form';
 import BaseModel from './base-model';
 import CareTeam from './care-team';
 import ConsentForm from './consent-form';
 import Patient from './patient';
+import PatientAdvancedDirectiveForm from './patient-advanced-directive-form';
 import PatientConsentForm from './patient-consent-form';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
@@ -114,9 +119,10 @@ export default class ComputedPatientStatus extends BaseModel {
   };
 
   static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
-    // TODO: When possible, actually calculate all of these values
+    // TODO: isPhotoAddedOrDeclined when a photo is actually uploaded
     const patient = await Patient.get(patientId, txn);
     const { patientInfo } = patient;
+    const { hasHealthcareProxy, hasMolst, hasDeclinedPhotoUpload } = patientInfo;
     const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
     const patientEmergencyContacts = await PatientContact.getEmergencyContactsForPatient(
       patientId,
@@ -130,14 +136,19 @@ export default class ComputedPatientStatus extends BaseModel {
       patientDataFlags.length > 0;
     const isDemographicInfoUpdated = !!patientInfo.updatedAt;
     const isEmergencyContactAdded = !!patientEmergencyContacts.length;
-    const isAdvancedDirectivesAdded = false;
+    const isAdvancedDirectivesAdded = await this.getAdvancedDirectivesStatus(
+      patientId,
+      hasHealthcareProxy,
+      hasMolst,
+      txn,
+    );
     const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
     const hasProgressNote = patientProgressNoteCount > 0;
     const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'communityHealthPartner');
     const hasOutreachSpecialist = this.isRoleOnCareTeam(patientCareTeam, 'outreachSpecialist');
     const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician');
     const isAssessed = false;
-    const isPhotoAddedOrDeclined = false;
+    const isPhotoAddedOrDeclined = hasDeclinedPhotoUpload === true;
     const isIneligible = false;
     const isDisenrolled = false;
 
@@ -183,6 +194,58 @@ export default class ComputedPatientStatus extends BaseModel {
     });
 
     return isConsentSignedForPatient;
+  }
+
+  static async getAdvancedDirectivesStatus(
+    patientId: string,
+    hasHealthcareProxy: boolean,
+    hasMolst: boolean,
+    txn: Transaction,
+  ): Promise<boolean> {
+    if (hasHealthcareProxy === false && hasMolst === false) {
+      return true;
+    } else if (hasHealthcareProxy || hasMolst) {
+      const advancedDirectiveForms = await AdvancedDirectiveForm.getAll(txn);
+      const healthcareProxyForm = find(advancedDirectiveForms, [
+        'title',
+        HEALTHCARE_PROXY_FORM_TITLE,
+      ]);
+      const molstForm = find(advancedDirectiveForms, ['title', MOLST_FORM_TITLE]);
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patientId,
+        txn,
+      );
+
+      if (hasHealthcareProxy && healthcareProxyForm) {
+        const patientHealthcareProxies = await PatientContact.getHealthcareProxiesForPatient(
+          patientId,
+          txn,
+        );
+        const patientSignedHealthcareProxyForm = find(patientAdvancedDirectiveForms, [
+          'formId',
+          healthcareProxyForm.id,
+        ]);
+
+        if (!patientHealthcareProxies.length || !patientSignedHealthcareProxyForm) {
+          return false;
+        }
+      }
+
+      if (hasMolst && molstForm) {
+        const patientSignedMolstForm = find(patientAdvancedDirectiveForms, [
+          'formId',
+          molstForm.id,
+        ]);
+
+        if (!patientSignedMolstForm) {
+          return false;
+        }
+      }
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   static async getForPatient(

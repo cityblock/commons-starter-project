@@ -1,11 +1,16 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import AdvancedDirectiveForm, {
+  HEALTHCARE_PROXY_FORM_TITLE,
+  MOLST_FORM_TITLE,
+} from '../advanced-directive-form';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus, { IComputedStatus } from '../computed-patient-status';
 import ConsentForm from '../consent-form';
 import Patient from '../patient';
+import PatientAdvancedDirectiveForm from '../patient-advanced-directive-form';
 import PatientConsentForm from '../patient-consent-form';
 import PatientContact from '../patient-contact';
 import PatientDataFlag from '../patient-data-flag';
@@ -566,7 +571,458 @@ describe('computed patient status model', () => {
     });
   });
 
-  /* TODO: Once it's possible, test isAdvancedDirectivesAdded, isAssessed,
-   *       isPhotoAddedOrDeclined, isIneligible, and isDisenrolled
+  describe('isAdvancedDirectivesAdded', () => {
+    it('correctly calculates when patient has none', async () => {
+      await transaction(ComputedPatientStatus.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus!.isAdvancedDirectivesAdded).toEqual(false);
+
+        await PatientInfo.edit(
+          {
+            updatedById: user.id,
+            hasHealthcareProxy: false,
+            hasMolst: false,
+          },
+          patient.patientInfo.id,
+          txn,
+        );
+
+        await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(true);
+      });
+    });
+
+    describe('when a patient has a MOLST', () => {
+      it('correctly calculates when a patient has uploaded the form', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: false,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: molstForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(true);
+        });
+      });
+
+      it('correctly calculates when a patient has not uploaded the form yet', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: false,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+    });
+
+    describe('when a patient has a healthcare proxy', () => {
+      it('correctly calculates when a patient has added a proxy and no form', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: false,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientContact.create(
+            {
+              patientId: patient.id,
+              updatedById: user.id,
+              relationToPatient: 'sister',
+              firstName: 'Aya',
+              lastName: 'Stark',
+              isEmergencyContact: false,
+              isHealthcareProxy: true,
+              canContact: true,
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+
+      it('correctly calculates when a patient has uploaded form and not added proxy', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: false,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: hcpForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+
+      it('correctly calculates when proxy is added and form is uploaded', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: false,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: hcpForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+          await PatientContact.create(
+            {
+              patientId: patient.id,
+              updatedById: user.id,
+              relationToPatient: 'sister',
+              firstName: 'Aya',
+              lastName: 'Stark',
+              isEmergencyContact: false,
+              isHealthcareProxy: true,
+              canContact: true,
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(true);
+        });
+      });
+    });
+
+    describe('when a patient has a MOLST and a healthcare proxy', () => {
+      it('correctly calculates when a patient has completed all components', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: molstForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: hcpForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+          await PatientContact.create(
+            {
+              patientId: patient.id,
+              updatedById: user.id,
+              relationToPatient: 'sister',
+              firstName: 'Aya',
+              lastName: 'Stark',
+              isEmergencyContact: false,
+              isHealthcareProxy: true,
+              canContact: true,
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(true);
+        });
+      });
+
+      it('correctly calculates when a patient has not completed the MOLST', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: hcpForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+          await PatientContact.create(
+            {
+              patientId: patient.id,
+              updatedById: user.id,
+              relationToPatient: 'sister',
+              firstName: 'Aya',
+              lastName: 'Stark',
+              isEmergencyContact: false,
+              isHealthcareProxy: true,
+              canContact: true,
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+
+      it('correctly calculates when a patient has completed no components', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+
+      it('correctly calculates when a patient has not completed the HCP components', async () => {
+        await transaction(ComputedPatientStatus.knex(), async txn => {
+          const { user, patient } = await setup(txn);
+          await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
+          const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
+          await PatientInfo.edit(
+            {
+              updatedById: user.id,
+              hasHealthcareProxy: true,
+              hasMolst: true,
+            },
+            patient.patientInfo.id,
+            txn,
+          );
+          const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+            patient.id,
+            user.id,
+            txn,
+          );
+
+          expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
+
+          await PatientAdvancedDirectiveForm.create(
+            {
+              userId: user.id,
+              formId: molstForm.id,
+              patientId: patient.id,
+              signedAt: new Date().toISOString(),
+            },
+            txn,
+          );
+
+          await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+          const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+            patient.id,
+            txn,
+          );
+
+          expect(refetchedComputedPatientStatus!.isAdvancedDirectivesAdded).toEqual(false);
+        });
+      });
+    });
+  });
+
+  describe('isPhotoAddedOrDeclined', () => {
+    it('correctly calculates when the patient has declined to upload', async () => {
+      await transaction(ComputedPatientStatus.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus!.isPhotoAddedOrDeclined).toEqual(false);
+
+        await PatientInfo.edit(
+          {
+            updatedById: user.id,
+            hasDeclinedPhotoUpload: true,
+          },
+          patient.patientInfo.id,
+          txn,
+        );
+        await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.isPhotoAddedOrDeclined).toEqual(true);
+      });
+    });
+  });
+
+  /* TODO: Once possible, test isAssessed, isPhotoAddedOrDeclined (uploaded case), isIneligible,
+   *       and isDisenrolled
    */
 });

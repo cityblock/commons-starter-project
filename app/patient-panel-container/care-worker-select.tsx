@@ -20,7 +20,7 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-const CARE_WORKER_ROLES = ['physician', 'nurseCareManager', 'healthCoach'];
+const CARE_WORKER_ROLES = ['physician', 'nurseCareManager', 'healthCoach', 'communityHealthPartner'];
 
 class CareWorkerSelect extends React.Component<allProps> {
   renderOption(users: ShortUserFragment[]) {

@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { withRouter, RouteComponentProps } from 'react-router';
 import AdvancedDirectives, { IAdvancedDirectives } from './advanced-directives';
 import BasicInfo, { IBasicInfo } from './basic-info';
 import ContactInfo, { IContactInfo } from './contact-info';
@@ -19,9 +21,22 @@ interface IProps {
   patient: IDemographics;
   routeBase: string;
   onChange: (fields: IEditableFieldState) => void;
+  location: Location;
 }
 
-class PatientDemographics extends React.Component<IProps> {
+type allProps = IProps & RouteComponentProps<IProps>;
+
+export class PatientDemographics extends React.Component<allProps> {
+  componentDidUpdate() {
+    const hash = this.props.location.hash.replace('#', '');
+    if (hash) {
+      const node = ReactDOM.findDOMNode(this.refs[hash]);
+      if (node) {
+        node.scrollIntoView();
+      }
+    }
+  }
+
   render() {
     const { patient, onChange, routeBase } = this.props;
 
@@ -34,11 +49,12 @@ class PatientDemographics extends React.Component<IProps> {
           advancedDirectives={patient.advanced}
           onChange={onChange}
           routeBase={routeBase}
+          ref="advancedDirectives"
         />
-        <PatientPhoto patientPhoto={patient.photo} onChange={onChange} />
+        <PatientPhoto patientPhoto={patient.photo} onChange={onChange} ref="photo" />
       </div>
     );
   }
 }
 
-export default PatientDemographics;
+export default withRouter(PatientDemographics);

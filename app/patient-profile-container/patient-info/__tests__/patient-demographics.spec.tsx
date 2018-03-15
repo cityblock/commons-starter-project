@@ -10,10 +10,14 @@ import {
 import BasicInfo from '../basic-info';
 import ContactInfo from '../contact-info';
 import CoreIdentity from '../core-identity';
-import PatientDemographics from '../patient-demographics';
+import { PatientDemographics } from '../patient-demographics';
 
 describe('Render Patient Demographics Component', () => {
   const onChange = () => true;
+  const location = {} as any;
+  const match = {} as any;
+  const history = { push: jest.fn() } as any;
+
   const wrapper = shallow(
     <PatientDemographics
       patient={{
@@ -25,6 +29,9 @@ describe('Render Patient Demographics Component', () => {
       }}
       routeBase={'/foo/bar'}
       onChange={onChange}
+      location={location}
+      match={match}
+      history={history}
     />,
   );
 

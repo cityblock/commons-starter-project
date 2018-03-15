@@ -147,7 +147,7 @@ export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlPro
           labelId="patientIntakeChecklist.advancedDirectivesLabel"
           subtextId="patientIntakeChecklist.advancedDirectivesSubtext"
           buttonTextId="patientIntakeChecklist.advancedDirectivesButton"
-          buttonLink={`/patients/${patientId}/member-info`}
+          buttonLink={`/patients/${patientId}/member-info#advancedDirectives`}
           onClick={this.onChecklistItemClick}
         />
         <PatientIntakeChecklistItem
@@ -163,7 +163,7 @@ export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlPro
           labelId="patientIntakeChecklist.photoUploadedLabel"
           subtextId="patientIntakeChecklist.photoUploadedSubtext"
           buttonTextId="patientIntakeChecklist.photoUploadedButton"
-          buttonLink={`/patients/${patientId}/member-info`}
+          buttonLink={`/patients/${patientId}/member-info#photo`}
           onClick={this.onChecklistItemClick}
         />
       </Fragment>

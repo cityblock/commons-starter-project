@@ -176,7 +176,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(careTeamReassignUserMutationGraphql as any, {
     name: 'careTeamReassignUser',
     options: {
-      refetchQueries: ['getPatientCareTeam', 'getUserSummaryList'],
+      refetchQueries: ['getPatientCareTeam', 'getUserSummaryList', 'getPatient'],
     },
   }),
 )(RemoveCareTeamMemberModal);

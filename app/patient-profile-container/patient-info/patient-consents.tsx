@@ -126,13 +126,13 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(createPatientConsentFormMutationGraphql as any, {
     name: 'createPatientConsentFormMutation',
     options: {
-      refetchQueries: ['getPatientConsentForms'],
+      refetchQueries: ['getPatientConsentForms', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
   graphql<IGraphqlProps, IProps, allProps>(deletePatientConsentFormMutationGraphql as any, {
     name: 'deletePatientConsentFormMutation',
     options: {
-      refetchQueries: ['getPatientConsentForms'],
+      refetchQueries: ['getPatientConsentForms', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
 )(PatientConsents);

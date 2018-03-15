@@ -1,10 +1,11 @@
 import { graphql } from 'graphql';
-import { find } from 'lodash';
 import { cloneDeep } from 'lodash';
+import { find } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
+import ComputedPatientStatus from '../../models/computed-patient-status';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -66,6 +67,46 @@ describe('care team', () => {
       });
     });
 
+    it('updates computed patient status when adding a user to a care team', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { user, patient, clinic } = await setup(txn);
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus!.hasChp).toEqual(false);
+
+        const user2 = await User.create(
+          {
+            email: 'chp@cityblock.com',
+            firstName: 'Chp',
+            lastName: 'User',
+            userRole: 'communityHealthPartner',
+            homeClinicId: clinic.id,
+          },
+          txn,
+        );
+        const mutation = `mutation {
+          careTeamAddUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
+            id
+          }
+        }`;
+        await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
+
+        await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.hasChp).toEqual(true);
+      });
+    });
+
     it('remove user from care team', async () => {
       await transaction(CareTeam.knex(), async txn => {
         const { user, patient } = await setup(txn);
@@ -83,6 +124,51 @@ describe('care team', () => {
         const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser).map((u: any) => u.id);
 
         expect(careTeamUserIds).not.toContain(user.id);
+      });
+    });
+
+    it('updates computed patient status when removing a user from a care team', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { user, patient, clinic } = await setup(txn);
+        const user2 = await User.create(
+          {
+            email: 'chp@cityblock.com',
+            firstName: 'Chp',
+            lastName: 'User',
+            userRole: 'communityHealthPartner',
+            homeClinicId: clinic.id,
+          },
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(computedPatientStatus.hasChp).toEqual(true);
+
+        const mutation = `mutation {
+          careTeamRemoveUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
+            id
+          }
+        }`;
+        await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
+
+        await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.hasChp).toEqual(false);
       });
     });
 
@@ -224,6 +310,53 @@ describe('care team', () => {
         const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
         expect(refetchedCareTeam).toHaveLength(1);
         expect(refetchedCareTeamUserIds).toContain(user2.id);
+      });
+    });
+
+    it('updates computed patient status when reassigning a care team member', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { user, patient, clinic } = await setup(txn);
+        const user2 = await User.create(
+          {
+            email: 'chp@cityblock.com',
+            firstName: 'Chp',
+            lastName: 'User',
+            userRole: 'communityHealthPartner',
+            homeClinicId: clinic.id,
+          },
+          txn,
+        );
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(computedPatientStatus.hasChp).toEqual(true);
+
+        const mutation = `mutation {
+          careTeamReassignUser(input: { userId: "${user2.id}", patientId: "${
+          patient.id
+        }", reassignedToId: "${user.id}" }) {
+            id
+          }
+        }`;
+        await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
+
+        await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+
+        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+          patient.id,
+          txn,
+        );
+
+        expect(refetchedComputedPatientStatus!.hasChp).toEqual(false);
       });
     });
 

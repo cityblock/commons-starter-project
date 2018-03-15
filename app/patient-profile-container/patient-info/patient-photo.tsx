@@ -26,11 +26,11 @@ export class PatientPhoto extends React.Component<IProps> {
 
   handleTakePhotoClick = () => {
     // TODO
-  }
+  };
 
   handleUploadClick = () => {
     // TODO
-  }
+  };
 
   render() {
     const { hasDeclinedPhotoUpload } = this.props.patientPhoto;
@@ -43,13 +43,29 @@ export class PatientPhoto extends React.Component<IProps> {
         <div className={parentStyles.fieldRow}>
           <Avatar avatarType="patient" size="xxLarge" className={parentStyles.field} />
           <div className={parentStyles.field}>
-            <DefaultText color="black" messageId="patientPhoto.description" className={parentStyles.field} />
+            <DefaultText
+              color="black"
+              messageId="patientPhoto.description"
+              className={parentStyles.field}
+            />
             <SmallText color="gray" messageId="patientPhoto.requirements" size="medium" />
           </div>
           <div className={parentStyles.field}>
             <div className={parentStyles.fieldRow}>
-              <Button messageId="patientPhoto.takePhoto" onClick={this.handleTakePhotoClick} color="white" fullWidth={true} className={parentStyles.field} />
-              <Button messageId="patientPhoto.upload" onClick={this.handleUploadClick} color="white" fullWidth={true} className={parentStyles.field} />
+              <Button
+                messageId="patientPhoto.takePhoto"
+                onClick={this.handleTakePhotoClick}
+                color="white"
+                fullWidth={true}
+                className={parentStyles.field}
+              />
+              <Button
+                messageId="patientPhoto.upload"
+                onClick={this.handleUploadClick}
+                color="white"
+                fullWidth={true}
+                className={parentStyles.field}
+              />
             </div>
             <Checkbox
               name="hasDeclinedPhotoUpload"

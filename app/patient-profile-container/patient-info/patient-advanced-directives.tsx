@@ -166,7 +166,7 @@ export default compose(
     {
       name: 'createPatientAdvancedDirectiveFormMutation',
       options: {
-        refetchQueries: ['getPatientAdvancedDirectiveForms'],
+        refetchQueries: ['getPatientAdvancedDirectiveForms', 'getPatientComputedPatientStatus'],
       },
     },
   ),
@@ -175,7 +175,7 @@ export default compose(
     {
       name: 'deletePatientAdvancedDirectiveFormMutation',
       options: {
-        refetchQueries: ['getPatientAdvancedDirectiveForms'],
+        refetchQueries: ['getPatientAdvancedDirectiveForms', 'getPatiencComputedPatientStatus'],
       },
     },
   ),

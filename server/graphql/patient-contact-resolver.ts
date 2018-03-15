@@ -13,6 +13,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import Address from '../models/address';
+import ComputedPatientStatus from '../models/computed-patient-status';
 import Email from '../models/email';
 import PatientContact from '../models/patient-contact';
 import PatientContactAddress from '../models/patient-contact-address';
@@ -78,6 +79,7 @@ export async function patientContactCreate(
   ];
 
   await Promise.all(promises);
+  await ComputedPatientStatus.updateForPatient(input.patientId, userId!, txn);
   return PatientContact.get(patientContact.id, txn);
 }
 
@@ -103,11 +105,15 @@ export async function patientContactEdit(
   delete filtered.address;
   delete filtered.email;
 
-  return PatientContact.edit(
+  const updatedPatientContact = await PatientContact.edit(
     { ...(filtered as any), updatedById: userId },
     input.patientContactId,
     txn,
   );
+
+  await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
+
+  return updatedPatientContact;
 }
 
 async function createAddress(

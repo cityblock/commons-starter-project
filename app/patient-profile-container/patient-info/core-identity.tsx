@@ -163,4 +163,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
 
 export default graphql<IGraphqlProps, IProps, allProps>(patientVerifyMutationGraphql as any, {
   name: 'verifyCoreIdentity',
+  options: {
+    refetchQueries: ['getPatientComputedPatientStatus'],
+  },
 })(CoreIdentity);

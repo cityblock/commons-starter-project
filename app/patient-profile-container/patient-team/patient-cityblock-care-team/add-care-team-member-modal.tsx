@@ -289,7 +289,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(patientCareTeamAddUserMutationGraphql as any, {
     name: 'addUserToPatientCareTeamMutation',
     options: {
-      refetchQueries: ['getPatientCareTeam', 'getUserSummaryList'],
+      refetchQueries: ['getPatientCareTeam', 'getUserSummaryList', 'getPatient'],
     },
   }),
 )(AddCareTeamMemberModal);

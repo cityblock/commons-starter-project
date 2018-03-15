@@ -9,6 +9,7 @@ import {
 import { IPaginationOptions } from '../db';
 import { convertCareTeamUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
+import ComputedPatientStatus from '../models/computed-patient-status';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -43,7 +44,11 @@ export async function careTeamAddUser(
 ): Promise<IRootMutationType['careTeamAddUser']> {
   await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
 
-  return CareTeam.create({ userId: input.userId, patientId: input.patientId }, txn);
+  const careTeam = await CareTeam.create({ userId: input.userId, patientId: input.patientId }, txn);
+
+  await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
+
+  return careTeam;
 }
 
 export async function careTeamRemoveUser(
@@ -53,7 +58,11 @@ export async function careTeamRemoveUser(
 ): Promise<IRootMutationType['careTeamRemoveUser']> {
   await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
 
-  return CareTeam.delete({ userId: input.userId, patientId: input.patientId }, txn);
+  const careTeam = await CareTeam.delete({ userId: input.userId, patientId: input.patientId }, txn);
+
+  await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
+
+  return careTeam;
 }
 
 export async function careTeamReassignUser(
@@ -63,7 +72,7 @@ export async function careTeamReassignUser(
 ): Promise<IRootMutationType['careTeamReassignUser']> {
   await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
 
-  return CareTeam.reassignUser(
+  const careTeam = await CareTeam.reassignUser(
     {
       userId: input.userId,
       patientId: input.patientId,
@@ -71,6 +80,10 @@ export async function careTeamReassignUser(
     },
     txn,
   );
+
+  await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
+
+  return careTeam;
 }
 
 export async function resolvePatientCareTeam(

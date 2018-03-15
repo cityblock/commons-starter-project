@@ -10,12 +10,7 @@ import PatientPhoto from '../patient-photo';
 
 describe('Renders Patient Photo Component', () => {
   const onChange = () => true;
-  const wrapper = shallow(
-    <PatientPhoto
-      patientPhoto={patientPhoto}
-      onChange={onChange}
-    />,
-  );
+  const wrapper = shallow(<PatientPhoto patientPhoto={patientPhoto} onChange={onChange} />);
 
   it('renders section', () => {
     expect(wrapper.find(Avatar)).toHaveLength(1);
@@ -53,6 +48,5 @@ describe('Renders Patient Photo Component', () => {
     checkbox = wrapper.find(Checkbox);
     expect(checkbox).toHaveLength(1);
     expect(checkbox.props().isChecked).toBeFalsy();
-
   });
 });

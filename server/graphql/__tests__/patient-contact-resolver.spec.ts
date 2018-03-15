@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Address from '../../models/address';
 import Clinic from '../../models/clinic';
+import ComputedPatientStatus from '../../models/computed-patient-status';
 import Email from '../../models/email';
 import Patient from '../../models/patient';
 import PatientContact from '../../models/patient-contact';
@@ -145,6 +146,48 @@ describe('patient info model', () => {
         );
         expect(patientContactPhone).not.toBeNull();
         expect(patientContactPhone.length).toBe(1);
+      });
+    });
+
+    it('updates computed patient status when creating a contact', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(computedPatientStatus.isEmergencyContactAdded).toEqual(false);
+
+        const query = `mutation {
+          patientContactCreate(input: {
+            patientId: "${patient.id}",
+            firstName: "Hermione",
+            lastName: "Granger",
+            relationToPatient: "friend",
+            phone: {
+              phoneNumber: "111-222-3344"
+            },
+            isEmergencyContact: true,
+          }) {
+            id
+          }
+        }`;
+        await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(true);
       });
     });
 
@@ -398,6 +441,55 @@ describe('patient info model', () => {
         );
         expect(patientContactEmail).not.toBeNull();
         expect(patientContactEmail).toHaveLength(1);
+      });
+    });
+
+    it('updates computed patient status when editing a contact', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const patientContact = await PatientContact.create(
+          {
+            patientId: patient.id,
+            updatedById: user.id,
+            relationToPatient: 'friend',
+            firstName: 'Person',
+            lastName: 'Last',
+            isEmergencyContact: true,
+            isHealthcareProxy: false,
+            canContact: true,
+          },
+          txn,
+        );
+        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(computedPatientStatus.isEmergencyContactAdded).toEqual(true);
+
+        const query = `mutation {
+          patientContactEdit(input: {
+            patientContactId: "${patientContact.id}"
+            isEmergencyContact: false,
+          }) {
+            id
+          }
+        }`;
+        await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
+          patient.id,
+          user.id,
+          txn,
+        );
+
+        expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(false);
       });
     });
 

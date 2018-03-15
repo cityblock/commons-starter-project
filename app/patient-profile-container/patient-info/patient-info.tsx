@@ -157,7 +157,10 @@ export class PatientInfo extends React.Component<allProps, allState> {
         ),
       },
       photo: {
-        hasDeclinedPhotoUpload: checkDefined<boolean>(hasDeclinedPhotoUpload, patientInfo.hasDeclinedPhotoUpload),
+        hasDeclinedPhotoUpload: checkDefined<boolean>(
+          hasDeclinedPhotoUpload,
+          patientInfo.hasDeclinedPhotoUpload,
+        ),
       },
     };
   }
@@ -311,7 +314,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
     options: {
-      refetchQueries: ['getPatientComputedPatientStatus'],
+      refetchQueries: ['getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {

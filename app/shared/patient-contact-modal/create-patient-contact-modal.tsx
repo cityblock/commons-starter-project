@@ -90,13 +90,13 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(createPatientContactMutationGraphql as any, {
     name: 'createPatientContactMutation',
     options: {
-      refetchQueries: ['getPatientContacts'],
+      refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
   graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
     options: {
-      refetchQueries: ['getPatientComputedPatientStatus'],
+      refetchQueries: ['getPatientComputedPatientStatus', 'getPatientComputedPatientStatus'],
     },
   }),
 )(CreatePatientContactModal);

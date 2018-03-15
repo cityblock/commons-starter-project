@@ -344,7 +344,8 @@ export const SPANISH_TRANSLATION = {
     'patientContact.cancel': 'Cancel',
     'patientContact.saveError': 'There was an error saving. Try again',
     'patientPhoto.sectionTitle': 'Member Photo',
-    'patientPhoto.description': 'Patient identification is very important to us. Uploading a patient photo will help ensure the identity of the patient.',
+    'patientPhoto.description':
+      'Patient identification is very important to us. Uploading a patient photo will help ensure the identity of the patient.',
     'patientPhoto.requirements': 'Photo should be at least 300px by 300px.',
     'patientPhoto.takePhoto': 'Take photo',
     'patientPhoto.upload': 'Upload a file',

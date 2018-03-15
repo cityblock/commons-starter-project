@@ -6644,6 +6644,7 @@ export interface patientInfoEditMutationVariables {
   canReceiveTexts?: boolean | null,
   hasHealthcareProxy?: boolean | null,
   hasMolst?: boolean | null,
+  hasDeclinedPhotoUpload?: boolean | null,
 };
 
 export interface patientInfoEditMutation {

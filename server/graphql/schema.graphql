@@ -1516,6 +1516,7 @@ input PatientInfoEditInput {
   canReceiveTexts: Boolean
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
+  hasDeclinedPhotoUpload: Boolean
 }
 
 # params for creating a patient contact in the db

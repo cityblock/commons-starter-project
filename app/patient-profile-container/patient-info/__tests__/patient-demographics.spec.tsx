@@ -5,6 +5,7 @@ import {
   basicInfo,
   contactInfo,
   coreIdentity,
+  patientPhoto,
 } from '../../../shared/util/test-data';
 import BasicInfo from '../basic-info';
 import ContactInfo from '../contact-info';
@@ -20,6 +21,7 @@ describe('Render Patient Demographics Component', () => {
         basic: basicInfo,
         contact: contactInfo,
         advanced: advancedDirectives,
+        photo: patientPhoto,
       }}
       routeBase={'/foo/bar'}
       onChange={onChange}

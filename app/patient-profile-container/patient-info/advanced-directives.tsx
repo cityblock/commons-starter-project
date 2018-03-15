@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import * as healthcareProxiesQuery from '../../graphql/queries/get-patient-contact-healthcare-proxies.graphql';
 import {
@@ -222,53 +223,58 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
           titleMessageId="patientContact.addHealthcareProxy"
         />
         {this.renderEditModal()}
-        <div className={parentStyles.field}>
+        <FormattedMessage id="advancedDirectives.sectionTitle">
+          {(message: string) => <h2>{message}</h2>}
+        </FormattedMessage>
+        <div className={parentStyles.subSection}>
           <div className={parentStyles.field}>
-            <FormLabel messageId="advancedDirectives.hasProxy" />
+            <div className={parentStyles.field}>
+              <FormLabel messageId="advancedDirectives.hasProxy" />
+              <RadioGroup>
+                <RadioInput
+                  name="hasHealthcareProxy"
+                  value="false"
+                  checked={hasHealthcareProxy === false}
+                  label="No"
+                  onChange={this.handleHasProxyChange}
+                  disabled={hasProxiesSaved}
+                />
+                <RadioInput
+                  name="hasHealthcareProxy"
+                  value="true"
+                  checked={hasHealthcareProxy === true}
+                  label="Yes"
+                  onChange={this.handleHasProxyChange}
+                  disabled={hasProxiesSaved}
+                />
+              </RadioGroup>
+            </div>
+            {proxyCards}
+            {proxyFormsLink}
+            {addProxyButton}
+          </div>
+
+          <div className={parentStyles.field}>
+            <FormLabel messageId="advancedDirectives.hasMolst" />
             <RadioGroup>
               <RadioInput
-                name="hasHealthcareProxy"
+                name="hasMolst"
                 value="false"
-                checked={hasHealthcareProxy === false}
+                checked={hasMolst === false}
                 label="No"
-                onChange={this.handleHasProxyChange}
-                disabled={hasProxiesSaved}
+                onChange={this.handleHasMolstChange}
               />
               <RadioInput
-                name="hasHealthcareProxy"
+                name="hasMolst"
                 value="true"
-                checked={hasHealthcareProxy === true}
+                checked={hasMolst === true}
                 label="Yes"
-                onChange={this.handleHasProxyChange}
-                disabled={hasProxiesSaved}
+                onChange={this.handleHasMolstChange}
               />
             </RadioGroup>
           </div>
-          {proxyCards}
-          {proxyFormsLink}
-          {addProxyButton}
+          {molstFormsLink}
         </div>
-
-        <div className={parentStyles.field}>
-          <FormLabel messageId="advancedDirectives.hasMolst" />
-          <RadioGroup>
-            <RadioInput
-              name="hasMolst"
-              value="false"
-              checked={hasMolst === false}
-              label="No"
-              onChange={this.handleHasMolstChange}
-            />
-            <RadioInput
-              name="hasMolst"
-              value="true"
-              checked={hasMolst === true}
-              label="Yes"
-              onChange={this.handleHasMolstChange}
-            />
-          </RadioGroup>
-        </div>
-        {molstFormsLink}
       </div>
     );
   }

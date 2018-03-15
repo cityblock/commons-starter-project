@@ -60,6 +60,7 @@ export interface IEditableFieldState {
   sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
   hasMolst?: getPatientQuery['patient']['patientInfo']['hasMolst'];
   hasHealthcareProxy?: getPatientQuery['patient']['patientInfo']['hasHealthcareProxy'];
+  hasDeclinedPhotoUpload?: getPatientQuery['patient']['patientInfo']['hasDeclinedPhotoUpload'];
 }
 
 interface IState {
@@ -110,6 +111,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       sexAtBirth,
       hasMolst,
       hasHealthcareProxy,
+      hasDeclinedPhotoUpload,
     } = this.state;
 
     return {
@@ -154,6 +156,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
           patientInfo.hasHealthcareProxy,
         ),
       },
+      photo: {
+        hasDeclinedPhotoUpload: checkDefined<boolean>(hasDeclinedPhotoUpload, patientInfo.hasDeclinedPhotoUpload),
+      },
     };
   }
 
@@ -173,6 +178,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       sexAtBirth,
       hasMolst,
       hasHealthcareProxy,
+      hasDeclinedPhotoUpload,
     } = this.state;
     if (!patient) {
       return;
@@ -194,6 +200,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           sexAtBirth,
           hasMolst,
           hasHealthcareProxy,
+          hasDeclinedPhotoUpload,
         },
       });
 

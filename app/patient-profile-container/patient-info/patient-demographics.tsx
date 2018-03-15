@@ -5,12 +5,14 @@ import ContactInfo, { IContactInfo } from './contact-info';
 import CoreIdentity, { ICoreIdentity } from './core-identity';
 import * as styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
+import PatientPhoto, { IPatientPhoto } from './patient-photo';
 
 export interface IDemographics {
   core: ICoreIdentity;
   basic: IBasicInfo;
   contact: IContactInfo;
   advanced: IAdvancedDirectives;
+  photo: IPatientPhoto;
 }
 
 interface IProps {
@@ -33,6 +35,7 @@ class PatientDemographics extends React.Component<IProps> {
           onChange={onChange}
           routeBase={routeBase}
         />
+        <PatientPhoto patientPhoto={patient.photo} onChange={onChange} />
       </div>
     );
   }

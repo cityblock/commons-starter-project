@@ -1102,6 +1102,10 @@ export const contactInfo = {
   preferredContactMethod: patient.patientInfo.preferredContactMethod,
 };
 
+export const patientPhoto = {
+  hasDeclinedPhotoUpload: patient.patientInfo.hasDeclinedPhotoUpload,
+};
+
 export const completeComputedPatientStatus = {
   id: 'computedPatientStatusId',
   patientId: 'patientId',

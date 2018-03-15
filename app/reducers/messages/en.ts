@@ -316,6 +316,7 @@ export const ENGLISH_TRANSLATION = {
     'phone.mobile': 'Mobile',
     'phone.other': 'Other',
     'phone.home': 'Home',
+    'advancedDirectives.sectionTitle': 'Advanced Directives',
     'advancedDirectives.hasMolst':
       'Does the member have a completed Medical Orders for Life-Sustaining Treatment (MOLST)?',
     'advancedDirectives.molstForms':
@@ -348,6 +349,12 @@ export const ENGLISH_TRANSLATION = {
     'patientContact.save': 'Save',
     'patientContact.cancel': 'Cancel',
     'patientContact.saveError': 'There was an error saving. Try again',
+    'patientPhoto.sectionTitle': 'Member Photo',
+    'patientPhoto.description': 'Patient identification is very important to us. Uploading a patient photo will help ensure the identity of the patient.',
+    'patientPhoto.requirements': 'Photo should be at least 300px by 300px.',
+    'patientPhoto.takePhoto': 'Take photo',
+    'patientPhoto.upload': 'Upload a file',
+    'patientPhoto.decline': 'Click here if the patient does not want their photo taken',
     'flaggingModal.title': 'Flag for review',
     'flaggingModal.description': 'Provide the following information for this field to be reviewed',
     'flaggingModal.cancel': 'Cancel',

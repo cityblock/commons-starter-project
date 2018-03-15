@@ -23,6 +23,9 @@ import { IEditableFieldState } from './patient-info';
 
 export interface IAdvancedDirectives {
   patientId: string;
+  patientInfoId: string;
+  hasHealthcareProxy?: boolean | null;
+  hasMolst?: boolean | null;
 }
 
 interface IProps {
@@ -38,7 +41,6 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 interface IState {
-  hasProxiesChecked: boolean;
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   currentProxy: FullPatientContactFragment | null;
@@ -49,9 +51,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    const { healthcareProxies } = props;
     this.state = {
-      hasProxiesChecked: !!(healthcareProxies && healthcareProxies.length),
       isEditModalVisible: false,
       isCreateModalVisible: false,
       currentProxy: null,
@@ -59,14 +59,23 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: allProps) {
-    if (nextProps.healthcareProxies && nextProps.healthcareProxies.length) {
-      this.setState({ hasProxiesChecked: true });
-    }
-  }
+  handleHasMolstChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { onChange } = this.props;
+    const { name, value } = event.target;
+    const booleanValue = value === 'true';
+    onChange({ [name as any]: booleanValue });
+  };
 
-  handleHasProxiesChange = () => {
-    this.setState({ hasProxiesChecked: true, isCreateModalVisible: true });
+  handleHasProxyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { onChange } = this.props;
+    const { value } = event.target;
+    const booleanValue = value === 'true';
+
+    if (booleanValue) {
+      this.setState({ isCreateModalVisible: true });
+    } else {
+      onChange({ hasHealthcareProxy: booleanValue });
+    }
   };
 
   handleAddProxyClick = () => {
@@ -82,12 +91,14 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   };
 
   handleCreateSuccess = (savedProxy: FullPatientContactFragment) => {
-    const { healthcareProxies } = this.props;
+    const { healthcareProxies, onChange } = this.props;
     const { updatedHealthcareProxies } = this.state;
 
     const currentProxies = updatedHealthcareProxies || healthcareProxies || [];
     const updatedProxies = [...currentProxies, savedProxy];
     this.setState({ updatedHealthcareProxies: updatedProxies });
+
+    onChange({ hasHealthcareProxy: true });
   };
 
   handleEditSuccess = (savedProxy: FullPatientContactFragment) => {
@@ -174,8 +185,8 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
   render() {
     const { healthcareProxies, advancedDirectives } = this.props;
-    const { patientId } = advancedDirectives;
-    const { hasProxiesChecked, isCreateModalVisible, updatedHealthcareProxies } = this.state;
+    const { patientId, patientInfoId, hasHealthcareProxy, hasMolst } = advancedDirectives;
+    const { isCreateModalVisible, updatedHealthcareProxies } = this.state;
 
     const currentProxies = updatedHealthcareProxies || healthcareProxies;
     const hasProxiesSaved = !!(currentProxies && currentProxies.length);
@@ -195,41 +206,67 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
       ? this.renderDocumentsLink('advancedDirectives.proxyForms')
       : null;
 
+    const molstFormsLink = hasMolst ? this.renderDocumentsLink('advancedDirectives.molstForms') : null;
+
     return (
       <div className={parentStyles.section}>
         <CreatePatientContactModal
           isVisible={isCreateModalVisible}
           closePopup={this.handleModalClose}
           patientId={patientId}
+          patientInfoId={patientInfoId}
           contactType="healthcareProxy"
           onSaved={this.handleCreateSuccess}
           titleMessageId="patientContact.addHealthcareProxy"
         />
         {this.renderEditModal()}
         <div className={parentStyles.field}>
-          <FormLabel messageId="advancedDirectives.hasProxy" />
+          <div className={parentStyles.field}>
+            <FormLabel messageId="advancedDirectives.hasProxy" />
+            <RadioGroup>
+              <RadioInput
+                name="hasHealthcareProxy"
+                value="false"
+                checked={hasHealthcareProxy === false}
+                label="No"
+                onChange={this.handleHasProxyChange}
+                disabled={hasProxiesSaved}
+              />
+              <RadioInput
+                name="hasHealthcareProxy"
+                value="true"
+                checked={hasHealthcareProxy === true}
+                label="Yes"
+                onChange={this.handleHasProxyChange}
+                disabled={hasProxiesSaved}
+              />
+            </RadioGroup>
+          </div>
+          {proxyCards}
+          {proxyFormsLink}
+          {addProxyButton}
+        </div>
+
+        <div className={parentStyles.field}>
+          <FormLabel messageId="advancedDirectives.hasMolst" />
           <RadioGroup>
             <RadioInput
-              name="hasProxiesChecked"
+              name="hasMolst"
               value="false"
-              checked={!hasProxiesChecked}
+              checked={hasMolst === false}
               label="No"
-              onChange={this.handleHasProxiesChange}
-              disabled={hasProxiesSaved}
+              onChange={this.handleHasMolstChange}
             />
             <RadioInput
-              name="hasProxiesChecked"
+              name="hasMolst"
               value="true"
-              checked={hasProxiesChecked}
+              checked={hasMolst === true}
               label="Yes"
-              onChange={this.handleHasProxiesChange}
-              disabled={hasProxiesSaved}
+              onChange={this.handleHasMolstChange}
             />
           </RadioGroup>
         </div>
-        {proxyCards}
-        {proxyFormsLink}
-        {addProxyButton}
+        {molstFormsLink}
       </div>
     );
   }

@@ -3510,6 +3510,8 @@ declare module 'schema' {
     preferredContactMethod?: IContactMethodOptionsEnum | null;
     canReceiveCalls?: boolean | null;
     canReceiveTexts?: boolean | null;
+    hasHealthcareProxy?: boolean | null;
+    hasMolst?: boolean | null;
   }
 
   /**

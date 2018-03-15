@@ -19,30 +19,45 @@ describe('Renders Advanced Directives Component', () => {
     />,
   );
 
-  it('renders section without any healthcare proxies', () => {
+  it('renders section without any healthcare proxies or molst', () => {
     expect(wrapper.find(DisplayCard)).toHaveLength(0);
     expect(wrapper.find(Button)).toHaveLength(0);
 
-    expect(wrapper.find(FormLabel)).toHaveLength(1);
-    expect(wrapper.find(FormLabel).props().messageId).toBe('advancedDirectives.hasProxy');
+    expect(wrapper.find(FormLabel)).toHaveLength(2);
+    expect(wrapper.find(FormLabel).at(0).props().messageId).toBe('advancedDirectives.hasProxy');
+    expect(wrapper.find(FormLabel).at(1).props().messageId).toBe('advancedDirectives.hasMolst');
 
     const radioInputs = wrapper.find(RadioInput);
-    expect(radioInputs).toHaveLength(2);
+    expect(radioInputs).toHaveLength(4);
 
-    expect(radioInputs.at(0).props().name).toBe('hasProxiesChecked');
+    expect(radioInputs.at(0).props().name).toBe('hasHealthcareProxy');
     expect(radioInputs.at(0).props().value).toBe('false');
-    expect(radioInputs.at(0).props().checked).toBeTruthy();
+    expect(radioInputs.at(0).props().checked).toBeFalsy();
     expect(radioInputs.at(0).props().label).toBe('No');
 
-    expect(radioInputs.at(1).props().name).toBe('hasProxiesChecked');
+    expect(radioInputs.at(1).props().name).toBe('hasHealthcareProxy');
     expect(radioInputs.at(1).props().value).toBe('true');
     expect(radioInputs.at(1).props().checked).toBeFalsy();
     expect(radioInputs.at(1).props().label).toBe('Yes');
+
+    expect(radioInputs.at(2).props().name).toBe('hasMolst');
+    expect(radioInputs.at(2).props().value).toBe('false');
+    expect(radioInputs.at(2).props().checked).toBeFalsy();
+    expect(radioInputs.at(2).props().label).toBe('No');
+
+    expect(radioInputs.at(3).props().name).toBe('hasMolst');
+    expect(radioInputs.at(3).props().value).toBe('true');
+    expect(radioInputs.at(3).props().checked).toBeFalsy();
+    expect(radioInputs.at(3).props().label).toBe('Yes');
   });
 
   it('renders section with one healthcare proxy', () => {
     wrapper.setProps({
       healthcareProxies: [healthcareProxy],
+      advancedDirectives: {
+        ...advancedDirectives,
+        hasHealthcareProxy: true,
+      },
     });
 
     expect(wrapper.find(DisplayCard)).toHaveLength(1);

@@ -1,3 +1,4 @@
+import { get} from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
@@ -57,6 +58,8 @@ export interface IEditableFieldState {
   isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
   preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
   sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
+  hasMolst?: getPatientQuery['patient']['patientInfo']['hasMolst'];
+  hasHealthcareProxy?: getPatientQuery['patient']['patientInfo']['hasHealthcareProxy'];
 }
 
 interface IState {
@@ -105,6 +108,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
       isMarginallyHoused,
       preferredName,
       sexAtBirth,
+      hasMolst,
+      hasHealthcareProxy,
     } = this.state;
 
     return {
@@ -142,6 +147,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
       },
       advanced: {
         patientId: id,
+        patientInfoId: patientInfo.id,
+        hasMolst: checkDefined<boolean>(hasMolst, patientInfo.hasMolst),
+        hasHealthcareProxy: checkDefined<boolean>(hasHealthcareProxy, patientInfo.hasHealthcareProxy),
       },
     };
   }
@@ -160,6 +168,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
       isMarginallyHoused,
       preferredName,
       sexAtBirth,
+      hasMolst,
+      hasHealthcareProxy,
     } = this.state;
     if (!patient) {
       return;
@@ -179,6 +189,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
           isMarginallyHoused,
           preferredName,
           sexAtBirth,
+          hasMolst,
+          hasHealthcareProxy,
         },
       });
 
@@ -245,7 +257,11 @@ export class PatientInfo extends React.Component<allProps, allState> {
         />
       ) : null;
 
-    const documents = isDocuments ? <PatientDocuments patientId={match.params.patientId} /> : null;
+    const hasMolst = checkDefined(this.state.hasMolst, get(patient, 'patientInfo.hasMolst'));
+    const hasHealthcareProxy = checkDefined(this.state.hasHealthcareProxy, get(patient, 'patientInfo.hasHealthcareProxy'));
+    const documents = isDocuments ? (
+      <PatientDocuments patientId={match.params.patientId} hasMolst={hasMolst} hasHealthcareProxy={hasHealthcareProxy} />
+    ) : null;
     const saveButton = !isDocuments ? this.renderSaveButton() : null;
 
     return (

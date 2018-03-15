@@ -1066,6 +1066,9 @@ export const healthcareProxy = {
 
 export const advancedDirectives = {
   patientId: patient.id,
+  patientInfoId: patient.patientInfo.id,
+  hasMolst: null,
+  hasHealthcareProxy: null,
 };
 
 export const basicInfo = {

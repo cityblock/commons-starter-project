@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +18,12 @@ import PatientAdvancedDirectiveForm from './patient-advanced-directive-form';
 
 export interface IProps {
   patientId: string;
+  hasMolst?: boolean | null;
+  hasHealthcareProxy?: boolean | null;
 }
+
+const MOLST_FORM_TITLE = 'MOLST';
+const HCP_FORM_TITLE = 'HCP';
 
 interface IGraphqlProps {
   createPatientAdvancedDirectiveFormMutation: (
@@ -77,26 +83,52 @@ export class PatientAdvancedDirectives extends React.Component<allProps, IState>
   };
 
   renderPatientAdvancedDirectiveForms() {
-    const { patientAdvancedDirectiveForms } = this.props;
+    const { patientAdvancedDirectiveForms, hasHealthcareProxy, hasMolst } = this.props;
 
     if (!patientAdvancedDirectiveForms) {
       return null;
     }
 
-    return patientAdvancedDirectiveForms.map(patientAdvancedDirectiveForm => (
-      <PatientAdvancedDirectiveForm
-        key={patientAdvancedDirectiveForm.formId}
-        patientAdvancedDirectiveForm={patientAdvancedDirectiveForm}
-        onDelete={this.onDelete}
-        onCreate={this.onShowModal}
-      />
-    ));
-  }
+    let proxyHtml = null;
+    if (hasHealthcareProxy) {
+      const proxyForm = patientAdvancedDirectiveForms.find(form => form.title === HCP_FORM_TITLE);
+      proxyHtml = proxyForm ? (
+        <PatientAdvancedDirectiveForm
+          key={proxyForm.formId}
+          patientAdvancedDirectiveForm={proxyForm}
+          onDelete={this.onDelete}
+          onCreate={this.onShowModal}
+        />
+      ) : null;
+    }
 
-  render(): JSX.Element {
-    const { isModalVisible, formId, formTitle } = this.state;
+    let molstHtml = null;
+    if (hasMolst) {
+      const molstForm = patientAdvancedDirectiveForms.find(form => form.title === MOLST_FORM_TITLE);
+      molstHtml = molstForm ? (
+        <PatientAdvancedDirectiveForm
+          key={molstForm.formId}
+          patientAdvancedDirectiveForm={molstForm}
+          onDelete={this.onDelete}
+          onCreate={this.onShowModal}
+        />
+      ) : null;
+    }
 
     return (
+      <Fragment>
+        {proxyHtml}
+        {molstHtml}
+      </Fragment>
+    );
+  }
+
+  render() {
+    const { hasHealthcareProxy, hasMolst } = this.props;
+    const { isModalVisible, formId, formTitle } = this.state;
+    const showSection = (hasHealthcareProxy || hasMolst);
+
+    return showSection ? (
       <div className={styles.section}>
         <FormattedMessage id={'patientDocuments.patientAdvancedDirectives'}>
           {(message: string) => <h2 className={styles.header}>{message}</h2>}
@@ -110,7 +142,7 @@ export class PatientAdvancedDirectives extends React.Component<allProps, IState>
           formTitle={formTitle}
         />
       </div>
-    );
+    ) : null;
   }
 }
 

@@ -6642,6 +6642,8 @@ export interface patientInfoEditMutationVariables {
   preferredContactMethod?: ContactMethodOptions | null,
   canReceiveCalls?: boolean | null,
   canReceiveTexts?: boolean | null,
+  hasHealthcareProxy?: boolean | null,
+  hasMolst?: boolean | null,
 };
 
 export interface patientInfoEditMutation {

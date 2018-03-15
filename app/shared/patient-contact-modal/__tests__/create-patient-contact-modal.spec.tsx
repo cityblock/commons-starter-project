@@ -9,6 +9,7 @@ describe('Render Create Patient Proxy Modal', () => {
   const onSaved = (patientContact: patientContactCreateMutation['patientContactCreate']) => true;
   const closePopup = () => true;
   const createPatientContactMutation = jest.fn();
+  const editPatientInfoMutation = jest.fn();
 
   const wrapper = shallow(
     <CreatePatientContactModal
@@ -19,6 +20,7 @@ describe('Render Create Patient Proxy Modal', () => {
       contactType="healthcareProxy"
       titleMessageId="testTitle"
       createPatientContactMutation={createPatientContactMutation}
+      editPatientInfoMutation={editPatientInfoMutation}
     />,
   );
 

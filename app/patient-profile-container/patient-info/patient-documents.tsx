@@ -5,13 +5,15 @@ import PatientConsents from './patient-consents';
 
 interface IProps {
   patientId: string;
+  hasMolst?: boolean | null;
+  hasHealthcareProxy?: boolean | null;
 }
 
 class PatientDocuments extends React.Component<IProps> {
   render() {
-    const { patientId } = this.props;
+    const { patientId, hasMolst, hasHealthcareProxy } = this.props;
     // TODO: Make this conditional such that they only show up when a patient has ADs
-    const patientAdvancedDirectives = <PatientAdvancedDirectives patientId={patientId} />;
+    const patientAdvancedDirectives = <PatientAdvancedDirectives patientId={patientId} hasMolst={hasMolst} hasHealthcareProxy={hasHealthcareProxy} />;
 
     return (
       <div className={styles.container}>

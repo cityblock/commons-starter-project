@@ -1514,6 +1514,8 @@ input PatientInfoEditInput {
   preferredContactMethod: ContactMethodOptions
   canReceiveCalls: Boolean
   canReceiveTexts: Boolean
+  hasHealthcareProxy: Boolean
+  hasMolst: Boolean
 }
 
 # params for creating a patient contact in the db

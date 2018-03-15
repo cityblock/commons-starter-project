@@ -14,6 +14,8 @@ mutation patientInfoEdit(
   $preferredContactMethod: ContactMethodOptions
   $canReceiveCalls: Boolean
   $canReceiveTexts: Boolean
+  $hasHealthcareProxy: Boolean
+  $hasMolst: Boolean
 ) {
   patientInfoEdit(
     input: {
@@ -30,6 +32,8 @@ mutation patientInfoEdit(
       preferredContactMethod: $preferredContactMethod
       canReceiveCalls: $canReceiveCalls
       canReceiveTexts: $canReceiveTexts
+      hasMolst: $hasMolst
+      hasHealthcareProxy: $hasHealthcareProxy
     }
   ) {
     ...ShortPatientInfo

@@ -13,3 +13,7 @@
 .container:hover {
   background: var(--highlight-background-color);
 }
+
+.headerText {
+  margin-left: 5px;
+}

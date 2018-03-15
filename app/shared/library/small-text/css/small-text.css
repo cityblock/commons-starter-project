@@ -35,6 +35,10 @@
   color: var(--green-color);
 }
 
+.lightBlue {
+  color: var(--light-blue-color);
+}
+
 .mediumFontSize {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

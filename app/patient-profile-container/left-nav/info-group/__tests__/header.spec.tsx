@@ -31,4 +31,41 @@ describe('Patient Left Navigation Info Group Header', () => {
 
     expect(wrapper.find(Icon).props().name).toBe('keyboardArrowUp');
   });
+
+  it('renders item count if one given', () => {
+    wrapper.setProps({ itemCount: 11 });
+
+    expect(wrapper.find(SmallText).length).toBe(2);
+
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().text,
+    ).toBe('(11)');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().size,
+    ).toBe('largest');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().color,
+    ).toBe('lightBlue');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().font,
+    ).toBe('basetica');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().isBold,
+    ).toBeTruthy();
+  });
 });

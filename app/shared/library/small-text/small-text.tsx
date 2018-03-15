@@ -11,7 +11,8 @@ export type Color =
   | 'white'
   | 'red'
   | 'green'
-  | 'purple'; // default is lightGray
+  | 'purple'
+  | 'lightBlue'; // default is lightGray
 export type Size = 'small' | 'medium' | 'large' | 'largest'; // default is small
 export type Font = 'roboto' | 'basetica'; // default is Roboto
 
@@ -42,6 +43,7 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.red]: color && color === 'red',
       [styles.purple]: color && color === 'purple',
       [styles.green]: color && color === 'green',
+      [styles.lightBlue]: color && color === 'lightBlue',
       [styles.bold]: isBold,
       [styles.basetica]: font === 'basetica',
     },

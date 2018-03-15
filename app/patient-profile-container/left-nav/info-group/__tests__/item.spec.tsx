@@ -105,4 +105,67 @@ describe('Patient Left Navigation Info Group Item', () => {
     expect(wrapper.find(SmallText).length).toBe(1);
     expect(wrapper.find('.container').props().className).toBe('container rightAlign');
   });
+
+  describe('non-translated label', () => {
+    const label = 'Dragon Fire';
+    const value2 = '2 min';
+
+    const wrapper2 = shallow(<InfoGroupItem label={label} value={value2} />);
+
+    it('renders bold text for label', () => {
+      expect(wrapper2.find(SmallText).length).toBe(2);
+
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(0)
+          .props().text,
+      ).toBe(label);
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(0)
+          .props().size,
+      ).toBe('large');
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(0)
+          .props().color,
+      ).toBe('black');
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(0)
+          .props().isBold,
+      ).toBeTruthy();
+    });
+
+    it('renders normal text for value', () => {
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(1)
+          .props().text,
+      ).toBe(value2);
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(1)
+          .props().size,
+      ).toBe('large');
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(1)
+          .props().color,
+      ).toBe('darkGray');
+      expect(
+        wrapper2
+          .find(SmallText)
+          .at(1)
+          .props().isBold,
+      ).toBeFalsy();
+    });
+  });
 });

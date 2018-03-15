@@ -6,6 +6,7 @@ import Contact from '../info-group/contact';
 import Demographics from '../info-group/demographics';
 import Medications from '../info-group/medications';
 import Plan from '../info-group/plan';
+import ProblemList from '../info-group/problem-list';
 import LeftNav from '../left-nav';
 
 describe('Patient Left Navigation', () => {
@@ -33,6 +34,11 @@ describe('Patient Left Navigation', () => {
   it('renders medications list', () => {
     expect(wrapper.find(Medications).length).toBe(1);
     expect(wrapper.find(Medications).props().isOpen).toBeFalsy();
+  });
+
+  it('renders problem list', () => {
+    expect(wrapper.find(ProblemList).length).toBe(1);
+    expect(wrapper.find(ProblemList).props().isOpen).toBeFalsy();
   });
 
   it('opens a list', () => {

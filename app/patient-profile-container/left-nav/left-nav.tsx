@@ -5,6 +5,7 @@ import Contact from './info-group/contact';
 import Demographics from './info-group/demographics';
 import Medications from './info-group/medications';
 import Plan from './info-group/plan';
+import ProblemList from './info-group/problem-list';
 
 export type Selected = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
 
@@ -50,6 +51,7 @@ class LeftNav extends React.Component<IProps, IState> {
             <Contact patient={patient} isOpen={selected === 'contact'} onClick={this.handleClick} />
             <Plan patient={patient} isOpen={selected === 'plan'} onClick={this.handleClick} />
             <Medications isOpen={selected === 'medications'} onClick={this.handleClick} />
+            <ProblemList isOpen={selected === 'problemList'} onClick={this.handleClick} />
           </div>
         )}
       </div>

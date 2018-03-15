@@ -10,7 +10,6 @@ interface IProps {
   glassBreakId: string | null;
 }
 
-// TODO: Deprecate old left nav info, medications, and patient problem list
 const PatientProfileLeftNav: React.StatelessComponent<IProps> = (props: IProps) => {
   const { patient, patientId, glassBreakId } = props;
 

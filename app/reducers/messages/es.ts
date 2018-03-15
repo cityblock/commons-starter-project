@@ -30,6 +30,7 @@ export const SPANISH_TRANSLATION = {
     'patientFilter.zip': 'Ubicación',
     'patientFiler.zipPlaceholder': 'Search by zip code',
     'patientFilter.careWorkerId': 'Assigned to a care worker',
+    'patientFilter.showAllPatients': 'Show only members assigned to you?',
     'patientFilter.insurance': 'Insurance type',
     'patientFilter.inNetwork': 'Is their primary doctor in-network',
     'patientFilter.yes': 'Yes',

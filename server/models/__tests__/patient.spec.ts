@@ -487,7 +487,13 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
         expect(
-          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { zip: '10001' }, txn),
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { zip: '10001' },
+            false,
+            txn,
+          ),
         ).toMatchObject({
           results: [
             {
@@ -514,6 +520,7 @@ describe('patient model', () => {
           user.id,
           { pageNumber: 0, pageSize: 10 },
           { zip: '11211' },
+          false,
           txn,
         );
         expect(patientResults.total).toBe(2);
@@ -536,7 +543,13 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
         expect(
-          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { ageMax: 19 }, txn),
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { ageMax: 19 },
+            false,
+            txn,
+          ),
         ).toMatchObject({
           results: [
             {
@@ -563,6 +576,7 @@ describe('patient model', () => {
           user.id,
           { pageNumber: 0, pageSize: 10 },
           { ageMin: 20, ageMax: 24 },
+          false,
           txn,
         );
         expect(patientResults.total).toBe(2);
@@ -585,7 +599,13 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
         expect(
-          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { ageMin: 80 }, txn),
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { ageMin: 80 },
+            false,
+            txn,
+          ),
         ).toMatchObject({
           results: [
             {
@@ -609,7 +629,7 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { user2 } = await setupPatientsForPanelFilter(txn);
         expect(
-          await Patient.filter(user2.id, { pageNumber: 0, pageSize: 10 }, {}, txn),
+          await Patient.filter(user2.id, { pageNumber: 0, pageSize: 10 }, {}, false, txn),
         ).toMatchObject({
           results: [
             {
@@ -636,6 +656,7 @@ describe('patient model', () => {
           user.id,
           { pageNumber: 0, pageSize: 10 },
           { gender: 'female' },
+          false,
           txn,
         );
         expect(patientResults.total).toBe(2);
@@ -662,6 +683,7 @@ describe('patient model', () => {
             user.id,
             { pageNumber: 0, pageSize: 10 },
             { gender: 'female', zip: '11211' },
+            false,
             txn,
           ),
         ).toMatchObject({
@@ -691,6 +713,7 @@ describe('patient model', () => {
             user.id,
             { pageNumber: 0, pageSize: 10 },
             { gender: 'female', zip: '11211', ageMin: 19, ageMax: 30 },
+            false,
             txn,
           ),
         ).toMatchObject({
@@ -721,6 +744,7 @@ describe('patient model', () => {
             user.id,
             { pageNumber: 0, pageSize: 10 },
             { careWorkerId: user3.id },
+            false,
             txn,
           ),
         ).toMatchObject({
@@ -748,6 +772,7 @@ describe('patient model', () => {
             user.id,
             { pageNumber: 0, pageSize: 10 },
             { careWorkerId: user3.id },
+            false,
             txn,
           ),
         ).toMatchObject({
@@ -762,6 +787,52 @@ describe('patient model', () => {
             },
           ],
           total: 1,
+        });
+      });
+    });
+
+    describe('with permissions that do not allow filtering entire patient panel', () => {
+      it('still only returns results from care team when showAllMembers is true', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          const patients = await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', showAllPatients: true },
+            false,
+            txn,
+          );
+          expect(patients.total).toEqual(2);
+        });
+      });
+    });
+
+    describe('with permissions that allow filtering entire patient panel', () => {
+      it('returns results from all members when showAllMembers is true', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          const patients = await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', showAllPatients: true },
+            true,
+            txn,
+          );
+          expect(patients.total).toEqual(3);
+        });
+      });
+
+      it('still only returns results from care team when showAllMembers is false', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          const patients = await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', showAllPatients: false },
+            true,
+            txn,
+          );
+          expect(patients.total).toEqual(2);
         });
       });
     });

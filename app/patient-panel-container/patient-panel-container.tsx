@@ -76,6 +76,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         zip: props.filters.zip,
         careWorkerId: props.filters.careWorkerId,
         patientState: props.filters.patientState,
+        showAllPatients: props.filters.showAllPatients,
       },
       patientSelectState: {},
       isGloballySelected: false,
@@ -285,6 +286,12 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
 const mapStateToProps = (state: IState, props: IProps): IStateProps => {
   const searchParams = querystring.parse(props.location.search.substring(1));
+  const showAllPatientsSearchParam = searchParams.showAllPatients as string;
+  let showAllPatients = false;
+
+  if (showAllPatientsSearchParam === 'true') {
+    showAllPatients = true;
+  }
 
   const filters = {
     gender: (searchParams.gender as Gender) || null,
@@ -293,6 +300,7 @@ const mapStateToProps = (state: IState, props: IProps): IStateProps => {
     ageMin: parseInt(searchParams.ageMin as string, 10) || null,
     ageMax: parseInt(searchParams.ageMax as string, 10) || null,
     patientState: (searchParams.patientState as CurrentPatientState) || null,
+    showAllPatients: showAllPatients || null,
   };
 
   const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);

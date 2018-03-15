@@ -14,7 +14,7 @@ import {
 } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from '../models/patient';
-import checkUserPermissions from './shared/permissions-check';
+import checkUserPermissions, { getBusinessToggles } from './shared/permissions-check';
 import { formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
@@ -146,8 +146,15 @@ export async function resolvePatientPanel(
   { permissions, userId, txn }: IContext,
 ): Promise<IPatientTableRowEdges> {
   await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+  const allowAllPatients = getBusinessToggles(permissions).canShowAllMembersInPatientPanel;
 
-  const patients = await Patient.filter(userId!, { pageNumber, pageSize }, filters, txn);
+  const patients = await Patient.filter(
+    userId!,
+    { pageNumber, pageSize },
+    filters,
+    allowAllPatients,
+    txn,
+  );
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,

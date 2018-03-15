@@ -379,6 +379,7 @@ input PatientFilterOptions {
   zip: String
   careWorkerId: ID
   patientState: CurrentPatientState
+  showAllPatients: Boolean
 }
 
 # Address

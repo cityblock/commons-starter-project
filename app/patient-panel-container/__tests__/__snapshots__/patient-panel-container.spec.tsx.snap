@@ -289,6 +289,62 @@ exports[`renders patient panel container correctly 1`] = `
           className="label"
           htmlFor={undefined}
         >
+          Show only members assigned to you?
+        </label>
+        <form
+          className="container"
+        >
+          <div
+            className="container enabled"
+          >
+            <input
+              checked={false}
+              disabled={false}
+              id="showAllPatients-true"
+              name="showAllPatients"
+              onChange={undefined}
+              onClick={[Function]}
+              readOnly={false}
+              type="radio"
+              value="true"
+            />
+            <label
+              className=""
+              htmlFor="showAllPatients-true"
+            >
+              No
+            </label>
+          </div>
+          <div
+            className="container enabled"
+          >
+            <input
+              checked={false}
+              disabled={false}
+              id="showAllPatients-false"
+              name="showAllPatients"
+              onChange={undefined}
+              onClick={[Function]}
+              readOnly={false}
+              type="radio"
+              value="false"
+            />
+            <label
+              className=""
+              htmlFor="showAllPatients-false"
+            >
+              Yes
+            </label>
+          </div>
+        </form>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
           Patient status
         </label>
         <select

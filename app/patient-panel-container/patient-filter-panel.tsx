@@ -8,11 +8,12 @@ import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
+import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import AgeRangeSelect, { formatAgeValue } from './age-range-select';
 import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-filter-panel.css';
 
-interface IProps {
+interface IProps extends IInjectedProps {
   onClick: (filters: PatientFilterOptions) => any;
   onChange: (filter: PatientFilterOptions) => any;
   filters: PatientFilterOptions;
@@ -23,7 +24,7 @@ interface IState {
   inNetwork: string;
 }
 
-export default class PatientFilterPanel extends React.Component<IProps, IState> {
+export class PatientFilterPanel extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -39,6 +40,17 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
     this.props.onChange({ [event.target.name as any]: event.target.value });
   };
 
+  handleBooleanValueChange = (event: React.MouseEvent<HTMLInputElement>) => {
+    let value = true;
+    const target = event.target as HTMLInputElement;
+
+    if (target.value === 'false') {
+      value = false;
+    }
+
+    this.props.onChange({ [target.name as any]: value });
+  };
+
   handleNetworkToggleChange = (event: React.MouseEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     let fieldValue: any = target.value;
@@ -51,7 +63,15 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
   };
 
   handleApplyClick = () => {
-    const { gender, ageMin, ageMax, zip, careWorkerId, patientState } = this.props.filters;
+    const {
+      gender,
+      ageMin,
+      ageMax,
+      zip,
+      careWorkerId,
+      patientState,
+      showAllPatients,
+    } = this.props.filters;
     this.props.onClick({
       gender,
       ageMin,
@@ -59,6 +79,7 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
       zip,
       careWorkerId,
       patientState,
+      showAllPatients,
     });
   };
 
@@ -67,8 +88,8 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
   };
 
   render() {
-    const { isVisible, filters } = this.props;
-    const { gender, zip, careWorkerId, ageMin, ageMax, patientState } = filters;
+    const { isVisible, filters, featureFlags } = this.props;
+    const { gender, zip, careWorkerId, ageMin, ageMax, patientState, showAllPatients } = filters;
     const { inNetwork } = this.state;
 
     return (
@@ -136,6 +157,27 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
               value={careWorkerId}
             />
           </div>
+          {featureFlags.canShowAllMembersInPatientPanel && (
+            <div className={styles.inputGroup}>
+              <FormLabel messageId="patientFilter.showAllPatients" />
+              <RadioGroup>
+                <RadioInput
+                  name="showAllPatients"
+                  value="true"
+                  checked={showAllPatients === true}
+                  label="No"
+                  onClick={this.handleBooleanValueChange}
+                />
+                <RadioInput
+                  name="showAllPatients"
+                  value="false"
+                  checked={showAllPatients === false}
+                  label="Yes"
+                  onClick={this.handleBooleanValueChange}
+                />
+              </RadioGroup>
+            </div>
+          )}
 
           <div className={styles.inputGroup}>
             <FormLabel messageId="patientFilter.patientStatus" />
@@ -179,3 +221,5 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
     );
   }
 }
+
+export default withCurrentUser()(PatientFilterPanel);

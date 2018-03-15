@@ -1241,6 +1241,7 @@ declare module 'schema' {
     zip?: string | null;
     careWorkerId?: string | null;
     patientState?: ICurrentPatientStateEnum | null;
+    showAllPatients?: boolean | null;
   }
 
   /**

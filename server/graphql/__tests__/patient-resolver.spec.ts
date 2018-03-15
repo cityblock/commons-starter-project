@@ -792,28 +792,89 @@ describe('patient', () => {
     it('returns single result for female in zip code 11211', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        expect(
-          await Patient.filter(
-            user.id,
-            { pageNumber: 0, pageSize: 10 },
-            { gender: 'female', zip: '11211' },
-            txn,
-          ),
-        ).toMatchObject({
-          results: [
-            {
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, zip: "11211" }) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.patientPanel.totalCount).toBe(1);
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
               firstName: 'Jane',
               lastName: 'Jacobs',
-              patientInfo: {
-                gender: 'female',
-                language: 'en',
-                primaryAddress: {
-                  zip: '11211',
-                },
-              },
             },
-          ],
-          total: 1,
+          }),
+        );
+      });
+    });
+
+    describe('with permissions that do not allow filtering entire patient panel', () => {
+      it('still only returns results from care team when showAllMembers is true', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          await User.updateUserPermissions(user.id, 'pink', txn);
+          const query = `{
+            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: true }) {
+              totalCount
+            }
+          }`;
+          const result = await graphql(schema, query, null, {
+            db,
+            permissions: user.permissions,
+            userId: user.id,
+            txn,
+          });
+
+          expect(result.data!.patientPanel.totalCount).toBe(2);
+        });
+      });
+    });
+
+    describe('with permissions that allow filtering entire patient panel', () => {
+      it('returns results from all members when showAllMembers is true', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          const query = `{
+            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: true }) {
+              totalCount
+            }
+          }`;
+          const result = await graphql(schema, query, null, {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          });
+
+          expect(result.data!.patientPanel.totalCount).toBe(3);
+        });
+      });
+
+      it('still only returns results from care team when showAllMembers is false', async () => {
+        await transaction(Patient.knex(), async txn => {
+          const { user } = await setupPatientsForPanelFilter(txn);
+          const query = `{
+            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: false }) {
+              totalCount
+            }
+          }`;
+          const result = await graphql(schema, query, null, {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          });
+
+          expect(result.data!.patientPanel.totalCount).toBe(2);
         });
       });
     });

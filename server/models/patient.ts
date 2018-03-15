@@ -388,30 +388,54 @@ export default class Patient extends Model {
   static async filter(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    { ageMax, ageMin, gender, zip, careWorkerId, patientState }: Partial<IPatientFilterOptions>,
+    {
+      ageMax,
+      ageMin,
+      gender,
+      zip,
+      careWorkerId,
+      patientState,
+      showAllPatients,
+    }: Partial<IPatientFilterOptions>,
+    allowAllPatients: boolean,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    if (!ageMax && !ageMin && !gender && !zip && !careWorkerId && !patientState) {
+    if (
+      !ageMax &&
+      !ageMin &&
+      !gender &&
+      !zip &&
+      !careWorkerId &&
+      !patientState &&
+      !allowAllPatients
+    ) {
       return CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
     }
 
     const builder = this.query(txn)
       .eager(EAGER_QUERY)
-      .leftOuterJoinRelation('patientInfo.[primaryAddress]')
-      .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn));
+      .leftOuterJoinRelation('patientInfo.[primaryAddress]');
+
+    if (!allowAllPatients || (allowAllPatients && !showAllPatients)) {
+      builder.where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn));
+    }
 
     if (gender) {
       builder.where('patientInfo.gender', gender);
     }
+
     if (zip) {
       builder.where('patientInfo:primaryAddress.zip', zip);
     }
+
     if (ageMax) {
       builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) <= ${ageMax}`);
     }
+
     if (ageMin) {
       builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) >= ${ageMin}`);
     }
+
     if (!isEmpty(patientState)) {
       builder
         .joinRaw(
@@ -421,6 +445,7 @@ export default class Patient extends Model {
         )
         .where('patient_state.currentState', patientState);
     }
+
     if (!isEmpty(careWorkerId)) {
       builder
         .joinRaw(
@@ -431,6 +456,7 @@ export default class Patient extends Model {
         .where('care_team.userId', careWorkerId);
     }
     builder.orderBy('patient.createdAt');
+
     const patientResult = (await builder.page(pageNumber, pageSize)) as any;
 
     return {

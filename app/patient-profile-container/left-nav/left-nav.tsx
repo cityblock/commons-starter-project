@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import LeftNavHeader from './header';
+import Demographics from './info-group/demographics';
 
-type Selected = 'demographic' | 'contact' | 'plan' | 'medications' | 'problemList';
+export type Selected = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
 
 interface IProps {
   patient: FullPatientForProfileFragment | null;
@@ -31,10 +32,20 @@ class LeftNav extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const { patient } = this.props;
+    const { selected } = this.state;
 
     return (
       <div>
         <LeftNavHeader patient={patient} />
+        {!!patient && (
+          <div>
+            <Demographics
+              patient={patient}
+              isOpen={selected === 'demographics'}
+              onClick={this.handleClick}
+            />
+          </div>
+        )}
       </div>
     );
   }

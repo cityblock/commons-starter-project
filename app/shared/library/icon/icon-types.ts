@@ -36,6 +36,7 @@ export type IconName =
   | 'keyboardArrowDown'
   | 'keyboardArrowLeft'
   | 'keyboardArrowRight'
+  | 'keyboardArrowUp'
   | 'labelOutline'
   | 'lockOutline'
   | 'moreVert'

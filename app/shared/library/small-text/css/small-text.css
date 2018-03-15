@@ -15,6 +15,10 @@
   color: var(--gray-font-color);
 }
 
+.darkGray {
+  color: var(--default-font-color);
+}
+
 .white {
   color: var(--white-color);
 }
@@ -48,4 +52,8 @@
 
 .bold {
   font-weight: var(--bold-font-weight);
+}
+
+.basetica {
+  font-family: var(--basetica-medium);
 }

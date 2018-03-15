@@ -245,6 +245,7 @@ export const SPANISH_TRANSLATION = {
     'patientInfo.delete': 'Delete',
     'patientInfo.primary': 'Primary',
     'patientInfo.missing': 'Not specified',
+    'patientInfo.notOnFile': 'None on file',
     'quickActions.addProgressNote': 'Add a progress note',
     'quickActions.addQuickCall': 'Add a quick-call note',
     'quickActions.administerTool': 'Administer a tool',
@@ -797,5 +798,9 @@ export const SPANISH_TRANSLATION = {
     'demographics.assignedSex': 'Sex at birth:',
     'demographics.dateOfBirth': 'Date of birth:',
     'demographics.gender': 'Self-identifying gender:',
+    'contact.phone': 'Phone:',
+    'contact.email': 'Email:',
+    'contact.preferredMethod': 'Preferred method:',
+    'contact.address': 'Address:',
   },
 };

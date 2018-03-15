@@ -13,7 +13,13 @@ class PatientDocuments extends React.Component<IProps> {
   render() {
     const { patientId, hasMolst, hasHealthcareProxy } = this.props;
     // TODO: Make this conditional such that they only show up when a patient has ADs
-    const patientAdvancedDirectives = <PatientAdvancedDirectives patientId={patientId} hasMolst={hasMolst} hasHealthcareProxy={hasHealthcareProxy} />;
+    const patientAdvancedDirectives = (
+      <PatientAdvancedDirectives
+        patientId={patientId}
+        hasMolst={hasMolst}
+        hasHealthcareProxy={hasHealthcareProxy}
+      />
+    );
 
     return (
       <div className={styles.container}>

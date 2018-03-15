@@ -241,6 +241,7 @@ export const ENGLISH_TRANSLATION = {
     'patientInfo.delete': 'Delete',
     'patientInfo.primary': 'Primary',
     'patientInfo.missing': 'Not specified',
+    'patientInfo.notOnFile': 'None on file',
     'quickActions.addProgressNote': 'Add a progress note',
     'quickActions.addQuickCall': 'Add a quick-call note',
     'quickActions.administerTool': 'Administer a tool',
@@ -315,7 +316,8 @@ export const ENGLISH_TRANSLATION = {
     'phone.mobile': 'Mobile',
     'phone.other': 'Other',
     'phone.home': 'Home',
-    'advancedDirectives.hasMolst': 'Does the member have a completed Medical Orders for Life-Sustaining Treatment (MOLST)?',
+    'advancedDirectives.hasMolst':
+      'Does the member have a completed Medical Orders for Life-Sustaining Treatment (MOLST)?',
     'advancedDirectives.molstForms':
       "You are required to upload a copy of the MOLST form to the member's documents",
     'advancedDirectives.hasProxy': 'Does the member have a health care proxy?',
@@ -814,5 +816,9 @@ export const ENGLISH_TRANSLATION = {
     'demographics.assignedSex': 'Sex at birth:',
     'demographics.dateOfBirth': 'Date of birth:',
     'demographics.gender': 'Self-identifying gender:',
+    'contact.phone': 'Phone:',
+    'contact.email': 'Email:',
+    'contact.preferredMethod': 'Preferred method:',
+    'contact.address': 'Address:',
   },
 };

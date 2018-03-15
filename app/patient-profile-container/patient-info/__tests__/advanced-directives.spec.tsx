@@ -24,8 +24,18 @@ describe('Renders Advanced Directives Component', () => {
     expect(wrapper.find(Button)).toHaveLength(0);
 
     expect(wrapper.find(FormLabel)).toHaveLength(2);
-    expect(wrapper.find(FormLabel).at(0).props().messageId).toBe('advancedDirectives.hasProxy');
-    expect(wrapper.find(FormLabel).at(1).props().messageId).toBe('advancedDirectives.hasMolst');
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(0)
+        .props().messageId,
+    ).toBe('advancedDirectives.hasProxy');
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(1)
+        .props().messageId,
+    ).toBe('advancedDirectives.hasMolst');
 
     const radioInputs = wrapper.find(RadioInput);
     expect(radioInputs).toHaveLength(4);

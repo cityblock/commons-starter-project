@@ -3,7 +3,15 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/small-text.css';
 
-export type Color = 'lightGray' | 'gray' | 'darkGray' | 'black' | 'white' | 'red' | 'green' | 'purple'; // default is lightGray
+export type Color =
+  | 'lightGray'
+  | 'gray'
+  | 'darkGray'
+  | 'black'
+  | 'white'
+  | 'red'
+  | 'green'
+  | 'purple'; // default is lightGray
 export type Size = 'small' | 'medium' | 'large' | 'largest'; // default is small
 export type Font = 'roboto' | 'basetica'; // default is Roboto
 

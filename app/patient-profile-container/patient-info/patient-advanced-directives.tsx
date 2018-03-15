@@ -126,7 +126,7 @@ export class PatientAdvancedDirectives extends React.Component<allProps, IState>
   render() {
     const { hasHealthcareProxy, hasMolst } = this.props;
     const { isModalVisible, formId, formTitle } = this.state;
-    const showSection = (hasHealthcareProxy || hasMolst);
+    const showSection = hasHealthcareProxy || hasMolst;
 
     return showSection ? (
       <div className={styles.section}>

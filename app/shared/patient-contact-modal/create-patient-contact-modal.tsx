@@ -35,7 +35,13 @@ type allProps = IProps & IGraphqlProps;
 
 export class CreatePatientContactModal extends React.Component<allProps> {
   createPatientContact = async (contact: IPatientContact) => {
-    const { createPatientContactMutation, editPatientInfoMutation, patientId, patientInfoId, contactType } = this.props;
+    const {
+      createPatientContactMutation,
+      editPatientInfoMutation,
+      patientId,
+      patientInfoId,
+      contactType,
+    } = this.props;
 
     // create patient contact heathcare proxy
     const response = await createPatientContactMutation({

@@ -66,16 +66,43 @@ describe('Patient Left Navigation Info Group Item', () => {
   it('renders empty value message if no value given', () => {
     wrapper.setProps({ value: '' });
 
-    expect(wrapper.find(SmallText).at(1).props().messageId).toBe('patientInfo.missing');
-    expect(wrapper.find(SmallText).at(1).props().size).toBe('large');
-    expect(wrapper.find(SmallText).at(1).props().color).toBe('lightGray');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().messageId,
+    ).toBe('patientInfo.missing');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().size,
+    ).toBe('large');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().color,
+    ).toBe('lightGray');
   });
 
   it('renders custom empty value message', () => {
-    const emptyValueMessgeId = 'ladyOfWinterfell';
+    const emptyValueMessageId = 'ladyOfWinterfell';
 
-    wrapper.setProps({ emptyValueMessgeId });
+    wrapper.setProps({ emptyValueMessageId });
 
-    expect(wrapper.find(SmallText).at(1).props().messageId).toBe(emptyValueMessgeId);
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().messageId,
+    ).toBe(emptyValueMessageId);
+  });
+
+  it('aligns right if no label message id', () => {
+    wrapper.setProps({ labelMessageId: null });
+
+    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find('.container').props().className).toBe('container rightAlign');
   });
 });

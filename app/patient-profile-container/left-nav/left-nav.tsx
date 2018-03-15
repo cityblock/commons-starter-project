@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import LeftNavHeader from './header';
+import Contact from './info-group/contact';
 import Demographics from './info-group/demographics';
 
 export type Selected = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
@@ -44,6 +45,7 @@ class LeftNav extends React.Component<IProps, IState> {
               isOpen={selected === 'demographics'}
               onClick={this.handleClick}
             />
+            <Contact patient={patient} isOpen={selected === 'contact'} onClick={this.handleClick} />
           </div>
         )}
       </div>

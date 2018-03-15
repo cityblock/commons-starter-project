@@ -1,7 +1,6 @@
 import { shallow } from 'enzyme';
 import { capitalize } from 'lodash';
 import * as React from 'react';
-import { formatDateOfBirth } from '../../../../shared/helpers/format-helpers';
 import { patient } from '../../../../shared/util/test-data';
 import InfoGroupContainer from '../container';
 import Demographics from '../demographics';
@@ -40,7 +39,7 @@ describe('Patient Left Nav Demographics', () => {
         .find(InfoGroupItem)
         .at(0)
         .props().value,
-    ).toBe(formatDateOfBirth(patient.dateOfBirth));
+    ).toBe('Jan 1, 1999');
   });
 
   it('renders info group for gender', () => {

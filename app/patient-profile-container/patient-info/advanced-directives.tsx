@@ -206,7 +206,9 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
       ? this.renderDocumentsLink('advancedDirectives.proxyForms')
       : null;
 
-    const molstFormsLink = hasMolst ? this.renderDocumentsLink('advancedDirectives.molstForms') : null;
+    const molstFormsLink = hasMolst
+      ? this.renderDocumentsLink('advancedDirectives.molstForms')
+      : null;
 
     return (
       <div className={parentStyles.section}>

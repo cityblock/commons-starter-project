@@ -289,6 +289,73 @@ exports[`renders patient panel container correctly 1`] = `
           className="label"
           htmlFor={undefined}
         >
+          Patient status
+        </label>
+        <select
+          className="select large noValue"
+          disabled={undefined}
+          name="patientState"
+          onChange={[Function]}
+          required={undefined}
+          value=""
+        >
+          <option
+            disabled={false}
+            value=""
+          >
+            Select a patient status
+          </option>
+          <option
+            disabled={undefined}
+            value="assigned"
+          >
+            Assigned
+          </option>
+          <option
+            disabled={undefined}
+            value="attributed"
+          >
+            Attributed
+          </option>
+          <option
+            disabled={undefined}
+            value="consented"
+          >
+            Consented
+          </option>
+          <option
+            disabled={undefined}
+            value="disenrolled"
+          >
+            Disenrolled
+          </option>
+          <option
+            disabled={undefined}
+            value="enrolled"
+          >
+            Enrolled
+          </option>
+          <option
+            disabled={undefined}
+            value="ineligible"
+          >
+            Ineligible
+          </option>
+          <option
+            disabled={undefined}
+            value="outreach"
+          >
+            Outreach
+          </option>
+        </select>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
           Insurance type
         </label>
       </div>

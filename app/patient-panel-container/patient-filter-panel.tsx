@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import { values } from 'lodash';
 import * as React from 'react';
-import { Gender, PatientFilterOptions } from '../graphql/types';
+import { CurrentPatientState, Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import RadioGroup from '../shared/library/radio-group/radio-group';
@@ -51,13 +51,14 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
   };
 
   handleApplyClick = () => {
-    const { gender, ageMin, ageMax, zip, careWorkerId } = this.props.filters;
+    const { gender, ageMin, ageMax, zip, careWorkerId, patientState } = this.props.filters;
     this.props.onClick({
       gender,
       ageMin,
       ageMax,
       zip,
       careWorkerId,
+      patientState,
     });
   };
 
@@ -67,7 +68,7 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
 
   render() {
     const { isVisible, filters } = this.props;
-    const { gender, zip, careWorkerId, ageMin, ageMax } = filters;
+    const { gender, zip, careWorkerId, ageMin, ageMax, patientState } = filters;
     const { inNetwork } = this.state;
 
     return (
@@ -133,6 +134,19 @@ export default class PatientFilterPanel extends React.Component<IProps, IState> 
               isUnselectable={true}
               onChange={this.handleChange}
               value={careWorkerId}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <FormLabel messageId="patientFilter.patientStatus" />
+            <Select
+              name="patientState"
+              large={true}
+              isUnselectable={true}
+              onChange={this.handleChange}
+              value={patientState || ''}
+              options={values(CurrentPatientState)}
+              hasPlaceholder={true}
             />
           </div>
 

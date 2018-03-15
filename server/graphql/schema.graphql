@@ -378,6 +378,7 @@ input PatientFilterOptions {
   gender: Gender
   zip: String
   careWorkerId: ID
+  patientState: CurrentPatientState
 }
 
 # Address

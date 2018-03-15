@@ -16,6 +16,7 @@ import {
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
+import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
@@ -703,6 +704,60 @@ describe('patient model', () => {
                 primaryAddress: {
                   zip: '11211',
                 },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns a single result when filtering on careWorkerId', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user, user3, patient5 } = await setupPatientsForPanelFilter(txn);
+        await CareTeam.create({ patientId: patient5.id, userId: user.id }, txn);
+        expect(
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { careWorkerId: user3.id },
+            txn,
+          ),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Juanita',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns a single result when filtering for enrolled patient status', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user, user3, patient5 } = await setupPatientsForPanelFilter(txn);
+        await CareTeam.create({ patientId: patient5.id, userId: user.id }, txn);
+        expect(
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { careWorkerId: user3.id },
+            txn,
+          ),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Juanita',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
               },
             },
           ],

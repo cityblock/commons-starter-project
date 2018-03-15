@@ -24,6 +24,7 @@ import PatientConcern from './models/patient-concern';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
+import PatientState from './models/patient-state';
 import { PhoneTypeOptions } from './models/phone';
 import ProgressNote from './models/progress-note';
 import ProgressNoteTemplate from './models/progress-note-template';
@@ -880,6 +881,7 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id), txn);
   const user2 = await User.create(createMockUser(12, clinic.id), txn);
+  const user3 = await User.create(createMockUser(13, clinic.id), txn);
 
   const patient1 = await createPatient(
     {
@@ -948,8 +950,13 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
     txn,
   );
   await createPrimaryAddressForPatient('11211', patient5.id, patient5.patientInfo.id, user.id, txn);
+  await CareTeam.create({ patientId: patient5.id, userId: user3.id }, txn);
+  await PatientState.updateForPatient(
+    { patientId: patient5.id, updatedById: user.id, currentState: 'enrolled' },
+    txn,
+  );
 
-  return { user, user2 };
+  return { user, user2, user3, patient5 };
 }
 
 export async function createAnswerAssociations(txn: Transaction) {

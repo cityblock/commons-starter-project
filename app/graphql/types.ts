@@ -222,6 +222,7 @@ export interface PatientFilterOptions {
   gender?: Gender | null,
   zip?: string | null,
   careWorkerId?: string | null,
+  patientState?: CurrentPatientState | null,
 };
 
 export enum TaskOrderOptions {

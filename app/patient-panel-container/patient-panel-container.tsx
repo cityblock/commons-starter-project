@@ -11,6 +11,7 @@ import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql
 import {
   getCurrentUserQuery,
   getPatientPanelQuery,
+  CurrentPatientState,
   Gender,
   PatientFilterOptions,
 } from '../graphql/types';
@@ -74,6 +75,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         gender: props.filters.gender,
         zip: props.filters.zip,
         careWorkerId: props.filters.careWorkerId,
+        patientState: props.filters.patientState,
       },
       patientSelectState: {},
       isGloballySelected: false,
@@ -290,6 +292,7 @@ const mapStateToProps = (state: IState, props: IProps): IStateProps => {
     zip: (searchParams.zip as string) || null,
     ageMin: parseInt(searchParams.ageMin as string, 10) || null,
     ageMax: parseInt(searchParams.ageMax as string, 10) || null,
+    patientState: (searchParams.patientState as CurrentPatientState) || null,
   };
 
   const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);

@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPatientFilterOptions } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -388,10 +388,10 @@ export default class Patient extends Model {
   static async filter(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    { ageMax, ageMin, gender, zip, careWorkerId }: Partial<IPatientFilterOptions>,
+    { ageMax, ageMin, gender, zip, careWorkerId, patientState }: Partial<IPatientFilterOptions>,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    if (!ageMax && !ageMin && !gender && !zip && !careWorkerId) {
+    if (!ageMax && !ageMin && !gender && !zip && !careWorkerId && !patientState) {
       return CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
     }
 
@@ -411,6 +411,24 @@ export default class Patient extends Model {
     }
     if (ageMin) {
       builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) >= ${ageMin}`);
+    }
+    if (!isEmpty(patientState)) {
+      builder
+        .joinRaw(
+          `
+          LEFT OUTER JOIN patient_state ON patient.id = patient_state."patientId" AND patient_state."deletedAt" IS NULL
+        `,
+        )
+        .where('patient_state.currentState', patientState);
+    }
+    if (!isEmpty(careWorkerId)) {
+      builder
+        .joinRaw(
+          `
+          LEFT OUTER JOIN care_team ON patient.id = care_team."patientId" AND care_team."deletedAt" IS NULL
+        `,
+        )
+        .where('care_team.userId', careWorkerId);
     }
     builder.orderBy('patient.createdAt');
     const patientResult = (await builder.page(pageNumber, pageSize)) as any;

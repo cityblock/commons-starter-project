@@ -1240,6 +1240,7 @@ declare module 'schema' {
     gender?: IGenderEnum | null;
     zip?: string | null;
     careWorkerId?: string | null;
+    patientState?: ICurrentPatientStateEnum | null;
   }
 
   /**

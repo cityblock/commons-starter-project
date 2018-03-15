@@ -27,7 +27,7 @@
   transform: translateX(450px);
   background-color: var(--highlight-background-color);
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: hidden;
 }
 
 .container.visible {
@@ -57,7 +57,10 @@
 }
 
 .fields {
-  margin: var(--gutter) var(--small-gutter);
+  padding: var(--gutter) var(--small-gutter);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  height: calc(100vh - 118px);
 }
 
 .inputGroup {

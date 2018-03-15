@@ -13,38 +13,43 @@ exports[`patient profile container renders patient profile container 1`] = `
   <div
     className="mainBody"
   >
-    <Apollo(PatientIntakeChecklist)
-      patientId="patient-1"
-    />
-    <UnderlineTabs
-      color="white"
+    <div
+      className="header"
     >
-      <UnderlineTab
-        href="/patients/patient-1/360"
-        messageId="patient.threeSixty"
-        selected={false}
+      <Apollo(PatientIntakeChecklist)
+        patientId="patient-1"
       />
-      <UnderlineTab
-        href="/patients/patient-1/map/active"
-        messageId="patient.map"
-        selected={true}
-      />
-      <UnderlineTab
-        href="/patients/patient-1/timeline"
-        messageId="patient.timeline"
-        selected={false}
-      />
-      <UnderlineTab
-        href="/patients/patient-1/member-info"
-        messageId="patient.patientInfo"
-        selected={false}
-      />
-      <UnderlineTab
-        href="/patients/patient-1/team"
-        messageId="patient.patientTeam"
-        selected={false}
-      />
-    </UnderlineTabs>
+      <UnderlineTabs
+        className="tabs"
+        color="white"
+      >
+        <UnderlineTab
+          href="/patients/patient-1/360"
+          messageId="patient.threeSixty"
+          selected={false}
+        />
+        <UnderlineTab
+          href="/patients/patient-1/map/active"
+          messageId="patient.map"
+          selected={true}
+        />
+        <UnderlineTab
+          href="/patients/patient-1/timeline"
+          messageId="patient.timeline"
+          selected={false}
+        />
+        <UnderlineTab
+          href="/patients/patient-1/member-info"
+          messageId="patient.patientInfo"
+          selected={false}
+        />
+        <UnderlineTab
+          href="/patients/patient-1/team"
+          messageId="patient.patientTeam"
+          selected={false}
+        />
+      </UnderlineTabs>
+    </div>
     <Switch>
       <Route
         exact={true}

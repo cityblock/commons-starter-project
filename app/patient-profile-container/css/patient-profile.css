@@ -14,3 +14,12 @@
   max-height: calc(100vh - 60px);
   overflow: auto;
 }
+
+.header {
+  position: sticky;
+  top: 0;
+}
+
+.tabs {
+  border-bottom: 1px solid var(--dark-gray-background-color);
+}

@@ -1,3 +1,13 @@
+.container {
+  position: relative;
+}
+
+.stickyTop {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
 .marginLeft {
   margin-left: 10px;
 }

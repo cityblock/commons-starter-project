@@ -14,3 +14,13 @@
 svg.successIcon {
   fill: var(--blue-color);
 }
+
+.container {
+  position: relative;
+}
+
+.stickyTop {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}

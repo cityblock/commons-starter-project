@@ -282,8 +282,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const saveButton = !isDocuments ? this.renderSaveButton() : null;
 
     return (
-      <div>
-        <UnderlineTabs>
+      <div className={styles.container} >
+        <UnderlineTabs className={styles.stickyTop} >
           <div>
             <UnderlineTab
               messageId="patientInfo.demographics"

@@ -4,3 +4,5 @@ export const body: string;
 export const bodyFlex: string;
 export const domains: string;
 export const flex: string;
+export const relativeContainer: string;
+export const stickyTop: string;

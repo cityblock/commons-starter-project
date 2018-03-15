@@ -1,3 +1,5 @@
+export const container: string;
+export const stickyTop: string;
 export const marginLeft: string;
 export const hidden: string;
 export const carePlanPanel: string;

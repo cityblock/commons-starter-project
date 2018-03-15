@@ -3,6 +3,7 @@ import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
+import * as styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
 import PatientExternalCareTeam from './patient-external-care-team';
@@ -149,8 +150,8 @@ export class PatientTeam extends React.Component<IProps, IState> {
     ) : null;
 
     return (
-      <div>
-        <UnderlineTabs>
+      <div className={styles.subContainer} >
+        <UnderlineTabs className={styles.stickyTop} >
           <div>
             <UnderlineTab
               messageId="patientTeam.cityblockCareTeam"

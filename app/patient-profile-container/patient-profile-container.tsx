@@ -69,34 +69,36 @@ export class PatientProfileContainer extends React.Component<allProps> {
           glassBreakId={glassBreakId}
         />
         <div className={styles.mainBody}>
-          <PatientIntakeChecklist patientId={patientId} />
-          <UnderlineTabs color="white">
-            <UnderlineTab
-              messageId="patient.threeSixty"
-              href={`/patients/${patientId}/360`}
-              selected={tab === '360'}
-            />
-            <UnderlineTab
-              messageId="patient.map"
-              selected={tab === 'map'}
-              href={`/patients/${patientId}/map/active`}
-            />
-            <UnderlineTab
-              messageId="patient.timeline"
-              selected={tab === 'timeline'}
-              href={`/patients/${patientId}/timeline`}
-            />
-            <UnderlineTab
-              messageId="patient.patientInfo"
-              href={`/patients/${patientId}/member-info`}
-              selected={tab === 'member-info'}
-            />
-            <UnderlineTab
-              messageId="patient.patientTeam"
-              href={`/patients/${patientId}/team`}
-              selected={tab === 'team'}
-            />
-          </UnderlineTabs>
+          <div className={styles.header}>
+            <PatientIntakeChecklist patientId={patientId} />
+            <UnderlineTabs color="white" className={styles.tabs} >
+              <UnderlineTab
+                messageId="patient.threeSixty"
+                href={`/patients/${patientId}/360`}
+                selected={tab === '360'}
+              />
+              <UnderlineTab
+                messageId="patient.map"
+                selected={tab === 'map'}
+                href={`/patients/${patientId}/map/active`}
+              />
+              <UnderlineTab
+                messageId="patient.timeline"
+                selected={tab === 'timeline'}
+                href={`/patients/${patientId}/timeline`}
+              />
+              <UnderlineTab
+                messageId="patient.patientInfo"
+                href={`/patients/${patientId}/member-info`}
+                selected={tab === 'member-info'}
+              />
+              <UnderlineTab
+                messageId="patient.patientTeam"
+                href={`/patients/${patientId}/team`}
+                selected={tab === 'team'}
+              />
+            </UnderlineTabs>
+          </div>
           <Switch>
             <Route
               exact

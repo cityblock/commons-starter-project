@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
     steps:
       - checkout
       - restore_cache:
@@ -26,7 +26,7 @@ jobs:
   test_frontend:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
     steps:
       - checkout
       - restore_cache:
@@ -44,14 +44,20 @@ jobs:
   test_api:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
-      - image: postgres:10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: postgres:10.3@sha256:6553a6de5d35c4c7626dd98833159494bd21a6a60bbb867ef77578f58b13800c
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
     steps:
       - checkout
+      - run: apt-get update && apt-get install -y sudo
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
       - restore_cache:
           keys:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
@@ -70,14 +76,20 @@ jobs:
   test_models:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
-      - image: postgres:10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: postgres:10.3@sha256:6553a6de5d35c4c7626dd98833159494bd21a6a60bbb867ef77578f58b13800c
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
     steps:
       - checkout
+      - run: apt-get update && apt-get install -y sudo
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
       - restore_cache:
           keys:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
@@ -96,7 +108,7 @@ jobs:
   deploy_staging:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
     steps:
       - checkout
       - run:
@@ -112,7 +124,7 @@ jobs:
   deploy_production:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.10
+      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
     steps:
       - checkout
       - run:

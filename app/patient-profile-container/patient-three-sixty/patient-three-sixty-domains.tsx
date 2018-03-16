@@ -57,7 +57,7 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
 
   return (
     <div className={styles.relativeContainer}>
-      <UnderlineTabs className={styles.stickyTop} >
+      <UnderlineTabs className={styles.stickyTop}>
         <UnderlineTab messageId="threeSixty.summary" selected={!history} href={routeBase} />
         <UnderlineTab
           messageId="threeSixty.history"

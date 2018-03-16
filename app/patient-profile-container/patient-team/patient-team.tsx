@@ -150,8 +150,8 @@ export class PatientTeam extends React.Component<IProps, IState> {
     ) : null;
 
     return (
-      <div className={styles.subContainer} >
-        <UnderlineTabs className={styles.stickyTop} >
+      <div className={styles.subContainer}>
+        <UnderlineTabs className={styles.stickyTop}>
           <div>
             <UnderlineTab
               messageId="patientTeam.cityblockCareTeam"

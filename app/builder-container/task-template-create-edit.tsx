@@ -150,7 +150,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         result = await editTaskTemplate({
           variables: {
             taskTemplateId: taskTemplate.id,
-            ...(omit(filtered, ['goalSuggestionTemplateId']) as any),
+            ...omit(filtered, ['goalSuggestionTemplateId']),
           },
         });
       } else {

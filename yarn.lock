@@ -191,9 +191,9 @@
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
 
-"@types/compression@0.0.35":
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/@types/compression/-/compression-0.0.35.tgz#7673a9c4b075e5194ada8c5938291015652a21e1"
+"@types/compression@0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@types/compression/-/compression-0.0.36.tgz#7646602ffbfc43ea48a8bf0b2f1d5e5f9d75c0d0"
   dependencies:
     "@types/express" "*"
 
@@ -275,9 +275,9 @@
     "@types/node" "*"
     "@types/redis" "*"
 
-"@types/lodash@4.14.104":
-  version "4.14.104"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.104.tgz#53ee2357fa2e6e68379341d92eb2ecea4b11bb80"
+"@types/lodash@4.14.105":
+  version "4.14.105"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.105.tgz#9fcc4627a1f98f8f8fce79ddb2bff4afd97e959b"
 
 "@types/mime@*":
   version "2.0.0"
@@ -357,9 +357,9 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react-router-dom@4.2.4":
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.2.4.tgz#02c43274129ffe0ac42b348f7c8c4a9a4e127c8a"
+"@types/react-router-dom@4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.2.5.tgz#a6fc921f1008567eae35244e30f34f5f7655d5f0"
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
@@ -2920,9 +2920,9 @@ css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
 
-css-loader@0.28.10:
-  version "0.28.10"
-  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.10.tgz#40282e79230f7bcb4e483efa631d670b735ebf42"
+css-loader@0.28.11:
+  version "0.28.11"
+  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.11.tgz#c3f9864a700be2711bb5a2462b2389b1a392dab7"
   dependencies:
     babel-code-frame "^6.26.0"
     css-selector-tokenizer "^0.7.0"
@@ -8515,9 +8515,9 @@ postcss-font-variant@^3.0.0:
   dependencies:
     postcss "^6.0.1"
 
-postcss-html@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/postcss-html/-/postcss-html-0.14.0.tgz#90421c382494b67c4f7c62c3a94c73fb4f4947b3"
+postcss-html@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/postcss-html/-/postcss-html-0.15.0.tgz#11ba3c07c817d0816f091fe40817a8ecd861300f"
   dependencies:
     htmlparser2 "^3.9.2"
     remark "^9.0.0"
@@ -10988,9 +10988,9 @@ stylelint-order@^0.4.4:
     postcss "^5.2.16"
     stylelint "^7.9.0"
 
-stylelint@9.1.2:
-  version "9.1.2"
-  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-9.1.2.tgz#4a503f6f32bd456e5313f4a74103634c987867ec"
+stylelint@9.1.3:
+  version "9.1.3"
+  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-9.1.3.tgz#8260f2a221b98e4afafd9b2b8a785d2e38cbb8a4"
   dependencies:
     autoprefixer "^8.0.0"
     balanced-match "^1.0.0"
@@ -11014,7 +11014,7 @@ stylelint@9.1.2:
     normalize-selector "^0.2.0"
     pify "^3.0.0"
     postcss "^6.0.16"
-    postcss-html "^0.14.0"
+    postcss-html "^0.15.0"
     postcss-less "^1.1.0"
     postcss-media-query-parser "^0.2.3"
     postcss-reporter "^5.0.0"

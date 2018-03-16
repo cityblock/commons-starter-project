@@ -139,6 +139,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 
   async onSubmit() {
     try {
+      // TODO: remove as any and use regular type checking
       this.setState({ loading: true, error: null });
       const filtered = omitBy<answerCreateMutationVariables>(this.state.answer, isNil);
       let result: {
@@ -149,7 +150,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         result = await this.props.editAnswer({
           variables: {
             answerId: this.props.answer.id,
-            ...omit(filtered, ['questionId']),
+            ...omit<any>(filtered, ['questionId']),
           },
         });
       } else {
@@ -157,7 +158,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           variables: filtered as any,
         });
       }
-      if (result.errors) {
+      if (result && result.errors) {
         this.setState({ loading: false, error: result.errors[0].message });
       } else {
         this.setState({ loading: false });

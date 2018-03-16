@@ -71,7 +71,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
         <div className={styles.mainBody}>
           <div className={styles.header}>
             <PatientIntakeChecklist patientId={patientId} />
-            <UnderlineTabs color="white" className={styles.tabs} >
+            <UnderlineTabs color="white" className={styles.tabs}>
               <UnderlineTab
                 messageId="patient.threeSixty"
                 href={`/patients/${patientId}/360`}

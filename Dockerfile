@@ -1,4 +1,4 @@
-FROM node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+FROM node:8.10.0@sha256:7817307d55cd400beba896d051dc5324f1c02bf20daefb13e239c4423c8c2207
 
 RUN apt-get update && apt-get install -y curl apt-transport-https
 

@@ -109,6 +109,15 @@ export interface IScreeningToolPopupOptions {
   patientId: string;
 }
 
+export interface IPatientPhotoPopup {
+  name: 'PATIENT_PHOTO';
+  options: IPatientPhotoPopupOptions;
+}
+
+export interface IPatientPhotoPopupOptions {
+  patientId: string;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -127,6 +136,7 @@ export type IState =
   | IComputedFieldFlagPopup
   | IQuickCallPopup
   | IScreeningToolPopup
+  | IPatientPhotoPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

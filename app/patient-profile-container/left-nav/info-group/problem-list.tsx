@@ -10,6 +10,7 @@ interface IProps {
   onClick: (clicked: Selected) => void;
 }
 
+// TODO: Remove hard coded values
 const ProblemList: React.StatelessComponent<IProps> = (props: IProps) => {
   const { isOpen, onClick } = props;
 

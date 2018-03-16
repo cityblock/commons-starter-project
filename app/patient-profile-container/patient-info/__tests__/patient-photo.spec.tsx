@@ -6,11 +6,18 @@ import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patientPhoto } from '../../../shared/util/test-data';
-import PatientPhoto from '../patient-photo';
+import { PatientPhoto } from '../patient-photo';
 
 describe('Renders Patient Photo Component', () => {
   const onChange = () => true;
-  const wrapper = shallow(<PatientPhoto patientPhoto={patientPhoto} onChange={onChange} />);
+  const wrapper = shallow(
+    <PatientPhoto
+      patientPhoto={patientPhoto}
+      onChange={onChange}
+      openPatientPhotoPopup={() => true as any}
+      patientId="sansaStark"
+    />,
+  );
 
   it('renders section', () => {
     expect(wrapper.find(Avatar)).toHaveLength(1);

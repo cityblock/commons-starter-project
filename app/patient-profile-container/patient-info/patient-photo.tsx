@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
+import { openPopup } from '../../actions/popup-action';
 import Avatar from '../../shared/library/avatar/avatar';
 import Button from '../../shared/library/button/button';
 import Checkbox from '../../shared/library/checkbox/checkbox';
@@ -12,12 +14,19 @@ export interface IPatientPhoto {
   hasDeclinedPhotoUpload?: boolean | null;
 }
 
+interface IDispatchProps {
+  openPatientPhotoPopup: () => void;
+}
+
 interface IProps {
+  patientId: string;
   patientPhoto: IPatientPhoto;
   onChange: (fields: IEditableFieldState) => void;
 }
 
-export class PatientPhoto extends React.Component<IProps> {
+type allProps = IProps & IDispatchProps;
+
+export class PatientPhoto extends React.Component<allProps> {
   handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { onChange } = this.props;
     const { name, checked } = event.target;
@@ -25,7 +34,7 @@ export class PatientPhoto extends React.Component<IProps> {
   };
 
   handleTakePhotoClick = () => {
-    // TODO
+    this.props.openPatientPhotoPopup();
   };
 
   handleUploadClick = () => {
@@ -80,4 +89,18 @@ export class PatientPhoto extends React.Component<IProps> {
   }
 }
 
-export default PatientPhoto;
+const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+  return {
+    openPatientPhotoPopup: () =>
+      dispatch(
+        openPopup({
+          name: 'PATIENT_PHOTO',
+          options: {
+            patientId: ownProps.patientId,
+          },
+        }),
+      ),
+  };
+};
+
+export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(PatientPhoto);

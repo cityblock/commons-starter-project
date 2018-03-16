@@ -12,6 +12,7 @@ interface IProps {
   patient: FullPatientForProfileFragment;
 }
 
+// TODO: Remove hard coded values
 const Plan: React.StatelessComponent<IProps> = (props: IProps) => {
   const { isOpen, onClick } = props;
 

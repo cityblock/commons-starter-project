@@ -1,0 +1,27 @@
+.popup {
+  border-radius: var(--big-border-radius);
+}
+
+.photo,
+.video {
+  width: 600px;
+  height: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.faceOutline {
+  height: 250px;
+  width: 200px;
+  top: 100px;
+  left: 200px;
+  border-radius: 50%;
+  position: absolute;
+  border: 2px dashed var(--white-color);
+}
+
+.spinner {
+  margin-top: var(--gutter);
+}

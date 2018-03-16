@@ -51,7 +51,11 @@ export class PatientDemographics extends React.Component<allProps> {
           routeBase={routeBase}
           ref="advancedDirectives"
         />
-        <PatientPhoto patientPhoto={patient.photo} onChange={onChange} ref="photo" />
+        <PatientPhoto
+          patientPhoto={patient.photo}
+          onChange={onChange}
+          patientId={patient.basic.patientId}
+        />
       </div>
     );
   }

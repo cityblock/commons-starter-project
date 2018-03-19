@@ -169,12 +169,8 @@ export default async (
   }
 
   /* istanbul ignore next */
-  if (config.GCLOUD_PROJECT && config.GCLOUD_API_KEY) {
-    const errors = stackDriver({
-      projectId: config.GCLOUD_PROJECT,
-      key: config.GCLOUD_API_KEY,
-      serviceContext: { service: 'commons' },
-    });
+  if (config.GCP_CREDS) {
+    const errors = stackDriver({ credentials: JSON.parse(String(config.GCP_CREDS)) });
     process.on('uncaughtException', e => {
       // Write the error to stderr.
       console.error(e);

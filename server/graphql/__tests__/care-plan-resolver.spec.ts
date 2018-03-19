@@ -1,8 +1,12 @@
 import { subHours } from 'date-fns';
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
+import * as carePlanSuggestionAccept from '../../../app/graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import * as carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import * as getCarePlanSuggestionsForPatient from '../../../app/graphql/queries/get-patient-care-plan-suggestions.graphql';
+import * as getCarePlanForPatient from '../../../app/graphql/queries/get-patient-care-plan.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
@@ -133,6 +137,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('care plan resolver tests', () => {
   let db: Db;
   const permissions = 'green';
+  const carePlanForPatientQuery = print(getCarePlanForPatient);
+  const carePlanSuggestionsForPatientQuery = print(getCarePlanSuggestionsForPatient);
+  const carePlanSuggestionAcceptMutation = print(carePlanSuggestionAccept);
+  const carePlanSuggestionDismissMutation = print(carePlanSuggestionDismiss);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -166,26 +174,18 @@ describe('care plan resolver tests', () => {
           },
           txn,
         );
-        const query = `{
-          carePlanForPatient(patientId: "${patient.id}") {
-            concerns {
-              id
-              concern {
-                title
-              }
-            }
-            goals {
-              id
-              title
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions,
+            txn,
+          },
+          { patientId: patient.id },
+        );
         expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
           concerns: [
             { concern: { title: 'Administrative Tasks' } },
@@ -224,27 +224,18 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const query = `{
-          carePlanForPatient(patientId: "${patient.id}") {
-            concerns {
-              id
-              concern {
-                title
-              }
-            }
-            goals {
-              id
-              title
-            }
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id },
+        );
 
         expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
           concerns: [
@@ -260,26 +251,18 @@ describe('care plan resolver tests', () => {
       await transaction(PatientConcern.knex(), async txn => {
         const { patient, user } = await setup(txn);
 
-        const query = `{
-          carePlanForPatient(patientId: "${patient.id}", glassBreakId: "${uuid()}") {
-            concerns {
-              id
-              concern {
-                title
-              }
-            }
-            goals {
-              id
-              title
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id, glassBreakId: uuid() },
+        );
 
         expect(result.errors![0].message).toBe(
           'You must break the glass again to view this patient. Please refresh the page.',
@@ -305,26 +288,18 @@ describe('care plan resolver tests', () => {
           .where({ userId: user.id, patientId: patient.id })
           .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-        const query = `{
-          carePlanForPatient(patientId: "${patient.id}", glassBreakId: "${patientGlassBreak.id}") {
-            concerns {
-              id
-              concern {
-                title
-              }
-            }
-            goals {
-              id
-              title
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id, glassBreakId: patientGlassBreak.id },
+        );
 
         expect(result.errors![0].message).toBe(
           'You must break the glass again to view this patient. Please refresh the page.',
@@ -337,26 +312,18 @@ describe('care plan resolver tests', () => {
         const { patient, clinic } = await setup(txn);
         const user2 = await User.create(createMockUser(12, clinic.id), txn);
 
-        const query = `{
-          carePlanForPatient(patientId: "${patient.id}") {
-            concerns {
-              id
-              concern {
-                title
-              }
-            }
-            goals {
-              id
-              title
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user2.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanForPatientQuery,
+          null,
+          {
+            db,
+            userId: user2.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id },
+        );
 
         const error = `User ${user2.id} cannot automatically break the glass for patient ${
           patient.id
@@ -399,36 +366,18 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const query = `{
-          carePlanSuggestionsForPatient(patientId: "${patient.id}") {
-            id
-            concern {
-              id
-            }
-            goalSuggestionTemplate {
-              id
-            }
-            riskAreaAssessmentSubmission {
-              id
-              riskArea {
-                id
-                title
-              }
-            }
-            computedField {
-              id
-            }
-            patientScreeningToolSubmission {
-              id
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanSuggestionsForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions,
+            txn,
+          },
+          { patientId: patient.id },
+        );
 
         const clonedResult = cloneDeep(result.data!.carePlanSuggestionsForPatient);
         const suggestions = clonedResult.map((suggestion: any) => ({
@@ -486,23 +435,18 @@ describe('care plan resolver tests', () => {
       await transaction(CarePlanSuggestion.knex(), async txn => {
         const { patient, user } = await setup(txn);
 
-        const query = `{
-          carePlanSuggestionsForPatient(patientId: "${patient.id}", glassBreakId: "${uuid()}") {
-            id
-            concern {
-              id
-            }
-            goalSuggestionTemplate {
-              id
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanSuggestionsForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id, glassBreakId: uuid() },
+        );
 
         expect(result.errors![0].message).toBe(
           'You must break the glass again to view this patient. Please refresh the page.',
@@ -528,25 +472,18 @@ describe('care plan resolver tests', () => {
           .where({ userId: user.id, patientId: patient.id })
           .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-        const query = `{
-          carePlanSuggestionsForPatient(patientId: "${patient.id}", glassBreakId: "${
-          patientGlassBreak.id
-        }") {
-            id
-            concern {
-              id
-            }
-            goalSuggestionTemplate {
-              id
-            }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanSuggestionsForPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions: 'blue',
+            txn,
+          },
+          { patientId: patient.id, glassBreakId: patientGlassBreak.id },
+        );
 
         expect(result.errors![0].message).toBe(
           'You must break the glass again to view this patient. Please refresh the page.',
@@ -571,20 +508,21 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const mutation = `mutation {
-          carePlanSuggestionDismiss(
-            input: { carePlanSuggestionId: "${suggestion1.id}", dismissedReason: "Because" }
-          ) {
-            dismissedById
-            dismissedReason
-          }
-        }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          carePlanSuggestionDismissMutation,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          {
+            carePlanSuggestionId: suggestion1.id,
+            dismissedReason: 'Because',
+          },
+        );
         expect(cloneDeep(result.data!.carePlanSuggestionDismiss)).toMatchObject({
           dismissedById: user.id,
           dismissedReason: 'Because',
@@ -620,25 +558,26 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const mutation = `mutation {
-          carePlanSuggestionAccept(
-            input: { carePlanSuggestionId: "${suggestion1.id}" }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: suggestion1.id,
+          },
+        );
 
-        const mutation2 = `mutation {
-          carePlanSuggestionAccept(
-            input: {
-              carePlanSuggestionId: "${suggestion2.id}", startedAt: "${new Date().toISOString()}"
-            }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation2, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: suggestion2.id,
+            startedAt: new Date().toISOString(),
+          },
+        );
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         // Note: Index starts at 1 because the first concern is Admin Tasks
@@ -672,14 +611,16 @@ describe('care plan resolver tests', () => {
         );
         const concern2 = await Concern.create({ title: 'Concern 2' }, txn);
 
-        const mutation = `mutation {
-          carePlanSuggestionAccept(
-            input: { carePlanSuggestionId: "${suggestion.id}", concernId: "${concern2.id}" }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: suggestion.id,
+            concernId: concern2.id,
+          },
+        );
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
@@ -726,14 +667,16 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const mutation = `mutation {
-          carePlanSuggestionAccept(
-            input: { carePlanSuggestionId: "${goalSuggestion.id}", concernId: "${concern.id}" }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: goalSuggestion.id,
+            concernId: concern.id,
+          },
+        );
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
@@ -778,17 +721,16 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const mutation = `mutation {
-          carePlanSuggestionAccept(
-            input: {
-              carePlanSuggestionId: "${suggestion.id}",
-              patientConcernId: "${patientConcern.id}"
-            }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: suggestion.id,
+            patientConcernId: patientConcern.id,
+          },
+        );
 
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
         expect(patientGoals.map(g => g.goalSuggestionTemplateId)).toContain(
@@ -831,18 +773,17 @@ describe('care plan resolver tests', () => {
           txn,
         );
 
-        const mutation = `mutation {
-          carePlanSuggestionAccept(
-            input: {
-              carePlanSuggestionId: "${suggestion.id}",
-              patientConcernId: "${patientConcern.id}",
-              taskTemplateIds: ["${taskTemplate.id}"]
-            }
-          ) {
-            id
-          }
-        }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+        await graphql(
+          schema,
+          carePlanSuggestionAcceptMutation,
+          null,
+          { db, permissions, userId: user.id, txn },
+          {
+            carePlanSuggestionId: suggestion.id,
+            patientConcernId: patientConcern.id,
+            taskTemplateIds: [taskTemplate.id],
+          },
+        );
 
         const patientTasks = await Task.getPatientTasks(
           patient.id,

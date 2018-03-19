@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
     steps:
       - checkout
       - restore_cache:
@@ -26,7 +26,7 @@ jobs:
   test_frontend:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
     steps:
       - checkout
       - restore_cache:
@@ -44,8 +44,8 @@ jobs:
   test_api:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
-      - image: postgres:10.3@sha256:6553a6de5d35c4c7626dd98833159494bd21a6a60bbb867ef77578f58b13800c
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
+      - image: postgres:10.3@sha256:e2688f79c920bbd5bcb8e1ed54aef522c7e93a1a5eab32e10b4b020d49b4b925
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
@@ -76,8 +76,8 @@ jobs:
   test_models:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
-      - image: postgres:10.3@sha256:6553a6de5d35c4c7626dd98833159494bd21a6a60bbb867ef77578f58b13800c
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
+      - image: postgres:10.3@sha256:e2688f79c920bbd5bcb8e1ed54aef522c7e93a1a5eab32e10b4b020d49b4b925
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
@@ -108,7 +108,7 @@ jobs:
   deploy_staging:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
     steps:
       - checkout
       - run:
@@ -124,7 +124,7 @@ jobs:
   deploy_production:
     working_directory: ~/repo
     docker:
-      - image: node:8.10.0@sha256:8654f499db990f00f9b670c7d284b210a3c7bc92225947d39532c01e67f53866
+      - image: node:8.10.0@sha256:aa231490fa207f5d255007d3187a3b4e2671eb596837d84b5138505c0095267a
     steps:
       - checkout
       - run:

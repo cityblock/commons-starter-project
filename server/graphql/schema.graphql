@@ -341,6 +341,9 @@ type PatientContact implements uniqueId {
   phone: Phone!
   address: Address
   email: Email
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
 }
 
 # ComputedPatientStatus
@@ -1535,6 +1538,11 @@ input PatientContactCreateInput {
   email: EmailCreateInput
 }
 
+# params for deleting a patient contact and all associated models in the db
+input PatientContactDeleteInput {
+  patientContactId: ID!
+}
+
 # params for editing a patient contact in the db
 input PatientContactEditInput {
   patientContactId: ID!
@@ -2235,6 +2243,8 @@ type RootMutationType {
   patientInfoEdit(input: PatientInfoEditInput): PatientInfo
   # Create patient contact
   patientContactCreate(input: PatientContactCreateInput): PatientContact
+  # Delete patient contact
+  patientContactDelete(input: PatientContactDeleteInput): PatientContact
   # Edit fields on patient contact stored in the db
   patientContactEdit(input: PatientContactEditInput): PatientContact
   # Edit a patient need to know

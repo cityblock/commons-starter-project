@@ -10,12 +10,15 @@ import DisplayCard from '../display-card';
 
 describe('Renders Advanced Directives Component', () => {
   const onChange = () => true;
+  const patientContactDelete = jest.fn();
+
   const wrapper = shallow(
     <AdvancedDirectives
       advancedDirectives={advancedDirectives}
       healthcareProxies={[]}
       onChange={onChange}
       routeBase={'/foo/bar'}
+      patientContactDelete={patientContactDelete}
     />,
   );
 

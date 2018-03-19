@@ -6,6 +6,7 @@ import {
   IEmailCreateInput,
   IEmailInput,
   IPatientContactCreateInput,
+  IPatientContactDeleteInput,
   IPatientContactEditInput,
   IPhoneCreateInput,
   IPhoneInput,
@@ -29,6 +30,10 @@ export interface IPatientContactCreateOptions {
 
 export interface IPatientContactEditOptions {
   input: IPatientContactEditInput;
+}
+
+export interface IPatientContactDeleteOptions {
+  input: IPatientContactDeleteInput;
 }
 
 export interface IQuery {
@@ -55,6 +60,37 @@ export async function resolvePatientContactsForPatient(
 
   logger.log(`GET patient contacts for ${patientId} by ${userId}`, 2);
   return PatientContact.getAllForPatient(patientId, txn);
+}
+
+export async function patientContactDelete(
+  source: any,
+  { input }: IPatientContactDeleteOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['patientContactDelete']> {
+  const patientContact = await PatientContact.get(input.patientContactId, txn);
+
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientContact.patientId);
+  logger.log(`DELETE patient contact ${input.patientContactId} by ${userId}`, 2);
+  const { id, address, email, phone } = patientContact;
+  const promises: Array<Promise<any>> = [];
+
+  if (address) {
+    await PatientContactAddress.delete({ addressId: address.id, patientContactId: id }, txn);
+    promises.push(Address.delete(address.id, txn));
+  }
+  if (email) {
+    await PatientContactEmail.delete({ emailId: email.id, patientContactId: id }, txn);
+    promises.push(Email.delete(email.id, txn));
+  }
+  if (phone) {
+    await PatientContactPhone.delete({ phoneId: phone.id, patientContactId: id }, txn);
+    promises.push(Phone.delete(phone.id, txn));
+  }
+
+  await Promise.all(promises);
+  const deletedPatientContact = await PatientContact.delete(id, userId!, txn);
+  await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
+  return deletedPatientContact;
 }
 
 export async function patientContactCreate(

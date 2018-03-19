@@ -174,8 +174,8 @@ describe('patient info model', () => {
     });
   });
 
-  describe('edit', async () => {
-    it('should edit patient info', async () => {
+  describe('delete', async () => {
+    it('should delete patient contact', async () => {
       await transaction(PatientContact.knex(), async txn => {
         const { patient, patientContact, user, phone } = await setup(txn);
         const result = await PatientContact.edit(
@@ -205,6 +205,30 @@ describe('patient info model', () => {
           email: null,
           address: null,
           description: 'some magical thing',
+        });
+      });
+    });
+  });
+
+  describe('delete', async () => {
+    it('should edit patient info', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user, patientContact } = await setup(txn);
+        const result = await PatientContact.delete(
+          patientContact.id,
+          user.id,
+          txn,
+        );
+
+        expect(result).toMatchObject({
+          patientId: patient.id,
+          firstName: 'harry',
+          lastName: 'potter',
+          relationToPatient: 'wizarding tutor',
+          isEmergencyContact: false,
+          isHealthcareProxy: false,
+          canContact: false,
+          description: 'some contact description',
         });
       });
     });

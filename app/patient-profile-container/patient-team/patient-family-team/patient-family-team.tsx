@@ -1,7 +1,13 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as patientContactsQuery from '../../../graphql/queries/get-patient-contacts.graphql';
-import { getPatientContactsQuery, FullPatientContactFragment } from '../../../graphql/types';
+import * as patientContactDeleteMutationGraphql from '../../../graphql/queries/patient-contact-delete-mutation.graphql';
+import {
+  getPatientContactsQuery,
+  patientContactDeleteMutation,
+  patientContactDeleteMutationVariables,
+  FullPatientContactFragment,
+} from '../../../graphql/types';
 import EditPatientContactModal from '../../../shared/patient-contact-modal/edit-patient-contact-modal';
 import * as styles from '../css/patient-team.css';
 import RequiredPlaceholder from '../required-placeholder';
@@ -14,6 +20,9 @@ interface IProps {
 
 interface IGraphqlProps {
   patientContacts?: getPatientContactsQuery['patientContacts'];
+  patientContactDelete: (
+    options: { variables: patientContactDeleteMutationVariables },
+  ) => { data: patientContactDeleteMutation };
   isLoading?: boolean;
   error?: string | null;
 }
@@ -32,8 +41,13 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
     this.state = { isEditModalVisible: false };
   }
 
-  handleRemove = (patientContactId: string) => {
-    // TODO: implement deleting
+  handleRemove = async (patientContactId: string) => {
+    const { patientContactDelete } = this.props;
+    try {
+      await patientContactDelete({ variables: { patientContactId } });
+    } catch (err) {
+      // TODO: handle errors
+    }
   };
 
   handleEditSuccess = () => {
@@ -110,15 +124,23 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientContactsQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.patientId,
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(patientContactDeleteMutationGraphql as any, {
+    name: 'patientContactDelete',
+    options: {
+      refetchQueries: ['getPatientContacts'],
     },
   }),
-  props: ({ data }) => ({
-    isLoading: data ? data.loading : false,
-    error: data ? data.error : null,
-    patientContacts: data ? (data as any).patientContacts : null,
+  graphql<IGraphqlProps, IProps, allProps>(patientContactsQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      isLoading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patientContacts: data ? (data as any).patientContacts : null,
+    }),
   }),
-})(PatientFamilyTeam);
+)(PatientFamilyTeam);

@@ -145,6 +145,7 @@ export default class PatientContact extends Model {
       .eager(EAGER_QUERY)
       .modifyEager('address', builder => builder.where('address.deletedAt', null))
       .modifyEager('email', builder => builder.where('email.deletedAt', null))
+      .where({ deletedAt: null })
       .findById(patientContactId);
 
     if (!patientContact) {
@@ -182,7 +183,7 @@ export default class PatientContact extends Model {
       .eager(EAGER_QUERY)
       .modifyEager('address', builder => builder.where('address.deletedAt', null))
       .modifyEager('email', builder => builder.where('email.deletedAt', null))
-      .where({ patientId, isEmergencyContact: true })
+      .where({ patientId, isEmergencyContact: true, deletedAt: null })
       .orderBy('createdAt', 'asc');
   }
 
@@ -206,6 +207,22 @@ export default class PatientContact extends Model {
       .patchAndFetchById(patientContactId, patientContact);
 
     return updatedPatientContact;
+  }
+
+  static async delete(patientContactId: string, updatedById: string, txn: Transaction): Promise<PatientContact> {
+    await this.query(txn)
+      .where({ id: patientContactId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString(), updatedById });
+
+    const deleted = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(patientContactId);
+
+    if (!deleted) {
+      return Promise.reject(`No such patient contact: ${patientContactId}`);
+    }
+
+    return deleted;
   }
 }
 /* tslint:enable:member-ordering */

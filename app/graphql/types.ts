@@ -2546,6 +2546,9 @@ export interface getPatientContactHealthcareProxiesQuery {
       id: string,
       phoneNumber: string,
     },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
   } > | null,
 };
 
@@ -2582,6 +2585,9 @@ export interface getPatientContactsQuery {
       id: string,
       phoneNumber: string,
     },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
   } > | null,
 };
 
@@ -6307,6 +6313,48 @@ export interface patientContactCreateMutation {
       id: string,
       phoneNumber: string,
     },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
+  } | null,
+};
+
+export interface patientContactDeleteMutationVariables {
+  patientContactId: string,
+};
+
+export interface patientContactDeleteMutation {
+  // Delete patient contact
+  patientContactDelete:  {
+    id: string,
+    patientId: string,
+    relationToPatient: string,
+    firstName: string,
+    lastName: string,
+    isEmergencyContact: boolean,
+    isHealthcareProxy: boolean,
+    canContact: boolean,
+    description: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
   } | null,
 };
 
@@ -6353,6 +6401,9 @@ export interface patientContactEditMutation {
       id: string,
       phoneNumber: string,
     },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
   } | null,
 };
 
@@ -10714,6 +10765,9 @@ export interface FullPatientContactFragment {
     id: string,
     phoneNumber: string,
   },
+  createdAt: string | null,
+  updatedAt: string | null,
+  deletedAt: string | null,
 };
 
 export interface FullPatientDataFlagFragment {

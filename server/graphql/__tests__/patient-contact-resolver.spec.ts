@@ -32,12 +32,43 @@ interface ISetup {
   user: User;
 }
 
+interface ISetupContact {
+  patientContact: PatientContact;
+  phone: Phone;
+}
+
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return { patient, user };
+}
+
+async function setupPatientContact(patientId: string, userId: string, txn: Transaction): Promise<ISetupContact> {
+  const phone = await Phone.create(createMockPhone(userId), txn);
+  const address = await Address.create(createMockAddress(userId), txn);
+  const email = await Email.create(createMockEmail(userId), txn);
+
+  const patientContact = await PatientContact.create(
+    createMockPatientContact(patientId, userId, phone, { email, address }),
+    txn,
+  );
+
+  await PatientContactPhone.create(
+    { phoneId: phone.id, patientContactId: patientContact.id },
+    txn,
+  );
+  await PatientContactEmail.create(
+    { emailId: email.id, patientContactId: patientContact.id },
+    txn,
+  );
+  await PatientContactAddress.create(
+    { addressId: address.id, patientContactId: patientContact.id },
+    txn,
+  );
+
+  return { patientContact, phone };
 }
 
 describe('patient info model', () => {
@@ -356,6 +387,45 @@ describe('patient info model', () => {
     });
   });
 
+  describe('delete', async () => {
+    it('should delete a patient contact and all associated models', async () => {
+      await transaction(PatientContact.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const { patientContact } = await setupPatientContact(patient.id, user.id, txn);
+
+        const query = `mutation {
+          patientContactDelete(input: {
+            patientContactId: "${patientContact.id}",
+          }) { deletedAt }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientContactDelete).deletedAt).not.toBeFalsy();
+        expect(log).toBeCalled();
+
+        const addresses = await PatientContactAddress.getForPatientContact(patientContact.id, txn);
+        expect(addresses).toHaveLength(0);
+
+        const emails = await PatientContactEmail.getForPatientContact(patientContact.id, txn);
+        expect(emails).toHaveLength(0);
+
+        const phones = await PatientContactPhone.getForPatientContact(patientContact.id, txn);
+        expect(phones).toHaveLength(0);
+
+        await expect(PatientContact.get(patientContact.id, txn)).rejects.toMatch(
+          `No such patient contact: ${patientContact.id}`,
+        );
+      });
+    });
+  });
+
   describe('edit', async () => {
     it('should edit patient contact and create email and address', async () => {
       await transaction(PatientContact.knex(), async txn => {
@@ -496,27 +566,7 @@ describe('patient info model', () => {
     it('should edit patient contact and update email and address', async () => {
       await transaction(PatientContact.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const phone = await Phone.create(createMockPhone(user.id), txn);
-        const address = await Address.create(createMockAddress(user.id), txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
-
-        const patientContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone, { email, address }),
-          txn,
-        );
-
-        await PatientContactPhone.create(
-          { phoneId: phone.id, patientContactId: patientContact.id },
-          txn,
-        );
-        await PatientContactEmail.create(
-          { emailId: email.id, patientContactId: patientContact.id },
-          txn,
-        );
-        await PatientContactAddress.create(
-          { addressId: address.id, patientContactId: patientContact.id },
-          txn,
-        );
+        const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
 
         const query = `mutation {
           patientContactEdit(input: {
@@ -593,27 +643,7 @@ describe('patient info model', () => {
     it('should edit patient contact and delete email and address', async () => {
       await transaction(PatientContact.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const phone = await Phone.create(createMockPhone(user.id), txn);
-        const address = await Address.create(createMockAddress(user.id), txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
-
-        const patientContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone, { email, address }),
-          txn,
-        );
-
-        await PatientContactPhone.create(
-          { phoneId: phone.id, patientContactId: patientContact.id },
-          txn,
-        );
-        await PatientContactEmail.create(
-          { emailId: email.id, patientContactId: patientContact.id },
-          txn,
-        );
-        await PatientContactAddress.create(
-          { addressId: address.id, patientContactId: patientContact.id },
-          txn,
-        );
+        const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
 
         const query = `mutation {
           patientContactEdit(input: {

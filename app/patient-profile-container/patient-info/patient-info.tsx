@@ -322,6 +322,7 @@ export default compose(
       variables: {
         patientId: props.match.params.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

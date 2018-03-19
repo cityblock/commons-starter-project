@@ -1289,6 +1289,9 @@ declare module 'schema' {
     phone: IPhone;
     address: IAddress | null;
     email: IEmail | null;
+    createdAt: string | null;
+    updatedAt: string | null;
+    deletedAt: string | null;
   }
 
   /**
@@ -2383,6 +2386,11 @@ declare module 'schema' {
     patientContactCreate: IPatientContact | null;
 
     /**
+     * Delete patient contact
+     */
+    patientContactDelete: IPatientContact | null;
+
+    /**
      * Edit fields on patient contact stored in the db
      */
     patientContactEdit: IPatientContact | null;
@@ -2956,6 +2964,9 @@ declare module 'schema' {
   }
   interface IPatientContactCreateOnRootMutationTypeArguments {
     input?: IPatientContactCreateInput | null;
+  }
+  interface IPatientContactDeleteOnRootMutationTypeArguments {
+    input?: IPatientContactDeleteInput | null;
   }
   interface IPatientContactEditOnRootMutationTypeArguments {
     input?: IPatientContactEditInput | null;
@@ -3531,6 +3542,13 @@ declare module 'schema' {
     description?: string | null;
     address?: IAddressCreateInput | null;
     email?: IEmailCreateInput | null;
+  }
+
+  /**
+   * params for deleting a patient contact and all associated models in the db
+   */
+  interface IPatientContactDeleteInput {
+    patientContactId: string;
   }
 
   /**

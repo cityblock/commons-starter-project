@@ -118,6 +118,7 @@ import {
 } from './patient-consent-form-resolver';
 import {
   patientContactCreate,
+  patientContactDelete,
   patientContactEdit,
   resolveHealthcareProxiesForPatient,
   resolvePatientContactsForPatient,
@@ -444,6 +445,7 @@ const resolveFunctions = {
     emailDeleteForPatient,
     emailEdit,
     patientContactCreate,
+    patientContactDelete,
     patientContactEdit,
     patientEdit,
     patientCoreIdentityVerify,

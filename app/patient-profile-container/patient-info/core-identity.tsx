@@ -108,10 +108,19 @@ export class CoreIdentity extends React.Component<allProps, IState> {
     const { isModalVisible } = this.state;
 
     let footerState: FooterState = 'confirm';
+    let flaggedOn: string | undefined;
     if (patientDataFlags && patientDataFlags.length) {
       footerState = 'flagged';
+      patientDataFlags.forEach(flag => {
+        if (
+          (flaggedOn && flag.updatedAt && flag.updatedAt > flaggedOn) ||
+          (!flaggedOn && flag.updatedAt)
+        ) {
+          flaggedOn = flag.updatedAt;
+        }
+      });
     } else if (coreIdentityVerifiedAt) {
-      footerState = 'none';
+      footerState = 'verified';
     }
 
     const birthday = dateOfBirth ? format(new Date(dateOfBirth), 'MM/DD/YYYY') : '';
@@ -125,9 +134,12 @@ export class CoreIdentity extends React.Component<allProps, IState> {
           titleMessageId="coreIdentity.title"
           footerState={footerState}
           onFlagClick={this.handleShowModal}
-          flaggedMessageId="coreIdentity.flaggedDescription"
           onConfirmClick={this.handleConfirmIdentity}
+          flaggedMessageId="coreIdentity.flaggedDescription"
           confirmMessageId="coreIdentity.confirmDescription"
+          verifiedMessageId="coreIdentity.verifiedDescription"
+          verifiedOn={coreIdentityVerifiedAt}
+          flaggedOn={flaggedOn}
         >
           <FlaggableDisplayField
             labelMessageId="coreIdentity.firstName"

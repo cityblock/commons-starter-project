@@ -4,6 +4,7 @@ export const title: string;
 export const body: string;
 export const flagged: string;
 export const confirm: string;
+export const verified: string;
 export const footer: string;
 export const footerDescription: string;
 export const date: string;

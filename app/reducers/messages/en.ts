@@ -275,6 +275,7 @@ export const ENGLISH_TRANSLATION = {
       'Confirm that the identifying information above is correct for this member. If anything is incorrect, flag if for review by clicking on the menu in the top right.',
     'coreIdentity.flaggedDescription':
       "This member's core identifying information has been flagged for review and is pending an update in our database.",
+    'coreIdentity.verifiedDescription': "This member's core identity information has been verified",
     'coreIdentity.firstName': 'First name',
     'coreIdentity.middleName': 'Middle name',
     'coreIdentity.lastName': 'Last name',
@@ -369,6 +370,7 @@ export const ENGLISH_TRANSLATION = {
     'flaggingModal.notes': 'Notes for review:',
     'flaggingModal.notesPlaceholder': 'Include any additional info for the review...',
     'flaggableDisplayCard.flaggedOn': 'Flagged on',
+    'flaggableDisplayCard.verifiedOn': 'Verified on',
     'flaggableDisplayCard.confirm': 'Yes, info is correct',
     'flaggableDisplayCard.flag': 'Flag for review',
     'displayCard.edit': 'Edit',

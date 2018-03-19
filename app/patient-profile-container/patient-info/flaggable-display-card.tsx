@@ -8,7 +8,7 @@ import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import SmallText from '../../shared/library/small-text/small-text';
 import * as styles from './css/flaggable-display-card.css';
 
-export type FooterState = 'flagged' | 'confirm' | 'none';
+export type FooterState = 'flagged' | 'confirm' | 'none' | 'verified';
 
 interface IProps {
   children?: any;
@@ -19,6 +19,8 @@ interface IProps {
   flaggedOn?: string; // date
   onConfirmClick?: () => void;
   confirmMessageId?: string;
+  verifiedMessageId?: string;
+  verifiedOn?: string | null; // date
 }
 
 interface IState {
@@ -43,7 +45,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
       <FormattedMessage id="flaggableDisplayCard.flaggedOn">
         {(message: string) => (
           <div className={styles.date}>
-            {message} {format(new Date(flaggedOn), 'MM/DD/YYYY')}
+            {message} {format(flaggedOn, 'MMM D, YYYY')}
           </div>
         )}
       </FormattedMessage>
@@ -57,6 +59,29 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
     );
 
     return footerState === 'flagged' ? footer : null;
+  }
+
+  renderVerifiedFooter() {
+    const { footerState, verifiedMessageId, verifiedOn } = this.props;
+
+    const flaggedOnMessage = verifiedOn ? (
+      <FormattedMessage id="flaggableDisplayCard.verifiedOn">
+        {(message: string) => (
+          <div className={styles.date}>
+            {message} {format(verifiedOn, 'MMM D, YYYY')}
+          </div>
+        )}
+      </FormattedMessage>
+    ) : null;
+
+    const footer = (
+      <div className={classNames(styles.footer, styles.flagged)}>
+        <SmallText messageId={verifiedMessageId} color="white" size="medium" />
+        {flaggedOnMessage}
+      </div>
+    );
+
+    return footerState === 'verified' ? footer : null;
   }
 
   renderConfirmFooter() {
@@ -95,6 +120,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
     const containerStyles = classNames(styles.container, {
       [styles.confirm]: footerState === 'confirm',
       [styles.flagged]: footerState === 'flagged',
+      [styles.verified]: footerState === 'verified',
     });
 
     return (
@@ -118,6 +144,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
         <div className={styles.body}>{children}</div>
         {this.renderFlaggedFooter()}
         {this.renderConfirmFooter()}
+        {this.renderVerifiedFooter()}
       </div>
     );
   }

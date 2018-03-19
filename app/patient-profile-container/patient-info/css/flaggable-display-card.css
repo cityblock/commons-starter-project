@@ -33,22 +33,30 @@
   border-color: var(--red-color);
 }
 
+.container.verified {
+  border-color: var(--green-color);
+}
+
 .footer {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: var(--extra-small-gutter) var(--medium-gutter);
+  padding: 15px var(--medium-gutter);
 }
 
 .flagged .footer {
   background-color: var(--yellow-color);
-  padding: 15px var(--medium-gutter);
 }
 
 .confirm .footer {
   background-color: var(--red-color);
+  padding: var(--extra-small-gutter) var(--medium-gutter);
+}
+
+.verified .footer {
+  background-color: var(--green-color);
 }
 
 .footerDescription {
@@ -57,7 +65,9 @@
 }
 
 .date {
-  color: gray;
+  color: var(--gray-font-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
 }
 
 .button {

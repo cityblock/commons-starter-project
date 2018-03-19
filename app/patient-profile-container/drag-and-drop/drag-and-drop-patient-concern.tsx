@@ -38,11 +38,9 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
           if (!provided.dragHandleProps) {
             return onClick;
           }
-          // creating a new onClick function that calls our onClick
-          // event as well as the provided one.
+          // creating a new onClick function that calls our onClick event
           return (event?: React.MouseEvent<HTMLDivElement>) => {
             if (event) {
-              provided.dragHandleProps!.onClick(event);
               onClick();
             }
           };

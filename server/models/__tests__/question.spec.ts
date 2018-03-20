@@ -34,9 +34,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('question model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Question.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -44,165 +55,275 @@ describe('question model', () => {
   });
 
   it('creates and gets a question', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
+    const { riskArea } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      expect(question).toMatchObject({
+    const question = await Question.create(
+      {
         title: 'testing?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
-      });
-      expect(await Question.get(question.id, txn)).toMatchObject({
-        title: 'testing?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        order: 1,
-      });
+      },
+      txn,
+    );
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id, txn)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 1,
     });
   });
 
   it('creates and gets a question for a screening tool', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { screeningTool } = await setup(txn);
+    const { screeningTool } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          screeningToolId: screeningTool.id,
-          type: 'screeningTool',
-          order: 1,
-        },
-        txn,
-      );
-      expect(question).toMatchObject({
+    const question = await Question.create(
+      {
         title: 'testing?',
         answerType: 'dropdown',
         screeningToolId: screeningTool.id,
+        type: 'screeningTool',
         order: 1,
-      });
-      expect(await Question.get(question.id, txn)).toMatchObject({
-        title: 'testing?',
-        answerType: 'dropdown',
-        screeningToolId: screeningTool.id,
-        order: 1,
-      });
+      },
+      txn,
+    );
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id, txn)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
     });
   });
 
   it('creates and gets a question for a progress note template', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { progressNoteTemplate } = await setup(txn);
+    const { progressNoteTemplate } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          progressNoteTemplateId: progressNoteTemplate.id,
-          type: 'progressNoteTemplate',
-          order: 1,
-        },
-        txn,
-      );
-      expect(question).toMatchObject({
+    const question = await Question.create(
+      {
         title: 'testing?',
         answerType: 'dropdown',
         progressNoteTemplateId: progressNoteTemplate.id,
+        type: 'progressNoteTemplate',
         order: 1,
-      });
-      expect(await Question.get(question.id, txn)).toMatchObject({
-        title: 'testing?',
-        answerType: 'dropdown',
-        progressNoteTemplateId: progressNoteTemplate.id,
-        order: 1,
-      });
+      },
+      txn,
+    );
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id, txn)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      order: 1,
     });
   });
 
   it('creates and gets a computed field question and auto-sets answerType', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
+    const { riskArea } = await setup(txn);
 
-      const computedField = await ComputedField.create(
-        {
-          label: 'Computed Field',
-          slug: 'computed-field',
-          dataType: 'boolean',
-        },
-        txn,
-      );
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-          computedFieldId: computedField.id,
-        },
-        txn,
-      );
-      expect(question).toMatchObject({
-        title: 'testing?',
-        answerType: 'radio', // answerType gets overwritten with radio for computedField questions
-        riskAreaId: riskArea.id,
-        order: 1,
-      });
-      expect(await Question.get(question.id, txn)).toMatchObject({
-        title: 'testing?',
-        answerType: 'radio',
-        riskAreaId: riskArea.id,
-        order: 1,
-      });
-      expect(question.computedField).toEqual(computedField);
-    });
-  });
-
-  it('creates a question with an "other" answer', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-          hasOtherTextAnswer: true,
-        },
-        txn,
-      );
-      const answers = await Answer.getAllForQuestion(question.id, txn);
-      expect(answers.length).toEqual(1);
-      expect(question.otherTextAnswerId).toEqual(answers[0].id);
-      expect(await Question.get(question.id, txn)).toMatchObject({
+    const computedField = await ComputedField.create(
+      {
+        label: 'Computed Field',
+        slug: 'computed-field',
+        dataType: 'boolean',
+      },
+      txn,
+    );
+    const question = await Question.create(
+      {
         title: 'testing?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
-        otherTextAnswerId: answers[0].id,
-      });
+        computedFieldId: computedField.id,
+      },
+      txn,
+    );
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'radio', // answerType gets overwritten with radio for computedField questions
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id, txn)).toMatchObject({
+      title: 'testing?',
+      answerType: 'radio',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    expect(question.computedField).toEqual(computedField);
+  });
+
+  it('creates a question with an "other" answer', async () => {
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        hasOtherTextAnswer: true,
+      },
+      txn,
+    );
+    const answers = await Answer.getAllForQuestion(question.id, txn);
+    expect(answers.length).toEqual(1);
+    expect(question.otherTextAnswerId).toEqual(answers[0].id);
+    expect(await Question.get(question.id, txn)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 1,
+      otherTextAnswerId: answers[0].id,
     });
   });
 
   it('does not create an "other" answer for a non-dropdown question', async () => {
-    await transaction(Question.knex(), async txn => {
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'radio',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        hasOtherTextAnswer: true,
+      },
+      txn,
+    );
+    const fetchedQuestion = await Question.get(question.id, txn);
+    const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+    expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+    expect(fetchedAnswers.length).toEqual(0);
+  });
+
+  it('does not create an "other" answer for a computed field question', async () => {
+    const { riskArea } = await setup(txn);
+    const computedField = await ComputedField.create(
+      {
+        dataType: 'string',
+        label: 'computed field',
+        slug: 'computed-field',
+      },
+      txn,
+    );
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        computedFieldId: computedField.id,
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        hasOtherTextAnswer: true,
+      },
+      txn,
+    );
+    const fetchedQuestion = await Question.get(question.id, txn);
+    const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+    expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+    expect(fetchedAnswers.length).toEqual(0);
+  });
+
+  it('does not create an "other" answer for a screening tool question', async () => {
+    const { screeningTool } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 1,
+        hasOtherTextAnswer: true,
+      },
+      txn,
+    );
+    const fetchedQuestion = await Question.get(question.id, txn);
+    const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+    expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+    expect(fetchedAnswers.length).toEqual(0);
+  });
+
+  it('should throw an error if a question does not exist for the id', async () => {
+    const fakeId = uuid();
+    await expect(Question.get(fakeId, txn)).rejects.toMatch(`No such question: ${fakeId}`);
+  });
+
+  it('edits question', async () => {
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    expect(await Question.edit({ title: 'Testing?' }, question.id, txn)).toMatchObject({
+      title: 'Testing?',
+    });
+  });
+
+  describe('editing a question with "other" answer type', () => {
+    it('adds an "other" answer to a question that does not already have one', async () => {
       const { riskArea } = await setup(txn);
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'radio',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(fetchedAnswers.length).toEqual(0);
+
+      // Add the other answer
+      await Question.edit(
+        {
+          hasOtherTextAnswer: true,
+        },
+        question.id,
+        txn,
+      );
+
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toEqual(refetchedAnswers[0].id);
+      expect(refetchedAnswers.length).toEqual(1);
+    });
+
+    it('is a noop if adding an "other" answer to a question that already has one', async () => {
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -212,13 +333,91 @@ describe('question model', () => {
       );
       const fetchedQuestion = await Question.get(question.id, txn);
       const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
+      expect(fetchedAnswers.length).toEqual(1);
+
+      // Try to add an other answer again
+      await Question.edit(
+        {
+          hasOtherTextAnswer: true,
+        },
+        question.id,
+        txn,
+      );
+
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toEqual(fetchedAnswers[0].id);
+      expect(refetchedAnswers.length).toEqual(1);
+      expect(refetchedAnswers).toMatchObject(fetchedAnswers);
+    });
+
+    it('removes an "other" answer to a question that has one', async () => {
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+          hasOtherTextAnswer: true,
+        },
+        txn,
+      );
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
+      expect(fetchedAnswers.length).toEqual(1);
+
+      // Remove the other answer
+      await Question.edit(
+        {
+          hasOtherTextAnswer: false,
+        },
+        question.id,
+        txn,
+      );
+
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(refetchedAnswers.length).toEqual(0);
+    });
+
+    it('is a noop if removing an "other" answer from a question that lacks one', async () => {
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
       expect(fetchedQuestion.otherTextAnswerId).toBeNull();
       expect(fetchedAnswers.length).toEqual(0);
-    });
-  });
 
-  it('does not create an "other" answer for a computed field question', async () => {
-    await transaction(Question.knex(), async txn => {
+      // Try to remove a non-existent other answer
+      await Question.edit(
+        {
+          hasOtherTextAnswer: false,
+        },
+        question.id,
+        txn,
+      );
+
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(refetchedAnswers.length).toEqual(0);
+    });
+
+    it('is a noop if adding an "other" answer to a computed field question', async () => {
       const { riskArea } = await setup(txn);
       const computedField = await ComputedField.create(
         {
@@ -236,7 +435,6 @@ describe('question model', () => {
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
-          hasOtherTextAnswer: true,
         },
         txn,
       );
@@ -244,11 +442,23 @@ describe('question model', () => {
       const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
       expect(fetchedQuestion.otherTextAnswerId).toBeNull();
       expect(fetchedAnswers.length).toEqual(0);
-    });
-  });
 
-  it('does not create an "other" answer for a screening tool question', async () => {
-    await transaction(Question.knex(), async txn => {
+      // Try to add an other answer
+      await Question.edit(
+        {
+          hasOtherTextAnswer: true,
+        },
+        question.id,
+        txn,
+      );
+
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(refetchedAnswers.length).toEqual(0);
+    });
+
+    it('is a noop if adding an "other" answer to a screening tool question', async () => {
       const { screeningTool } = await setup(txn);
       const question = await Question.create(
         {
@@ -257,7 +467,6 @@ describe('question model', () => {
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
-          hasOtherTextAnswer: true,
         },
         txn,
       );
@@ -265,18 +474,23 @@ describe('question model', () => {
       const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
       expect(fetchedQuestion.otherTextAnswerId).toBeNull();
       expect(fetchedAnswers.length).toEqual(0);
-    });
-  });
 
-  it('should throw an error if a question does not exist for the id', async () => {
-    await transaction(Question.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(Question.get(fakeId, txn)).rejects.toMatch(`No such question: ${fakeId}`);
-    });
-  });
+      // Try to add an other answer
+      await Question.edit(
+        {
+          hasOtherTextAnswer: true,
+        },
+        question.id,
+        txn,
+      );
 
-  it('edits question', async () => {
-    await transaction(Question.knex(), async txn => {
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(refetchedAnswers.length).toEqual(0);
+    });
+
+    it('errors when changing answerType to non-dropdown for an "other" question', async () => {
       const { riskArea } = await setup(txn);
       const question = await Question.create(
         {
@@ -285,511 +499,260 @@ describe('question model', () => {
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
+          hasOtherTextAnswer: true,
         },
         txn,
       );
-      expect(await Question.edit({ title: 'Testing?' }, question.id, txn)).toMatchObject({
-        title: 'Testing?',
-      });
-    });
-  });
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
+      expect(fetchedAnswers.length).toEqual(1);
 
-  describe('editing a question with "other" answer type', () => {
-    it('adds an "other" answer to a question that does not already have one', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
-
-        // Add the other answer
-        await Question.edit(
-          {
-            hasOtherTextAnswer: true,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toEqual(refetchedAnswers[0].id);
-        expect(refetchedAnswers.length).toEqual(1);
-      });
-    });
-
-    it('is a noop if adding an "other" answer to a question that already has one', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-            hasOtherTextAnswer: true,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
-        expect(fetchedAnswers.length).toEqual(1);
-
-        // Try to add an other answer again
-        await Question.edit(
-          {
-            hasOtherTextAnswer: true,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toEqual(fetchedAnswers[0].id);
-        expect(refetchedAnswers.length).toEqual(1);
-        expect(refetchedAnswers).toMatchObject(fetchedAnswers);
-      });
-    });
-
-    it('removes an "other" answer to a question that has one', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-            hasOtherTextAnswer: true,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
-        expect(fetchedAnswers.length).toEqual(1);
-
-        // Remove the other answer
-        await Question.edit(
-          {
-            hasOtherTextAnswer: false,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(refetchedAnswers.length).toEqual(0);
-      });
-    });
-
-    it('is a noop if removing an "other" answer from a question that lacks one', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
-
-        // Try to remove a non-existent other answer
-        await Question.edit(
-          {
-            hasOtherTextAnswer: false,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(refetchedAnswers.length).toEqual(0);
-      });
-    });
-
-    it('is a noop if adding an "other" answer to a computed field question', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const computedField = await ComputedField.create(
-          {
-            dataType: 'string',
-            label: 'computed field',
-            slug: 'computed-field',
-          },
-          txn,
-        );
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            computedFieldId: computedField.id,
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
-
-        // Try to add an other answer
-        await Question.edit(
-          {
-            hasOtherTextAnswer: true,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(refetchedAnswers.length).toEqual(0);
-      });
-    });
-
-    it('is a noop if adding an "other" answer to a screening tool question', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { screeningTool } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            screeningToolId: screeningTool.id,
-            type: 'screeningTool',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
-
-        // Try to add an other answer
-        await Question.edit(
-          {
-            hasOtherTextAnswer: true,
-          },
-          question.id,
-          txn,
-        );
-
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(refetchedAnswers.length).toEqual(0);
-      });
-    });
-
-    it('errors when changing answerType to non-dropdown for an "other" question', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-            hasOtherTextAnswer: true,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
-        expect(fetchedAnswers.length).toEqual(1);
-
-        await expect(Question.edit({ answerType: 'radio' }, question.id, txn)).rejects.toMatch(
-          'Cannot change answerType for a question with an "other" answer',
-        );
-      });
+      await expect(Question.edit({ answerType: 'radio' }, question.id, txn)).rejects.toMatch(
+        'Cannot change answerType for a question with an "other" answer',
+      );
     });
 
     it('errors when adding "other" question to non-dropdown question', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'radio',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'radio',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(fetchedAnswers.length).toEqual(0);
 
-        await expect(Question.edit({ hasOtherTextAnswer: true }, question.id, txn)).rejects.toMatch(
-          'Cannot add an "other" answer to a non-dropdown question',
-        );
-      });
+      await expect(Question.edit({ hasOtherTextAnswer: true }, question.id, txn)).rejects.toMatch(
+        'Cannot add an "other" answer to a non-dropdown question',
+      );
     });
 
     it('adds "other" answer to non-dropdown question when also changing to dropdown', async () => {
-      await transaction(Question.knex(), async txn => {
-        const { riskArea } = await setup(txn);
-        const question = await Question.create(
-          {
-            title: 'testing?',
-            answerType: 'radio',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const fetchedQuestion = await Question.get(question.id, txn);
-        const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
-        expect(fetchedAnswers.length).toEqual(0);
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'radio',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const fetchedQuestion = await Question.get(question.id, txn);
+      const fetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+      expect(fetchedAnswers.length).toEqual(0);
 
-        await Question.edit({ hasOtherTextAnswer: true, answerType: 'dropdown' }, question.id, txn);
+      await Question.edit({ hasOtherTextAnswer: true, answerType: 'dropdown' }, question.id, txn);
 
-        const refetchedQuestion = await Question.get(question.id, txn);
-        const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
-        expect(refetchedQuestion.otherTextAnswerId).not.toBeNull();
-        expect(refetchedAnswers.length).toEqual(1);
-      });
+      const refetchedQuestion = await Question.get(question.id, txn);
+      const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
+      expect(refetchedQuestion.otherTextAnswerId).not.toBeNull();
+      expect(refetchedAnswers.length).toEqual(1);
     });
   });
 
   it('gets questions for risk area', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea, screeningTool } = await setup(txn);
+    const { riskArea, screeningTool } = await setup(txn);
 
-      const question1 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const question2 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 2,
-        },
-        txn,
-      );
-      const question3 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          screeningToolId: screeningTool.id,
-          type: 'screeningTool',
-          order: 3,
-        },
-        txn,
-      );
-      const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id, txn);
-      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-      expect(fetchedQuestions[0].id).toEqual(question1.id);
-      expect(fetchedQuestions[1].id).toEqual(question2.id);
-      expect(fetchedQuestionIds).not.toContain(question3.id);
-    });
+    const question1 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const question2 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 2,
+      },
+      txn,
+    );
+    const question3 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 3,
+      },
+      txn,
+    );
+    const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id, txn);
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('gets questions for screening tool', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea, screeningTool } = await setup(txn);
+    const { riskArea, screeningTool } = await setup(txn);
 
-      const question1 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          screeningToolId: screeningTool.id,
-          type: 'screeningTool',
-          order: 1,
-        },
-        txn,
-      );
-      const question2 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          screeningToolId: screeningTool.id,
-          type: 'screeningTool',
-          order: 2,
-        },
-        txn,
-      );
-      const question3 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 3,
-        },
-        txn,
-      );
-      const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id, txn);
-      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-      expect(fetchedQuestions[0].id).toEqual(question1.id);
-      expect(fetchedQuestions[1].id).toEqual(question2.id);
-      expect(fetchedQuestionIds).not.toContain(question3.id);
-    });
+    const question1 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 1,
+      },
+      txn,
+    );
+    const question2 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 2,
+      },
+      txn,
+    );
+    const question3 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 3,
+      },
+      txn,
+    );
+    const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id, txn);
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('gets questions for progress note template', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea, progressNoteTemplate } = await setup(txn);
+    const { riskArea, progressNoteTemplate } = await setup(txn);
 
-      const question1 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          progressNoteTemplateId: progressNoteTemplate.id,
-          type: 'progressNoteTemplate',
-          order: 1,
-        },
-        txn,
-      );
-      const question2 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          progressNoteTemplateId: progressNoteTemplate.id,
-          type: 'progressNoteTemplate',
-          order: 2,
-        },
-        txn,
-      );
-      const question3 = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 3,
-        },
-        txn,
-      );
-      const fetchedQuestions = await Question.getAllForProgressNoteTemplate(
-        progressNoteTemplate.id,
-        txn,
-      );
-      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-      expect(fetchedQuestions[0].id).toEqual(question1.id);
-      expect(fetchedQuestions[1].id).toEqual(question2.id);
-      expect(fetchedQuestionIds).not.toContain(question3.id);
-    });
+    const question1 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        type: 'progressNoteTemplate',
+        order: 1,
+      },
+      txn,
+    );
+    const question2 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        type: 'progressNoteTemplate',
+        order: 2,
+      },
+      txn,
+    );
+    const question3 = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 3,
+      },
+      txn,
+    );
+    const fetchedQuestions = await Question.getAllForProgressNoteTemplate(
+      progressNoteTemplate.id,
+      txn,
+    );
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('eager loads answers ordered by...order', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
+    const { riskArea } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 2,
-        },
-        txn,
-      );
-      const answer2 = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      const deletedAnswer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      await Answer.delete(deletedAnswer.id, txn);
-      const fetched = await Question.get(question.id, txn);
-      expect(fetched.answers).toMatchObject([answer2, answer]);
-    });
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 2,
+      },
+      txn,
+    );
+    const answer2 = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const deletedAnswer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    await Answer.delete(deletedAnswer.id, txn);
+    const fetched = await Question.get(question.id, txn);
+    expect(fetched.answers).toMatchObject([answer2, answer]);
   });
 
   it('deletes question', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
+    const { riskArea } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'testing?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      expect(question.deletedAt).toBeFalsy();
-      const deleted = await Question.delete(question.id, txn);
-      expect(deleted.deletedAt).not.toBeFalsy();
-    });
+    const question = await Question.create(
+      {
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    expect(question.deletedAt).toBeFalsy();
+    const deleted = await Question.delete(question.id, txn);
+    expect(deleted.deletedAt).not.toBeFalsy();
   });
 });

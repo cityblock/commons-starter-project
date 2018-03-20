@@ -19,9 +19,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('answer model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Question.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -29,412 +40,394 @@ describe('answer model', () => {
   });
 
   it('should create and get an answer', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      expect(answer.displayValue).toEqual('loves writing tests!');
-      expect(await Answer.get(answer.id, txn)).toEqual(answer);
-    });
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    expect(answer.displayValue).toEqual('loves writing tests!');
+    expect(await Answer.get(answer.id, txn)).toEqual(answer);
   });
 
   it('should handle relations', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
-        {
-          title: 'Fix housing',
-        },
-        txn,
-      );
-      const deleteedGoalSuggestionTemplate = await GoalSuggestionTemplate.create(
-        {
-          title: 'Fix housing',
-        },
-        txn,
-      );
-      const goalSuggestionTemplateWithDeletedSuggestion = await GoalSuggestionTemplate.create(
-        {
-          title: 'Fix housing',
-        },
-        txn,
-      );
-      await GoalSuggestion.create(
-        {
-          goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          answerId: answer.id,
-        },
-        txn,
-      );
-      await GoalSuggestion.create(
-        {
-          goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          answerId: answer.id,
-        },
-        txn,
-      );
-      // deleted suggestion
-      await GoalSuggestion.create(
-        {
-          goalSuggestionTemplateId: goalSuggestionTemplateWithDeletedSuggestion.id,
-          answerId: answer.id,
-        },
-        txn,
-      );
-      await GoalSuggestion.delete(
-        {
-          goalSuggestionTemplateId: goalSuggestionTemplateWithDeletedSuggestion.id,
-          answerId: answer.id,
-        },
-        txn,
-      );
-      await GoalSuggestionTemplate.delete(deleteedGoalSuggestionTemplate.id, txn);
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
+      {
+        title: 'Fix housing',
+      },
+      txn,
+    );
+    const deleteedGoalSuggestionTemplate = await GoalSuggestionTemplate.create(
+      {
+        title: 'Fix housing',
+      },
+      txn,
+    );
+    const goalSuggestionTemplateWithDeletedSuggestion = await GoalSuggestionTemplate.create(
+      {
+        title: 'Fix housing',
+      },
+      txn,
+    );
+    await GoalSuggestion.create(
+      {
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer.id,
+      },
+      txn,
+    );
+    await GoalSuggestion.create(
+      {
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer.id,
+      },
+      txn,
+    );
+    // deleted suggestion
+    await GoalSuggestion.create(
+      {
+        goalSuggestionTemplateId: goalSuggestionTemplateWithDeletedSuggestion.id,
+        answerId: answer.id,
+      },
+      txn,
+    );
+    await GoalSuggestion.delete(
+      {
+        goalSuggestionTemplateId: goalSuggestionTemplateWithDeletedSuggestion.id,
+        answerId: answer.id,
+      },
+      txn,
+    );
+    await GoalSuggestionTemplate.delete(deleteedGoalSuggestionTemplate.id, txn);
 
-      const receivedAnswer = await Answer.get(answer.id, txn);
-      expect(receivedAnswer.goalSuggestions).toEqual([goalSuggestionTemplate]);
-    });
+    const receivedAnswer = await Answer.get(answer.id, txn);
+    expect(receivedAnswer.goalSuggestions).toEqual([goalSuggestionTemplate]);
   });
 
   it('should get multiple answers', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
+    const { riskArea } = await setup(txn);
 
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const question2 = await Question.create(
-        {
-          title: 'hate writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 2,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      const answer2 = await Answer.create(
-        {
-          displayValue: 'hate writing tests!',
-          value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question2.id,
-          order: 1,
-        },
-        txn,
-      );
-      const fetchedAnswers = await Answer.getMultiple([answer.id, answer2.id], txn);
-      const fetchedAnswerIds = fetchedAnswers.map(ans => ans.id);
-      expect(fetchedAnswerIds.length).toEqual(2);
-      expect(fetchedAnswerIds).toContain(answer.id);
-      expect(fetchedAnswerIds).toContain(answer2.id);
-    });
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const question2 = await Question.create(
+      {
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 2,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const answer2 = await Answer.create(
+      {
+        displayValue: 'hate writing tests!',
+        value: '2',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question2.id,
+        order: 1,
+      },
+      txn,
+    );
+    const fetchedAnswers = await Answer.getMultiple([answer.id, answer2.id], txn);
+    const fetchedAnswerIds = fetchedAnswers.map(ans => ans.id);
+    expect(fetchedAnswerIds.length).toEqual(2);
+    expect(fetchedAnswerIds).toContain(answer.id);
+    expect(fetchedAnswerIds).toContain(answer2.id);
   });
 
   it('sets default riskAdjustmentType to inactive', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      expect(answer.riskAdjustmentType).toEqual('inactive');
-    });
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    expect(answer.riskAdjustmentType).toEqual('inactive');
   });
 
   it('should throw an error if an answer does not exist for the id', async () => {
-    await transaction(Question.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(Answer.get(fakeId, txn)).rejects.toMatch(`No such answer: ${fakeId}`);
-    });
+    const fakeId = uuid();
+    await expect(Answer.get(fakeId, txn)).rejects.toMatch(`No such answer: ${fakeId}`);
   });
 
   it('edits answer', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      const updatedAt = answer.updatedAt;
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const updatedAt = answer.updatedAt;
 
-      expect(answer.displayValue).toEqual('loves writing tests!');
-      const editedRiskArea = await Answer.edit(
-        { displayValue: 'luvs writing tests!' },
-        answer.id,
-        txn,
-      );
-      expect(editedRiskArea.updatedAt).not.toEqual(updatedAt);
-      expect(editedRiskArea.displayValue).toEqual('luvs writing tests!');
-    });
+    expect(answer.displayValue).toEqual('loves writing tests!');
+    const editedRiskArea = await Answer.edit(
+      { displayValue: 'luvs writing tests!' },
+      answer.id,
+      txn,
+    );
+    expect(editedRiskArea.updatedAt).not.toEqual(updatedAt);
+    expect(editedRiskArea.displayValue).toEqual('luvs writing tests!');
   });
 
   it('gets answers for question', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer1 = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      const answer2 = await Answer.create(
-        {
-          displayValue: 'loves writing more tests!',
-          value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 2,
-        },
-        txn,
-      );
-      const deletedAnswer = await Answer.create(
-        {
-          displayValue: 'loves writing more tests!',
-          value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 2,
-        },
-        txn,
-      );
-      await Answer.delete(deletedAnswer.id, txn);
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer1 = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const answer2 = await Answer.create(
+      {
+        displayValue: 'loves writing more tests!',
+        value: '2',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 2,
+      },
+      txn,
+    );
+    const deletedAnswer = await Answer.create(
+      {
+        displayValue: 'loves writing more tests!',
+        value: '2',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 2,
+      },
+      txn,
+    );
+    await Answer.delete(deletedAnswer.id, txn);
 
-      expect(await Answer.getAllForQuestion(question.id, txn)).toMatchObject([answer1, answer2]);
-    });
+    expect(await Answer.getAllForQuestion(question.id, txn)).toMatchObject([answer1, answer2]);
   });
 
   it('gets an answer for a computed field slug and value', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const computedField = await ComputedField.create(
-        {
-          label: 'Computed Field',
-          slug: 'computed-field',
-          dataType: 'number',
-        },
-        txn,
-      );
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-          computedFieldId: computedField.id,
-        },
-        txn,
-      );
-      const answer1 = await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      await Answer.create(
-        {
-          displayValue: 'loves writing more tests!',
-          value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 2,
-        },
-        txn,
-      );
-      const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
-        {
-          slug: 'computed-field',
-          value: answer1.value,
-        },
-        txn,
-      );
+    const { riskArea } = await setup(txn);
+    const computedField = await ComputedField.create(
+      {
+        label: 'Computed Field',
+        slug: 'computed-field',
+        dataType: 'number',
+      },
+      txn,
+    );
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        computedFieldId: computedField.id,
+      },
+      txn,
+    );
+    const answer1 = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    await Answer.create(
+      {
+        displayValue: 'loves writing more tests!',
+        value: '2',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 2,
+      },
+      txn,
+    );
+    const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
+      {
+        slug: 'computed-field',
+        value: answer1.value,
+      },
+      txn,
+    );
 
-      expect(fetchedAnswer!.id).toEqual(answer1.id);
-      expect(fetchedAnswer!.value).toEqual(answer1.value);
-    });
+    expect(fetchedAnswer!.id).toEqual(answer1.id);
+    expect(fetchedAnswer!.value).toEqual(answer1.value);
   });
 
   it('returns null when getting an answer for an invalid computed field slug/value', async () => {
-    await transaction(Question.knex(), async txn => {
-      const { riskArea } = await setup(txn);
-      const computedField = await ComputedField.create(
-        {
-          label: 'Computed Field',
-          slug: 'computed-field',
-          dataType: 'number',
-        },
-        txn,
-      );
-      const question = await Question.create(
-        {
-          title: 'like writing tests?',
-          answerType: 'dropdown',
-          riskAreaId: riskArea.id,
-          type: 'riskArea',
-          order: 1,
-          computedFieldId: computedField.id,
-        },
-        txn,
-      );
-      await Answer.create(
-        {
-          displayValue: 'loves writing tests!',
-          value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 1,
-        },
-        txn,
-      );
-      await Answer.create(
-        {
-          displayValue: 'loves writing more tests!',
-          value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
-          inSummary: false,
-          questionId: question.id,
-          order: 2,
-        },
-        txn,
-      );
-      const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
-        {
-          slug: 'computed-field',
-          value: 'random value',
-        },
-        txn,
-      );
+    const { riskArea } = await setup(txn);
+    const computedField = await ComputedField.create(
+      {
+        label: 'Computed Field',
+        slug: 'computed-field',
+        dataType: 'number',
+      },
+      txn,
+    );
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        computedFieldId: computedField.id,
+      },
+      txn,
+    );
+    await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    await Answer.create(
+      {
+        displayValue: 'loves writing more tests!',
+        value: '2',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 2,
+      },
+      txn,
+    );
+    const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
+      {
+        slug: 'computed-field',
+        value: 'random value',
+      },
+      txn,
+    );
 
-      expect(fetchedAnswer).toBeNull();
-    });
+    expect(fetchedAnswer).toBeNull();
   });
 });

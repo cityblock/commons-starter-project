@@ -21,9 +21,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('email', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Email.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -32,59 +43,51 @@ describe('email', () => {
 
   describe('get', async () => {
     it('should get email by id', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { email } = await setup(txn);
-        const fetchedEmail = await Email.get(email.id, txn);
-        expect(fetchedEmail).toMatchObject(email);
-      });
+      const { email } = await setup(txn);
+      const fetchedEmail = await Email.get(email.id, txn);
+      expect(fetchedEmail).toMatchObject(email);
     });
   });
 
   describe('create', async () => {
     it('should create email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { email, user } = await setup(txn);
-        expect(email).toMatchObject({
-          emailAddress: 'spam@email.com',
-          description: 'spam email',
-          updatedById: user.id,
-        });
+      const { email, user } = await setup(txn);
+      expect(email).toMatchObject({
+        emailAddress: 'spam@email.com',
+        description: 'spam email',
+        updatedById: user.id,
       });
     });
   });
 
   describe('delete', async () => {
     it('should delete email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { email } = await setup(txn);
-        const deleted = await Email.delete(email.id, txn);
+      const { email } = await setup(txn);
+      const deleted = await Email.delete(email.id, txn);
 
-        expect(deleted.deletedAt).toBeTruthy();
-        expect(deleted.id).toBe(email.id);
+      expect(deleted.deletedAt).toBeTruthy();
+      expect(deleted.id).toBe(email.id);
 
-        await expect(Email.get(email.id, txn)).rejects.toMatch(`No such email: ${email.id}`);
-      });
+      await expect(Email.get(email.id, txn)).rejects.toMatch(`No such email: ${email.id}`);
     });
   });
 
   describe('edit', async () => {
     it('should edit email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { email, user } = await setup(txn);
-        const editedEmail = await Email.edit(
-          {
-            emailAddress: 'new@email.edu',
-            description: 'new',
-            updatedById: user.id,
-          },
-          email.id,
-          txn,
-        );
-        expect(editedEmail).toMatchObject({
+      const { email, user } = await setup(txn);
+      const editedEmail = await Email.edit(
+        {
           emailAddress: 'new@email.edu',
           description: 'new',
           updatedById: user.id,
-        });
+        },
+        email.id,
+        txn,
+      );
+      expect(editedEmail).toMatchObject({
+        emailAddress: 'new@email.edu',
+        description: 'new',
+        updatedById: user.id,
       });
     });
   });

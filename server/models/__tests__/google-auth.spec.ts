@@ -6,9 +6,20 @@ import GoogleAuth from '../google-auth';
 import User from '../user';
 
 describe('google auth model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(GoogleAuth.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -16,41 +27,39 @@ describe('google auth model', () => {
   });
 
   it('should get and create', async () => {
-    await transaction(GoogleAuth.knex(), async txn => {
-      const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(
-        createMockUser(11, clinic.id, 'physician', 'care@care.com'),
-        txn,
-      );
+    const clinic = await Clinic.create(createMockClinic(), txn);
+    const user = await User.create(
+      createMockUser(11, clinic.id, 'physician', 'care@care.com'),
+      txn,
+    );
 
-      const googleAuth = await GoogleAuth.updateOrCreate(
+    const googleAuth = await GoogleAuth.updateOrCreate(
+      {
+        accessToken: 'accessToken',
+        expiresAt: 'expires!',
+        userId: user.id,
+      },
+      txn,
+    );
+    expect(googleAuth).toMatchObject({
+      accessToken: 'accessToken',
+      expiresAt: 'expires!',
+      userId: user.id,
+    });
+    expect(
+      await GoogleAuth.updateOrCreate(
         {
           accessToken: 'accessToken',
           expiresAt: 'expires!',
           userId: user.id,
         },
         txn,
-      );
-      expect(googleAuth).toMatchObject({
-        accessToken: 'accessToken',
-        expiresAt: 'expires!',
-        userId: user.id,
-      });
-      expect(
-        await GoogleAuth.updateOrCreate(
-          {
-            accessToken: 'accessToken',
-            expiresAt: 'expires!',
-            userId: user.id,
-          },
-          txn,
-        ),
-      ).toMatchObject({
-        id: googleAuth.id,
-        accessToken: 'accessToken',
-        expiresAt: 'expires!',
-        userId: user.id,
-      });
+      ),
+    ).toMatchObject({
+      id: googleAuth.id,
+      accessToken: 'accessToken',
+      expiresAt: 'expires!',
+      userId: user.id,
     });
   });
 });

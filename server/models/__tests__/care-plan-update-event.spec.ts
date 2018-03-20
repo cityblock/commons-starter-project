@@ -62,9 +62,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('care plan update event model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(CarePlanUpdateEvent.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -72,353 +83,333 @@ describe('care plan update event model', () => {
   });
 
   it('creates and fetches a carePlanUpdateEvent', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
-        },
-        txn,
-      );
-      expect(carePlanUpdateEvent.patientConcern.id).toEqual(patientConcern.id);
-
-      const fetchedCarePlanUpdateEvent = await CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn);
-      expect(fetchedCarePlanUpdateEvent).toMatchObject({
-        id: carePlanUpdateEvent.id,
-        patientId: carePlanUpdateEvent.patientId,
-        userId: carePlanUpdateEvent.userId,
+    const { patient, user, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
         eventType: 'create_patient_concern',
-      });
-      expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
-      expect(fetchedCarePlanUpdateEvent.createdAt).not.toBeFalsy();
-      expect(fetchedCarePlanUpdateEvent.updatedAt).not.toBeFalsy();
+      },
+      txn,
+    );
+    expect(carePlanUpdateEvent.patientConcern.id).toEqual(patientConcern.id);
+
+    const fetchedCarePlanUpdateEvent = await CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn);
+    expect(fetchedCarePlanUpdateEvent).toMatchObject({
+      id: carePlanUpdateEvent.id,
+      patientId: carePlanUpdateEvent.patientId,
+      userId: carePlanUpdateEvent.userId,
+      eventType: 'create_patient_concern',
     });
+    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
+    expect(fetchedCarePlanUpdateEvent.createdAt).not.toBeFalsy();
+    expect(fetchedCarePlanUpdateEvent.updatedAt).not.toBeFalsy();
   });
 
   it('does not allow creating a carePlanUpdateEvent with both concern and goal ids', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientConcern, patientGoal } = await setup(txn);
-      let errorMessage: string = '';
+    const { patient, user, patientConcern, patientGoal } = await setup(txn);
+    let errorMessage: string = '';
 
-      try {
-        await CarePlanUpdateEvent.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            patientConcernId: patientConcern.id,
-            patientGoalId: patientGoal.id,
-            eventType: 'create_patient_goal',
-          },
-          txn,
-        );
-      } catch (err) {
-        errorMessage = err.message;
-      }
+    try {
+      await CarePlanUpdateEvent.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+          patientGoalId: patientGoal.id,
+          eventType: 'create_patient_goal',
+        },
+        txn,
+      );
+    } catch (err) {
+      errorMessage = err.message;
+    }
 
-      expect(errorMessage).toMatch('violates check constraint');
-    });
+    expect(errorMessage).toMatch('violates check constraint');
   });
 
   it('automatically opens a progress note on create', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
-        },
-        txn,
-      );
+    const { patient, user, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'create_patient_concern',
+      },
+      txn,
+    );
 
-      expect(carePlanUpdateEvent.progressNoteId).not.toBeFalsy();
-    });
+    expect(carePlanUpdateEvent.progressNoteId).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(CarePlanUpdateEvent.get(fakeId, txn)).rejects.toMatch(
-        `No such carePlanUpdateEvent: ${fakeId}`,
-      );
-    });
+    const fakeId = uuid();
+    await expect(CarePlanUpdateEvent.get(fakeId, txn)).rejects.toMatch(
+      `No such carePlanUpdateEvent: ${fakeId}`,
+    );
   });
 
   it('deletes a carePlanUpdateEvent', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
-        },
-        txn,
-      );
-      const fetchedCarePlanUpdateEvent = await CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn);
-      expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
+    const { patient, user, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'create_patient_concern',
+      },
+      txn,
+    );
+    const fetchedCarePlanUpdateEvent = await CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn);
+    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id, txn);
-      await expect(CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn)).rejects.toMatch(
-        `No such carePlanUpdateEvent: ${carePlanUpdateEvent.id}`,
-      );
-    });
+    await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id, txn);
+    await expect(CarePlanUpdateEvent.get(carePlanUpdateEvent.id, txn)).rejects.toMatch(
+      `No such carePlanUpdateEvent: ${carePlanUpdateEvent.id}`,
+    );
   });
 
   it('fetches all not deleted care plan update events for a patient concern', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
-        },
-        txn,
-      );
-      const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'edit_patient_concern',
-        },
-        txn,
-      );
+    const { patient, user, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'create_patient_concern',
+      },
+      txn,
+    );
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'edit_patient_concern',
+      },
+      txn,
+    );
 
-      // Make sure all carePlanUpdateEvents are returned
-      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientConcern(
-        patientConcern.id,
-        { pageNumber: 0, pageSize: 10 },
-        txn,
-      );
-      const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
-      expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientConcern(
+      patientConcern.id,
+      { pageNumber: 0, pageSize: 10 },
+      txn,
+    );
+    const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
 
-      // Make sure the deleted carePlanUpdateEvent isn't returned
-      const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientConcern(
-        patientConcern.id,
-        { pageNumber: 0, pageSize: 10 },
-        txn,
-      );
-      expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
-        results: [{ id: carePlanUpdateEvent.id }],
-        total: 1,
-      });
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientConcern(
+      patientConcern.id,
+      { pageNumber: 0, pageSize: 10 },
+      txn,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
+      results: [{ id: carePlanUpdateEvent.id }],
+      total: 1,
     });
   });
 
   it('fetches all not deleted care plan update events for a patient goal', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientGoal } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
-        },
-        txn,
-      );
-      const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'edit_patient_goal',
-        },
-        txn,
-      );
+    const { patient, user, patientGoal } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'create_patient_goal',
+      },
+      txn,
+    );
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'edit_patient_goal',
+      },
+      txn,
+    );
 
-      // Make sure all carePlanUpdateEvents are returned
-      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientGoal(
-        patientGoal.id,
-        { pageNumber: 0, pageSize: 10 },
-        txn,
-      );
-      const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
-      expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientGoal(
+      patientGoal.id,
+      { pageNumber: 0, pageSize: 10 },
+      txn,
+    );
+    const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
 
-      // Make sure the deleted carePlanUpdateEvent isn't returned
-      const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientGoal(
-        patientGoal.id,
-        { pageNumber: 0, pageSize: 10 },
-        txn,
-      );
-      expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
-        results: [{ id: carePlanUpdateEvent.id }],
-        total: 1,
-      });
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatientGoal(
+      patientGoal.id,
+      { pageNumber: 0, pageSize: 10 },
+      txn,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
+      results: [{ id: carePlanUpdateEvent.id }],
+      total: 1,
     });
   });
 
   it('fetches all not deleted care plan update events for a patient', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientGoal, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
-        },
-        txn,
-      );
-      const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'edit_patient_concern',
-        },
-        txn,
-      );
+    const { patient, user, patientGoal, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'create_patient_goal',
+      },
+      txn,
+    );
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'edit_patient_concern',
+      },
+      txn,
+    );
 
-      // Make sure all carePlanUpdateEvents are returned
-      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
-        patient.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
-      expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+      patient.id,
+      {
+        pageNumber: 0,
+        pageSize: 10,
+      },
+      txn,
+    );
+    const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
 
-      // Make sure the deleted carePlanUpdateEvent isn't returned
-      const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
-        patient.id,
-        { pageNumber: 0, pageSize: 10 },
-        txn,
-      );
-      expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
-        results: [{ id: carePlanUpdateEvent.id }],
-        total: 1,
-      });
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+      patient.id,
+      { pageNumber: 0, pageSize: 10 },
+      txn,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
+      results: [{ id: carePlanUpdateEvent.id }],
+      total: 1,
     });
   });
 
   it('fetches all not deleted care plan update events for a user', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientGoal, patientConcern } = await setup(txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
-        },
-        txn,
-      );
-      const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'edit_patient_concern',
-        },
-        txn,
-      );
+    const { patient, user, patientGoal, patientConcern } = await setup(txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'create_patient_goal',
+      },
+      txn,
+    );
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'edit_patient_concern',
+      },
+      txn,
+    );
 
-      // Make sure all carePlanUpdateEvents are returned
-      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForUser(
-        user.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
-      expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
-      expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForUser(
+      user.id,
+      {
+        pageNumber: 0,
+        pageSize: 10,
+      },
+      txn,
+    );
+    const carePlanUpdateEventIds = fetchedCarePlanUpdateEvents.results.map(event => event.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(carePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
 
-      // Make sure the deleted carePlanUpdateEvent isn't returned
-      const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForUser(
-        user.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
-        results: [{ id: carePlanUpdateEvent.id }],
-        total: 1,
-      });
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForUser(
+      user.id,
+      {
+        pageNumber: 0,
+        pageSize: 10,
+      },
+      txn,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject({
+      results: [{ id: carePlanUpdateEvent.id }],
+      total: 1,
     });
   });
 
   it('fetches all not deleted care plan update events for a progress note', async () => {
-    await transaction(CarePlanUpdateEvent.knex(), async txn => {
-      const { patient, user, patientGoal } = await setup(txn);
-      const progressNote = await ProgressNote.autoOpenIfRequired(
-        {
-          patientId: patient.id,
-          userId: user.id,
-        },
-        txn,
-      );
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
-          progressNoteId: progressNote.id,
-        },
-        txn,
-      );
-      const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientGoalId: patientGoal.id,
-          eventType: 'edit_patient_goal',
-          progressNoteId: progressNote.id,
-        },
-        txn,
-      );
+    const { patient, user, patientGoal } = await setup(txn);
+    const progressNote = await ProgressNote.autoOpenIfRequired(
+      {
+        patientId: patient.id,
+        userId: user.id,
+      },
+      txn,
+    );
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'create_patient_goal',
+        progressNoteId: progressNote.id,
+      },
+      txn,
+    );
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientGoalId: patientGoal.id,
+        eventType: 'edit_patient_goal',
+        progressNoteId: progressNote.id,
+      },
+      txn,
+    );
 
-      // Make sure all carePlanUpdateEvents are returned
-      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
-        progressNote.id,
-        txn,
-      );
-      const fetchedCarePlanUpdateEventIds = fetchedCarePlanUpdateEvents.map(event => event.id);
-      expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
-      expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
+      progressNote.id,
+      txn,
+    );
+    const fetchedCarePlanUpdateEventIds = fetchedCarePlanUpdateEvents.map(event => event.id);
+    expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
 
-      await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id, txn);
 
-      // Make sure the deleted carePlanUpdateEvent isn't returned
-      const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
-        progressNote.id,
-        txn,
-      );
-      expect(secondFetchedCarePlanUpdateEvents).toMatchObject([{ id: carePlanUpdateEvent.id }]);
-    });
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
+      progressNote.id,
+      txn,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject([{ id: carePlanUpdateEvent.id }]);
   });
 });

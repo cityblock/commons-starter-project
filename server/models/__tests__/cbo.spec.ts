@@ -30,9 +30,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('CBO model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(CBO.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -40,151 +51,135 @@ describe('CBO model', () => {
   });
 
   it('creates and gets a CBO', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const { cboCategory } = await setup(txn);
-      const cbo = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-        },
-        txn,
-      );
-
-      expect(cbo).toMatchObject({
+    const { cboCategory } = await setup(txn);
+    const cbo = await CBO.create(
+      {
         categoryId: cboCategory.id,
         ...input,
-      });
-      expect(await CBO.get(cbo.id, txn)).toEqual(cbo);
+      },
+      txn,
+    );
+
+    expect(cbo).toMatchObject({
+      categoryId: cboCategory.id,
+      ...input,
     });
+    expect(await CBO.get(cbo.id, txn)).toEqual(cbo);
   });
 
   it('throws an error if CBO does not exist for a given id', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(CBO.get(fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
-    });
+    const fakeId = uuid();
+    await expect(CBO.get(fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
   });
 
   it('gets all CBOs', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const { cboCategory } = await setup(txn);
-      const cbo1 = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-          name: name1,
-        },
-        txn,
-      );
-      const cbo2 = await createCBO(txn, name2);
+    const { cboCategory } = await setup(txn);
+    const cbo1 = await CBO.create(
+      {
+        categoryId: cboCategory.id,
+        ...input,
+        name: name1,
+      },
+      txn,
+    );
+    const cbo2 = await createCBO(txn, name2);
 
-      expect(await CBO.getAll(txn)).toMatchObject([cbo2, cbo1]);
-    });
+    expect(await CBO.getAll(txn)).toMatchObject([cbo2, cbo1]);
   });
 
   it('gets all CBOs for a given category', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const { cboCategory } = await setup(txn);
-      const cboCategory2 = await createCBOCategory(txn);
+    const { cboCategory } = await setup(txn);
+    const cboCategory2 = await createCBOCategory(txn);
 
-      const cbo1 = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-          name: name1,
-        },
-        txn,
-      );
-      await CBO.create(
-        {
-          categoryId: cboCategory2.id,
-          ...input,
-          name: name2,
-        },
-        txn,
-      );
-      const cbo3 = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-          name: name3,
-        },
-        txn,
-      );
+    const cbo1 = await CBO.create(
+      {
+        categoryId: cboCategory.id,
+        ...input,
+        name: name1,
+      },
+      txn,
+    );
+    await CBO.create(
+      {
+        categoryId: cboCategory2.id,
+        ...input,
+        name: name2,
+      },
+      txn,
+    );
+    const cbo3 = await CBO.create(
+      {
+        categoryId: cboCategory.id,
+        ...input,
+        name: name3,
+      },
+      txn,
+    );
 
-      expect(await CBO.getForCategory(cboCategory.id, txn)).toMatchObject([cbo1, cbo3]);
-    });
+    expect(await CBO.getForCategory(cboCategory.id, txn)).toMatchObject([cbo1, cbo3]);
   });
 
   it('edits a CBO', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const { cboCategory } = await setup(txn);
+    const { cboCategory } = await setup(txn);
 
-      const cbo = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-        },
-        txn,
-      );
-
-      expect(cbo).toMatchObject({
+    const cbo = await CBO.create(
+      {
         categoryId: cboCategory.id,
         ...input,
-      });
+      },
+      txn,
+    );
 
-      const address2 = 'Middle of ocean';
+    expect(cbo).toMatchObject({
+      categoryId: cboCategory.id,
+      ...input,
+    });
 
-      const editedCBO = await CBO.edit(
-        {
-          name: name2,
-          address: address2,
-        },
-        cbo.id,
-        txn,
-      );
+    const address2 = 'Middle of ocean';
 
-      expect(editedCBO).toMatchObject({
+    const editedCBO = await CBO.edit(
+      {
         name: name2,
         address: address2,
-      });
+      },
+      cbo.id,
+      txn,
+    );
+
+    expect(editedCBO).toMatchObject({
+      name: name2,
+      address: address2,
     });
   });
 
   it('throws error when trying to edit with bogus id', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const fakeId = uuid();
-      const name = "Arya's Meat Pie Pantry";
+    const fakeId = uuid();
+    const name = "Arya's Meat Pie Pantry";
 
-      await expect(CBO.edit({ name }, fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
-    });
+    await expect(CBO.edit({ name }, fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
   });
 
   it('deletes a CBO', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const { cboCategory } = await setup(txn);
+    const { cboCategory } = await setup(txn);
 
-      const cbo1 = await CBO.create(
-        {
-          categoryId: cboCategory.id,
-          ...input,
-        },
-        txn,
-      );
-      const cbo2 = await createCBO(txn);
+    const cbo1 = await CBO.create(
+      {
+        categoryId: cboCategory.id,
+        ...input,
+      },
+      txn,
+    );
+    const cbo2 = await createCBO(txn);
 
-      expect(cbo1.deletedAt).toBeFalsy();
-      const deleted = await CBO.delete(cbo1.id, txn);
-      expect(deleted.deletedAt).toBeTruthy();
+    expect(cbo1.deletedAt).toBeFalsy();
+    const deleted = await CBO.delete(cbo1.id, txn);
+    expect(deleted.deletedAt).toBeTruthy();
 
-      expect(await CBO.getAll(txn)).toMatchObject([cbo2]);
-    });
+    expect(await CBO.getAll(txn)).toMatchObject([cbo2]);
   });
 
   it('throws error when trying to delete with bogus id', async () => {
-    await transaction(CBO.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(CBO.delete(fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
-    });
+    const fakeId = uuid();
+    await expect(CBO.delete(fakeId, txn)).rejects.toMatch(`No such CBO: ${fakeId}`);
   });
 });

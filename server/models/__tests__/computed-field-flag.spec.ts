@@ -81,9 +81,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('computed field flag model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Question.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -91,85 +102,77 @@ describe('computed field flag model', () => {
   });
 
   it('should create and get a computed field flag', async () => {
-    await transaction(ComputedFieldFlag.knex(), async txn => {
-      const { patientAnswers, user } = await setup(txn);
-      const computedFieldFlag = await ComputedFieldFlag.create(
-        {
-          patientAnswerId: patientAnswers[0].id,
-          userId: user.id,
-          reason,
-        },
-        txn,
-      );
-
-      expect(computedFieldFlag).toMatchObject({
+    const { patientAnswers, user } = await setup(txn);
+    const computedFieldFlag = await ComputedFieldFlag.create(
+      {
         patientAnswerId: patientAnswers[0].id,
         userId: user.id,
         reason,
-      });
+      },
+      txn,
+    );
 
-      expect(await ComputedFieldFlag.get(computedFieldFlag.id, txn)).toMatchObject({
-        patientAnswerId: patientAnswers[0].id,
-        userId: user.id,
-        reason,
-      });
+    expect(computedFieldFlag).toMatchObject({
+      patientAnswerId: patientAnswers[0].id,
+      userId: user.id,
+      reason,
+    });
+
+    expect(await ComputedFieldFlag.get(computedFieldFlag.id, txn)).toMatchObject({
+      patientAnswerId: patientAnswers[0].id,
+      userId: user.id,
+      reason,
     });
   });
 
   it('throws an error if the computed field flag does not exist for given id', async () => {
-    await transaction(ComputedFieldFlag.knex(), async txn => {
-      const fakeId = uuid();
-      const error = `No such computed field flag: ${fakeId}`;
-      await expect(ComputedFieldFlag.get(fakeId, txn)).rejects.toMatch(error);
-    });
+    const fakeId = uuid();
+    const error = `No such computed field flag: ${fakeId}`;
+    await expect(ComputedFieldFlag.get(fakeId, txn)).rejects.toMatch(error);
   });
 
   it('gets all computed field flags', async () => {
-    await transaction(ComputedFieldFlag.knex(), async txn => {
-      const { patientAnswers, user, clinic } = await setup(txn);
+    const { patientAnswers, user, clinic } = await setup(txn);
 
-      const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
-      await ComputedFieldFlag.create(
-        {
-          patientAnswerId: patientAnswers[0].id,
-          userId: user.id,
-          reason,
-        },
-        txn,
-      );
-      await ComputedFieldFlag.create(
-        {
-          patientAnswerId: patientAnswers[0].id,
-          userId: user2.id,
-          reason,
-        },
-        txn,
-      );
+    const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+    await ComputedFieldFlag.create(
+      {
+        patientAnswerId: patientAnswers[0].id,
+        userId: user.id,
+        reason,
+      },
+      txn,
+    );
+    await ComputedFieldFlag.create(
+      {
+        patientAnswerId: patientAnswers[0].id,
+        userId: user2.id,
+        reason,
+      },
+      txn,
+    );
 
-      const computedFieldFlags = await ComputedFieldFlag.getAll(txn);
-      const userIds = computedFieldFlags.map(field => field.userId);
-      const sortFn = (a: string, b: string) => {
-        if (a < b) return -1;
-        else return 1;
-      };
-      expect(userIds.sort(sortFn)).toEqual([user.id, user2.id].sort(sortFn));
-    });
+    const computedFieldFlags = await ComputedFieldFlag.getAll(txn);
+    const userIds = computedFieldFlags.map(field => field.userId);
+    const sortFn = (a: string, b: string) => {
+      if (a < b) return -1;
+      else return 1;
+    };
+    expect(userIds.sort(sortFn)).toEqual([user.id, user2.id].sort(sortFn));
   });
 
   it('deletes computed field flag', async () => {
-    await transaction(ComputedFieldFlag.knex(), async txn => {
-      const { patientAnswers, user } = await setup(txn);
-      const computedFieldFlag = await ComputedFieldFlag.create(
-        {
-          patientAnswerId: patientAnswers[0].id,
-          userId: user.id,
-          reason,
-        },
-        txn,
-      );
-      expect(computedFieldFlag.deletedAt).toBeFalsy();
-      const deleted = await ComputedFieldFlag.delete(computedFieldFlag.id, txn);
-      expect(deleted.deletedAt).toBeTruthy();
-    });
+    const { patientAnswers, user } = await setup(txn);
+    const computedFieldFlag = await ComputedFieldFlag.create(
+      {
+        patientAnswerId: patientAnswers[0].id,
+        userId: user.id,
+        reason,
+      },
+      txn,
+    );
+    expect(computedFieldFlag.deletedAt).toBeFalsy();
+    const deleted = await ComputedFieldFlag.delete(computedFieldFlag.id, txn);
+    expect(deleted.deletedAt).toBeTruthy();
   });
 });

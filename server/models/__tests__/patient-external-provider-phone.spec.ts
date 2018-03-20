@@ -45,9 +45,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient external provider phone model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(PatientExternalProviderPhone.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -56,103 +67,94 @@ describe('patient external provider phone model', () => {
 
   describe('create', async () => {
     it('should create external provider to phone join', async () => {
-      await transaction(PatientExternalProviderPhone.knex(), async txn => {
-        const { patientExternalProvider, phone } = await setup(txn);
-        const patientExternalProviderPhone = await PatientExternalProviderPhone.create(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            phoneId: phone.id,
-          },
-          txn,
-        );
+      const { patientExternalProvider, phone } = await setup(txn);
+      const patientExternalProviderPhone = await PatientExternalProviderPhone.create(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
 
-        expect(patientExternalProviderPhone.length).toBe(1);
-        expect(patientExternalProviderPhone[0]).toMatchObject({
-          phoneNumber: '123-456-7890',
-          type: 'home',
-          description: 'moms home phone',
-        });
+      expect(patientExternalProviderPhone.length).toBe(1);
+      expect(patientExternalProviderPhone[0]).toMatchObject({
+        phoneNumber: '123-456-7890',
+        type: 'home',
+        description: 'moms home phone',
       });
     });
   });
 
   describe('delete', async () => {
     it('should mark external provider phone relationship as deleted', async () => {
-      await transaction(PatientExternalProviderPhone.knex(), async txn => {
-        const { patientExternalProvider, phone } = await setup(txn);
-        const patientExternalProviderPhone = await PatientExternalProviderPhone.create(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            phoneId: phone.id,
-          },
-          txn,
-        );
+      const { patientExternalProvider, phone } = await setup(txn);
+      const patientExternalProviderPhone = await PatientExternalProviderPhone.create(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
 
-        expect(patientExternalProviderPhone.length).toBe(1);
-        expect(patientExternalProviderPhone[0]).toMatchObject({
-          phoneNumber: '123-456-7890',
-          type: 'home',
-          description: 'moms home phone',
-        });
-
-        const remainingPhones = await PatientExternalProviderPhone.delete(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            phoneId: phone.id,
-          },
-          txn,
-        );
-        expect(remainingPhones.length).toBe(0);
+      expect(patientExternalProviderPhone.length).toBe(1);
+      expect(patientExternalProviderPhone[0]).toMatchObject({
+        phoneNumber: '123-456-7890',
+        type: 'home',
+        description: 'moms home phone',
       });
+
+      const remainingPhones = await PatientExternalProviderPhone.delete(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
+      expect(remainingPhones.length).toBe(0);
     });
   });
 
   describe('get for external provider', async () => {
     it('should get the one non deleted phones for a external provider', async () => {
-      await transaction(PatientExternalProviderPhone.knex(), async txn => {
-        const { patientExternalProvider, phone, user, patient } = await setup(txn);
+      const { patientExternalProvider, phone, user, patient } = await setup(txn);
 
-        // first phone for provider (deleted)
-        await PatientExternalProviderPhone.create(
-          { patientExternalProviderId: patientExternalProvider.id, phoneId: phone.id },
-          txn,
-        );
-        await PatientExternalProviderPhone.delete(
-          { patientExternalProviderId: patientExternalProvider.id, phoneId: phone.id },
-          txn,
-        );
+      // first phone for provider (deleted)
+      await PatientExternalProviderPhone.create(
+        { patientExternalProviderId: patientExternalProvider.id, phoneId: phone.id },
+        txn,
+      );
+      await PatientExternalProviderPhone.delete(
+        { patientExternalProviderId: patientExternalProvider.id, phoneId: phone.id },
+        txn,
+      );
 
-        // second phone for the same provider
-        const phone2 = await Phone.create(
-          { phoneNumber: '111-111-1111', type: 'mobile', updatedById: user.id },
-          txn,
-        );
-        await PatientExternalProviderPhone.create(
-          { patientExternalProviderId: patientExternalProvider.id, phoneId: phone2.id },
-          txn,
-        );
+      // second phone for the same provider
+      const phone2 = await Phone.create(
+        { phoneNumber: '111-111-1111', type: 'mobile', updatedById: user.id },
+        txn,
+      );
+      await PatientExternalProviderPhone.create(
+        { patientExternalProviderId: patientExternalProvider.id, phoneId: phone2.id },
+        txn,
+      );
 
-        // phone for another patientExternalProvider
-        const phone4 = await Phone.create(
-          { phoneNumber: '333-333-3333', updatedById: user.id },
-          txn,
-        );
-        const patientExternalProvider2 = await PatientExternalProvider.create(
-          createMockPatientExternalProvider(patient.id, user.id, phone4),
-          txn,
-        );
-        await PatientExternalProviderPhone.create(
-          { patientExternalProviderId: patientExternalProvider2.id, phoneId: phone4.id },
-          txn,
-        );
+      // phone for another patientExternalProvider
+      const phone4 = await Phone.create({ phoneNumber: '333-333-3333', updatedById: user.id }, txn);
+      const patientExternalProvider2 = await PatientExternalProvider.create(
+        createMockPatientExternalProvider(patient.id, user.id, phone4),
+        txn,
+      );
+      await PatientExternalProviderPhone.create(
+        { patientExternalProviderId: patientExternalProvider2.id, phoneId: phone4.id },
+        txn,
+      );
 
-        const phones = await PatientExternalProviderPhone.getForPatientExternalProvider(
-          patientExternalProvider.id,
-          txn,
-        );
-        expect(phones.length).toBe(1);
-        expect(phones[0]).toMatchObject({ phoneNumber: '111-111-1111', type: 'mobile' });
-      });
+      const phones = await PatientExternalProviderPhone.getForPatientExternalProvider(
+        patientExternalProvider.id,
+        txn,
+      );
+      expect(phones.length).toBe(1);
+      expect(phones[0]).toMatchObject({ phoneNumber: '111-111-1111', type: 'mobile' });
     });
   });
 });

@@ -30,9 +30,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient state model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(PatientState.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -40,32 +51,28 @@ describe('patient state model', () => {
   });
 
   it('gets a patient state model for a patient', async () => {
-    await transaction(PatientState.knex(), async txn => {
-      const { patient } = await setup(txn);
-      const patientState = await PatientState.getForPatient(patient.id, txn);
+    const { patient } = await setup(txn);
+    const patientState = await PatientState.getForPatient(patient.id, txn);
 
-      expect(patientState).not.toBeNull();
-    });
+    expect(patientState).not.toBeNull();
   });
 
   it('updates and gets a patient state for a patient', async () => {
-    await transaction(PatientState.knex(), async txn => {
-      const { patient, user } = await setup(txn);
-      const patientState = await PatientState.getForPatient(patient.id, txn);
+    const { patient, user } = await setup(txn);
+    const patientState = await PatientState.getForPatient(patient.id, txn);
 
-      expect(patientState!.currentState).toEqual('attributed');
+    expect(patientState!.currentState).toEqual('attributed');
 
-      await PatientState.updateForPatient(
-        {
-          patientId: patient.id,
-          updatedById: user.id,
-          currentState: 'assigned',
-        },
-        txn,
-      );
-      const refetchedPatientState = await PatientState.getForPatient(patient.id, txn);
+    await PatientState.updateForPatient(
+      {
+        patientId: patient.id,
+        updatedById: user.id,
+        currentState: 'assigned',
+      },
+      txn,
+    );
+    const refetchedPatientState = await PatientState.getForPatient(patient.id, txn);
 
-      expect(refetchedPatientState!.currentState).toEqual('assigned');
-    });
+    expect(refetchedPatientState!.currentState).toEqual('assigned');
   });
 });

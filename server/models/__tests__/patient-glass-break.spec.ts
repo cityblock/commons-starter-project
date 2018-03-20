@@ -30,9 +30,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('Patient Glass Break Model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(PatientGlassBreak.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -40,200 +51,186 @@ describe('Patient Glass Break Model', () => {
   });
 
   it('should create and get a patient glass break', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-
-      expect(patientGlassBreak).toMatchObject({
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
         userId: user.id,
         patientId: patient.id,
         reason,
         note,
-      });
+      },
+      txn,
+    );
 
-      expect(await PatientGlassBreak.get(patientGlassBreak.id, txn)).toMatchObject({
-        userId: user.id,
-        patientId: patient.id,
-        reason,
-        note,
-      });
+    expect(patientGlassBreak).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      reason,
+      note,
+    });
+
+    expect(await PatientGlassBreak.get(patientGlassBreak.id, txn)).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      reason,
+      note,
     });
   });
 
   it('throws an error if the patient glass break does not exist for given id', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const fakeId = uuid();
-      const error = `No such patient glass break: ${fakeId}`;
-      await expect(PatientGlassBreak.get(fakeId, txn)).rejects.toMatch(error);
-    });
+    const fakeId = uuid();
+    const error = `No such patient glass break: ${fakeId}`;
+    await expect(PatientGlassBreak.get(fakeId, txn)).rejects.toMatch(error);
   });
 
   it('validates a recent glass break', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
 
-      expect(
-        await PatientGlassBreak.validateGlassBreak(patientGlassBreak.id, user.id, patient.id, txn),
-      ).toBe(true);
-    });
+    expect(
+      await PatientGlassBreak.validateGlassBreak(patientGlassBreak.id, user.id, patient.id, txn),
+    ).toBe(true);
   });
 
   it('invalidates a glass break with a fake id', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
-      const fakeId = uuid();
-      const error = 'You must break the glass again to view this patient. Please refresh the page.';
-      await expect(
-        PatientGlassBreak.validateGlassBreak(fakeId, user.id, patient.id, txn),
-      ).rejects.toMatch(error);
-    });
+    const { user, patient } = await setup(txn);
+    const fakeId = uuid();
+    const error = 'You must break the glass again to view this patient. Please refresh the page.';
+    await expect(
+      PatientGlassBreak.validateGlassBreak(fakeId, user.id, patient.id, txn),
+    ).rejects.toMatch(error);
   });
 
   it('invalidates a glass break that was created too long ago', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
 
-      await PatientGlassBreak.query(txn)
-        .where({ userId: user.id, patientId: patient.id })
-        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+    await PatientGlassBreak.query(txn)
+      .where({ userId: user.id, patientId: patient.id })
+      .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const error = 'You must break the glass again to view this patient. Please refresh the page.';
+    const error = 'You must break the glass again to view this patient. Please refresh the page.';
 
-      await expect(
-        PatientGlassBreak.validateGlassBreak(patientGlassBreak.id, user.id, patient.id, txn),
-      ).rejects.toMatch(error);
-    });
+    await expect(
+      PatientGlassBreak.validateGlassBreak(patientGlassBreak.id, user.id, patient.id, txn),
+    ).rejects.toMatch(error);
   });
 
   it('gets all patient glass breaks for the current user session', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient, clinic } = await setup(txn);
-      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+    const { user, patient, clinic } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const tooOldGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const otherPatientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient2.id,
-          reason,
-          note,
-        },
-        txn,
-      );
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const tooOldGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const otherPatientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient2.id,
+        reason,
+        note,
+      },
+      txn,
+    );
 
-      await PatientGlassBreak.query(txn)
-        .where({ id: tooOldGlassBreak.id })
-        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+    await PatientGlassBreak.query(txn)
+      .where({ id: tooOldGlassBreak.id })
+      .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const glassBreaks = await PatientGlassBreak.getForCurrentUserSession(user.id, txn);
+    const glassBreaks = await PatientGlassBreak.getForCurrentUserSession(user.id, txn);
 
-      expect(glassBreaks.length).toBe(2);
+    expect(glassBreaks.length).toBe(2);
 
-      expect(glassBreaks.find(glassBreak => glassBreak.id === patientGlassBreak.id)).toMatchObject({
-        ...patientGlassBreak,
-      });
-      expect(
-        glassBreaks.find(glassBreak => glassBreak.id === otherPatientGlassBreak.id),
-      ).toMatchObject({
-        ...otherPatientGlassBreak,
-      });
+    expect(glassBreaks.find(glassBreak => glassBreak.id === patientGlassBreak.id)).toMatchObject({
+      ...patientGlassBreak,
+    });
+    expect(
+      glassBreaks.find(glassBreak => glassBreak.id === otherPatientGlassBreak.id),
+    ).toMatchObject({
+      ...otherPatientGlassBreak,
     });
   });
 
   it('gets all patient glass breaks for the current user and patient combination', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient, clinic } = await setup(txn);
-      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+    const { user, patient, clinic } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const tooOldGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient2.id,
-          reason,
-          note,
-        },
-        txn,
-      );
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const tooOldGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient2.id,
+        reason,
+        note,
+      },
+      txn,
+    );
 
-      await PatientGlassBreak.query(txn)
-        .where({ id: tooOldGlassBreak.id })
-        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+    await PatientGlassBreak.query(txn)
+      .where({ id: tooOldGlassBreak.id })
+      .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
-        user.id,
-        patient.id,
-        txn,
-      );
+    const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+      user.id,
+      patient.id,
+      txn,
+    );
 
-      expect(glassBreaks.length).toBe(1);
+    expect(glassBreaks.length).toBe(1);
 
-      expect(glassBreaks[0]).toMatchObject({
-        ...patientGlassBreak,
-      });
+    expect(glassBreaks[0]).toMatchObject({
+      ...patientGlassBreak,
     });
   });
 });

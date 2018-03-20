@@ -20,9 +20,20 @@ const setup = async (txn: Transaction): Promise<ISetup> => {
 };
 
 describe('CBO referral model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(CBOReferral.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -30,129 +41,111 @@ describe('CBO referral model', () => {
   });
 
   it('creates and gets a CBO referral', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const { cbo } = await setup(txn);
-      const cboReferral = await CBOReferral.create(
-        {
-          categoryId: cbo.categoryId,
-          CBOId: cbo.id,
-          diagnosis,
-        },
-        txn,
-      );
-
-      expect(cboReferral).toMatchObject({
+    const { cbo } = await setup(txn);
+    const cboReferral = await CBOReferral.create(
+      {
         categoryId: cbo.categoryId,
         CBOId: cbo.id,
         diagnosis,
-      });
-      expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);
+      },
+      txn,
+    );
+
+    expect(cboReferral).toMatchObject({
+      categoryId: cbo.categoryId,
+      CBOId: cbo.id,
+      diagnosis,
     });
+    expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);
   });
 
   it('creates and gets a CBO referral for other CBO', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const { cbo } = await setup(txn);
-      const url = 'https://www.westeros.com';
+    const { cbo } = await setup(txn);
+    const url = 'https://www.westeros.com';
 
-      const cboReferral = await CBOReferral.create(
-        {
-          categoryId: cbo.categoryId,
-          name,
-          url,
-          diagnosis,
-        },
-        txn,
-      );
-
-      expect(cboReferral).toMatchObject({
+    const cboReferral = await CBOReferral.create(
+      {
         categoryId: cbo.categoryId,
         name,
         url,
         diagnosis,
-      });
-      expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);
+      },
+      txn,
+    );
+
+    expect(cboReferral).toMatchObject({
+      categoryId: cbo.categoryId,
+      name,
+      url,
+      diagnosis,
     });
+    expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);
   });
 
   it('throws an error if trying to create CBO referral without enough information', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const { cbo } = await setup(txn);
-      const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
-      await expect(CBOReferral.create(input, txn)).rejects.toMatch(
-        'Must select CBO from list or provide name and URL of other CBO',
-      );
-    });
+    const { cbo } = await setup(txn);
+    const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
+    await expect(CBOReferral.create(input, txn)).rejects.toMatch(
+      'Must select CBO from list or provide name and URL of other CBO',
+    );
   });
 
   it('does not throw an error if skipping validation for CBO referral', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const { cbo } = await setup(txn);
-      const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
+    const { cbo } = await setup(txn);
+    const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
 
-      const cboReferral = await CBOReferral.create(input, txn, true);
-      expect(cboReferral.name).toBe(CBOReferral.name);
-      expect(cboReferral.CBOId).toBeNull();
-      expect(cboReferral.url).toBeNull();
-    });
+    const cboReferral = await CBOReferral.create(input, txn, true);
+    expect(cboReferral.name).toBe(CBOReferral.name);
+    expect(cboReferral.CBOId).toBeNull();
+    expect(cboReferral.url).toBeNull();
   });
 
   it('throws an error if CBO referral does not exist for a given id', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(CBOReferral.get(fakeId, txn)).rejects.toMatch(`No such CBO referral: ${fakeId}`);
-    });
+    const fakeId = uuid();
+    await expect(CBOReferral.get(fakeId, txn)).rejects.toMatch(`No such CBO referral: ${fakeId}`);
   });
 
   it('edits a CBO referral', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const cboReferral = await createCBOReferral(txn);
-      expect(cboReferral.sentAt).toBeFalsy();
+    const cboReferral = await createCBOReferral(txn);
+    expect(cboReferral.sentAt).toBeFalsy();
 
-      const editedCBO = await CBOReferral.edit(
-        {
-          sentAt,
-        },
-        cboReferral.id,
-        txn,
-      );
+    const editedCBO = await CBOReferral.edit(
+      {
+        sentAt,
+      },
+      cboReferral.id,
+      txn,
+    );
 
-      expect(editedCBO.sentAt).toBeTruthy();
-    });
+    expect(editedCBO.sentAt).toBeTruthy();
   });
 
   it('throws error when trying to edit with bogus id', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const fakeId = uuid();
+    const fakeId = uuid();
 
-      await expect(
-        CBOReferral.edit(
-          {
-            sentAt,
-          },
-          fakeId,
-          txn,
-        ),
-      ).rejects.toMatch(`No such CBO referral: ${fakeId}`);
-    });
+    await expect(
+      CBOReferral.edit(
+        {
+          sentAt,
+        },
+        fakeId,
+        txn,
+      ),
+    ).rejects.toMatch(`No such CBO referral: ${fakeId}`);
   });
 
   it('deletes a CBO referral', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const cboReferral = await createCBOReferral(txn);
-      expect(cboReferral.deletedAt).toBeFalsy();
+    const cboReferral = await createCBOReferral(txn);
+    expect(cboReferral.deletedAt).toBeFalsy();
 
-      const deleted = await CBOReferral.delete(cboReferral.id, txn);
-      expect(deleted.deletedAt).toBeTruthy();
-    });
+    const deleted = await CBOReferral.delete(cboReferral.id, txn);
+    expect(deleted.deletedAt).toBeTruthy();
   });
 
   it('throws error when trying to delete with bogus id', async () => {
-    await transaction(CBOReferral.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(CBOReferral.delete(fakeId, txn)).rejects.toMatch(
-        `No such CBO referral: ${fakeId}`,
-      );
-    });
+    const fakeId = uuid();
+    await expect(CBOReferral.delete(fakeId, txn)).rejects.toMatch(
+      `No such CBO referral: ${fakeId}`,
+    );
   });
 });

@@ -50,9 +50,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient external provider email model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Email.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -61,105 +72,99 @@ describe('patient external provider email model', () => {
 
   describe('create', async () => {
     it('should create patient external provider to email join', async () => {
-      await transaction(PatientExternalProviderEmail.knex(), async txn => {
-        const { patientExternalProvider, email } = await setup(txn);
-        const patientExternalProviderEmail = await PatientExternalProviderEmail.create(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            emailId: email.id,
-          },
-          txn,
-        );
+      const { patientExternalProvider, email } = await setup(txn);
+      const patientExternalProviderEmail = await PatientExternalProviderEmail.create(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          emailId: email.id,
+        },
+        txn,
+      );
 
-        expect(patientExternalProviderEmail.length).toBe(1);
-        expect(patientExternalProviderEmail[0]).toMatchObject({
-          emailAddress: 'spam@email.com',
-          description: 'spam email',
-        });
+      expect(patientExternalProviderEmail.length).toBe(1);
+      expect(patientExternalProviderEmail[0]).toMatchObject({
+        emailAddress: 'spam@email.com',
+        description: 'spam email',
       });
     });
   });
 
   describe('delete', async () => {
     it('should mark patient external provider email relationship as deleted', async () => {
-      await transaction(PatientExternalProviderEmail.knex(), async txn => {
-        const { patientExternalProvider, email } = await setup(txn);
-        const patientExternalProviderEmail = await PatientExternalProviderEmail.create(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            emailId: email.id,
-          },
-          txn,
-        );
+      const { patientExternalProvider, email } = await setup(txn);
+      const patientExternalProviderEmail = await PatientExternalProviderEmail.create(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          emailId: email.id,
+        },
+        txn,
+      );
 
-        expect(patientExternalProviderEmail.length).toBe(1);
-        expect(patientExternalProviderEmail[0]).toMatchObject({
-          emailAddress: 'spam@email.com',
-          description: 'spam email',
-        });
-
-        const remainingEmails = await PatientExternalProviderEmail.delete(
-          {
-            patientExternalProviderId: patientExternalProvider.id,
-            emailId: email.id,
-          },
-          txn,
-        );
-        expect(remainingEmails.length).toBe(0);
+      expect(patientExternalProviderEmail.length).toBe(1);
+      expect(patientExternalProviderEmail[0]).toMatchObject({
+        emailAddress: 'spam@email.com',
+        description: 'spam email',
       });
+
+      const remainingEmails = await PatientExternalProviderEmail.delete(
+        {
+          patientExternalProviderId: patientExternalProvider.id,
+          emailId: email.id,
+        },
+        txn,
+      );
+      expect(remainingEmails.length).toBe(0);
     });
   });
 
   describe('get for patient external provider', async () => {
     it('should get the one non deleted email for a patient external provider', async () => {
-      await transaction(PatientExternalProviderEmail.knex(), async txn => {
-        const { patientExternalProvider, patient, phone, email, user } = await setup(txn);
+      const { patientExternalProvider, patient, phone, email, user } = await setup(txn);
 
-        // first email for provider (deleted)
-        await PatientExternalProviderEmail.create(
-          { patientExternalProviderId: patientExternalProvider.id, emailId: email.id },
-          txn,
-        );
-        await PatientExternalProviderEmail.delete(
-          { patientExternalProviderId: patientExternalProvider.id, emailId: email.id },
-          txn,
-        );
+      // first email for provider (deleted)
+      await PatientExternalProviderEmail.create(
+        { patientExternalProviderId: patientExternalProvider.id, emailId: email.id },
+        txn,
+      );
+      await PatientExternalProviderEmail.delete(
+        { patientExternalProviderId: patientExternalProvider.id, emailId: email.id },
+        txn,
+      );
 
-        // second email for the same patient external provider
-        const email2 = await Email.create(
-          { emailAddress: 'joe@email.edu', updatedById: user.id },
-          txn,
-        );
-        await PatientExternalProviderEmail.create(
-          { patientExternalProviderId: patientExternalProvider.id, emailId: email2.id },
-          txn,
-        );
+      // second email for the same patient external provider
+      const email2 = await Email.create(
+        { emailAddress: 'joe@email.edu', updatedById: user.id },
+        txn,
+      );
+      await PatientExternalProviderEmail.create(
+        { patientExternalProviderId: patientExternalProvider.id, emailId: email2.id },
+        txn,
+      );
 
-        // email for another patient external provider
-        const patientExternalProvider2 = await PatientExternalProvider.create(
-          createMockPatientExternalProvider(patient.id, user.id, phone),
-          txn,
-        );
-        await PatientExternalProviderPhone.create(
-          { phoneId: phone.id, patientExternalProviderId: patientExternalProvider2.id },
-          txn,
-        );
-        const email3 = await Email.create(
-          { emailAddress: 'test@email.com', updatedById: user.id },
-          txn,
-        );
-        await PatientExternalProviderEmail.create(
-          { patientExternalProviderId: patientExternalProvider2.id, emailId: email3.id },
-          txn,
-        );
+      // email for another patient external provider
+      const patientExternalProvider2 = await PatientExternalProvider.create(
+        createMockPatientExternalProvider(patient.id, user.id, phone),
+        txn,
+      );
+      await PatientExternalProviderPhone.create(
+        { phoneId: phone.id, patientExternalProviderId: patientExternalProvider2.id },
+        txn,
+      );
+      const email3 = await Email.create(
+        { emailAddress: 'test@email.com', updatedById: user.id },
+        txn,
+      );
+      await PatientExternalProviderEmail.create(
+        { patientExternalProviderId: patientExternalProvider2.id, emailId: email3.id },
+        txn,
+      );
 
-        const emails = await PatientExternalProviderEmail.getForPatientExternalProvider(
-          patientExternalProvider.id,
-          txn,
-        );
-        expect(emails.length).toBe(1);
-        expect(emails[0]).toMatchObject({ emailAddress: 'joe@email.edu' });
-      });
+      const emails = await PatientExternalProviderEmail.getForPatientExternalProvider(
+        patientExternalProvider.id,
+        txn,
+      );
+      expect(emails.length).toBe(1);
+      expect(emails[0]).toMatchObject({ emailAddress: 'joe@email.edu' });
     });
   });
 });

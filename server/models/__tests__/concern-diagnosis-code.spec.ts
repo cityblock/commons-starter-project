@@ -25,9 +25,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('concern diagnosis code model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(ConcernDiagnosisCode.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -36,86 +47,47 @@ describe('concern diagnosis code model', () => {
 
   describe('creating a concern diagnosis code', () => {
     it('creates a concern diagnosis code and associations', async () => {
-      await transaction(ConcernDiagnosisCode.knex(), async txn => {
-        const { concern, diagnosisCode } = await setup(txn);
+      const { concern, diagnosisCode } = await setup(txn);
 
-        expect(concern.diagnosisCodes.length).toEqual(0);
+      expect(concern.diagnosisCodes.length).toEqual(0);
 
-        await ConcernDiagnosisCode.create(
-          {
-            concernId: concern.id,
-            diagnosisCodeId: diagnosisCode.id,
-          },
-          txn,
-        );
+      await ConcernDiagnosisCode.create(
+        {
+          concernId: concern.id,
+          diagnosisCodeId: diagnosisCode.id,
+        },
+        txn,
+      );
 
-        const fetchedConcern = await Concern.get(concern.id, txn);
+      const fetchedConcern = await Concern.get(concern.id, txn);
 
-        expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
-        expect(fetchedConcern.diagnosisCodes[0]).toMatchObject(diagnosisCode);
-      });
+      expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
+      expect(fetchedConcern.diagnosisCodes[0]).toMatchObject(diagnosisCode);
     });
 
     it('is a noop when creating a duplicate concern diagnosis code', async () => {
-      await transaction(ConcernDiagnosisCode.knex(), async txn => {
-        const { concern, diagnosisCode } = await setup(txn);
+      const { concern, diagnosisCode } = await setup(txn);
 
-        await ConcernDiagnosisCode.create(
-          {
-            concernId: concern.id,
-            diagnosisCodeId: diagnosisCode.id,
-          },
-          txn,
-        );
-        await ConcernDiagnosisCode.create(
-          {
-            concernId: concern.id,
-            diagnosisCodeId: diagnosisCode.id,
-          },
-          txn,
-        );
+      await ConcernDiagnosisCode.create(
+        {
+          concernId: concern.id,
+          diagnosisCodeId: diagnosisCode.id,
+        },
+        txn,
+      );
+      await ConcernDiagnosisCode.create(
+        {
+          concernId: concern.id,
+          diagnosisCodeId: diagnosisCode.id,
+        },
+        txn,
+      );
 
-        const fetchedConcern = await Concern.get(concern.id, txn);
-        expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
-      });
+      const fetchedConcern = await Concern.get(concern.id, txn);
+      expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
     });
 
     it('is creates a duplicate when the existing one is already deleted', async () => {
-      await transaction(ConcernDiagnosisCode.knex(), async txn => {
-        const { concern, diagnosisCode } = await setup(txn);
-
-        await ConcernDiagnosisCode.create(
-          {
-            concernId: concern.id,
-            diagnosisCodeId: diagnosisCode.id,
-          },
-          txn,
-        );
-
-        const fetchedConcern = await Concern.get(concern.id, txn);
-        expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
-
-        await ConcernDiagnosisCode.delete(concern.id, diagnosisCode.id, txn);
-
-        const refetchedConcern = await Concern.get(concern.id, txn);
-        expect(refetchedConcern.diagnosisCodes.length).toEqual(0);
-
-        await ConcernDiagnosisCode.create(
-          {
-            concernId: concern.id,
-            diagnosisCodeId: diagnosisCode.id,
-          },
-          txn,
-        );
-
-        const finalRefetchedConcern = await Concern.get(concern.id, txn);
-        expect(finalRefetchedConcern.diagnosisCodes.length).toEqual(1);
-      });
-    });
-  });
-
-  it('deletes a concern diagnosis code and updates associations', async () => {
-    await transaction(ConcernDiagnosisCode.knex(), async txn => {
       const { concern, diagnosisCode } = await setup(txn);
 
       await ConcernDiagnosisCode.create(
@@ -129,10 +101,41 @@ describe('concern diagnosis code model', () => {
       const fetchedConcern = await Concern.get(concern.id, txn);
       expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
 
-      await ConcernDiagnosisCode.delete(concern.id, fetchedConcern.diagnosisCodes[0].id, txn);
+      await ConcernDiagnosisCode.delete(concern.id, diagnosisCode.id, txn);
 
       const refetchedConcern = await Concern.get(concern.id, txn);
       expect(refetchedConcern.diagnosisCodes.length).toEqual(0);
+
+      await ConcernDiagnosisCode.create(
+        {
+          concernId: concern.id,
+          diagnosisCodeId: diagnosisCode.id,
+        },
+        txn,
+      );
+
+      const finalRefetchedConcern = await Concern.get(concern.id, txn);
+      expect(finalRefetchedConcern.diagnosisCodes.length).toEqual(1);
     });
+  });
+
+  it('deletes a concern diagnosis code and updates associations', async () => {
+    const { concern, diagnosisCode } = await setup(txn);
+
+    await ConcernDiagnosisCode.create(
+      {
+        concernId: concern.id,
+        diagnosisCodeId: diagnosisCode.id,
+      },
+      txn,
+    );
+
+    const fetchedConcern = await Concern.get(concern.id, txn);
+    expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
+
+    await ConcernDiagnosisCode.delete(concern.id, fetchedConcern.diagnosisCodes[0].id, txn);
+
+    const refetchedConcern = await Concern.get(concern.id, txn);
+    expect(refetchedConcern.diagnosisCodes.length).toEqual(0);
   });
 });

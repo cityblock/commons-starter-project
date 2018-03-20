@@ -21,9 +21,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('address', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Address.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -32,70 +43,60 @@ describe('address', () => {
 
   describe('get', async () => {
     it('should get address by id', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { address } = await setup(txn);
-        const fetchedAddress = await Address.get(address.id, txn);
-        expect(fetchedAddress).toMatchObject(address);
-      });
+      const { address } = await setup(txn);
+      const fetchedAddress = await Address.get(address.id, txn);
+      expect(fetchedAddress).toMatchObject(address);
     });
   });
 
   describe('create', async () => {
     it('should create address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { address, user } = await setup(txn);
-        expect(address).toMatchObject({
-          street1: '55 Washington St',
-          zip: '11201',
-          state: 'NY',
-          city: 'Brooklyn',
-          description: 'Office',
-          updatedById: user.id,
-        });
+      const { address, user } = await setup(txn);
+      expect(address).toMatchObject({
+        street1: '55 Washington St',
+        zip: '11201',
+        state: 'NY',
+        city: 'Brooklyn',
+        description: 'Office',
+        updatedById: user.id,
       });
     });
   });
 
   describe('delete', async () => {
     it('should delete address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { address } = await setup(txn);
-        const deleted = await Address.delete(address.id, txn);
+      const { address } = await setup(txn);
+      const deleted = await Address.delete(address.id, txn);
 
-        expect(deleted.deletedAt).toBeTruthy();
-        expect(deleted.id).toBe(address.id);
+      expect(deleted.deletedAt).toBeTruthy();
+      expect(deleted.id).toBe(address.id);
 
-        await expect(Address.get(address.id, txn)).rejects.toMatch(
-          `No such address: ${address.id}`,
-        );
-      });
+      await expect(Address.get(address.id, txn)).rejects.toMatch(`No such address: ${address.id}`);
     });
   });
 
   describe('edit', async () => {
     it('should edit address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { address, user } = await setup(txn);
-        const editedAddress = await Address.edit(
-          {
-            street1: '44 Washington St',
-            zip: '10010',
-            state: 'MA',
-            city: 'Boston',
-            description: "Sister's house",
-            updatedById: user.id,
-          },
-          address.id,
-          txn,
-        );
-        expect(editedAddress).toMatchObject({
+      const { address, user } = await setup(txn);
+      const editedAddress = await Address.edit(
+        {
           street1: '44 Washington St',
           zip: '10010',
           state: 'MA',
           city: 'Boston',
           description: "Sister's house",
           updatedById: user.id,
-        });
+        },
+        address.id,
+        txn,
+      );
+      expect(editedAddress).toMatchObject({
+        street1: '44 Washington St',
+        zip: '10010',
+        state: 'MA',
+        city: 'Boston',
+        description: "Sister's house",
+        updatedById: user.id,
       });
     });
   });

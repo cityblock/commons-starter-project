@@ -5,9 +5,20 @@ import CBOCategory from '../cbo-category';
 const title = 'Food Services';
 
 describe('CBO category model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(CBOCategory.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -15,35 +26,31 @@ describe('CBO category model', () => {
   });
 
   it('gets all CBO categories', async () => {
-    await transaction(CBOCategory.knex(), async txn => {
-      const title2 = 'Mental Health Services';
-      const cboCategory = await CBOCategory.create(
-        {
-          title,
-        },
-        txn,
-      );
-      const cboCategory2 = await CBOCategory.create(
-        {
-          title: title2,
-        },
-        txn,
-      );
+    const title2 = 'Mental Health Services';
+    const cboCategory = await CBOCategory.create(
+      {
+        title,
+      },
+      txn,
+    );
+    const cboCategory2 = await CBOCategory.create(
+      {
+        title: title2,
+      },
+      txn,
+    );
 
-      expect(await CBOCategory.getAll(txn)).toMatchObject([cboCategory, cboCategory2]);
-    });
+    expect(await CBOCategory.getAll(txn)).toMatchObject([cboCategory, cboCategory2]);
   });
 
   it('creates a CBO category', async () => {
-    await transaction(CBOCategory.knex(), async txn => {
-      const cboCategory = await CBOCategory.create(
-        {
-          title,
-        },
-        txn,
-      );
+    const cboCategory = await CBOCategory.create(
+      {
+        title,
+      },
+      txn,
+    );
 
-      expect(cboCategory.title).toBe(title);
-    });
+    expect(cboCategory.title).toBe(title);
   });
 });

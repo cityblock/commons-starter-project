@@ -33,9 +33,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient consent form model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -44,181 +55,171 @@ describe('patient consent form model', () => {
 
   describe('creating a patient consent form', async () => {
     it('should create a patient consent form', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { consentForm, patient, user } = await setup(txn);
-        const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
+      const { consentForm, patient, user } = await setup(txn);
+      const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
 
-        expect(patientConsentForms.length).toEqual(0);
+      expect(patientConsentForms.length).toEqual(0);
 
-        const patientConsentForm = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const patientConsentForm = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientConsentForms.length).toEqual(1);
-        expect(refetchedPatientConsentForms[0]).toMatchObject(patientConsentForm);
-      });
+      expect(refetchedPatientConsentForms.length).toEqual(1);
+      expect(refetchedPatientConsentForms[0]).toMatchObject(patientConsentForm);
     });
 
     it('should delete any duplicate patient consent forms', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { consentForm, patient, user } = await setup(txn);
-        const consentForm2 = await ConsentForm.create('HIPAA', txn);
-        const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
+      const { consentForm, patient, user } = await setup(txn);
+      const consentForm2 = await ConsentForm.create('HIPAA', txn);
+      const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
 
-        expect(patientConsentForms.length).toEqual(0);
+      expect(patientConsentForms.length).toEqual(0);
 
-        const patientConsentForm1 = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const patientConsentForm2 = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm2.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        const refetchedPatientConsentFormIds = refetchedPatientConsentForms.map(
-          patientConsentForm => patientConsentForm.id,
-        );
+      const patientConsentForm1 = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const patientConsentForm2 = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm2.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      const refetchedPatientConsentFormIds = refetchedPatientConsentForms.map(
+        patientConsentForm => patientConsentForm.id,
+      );
 
-        expect(refetchedPatientConsentForms.length).toEqual(2);
-        expect(refetchedPatientConsentFormIds).toContain(patientConsentForm1.id);
-        expect(refetchedPatientConsentFormIds).toContain(patientConsentForm2.id);
+      expect(refetchedPatientConsentForms.length).toEqual(2);
+      expect(refetchedPatientConsentFormIds).toContain(patientConsentForm1.id);
+      expect(refetchedPatientConsentFormIds).toContain(patientConsentForm2.id);
 
-        const patientConsentForm3 = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/02/1999',
-          },
-          txn,
-        );
-        const refetchedPatientConsentForms2 = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        const refetchedPatientConsentFormIds2 = refetchedPatientConsentForms2.map(
-          patientConsentForm => patientConsentForm.id,
-        );
+      const patientConsentForm3 = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/02/1999',
+        },
+        txn,
+      );
+      const refetchedPatientConsentForms2 = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      const refetchedPatientConsentFormIds2 = refetchedPatientConsentForms2.map(
+        patientConsentForm => patientConsentForm.id,
+      );
 
-        expect(refetchedPatientConsentForms2.length).toEqual(2);
-        expect(refetchedPatientConsentFormIds2).toContain(patientConsentForm2.id);
-        expect(refetchedPatientConsentFormIds2).toContain(patientConsentForm3.id);
-        expect(refetchedPatientConsentFormIds2).not.toContain(patientConsentForm1.id);
-      });
+      expect(refetchedPatientConsentForms2.length).toEqual(2);
+      expect(refetchedPatientConsentFormIds2).toContain(patientConsentForm2.id);
+      expect(refetchedPatientConsentFormIds2).toContain(patientConsentForm3.id);
+      expect(refetchedPatientConsentFormIds2).not.toContain(patientConsentForm1.id);
     });
 
     it('updates the computed patient status', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { consentForm, patient, user } = await setup(txn);
-        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+      const { consentForm, patient, user } = await setup(txn);
+      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-        expect(computedPatientStatus!.isConsentSigned).toEqual(false);
+      expect(computedPatientStatus!.isConsentSigned).toEqual(false);
 
-        await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
+      await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
 
-        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
-      });
+      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
     });
   });
 
   describe('deleting a patient consent form', () => {
     it('should delete a patient consent form', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { consentForm, patient, user } = await setup(txn);
-        const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
+      const { consentForm, patient, user } = await setup(txn);
+      const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
 
-        expect(patientConsentForms.length).toEqual(0);
+      expect(patientConsentForms.length).toEqual(0);
 
-        const patientConsentForm = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
+      const patientConsentForm = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
 
-        const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientConsentForms.length).toEqual(1);
+      expect(refetchedPatientConsentForms.length).toEqual(1);
 
-        await PatientConsentForm.delete(patientConsentForm.id, user.id, txn);
+      await PatientConsentForm.delete(patientConsentForm.id, user.id, txn);
 
-        const refetchedPatientConsentForms2 = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedPatientConsentForms2 = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientConsentForms2.length).toEqual(0);
-      });
+      expect(refetchedPatientConsentForms2.length).toEqual(0);
     });
 
     it('updates the computed patient status', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { consentForm, patient, user } = await setup(txn);
-        const patientConsentForm = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+      const { consentForm, patient, user } = await setup(txn);
+      const patientConsentForm = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-        expect(computedPatientStatus!.isConsentSigned).toEqual(true);
+      expect(computedPatientStatus!.isConsentSigned).toEqual(true);
 
-        await PatientConsentForm.delete(patientConsentForm.id, user.id, txn);
+      await PatientConsentForm.delete(patientConsentForm.id, user.id, txn);
 
-        const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
-      });
+      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
     });
   });
 });

@@ -5,9 +5,20 @@ import { attributionUserClinicName } from '../../lib/consts';
 import Clinic from '../clinic';
 
 describe('clinic model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Clinic.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -16,107 +27,90 @@ describe('clinic model', () => {
 
   describe('clinic functions', () => {
     it('creates and retrieves a clinic', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const clinic = await Clinic.create(
-          {
-            departmentId: 1,
-            name: 'Center Zero',
-          },
-          txn,
-        );
-        const clinicById = await Clinic.get(clinic.id, txn);
+      const clinic = await Clinic.create(
+        {
+          departmentId: 1,
+          name: 'Center Zero',
+        },
+        txn,
+      );
+      const clinicById = await Clinic.get(clinic.id, txn);
 
-        expect(clinicById).toMatchObject(clinic);
-      });
+      expect(clinicById).toMatchObject(clinic);
     });
 
     it('should create an attribution clinic', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const clinic = await Clinic.findOrCreateAttributionClinic(txn);
-        expect(clinic.name).toEqual(attributionUserClinicName);
+      const clinic = await Clinic.findOrCreateAttributionClinic(txn);
+      expect(clinic.name).toEqual(attributionUserClinicName);
 
-        // Check to make sure it's an idempotent operation
-        await Clinic.findOrCreateAttributionClinic(txn);
-        const clinics = await Clinic.getAll({ pageNumber: 0, pageSize: 100 }, txn);
+      // Check to make sure it's an idempotent operation
+      await Clinic.findOrCreateAttributionClinic(txn);
+      const clinics = await Clinic.getAll({ pageNumber: 0, pageSize: 100 }, txn);
 
-        expect(clinics.total).toEqual(1);
-      });
+      expect(clinics.total).toEqual(1);
     });
 
     it('gets a clinic by a field', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const clinic = await Clinic.create(
-          {
-            departmentId: 1,
-            name: 'Center Zero',
-          },
-          txn,
-        );
-        const clinicByDepartmentId = await Clinic.getBy(
-          { fieldName: 'departmentId', field: 1 },
-          txn,
-        );
-        const clinicByName = await Clinic.getBy({ fieldName: 'name', field: 'Center Zero' }, txn);
+      const clinic = await Clinic.create(
+        {
+          departmentId: 1,
+          name: 'Center Zero',
+        },
+        txn,
+      );
+      const clinicByDepartmentId = await Clinic.getBy({ fieldName: 'departmentId', field: 1 }, txn);
+      const clinicByName = await Clinic.getBy({ fieldName: 'name', field: 'Center Zero' }, txn);
 
-        expect(clinicByDepartmentId).toMatchObject(clinic);
-        expect(clinicByName).toMatchObject(clinic);
-      });
+      expect(clinicByDepartmentId).toMatchObject(clinic);
+      expect(clinicByName).toMatchObject(clinic);
     });
 
     it('updates a clinic', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const clinic = await Clinic.create(
-          {
-            departmentId: 1,
-            name: 'Center Zero',
-          },
-          txn,
-        );
-        const updatedClinic = await Clinic.update(
-          clinic.id,
-          {
-            departmentId: 2,
-            name: 'Center One',
-          },
-          txn,
-        );
-        expect(updatedClinic.name).toBe('Center One');
-        expect(updatedClinic.departmentId).toBe(2);
-      });
+      const clinic = await Clinic.create(
+        {
+          departmentId: 1,
+          name: 'Center Zero',
+        },
+        txn,
+      );
+      const updatedClinic = await Clinic.update(
+        clinic.id,
+        {
+          departmentId: 2,
+          name: 'Center One',
+        },
+        txn,
+      );
+      expect(updatedClinic.name).toBe('Center One');
+      expect(updatedClinic.departmentId).toBe(2);
     });
 
     it('returns null if calling getBy without a comparison parameter', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const result = await Clinic.getBy({ fieldName: 'name' }, txn);
-        expect(result).toBeFalsy();
-      });
+      const result = await Clinic.getBy({ fieldName: 'name' }, txn);
+      expect(result).toBeFalsy();
     });
 
     it('throws an error when getting a clinic by an invalid id', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        const fakeId = uuid();
-        await expect(Clinic.get(fakeId, txn)).rejects.toMatch(
-          `No such clinic for clinicId: ${fakeId}`,
-        );
-      });
+      const fakeId = uuid();
+      await expect(Clinic.get(fakeId, txn)).rejects.toMatch(
+        `No such clinic for clinicId: ${fakeId}`,
+      );
     });
 
     it('fetches all clinics', async () => {
-      await transaction(Clinic.knex(), async txn => {
-        await Clinic.create({ departmentId: 1, name: 'Center Zero' }, txn);
-        await Clinic.create({ departmentId: 2, name: 'Center One' }, txn);
+      await Clinic.create({ departmentId: 1, name: 'Center Zero' }, txn);
+      await Clinic.create({ departmentId: 2, name: 'Center One' }, txn);
 
-        expect(await Clinic.getAll({ pageNumber: 0, pageSize: 10 }, txn)).toMatchObject({
-          results: [
-            {
-              name: 'Center Zero',
-            },
-            {
-              name: 'Center One',
-            },
-          ],
-          total: 2,
-        });
+      expect(await Clinic.getAll({ pageNumber: 0, pageSize: 10 }, txn)).toMatchObject({
+        results: [
+          {
+            name: 'Center Zero',
+          },
+          {
+            name: 'Center One',
+          },
+        ],
+        total: 2,
       });
     });
   });

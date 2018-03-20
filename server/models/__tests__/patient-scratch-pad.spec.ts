@@ -26,9 +26,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient scratch pad model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Patient.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -36,29 +47,35 @@ describe('patient scratch pad model', () => {
   });
 
   it('should create and get a patient scratch pad', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientScratchPad = await PatientScratchPad.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-        },
-        txn,
-      );
-
-      expect(patientScratchPad).toMatchObject({
+    const patientScratchPad = await PatientScratchPad.create(
+      {
         userId: user.id,
         patientId: patient.id,
-        body: '',
-      });
+      },
+      txn,
+    );
+
+    expect(patientScratchPad).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      body: '',
     });
   });
 
   it('should error if trying to create a patient scratch pad for same user/patient combination', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
+    await PatientScratchPad.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+      },
+      txn,
+    );
+
+    try {
       await PatientScratchPad.create(
         {
           userId: user.id,
@@ -66,107 +83,89 @@ describe('patient scratch pad model', () => {
         },
         txn,
       );
-
-      try {
-        await PatientScratchPad.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-          },
-          txn,
-        );
-      } catch (err) {
-        expect(err.constraint).toEqual('patient_scratch_pad_userid_patientid_unique');
-      }
-    });
+    } catch (err) {
+      expect(err.constraint).toEqual('patient_scratch_pad_userid_patientid_unique');
+    }
   });
 
   it('should find a patient scratch pad for given user and patient', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientScratchPad = await PatientScratchPad.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-        },
-        txn,
-      );
-
-      const fetchedScratchPad = await PatientScratchPad.getForPatientAndUser(
-        {
-          userId: user.id,
-          patientId: patient.id,
-        },
-        txn,
-      );
-
-      expect(fetchedScratchPad).toMatchObject({
-        id: patientScratchPad.id,
+    const patientScratchPad = await PatientScratchPad.create(
+      {
         userId: user.id,
         patientId: patient.id,
-        body: '',
-      });
+      },
+      txn,
+    );
+
+    const fetchedScratchPad = await PatientScratchPad.getForPatientAndUser(
+      {
+        userId: user.id,
+        patientId: patient.id,
+      },
+      txn,
+    );
+
+    expect(fetchedScratchPad).toMatchObject({
+      id: patientScratchPad.id,
+      userId: user.id,
+      patientId: patient.id,
+      body: '',
     });
   });
 
   it('should return null if scratch pad does not exist for given user and patient', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const fetchedScratchPad = await PatientScratchPad.getForPatientAndUser(
-        {
-          userId: uuid(),
-          patientId: uuid(),
-        },
-        txn,
-      );
+    const fetchedScratchPad = await PatientScratchPad.getForPatientAndUser(
+      {
+        userId: uuid(),
+        patientId: uuid(),
+      },
+      txn,
+    );
 
-      expect(fetchedScratchPad).toBeNull();
-    });
+    expect(fetchedScratchPad).toBeNull();
   });
 
   it('should edit body of patient scratch pad', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientScratchPad = await PatientScratchPad.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-        },
-        txn,
-      );
-
-      const body = 'Seems worried about Night King';
-
-      const updatedScratchPad = await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
-
-      expect(updatedScratchPad).toMatchObject({
-        id: patientScratchPad.id,
+    const patientScratchPad = await PatientScratchPad.create(
+      {
         userId: user.id,
         patientId: patient.id,
-        body,
-      });
+      },
+      txn,
+    );
+
+    const body = 'Seems worried about Night King';
+
+    const updatedScratchPad = await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
+
+    expect(updatedScratchPad).toMatchObject({
+      id: patientScratchPad.id,
+      userId: user.id,
+      patientId: patient.id,
+      body,
     });
   });
 
   it('should get patient id for resource', async () => {
-    await transaction(PatientScratchPad.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const patientScratchPad = await PatientScratchPad.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-        },
-        txn,
-      );
+    const patientScratchPad = await PatientScratchPad.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+      },
+      txn,
+    );
 
-      const fetchedPatientId = await PatientScratchPad.getPatientIdForResource(
-        patientScratchPad.id,
-        txn,
-      );
+    const fetchedPatientId = await PatientScratchPad.getPatientIdForResource(
+      patientScratchPad.id,
+      txn,
+    );
 
-      expect(fetchedPatientId).toBe(patient.id);
-    });
+    expect(fetchedPatientId).toBe(patient.id);
   });
 });

@@ -32,9 +32,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient advanced directive form model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(PatientAdvancedDirectiveForm.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -43,149 +54,133 @@ describe('patient advanced directive form model', () => {
 
   describe('creating a patient advanced directive form', async () => {
     it('should create a patient advanced directive form', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { advancedDirectiveForm, patient, user } = await setup(txn);
-        const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const { advancedDirectiveForm, patient, user } = await setup(txn);
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(patientAdvancedDirectiveForms.length).toEqual(0);
+      expect(patientAdvancedDirectiveForms.length).toEqual(0);
 
-        const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(1);
-        expect(refetchedPatientAdvancedDirectiveForms[0]).toMatchObject(
-          patientAdvancedDirectiveForm,
-        );
-      });
+      expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(1);
+      expect(refetchedPatientAdvancedDirectiveForms[0]).toMatchObject(patientAdvancedDirectiveForm);
     });
 
     it('should delete any duplicate patient advanced directive forms', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { advancedDirectiveForm, patient, user } = await setup(txn);
-        const advancedDirectiveForm2 = await AdvancedDirectiveForm.create('HIPAA', txn);
-        const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const { advancedDirectiveForm, patient, user } = await setup(txn);
+      const advancedDirectiveForm2 = await AdvancedDirectiveForm.create('HIPAA', txn);
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(patientAdvancedDirectiveForms.length).toEqual(0);
+      expect(patientAdvancedDirectiveForms.length).toEqual(0);
 
-        const patientAdvancedDirectiveForm1 = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const patientAdvancedDirectiveForm2 = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm2.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        const refetchedPatientAdvancedDirectiveFormIds = refetchedPatientAdvancedDirectiveForms.map(
-          patientAdvancedDirectiveForm => patientAdvancedDirectiveForm.id,
-        );
+      const patientAdvancedDirectiveForm1 = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const patientAdvancedDirectiveForm2 = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm2.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      const refetchedPatientAdvancedDirectiveFormIds = refetchedPatientAdvancedDirectiveForms.map(
+        patientAdvancedDirectiveForm => patientAdvancedDirectiveForm.id,
+      );
 
-        expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(2);
-        expect(refetchedPatientAdvancedDirectiveFormIds).toContain(
-          patientAdvancedDirectiveForm1.id,
-        );
-        expect(refetchedPatientAdvancedDirectiveFormIds).toContain(
-          patientAdvancedDirectiveForm2.id,
-        );
+      expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(2);
+      expect(refetchedPatientAdvancedDirectiveFormIds).toContain(patientAdvancedDirectiveForm1.id);
+      expect(refetchedPatientAdvancedDirectiveFormIds).toContain(patientAdvancedDirectiveForm2.id);
 
-        const patientAdvancedDirectiveForm3 = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/02/1999',
-          },
-          txn,
-        );
-        const refetchedPatientAdvancedDirectiveForms2 = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        const refetchedPatientAdvancedDirectiveFormIds2 = refetchedPatientAdvancedDirectiveForms2.map(
-          patientAdvancedDirectiveForm => patientAdvancedDirectiveForm.id,
-        );
+      const patientAdvancedDirectiveForm3 = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/02/1999',
+        },
+        txn,
+      );
+      const refetchedPatientAdvancedDirectiveForms2 = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      const refetchedPatientAdvancedDirectiveFormIds2 = refetchedPatientAdvancedDirectiveForms2.map(
+        patientAdvancedDirectiveForm => patientAdvancedDirectiveForm.id,
+      );
 
-        expect(refetchedPatientAdvancedDirectiveForms2.length).toEqual(2);
-        expect(refetchedPatientAdvancedDirectiveFormIds2).toContain(
-          patientAdvancedDirectiveForm2.id,
-        );
-        expect(refetchedPatientAdvancedDirectiveFormIds2).toContain(
-          patientAdvancedDirectiveForm3.id,
-        );
-        expect(refetchedPatientAdvancedDirectiveFormIds2).not.toContain(
-          patientAdvancedDirectiveForm1.id,
-        );
-      });
+      expect(refetchedPatientAdvancedDirectiveForms2.length).toEqual(2);
+      expect(refetchedPatientAdvancedDirectiveFormIds2).toContain(patientAdvancedDirectiveForm2.id);
+      expect(refetchedPatientAdvancedDirectiveFormIds2).toContain(patientAdvancedDirectiveForm3.id);
+      expect(refetchedPatientAdvancedDirectiveFormIds2).not.toContain(
+        patientAdvancedDirectiveForm1.id,
+      );
     });
   });
 
   describe('deleting a patient advanced directive form', () => {
     it('should delete a patient advanced directive form', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { advancedDirectiveForm, patient, user } = await setup(txn);
-        const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const { advancedDirectiveForm, patient, user } = await setup(txn);
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(patientAdvancedDirectiveForms.length).toEqual(0);
+      expect(patientAdvancedDirectiveForms.length).toEqual(0);
 
-        const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
+      const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
 
-        const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(1);
+      expect(refetchedPatientAdvancedDirectiveForms.length).toEqual(1);
 
-        await PatientAdvancedDirectiveForm.delete(patientAdvancedDirectiveForm.id, user.id, txn);
+      await PatientAdvancedDirectiveForm.delete(patientAdvancedDirectiveForm.id, user.id, txn);
 
-        const refetchedPatientAdvancedDirectiveForms2 = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
+      const refetchedPatientAdvancedDirectiveForms2 = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
 
-        expect(refetchedPatientAdvancedDirectiveForms2.length).toEqual(0);
-      });
+      expect(refetchedPatientAdvancedDirectiveForms2.length).toEqual(0);
     });
   });
 });

@@ -351,10 +351,10 @@ type PatientExternalProvider implements uniqueId {
   id: ID!
   patientId: ID!
   role: String!
+  roleFreeText: String
+  agencyName: String!
   firstName: String
   lastName: String
-  isMedicalSpecialist: Boolean
-  agencyName: String
   description: String
   phone: Phone!
   email: Email
@@ -1584,11 +1584,11 @@ input PatientContactEditInput {
 input PatientExternalProviderCreateInput {
   patientId: ID!
   role: String!
+  roleFreeText: String
   firstName: String
   lastName: String
   phone: PhoneCreateInput!
-  isMedicalSpecialist: Boolean
-  agencyName: String
+  agencyName: String!
   description: String
   email: EmailCreateInput
 }
@@ -1602,9 +1602,9 @@ input PatientExternalProviderDeleteInput {
 input PatientExternalProviderEditInput {
   patientExternalProviderId: ID!
   role: String
+  roleFreeText: String
   firstName: String
   lastName: String
-  isMedicalSpecialist: Boolean
   agencyName: String
   description: String
   email: EmailInput

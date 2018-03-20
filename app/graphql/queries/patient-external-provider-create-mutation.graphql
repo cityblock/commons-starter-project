@@ -3,10 +3,10 @@
 mutation patientExternalProviderCreate(
   $patientId: ID!
   $role: String!
+  $roleFreeText: String
   $firstName: String
   $lastName: String
-  $isMedicalSpecialist: Boolean
-  $agencyName: String
+  $agencyName: String!
   $description: String
   $email: EmailCreateInput
   $phone: PhoneCreateInput!
@@ -15,9 +15,9 @@ mutation patientExternalProviderCreate(
     input: {
       patientId: $patientId
       role: $role
+      roleFreeText: $roleFreeText
       firstName: $firstName
       lastName: $lastName
-      isMedicalSpecialist: $isMedicalSpecialist
       agencyName: $agencyName
       description: $description
       phone: $phone

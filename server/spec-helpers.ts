@@ -190,22 +190,20 @@ export function createMockPatientExternalProvider(
     firstName?: string;
     lastName?: string;
     role?: string;
-    isMedicalSpecialist?: boolean;
+    roleFreeText?: string;
     agencyName?: string;
     description?: string;
   },
 ) {
-  const isMedicalSpecialist = get(options, 'isMedicalSpecialist');
-
   return {
     phone,
     updatedById: userId,
     patientId,
     firstName: get(options, 'firstName') || 'Hermione',
     lastName: get(options, 'lastName') || 'Granger',
-    role: 'psychiatrist',
-    agencyName: 'Hogwarts',
-    isMedicalSpecialist: isNil(isMedicalSpecialist) ? false : isMedicalSpecialist,
+    role: get(options, 'role') || 'psychiatrist',
+    agencyName: get(options, 'agencyName') || 'Hogwarts',
+    roleFreeText: get(options, 'roleFreeText') || null,
     email: get(options, 'email'),
     description: get(options, 'description') || 'some provider description',
   };

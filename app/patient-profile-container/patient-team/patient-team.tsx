@@ -6,7 +6,7 @@ import CreatePatientContactModal from '../../shared/patient-contact-modal/create
 import * as styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
-import PatientExternalCareTeam from './patient-external-care-team';
+import PatientExternalTeam from './patient-external-team/patient-external-team';
 import PatientFamilyTeam from './patient-family-team/patient-family-team';
 
 export type SelectableTabs = 'cityblock' | 'external' | 'family-and-support';
@@ -140,7 +140,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
       />
     ) : null;
     const externalCareTeam = currentSubTab.isExternalCareTeam ? (
-      <PatientExternalCareTeam patientId={match.params.patientId} />
+      <PatientExternalTeam patientId={match.params.patientId} />
     ) : null;
     const familyAndSupportTeam = currentSubTab.isFamilyAndSupportTeam ? (
       <PatientFamilyTeam

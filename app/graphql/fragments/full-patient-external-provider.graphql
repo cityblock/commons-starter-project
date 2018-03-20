@@ -2,10 +2,10 @@ fragment FullPatientExternalProvider on PatientExternalProvider {
   id
   patientId
   role
+  roleFreeText
   firstName
   lastName
   agencyName
-  isMedicalSpecialist
   description
   email {
     id

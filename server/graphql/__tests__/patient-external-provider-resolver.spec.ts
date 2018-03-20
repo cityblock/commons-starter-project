@@ -117,8 +117,8 @@ describe('patient info model', () => {
           lastName,
           firstName,
           agencyName,
-          isMedicalSpecialist,
           role,
+          roleFreeText,
           description,
         } = patientExternalProvider;
         expect(cloneDeep(result.data!.patientExternalProviders)).toHaveLength(1);
@@ -126,7 +126,7 @@ describe('patient info model', () => {
           firstName,
           lastName,
           agencyName,
-          isMedicalSpecialist,
+          roleFreeText,
           role,
           description,
           phone: {
@@ -171,7 +171,7 @@ describe('patient info model', () => {
           lastName: 'Granger',
           role: 'psychiatrist',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: false,
+          roleFreeText: null,
           email: null,
           description: 'some provider description',
         });
@@ -217,7 +217,7 @@ describe('patient info model', () => {
           lastName: 'Granger',
           role: 'psychiatrist',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: false,
+          roleFreeText: null,
           description: 'some provider description',
         });
         expect(log).toBeCalled();
@@ -269,7 +269,7 @@ describe('patient info model', () => {
           lastName: 'Granger',
           role: 'psychiatrist',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: false,
+          roleFreeText: null,
           description: 'some provider description',
         });
         expect(log).toBeCalled();
@@ -368,9 +368,9 @@ describe('patient info model', () => {
             patientExternalProviderId: patientExternalProvider.id,
             firstName: 'Luna',
             lastName: 'Lovegood',
-            role: 'dermatology',
+            role: 'other',
             agencyName: 'Quibbler',
-            isMedicalSpecialist: true,
+            roleFreeText: 'magical potion provider',
             phone: { phoneNumber: '000-111-2255' },
             email: { emailAddress: 'changed@email.com' },
           },
@@ -380,9 +380,9 @@ describe('patient info model', () => {
           patientId: patient.id,
           firstName: 'Luna',
           lastName: 'Lovegood',
-          role: 'dermatology',
+          role: 'other',
           agencyName: 'Quibbler',
-          isMedicalSpecialist: true,
+          roleFreeText: 'magical potion provider',
           phone: { id: phone.id, phoneNumber: '000-111-2255' },
           email: { emailAddress: 'changed@email.com' },
         });
@@ -423,7 +423,6 @@ describe('patient info model', () => {
             lastName: 'Lovegood',
             role: 'dermatology',
             agencyName: 'Quibbler',
-            isMedicalSpecialist: true,
             phone: { phoneNumber: '000-111-2255' },
             email: { emailAddress: 'changed@email.com' },
           },
@@ -435,7 +434,7 @@ describe('patient info model', () => {
           lastName: 'Lovegood',
           role: 'dermatology',
           agencyName: 'Quibbler',
-          isMedicalSpecialist: true,
+          roleFreeText: null,
           phone: { id: phone.id, phoneNumber: '000-111-2255' },
           email: { id: email.id, emailAddress: 'changed@email.com' },
         });
@@ -476,7 +475,6 @@ describe('patient info model', () => {
             lastName: 'Lovegood',
             role: 'dermatology',
             agencyName: 'Quibbler',
-            isMedicalSpecialist: true,
             phone: { phoneNumber: '000-111-2255' },
             email: { emailAddress: '' },
           },
@@ -488,7 +486,7 @@ describe('patient info model', () => {
           lastName: 'Lovegood',
           role: 'dermatology',
           agencyName: 'Quibbler',
-          isMedicalSpecialist: true,
+          roleFreeText: null,
           phone: { id: phone.id, phoneNumber: '000-111-2255' },
           email: null,
         });

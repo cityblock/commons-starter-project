@@ -1074,6 +1074,45 @@ export const advancedDirectives = {
   hasHealthcareProxy: null,
 };
 
+export const externalProviderPerson = {
+  id: 'external-provider-id',
+  patientId: patient.id,
+  firstName: 'Tonya',
+  lastName: 'Willis',
+  role: 'cardiology',
+  roleFreeText: null,
+  agencyName: 'Mount Sinai',
+  description: 'best doctor for this patient',
+  phone: {
+    id: phone1.id,
+    phoneNumber: phone1.phoneNumber,
+  },
+  email: {
+    id: email1.id,
+    emailAddress: email1.emailAddress,
+  },
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
+export const externalProviderEntity = {
+  id: 'external-provider-id-2',
+  patientId: patient.id,
+  role: 'other',
+  roleFreeText: 'Some other type of provider',
+  agencyName: 'Mount Sinai',
+  description: null,
+  phone: {
+    id: phone1.id,
+    phoneNumber: phone1.phoneNumber,
+  },
+  email: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
 export const basicInfo = {
   patientId: patient.id,
   patientInfoId: patient.patientInfo.id,

@@ -1310,10 +1310,10 @@ declare module 'schema' {
     id: string;
     patientId: string;
     role: string;
+    roleFreeText: string | null;
+    agencyName: string;
     firstName: string | null;
     lastName: string | null;
-    isMedicalSpecialist: boolean | null;
-    agencyName: string | null;
     description: string | null;
     phone: IPhone;
     email: IEmail | null;
@@ -3665,11 +3665,11 @@ declare module 'schema' {
   interface IPatientExternalProviderCreateInput {
     patientId: string;
     role: string;
+    roleFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
     phone: IPhoneCreateInput;
-    isMedicalSpecialist?: boolean | null;
-    agencyName?: string | null;
+    agencyName: string;
     description?: string | null;
     email?: IEmailCreateInput | null;
   }
@@ -3687,9 +3687,9 @@ declare module 'schema' {
   interface IPatientExternalProviderEditInput {
     patientExternalProviderId: string;
     role?: string | null;
+    roleFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
-    isMedicalSpecialist?: boolean | null;
     agencyName?: string | null;
     description?: string | null;
     email?: IEmailInput | null;

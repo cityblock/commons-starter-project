@@ -80,7 +80,7 @@ describe('patient info model', () => {
           lastName: 'Granger',
           role: 'psychiatrist',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: false,
+          roleFreeText: null,
           email: null,
           description: 'some provider description',
         });
@@ -94,7 +94,8 @@ describe('patient info model', () => {
         const patientExternalProvider = await PatientExternalProvider.create(
           createMockPatientExternalProvider(patient.id, user.id, phone, {
             email,
-            isMedicalSpecialist: true,
+            role: 'otherMedicalSpecialty',
+            roleFreeText: 'potion intern',
           }),
           txn,
         );
@@ -114,9 +115,9 @@ describe('patient info model', () => {
           patientId: patient.id,
           firstName: 'Hermione',
           lastName: 'Granger',
-          role: 'psychiatrist',
+          role: 'otherMedicalSpecialty',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: true,
+          roleFreeText: 'potion intern',
           description: 'some provider description',
         });
 
@@ -131,9 +132,9 @@ describe('patient info model', () => {
           patientId: patient.id,
           firstName: 'Hermione',
           lastName: 'Granger',
-          role: 'psychiatrist',
+          role: 'otherMedicalSpecialty',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: true,
+          roleFreeText: 'potion intern',
           description: 'some provider description',
         });
       });
@@ -150,7 +151,6 @@ describe('patient info model', () => {
             lastName: 'Weasley',
             role: 'oncology',
             agencyName: 'Hogwarts Cancer Ward',
-            isMedicalSpecialist: true,
             description: 'magical cancer treatments',
             updatedById: user.id,
           },
@@ -164,7 +164,7 @@ describe('patient info model', () => {
           firstName: 'Ron',
           lastName: 'Weasley',
           role: 'oncology',
-          isMedicalSpecialist: true,
+          roleFreeText: null,
           email: null,
           description: 'magical cancer treatments',
         });
@@ -188,7 +188,7 @@ describe('patient info model', () => {
           lastName: 'Granger',
           role: 'psychiatrist',
           agencyName: 'Hogwarts',
-          isMedicalSpecialist: false,
+          roleFreeText: null,
           email: null,
           description: 'some provider description',
         });

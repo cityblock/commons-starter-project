@@ -9,20 +9,20 @@ export interface IPatientExternalProviderOptions {
   patientId: string;
   updatedById: string;
   role: string;
-  lastName: string;
+  roleFreeText?: string | null;
+  lastName?: string;
   agencyName: string;
   firstName?: string;
-  isMedicalSpecialist?: boolean;
   description?: string;
 }
 
 interface IEditPatientExternalProvider extends Partial<IPatientExternalProviderOptions> {
   updatedById: string;
   role?: string;
+  roleFreeText?: string | null;
   lastName?: string;
   agencyName?: string;
   firstName?: string;
-  isMedicalSpecialist?: boolean;
   description?: string;
 }
 
@@ -35,10 +35,10 @@ export default class PatientExternalProvider extends Model {
   patientId: string;
   updatedById: string;
   role: string;
+  roleFreeText: string | null;
   lastName: string;
   agencyName: string;
   firstName: string;
-  isMedicalSpecialist: boolean;
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -66,17 +66,17 @@ export default class PatientExternalProvider extends Model {
       id: { type: 'string', format: 'uuid' },
       patientId: { type: 'string', format: 'uuid' },
       role: { type: 'string', minLength: 1 },
+      roleFreeText: { type: ['string', 'null'] },
       firstName: { type: 'string', minLength: 1 },
       lastName: { type: 'string', minLength: 1 },
       agencyName: { type: 'string', minLength: 1 },
-      isMedicalSpecialist: { type: 'boolean' },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: ['patientId', 'updatedById', 'role', 'agencyName', 'lastName'],
+    required: ['patientId', 'updatedById', 'role', 'agencyName'],
   };
 
   static relationMappings: RelationMappings = {

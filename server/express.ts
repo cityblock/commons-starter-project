@@ -169,7 +169,7 @@ export default async (
   }
 
   /* istanbul ignore next */
-  if (config.GCP_CREDS) {
+  if (config.NODE_ENV === 'production' && config.GCP_CREDS) {
     const errors = stackDriver({ credentials: JSON.parse(String(config.GCP_CREDS)) });
     process.on('uncaughtException', e => {
       // Write the error to stderr.

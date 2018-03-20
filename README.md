@@ -174,9 +174,12 @@ except login require you to be authenticated. In order to pass auth information 
     # for style changes
     yarn stylelint --fix
 
+### To print config vars or env vars from aptible production or staging
+
 Once you've added the aptible git remote, you can use Aptible toolbelt to interface with the app:
 
-    aptible config  # prints environment variables from aptible
+    aptible config --app=commons-staging # prints environment variables from staging
+    aptible config --app=commons-production  # prints environment variables from production
 
 ### To connect to the Aptible database from your machine, run
 
@@ -385,7 +388,7 @@ Alternatively, you can install following the instructions on the [Redis download
 [aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://commons-staging.cityblock.com
 [yarn]: https://yarnpkg.com/lang/en/docs/install/
-[.env]: https://drive.google.com/open?id=0ByoS7xhzfIR0b296cS1jSW9nNzA
+[.env]: https://drive.google.com/open?id=1zrkunT08lEvUBJmhCd5bkqKREI2cFsI6
 [prd]: https://docs.google.com/document/d/1yfcbwghOUcJ2PlK_J5JxBIUcXaYuArZuR6VN8-NcZ6g/edit?usp=sharing
 [modheader]: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj
 [apollo tools]: https://github.com/apollographql/graphql-tools

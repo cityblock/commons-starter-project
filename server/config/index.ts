@@ -11,7 +11,6 @@ export default {
   TIME_ZONE: '-04:00',
   JWT_SECRET: 'topsecret',
   JWT_EXPIRY: '1d',
-  ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
   DATADOG_API_KEY: null,
   GCP_CREDS: null,
   REDIS_HOST: '127.0.0.1',

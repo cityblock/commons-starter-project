@@ -1,6 +1,7 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as progressNoteActivity from '../../../app/graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanUpdateEvent from '../../models/care-plan-update-event';
@@ -64,6 +65,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('progress note resolver', () => {
+  const progressNoteActivityQuery = print(progressNoteActivity);
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
@@ -177,17 +179,13 @@ describe('progress note resolver', () => {
         txn,
       );
       // Phew, setup done
-
-      const query = `{
-        progressNoteActivityForProgressNote(
-          progressNoteId: "${progressNote.id}",
-        ) {
-          taskEvents { id }
-          patientAnswerEvents { id }
-          carePlanUpdateEvents { id }
-        }
-      }`;
-      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
+      const result = await graphql(
+        schema,
+        progressNoteActivityQuery,
+        null,
+        { permissions, userId: user.id, txn },
+        { progressNoteId: progressNote.id },
+      );
       const clonedResults = cloneDeep(result.data!.progressNoteActivityForProgressNote);
       expect(clonedResults.taskEvents.length).toEqual(1);
       expect(clonedResults.patientAnswerEvents.length).toEqual(1);

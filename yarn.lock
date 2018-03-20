@@ -89,7 +89,7 @@
     is "^3.2.0"
     lodash.has "^4.5.2"
 
-"@google-cloud/storage@^1.6.0":
+"@google-cloud/storage@1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-1.6.0.tgz#3dea740e24bf097d91f16596e2915052907679a2"
   dependencies:
@@ -278,7 +278,7 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/google-cloud__storage@^1.1.7":
+"@types/google-cloud__storage@1.1.7":
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@types/google-cloud__storage/-/google-cloud__storage-1.1.7.tgz#f4b568b163cce16314f32f954f5b7d5c9001fa86"
   dependencies:

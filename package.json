@@ -121,6 +121,7 @@
   },
   "dependencies": {
     "@google-cloud/error-reporting": "0.2.2",
+    "@google-cloud/storage": "^1.6.0",
     "@react-pdf/core": "0.7.5",
     "@react-pdf/node": "0.7.5",
     "@types/acl": "0.4.34",
@@ -133,6 +134,7 @@
     "@types/compression": "0.0.36",
     "@types/dotenv": "4.0.2",
     "@types/express": "4.11.1",
+    "@types/google-cloud__storage": "^1.1.7",
     "@types/graphql": "0.12.5",
     "@types/history": "4.6.2",
     "@types/jsonwebtoken": "7.2.6",

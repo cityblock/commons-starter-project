@@ -6911,6 +6911,17 @@ export interface patientNeedToKnowEditMutation {
   } | null,
 };
 
+export interface patientPhotoSignedUrlCreateMutationVariables {
+  patientId: string,
+};
+
+export interface patientPhotoSignedUrlCreateMutation {
+  // generate a signed URL for patient photo
+  patientPhotoSignedUrlCreate:  {
+    signedUrl: string,
+  },
+};
+
 export interface patientScratchPadEditMutationVariables {
   patientScratchPadId: string,
   body: string,

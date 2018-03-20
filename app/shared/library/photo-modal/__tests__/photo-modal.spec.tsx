@@ -8,7 +8,7 @@ import PhotoModalButtons from '../photo-modal-buttons';
 
 describe('Library Photo Modal Component', () => {
   const placeholderFn = () => true as any;
-  const imgData = 'daenerysTargaryen';
+  const imgData = new Blob(['daenerysTargaryen']);
 
   const wrapper = shallow(
     <PhotoModal isVisible={true} closePopup={placeholderFn} onSave={placeholderFn} />,

@@ -1,0 +1,5 @@
+mutation patientPhotoSignedUrlCreate($patientId: ID!) {
+  patientPhotoSignedUrlCreate(input: { patientId: $patientId }) {
+    signedUrl
+  }
+}

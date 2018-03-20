@@ -2923,6 +2923,11 @@ declare module 'schema' {
      * edits a patient scratch pad
      */
     patientScratchPadEdit: IPatientScratchPad | null;
+
+    /**
+     * generate a signed URL for patient photo
+     */
+    patientPhotoSignedUrlCreate: IPatientPhotoSignedUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3316,6 +3321,9 @@ declare module 'schema' {
   }
   interface IPatientScratchPadEditOnRootMutationTypeArguments {
     input?: IPatientScratchPadEditInput | null;
+  }
+  interface IPatientPhotoSignedUrlCreateOnRootMutationTypeArguments {
+    input?: IPatientPhotoSignedUrlCreateInput | null;
   }
 
   /**
@@ -4382,6 +4390,20 @@ declare module 'schema' {
   interface IPatientScratchPadEditInput {
     patientScratchPadId: string;
     body: string;
+  }
+
+  /**
+   * generate signed url for patient photo
+   */
+  interface IPatientPhotoSignedUrlCreateInput {
+    patientId: string;
+  }
+
+  /**
+   * Patient photo upload url
+   */
+  interface IPatientPhotoSignedUrl {
+    signedUrl: string;
   }
 
   /**

@@ -1445,6 +1445,11 @@ type PatientScratchPad implements uniqueId {
   body: String!
 }
 
+# Patient photo upload url
+type PatientPhotoSignedUrl {
+  signedUrl: String!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -2234,6 +2239,11 @@ input PatientScratchPadEditInput {
   body: String!
 }
 
+# generate signed url for patient photo
+input PatientPhotoSignedUrlCreateInput {
+  patientId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2510,6 +2520,8 @@ type RootMutationType {
   ): PatientAdvancedDirectiveForm
   # edits a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
+  # generate a signed URL for patient photo
+  patientPhotoSignedUrlCreate(input: PatientPhotoSignedUrlCreateInput): PatientPhotoSignedUrl!
 }
 
 type RootQueryType {

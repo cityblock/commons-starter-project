@@ -21,6 +21,7 @@ export interface IContext {
   logger: ILogger;
   txn: Transaction;
   datadogContext: any;
+  testConfig?: any;
 }
 
 export function formatRelayEdge(node: any, id: string) {

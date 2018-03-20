@@ -155,6 +155,7 @@ import {
   resolvePatientLists,
 } from './patient-list-resolver';
 import { resolvePhones } from './patient-phone-resolver';
+import { patientPhotoSignedUrlCreate } from './patient-photo-resolver';
 import {
   patientCoreIdentityVerify,
   patientEdit,
@@ -568,6 +569,7 @@ const resolveFunctions = {
     patientAdvancedDirectiveFormCreate,
     patientAdvancedDirectiveFormDelete,
     patientScratchPadEdit,
+    patientPhotoSignedUrlCreate,
   },
 };
 

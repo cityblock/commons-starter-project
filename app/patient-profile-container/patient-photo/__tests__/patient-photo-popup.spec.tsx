@@ -4,11 +4,14 @@ import PhotoModal from '../../../shared/library/photo-modal/photo-modal';
 import { PatientPhotoPopup } from '../patient-photo-popup';
 
 describe('Patient Photo Modal', () => {
+  const placeholderFn = () => true as any;
+
   const wrapper = shallow(
     <PatientPhotoPopup
       isVisible={true}
       patientId="aryaStark"
-      closePatientPhotoPopup={() => true as any}
+      closePatientPhotoPopup={placeholderFn}
+      getSignedUploadUrl={placeholderFn}
     />,
   );
 

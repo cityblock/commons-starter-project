@@ -1,6 +1,13 @@
+import axios from 'axios';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
+import * as patientPhotoSignedUrlCreate from '../../graphql/queries/patient-photo-signed-url-create.graphql';
+import {
+  patientPhotoSignedUrlCreateMutation,
+  patientPhotoSignedUrlCreateMutationVariables,
+} from '../../graphql/types';
 import { IPatientPhotoPopupOptions } from '../../reducers/popup-reducer';
 import PhotoModal from '../../shared/library/photo-modal/photo-modal';
 import { IState as IAppState } from '../../store';
@@ -14,12 +21,25 @@ interface IDispatchProps {
   closePatientPhotoPopup: () => void;
 }
 
-type allProps = IStateProps & IDispatchProps;
+interface IGraphqlProps {
+  getSignedUploadUrl: (
+    options: { variables: patientPhotoSignedUrlCreateMutationVariables },
+  ) => { data: patientPhotoSignedUrlCreateMutation };
+}
+
+type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 export class PatientPhotoPopup extends React.Component<allProps> {
-  // TODO: Implement handle save
-  handleSave = async (imgData: string): Promise<void> => {
-    return;
+  handleSave = async (imgData: Blob): Promise<void> => {
+    const { getSignedUploadUrl, patientId } = this.props;
+
+    const signedUrlData = await getSignedUploadUrl({ variables: { patientId } });
+
+    await axios.put(signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl, imgData, {
+      headers: {
+        'Content-Type': 'image/png',
+      },
+    });
   };
 
   render(): JSX.Element {
@@ -47,7 +67,15 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => (
   closePatientPhotoPopup: () => dispatch(closePopup()),
 });
 
-export default connect<IStateProps, IDispatchProps, {}>(
-  mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+export default compose(
+  connect<IStateProps, IDispatchProps, {}>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
+  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(
+    patientPhotoSignedUrlCreate as any,
+    {
+      name: 'getSignedUploadUrl',
+    },
+  ),
 )(PatientPhotoPopup);

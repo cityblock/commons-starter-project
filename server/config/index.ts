@@ -12,10 +12,12 @@ export default {
   JWT_SECRET: 'topsecret',
   JWT_EXPIRY: '1d',
   DATADOG_API_KEY: null,
-  GCP_CREDS: null,
   REDIS_HOST: '127.0.0.1',
   REDIS_PORT: 6379,
   REDIS_PASSWORD: undefined, // Null breaks things, unfortunately
   PERMISSIONS_SESSION_IN_HOURS: 8,
+  GCS_PROJECT_ID: null,
+  GCS_BUCKET: null,
+  GCP_CREDS: null,
   ...process.env,
 };

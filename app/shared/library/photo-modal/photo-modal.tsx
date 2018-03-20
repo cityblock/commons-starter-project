@@ -9,12 +9,12 @@ import PhotoModalButtons from './photo-modal-buttons';
 interface IProps {
   isVisible: boolean;
   closePopup: () => void;
-  onSave: (imgData: string) => void;
+  onSave: (imgData: Blob) => void;
   showFaceOutline?: boolean;
 }
 
 interface IState {
-  imgData: string | null;
+  imgData: Blob | null;
   loading: boolean;
   error: string | null;
   stream: MediaStream | null;
@@ -106,8 +106,9 @@ class PhotoModal extends React.Component<IProps, IState> {
         context.drawImage(this.video, 0, 0, width, height);
       }
 
-      const imgData = this.canvas.toDataURL('image/png');
-      this.setState({ imgData });
+      this.canvas.toBlob(blob => {
+        this.setState({ imgData: blob });
+      }, 'image/png');
     }
   };
 
@@ -117,12 +118,12 @@ class PhotoModal extends React.Component<IProps, IState> {
 
   handleSavePhoto = async (): Promise<void> => {
     const { imgData, loading } = this.state;
+
     if (!loading && imgData) {
       try {
         this.setState({ loading: true });
         await this.props.onSave(imgData);
-
-        this.setState({ loading: false });
+        this.handleClose();
       } catch (err) {
         this.setState({ loading: false, error: err.message });
       }
@@ -138,6 +139,8 @@ class PhotoModal extends React.Component<IProps, IState> {
     });
 
     const displayOutline = showFaceOutline && stream && !imgData;
+    // cannot run URL.createObjectURL on null
+    const imgSrc = imgData && URL.createObjectURL ? URL.createObjectURL(imgData) : (imgData as any);
 
     return (
       <Popup visible={isVisible} style="no-padding" className={styles.popup}>
@@ -151,7 +154,7 @@ class PhotoModal extends React.Component<IProps, IState> {
             onCanPlay={this.handleCanPlay}
           />
           <canvas className={styles.hidden} ref={canvas => (this.canvas = canvas)} />
-          {imgData && <img src={imgData} alt="Member photo" />}
+          {imgData && <img src={imgSrc} alt="Member photo" />}
         </div>
         <PhotoModalButtons
           isPhotoTaken={!!imgData}

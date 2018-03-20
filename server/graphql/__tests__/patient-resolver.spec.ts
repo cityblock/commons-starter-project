@@ -1,6 +1,20 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
+import * as getPatientPanel from '../../../app/graphql/queries/get-patient-panel.graphql';
+import * as getPatientSearch from '../../../app/graphql/queries/get-patient-search.graphql';
+import * as getPatient from '../../../app/graphql/queries/get-patient.graphql';
+import * as patientForComputedList from '../../../app/graphql/queries/get-patients-for-computed-list.graphql';
+import * as patientsNewToCareTeam from '../../../app/graphql/queries/get-patients-new-to-care-team.graphql';
+import * as patientsWithMissingInfo from '../../../app/graphql/queries/get-patients-with-missing-info.graphql';
+import * as patientsWithNoRecentEngagement from '../../../app/graphql/queries/get-patients-with-no-recent-engagement.graphql';
+import * as patientsWithOpenCBOReferrals from '../../../app/graphql/queries/get-patients-with-open-cbo-referrals.graphql';
+import * as patientsWithOutOfDateMAP from '../../../app/graphql/queries/get-patients-with-out-of-date-map.graphql';
+import * as patientsWithPendingSuggestions from '../../../app/graphql/queries/get-patients-with-pending-suggestions.graphql';
+import * as patientsWithUrgentTasks from '../../../app/graphql/queries/get-patients-with-urgent-tasks.graphql';
+import * as patientEdit from '../../../app/graphql/queries/patient-edit-mutation.graphql';
+import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -119,6 +133,20 @@ describe('patient', () => {
   let db: Db;
   const log = jest.fn();
   const logger = { log };
+  const getPatientQuery = print(getPatient);
+  const patientEditMutation = print(patientEdit);
+  const getPatientNeedToKnowQuery = print(getPatientNeedToKnow);
+  const patientNeedToKnowEditMutation = print(patientNeedToKnowEdit);
+  const getPatientPanelQuery = print(getPatientPanel);
+  const getPatientSearchQuery = print(getPatientSearch);
+  const patientForComputedListQuery = print(patientForComputedList);
+  const patientsNewToCareTeamQuery = print(patientsNewToCareTeam);
+  const patientsWithMissingInfoQuery = print(patientsWithMissingInfo);
+  const patientsWithNoRecentEngagementQuery = print(patientsWithNoRecentEngagement);
+  const patientsWithOpenCBOReferralsQuery = print(patientsWithOpenCBOReferrals);
+  const patientsWithOutOfDateMAPQuery = print(patientsWithOutOfDateMAP);
+  const patientsWithPendingSuggestionsQuery = print(patientsWithPendingSuggestions);
+  const patientsWithUrgentTasksQuery = print(patientsWithUrgentTasks);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -133,19 +161,20 @@ describe('patient', () => {
     it('returns patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const query = `{
-          patient(patientId: "${patient.id}") {
-            id, firstName, lastName
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          logger,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientQuery,
+          null,
+          {
+            db,
+            userId: user.id,
+            permissions,
+            logger,
+            txn,
+          },
+          { patientId: patient.id },
+        );
         expect(cloneDeep(result.data!.patient)).toMatchObject({
           id: patient.id,
           firstName: 'dan',
@@ -160,19 +189,20 @@ describe('patient', () => {
     it('edits patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const query = `mutation {
-          patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
-            id, firstName
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          patientEditMutation,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            logger,
+            txn,
+          },
+          { patientId: patient.id, firstName: 'first' },
+        );
         expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
           id: patient.id,
           firstName: 'first',
@@ -188,18 +218,18 @@ describe('patient', () => {
         const { patient, user } = await setup(txn);
         await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id, txn);
 
-        const query = `{
-          patientNeedToKnow(patientId: "${patient.id}") {
-            text
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientNeedToKnowQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { patientId: patient.id },
+        );
 
         expect(cloneDeep(result.data!.patientNeedToKnow)).toMatchObject({
           text: 'Test Scratch Pad',
@@ -213,20 +243,19 @@ describe('patient', () => {
       await transaction(Patient.knex(), async txn => {
         const { patient, user } = await setup(txn);
         await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id, txn);
-
-        const query = `mutation {
-          patientNeedToKnowEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
-            text
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          patientNeedToKnowEditMutation,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            logger,
+            txn,
+          },
+          { patientId: patient.id, text: 'Edited Scratch Pad' },
+        );
         expect(cloneDeep(result.data!.patientNeedToKnowEdit)).toMatchObject({
           text: 'Edited Scratch Pad',
         });
@@ -238,18 +267,18 @@ describe('patient', () => {
     it('searches for a single patients', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await additionalSetup(txn);
-        const query = `{
-          patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { query: 'jon', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
           edges: [
@@ -269,18 +298,19 @@ describe('patient', () => {
     it('searches for multiple patients', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await additionalSetup(txn);
-        const query = `{
-          patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { query: 'stark', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
           edges: [
@@ -312,18 +342,18 @@ describe('patient', () => {
     it('fuzzy searches for a patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await additionalSetup(txn);
-        const query = `{
-          patientSearch(query: "john snow", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { query: 'john snow', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
           edges: [
@@ -343,18 +373,18 @@ describe('patient', () => {
     it('returns no search results', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setup(txn);
-        const query = `{
-          patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { query: 'daenerys', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
           edges: [],
@@ -366,19 +396,19 @@ describe('patient', () => {
     it('catches error if not logged in', async () => {
       await transaction(Patient.knex(), async txn => {
         await additionalSetup(txn);
-        const query = `{
-          patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: '',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: '',
+            txn,
+          },
+          { query: 'daenerys', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(result.errors![0].message).toBe('not logged in');
       });
@@ -387,19 +417,18 @@ describe('patient', () => {
     it('catches error if empty string searched', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await additionalSetup(txn);
-        const query = `{
-          patientSearch(query: "", pageNumber: 0, pageSize: 10) {
-            edges { node { firstName, lastName, userCareTeam } }
-            totalCount
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientSearchQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { query: '', pageNumber: 0, pageSize: 10 },
+        );
 
         expect(result.errors![0].message).toBe('Must provide a search term');
       });
@@ -410,19 +439,19 @@ describe('patient', () => {
     it('catches error if not logged in', async () => {
       await transaction(Patient.knex(), async txn => {
         await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: '',
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: '',
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: {} },
+        );
 
         expect(result.errors![0].message).toBe('not logged in');
       });
@@ -449,17 +478,18 @@ describe('patient', () => {
           txn,
         );
 
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
-            edges { node { id, firstName } }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: {} },
+        );
         expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
           edges: [],
         });
@@ -486,17 +516,18 @@ describe('patient', () => {
           txn,
         );
 
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
-            edges { node { id, firstName } }
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: {} },
+        );
         const patientPanel = cloneDeep(result.data!.patientPanel);
         const patientIds = patientPanel.edges.map((edge: any) => edge.node.id);
         expect(patientIds).toContain(patient.id);
@@ -508,19 +539,19 @@ describe('patient', () => {
     it('finds all patients for user with no filter', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: {} },
+        );
 
         expect(result.data!.patientPanel.totalCount).toBe(4);
       });
@@ -529,19 +560,18 @@ describe('patient', () => {
     it('returns single result for zip code 10001', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { zip: "10001" }) {
-            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
-            totalCount
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { zip: '10001' } },
+        );
 
         expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
           edges: [
@@ -551,10 +581,6 @@ describe('patient', () => {
                 lastName: 'Man',
                 patientInfo: {
                   gender: 'male',
-                  language: 'en',
-                  primaryAddress: {
-                    zip: '10001',
-                  },
                 },
               },
             },
@@ -567,56 +593,38 @@ describe('patient', () => {
     it('returns two results for zip code 11211 for first user', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { zip: "11211" }) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { zip: '11211' } },
+        );
 
         expect(result.data!.patientPanel.totalCount).toBe(2);
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Robb',
-              lastName: 'Stark',
-            },
-          }),
-        );
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Jane',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
       });
     });
 
     it('returns single result age range 19 and under', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMax: 19 }) {
-            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
-            totalCount
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { ageMax: 19 } },
+        );
 
         expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
           edges: [
@@ -626,10 +634,6 @@ describe('patient', () => {
                 lastName: 'Stark',
                 patientInfo: {
                   gender: 'male',
-                  language: 'en',
-                  primaryAddress: {
-                    zip: '11211',
-                  },
                 },
               },
             },
@@ -642,74 +646,46 @@ describe('patient', () => {
     it('returns two results for age range 20 to 24', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMin: 20, ageMax: 24 }) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { ageMin: 20, ageMax: 24 } },
+        );
 
         expect(result.data!.patientPanel.totalCount).toBe(2);
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Maxie',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Jane',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
       });
     });
 
     it('returns single result age range 80 and older', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMin: 80 }) {
-            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
-            totalCount
-          }
-        }`;
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { ageMin: 80 } },
+        );
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
-          edges: [
-            {
-              node: {
-                firstName: 'Mark',
-                lastName: 'Man',
-                patientInfo: {
-                  gender: 'male',
-                  language: 'en',
-                  primaryAddress: {
-                    zip: '10001',
-                  },
-                },
-              },
-            },
-          ],
-          totalCount: 1,
+        expect(cloneDeep(result.data!.patientPanel.edges[0].node)).toMatchObject({
+          firstName: 'Mark',
+          lastName: 'Man',
+          patientInfo: {
+            gender: 'male',
+          },
         });
       });
     });
@@ -717,37 +693,26 @@ describe('patient', () => {
     it('returns single result for second user and no filters', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user2 } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { }) {
-            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user2.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user2.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: {} },
+        );
 
-        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
-          edges: [
-            {
-              node: {
-                firstName: 'Juanita',
-                lastName: 'Jacobs',
-                patientInfo: {
-                  gender: 'female',
-                  language: 'en',
-                  primaryAddress: {
-                    zip: '11211',
-                  },
-                },
-              },
-            },
-          ],
-          totalCount: 1,
+        expect(cloneDeep(result.data!.patientPanel.edges[0].node)).toMatchObject({
+          firstName: 'Juanita',
+          lastName: 'Jacobs',
+          patientInfo: {
+            gender: 'female',
+          },
         });
       });
     });
@@ -755,65 +720,45 @@ describe('patient', () => {
     it('returns two results for female gender', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female }) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { gender: 'female' } },
+        );
 
         expect(result.data!.patientPanel.totalCount).toBe(2);
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Maxie',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Jane',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
       });
     });
 
     it('returns single result for female in zip code 11211', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, zip: "11211" }) {
-            edges { node { firstName, lastName } }
-            totalCount
-          }
-        }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const result = await graphql(
+          schema,
+          getPatientPanelQuery,
+          null,
+          {
+            db,
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10, filters: { gender: 'female', zip: '11211' } },
+        );
 
         expect(result.data!.patientPanel.totalCount).toBe(1);
-        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
-          expect.objectContaining({
-            node: {
-              firstName: 'Jane',
-              lastName: 'Jacobs',
-            },
-          }),
-        );
+        expect(cloneDeep(result.data!.patientPanel.edges[0].node)).toMatchObject({
+          firstName: 'Jane',
+          lastName: 'Jacobs',
+        });
       });
     });
 
@@ -822,17 +767,18 @@ describe('patient', () => {
         await transaction(Patient.knex(), async txn => {
           const { user } = await setupPatientsForPanelFilter(txn);
           await User.updateUserPermissions(user.id, 'pink', txn);
-          const query = `{
-            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: true }) {
-              totalCount
-            }
-          }`;
-          const result = await graphql(schema, query, null, {
-            db,
-            permissions: user.permissions,
-            userId: user.id,
-            txn,
-          });
+          const result = await graphql(
+            schema,
+            getPatientPanelQuery,
+            null,
+            {
+              db,
+              permissions: user.permissions,
+              userId: user.id,
+              txn,
+            },
+            { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: true } },
+          );
 
           expect(result.data!.patientPanel.totalCount).toBe(2);
         });
@@ -843,17 +789,18 @@ describe('patient', () => {
       it('returns results from all members when showAllMembers is true', async () => {
         await transaction(Patient.knex(), async txn => {
           const { user } = await setupPatientsForPanelFilter(txn);
-          const query = `{
-            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: true }) {
-              totalCount
-            }
-          }`;
-          const result = await graphql(schema, query, null, {
-            db,
-            permissions,
-            userId: user.id,
-            txn,
-          });
+          const result = await graphql(
+            schema,
+            getPatientPanelQuery,
+            null,
+            {
+              db,
+              permissions,
+              userId: user.id,
+              txn,
+            },
+            { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: true } },
+          );
 
           expect(result.data!.patientPanel.totalCount).toBe(3);
         });
@@ -862,17 +809,18 @@ describe('patient', () => {
       it('still only returns results from care team when showAllMembers is false', async () => {
         await transaction(Patient.knex(), async txn => {
           const { user } = await setupPatientsForPanelFilter(txn);
-          const query = `{
-            patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female, showAllPatients: false }) {
-              totalCount
-            }
-          }`;
-          const result = await graphql(schema, query, null, {
-            db,
-            permissions,
-            userId: user.id,
-            txn,
-          });
+          const result = await graphql(
+            schema,
+            getPatientPanelQuery,
+            null,
+            {
+              db,
+              permissions,
+              userId: user.id,
+              txn,
+            },
+            { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: false } },
+          );
 
           expect(result.data!.patientPanel.totalCount).toBe(2);
         });
@@ -883,30 +831,24 @@ describe('patient', () => {
   describe('patient dashboard', () => {
     it('gets patients with tasks due soon or that have notifications', async () => {
       await transaction(Patient.knex(), async txn => {
-        const { user, patient1, patient5 } = await setupUrgentTasks(txn);
-
-        const query = `{
-          patientsWithUrgentTasks(pageNumber: 0, pageSize: 10) {
-            edges { node { id, firstName }}
-            totalCount
-          }
-        }`;
-
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+        const { user, patient5 } = await setupUrgentTasks(txn);
+        const result = await graphql(
+          schema,
+          patientsWithUrgentTasksQuery,
+          null,
+          {
+            permissions,
+            userId: user.id,
+            txn,
+          },
+          { pageNumber: 0, pageSize: 10 },
+        );
 
         expect(result.data!.patientsWithUrgentTasks.totalCount).toBe(2);
-        expect(result.data!.patientsWithUrgentTasks.edges[0].node).toMatchObject({
-          id: patient1.id,
-          firstName: patient1.firstName,
-        });
-        expect(result.data!.patientsWithUrgentTasks.edges[1].node).toMatchObject({
-          id: patient5.id,
-          firstName: patient5.firstName,
-        });
+        expect([
+          result.data!.patientsWithUrgentTasks.edges[0].node.firstName,
+          result.data!.patientsWithUrgentTasks.edges[1].node.firstName,
+        ]).toContain(patient5.firstName);
       });
     });
   });
@@ -914,19 +856,17 @@ describe('patient', () => {
   it("gets patients that are new to user's care team", async () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient1 } = await setupPatientsNewToCareTeam(txn);
-
-      const query = `{
-        patientsNewToCareTeam(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientsNewToCareTeamQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsNewToCareTeam.totalCount).toBe(1);
       expect(result.data!.patientsNewToCareTeam.edges[0].node).toMatchObject({
@@ -939,19 +879,17 @@ describe('patient', () => {
   it('gets patients that have pending MAP suggestions', async () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient1 } = await setupPatientsWithPendingSuggestions(txn);
-
-      const query = `{
-        patientsWithPendingSuggestions(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientsWithPendingSuggestionsQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsWithPendingSuggestions.totalCount).toBe(1);
       expect(result.data!.patientsWithPendingSuggestions.edges[0].node).toMatchObject({
@@ -965,18 +903,17 @@ describe('patient', () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient } = await setupPatientsWithMissingInfo(txn);
 
-      const query = `{
-        patientsWithMissingInfo(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName, patientInfo { gender } }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientsWithMissingInfoQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsWithMissingInfo.totalCount).toBe(1);
       expect(result.data!.patientsWithMissingInfo.edges[0].node).toMatchObject({
@@ -993,18 +930,17 @@ describe('patient', () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient1 } = await setupPatientsWithNoRecentEngagement(txn);
 
-      const query = `{
-        patientsWithNoRecentEngagement(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientsWithNoRecentEngagementQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsWithNoRecentEngagement.totalCount).toBe(1);
       expect(result.data!.patientsWithNoRecentEngagement.edges[0].node).toMatchObject({
@@ -1017,19 +953,17 @@ describe('patient', () => {
   it('gets patients that have an out of date MAP', async () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient1 } = await setupPatientsWithOutOfDateMAP(txn);
-
-      const query = `{
-        patientsWithOutOfDateMAP(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientsWithOutOfDateMAPQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsWithOutOfDateMAP.totalCount).toBe(1);
       expect(result.data!.patientsWithOutOfDateMAP.edges[0].node).toMatchObject({
@@ -1041,30 +975,24 @@ describe('patient', () => {
 
   it('gets patients with open CBO referrals', async () => {
     await transaction(Patient.knex(), async txn => {
-      const { user, patient1, patient5 } = await setupPatientsWithOpenCBOReferrals(txn);
-
-      const query = `{
-        patientsWithOpenCBOReferrals(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const { user, patient5 } = await setupPatientsWithOpenCBOReferrals(txn);
+      const result = await graphql(
+        schema,
+        patientsWithOpenCBOReferralsQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsWithOpenCBOReferrals.totalCount).toBe(2);
-      expect(result.data!.patientsWithOpenCBOReferrals.edges[0].node).toMatchObject({
-        id: patient1.id,
-        firstName: patient1.firstName,
-      });
-      expect(result.data!.patientsWithOpenCBOReferrals.edges[1].node).toMatchObject({
-        id: patient5.id,
-        firstName: patient5.firstName,
-      });
+      expect([
+        result.data!.patientsWithOpenCBOReferrals.edges[0].node.firstName,
+        result.data!.patientsWithOpenCBOReferrals.edges[1].node.firstName,
+      ]).toContain(patient5.firstName);
     });
   });
 
@@ -1072,18 +1000,17 @@ describe('patient', () => {
     await transaction(Patient.knex(), async txn => {
       const { user, patient1, answer } = await setupComputedPatientList(txn);
 
-      const query = `{
-        patientsForComputedList(answerId: "${answer.id}", pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
-          totalCount
-        }
-      }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientForComputedListQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { answerId: answer.id, pageNumber: 0, pageSize: 10 },
+      );
 
       expect(result.data!.patientsForComputedList.totalCount).toBe(1);
       expect(result.data!.patientsForComputedList.edges[0].node).toMatchObject({

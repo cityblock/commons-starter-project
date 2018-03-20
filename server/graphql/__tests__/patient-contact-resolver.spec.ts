@@ -45,7 +45,11 @@ async function setup(txn: Transaction): Promise<ISetup> {
   return { patient, user };
 }
 
-async function setupPatientContact(patientId: string, userId: string, txn: Transaction): Promise<ISetupContact> {
+async function setupPatientContact(
+  patientId: string,
+  userId: string,
+  txn: Transaction,
+): Promise<ISetupContact> {
   const phone = await Phone.create(createMockPhone(userId), txn);
   const address = await Address.create(createMockAddress(userId), txn);
   const email = await Email.create(createMockEmail(userId), txn);
@@ -55,14 +59,8 @@ async function setupPatientContact(patientId: string, userId: string, txn: Trans
     txn,
   );
 
-  await PatientContactPhone.create(
-    { phoneId: phone.id, patientContactId: patientContact.id },
-    txn,
-  );
-  await PatientContactEmail.create(
-    { emailId: email.id, patientContactId: patientContact.id },
-    txn,
-  );
+  await PatientContactPhone.create({ phoneId: phone.id, patientContactId: patientContact.id }, txn);
+  await PatientContactEmail.create({ emailId: email.id, patientContactId: patientContact.id }, txn);
   await PatientContactAddress.create(
     { addressId: address.id, patientContactId: patientContact.id },
     txn,

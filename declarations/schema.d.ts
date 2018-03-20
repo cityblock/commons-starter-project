@@ -110,6 +110,11 @@ declare module 'schema' {
     patientContactHealthcareProxies: Array<IPatientContact>;
 
     /**
+     * Patient external providers for patient
+     */
+    patientExternalProviders: Array<IPatientExternalProvider>;
+
+    /**
      * A single clinic
      */
     clinic: IClinic;
@@ -622,6 +627,9 @@ declare module 'schema' {
   interface IPatientContactHealthcareProxiesOnRootQueryTypeArguments {
     patientId: string;
   }
+  interface IPatientExternalProvidersOnRootQueryTypeArguments {
+    patientId: string;
+  }
   interface IClinicOnRootQueryTypeArguments {
     clinicId: string;
   }
@@ -937,6 +945,7 @@ declare module 'schema' {
     | IPatientTableRow
     | IPatientForDashboard
     | IPatientContact
+    | IPatientExternalProvider
     | IClinic
     | ITask
     | IPatientGoalShort
@@ -1288,6 +1297,25 @@ declare module 'schema' {
     description: string | null;
     phone: IPhone;
     address: IAddress | null;
+    email: IEmail | null;
+    createdAt: string | null;
+    updatedAt: string | null;
+    deletedAt: string | null;
+  }
+
+  /**
+   * Patient external provider that is editable in Commons
+   */
+  interface IPatientExternalProvider {
+    id: string;
+    patientId: string;
+    role: string;
+    firstName: string | null;
+    lastName: string | null;
+    isMedicalSpecialist: boolean | null;
+    agencyName: string | null;
+    description: string | null;
+    phone: IPhone;
     email: IEmail | null;
     createdAt: string | null;
     updatedAt: string | null;
@@ -2396,6 +2424,21 @@ declare module 'schema' {
     patientContactEdit: IPatientContact | null;
 
     /**
+     * Create patient external provider
+     */
+    patientExternalProviderCreate: IPatientExternalProvider | null;
+
+    /**
+     * Delete patient external provider
+     */
+    patientExternalProviderDelete: IPatientExternalProvider | null;
+
+    /**
+     * Edit fields on patient external provider stored in the db
+     */
+    patientExternalProviderEdit: IPatientExternalProvider | null;
+
+    /**
      * Edit a patient need to know
      */
     patientNeedToKnowEdit: IPatientNeedToKnow | null;
@@ -2970,6 +3013,15 @@ declare module 'schema' {
   }
   interface IPatientContactEditOnRootMutationTypeArguments {
     input?: IPatientContactEditInput | null;
+  }
+  interface IPatientExternalProviderCreateOnRootMutationTypeArguments {
+    input?: IPatientExternalProviderCreateInput | null;
+  }
+  interface IPatientExternalProviderDeleteOnRootMutationTypeArguments {
+    input?: IPatientExternalProviderDeleteInput | null;
+  }
+  interface IPatientExternalProviderEditOnRootMutationTypeArguments {
+    input?: IPatientExternalProviderEditInput | null;
   }
   interface IPatientNeedToKnowEditOnRootMutationTypeArguments {
     input?: IPatientNeedToKnowEditInput | null;
@@ -3597,6 +3649,43 @@ declare module 'schema' {
     phoneNumber: string;
     type?: IPhoneTypeOptionsEnum | null;
     description?: string | null;
+  }
+
+  /**
+   * params for creating a patient external provider in the db
+   */
+  interface IPatientExternalProviderCreateInput {
+    patientId: string;
+    role: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    phone: IPhoneCreateInput;
+    isMedicalSpecialist?: boolean | null;
+    agencyName?: string | null;
+    description?: string | null;
+    email?: IEmailCreateInput | null;
+  }
+
+  /**
+   * params for deleting a patient external provider and all associated models in the db
+   */
+  interface IPatientExternalProviderDeleteInput {
+    patientExternalProviderId: string;
+  }
+
+  /**
+   * params for editing a patient external provider in the db
+   */
+  interface IPatientExternalProviderEditInput {
+    patientExternalProviderId: string;
+    role?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    isMedicalSpecialist?: boolean | null;
+    agencyName?: string | null;
+    description?: string | null;
+    email?: IEmailInput | null;
+    phone?: IPhoneInput | null;
   }
 
   /**

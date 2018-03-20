@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-external-provider.graphql"
+
+mutation patientExternalProviderDelete($patientExternalProviderId: ID!) {
+  patientExternalProviderDelete(input: { patientExternalProviderId: $patientExternalProviderId }) {
+    ...FullPatientExternalProvider
+  }
+}

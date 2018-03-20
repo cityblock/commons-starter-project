@@ -2604,6 +2604,35 @@ export interface getPatientEmailsQuery {
   } > | null,
 };
 
+export interface getPatientExternalProvidersQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientExternalProvidersQuery {
+  // Patient external providers for patient
+  patientExternalProviders:  Array< {
+    id: string,
+    patientId: string,
+    role: string,
+    firstName: string | null,
+    lastName: string | null,
+    agencyName: string | null,
+    isMedicalSpecialist: boolean | null,
+    description: string | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
+  } > | null,
+};
+
 export interface getPatientGlassBreakCheckQueryVariables {
   patientId: string,
 };
@@ -6498,6 +6527,109 @@ export interface patientEditMutation {
       id: string,
       currentState: CurrentPatientState,
     },
+  } | null,
+};
+
+export interface patientExternalProviderCreateMutationVariables {
+  patientId: string,
+  role: string,
+  firstName?: string | null,
+  lastName?: string | null,
+  isMedicalSpecialist?: boolean | null,
+  agencyName?: string | null,
+  description?: string | null,
+  email?: EmailCreateInput | null,
+  phone: PhoneCreateInput,
+};
+
+export interface patientExternalProviderCreateMutation {
+  // Create patient external provider
+  patientExternalProviderCreate:  {
+    id: string,
+    patientId: string,
+    role: string,
+    firstName: string | null,
+    lastName: string | null,
+    agencyName: string | null,
+    isMedicalSpecialist: boolean | null,
+    description: string | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
+  } | null,
+};
+
+export interface patientExternalProviderDeleteMutationVariables {
+  patientExternalProviderId: string,
+};
+
+export interface patientExternalProviderDeleteMutation {
+  // Delete patient external provider
+  patientExternalProviderDelete:  {
+    id: string,
+    patientId: string,
+    role: string,
+    firstName: string | null,
+    lastName: string | null,
+    agencyName: string | null,
+    isMedicalSpecialist: boolean | null,
+    description: string | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
+  } | null,
+};
+
+export interface patientExternalProviderEditMutationVariables {
+  patientExternalProviderId: string,
+  role?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  isMedicalSpecialist?: boolean | null,
+  agencyName?: string | null,
+  description?: string | null,
+  email?: EmailInput | null,
+  phone?: PhoneInput | null,
+};
+
+export interface patientExternalProviderEditMutation {
+  // Edit fields on patient external provider stored in the db
+  patientExternalProviderEdit:  {
+    id: string,
+    patientId: string,
+    role: string,
+    firstName: string | null,
+    lastName: string | null,
+    agencyName: string | null,
+    isMedicalSpecialist: boolean | null,
+    description: string | null,
+    email:  {
+      id: string,
+      emailAddress: string,
+    } | null,
+    phone:  {
+      id: string,
+      phoneNumber: string,
+    },
+    createdAt: string | null,
+    updatedAt: string | null,
+    deletedAt: string | null,
   } | null,
 };
 
@@ -10778,6 +10910,28 @@ export interface FullPatientDataFlagFragment {
   suggestedValue: string | null,
   notes: string | null,
   updatedAt: string | null,
+};
+
+export interface FullPatientExternalProviderFragment {
+  id: string,
+  patientId: string,
+  role: string,
+  firstName: string | null,
+  lastName: string | null,
+  agencyName: string | null,
+  isMedicalSpecialist: boolean | null,
+  description: string | null,
+  email:  {
+    id: string,
+    emailAddress: string,
+  } | null,
+  phone:  {
+    id: string,
+    phoneNumber: string,
+  },
+  createdAt: string | null,
+  updatedAt: string | null,
+  deletedAt: string | null,
 };
 
 export interface FullPatientForCBOReferralFormPDFFragment {

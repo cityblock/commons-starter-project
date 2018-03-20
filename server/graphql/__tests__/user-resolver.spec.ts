@@ -141,7 +141,7 @@ describe('user tests', () => {
             permissions: 'red',
             txn,
           },
-          { userRoleFiltesrs: [user.userRole] },
+          { userRoleFilters: [user.userRole] },
         );
 
         expect(cloneDeep(result.errors![0].message)).toMatch('red not able to view allUsers');

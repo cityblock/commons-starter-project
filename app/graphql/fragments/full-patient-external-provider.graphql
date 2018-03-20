@@ -1,0 +1,21 @@
+fragment FullPatientExternalProvider on PatientExternalProvider {
+  id
+  patientId
+  role
+  firstName
+  lastName
+  agencyName
+  isMedicalSpecialist
+  description
+  email {
+    id
+    emailAddress
+  }
+  phone {
+    id
+    phoneNumber
+  }
+  createdAt
+  updatedAt
+  deletedAt
+}

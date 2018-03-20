@@ -1,0 +1,29 @@
+#import "../fragments/full-patient-external-provider.graphql"
+
+mutation patientExternalProviderEdit(
+  $patientExternalProviderId: ID!
+  $role: String
+  $firstName: String
+  $lastName: String
+  $isMedicalSpecialist: Boolean
+  $agencyName: String
+  $description: String
+  $email: EmailInput
+  $phone: PhoneInput
+) {
+  patientExternalProviderEdit(
+    input: {
+      patientExternalProviderId: $patientExternalProviderId
+      role: $role
+      firstName: $firstName
+      lastName: $lastName
+      isMedicalSpecialist: $isMedicalSpecialist
+      agencyName: $agencyName
+      description: $description
+      phone: $phone
+      email: $email
+    }
+  ) {
+    ...FullPatientExternalProvider
+  }
+}

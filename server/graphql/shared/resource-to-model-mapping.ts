@@ -35,6 +35,9 @@ import PatientContactEmail from '../../models/patient-contact-email';
 import PatientContactPhone from '../../models/patient-contact-phone';
 import PatientDataFlag from '../../models/patient-data-flag';
 import PatientEmail from '../../models/patient-email';
+import PatientExternalProvider from '../../models/patient-external-provider';
+import PatientExternalProviderEmail from '../../models/patient-external-provider-email';
+import PatientExternalProviderPhone from '../../models/patient-external-provider-phone';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import PatientGoal from '../../models/patient-goal';
 import PatientInfo from '../../models/patient-info';
@@ -101,6 +104,9 @@ export type ModelResource =
   | 'patientContactPhone'
   | 'patientDataFlag'
   | 'patientEmail'
+  | 'patientExternalProvider'
+  | 'patientExternalProviderEmail'
+  | 'patientExternalProviderPhone'
   | 'patientGlassBreak'
   | 'patientGoal'
   | 'patientInfo'
@@ -171,6 +177,9 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientContactPhone: PatientContactPhone,
   patientDataFlag: PatientDataFlag,
   patientEmail: PatientEmail,
+  patientExternalProvider: PatientExternalProvider,
+  patientExternalProviderEmail: PatientExternalProviderEmail,
+  patientExternalProviderPhone: PatientExternalProviderPhone,
   patientGlassBreak: PatientGlassBreak,
   patientGoal: PatientGoal,
   patientInfo: PatientInfo,

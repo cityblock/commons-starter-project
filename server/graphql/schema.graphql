@@ -346,6 +346,23 @@ type PatientContact implements uniqueId {
   deletedAt: String
 }
 
+# Patient external provider that is editable in Commons
+type PatientExternalProvider implements uniqueId {
+  id: ID!
+  patientId: ID!
+  role: String!
+  firstName: String
+  lastName: String
+  isMedicalSpecialist: Boolean
+  agencyName: String
+  description: String
+  phone: Phone!
+  email: Email
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+}
+
 # ComputedPatientStatus
 type ComputedPatientStatus implements uniqueId {
   id: ID!
@@ -1558,6 +1575,37 @@ input PatientContactEditInput {
   phone: PhoneInput
 }
 
+# params for creating a patient external provider in the db
+input PatientExternalProviderCreateInput {
+  patientId: ID!
+  role: String!
+  firstName: String
+  lastName: String
+  phone: PhoneCreateInput!
+  isMedicalSpecialist: Boolean
+  agencyName: String
+  description: String
+  email: EmailCreateInput
+}
+
+# params for deleting a patient external provider and all associated models in the db
+input PatientExternalProviderDeleteInput {
+  patientExternalProviderId: ID!
+}
+
+# params for editing a patient external provider in the db
+input PatientExternalProviderEditInput {
+  patientExternalProviderId: ID!
+  role: String
+  firstName: String
+  lastName: String
+  isMedicalSpecialist: Boolean
+  agencyName: String
+  description: String
+  email: EmailInput
+  phone: PhoneInput
+}
+
 # params for editing a patient need to know
 input PatientNeedToKnowEditInput {
   patientId: ID!
@@ -2247,6 +2295,12 @@ type RootMutationType {
   patientContactDelete(input: PatientContactDeleteInput): PatientContact
   # Edit fields on patient contact stored in the db
   patientContactEdit(input: PatientContactEditInput): PatientContact
+  # Create patient external provider
+  patientExternalProviderCreate(input: PatientExternalProviderCreateInput): PatientExternalProvider
+  # Delete patient external provider
+  patientExternalProviderDelete(input: PatientExternalProviderDeleteInput): PatientExternalProvider
+  # Edit fields on patient external provider stored in the db
+  patientExternalProviderEdit(input: PatientExternalProviderEditInput): PatientExternalProvider
   # Edit a patient need to know
   patientNeedToKnowEdit(input: PatientNeedToKnowEditInput): PatientNeedToKnow
   # Create a task
@@ -2503,6 +2557,8 @@ type RootQueryType {
   patientContacts(patientId: ID!): [PatientContact!]
   # Patient contact healthcare proxies
   patientContactHealthcareProxies(patientId: ID!): [PatientContact!]
+  # Patient external providers for patient
+  patientExternalProviders(patientId: ID!): [PatientExternalProvider!]
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

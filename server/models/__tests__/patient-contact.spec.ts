@@ -174,8 +174,8 @@ describe('patient info model', () => {
     });
   });
 
-  describe('delete', async () => {
-    it('should delete patient contact', async () => {
+  describe('edit', async () => {
+    it('should edit patient contact', async () => {
       await transaction(PatientContact.knex(), async txn => {
         const { patient, patientContact, user, phone } = await setup(txn);
         const result = await PatientContact.edit(
@@ -211,14 +211,10 @@ describe('patient info model', () => {
   });
 
   describe('delete', async () => {
-    it('should edit patient info', async () => {
+    it('should delete patient contact', async () => {
       await transaction(PatientContact.knex(), async txn => {
         const { patient, user, patientContact } = await setup(txn);
-        const result = await PatientContact.delete(
-          patientContact.id,
-          user.id,
-          txn,
-        );
+        const result = await PatientContact.delete(patientContact.id, user.id, txn);
 
         expect(result).toMatchObject({
           patientId: patient.id,

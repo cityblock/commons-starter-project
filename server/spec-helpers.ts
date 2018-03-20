@@ -181,6 +181,36 @@ export function createMockPatientContact(
   };
 }
 
+export function createMockPatientExternalProvider(
+  patientId: string,
+  userId: string,
+  phone: { phoneNumber: string },
+  options?: {
+    email?: { emailAddress: string };
+    firstName?: string;
+    lastName?: string;
+    role?: string;
+    isMedicalSpecialist?: boolean;
+    agencyName?: string;
+    description?: string;
+  },
+) {
+  const isMedicalSpecialist = get(options, 'isMedicalSpecialist');
+
+  return {
+    phone,
+    updatedById: userId,
+    patientId,
+    firstName: get(options, 'firstName') || 'Hermione',
+    lastName: get(options, 'lastName') || 'Granger',
+    role: 'psychiatrist',
+    agencyName: 'Hogwarts',
+    isMedicalSpecialist: isNil(isMedicalSpecialist) ? false : isMedicalSpecialist,
+    email: get(options, 'email'),
+    description: get(options, 'description') || 'some provider description',
+  };
+}
+
 export function createMockPatientInfo(primaryAddressId?: string) {
   return {
     gender: 'male' as PatientGenderOptions,

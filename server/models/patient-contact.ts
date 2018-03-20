@@ -209,7 +209,11 @@ export default class PatientContact extends Model {
     return updatedPatientContact;
   }
 
-  static async delete(patientContactId: string, updatedById: string, txn: Transaction): Promise<PatientContact> {
+  static async delete(
+    patientContactId: string,
+    updatedById: string,
+    txn: Transaction,
+  ): Promise<PatientContact> {
     await this.query(txn)
       .where({ id: patientContactId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString(), updatedById });

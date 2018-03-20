@@ -129,6 +129,12 @@ import {
 } from './patient-data-flag-resolver';
 import { resolveEmails } from './patient-email-resolver';
 import {
+  patientExternalProviderCreate,
+  patientExternalProviderDelete,
+  patientExternalProviderEdit,
+  resolvePatientExternalProvidersForPatient,
+} from './patient-external-provider-resolver';
+import {
   patientGlassBreakCreate,
   resolvePatientGlassBreaksForUser,
   resolvePatientGlassBreakCheck,
@@ -340,6 +346,7 @@ const resolveFunctions = {
     patientsForComputedList: resolvePatientsForComputedList,
     patientContacts: resolvePatientContactsForPatient,
     patientContactHealthcareProxies: resolveHealthcareProxiesForPatient,
+    patientExternalProviders: resolvePatientExternalProvidersForPatient,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
     task: resolveTask,
@@ -447,6 +454,9 @@ const resolveFunctions = {
     patientContactCreate,
     patientContactDelete,
     patientContactEdit,
+    patientExternalProviderCreate,
+    patientExternalProviderDelete,
+    patientExternalProviderEdit,
     patientEdit,
     patientCoreIdentityVerify,
     patientInfoEdit,

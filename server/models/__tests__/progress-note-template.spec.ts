@@ -21,9 +21,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('progress note template model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(ProgressNoteTemplate.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -31,92 +42,82 @@ describe('progress note template model', () => {
   });
 
   it('creates and retrieves progress note', async () => {
-    await transaction(ProgressNoteTemplate.knex(), async txn => {
-      await setup(txn);
-      const createdProgressNoteTemplate = await ProgressNoteTemplate.create(
-        {
-          title: 'title',
-        },
-        txn,
-      );
-      const progressNoteTemplate = await ProgressNoteTemplate.get(
-        createdProgressNoteTemplate.id,
-        txn,
-      );
-      expect(progressNoteTemplate).toMatchObject({
-        id: progressNoteTemplate.id,
+    await setup(txn);
+    const createdProgressNoteTemplate = await ProgressNoteTemplate.create(
+      {
         title: 'title',
-        requiresGlassBreak: false,
-      });
-
-      expect(progressNoteTemplate.createdAt).not.toBeFalsy();
-      expect(progressNoteTemplate.updatedAt).not.toBeFalsy();
+      },
+      txn,
+    );
+    const progressNoteTemplate = await ProgressNoteTemplate.get(
+      createdProgressNoteTemplate.id,
+      txn,
+    );
+    expect(progressNoteTemplate).toMatchObject({
+      id: progressNoteTemplate.id,
+      title: 'title',
+      requiresGlassBreak: false,
     });
+
+    expect(progressNoteTemplate.createdAt).not.toBeFalsy();
+    expect(progressNoteTemplate.updatedAt).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
-    await transaction(ProgressNoteTemplate.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(ProgressNoteTemplate.get(fakeId, txn)).rejects.toMatch(
-        `No such progress note template: ${fakeId}`,
-      );
-    });
+    const fakeId = uuid();
+    await expect(ProgressNoteTemplate.get(fakeId, txn)).rejects.toMatch(
+      `No such progress note template: ${fakeId}`,
+    );
   });
 
   it('gets all progress note template', async () => {
-    await transaction(ProgressNoteTemplate.knex(), async txn => {
-      const progressNoteTemplate1 = await ProgressNoteTemplate.create(
-        {
-          title: 'title 1',
-        },
-        txn,
-      );
-      const progressNoteTemplate2 = await ProgressNoteTemplate.create(
-        {
-          title: 'title 2',
-        },
-        txn,
-      );
+    const progressNoteTemplate1 = await ProgressNoteTemplate.create(
+      {
+        title: 'title 1',
+      },
+      txn,
+    );
+    const progressNoteTemplate2 = await ProgressNoteTemplate.create(
+      {
+        title: 'title 2',
+      },
+      txn,
+    );
 
-      const progressNotes = await ProgressNoteTemplate.getAll(txn);
-      expect(progressNotes).toEqual([progressNoteTemplate1, progressNoteTemplate2]);
-    });
+    const progressNotes = await ProgressNoteTemplate.getAll(txn);
+    expect(progressNotes).toEqual([progressNoteTemplate1, progressNoteTemplate2]);
   });
 
   it('edits a progress note', async () => {
-    await transaction(ProgressNoteTemplate.knex(), async txn => {
-      await setup(txn);
-      const progressNoteTemplate = await ProgressNoteTemplate.create(
-        {
-          title: 'title',
-        },
-        txn,
-      );
+    await setup(txn);
+    const progressNoteTemplate = await ProgressNoteTemplate.create(
+      {
+        title: 'title',
+      },
+      txn,
+    );
 
-      const editedDrogressNoteTemplate = await ProgressNoteTemplate.edit(
-        {
-          title: 'new title',
-        },
-        progressNoteTemplate.id,
-        txn,
-      );
+    const editedDrogressNoteTemplate = await ProgressNoteTemplate.edit(
+      {
+        title: 'new title',
+      },
+      progressNoteTemplate.id,
+      txn,
+    );
 
-      expect(editedDrogressNoteTemplate.title).toEqual('new title');
-    });
+    expect(editedDrogressNoteTemplate.title).toEqual('new title');
   });
 
   it('deletes a progress note template', async () => {
-    await transaction(ProgressNoteTemplate.knex(), async txn => {
-      await setup(txn);
-      const progressNoteTemplate = await ProgressNoteTemplate.create(
-        {
-          title: 'title',
-        },
-        txn,
-      );
-      expect(progressNoteTemplate.deletedAt).toBeFalsy();
-      const deletedNote = await ProgressNoteTemplate.delete(progressNoteTemplate.id, txn);
-      expect(deletedNote.deletedAt).not.toBeFalsy();
-    });
+    await setup(txn);
+    const progressNoteTemplate = await ProgressNoteTemplate.create(
+      {
+        title: 'title',
+      },
+      txn,
+    );
+    expect(progressNoteTemplate.deletedAt).toBeFalsy();
+    const deletedNote = await ProgressNoteTemplate.delete(progressNoteTemplate.id, txn);
+    expect(deletedNote.deletedAt).not.toBeFalsy();
   });
 });

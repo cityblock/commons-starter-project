@@ -76,9 +76,20 @@ async function setup2(riskAreaGroup: RiskAreaGroup, txn: Transaction): Promise<I
 }
 
 describe('risk area model', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(Question.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -86,81 +97,252 @@ describe('risk area model', () => {
   });
 
   it('should creates and get a risk area', async () => {
-    await transaction(RiskArea.knex(), async txn => {
-      const { riskAreaGroup } = await setup(txn);
+    const { riskAreaGroup } = await setup(txn);
 
-      const riskArea = await RiskArea.create(
-        {
-          title: 'Housing',
-          order: 1,
-          mediumRiskThreshold,
-          highRiskThreshold,
-          assessmentType,
-          riskAreaGroupId: riskAreaGroup.id,
-        },
-        txn,
-      );
-      expect(riskArea.title).toEqual('Housing');
-      expect(riskArea.mediumRiskThreshold).toBe(mediumRiskThreshold);
-      expect(riskArea.highRiskThreshold).toBe(highRiskThreshold);
-      const fetchedRiskArea = await RiskArea.get(riskArea.id, txn);
-      expect(fetchedRiskArea).toMatchObject(riskArea);
-      expect(fetchedRiskArea.riskAreaGroup).toMatchObject(riskAreaGroup);
-    });
+    const riskArea = await RiskArea.create(
+      {
+        title: 'Housing',
+        order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    expect(riskArea.title).toEqual('Housing');
+    expect(riskArea.mediumRiskThreshold).toBe(mediumRiskThreshold);
+    expect(riskArea.highRiskThreshold).toBe(highRiskThreshold);
+    const fetchedRiskArea = await RiskArea.get(riskArea.id, txn);
+    expect(fetchedRiskArea).toMatchObject(riskArea);
+    expect(fetchedRiskArea.riskAreaGroup).toMatchObject(riskAreaGroup);
   });
 
   it('should throw an error if a risk area does not exist for the id', async () => {
-    await transaction(RiskArea.knex(), async txn => {
-      const fakeId = uuid();
-      await expect(RiskArea.get(fakeId, txn)).rejects.toMatch(`No such risk area: ${fakeId}`);
-    });
+    const fakeId = uuid();
+    await expect(RiskArea.get(fakeId, txn)).rejects.toMatch(`No such risk area: ${fakeId}`);
   });
 
   it('edits risk area', async () => {
-    await transaction(RiskArea.knex(), async txn => {
-      const { riskAreaGroup } = await setup(txn);
+    const { riskAreaGroup } = await setup(txn);
 
-      const riskArea = await RiskArea.create(
-        {
-          title: 'Housing',
-          order: 1,
-          mediumRiskThreshold,
-          highRiskThreshold,
-          assessmentType,
-          riskAreaGroupId: riskAreaGroup.id,
-        },
-        txn,
-      );
-      expect(riskArea.title).toEqual('Housing');
-      const editedRiskArea = await RiskArea.edit(
-        { title: 'Mental Health', mediumRiskThreshold: 6, assessmentType: 'automated' },
-        riskArea.id,
-        txn,
-      );
-      expect(editedRiskArea.title).toEqual('Mental Health');
-      expect(editedRiskArea.mediumRiskThreshold).toBe(6);
-      expect(editedRiskArea.assessmentType).toBe('automated');
-    });
+    const riskArea = await RiskArea.create(
+      {
+        title: 'Housing',
+        order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    expect(riskArea.title).toEqual('Housing');
+    const editedRiskArea = await RiskArea.edit(
+      { title: 'Mental Health', mediumRiskThreshold: 6, assessmentType: 'automated' },
+      riskArea.id,
+      txn,
+    );
+    expect(editedRiskArea.title).toEqual('Mental Health');
+    expect(editedRiskArea.mediumRiskThreshold).toBe(6);
+    expect(editedRiskArea.assessmentType).toBe('automated');
   });
 
   it('get all risk areas', async () => {
-    await transaction(RiskArea.knex(), async txn => {
-      const { riskAreaGroup } = await setup(txn);
+    const { riskAreaGroup } = await setup(txn);
 
-      const riskArea = await RiskArea.create(
+    const riskArea = await RiskArea.create(
+      {
+        title: 'Housing',
+        order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    const riskArea2 = await RiskArea.create(
+      {
+        title: 'Housing 2',
+        order: 2,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+
+    expect(riskArea.deletedAt).toBeFalsy();
+    const deleted = await RiskArea.delete(riskArea.id, txn);
+    expect(deleted.deletedAt).not.toBeFalsy();
+
+    expect(await RiskArea.getAll(txn)).toMatchObject([riskArea2]);
+  });
+
+  it('deleted risk area', async () => {
+    const { riskAreaGroup } = await setup(txn);
+
+    const riskArea = await RiskArea.create(
+      {
+        title: 'Housing',
+        order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    expect(riskArea.deletedAt).toBeFalsy();
+    const deleted = await RiskArea.delete(riskArea.id, txn);
+    expect(deleted.deletedAt).not.toBeFalsy();
+  });
+
+  describe('questions with patient answers', () => {
+    it('gets summary for patient', async () => {
+      const { riskAreaGroup } = await setup(txn);
+      const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
+        riskAreaGroup,
+        txn,
+      );
+
+      const answer = await Answer.create(
         {
-          title: 'Housing',
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: true,
+          summaryText: 'summary text!',
+          questionId: question.id,
           order: 1,
-          mediumRiskThreshold,
-          highRiskThreshold,
-          assessmentType,
-          riskAreaGroupId: riskAreaGroup.id,
         },
         txn,
       );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [answer.questionId],
+          answers: [
+            {
+              questionId: answer.questionId,
+              answerId: answer.id,
+              answerValue: '3',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+      expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id, txn)).toMatchObject({
+        started: true,
+        summary: ['summary text!'],
+      });
+    });
+
+    it('gets increment and high risk score for patient', async () => {
+      const { riskAreaGroup } = await setup(txn);
+      const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
+        riskAreaGroup,
+        txn,
+      );
+
+      const answer = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'increment',
+          inSummary: true,
+          summaryText: 'summary text!',
+          questionId: question.id,
+          order: 1,
+        },
+        txn,
+      );
+      const question2 = await Question.create(
+        {
+          title: 'hate writing tests?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 2,
+        },
+        txn,
+      );
+      const highRiskAnswer = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '4',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: true,
+          summaryText: 'summary text!',
+          questionId: question2.id,
+          order: 1,
+        },
+        txn,
+      );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [answer.questionId],
+          answers: [
+            {
+              questionId: answer.questionId,
+              answerId: answer.id,
+              answerValue: '3',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [highRiskAnswer.questionId],
+          answers: [
+            {
+              questionId: highRiskAnswer.questionId,
+              answerId: highRiskAnswer.id,
+              answerValue: '4',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+      expect(await RiskArea.getRiskScoreForPatient(riskArea.id, patient.id, txn)).toEqual({
+        score: 1,
+        forceHighRisk: true,
+      });
+    });
+
+    it('gets a full 360 degree summary for a patient', async () => {
+      const { riskAreaGroup } = await setup(txn);
+      const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
+        riskAreaGroup,
+        txn,
+      );
+
       const riskArea2 = await RiskArea.create(
         {
-          title: 'Housing 2',
+          title: 'risk area 2',
           order: 2,
           mediumRiskThreshold,
           highRiskThreshold,
@@ -169,307 +351,117 @@ describe('risk area model', () => {
         },
         txn,
       );
-
-      expect(riskArea.deletedAt).toBeFalsy();
-      const deleted = await RiskArea.delete(riskArea.id, txn);
-      expect(deleted.deletedAt).not.toBeFalsy();
-
-      expect(await RiskArea.getAll(txn)).toMatchObject([riskArea2]);
-    });
-  });
-
-  it('deleted risk area', async () => {
-    await transaction(RiskArea.knex(), async txn => {
-      const { riskAreaGroup } = await setup(txn);
-
-      const riskArea = await RiskArea.create(
+      const question2 = await Question.create(
         {
-          title: 'Housing',
-          order: 1,
-          mediumRiskThreshold,
-          highRiskThreshold,
-          assessmentType,
-          riskAreaGroupId: riskAreaGroup.id,
+          title: 'hate writing tests?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 2,
         },
         txn,
       );
-      expect(riskArea.deletedAt).toBeFalsy();
-      const deleted = await RiskArea.delete(riskArea.id, txn);
-      expect(deleted.deletedAt).not.toBeFalsy();
-    });
-  });
+      const question3 = await Question.create(
+        {
+          title: 'really hate writing tests?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea2.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const answer1 = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'increment',
+          inSummary: true,
+          summaryText: 'loves writing tests summary text!',
+          questionId: question.id,
+          order: 1,
+        },
+        txn,
+      );
+      const answer2 = await Answer.create(
+        {
+          displayValue: 'hates writing tests!',
+          value: '4',
+          valueType: 'number',
+          riskAdjustmentType: 'increment',
+          inSummary: true,
+          summaryText: 'hates writing tests summary text!',
+          questionId: question2.id,
+          order: 1,
+        },
+        txn,
+      );
+      const answer3 = await Answer.create(
+        {
+          displayValue: 'really hates writing tests!',
+          value: '5',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: true,
+          summaryText: 'really hates writing tests summary text!',
+          questionId: question3.id,
+          order: 1,
+        },
+        txn,
+      );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [answer1.questionId, answer2.id, answer3.id],
+          answers: [
+            {
+              questionId: answer1.questionId,
+              answerId: answer1.id,
+              answerValue: '3',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+            {
+              questionId: answer2.questionId,
+              answerId: answer2.id,
+              answerValue: '4',
+              patientId: patient.id,
+              applicable: false,
+              userId: user.id,
+            },
+            {
+              questionId: answer3.questionId,
+              answerId: answer3.id,
+              answerValue: '5',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
 
-  describe('questions with patient answers', () => {
-    it('gets summary for patient', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { riskAreaGroup } = await setup(txn);
-        const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
-          riskAreaGroup,
-          txn,
-        );
-
-        const answer = await Answer.create(
-          {
-            displayValue: 'loves writing tests!',
-            value: '3',
-            valueType: 'number',
-            riskAdjustmentType: 'forceHighRisk',
-            inSummary: true,
-            summaryText: 'summary text!',
-            questionId: question.id,
-            order: 1,
-          },
-          txn,
-        );
-        await PatientAnswer.create(
-          {
-            patientId: patient.id,
-            type: 'riskAreaAssessmentSubmission',
-            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-            questionIds: [answer.questionId],
-            answers: [
-              {
-                questionId: answer.questionId,
-                answerId: answer.id,
-                answerValue: '3',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-            ],
-          },
-          txn,
-        );
-        expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id, txn)).toMatchObject({
-          started: true,
-          summary: ['summary text!'],
-        });
-      });
-    });
-
-    it('gets increment and high risk score for patient', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { riskAreaGroup } = await setup(txn);
-        const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
-          riskAreaGroup,
-          txn,
-        );
-
-        const answer = await Answer.create(
-          {
-            displayValue: 'loves writing tests!',
-            value: '3',
-            valueType: 'number',
-            riskAdjustmentType: 'increment',
-            inSummary: true,
-            summaryText: 'summary text!',
-            questionId: question.id,
-            order: 1,
-          },
-          txn,
-        );
-        const question2 = await Question.create(
-          {
-            title: 'hate writing tests?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 2,
-          },
-          txn,
-        );
-        const highRiskAnswer = await Answer.create(
-          {
-            displayValue: 'loves writing tests!',
-            value: '4',
-            valueType: 'number',
-            riskAdjustmentType: 'forceHighRisk',
-            inSummary: true,
-            summaryText: 'summary text!',
-            questionId: question2.id,
-            order: 1,
-          },
-          txn,
-        );
-        await PatientAnswer.create(
-          {
-            patientId: patient.id,
-            type: 'riskAreaAssessmentSubmission',
-            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-            questionIds: [answer.questionId],
-            answers: [
-              {
-                questionId: answer.questionId,
-                answerId: answer.id,
-                answerValue: '3',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-            ],
-          },
-          txn,
-        );
-        await PatientAnswer.create(
-          {
-            patientId: patient.id,
-            type: 'riskAreaAssessmentSubmission',
-            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-            questionIds: [highRiskAnswer.questionId],
-            answers: [
-              {
-                questionId: highRiskAnswer.questionId,
-                answerId: highRiskAnswer.id,
-                answerValue: '4',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-            ],
-          },
-          txn,
-        );
-        expect(await RiskArea.getRiskScoreForPatient(riskArea.id, patient.id, txn)).toEqual({
-          score: 1,
-          forceHighRisk: true,
-        });
-      });
-    });
-
-    it('gets a full 360 degree summary for a patient', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { riskAreaGroup } = await setup(txn);
-        const { riskArea, question, patient, user, riskAreaAssessmentSubmission } = await setup2(
-          riskAreaGroup,
-          txn,
-        );
-
-        const riskArea2 = await RiskArea.create(
-          {
-            title: 'risk area 2',
-            order: 2,
-            mediumRiskThreshold,
-            highRiskThreshold,
-            assessmentType,
-            riskAreaGroupId: riskAreaGroup.id,
-          },
-          txn,
-        );
-        const question2 = await Question.create(
-          {
-            title: 'hate writing tests?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 2,
-          },
-          txn,
-        );
-        const question3 = await Question.create(
-          {
-            title: 'really hate writing tests?',
-            answerType: 'dropdown',
-            riskAreaId: riskArea2.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const answer1 = await Answer.create(
-          {
-            displayValue: 'loves writing tests!',
-            value: '3',
-            valueType: 'number',
-            riskAdjustmentType: 'increment',
-            inSummary: true,
-            summaryText: 'loves writing tests summary text!',
-            questionId: question.id,
-            order: 1,
-          },
-          txn,
-        );
-        const answer2 = await Answer.create(
-          {
-            displayValue: 'hates writing tests!',
-            value: '4',
-            valueType: 'number',
-            riskAdjustmentType: 'increment',
-            inSummary: true,
-            summaryText: 'hates writing tests summary text!',
-            questionId: question2.id,
-            order: 1,
-          },
-          txn,
-        );
-        const answer3 = await Answer.create(
-          {
-            displayValue: 'really hates writing tests!',
-            value: '5',
-            valueType: 'number',
-            riskAdjustmentType: 'forceHighRisk',
-            inSummary: true,
-            summaryText: 'really hates writing tests summary text!',
-            questionId: question3.id,
-            order: 1,
-          },
-          txn,
-        );
-        await PatientAnswer.create(
-          {
-            patientId: patient.id,
-            type: 'riskAreaAssessmentSubmission',
-            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-            questionIds: [answer1.questionId, answer2.id, answer3.id],
-            answers: [
-              {
-                questionId: answer1.questionId,
-                answerId: answer1.id,
-                answerValue: '3',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-              {
-                questionId: answer2.questionId,
-                answerId: answer2.id,
-                answerValue: '4',
-                patientId: patient.id,
-                applicable: false,
-                userId: user.id,
-              },
-              {
-                questionId: answer3.questionId,
-                answerId: answer3.id,
-                answerValue: '5',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-            ],
-          },
-          txn,
-        );
-
-        const fullThreeSixtySummary = await RiskArea.getThreeSixtySummaryForPatient(
-          patient.id,
-          txn,
-        );
-        expect(fullThreeSixtySummary.riskAreas.length).toEqual(2);
-        expect(fullThreeSixtySummary.riskAreas[0].riskArea.id).toEqual(riskArea.id);
-        expect(fullThreeSixtySummary.riskAreas[1].riskArea.id).toEqual(riskArea2.id);
-        expect(fullThreeSixtySummary.riskAreas[0].scoreData.forceHighRisk).toEqual(false);
-        expect(fullThreeSixtySummary.riskAreas[0].scoreData.score).toEqual(1);
-        expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).toContain(
-          'loves writing tests summary text!',
-        );
-        expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).not.toContain(
-          'hates writing tests summary text!',
-        );
-        expect(fullThreeSixtySummary.riskAreas[1].scoreData.forceHighRisk).toEqual(true);
-        expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary).toContain(
-          'really hates writing tests summary text!',
-        );
-      });
+      const fullThreeSixtySummary = await RiskArea.getThreeSixtySummaryForPatient(patient.id, txn);
+      expect(fullThreeSixtySummary.riskAreas.length).toEqual(2);
+      expect(fullThreeSixtySummary.riskAreas[0].riskArea.id).toEqual(riskArea.id);
+      expect(fullThreeSixtySummary.riskAreas[1].riskArea.id).toEqual(riskArea2.id);
+      expect(fullThreeSixtySummary.riskAreas[0].scoreData.forceHighRisk).toEqual(false);
+      expect(fullThreeSixtySummary.riskAreas[0].scoreData.score).toEqual(1);
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).toContain(
+        'loves writing tests summary text!',
+      );
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).not.toContain(
+        'hates writing tests summary text!',
+      );
+      expect(fullThreeSixtySummary.riskAreas[1].scoreData.forceHighRisk).toEqual(true);
+      expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary).toContain(
+        'really hates writing tests summary text!',
+      );
     });
   });
 });

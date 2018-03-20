@@ -21,9 +21,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('phone', () => {
-  beforeEach(async () => {
+  let txn = null as any;
+
+  beforeAll(async () => {
     await Db.get();
     await Db.clear();
+  });
+
+  beforeEach(async () => {
+    await Db.get();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -32,62 +43,54 @@ describe('phone', () => {
 
   describe('get', async () => {
     it('should get phone by id', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { phone } = await setup(txn);
-        const fetchedPhone = await Phone.get(phone.id, txn);
-        expect(fetchedPhone).toMatchObject(phone);
-      });
+      const { phone } = await setup(txn);
+      const fetchedPhone = await Phone.get(phone.id, txn);
+      expect(fetchedPhone).toMatchObject(phone);
     });
   });
 
   describe('create', async () => {
     it('should create phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { phone, user } = await setup(txn);
-        expect(phone).toMatchObject({
-          phoneNumber: '123-456-7890',
-          type: 'home',
-          description: 'moms home phone',
-          updatedById: user.id,
-        });
+      const { phone, user } = await setup(txn);
+      expect(phone).toMatchObject({
+        phoneNumber: '123-456-7890',
+        type: 'home',
+        description: 'moms home phone',
+        updatedById: user.id,
       });
     });
   });
 
   describe('delete', async () => {
     it('should delete phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { phone } = await setup(txn);
-        const deleted = await Phone.delete(phone.id, txn);
+      const { phone } = await setup(txn);
+      const deleted = await Phone.delete(phone.id, txn);
 
-        expect(deleted.deletedAt).toBeTruthy();
-        expect(deleted.id).toBe(phone.id);
+      expect(deleted.deletedAt).toBeTruthy();
+      expect(deleted.id).toBe(phone.id);
 
-        await expect(Phone.get(phone.id, txn)).rejects.toMatch(`No such phone: ${phone.id}`);
-      });
+      await expect(Phone.get(phone.id, txn)).rejects.toMatch(`No such phone: ${phone.id}`);
     });
   });
 
   describe('edit', async () => {
     it('should edit phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { phone, user } = await setup(txn);
-        const editedPhone = await Phone.edit(
-          {
-            phoneNumber: '555-555-5555',
-            type: 'work',
-            description: 'bank job',
-            updatedById: user.id,
-          },
-          phone.id,
-          txn,
-        );
-        expect(editedPhone).toMatchObject({
+      const { phone, user } = await setup(txn);
+      const editedPhone = await Phone.edit(
+        {
           phoneNumber: '555-555-5555',
           type: 'work',
           description: 'bank job',
           updatedById: user.id,
-        });
+        },
+        phone.id,
+        txn,
+      );
+      expect(editedPhone).toMatchObject({
+        phoneNumber: '555-555-5555',
+        type: 'work',
+        description: 'bank job',
+        updatedById: user.id,
       });
     });
   });

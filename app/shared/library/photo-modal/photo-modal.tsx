@@ -34,6 +34,7 @@ const INITIAL_STATE: IState = {
 class PhotoModal extends React.Component<IProps, IState> {
   video: HTMLVideoElement | null;
   canvas: HTMLCanvasElement | null;
+  imgCanvas: HTMLCanvasElement | null;
 
   constructor(props: IProps) {
     super(props);
@@ -90,7 +91,7 @@ class PhotoModal extends React.Component<IProps, IState> {
   };
 
   handleTakePhoto = (): void => {
-    if (!this.canvas || !this.video) {
+    if (!this.canvas || !this.imgCanvas || !this.video) {
       this.setState({ error: 'Something went wrong. Please try again.' });
       return;
     }
@@ -98,15 +99,23 @@ class PhotoModal extends React.Component<IProps, IState> {
     const { width, height } = this.state;
 
     if (width && height) {
-      const context = this.canvas.getContext('2d');
       this.canvas.width = width;
       this.canvas.height = height;
 
-      if (context) {
+      const imgWidth = width / 3;
+      const imgHeight = height - 70;
+      this.imgCanvas.width = imgWidth;
+      this.imgCanvas.height = imgHeight;
+
+      const context = this.canvas.getContext('2d');
+      const imgContext = this.imgCanvas.getContext('2d');
+
+      if (context && imgContext) {
         context.drawImage(this.video, 0, 0, width, height);
+        imgContext.drawImage(this.canvas, imgWidth, 20, imgWidth, imgHeight, 0, 0, imgWidth, imgHeight);
       }
 
-      this.canvas.toBlob(blob => {
+      this.imgCanvas.toBlob(blob => {
         this.setState({ imgData: blob });
       }, 'image/png');
     }
@@ -132,7 +141,7 @@ class PhotoModal extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const { isVisible, showFaceOutline } = this.props;
-    const { imgData, stream } = this.state;
+    const { imgData, stream, height } = this.state;
 
     const videoStyles = classNames(styles.video, {
       [styles.hidden]: !!imgData,
@@ -153,8 +162,13 @@ class PhotoModal extends React.Component<IProps, IState> {
             ref={video => (this.video = video)}
             onCanPlay={this.handleCanPlay}
           />
-          <canvas className={styles.hidden} ref={canvas => (this.canvas = canvas)} />
-          {imgData && <img src={imgSrc} alt="Member photo" />}
+          <canvas className={styles.canvas} ref={canvas => (this.canvas = canvas)} />
+          <canvas className={styles.canvas} ref={canvas => (this.imgCanvas = canvas)} />
+          {imgData && (
+            <div style={{ height: `${height}px` }} className={styles.imgContainer}>
+            <img src={imgSrc} alt="Member photo" />
+            </div>
+          )}
         </div>
         <PhotoModalButtons
           isPhotoTaken={!!imgData}

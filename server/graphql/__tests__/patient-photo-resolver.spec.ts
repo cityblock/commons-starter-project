@@ -84,4 +84,24 @@ describe('patient photo signed URL resolver', () => {
       expect(result.data!.patientPhotoSignedUrlCreate.signedUrl).toMatch('fake-credentials');
     });
   });
+
+  it('throws an error if patient id not provided', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const { user } = await setup(txn);
+      const mutation = `mutation {
+        patientPhotoSignedUrlCreate(input: { patientId: "" }) {
+          signedUrl
+        }
+      }`;
+
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
+      });
+
+      expect(result.errors![0].message).toBe('Must provide patient id');
+    });
+  });
 });

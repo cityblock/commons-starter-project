@@ -8,8 +8,15 @@
   height: auto;
 }
 
+.canvas,
 .hidden {
   display: none;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .faceOutline {

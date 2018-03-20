@@ -36,8 +36,11 @@ describe('Library Photo Modal Component', () => {
     expect(wrapper.find('video').props().className).toBe('video');
   });
 
-  it('renders hidden canvas to draw intermediate image data', () => {
-    expect(wrapper.find('canvas').props().className).toBe('hidden');
+  it('renders hidden canvases to draw intermediate image data', () => {
+    expect(wrapper.find('canvas').length).toBe(2);
+
+    expect(wrapper.find('canvas').at(0).props().className).toBe('canvas');
+    expect(wrapper.find('canvas').at(1).props().className).toBe('canvas');
   });
 
   it('does not render image if no data yet', () => {

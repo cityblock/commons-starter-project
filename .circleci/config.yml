@@ -50,6 +50,7 @@ jobs:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
+      - image: redis:4.0.8
     steps:
       - checkout
       - run: apt-get update && apt-get install -y sudo
@@ -71,6 +72,9 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for Redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
       - run: yarn test:api
 
   test_models:

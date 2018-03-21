@@ -1,5 +1,5 @@
-mutation patientPhotoSignedUrlCreate($patientId: ID!) {
-  patientPhotoSignedUrlCreate(input: { patientId: $patientId }) {
+mutation patientPhotoSignedUrlCreate($patientId: ID!, $action: PatientPhotoSignedUrlAction!) {
+  patientPhotoSignedUrlCreate(input: { patientId: $patientId, action: $action }) {
     signedUrl
   }
 }

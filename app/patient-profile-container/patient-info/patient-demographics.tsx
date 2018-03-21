@@ -49,11 +49,7 @@ export class PatientDemographics extends React.Component<allProps> {
     return (
       <div className={styles.container}>
         <CoreIdentity patientIdentity={patient.core} onChange={onChange} />
-        <BasicInfo
-          patientInformation={patient.basic}
-          onChange={onChange}
-          ref="basic"
-        />
+        <BasicInfo patientInformation={patient.basic} onChange={onChange} ref="basic" />
         <ContactInfo contactInfo={patient.contact} onChange={onChange} />
         <AdvancedDirectives
           advancedDirectives={patient.advanced}
@@ -66,6 +62,7 @@ export class PatientDemographics extends React.Component<allProps> {
           onChange={onChange}
           patientId={patient.basic.patientId}
           patientInfoId={patient.basic.patientInfoId}
+          gender={patient.basic.gender}
           ref="photo"
         />
       </div>

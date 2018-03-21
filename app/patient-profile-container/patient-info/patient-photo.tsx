@@ -2,16 +2,17 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import Avatar from '../../shared/library/avatar/avatar';
+import { Gender } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import Checkbox from '../../shared/library/checkbox/checkbox';
 import DefaultText from '../../shared/library/default-text/default-text';
-import SmallText from '../../shared/library/small-text/small-text';
+import PatientProfilePhoto from '../../shared/library/patient-photo/patient-photo';
 import * as parentStyles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
 export interface IPatientPhoto {
   hasDeclinedPhotoUpload?: boolean | null;
+  hasUploadedPhoto: boolean;
 }
 
 interface IDispatchProps {
@@ -23,6 +24,7 @@ interface IProps {
   patientInfoId: string;
   patientPhoto: IPatientPhoto;
   onChange: (fields: IEditableFieldState) => void;
+  gender: Gender | null;
 }
 
 type allProps = IProps & IDispatchProps;
@@ -39,7 +41,8 @@ export class PatientPhoto extends React.Component<allProps> {
   };
 
   render() {
-    const { hasDeclinedPhotoUpload } = this.props.patientPhoto;
+    const { patientId, gender } = this.props;
+    const { hasDeclinedPhotoUpload, hasUploadedPhoto } = this.props.patientPhoto;
 
     return (
       <div className={parentStyles.section}>
@@ -47,14 +50,18 @@ export class PatientPhoto extends React.Component<allProps> {
           {(message: string) => <h2>{message}</h2>}
         </FormattedMessage>
         <div className={parentStyles.fieldRow}>
-          <Avatar avatarType="patient" size="xxLarge" className={parentStyles.field} />
+          <PatientProfilePhoto
+            patientId={patientId}
+            hasUploadedPhoto={hasUploadedPhoto}
+            gender={gender}
+            className={parentStyles.field}
+          />
           <div className={parentStyles.field}>
             <DefaultText
               color="black"
               messageId="patientPhoto.description"
               className={parentStyles.field}
             />
-            <SmallText color="gray" messageId="patientPhoto.requirements" size="medium" />
           </div>
           <div className={parentStyles.field}>
             <div className={parentStyles.fieldRow}>

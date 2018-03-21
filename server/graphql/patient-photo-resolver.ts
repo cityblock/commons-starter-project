@@ -15,11 +15,12 @@ export async function patientPhotoSignedUrlCreate(
   { input }: IPatientPhotoSignedUrlCreateOptions,
   { permissions, userId, txn, testConfig }: IContext,
 ): Promise<IRootMutationType['patientPhotoSignedUrlCreate']> {
-  if (!input.patientId) {
+  const { patientId, action } = input;
+  if (!patientId) {
     throw new Error('Must provide patient id');
   }
-
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  const permissionAction = action === 'read' ? 'view' : 'edit';
+  await checkUserPermissions(userId, permissions, permissionAction, 'patient', txn, patientId);
 
   const finalConfig = testConfig || config;
 
@@ -29,13 +30,18 @@ export async function patientPhotoSignedUrlCreate(
   });
 
   const bucket = storage.bucket(finalConfig.GCS_BUCKET);
-  const file = bucket.file(`${input.patientId}/photos/profile_photo.png`);
+  const file = bucket.file(`${patientId}/photos/profile_photo.png`);
 
-  const signedUrls = await file.getSignedUrl({
-    action: 'write',
+  const signedUrlParams: Storage.SignedUrlConfig = {
+    action,
     expires: Date.now() + EXPIRE_TIME,
-    contentType: 'image/png',
-  });
+  };
+
+  if (action === 'write') {
+    signedUrlParams.contentType = 'image/png';
+  }
+
+  const signedUrls = await file.getSignedUrl(signedUrlParams);
 
   return { signedUrl: signedUrls[0] };
 }

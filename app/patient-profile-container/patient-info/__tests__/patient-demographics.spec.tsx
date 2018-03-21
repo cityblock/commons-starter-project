@@ -11,6 +11,7 @@ import BasicInfo from '../basic-info';
 import ContactInfo from '../contact-info';
 import CoreIdentity from '../core-identity';
 import { PatientDemographics } from '../patient-demographics';
+import PatientPhoto from '../patient-photo';
 
 describe('Render Patient Demographics Component', () => {
   const onChange = () => true;
@@ -47,5 +48,12 @@ describe('Render Patient Demographics Component', () => {
   it('renders contact info', () => {
     expect(wrapper.find(ContactInfo)).toHaveLength(1);
     expect(wrapper.find(ContactInfo).props().contactInfo).toBe(contactInfo);
+  });
+
+  it('renders patient photo', () => {
+    expect(wrapper.find(PatientPhoto).props().patientId).toBe(basicInfo.patientId);
+    expect(wrapper.find(PatientPhoto).props().patientInfoId).toBe(basicInfo.patientInfoId);
+    expect(wrapper.find(PatientPhoto).props().gender).toBe(basicInfo.gender);
+    expect(wrapper.find(PatientPhoto).props().patientPhoto).toEqual(patientPhoto);
   });
 });

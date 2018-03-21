@@ -1,0 +1,22 @@
+.img {
+  width: 112px;
+  height: 150px;
+}
+
+.male {
+  background-image: url('../../../../assets/missing-avatar-male.svg');
+}
+
+.female {
+  background-image: url('../../../../assets/missing-avatar-female.svg');
+}
+
+.unspecified {
+  background-image: url('../../../../assets/missing-avatar-unspecified.svg');
+}
+
+.male,
+.female,
+.unspecified {
+  min-width: 112px;
+}

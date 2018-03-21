@@ -371,7 +371,6 @@ export const ENGLISH_TRANSLATION = {
     'patientPhoto.sectionTitle': 'Member Photo',
     'patientPhoto.description':
       'Patient identification is very important to us. Uploading a patient photo will help ensure the identity of the patient.',
-    'patientPhoto.requirements': 'Photo should be at least 300px by 300px.',
     'patientPhoto.takePhoto': 'Take photo',
     'patientPhoto.retakePhoto': 'Retake photo',
     'patientPhoto.savePhoto': 'Save photo',

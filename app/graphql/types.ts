@@ -351,6 +351,12 @@ export interface PhoneInput {
   description?: string | null,
 };
 
+export enum PatientPhotoSignedUrlAction {
+  read = "read",
+  write = "write",
+}
+
+
 export interface addressCreateForPatientMutationVariables {
   patientId: string,
   zip: string,
@@ -3332,6 +3338,7 @@ export interface getPatientQuery {
       hasHealthcareProxy: boolean | null,
       hasMolst: boolean | null,
       hasDeclinedPhotoUpload: boolean | null,
+      hasUploadedPhoto: boolean | null,
     },
     patientDataFlags:  Array< {
       id: string,
@@ -6952,6 +6959,7 @@ export interface patientNeedToKnowEditMutation {
 
 export interface patientPhotoSignedUrlCreateMutationVariables {
   patientId: string,
+  action: PatientPhotoSignedUrlAction,
 };
 
 export interface patientPhotoSignedUrlCreateMutation {
@@ -11067,6 +11075,7 @@ export interface FullPatientForProfileFragment {
     hasHealthcareProxy: boolean | null,
     hasMolst: boolean | null,
     hasDeclinedPhotoUpload: boolean | null,
+    hasUploadedPhoto: boolean | null,
   },
   patientDataFlags:  Array< {
     id: string,
@@ -11194,6 +11203,7 @@ export interface FullPatientInfoFragment {
   hasHealthcareProxy: boolean | null,
   hasMolst: boolean | null,
   hasDeclinedPhotoUpload: boolean | null,
+  hasUploadedPhoto: boolean | null,
 };
 
 export interface FullPatientListFragment {

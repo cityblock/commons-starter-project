@@ -161,6 +161,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           hasDeclinedPhotoUpload,
           patientInfo.hasDeclinedPhotoUpload,
         ),
+        hasUploadedPhoto: !!patientInfo.hasUploadedPhoto,
       },
     };
   }

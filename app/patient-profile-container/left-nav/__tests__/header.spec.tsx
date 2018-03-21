@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import { capitalize } from 'lodash';
 import * as React from 'react';
 import { formatAge, formatPatientNameForProfile } from '../../../shared/helpers/format-helpers';
-import Avatar from '../../../shared/library/avatar/avatar';
+import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patient } from '../../../shared/util/test-data';
 import LeftNavHeader from '../header';
@@ -16,9 +16,12 @@ describe('Patient Left Navigation Header', () => {
     expect(wrapper.find('.container').length).toBe(1);
   });
 
-  it('renders patient avatar', () => {
-    expect(wrapper.find(Avatar).props().avatarType).toBe('patient');
-    expect(wrapper.find(Avatar).props().size).toBe('xxLarge');
+  it('renders patient photo', () => {
+    expect(wrapper.find(PatientPhoto).props().patientId).toBe(patient.id);
+    expect(wrapper.find(PatientPhoto).props().hasUploadedPhoto).toBe(
+      patient.patientInfo.hasUploadedPhoto,
+    );
+    expect(wrapper.find(PatientPhoto).props().gender).toBe(patient.patientInfo.gender);
   });
 
   it('renders text for patient state', () => {

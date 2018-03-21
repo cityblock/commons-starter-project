@@ -1,27 +1,30 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Avatar from '../../../shared/library/avatar/avatar';
 import Button from '../../../shared/library/button/button';
 import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
-import SmallText from '../../../shared/library/small-text/small-text';
+import PatientProfilePhoto from '../../../shared/library/patient-photo/patient-photo';
 import { patientPhoto } from '../../../shared/util/test-data';
 import { PatientPhoto } from '../patient-photo';
 
 describe('Renders Patient Photo Component', () => {
   const onChange = () => true;
+  const patientId = 'sansaStark';
+
   const wrapper = shallow(
     <PatientPhoto
       patientPhoto={patientPhoto}
       onChange={onChange}
       openPatientPhotoPopup={() => true as any}
-      patientId="sansaStark"
+      patientId={patientId}
       patientInfoId="lady"
+      gender={'female' as any}
     />,
   );
 
   it('renders section', () => {
-    expect(wrapper.find(Avatar)).toHaveLength(1);
+    expect(wrapper.find(PatientProfilePhoto).props().patientId).toBe(patientId);
+    expect(wrapper.find(PatientProfilePhoto).props().gender).toBe('female');
 
     const button = wrapper.find(Button);
 
@@ -30,10 +33,6 @@ describe('Renders Patient Photo Component', () => {
     const defaultText = wrapper.find(DefaultText);
     expect(defaultText).toHaveLength(1);
     expect(defaultText.props().messageId).toBe('patientPhoto.description');
-
-    const smallText = wrapper.find(SmallText);
-    expect(smallText).toHaveLength(1);
-    expect(smallText.props().messageId).toBe('patientPhoto.requirements');
 
     const checkbox = wrapper.find(Checkbox);
     expect(checkbox).toHaveLength(1);

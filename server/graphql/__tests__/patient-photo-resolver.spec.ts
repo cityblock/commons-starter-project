@@ -65,7 +65,7 @@ describe('patient photo signed URL resolver', () => {
   it('returns a signed URL for patient photo upload', async () => {
     const { patient, user } = await setup(txn);
     const mutation = `mutation {
-        patientPhotoSignedUrlCreate(input: { patientId: "${patient.id}" }) {
+        patientPhotoSignedUrlCreate(input: { patientId: "${patient.id}", action: write }) {
           signedUrl
         }
       }`;
@@ -91,7 +91,7 @@ describe('patient photo signed URL resolver', () => {
   it('throws an error if patient id not provided', async () => {
     const { user } = await setup(txn);
     const mutation = `mutation {
-        patientPhotoSignedUrlCreate(input: { patientId: "" }) {
+        patientPhotoSignedUrlCreate(input: { patientId: "", action: write }) {
           signedUrl
         }
       }`;

@@ -2,7 +2,7 @@ import { capitalize } from 'lodash';
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import { formatAge, formatPatientNameForProfile } from '../../shared/helpers/format-helpers';
-import Avatar from '../../shared/library/avatar/avatar';
+import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../shared/library/small-text/small-text';
 import * as styles from './css/header.css';
 import PatientNeedToKnow from './patient-need-to-know';
@@ -17,10 +17,13 @@ const LeftNavHeader: React.StatelessComponent<IProps> = (props: IProps) => {
 
   if (!patient) return null;
 
+  const hasUploadedPhoto = !!patient.patientInfo.hasUploadedPhoto;
+  const gender = patient.patientInfo.gender;
+
   return (
     <div className={styles.container}>
       <div className={styles.info}>
-        <Avatar avatarType="patient" size="xxLarge" />
+        <PatientPhoto patientId={patient.id} hasUploadedPhoto={hasUploadedPhoto} gender={gender} />
         <div className={styles.patient}>
           <SmallText
             text={capitalize(patient.patientState.currentState)}

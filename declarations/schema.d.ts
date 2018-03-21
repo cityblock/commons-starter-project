@@ -1087,6 +1087,7 @@ declare module 'schema' {
     hasHealthcareProxy: boolean | null;
     hasMolst: boolean | null;
     hasDeclinedPhotoUpload: boolean | null;
+    hasUploadedPhoto: boolean | null;
   }
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
@@ -4434,7 +4435,10 @@ declare module 'schema' {
    */
   interface IPatientPhotoSignedUrlCreateInput {
     patientId: string;
+    action: IPatientPhotoSignedUrlActionEnum;
   }
+
+  type IPatientPhotoSignedUrlActionEnum = 'read' | 'write';
 
   /**
    * Patient photo upload url

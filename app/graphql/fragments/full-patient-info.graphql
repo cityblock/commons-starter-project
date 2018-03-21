@@ -25,4 +25,5 @@ fragment FullPatientInfo on PatientInfo {
   hasHealthcareProxy
   hasMolst
   hasDeclinedPhotoUpload
+  hasUploadedPhoto
 }

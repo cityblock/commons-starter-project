@@ -214,6 +214,7 @@ export const patient = {
     hasHealthcareProxy: false,
     hasMolst: false,
     hasDeclinedPhotoUpload: false,
+    hasUploadedPhoto: false,
   },
   patientDataFlags: [],
   cityblockId: 123,
@@ -1149,6 +1150,7 @@ export const contactInfo = {
 
 export const patientPhoto = {
   hasDeclinedPhotoUpload: patient.patientInfo.hasDeclinedPhotoUpload,
+  hasUploadedPhoto: patient.patientInfo.hasUploadedPhoto,
 };
 
 export const completeComputedPatientStatus = {

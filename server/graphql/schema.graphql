@@ -252,6 +252,11 @@ enum ExternalProviderOptions {
   otherMedicalSpecialist
 }
 
+enum PatientPhotoSignedUrlAction {
+  read
+  write
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -362,6 +367,7 @@ type PatientInfo implements uniqueId {
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
+  hasUploadedPhoto: Boolean
 }
 
 # Patient contact that is editable in Commons
@@ -2280,6 +2286,7 @@ input PatientScratchPadEditInput {
 # generate signed url for patient photo
 input PatientPhotoSignedUrlCreateInput {
   patientId: ID!
+  action: PatientPhotoSignedUrlAction!
 }
 
 type RootMutationType {

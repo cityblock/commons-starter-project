@@ -10,6 +10,7 @@ import {
   patientInfoEditMutationVariables,
   patientPhotoSignedUrlCreateMutation,
   patientPhotoSignedUrlCreateMutationVariables,
+  PatientPhotoSignedUrlAction,
 } from '../../graphql/types';
 import { IPatientPhotoPopupOptions } from '../../reducers/popup-reducer';
 import PhotoModal from '../../shared/library/photo-modal/photo-modal';
@@ -40,7 +41,9 @@ export class PatientPhotoPopup extends React.Component<allProps> {
   handleSave = async (imgData: Blob): Promise<void> => {
     const { getSignedUploadUrl, editPatientInfo, patientId, patientInfoId } = this.props;
 
-    const signedUrlData = await getSignedUploadUrl({ variables: { patientId } });
+    const signedUrlData = await getSignedUploadUrl({
+      variables: { patientId, action: 'write' as PatientPhotoSignedUrlAction },
+    });
 
     await axios.put(signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl, imgData, {
       headers: {

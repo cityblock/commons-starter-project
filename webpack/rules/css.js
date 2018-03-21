@@ -1,5 +1,5 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssCssnext = require('postcss-cssnext');
 const postcssReporter = require('postcss-reporter');
 const cssnano = require('cssnano');
@@ -35,10 +35,7 @@ module.exports = ({ production = false } = {}) => {
 
   const createBrowserLoaders = extractCssToFile => loaders => {
     if (extractCssToFile) {
-      return ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: loaders,
-      });
+      return [MiniCssExtractPlugin.loader, ...loaders];
     }
     return [{ loader: 'style-loader' }, ...loaders];
   };

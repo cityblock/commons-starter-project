@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
@@ -20,8 +20,7 @@ module.exports = ({ production = false } = {}) => {
     );
   } else {
     plugins.push(
-      new ExtractTextPlugin({
-        allChunks: true,
+      new MiniCssExtractPlugin({
         filename: 'styles/main.css',
       }),
       new CopyWebpackPlugin([

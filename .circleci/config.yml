@@ -22,6 +22,7 @@ jobs:
           name: check-schema
           command: './scripts/check-schema-in-sync.sh'
       - run: yarn codegen
+      - run: yarn danger ci
 
   test_frontend:
     working_directory: ~/repo
@@ -147,9 +148,12 @@ workflows:
   test_and_deploy:
     jobs:
       - lint:
+          context: commons
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: master
       - test_frontend:
           filters:
             tags:

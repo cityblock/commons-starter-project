@@ -55,6 +55,7 @@ export class PatientDemographics extends React.Component<allProps> {
           patientPhoto={patient.photo}
           onChange={onChange}
           patientId={patient.basic.patientId}
+          patientInfoId={patient.basic.patientInfoId}
         />
       </div>
     );

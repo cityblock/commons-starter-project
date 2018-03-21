@@ -3,13 +3,17 @@ import * as React from 'react';
 import Modal from '../../../../shared/library/modal/modal';
 import { externalProviderEntity, externalProviderPerson } from '../../../../shared/util/test-data';
 import PatientExternalProviderForm from '../patient-external-provider-form';
-import PatientExternalProviderModal, { IPatientExternalProvider } from '../patient-external-provider-modal';
+import PatientExternalProviderModal, {
+  IPatientExternalProvider,
+} from '../patient-external-provider-modal';
 
 describe('Render External Provider Modal Component', () => {
   const closePopup = () => true;
   const wrapper = shallow(
     <PatientExternalProviderModal
-      saveExternalProvider={async (patientExternalProvider: IPatientExternalProvider) => Promise.resolve()}
+      saveExternalProvider={async (patientExternalProvider: IPatientExternalProvider) =>
+        Promise.resolve()
+      }
       closePopup={closePopup}
       isVisible={false}
       titleMessageId="title.id"
@@ -47,12 +51,8 @@ describe('Render External Provider Modal Component', () => {
     let form = wrapper.find(PatientExternalProviderForm);
     expect(form).toHaveLength(1);
 
-    expect(form.props().emailAddress).toBe(
-      externalProviderPerson.email.emailAddress,
-    );
-    expect(form.props().phoneNumber).toBe(
-      externalProviderPerson.phone.phoneNumber,
-    );
+    expect(form.props().emailAddress).toBe(externalProviderPerson.email.emailAddress);
+    expect(form.props().phoneNumber).toBe(externalProviderPerson.phone.phoneNumber);
     expect(form.props().firstName).toBe(externalProviderPerson.firstName);
     expect(form.props().lastName).toBe(externalProviderPerson.lastName);
     expect(form.props().role).toBe(externalProviderPerson.role);

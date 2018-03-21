@@ -16,16 +16,16 @@ describe('Renders Patient Photo Component', () => {
       onChange={onChange}
       openPatientPhotoPopup={() => true as any}
       patientId="sansaStark"
+      patientInfoId="lady"
     />,
   );
 
   it('renders section', () => {
     expect(wrapper.find(Avatar)).toHaveLength(1);
 
-    const buttons = wrapper.find(Button);
-    expect(buttons).toHaveLength(2);
-    expect(buttons.at(0).props().messageId).toBe('patientPhoto.takePhoto');
-    expect(buttons.at(1).props().messageId).toBe('patientPhoto.upload');
+    const button = wrapper.find(Button);
+
+    expect(button.props().messageId).toBe('patientPhoto.takePhoto');
 
     const defaultText = wrapper.find(DefaultText);
     expect(defaultText).toHaveLength(1);

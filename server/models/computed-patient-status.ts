@@ -122,7 +122,7 @@ export default class ComputedPatientStatus extends BaseModel {
     // TODO: isPhotoAddedOrDeclined when a photo is actually uploaded
     const patient = await Patient.get(patientId, txn);
     const { patientInfo } = patient;
-    const { hasHealthcareProxy, hasMolst, hasDeclinedPhotoUpload } = patientInfo;
+    const { hasHealthcareProxy, hasMolst, hasDeclinedPhotoUpload, hasUploadedPhoto } = patientInfo;
     const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
     const patientEmergencyContacts = await PatientContact.getEmergencyContactsForPatient(
       patientId,
@@ -148,7 +148,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const hasOutreachSpecialist = this.isRoleOnCareTeam(patientCareTeam, 'outreachSpecialist');
     const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician');
     const isAssessed = false;
-    const isPhotoAddedOrDeclined = hasDeclinedPhotoUpload === true;
+    const isPhotoAddedOrDeclined = hasUploadedPhoto || !!hasDeclinedPhotoUpload;
     const isIneligible = false;
     const isDisenrolled = false;
 

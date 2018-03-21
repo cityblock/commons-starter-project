@@ -3,8 +3,11 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
+import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import * as patientPhotoSignedUrlCreate from '../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
+  patientInfoEditMutation,
+  patientInfoEditMutationVariables,
   patientPhotoSignedUrlCreateMutation,
   patientPhotoSignedUrlCreateMutationVariables,
 } from '../../graphql/types';
@@ -15,6 +18,7 @@ import { IState as IAppState } from '../../store';
 interface IStateProps {
   isVisible: boolean;
   patientId: string;
+  patientInfoId: string;
 }
 
 interface IDispatchProps {
@@ -25,13 +29,16 @@ interface IGraphqlProps {
   getSignedUploadUrl: (
     options: { variables: patientPhotoSignedUrlCreateMutationVariables },
   ) => { data: patientPhotoSignedUrlCreateMutation };
+  editPatientInfo: (
+    options: { variables: patientInfoEditMutationVariables },
+  ) => { data: patientInfoEditMutation };
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 export class PatientPhotoPopup extends React.Component<allProps> {
   handleSave = async (imgData: Blob): Promise<void> => {
-    const { getSignedUploadUrl, patientId } = this.props;
+    const { getSignedUploadUrl, editPatientInfo, patientId, patientInfoId } = this.props;
 
     const signedUrlData = await getSignedUploadUrl({ variables: { patientId } });
 
@@ -40,6 +47,7 @@ export class PatientPhotoPopup extends React.Component<allProps> {
         'Content-Type': 'image/png',
       },
     });
+    await editPatientInfo({ variables: { patientInfoId, hasUploadedPhoto: true } });
   };
 
   render(): JSX.Element {
@@ -59,8 +67,11 @@ export class PatientPhotoPopup extends React.Component<allProps> {
 const mapStateToProps = (state: IAppState): IStateProps => {
   const isVisible = state.popup.name === 'PATIENT_PHOTO';
   const patientId = isVisible ? (state.popup.options as IPatientPhotoPopupOptions).patientId : '';
+  const patientInfoId = isVisible
+    ? (state.popup.options as IPatientPhotoPopupOptions).patientInfoId
+    : '';
 
-  return { isVisible, patientId };
+  return { isVisible, patientId, patientInfoId };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
@@ -76,6 +87,15 @@ export default compose(
     patientPhotoSignedUrlCreate as any,
     {
       name: 'getSignedUploadUrl',
+    },
+  ),
+  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(
+    editPatientInfoMutationGraphql as any,
+    {
+      name: 'editPatientInfo',
+      options: {
+        refetchQueries: ['getPatientComputedPatientStatus'],
+      },
     },
   ),
 )(PatientPhotoPopup);

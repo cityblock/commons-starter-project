@@ -20,6 +20,7 @@ interface IDispatchProps {
 
 interface IProps {
   patientId: string;
+  patientInfoId: string;
   patientPhoto: IPatientPhoto;
   onChange: (fields: IEditableFieldState) => void;
 }
@@ -35,10 +36,6 @@ export class PatientPhoto extends React.Component<allProps> {
 
   handleTakePhotoClick = () => {
     this.props.openPatientPhotoPopup();
-  };
-
-  handleUploadClick = () => {
-    // TODO
   };
 
   render() {
@@ -68,13 +65,6 @@ export class PatientPhoto extends React.Component<allProps> {
                 fullWidth={true}
                 className={parentStyles.field}
               />
-              <Button
-                messageId="patientPhoto.upload"
-                onClick={this.handleUploadClick}
-                color="white"
-                fullWidth={true}
-                className={parentStyles.field}
-              />
             </div>
             <Checkbox
               name="hasDeclinedPhotoUpload"
@@ -97,6 +87,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
           name: 'PATIENT_PHOTO',
           options: {
             patientId: ownProps.patientId,
+            patientInfoId: ownProps.patientInfoId,
           },
         }),
       ),

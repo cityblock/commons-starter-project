@@ -102,8 +102,8 @@ class PhotoModal extends React.Component<IProps, IState> {
       this.canvas.width = width;
       this.canvas.height = height;
 
-      const imgWidth = width / 3;
-      const imgHeight = height - 70;
+      const imgWidth = 200;
+      const imgHeight = 267;
       this.imgCanvas.width = imgWidth;
       this.imgCanvas.height = imgHeight;
 

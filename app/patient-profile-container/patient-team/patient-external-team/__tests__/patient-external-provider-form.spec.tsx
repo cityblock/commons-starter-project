@@ -8,7 +8,9 @@ import PatientExternalProviderForm from '../patient-external-provider-form';
 describe('Render Patient External Provider Form', () => {
   const onChange = () => true;
   const hasFieldError = {};
-  const wrapper = shallow(<PatientExternalProviderForm onChange={onChange} hasFieldError={hasFieldError} />);
+  const wrapper = shallow(
+    <PatientExternalProviderForm onChange={onChange} hasFieldError={hasFieldError} />,
+  );
 
   it('renders empty external provider form', () => {
     const labels = wrapper.find(FormLabel);

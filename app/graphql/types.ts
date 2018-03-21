@@ -6867,6 +6867,7 @@ export interface patientInfoEditMutationVariables {
   hasHealthcareProxy?: boolean | null,
   hasMolst?: boolean | null,
   hasDeclinedPhotoUpload?: boolean | null,
+  hasUploadedPhoto?: boolean | null,
 };
 
 export interface patientInfoEditMutation {

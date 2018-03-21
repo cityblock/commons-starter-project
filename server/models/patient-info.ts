@@ -61,6 +61,7 @@ interface IEditPatientInfo {
   hasHealthcareProxy?: boolean;
   hasMolst?: boolean;
   hasDeclinedPhotoUpload?: boolean;
+  hasUploadedPhoto?: boolean;
 }
 
 /* tslint:disable:member-ordering */
@@ -89,6 +90,7 @@ export default class PatientInfo extends Model {
   hasHealthcareProxy: boolean;
   hasMolst: boolean;
   hasDeclinedPhotoUpload: boolean;
+  hasUploadedPhoto: boolean;
   createdAt: string;
   updatedAt: string;
 
@@ -126,6 +128,7 @@ export default class PatientInfo extends Model {
       hasHealthcareProxy: { type: 'boolean' },
       hasMolst: { type: 'boolean' },
       hasDeclinedPhotoUpload: { type: 'boolean' },
+      hasUploadedPhoto: { type: 'boolean' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },

@@ -116,6 +116,7 @@ export interface IPatientPhotoPopup {
 
 export interface IPatientPhotoPopupOptions {
   patientId: string;
+  patientInfoId: string;
 }
 
 export interface IDefaultState {

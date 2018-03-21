@@ -202,7 +202,7 @@ export function createMockPatientExternalProvider(
     patientId,
     firstName: get(options, 'firstName') || 'Hermione',
     lastName: get(options, 'lastName') || 'Granger',
-    role: get(options, 'role') || 'psychiatrist' as ExternalProviderOptions,
+    role: get(options, 'role') || ('psychiatrist' as ExternalProviderOptions),
     agencyName: get(options, 'agencyName') || 'Hogwarts',
     roleFreeText: get(options, 'roleFreeText') || null,
     email: get(options, 'email'),

@@ -17,6 +17,7 @@ mutation patientInfoEdit(
   $hasHealthcareProxy: Boolean
   $hasMolst: Boolean
   $hasDeclinedPhotoUpload: Boolean
+  $hasUploadedPhoto: Boolean
 ) {
   patientInfoEdit(
     input: {
@@ -36,6 +37,7 @@ mutation patientInfoEdit(
       hasMolst: $hasMolst
       hasHealthcareProxy: $hasHealthcareProxy
       hasDeclinedPhotoUpload: $hasDeclinedPhotoUpload
+      hasUploadedPhoto: $hasUploadedPhoto
     }
   ) {
     ...ShortPatientInfo

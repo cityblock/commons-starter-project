@@ -3621,6 +3621,7 @@ declare module 'schema' {
     hasHealthcareProxy?: boolean | null;
     hasMolst?: boolean | null;
     hasDeclinedPhotoUpload?: boolean | null;
+    hasUploadedPhoto?: boolean | null;
   }
 
   /**

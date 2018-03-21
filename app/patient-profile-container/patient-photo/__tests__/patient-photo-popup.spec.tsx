@@ -10,8 +10,10 @@ describe('Patient Photo Modal', () => {
     <PatientPhotoPopup
       isVisible={true}
       patientId="aryaStark"
+      patientInfoId="nymeria"
       closePatientPhotoPopup={placeholderFn}
       getSignedUploadUrl={placeholderFn}
+      editPatientInfo={placeholderFn}
     />,
   );
 

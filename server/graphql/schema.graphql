@@ -1580,6 +1580,7 @@ input PatientInfoEditInput {
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
+  hasUploadedPhoto: Boolean
 }
 
 # params for creating a patient contact in the db

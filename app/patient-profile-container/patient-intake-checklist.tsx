@@ -131,7 +131,7 @@ export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlPro
           labelId="patientIntakeChecklist.demographicInfoLabel"
           subtextId="patientIntakeChecklist.demographicInfoSubtext"
           buttonTextId="patientIntakeChecklist.demographicInfoButton"
-          buttonLink={`/patients/${patientId}/member-info`}
+          buttonLink={`/patients/${patientId}/member-info#basic`}
           onClick={this.onChecklistItemClick}
         />
         <PatientIntakeChecklistItem

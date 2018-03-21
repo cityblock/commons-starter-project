@@ -1,3 +1,4 @@
+import { History } from 'history';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -22,17 +23,22 @@ interface IProps {
   routeBase: string;
   onChange: (fields: IEditableFieldState) => void;
   location: Location;
+  history: History;
 }
 
 type allProps = IProps & RouteComponentProps<IProps>;
 
 export class PatientDemographics extends React.Component<allProps> {
   componentDidUpdate() {
-    const hash = this.props.location.hash.replace('#', '');
+    const { history, routeBase, location } = this.props;
+    const hash = location.hash.replace('#', '');
+
     if (hash) {
       const node = ReactDOM.findDOMNode(this.refs[hash]);
+
       if (node) {
         node.scrollIntoView();
+        history.push(routeBase);
       }
     }
   }
@@ -43,7 +49,11 @@ export class PatientDemographics extends React.Component<allProps> {
     return (
       <div className={styles.container}>
         <CoreIdentity patientIdentity={patient.core} onChange={onChange} />
-        <BasicInfo patientInformation={patient.basic} onChange={onChange} />
+        <BasicInfo
+          patientInformation={patient.basic}
+          onChange={onChange}
+          ref="basic"
+        />
         <ContactInfo contactInfo={patient.contact} onChange={onChange} />
         <AdvancedDirectives
           advancedDirectives={patient.advanced}
@@ -56,6 +66,7 @@ export class PatientDemographics extends React.Component<allProps> {
           onChange={onChange}
           patientId={patient.basic.patientId}
           patientInfoId={patient.basic.patientInfoId}
+          ref="photo"
         />
       </div>
     );

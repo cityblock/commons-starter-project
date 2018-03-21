@@ -4,3 +4,4 @@ export const disabled: string;
 export const noValue: string;
 export const large: string;
 export const empty: string;
+export const error: string;

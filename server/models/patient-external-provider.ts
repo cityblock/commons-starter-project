@@ -5,10 +5,46 @@ import Phone from './phone';
 
 const EAGER_QUERY = '[email, phone]';
 
+export type ExternalProviderOptions =
+  | 'substanceUseCounselor'
+  | 'therapistMentalHealth'
+  | 'therapistPhysical'
+  | 'psychiatrist'
+  | 'dialysis'
+  | 'housingCaseManager'
+  | 'hasaCaseManager'
+  | 'pharmacy'
+  | 'homeAttendant'
+  | 'visitingNurse'
+  | 'durableMedicalEquipment'
+  | 'healthHomeCareManager'
+  | 'insurancePlanCareManager'
+  | 'otherCaseManagement'
+  | 'formalCaregiver'
+  | 'other'
+  | 'urology'
+  | 'endocrinology'
+  | 'ophthalmology'
+  | 'cardiology'
+  | 'podiatry'
+  | 'orthopedics'
+  | 'infectiousDisease'
+  | 'obgyn'
+  | 'pulmonology'
+  | 'nephrology'
+  | 'hepatology'
+  | 'gastroenterology'
+  | 'ent'
+  | 'vascular'
+  | 'oncology'
+  | 'hematology'
+  | 'dermatology'
+  | 'otherMedicalSpecialist';
+
 export interface IPatientExternalProviderOptions {
   patientId: string;
   updatedById: string;
-  role: string;
+  role: ExternalProviderOptions;
   roleFreeText?: string | null;
   lastName?: string;
   agencyName: string;
@@ -18,7 +54,7 @@ export interface IPatientExternalProviderOptions {
 
 interface IEditPatientExternalProvider extends Partial<IPatientExternalProviderOptions> {
   updatedById: string;
-  role?: string;
+  role?: ExternalProviderOptions;
   roleFreeText?: string | null;
   lastName?: string;
   agencyName?: string;
@@ -34,7 +70,7 @@ export default class PatientExternalProvider extends Model {
   id: string;
   patientId: string;
   updatedById: string;
-  role: string;
+  role: ExternalProviderOptions;
   roleFreeText: string | null;
   lastName: string;
   agencyName: string;

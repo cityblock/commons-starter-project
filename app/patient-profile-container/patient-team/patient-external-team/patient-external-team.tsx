@@ -10,6 +10,7 @@ import {
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import * as styles from '../css/patient-team.css';
+import EditPatientExternalProviderModal from './edit-patient-external-provider-modal';
 import PatientExternalProvider from './patient-external-provider';
 
 interface IProps {
@@ -48,10 +49,6 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
     }
   };
 
-  handleEditSuccess = () => {
-    // TODO: get rid of these
-  };
-
   handleOpenEditModal = (patientExternalProviderToEdit: FullPatientExternalProviderFragment) => {
     this.setState({ isEditModalVisible: true, patientExternalProviderToEdit });
   };
@@ -61,7 +58,21 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
   };
 
   renderEditModal() {
-    // TODO
+    const { patientId } = this.props;
+    const { isEditModalVisible, patientExternalProviderToEdit } = this.state;
+
+    if (patientExternalProviderToEdit) {
+      return (
+        <EditPatientExternalProviderModal
+          isVisible={isEditModalVisible}
+          closePopup={this.handleCloseModal}
+          patientExternalProvider={patientExternalProviderToEdit}
+          patientId={patientId}
+        />
+      );
+    }
+
+    return null;
   }
 
   renderTeamMembers() {

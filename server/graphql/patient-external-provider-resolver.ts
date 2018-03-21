@@ -98,6 +98,7 @@ export async function patientExternalProviderCreate(
   await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IPatientExternalProviderCreateInput>(input, isNil) as any;
+  filtered.roleFreeText = input.roleFreeText;
   delete filtered.phone;
   delete filtered.email;
 
@@ -144,6 +145,7 @@ export async function patientExternalProviderEdit(
 
   await Promise.all(promises);
   const filtered = omitBy(input, isNil);
+  filtered.roleFreeText = input.roleFreeText;
   delete filtered.phone;
   delete filtered.email;
 

@@ -23,7 +23,7 @@ describe('Render Patient External Provider', () => {
     expect(text).toHaveLength(6);
 
     expect(text.at(0).props().text).toBe('Tonya Willis');
-    expect(text.at(1).props().messageId).toBe('externalProvider.cardiology');
+    expect(text.at(1).props().messageId).toBe('externalProviderRole.cardiology');
     expect(text.at(2).props().text).toBe(externalProviderPerson.phone.phoneNumber);
     expect(text.at(3).props().text).toBe(externalProviderPerson.email.emailAddress);
     expect(text.at(4).props().text).toBe(externalProviderPerson.agencyName);

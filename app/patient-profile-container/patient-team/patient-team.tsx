@@ -6,6 +6,7 @@ import CreatePatientContactModal from '../../shared/patient-contact-modal/create
 import * as styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
+import CreatePatientExternalProviderModal from './patient-external-team/create-patient-external-provider-modal';
 import PatientExternalTeam from './patient-external-team/patient-external-team';
 import PatientFamilyTeam from './patient-family-team/patient-family-team';
 
@@ -108,8 +109,13 @@ export class PatientTeam extends React.Component<IProps, IState> {
         />
       );
     } else if (isExternalCareTeam) {
-      // TODO: add appropriate modal here
-      return null;
+      return (
+        <CreatePatientExternalProviderModal
+          isVisible={isModalVisible}
+          closePopup={this.onClosePopup}
+          patientId={match.params.patientId}
+        />
+      );
     } else if (isFamilyAndSupportTeam) {
       const contactType = isAddingEmergencyContact ? 'emergencyContact' : 'familyMember';
       return (

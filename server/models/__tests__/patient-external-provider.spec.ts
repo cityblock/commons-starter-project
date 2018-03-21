@@ -100,7 +100,7 @@ describe('patient external provider model', () => {
       const patientExternalProvider = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone, {
           email,
-          role: 'otherMedicalSpecialty',
+          role: 'otherMedicalSpecialist',
           roleFreeText: 'potion intern',
         }),
         txn,
@@ -121,7 +121,7 @@ describe('patient external provider model', () => {
         patientId: patient.id,
         firstName: 'Hermione',
         lastName: 'Granger',
-        role: 'otherMedicalSpecialty',
+        role: 'otherMedicalSpecialist',
         agencyName: 'Hogwarts',
         roleFreeText: 'potion intern',
         description: 'some provider description',
@@ -138,7 +138,7 @@ describe('patient external provider model', () => {
         patientId: patient.id,
         firstName: 'Hermione',
         lastName: 'Granger',
-        role: 'otherMedicalSpecialty',
+        role: 'otherMedicalSpecialist',
         agencyName: 'Hogwarts',
         roleFreeText: 'potion intern',
         description: 'some provider description',

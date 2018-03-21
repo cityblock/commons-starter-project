@@ -21,6 +21,7 @@ import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
+import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
@@ -189,7 +190,7 @@ export function createMockPatientExternalProvider(
     email?: { emailAddress: string };
     firstName?: string;
     lastName?: string;
-    role?: string;
+    role?: ExternalProviderOptions;
     roleFreeText?: string;
     agencyName?: string;
     description?: string;
@@ -201,7 +202,7 @@ export function createMockPatientExternalProvider(
     patientId,
     firstName: get(options, 'firstName') || 'Hermione',
     lastName: get(options, 'lastName') || 'Granger',
-    role: get(options, 'role') || 'psychiatrist',
+    role: get(options, 'role') || 'psychiatrist' as ExternalProviderOptions,
     agencyName: get(options, 'agencyName') || 'Hogwarts',
     roleFreeText: get(options, 'roleFreeText') || null,
     email: get(options, 'email'),

@@ -12,6 +12,10 @@
   margin-bottom: var(--small-gutter);
 }
 
+.field:last-child {
+  margin-right: 0;
+}
+
 .addButton {
   background-color: var(--dark-gray-background-color);
   border: 1px solid var(--border-color);
@@ -22,4 +26,9 @@
 
 .addButton:last-child {
   margin-bottom: 0;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
 }

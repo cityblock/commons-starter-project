@@ -61,26 +61,22 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
       </div>
     ) : null;
 
-    const nameText = (firstName || lastName) ? formatFullName(firstName, lastName) : agencyName;
-    const agencyText = (firstName || lastName) ? agencyName : null;
+    const nameText = firstName || lastName ? formatFullName(firstName, lastName) : agencyName;
+    const agencyText = firstName || lastName ? agencyName : null;
 
-    const roleHtml = (role === 'other' || role === 'otherMedicalSpecialty') ? (
-      <SmallText text={roleFreeText || ''} color="gray" size="medium" />
-    ) : (
-      <SmallText messageId={`externalProvider.${role}`} color="gray" size="medium" />
-    );
+    const roleHtml =
+      role === 'other' || role === 'otherMedicalSpecialist' ? (
+        <SmallText text={roleFreeText || ''} color="gray" size="medium" />
+      ) : (
+        <SmallText messageId={`externalProviderRole.${role}`} color="gray" size="medium" />
+      );
 
     return (
       <Fragment>
         <div className={styles.container}>
           <div className={styles.row}>
             <div className={styles.column}>
-              <SmallText
-                text={nameText}
-                color="black"
-                size="largest"
-                isBold={true}
-              />
+              <SmallText text={nameText} color="black" size="largest" isBold={true} />
               {roleHtml}
             </div>
 
@@ -89,7 +85,12 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
               <SmallText text={emailAddress} color="black" size="medium" />
             </div>
 
-            <SmallText text={agencyText || ''} color="black" size="medium" className={styles.column} />
+            <SmallText
+              text={agencyText || ''}
+              color="black"
+              size="medium"
+              className={styles.column}
+            />
           </div>
           <HamburgerMenu open={isMenuOpen} onMenuToggle={this.onMenuToggle}>
             <HamburgerMenuOption

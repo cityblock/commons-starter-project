@@ -2,7 +2,7 @@
 
 mutation patientExternalProviderCreate(
   $patientId: ID!
-  $role: String!
+  $role: ExternalProviderOptions!
   $roleFreeText: String
   $firstName: String
   $lastName: String

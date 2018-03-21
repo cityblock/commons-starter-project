@@ -84,6 +84,44 @@ export enum CoreIdentityOptions {
 }
 
 
+export enum ExternalProviderOptions {
+  cardiology = "cardiology",
+  dermatology = "dermatology",
+  dialysis = "dialysis",
+  durableMedicalEquipment = "durableMedicalEquipment",
+  endocrinology = "endocrinology",
+  ent = "ent",
+  formalCaregiver = "formalCaregiver",
+  gastroenterology = "gastroenterology",
+  hasaCaseManager = "hasaCaseManager",
+  healthHomeCareManager = "healthHomeCareManager",
+  hematology = "hematology",
+  hepatology = "hepatology",
+  homeAttendant = "homeAttendant",
+  housingCaseManager = "housingCaseManager",
+  infectiousDisease = "infectiousDisease",
+  insurancePlanCareManager = "insurancePlanCareManager",
+  nephrology = "nephrology",
+  obgyn = "obgyn",
+  oncology = "oncology",
+  ophthalmology = "ophthalmology",
+  orthopedics = "orthopedics",
+  other = "other",
+  otherCaseManagement = "otherCaseManagement",
+  otherMedicalSpecialist = "otherMedicalSpecialist",
+  pharmacy = "pharmacy",
+  podiatry = "podiatry",
+  psychiatrist = "psychiatrist",
+  pulmonology = "pulmonology",
+  substanceUseCounselor = "substanceUseCounselor",
+  therapistMentalHealth = "therapistMentalHealth",
+  therapistPhysical = "therapistPhysical",
+  urology = "urology",
+  vascular = "vascular",
+  visitingNurse = "visitingNurse",
+}
+
+
 export enum Gender {
   female = "female",
   male = "male",
@@ -2613,7 +2651,7 @@ export interface getPatientExternalProvidersQuery {
   patientExternalProviders:  Array< {
     id: string,
     patientId: string,
-    role: string,
+    role: ExternalProviderOptions,
     roleFreeText: string | null,
     firstName: string | null,
     lastName: string | null,
@@ -6532,7 +6570,7 @@ export interface patientEditMutation {
 
 export interface patientExternalProviderCreateMutationVariables {
   patientId: string,
-  role: string,
+  role: ExternalProviderOptions,
   roleFreeText?: string | null,
   firstName?: string | null,
   lastName?: string | null,
@@ -6547,7 +6585,7 @@ export interface patientExternalProviderCreateMutation {
   patientExternalProviderCreate:  {
     id: string,
     patientId: string,
-    role: string,
+    role: ExternalProviderOptions,
     roleFreeText: string | null,
     firstName: string | null,
     lastName: string | null,
@@ -6576,7 +6614,7 @@ export interface patientExternalProviderDeleteMutation {
   patientExternalProviderDelete:  {
     id: string,
     patientId: string,
-    role: string,
+    role: ExternalProviderOptions,
     roleFreeText: string | null,
     firstName: string | null,
     lastName: string | null,
@@ -6598,7 +6636,7 @@ export interface patientExternalProviderDeleteMutation {
 
 export interface patientExternalProviderEditMutationVariables {
   patientExternalProviderId: string,
-  role?: string | null,
+  role?: ExternalProviderOptions | null,
   roleFreeText?: string | null,
   firstName?: string | null,
   lastName?: string | null,
@@ -6613,7 +6651,7 @@ export interface patientExternalProviderEditMutation {
   patientExternalProviderEdit:  {
     id: string,
     patientId: string,
-    role: string,
+    role: ExternalProviderOptions,
     roleFreeText: string | null,
     firstName: string | null,
     lastName: string | null,
@@ -10926,7 +10964,7 @@ export interface FullPatientDataFlagFragment {
 export interface FullPatientExternalProviderFragment {
   id: string,
   patientId: string,
-  role: string,
+  role: ExternalProviderOptions,
   roleFreeText: string | null,
   firstName: string | null,
   lastName: string | null,

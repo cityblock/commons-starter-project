@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { Fragment } from 'react';
 import Option from '../option/option';
+import SmallText from '../small-text/small-text';
 import * as styles from './css/select.css';
 
 export type Color = 'black' | 'blue';
@@ -16,6 +18,8 @@ interface IProps {
   disabled?: boolean;
   name?: string;
   required?: boolean;
+  errorMessageId?: string;
+  hasError?: boolean;
   large?: boolean; // makes select 50px tall
   isUnselectable?: boolean;
   color?: Color; // default is black
@@ -30,12 +34,16 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     disabled,
     name,
     required,
+    hasError,
+    errorMessageId,
     large,
     options,
     isUnselectable,
     hasPlaceholder,
     color,
   } = props;
+
+  const errorMessage = hasError ? <SmallText messageId={errorMessageId} color="red" /> : null;
 
   const selectStyles = classNames(
     styles.select,
@@ -45,6 +53,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.disabled]: !!disabled,
       [styles.empty]: !!disabled && !value,
       [styles.blue]: color && color === 'blue',
+      [styles.error]: hasError,
     },
     className,
   );
@@ -65,18 +74,21 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     : null;
 
   return (
-    <select
-      name={name}
-      required={required}
-      value={value}
-      className={selectStyles}
-      onChange={onChange}
-      disabled={disabled}
-    >
-      {placeholderComponent}
-      {optionsComponent}
-      {children}
-    </select>
+    <Fragment>
+      <select
+        name={name}
+        required={required}
+        value={value}
+        className={selectStyles}
+        onChange={onChange}
+        disabled={disabled}
+      >
+        {placeholderComponent}
+        {optionsComponent}
+        {children}
+      </select>
+      {errorMessage}
+    </Fragment>
   );
 };
 

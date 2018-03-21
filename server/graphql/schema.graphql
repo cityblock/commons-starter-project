@@ -215,6 +215,43 @@ enum CurrentPatientState {
   ineligible
 }
 
+enum ExternalProviderOptions {
+  substanceUseCounselor
+  therapistMentalHealth
+  therapistPhysical
+  psychiatrist
+  dialysis
+  housingCaseManager
+  hasaCaseManager
+  pharmacy
+  homeAttendant
+  visitingNurse
+  durableMedicalEquipment
+  healthHomeCareManager
+  insurancePlanCareManager
+  otherCaseManagement
+  formalCaregiver
+  other
+  urology
+  endocrinology
+  ophthalmology
+  cardiology
+  podiatry
+  orthopedics
+  infectiousDisease
+  obgyn
+  pulmonology
+  nephrology
+  hepatology
+  gastroenterology
+  ent
+  vascular
+  oncology
+  hematology
+  dermatology
+  otherMedicalSpecialist
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -350,7 +387,7 @@ type PatientContact implements uniqueId {
 type PatientExternalProvider implements uniqueId {
   id: ID!
   patientId: ID!
-  role: String!
+  role: ExternalProviderOptions!
   roleFreeText: String
   agencyName: String!
   firstName: String
@@ -1583,7 +1620,7 @@ input PatientContactEditInput {
 # params for creating a patient external provider in the db
 input PatientExternalProviderCreateInput {
   patientId: ID!
-  role: String!
+  role: ExternalProviderOptions!
   roleFreeText: String
   firstName: String
   lastName: String
@@ -1601,7 +1638,7 @@ input PatientExternalProviderDeleteInput {
 # params for editing a patient external provider in the db
 input PatientExternalProviderEditInput {
   patientExternalProviderId: ID!
-  role: String
+  role: ExternalProviderOptions
   roleFreeText: String
   firstName: String
   lastName: String

@@ -1,7 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import EmptyPlaceholder from '../../../../shared/library/empty-placeholder/empty-placeholder';
-import { externalProviderEntity, externalProviderPerson, patient } from '../../../../shared/util/test-data';
+import {
+  externalProviderEntity,
+  externalProviderPerson,
+  patient,
+} from '../../../../shared/util/test-data';
 import PatientExternalProvider from '../patient-external-provider';
 import { PatientExternalTeam } from '../patient-external-team';
 
@@ -26,7 +30,9 @@ describe('Render Patient External Team Members', () => {
   });
 
   it('renders external members tab with providers', () => {
-    wrapper.setProps({ patientExternalProviders: [externalProviderEntity, externalProviderPerson] });
+    wrapper.setProps({
+      patientExternalProviders: [externalProviderEntity, externalProviderPerson],
+    });
 
     expect(wrapper.find(EmptyPlaceholder)).toHaveLength(0);
 

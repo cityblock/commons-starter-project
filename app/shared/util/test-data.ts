@@ -2,6 +2,7 @@ import {
   BirthSexOptions,
   ContactMethodOptions,
   CurrentPatientState,
+  ExternalProviderOptions,
   Gender,
   PhoneTypeOptions,
 } from '../../graphql/types';
@@ -1079,7 +1080,7 @@ export const externalProviderPerson = {
   patientId: patient.id,
   firstName: 'Tonya',
   lastName: 'Willis',
-  role: 'cardiology',
+  role: ExternalProviderOptions.cardiology,
   roleFreeText: null,
   agencyName: 'Mount Sinai',
   description: 'best doctor for this patient',
@@ -1099,7 +1100,9 @@ export const externalProviderPerson = {
 export const externalProviderEntity = {
   id: 'external-provider-id-2',
   patientId: patient.id,
-  role: 'other',
+  firstName: null,
+  lastName: null,
+  role: ExternalProviderOptions.other,
   roleFreeText: 'Some other type of provider',
   agencyName: 'Mount Sinai',
   description: null,

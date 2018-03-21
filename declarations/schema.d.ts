@@ -1309,7 +1309,7 @@ declare module 'schema' {
   interface IPatientExternalProvider {
     id: string;
     patientId: string;
-    role: string;
+    role: IExternalProviderOptionsEnum;
     roleFreeText: string | null;
     agencyName: string;
     firstName: string | null;
@@ -1321,6 +1321,42 @@ declare module 'schema' {
     updatedAt: string | null;
     deletedAt: string | null;
   }
+
+  type IExternalProviderOptionsEnum =
+    | 'substanceUseCounselor'
+    | 'therapistMentalHealth'
+    | 'therapistPhysical'
+    | 'psychiatrist'
+    | 'dialysis'
+    | 'housingCaseManager'
+    | 'hasaCaseManager'
+    | 'pharmacy'
+    | 'homeAttendant'
+    | 'visitingNurse'
+    | 'durableMedicalEquipment'
+    | 'healthHomeCareManager'
+    | 'insurancePlanCareManager'
+    | 'otherCaseManagement'
+    | 'formalCaregiver'
+    | 'other'
+    | 'urology'
+    | 'endocrinology'
+    | 'ophthalmology'
+    | 'cardiology'
+    | 'podiatry'
+    | 'orthopedics'
+    | 'infectiousDisease'
+    | 'obgyn'
+    | 'pulmonology'
+    | 'nephrology'
+    | 'hepatology'
+    | 'gastroenterology'
+    | 'ent'
+    | 'vascular'
+    | 'oncology'
+    | 'hematology'
+    | 'dermatology'
+    | 'otherMedicalSpecialist';
 
   /**
    * Clinic
@@ -3664,7 +3700,7 @@ declare module 'schema' {
    */
   interface IPatientExternalProviderCreateInput {
     patientId: string;
-    role: string;
+    role: IExternalProviderOptionsEnum;
     roleFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
@@ -3686,7 +3722,7 @@ declare module 'schema' {
    */
   interface IPatientExternalProviderEditInput {
     patientExternalProviderId: string;
-    role?: string | null;
+    role?: IExternalProviderOptionsEnum | null;
     roleFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;

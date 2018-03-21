@@ -8,11 +8,6 @@ import User from '../user';
 describe('google auth model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(GoogleAuth.knex());

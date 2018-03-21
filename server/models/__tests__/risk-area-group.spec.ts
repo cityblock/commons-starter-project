@@ -15,11 +15,6 @@ import {
 describe('risk area group model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(RiskAreaGroup.knex());

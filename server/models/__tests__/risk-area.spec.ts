@@ -78,11 +78,6 @@ async function setup2(riskAreaGroup: RiskAreaGroup, txn: Transaction): Promise<I
 describe('risk area model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(Question.knex());

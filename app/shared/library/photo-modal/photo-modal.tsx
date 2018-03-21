@@ -112,7 +112,17 @@ class PhotoModal extends React.Component<IProps, IState> {
 
       if (context && imgContext) {
         context.drawImage(this.video, 0, 0, width, height);
-        imgContext.drawImage(this.canvas, imgWidth, 20, imgWidth, imgHeight, 0, 0, imgWidth, imgHeight);
+        imgContext.drawImage(
+          this.canvas,
+          imgWidth,
+          20,
+          imgWidth,
+          imgHeight,
+          0,
+          0,
+          imgWidth,
+          imgHeight,
+        );
       }
 
       this.imgCanvas.toBlob(blob => {
@@ -166,7 +176,7 @@ class PhotoModal extends React.Component<IProps, IState> {
           <canvas className={styles.canvas} ref={canvas => (this.imgCanvas = canvas)} />
           {imgData && (
             <div style={{ height: `${height}px` }} className={styles.imgContainer}>
-            <img src={imgSrc} alt="Member photo" />
+              <img src={imgSrc} alt="Member photo" />
             </div>
           )}
         </div>

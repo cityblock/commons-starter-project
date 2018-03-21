@@ -55,11 +55,6 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('concern suggestion model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(Question.knex());

@@ -48,11 +48,6 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('task model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(Task.knex());

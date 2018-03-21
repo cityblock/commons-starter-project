@@ -16,7 +16,7 @@ export async function patientPhotoSignedUrlCreate(
   { permissions, userId, txn, testConfig }: IContext,
 ): Promise<IRootMutationType['patientPhotoSignedUrlCreate']> {
   if (!input.patientId) {
-    throw new Error("Must provide patient id");
+    throw new Error('Must provide patient id');
   }
 
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);

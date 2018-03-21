@@ -32,11 +32,6 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('Patient Glass Break Model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(PatientGlassBreak.knex());

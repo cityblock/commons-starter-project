@@ -107,11 +107,6 @@ async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
 describe('patient model', () => {
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-    await Db.clear();
-  });
-
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(Patient.knex());
@@ -464,18 +459,9 @@ describe('patient model', () => {
   describe('patients', () => {
     it('should fetch patients', async () => {
       const { patient1, patient2 } = await patientsSetup(txn);
-
-      expect(await Patient.getAll({ pageNumber: 0, pageSize: 10 }, txn)).toMatchObject({
-        results: [
-          {
-            id: patient1.id,
-          },
-          {
-            id: patient2.id,
-          },
-        ],
-        total: 2,
-      });
+      const patients = await Patient.getAll({ pageNumber: 0, pageSize: 10 }, txn);
+      expect(patients.results).toContainEqual(patient1);
+      expect(patients.results).toContainEqual(patient2);
     });
 
     it('should fetch all patient ids', async () => {

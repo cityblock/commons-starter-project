@@ -1,5 +1,7 @@
 .container {
   display: inline-block;
+  width: 33%;
+  vertical-align: middle;
 }
 
 .title h2 {

@@ -9,13 +9,12 @@
 
 .header {
   width: 100%;
+  padding: 50px var(--gutter);
 }
 
-.headerRow {
-  padding: 50px var(--gutter);
-  justify-content: space-between;
-  align-items: center;
+.buttonGroup {
   display: flex;
+  justify-content: flex-end;
 }
 
 .patientPanelBody {
@@ -27,4 +26,15 @@
 
 .button {
   margin: 6px 0 6px var(--small-gutter);
+  height: 42px;
+  padding: 13px var(--medium-gutter);
+}
+
+.boxWrapper {
+  width: 33%;
+  display: inline-block;
+}
+
+.toggle {
+  justify-content: center;
 }

@@ -8,32 +8,84 @@ exports[`renders patient panel container correctly 1`] = `
     className="header"
   >
     <div
-      className="headerRow"
+      className="container"
     >
       <div
-        className="container"
+        className="title"
+      >
+        <h2>
+          Members:
+        </h2>
+        <h2
+          className="lightBlue"
+        >
+          0
+        </h2>
+      </div>
+      <div
+        className="description"
+      >
+        All members on this care team
+      </div>
+    </div>
+    <div
+      className="boxWrapper"
+    >
+      <form
+        className="container toggle"
       >
         <div
-          className="title"
+          className="container checked enabled"
         >
-          <h2>
-            Members:
-          </h2>
-          <h2
-            className="lightBlue"
+          <input
+            checked={true}
+            disabled={false}
+            id="showAllPatients-true"
+            name="showAllPatients"
+            onChange={[Function]}
+            onClick={undefined}
+            readOnly={false}
+            type="radio"
+            value="true"
+          />
+          <label
+            className=""
+            htmlFor="showAllPatients-true"
           >
-            0
-          </h2>
+            All Members
+          </label>
         </div>
         <div
-          className="description"
+          className="container enabled"
         >
-          All members on this care team
+          <input
+            checked={false}
+            disabled={false}
+            id="showAllPatients-false"
+            name="showAllPatients"
+            onChange={[Function]}
+            onClick={undefined}
+            readOnly={false}
+            type="radio"
+            value="false"
+          />
+          <label
+            className=""
+            htmlFor="showAllPatients-false"
+          >
+            My Panel
+          </label>
         </div>
-      </div>
-      <div>
+      </form>
+    </div>
+    <div
+      className="boxWrapper"
+    >
+      <div
+        className="buttonGroup"
+      >
         <button
-          className="button button"
+          className="button white button"
           disabled={false}
           onClick={[Function]}
         >
@@ -105,6 +157,23 @@ exports[`renders patient panel container correctly 1`] = `
     <div
       className="fields"
     >
+      <div
+        className="inputGroup"
+      >
+        <button
+          className="button white fullWidth"
+          disabled={false}
+          onClick={[Function]}
+        >
+          <span
+            className="flex"
+          >
+            <span>
+              Clear Filters
+            </span>
+          </span>
+        </button>
+      </div>
       <div
         className="inputGroup"
       >
@@ -281,62 +350,6 @@ exports[`renders patient panel container correctly 1`] = `
             Select the care worker
           </option>
         </select>
-      </div>
-      <div
-        className="inputGroup"
-      >
-        <label
-          className="label"
-          htmlFor={undefined}
-        >
-          Show only members assigned to you?
-        </label>
-        <form
-          className="container"
-        >
-          <div
-            className="container enabled"
-          >
-            <input
-              checked={false}
-              disabled={false}
-              id="showAllPatients-true"
-              name="showAllPatients"
-              onChange={undefined}
-              onClick={[Function]}
-              readOnly={false}
-              type="radio"
-              value="true"
-            />
-            <label
-              className=""
-              htmlFor="showAllPatients-true"
-            >
-              No
-            </label>
-          </div>
-          <div
-            className="container enabled"
-          >
-            <input
-              checked={false}
-              disabled={false}
-              id="showAllPatients-false"
-              name="showAllPatients"
-              onChange={undefined}
-              onClick={[Function]}
-              readOnly={false}
-              type="radio"
-              value="false"
-            />
-            <label
-              className=""
-              htmlFor="showAllPatients-false"
-            >
-              Yes
-            </label>
-          </div>
-        </form>
       </div>
       <div
         className="inputGroup"

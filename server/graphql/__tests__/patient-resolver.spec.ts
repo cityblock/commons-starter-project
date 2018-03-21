@@ -742,7 +742,7 @@ describe('patient', () => {
             userId: user.id,
             txn,
           },
-          { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: true } },
+          { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: true },
         );
 
         expect(result.data!.patientPanel.totalCount).toBe(2);
@@ -762,7 +762,7 @@ describe('patient', () => {
             userId: user.id,
             txn,
           },
-          { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: true } },
+          { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: true },
         );
 
         expect(result.data!.patientPanel.totalCount).toBe(3);
@@ -780,7 +780,7 @@ describe('patient', () => {
             userId: user.id,
             txn,
           },
-          { pageNumber: 0, pageSize: 10, filters: { gender: 'female', showAllPatients: false } },
+          { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: false },
         );
 
         expect(result.data!.patientPanel.totalCount).toBe(2);

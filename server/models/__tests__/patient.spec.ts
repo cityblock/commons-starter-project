@@ -776,7 +776,7 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female', showAllPatients: true },
+          { gender: 'female' },
           false,
           txn,
         );
@@ -790,7 +790,7 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female', showAllPatients: true },
+          { gender: 'female' },
           true,
           txn,
         );
@@ -802,8 +802,8 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female', showAllPatients: false },
-          true,
+          { gender: 'female' },
+          false,
           txn,
         );
         expect(patients.total).toEqual(2);

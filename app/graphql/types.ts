@@ -261,7 +261,6 @@ export interface PatientFilterOptions {
   zip?: string | null,
   careWorkerId?: string | null,
   patientState?: CurrentPatientState | null,
-  showAllPatients?: boolean | null,
 };
 
 export enum TaskOrderOptions {
@@ -2738,6 +2737,7 @@ export interface getPatientPanelQueryVariables {
   pageNumber: number,
   pageSize: number,
   filters: PatientFilterOptions,
+  showAllPatients?: boolean | null,
 };
 
 export interface getPatientPanelQuery {

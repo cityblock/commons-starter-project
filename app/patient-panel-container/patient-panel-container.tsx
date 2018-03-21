@@ -16,6 +16,8 @@ import {
   PatientFilterOptions,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
+import RadioGroup from '../shared/library/radio-group/radio-group';
+import RadioInput from '../shared/library/radio-input/radio-input';
 import PatientTable, { IFormattedPatient } from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
@@ -39,6 +41,7 @@ interface IStateProps {
   filters: PatientFilterOptions;
   pageNumber: number;
   pageSize: number;
+  showAllPatients: boolean;
 }
 
 interface IProps extends IInjectedProps {
@@ -57,6 +60,7 @@ interface IState {
   pendingFilters: PatientFilterOptions;
   patientSelectState: IPatientState;
   isGloballySelected: boolean;
+  isAllPatientsSelected: boolean;
 }
 
 class PatientPanelContainer extends React.Component<allProps, IState> {
@@ -76,10 +80,10 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         zip: props.filters.zip,
         careWorkerId: props.filters.careWorkerId,
         patientState: props.filters.patientState,
-        showAllPatients: props.filters.showAllPatients,
       },
       patientSelectState: {},
       isGloballySelected: false,
+      isAllPatientsSelected: props.showAllPatients,
     };
   }
 
@@ -124,14 +128,19 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     });
   };
 
+  handleCloseFilterPanel = () => {
+    this.setState({ isPanelOpen: false, pendingFilters: this.props.filters });
+  }
+
   handleFilterButtonClick = (filters?: PatientFilterOptions) => {
     const { history, pageSize } = this.props;
-    const { pendingFilters } = this.state;
+    const { pendingFilters, isAllPatientsSelected } = this.state;
 
     const activeFilters = omitBy<PatientFilterOptions>(filters || pendingFilters, isNil);
     const filterString = querystring.stringify({
       pageNumber: INITIAL_PAGE_NUMBER,
       pageSize,
+      showAllPatients: isAllPatientsSelected,
       ...activeFilters,
     });
 
@@ -142,6 +151,23 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
       patientSelectState: {},
       isGloballySelected: false,
     });
+  };
+
+  handleShowPatientsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { history, pageSize, filters } = this.props;
+    const { value } = event.target;
+    const updatedValue = value === 'true';
+
+    const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
+    const filterString = querystring.stringify({
+      pageNumber: INITIAL_PAGE_NUMBER,
+      pageSize,
+      showAllPatients: updatedValue,
+      ...activeFilters,
+    });
+
+    history.push({ search: filterString });
+    this.setState({ isAllPatientsSelected: updatedValue });
   };
 
   handleModalClose = () => {
@@ -176,13 +202,44 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   };
 
   createQueryString = (pageNumber: number, pageSize: number) => {
-    const activeFilters = omitBy<PatientFilterOptions>(this.props.filters, isNil);
+    const { showAllPatients, filters } = this.props;
+    const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
     return querystring.stringify({
       pageNumber,
       pageSize,
       ...activeFilters,
+      showAllPatients,
     });
   };
+
+  renderShowAllPatientsToggle() {
+    const { featureFlags } = this.props;
+    const { isAllPatientsSelected } = this.state;
+    if (!featureFlags.canShowAllMembersInPatientPanel) {
+      return null;
+    }
+
+    return (
+      <div className={styles.boxWrapper}>
+        <RadioGroup className={styles.toggle}>
+          <RadioInput
+            name="showAllPatients"
+            value="true"
+            checked={isAllPatientsSelected}
+            label="All Members"
+            onChange={this.handleShowPatientsChange}
+          />
+          <RadioInput
+            name="showAllPatients"
+            value="false"
+            checked={!isAllPatientsSelected}
+            label="My Panel"
+            onChange={this.handleShowPatientsChange}
+          />
+        </RadioGroup>
+      </div>
+    );
+  }
 
   renderButtons() {
     const { filters, featureFlags } = this.props;
@@ -197,23 +254,30 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     }
 
     return (
-      <div>
-        <FormattedMessage id="patientPanel.filter">
-          {(message: string) => {
-            const label = numberFilters ? `${message}s (${numberFilters})` : message;
-            return (
-              <Button label={label} onClick={this.handleFilterClick} className={styles.button} />
-            );
-          }}
-        </FormattedMessage>
-        {featureFlags.canBulkAssign && (
-          <Button
-            messageId="patientPanel.assignMembers"
-            onClick={this.handleAssignMembersClick}
-            className={styles.button}
-            disabled={!numberPatientsSelected}
-          />
-        )}
+      <div className={styles.boxWrapper}>
+        <div className={styles.buttonGroup}>
+          <FormattedMessage id="patientPanel.filter">
+            {(message: string) => {
+              const label = numberFilters ? `${message}s (${numberFilters})` : message;
+              return (
+                <Button
+                  label={label}
+                  onClick={this.handleFilterClick}
+                  className={styles.button}
+                  color="white"
+                />
+              );
+            }}
+          </FormattedMessage>
+          {featureFlags.canBulkAssign && (
+            <Button
+              messageId="patientPanel.assignMembers"
+              onClick={this.handleAssignMembersClick}
+              className={styles.button}
+              disabled={!numberPatientsSelected}
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -241,10 +305,9 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
-          <div className={styles.headerRow}>
-            <PatientPanelHeader filters={filters} totalResults={memberCount} />
-            {this.renderButtons()}
-          </div>
+          <PatientPanelHeader filters={filters} totalResults={memberCount} />
+          {this.renderShowAllPatientsToggle()}
+          {this.renderButtons()}
         </div>
         <div className={styles.patientPanelBody}>
           <PatientTable
@@ -270,7 +333,8 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         </div>
         <PatientFilterPanel
           filters={pendingFilters}
-          onClick={this.handleFilterButtonClick}
+          onClickApply={this.handleFilterButtonClick}
+          onClickCancel={this.handleCloseFilterPanel}
           onChange={this.handleFilterChange}
           isVisible={isPanelOpen}
         />
@@ -287,10 +351,13 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 const mapStateToProps = (state: IState, props: IProps): IStateProps => {
   const searchParams = querystring.parse(props.location.search.substring(1));
   const showAllPatientsSearchParam = searchParams.showAllPatients as string;
-  let showAllPatients = false;
+  let showAllPatients = true;
 
-  if (showAllPatientsSearchParam === 'true') {
-    showAllPatients = true;
+  if (
+    showAllPatientsSearchParam === 'false' ||
+    !props.featureFlags.canShowAllMembersInPatientPanel
+  ) {
+    showAllPatients = false;
   }
 
   const filters = {
@@ -300,12 +367,12 @@ const mapStateToProps = (state: IState, props: IProps): IStateProps => {
     ageMin: parseInt(searchParams.ageMin as string, 10) || null,
     ageMax: parseInt(searchParams.ageMax as string, 10) || null,
     patientState: (searchParams.patientState as CurrentPatientState) || null,
-    showAllPatients: showAllPatients || null,
   };
 
   const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
   return {
     filters: activeFilters,
+    showAllPatients,
     pageNumber: Number(searchParams.pageNumber || INITIAL_PAGE_NUMBER),
     pageSize: Number(searchParams.pageSize || INITIAL_PAGE_SIZE),
   };
@@ -316,8 +383,8 @@ export default compose(
   withCurrentUser(),
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientPanelQuery as any, {
-    options: ({ pageNumber, pageSize, filters }) => ({
-      variables: { pageNumber, pageSize, filters },
+    options: ({ pageNumber, pageSize, filters, showAllPatients }) => ({
+      variables: { pageNumber, pageSize, filters, showAllPatients },
     }),
     props: ({ data }) => ({
       refetchPatientPanel: data ? data.refetch : null,

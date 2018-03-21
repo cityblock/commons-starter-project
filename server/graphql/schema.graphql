@@ -442,7 +442,6 @@ input PatientFilterOptions {
   zip: String
   careWorkerId: ID
   patientState: CurrentPatientState
-  showAllPatients: Boolean
 }
 
 # Address
@@ -2589,6 +2588,7 @@ type RootQueryType {
     pageNumber: Int!
     pageSize: Int!
     filters: PatientFilterOptions!
+    showAllPatients: Boolean
   ): PatientTableRowEdges!
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!

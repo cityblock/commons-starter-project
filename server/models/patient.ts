@@ -388,16 +388,8 @@ export default class Patient extends Model {
   static async filter(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    {
-      ageMax,
-      ageMin,
-      gender,
-      zip,
-      careWorkerId,
-      patientState,
-      showAllPatients,
-    }: Partial<IPatientFilterOptions>,
-    allowAllPatients: boolean,
+    { ageMax, ageMin, gender, zip, careWorkerId, patientState }: Partial<IPatientFilterOptions>,
+    showAllPatients: boolean,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     if (
@@ -407,7 +399,7 @@ export default class Patient extends Model {
       !zip &&
       !careWorkerId &&
       !patientState &&
-      !allowAllPatients
+      !showAllPatients
     ) {
       return CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
     }
@@ -416,7 +408,7 @@ export default class Patient extends Model {
       .eager(EAGER_QUERY)
       .leftOuterJoinRelation('patientInfo.[primaryAddress]');
 
-    if (!allowAllPatients || (allowAllPatients && !showAllPatients)) {
+    if (!showAllPatients) {
       builder.where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn));
     }
 

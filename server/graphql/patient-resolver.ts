@@ -138,21 +138,23 @@ export async function resolvePatientSearch(
 
 interface IPatientFilterInput extends IPaginationOptions {
   filters: IPatientFilterOptions;
+  showAllPatients: boolean;
 }
 
 export async function resolvePatientPanel(
   root: any,
-  { pageNumber, pageSize, filters }: IPatientFilterInput,
+  { pageNumber, pageSize, filters, showAllPatients }: IPatientFilterInput,
   { permissions, userId, txn }: IContext,
 ): Promise<IPatientTableRowEdges> {
   await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
   const allowAllPatients = getBusinessToggles(permissions).canShowAllMembersInPatientPanel;
+  const verifiedShowAllPatients = allowAllPatients && showAllPatients;
 
   const patients = await Patient.filter(
     userId!,
     { pageNumber, pageSize },
     filters,
-    allowAllPatients,
+    verifiedShowAllPatients,
     txn,
   );
 

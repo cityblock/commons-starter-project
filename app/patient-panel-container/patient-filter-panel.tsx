@@ -14,7 +14,8 @@ import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-filter-panel.css';
 
 interface IProps extends IInjectedProps {
-  onClick: (filters: PatientFilterOptions) => any;
+  onClickApply: (filters: PatientFilterOptions) => any;
+  onClickCancel: () => void;
   onChange: (filter: PatientFilterOptions) => any;
   filters: PatientFilterOptions;
   isVisible: boolean | null;
@@ -63,33 +64,24 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
   };
 
   handleApplyClick = () => {
-    const {
+    const { gender, ageMin, ageMax, zip, careWorkerId, patientState } = this.props.filters;
+    this.props.onClickApply({
       gender,
       ageMin,
       ageMax,
       zip,
       careWorkerId,
       patientState,
-      showAllPatients,
-    } = this.props.filters;
-    this.props.onClick({
-      gender,
-      ageMin,
-      ageMax,
-      zip,
-      careWorkerId,
-      patientState,
-      showAllPatients,
     });
   };
 
-  handleCancelClick = () => {
-    this.props.onClick({});
+  handleClearAllClick = () => {
+    this.props.onClickApply({});
   };
 
   render() {
-    const { isVisible, filters, featureFlags } = this.props;
-    const { gender, zip, careWorkerId, ageMin, ageMax, patientState, showAllPatients } = filters;
+    const { isVisible, filters, onClickCancel } = this.props;
+    const { gender, zip, careWorkerId, ageMin, ageMax, patientState } = filters;
     const { inNetwork } = this.state;
 
     return (
@@ -105,7 +97,7 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
             <Button
               messageId="patientFilter.cancel"
               color="white"
-              onClick={this.handleCancelClick}
+              onClick={onClickCancel}
               className={styles.button}
             />
             <Button
@@ -116,6 +108,15 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.fields}>
+          <div className={styles.inputGroup}>
+            <Button
+              fullWidth={true}
+              color="white"
+              label="Clear Filters"
+              onClick={this.handleClearAllClick}
+            />
+          </div>
+
           <div className={styles.inputGroup}>
             <FormLabel messageId="patientFilter.age" />
             <AgeRangeSelect
@@ -157,27 +158,6 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
               value={careWorkerId}
             />
           </div>
-          {featureFlags.canShowAllMembersInPatientPanel && (
-            <div className={styles.inputGroup}>
-              <FormLabel messageId="patientFilter.showAllPatients" />
-              <RadioGroup>
-                <RadioInput
-                  name="showAllPatients"
-                  value="true"
-                  checked={showAllPatients === true}
-                  label="No"
-                  onClick={this.handleBooleanValueChange}
-                />
-                <RadioInput
-                  name="showAllPatients"
-                  value="false"
-                  checked={showAllPatients === false}
-                  label="Yes"
-                  onClick={this.handleBooleanValueChange}
-                />
-              </RadioGroup>
-            </div>
-          )}
 
           <div className={styles.inputGroup}>
             <FormLabel messageId="patientFilter.patientStatus" />

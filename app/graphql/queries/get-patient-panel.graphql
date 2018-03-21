@@ -1,7 +1,17 @@
 #import "../fragments/full-patient-table-row.graphql"
 
-query getPatientPanel($pageNumber: Int!, $pageSize: Int!, $filters: PatientFilterOptions!) {
-  patientPanel(pageNumber: $pageNumber, pageSize: $pageSize, filters: $filters) {
+query getPatientPanel(
+  $pageNumber: Int!
+  $pageSize: Int!
+  $filters: PatientFilterOptions!
+  $showAllPatients: Boolean
+) {
+  patientPanel(
+    pageNumber: $pageNumber
+    pageSize: $pageSize
+    filters: $filters
+    showAllPatients: $showAllPatients
+  ) {
     edges {
       node {
         ...FullPatientTableRow

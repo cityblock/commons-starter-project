@@ -587,6 +587,7 @@ declare module 'schema' {
     pageNumber: number;
     pageSize: number;
     filters: IPatientFilterOptions;
+    showAllPatients?: boolean | null;
   }
   interface IPatientsWithUrgentTasksOnRootQueryTypeArguments {
     pageNumber: number;
@@ -1251,7 +1252,6 @@ declare module 'schema' {
     zip?: string | null;
     careWorkerId?: string | null;
     patientState?: ICurrentPatientStateEnum | null;
-    showAllPatients?: boolean | null;
   }
 
   /**

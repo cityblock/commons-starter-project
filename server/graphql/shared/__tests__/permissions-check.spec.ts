@@ -29,18 +29,18 @@ interface ISetup {
   progressNote: ProgressNote;
 }
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin'), trx);
   const patient = await createPatient(
     { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
-    txn,
+    trx,
   );
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
       title: 'title',
     },
-    txn,
+    trx,
   );
   const progressNote = await ProgressNote.create(
     {
@@ -48,7 +48,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       userId: user.id,
       progressNoteTemplateId: progressNoteTemplate.id,
     },
-    txn,
+    trx,
   );
 
   return { user, patient, clinic, progressNoteTemplate, progressNote };

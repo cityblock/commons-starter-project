@@ -70,13 +70,18 @@ async function setupPatientContact(
 }
 
 describe('patient info model', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -85,45 +90,42 @@ describe('patient info model', () => {
 
   describe('patient contact resolvers', async () => {
     it('gets all patient contact healthcare proxies for patient with id', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { user, patient } = await setup(txn);
-        const phone = await Phone.create(createMockPhone(user.id), txn);
-        await PatientContact.create(createMockPatientContact(patient.id, user.id, phone), txn);
-        const proxy = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
-          txn,
-        );
+      const { user, patient } = await setup(txn);
+      const phone = await Phone.create(createMockPhone(user.id), txn);
+      await PatientContact.create(createMockPatientContact(patient.id, user.id, phone), txn);
+      const proxy = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           patientContactHealthcareProxies(patientId: "${patient.id}") {
             id, patientId, isHealthcareProxy
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactHealthcareProxies[0])).toMatchObject({
-          id: proxy.id,
-          patientId: patient.id,
-          isHealthcareProxy: true,
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactHealthcareProxies[0])).toMatchObject({
+        id: proxy.id,
+        patientId: patient.id,
+        isHealthcareProxy: true,
+      });
+      expect(log).toBeCalled();
     });
   });
 
   describe('create', async () => {
     it('should create a patient contact with minimal info', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactCreate(input: {
             patientId: "${patient.id}",
             firstName: "Hermione",
@@ -147,49 +149,47 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: false,
-          isEmergencyContact: false,
-          canContact: false,
-          phone: { phoneNumber: '111-222-3344' },
-          email: null,
-          address: null,
-        });
-        expect(log).toBeCalled();
-
-        const patientContactPhone = await PatientContactPhone.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactPhone).not.toBeNull();
-        expect(patientContactPhone.length).toBe(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: false,
+        isEmergencyContact: false,
+        canContact: false,
+        phone: { phoneNumber: '111-222-3344' },
+        email: null,
+        address: null,
+      });
+      expect(log).toBeCalled();
+
+      const patientContactPhone = await PatientContactPhone.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactPhone).not.toBeNull();
+      expect(patientContactPhone.length).toBe(1);
     });
 
     it('updates computed patient status when creating a contact', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
-          patient.id,
-          user.id,
-          txn,
-        );
+      const { patient, user } = await setup(txn);
+      const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+        patient.id,
+        user.id,
+        txn,
+      );
 
-        expect(computedPatientStatus.isEmergencyContactAdded).toEqual(false);
+      expect(computedPatientStatus.isEmergencyContactAdded).toEqual(false);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactCreate(input: {
             patientId: "${patient.id}",
             firstName: "Hermione",
@@ -203,28 +203,26 @@ describe('patient info model', () => {
             id
           }
         }`;
-        await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
-          patient.id,
-          user.id,
-          txn,
-        );
-
-        expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(true);
+      await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
+        patient.id,
+        user.id,
+        txn,
+      );
+
+      expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(true);
     });
 
     it('should create a patient contact with all contact fields', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactCreate(input: {
             patientId: "${patient.id}",
             firstName: "Hermione",
@@ -257,56 +255,54 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: true,
-          isEmergencyContact: true,
-          canContact: true,
-          phone: { phoneNumber: '111-222-3344' },
-          email: { emailAddress: 'test@email.com' },
-          address: { zip: '11238' },
-        });
-        expect(log).toBeCalled();
-
-        const patientContactPhone = await PatientContactPhone.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactPhone).not.toBeNull();
-        expect(patientContactPhone.length).toBe(1);
-
-        const patientContactAddress = await PatientContactAddress.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactAddress).not.toBeNull();
-        expect(patientContactAddress).toHaveLength(1);
-
-        const patientContactEmail = await PatientContactEmail.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactEmail).not.toBeNull();
-        expect(patientContactEmail).toHaveLength(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        canContact: true,
+        phone: { phoneNumber: '111-222-3344' },
+        email: { emailAddress: 'test@email.com' },
+        address: { zip: '11238' },
+      });
+      expect(log).toBeCalled();
+
+      const patientContactPhone = await PatientContactPhone.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactPhone).not.toBeNull();
+      expect(patientContactPhone.length).toBe(1);
+
+      const patientContactAddress = await PatientContactAddress.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactAddress).not.toBeNull();
+      expect(patientContactAddress).toHaveLength(1);
+
+      const patientContactEmail = await PatientContactEmail.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactEmail).not.toBeNull();
+      expect(patientContactEmail).toHaveLength(1);
     });
 
     it('should create a patient contact but not empty address or email', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactCreate(input: {
             patientId: "${patient.id}",
             firstName: "Hermione",
@@ -339,108 +335,104 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: true,
-          isEmergencyContact: true,
-          canContact: true,
-          phone: { phoneNumber: '111-222-3344' },
-          email: null,
-          address: null,
-        });
-        expect(log).toBeCalled();
-
-        const patientContactPhone = await PatientContactPhone.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactPhone).not.toBeNull();
-        expect(patientContactPhone.length).toBe(1);
-
-        const patientContactAddress = await PatientContactAddress.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactAddress).not.toBeNull();
-        expect(patientContactAddress).toHaveLength(0);
-
-        const patientContactEmail = await PatientContactEmail.getForPatientContact(
-          result.data!.patientContactCreate.id,
-          txn,
-        );
-        expect(patientContactEmail).not.toBeNull();
-        expect(patientContactEmail).toHaveLength(0);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        canContact: true,
+        phone: { phoneNumber: '111-222-3344' },
+        email: null,
+        address: null,
+      });
+      expect(log).toBeCalled();
+
+      const patientContactPhone = await PatientContactPhone.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactPhone).not.toBeNull();
+      expect(patientContactPhone.length).toBe(1);
+
+      const patientContactAddress = await PatientContactAddress.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactAddress).not.toBeNull();
+      expect(patientContactAddress).toHaveLength(0);
+
+      const patientContactEmail = await PatientContactEmail.getForPatientContact(
+        result.data!.patientContactCreate.id,
+        txn,
+      );
+      expect(patientContactEmail).not.toBeNull();
+      expect(patientContactEmail).toHaveLength(0);
     });
   });
 
   describe('delete', async () => {
     it('should delete a patient contact and all associated models', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const { patientContact } = await setupPatientContact(patient.id, user.id, txn);
+      const { patient, user } = await setup(txn);
+      const { patientContact } = await setupPatientContact(patient.id, user.id, txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactDelete(input: {
             patientContactId: "${patientContact.id}",
           }) { deletedAt }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactDelete).deletedAt).not.toBeFalsy();
-        expect(log).toBeCalled();
-
-        const addresses = await PatientContactAddress.getForPatientContact(patientContact.id, txn);
-        expect(addresses).toHaveLength(0);
-
-        const emails = await PatientContactEmail.getForPatientContact(patientContact.id, txn);
-        expect(emails).toHaveLength(0);
-
-        const phones = await PatientContactPhone.getForPatientContact(patientContact.id, txn);
-        expect(phones).toHaveLength(0);
-
-        await expect(PatientContact.get(patientContact.id, txn)).rejects.toMatch(
-          `No such patient contact: ${patientContact.id}`,
-        );
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactDelete).deletedAt).not.toBeFalsy();
+      expect(log).toBeCalled();
+
+      const addresses = await PatientContactAddress.getForPatientContact(patientContact.id, txn);
+      expect(addresses).toHaveLength(0);
+
+      const emails = await PatientContactEmail.getForPatientContact(patientContact.id, txn);
+      expect(emails).toHaveLength(0);
+
+      const phones = await PatientContactPhone.getForPatientContact(patientContact.id, txn);
+      expect(phones).toHaveLength(0);
+
+      await expect(PatientContact.get(patientContact.id, txn)).rejects.toMatch(
+        `No such patient contact: ${patientContact.id}`,
+      );
     });
   });
 
   describe('edit', async () => {
     it('should edit patient contact and create email and address', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const phone = await Phone.create(createMockPhone(user.id), txn);
+      const { patient, user } = await setup(txn);
+      const phone = await Phone.create(createMockPhone(user.id), txn);
 
-        const patientContact = await PatientContact.create(
-          createMockPatientContact(patient.id, user.id, phone),
-          txn,
-        );
+      const patientContact = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone),
+        txn,
+      );
 
-        await PatientContactPhone.create(
-          { phoneId: phone.id, patientContactId: patientContact.id },
-          txn,
-        );
+      await PatientContactPhone.create(
+        { phoneId: phone.id, patientContactId: patientContact.id },
+        txn,
+      );
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactEdit(input: {
             patientContactId: "${patientContact.id}",
             firstName: "Hermione",
@@ -474,69 +466,67 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: true,
-          isEmergencyContact: true,
-          canContact: true,
-          phone: { id: phone.id, phoneNumber: '000-111-2255' },
-          email: { emailAddress: 'changed@email.com' },
-          address: { zip: '02139', state: 'MA' },
-        });
-        expect(log).toBeCalled();
-
-        const patientContactAddress = await PatientContactAddress.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactAddress).not.toBeNull();
-        expect(patientContactAddress).toHaveLength(1);
-
-        const patientContactEmail = await PatientContactEmail.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactEmail).not.toBeNull();
-        expect(patientContactEmail).toHaveLength(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        canContact: true,
+        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        email: { emailAddress: 'changed@email.com' },
+        address: { zip: '02139', state: 'MA' },
+      });
+      expect(log).toBeCalled();
+
+      const patientContactAddress = await PatientContactAddress.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactAddress).not.toBeNull();
+      expect(patientContactAddress).toHaveLength(1);
+
+      const patientContactEmail = await PatientContactEmail.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactEmail).not.toBeNull();
+      expect(patientContactEmail).toHaveLength(1);
     });
 
     it('updates computed patient status when editing a contact', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const patientContact = await PatientContact.create(
-          {
-            patientId: patient.id,
-            updatedById: user.id,
-            relationToPatient: 'friend',
-            firstName: 'Person',
-            lastName: 'Last',
-            isEmergencyContact: true,
-            isHealthcareProxy: false,
-            canContact: true,
-          },
-          txn,
-        );
-        const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
-          patient.id,
-          user.id,
-          txn,
-        );
+      const { patient, user } = await setup(txn);
+      const patientContact = await PatientContact.create(
+        {
+          patientId: patient.id,
+          updatedById: user.id,
+          relationToPatient: 'friend',
+          firstName: 'Person',
+          lastName: 'Last',
+          isEmergencyContact: true,
+          isHealthcareProxy: false,
+          canContact: true,
+        },
+        txn,
+      );
+      const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
+        patient.id,
+        user.id,
+        txn,
+      );
 
-        expect(computedPatientStatus.isEmergencyContactAdded).toEqual(true);
+      expect(computedPatientStatus.isEmergencyContactAdded).toEqual(true);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactEdit(input: {
             patientContactId: "${patientContact.id}"
             isEmergencyContact: false,
@@ -544,29 +534,27 @@ describe('patient info model', () => {
             id
           }
         }`;
-        await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
-          patient.id,
-          user.id,
-          txn,
-        );
-
-        expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(false);
+      await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
+        patient.id,
+        user.id,
+        txn,
+      );
+
+      expect(updatedComputedPatientStatus.isEmergencyContactAdded).toEqual(false);
     });
 
     it('should edit patient contact and update email and address', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
+      const { patient, user } = await setup(txn);
+      const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactEdit(input: {
             patientContactId: "${patientContact.id}",
             firstName: "Hermione",
@@ -600,50 +588,48 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: true,
-          isEmergencyContact: true,
-          canContact: true,
-          phone: { id: phone.id, phoneNumber: '000-111-2255' },
-          email: { emailAddress: 'changed@email.com' },
-          address: { zip: '02139', state: 'MA' },
-        });
-        expect(log).toBeCalled();
-
-        const patientContactAddress = await PatientContactAddress.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactAddress).not.toBeNull();
-        expect(patientContactAddress).toHaveLength(1);
-
-        const patientContactEmail = await PatientContactEmail.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactEmail).not.toBeNull();
-        expect(patientContactEmail).toHaveLength(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        canContact: true,
+        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        email: { emailAddress: 'changed@email.com' },
+        address: { zip: '02139', state: 'MA' },
+      });
+      expect(log).toBeCalled();
+
+      const patientContactAddress = await PatientContactAddress.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactAddress).not.toBeNull();
+      expect(patientContactAddress).toHaveLength(1);
+
+      const patientContactEmail = await PatientContactEmail.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactEmail).not.toBeNull();
+      expect(patientContactEmail).toHaveLength(1);
     });
 
     it('should edit patient contact and delete email and address', async () => {
-      await transaction(PatientContact.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
+      const { patient, user } = await setup(txn);
+      const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientContactEdit(input: {
             patientContactId: "${patientContact.id}",
             firstName: "Hermione",
@@ -677,42 +663,41 @@ describe('patient info model', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
-          patientId: patient.id,
-          firstName: 'Hermione',
-          lastName: 'Granger',
-          relationToPatient: 'friend',
-          isHealthcareProxy: true,
-          isEmergencyContact: true,
-          canContact: true,
-          phone: { id: phone.id, phoneNumber: '000-111-2255' },
-          email: null,
-          address: null,
-        });
-        expect(log).toBeCalled();
-
-        const patientContactAddress = await PatientContactAddress.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactAddress).not.toBeNull();
-        expect(patientContactAddress).toHaveLength(0);
-
-        const patientContactEmail = await PatientContactEmail.getForPatientContact(
-          result.data!.patientContactEdit.id,
-          txn,
-        );
-        expect(patientContactEmail).not.toBeNull();
-        expect(patientContactEmail).toHaveLength(0);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        canContact: true,
+        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        email: null,
+        address: null,
+      });
+      expect(log).toBeCalled();
+
+      const patientContactAddress = await PatientContactAddress.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactAddress).not.toBeNull();
+      expect(patientContactAddress).toHaveLength(0);
+
+      const patientContactEmail = await PatientContactEmail.getForPatientContact(
+        result.data!.patientContactEdit.id,
+        txn,
+      );
+      expect(patientContactEmail).not.toBeNull();
+      expect(patientContactEmail).toHaveLength(0);
     });
   });
 });

@@ -23,7 +23,7 @@ const permissions = 'green';
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - patient info',
       departmentId: 1,
     },
     txn,
@@ -46,26 +46,29 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient info resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
     await Db.release();
   });
-
   describe('patient info edit', () => {
     it('edits patient', async () => {
-      await transaction(Patient.knex(), async txn => {
-        const { patient, address, user } = await setup(txn);
-        await PatientAddress.create({ patientId: patient.id, addressId: address.id }, txn);
+      const { patient, address, user } = await setup(txn);
+      await PatientAddress.create({ patientId: patient.id, addressId: address.id }, txn);
 
-        const query = `mutation {
+      const query = `mutation {
           patientInfoEdit(input: {
             patientInfoId: "${patient.patientInfo.id}",
             gender: male,
@@ -76,33 +79,32 @@ describe('patient info resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
-          id: patient.patientInfo.id,
-          gender: 'male',
-          language: 'ch',
-          primaryAddress: {
-            id: address.id,
-            zip: '11201',
-          },
-        });
-        expect(log).toBeCalled();
-
-        const result2 = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'red',
-          logger,
-          txn,
-        });
-        expect(result2.errors![0].message).toBe('red not able to edit patient');
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
+        id: patient.patientInfo.id,
+        gender: 'male',
+        language: 'ch',
+        primaryAddress: {
+          id: address.id,
+          zip: '11201',
+        },
+      });
+      expect(log).toBeCalled();
+
+      const result2 = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions: 'red',
+        logger,
+        txn,
+      });
+      expect(result2.errors![0].message).toBe('red not able to edit patient');
     });
   });
 });

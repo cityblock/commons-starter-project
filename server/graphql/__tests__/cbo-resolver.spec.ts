@@ -24,18 +24,24 @@ const input = {
 const userRole = 'admin';
 const permissions = 'green';
 
-const setup = async (txn: Transaction) => {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const cboCategory = await createCBOCategory(txn, 'Animal Services');
+const setup = async (trx: Transaction) => {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
+  const cboCategory = await createCBOCategory(trx, 'Animal Services');
 
   return { user, cboCategory };
 };
 
 describe('CBO resolver', () => {
+  let txn = null as any;
+
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -44,19 +50,18 @@ describe('CBO resolver', () => {
 
   describe('resolve CBO', () => {
     it('gets all CBOs', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user, cboCategory } = await setup(txn);
+      const { user, cboCategory } = await setup(txn);
 
-        const cbo1 = await CBO.create(
-          {
-            categoryId: cboCategory.id,
-            ...input,
-          },
-          txn,
-        );
-        const cbo2 = await createCBO(txn, name2);
+      const cbo1 = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+        },
+        txn,
+      );
+      const cbo2 = await createCBO(txn, name2);
 
-        const query = `{
+      const query = `{
           CBOs {
             id
             name
@@ -65,58 +70,56 @@ describe('CBO resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.CBOs[0]).toMatchObject({
-          id: cbo2.id,
-          name: name2,
-          categoryId: cbo2.categoryId,
-          address: cbo2.address,
-        });
-        expect(result.data!.CBOs[1]).toMatchObject({
-          id: cbo1.id,
-          name: input.name,
-          categoryId: cboCategory.id,
-          address: input.address,
-        });
+      expect(result.data!.CBOs[0]).toMatchObject({
+        id: cbo2.id,
+        name: name2,
+        categoryId: cbo2.categoryId,
+        address: cbo2.address,
+      });
+      expect(result.data!.CBOs[1]).toMatchObject({
+        id: cbo1.id,
+        name: input.name,
+        categoryId: cboCategory.id,
+        address: input.address,
       });
     });
 
     it('gets all CBOs for a given category', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user, cboCategory } = await setup(txn);
-        const cboCategory2 = await createCBOCategory(txn);
+      const { user, cboCategory } = await setup(txn);
+      const cboCategory2 = await createCBOCategory(txn);
 
-        const cbo1 = await CBO.create(
-          {
-            categoryId: cboCategory.id,
-            ...input,
-            name: name1,
-          },
-          txn,
-        );
-        await CBO.create(
-          {
-            categoryId: cboCategory2.id,
-            ...input,
-            name: name2,
-          },
-          txn,
-        );
-        const cbo3 = await CBO.create(
-          {
-            categoryId: cboCategory.id,
-            ...input,
-            name: name3,
-          },
-          txn,
-        );
+      const cbo1 = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+          name: name1,
+        },
+        txn,
+      );
+      await CBO.create(
+        {
+          categoryId: cboCategory2.id,
+          ...input,
+          name: name2,
+        },
+        txn,
+      );
+      const cbo3 = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+          name: name3,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           CBOsForCategory(categoryId: "${cboCategory.id}") {
             id
             name
@@ -124,40 +127,38 @@ describe('CBO resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(result.data!.CBOsForCategory).toMatchObject([
-          {
-            id: cbo1.id,
-            name: name1,
-            categoryId: cboCategory.id,
-          },
-          {
-            id: cbo3.id,
-            name: name3,
-            categoryId: cboCategory.id,
-          },
-        ]);
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(result.data!.CBOsForCategory).toMatchObject([
+        {
+          id: cbo1.id,
+          name: name1,
+          categoryId: cboCategory.id,
+        },
+        {
+          id: cbo3.id,
+          name: name3,
+          categoryId: cboCategory.id,
+        },
+      ]);
     });
 
     it('fetches a single CBO', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user, cboCategory } = await setup(txn);
+      const { user, cboCategory } = await setup(txn);
 
-        const cbo = await CBO.create(
-          {
-            categoryId: cboCategory.id,
-            ...input,
-          },
-          txn,
-        );
+      const cbo = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           CBO(CBOId: "${cbo.id}") {
             id
             name
@@ -166,44 +167,40 @@ describe('CBO resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.CBO).toMatchObject({
-          id: cbo.id,
-          name: input.name,
-          categoryId: cboCategory.id,
-          address: input.address,
-        });
+      expect(result.data!.CBO).toMatchObject({
+        id: cbo.id,
+        name: input.name,
+        categoryId: cboCategory.id,
+        address: input.address,
       });
     });
 
     it('throws an error if CBO not found', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user } = await setup(txn);
-        const fakeId = uuid();
-        const query = `{ CBO(CBOId: "${fakeId}") { id } }`;
+      const { user } = await setup(txn);
+      const fakeId = uuid();
+      const query = `{ CBO(CBOId: "${fakeId}") { id } }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(result.errors![0].message).toMatch(`No such CBO: ${fakeId}`);
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(result.errors![0].message).toMatch(`No such CBO: ${fakeId}`);
     });
   });
 
   describe('CBO create', () => {
     it('creates a new CBO', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user, cboCategory } = await setup(txn);
+      const { user, cboCategory } = await setup(txn);
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           CBOCreate(input: {
             name: "${input.name}",
             categoryId: "${cboCategory.id}",
@@ -220,39 +217,37 @@ describe('CBO resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.CBOCreate).toMatchObject({
-          name: input.name,
-          categoryId: cboCategory.id,
-          address: input.address,
-        });
+      expect(result.data!.CBOCreate).toMatchObject({
+        name: input.name,
+        categoryId: cboCategory.id,
+        address: input.address,
       });
     });
   });
 
   describe('CBO edit', () => {
     it('edits a CBO', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user, cboCategory } = await setup(txn);
+      const { user, cboCategory } = await setup(txn);
 
-        const newName = 'Winterfell Hospice Service';
-        const newAddress = 'Winterfell';
-        const newCity = 'the North';
+      const newName = 'Winterfell Hospice Service';
+      const newAddress = 'Winterfell';
+      const newCity = 'the North';
 
-        const cbo = await CBO.create(
-          {
-            categoryId: cboCategory.id,
-            ...input,
-          },
-          txn,
-        );
+      const cbo = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+        },
+        txn,
+      );
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           CBOEdit(input: {
             name: "${newName}"
             address: "${newAddress}"
@@ -267,44 +262,41 @@ describe('CBO resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.CBOEdit).toMatchObject({
-          id: cbo.id,
-          name: newName,
-          categoryId: cboCategory.id,
-          address: newAddress,
-          city: newCity,
-        });
+      expect(result.data!.CBOEdit).toMatchObject({
+        id: cbo.id,
+        name: newName,
+        categoryId: cboCategory.id,
+        address: newAddress,
+        city: newCity,
       });
     });
   });
 
   describe('CBO delete', () => {
     it('deletes a CBO', async () => {
-      await transaction(CBO.knex(), async txn => {
-        const { user } = await setup(txn);
-        const cbo = await createCBO(txn);
+      const { user } = await setup(txn);
+      const cbo = await createCBO(txn);
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           CBODelete(input: { CBOId: "${cbo.id}"}) {
             id
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.CBODelete).toMatchObject({
-          id: cbo.id,
-        });
+      expect(result.data!.CBODelete).toMatchObject({
+        id: cbo.id,
       });
     });
   });

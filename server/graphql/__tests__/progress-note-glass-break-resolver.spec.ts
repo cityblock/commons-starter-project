@@ -54,11 +54,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('Progress Note Glass Break Resolver', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -66,10 +71,9 @@ describe('Progress Note Glass Break Resolver', () => {
   });
 
   it('creates a progress note glass break', async () => {
-    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
-      const { user, progressNote } = await setup(txn);
+    const { user, progressNote } = await setup(txn);
 
-      const mutation = `mutation {
+    const mutation = `mutation {
         progressNoteGlassBreakCreate(input: {
           progressNoteId: "${progressNote.id}"
           reason: "${reason}"
@@ -83,65 +87,63 @@ describe('Progress Note Glass Break Resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-
-      expect(result.data!.progressNoteGlassBreakCreate.id).toBeTruthy();
-      expect(result.data!.progressNoteGlassBreakCreate.progressNoteId).toBe(progressNote.id);
-      expect(result.data!.progressNoteGlassBreakCreate.userId).toBe(user.id);
-      expect(result.data!.progressNoteGlassBreakCreate.reason).toBe(reason);
-      expect(result.data!.progressNoteGlassBreakCreate.note).toBe(note);
+    const result = await graphql(schema, mutation, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
     });
+
+    expect(result.data!.progressNoteGlassBreakCreate.id).toBeTruthy();
+    expect(result.data!.progressNoteGlassBreakCreate.progressNoteId).toBe(progressNote.id);
+    expect(result.data!.progressNoteGlassBreakCreate.userId).toBe(user.id);
+    expect(result.data!.progressNoteGlassBreakCreate.reason).toBe(reason);
+    expect(result.data!.progressNoteGlassBreakCreate.note).toBe(note);
   });
 
   it('fetches progress note glass breaks for current user session', async () => {
-    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
-      const { user, patient, progressNoteTemplate, progressNote } = await setup(txn);
-      const progressNote2 = await ProgressNote.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          progressNoteTemplateId: progressNoteTemplate.id,
-        },
-        txn,
-      );
+    const { user, patient, progressNoteTemplate, progressNote } = await setup(txn);
+    const progressNote2 = await ProgressNote.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      },
+      txn,
+    );
 
-      const progressNoteGlassBreak = await ProgressNoteGlassBreak.create(
-        {
-          userId: user.id,
-          progressNoteId: progressNote.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const tooOldGlassBreak = await ProgressNoteGlassBreak.create(
-        {
-          userId: user.id,
-          progressNoteId: progressNote.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const otherProgressNoteGlassBreak = await ProgressNoteGlassBreak.create(
-        {
-          userId: user.id,
-          progressNoteId: progressNote2.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      await ProgressNoteGlassBreak.query(txn)
-        .where({ id: tooOldGlassBreak.id })
-        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+    const progressNoteGlassBreak = await ProgressNoteGlassBreak.create(
+      {
+        userId: user.id,
+        progressNoteId: progressNote.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const tooOldGlassBreak = await ProgressNoteGlassBreak.create(
+      {
+        userId: user.id,
+        progressNoteId: progressNote.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const otherProgressNoteGlassBreak = await ProgressNoteGlassBreak.create(
+      {
+        userId: user.id,
+        progressNoteId: progressNote2.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    await ProgressNoteGlassBreak.query(txn)
+      .where({ id: tooOldGlassBreak.id })
+      .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const query = `{
+    const query = `{
         progressNoteGlassBreaksForUser {
           id
           progressNoteId
@@ -149,125 +151,118 @@ describe('Progress Note Glass Break Resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
 
-      expect(result.data!.progressNoteGlassBreaksForUser.length).toBe(2);
+    expect(result.data!.progressNoteGlassBreaksForUser.length).toBe(2);
 
-      const glassBreak1 = result.data!.progressNoteGlassBreaksForUser.find(
-        (glassBreak: ProgressNoteGlassBreak) => glassBreak.id === progressNoteGlassBreak.id,
-      );
-      const glassBreak2 = result.data!.progressNoteGlassBreaksForUser.find(
-        (glassBreak: ProgressNoteGlassBreak) => glassBreak.id === otherProgressNoteGlassBreak.id,
-      );
+    const glassBreak1 = result.data!.progressNoteGlassBreaksForUser.find(
+      (glassBreak: ProgressNoteGlassBreak) => glassBreak.id === progressNoteGlassBreak.id,
+    );
+    const glassBreak2 = result.data!.progressNoteGlassBreaksForUser.find(
+      (glassBreak: ProgressNoteGlassBreak) => glassBreak.id === otherProgressNoteGlassBreak.id,
+    );
 
-      expect(glassBreak1).toMatchObject({
-        id: progressNoteGlassBreak.id,
-        progressNoteId: progressNote.id,
-        userId: user.id,
-      });
+    expect(glassBreak1).toMatchObject({
+      id: progressNoteGlassBreak.id,
+      progressNoteId: progressNote.id,
+      userId: user.id,
+    });
 
-      expect(glassBreak2).toMatchObject({
-        id: otherProgressNoteGlassBreak.id,
-        progressNoteId: progressNote2.id,
-        userId: user.id,
-      });
+    expect(glassBreak2).toMatchObject({
+      id: otherProgressNoteGlassBreak.id,
+      progressNoteId: progressNote2.id,
+      userId: user.id,
     });
   });
 
   it('resolves glass break check for progress note not requiring glass break', async () => {
-    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
-      const { clinic, user, patient } = await setup(txn);
-      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const progressNoteTemplate2 = await ProgressNoteTemplate.create(
-        {
-          title: 'title',
-        },
-        txn,
-      );
+    const { clinic, user, patient } = await setup(txn);
+    const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+    const progressNoteTemplate2 = await ProgressNoteTemplate.create(
+      {
+        title: 'title',
+      },
+      txn,
+    );
 
-      const progressNote2 = await ProgressNote.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          progressNoteTemplateId: progressNoteTemplate2.id,
-        },
-        txn,
-      );
+    const progressNote2 = await ProgressNote.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate2.id,
+      },
+      txn,
+    );
 
-      const query = `{
+    const query = `{
         progressNoteGlassBreakCheck(progressNoteId: "${progressNote2.id}") {
           progressNoteId
           isGlassBreakNotNeeded
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions: 'blue',
-        userId: user2.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions: 'blue',
+      userId: user2.id,
+      txn,
+    });
 
-      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
-        progressNoteId: progressNote2.id,
-        isGlassBreakNotNeeded: true,
-      });
+    expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+      progressNoteId: progressNote2.id,
+      isGlassBreakNotNeeded: true,
     });
   });
 
   it('resolves glass break check for progress note written by user', async () => {
-    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
-      const { user, progressNote } = await setup(txn);
+    const { user, progressNote } = await setup(txn);
 
-      const query = `{
+    const query = `{
         progressNoteGlassBreakCheck(progressNoteId: "${progressNote.id}") {
           progressNoteId
           isGlassBreakNotNeeded
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions: 'blue',
-        userId: user.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions: 'blue',
+      userId: user.id,
+      txn,
+    });
 
-      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
-        progressNoteId: progressNote.id,
-        isGlassBreakNotNeeded: true,
-      });
+    expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+      progressNoteId: progressNote.id,
+      isGlassBreakNotNeeded: true,
     });
   });
 
   it('resolves glass break check for progress note requiring glass break', async () => {
-    await transaction(ProgressNoteGlassBreak.knex(), async txn => {
-      const { clinic, progressNote } = await setup(txn);
-      const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
+    const { clinic, progressNote } = await setup(txn);
+    const user2 = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
-      const query = `{
+    const query = `{
         progressNoteGlassBreakCheck(progressNoteId: "${progressNote.id}") {
           progressNoteId
           isGlassBreakNotNeeded
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions: 'blue',
-        userId: user2.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions: 'blue',
+      userId: user2.id,
+      txn,
+    });
 
-      expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
-        progressNoteId: progressNote.id,
-        isGlassBreakNotNeeded: false,
-      });
+    expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
+      progressNoteId: progressNote.id,
+      isGlassBreakNotNeeded: false,
     });
   });
 });

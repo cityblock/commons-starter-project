@@ -48,11 +48,11 @@ interface ISetup {
   taskTemplate: TaskTemplate;
 }
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id), txn);
-  const concern = await Concern.create({ title: 'Concern' }, txn);
-  const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' }, txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id), trx);
+  const concern = await Concern.create({ title: 'Concern' }, trx);
+  const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' }, trx);
   const taskTemplate = await TaskTemplate.create(
     {
       title: 'Housing Task',
@@ -61,10 +61,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
       priority: 'low',
       careTeamAssigneeRole: 'physician',
     },
-    txn,
+    trx,
   );
-  const riskArea = await createRiskArea({ title: 'testing' }, txn);
-  const riskArea2 = await createRiskArea({ title: 'testing second area', order: 2 }, txn);
+  const riskArea = await createRiskArea({ title: 'testing' }, trx);
+  const riskArea2 = await createRiskArea({ title: 'testing second area', order: 2 }, trx);
   const question = await Question.create(
     {
       title: 'like writing tests?',
@@ -73,7 +73,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       type: 'riskArea',
       order: 1,
     },
-    txn,
+    trx,
   );
   const question2 = await Question.create(
     {
@@ -83,7 +83,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       type: 'riskArea',
       order: 2,
     },
-    txn,
+    trx,
   );
   await Answer.create(
     {
@@ -95,7 +95,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       questionId: question.id,
       order: 1,
     },
-    txn,
+    trx,
   );
   await Answer.create(
     {
@@ -107,16 +107,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
       questionId: question2.id,
       order: 2,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, trx);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,
       userId: user.id,
       riskAreaId: riskArea.id,
     },
-    txn,
+    trx,
   );
 
   return {

@@ -46,11 +46,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
   return { clinic, user, patient, riskArea, submission };
 }
 describe('risk area assessment resolver tests', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -59,71 +64,66 @@ describe('risk area assessment resolver tests', () => {
 
   describe('resolve riskAreaAssessmentSubmission', () => {
     it('can fetch a riskAreaAssessmentSubmission', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { submission, user } = await setup(txn);
+      const { submission, user } = await setup(txn);
 
-        const query = `{
+      const query = `{
           riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: "${submission.id}") {
             id
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
+      });
 
-        expect(cloneDeep(result.data!.riskAreaAssessmentSubmission)).toMatchObject({
-          id: submission.id,
-        });
+      expect(cloneDeep(result.data!.riskAreaAssessmentSubmission)).toMatchObject({
+        id: submission.id,
       });
     });
 
     it('errors if a riskAreaAssessmentSubmission cannot be found', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { user } = await setup(txn);
-        const fakeId = uuid();
-        const query = `{
+      const { user } = await setup(txn);
+      const fakeId = uuid();
+      const query = `{
           riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: "${fakeId}") {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
-        expect(result.errors![0].message).toMatch(
-          `No such risk area assessment submission: ${fakeId}`,
-        );
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
       });
+      expect(result.errors![0].message).toMatch(
+        `No such risk area assessment submission: ${fakeId}`,
+      );
     });
 
     it('gets the latest riskAreaAssessmentSubmission for a patient for a risk area', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { patient, user, riskArea, submission } = await setup(txn);
+      const { patient, user, riskArea, submission } = await setup(txn);
 
-        const submission1 = await RiskAreaAssessmentSubmission.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            riskAreaId: riskArea.id,
-          },
-          txn,
-        );
-        const submission2 = await RiskAreaAssessmentSubmission.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            riskAreaId: riskArea.id,
-          },
-          txn,
-        );
+      const submission1 = await RiskAreaAssessmentSubmission.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          riskAreaId: riskArea.id,
+        },
+        txn,
+      );
+      const submission2 = await RiskAreaAssessmentSubmission.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          riskAreaId: riskArea.id,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           riskAreaAssessmentSubmissionForPatient(
             riskAreaId: "${riskArea.id}"
             patientId: "${patient.id}"
@@ -132,24 +132,22 @@ describe('risk area assessment resolver tests', () => {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
-        const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
-        expect([submission.id, submission1.id, submission2.id]).toContain(resultSubmission.id);
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
       });
+      const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
+      expect([submission.id, submission1.id, submission2.id]).toContain(resultSubmission.id);
     });
 
     it('returns null if no latest submission for a patient for a risk area', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { submission, riskArea, patient, user } = await setup(txn);
+      const { submission, riskArea, patient, user } = await setup(txn);
 
-        await RiskAreaAssessmentSubmission.complete(submission.id, txn);
+      await RiskAreaAssessmentSubmission.complete(submission.id, txn);
 
-        const query = `{
+      const query = `{
           riskAreaAssessmentSubmissionForPatient(
             riskAreaId: "${riskArea.id}"
             patientId: "${patient.id}"
@@ -158,94 +156,92 @@ describe('risk area assessment resolver tests', () => {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
-        const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
-        expect(resultSubmission).toBeFalsy();
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
       });
+      const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
+      expect(resultSubmission).toBeFalsy();
     });
   });
 
   describe('riskAreaAssessmentSubmission completes submission', () => {
     it('completes submission', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { riskArea, patient, user, submission } = await setup(txn);
+      const { riskArea, patient, user, submission } = await setup(txn);
 
-        const question = await Question.create(
-          {
-            title: 'Question Title',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 1,
-          },
-          txn,
-        );
-        const question2 = await Question.create(
-          {
-            title: 'Question 2 Title',
-            answerType: 'dropdown',
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            order: 2,
-          },
-          txn,
-        );
-        const answer = await Answer.create(
-          {
-            questionId: question.id,
-            displayValue: '1',
-            value: '1',
-            valueType: 'number',
-            order: 1,
-            inSummary: false,
-          },
-          txn,
-        );
-        const answer2 = await Answer.create(
-          {
-            questionId: question2.id,
-            displayValue: '4',
-            value: '4',
-            valueType: 'number',
-            order: 1,
-            inSummary: false,
-          },
-          txn,
-        );
-        await PatientAnswer.create(
-          {
-            patientId: patient.id,
-            riskAreaAssessmentSubmissionId: submission.id,
-            type: 'riskAreaAssessmentSubmission',
-            questionIds: [question.id, question2.id],
-            answers: [
-              {
-                answerId: answer.id,
-                questionId: question.id,
-                answerValue: '1',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-              {
-                answerId: answer2.id,
-                questionId: question2.id,
-                answerValue: '4',
-                patientId: patient.id,
-                applicable: true,
-                userId: user.id,
-              },
-            ],
-          },
-          txn,
-        );
+      const question = await Question.create(
+        {
+          title: 'Question Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const question2 = await Question.create(
+        {
+          title: 'Question 2 Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 2,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '1',
+          value: '1',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      const answer2 = await Answer.create(
+        {
+          questionId: question2.id,
+          displayValue: '4',
+          value: '4',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          riskAreaAssessmentSubmissionId: submission.id,
+          type: 'riskAreaAssessmentSubmission',
+          questionIds: [question.id, question2.id],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: '1',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+            {
+              answerId: answer2.id,
+              questionId: question2.id,
+              answerValue: '4',
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
 
-        const query = `mutation {
+      const query = `mutation {
           riskAreaAssessmentSubmissionComplete(input: {
             riskAreaAssessmentSubmissionId: "${submission.id}"
           }) {
@@ -253,28 +249,26 @@ describe('risk area assessment resolver tests', () => {
             completedAt
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionComplete)).toMatchObject({
-          id: submission.id,
-        });
-        expect(
-          cloneDeep(result.data!.riskAreaAssessmentSubmissionComplete).completedAt,
-        ).not.toBeFalsy();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+      expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionComplete)).toMatchObject({
+        id: submission.id,
+      });
+      expect(
+        cloneDeep(result.data!.riskAreaAssessmentSubmissionComplete).completedAt,
+      ).not.toBeFalsy();
     });
   });
 
   describe('riskAreaAssessmentSubmission create', () => {
     it('creates a new riskAreaAssessmentSubmission', async () => {
-      await transaction(RiskArea.knex(), async txn => {
-        const { riskArea, patient, user } = await setup(txn);
+      const { riskArea, patient, user } = await setup(txn);
 
-        const mutation = `mutation {
+      const mutation = `mutation {
         riskAreaAssessmentSubmissionCreate(input: {
           riskAreaId: "${riskArea.id}"
           patientId: "${patient.id}"
@@ -283,16 +277,15 @@ describe('risk area assessment resolver tests', () => {
           patientId
         }
       }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionCreate)).toMatchObject({
-          userId: user.id,
-          patientId: patient.id,
-        });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionCreate)).toMatchObject({
+        userId: user.id,
+        patientId: patient.id,
       });
     });
   });

@@ -40,11 +40,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('task comments', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -53,61 +58,58 @@ describe('task comments', () => {
 
   describe('task comments', () => {
     it('adds and removes a comment', async () => {
-      await transaction(TaskComment.knex(), async txn => {
-        // add comment
-        const { task, user } = await setup(txn);
-        const mutation = `mutation {
+      // add comment
+      const { task, user } = await setup(txn);
+      const mutation = `mutation {
           taskCommentCreate(
             input: { taskId: "${task.id}", body: "my comment" }
           ) {
             id, body
           }
         }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
-        const taskEvents1 = await TaskEvent.getTaskEvents(
-          task.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-          },
-          txn,
-        );
-        expect(taskEvents1.total).toEqual(1);
-        expect(taskEvents1.results[0].eventType).toEqual('add_comment');
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
+      const taskEvents1 = await TaskEvent.getTaskEvents(
+        task.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
+      expect(taskEvents1.total).toEqual(1);
+      expect(taskEvents1.results[0].eventType).toEqual('add_comment');
 
-        // delete comment
-        const deleteMutation = `mutation {
+      // delete comment
+      const deleteMutation = `mutation {
           taskCommentDelete(input: { taskCommentId: "${result.data!.taskCommentCreate.id}" }) {
             id
           }
         }`;
-        await graphql(schema, deleteMutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        const taskEvents2 = await TaskEvent.getTaskEvents(
-          task.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-          },
-          txn,
-        );
-        expect(taskEvents2.total).toEqual(2);
-        expect(
-          taskEvents2.results.find(event => event.eventType === 'delete_comment'),
-        ).toBeTruthy();
+      await graphql(schema, deleteMutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      const taskEvents2 = await TaskEvent.getTaskEvents(
+        task.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
+      expect(taskEvents2.total).toEqual(2);
+      expect(taskEvents2.results.find(event => event.eventType === 'delete_comment')).toBeTruthy();
 
-        // get comments
-        const getComments = `{ taskComments(taskId: "${task.id}") {
+      // get comments
+      const getComments = `{ taskComments(taskId: "${task.id}") {
             edges {
               node {
                 body
@@ -115,37 +117,35 @@ describe('task comments', () => {
             }
           }
         }`;
-        const taskComments = await graphql(schema, getComments, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(taskComments.data!.taskComments.edges)).toHaveLength(0);
+      const taskComments = await graphql(schema, getComments, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+      expect(cloneDeep(taskComments.data!.taskComments.edges)).toHaveLength(0);
     });
 
     it('edits a comment', async () => {
-      await transaction(TaskComment.knex(), async txn => {
-        // add comment
-        const { task, user } = await setup(txn);
-        const mutation = `mutation {
+      // add comment
+      const { task, user } = await setup(txn);
+      const mutation = `mutation {
           taskCommentCreate(
             input: { taskId: "${task.id}", body: "my comment" }
           ) {
             id, body
           }
         }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
 
-        // edit comment
-        const editMutation = `mutation {
+      // edit comment
+      const editMutation = `mutation {
           taskCommentEdit(input: {
               taskCommentId: "${result.data!.taskCommentCreate.id}",
               body: "cool new comment"
@@ -153,41 +153,39 @@ describe('task comments', () => {
             id, body
           }
         }`;
-        const editedComment = await graphql(schema, editMutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
-        const taskEvents = await TaskEvent.getTaskEvents(
-          task.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-          },
-          txn,
-        );
-        expect(taskEvents.total).toEqual(2);
-        expect(taskEvents.results.find(event => event.eventType === 'edit_comment')).toBeTruthy();
+      const editedComment = await graphql(schema, editMutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
+      const taskEvents = await TaskEvent.getTaskEvents(
+        task.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
+      expect(taskEvents.total).toEqual(2);
+      expect(taskEvents.results.find(event => event.eventType === 'edit_comment')).toBeTruthy();
     });
 
     it('resolves task comments', async () => {
-      await transaction(TaskComment.knex(), async txn => {
-        // add comment
-        const { task, user } = await setup(txn);
-        const mutation = `mutation {
+      // add comment
+      const { task, user } = await setup(txn);
+      const mutation = `mutation {
           taskCommentCreate(
             input: { taskId: "${task.id}", body: "my comment" }
           ) {
             id, body
           }
         }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
-        const query = `{
+      const query = `{
           taskComments(taskId: "${task.id}",pageNumber: 0, pageSize: 1) {
             edges {
               node {
@@ -200,48 +198,6 @@ describe('task comments', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.taskComments)).toMatchObject({
-          edges: [
-            {
-              node: {
-                body: 'my comment',
-              },
-            },
-          ],
-          pageInfo: {
-            hasNextPage: false,
-            hasPreviousPage: false,
-          },
-        });
-      });
-    });
-  });
-
-  it('resolves a single task comment', async () => {
-    await transaction(TaskComment.knex(), async txn => {
-      const { task, user } = await setup(txn);
-      const taskComment = await TaskComment.create(
-        {
-          userId: user.id,
-          taskId: task.id,
-          body: 'my comment',
-        },
-        txn,
-      );
-
-      const query = `{
-        taskComment(taskCommentId: "${taskComment.id}") {
-          id, body
-        }
-      }`;
-
       const result = await graphql(schema, query, null, {
         db,
         permissions,
@@ -249,10 +205,49 @@ describe('task comments', () => {
         txn,
       });
 
-      expect(cloneDeep(result.data!.taskComment)).toMatchObject({
-        id: taskComment.id,
-        body: taskComment.body,
+      expect(cloneDeep(result.data!.taskComments)).toMatchObject({
+        edges: [
+          {
+            node: {
+              body: 'my comment',
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
       });
+    });
+  });
+
+  it('resolves a single task comment', async () => {
+    const { task, user } = await setup(txn);
+    const taskComment = await TaskComment.create(
+      {
+        userId: user.id,
+        taskId: task.id,
+        body: 'my comment',
+      },
+      txn,
+    );
+
+    const query = `{
+        taskComment(taskCommentId: "${taskComment.id}") {
+          id, body
+        }
+      }`;
+
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
+
+    expect(cloneDeep(result.data!.taskComment)).toMatchObject({
+      id: taskComment.id,
+      body: taskComment.body,
     });
   });
 });

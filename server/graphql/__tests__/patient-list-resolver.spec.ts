@@ -19,18 +19,21 @@ describe('patient list resolver', () => {
   let user: User;
   let answer1: Answer;
   let answer2: Answer;
+  let txn = null as any;
 
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
 
-    await transaction(PatientList.knex(), async txn => {
-      clinic = await Clinic.create(createMockClinic(), txn);
-      user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const answers = await createAnswerAssociations(txn);
-      answer1 = answers.answer1;
-      answer2 = answers.answer2;
-    });
+    clinic = await Clinic.create(createMockClinic(), txn);
+    user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+    const answers = await createAnswerAssociations(txn);
+    answer1 = answers.answer1;
+    answer2 = answers.answer2;
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -39,28 +42,27 @@ describe('patient list resolver', () => {
 
   describe('resolve patient list', () => {
     it('gets all patient lists', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const title1 = 'Red priests';
-        const title2 = 'The Knights of the Vale';
+      const title1 = 'Red priests';
+      const title2 = 'The Knights of the Vale';
 
-        const patientList1 = await PatientList.create(
-          {
-            title: title1,
-            answerId: answer1.id,
-            order: 1,
-          },
-          txn,
-        );
-        const patientList2 = await PatientList.create(
-          {
-            title: title2,
-            answerId: answer2.id,
-            order: 2,
-          },
-          txn,
-        );
+      const patientList1 = await PatientList.create(
+        {
+          title: title1,
+          answerId: answer1.id,
+          order: 1,
+        },
+        txn,
+      );
+      const patientList2 = await PatientList.create(
+        {
+          title: title2,
+          answerId: answer2.id,
+          order: 2,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           patientLists {
             id
             title
@@ -68,37 +70,35 @@ describe('patient list resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.patientLists[0]).toMatchObject({
-          id: patientList1.id,
-          title: title1,
-          answerId: answer1.id,
-        });
-        expect(result.data!.patientLists[1]).toMatchObject({
-          id: patientList2.id,
-          title: title2,
-          answerId: answer2.id,
-        });
+      expect(result.data!.patientLists[0]).toMatchObject({
+        id: patientList1.id,
+        title: title1,
+        answerId: answer1.id,
+      });
+      expect(result.data!.patientLists[1]).toMatchObject({
+        id: patientList2.id,
+        title: title2,
+        answerId: answer2.id,
       });
     });
 
     it('fetches a single patient list', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const patientList = await PatientList.create(
-          {
-            title,
-            answerId: answer1.id,
-            order,
-          },
-          txn,
-        );
+      const patientList = await PatientList.create(
+        {
+          title,
+          answerId: answer1.id,
+          order,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           patientList(patientListId: "${patientList.id}") {
             id
             title
@@ -107,41 +107,37 @@ describe('patient list resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.patientList).toMatchObject({
-          id: patientList.id,
-          title,
-          answerId: answer1.id,
-          order,
-        });
+      expect(result.data!.patientList).toMatchObject({
+        id: patientList.id,
+        title,
+        answerId: answer1.id,
+        order,
       });
     });
 
     it('throws an error if patient list not found', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const fakeId = uuid();
-        const query = `{ patientList(patientListId: "${fakeId}") { id } }`;
+      const fakeId = uuid();
+      const query = `{ patientList(patientListId: "${fakeId}") { id } }`;
 
-        const result = await graphql(schema, query, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(result.errors![0].message).toMatch(`No such patient list: ${fakeId}`);
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(result.errors![0].message).toMatch(`No such patient list: ${fakeId}`);
     });
   });
 
   describe('patient list create', () => {
     it('creates a new patient list', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientListCreate(input: {
             title: "${title}",
             answerId: "${answer1.id}"
@@ -153,36 +149,34 @@ describe('patient list resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.patientListCreate).toMatchObject({
-          title,
-          answerId: answer1.id,
-          order,
-        });
+      expect(result.data!.patientListCreate).toMatchObject({
+        title,
+        answerId: answer1.id,
+        order,
       });
     });
   });
 
   describe('patient list edit', () => {
     it('edits a patient list', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const newTitle = 'Kingsguard';
-        const newOrder = 1;
-        const patientList = await PatientList.create(
-          {
-            title,
-            answerId: answer1.id,
-            order,
-          },
-          txn,
-        );
+      const newTitle = 'Kingsguard';
+      const newOrder = 1;
+      const patientList = await PatientList.create(
+        {
+          title,
+          answerId: answer1.id,
+          order,
+        },
+        txn,
+      );
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientListEdit(input: {
             title: "${newTitle}"
             order: ${newOrder}
@@ -196,49 +190,46 @@ describe('patient list resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.patientListEdit).toMatchObject({
-          id: patientList.id,
-          title: newTitle,
-          answerId: answer2.id,
-          order: newOrder,
-        });
+      expect(result.data!.patientListEdit).toMatchObject({
+        id: patientList.id,
+        title: newTitle,
+        answerId: answer2.id,
+        order: newOrder,
       });
     });
   });
 
   describe('patient list delete', () => {
     it('deletes a patient list', async () => {
-      await transaction(PatientList.knex(), async txn => {
-        const patientList = await PatientList.create(
-          {
-            title,
-            answerId: answer1.id,
-            order,
-          },
-          txn,
-        );
+      const patientList = await PatientList.create(
+        {
+          title,
+          answerId: answer1.id,
+          order,
+        },
+        txn,
+      );
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientListDelete(input: { patientListId: "${patientList.id}"}) {
             id
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, {
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(result.data!.patientListDelete).toMatchObject({
-          id: patientList.id,
-        });
+      expect(result.data!.patientListDelete).toMatchObject({
+        id: patientList.id,
       });
     });
   });

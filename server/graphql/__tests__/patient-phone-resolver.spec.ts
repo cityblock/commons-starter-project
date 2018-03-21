@@ -24,7 +24,7 @@ const permissions = 'green';
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - patient phone',
       departmentId: 1,
     },
     txn,
@@ -58,13 +58,18 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('phone resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -73,38 +78,36 @@ describe('phone resolver', () => {
 
   describe('get all patient phones', async () => {
     it('should get all patient phones', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { primaryPhone, phone, patient, user } = await setup(txn);
-        const query = `{
+      const { primaryPhone, phone, patient, user } = await setup(txn);
+      const query = `{
           patientPhones(patientId: "${patient.id}") {
             id, phoneNumber, description
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.patientPhones)).toHaveLength(2);
-        expect(cloneDeep(result.data!.patientPhones)).toContainEqual(
-          expect.objectContaining({
-            id: primaryPhone.id,
-            phoneNumber: primaryPhone.phoneNumber,
-            description: primaryPhone.description,
-          }),
-        );
-        expect(cloneDeep(result.data!.patientPhones)).toContainEqual(
-          expect.objectContaining({
-            id: phone.id,
-            phoneNumber: phone.phoneNumber,
-            description: phone.description,
-          }),
-        );
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.patientPhones)).toHaveLength(2);
+      expect(cloneDeep(result.data!.patientPhones)).toContainEqual(
+        expect.objectContaining({
+          id: primaryPhone.id,
+          phoneNumber: primaryPhone.phoneNumber,
+          description: primaryPhone.description,
+        }),
+      );
+      expect(cloneDeep(result.data!.patientPhones)).toContainEqual(
+        expect.objectContaining({
+          id: phone.id,
+          phoneNumber: phone.phoneNumber,
+          description: phone.description,
+        }),
+      );
+      expect(log).toBeCalled();
     });
   });
 });

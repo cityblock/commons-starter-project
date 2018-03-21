@@ -29,9 +29,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('quick call resolver', () => {
+  let txn = null as any;
+
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -39,7 +45,56 @@ describe('quick call resolver', () => {
   });
 
   it('fetches a quick call', async () => {
-    await transaction(QuickCall.knex(), async txn => {
+    const { user, patient } = await setup(txn);
+    const createdCall = await QuickCall.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason: 'Had to call the son',
+        summary: 'package is on the way',
+        startTime: new Date().toISOString(),
+        direction: 'Outbound',
+        callRecipient: 'The son',
+        wasSuccessful: true,
+      },
+      txn,
+    );
+
+    const query = `{
+        quickCall(
+          quickCallId: "${createdCall.id}"
+        ) { id } }`;
+    const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
+
+    expect(cloneDeep(result.data!.quickCall)).toMatchObject({
+      id: createdCall.id,
+    });
+  });
+
+  it('creates a quick call', async () => {
+    const { user, patient } = await setup(txn);
+    const mutation = `mutation {
+          quickCallCreate(input:
+            {
+              patientId: "${patient.id}",
+              reason: "Had to call the son",
+              summary: "package is on the way",
+              startTime: "${new Date().toISOString()}",
+              direction: Outbound,
+              callRecipient: "The son",
+              wasSuccessful: true,
+            }
+          ) {
+            id, progressNoteId
+          }
+        }`;
+    const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    expect(cloneDeep(result.data!.quickCallCreate.id)).not.toBeFalsy();
+    expect(cloneDeep(result.data!.quickCallCreate.progressNoteId)).not.toBeFalsy();
+  });
+
+  describe('quick calls', () => {
+    it('returns quick calls for progress note', async () => {
       const { user, patient } = await setup(txn);
       const createdCall = await QuickCall.create(
         {
@@ -55,83 +110,28 @@ describe('quick call resolver', () => {
         txn,
       );
 
+      const createdCall2 = await QuickCall.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason: 'Had to call the son',
+          summary: 'package is on the way',
+          startTime: new Date().toISOString(),
+          direction: 'Outbound',
+          callRecipient: 'The son',
+          wasSuccessful: true,
+        },
+        txn,
+      );
+
+      expect(createdCall.progressNoteId).toEqual(createdCall2.progressNoteId);
+
       const query = `{
-        quickCall(
-          quickCallId: "${createdCall.id}"
-        ) { id } }`;
-      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
-
-      expect(cloneDeep(result.data!.quickCall)).toMatchObject({
-        id: createdCall.id,
-      });
-    });
-  });
-
-  it('creates a quick call', async () => {
-    await transaction(QuickCall.knex(), async txn => {
-      const { user, patient } = await setup(txn);
-      const mutation = `mutation {
-          quickCallCreate(input:
-            {
-              patientId: "${patient.id}",
-              reason: "Had to call the son",
-              summary: "package is on the way",
-              startTime: "${new Date().toISOString()}",
-              direction: Outbound,
-              callRecipient: "The son",
-              wasSuccessful: true,
-            }
-          ) {
-            id, progressNoteId
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
-      expect(cloneDeep(result.data!.quickCallCreate.id)).not.toBeFalsy();
-      expect(cloneDeep(result.data!.quickCallCreate.progressNoteId)).not.toBeFalsy();
-    });
-  });
-
-  describe('quick calls', () => {
-    it('returns quick calls for progress note', async () => {
-      await transaction(QuickCall.knex(), async txn => {
-        const { user, patient } = await setup(txn);
-        const createdCall = await QuickCall.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-            reason: 'Had to call the son',
-            summary: 'package is on the way',
-            startTime: new Date().toISOString(),
-            direction: 'Outbound',
-            callRecipient: 'The son',
-            wasSuccessful: true,
-          },
-          txn,
-        );
-
-        const createdCall2 = await QuickCall.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-            reason: 'Had to call the son',
-            summary: 'package is on the way',
-            startTime: new Date().toISOString(),
-            direction: 'Outbound',
-            callRecipient: 'The son',
-            wasSuccessful: true,
-          },
-          txn,
-        );
-
-        expect(createdCall.progressNoteId).toEqual(createdCall2.progressNoteId);
-
-        const query = `{
           quickCallsForProgressNote(
             progressNoteId: "${createdCall.progressNoteId}"
           ) { id } }`;
-        const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
-        expect(result.data!.quickCallsForProgressNote.length).toBe(2);
-      });
+      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
+      expect(result.data!.quickCallsForProgressNote.length).toBe(2);
     });
   });
 });

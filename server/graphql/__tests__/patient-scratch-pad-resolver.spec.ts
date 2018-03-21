@@ -27,12 +27,17 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient scratch pad resolver', () => {
-  let db: Db;
   const permissions = 'green';
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -41,20 +46,19 @@ describe('patient scratch pad resolver', () => {
 
   describe('resolve patient scratch pad', () => {
     it('resolves scratch pad for given patient and user if one already exists', async () => {
-      await transaction(PatientScratchPad.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const patientScratchPad = await PatientScratchPad.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-          },
-          txn,
-        );
+      const patientScratchPad = await PatientScratchPad.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+        },
+        txn,
+      );
 
-        await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
+      await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
 
-        const query = `{
+      const query = `{
           patientScratchPad(patientId: "${patient.id}") {
             id
             userId
@@ -62,27 +66,25 @@ describe('patient scratch pad resolver', () => {
             body
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
+      });
 
-        expect(result.data!.patientScratchPad).toMatchObject({
-          id: patientScratchPad.id,
-          body,
-          userId: user.id,
-          patientId: patient.id,
-        });
+      expect(result.data!.patientScratchPad).toMatchObject({
+        id: patientScratchPad.id,
+        body,
+        userId: user.id,
+        patientId: patient.id,
       });
     });
 
     it('creates scratch pad for given patient and user if one does not exist', async () => {
-      await transaction(PatientScratchPad.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const query = `{
+      const query = `{
           patientScratchPad(patientId: "${patient.id}") {
             id
             userId
@@ -90,41 +92,39 @@ describe('patient scratch pad resolver', () => {
             body
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
+      });
 
-        expect(result.data!.patientScratchPad).toMatchObject({
-          body: '',
-          userId: user.id,
-          patientId: patient.id,
-        });
+      expect(result.data!.patientScratchPad).toMatchObject({
+        body: '',
+        userId: user.id,
+        patientId: patient.id,
       });
     });
 
     it('validates glass break id if one provided', async () => {
-      await transaction(PatientScratchPad.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const patientScratchPad = await PatientScratchPad.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-          },
-          txn,
-        );
+      const patientScratchPad = await PatientScratchPad.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+        },
+        txn,
+      );
 
-        await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
+      await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
 
-        const glassBreak = await PatientGlassBreak.create(
-          { userId: user.id, patientId: patient.id, reason: 'dunno', note: null },
-          txn,
-        );
+      const glassBreak = await PatientGlassBreak.create(
+        { userId: user.id, patientId: patient.id, reason: 'dunno', note: null },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           patientScratchPad(patientId: "${patient.id}", glassBreakId: "${glassBreak.id}") {
             id
             userId
@@ -133,37 +133,35 @@ describe('patient scratch pad resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions: 'blue',
+        txn,
+      });
 
-        expect(result.data!.patientScratchPad).toMatchObject({
-          id: patientScratchPad.id,
-          body,
-          userId: user.id,
-          patientId: patient.id,
-        });
+      expect(result.data!.patientScratchPad).toMatchObject({
+        id: patientScratchPad.id,
+        body,
+        userId: user.id,
+        patientId: patient.id,
       });
     });
 
     it('invalides invalid glass break id', async () => {
-      await transaction(PatientScratchPad.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const patientScratchPad = await PatientScratchPad.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-          },
-          txn,
-        );
+      const patientScratchPad = await PatientScratchPad.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+        },
+        txn,
+      );
 
-        await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
+      await PatientScratchPad.update(patientScratchPad.id, { body }, txn);
 
-        const query = `{
+      const query = `{
           patientScratchPad(patientId: "${patient.id}", glassBreakId: "${uuid()}") {
             id
             userId
@@ -172,34 +170,32 @@ describe('patient scratch pad resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions: 'blue',
-          txn,
-        });
-
-        expect(result.errors![0].message).toBe(
-          'You must break the glass again to view this patient. Please refresh the page.',
-        );
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions: 'blue',
+        txn,
       });
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
     });
   });
 
   describe('edit patient scratch pad', () => {
     it('edits a patient scratch pad', async () => {
-      await transaction(PatientScratchPad.knex(), async txn => {
-        const { patient, user } = await setup(txn);
+      const { patient, user } = await setup(txn);
 
-        const patientScratchPad = await PatientScratchPad.create(
-          {
-            userId: user.id,
-            patientId: patient.id,
-          },
-          txn,
-        );
+      const patientScratchPad = await PatientScratchPad.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+        },
+        txn,
+      );
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientScratchPadEdit(
             input: { patientScratchPadId: "${patientScratchPad.id}", body: "${body}"}
           ) {
@@ -209,18 +205,17 @@ describe('patient scratch pad resolver', () => {
             body
           }
         }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(result.data!.patientScratchPadEdit).toMatchObject({
-          id: patientScratchPad.id,
-          body,
-          userId: user.id,
-          patientId: patient.id,
-        });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(result.data!.patientScratchPadEdit).toMatchObject({
+        id: patientScratchPad.id,
+        body,
+        userId: user.id,
+        patientId: patient.id,
       });
     });
   });

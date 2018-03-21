@@ -22,7 +22,7 @@ const permissions = 'green';
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - email',
       departmentId: 1,
     },
     txn,
@@ -43,13 +43,18 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('email resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -58,9 +63,8 @@ describe('email resolver', () => {
 
   describe('create email', async () => {
     it('should create email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { user } = await setup(txn);
-        const query = `mutation {
+      const { user } = await setup(txn);
+      const query = `mutation {
           emailCreate(input: {
             emailAddress: "patient@email.com",
             description: "Some email",
@@ -69,28 +73,26 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.emailCreate)).toMatchObject({
-          emailAddress: 'patient@email.com',
-          description: 'Some email',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.emailCreate)).toMatchObject({
+        emailAddress: 'patient@email.com',
+        description: 'Some email',
+      });
+      expect(log).toBeCalled();
     });
   });
 
   describe('create email for patient', async () => {
     it('should create email with patient and associate it with patient', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
             emailAddress: "patient@email.com",
@@ -100,30 +102,28 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
-          emailAddress: 'patient@email.com',
-          description: 'Some email',
-        });
-        expect(log).toBeCalled();
-
-        const patientEmail = await PatientEmail.getAll(patient.id, txn);
-        expect(patientEmail).not.toBeNull();
-        expect(patientEmail.length).toBe(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
+        emailAddress: 'patient@email.com',
+        description: 'Some email',
+      });
+      expect(log).toBeCalled();
+
+      const patientEmail = await PatientEmail.getAll(patient.id, txn);
+      expect(patientEmail).not.toBeNull();
+      expect(patientEmail.length).toBe(1);
     });
 
     it('should create email with patient and make it primary for patient', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
             emailAddress: "patient@email.com",
@@ -134,35 +134,33 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
-          emailAddress: 'patient@email.com',
-          description: 'Some email',
-        });
-        expect(log).toBeCalled();
-
-        const patientEmail = await PatientEmail.getAll(patient.id, txn);
-        expect(patientEmail).not.toBeNull();
-        expect(patientEmail.length).toBe(1);
-
-        const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(editedInfo.primaryEmailId).toBe(result.data!.emailCreateForPatient.id);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
+        emailAddress: 'patient@email.com',
+        description: 'Some email',
+      });
+      expect(log).toBeCalled();
+
+      const patientEmail = await PatientEmail.getAll(patient.id, txn);
+      expect(patientEmail).not.toBeNull();
+      expect(patientEmail.length).toBe(1);
+
+      const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(editedInfo.primaryEmailId).toBe(result.data!.emailCreateForPatient.id);
     });
   });
 
   describe('delete email', async () => {
     it('should delete email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
             emailAddress: "patient@email.com",
@@ -172,16 +170,16 @@ describe('email resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const email = createResult.data!.emailCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const email = createResult.data!.emailCreateForPatient;
 
-        const query = `mutation {
+      const query = `mutation {
           emailDeleteForPatient(input: {
             emailId: "${email.id}",
             patientId: "${patient.id}",
@@ -190,27 +188,25 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
-          id: email.id,
-          emailAddress: email.emailAddress,
-          description: email.description,
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
+        id: email.id,
+        emailAddress: email.emailAddress,
+        description: email.description,
+      });
+      expect(log).toBeCalled();
     });
 
     it('should delete primary email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           emailCreateForPatient(input: {
             patientId: "${patient.id}",
             emailAddress: "patient@email.com",
@@ -221,19 +217,19 @@ describe('email resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const email = createResult.data!.emailCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const email = createResult.data!.emailCreateForPatient;
 
-        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(initialPatientInfo.primaryEmailId).toBe(email.id);
+      const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(initialPatientInfo.primaryEmailId).toBe(email.id);
 
-        const query = `mutation {
+      const query = `mutation {
           emailDeleteForPatient(input: {
             emailId: "${email.id}",
             patientId: "${patient.id}",
@@ -243,33 +239,31 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
-          id: email.id,
-          emailAddress: email.emailAddress,
-          description: email.description,
-        });
-        expect(log).toBeCalled();
-
-        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(patientInfo.primaryEmailId).toBeFalsy();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
+        id: email.id,
+        emailAddress: email.emailAddress,
+        description: email.description,
+      });
+      expect(log).toBeCalled();
+
+      const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(patientInfo.primaryEmailId).toBeFalsy();
     });
   });
 
   describe('edit email', async () => {
     it('should edit fields on email', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const email = await Email.create(createMockEmail(user.id), txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const email = await Email.create(createMockEmail(user.id), txn);
+      const query = `mutation {
           emailEdit(input: {
             emailId: "${email.id}",
             patientId: "${patient.id}",
@@ -280,19 +274,18 @@ describe('email resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.emailEdit)).toMatchObject({
-          emailAddress: 'patient@email.com',
-          description: 'Some email',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.emailEdit)).toMatchObject({
+        emailAddress: 'patient@email.com',
+        description: 'Some email',
+      });
+      expect(log).toBeCalled();
     });
   });
 });

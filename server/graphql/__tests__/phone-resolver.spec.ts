@@ -22,7 +22,7 @@ const permissions = 'green';
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - phone',
       departmentId: 1,
     },
     txn,
@@ -43,13 +43,18 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('phone resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -58,9 +63,8 @@ describe('phone resolver', () => {
 
   describe('create phone', async () => {
     it('should create phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { user } = await setup(txn);
-        const query = `mutation {
+      const { user } = await setup(txn);
+      const query = `mutation {
           phoneCreate(input: {
             phoneNumber: "123-456-7890",
             type: home,
@@ -70,29 +74,27 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
-          phoneNumber: '123-456-7890',
-          type: 'home',
-          description: 'moms home phone',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
+        phoneNumber: '123-456-7890',
+        type: 'home',
+        description: 'moms home phone',
+      });
+      expect(log).toBeCalled();
     });
   });
 
   describe('create phone for patient', async () => {
     it('should create phone with patient and associate it with patient', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "123-456-7890",
@@ -103,31 +105,29 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
-          phoneNumber: '123-456-7890',
-          type: 'home',
-          description: 'moms home phone',
-        });
-        expect(log).toBeCalled();
-
-        const patientPhone = await PatientPhone.getAll(patient.id, txn);
-        expect(patientPhone).not.toBeNull();
-        expect(patientPhone.length).toBe(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
+        phoneNumber: '123-456-7890',
+        type: 'home',
+        description: 'moms home phone',
+      });
+      expect(log).toBeCalled();
+
+      const patientPhone = await PatientPhone.getAll(patient.id, txn);
+      expect(patientPhone).not.toBeNull();
+      expect(patientPhone.length).toBe(1);
     });
 
     it('should create phone with patient and make it primary for patient', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "111-111-1111",
@@ -139,36 +139,34 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
-          phoneNumber: '111-111-1111',
-          type: 'mobile',
-          description: 'Some phone',
-        });
-        expect(log).toBeCalled();
-
-        const patientPhone = await PatientPhone.getAll(patient.id, txn);
-        expect(patientPhone).not.toBeNull();
-        expect(patientPhone.length).toBe(1);
-
-        const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(editedInfo.primaryPhoneId).toBe(result.data!.phoneCreateForPatient.id);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
+        phoneNumber: '111-111-1111',
+        type: 'mobile',
+        description: 'Some phone',
+      });
+      expect(log).toBeCalled();
+
+      const patientPhone = await PatientPhone.getAll(patient.id, txn);
+      expect(patientPhone).not.toBeNull();
+      expect(patientPhone.length).toBe(1);
+
+      const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(editedInfo.primaryPhoneId).toBe(result.data!.phoneCreateForPatient.id);
     });
   });
 
   describe('delete phone', async () => {
     it('should delete phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
@@ -178,16 +176,16 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const phone = createResult.data!.phoneCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const phone = createResult.data!.phoneCreateForPatient;
 
-        const query = `mutation {
+      const query = `mutation {
           phoneDeleteForPatient(input: {
             phoneId: "${phone.id}",
             patientId: "${patient.id}",
@@ -196,27 +194,25 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
-          id: phone.id,
-          phoneNumber: phone.phoneNumber,
-          description: phone.description,
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
+        id: phone.id,
+        phoneNumber: phone.phoneNumber,
+        description: phone.description,
+      });
+      expect(log).toBeCalled();
     });
 
     it('should delete primary phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
@@ -227,19 +223,19 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const phone = createResult.data!.phoneCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const phone = createResult.data!.phoneCreateForPatient;
 
-        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(initialPatientInfo.primaryPhoneId).toBe(phone.id);
+      const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(initialPatientInfo.primaryPhoneId).toBe(phone.id);
 
-        const query = `mutation {
+      const query = `mutation {
           phoneDeleteForPatient(input: {
             phoneId: "${phone.id}",
             patientId: "${patient.id}",
@@ -249,33 +245,31 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
-          id: phone.id,
-          phoneNumber: phone.phoneNumber,
-          description: phone.description,
-        });
-        expect(log).toBeCalled();
-
-        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(patientInfo.primaryPhoneId).toBeFalsy();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
+        id: phone.id,
+        phoneNumber: phone.phoneNumber,
+        description: phone.description,
+      });
+      expect(log).toBeCalled();
+
+      const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(patientInfo.primaryPhoneId).toBeFalsy();
     });
   });
 
   describe('edit phone', async () => {
     it('should edit fields on phone', async () => {
-      await transaction(Phone.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const phone = await Phone.create(createMockPhone(user.id), txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const phone = await Phone.create(createMockPhone(user.id), txn);
+      const query = `mutation {
           phoneEdit(input: {
             phoneId: "${phone.id}",
             patientId: "${patient.id}",
@@ -286,19 +280,18 @@ describe('phone resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
-          phoneNumber: '222-222-2222',
-          description: 'Some phone',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
+        phoneNumber: '222-222-2222',
+        description: 'Some phone',
+      });
+      expect(log).toBeCalled();
     });
   });
 });

@@ -66,9 +66,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('progress note resolver', () => {
   const progressNoteActivityQuery = print(progressNoteActivity);
+  let txn = null as any;
+
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -76,123 +82,121 @@ describe('progress note resolver', () => {
   });
 
   it('gets activity for a progress note', async () => {
-    await transaction(ProgressNote.knex(), async txn => {
-      // Lots and lots of setup :-(
-      const { patient, user, riskAreaAssessmentSubmission } = await setup(txn);
-      const progressNote = await ProgressNote.autoOpenIfRequired(
-        {
-          patientId: patient.id,
-          userId: user.id,
-        },
-        txn,
-      );
-      const task = await Task.create(
-        {
-          title: 'Task Title',
-          description: 'Task description',
-          dueAt: new Date().toISOString(),
-          patientId: patient.id,
-          createdById: user.id,
-          assignedToId: user.id,
-        },
-        txn,
-      );
-      const taskEvent = await TaskEvent.create(
-        {
-          taskId: task.id,
-          userId: user.id,
-          eventType: 'edit_assignee',
-          progressNoteId: progressNote.id,
-        },
-        txn,
-      );
-      const concern = await Concern.create({ title: 'Concern Title' }, txn);
-      const patientConcern = await PatientConcern.create(
-        {
-          patientId: patient.id,
-          concernId: concern.id,
-          userId: user.id,
-        },
-        txn,
-      );
-      await cleanCarePlanUpdateEvents(patient.id, txn);
-      const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
-          progressNoteId: progressNote.id,
-        },
-        txn,
-      );
-      const riskArea = await createRiskArea({ title: 'Risk Area Title', order: 2 }, txn);
-      const question = await Question.create(
-        {
-          riskAreaId: riskArea.id,
-          title: 'Question Title',
-          answerType: 'dropdown',
-          type: 'riskArea',
-          order: 1,
-        },
-        txn,
-      );
-      const answer = await Answer.create(
-        {
-          questionId: question.id,
-          displayValue: '1',
-          value: '1',
-          valueType: 'number',
-          order: 1,
-          inSummary: false,
-        },
-        txn,
-      );
-      const patientAnswer = (await PatientAnswer.create(
-        {
-          patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
-          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-          questionIds: [answer.questionId],
-          answers: [
-            {
-              answerId: answer.id,
-              questionId: question.id,
-              answerValue: answer.value,
-              patientId: patient.id,
-              applicable: true,
-              userId: user.id,
-            },
-          ],
-        },
-        txn,
-      ))[0];
-      await cleanPatientAnswerEvents(patient.id, txn);
-      const patientAnswerEvent = await PatientAnswerEvent.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          patientAnswerId: patientAnswer.id,
-          eventType: 'create_patient_answer',
-          progressNoteId: progressNote.id,
-        },
-        txn,
-      );
-      // Phew, setup done
-      const result = await graphql(
-        schema,
-        progressNoteActivityQuery,
-        null,
-        { permissions, userId: user.id, txn },
-        { progressNoteId: progressNote.id },
-      );
-      const clonedResults = cloneDeep(result.data!.progressNoteActivityForProgressNote);
-      expect(clonedResults.taskEvents.length).toEqual(1);
-      expect(clonedResults.patientAnswerEvents.length).toEqual(1);
-      expect(clonedResults.carePlanUpdateEvents.length).toEqual(1);
-      expect(clonedResults.taskEvents[0].id).toEqual(taskEvent.id);
-      expect(clonedResults.patientAnswerEvents[0].id).toEqual(patientAnswerEvent.id);
-      expect(clonedResults.carePlanUpdateEvents[0].id).toEqual(carePlanUpdateEvent.id);
-    });
+    // Lots and lots of setup :-(
+    const { patient, user, riskAreaAssessmentSubmission } = await setup(txn);
+    const progressNote = await ProgressNote.autoOpenIfRequired(
+      {
+        patientId: patient.id,
+        userId: user.id,
+      },
+      txn,
+    );
+    const task = await Task.create(
+      {
+        title: 'Task Title',
+        description: 'Task description',
+        dueAt: new Date().toISOString(),
+        patientId: patient.id,
+        createdById: user.id,
+        assignedToId: user.id,
+      },
+      txn,
+    );
+    const taskEvent = await TaskEvent.create(
+      {
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_assignee',
+        progressNoteId: progressNote.id,
+      },
+      txn,
+    );
+    const concern = await Concern.create({ title: 'Concern Title' }, txn);
+    const patientConcern = await PatientConcern.create(
+      {
+        patientId: patient.id,
+        concernId: concern.id,
+        userId: user.id,
+      },
+      txn,
+    );
+    await cleanCarePlanUpdateEvents(patient.id, txn);
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+        eventType: 'create_patient_concern',
+        progressNoteId: progressNote.id,
+      },
+      txn,
+    );
+    const riskArea = await createRiskArea({ title: 'Risk Area Title', order: 2 }, txn);
+    const question = await Question.create(
+      {
+        riskAreaId: riskArea.id,
+        title: 'Question Title',
+        answerType: 'dropdown',
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        questionId: question.id,
+        displayValue: '1',
+        value: '1',
+        valueType: 'number',
+        order: 1,
+        inSummary: false,
+      },
+      txn,
+    );
+    const patientAnswer = (await PatientAnswer.create(
+      {
+        patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
+        answers: [
+          {
+            answerId: answer.id,
+            questionId: question.id,
+            answerValue: answer.value,
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
+      },
+      txn,
+    ))[0];
+    await cleanPatientAnswerEvents(patient.id, txn);
+    const patientAnswerEvent = await PatientAnswerEvent.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        patientAnswerId: patientAnswer.id,
+        eventType: 'create_patient_answer',
+        progressNoteId: progressNote.id,
+      },
+      txn,
+    );
+    // Phew, setup done
+    const result = await graphql(
+      schema,
+      progressNoteActivityQuery,
+      null,
+      { permissions, userId: user.id, txn },
+      { progressNoteId: progressNote.id },
+    );
+    const clonedResults = cloneDeep(result.data!.progressNoteActivityForProgressNote);
+    expect(clonedResults.taskEvents.length).toEqual(1);
+    expect(clonedResults.patientAnswerEvents.length).toEqual(1);
+    expect(clonedResults.carePlanUpdateEvents.length).toEqual(1);
+    expect(clonedResults.taskEvents[0].id).toEqual(taskEvent.id);
+    expect(clonedResults.patientAnswerEvents[0].id).toEqual(patientAnswerEvent.id);
+    expect(clonedResults.carePlanUpdateEvents[0].id).toEqual(carePlanUpdateEvent.id);
   });
 });

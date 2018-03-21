@@ -70,9 +70,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('handling PDF requests', () => {
+  let txn = null as any;
+
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -100,123 +106,109 @@ describe('handling PDF requests', () => {
 
   describe('renderPDF', () => {
     it('returns a PDF with relevant component and filename', async () => {
-      await transaction(Task.knex(), async txn => {
-        const { task } = await setup(txn);
-        const req = httpMocks.createRequest();
-        req.query = { token: getAuthToken() };
-        const res = httpMocks.createResponse();
-        const result = await renderPdf(req, res, <CBOReferral task={task} />, filename);
+      const { task } = await setup(txn);
+      const req = httpMocks.createRequest();
+      req.query = { token: getAuthToken() };
+      const res = httpMocks.createResponse();
+      const result = await renderPdf(req, res, <CBOReferral task={task} />, filename);
 
-        expect(result._headers).toMatchObject({
-          'Content-type': 'application/pdf',
-          'Content-Transfer-Encoding': 'binary',
-          'Content-disposition': `inline; filename="${filename}.pdf"`,
-        });
-        expect(result.statusCode).toBe(200);
+      expect(result._headers).toMatchObject({
+        'Content-type': 'application/pdf',
+        'Content-Transfer-Encoding': 'binary',
+        'Content-disposition': `inline; filename="${filename}.pdf"`,
       });
+      expect(result.statusCode).toBe(200);
     });
 
     it('returns a 401 unauthorized if no token provided', async () => {
-      await transaction(Task.knex(), async txn => {
-        const { task } = await setup(txn);
-        const req = httpMocks.createRequest();
-        const res = httpMocks.createResponse();
-        res.status = jest.fn();
-        (res.status as any).mockReturnValueOnce({ send: jest.fn() });
+      const { task } = await setup(txn);
+      const req = httpMocks.createRequest();
+      const res = httpMocks.createResponse();
+      res.status = jest.fn();
+      (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        await renderPdf(req, res, <CBOReferral task={task} />, filename);
+      await renderPdf(req, res, <CBOReferral task={task} />, filename);
 
-        expect(res.status).toBeCalledWith(401);
-      });
+      expect(res.status).toBeCalledWith(401);
     });
 
     it('returns a 401 unauthorized if expired token provided', async () => {
-      await transaction(Task.knex(), async txn => {
-        const { task } = await setup(txn);
-        const req = httpMocks.createRequest();
-        req.query = { token: EXPIRED_TOKEN };
-        const res = httpMocks.createResponse();
-        res.status = jest.fn();
-        (res.status as any).mockReturnValueOnce({ send: jest.fn() });
+      const { task } = await setup(txn);
+      const req = httpMocks.createRequest();
+      req.query = { token: EXPIRED_TOKEN };
+      const res = httpMocks.createResponse();
+      res.status = jest.fn();
+      (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        await renderPdf(req, res, <CBOReferral task={task} />, filename);
+      await renderPdf(req, res, <CBOReferral task={task} />, filename);
 
-        expect(res.status).toBeCalledWith(401);
-      });
+      expect(res.status).toBeCalledWith(401);
     });
   });
 
   describe('renderCBOReferralFormPdf', () => {
     it('returns a PDF for CBO referral form', async () => {
-      await transaction(Task.knex(), async txn => {
-        const { task } = await setup(txn);
-        const req = httpMocks.createRequest();
-        req.query = { token: getAuthToken() };
-        req.params = { taskId: task.id };
-        const res = httpMocks.createResponse();
-        res.locals = { existingTxn: txn };
+      const { task } = await setup(txn);
+      const req = httpMocks.createRequest();
+      req.query = { token: getAuthToken() };
+      req.params = { taskId: task.id };
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
 
-        const result = await renderCBOReferralFormPdf(req, res);
-        const fileName = formatCBOReferralTaskPdfFileName(task);
+      const result = await renderCBOReferralFormPdf(req, res);
+      const fileName = formatCBOReferralTaskPdfFileName(task);
 
-        expect(result._headers).toMatchObject({
-          'Content-type': 'application/pdf',
-          'Content-Transfer-Encoding': 'binary',
-          'Content-disposition': `inline; filename="${fileName}.pdf"`,
-        });
-        expect(result.statusCode).toBe(200);
+      expect(result._headers).toMatchObject({
+        'Content-type': 'application/pdf',
+        'Content-Transfer-Encoding': 'binary',
+        'Content-disposition': `inline; filename="${fileName}.pdf"`,
       });
+      expect(result.statusCode).toBe(200);
     });
 
     it('returns a 404 not found if no task id provided', async () => {
-      await transaction(Task.knex(), async txn => {
-        const req = httpMocks.createRequest();
-        const res = httpMocks.createResponse();
-        res.locals = { existingTxn: txn };
-        res.status = jest.fn();
-        (res.status as any).mockReturnValueOnce({ send: jest.fn() });
+      const req = httpMocks.createRequest();
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.status = jest.fn();
+      (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        await renderCBOReferralFormPdf(req, res);
+      await renderCBOReferralFormPdf(req, res);
 
-        expect(res.status).toBeCalledWith(404);
-      });
+      expect(res.status).toBeCalledWith(404);
     });
   });
 
   describe('renderPrintableMapPdf', () => {
     it('returns a PDF for printable MAP', async () => {
-      await transaction(Task.knex(), async txn => {
-        const { patient } = await setup(txn);
-        const req = httpMocks.createRequest();
-        req.query = { token: getAuthToken() };
-        req.params = { patientId: patient.id };
-        const res = httpMocks.createResponse();
-        res.locals = { existingTxn: txn };
+      const { patient } = await setup(txn);
+      const req = httpMocks.createRequest();
+      req.query = { token: getAuthToken() };
+      req.params = { patientId: patient.id };
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
 
-        const result = await renderPrintableMapPdf(req, res);
-        const fileName = formatPrintableMapPdfFileName(patient);
+      const result = await renderPrintableMapPdf(req, res);
+      const fileName = formatPrintableMapPdfFileName(patient);
 
-        expect(result._headers).toMatchObject({
-          'Content-type': 'application/pdf',
-          'Content-Transfer-Encoding': 'binary',
-          'Content-disposition': `inline; filename="${fileName}.pdf"`,
-        });
-        expect(result.statusCode).toBe(200);
+      expect(result._headers).toMatchObject({
+        'Content-type': 'application/pdf',
+        'Content-Transfer-Encoding': 'binary',
+        'Content-disposition': `inline; filename="${fileName}.pdf"`,
       });
+      expect(result.statusCode).toBe(200);
     });
 
     it('returns a 404 not found if no patient id provided', async () => {
-      await transaction(Patient.knex(), async txn => {
-        const req = httpMocks.createRequest();
-        const res = httpMocks.createResponse();
-        res.locals = { existingTxn: txn };
-        res.status = jest.fn();
-        (res.status as any).mockReturnValueOnce({ send: jest.fn() });
+      const req = httpMocks.createRequest();
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.status = jest.fn();
+      (res.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-        await renderPrintableMapPdf(req, res);
+      await renderPrintableMapPdf(req, res);
 
-        expect(res.status).toBeCalledWith(404);
-      });
+      expect(res.status).toBeCalledWith(404);
     });
   });
 });

@@ -20,11 +20,11 @@ interface ISetup {
 const userRole = 'physician';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
-  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
+  const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, trx);
+  await CareTeam.create({ userId: user.id, patientId: patient.id }, trx);
 
   return { clinic, user, patient };
 }

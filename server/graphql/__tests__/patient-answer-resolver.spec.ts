@@ -42,10 +42,10 @@ interface ISetup {
 const userRole = 'admin';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
+  const riskArea = await createRiskArea({ title: 'Risk Area' }, trx);
   const question = await Question.create(
     {
       title: 'like writing tests?',
@@ -54,7 +54,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       type: 'riskArea',
       order: 1,
     },
-    txn,
+    trx,
   );
   const answer = await Answer.create(
     {
@@ -66,7 +66,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       questionId: question.id,
       order: 1,
     },
-    txn,
+    trx,
   );
   const answer2 = await Answer.create(
     {
@@ -78,16 +78,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
       questionId: question.id,
       order: 2,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, trx);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,
       userId: user.id,
       riskAreaId: riskArea.id,
     },
-    txn,
+    trx,
   );
 
   return {
@@ -123,6 +123,7 @@ describe('patient answer tests', () => {
   afterAll(async () => {
     await Db.release();
   });
+
   describe('resolve patient answer', () => {
     it('can fetch patient answer', async () => {
       const { patient, user, riskAreaAssessmentSubmission, answer } = await setup(txn);

@@ -61,9 +61,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('task suggestion resolver', () => {
+  let txn = null as any;
+
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -72,34 +78,29 @@ describe('task suggestion resolver', () => {
 
   describe('resolve tasks for answer', () => {
     it('fetches a task', async () => {
-      await transaction(TaskSuggestion.knex(), async txn => {
-        const { answer, taskTemplate, user } = await setup(txn);
-        const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-        const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
-        // null if no suggested tasks
-        expect(cloneDeep(result.data!.taskTemplatesForAnswer)).toMatchObject([]);
+      const { answer, taskTemplate, user } = await setup(txn);
+      const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
+      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      // null if no suggested tasks
+      expect(cloneDeep(result.data!.taskTemplatesForAnswer)).toMatchObject([]);
 
-        await TaskSuggestion.create(
-          {
-            taskTemplateId: taskTemplate.id,
-            answerId: answer.id,
-          },
-          txn,
-        );
-        // one if suggested task
-        const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
-        expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([
-          { title: 'Housing' },
-        ]);
-      });
+      await TaskSuggestion.create(
+        {
+          taskTemplateId: taskTemplate.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
+      // one if suggested task
+      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([{ title: 'Housing' }]);
     });
   });
 
   describe('task suggestion create', () => {
     it('suggests a task for an answer', async () => {
-      await transaction(TaskSuggestion.knex(), async txn => {
-        const { answer, taskTemplate, user } = await setup(txn);
-        const mutation = `mutation {
+      const { answer, taskTemplate, user } = await setup(txn);
+      const mutation = `mutation {
           taskSuggestionCreate(
             input: {
               answerId: "${answer.id}", taskTemplateId: "${taskTemplate.id}"
@@ -108,42 +109,39 @@ describe('task suggestion resolver', () => {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
-        expect(cloneDeep(result.data!.taskSuggestionCreate)).toMatchObject([
-          {
-            title: 'Housing',
-          },
-        ]);
-      });
+      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      expect(cloneDeep(result.data!.taskSuggestionCreate)).toMatchObject([
+        {
+          title: 'Housing',
+        },
+      ]);
     });
   });
 
   describe('task suggestion delete', () => {
     it('unsuggests a task for an answer', async () => {
-      await transaction(TaskSuggestion.knex(), async txn => {
-        const { taskTemplate, answer, user } = await setup(txn);
-        await TaskSuggestion.create(
-          {
-            taskTemplateId: taskTemplate.id,
-            answerId: answer.id,
-          },
-          txn,
-        );
-        const mutation = `mutation {
+      const { taskTemplate, answer, user } = await setup(txn);
+      await TaskSuggestion.create(
+        {
+          taskTemplateId: taskTemplate.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
+      const mutation = `mutation {
           taskSuggestionDelete(input: {
             answerId: "${answer.id}", taskTemplateId: "${taskTemplate.id}"
           }) {
             title
           }
         }`;
-        const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
-        expect(cloneDeep(result.data!.taskSuggestionDelete)).toMatchObject([]);
+      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      expect(cloneDeep(result.data!.taskSuggestionDelete)).toMatchObject([]);
 
-        // empty with no suggested tasks
-        const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-        const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
-        expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([]);
-      });
+      // empty with no suggested tasks
+      const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
+      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([]);
     });
   });
 });

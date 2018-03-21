@@ -20,12 +20,12 @@ interface ISetup {
 const userRole = 'admin';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const advancedDirectiveForm = await AdvancedDirectiveForm.create('MOLST', txn);
-  const advancedDirectiveForm2 = await AdvancedDirectiveForm.create('THING', txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, trx);
+  const advancedDirectiveForm = await AdvancedDirectiveForm.create('MOLST', trx);
+  const advancedDirectiveForm2 = await AdvancedDirectiveForm.create('THING', trx);
 
   return {
     user,
@@ -36,11 +36,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient advanced directive form tests', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -49,55 +54,52 @@ describe('patient advanced directive form tests', () => {
 
   describe('resolve patient advanced directive forms for patient', () => {
     it('can fetch patient advanced directive forms', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { patient, user, advancedDirectiveForm, advancedDirectiveForm2 } = await setup(txn);
-        const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const query = `{
+      const { patient, user, advancedDirectiveForm, advancedDirectiveForm2 } = await setup(txn);
+      const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const query = `{
           patientAdvancedDirectiveFormsForPatient(patientId: "${patient.id}") {
             patientAdvancedDirectiveFormId,
             formId,
             signedAt,
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        const results = cloneDeep(result.data!.patientAdvancedDirectiveFormsForPatient);
-        const patientAdvancedDirectiveFormIds = results.map(
-          (res: any) => res.patientAdvancedDirectiveFormId,
-        );
-        const advancedDirectiveFormIds = results.map((res: any) => res.formId);
-        expect(results).toHaveLength(2);
-        expect(advancedDirectiveFormIds).toContain(advancedDirectiveForm.id);
-        expect(advancedDirectiveFormIds).toContain(advancedDirectiveForm2.id);
-        expect(patientAdvancedDirectiveFormIds).toContain(patientAdvancedDirectiveForm.id);
-        // No form was created for advancedDirectiveForm2
-        expect(patientAdvancedDirectiveFormIds).toContain(null);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+      const results = cloneDeep(result.data!.patientAdvancedDirectiveFormsForPatient);
+      const patientAdvancedDirectiveFormIds = results.map(
+        (res: any) => res.patientAdvancedDirectiveFormId,
+      );
+      const advancedDirectiveFormIds = results.map((res: any) => res.formId);
+      expect(results).toHaveLength(2);
+      expect(advancedDirectiveFormIds).toContain(advancedDirectiveForm.id);
+      expect(advancedDirectiveFormIds).toContain(advancedDirectiveForm2.id);
+      expect(patientAdvancedDirectiveFormIds).toContain(patientAdvancedDirectiveForm.id);
+      // No form was created for advancedDirectiveForm2
+      expect(patientAdvancedDirectiveFormIds).toContain(null);
     });
   });
 
   describe('patient advanced directive form create', () => {
     it('creates a patient advanced directive form', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { patient, user, advancedDirectiveForm } = await setup(txn);
-        const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(patientAdvancedDirectiveForms).toHaveLength(0);
-        const query = `mutation {
+      const { patient, user, advancedDirectiveForm } = await setup(txn);
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(patientAdvancedDirectiveForms).toHaveLength(0);
+      const query = `mutation {
           patientAdvancedDirectiveFormCreate(input: {
             patientId: "${patient.id}",
             formId: "${advancedDirectiveForm.id}",
@@ -106,66 +108,63 @@ describe('patient advanced directive form tests', () => {
             formId
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientAdvancedDirectiveFormCreate)).toMatchObject({
-          formId: advancedDirectiveForm.id,
-        });
-        const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(refetchedPatientAdvancedDirectiveForms).toHaveLength(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientAdvancedDirectiveFormCreate)).toMatchObject({
+        formId: advancedDirectiveForm.id,
+      });
+      const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(refetchedPatientAdvancedDirectiveForms).toHaveLength(1);
     });
   });
 
   describe('patient advanced directive form delete', () => {
     it('deletes a patient advanced directive form', async () => {
-      await transaction(PatientAdvancedDirectiveForm.knex(), async txn => {
-        const { patient, user, advancedDirectiveForm } = await setup(txn);
-        const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: advancedDirectiveForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(patientAdvancedDirectiveForms).toHaveLength(1);
-        const query = `mutation {
+      const { patient, user, advancedDirectiveForm } = await setup(txn);
+      const patientAdvancedDirectiveForm = await PatientAdvancedDirectiveForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: advancedDirectiveForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(patientAdvancedDirectiveForms).toHaveLength(1);
+      const query = `mutation {
           patientAdvancedDirectiveFormDelete(input: {
             patientAdvancedDirectiveFormId: "${patientAdvancedDirectiveForm.id}",
           }) {
             patientAdvancedDirectiveFormId
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientAdvancedDirectiveFormDelete)).toMatchObject({
-          patientAdvancedDirectiveFormId: patientAdvancedDirectiveForm.id,
-        });
-        const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(refetchedPatientAdvancedDirectiveForms).toHaveLength(0);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientAdvancedDirectiveFormDelete)).toMatchObject({
+        patientAdvancedDirectiveFormId: patientAdvancedDirectiveForm.id,
+      });
+      const refetchedPatientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(refetchedPatientAdvancedDirectiveForms).toHaveLength(0);
     });
   });
 });

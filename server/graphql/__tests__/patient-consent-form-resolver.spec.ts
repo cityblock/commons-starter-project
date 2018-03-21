@@ -36,11 +36,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient consent form tests', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -49,49 +54,46 @@ describe('patient consent form tests', () => {
 
   describe('resolve patient consent forms for patient', () => {
     it('can fetch patient consent forms', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { patient, user, consentForm, consentForm2 } = await setup(txn);
-        const patientConsentForm = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const query = `{
+      const { patient, user, consentForm, consentForm2 } = await setup(txn);
+      const patientConsentForm = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const query = `{
           patientConsentFormsForPatient(patientId: "${patient.id}") {
             patientConsentFormId,
             formId,
             signedAt,
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        const results = cloneDeep(result.data!.patientConsentFormsForPatient);
-        const patientConsentFormIds = results.map((res: any) => res.patientConsentFormId);
-        const consentFormIds = results.map((res: any) => res.formId);
-        expect(results).toHaveLength(2);
-        expect(consentFormIds).toContain(consentForm.id);
-        expect(consentFormIds).toContain(consentForm2.id);
-        expect(patientConsentFormIds).toContain(patientConsentForm.id);
-        expect(patientConsentFormIds).toContain(null); // No form was created for consentForm2
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+      const results = cloneDeep(result.data!.patientConsentFormsForPatient);
+      const patientConsentFormIds = results.map((res: any) => res.patientConsentFormId);
+      const consentFormIds = results.map((res: any) => res.formId);
+      expect(results).toHaveLength(2);
+      expect(consentFormIds).toContain(consentForm.id);
+      expect(consentFormIds).toContain(consentForm2.id);
+      expect(patientConsentFormIds).toContain(patientConsentForm.id);
+      expect(patientConsentFormIds).toContain(null); // No form was created for consentForm2
     });
   });
 
   describe('patient consent form create', () => {
     it('creates a patient consent form', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { patient, user, consentForm } = await setup(txn);
-        const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
-        expect(patientConsentForms).toHaveLength(0);
-        const query = `mutation {
+      const { patient, user, consentForm } = await setup(txn);
+      const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
+      expect(patientConsentForms).toHaveLength(0);
+      const query = `mutation {
           patientConsentFormCreate(input: {
             patientId: "${patient.id}",
             formId: "${consentForm.id}",
@@ -100,63 +102,60 @@ describe('patient consent form tests', () => {
             formId
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientConsentFormCreate)).toMatchObject({
-          formId: consentForm.id,
-        });
-        const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(refetchedPatientConsentForms).toHaveLength(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientConsentFormCreate)).toMatchObject({
+        formId: consentForm.id,
+      });
+      const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(refetchedPatientConsentForms).toHaveLength(1);
     });
   });
 
   describe('patient consent form delete', () => {
     it('deletes a patient consent form', async () => {
-      await transaction(PatientConsentForm.knex(), async txn => {
-        const { patient, user, consentForm } = await setup(txn);
-        const patientConsentForm = await PatientConsentForm.create(
-          {
-            patientId: patient.id,
-            userId: user.id,
-            formId: consentForm.id,
-            signedAt: '01/01/1999',
-          },
-          txn,
-        );
-        const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
-        expect(patientConsentForms).toHaveLength(1);
-        const query = `mutation {
+      const { patient, user, consentForm } = await setup(txn);
+      const patientConsentForm = await PatientConsentForm.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          formId: consentForm.id,
+          signedAt: '01/01/1999',
+        },
+        txn,
+      );
+      const patientConsentForms = await PatientConsentForm.getAllForPatient(patient.id, txn);
+      expect(patientConsentForms).toHaveLength(1);
+      const query = `mutation {
           patientConsentFormDelete(input: {
             patientConsentFormId: "${patientConsentForm.id}",
           }) {
             patientConsentFormId
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientConsentFormDelete)).toMatchObject({
-          patientConsentFormId: patientConsentForm.id,
-        });
-        const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
-          patient.id,
-          txn,
-        );
-        expect(refetchedPatientConsentForms).toHaveLength(0);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientConsentFormDelete)).toMatchObject({
+        patientConsentFormId: patientConsentForm.id,
+      });
+      const refetchedPatientConsentForms = await PatientConsentForm.getAllForPatient(
+        patient.id,
+        txn,
+      );
+      expect(refetchedPatientConsentForms).toHaveLength(0);
     });
   });
 });

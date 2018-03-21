@@ -30,6 +30,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('processing memberAttribution jobs', () => {
+  let txn = null as any;
+
   beforeAll(async () => {
     queue.testMode.enter();
   });
@@ -38,7 +40,11 @@ describe('processing memberAttribution jobs', () => {
     queue.testMode.clear();
 
     await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -49,62 +55,56 @@ describe('processing memberAttribution jobs', () => {
   });
 
   it('throws an error if data is missing', async () => {
-    await transaction(Patient.knex(), async txn => {
-      const data = {
-        patientId: uuid(),
-        cityblockId: 123,
-      };
+    const data = {
+      patientId: uuid(),
+      cityblockId: 123,
+    };
 
-      await expect(processNewMemberAttributionMessage(data as any, txn)).rejects.toMatch(
-        'Missing either patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, or jobId',
-      );
-    });
+    await expect(processNewMemberAttributionMessage(data as any, txn)).rejects.toMatch(
+      'Missing either patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, or jobId',
+    );
   });
 
   describe('with a new patient', () => {
     it('creates a new patient', async () => {
-      await transaction(Patient.knex(), async txn => {
-        const { clinic } = await setup(txn);
-        const patientId = uuid();
-        const data = {
-          patientId,
-          cityblockId: 123,
-          firstName: 'Bob',
-          lastName: 'Smith',
-          dateOfBirth: '01/01/1990',
-          gender: 'male',
-          language: 'en',
-          jobId: 'jobId',
-          homeClinicId: clinic.id,
-        };
-        await processNewMemberAttributionMessage(data as any, txn);
+      const { clinic } = await setup(txn);
+      const patientId = uuid();
+      const data = {
+        patientId,
+        cityblockId: 123,
+        firstName: 'Bob',
+        lastName: 'Smith',
+        dateOfBirth: '01/01/1990',
+        gender: 'male',
+        language: 'en',
+        jobId: 'jobId',
+        homeClinicId: clinic.id,
+      };
+      await processNewMemberAttributionMessage(data as any, txn);
 
-        const fetchedPatient = await Patient.get(patientId, txn);
-        expect(fetchedPatient.patientInfo.gender).toEqual('male');
-        expect(fetchedPatient.cityblockId).toEqual(123);
-      });
+      const fetchedPatient = await Patient.get(patientId, txn);
+      expect(fetchedPatient.patientInfo.gender).toEqual('male');
+      expect(fetchedPatient.cityblockId).toEqual(123);
     });
   });
 
   describe('with an existing patient', () => {
     it('updates an existing patient', async () => {
-      await transaction(Patient.knex(), async txn => {
-        const { patient, clinic } = await setup(txn);
-        expect(patient.lastName).toEqual('plant');
-        const data = {
-          patientId: patient.id,
-          cityblockId: patient.cityblockId,
-          firstName: patient.firstName,
-          lastName: 'New Last Name',
-          dateOfBirth: '01/01/1990',
-          jobId: 'jobId',
-          homeClinicId: clinic.id,
-        };
-        await processNewMemberAttributionMessage(data as any, txn);
+      const { patient, clinic } = await setup(txn);
+      expect(patient.lastName).toEqual('plant');
+      const data = {
+        patientId: patient.id,
+        cityblockId: patient.cityblockId,
+        firstName: patient.firstName,
+        lastName: 'New Last Name',
+        dateOfBirth: '01/01/1990',
+        jobId: 'jobId',
+        homeClinicId: clinic.id,
+      };
+      await processNewMemberAttributionMessage(data as any, txn);
 
-        const fetchedPatient = await Patient.get(patient.id, txn);
-        expect(fetchedPatient.lastName).toEqual('New Last Name');
-      });
+      const fetchedPatient = await Patient.get(patient.id, txn);
+      expect(fetchedPatient.lastName).toEqual('New Last Name');
     });
   });
 });

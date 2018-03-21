@@ -26,10 +26,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('computed field schema resolver', () => {
   let db: Db;
+  let txn = null as any;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -38,60 +43,59 @@ describe('computed field schema resolver', () => {
 
   describe('resolve computed fields schema', () => {
     it('returns computed fields', async () => {
-      await transaction(ComputedField.knex(), async txn => {
-        const { user } = await setup(txn);
-        const computedField1 = await ComputedField.create(
-          {
-            label: 'def',
-            slug: 'computed-field-1',
-            dataType: 'boolean',
-          },
-          txn,
-        );
-        await ComputedField.create(
-          {
-            label: 'abc',
-            slug: 'computed-field-2',
-            dataType: 'boolean',
-          },
-          txn,
-        );
-        const riskArea = await createRiskArea({ title: 'Housing' }, txn);
-        const question = await Question.create(
-          {
-            riskAreaId: riskArea.id,
-            type: 'riskArea',
-            title: 'Question',
-            answerType: 'boolean' as any,
-            order: 1,
-            computedFieldId: computedField1.id,
-          },
-          txn,
-        );
-        await Answer.create(
-          {
-            questionId: question.id,
-            displayValue: 'Answer Display Value',
-            value: 'true',
-            valueType: 'boolean',
-            order: 1,
-            inSummary: false,
-          },
-          txn,
-        );
-        await Answer.create(
-          {
-            questionId: question.id,
-            displayValue: 'Answer Display Value',
-            value: 'false',
-            valueType: 'boolean',
-            order: 2,
-            inSummary: false,
-          },
-          txn,
-        );
+      const { user } = await setup(txn);
+      const computedField1 = await ComputedField.create(
+        {
+          label: 'def',
+          slug: 'computed-field-1',
+          dataType: 'boolean',
+        },
+        txn,
+      );
+      await ComputedField.create(
+        {
+          label: 'abc',
+          slug: 'computed-field-2',
+          dataType: 'boolean',
+        },
+        txn,
+      );
+      const riskArea = await createRiskArea({ title: 'Housing' }, txn);
+      const question = await Question.create(
+        {
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          title: 'Question',
+          answerType: 'boolean' as any,
+          order: 1,
+          computedFieldId: computedField1.id,
+        },
+        txn,
+      );
+      await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: 'Answer Display Value',
+          value: 'true',
+          valueType: 'boolean',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: 'Answer Display Value',
+          value: 'false',
+          valueType: 'boolean',
+          order: 2,
+          inSummary: false,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           computedFieldsSchema {
             computedFields {
               slug
@@ -101,21 +105,20 @@ describe('computed field schema resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          userId: user.id,
-          permissions,
-          txn,
-        });
-        expect(cloneDeep(result.data!.computedFieldsSchema)).toMatchObject({
-          computedFields: [
-            {
-              slug: 'computed-field-1',
-              dataType: 'boolean',
-              values: ['true', 'false'],
-            },
-          ],
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        permissions,
+        txn,
+      });
+      expect(cloneDeep(result.data!.computedFieldsSchema)).toMatchObject({
+        computedFields: [
+          {
+            slug: 'computed-field-1',
+            dataType: 'boolean',
+            values: ['true', 'false'],
+          },
+        ],
       });
     });
   });

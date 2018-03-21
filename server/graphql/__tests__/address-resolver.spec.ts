@@ -19,13 +19,13 @@ interface ISetup {
 const userRole = 'physician';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
+async function setup(trx: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - address',
       departmentId: 1,
     },
-    txn,
+    trx,
   );
   const homeClinicId = homeClinic.id;
   const user = await User.create(
@@ -36,20 +36,25 @@ async function setup(txn: Transaction): Promise<ISetup> {
       userRole,
       homeClinicId,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
+  const patient = await createPatient({ cityblockId: 1, homeClinicId }, trx);
   return { patient, user };
 }
 
 describe('address resolver', () => {
   let db: Db;
+  let txn = null as any;
   const log = jest.fn();
   const logger = { log };
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -58,9 +63,8 @@ describe('address resolver', () => {
 
   describe('create address', async () => {
     it('should create address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { user } = await setup(txn);
-        const query = `mutation {
+      const { user } = await setup(txn);
+      const query = `mutation {
           addressCreate(input: {
             zip: "11238",
             state: "NY",
@@ -72,31 +76,29 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.addressCreate)).toMatchObject({
-          street1: '600 Vanderbilt Ave',
-          zip: '11238',
-          state: 'NY',
-          city: 'Brooklyn',
-          description: 'Some building',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.addressCreate)).toMatchObject({
+        street1: '600 Vanderbilt Ave',
+        zip: '11238',
+        state: 'NY',
+        city: 'Brooklyn',
+        description: 'Some building',
+      });
+      expect(log).toBeCalled();
     });
   });
 
   describe('create address for patient', async () => {
     it('should create address with patient and associate it with patient', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           addressCreateForPatient(input: {
             patientId: "${patient.id}",
             zip: "11238",
@@ -109,32 +111,30 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
-          street1: '600 Vanderbilt Ave',
-          zip: '11238',
-          state: 'NY',
-          city: 'Brooklyn',
-          description: 'Some building',
-        });
-        expect(log).toBeCalled();
-
-        const patientAddress = await PatientAddress.getAll(patient.id, txn);
-        expect(patientAddress).not.toBeNull();
-        expect(patientAddress.length).toBe(1);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
+        street1: '600 Vanderbilt Ave',
+        zip: '11238',
+        state: 'NY',
+        city: 'Brooklyn',
+        description: 'Some building',
+      });
+      expect(log).toBeCalled();
+
+      const patientAddress = await PatientAddress.getAll(patient.id, txn);
+      expect(patientAddress).not.toBeNull();
+      expect(patientAddress.length).toBe(1);
     });
 
     it('should create address with patient and make it primary for patient', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const query = `mutation {
           addressCreateForPatient(input: {
             patientId: "${patient.id}",
             zip: "11238",
@@ -148,37 +148,35 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
-          street1: '600 Vanderbilt Ave',
-          zip: '11238',
-          state: 'NY',
-          city: 'Brooklyn',
-          description: 'Some building',
-        });
-        expect(log).toBeCalled();
-
-        const patientAddress = await PatientAddress.getAll(patient.id, txn);
-        expect(patientAddress).not.toBeNull();
-        expect(patientAddress.length).toBe(1);
-
-        const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreateForPatient.id);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
+        street1: '600 Vanderbilt Ave',
+        zip: '11238',
+        state: 'NY',
+        city: 'Brooklyn',
+        description: 'Some building',
+      });
+      expect(log).toBeCalled();
+
+      const patientAddress = await PatientAddress.getAll(patient.id, txn);
+      expect(patientAddress).not.toBeNull();
+      expect(patientAddress.length).toBe(1);
+
+      const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreateForPatient.id);
     });
   });
 
   describe('delete address', async () => {
     it('should delete address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           addressCreateForPatient(input: {
             patientId: "${patient.id}",
             zip: "11238",
@@ -188,16 +186,16 @@ describe('address resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const address = createResult.data!.addressCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const address = createResult.data!.addressCreateForPatient;
 
-        const query = `mutation {
+      const query = `mutation {
           addressDeleteForPatient(input: {
             addressId: "${address.id}",
             patientId: "${patient.id}",
@@ -206,27 +204,25 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
-          id: address.id,
-          zip: address.zip,
-          description: address.description,
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
+        id: address.id,
+        zip: address.zip,
+        description: address.description,
+      });
+      expect(log).toBeCalled();
     });
 
     it('should delete primary address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const createQuery = `mutation {
+      const { patient, user } = await setup(txn);
+      const createQuery = `mutation {
           addressCreateForPatient(input: {
             patientId: "${patient.id}",
             zip: "11238",
@@ -237,19 +233,19 @@ describe('address resolver', () => {
           }
         }`;
 
-        const createResult = await graphql(schema, createQuery, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        const address = createResult.data!.addressCreateForPatient;
+      const createResult = await graphql(schema, createQuery, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+      const address = createResult.data!.addressCreateForPatient;
 
-        const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(initialPatientInfo.primaryAddressId).toBe(address.id);
+      const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(initialPatientInfo.primaryAddressId).toBe(address.id);
 
-        const query = `mutation {
+      const query = `mutation {
           addressDeleteForPatient(input: {
             addressId: "${address.id}",
             patientId: "${patient.id}",
@@ -259,33 +255,31 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
-          id: address.id,
-          zip: address.zip,
-          description: address.description,
-        });
-        expect(log).toBeCalled();
-
-        const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-        expect(patientInfo.primaryAddressId).toBeFalsy();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
+        id: address.id,
+        zip: address.zip,
+        description: address.description,
+      });
+      expect(log).toBeCalled();
+
+      const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
+      expect(patientInfo.primaryAddressId).toBeFalsy();
     });
   });
 
   describe('edit address', async () => {
     it('should edit fields on address', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const address = await Address.create(createMockAddress(user.id), txn);
-        const query = `mutation {
+      const { patient, user } = await setup(txn);
+      const address = await Address.create(createMockAddress(user.id), txn);
+      const query = `mutation {
           addressEdit(input: {
             addressId: "${address.id}",
             patientId: "${patient.id}",
@@ -299,22 +293,21 @@ describe('address resolver', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.addressEdit)).toMatchObject({
-          street1: '600 Vanderbilt Ave',
-          zip: '11238',
-          state: 'CT',
-          city: 'Haverford',
-          description: 'Some building',
-        });
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.addressEdit)).toMatchObject({
+        street1: '600 Vanderbilt Ave',
+        zip: '11238',
+        state: 'CT',
+        city: 'Haverford',
+        description: 'Some building',
+      });
+      expect(log).toBeCalled();
     });
   });
 });

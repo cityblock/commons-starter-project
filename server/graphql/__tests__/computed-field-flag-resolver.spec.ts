@@ -4,7 +4,6 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
-import ComputedFieldFlag from '../../models/computed-field-flag';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import Question, { IRiskAreaQuestion } from '../../models/question';
@@ -36,20 +35,20 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id }, txn);
-  const riskArea = await createRiskArea({ title: 'The War for the Dawn' }, txn);
-  const question = await Question.create(createMockQuestion(riskArea.id) as IRiskAreaQuestion, txn);
-  const answer = await Answer.create(createMockAnswer(question.id), txn);
+async function setup(trx: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
+  const patient = await createPatient({ cityblockId: 12, homeClinicId: clinic.id }, trx);
+  const riskArea = await createRiskArea({ title: 'The War for the Dawn' }, trx);
+  const question = await Question.create(createMockQuestion(riskArea.id) as IRiskAreaQuestion, trx);
+  const answer = await Answer.create(createMockAnswer(question.id), trx);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       riskAreaId: riskArea.id,
       patientId: patient.id,
       userId: user.id,
     },
-    txn,
+    trx,
   );
 
   const patientAnswers = await PatientAnswer.create(
@@ -69,7 +68,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       ],
       type: 'riskAreaAssessmentSubmission',
     },
-    txn,
+    trx,
   );
   return {
     clinic,
@@ -85,10 +84,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('computed field flag resolver', () => {
   let db: Db;
+  let txn = null as any;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -96,9 +100,8 @@ describe('computed field flag resolver', () => {
   });
 
   it('creates a computed field flag', async () => {
-    await transaction(ComputedFieldFlag.knex(), async txn => {
-      const { patientAnswers, user } = await setup(txn);
-      const mutation = `mutation {
+    const { patientAnswers, user } = await setup(txn);
+    const mutation = `mutation {
         computedFieldFlagCreate(input: {
           patientAnswerId: "${patientAnswers[0].id}",
           reason: "${reason}"
@@ -110,20 +113,19 @@ describe('computed field flag resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-      const computedFieldFlag = cloneDeep(result.data!.computedFieldFlagCreate);
+    const result = await graphql(schema, mutation, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
+    const computedFieldFlag = cloneDeep(result.data!.computedFieldFlagCreate);
 
-      expect(computedFieldFlag.id).toBeTruthy();
-      expect(computedFieldFlag).toMatchObject({
-        userId: user.id,
-        patientAnswerId: patientAnswers[0].id,
-        reason,
-      });
+    expect(computedFieldFlag.id).toBeTruthy();
+    expect(computedFieldFlag).toMatchObject({
+      userId: user.id,
+      patientAnswerId: patientAnswers[0].id,
+      reason,
     });
   });
 });

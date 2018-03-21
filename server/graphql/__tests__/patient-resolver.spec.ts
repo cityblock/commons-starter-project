@@ -45,7 +45,7 @@ const permissions = 'green';
 async function setup(trx: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - patient 1',
       departmentId: 2,
     },
     trx,
@@ -448,7 +448,7 @@ describe('patient', () => {
     it('works if user has no patients', async () => {
       const homeClinic = await HomeClinic.create(
         {
-          name: 'cool clinic',
+          name: 'cool clinic - patient 2',
           departmentId: 1,
         },
         txn,

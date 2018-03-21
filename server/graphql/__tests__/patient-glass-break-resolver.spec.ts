@@ -32,11 +32,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('Patient Glass Break Resolver', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -44,10 +49,9 @@ describe('Patient Glass Break Resolver', () => {
   });
 
   it('creates a patient glass break', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const mutation = `mutation {
+    const mutation = `mutation {
         patientGlassBreakCreate(input: {
           patientId: "${patient.id}"
           reason: "${reason}"
@@ -61,58 +65,56 @@ describe('Patient Glass Break Resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-
-      expect(result.data!.patientGlassBreakCreate.id).toBeTruthy();
-      expect(result.data!.patientGlassBreakCreate.patientId).toBe(patient.id);
-      expect(result.data!.patientGlassBreakCreate.userId).toBe(user.id);
-      expect(result.data!.patientGlassBreakCreate.reason).toBe(reason);
-      expect(result.data!.patientGlassBreakCreate.note).toBe(note);
+    const result = await graphql(schema, mutation, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
     });
+
+    expect(result.data!.patientGlassBreakCreate.id).toBeTruthy();
+    expect(result.data!.patientGlassBreakCreate.patientId).toBe(patient.id);
+    expect(result.data!.patientGlassBreakCreate.userId).toBe(user.id);
+    expect(result.data!.patientGlassBreakCreate.reason).toBe(reason);
+    expect(result.data!.patientGlassBreakCreate.note).toBe(note);
   });
 
   it('fetches patient glass breaks for current user session', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient, clinic } = await setup(txn);
-      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+    const { user, patient, clinic } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
 
-      const patientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const tooOldGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      const otherPatientGlassBreak = await PatientGlassBreak.create(
-        {
-          userId: user.id,
-          patientId: patient2.id,
-          reason,
-          note,
-        },
-        txn,
-      );
-      await PatientGlassBreak.query(txn)
-        .where({ id: tooOldGlassBreak.id })
-        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+    const patientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const tooOldGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    const otherPatientGlassBreak = await PatientGlassBreak.create(
+      {
+        userId: user.id,
+        patientId: patient2.id,
+        reason,
+        note,
+      },
+      txn,
+    );
+    await PatientGlassBreak.query(txn)
+      .where({ id: tooOldGlassBreak.id })
+      .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const query = `{
+    const query = `{
         patientGlassBreaksForUser {
           id
           patientId
@@ -120,84 +122,79 @@ describe('Patient Glass Break Resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
 
-      expect(result.data!.patientGlassBreaksForUser.length).toBe(2);
+    expect(result.data!.patientGlassBreaksForUser.length).toBe(2);
 
-      const glassBreak1 = result.data!.patientGlassBreaksForUser.find(
-        (glassBreak: PatientGlassBreak) => glassBreak.id === patientGlassBreak.id,
-      );
-      const glassBreak2 = result.data!.patientGlassBreaksForUser.find(
-        (glassBreak: PatientGlassBreak) => glassBreak.id === otherPatientGlassBreak.id,
-      );
+    const glassBreak1 = result.data!.patientGlassBreaksForUser.find(
+      (glassBreak: PatientGlassBreak) => glassBreak.id === patientGlassBreak.id,
+    );
+    const glassBreak2 = result.data!.patientGlassBreaksForUser.find(
+      (glassBreak: PatientGlassBreak) => glassBreak.id === otherPatientGlassBreak.id,
+    );
 
-      expect(glassBreak1).toMatchObject({
-        id: patientGlassBreak.id,
-        patientId: patient.id,
-        userId: user.id,
-      });
+    expect(glassBreak1).toMatchObject({
+      id: patientGlassBreak.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
 
-      expect(glassBreak2).toMatchObject({
-        id: otherPatientGlassBreak.id,
-        patientId: patient2.id,
-        userId: user.id,
-      });
+    expect(glassBreak2).toMatchObject({
+      id: otherPatientGlassBreak.id,
+      patientId: patient2.id,
+      userId: user.id,
     });
   });
 
   it('resolves glass break check for patient on care team', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, patient } = await setup(txn);
+    const { user, patient } = await setup(txn);
 
-      const query = `{
+    const query = `{
         patientGlassBreakCheck(patientId: "${patient.id}") {
           patientId
           isGlassBreakNotNeeded
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
 
-      expect(result.data!.patientGlassBreakCheck).toMatchObject({
-        patientId: patient.id,
-        isGlassBreakNotNeeded: true,
-      });
+    expect(result.data!.patientGlassBreakCheck).toMatchObject({
+      patientId: patient.id,
+      isGlassBreakNotNeeded: true,
     });
   });
 
   it('resolves glass break check for patient not on care team', async () => {
-    await transaction(PatientGlassBreak.knex(), async txn => {
-      const { user, clinic } = await setup(txn);
-      const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
+    const { user, clinic } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 13, homeClinicId: clinic.id }, txn);
 
-      const query = `{
+    const query = `{
         patientGlassBreakCheck(patientId: "${patient2.id}") {
           patientId
           isGlassBreakNotNeeded
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+    const result = await graphql(schema, query, null, {
+      db,
+      permissions,
+      userId: user.id,
+      txn,
+    });
 
-      expect(result.data!.patientGlassBreakCheck).toMatchObject({
-        patientId: patient2.id,
-        isGlassBreakNotNeeded: false,
-      });
+    expect(result.data!.patientGlassBreakCheck).toMatchObject({
+      patientId: patient2.id,
+      isGlassBreakNotNeeded: false,
     });
   });
 });

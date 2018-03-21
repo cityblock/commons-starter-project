@@ -3,7 +3,6 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
-import ComputedPatientStatus from '../../models/computed-patient-status';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import { createPatient } from '../../spec-helpers';
@@ -17,13 +16,13 @@ interface ISetup {
 const userRole = 'physician';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
+async function setup(trx: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - computed patient',
       departmentId: 1,
     },
-    txn,
+    trx,
   );
   const user = await User.create(
     {
@@ -33,19 +32,24 @@ async function setup(txn: Transaction): Promise<ISetup> {
       userRole,
       homeClinicId: homeClinic.id,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 1, homeClinicId: homeClinic.id }, txn);
+  const patient = await createPatient({ cityblockId: 1, homeClinicId: homeClinic.id }, trx);
 
   return { patient, user };
 }
 
 describe('computed patient status resolver', () => {
   let db: Db;
+  let txn = null as any;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -54,25 +58,23 @@ describe('computed patient status resolver', () => {
 
   describe('resolve patient computed patient status', () => {
     it('resolves a computed patient status for a patient', async () => {
-      await transaction(ComputedPatientStatus.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const { computedPatientStatus } = patient;
+      const { patient, user } = await setup(txn);
+      const { computedPatientStatus } = patient;
 
-        const query = `{
+      const query = `{
           patientComputedPatientStatus(patientId: "${patient.id}") {
             id
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
 
-        expect(cloneDeep(result.data!.patientComputedPatientStatus)).toMatchObject({
-          id: computedPatientStatus.id,
-        });
+      expect(cloneDeep(result.data!.patientComputedPatientStatus)).toMatchObject({
+        id: computedPatientStatus.id,
       });
     });
   });

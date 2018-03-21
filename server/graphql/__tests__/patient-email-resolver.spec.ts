@@ -21,13 +21,13 @@ interface ISetup {
 const userRole = 'physician';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
+async function setup(trx: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - patient email',
       departmentId: 1,
     },
-    txn,
+    trx,
   );
   const homeClinicId = homeClinic.id;
   const user = await User.create(
@@ -38,33 +38,38 @@ async function setup(txn: Transaction): Promise<ISetup> {
       userRole,
       homeClinicId,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
-  const email = await Email.create(createMockEmail(user.id), txn);
+  const patient = await createPatient({ cityblockId: 1, homeClinicId }, trx);
+  const email = await Email.create(createMockEmail(user.id), trx);
   const primaryEmail = await Email.create(
     { emailAddress: 'primary@email.com', updatedById: user.id },
-    txn,
+    trx,
   );
-  await PatientEmail.create({ emailId: email.id, patientId: patient.id }, txn);
-  await PatientEmail.create({ emailId: primaryEmail.id, patientId: patient.id }, txn);
+  await PatientEmail.create({ emailId: email.id, patientId: patient.id }, trx);
+  await PatientEmail.create({ emailId: primaryEmail.id, patientId: patient.id }, trx);
   await PatientInfo.edit(
     { primaryEmailId: primaryEmail.id, updatedById: user.id },
     patient.patientInfo.id,
-    txn,
+    trx,
   );
 
   return { patient, user, email, primaryEmail };
 }
 
 describe('email resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -73,38 +78,36 @@ describe('email resolver', () => {
 
   describe('get all patient emails', async () => {
     it('should get all patient emails', async () => {
-      await transaction(Email.knex(), async txn => {
-        const { primaryEmail, email, patient, user } = await setup(txn);
-        const query = `{
+      const { primaryEmail, email, patient, user } = await setup(txn);
+      const query = `{
           patientEmails(patientId: "${patient.id}") {
             id, emailAddress, description
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-        expect(cloneDeep(result.data!.patientEmails)).toHaveLength(2);
-        expect(cloneDeep(result.data!.patientEmails)).toContainEqual(
-          expect.objectContaining({
-            id: primaryEmail.id,
-            emailAddress: primaryEmail.emailAddress,
-            description: primaryEmail.description,
-          }),
-        );
-        expect(cloneDeep(result.data!.patientEmails)).toContainEqual(
-          expect.objectContaining({
-            id: email.id,
-            emailAddress: email.emailAddress,
-            description: email.description,
-          }),
-        );
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+      expect(cloneDeep(result.data!.patientEmails)).toHaveLength(2);
+      expect(cloneDeep(result.data!.patientEmails)).toContainEqual(
+        expect.objectContaining({
+          id: primaryEmail.id,
+          emailAddress: primaryEmail.emailAddress,
+          description: primaryEmail.description,
+        }),
+      );
+      expect(cloneDeep(result.data!.patientEmails)).toContainEqual(
+        expect.objectContaining({
+          id: email.id,
+          emailAddress: email.emailAddress,
+          description: email.description,
+        }),
+      );
+      expect(log).toBeCalled();
     });
   });
 });

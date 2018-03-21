@@ -21,13 +21,13 @@ interface ISetup {
 const userRole = 'physician';
 const permissions = 'green';
 
-async function setup(txn: Transaction): Promise<ISetup> {
+async function setup(trx: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
-      name: 'cool clinic',
+      name: 'cool clinic - patient address',
       departmentId: 1,
     },
-    txn,
+    trx,
   );
   const homeClinicId = homeClinic.id;
   const user = await User.create(
@@ -38,30 +38,35 @@ async function setup(txn: Transaction): Promise<ISetup> {
       userRole,
       homeClinicId,
     },
-    txn,
+    trx,
   );
-  const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
-  const address = await Address.create(createMockAddress(user.id), txn);
-  const primaryAddress = await Address.create({ zip: '11111', updatedById: user.id }, txn);
-  await PatientAddress.create({ addressId: address.id, patientId: patient.id }, txn);
-  await PatientAddress.create({ addressId: primaryAddress.id, patientId: patient.id }, txn);
+  const patient = await createPatient({ cityblockId: 1, homeClinicId }, trx);
+  const address = await Address.create(createMockAddress(user.id), trx);
+  const primaryAddress = await Address.create({ zip: '11111', updatedById: user.id }, trx);
+  await PatientAddress.create({ addressId: address.id, patientId: patient.id }, trx);
+  await PatientAddress.create({ addressId: primaryAddress.id, patientId: patient.id }, trx);
   await PatientInfo.edit(
     { primaryAddressId: primaryAddress.id, updatedById: user.id },
     patient.patientInfo.id,
-    txn,
+    trx,
   );
 
   return { patient, user, address, primaryAddress };
 }
 
 describe('address resolver', () => {
-  let db: Db;
   const log = jest.fn();
   const logger = { log };
+  let txn = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -70,39 +75,37 @@ describe('address resolver', () => {
 
   describe('get all patient addresses', async () => {
     it('should get all patient addresses', async () => {
-      await transaction(Address.knex(), async txn => {
-        const { primaryAddress, address, patient, user } = await setup(txn);
-        const query = `{
+      const { primaryAddress, address, patient, user } = await setup(txn);
+      const query = `{
           patientAddresses(patientId: "${patient.id}") {
             id, zip, description
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientAddresses)).toHaveLength(2);
-        expect(cloneDeep(result.data!.patientAddresses)).toContainEqual(
-          expect.objectContaining({
-            id: primaryAddress.id,
-            zip: primaryAddress.zip,
-            description: primaryAddress.description,
-          }),
-        );
-        expect(cloneDeep(result.data!.patientAddresses)).toContainEqual(
-          expect.objectContaining({
-            id: address.id,
-            zip: address.zip,
-            description: address.description,
-          }),
-        );
-        expect(log).toBeCalled();
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
       });
+
+      expect(cloneDeep(result.data!.patientAddresses)).toHaveLength(2);
+      expect(cloneDeep(result.data!.patientAddresses)).toContainEqual(
+        expect.objectContaining({
+          id: primaryAddress.id,
+          zip: primaryAddress.zip,
+          description: primaryAddress.description,
+        }),
+      );
+      expect(cloneDeep(result.data!.patientAddresses)).toContainEqual(
+        expect.objectContaining({
+          id: address.id,
+          zip: address.zip,
+          description: address.description,
+        }),
+      );
+      expect(log).toBeCalled();
     });
   });
 });

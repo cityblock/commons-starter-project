@@ -94,11 +94,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('patient task suggestion resolver tests', () => {
+  let txn = null as any;
   let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
-    await Db.clear();
+    txn = await transaction.start(User.knex());
+  });
+
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   afterAll(async () => {
@@ -107,17 +112,16 @@ describe('patient task suggestion resolver tests', () => {
 
   describe('resolvePatientTaskSuggestions', () => {
     it('can get patient task suggestions for a patient', async () => {
-      await transaction(PatientTaskSuggestion.knex(), async txn => {
-        const { user, patient, taskTemplate } = await setup(txn);
-        const suggestion = await PatientTaskSuggestion.create(
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplate.id,
-          },
-          txn,
-        );
+      const { user, patient, taskTemplate } = await setup(txn);
+      const suggestion = await PatientTaskSuggestion.create(
+        {
+          patientId: patient.id,
+          taskTemplateId: taskTemplate.id,
+        },
+        txn,
+      );
 
-        const query = `{
+      const query = `{
           patientTaskSuggestions(patientId: "${patient.id}") {
             id
             patient {
@@ -128,40 +132,38 @@ describe('patient task suggestion resolver tests', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.patientTaskSuggestions)).toMatchObject([
-          {
-            id: suggestion.id,
-            patient: {
-              id: patient.id,
-            },
-            taskTemplate: {
-              id: taskTemplate.id,
-            },
-          },
-        ]);
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
       });
+      expect(cloneDeep(result.data!.patientTaskSuggestions)).toMatchObject([
+        {
+          id: suggestion.id,
+          patient: {
+            id: patient.id,
+          },
+          taskTemplate: {
+            id: taskTemplate.id,
+          },
+        },
+      ]);
     });
   });
 
   describe('patientTaskSuggestionDismiss', () => {
     it('dismisses a carePlanSuggestion', async () => {
-      await transaction(PatientTaskSuggestion.knex(), async txn => {
-        const { user, patient, taskTemplate } = await setup(txn);
-        const suggestion = await PatientTaskSuggestion.create(
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplate.id,
-          },
-          txn,
-        );
+      const { user, patient, taskTemplate } = await setup(txn);
+      const suggestion = await PatientTaskSuggestion.create(
+        {
+          patientId: patient.id,
+          taskTemplateId: taskTemplate.id,
+        },
+        txn,
+      );
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientTaskSuggestionDismiss(
             input: { patientTaskSuggestionId: "${suggestion.id}", dismissedReason: "Because" }
           ) {
@@ -170,143 +172,138 @@ describe('patient task suggestion resolver tests', () => {
             dismissedReason
           }
         }`;
-        const result = await graphql(schema, mutation, null, {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        });
-        expect(cloneDeep(result.data!.patientTaskSuggestionDismiss)).toMatchObject({
-          taskTemplateId: taskTemplate.id,
-          dismissedById: user.id,
-          dismissedReason: 'Because',
-        });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.patientTaskSuggestionDismiss)).toMatchObject({
+        taskTemplateId: taskTemplate.id,
+        dismissedById: user.id,
+        dismissedReason: 'Because',
       });
     });
   });
 
   describe('patientTaskSuggestionAccept', () => {
     it('accepts a patient task suggestion and creates new task', async () => {
-      await transaction(PatientTaskSuggestion.knex(), async txn => {
-        const { user, patient, taskTemplate } = await setup(txn);
-        const suggestion = await PatientTaskSuggestion.create(
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplate.id,
-          },
-          txn,
-        );
-        expect(suggestion.acceptedAt).toBeFalsy();
-        const tasks = await Task.getPatientTasks(
-          patient.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-            orderBy: 'createdAt',
-            order: 'asc',
-          },
-          txn,
-        );
-        expect(tasks.total).toBe(0);
+      const { user, patient, taskTemplate } = await setup(txn);
+      const suggestion = await PatientTaskSuggestion.create(
+        {
+          patientId: patient.id,
+          taskTemplateId: taskTemplate.id,
+        },
+        txn,
+      );
+      expect(suggestion.acceptedAt).toBeFalsy();
+      const tasks = await Task.getPatientTasks(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+          orderBy: 'createdAt',
+          order: 'asc',
+        },
+        txn,
+      );
+      expect(tasks.total).toBe(0);
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientTaskSuggestionAccept(
             input: { patientTaskSuggestionId: "${suggestion.id}" }
           ) {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
-        const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
-        expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
+      const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
+      expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
 
-        const fetchedTasks = await Task.getPatientTasks(
-          patient.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-            orderBy: 'createdAt',
-            order: 'asc',
-          },
-          txn,
-        );
+      const fetchedTasks = await Task.getPatientTasks(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+          orderBy: 'createdAt',
+          order: 'asc',
+        },
+        txn,
+      );
 
-        expect(fetchedTasks.total).toBe(1);
-        expect(fetchedTasks.results[0].CBOReferralId).toBeFalsy();
-      });
+      expect(fetchedTasks.total).toBe(1);
+      expect(fetchedTasks.results[0].CBOReferralId).toBeFalsy();
     });
 
     it('accepts a patient CBO task suggestion and creates new task', async () => {
-      await transaction(PatientTaskSuggestion.knex(), async txn => {
-        const { user, patient, answer } = await setup(txn);
-        const CBOCategory = await createCBOCategory(txn);
-        const taskTemplateCBO = await TaskTemplate.create(
-          {
-            title: 'Refer to Dragon Training',
-            repeating: false,
-            priority: 'high',
-            careTeamAssigneeRole: 'physician',
-            CBOCategoryId: CBOCategory.id,
-          },
-          txn,
-        );
-        await TaskSuggestion.create(
-          {
-            answerId: answer.id,
-            taskTemplateId: taskTemplateCBO.id,
-          },
-          txn,
-        );
+      const { user, patient, answer } = await setup(txn);
+      const CBOCategory = await createCBOCategory(txn);
+      const taskTemplateCBO = await TaskTemplate.create(
+        {
+          title: 'Refer to Dragon Training',
+          repeating: false,
+          priority: 'high',
+          careTeamAssigneeRole: 'physician',
+          CBOCategoryId: CBOCategory.id,
+        },
+        txn,
+      );
+      await TaskSuggestion.create(
+        {
+          answerId: answer.id,
+          taskTemplateId: taskTemplateCBO.id,
+        },
+        txn,
+      );
 
-        const suggestion = await PatientTaskSuggestion.create(
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplateCBO.id,
-          },
-          txn,
-        );
-        expect(suggestion.acceptedAt).toBeFalsy();
-        const tasks = await Task.getPatientTasks(
-          patient.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-            orderBy: 'createdAt',
-            order: 'asc',
-          },
-          txn,
-        );
-        expect(tasks.total).toBe(0);
+      const suggestion = await PatientTaskSuggestion.create(
+        {
+          patientId: patient.id,
+          taskTemplateId: taskTemplateCBO.id,
+        },
+        txn,
+      );
+      expect(suggestion.acceptedAt).toBeFalsy();
+      const tasks = await Task.getPatientTasks(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+          orderBy: 'createdAt',
+          order: 'asc',
+        },
+        txn,
+      );
+      expect(tasks.total).toBe(0);
 
-        const mutation = `mutation {
+      const mutation = `mutation {
           patientTaskSuggestionAccept(
             input: { patientTaskSuggestionId: "${suggestion.id}" }
           ) {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
-        const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
-        expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
+      const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
+      expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
 
-        const fetchedTasks = await Task.getPatientTasks(
-          patient.id,
-          {
-            pageNumber: 0,
-            pageSize: 10,
-            orderBy: 'createdAt',
-            order: 'asc',
-          },
-          txn,
-        );
+      const fetchedTasks = await Task.getPatientTasks(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+          orderBy: 'createdAt',
+          order: 'asc',
+        },
+        txn,
+      );
 
-        expect(fetchedTasks.total).toBe(1);
-        expect(fetchedTasks.results[0].title).toBe(CBO_REFERRAL_ACTION_TITLE);
-        expect(fetchedTasks.results[0].CBOReferralId).toBeTruthy();
-        expect(fetchedTasks.results[0].CBOReferral!.categoryId).toBe(CBOCategory.id);
-      });
+      expect(fetchedTasks.total).toBe(1);
+      expect(fetchedTasks.results[0].title).toBe(CBO_REFERRAL_ACTION_TITLE);
+      expect(fetchedTasks.results[0].CBOReferralId).toBeTruthy();
+      expect(fetchedTasks.results[0].CBOReferral!.categoryId).toBe(CBOCategory.id);
     });
   });
 });

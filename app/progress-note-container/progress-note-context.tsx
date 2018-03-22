@@ -28,7 +28,6 @@ import {
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
-import ScreeningToolDropdown from './screening-tool-dropdown';
 
 interface IProps {
   disabled: boolean;
@@ -257,13 +256,6 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         <Icon name={'keyboardArrowRight'} className={styles.icon} />
       </Link>
     );
-    const screeningToolDropdown = disabled ? null : (
-      <React.Fragment>
-        <ScreeningToolDropdown patientId={progressNote.patientId} close={close} />
-        <br />
-        <br />
-      </React.Fragment>
-    );
     const linkToActivity = disabled ? null : (
       <Link
         to={`/patients/${progressNote.patientId}/map/active`}
@@ -317,7 +309,6 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
             />
             {linkTo360}
           </div>
-          {screeningToolDropdown}
           <Textarea
             disabled={disabled}
             value={progressNoteMemberConcern || ''}

@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router';
 import * as patientsForComputedListQuery from '../graphql/queries/get-patients-for-computed-list.graphql';
 import * as patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
+import * as patientsWithAssignedStateQuery from '../graphql/queries/get-patients-with-assigned-state.graphql';
 import * as patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
 import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
 import * as patientsWithOpenCBOReferralsQuery from '../graphql/queries/get-patients-with-open-cbo-referrals.graphql';
@@ -13,6 +14,7 @@ import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-w
 import {
   getPatientsForComputedListQuery,
   getPatientsNewToCareTeamQuery,
+  getPatientsWithAssignedStateQuery,
   getPatientsWithMissingInfoQuery,
   getPatientsWithNoRecentEngagementQuery,
   getPatientsWithOpenCBOReferralsQuery,
@@ -44,7 +46,8 @@ export type PatientResults =
   | getPatientsWithNoRecentEngagementQuery['patientsWithNoRecentEngagement']
   | getPatientsWithOutOfDateMAPQuery['patientsWithOutOfDateMAP']
   | getPatientsWithOpenCBOReferralsQuery['patientsWithOpenCBOReferrals']
-  | getPatientsForComputedListQuery['patientsForComputedList'];
+  | getPatientsForComputedListQuery['patientsForComputedList']
+  | getPatientsWithAssignedStateQuery['patientsWithAssignedState'];
 
 export interface IInjectedProps {
   loading: boolean;
@@ -155,6 +158,18 @@ const fetchPatientList = () => <P extends {}>(
           loading: data ? data.loading : false,
           error: data ? data.error : null,
           patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithAssignedStateQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'assigned',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithAssignedState : null,
         }),
       },
     ),

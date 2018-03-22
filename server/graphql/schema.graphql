@@ -2621,6 +2621,8 @@ type RootQueryType {
   patientsWithOutOfDateMAP(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - open CBO referrals
   patientsWithOpenCBOReferrals(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - assigned state
+  patientsWithAssignedState(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - computed list for answer
   patientsForComputedList(
     answerId: ID!

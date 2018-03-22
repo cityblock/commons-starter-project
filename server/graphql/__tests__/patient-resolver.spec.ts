@@ -7,6 +7,7 @@ import * as getPatientSearch from '../../../app/graphql/queries/get-patient-sear
 import * as getPatient from '../../../app/graphql/queries/get-patient.graphql';
 import * as patientForComputedList from '../../../app/graphql/queries/get-patients-for-computed-list.graphql';
 import * as patientsNewToCareTeam from '../../../app/graphql/queries/get-patients-new-to-care-team.graphql';
+import * as patientsWithAssignedState from '../../../app/graphql/queries/get-patients-with-assigned-state.graphql';
 import * as patientsWithMissingInfo from '../../../app/graphql/queries/get-patients-with-missing-info.graphql';
 import * as patientsWithNoRecentEngagement from '../../../app/graphql/queries/get-patients-with-no-recent-engagement.graphql';
 import * as patientsWithOpenCBOReferrals from '../../../app/graphql/queries/get-patients-with-open-cbo-referrals.graphql';
@@ -24,6 +25,7 @@ import {
   setupComputedPatientList,
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
+  setupPatientsWithAssignedState,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
   setupPatientsWithOpenCBOReferrals,
@@ -148,6 +150,7 @@ describe('patient', () => {
   const patientsWithOutOfDateMAPQuery = print(patientsWithOutOfDateMAP);
   const patientsWithPendingSuggestionsQuery = print(patientsWithPendingSuggestions);
   const patientsWithUrgentTasksQuery = print(patientsWithUrgentTasks);
+  const patientsWithAssignedStateQuery = print(patientsWithAssignedState);
 
   beforeAll(async () => {
     db = await Db.get();
@@ -827,6 +830,27 @@ describe('patient', () => {
 
     expect(result.data!.patientsNewToCareTeam.totalCount).toBe(1);
     expect(result.data!.patientsNewToCareTeam.edges[0].node).toMatchObject({
+      id: patient1.id,
+      firstName: patient1.firstName,
+    });
+  });
+
+  it('gets patients that are in the assigned state', async () => {
+    const { user, patient1 } = await setupPatientsWithAssignedState(txn);
+    const result = await graphql(
+      schema,
+      patientsWithAssignedStateQuery,
+      null,
+      {
+        permissions,
+        userId: user.id,
+        txn,
+      },
+      { pageNumber: 0, pageSize: 10 },
+    );
+
+    expect(result.data!.patientsWithAssignedState.totalCount).toBe(1);
+    expect(result.data!.patientsWithAssignedState.edges[0].node).toMatchObject({
       id: patient1.id,
       firstName: patient1.firstName,
     });

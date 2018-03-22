@@ -298,6 +298,19 @@ export async function resolvePatientsWithOpenCBOReferrals(
   );
 }
 
+export async function resolvePatientsWithAssignedState(
+  root: any,
+  pageOptions: IPaginationOptions,
+  context: IContext,
+): Promise<IPatientForDashboardEdges> {
+  return resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithAssignedState,
+  );
+}
+
 export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,

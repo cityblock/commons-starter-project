@@ -9,6 +9,7 @@ import {
   setupComputedPatientList,
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
+  setupPatientsWithAssignedState,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
   setupPatientsWithOpenCBOReferrals,
@@ -931,6 +932,25 @@ describe('patient model', () => {
       const { user, patient1 } = await setupPatientsNewToCareTeam(txn);
 
       const { total, results } = await Patient.getPatientsNewToCareTeam(
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        user.id,
+        txn,
+      );
+
+      expect(total).toBe(1);
+      expect(results[0]).toMatchObject({
+        id: patient1.id,
+        firstName: patient1.firstName,
+      });
+    });
+
+    it('returns patients on care team that are in the assigned state', async () => {
+      const { user, patient1 } = await setupPatientsWithAssignedState(txn);
+
+      const { total, results } = await Patient.getPatientsWithAssignedState(
         {
           pageNumber: 0,
           pageSize: 10,

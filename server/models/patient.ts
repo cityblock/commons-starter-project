@@ -622,6 +622,21 @@ export default class Patient extends Model {
       .page(pageNumber, pageSize);
   }
 
+  static async getPatientsWithAssignedState(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .leftOuterJoinRelation('patientState')
+      .where('patientState.currentState', 'assigned')
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize) as any;
+  }
+
   static async getPatientsForComputedList(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,

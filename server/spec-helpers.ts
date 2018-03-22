@@ -589,6 +589,57 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   return { user, patient };
 }
 
+export async function setupPatientsWithAssignedState(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Pentos', 13), txn);
+  const user = await User.create(createMockUser(311, clinic.id), txn);
+  const user2 = await User.create(createMockUser(213, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  await PatientState.updateForPatient(
+    { patientId: patient1.id, updatedById: user.id, currentState: 'assigned' },
+    txn,
+  );
+
+  await PatientState.updateForPatient(
+    { patientId: patient2.id, updatedById: user.id, currentState: 'assigned' },
+    txn,
+  );
+
+  await PatientState.updateForPatient(
+    { patientId: patient3.id, updatedById: user.id, currentState: 'enrolled' },
+    txn,
+  );
+
+  return { patient1, user };
+}
+
 export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('The Dothraki Sea', 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);

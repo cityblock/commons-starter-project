@@ -70,6 +70,13 @@ export const DashboardNavigation: React.StatelessComponent<allProps> = (props: a
           isSelected={selected === 'new'}
           routeBase={ROUTE_BASE}
           icon="addCircle"
+          noDivider={selected === 'assigned'}
+        />
+        <NavigationItem
+          selected="assigned"
+          isSelected={selected === 'assigned'}
+          routeBase={ROUTE_BASE}
+          icon="assignment"
           noDivider={selected === 'suggestions'}
         />
         <NavigationItem

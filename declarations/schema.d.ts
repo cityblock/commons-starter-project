@@ -95,6 +95,11 @@ declare module 'schema' {
     patientsWithOpenCBOReferrals: IPatientForDashboardEdges;
 
     /**
+     * Patient dashboard - assigned state
+     */
+    patientsWithAssignedState: IPatientForDashboardEdges;
+
+    /**
      * Patient dashboard - computed list for answer
      */
     patientsForComputedList: IPatientForDashboardEdges;
@@ -614,6 +619,10 @@ declare module 'schema' {
     pageSize: number;
   }
   interface IPatientsWithOpenCBOReferralsOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithAssignedStateOnRootQueryTypeArguments {
     pageNumber: number;
     pageSize: number;
   }

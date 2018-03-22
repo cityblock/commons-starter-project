@@ -15,7 +15,8 @@ export type Selected =
   | 'engage'
   | 'updateMAP'
   | 'computed'
-  | 'loading';
+  | 'loading'
+  | 'assigned';
 
 interface IProps extends IInjectedProps {
   match: {

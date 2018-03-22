@@ -32,7 +32,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for task notifications', () => {
-    expect(wrapper.find(NavigationItem).length).toBe(7);
+    expect(wrapper.find(NavigationItem).length).toBe(8);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -113,13 +113,13 @@ describe('Dashboard Navigation', () => {
     ).toBe('addCircle');
   });
 
-  it('renders navigation item for pending MAP suggestions', () => {
+  it('renders navigation item for patients in assigned state', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
         .at(3)
         .props().selected,
-    ).toBe('suggestions');
+    ).toBe('assigned');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -136,6 +136,33 @@ describe('Dashboard Navigation', () => {
       wrapper
         .find<IProps>(NavigationItem)
         .at(3)
+        .props().icon,
+    ).toBe('assignment');
+  });
+
+  it('renders navigation item for pending MAP suggestions', () => {
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().selected,
+    ).toBe('suggestions');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
         .props().icon,
     ).toBe('playlistAdd');
   });
@@ -144,25 +171,25 @@ describe('Dashboard Navigation', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(5)
         .props().selected,
     ).toBe('demographics');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(5)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(5)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(5)
         .props().icon,
     ).toBe('infoOutline');
   });
@@ -171,25 +198,25 @@ describe('Dashboard Navigation', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(6)
         .props().selected,
     ).toBe('engage');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(6)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(6)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(6)
         .props().icon,
     ).toBe('syncProblem');
   });
@@ -198,25 +225,25 @@ describe('Dashboard Navigation', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(7)
         .props().selected,
     ).toBe('updateMAP');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(7)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(7)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(7)
         .props().icon,
     ).toBe('accessAlarms');
   });

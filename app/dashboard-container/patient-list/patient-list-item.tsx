@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import { History } from 'history';
+import { capitalize } from 'lodash';
 import * as React from 'react';
 import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
@@ -75,6 +76,7 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
       </div>
       <div className={styles.info}>
         <p>CBH-1234567</p>
+        <p>{capitalize(patient.patientState.currentState)}</p>
         {itemBody}
         <div onClick={redirectToPatient} className={styles.profileLink}>
           <Icon name="keyboardArrowRight" className={styles.arrow} />

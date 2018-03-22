@@ -3448,6 +3448,38 @@ export interface getPatientsNewToCareTeamQuery {
   },
 };
 
+export interface getPatientsWithAssignedStateQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithAssignedStateQuery {
+  // Patient dashboard - assigned state
+  patientsWithAssignedState:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        patientInfo:  {
+          gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
+        },
+        patientState:  {
+          id: string,
+          currentState: CurrentPatientState,
+        },
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
 export interface getPatientsWithMissingInfoQueryVariables {
   pageNumber: number,
   pageSize: number,

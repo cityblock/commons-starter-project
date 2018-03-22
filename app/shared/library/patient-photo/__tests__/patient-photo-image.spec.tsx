@@ -1,27 +1,27 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PatientPhotoLarge from '../patient-photo-large';
+import PatientPhotoImage from '../patient-photo-image';
 
 describe('Library Patient Photo large component', () => {
   const className = 'blueEyesWhiteDragon';
 
-  const wrapper = shallow(<PatientPhotoLarge imgUrl={null} gender={null} />);
+  const wrapper = shallow(<PatientPhotoImage imgUrl={null} gender={null} type="large" />);
 
   it('renders unspecified missing avatar if no gender or image url', () => {
-    expect(wrapper.find('div').props().className).toBe('img unspecified');
+    expect(wrapper.find('div').props().className).toBe('large unspecified');
 
     expect(wrapper.find('img').length).toBe(0);
   });
 
   it('renders div with correct missing avatar for gender no image url present', () => {
     wrapper.setProps({ gender: 'female' });
-    expect(wrapper.find('div').props().className).toBe('img female');
+    expect(wrapper.find('div').props().className).toBe('large female');
   });
 
   it('applies custom styles if specified', () => {
     wrapper.setProps({ className });
 
-    expect(wrapper.find('div').props().className).toBe(`img female ${className}`);
+    expect(wrapper.find('div').props().className).toBe(`large female ${className}`);
   });
 
   it('renders image with image url if one present', () => {
@@ -29,7 +29,13 @@ describe('Library Patient Photo large component', () => {
     wrapper.setProps({ imgUrl });
 
     expect(wrapper.find('img').props().src).toBe(imgUrl);
-    expect(wrapper.find('img').props().className).toBe(`img ${className}`);
+    expect(wrapper.find('img').props().className).toBe(`large ${className}`);
     expect(wrapper.find('div').length).toBe(0);
+  });
+
+  it('applices circular styles if circle type', () => {
+    wrapper.setProps({ type: 'circle' });
+
+    expect(wrapper.find('img').props().className).toBe(`circle ${className}`);
   });
 });

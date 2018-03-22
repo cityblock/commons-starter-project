@@ -1,19 +1,28 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { Gender } from '../../../graphql/types';
-import * as styles from './css/patient-photo-large.css';
+import * as styles from './css/patient-photo-image.css';
+import { PhotoType } from './patient-photo';
 
 interface IProps {
   imgUrl: string | null;
   gender: Gender | null;
   className?: string | null;
+  type: PhotoType;
 }
 
-const PatientPhotoLarge: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { imgUrl, gender, className } = props;
+const PatientPhotoImage: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { imgUrl, gender, className, type } = props;
 
   if (imgUrl) {
-    const imgStyles = classNames(styles.img, className);
+    const imgStyles = classNames(
+      {
+        [styles.large]: type === 'large',
+        [styles.circle]: type === 'circle',
+      },
+      className,
+    );
+
     return <img src={imgUrl} className={imgStyles} />;
   }
 
@@ -21,8 +30,9 @@ const PatientPhotoLarge: React.StatelessComponent<IProps> = (props: IProps) => {
   const isMale = gender === 'male';
 
   const missingStyles = classNames(
-    styles.img,
     {
+      [styles.large]: type === 'large',
+      [styles.circleSvg]: type === 'circle',
       [styles.male]: isMale,
       [styles.female]: isFemale,
       [styles.unspecified]: !isFemale && !isMale,
@@ -33,4 +43,4 @@ const PatientPhotoLarge: React.StatelessComponent<IProps> = (props: IProps) => {
   return <div className={missingStyles} />;
 };
 
-export default PatientPhotoLarge;
+export default PatientPhotoImage;

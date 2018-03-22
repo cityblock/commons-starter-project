@@ -7,6 +7,7 @@ fragment FullPatientForDashboard on PatientForDashboard {
   dateOfBirth
   patientInfo {
     gender
+    hasUploadedPhoto
   }
   patientState {
     ...ShortPatientState

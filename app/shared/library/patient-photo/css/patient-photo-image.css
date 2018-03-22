@@ -1,0 +1,46 @@
+.large {
+  width: 112px;
+  height: 150px;
+}
+
+.circle,
+.circleSvg {
+  height: var(--medium-gutter);
+  width: var(--medium-gutter);
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+}
+
+.circle {
+  object-fit: cover;
+}
+
+.circleSvg {
+  background-size: 100% 100%;
+}
+
+.male {
+  background-image: url('../../../../assets/missing-avatar-male.svg');
+}
+
+.female {
+  background-image: url('../../../../assets/missing-avatar-female.svg');
+}
+
+.unspecified {
+  background-image: url('../../../../assets/missing-avatar-unspecified.svg');
+}
+
+.male,
+.female,
+.unspecified {
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+}
+
+.large.male,
+.large.female,
+.large.unspecified {
+  min-width: 112px;
+  height: 150px;
+}

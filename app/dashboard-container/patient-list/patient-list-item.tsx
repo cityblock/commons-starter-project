@@ -5,9 +5,9 @@ import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
-import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
 import PatientAge from '../../shared/library/patient-age/patient-age';
+import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import PatientTaskCount from '../tasks/patient-task-count';
 import * as styles from './css/patient-list-item.css';
 
@@ -51,19 +51,26 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
     containerProps.onClick = redirectToPatient;
   }
 
+  const { gender, hasUploadedPhoto } = patient.patientInfo;
+
   const itemBody = !!taskView ? (
     <PatientTaskCount
       tasksDueCount={tasksDueCount as number | null}
       notificationsCount={notificationsCount as number | null}
     />
   ) : (
-    <PatientAge dateOfBirth={patient.dateOfBirth} gender={patient.patientInfo.gender} />
+    <PatientAge dateOfBirth={patient.dateOfBirth} gender={gender} />
   );
 
   return (
     <div {...containerProps}>
       <div className={styles.patient}>
-        <Avatar borderColor="lightGray" />
+        <PatientPhoto
+          patientId={patient.id}
+          gender={gender}
+          hasUploadedPhoto={!!hasUploadedPhoto}
+          type="circle"
+        />
         <h4>{formatFullName(patient.firstName, patient.lastName)}</h4>
       </div>
       <div className={styles.info}>

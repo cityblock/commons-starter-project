@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
-import Avatar from '../../../shared/library/avatar/avatar';
 import Icon from '../../../shared/library/icon/icon';
 import PatientAge from '../../../shared/library/patient-age/patient-age';
+import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import { patient } from '../../../shared/util/test-data';
 import PatientTaskCount from '../../tasks/patient-task-count';
 import { PatientListItem } from '../patient-list-item';
@@ -25,9 +25,14 @@ describe('Dashboard Patient List Item', () => {
     ).toBe('container');
   });
 
-  it('renders image of patient avatar', () => {
-    expect(wrapper.find(Avatar).length).toBe(1);
-    expect(wrapper.find(Avatar).props().borderColor).toBe('lightGray');
+  it('renders patient profile photo', () => {
+    expect(wrapper.find(PatientPhoto).length).toBe(1);
+    expect(wrapper.find(PatientPhoto).props().patientId).toBe(patient.id);
+    expect(wrapper.find(PatientPhoto).props().type).toBe('circle');
+    expect(wrapper.find(PatientPhoto).props().gender).toBe(patient.patientInfo.gender);
+    expect(wrapper.find(PatientPhoto).props().hasUploadedPhoto).toBe(
+      patient.patientInfo.hasUploadedPhoto,
+    );
   });
 
   it('renders patient full name', () => {

@@ -3390,6 +3390,7 @@ export interface getPatientsForComputedListQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3421,6 +3422,7 @@ export interface getPatientsNewToCareTeamQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3452,6 +3454,7 @@ export interface getPatientsWithMissingInfoQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3483,6 +3486,7 @@ export interface getPatientsWithNoRecentEngagementQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3514,6 +3518,7 @@ export interface getPatientsWithOpenCBOReferralsQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3545,6 +3550,7 @@ export interface getPatientsWithOutOfDateMAPQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3576,6 +3582,7 @@ export interface getPatientsWithPendingSuggestionsQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -3607,6 +3614,7 @@ export interface getPatientsWithUrgentTasksQuery {
         dateOfBirth: string | null,
         patientInfo:  {
           gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
         },
         patientState:  {
           id: string,
@@ -11048,6 +11056,7 @@ export interface FullPatientForDashboardFragment {
   dateOfBirth: string | null,
   patientInfo:  {
     gender: Gender | null,
+    hasUploadedPhoto: boolean | null,
   },
   patientState:  {
     id: string,

@@ -7,13 +7,16 @@ import {
   Gender,
   PatientPhotoSignedUrlAction,
 } from '../../../graphql/types';
-import PatientPhotoLarge from './patient-photo-large';
+import PatientPhotoImage from './patient-photo-image';
+
+export type PhotoType = 'large' | 'circle';
 
 interface IProps {
   patientId: string;
   hasUploadedPhoto: boolean;
   gender: Gender | null;
   className?: string | null;
+  type?: PhotoType; // default is large
 }
 
 interface IGraphqlProps {
@@ -55,9 +58,16 @@ export class PatientPhoto extends React.Component<allProps, IState> {
 
   render(): JSX.Element | null {
     const { imgUrl } = this.state;
-    const { gender, className } = this.props;
+    const { gender, className, type } = this.props;
 
-    return <PatientPhotoLarge imgUrl={imgUrl} gender={gender} className={className || null} />;
+    return (
+      <PatientPhotoImage
+        imgUrl={imgUrl}
+        gender={gender}
+        className={className || null}
+        type={type || 'large'}
+      />
+    );
   }
 }
 

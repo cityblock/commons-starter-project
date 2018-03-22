@@ -402,7 +402,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         updatedById: user.id,
-        relationToPatient: 'sister',
+        relationToPatient: 'sibling',
         firstName: 'Aya',
         lastName: 'Stark',
         isEmergencyContact: false,
@@ -419,7 +419,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         updatedById: user.id,
-        relationToPatient: 'sister',
+        relationToPatient: 'sibling',
         firstName: 'Aya',
         lastName: 'Stark',
         isEmergencyContact: true,
@@ -654,7 +654,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sister',
+            relationToPatient: 'sibling',
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -745,7 +745,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sister',
+            relationToPatient: 'sibling',
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -809,7 +809,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sister',
+            relationToPatient: 'sibling',
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -862,7 +862,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sister',
+            relationToPatient: 'sibling',
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,

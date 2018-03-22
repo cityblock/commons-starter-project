@@ -1,6 +1,10 @@
+import * as classNames from 'classnames';
+import { values } from 'lodash';
 import * as React from 'react';
+import { PatientRelationOptions } from '../../graphql/types';
 import FormLabel from '../library/form-label/form-label';
 import * as styles from '../library/form/css/form.css';
+import Select from '../library/select/select';
 import TextInput from '../library/text-input/text-input';
 
 interface IProps {
@@ -9,6 +13,7 @@ interface IProps {
   firstName?: string | null;
   lastName?: string | null;
   relationToPatient?: string | null;
+  relationFreeText?: string | null;
   description?: string | null;
   onChange: (e?: any) => void;
   hasFieldError: { [key: string]: boolean };
@@ -22,15 +27,18 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
     firstName,
     lastName,
     relationToPatient,
+    relationFreeText,
     description,
     hasFieldError,
   } = props;
+
+  const isOtherRelation = relationToPatient === 'other';
 
   return (
     <div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <FormLabel messageId="patientContact.firstName" />
+          <FormLabel messageId="patientContact.firstName" className={styles.required} />
           <TextInput
             name="firstName"
             value={firstName || ''}
@@ -42,7 +50,7 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
         </div>
 
         <div className={styles.field}>
-          <FormLabel messageId="patientContact.lastName" />
+          <FormLabel messageId="patientContact.lastName" className={styles.required} />
           <TextInput
             name="lastName"
             value={lastName || ''}
@@ -54,21 +62,38 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
         </div>
       </div>
 
-      <div className={styles.field}>
-        <FormLabel messageId="patientContact.relationToPatient" />
-        <TextInput
-          name="relationToPatient"
-          value={relationToPatient || ''}
-          onChange={onChange}
-          required={true}
-          errorMessageId="patientContact.fieldEmptyError"
-          hasError={hasFieldError.relationToPatient}
-        />
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <FormLabel messageId="patientContact.relationToPatient" className={styles.required} />
+          <Select
+            name="relationToPatient"
+            value={relationToPatient || ''}
+            hasPlaceholder={true}
+            onChange={onChange}
+            required={true}
+            errorMessageId="patientContact.fieldEmptyError"
+            hasError={hasFieldError.relationToPatient}
+            options={values(PatientRelationOptions)}
+            large={true}
+          />
+        </div>
+
+        <div className={classNames(styles.field, { [styles.hidden]: !isOtherRelation })}>
+          <FormLabel messageId="patientContact.relationFreeText" className={styles.required} />
+          <TextInput
+            name="relationFreeText"
+            value={relationFreeText || ''}
+            onChange={onChange}
+            required={true}
+            errorMessageId="patientContact.fieldEmptyError"
+            hasError={hasFieldError.relationFreeText}
+          />
+        </div>
       </div>
 
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <FormLabel messageId="patientContact.phoneNumber" />
+          <FormLabel messageId="patientContact.phoneNumber" className={styles.required} />
           <TextInput
             name="phoneNumber"
             value={phoneNumber || ''}

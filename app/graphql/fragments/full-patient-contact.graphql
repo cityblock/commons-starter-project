@@ -4,6 +4,7 @@ fragment FullPatientContact on PatientContact {
   id
   patientId
   relationToPatient
+  relationFreeText
   firstName
   lastName
   isEmergencyContact

@@ -43,11 +43,17 @@ export class CreatePatientContactModal extends React.Component<allProps> {
       contactType,
     } = this.props;
 
+    let relationFreeText = null;
+    if (contact.relationToPatient === 'other') {
+      relationFreeText = contact.relationFreeText;
+    }
+
     // create patient contact heathcare proxy
     const response = await createPatientContactMutation({
       variables: {
         ...contact,
         patientId,
+        relationFreeText,
       },
     });
 

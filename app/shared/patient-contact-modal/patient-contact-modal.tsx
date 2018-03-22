@@ -1,6 +1,6 @@
 import { get, isNil } from 'lodash';
 import * as React from 'react';
-import { AddressInput, EmailInput, PhoneInput } from '../../graphql/types';
+import { AddressInput, EmailInput, PatientRelationOptions, PhoneInput } from '../../graphql/types';
 import Modal from '../library/modal/modal';
 import PatientFamilyMemberForm from './patient-family-member-form';
 import PatientProxyForm from './patient-proxy-form';
@@ -10,7 +10,8 @@ export type ContactType = 'healthcareProxy' | 'familyMember' | 'emergencyContact
 export interface IPatientContact {
   firstName: string;
   lastName: string;
-  relationToPatient: string;
+  relationToPatient: PatientRelationOptions;
+  relationFreeText?: string | null;
   phone: PhoneInput;
   email?: EmailInput | null;
   address?: AddressInput | null;
@@ -35,6 +36,7 @@ interface IEditableFieldState {
   firstName?: string | null;
   lastName?: string | null;
   relationToPatient?: string | null;
+  relationFreeText?: string | null;
   description?: string | null;
   emailAddress?: string | null;
   phoneNumber?: string | null;
@@ -62,6 +64,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       firstName: patientContact.firstName,
       lastName: patientContact.lastName,
       relationToPatient: patientContact.relationToPatient,
+      relationFreeText: patientContact.relationFreeText,
       description: patientContact.description,
       emailAddress: get(patientContact, 'email.emailAddress'),
       phoneNumber: get(patientContact, 'phone.phoneNumber'),
@@ -84,6 +87,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
         firstName: patientContact.firstName,
         lastName: patientContact.lastName,
         relationToPatient: patientContact.relationToPatient,
+        relationFreeText: patientContact.relationFreeText,
         description: patientContact.description,
         emailAddress: get(patientContact, 'email.emailAddress'),
         phoneNumber: get(patientContact, 'phone.phoneNumber'),
@@ -112,6 +116,11 @@ class PatientContactModal extends React.Component<IProps, allState> {
         errors[fieldName] = true;
       }
     });
+
+    // if other is selected for role, the user must provide text for the other role
+    if (this.state.relationToPatient === 'other' && !this.state.relationFreeText) {
+      errors.relationFreeText = true;
+    }
 
     this.setState({ hasFieldError: errors });
     return !!Object.keys(errors).length;
@@ -151,6 +160,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       firstName,
       lastName,
       relationToPatient,
+      relationFreeText,
       phoneNumber,
       emailAddress,
       description,
@@ -173,6 +183,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       canContact,
       email: isNil(emailAddress) ? null : { emailAddress },
       address: this.getContactAddress(),
+      relationFreeText,
     } as any;
 
     if (contactType === 'healthcareProxy') {
@@ -209,6 +220,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       firstName,
       lastName,
       relationToPatient,
+      relationFreeText,
       description,
       canContact,
       isEmergencyContact,
@@ -223,6 +235,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
           firstName={firstName}
           lastName={lastName}
           relationToPatient={relationToPatient}
+          relationFreeText={relationFreeText}
           description={description}
           onChange={this.handleChange}
           hasFieldError={hasFieldError || {}}
@@ -238,6 +251,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
         firstName={firstName}
         lastName={lastName}
         relationToPatient={relationToPatient}
+        relationFreeText={relationFreeText}
         description={description}
         isEmergencyContact={isEmergencyContact}
         canContact={canContact}

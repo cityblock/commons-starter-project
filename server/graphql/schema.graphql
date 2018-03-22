@@ -215,6 +215,20 @@ enum CurrentPatientState {
   ineligible
 }
 
+enum PatientRelationOptions {
+  parent
+  grandparent
+  child
+  sibling
+  grandchild
+  roommate
+  friend
+  neighbor
+  partner
+  spouse
+  other
+}
+
 enum ExternalProviderOptions {
   substanceUseCounselor
   therapistMentalHealth
@@ -374,7 +388,8 @@ type PatientInfo implements uniqueId {
 type PatientContact implements uniqueId {
   id: ID!
   patientId: ID!
-  relationToPatient: String!
+  relationToPatient: PatientRelationOptions!
+  relationFreeText: String
   firstName: String!
   lastName: String!
   isEmergencyContact: Boolean!
@@ -1591,7 +1606,8 @@ input PatientInfoEditInput {
 # params for creating a patient contact in the db
 input PatientContactCreateInput {
   patientId: ID!
-  relationToPatient: String!
+  relationToPatient: PatientRelationOptions!
+  relationFreeText: String
   firstName: String!
   lastName: String!
   phone: PhoneCreateInput!
@@ -1611,7 +1627,8 @@ input PatientContactDeleteInput {
 # params for editing a patient contact in the db
 input PatientContactEditInput {
   patientContactId: ID!
-  relationToPatient: String
+  relationToPatient: PatientRelationOptions
+  relationFreeText: String
   firstName: String
   lastName: String
   isEmergencyContact: Boolean

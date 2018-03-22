@@ -76,6 +76,21 @@ export enum AnswerTypeOptions {
 }
 
 
+export enum PatientRelationOptions {
+  child = "child",
+  friend = "friend",
+  grandchild = "grandchild",
+  grandparent = "grandparent",
+  neighbor = "neighbor",
+  other = "other",
+  parent = "parent",
+  partner = "partner",
+  roommate = "roommate",
+  sibling = "sibling",
+  spouse = "spouse",
+}
+
+
 export enum CoreIdentityOptions {
   dateOfBirth = "dateOfBirth",
   firstName = "firstName",
@@ -2565,7 +2580,8 @@ export interface getPatientContactHealthcareProxiesQuery {
   patientContactHealthcareProxies:  Array< {
     id: string,
     patientId: string,
-    relationToPatient: string,
+    relationToPatient: PatientRelationOptions,
+    relationFreeText: string | null,
     firstName: string,
     lastName: string,
     isEmergencyContact: boolean,
@@ -2604,7 +2620,8 @@ export interface getPatientContactsQuery {
   patientContacts:  Array< {
     id: string,
     patientId: string,
-    relationToPatient: string,
+    relationToPatient: PatientRelationOptions,
+    relationFreeText: string | null,
     firstName: string,
     lastName: string,
     isEmergencyContact: boolean,
@@ -6346,7 +6363,8 @@ export interface patientConsentFormDeleteMutation {
 
 export interface patientContactCreateMutationVariables {
   patientId: string,
-  relationToPatient: string,
+  relationToPatient: PatientRelationOptions,
+  relationFreeText?: string | null,
   firstName: string,
   lastName: string,
   phone: PhoneCreateInput,
@@ -6363,7 +6381,8 @@ export interface patientContactCreateMutation {
   patientContactCreate:  {
     id: string,
     patientId: string,
-    relationToPatient: string,
+    relationToPatient: PatientRelationOptions,
+    relationFreeText: string | null,
     firstName: string,
     lastName: string,
     isEmergencyContact: boolean,
@@ -6402,7 +6421,8 @@ export interface patientContactDeleteMutation {
   patientContactDelete:  {
     id: string,
     patientId: string,
-    relationToPatient: string,
+    relationToPatient: PatientRelationOptions,
+    relationFreeText: string | null,
     firstName: string,
     lastName: string,
     isEmergencyContact: boolean,
@@ -6434,7 +6454,8 @@ export interface patientContactDeleteMutation {
 
 export interface patientContactEditMutationVariables {
   patientContactId: string,
-  relationToPatient?: string | null,
+  relationToPatient?: PatientRelationOptions | null,
+  relationFreeText?: string | null,
   firstName?: string | null,
   lastName?: string | null,
   isEmergencyContact?: boolean | null,
@@ -6451,7 +6472,8 @@ export interface patientContactEditMutation {
   patientContactEdit:  {
     id: string,
     patientId: string,
-    relationToPatient: string,
+    relationToPatient: PatientRelationOptions,
+    relationFreeText: string | null,
     firstName: string,
     lastName: string,
     isEmergencyContact: boolean,
@@ -10931,7 +10953,8 @@ export interface FullPatientConsentFormFragment {
 export interface FullPatientContactFragment {
   id: string,
   patientId: string,
-  relationToPatient: string,
+  relationToPatient: PatientRelationOptions,
+  relationFreeText: string | null,
   firstName: string,
   lastName: string,
   isEmergencyContact: boolean,

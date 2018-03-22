@@ -6,10 +6,24 @@ import Phone from './phone';
 
 const EAGER_QUERY = '[address, email, phone]';
 
+export type PatientRelationOptions =
+  | 'parent'
+  | 'grandparent'
+  | 'child'
+  | 'sibling'
+  | 'grandchild'
+  | 'roommate'
+  | 'friend'
+  | 'neighbor'
+  | 'partner'
+  | 'spouse'
+  | 'other';
+
 export interface IPatientContactOptions {
   patientId: string;
   updatedById: string;
-  relationToPatient: string;
+  relationToPatient: PatientRelationOptions;
+  relationFreeText?: string | null;
   firstName: string;
   lastName: string;
   isEmergencyContact: boolean;
@@ -20,7 +34,8 @@ export interface IPatientContactOptions {
 
 interface IEditPatientContact extends Partial<IPatientContactOptions> {
   updatedById: string;
-  relationToPatient?: string;
+  relationToPatient?: PatientRelationOptions;
+  relationFreeText?: string | null;
   firstName?: string;
   lastName?: string;
   isEmergencyContact?: boolean;
@@ -37,7 +52,8 @@ export default class PatientContact extends Model {
   id: string;
   patientId: string;
   updatedById: string;
-  relationToPatient: string;
+  relationToPatient: PatientRelationOptions;
+  relationFreeText: string | null;
   firstName: string;
   lastName: string;
   isEmergencyContact: boolean;
@@ -71,6 +87,7 @@ export default class PatientContact extends Model {
       id: { type: 'string', format: 'uuid' },
       patientId: { type: 'string', format: 'uuid' },
       relationToPatient: { type: 'string', minLength: 1 },
+      relationFreeText: { type: ['string', 'null'] },
       firstName: { type: 'string', minLength: 1 },
       lastName: { type: 'string', minLength: 1 },
       isEmergencyContact: { type: 'boolean' },

@@ -4,6 +4,7 @@ import {
   CurrentPatientState,
   ExternalProviderOptions,
   Gender,
+  PatientRelationOptions,
   PhoneTypeOptions,
 } from '../../graphql/types';
 
@@ -1049,7 +1050,8 @@ export const healthcareProxy = {
   id: 'patient-contact-id',
   firstName: 'mary',
   lastName: 'jane',
-  relationToPatient: 'mother',
+  relationToPatient: PatientRelationOptions.parent,
+  relationFreeText: null,
   patientId: patient.id,
   phone: {
     id: phone1.id,

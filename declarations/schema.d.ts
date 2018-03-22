@@ -1289,7 +1289,8 @@ declare module 'schema' {
   interface IPatientContact {
     id: string;
     patientId: string;
-    relationToPatient: string;
+    relationToPatient: IPatientRelationOptionsEnum;
+    relationFreeText: string | null;
     firstName: string;
     lastName: string;
     isEmergencyContact: boolean;
@@ -1303,6 +1304,19 @@ declare module 'schema' {
     updatedAt: string | null;
     deletedAt: string | null;
   }
+
+  type IPatientRelationOptionsEnum =
+    | 'parent'
+    | 'grandparent'
+    | 'child'
+    | 'sibling'
+    | 'grandchild'
+    | 'roommate'
+    | 'friend'
+    | 'neighbor'
+    | 'partner'
+    | 'spouse'
+    | 'other';
 
   /**
    * Patient external provider that is editable in Commons
@@ -3630,7 +3644,8 @@ declare module 'schema' {
    */
   interface IPatientContactCreateInput {
     patientId: string;
-    relationToPatient: string;
+    relationToPatient: IPatientRelationOptionsEnum;
+    relationFreeText?: string | null;
     firstName: string;
     lastName: string;
     phone: IPhoneCreateInput;
@@ -3654,7 +3669,8 @@ declare module 'schema' {
    */
   interface IPatientContactEditInput {
     patientContactId: string;
-    relationToPatient?: string | null;
+    relationToPatient?: IPatientRelationOptionsEnum | null;
+    relationFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
     isEmergencyContact?: boolean | null;

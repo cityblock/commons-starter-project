@@ -101,6 +101,7 @@ export async function patientContactCreate(
   await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IPatientContactCreateInput>(input, isNil) as any;
+  filtered.relationFreeText = input.relationFreeText;
   delete filtered.phone;
   delete filtered.address;
   delete filtered.email;
@@ -137,6 +138,7 @@ export async function patientContactEdit(
 
   await Promise.all(promises);
   const filtered = omitBy(input, isNil);
+  filtered.relationFreeText = input.relationFreeText;
   delete filtered.phone;
   delete filtered.address;
   delete filtered.email;

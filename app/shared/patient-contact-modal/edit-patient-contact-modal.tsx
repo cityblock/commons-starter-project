@@ -31,11 +31,17 @@ export class EditPatientContactModal extends React.Component<allProps> {
   editPatientContact = async (contact: IPatientContact) => {
     const { editPatientContactMutation, patientContact } = this.props;
 
+    let relationFreeText = null;
+    if (contact.relationToPatient === 'other') {
+      relationFreeText = contact.relationFreeText;
+    }
+
     // edit patient contact healthcare contact
     return editPatientContactMutation({
       variables: {
         ...contact,
         patientContactId: patientContact.id,
+        relationFreeText,
       },
     });
   };

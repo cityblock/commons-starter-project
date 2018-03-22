@@ -1,11 +1,14 @@
+import * as classNames from 'classnames';
+import { values } from 'lodash';
 import * as React from 'react';
-import { AddressInput } from '../../graphql/types';
+import { AddressInput, PatientRelationOptions } from '../../graphql/types';
 import AddressForm from '../address-modal/address-form';
 import Button from '../library/button/button';
 import FormLabel from '../library/form-label/form-label';
 import * as styles from '../library/form/css/form.css';
 import RadioGroup from '../library/radio-group/radio-group';
 import RadioInput from '../library/radio-input/radio-input';
+import Select from '../library/select/select';
 import TextInput from '../library/text-input/text-input';
 
 interface IProps {
@@ -15,6 +18,7 @@ interface IProps {
   firstName?: string | null;
   lastName?: string | null;
   relationToPatient?: string | null;
+  relationFreeText?: string | null;
   description?: string | null;
   canContact?: boolean | null;
   isEmergencyContact?: boolean | null;
@@ -108,16 +112,19 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
       firstName,
       lastName,
       relationToPatient,
+      relationFreeText,
       hasFieldError,
       isEmergencyContact,
       canContact,
     } = this.props;
 
+    const isOtherRelation = relationToPatient === 'other';
+
     return (
       <div>
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="patientContact.firstName" />
+            <FormLabel messageId="patientContact.firstName" className={styles.required} />
             <TextInput
               name="firstName"
               value={firstName || ''}
@@ -129,7 +136,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
           </div>
 
           <div className={styles.field}>
-            <FormLabel messageId="patientContact.lastName" />
+            <FormLabel messageId="patientContact.lastName" className={styles.required} />
             <TextInput
               name="lastName"
               value={lastName || ''}
@@ -143,7 +150,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="patientContact.phoneNumber" />
+            <FormLabel messageId="patientContact.phoneNumber" className={styles.required} />
             <TextInput
               name="phoneNumber"
               value={phoneNumber || ''}
@@ -162,17 +169,34 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="patientContact.relationToPatient" />
-            <TextInput
+            <FormLabel messageId="patientContact.relationToPatient" className={styles.required} />
+            <Select
               name="relationToPatient"
               value={relationToPatient || ''}
+              hasPlaceholder={true}
               onChange={onChange}
               required={true}
               errorMessageId="patientContact.fieldEmptyError"
               hasError={hasFieldError.relationToPatient}
+              options={values(PatientRelationOptions)}
+              large={true}
             />
           </div>
 
+          <div className={classNames(styles.field, { [styles.hidden]: !isOtherRelation })}>
+            <FormLabel messageId="patientContact.relationFreeText" className={styles.required} />
+            <TextInput
+              name="relationFreeText"
+              value={relationFreeText || ''}
+              onChange={onChange}
+              required={true}
+              errorMessageId="patientContact.fieldEmptyError"
+              hasError={hasFieldError.relationFreeText}
+            />
+          </div>
+        </div>
+
+        <div className={styles.fieldRow}>
           <div className={styles.field}>
             <FormLabel messageId="patientContact.isEmergencyContact" />
             <RadioGroup>
@@ -192,26 +216,26 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
               />
             </RadioGroup>
           </div>
-        </div>
 
-        <div className={styles.field}>
-          <FormLabel messageId="patientContact.canContact" />
-          <RadioGroup>
-            <RadioInput
-              name="canContact"
-              value="false"
-              checked={!canContact}
-              label="No"
-              onChange={onRadioChange}
-            />
-            <RadioInput
-              name="canContact"
-              value="true"
-              checked={!!canContact}
-              label="Yes"
-              onChange={onRadioChange}
-            />
-          </RadioGroup>
+          <div className={styles.field}>
+            <FormLabel messageId="patientContact.canContact" />
+            <RadioGroup>
+              <RadioInput
+                name="canContact"
+                value="false"
+                checked={!canContact}
+                label="No"
+                onChange={onRadioChange}
+              />
+              <RadioInput
+                name="canContact"
+                value="true"
+                checked={!!canContact}
+                label="Yes"
+                onChange={onRadioChange}
+              />
+            </RadioGroup>
+          </div>
         </div>
 
         {this.renderAddressSection()}

@@ -18,6 +18,7 @@ import FormLabel from '../../shared/library/form-label/form-label';
 import Icon from '../../shared/library/icon/icon';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
+import SmallText from '../../shared/library/small-text/small-text';
 import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
 import EditPatientContactModal from '../../shared/patient-contact-modal/edit-patient-contact-modal';
 import * as styles from './css/advanced-directives.css';
@@ -134,6 +135,17 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   renderHealthcareProxyCard = (proxy: FullPatientContactFragment) => {
     const emailHtml = proxy.email ? <p>{proxy.email.emailAddress}</p> : <p>Unknown Email</p>;
     const phoneHtml = proxy.phone ? <p>{proxy.phone.phoneNumber}</p> : <p>Unknown Phone</p>;
+    const relationHtml =
+      proxy.relationToPatient === 'other' ? (
+        <SmallText text={proxy.relationFreeText || ''} color="gray" size="medium" />
+      ) : (
+        <SmallText
+          messageId={`relationToPatient.${proxy.relationToPatient}`}
+          color="gray"
+          size="medium"
+        />
+      );
+
     return (
       <DisplayCard
         onEditClick={() => this.handleOpenEditModal(proxy)}
@@ -144,7 +156,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
         <div className={styles.proxyFieldRow}>
           <div className={styles.proxyField}>
             <h4 className={styles.proxyName}>{formatFullName(proxy.firstName, proxy.lastName)}</h4>
-            <p className={styles.gray}>{proxy.relationToPatient}</p>
+            {relationHtml}
           </div>
           <div className={styles.proxyField}>
             {phoneHtml}

@@ -2,7 +2,8 @@
 
 mutation patientContactEdit(
   $patientContactId: ID!
-  $relationToPatient: String
+  $relationToPatient: PatientRelationOptions
+  $relationFreeText: String
   $firstName: String
   $lastName: String
   $isEmergencyContact: Boolean
@@ -17,6 +18,7 @@ mutation patientContactEdit(
     input: {
       patientContactId: $patientContactId
       relationToPatient: $relationToPatient
+      relationFreeText: $relationFreeText
       firstName: $firstName
       lastName: $lastName
       isEmergencyContact: $isEmergencyContact

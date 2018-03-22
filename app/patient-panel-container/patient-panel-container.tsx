@@ -130,7 +130,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
   handleCloseFilterPanel = () => {
     this.setState({ isPanelOpen: false, pendingFilters: this.props.filters });
-  }
+  };
 
   handleFilterButtonClick = (filters?: PatientFilterOptions) => {
     const { history, pageSize } = this.props;

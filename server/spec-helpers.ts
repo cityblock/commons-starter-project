@@ -21,6 +21,7 @@ import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
+import { PatientRelationOptions } from './models/patient-contact';
 import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
@@ -155,7 +156,8 @@ export function createMockPatientContact(
     address?: { zip: string; state?: string };
     firstName?: string;
     lastName?: string;
-    relationToPatient?: string;
+    relationToPatient?: PatientRelationOptions;
+    relationFreeText?: string;
     isEmergencyContact?: boolean;
     isHealthcareProxy?: boolean;
     canContact?: boolean;
@@ -172,7 +174,8 @@ export function createMockPatientContact(
     patientId,
     firstName: get(options, 'firstName') || 'harry',
     lastName: get(options, 'lastName') || 'potter',
-    relationToPatient: get(options, 'relationToPatient') || 'wizarding tutor',
+    relationToPatient: get(options, 'relationToPatient') || ('parent' as PatientRelationOptions),
+    relationFreeText: get(options, 'relationFreeText') || null,
     isEmergencyContact: isNil(isEmergencyContact) ? false : isEmergencyContact,
     isHealthcareProxy: isNil(isHealthcareProxy) ? false : isHealthcareProxy,
     canContact: isNil(canContact) ? false : canContact,

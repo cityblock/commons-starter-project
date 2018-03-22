@@ -32,3 +32,7 @@
   visibility: hidden;
   opacity: 0;
 }
+
+.required::after {
+  content: ' *';
+}

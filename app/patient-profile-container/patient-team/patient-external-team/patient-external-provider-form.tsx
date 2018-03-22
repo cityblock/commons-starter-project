@@ -76,7 +76,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
     return (
       <div>
         <div className={styles.field}>
-          <FormLabel messageId="patientExternalProvider.agencyName" />
+          <FormLabel messageId="patientExternalProvider.agencyName" className={styles.required} />
           <TextInput
             name="agencyName"
             value={agencyName || ''}
@@ -101,7 +101,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="patientExternalProvider.role" />
+            <FormLabel messageId="patientExternalProvider.role" className={styles.required} />
             <ExternalProviderRoleSelect
               value={role || ''}
               onChange={onChange}
@@ -112,7 +112,10 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
           </div>
 
           <div className={classNames(styles.field, { [styles.hidden]: !isOtherRole })}>
-            <FormLabel messageId="patientExternalProvider.roleFreeText" />
+            <FormLabel
+              messageId="patientExternalProvider.roleFreeText"
+              className={styles.required}
+            />
             <TextInput
               name="roleFreeText"
               value={roleFreeText || ''}
@@ -125,7 +128,10 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="patientExternalProvider.phoneNumber" />
+            <FormLabel
+              messageId="patientExternalProvider.phoneNumber"
+              className={styles.required}
+            />
             <TextInput
               name="phoneNumber"
               value={phoneNumber || ''}

@@ -51,6 +51,7 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
       firstName,
       lastName,
       relationToPatient,
+      relationFreeText,
       phone,
       email,
       address,
@@ -99,6 +100,17 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
       </div>
     ) : null;
 
+    const relationHtml =
+      relationToPatient === 'other' ? (
+        <SmallText text={relationFreeText || ''} color="gray" size="medium" />
+      ) : (
+        <SmallText
+          messageId={`relationToPatient.${relationToPatient}`}
+          color="gray"
+          size="medium"
+        />
+      );
+
     return (
       <Fragment>
         <div className={styles.container}>
@@ -111,7 +123,7 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
                 isBold={true}
               />
               <div className={styles.row}>
-                <SmallText text={relationToPatient} color="gray" size="medium" />
+                {relationHtml}
                 {contactRoleHtml}
               </div>
             </div>

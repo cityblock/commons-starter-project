@@ -29,16 +29,20 @@ export const getMiddlewareLink = () => {
             console.log(operation, data);
             /* tslint:enable no-console */
 
-            // update last action for our idle timeout
-            debouncedSetLastAction();
-
             return data;
           })
         : null,
   );
 
+  // update last action for our idle timeout
+  const lastActionMiddleware = new ApolloLink((operation, forward) => {
+    debouncedSetLastAction();
+    return forward ? forward(operation) : null;
+  });
+
   if (process.env.NODE_ENV === 'development') {
     middlewareLink = middlewareLink.concat(loggingMiddleware);
   }
+  middlewareLink = middlewareLink.concat(lastActionMiddleware);
   return middlewareLink.concat(httpLink);
 };

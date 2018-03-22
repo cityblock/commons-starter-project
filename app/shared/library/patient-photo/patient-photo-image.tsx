@@ -19,6 +19,7 @@ const PatientPhotoImage: React.StatelessComponent<IProps> = (props: IProps) => {
       {
         [styles.large]: type === 'large',
         [styles.circle]: type === 'circle',
+        [styles.circleLarge]: type === 'circleLarge',
       },
       className,
     );
@@ -33,6 +34,7 @@ const PatientPhotoImage: React.StatelessComponent<IProps> = (props: IProps) => {
     {
       [styles.large]: type === 'large',
       [styles.circleSvg]: type === 'circle',
+      [styles.circleSvgLarge]: type === "circleLarge",
       [styles.male]: isMale,
       [styles.female]: isFemale,
       [styles.unspecified]: !isFemale && !isMale,

@@ -16,11 +16,11 @@ import {
 } from '../../graphql/types';
 import { IQuickCallPopupOptions } from '../../reducers/popup-reducer';
 import { formatFullName } from '../../shared/helpers/format-helpers';
-import Avatar from '../../shared/library/avatar/avatar';
 import Button from '../../shared/library/button/button';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Icon from '../../shared/library/icon/icon';
 import Option from '../../shared/library/option/option';
+import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
 import Select from '../../shared/library/select/select';
@@ -157,7 +157,9 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { close, visible, patient, patientCareTeam } = this.props;
+    const { close, visible, patient, patientCareTeam, patientId } = this.props;
+    const gender = patient ? patient.patientInfo.gender : null;
+    const hasUploadedPhoto = patient ? !!patient.patientInfo.hasUploadedPhoto : false;
     const { quickCall, error, readyToSubmit } = this.state;
     const patientName = patient ? getPatientFullName(patient) : 'Unknown';
     const errorsHtml = error ? <div className={styles.error}>Error: {error}</div> : null;
@@ -191,7 +193,12 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
         <div className={styles.container}>
           <div className={styles.middleBar}>
             <div className={styles.patientContainer}>
-              <Avatar avatarType="patient" size="large" />
+              <PatientPhoto
+                patientId={patientId}
+                gender={gender}
+                hasUploadedPhoto={hasUploadedPhoto}
+                type="circleLarge"
+              />
               <div className={styles.patientContainerRight}>
                 <div className={styles.patientName}>{patientName}</div>
               </div>

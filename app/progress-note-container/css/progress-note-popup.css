@@ -61,6 +61,7 @@
 .middleBar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 16px var(--small-gutter);
   background: var(--white-font-color);
 }
@@ -70,7 +71,8 @@
 }
 
 .patientContainer {
-  display: block;
+  display: flex;
+  align-items: center;
 }
 
 .patientContainerRight {

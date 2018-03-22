@@ -41,4 +41,10 @@ describe('Library Patient Photo Component', () => {
 
     expect(wrapper.find(PatientPhotoImage).props().type).toBe('circle');
   });
+
+  it('renders large circular patient photo if specified', () => {
+    wrapper.setProps({ type: 'circleLarge' });
+
+    expect(wrapper.find(PatientPhotoImage).props().type).toBe('circleLarge');
+  });
 });

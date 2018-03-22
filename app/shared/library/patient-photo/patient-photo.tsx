@@ -9,7 +9,8 @@ import {
 } from '../../../graphql/types';
 import PatientPhotoImage from './patient-photo-image';
 
-export type PhotoType = 'large' | 'circle';
+// large is square, circle and circleLarge are 30x30 and 40x40 respectively
+export type PhotoType = 'large' | 'circle' | 'circleLarge';
 
 interface IProps {
   patientId: string;

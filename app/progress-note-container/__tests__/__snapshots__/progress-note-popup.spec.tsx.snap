@@ -24,9 +24,11 @@ exports[`builder concerns renders progress note popup with templates renders pro
       replace={false}
       to="/patients/patient-id"
     >
-      <Avatar
-        avatarType="patient"
-        size="large"
+      <Apollo(PatientPhoto)
+        gender="male"
+        hasUploadedPhoto={false}
+        patientId="patient-id"
+        type="circleLarge"
       />
       <div
         className="patientContainerRight"
@@ -371,9 +373,11 @@ exports[`builder concerns renders progress note popup with templates renders pro
       replace={false}
       to="/patients/patient-id"
     >
-      <Avatar
-        avatarType="patient"
-        size="large"
+      <Apollo(PatientPhoto)
+        gender="male"
+        hasUploadedPhoto={false}
+        patientId="patient-id"
+        type="circleLarge"
       />
       <div
         className="patientContainerRight"

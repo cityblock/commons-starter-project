@@ -20,8 +20,8 @@ import {
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
-import Avatar from '../shared/library/avatar/avatar';
 import Button from '../shared/library/button/button';
+import PatientPhoto from '../shared/library/patient-photo/patient-photo';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
@@ -278,6 +278,8 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       />
     );
 
+    const { gender, hasUploadedPhoto } = progressNote.patient.patientInfo;
+
     return (
       <div>
         <div className={styles.topBar}>
@@ -286,7 +288,12 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         </div>
         <div className={styles.middleBar}>
           <Link className={styles.patientContainer} to={`/patients/${progressNote.patientId}`}>
-            <Avatar avatarType="patient" size="large" />
+            <PatientPhoto
+              patientId={progressNote.patientId}
+              gender={gender}
+              hasUploadedPhoto={!!hasUploadedPhoto}
+              type="circleLarge"
+            />
             <div className={styles.patientContainerRight}>
               <div className={styles.patientName}>{patientName}</div>
               {openedAt}

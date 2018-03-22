@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedTime } from 'react-intl';
 import { FullProgressNoteFragment } from '../graphql/types';
-import Avatar from '../shared/library/avatar/avatar';
+import PatientPhoto from '../shared/library/patient-photo/patient-photo';
 import * as styles from './css/progress-note-small-row.css';
 
 interface IProps {
@@ -29,13 +29,20 @@ export const ProgressNoteSmallRow: React.StatelessComponent<IProps> = props => {
     title = 'Supervisor review';
     titleStyles = classNames(styles.title, styles.highlight);
   }
+
+  const { gender, hasUploadedPhoto } = progressNote.patient.patientInfo;
   return (
     <div
       key={progressNote.id}
       className={styles.progressNote}
       onClick={() => onClick(progressNote.id)}
     >
-      <Avatar avatarType="patient" size="large" />
+      <PatientPhoto
+        patientId={progressNote.patient.id}
+        gender={gender}
+        hasUploadedPhoto={!!hasUploadedPhoto}
+        type="circleLarge"
+      />
       <div className={styles.progressNoteRight}>
         <div className={styles.patientName}>{name}</div>
         <div className={styles.bottomSection}>

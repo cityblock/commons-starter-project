@@ -54,7 +54,7 @@ export class PatientPhoto extends React.Component<allProps> {
             patientId={patientId}
             hasUploadedPhoto={hasUploadedPhoto}
             gender={gender}
-            className={parentStyles.field}
+            className={parentStyles.photo}
           />
           <div className={parentStyles.field}>
             <DefaultText

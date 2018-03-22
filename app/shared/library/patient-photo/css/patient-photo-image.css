@@ -4,18 +4,33 @@
 }
 
 .circle,
-.circleSvg {
-  height: var(--medium-gutter);
-  width: var(--medium-gutter);
+.circleSvg,
+.circleLarge,
+.circleSvgLarge {
   border-radius: 50%;
   border: 1px solid var(--border-color);
 }
 
-.circle {
+.circle,
+.circleSvg {
+  height: var(--medium-gutter);
+  width: var(--medium-gutter);
   object-fit: cover;
 }
 
-.circleSvg {
+.circleLarge,
+.circleSvgLarge {
+  height: var(--gutter);
+  width: var(--gutter);
+}
+
+.circle,
+.circleLarge {
+  object-fit: cover;
+}
+
+.circleSvg,
+.circleSvgLarge {
   background-size: 100% 100%;
 }
 
@@ -42,5 +57,4 @@
 .large.female,
 .large.unspecified {
   min-width: 112px;
-  height: 150px;
 }

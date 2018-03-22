@@ -27,18 +27,24 @@
   justify-content: space-between;
 }
 
+.body {
+  flex: 1;
+}
+
 .domains {
   display: flex;
   flex-direction: column;
   width: calc(50% - 10px);
 }
 
-.relativeContainer {
+.container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.stickyTop {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+.navBar {
+  flex-shrink: 0;
+  height: 50px;
 }

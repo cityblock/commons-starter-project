@@ -4,5 +4,5 @@ export const body: string;
 export const bodyFlex: string;
 export const domains: string;
 export const flex: string;
-export const relativeContainer: string;
-export const stickyTop: string;
+export const container: string;
+export const navBar: string;

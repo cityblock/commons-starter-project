@@ -287,7 +287,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
 
     return (
       <div className={styles.container}>
-        <UnderlineTabs className={styles.stickyTop}>
+        <UnderlineTabs className={styles.navBar}>
           <div>
             <UnderlineTab
               messageId="patientInfo.demographics"
@@ -302,7 +302,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           </div>
           {saveButton}
         </UnderlineTabs>
-        <div>
+        <div className={styles.body}>
           {demographics}
           {documents}
         </div>

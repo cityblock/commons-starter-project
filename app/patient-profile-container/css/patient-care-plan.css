@@ -1,11 +1,13 @@
 .container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.stickyTop {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+.navBar {
+  height: 50px;
+  flex-shrink: 0;
 }
 
 .marginLeft {
@@ -19,7 +21,8 @@
 .carePlanPanel {
   background-color: var(--gray-background-color);
   padding: 0 0 var(--small-gutter);
-  min-height: calc(100vh - 160px);
+  flex: 1;
+  overflow: scroll;
 }
 
 .paddingTop {
@@ -28,7 +31,6 @@
 
 .carePlanSuggestions,
 .carePlan {
-  height: calc(100vh - 200px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }

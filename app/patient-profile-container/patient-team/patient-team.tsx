@@ -157,7 +157,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
 
     return (
       <div className={styles.subContainer}>
-        <UnderlineTabs className={styles.stickyTop}>
+        <UnderlineTabs className={styles.navBar}>
           <div>
             <UnderlineTab
               messageId="patientTeam.cityblockCareTeam"
@@ -177,7 +177,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
           </div>
           {this.renderAddButton()}
         </UnderlineTabs>
-        <div>
+        <div className={styles.body}>
           {cityblockCareTeam}
           {externalCareTeam}
           {familyAndSupportTeam}

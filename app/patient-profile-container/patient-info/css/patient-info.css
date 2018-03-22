@@ -17,10 +17,17 @@ svg.successIcon {
 
 .container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.stickyTop {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+.navBar {
+  flex-shrink: 0;
+  height: 50px;
+}
+
+.body {
+  flex: 1;
+  overflow: scroll;
 }

@@ -11,13 +11,19 @@
 
 .mainBody {
   flex-basis: 75%;
-  max-height: calc(100vh - 60px);
-  overflow: auto;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .header {
-  position: sticky;
-  top: 0;
+  flex-shrink: 0;
+}
+
+.pageContent {
+  flex: 1;
+  overflow: hidden;
 }
 
 .tabs {

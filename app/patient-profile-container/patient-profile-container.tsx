@@ -99,34 +99,40 @@ export class PatientProfileContainer extends React.Component<allProps> {
               />
             </UnderlineTabs>
           </div>
-          <Switch>
-            <Route
-              exact
-              path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
-              render={(props: any) => (
-                <PatientCarePlanView {...props} glassBreakId={glassBreakId} />
-              )}
-            />
-            <Route
-              exact
-              path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
-              render={(props: any) => (
-                <PatientThreeSixtyView {...props} glassBreakId={glassBreakId} />
-              )}
-            />
-            <Route
-              exact
-              path="/patients/:patientId/tools/:screeningToolId?"
-              component={ScreeningTool}
-            />
-            <Route
-              exact
-              path="/patients/:patientId/timeline"
-              render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
-            />
-            <Route exact path="/patients/:patientId/member-info/:subTab?" component={PatientInfo} />
-            <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
-          </Switch>
+          <div className={styles.pageContent}>
+            <Switch>
+              <Route
+                exact
+                path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
+                render={(props: any) => (
+                  <PatientCarePlanView {...props} glassBreakId={glassBreakId} />
+                )}
+              />
+              <Route
+                exact
+                path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
+                render={(props: any) => (
+                  <PatientThreeSixtyView {...props} glassBreakId={glassBreakId} />
+                )}
+              />
+              <Route
+                exact
+                path="/patients/:patientId/tools/:screeningToolId?"
+                component={ScreeningTool}
+              />
+              <Route
+                exact
+                path="/patients/:patientId/timeline"
+                render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
+              />
+              <Route
+                exact
+                path="/patients/:patientId/member-info/:subTab?"
+                component={PatientInfo}
+              />
+              <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
+            </Switch>
+          </div>
         </div>
       </div>
     );

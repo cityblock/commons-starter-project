@@ -68,7 +68,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
 
     return (
       <div onClick={this.onContainerClick} className={styles.container}>
-        <UnderlineTabs className={styles.stickyTop}>
+        <UnderlineTabs className={styles.navBar}>
           <div>
             <UnderlineTab
               messageId="patient.activeCarePlan"

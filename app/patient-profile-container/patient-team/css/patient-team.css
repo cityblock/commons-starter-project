@@ -5,15 +5,22 @@
 .container {
   padding: var(--small-gutter) var(--medium-gutter);
   background-color: var(--gray-background-color);
-  min-height: calc(100vh - 160px);
+  min-height: 100%;
 }
 
 .subContainer {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.stickyTop {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+.navBar {
+  flex-shrink: 0;
+  height: 50px;
+}
+
+.body {
+  flex: 1;
+  overflow: scroll;
 }

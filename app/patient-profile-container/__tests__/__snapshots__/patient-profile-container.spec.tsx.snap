@@ -50,38 +50,42 @@ exports[`patient profile container renders patient profile container 1`] = `
         />
       </UnderlineTabs>
     </div>
-    <Switch>
-      <Route
-        exact={true}
-        path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
-        render={[Function]}
-      />
-      <Route
-        component={[Function]}
-        exact={true}
-        path="/patients/:patientId/tools/:screeningToolId?"
-      />
-      <Route
-        exact={true}
-        path="/patients/:patientId/timeline"
-        render={[Function]}
-      />
-      <Route
-        component={[Function]}
-        exact={true}
-        path="/patients/:patientId/member-info/:subTab?"
-      />
-      <Route
-        component={[Function]}
-        exact={true}
-        path="/patients/:patientId/team/:subTab?"
-      />
-    </Switch>
+    <div
+      className="pageContent"
+    >
+      <Switch>
+        <Route
+          exact={true}
+          path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
+          render={[Function]}
+        />
+        <Route
+          exact={true}
+          path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
+          render={[Function]}
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/patients/:patientId/tools/:screeningToolId?"
+        />
+        <Route
+          exact={true}
+          path="/patients/:patientId/timeline"
+          render={[Function]}
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/patients/:patientId/member-info/:subTab?"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/patients/:patientId/team/:subTab?"
+        />
+      </Switch>
+    </div>
   </div>
 </div>
 `;

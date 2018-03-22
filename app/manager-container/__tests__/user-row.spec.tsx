@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { Permissions } from '../../graphql/types';
+import { Permissions, UserRole } from '../../graphql/types';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { currentUser, featureFlags, user } from '../../shared/util/test-data';
@@ -25,7 +25,8 @@ describe('user row', () => {
 
     const locale = { messages: ENGLISH_TRANSLATION.messages };
     const deleteUser = () => false;
-    const editUserPermissions = (userRole: Permissions, userEmail: string) => false;
+    const editUserPermissions = (permissions: Permissions, userEmail: string) => false;
+    const editUserRole = (userRole: UserRole, userEmail: string) => false;
     const tree = create(
       <MockedProvider mocks={[]}>
         <Provider store={mockStore({ locale })}>
@@ -37,6 +38,7 @@ describe('user row', () => {
                 user={user}
                 deleteUser={deleteUser}
                 editUserPermissions={editUserPermissions}
+                editUserRole={editUserRole}
               />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>

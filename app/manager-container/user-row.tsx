@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
-import { FullUserFragment, Permissions } from '../graphql/types';
+import { FullUserFragment, Permissions, UserRole } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -11,7 +11,8 @@ import * as styles from './css/user-row.css';
 interface IProps extends IInjectedProps {
   user: FullUserFragment;
   deleteUser: (userEmail: string) => void;
-  editUserPermissions: (permissions: Permissions, userEmail: string) => void;
+  editUserPermissions: (permission: Permissions, userEmail: string) => void;
+  editUserRole: (userRole: UserRole, userEmail: string) => void;
 }
 
 interface IState {
@@ -68,10 +69,13 @@ export class UserRow extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { user, editUserPermissions, featureFlags } = this.props;
+    const { user, editUserPermissions, editUserRole, featureFlags } = this.props;
     const popup = this.renderPopup();
     const onChangeUserPermissions = (event: React.ChangeEvent<HTMLSelectElement>) => {
       editUserPermissions(event.target.value as Permissions, user.email!);
+    };
+    const onChangeUserRole = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      editUserRole(event.target.value as UserRole, user.email!);
     };
     const formattedCreatedAt = (
       <FormattedRelative value={user.createdAt}>
@@ -87,6 +91,20 @@ export class UserRow extends React.Component<IProps, IState> {
       <div className={styles.container}>
         <div className={styles.title}>{this.formatUser()}</div>
         <div className={styles.meta}>
+          <div className={styles.dateSection}>
+            {featureFlags.canChangeUserPermissions && (
+              <Select value={user.userRole} onChange={onChangeUserRole} className={styles.select}>
+                <Option value="physician" label="Physician" />
+                <Option value="nurseCareManager" label="Nurse Care Manager" />
+                <Option value="healthCoach" label="Health Coach" />
+                <Option value="familyMember" label="Family Member" />
+                <Option value="admin" label="Admin (NOTE: does not grant permissions!)" />
+                <Option value="communityHealthPartner" label="Community Health Partner" />
+                <Option value="outreachSpecialist" label="Outreach Specialist" />
+                <Option value="primaryCarePhysician" label="Primary Care Physician" />
+              </Select>
+            )}
+          </div>
           <div className={styles.dateSection}>
             {featureFlags.canChangeUserPermissions && (
               <Select

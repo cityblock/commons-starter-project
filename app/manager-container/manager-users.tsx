@@ -10,6 +10,7 @@ import * as usersQuery from '../graphql/queries/get-users.graphql';
 import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
 import * as userEditPermissionsMutationGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
+import * as userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
 import {
   getUsersQuery,
   getUsersQueryVariables,
@@ -19,9 +20,12 @@ import {
   userDeleteMutationVariables,
   userEditPermissionsMutation,
   userEditPermissionsMutationVariables,
+  userEditRoleMutation,
+  userEditRoleMutationVariables,
   FullUserFragment,
   Permissions,
   UserOrderOptions,
+  UserRole,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
@@ -64,6 +68,9 @@ export interface IGraphqlProps {
   editUserPermissions?: (
     options: { variables: userEditPermissionsMutationVariables },
   ) => { data: userEditPermissionsMutation };
+  editUserRole?: (
+    options: { variables: userEditRoleMutationVariables },
+  ) => { data: userEditRoleMutation };
   createUser?: (
     options: { variables: userCreateMutationVariables },
   ) => { data: userCreateMutation };
@@ -124,6 +131,7 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
         user={user}
         deleteUser={this.onDeleteUser}
         editUserPermissions={this.onEditUserPermissions}
+        editUserRole={this.onEditUserRole}
       />
     );
   };
@@ -133,6 +141,14 @@ export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState
 
     if (editUserPermissions) {
       await editUserPermissions({ variables: { permissions, email: userEmail } });
+    }
+  };
+
+  onEditUserRole = async (userRole: UserRole, userEmail: string) => {
+    const { editUserRole } = this.props;
+
+    if (editUserRole) {
+      await editUserRole({ variables: { userRole, email: userEmail } });
     }
   };
 
@@ -235,6 +251,10 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps>(userEditPermissionsMutationGraphql as any, {
     name: 'editUserPermissions',
+  }),
+
+  graphql<IGraphqlProps, IProps>(userEditRoleMutationGraphql as any, {
+    name: 'editUserRole',
   }),
   graphql<IGraphqlProps, IProps>(userCreateMutationGraphql as any, {
     name: 'createUser',

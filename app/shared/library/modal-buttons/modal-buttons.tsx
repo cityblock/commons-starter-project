@@ -15,7 +15,8 @@ interface IProps {
 const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
   const { cancelMessageId, submitMessageId, cancel, submit, redSubmit, isLoading } = props;
   const submitButtonMessageId = isLoading
-    ? 'modalButtons.loading' : submitMessageId || 'modalButtons.submit';
+    ? 'modalButtons.loading'
+    : submitMessageId || 'modalButtons.submit';
 
   return (
     <div

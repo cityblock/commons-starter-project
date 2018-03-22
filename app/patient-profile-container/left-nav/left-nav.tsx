@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
+import * as styles from './css/left-nav.css';
 import LeftNavHeader from './header';
 import Contact from './info-group/contact';
 import Demographics from './info-group/demographics';
@@ -39,7 +40,7 @@ class LeftNav extends React.Component<IProps, IState> {
     const { selected } = this.state;
 
     return (
-      <div>
+      <div className={styles.container}>
         <LeftNavHeader patient={patient} />
         {!!patient && (
           <div>

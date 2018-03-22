@@ -100,7 +100,7 @@ describe('Library Modal Buttons Component', () => {
     ).toBe('red');
   });
 
-  it('disables submit button if loading', ()  => {
+  it('disables submit button if loading', () => {
     wrapper.setProps({ isLoading: true });
     expect(
       wrapper

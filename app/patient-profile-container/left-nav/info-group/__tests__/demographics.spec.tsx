@@ -26,7 +26,7 @@ describe('Patient Left Nav Demographics', () => {
   });
 
   it('renders info group item for date of birth', () => {
-    expect(wrapper.find(InfoGroupItem).length).toBe(3);
+    expect(wrapper.find(InfoGroupItem).length).toBe(2);
 
     expect(
       wrapper
@@ -55,21 +55,6 @@ describe('Patient Left Nav Demographics', () => {
         .at(1)
         .props().value,
     ).toBe(capitalize(patient.patientInfo.gender));
-  });
-
-  it('renders info group for assigned sex', () => {
-    expect(
-      wrapper
-        .find(InfoGroupItem)
-        .at(2)
-        .props().labelMessageId,
-    ).toBe('demographics.assignedSex');
-    expect(
-      wrapper
-        .find(InfoGroupItem)
-        .at(2)
-        .props().value,
-    ).toBe(capitalize(patient.patientInfo.sexAtBirth));
   });
 
   it('opens info group container and header', () => {

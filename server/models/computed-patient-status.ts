@@ -119,7 +119,6 @@ export default class ComputedPatientStatus extends BaseModel {
   };
 
   static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
-    // TODO: isPhotoAddedOrDeclined when a photo is actually uploaded
     const patient = await Patient.get(patientId, txn);
     const { patientInfo } = patient;
     const { hasHealthcareProxy, hasMolst, hasDeclinedPhotoUpload, hasUploadedPhoto } = patientInfo;

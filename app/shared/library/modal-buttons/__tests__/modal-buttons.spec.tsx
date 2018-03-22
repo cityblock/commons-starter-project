@@ -64,6 +64,12 @@ describe('Library Modal Buttons Component', () => {
       wrapper
         .find(Button)
         .at(1)
+        .props().disabled,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
         .props().onClick,
     ).toBe(placeholderFn);
   });
@@ -92,5 +98,15 @@ describe('Library Modal Buttons Component', () => {
         .at(1)
         .props().color,
     ).toBe('red');
+  });
+
+  it('disables submit button if loading', ()  => {
+    wrapper.setProps({ isLoading: true });
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
+        .props().disabled,
+    ).toBeTruthy();
   });
 });

@@ -59,6 +59,7 @@ describe('Library Photo Modal Component', () => {
 
   it('renders photo modal buttons', () => {
     expect(wrapper.find(PhotoModalButtons).props().isPhotoTaken).toBeFalsy();
+    expect(wrapper.find(PhotoModalButtons).props().isLoading).toBeFalsy();
   });
 
   it('does not render spinner once stream established', () => {

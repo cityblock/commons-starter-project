@@ -151,7 +151,7 @@ class PhotoModal extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const { isVisible, showFaceOutline } = this.props;
-    const { imgData, stream, height } = this.state;
+    const { imgData, stream, height, loading } = this.state;
 
     const videoStyles = classNames(styles.video, {
       [styles.hidden]: !!imgData,
@@ -186,6 +186,7 @@ class PhotoModal extends React.Component<IProps, IState> {
           onTakePhoto={this.handleTakePhoto}
           onRetakePhoto={this.handleRetakePhoto}
           onSavePhoto={this.handleSavePhoto}
+          isLoading={loading}
         />
       </Popup>
     );

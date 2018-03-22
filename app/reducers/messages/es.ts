@@ -223,6 +223,7 @@ export const SPANISH_TRANSLATION = {
     'leftNavActions.scratchPad': 'Scratchpad',
     'modalButtons.cancel': 'Cancelar',
     'modalButtons.delete': 'Sí, borrar',
+    'modalButtons.loading': 'Loading...',
     'modalButtons.submit': 'Enviar',
     'patientInfo.age': '{age} years old',
     'patientInfo.needToKnow': 'Need-to-know',

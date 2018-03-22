@@ -8,10 +8,11 @@ interface IProps {
   onTakePhoto: () => void;
   onRetakePhoto: () => void;
   onSavePhoto: () => void;
+  isLoading: boolean;
 }
 
 const PhotoModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { isPhotoTaken, onClose, onTakePhoto, onRetakePhoto, onSavePhoto } = props;
+  const { isPhotoTaken, onClose, onTakePhoto, onRetakePhoto, onSavePhoto, isLoading } = props;
 
   if (isPhotoTaken) {
     return (
@@ -21,6 +22,7 @@ const PhotoModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
           cancel={onRetakePhoto}
           submitMessageId="patientPhoto.savePhoto"
           submit={onSavePhoto}
+          isLoading={isLoading}
         />
       </div>
     );

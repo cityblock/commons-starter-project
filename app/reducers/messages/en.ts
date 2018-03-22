@@ -219,6 +219,7 @@ export const ENGLISH_TRANSLATION = {
     'leftNavActions.scratchPad': 'Scratchpad',
     'modalButtons.cancel': 'Cancel',
     'modalButtons.delete': 'Yes, delete',
+    'modalButtons.loading': 'Loading...',
     'modalButtons.submit': 'Submit',
     'patientInfo.age': '{age} years old',
     'patientInfo.needToKnow': 'Need-to-know',

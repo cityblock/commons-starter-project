@@ -9,10 +9,13 @@ interface IProps {
   cancel?: () => void; // click handler for cancel button
   submit?: () => void; // click handler for submit button
   redSubmit?: boolean; // if true, makes submit button red
+  isLoading?: boolean; // if true, disable submit button
 }
 
 const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { cancelMessageId, submitMessageId, cancel, submit, redSubmit } = props;
+  const { cancelMessageId, submitMessageId, cancel, submit, redSubmit, isLoading } = props;
+  const submitButtonMessageId = isLoading
+    ? 'modalButtons.loading' : submitMessageId || 'modalButtons.submit';
 
   return (
     <div
@@ -30,10 +33,11 @@ const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
       )}
       {submit && (
         <Button
-          messageId={submitMessageId || 'modalButtons.submit'}
+          messageId={submitButtonMessageId}
           color={redSubmit ? 'red' : 'blue'}
           onClick={submit}
           className={styles.button}
+          disabled={!!isLoading}
         />
       )}
     </div>

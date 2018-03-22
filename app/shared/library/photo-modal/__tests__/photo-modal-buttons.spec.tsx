@@ -13,6 +13,7 @@ describe('Library Photo Modal Buttons Component', () => {
       onTakePhoto={placeholderFn}
       onRetakePhoto={placeholderFn}
       onSavePhoto={placeholderFn}
+      isLoading={false}
     />,
   );
 
@@ -32,5 +33,6 @@ describe('Library Photo Modal Buttons Component', () => {
 
     expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('patientPhoto.savePhoto');
     expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('patientPhoto.retakePhoto');
+    expect(wrapper.find(ModalButtons).props().isLoading).toBeFalsy();
   });
 });

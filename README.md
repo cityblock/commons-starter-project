@@ -185,7 +185,7 @@ Once you've added the aptible git remote, you can use Aptible toolbelt to interf
 
     yarn prod-db
 
-Or, alternatively, use `aptible db:tunnel commons`. Note: If you get an auth error here, you may
+Or, alternatively, use `aptible db:tunnel commons-staging` or `aptible db:tunnel commons-production`. Note: If you get an auth error here, you may
 need to login to Aptible again. Login tokens last 1 week.
 
 ### To push your local version of the server to Aptible, run

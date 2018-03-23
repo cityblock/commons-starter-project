@@ -68,6 +68,7 @@ export default async (
   app: express.Application,
   logger: Console,
   txn?: Transaction,
+  allowCrossDomainRequests?: boolean,
 ) => {
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
@@ -114,7 +115,9 @@ export default async (
   }
 
   // Used for integration tests
-  app.use(allowCrossDomainMiddleware);
+  if (allowCrossDomainRequests && config.NODE_ENV === 'test') {
+    app.use(allowCrossDomainMiddleware);
+  }
 
   app.use(
     '/graphql',

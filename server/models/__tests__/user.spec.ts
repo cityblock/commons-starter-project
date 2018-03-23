@@ -280,7 +280,7 @@ describe('user model', () => {
       { cityblockId: 123, homeClinicId: clinic.id, userId: user1.id },
       txn,
     );
-    await createPatient({ cityblockId: 123, homeClinicId: clinic.id, userId: user1.id }, txn);
+    await createPatient({ cityblockId: 124, homeClinicId: clinic.id, userId: user1.id }, txn);
 
     const userSummaryList = await User.getUserSummaryList([healthCoachUserRole], txn);
     const user1Summary = userSummaryList.find(user => user.id === user1.id);

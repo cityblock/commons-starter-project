@@ -547,7 +547,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   const patient1 = await Patient.create(
     {
       patientId: uuid(),
-      cityblockId: 5678,
+      cityblockId: 5679,
       firstName: patient2Name,
       lastName: 'Stark',
       homeClinicId: clinic.id,
@@ -894,7 +894,7 @@ export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
   );
   await createPatient(
     {
-      cityblockId: 234,
+      cityblockId: 235,
       firstName: patient3Name,
       homeClinicId: clinic.id,
       userId: user2.id,
@@ -903,7 +903,7 @@ export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
   );
   const patient4 = await createPatient(
     {
-      cityblockId: 234,
+      cityblockId: 238,
       firstName: patient4Name,
       homeClinicId: clinic.id,
       userId: user.id,
@@ -912,7 +912,7 @@ export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
   );
   const patient5 = await createPatient(
     {
-      cityblockId: 234,
+      cityblockId: 237,
       firstName: patient5Name,
       homeClinicId: clinic.id,
       userId: user.id,

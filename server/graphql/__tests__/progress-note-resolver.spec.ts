@@ -423,7 +423,7 @@ describe('progress note resolver', () => {
       const { clinic, user } = await setup(txn);
       const patient2 = await createPatient(
         {
-          cityblockId: 123,
+          cityblockId: 124,
           homeClinicId: clinic.id,
         },
         txn,
@@ -451,7 +451,7 @@ describe('progress note resolver', () => {
       const { clinic, user } = await setup(txn);
       const patient2 = await createPatient(
         {
-          cityblockId: 123,
+          cityblockId: 125,
           homeClinicId: clinic.id,
         },
         txn,

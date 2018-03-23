@@ -169,7 +169,7 @@ describe('patient model', () => {
   describe('edit', () => {
     it('should edit patient', async () => {
       const { clinic } = await setup(txn);
-      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const patient = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
       const birthday = new Date('02/02/1902');
       expect(patient).toMatchObject({
         id: patient.id,
@@ -248,7 +248,7 @@ describe('patient model', () => {
       const patient = await Patient.create(
         {
           patientId: uuid(),
-          cityblockId: 123456,
+          cityblockId: 123459,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -269,7 +269,7 @@ describe('patient model', () => {
       const patient = await Patient.create(
         {
           patientId: uuid(),
-          cityblockId: 123456,
+          cityblockId: 123450,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -295,7 +295,7 @@ describe('patient model', () => {
       const patient = await Patient.create(
         {
           patientId,
-          cityblockId: 123456,
+          cityblockId: 123451,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -334,7 +334,7 @@ describe('patient model', () => {
       await Patient.create(
         {
           patientId,
-          cityblockId: 123456,
+          cityblockId: 123452,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -369,7 +369,7 @@ describe('patient model', () => {
       await Patient.create(
         {
           patientId,
-          cityblockId: 123456,
+          cityblockId: 123458,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -406,7 +406,7 @@ describe('patient model', () => {
       await Patient.create(
         {
           patientId,
-          cityblockId: 123456,
+          cityblockId: 123411,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',

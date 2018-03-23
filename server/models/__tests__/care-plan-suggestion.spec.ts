@@ -124,8 +124,8 @@ describe('care plan suggestion', () => {
         txn,
       );
 
-      expect(foundCarePlanSuggestion!.id).toEqual(carePlanSuggestion.id);
-      expect(notFoundCarePlanSuggestion).toBeFalsy();
+      expect(foundCarePlanSuggestion[0].id).toEqual(carePlanSuggestion.id);
+      expect(notFoundCarePlanSuggestion).toHaveLength(0);
     });
 
     it('creates multiple carePlanSuggestions at once', async () => {
@@ -307,6 +307,7 @@ describe('care plan suggestion', () => {
       const suggestionsForPatient = await CarePlanSuggestion.getForPatient(patient.id, txn);
       expect(suggestionsForPatient.length).toEqual(2);
 
+      // accept only one
       await CarePlanSuggestion.accept(suggestions[0], user.id, txn);
 
       // getForPatient should return correct number as well
@@ -360,6 +361,7 @@ describe('care plan suggestion', () => {
       const suggestionsForPatient = await CarePlanSuggestion.getForPatient(patient.id, txn);
       expect(suggestionsForPatient.length).toEqual(2);
 
+      // accept only one
       await CarePlanSuggestion.accept(suggestions[0], user.id, txn);
 
       const suggestionsAfterAccepting = await CarePlanSuggestion.query(txn).where({

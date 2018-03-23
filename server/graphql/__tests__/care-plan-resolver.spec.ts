@@ -697,6 +697,17 @@ describe('care plan resolver tests', () => {
         },
         txn,
       );
+      // dupe suggestion
+      const dupeSuggestion = await CarePlanSuggestion.create(
+        {
+          patientId: patient.id,
+          suggestionType: 'goal',
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        },
+        txn,
+      );
       const patientConcern = await PatientConcern.create(
         {
           patientId: patient.id,
@@ -717,14 +728,33 @@ describe('care plan resolver tests', () => {
         },
       );
 
+      // accept the same suggestion again
+      const dupeSuggestionAcceptResponse = await graphql(
+        schema,
+        carePlanSuggestionAcceptMutation,
+        null,
+        { db, permissions, userId: user.id, txn },
+        {
+          carePlanSuggestionId: suggestion.id,
+          patientConcernId: patientConcern.id,
+        },
+      );
+      expect(dupeSuggestionAcceptResponse.errors![0].message).toBe(
+        'Suggestion was already accepted',
+      );
+
       const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
       expect(patientGoals.map(g => g.goalSuggestionTemplateId)).toContain(
         goalSuggestionTemplate.id,
       );
+      expect(patientGoals).toHaveLength(1);
       expect(patientGoals[0].patientConcernId).toEqual(patientConcern.id);
 
       const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id, txn);
       expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
+
+      const fetchedDupeSuggestion = await CarePlanSuggestion.get(dupeSuggestion.id, txn);
+      expect(fetchedDupeSuggestion!.acceptedAt).not.toBeFalsy();
     });
 
     it('accepts a goal suggestion and some task templates', async () => {

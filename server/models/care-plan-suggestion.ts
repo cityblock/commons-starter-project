@@ -202,10 +202,10 @@ export default class CarePlanSuggestion extends BaseModel {
     patientId: string,
     concernId: string,
     txn: Transaction,
-  ): Promise<CarePlanSuggestion | undefined> {
+  ): Promise<CarePlanSuggestion[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .findOne({ patientId, concernId, acceptedAt: null, dismissedAt: null });
+      .where({ patientId, concernId, acceptedAt: null, dismissedAt: null });
   }
 
   static async create(

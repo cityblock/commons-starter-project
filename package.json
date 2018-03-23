@@ -196,7 +196,7 @@
     "mini-css-extract-plugin": "0.2.0",
     "morgan": "1.9.0",
     "nodemon": "1.17.2",
-    "objection": "1.0.0",
+    "objection": "1.0.1",
     "pg": "7.4.1",
     "postcss-cssnext": "3.1.0",
     "postcss-loader": "2.1.3",

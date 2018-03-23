@@ -118,62 +118,70 @@ export async function carePlanSuggestionAccept(
   );
 
   const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
-  let secondaryCarePlanSuggestion: CarePlanSuggestion | undefined;
+  let secondaryCarePlanSuggestions: CarePlanSuggestion[] = [];
 
-  if (carePlanSuggestion) {
-    const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-    const { startedAt, concernId, taskTemplateIds } = input;
-    let { patientConcernId } = input;
+  if (!carePlanSuggestion) {
+    throw new Error('Suggestion does not exist');
+  } else if (carePlanSuggestion.acceptedAt) {
+    throw new Error('Suggestion was already accepted');
+  }
 
-    if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
-      await PatientConcern.create(
+  const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
+  const { startedAt, concernId, taskTemplateIds } = input;
+  let { patientConcernId } = input;
+
+  if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
+    await PatientConcern.create(
+      {
+        concernId: carePlanSuggestion.concernId,
+        patientId,
+        startedAt: startedAt || undefined,
+        userId: userId!,
+      },
+      txn,
+    );
+  } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
+    if (concernId) {
+      const patientConcern = await PatientConcern.create(
         {
-          concernId: carePlanSuggestion.concernId,
+          concernId,
           patientId,
           startedAt: startedAt || undefined,
           userId: userId!,
         },
         txn,
       );
-    } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
-      if (concernId) {
-        const patientConcern = await PatientConcern.create(
-          {
-            concernId,
-            patientId,
-            startedAt: startedAt || undefined,
-            userId: userId!,
-          },
-          txn,
-        );
 
-        patientConcernId = patientConcern.id;
+      patientConcernId = patientConcern.id;
 
-        secondaryCarePlanSuggestion = await CarePlanSuggestion.findForPatientAndConcern(
-          patientId,
-          concernId,
-          txn,
-        );
-      }
-
-      await PatientGoal.create(
-        {
-          userId: userId!,
-          goalSuggestionTemplateId: goalSuggestionTemplateId || null,
-          patientId: carePlanSuggestion.patientId,
-          title: carePlanSuggestion.goalSuggestionTemplate.title,
-          patientConcernId: patientConcernId || null,
-          taskTemplateIds: taskTemplateIds || [],
-        },
+      secondaryCarePlanSuggestions = await CarePlanSuggestion.findForPatientAndConcern(
+        patientId,
+        concernId,
         txn,
       );
     }
 
-    await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
+    await PatientGoal.create(
+      {
+        userId: userId!,
+        goalSuggestionTemplateId: goalSuggestionTemplateId || null,
+        patientId: carePlanSuggestion.patientId,
+        title: carePlanSuggestion.goalSuggestionTemplate.title,
+        patientConcernId: patientConcernId || null,
+        taskTemplateIds: taskTemplateIds || [],
+      },
+      txn,
+    );
+  }
 
-    if (secondaryCarePlanSuggestion) {
-      await CarePlanSuggestion.accept(secondaryCarePlanSuggestion, userId!, txn);
-    }
+  await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
+
+  if (secondaryCarePlanSuggestions) {
+    await Promise.all([
+      secondaryCarePlanSuggestions.forEach(async suggestion =>
+        CarePlanSuggestion.accept(suggestion, userId!, txn),
+      ),
+    ]);
   }
 
   return carePlanSuggestion || null;

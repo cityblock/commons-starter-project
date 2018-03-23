@@ -84,7 +84,7 @@
   },
   "devDependencies": {
     "@types/enzyme": "3.1.9",
-    "@types/jest": "22.2.0",
+    "@types/jest": "22.2.2",
     "@types/nock": "9.1.2",
     "@types/react-test-renderer": "16.0.1",
     "@types/redux-mock-store": "0.0.13",

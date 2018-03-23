@@ -14,14 +14,17 @@ import CBOCategory from './models/cbo-category';
 import CBOReferral from './models/cbo-referral';
 import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
+import ComputedPatientStatus from './models/computed-patient-status';
 import Concern from './models/concern';
+import ConsentForm from './models/consent-form';
 import EventNotification from './models/event-notification';
 import Patient from './models/patient';
 import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
-import { PatientRelationOptions } from './models/patient-contact';
+import PatientConsentForm from './models/patient-consent-form';
+import PatientContact, { PatientRelationOptions } from './models/patient-contact';
 import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
@@ -638,6 +641,115 @@ export async function setupPatientsWithAssignedState(txn: Transaction) {
   );
 
   return { patient1, user };
+}
+
+export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Pentos', 13), txn);
+  const user = await User.create(createMockUser(311, clinic.id), txn);
+  const user2 = await User.create(createMockUser(213, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  await ComputedPatientStatus.updateForPatient(patient1.id, user.id, txn);
+
+  // complete checklist for patient2
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  await Patient.edit(
+    {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    },
+    patient2.id,
+    txn,
+  );
+  await PatientInfo.edit(
+    {
+      gender: 'nonbinary',
+      hasHealthcareProxy: false,
+      hasMolst: false,
+      hasDeclinedPhotoUpload: true,
+      updatedById: user.id,
+    },
+    patient2.patientInfo.id,
+    txn,
+  );
+  await PatientContact.create(
+    {
+      patientId: patient2.id,
+      updatedById: user.id,
+      relationToPatient: 'sibling',
+      firstName: 'Aya',
+      lastName: 'Stark',
+      isEmergencyContact: true,
+      isHealthcareProxy: false,
+      canContact: true,
+    },
+    txn,
+  );
+  const consentForm = await ConsentForm.create('Cityblock', txn);
+  await PatientConsentForm.create(
+    {
+      patientId: patient2.id,
+      userId: user.id,
+      formId: consentForm.id,
+      signedAt: '01/01/1999',
+    },
+    txn,
+  );
+  await ComputedPatientStatus.updateForPatient(patient2.id, user.id, txn);
+
+  // partially complete checklist for patient 3
+  const patient3 = await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  await PatientInfo.edit(
+    {
+      gender: 'nonbinary',
+      hasHealthcareProxy: false,
+      hasMolst: false,
+      hasDeclinedPhotoUpload: true,
+      updatedById: user.id,
+    },
+    patient3.patientInfo.id,
+    txn,
+  );
+  await ComputedPatientStatus.updateForPatient(patient3.id, user.id, txn);
+
+  // create patient for other user
+  const patient4 = await createPatient(
+    {
+      cityblockId: 456,
+      firstName: patient4Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  await ComputedPatientStatus.updateForPatient(patient4.id, user.id, txn);
+
+  return { patient1, patient3, user };
 }
 
 export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {

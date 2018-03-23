@@ -311,6 +311,19 @@ export async function resolvePatientsWithAssignedState(
   );
 }
 
+export async function resolvePatientsWithIntakeInProgress(
+  root: any,
+  pageOptions: IPaginationOptions,
+  context: IContext,
+): Promise<IPatientForDashboardEdges> {
+  return resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithIntakeInProgress,
+  );
+}
+
 export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,

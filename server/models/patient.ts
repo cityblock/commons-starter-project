@@ -193,6 +193,7 @@ export default class Patient extends Model {
         from: 'computed_patient_status.patientId',
         to: 'patient.id',
       },
+      modify: builder => builder.findOne({ deletedAt: null }),
     },
 
     patientState: {
@@ -631,6 +632,32 @@ export default class Patient extends Model {
       .eager(EAGER_QUERY)
       .leftOuterJoinRelation('patientState')
       .where('patientState.currentState', 'assigned')
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize) as any;
+  }
+
+  static async getPatientsWithIntakeInProgress(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .leftOuterJoinRelation('computedPatientStatus')
+      .whereRaw(
+        `
+        (
+          "isCoreIdentityVerified" IS NOT TRUE
+          OR "isDemographicInfoUpdated" IS NOT TRUE
+          OR "isEmergencyContactAdded" IS NOT TRUE
+          OR "isAdvancedDirectivesAdded" IS NOT TRUE
+          OR "isConsentSigned" IS NOT TRUE
+          OR "isPhotoAddedOrDeclined" IS NOT TRUE
+        )
+      `,
+      )
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')

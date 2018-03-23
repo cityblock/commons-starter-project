@@ -100,6 +100,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "needsSupervisorReview": null,
           "patient": Object {
             "cityblockId": 123,
+            "computedPatientStatus": Object {
+              "isAdvancedDirectivesAdded": true,
+              "isConsentSigned": false,
+              "isCoreIdentityVerified": true,
+              "isDemographicInfoUpdated": true,
+              "isEmergencyContactAdded": false,
+              "isPhotoAddedOrDeclined": false,
+            },
             "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
             "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
@@ -258,6 +266,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "needsSupervisorReview": null,
           "patient": Object {
             "cityblockId": 123,
+            "computedPatientStatus": Object {
+              "isAdvancedDirectivesAdded": true,
+              "isConsentSigned": false,
+              "isCoreIdentityVerified": true,
+              "isDemographicInfoUpdated": true,
+              "isEmergencyContactAdded": false,
+              "isPhotoAddedOrDeclined": false,
+            },
             "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
             "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
@@ -449,6 +465,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "needsSupervisorReview": null,
           "patient": Object {
             "cityblockId": 123,
+            "computedPatientStatus": Object {
+              "isAdvancedDirectivesAdded": true,
+              "isConsentSigned": false,
+              "isCoreIdentityVerified": true,
+              "isDemographicInfoUpdated": true,
+              "isEmergencyContactAdded": false,
+              "isPhotoAddedOrDeclined": false,
+            },
             "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
             "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",
@@ -607,6 +631,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "needsSupervisorReview": null,
           "patient": Object {
             "cityblockId": 123,
+            "computedPatientStatus": Object {
+              "isAdvancedDirectivesAdded": true,
+              "isConsentSigned": false,
+              "isCoreIdentityVerified": true,
+              "isDemographicInfoUpdated": true,
+              "isEmergencyContactAdded": false,
+              "isPhotoAddedOrDeclined": false,
+            },
             "coreIdentityVerifiedAt": "2017-09-07T13:45:14.532Z",
             "coreIdentityVerifiedById": "id2",
             "createdAt": "2017-09-07T13:45:14.532Z",

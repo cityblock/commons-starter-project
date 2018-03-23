@@ -11,15 +11,18 @@ import PatientAge from '../../shared/library/patient-age/patient-age';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import PatientTaskCount from '../tasks/patient-task-count';
 import * as styles from './css/patient-list-item.css';
+import PatientIntakeProgressBar from './patient-intake-progress-bar';
 
 interface IContainerProps {
   className: string;
   onClick?: () => void;
 }
 
+export type DisplayOptions = 'task' | 'progress' | 'default';
+
 interface IProps {
   patient: FullPatientForDashboardFragment;
-  taskView?: boolean; // optional flag if viewing patient with urgent tasks
+  displayType?: DisplayOptions; // optional body view option
   tasksDueCount?: number | null; // number of tasks due, only for task view
   notificationsCount?: number | null; // number of tasks with notifications, only for task view
   selected?: boolean; // flag if patient is selected, applies sticky scroll styles
@@ -34,7 +37,7 @@ interface IProps {
 }
 
 export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { patient, taskView, tasksDueCount, notificationsCount, selected, history } = props;
+  const { patient, displayType, tasksDueCount, notificationsCount, selected, history } = props;
 
   const redirectToPatient = () => {
     history.push(getActiveMapRoute(patient.id));
@@ -48,20 +51,25 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
     className: containerStyles,
   };
 
-  if (!taskView) {
+  if (displayType !== 'task') {
     containerProps.onClick = redirectToPatient;
   }
 
   const { gender, hasUploadedPhoto } = patient.patientInfo;
 
-  const itemBody = !!taskView ? (
-    <PatientTaskCount
-      tasksDueCount={tasksDueCount as number | null}
-      notificationsCount={notificationsCount as number | null}
-    />
-  ) : (
-    <PatientAge dateOfBirth={patient.dateOfBirth} gender={gender} />
-  );
+  let itemBody;
+  if (displayType === 'task') {
+    itemBody = (
+      <PatientTaskCount
+        tasksDueCount={tasksDueCount as number | null}
+        notificationsCount={notificationsCount as number | null}
+      />
+    );
+  } else if (displayType === 'progress') {
+    itemBody = <PatientIntakeProgressBar computedPatientStatus={patient.computedPatientStatus} />;
+  } else {
+    itemBody = <PatientAge dateOfBirth={patient.dateOfBirth} gender={gender} />;
+  }
 
   return (
     <div {...containerProps}>

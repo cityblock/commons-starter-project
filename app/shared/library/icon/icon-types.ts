@@ -38,6 +38,7 @@ export type IconName =
   | 'keyboardArrowRight'
   | 'keyboardArrowUp'
   | 'labelOutline'
+  | 'list'
   | 'lockOutline'
   | 'moreVert'
   | 'noteAdd'

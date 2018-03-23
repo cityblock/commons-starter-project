@@ -13,4 +13,12 @@ fragment FullPatientForDashboard on PatientForDashboard {
   patientState {
     ...ShortPatientState
   }
+  computedPatientStatus {
+    isCoreIdentityVerified
+    isDemographicInfoUpdated
+    isEmergencyContactAdded
+    isAdvancedDirectivesAdded
+    isConsentSigned
+    isPhotoAddedOrDeclined
+  }
 }

@@ -100,6 +100,11 @@ declare module 'schema' {
     patientsWithAssignedState: IPatientForDashboardEdges;
 
     /**
+     * Patient dashboard - intake in progress
+     */
+    patientsWithIntakeInProgress: IPatientForDashboardEdges;
+
+    /**
      * Patient dashboard - computed list for answer
      */
     patientsForComputedList: IPatientForDashboardEdges;
@@ -623,6 +628,10 @@ declare module 'schema' {
     pageSize: number;
   }
   interface IPatientsWithAssignedStateOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithIntakeInProgressOnRootQueryTypeArguments {
     pageNumber: number;
     pageSize: number;
   }
@@ -1293,6 +1302,7 @@ declare module 'schema' {
     cityblockId: number;
     patientInfo: IPatientInfo;
     patientState: IPatientState;
+    computedPatientStatus: IComputedPatientStatus;
   }
 
   /**

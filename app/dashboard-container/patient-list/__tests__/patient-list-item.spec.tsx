@@ -68,7 +68,7 @@ describe('Dashboard Patient List Item', () => {
   it('renders patient task count if on patient task view', () => {
     const tasksDueCount = 11;
     const notificationsCount = 12;
-    wrapper.setProps({ taskView: true, tasksDueCount, notificationsCount });
+    wrapper.setProps({ displayType: 'task', tasksDueCount, notificationsCount });
 
     expect(wrapper.find(PatientTaskCount).length).toBe(1);
     expect(wrapper.find(PatientTaskCount).props().tasksDueCount).toBe(tasksDueCount);

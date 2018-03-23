@@ -67,6 +67,7 @@ export class DashboardPatients extends React.Component<allProps> {
     const patients =
       patientResults && patientResults.edges ? patientResults.edges.map(result => result.node) : [];
 
+    const displayType = selected === 'intake' ? 'progress' : 'default';
     const patientList =
       selected === 'tasks' ? (
         <PatientWithTasksList
@@ -75,7 +76,10 @@ export class DashboardPatients extends React.Component<allProps> {
           pageSize={pageSize}
         />
       ) : (
-        <PatientList patients={patients as FullPatientForDashboardFragment[]} />
+        <PatientList
+          patients={patients as FullPatientForDashboardFragment[]}
+          displayType={displayType}
+        />
       );
 
     return (

@@ -72,7 +72,7 @@ export class PatientWithTasksListItem extends React.Component<allProps> {
       <div onClick={this.onPatientClick} className={otherPatientSelected ? styles.opaque : ''}>
         <PatientListItem
           patient={patient}
-          taskView={true}
+          displayType="task"
           tasksDueCount={tasksDueCount}
           notificationsCount={notificationsCount}
           selected={tasksVisible}

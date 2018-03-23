@@ -659,6 +659,7 @@ type PatientForDashboard implements uniqueId {
   cityblockId: Int!
   patientInfo: PatientInfo!
   patientState: PatientState!
+  computedPatientStatus: ComputedPatientStatus!
 }
 
 # Patient dashboard item node
@@ -2626,6 +2627,8 @@ type RootQueryType {
   patientsWithOpenCBOReferrals(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - assigned state
   patientsWithAssignedState(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - intake in progress
+  patientsWithIntakeInProgress(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - computed list for answer
   patientsForComputedList(
     answerId: ID!

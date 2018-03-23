@@ -220,6 +220,14 @@ export const patient = {
   patientDataFlags: [],
   cityblockId: 123,
   patientState,
+  computedPatientStatus: {
+    isCoreIdentityVerified: true,
+    isDemographicInfoUpdated: true,
+    isEmergencyContactAdded: false,
+    isAdvancedDirectivesAdded: true,
+    isConsentSigned: false,
+    isPhotoAddedOrDeclined: false,
+  },
 };
 
 export const concern = {

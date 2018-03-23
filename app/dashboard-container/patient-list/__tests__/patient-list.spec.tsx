@@ -5,7 +5,7 @@ import PatientList from '../patient-list';
 import PatientListItem from '../patient-list-item';
 
 describe('Dashboard Patient with Tasks List', () => {
-  const wrapper = shallow(<PatientList patients={[patient]} />);
+  const wrapper = shallow(<PatientList patients={[patient]} displayType="default" />);
 
   it('renders list of patients', () => {
     expect(wrapper.find('.list').length).toBe(1);

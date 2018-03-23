@@ -10,6 +10,7 @@ import {
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
   setupPatientsWithAssignedState,
+  setupPatientsWithIntakeInProgress,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
   setupPatientsWithOpenCBOReferrals,
@@ -964,6 +965,34 @@ describe('patient model', () => {
         id: patient1.id,
         firstName: patient1.firstName,
       });
+    });
+
+    it('returns patients on care team that have intake in progress', async () => {
+      const { user, patient1, patient3 } = await setupPatientsWithIntakeInProgress(txn);
+
+      const { total, results } = await Patient.getPatientsWithIntakeInProgress(
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        user.id,
+        txn,
+      );
+
+      expect(total).toBe(2);
+
+      expect(results).toContainEqual(
+        expect.objectContaining({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        }),
+      );
+      expect(results).toContainEqual(
+        expect.objectContaining({
+          id: patient3.id,
+          firstName: patient3.firstName,
+        }),
+      );
     });
 
     it('returns patients on care team with pending MAP suggestions', async () => {

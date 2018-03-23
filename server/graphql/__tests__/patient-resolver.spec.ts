@@ -8,6 +8,7 @@ import * as getPatient from '../../../app/graphql/queries/get-patient.graphql';
 import * as patientForComputedList from '../../../app/graphql/queries/get-patients-for-computed-list.graphql';
 import * as patientsNewToCareTeam from '../../../app/graphql/queries/get-patients-new-to-care-team.graphql';
 import * as patientsWithAssignedState from '../../../app/graphql/queries/get-patients-with-assigned-state.graphql';
+import * as patientsWithIntakeInProgress from '../../../app/graphql/queries/get-patients-with-intake-in-progress.graphql';
 import * as patientsWithMissingInfo from '../../../app/graphql/queries/get-patients-with-missing-info.graphql';
 import * as patientsWithNoRecentEngagement from '../../../app/graphql/queries/get-patients-with-no-recent-engagement.graphql';
 import * as patientsWithOpenCBOReferrals from '../../../app/graphql/queries/get-patients-with-open-cbo-referrals.graphql';
@@ -26,6 +27,7 @@ import {
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
   setupPatientsWithAssignedState,
+  setupPatientsWithIntakeInProgress,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
   setupPatientsWithOpenCBOReferrals,
@@ -151,6 +153,7 @@ describe('patient', () => {
   const patientsWithPendingSuggestionsQuery = print(patientsWithPendingSuggestions);
   const patientsWithUrgentTasksQuery = print(patientsWithUrgentTasks);
   const patientsWithAssignedStateQuery = print(patientsWithAssignedState);
+  const patientsWithIntakeInProgressQuery = print(patientsWithIntakeInProgress);
 
   beforeAll(async () => {
     db = await Db.get();
@@ -854,6 +857,52 @@ describe('patient', () => {
       id: patient1.id,
       firstName: patient1.firstName,
     });
+  });
+
+  it('gets patients that have intake in progress', async () => {
+    const { user, patient1, patient3 } = await setupPatientsWithIntakeInProgress(txn);
+    const result = await graphql(
+      schema,
+      patientsWithIntakeInProgressQuery,
+      null,
+      {
+        permissions,
+        userId: user.id,
+        txn,
+      },
+      { pageNumber: 0, pageSize: 10 },
+    );
+
+    expect(result.data!.patientsWithIntakeInProgress.totalCount).toBe(2);
+    const patients = result.data!.patientsWithIntakeInProgress.edges.map((edge: any) => edge.node);
+    expect(patients).toContainEqual(
+      expect.objectContaining({
+        id: patient1.id,
+        firstName: patient1.firstName,
+        computedPatientStatus: {
+          isCoreIdentityVerified: false,
+          isDemographicInfoUpdated: false,
+          isEmergencyContactAdded: false,
+          isAdvancedDirectivesAdded: false,
+          isConsentSigned: false,
+          isPhotoAddedOrDeclined: false,
+        },
+      }),
+    );
+    expect(patients).toContainEqual(
+      expect.objectContaining({
+        id: patient3.id,
+        firstName: patient3.firstName,
+        computedPatientStatus: {
+          isCoreIdentityVerified: false,
+          isDemographicInfoUpdated: true,
+          isEmergencyContactAdded: false,
+          isAdvancedDirectivesAdded: true,
+          isConsentSigned: false,
+          isPhotoAddedOrDeclined: true,
+        },
+      }),
+    );
   });
 
   it('gets patients that have pending MAP suggestions', async () => {

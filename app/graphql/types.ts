@@ -3348,6 +3348,14 @@ export interface getPatientsForComputedListQuery {
           id: string,
           currentState: CurrentPatientState,
         },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
       } | null,
     } >,
     pageInfo:  {
@@ -3380,6 +3388,14 @@ export interface getPatientsNewToCareTeamQuery {
         patientState:  {
           id: string,
           currentState: CurrentPatientState,
+        },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
         },
       } | null,
     } >,
@@ -3414,6 +3430,55 @@ export interface getPatientsWithAssignedStateQuery {
           id: string,
           currentState: CurrentPatientState,
         },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
+export interface getPatientsWithIntakeInProgressQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithIntakeInProgressQuery {
+  // Patient dashboard - intake in progress
+  patientsWithIntakeInProgress:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        cityblockId: number,
+        patientInfo:  {
+          gender: Gender | null,
+          hasUploadedPhoto: boolean | null,
+        },
+        patientState:  {
+          id: string,
+          currentState: CurrentPatientState,
+        },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
       } | null,
     } >,
     pageInfo:  {
@@ -3446,6 +3511,14 @@ export interface getPatientsWithMissingInfoQuery {
         patientState:  {
           id: string,
           currentState: CurrentPatientState,
+        },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
         },
       } | null,
     } >,
@@ -3480,6 +3553,14 @@ export interface getPatientsWithNoRecentEngagementQuery {
           id: string,
           currentState: CurrentPatientState,
         },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
       } | null,
     } >,
     pageInfo:  {
@@ -3512,6 +3593,14 @@ export interface getPatientsWithOpenCBOReferralsQuery {
         patientState:  {
           id: string,
           currentState: CurrentPatientState,
+        },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
         },
       } | null,
     } >,
@@ -3546,6 +3635,14 @@ export interface getPatientsWithOutOfDateMAPQuery {
           id: string,
           currentState: CurrentPatientState,
         },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
       } | null,
     } >,
     pageInfo:  {
@@ -3579,6 +3676,14 @@ export interface getPatientsWithPendingSuggestionsQuery {
           id: string,
           currentState: CurrentPatientState,
         },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
+        },
       } | null,
     } >,
     pageInfo:  {
@@ -3611,6 +3716,14 @@ export interface getPatientsWithUrgentTasksQuery {
         patientState:  {
           id: string,
           currentState: CurrentPatientState,
+        },
+        computedPatientStatus:  {
+          isCoreIdentityVerified: boolean,
+          isDemographicInfoUpdated: boolean,
+          isEmergencyContactAdded: boolean,
+          isAdvancedDirectivesAdded: boolean,
+          isConsentSigned: boolean,
+          isPhotoAddedOrDeclined: boolean,
         },
       } | null,
     } >,
@@ -10769,6 +10882,14 @@ export interface FullPatientForDashboardFragment {
   patientState:  {
     id: string,
     currentState: CurrentPatientState,
+  },
+  computedPatientStatus:  {
+    isCoreIdentityVerified: boolean,
+    isDemographicInfoUpdated: boolean,
+    isEmergencyContactAdded: boolean,
+    isAdvancedDirectivesAdded: boolean,
+    isConsentSigned: boolean,
+    isPhotoAddedOrDeclined: boolean,
   },
 };
 

@@ -22,7 +22,7 @@ describe('Dashboard Patient with Tasks List Item', () => {
   it('returns patient list item for urgent tasks view', () => {
     expect(wrapper.find(PatientListItem).length).toBe(1);
     expect(wrapper.find(PatientListItem).props().patient).toEqual(patient);
-    expect(wrapper.find(PatientListItem).props().taskView).toBeTruthy();
+    expect(wrapper.find(PatientListItem).props().displayType).toBe('task');
     expect(wrapper.find(PatientListItem).props().selected).toBeFalsy();
   });
 

@@ -42,6 +42,7 @@ import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from 'material-ui-icons/KeyboardArrowUp';
 import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
+import ListIcon from 'material-ui-icons/List';
 import LockOutlineIcon from 'material-ui-icons/LockOutline';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import NoteAddIcon from 'material-ui-icons/NoteAdd';
@@ -104,6 +105,7 @@ const components: IconComponents = {
   keyboardArrowRight: KeyboardArrowRightIcon,
   keyboardArrowUp: KeyboardArrowUpIcon,
   labelOutline: LabelOutlineIcon,
+  list: ListIcon,
   lockOutline: LockOutlineIcon,
   moreVert: MoreVertIcon,
   noteAdd: NoteAddIcon,

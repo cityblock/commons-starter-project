@@ -32,7 +32,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for task notifications', () => {
-    expect(wrapper.find(NavigationItem).length).toBe(8);
+    expect(wrapper.find(NavigationItem).length).toBe(9);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -140,110 +140,142 @@ describe('Dashboard Navigation', () => {
     ).toBe('assignment');
   });
 
-  it('renders navigation item for pending MAP suggestions', () => {
+  it('renders navigation item for intake in progress', () => {
+    const position = 4;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(position)
+        .props().selected,
+    ).toBe('intake');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(position)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(position)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(position)
+        .props().icon,
+    ).toBe('list');
+  });
+
+  it('renders navigation item for pending MAP suggestions', () => {
+    const position = 5;
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(position)
         .props().selected,
     ).toBe('suggestions');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(position)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(position)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(4)
+        .at(position)
         .props().icon,
     ).toBe('playlistAdd');
   });
 
   it('renders navigation item for patients with missing info', () => {
+    const position = 6;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(position)
         .props().selected,
     ).toBe('demographics');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(position)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(position)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(5)
+        .at(position)
         .props().icon,
     ).toBe('infoOutline');
   });
 
   it('renders navigation item for no recent engagement', () => {
+    const position = 7;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(position)
         .props().selected,
     ).toBe('engage');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(position)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(position)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(6)
+        .at(position)
         .props().icon,
     ).toBe('syncProblem');
   });
 
   it('renders navigation item for out of date MAP', () => {
+    const position = 8;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(7)
+        .at(position)
         .props().selected,
     ).toBe('updateMAP');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(7)
+        .at(position)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(7)
+        .at(position)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(7)
+        .at(position)
         .props().icon,
     ).toBe('accessAlarms');
   });

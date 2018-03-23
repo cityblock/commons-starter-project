@@ -154,9 +154,9 @@
     lodash "^4.17.4"
     url-template "^2.0.8"
 
-"@react-pdf/core@0.7.5", "@react-pdf/core@^0.7.5":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@react-pdf/core/-/core-0.7.5.tgz#df9885497881bded1d6781dc5044911ed1fb6f4e"
+"@react-pdf/core@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@react-pdf/core/-/core-0.7.6.tgz#06c60142bd51a02537cac8f9f29c50c784b7b4dc"
   dependencies:
     blob-stream "^0.1.3"
     fbjs "^0.8.4"
@@ -174,11 +174,11 @@
     request "^2.81.0"
     yoga-layout "1.9.3"
 
-"@react-pdf/node@0.7.5":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@react-pdf/node/-/node-0.7.5.tgz#0088a4a5fc06940529125f16c2bed7e78eab7aca"
+"@react-pdf/node@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@react-pdf/node/-/node-0.7.6.tgz#26c059d7b62dee12ea3b83eea3d318cbe2d3ab1b"
   dependencies:
-    "@react-pdf/core" "^0.7.5"
+    "@react-pdf/core" "^0.7.6"
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"

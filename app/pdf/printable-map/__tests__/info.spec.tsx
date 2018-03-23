@@ -7,8 +7,14 @@ import Info from '../info';
 import PatientInfo from '../patient-info';
 
 describe('Printable MAP information component', () => {
+  const profilePhotoUrl = '/lady/of/winterfell.com';
   const wrapper = shallow(
-    <Info patient={patient} carePlan={[patientConcern]} careTeam={[userForCareTeam]} />,
+    <Info
+      patient={patient}
+      carePlan={[patientConcern]}
+      careTeam={[userForCareTeam]}
+      profilePhotoUrl={profilePhotoUrl}
+    />,
   );
 
   it('renders container views', () => {
@@ -17,6 +23,7 @@ describe('Printable MAP information component', () => {
 
   it('renders patient info component', () => {
     expect(wrapper.find(PatientInfo).props().patient).toEqual(patient);
+    expect(wrapper.find(PatientInfo).props().profilePhotoUrl).toBe(profilePhotoUrl);
     expect(wrapper.find(PatientInfo).props().carePlan).toEqual([patientConcern]);
   });
 

@@ -17,11 +17,14 @@ import PrintableMap from '../printable-map';
 import Task from '../task';
 
 describe('Printable MAP Component', () => {
+  const profilePhotoUrl = '/lady/of/winterfell.com';
+
   const wrapper = shallow(
     <PrintableMap
       patient={patient}
       carePlan={[patientConcern, patientConcernActive]}
       careTeam={[userForCareTeam]}
+      profilePhotoUrl={profilePhotoUrl}
     />,
   );
 
@@ -47,6 +50,7 @@ describe('Printable MAP Component', () => {
 
   it('renders information about MAP', () => {
     expect(wrapper.find(Info).props().patient).toEqual(patient);
+    expect(wrapper.find(Info).props().profilePhotoUrl).toBe(profilePhotoUrl);
     expect(wrapper.find(Info).props().careTeam).toEqual([userForCareTeam]);
     expect(wrapper.find(Info).props().carePlan).toEqual([patientConcernActive]);
   });

@@ -254,7 +254,7 @@ install [Docker][]. After you have Docker installed and running, follow these st
     this, you will have to wait a little while.
 1.  In a separate terminal window, run: `yarn run docker-prod:migrate`.
 1.  To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
-    1.  Alternatively, connect to the database using Postico (user is 'postgres' and port is '5431').
+    1.  Alternatively, connect to the database using Postico (user is 'postgres', port is '5431', and database is 'db').
 1.  Visit `localhost:3000` in your browser.
 1.  If you make changes to the application and wish to see them, the application container will need
     to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.

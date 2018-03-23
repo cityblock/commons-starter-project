@@ -35,7 +35,7 @@ export interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
-  await expressConfig(app, logger, options.transaction, options.allowCrossDomainRequests);
+  await expressConfig(app, logger, options.transaction);
   return (app as any).listen(app.get('port'));
 }
 

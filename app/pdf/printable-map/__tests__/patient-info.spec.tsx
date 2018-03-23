@@ -8,7 +8,11 @@ import PatientHeader from '../patient-header';
 import PatientInfo from '../patient-info';
 
 describe('Printable MAP patient info (left pane)', () => {
-  const wrapper = shallow(<PatientInfo patient={patient} carePlan={[patientConcern]} />);
+  const profilePhotoUrl = '/king/in/the/north.com';
+
+  const wrapper = shallow(
+    <PatientInfo patient={patient} carePlan={[patientConcern]} profilePhotoUrl={profilePhotoUrl} />,
+  );
 
   it('renders container views', () => {
     expect(wrapper.find(View).length).toBe(2);
@@ -16,6 +20,7 @@ describe('Printable MAP patient info (left pane)', () => {
 
   it('renders patient header', () => {
     expect(wrapper.find(PatientHeader).props().patient).toEqual(patient);
+    expect(wrapper.find(PatientHeader).props().profilePhotoUrl).toBe(profilePhotoUrl);
   });
 
   it('renders overview of MAP', () => {

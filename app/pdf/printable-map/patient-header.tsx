@@ -6,10 +6,9 @@ import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
-const AVATAR_PATH = `https://pm1.narvii.com/6055/a3f14b67fc9941a06baa0fe907ecf3aa135b8484_hq.jpg`;
-
 interface IProps {
   patient: FullPatientForProfileFragment;
+  profilePhotoUrl: string | null;
 }
 
 const styles = StyleSheet.create({
@@ -35,12 +34,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const PatientHeader: React.StatelessComponent<IProps> = ({ patient }) => {
+const PatientHeader: React.StatelessComponent<IProps> = ({ patient, profilePhotoUrl }) => {
   const patientName = formatFullName(patient.firstName, patient.lastName);
 
   return (
     <View style={styles.container}>
-      <Image src={AVATAR_PATH} style={styles.image} />
+      {profilePhotoUrl && <Image src={profilePhotoUrl} style={styles.image} />}
       <View style={styles.patient}>
         <HeaderText label={copy.member} />
         <Text style={styles.title}>{patientName}</Text>

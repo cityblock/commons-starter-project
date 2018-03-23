@@ -13,6 +13,7 @@ interface IProps {
   patient: FullPatientForProfileFragment;
   careTeam: FullCareTeamUserFragment[];
   carePlan: FullPatientConcernFragment[];
+  profilePhotoUrl: string | null;
 }
 
 const styles = StyleSheet.create({
@@ -24,10 +25,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Info: React.StatelessComponent<IProps> = ({ patient, careTeam, carePlan }) => {
+const Info: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { patient, careTeam, carePlan, profilePhotoUrl } = props;
+
   return (
     <View style={styles.main}>
-      <PatientInfo patient={patient} carePlan={carePlan} />
+      <PatientInfo patient={patient} carePlan={carePlan} profilePhotoUrl={profilePhotoUrl} />
       <CareTeam careTeam={careTeam} />
     </View>
   );

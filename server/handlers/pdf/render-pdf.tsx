@@ -4,6 +4,7 @@ import { transaction } from 'objection';
 import * as React from 'react';
 import CBOReferral from '../../../app/pdf/cbo-referral/cbo-referral';
 import PrintableMAP from '../../../app/pdf/printable-map/printable-map';
+import { loadPatientPhotoUrl } from '../../graphql/shared/gcs/helpers';
 import { decodeJwt, IJWTForPDFData } from '../../graphql/shared/utils';
 import CareTeam from '../../models/care-team';
 import Patient from '../../models/patient';
@@ -116,11 +117,21 @@ export const renderPrintableMapPdf = async (req: express.Request, res: express.R
     return res.status(404).send('Care plan not found');
   }
 
+  let profilePhotoUrl = null;
+  if (patient.patientInfo.hasUploadedPhoto) {
+    profilePhotoUrl = await loadPatientPhotoUrl(patientId, 'read');
+  }
+
   try {
     return await renderPdf(
       req,
       res,
-      <PrintableMAP carePlan={carePlan} careTeam={careTeam} patient={patient} />,
+      <PrintableMAP
+        carePlan={carePlan}
+        careTeam={careTeam}
+        patient={patient}
+        profilePhotoUrl={profilePhotoUrl}
+      />,
       formatPrintableMapPdfFileName(patient),
     );
   } catch (err) {

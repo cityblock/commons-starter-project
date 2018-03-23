@@ -20,6 +20,7 @@ interface IProps {
   carePlan: FullPatientConcernFragment[];
   careTeam: FullCareTeamUserFragment[];
   patient: FullPatientForProfileFragment;
+  profilePhotoUrl: string | null;
 }
 
 const styles = StyleSheet.create({
@@ -39,7 +40,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, careTeam, patient }) => {
+const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { carePlan, careTeam, patient, profilePhotoUrl } = props;
+
   // only get active concerns (have been started but not completed)
   const activeConcerns = carePlan.filter(concern => !!concern.startedAt && !concern.completedAt);
 
@@ -73,7 +76,12 @@ const PrintableMAP: React.StatelessComponent<IProps> = ({ carePlan, careTeam, pa
         <Header />
         <View style={styles.container}>
           <Divider color="darkGray" />
-          <Info patient={patient} careTeam={careTeam} carePlan={activeConcerns} />
+          <Info
+            patient={patient}
+            careTeam={careTeam}
+            carePlan={activeConcerns}
+            profilePhotoUrl={profilePhotoUrl}
+          />
           {renderedCarePlan}
         </View>
         <Footer patient={patient} />

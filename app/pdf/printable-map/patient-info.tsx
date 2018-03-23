@@ -9,6 +9,7 @@ import PatientHeader from './patient-header';
 interface IProps {
   patient: FullPatientForProfileFragment;
   carePlan: FullPatientConcernFragment[];
+  profilePhotoUrl: string | null;
 }
 
 const styles = StyleSheet.create({
@@ -30,11 +31,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const PatientInfo: React.StatelessComponent<IProps> = ({ patient, carePlan }) => {
+const PatientInfo: React.StatelessComponent<IProps> = ({ patient, carePlan, profilePhotoUrl }) => {
   return (
     <View style={styles.container}>
       <View>
-        <PatientHeader patient={patient} />
+        <PatientHeader patient={patient} profilePhotoUrl={profilePhotoUrl} />
         <Text style={styles.info}>{copy.mapInfo}</Text>
       </View>
       <MapSummary carePlan={carePlan} />

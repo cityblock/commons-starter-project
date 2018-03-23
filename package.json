@@ -123,8 +123,8 @@
   "dependencies": {
     "@google-cloud/error-reporting": "0.2.2",
     "@google-cloud/storage": "1.6.0",
-    "@react-pdf/core": "0.7.5",
-    "@react-pdf/node": "0.7.5",
+    "@react-pdf/core": "^0.7.6",
+    "@react-pdf/node": "^0.7.6",
     "@types/acl": "0.4.34",
     "@types/base-64": "0.1.2",
     "@types/basic-auth": "1.1.2",

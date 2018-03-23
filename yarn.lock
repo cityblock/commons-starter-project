@@ -154,7 +154,7 @@
     lodash "^4.17.4"
     url-template "^2.0.8"
 
-"@react-pdf/core@^0.7.6":
+"@react-pdf/core@0.7.6", "@react-pdf/core@^0.7.6":
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/@react-pdf/core/-/core-0.7.6.tgz#06c60142bd51a02537cac8f9f29c50c784b7b4dc"
   dependencies:
@@ -174,7 +174,7 @@
     request "^2.81.0"
     yoga-layout "1.9.3"
 
-"@react-pdf/node@^0.7.6":
+"@react-pdf/node@0.7.6":
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/@react-pdf/node/-/node-0.7.6.tgz#26c059d7b62dee12ea3b83eea3d318cbe2d3ab1b"
   dependencies:

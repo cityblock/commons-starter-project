@@ -1,7 +1,6 @@
 import { differenceInYears, format } from 'date-fns';
-import { startCase } from 'lodash';
+import { padStart, startCase } from 'lodash';
 import {
-  FullAddressFragment,
   FullPatientAnswerFragment,
   ShortPatientFragment,
   ShortPatientScreeningToolSubmission360Fragment,
@@ -25,6 +24,10 @@ export const formatPatientNameForProfile = (patient: ShortPatientFragment) => {
   }
 
   return names.join(' ');
+};
+
+export const formatCityblockId = (id: number): string => {
+  return `CBH-${padStart(id.toString(), 7, '0')}`;
 };
 
 export const formatCareTeamMemberRole = (role: UserRole): string => {
@@ -102,15 +105,22 @@ export const formatAgeDetails = (dateOfBirth: string | null, gender: string | nu
 };
 
 export const formatAddress = (
-  address: string,
-  city: string,
-  state: string,
-  zip: string,
+  street1: string | null,
+  city: string | null,
+  state: string | null,
+  zip: string | null,
+  street2?: string | null,
 ): string => {
-  return `${address}, ${city}, ${state} ${zip}`;
+  const line1 = formatAddressFirstLine({ street1, street2 });
+  const line2 = formatAddressSecondLine({ state, city, zip });
+
+  return line1 ? `${line1}, ${line2}` : line2 || '';
 };
 
-export const formatAddressFirstLine = (address: FullAddressFragment): string | null => {
+export const formatAddressFirstLine = (address: {
+  street1?: string | null;
+  street2?: string | null;
+}): string | null => {
   const { street1, street2 } = address;
   if (!street1) {
     return null;
@@ -123,7 +133,11 @@ export const formatAddressFirstLine = (address: FullAddressFragment): string | n
   return street1;
 };
 
-export const formatAddressSecondLine = (address: FullAddressFragment): string | null => {
+export const formatAddressSecondLine = (address: {
+  state?: string | null;
+  city?: string | null;
+  zip?: string | null;
+}): string | null => {
   const { state, city, zip } = address;
   if (!(state || city || zip)) {
     return null;

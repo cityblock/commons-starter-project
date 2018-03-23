@@ -5,6 +5,7 @@ fragment FullPatientForDashboard on PatientForDashboard {
   firstName
   lastName
   dateOfBirth
+  cityblockId
   patientInfo {
     gender
     hasUploadedPhoto

@@ -1,7 +1,12 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientForCBOReferralFormPDFFragment } from '../../graphql/types';
-import { formatDateOfBirth, formatGender } from '../../shared/helpers/format-helpers';
+import {
+  formatAddress,
+  formatCityblockId,
+  formatDateOfBirth,
+  formatGender,
+} from '../../shared/helpers/format-helpers';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import TextGroup from './text-group';
@@ -24,12 +29,21 @@ const styles = StyleSheet.create({
 });
 
 const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description }) => {
+  const address = patient.patientInfo.primaryAddress;
+  const formattedAddress = address
+    ? formatAddress(address.street1, address.city, address.state, address.zip, address.street2)
+    : 'Unknown';
+  const formattedPhone = patient.patientInfo.primaryPhone
+    ? patient.patientInfo.primaryPhone.phoneNumber
+    : 'Unknown';
+  const formattedCityblockId = formatCityblockId(patient.cityblockId);
+
   return (
     <View style={styles.container}>
       <View style={styles.body}>
         <TextGroup headerLabel={copy.patientFirstName} bodyLabel={patient.firstName} />
         <TextGroup headerLabel={copy.patientLastName} bodyLabel={patient.lastName} />
-        <TextGroup headerLabel={copy.patientCityblockID} bodyLabel="CBH-1234567" />
+        <TextGroup headerLabel={copy.patientCityblockID} bodyLabel={formattedCityblockId} />
       </View>
       <View style={styles.body}>
         <TextGroup
@@ -46,12 +60,8 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description })
         />
       </View>
       <View style={styles.body}>
-        <TextGroup headerLabel={copy.patientPhone} bodyLabel="123-456-7890" />
-        <TextGroup
-          headerLabel={copy.patientAddress}
-          bodyLabel="1234 Main Street Apt 2A, Brooklyn, NY 11238"
-          size="medium"
-        />
+        <TextGroup headerLabel={copy.patientPhone} bodyLabel={formattedPhone} />
+        <TextGroup headerLabel={copy.patientAddress} bodyLabel={formattedAddress} size="medium" />
       </View>
       <View style={styles.body}>
         <TextGroup headerLabel={copy.patientInsurancePlan} bodyLabel="Medicaid" />

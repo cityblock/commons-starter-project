@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Gender } from '../../../graphql/types';
 import PatientAge from '../../library/patient-age/patient-age';
-import { patientState } from '../../util/test-data';
+import { address1, patientState } from '../../util/test-data';
 import PatientTableRow from '../patient-table-row';
 
 describe('Patient Table Row Component', () => {
@@ -12,14 +12,17 @@ describe('Patient Table Row Component', () => {
   const id = 'ladyOfWinterfell';
   const dateOfBirth = '2000-12-01 12:00:00+00:00';
   const gender = Gender.female;
+  const cityblockId = 9934;
 
   const getSearchResult = (userCareTeam: boolean) => ({
     firstName,
     lastName,
     id,
     dateOfBirth,
+    cityblockId,
     patientInfo: {
       gender,
+      primaryAddress: address1,
     },
     userCareTeam,
     patientState,

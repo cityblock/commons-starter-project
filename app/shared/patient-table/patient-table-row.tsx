@@ -3,7 +3,7 @@ import { capitalize } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientTableRowFragment } from '../../graphql/types';
-import { formatFullName } from '../helpers/format-helpers';
+import { formatAddress, formatCityblockId, formatFullName } from '../helpers/format-helpers';
 import Checkbox from '../library/checkbox/checkbox';
 import PatientAge from '../library/patient-age/patient-age';
 import { formatSearchText } from '../library/search/helpers';
@@ -24,6 +24,7 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
     id,
     firstName,
     lastName,
+    cityblockId,
     dateOfBirth,
     patientInfo,
     userCareTeam,
@@ -32,7 +33,12 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
   } = patient;
   const fullName = formatFullName(firstName, lastName);
   const formattedName = query ? formatSearchText(fullName, query) : fullName;
+  const formattedCityblockId = formatCityblockId(cityblockId);
   const formattedState = capitalize(patientState.currentState);
+  const address = patientInfo.primaryAddress;
+  const formattedAddress = address
+    ? formatAddress(address.street1, address.city, address.state, address.zip, address.street2)
+    : 'Unknown Address';
 
   return (
     <div className={classNames(styles.rowContainer, { [styles.hasCheck]: !!onSelectToggle })}>
@@ -47,9 +53,9 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
         {query && userCareTeam && <div className={styles.userCareTeam} />}
         <h4 className={styles.name}>{formattedName}</h4>
         <p className={styles.status}>{formattedState}</p>
-        <p className={styles.memberId}>CBH-1234567</p>
+        <p className={styles.memberId}>{formattedCityblockId}</p>
         <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
-        <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>
+        <p className={styles.address}>{formattedAddress}</p>
       </Link>
     </div>
   );

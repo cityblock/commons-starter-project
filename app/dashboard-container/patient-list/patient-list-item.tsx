@@ -4,7 +4,7 @@ import { capitalize } from 'lodash';
 import * as React from 'react';
 import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
-import { formatFullName } from '../../shared/helpers/format-helpers';
+import { formatCityblockId, formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
 import Icon from '../../shared/library/icon/icon';
 import PatientAge from '../../shared/library/patient-age/patient-age';
@@ -75,7 +75,7 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
         <h4>{formatFullName(patient.firstName, patient.lastName)}</h4>
       </div>
       <div className={styles.info}>
-        <p>CBH-1234567</p>
+        <p>{formatCityblockId(patient.cityblockId)}</p>
         <p>{capitalize(patient.patientState.currentState)}</p>
         {itemBody}
         <div onClick={redirectToPatient} className={styles.profileLink}>

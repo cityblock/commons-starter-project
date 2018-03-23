@@ -2,14 +2,6 @@ fragment ShortPatientInfo on PatientInfo {
   id
   gender
   language
-  primaryAddress {
-    id
-    zip
-  }
-  primaryEmail {
-    id
-    emailAddress
-  }
   preferredName
   hasUploadedPhoto
 }

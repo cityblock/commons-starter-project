@@ -1065,6 +1065,7 @@ declare module 'schema' {
     middleName: string | null;
     lastName: string;
     dateOfBirth: string | null;
+    cityblockId: number;
     homeClinicId: string | null;
     createdAt: string;
     scratchPad: string | null;
@@ -1248,6 +1249,7 @@ declare module 'schema' {
     id: string;
     firstName: string;
     lastName: string;
+    cityblockId: number;
     dateOfBirth: string | null;
     userCareTeam: boolean | null;
     patientInfo: IPatientInfo;
@@ -1288,6 +1290,7 @@ declare module 'schema' {
     firstName: string;
     lastName: string;
     dateOfBirth: string | null;
+    cityblockId: number;
     patientInfo: IPatientInfo;
     patientState: IPatientState;
   }

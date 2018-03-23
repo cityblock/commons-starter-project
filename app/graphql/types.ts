@@ -685,14 +685,6 @@ export interface carePlanSuggestionAcceptMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -786,14 +778,6 @@ export interface carePlanSuggestionDismissMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -2209,14 +2193,6 @@ export interface getPatientCarePlanSuggestionsQuery {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -2345,14 +2321,6 @@ export interface getPatientCarePlanQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -2377,14 +2345,6 @@ export interface getPatientCarePlanQuery {
             id: string,
             gender: Gender | null,
             language: string | null,
-            primaryAddress:  {
-              id: string,
-              zip: string | null,
-            } | null,
-            primaryEmail:  {
-              id: string,
-              emailAddress: string,
-            } | null,
             preferredName: string | null,
             hasUploadedPhoto: boolean | null,
           },
@@ -2455,14 +2415,6 @@ export interface getPatientCarePlanQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -2772,9 +2724,19 @@ export interface getPatientPanelQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         userCareTeam: boolean | null,
         patientInfo:  {
           gender: Gender | null,
+          primaryAddress:  {
+            id: string,
+            city: string | null,
+            state: string | null,
+            street1: string | null,
+            street2: string | null,
+            zip: string | null,
+            description: string | null,
+          } | null,
         },
         patientState:  {
           id: string,
@@ -2874,14 +2836,6 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -2918,14 +2872,6 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -3058,14 +3004,6 @@ export interface getPatientScreeningToolSubmissionQuery {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -3102,14 +3040,6 @@ export interface getPatientScreeningToolSubmissionQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -3202,9 +3132,19 @@ export interface getPatientSearchQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         userCareTeam: boolean | null,
         patientInfo:  {
           gender: Gender | null,
+          primaryAddress:  {
+            id: string,
+            city: string | null,
+            state: string | null,
+            street1: string | null,
+            street2: string | null,
+            zip: string | null,
+            description: string | null,
+          } | null,
         },
         patientState:  {
           id: string,
@@ -3327,6 +3267,7 @@ export interface getPatientQuery {
     firstName: string,
     middleName: string | null,
     lastName: string,
+    cityblockId: number,
     dateOfBirth: string | null,
     createdAt: string,
     coreIdentityVerifiedAt: string | null,
@@ -3398,6 +3339,7 @@ export interface getPatientsForComputedListQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3430,6 +3372,7 @@ export interface getPatientsNewToCareTeamQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3462,6 +3405,7 @@ export interface getPatientsWithAssignedStateQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3494,6 +3438,7 @@ export interface getPatientsWithMissingInfoQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3526,6 +3471,7 @@ export interface getPatientsWithNoRecentEngagementQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3558,6 +3504,7 @@ export interface getPatientsWithOpenCBOReferralsQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3590,6 +3537,7 @@ export interface getPatientsWithOutOfDateMAPQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3622,6 +3570,7 @@ export interface getPatientsWithPendingSuggestionsQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3654,6 +3603,7 @@ export interface getPatientsWithUrgentTasksQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
+        cityblockId: number,
         patientInfo:  {
           gender: Gender | null,
           hasUploadedPhoto: boolean | null,
@@ -3759,14 +3709,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -3953,14 +3895,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -4016,14 +3950,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             gender: Gender | null,
             language: string | null,
-            primaryAddress:  {
-              id: string,
-              zip: string | null,
-            } | null,
-            primaryEmail:  {
-              id: string,
-              emailAddress: string,
-            } | null,
             preferredName: string | null,
             hasUploadedPhoto: boolean | null,
           },
@@ -4048,14 +3974,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               id: string,
               gender: Gender | null,
               language: string | null,
-              primaryAddress:  {
-                id: string,
-                zip: string | null,
-              } | null,
-              primaryEmail:  {
-                id: string,
-                emailAddress: string,
-              } | null,
               preferredName: string | null,
               hasUploadedPhoto: boolean | null,
             },
@@ -4127,14 +4045,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             gender: Gender | null,
             language: string | null,
-            primaryAddress:  {
-              id: string,
-              zip: string | null,
-            } | null,
-            primaryEmail:  {
-              id: string,
-              emailAddress: string,
-            } | null,
             preferredName: string | null,
             hasUploadedPhoto: boolean | null,
           },
@@ -4237,14 +4147,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -4281,14 +4183,6 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             id: string,
             gender: Gender | null,
             language: string | null,
-            primaryAddress:  {
-              id: string,
-              zip: string | null,
-            } | null,
-            primaryEmail:  {
-              id: string,
-              emailAddress: string,
-            } | null,
             preferredName: string | null,
             hasUploadedPhoto: boolean | null,
           },
@@ -4458,14 +4352,6 @@ export interface getProgressNoteQuery {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -4536,14 +4422,6 @@ export interface getProgressNotesForCurrentUserQuery {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -4610,14 +4488,6 @@ export interface getProgressNotesForSupervisorReviewQuery {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -4928,14 +4798,6 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -5038,14 +4900,6 @@ export interface getRiskAreaAssessmentSubmissionQuery {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -6031,14 +5885,6 @@ export interface patientConcernBulkEditMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -6063,14 +5909,6 @@ export interface patientConcernBulkEditMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -6166,14 +6004,6 @@ export interface patientConcernCreateMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -6198,14 +6028,6 @@ export interface patientConcernCreateMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -6299,14 +6121,6 @@ export interface patientConcernDeleteMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -6331,14 +6145,6 @@ export interface patientConcernDeleteMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -6589,14 +6395,6 @@ export interface patientCoreIdentityVerifyMutation {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -6649,14 +6447,6 @@ export interface patientEditMutation {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -6813,14 +6603,6 @@ export interface patientGoalCreateMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -6893,14 +6675,6 @@ export interface patientGoalDeleteMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -6977,14 +6751,6 @@ export interface patientInfoEditMutation {
     id: string,
     gender: Gender | null,
     language: string | null,
-    primaryAddress:  {
-      id: string,
-      zip: string | null,
-    } | null,
-    primaryEmail:  {
-      id: string,
-      emailAddress: string,
-    } | null,
     preferredName: string | null,
     hasUploadedPhoto: boolean | null,
   } | null,
@@ -7106,14 +6872,6 @@ export interface patientScreeningToolSubmissionCreateMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7150,14 +6908,6 @@ export interface patientScreeningToolSubmissionCreateMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -7261,14 +7011,6 @@ export interface patientScreeningToolSubmissionScoreMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7305,14 +7047,6 @@ export interface patientScreeningToolSubmissionScoreMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -7494,14 +7228,6 @@ export interface progressNoteAddSupervisorNotesMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7572,14 +7298,6 @@ export interface progressNoteCompleteMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7650,14 +7368,6 @@ export interface progressNoteCompleteSupervisorReviewMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7728,14 +7438,6 @@ export interface progressNoteCreateMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -7813,14 +7515,6 @@ export interface progressNoteEditMutation {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -8311,14 +8005,6 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -8422,14 +8108,6 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -9952,14 +9630,6 @@ export interface FullCarePlanSuggestionForPatientFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -10063,14 +9733,6 @@ export interface FullCarePlanSuggestionFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -10156,14 +9818,6 @@ export interface FullCarePlanUpdateEventFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -10219,14 +9873,6 @@ export interface FullCarePlanUpdateEventFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -10251,14 +9897,6 @@ export interface FullCarePlanUpdateEventFragment {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -10330,14 +9968,6 @@ export interface FullCarePlanUpdateEventFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -10657,14 +10287,6 @@ export interface FullPatientAnswerEventFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -10939,14 +10561,6 @@ export interface FullPatientConcernFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -10971,14 +10585,6 @@ export interface FullPatientConcernFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -11113,6 +10719,7 @@ export interface FullPatientForCBOReferralFormPDFFragment {
   createdAt: string,
   firstName: string,
   lastName: string,
+  cityblockId: number,
   dateOfBirth: string | null,
   careTeam:  Array< {
     id: string,
@@ -11131,6 +10738,21 @@ export interface FullPatientForCBOReferralFormPDFFragment {
   patientInfo:  {
     gender: Gender | null,
     language: string | null,
+    primaryAddress:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    primaryPhone:  {
+      id: string,
+      phoneNumber: string,
+      type: PhoneTypeOptions | null,
+      description: string | null,
+    } | null,
   },
 };
 
@@ -11139,6 +10761,7 @@ export interface FullPatientForDashboardFragment {
   firstName: string,
   lastName: string,
   dateOfBirth: string | null,
+  cityblockId: number,
   patientInfo:  {
     gender: Gender | null,
     hasUploadedPhoto: boolean | null,
@@ -11154,6 +10777,7 @@ export interface FullPatientForProfileFragment {
   firstName: string,
   middleName: string | null,
   lastName: string,
+  cityblockId: number,
   dateOfBirth: string | null,
   createdAt: string,
   coreIdentityVerifiedAt: string | null,
@@ -11230,14 +10854,6 @@ export interface FullPatientGoalFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -11363,14 +10979,6 @@ export interface FullPatientScreeningToolSubmissionFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -11407,14 +11015,6 @@ export interface FullPatientScreeningToolSubmissionFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -11496,9 +11096,19 @@ export interface FullPatientTableRowFragment {
   firstName: string,
   lastName: string,
   dateOfBirth: string | null,
+  cityblockId: number,
   userCareTeam: boolean | null,
   patientInfo:  {
     gender: Gender | null,
+    primaryAddress:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
   },
   patientState:  {
     id: string,
@@ -11594,14 +11204,6 @@ export interface FullProgressNoteActivityFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -11788,14 +11390,6 @@ export interface FullProgressNoteActivityFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -11851,14 +11445,6 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -11883,14 +11469,6 @@ export interface FullProgressNoteActivityFragment {
             id: string,
             gender: Gender | null,
             language: string | null,
-            primaryAddress:  {
-              id: string,
-              zip: string | null,
-            } | null,
-            primaryEmail:  {
-              id: string,
-              emailAddress: string,
-            } | null,
             preferredName: string | null,
             hasUploadedPhoto: boolean | null,
           },
@@ -11962,14 +11540,6 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -12072,14 +11642,6 @@ export interface FullProgressNoteActivityFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -12116,14 +11678,6 @@ export interface FullProgressNoteActivityFragment {
           id: string,
           gender: Gender | null,
           language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
-          primaryEmail:  {
-            id: string,
-            emailAddress: string,
-          } | null,
           preferredName: string | null,
           hasUploadedPhoto: boolean | null,
         },
@@ -12242,14 +11796,6 @@ export interface FullProgressNoteFragment {
       id: string,
       gender: Gender | null,
       language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-      primaryEmail:  {
-        id: string,
-        emailAddress: string,
-      } | null,
       preferredName: string | null,
       hasUploadedPhoto: boolean | null,
     },
@@ -12426,14 +11972,6 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
         id: string,
         gender: Gender | null,
         language: string | null,
-        primaryAddress:  {
-          id: string,
-          zip: string | null,
-        } | null,
-        primaryEmail:  {
-          id: string,
-          emailAddress: string,
-        } | null,
         preferredName: string | null,
         hasUploadedPhoto: boolean | null,
       },
@@ -12841,6 +12379,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
     createdAt: string,
     firstName: string,
     lastName: string,
+    cityblockId: number,
     dateOfBirth: string | null,
     careTeam:  Array< {
       id: string,
@@ -12859,6 +12398,21 @@ export interface FullTaskForCBOReferralFormPDFFragment {
     patientInfo:  {
       gender: Gender | null,
       language: string | null,
+      primaryAddress:  {
+        id: string,
+        city: string | null,
+        state: string | null,
+        street1: string | null,
+        street2: string | null,
+        zip: string | null,
+        description: string | null,
+      } | null,
+      primaryPhone:  {
+        id: string,
+        phoneNumber: string,
+        type: PhoneTypeOptions | null,
+        description: string | null,
+      } | null,
     },
   },
   priority: Priority | null,
@@ -13055,14 +12609,6 @@ export interface ShortPatientInfoFragment {
   id: string,
   gender: Gender | null,
   language: string | null,
-  primaryAddress:  {
-    id: string,
-    zip: string | null,
-  } | null,
-  primaryEmail:  {
-    id: string,
-    emailAddress: string,
-  } | null,
   preferredName: string | null,
   hasUploadedPhoto: boolean | null,
 };
@@ -13128,14 +12674,6 @@ export interface ShortPatientFragment {
     id: string,
     gender: Gender | null,
     language: string | null,
-    primaryAddress:  {
-      id: string,
-      zip: string | null,
-    } | null,
-    primaryEmail:  {
-      id: string,
-      emailAddress: string,
-    } | null,
     preferredName: string | null,
     hasUploadedPhoto: boolean | null,
   },

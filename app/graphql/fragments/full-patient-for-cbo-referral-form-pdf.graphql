@@ -1,3 +1,5 @@
+#import "../fragments/full-address.graphql"
+#import "../fragments/full-phone.graphql"
 #import "../fragments/full-user.graphql"
 
 fragment FullPatientForCBOReferralFormPDF on Patient {
@@ -5,6 +7,7 @@ fragment FullPatientForCBOReferralFormPDF on Patient {
   createdAt
   firstName
   lastName
+  cityblockId
   dateOfBirth
   careTeam {
     ...FullUser
@@ -12,5 +15,11 @@ fragment FullPatientForCBOReferralFormPDF on Patient {
   patientInfo {
     gender
     language
+    primaryAddress {
+      ...FullAddress
+    }
+    primaryPhone {
+      ...FullPhone
+    }
   }
 }

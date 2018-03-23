@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../../graphql/types';
+import { formatCityblockId } from '../../../shared/helpers/format-helpers';
 import { Selected } from '../left-nav';
 import InfoGroupContainer from './container';
 import * as styles from './css/shared.css';
@@ -14,13 +15,14 @@ interface IProps {
 
 // TODO: Remove hard coded values
 const Plan: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { isOpen, onClick } = props;
+  const { isOpen, onClick, patient } = props;
+  const formattedCityblockId = formatCityblockId(patient.cityblockId);
 
   return (
     <div className={styles.container}>
       <InfoGroupHeader selected="plan" isOpen={isOpen} onClick={onClick} />
       <InfoGroupContainer isOpen={isOpen}>
-        <InfoGroupItem labelMessageId="plan.cityblockId" value="CBH-1230811" />
+        <InfoGroupItem labelMessageId="plan.cityblockId" value={formattedCityblockId} />
         <InfoGroupItem labelMessageId="plan.insurance" value="EmblemHealth" />
         <InfoGroupItem labelMessageId="plan.planId" value="EMB1234567" />
         <InfoGroupItem labelMessageId="plan.planType" value="Medicaid" />

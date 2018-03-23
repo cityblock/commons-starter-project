@@ -351,6 +351,7 @@ type Patient implements uniqueId {
   middleName: String
   lastName: String!
   dateOfBirth: String
+  cityblockId: Int!
   homeClinicId: ID
   createdAt: String!
   scratchPad: String
@@ -629,6 +630,7 @@ type PatientTableRow implements uniqueId {
   id: ID!
   firstName: String!
   lastName: String!
+  cityblockId: Int!
   dateOfBirth: String
   userCareTeam: Boolean
   patientInfo: PatientInfo!
@@ -654,6 +656,7 @@ type PatientForDashboard implements uniqueId {
   firstName: String!
   lastName: String!
   dateOfBirth: String
+  cityblockId: Int!
   patientInfo: PatientInfo!
   patientState: PatientState!
 }

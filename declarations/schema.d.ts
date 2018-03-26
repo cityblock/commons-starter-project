@@ -444,6 +444,11 @@ declare module 'schema' {
     progressNoteActivityForProgressNote: IProgressNoteActivity;
 
     /**
+     * latest progress note for patient
+     */
+    progressNoteLatestForPatient: IProgressNote | null;
+
+    /**
      * quick call
      */
     quickCall: IQuickCall;
@@ -842,6 +847,9 @@ declare module 'schema' {
   }
   interface IProgressNoteActivityForProgressNoteOnRootQueryTypeArguments {
     progressNoteId: string;
+  }
+  interface IProgressNoteLatestForPatientOnRootQueryTypeArguments {
+    patientId: string;
   }
   interface IQuickCallOnRootQueryTypeArguments {
     quickCallId: string;

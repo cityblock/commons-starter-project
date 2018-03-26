@@ -30,6 +30,10 @@ interface IResolveProgressNotesForCurrentUserOptions {
   completed: boolean;
 }
 
+interface IResolveProgressNoteLatestForPatientOptions {
+  patientId: string;
+}
+
 interface ICompleteProgressNoteOptions {
   input: IProgressNoteCompleteInput;
 }
@@ -201,4 +205,14 @@ export async function resolveProgressNotesForSupervisorReview(
   await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
   return ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
+}
+
+export async function resolveProgressNoteLatestForPatient(
+  root: any,
+  { patientId }: IResolveProgressNoteLatestForPatientOptions,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootQueryType['progressNoteLatestForPatient']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+
+  return ProgressNote.getLatestForPatient(patientId, txn);
 }

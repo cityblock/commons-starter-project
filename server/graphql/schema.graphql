@@ -2798,6 +2798,8 @@ type RootQueryType {
   progressNotesForSupervisorReview: [ProgressNote]!
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity!
+  # latest progress note for patient
+  progressNoteLatestForPatient(patientId: ID!): ProgressNote
   # quick call
   quickCall(quickCallId: ID!): QuickCall!
   # quick calls for progress note

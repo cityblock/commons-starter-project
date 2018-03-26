@@ -4405,6 +4405,18 @@ export interface getProgressNoteIdsForPatientQuery {
   progressNoteIdsForPatient: Array< string >,
 };
 
+export interface getProgressNoteLatestForPatientQueryVariables {
+  patientId: string,
+};
+
+export interface getProgressNoteLatestForPatientQuery {
+  // latest progress note for patient
+  progressNoteLatestForPatient:  {
+    id: string,
+    worryScore: number | null,
+  } | null,
+};
+
 export interface getProgressNoteTemplateQueryVariables {
   progressNoteTemplateId: string,
 };

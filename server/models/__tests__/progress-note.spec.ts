@@ -142,6 +142,36 @@ describe('progress note model', () => {
     expect(progressNoteCount2).toEqual(1);
   });
 
+  it('gets the latest progress note for a patient', async () => {
+    const { patient, user, progressNoteTemplate } = await setup(txn);
+
+    const latest1 = await ProgressNote.getLatestForPatient(patient.id, txn);
+    expect(latest1).toBeNull();
+
+    const progressNote = await ProgressNote.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      },
+      txn,
+    );
+
+    const latest2 = await ProgressNote.getLatestForPatient(patient.id, txn);
+    expect(latest2).toBeNull();
+
+    await ProgressNote.update(progressNote.id, { worryScore: 2 }, txn);
+    await ProgressNote.complete(progressNote.id, txn);
+
+    const latest3 = await ProgressNote.getLatestForPatient(patient.id, txn);
+    expect(latest3).toMatchObject({
+      id: progressNote.id,
+      userId: user.id,
+      patientId: patient.id,
+      worryScore: 2,
+    });
+  });
+
   it('gets progress for supervisor review', async () => {
     const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
     const supervisor = await User.create(

@@ -1,8 +1,9 @@
 import { subHours } from 'date-fns';
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
+import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -46,6 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('progress note resolver', () => {
   let txn = null as any;
   let db: Db;
+  const progressNoteLatestForPatientQuery = print(progressNoteLatestForPatient);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -561,6 +563,38 @@ describe('progress note resolver', () => {
           id: progressNote1.id,
         },
       ]);
+    });
+
+    it('returns latest progress note for patient', async () => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+      await ProgressNote.update(progressNote.id, { worryScore: 2 }, txn);
+      await ProgressNote.complete(progressNote.id, txn);
+
+      const result = await graphql(
+        schema,
+        progressNoteLatestForPatientQuery,
+        null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      },
+      { patientId: patient.id },
+    );
+
+      expect(cloneDeep(result.data!.progressNoteLatestForPatient)).toMatchObject({
+        id: progressNote.id,
+        worryScore: 2,
+      });
     });
   });
 });

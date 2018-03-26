@@ -183,6 +183,16 @@ export default class ProgressNote extends BaseModel {
     return toNumber(progressNoteCount[0].count);
   }
 
+  static async getLatestForPatient(patientId: string, txn: Transaction): Promise<ProgressNote> {
+    const latestNote = await this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .whereNotNull('completedAt')
+      .orderBy('createdAt', 'desc')
+      .limit(1);
+
+    return latestNote[0] || null;
+  }
+
   static async getAllForUser(
     userId: string,
     completed: boolean,

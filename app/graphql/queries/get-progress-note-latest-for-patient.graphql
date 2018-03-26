@@ -1,0 +1,6 @@
+query getProgressNoteLatestForPatient($patientId: ID!) {
+  progressNoteLatestForPatient(patientId: $patientId) {
+    id
+    worryScore
+  }
+}

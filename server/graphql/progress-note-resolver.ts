@@ -98,6 +98,7 @@ export async function progressNoteEdit(
       supervisorId: input.supervisorId || undefined,
       needsSupervisorReview:
         input.needsSupervisorReview === null ? undefined : input.needsSupervisorReview,
+      worryScore: input.worryScore || undefined,
     },
     txn,
   );

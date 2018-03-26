@@ -4497,6 +4497,7 @@ export interface getProgressNoteQuery {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   },
 };
 
@@ -4567,6 +4568,7 @@ export interface getProgressNotesForCurrentUserQuery {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null >,
 };
 
@@ -4633,6 +4635,7 @@ export interface getProgressNotesForSupervisorReviewQuery {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null >,
 };
 
@@ -7373,6 +7376,7 @@ export interface progressNoteAddSupervisorNotesMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null,
 };
 
@@ -7443,6 +7447,7 @@ export interface progressNoteCompleteMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null,
 };
 
@@ -7513,6 +7518,7 @@ export interface progressNoteCompleteSupervisorReviewMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null,
 };
 
@@ -7583,6 +7589,7 @@ export interface progressNoteCreateMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null,
 };
 
@@ -7595,6 +7602,7 @@ export interface progressNoteEditMutationVariables {
   memberConcern?: string | null,
   needsSupervisorReview?: boolean | null,
   supervisorId?: string | null,
+  worryScore?: number | null,
 };
 
 export interface progressNoteEditMutation {
@@ -7660,6 +7668,7 @@ export interface progressNoteEditMutation {
       createdAt: string,
       deletedAt: string | null,
     } | null,
+    worryScore: number | null,
   } | null,
 };
 
@@ -11949,6 +11958,7 @@ export interface FullProgressNoteFragment {
     createdAt: string,
     deletedAt: string | null,
   } | null,
+  worryScore: number | null,
 };
 
 export interface FullQuestionConditionFragment {

@@ -256,10 +256,12 @@ describe('progress note resolver', () => {
           progressNoteId: "${progressNote.id}"
           progressNoteTemplateId: "${progressNoteTemplate2.id}"
           needsSupervisorReview: false
+          worryScore: 2
         }) {
           id
           progressNoteTemplate { id }
           needsSupervisorReview
+          worryScore
         }
       }`;
     const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
@@ -267,6 +269,7 @@ describe('progress note resolver', () => {
       progressNoteTemplate2.id,
     );
     expect(cloneDeep(result.data!.progressNoteEdit.needsSupervisorReview)).toBeFalsy();
+    expect(cloneDeep(result.data!.progressNoteEdit.worryScore)).toBe(2);
   });
 
   it('adds supervisor notes', async () => {

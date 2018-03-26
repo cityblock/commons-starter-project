@@ -196,12 +196,14 @@ describe('progress note model', () => {
 
   it('updates a progress note', async () => {
     const { patient, user, progressNoteTemplate } = await setup(txn);
+    const worryScore = 3;
 
     const progressNote = await ProgressNote.create(
       {
         patientId: patient.id,
         userId: user.id,
         progressNoteTemplateId: progressNoteTemplate.id,
+        worryScore,
       },
       txn,
     );
@@ -219,6 +221,7 @@ describe('progress note model', () => {
         progressNoteTemplateId: progressNoteTemplate2.id,
         startedAt,
         location,
+        worryScore,
       },
       txn,
     );

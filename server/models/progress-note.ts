@@ -15,6 +15,7 @@ interface IProgressNoteEditableFields {
   progressNoteTemplateId: string;
   needsSupervisorReview?: boolean;
   supervisorId?: string;
+  worryScore?: number;
 }
 
 interface IProgressNoteAutoOpenFields {
@@ -42,6 +43,7 @@ export default class ProgressNote extends BaseModel {
   supervisor: User;
   needsSupervisorReview: boolean;
   reviewedBySupervisorAt: string;
+  worryScore: number;
 
   static tableName = 'progress_note';
 
@@ -65,6 +67,7 @@ export default class ProgressNote extends BaseModel {
       supervisorId: { type: 'string' },
       needsSupervisorReview: { type: 'boolean' },
       reviewedBySupervisorAt: { type: 'string' },
+      worryScore: { type: 'integer', minimum: 1, maximum: 3 },
       createdAt: { type: 'string' },
     },
     required: ['patientId', 'userId'],

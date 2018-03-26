@@ -2119,6 +2119,7 @@ declare module 'schema' {
     needsSupervisorReview: boolean | null;
     reviewedBySupervisorAt: string | null;
     supervisorNotes: string | null;
+    worryScore: number | null;
   }
 
   interface IProgressNoteTemplate {
@@ -4245,6 +4246,7 @@ declare module 'schema' {
     memberConcern?: string | null;
     supervisorId?: string | null;
     needsSupervisorReview?: boolean | null;
+    worryScore?: number | null;
   }
 
   interface IProgressNoteAddSupervisorNotesInput {

@@ -29,4 +29,5 @@ fragment FullProgressNote on ProgressNote {
   progressNoteTemplate {
     ...FullProgressNoteTemplate
   }
+  worryScore
 }

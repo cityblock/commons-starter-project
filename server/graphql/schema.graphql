@@ -1327,6 +1327,7 @@ type ProgressNote implements uniqueId {
   needsSupervisorReview: Boolean
   reviewedBySupervisorAt: String
   supervisorNotes: String
+  worryScore: Int
 }
 
 type QuickCall implements uniqueId {
@@ -2137,6 +2138,7 @@ input ProgressNoteEditInput {
   memberConcern: String
   supervisorId: ID
   needsSupervisorReview: Boolean
+  worryScore: Int
 }
 
 input ProgressNoteAddSupervisorNotesInput {

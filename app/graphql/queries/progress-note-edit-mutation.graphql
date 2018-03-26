@@ -9,6 +9,7 @@ mutation progressNoteEdit(
   $memberConcern: String
   $needsSupervisorReview: Boolean
   $supervisorId: ID
+  $worryScore: Int
 ) {
   progressNoteEdit(
     input: {
@@ -20,6 +21,7 @@ mutation progressNoteEdit(
       memberConcern: $memberConcern
       needsSupervisorReview: $needsSupervisorReview
       supervisorId: $supervisorId
+      worryScore: $worryScore
     }
   ) {
     ...FullProgressNote

@@ -171,6 +171,15 @@ describe('goal suggestion model', () => {
         txn,
       );
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      // creates a patient goal with no goal suggestion template
+      await PatientGoal.create(
+        {
+          title: 'goal title',
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
@@ -497,6 +506,7 @@ describe('goal suggestion model', () => {
       expect(secondGoalSuggestions.length).toEqual(1);
     });
   });
+
   describe('utility methods', async () => {
     it('gets correct current goal suggestion templates', async () => {
       const { goalSuggestionTemplate, answer, clinic, riskArea, question } = await setup(txn);

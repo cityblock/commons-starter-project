@@ -248,7 +248,8 @@ export default class ConcernSuggestion extends Model {
 
   static currentConcernSuggestionIdsQuery(patientId: string, txn: Transaction) {
     return CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
+      .whereNotNull('concernId')
+      .andWhere('patientId', patientId)
       .andWhere('dismissedAt', null)
       .andWhere('acceptedAt', null)
       .andWhere('suggestionType', 'concern')

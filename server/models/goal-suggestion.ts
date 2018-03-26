@@ -285,6 +285,7 @@ export default class GoalSuggestion extends Model {
    */
   static currentGoalSuggestionTemplateIdsQuery(patientId: string, txn: Transaction) {
     return CarePlanSuggestion.query(txn)
+      .whereNotNull('goalSuggestionTemplateId')
       .andWhere('patientId', patientId)
       .andWhere('dismissedAt', null)
       .andWhere('acceptedAt', null)
@@ -297,6 +298,7 @@ export default class GoalSuggestion extends Model {
    */
   static currentPatientGoalTemplateIdsQuery(patientId: string, txn: Transaction) {
     return PatientGoal.query(txn)
+      .whereNotNull('goalSuggestionTemplateId')
       .andWhere('patientId', patientId)
       .andWhere('deletedAt', null)
       .select('goalSuggestionTemplateId');

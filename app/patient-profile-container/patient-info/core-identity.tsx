@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { filter } from 'lodash';
+import { filter, includes, values } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -9,7 +9,9 @@ import {
   patientCoreIdentityVerifyMutation,
   patientCoreIdentityVerifyMutationVariables,
   patientDataFlagCreateMutation,
+  CoreIdentityOptions,
 } from '../../graphql/types';
+import { formatCityblockId } from '../../shared/helpers/format-helpers';
 import * as styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
@@ -21,13 +23,14 @@ export interface ICoreIdentity {
   middleName: getPatientQuery['patient']['middleName'];
   lastName: getPatientQuery['patient']['lastName'];
   dateOfBirth: getPatientQuery['patient']['dateOfBirth'];
+  cityblockId: getPatientQuery['patient']['cityblockId'];
   patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
-  patientId: string;
   coreIdentityVerifiedAt?: string | null;
 }
 
 interface IProps {
   patientIdentity: ICoreIdentity;
+  patientId: string;
   onChange: (fields: IEditableFieldState) => void;
 }
 
@@ -47,6 +50,14 @@ export class CoreIdentity extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
     this.state = { isModalVisible: false };
+  }
+
+  hasDataFlags() {
+    const { patientDataFlags } = this.props.patientIdentity;
+    const flags = filter(patientDataFlags, flag =>
+      includes(values(CoreIdentityOptions), flag.fieldName),
+    );
+    return !!flags.length;
   }
 
   findFlag(fieldName: string) {
@@ -72,11 +83,9 @@ export class CoreIdentity extends React.Component<allProps, IState> {
   };
 
   handleConfirmIdentity = async () => {
-    const { patientIdentity, verifyCoreIdentity, onChange } = this.props;
+    const { patientId, verifyCoreIdentity, onChange } = this.props;
     const response = await verifyCoreIdentity({
-      variables: {
-        patientId: patientIdentity.patientId,
-      },
+      variables: { patientId },
     });
 
     if (response.data.patientCoreIdentityVerify) {
@@ -95,23 +104,23 @@ export class CoreIdentity extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { patientIdentity } = this.props;
+    const { patientIdentity, patientId } = this.props;
     const {
       firstName,
       middleName,
       lastName,
       dateOfBirth,
       patientDataFlags,
-      patientId,
       coreIdentityVerifiedAt,
+      cityblockId,
     } = patientIdentity;
     const { isModalVisible } = this.state;
 
     let footerState: FooterState = 'confirm';
     let flaggedOn: string | undefined;
-    if (patientDataFlags && patientDataFlags.length) {
+    if (this.hasDataFlags()) {
       footerState = 'flagged';
-      patientDataFlags.forEach(flag => {
+      patientDataFlags!.forEach(flag => {
         if (
           (flaggedOn && flag.updatedAt && flag.updatedAt > flaggedOn) ||
           (!flaggedOn && flag.updatedAt)
@@ -141,26 +150,54 @@ export class CoreIdentity extends React.Component<allProps, IState> {
           verifiedOn={coreIdentityVerifiedAt}
           flaggedOn={flaggedOn}
         >
-          <FlaggableDisplayField
-            labelMessageId="coreIdentity.firstName"
-            value={firstName}
-            correctedValue={this.findFlag('firstName')}
-          />
-          <FlaggableDisplayField
-            labelMessageId="coreIdentity.middleName"
-            value={middleName}
-            correctedValue={this.findFlag('middleName')}
-          />
-          <FlaggableDisplayField
-            labelMessageId="coreIdentity.lastName"
-            value={lastName}
-            correctedValue={this.findFlag('lastName')}
-          />
-          <FlaggableDisplayField
-            labelMessageId="coreIdentity.dateOfBirth"
-            value={birthday}
-            correctedValue={this.findFlag('dateOfBirth')}
-          />
+          <div>
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.firstName"
+              value={firstName}
+              correctedValue={this.findFlag('firstName')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.socialSecurity"
+              value="XXX-XX-0029"
+              correctedValue={this.findFlag('socialSecurity')}
+            />
+          </div>
+          <div>
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.middleName"
+              value={middleName}
+              correctedValue={this.findFlag('middleName')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.cityblockId"
+              value={formatCityblockId(cityblockId)}
+              correctedValue={this.findFlag('cityblockId')}
+            />
+          </div>
+          <div>
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.lastName"
+              value={lastName}
+              correctedValue={this.findFlag('lastName')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.nmiNumber"
+              value="NM12345"
+              correctedValue={this.findFlag('nmiNumber')}
+            />
+          </div>
+          <div>
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.dateOfBirth"
+              value={birthday}
+              correctedValue={this.findFlag('dateOfBirth')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="coreIdentity.ehrNumber"
+              value="MRN283753"
+              correctedValue={this.findFlag('ehrNumber')}
+            />
+          </div>
         </FlaggableDisplayCard>
         <FlaggingModal
           isVisible={isModalVisible}

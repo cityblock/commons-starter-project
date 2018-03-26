@@ -1,6 +1,12 @@
 .container {
   display: inline-block;
   padding-right: 80px;
+  margin-bottom: 20px;
+  height: 70px;
+}
+
+.container:last-child {
+  margin-bottom: 0;
 }
 
 .value {

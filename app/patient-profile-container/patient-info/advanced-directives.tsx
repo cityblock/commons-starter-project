@@ -27,14 +27,14 @@ import DisplayCard from './display-card';
 import { IEditableFieldState } from './patient-info';
 
 export interface IAdvancedDirectives {
-  patientId: string;
-  patientInfoId: string;
   hasHealthcareProxy?: boolean | null;
   hasMolst?: boolean | null;
 }
 
 interface IProps {
   advancedDirectives: IAdvancedDirectives;
+  patientId: string;
+  patientInfoId: string;
   onChange: (fields: IEditableFieldState) => void;
   routeBase: string;
 }
@@ -187,7 +187,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   }
 
   renderEditModal() {
-    const { patientId } = this.props.advancedDirectives;
+    const { patientId } = this.props;
     const { isEditModalVisible, currentProxy } = this.state;
 
     if (currentProxy) {
@@ -208,8 +208,8 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { healthcareProxies, advancedDirectives } = this.props;
-    const { patientId, patientInfoId, hasHealthcareProxy, hasMolst } = advancedDirectives;
+    const { patientId, patientInfoId, healthcareProxies, advancedDirectives } = this.props;
+    const { hasHealthcareProxy, hasMolst } = advancedDirectives;
     const { isCreateModalVisible, updatedHealthcareProxies } = this.state;
 
     const currentProxies = updatedHealthcareProxies || healthcareProxies;
@@ -313,7 +313,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(healthcareProxiesQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        patientId: props.advancedDirectives.patientId,
+        patientId: props.patientId,
       },
     }),
     props: ({ data }) => ({

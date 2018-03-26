@@ -4,14 +4,21 @@ import { FormattedMessage } from 'react-intl';
 import { ContactMethodOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import RadioInput from '../../../shared/library/radio-input/radio-input';
-import { contactInfo } from '../../../shared/util/test-data';
+import { contactInfo, patient } from '../../../shared/util/test-data';
 import ContactInfo from '../contact-info';
 import EmailInfo from '../email-info/email-info';
 import PhoneInfo from '../phone-info/phone-info';
 
 describe('Render Patient Comtact Info Component', () => {
   const onChange = () => true;
-  const wrapper = shallow(<ContactInfo contactInfo={contactInfo} onChange={onChange} />);
+  const wrapper = shallow(
+    <ContactInfo
+      contactInfo={contactInfo}
+      patientId={patient.id}
+      patientInfoId={patient.patientInfo.id}
+      onChange={onChange}
+    />,
+  );
 
   it('renders email info', () => {
     const emailInfo = wrapper.find(EmailInfo);

@@ -1128,8 +1128,6 @@ export const externalProviderEntity = {
 };
 
 export const basicInfo = {
-  patientId: patient.id,
-  patientInfoId: patient.patientInfo.id,
   gender: patient.patientInfo.gender,
   language: patient.patientInfo.language,
   primaryAddress: patient.patientInfo.primaryAddress,
@@ -1138,18 +1136,20 @@ export const basicInfo = {
   preferredName: patient.patientInfo.preferredName,
 };
 
+export const planInfo = {
+  patientDataFlags: patient.patientDataFlags,
+};
+
 export const coreIdentity = {
   firstName: patient.firstName,
   middleName: patient.middleName,
   lastName: patient.lastName,
   dateOfBirth: patient.dateOfBirth,
   patientDataFlags: patient.patientDataFlags,
-  patientId: patient.id,
+  cityblockId: patient.cityblockId,
 };
 
 export const contactInfo = {
-  patientId: patient.id,
-  patientInfoId: patient.patientInfo.id,
   primaryEmail: patient.patientInfo.primaryEmail,
   primaryPhone: patient.patientInfo.primaryPhone,
   hasEmail: patient.patientInfo.hasEmail,

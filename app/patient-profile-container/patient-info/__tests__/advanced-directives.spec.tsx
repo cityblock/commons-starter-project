@@ -4,7 +4,7 @@ import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import RadioInput from '../../../shared/library/radio-input/radio-input';
-import { advancedDirectives, healthcareProxy } from '../../../shared/util/test-data';
+import { advancedDirectives, healthcareProxy, patient } from '../../../shared/util/test-data';
 import { AdvancedDirectives } from '../advanced-directives';
 import DisplayCard from '../display-card';
 
@@ -15,6 +15,8 @@ describe('Renders Advanced Directives Component', () => {
   const wrapper = shallow(
     <AdvancedDirectives
       advancedDirectives={advancedDirectives}
+      patientId={patient.id}
+      patientInfoId={patient.patientInfo.id}
       healthcareProxies={[]}
       onChange={onChange}
       routeBase={'/foo/bar'}

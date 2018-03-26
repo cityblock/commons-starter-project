@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { formatCityblockId } from '../../../shared/helpers/format-helpers';
 import { coreIdentity, patient, user } from '../../../shared/util/test-data';
 import { CoreIdentity } from '../core-identity';
 import FlaggableDisplayCard from '../flaggable-display-card';
@@ -12,6 +13,7 @@ describe('Render Core Idenity Component', () => {
       patientIdentity={coreIdentity}
       onChange={() => true}
       verifyCoreIdentity={verifyCoreIdentity}
+      patientId={patient.id}
     />,
   );
 
@@ -26,7 +28,7 @@ describe('Render Core Idenity Component', () => {
 
   it('renders core identity card fields', () => {
     const card = wrapper.find(FlaggableDisplayField);
-    expect(card.length).toBe(4);
+    expect(card.length).toBe(8);
 
     const firstName = wrapper
       .find(FlaggableDisplayField)
@@ -35,26 +37,51 @@ describe('Render Core Idenity Component', () => {
     expect(firstName.labelMessageId).toBe('coreIdentity.firstName');
     expect(firstName.value).toBe(coreIdentity.firstName);
 
-    const middleName = wrapper
+    const ssn = wrapper
       .find(FlaggableDisplayField)
       .at(1)
+      .props();
+    expect(ssn.labelMessageId).toBe('coreIdentity.socialSecurity');
+
+    const middleName = wrapper
+      .find(FlaggableDisplayField)
+      .at(2)
       .props();
     expect(middleName.labelMessageId).toBe('coreIdentity.middleName');
     expect(middleName.value).toBe(coreIdentity.middleName);
 
+    const cityblockId = wrapper
+      .find(FlaggableDisplayField)
+      .at(3)
+      .props();
+    expect(cityblockId.labelMessageId).toBe('coreIdentity.cityblockId');
+    expect(cityblockId.value).toBe(formatCityblockId(coreIdentity.cityblockId));
+
     const lastName = wrapper
       .find(FlaggableDisplayField)
-      .at(2)
+      .at(4)
       .props();
     expect(lastName.labelMessageId).toBe('coreIdentity.lastName');
     expect(lastName.value).toBe(coreIdentity.lastName);
 
+    const nmiNumber = wrapper
+      .find(FlaggableDisplayField)
+      .at(5)
+      .props();
+    expect(nmiNumber.labelMessageId).toBe('coreIdentity.nmiNumber');
+
     const dateOfBirth = wrapper
       .find(FlaggableDisplayField)
-      .at(3)
+      .at(6)
       .props();
     expect(dateOfBirth.labelMessageId).toBe('coreIdentity.dateOfBirth');
     expect(dateOfBirth.value).toBe(coreIdentity.dateOfBirth);
+
+    const ehrNumber = wrapper
+      .find(FlaggableDisplayField)
+      .at(7)
+      .props();
+    expect(ehrNumber.labelMessageId).toBe('coreIdentity.ehrNumber');
   });
 
   it('renders flagged state', () => {

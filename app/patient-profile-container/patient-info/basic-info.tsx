@@ -21,8 +21,6 @@ import * as styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
 export interface IBasicInfo {
-  patientId: string;
-  patientInfoId: string;
   gender: getPatientQuery['patient']['patientInfo']['gender'];
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
@@ -34,6 +32,8 @@ export interface IBasicInfo {
 
 interface IProps {
   patientInformation: IBasicInfo;
+  patientId: string;
+  patientInfoId: string;
   onChange: (fields: IEditableFieldState) => void;
   className?: string;
 }
@@ -162,14 +162,8 @@ export class BasicInfo extends React.Component<allProps> {
   }
 
   render() {
-    const { patientInformation, onChange } = this.props;
-    const {
-      primaryAddress,
-      addresses,
-      patientId,
-      patientInfoId,
-      isMarginallyHoused,
-    } = patientInformation;
+    const { patientInformation, onChange, patientId, patientInfoId } = this.props;
+    const { primaryAddress, addresses, isMarginallyHoused } = patientInformation;
 
     return (
       <div className={styles.section}>
@@ -193,7 +187,7 @@ export class BasicInfo extends React.Component<allProps> {
 export default graphql<IGraphqlProps, IProps, allProps>(computedPatientStatusQuery as any, {
   options: (props: IProps) => ({
     variables: {
-      patientId: props.patientInformation.patientId,
+      patientId: props.patientId,
     },
   }),
   props: ({ data }) => ({

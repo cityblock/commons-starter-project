@@ -93,6 +93,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       patientDataFlags,
       patientInfo,
       coreIdentityVerifiedAt,
+      cityblockId,
     } = patient;
     const {
       language,
@@ -115,18 +116,18 @@ export class PatientInfo extends React.Component<allProps, allState> {
     } = this.state;
 
     return {
+      patientId: id,
+      patientInfoId: patientInfo.id,
       core: {
-        patientId: id,
         firstName,
         lastName,
         middleName,
+        cityblockId,
         dateOfBirth,
         patientDataFlags: flags || patientDataFlags,
         coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
       },
       basic: {
-        patientId: id,
-        patientInfoId: patientInfo.id,
         gender: gender || patientInfo.gender,
         language: language || patientInfo.language,
         primaryAddress: checkDefined<ISavedAddress>(primaryAddress, patientInfo.primaryAddress),
@@ -138,8 +139,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
         sexAtBirth: sexAtBirth || patientInfo.sexAtBirth,
       },
       contact: {
-        patientId: id,
-        patientInfoId: patientInfo.id,
         hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
         primaryEmail: checkDefined<ISavedEmail>(primaryEmail, patientInfo.primaryEmail),
         canReceiveCalls: checkDefined<boolean>(canReceiveCalls, patientInfo.canReceiveCalls),
@@ -147,9 +146,10 @@ export class PatientInfo extends React.Component<allProps, allState> {
         preferredContactMethod: preferredContactMethod || patientInfo.preferredContactMethod,
         primaryPhone: checkDefined<ISavedPhone>(primaryPhone, patientInfo.primaryPhone),
       },
+      plan: {
+        patientDataFlags: flags || patientDataFlags,
+      },
       advanced: {
-        patientId: id,
-        patientInfoId: patientInfo.id,
         hasMolst: checkDefined<boolean>(hasMolst, patientInfo.hasMolst),
         hasHealthcareProxy: checkDefined<boolean>(
           hasHealthcareProxy,

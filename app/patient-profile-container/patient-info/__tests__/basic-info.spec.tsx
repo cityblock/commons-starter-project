@@ -3,14 +3,20 @@ import * as React from 'react';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import Select from '../../../shared/library/select/select';
 import TextInput from '../../../shared/library/text-input/text-input';
-import { basicInfo } from '../../../shared/util/test-data';
+import { basicInfo, patient } from '../../../shared/util/test-data';
 import AddressInfo from '../address-info/address-info';
 import { BasicInfo } from '../basic-info';
 
 describe('Render Basic Information Component', () => {
   const onChange = () => true;
   const wrapper = shallow(
-    <BasicInfo patientInformation={basicInfo} onChange={onChange} className="infoStyles" />,
+    <BasicInfo
+      patientInformation={basicInfo}
+      patientId={patient.id}
+      patientInfoId={patient.patientInfo.id}
+      onChange={onChange}
+      className="infoStyles"
+    />,
   );
 
   it('renders address info', () => {

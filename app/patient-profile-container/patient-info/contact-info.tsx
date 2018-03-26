@@ -12,8 +12,6 @@ import { IEditableFieldState } from './patient-info';
 import PhoneInfo from './phone-info/phone-info';
 
 export interface IContactInfo {
-  patientId: string;
-  patientInfoId: string;
   preferredContactMethod?: ContactMethodOptions | null;
   canReceiveCalls?: boolean | null;
   canReceiveTexts?: boolean | null;
@@ -26,6 +24,8 @@ export interface IContactInfo {
 
 interface IProps {
   contactInfo: IContactInfo;
+  patientId: string;
+  patientInfoId: string;
   onChange: (fields: IEditableFieldState) => void;
 }
 
@@ -126,16 +126,8 @@ export default class ContactInfo extends React.Component<IProps> {
   }
 
   render() {
-    const { onChange, contactInfo } = this.props;
-    const {
-      emails,
-      primaryEmail,
-      phones,
-      primaryPhone,
-      patientId,
-      patientInfoId,
-      hasEmail,
-    } = contactInfo;
+    const { onChange, contactInfo, patientId, patientInfoId } = this.props;
+    const { emails, primaryEmail, phones, primaryPhone, hasEmail } = contactInfo;
 
     return (
       <div className={styles.section}>

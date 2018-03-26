@@ -286,6 +286,15 @@ export const SPANISH_TRANSLATION = {
     'coreIdentity.lastName': 'Last name',
     'coreIdentity.dateOfBirth': 'Date of birth',
     'coreIdentity.placeholder': 'Select a field name...',
+    'planInfo.sectionTitle': 'Plan Information',
+    'planInfo.title': 'Insurance and Plan Information',
+    'planInfo.medicaidNumber': 'Medicaid number',
+    'planInfo.planId': 'Plan ID',
+    'planInfo.productDescription': 'Product description',
+    'planInfo.lineOfBusiness': ' Line of business',
+    'planInfo.primaryCare': "Primary care physician's practice name",
+    'planInfo.flaggedDescription':
+      "This member's plan information has been flagged for review and is pending an update in our database.",
     'contactInfo.sectionTitle': 'Contact Information',
     'contactInfo.hasEmail': '',
     'contactInfo.canReceiveTexts':

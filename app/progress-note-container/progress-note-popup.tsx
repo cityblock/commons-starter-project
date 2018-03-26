@@ -44,6 +44,7 @@ export interface IUpdateProgressNoteOptions {
   memberConcern: string | null;
   needsSupervisorReview: boolean | null;
   supervisorId: string | null;
+  worryScore: number | null;
 }
 
 interface IProps {
@@ -134,6 +135,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           summary: options.summary,
           memberConcern: options.memberConcern,
           needsSupervisorReview: options.needsSupervisorReview,
+          worryScore: options.worryScore,
           supervisorId: options.supervisorId,
         },
       });
@@ -196,6 +198,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
             hasProgressNoteTemplate &&
             hasSummaryAndConcern &&
             filledOutCosignitureIfRequired &&
+            !!progressNote.worryScore &&
             allQuestionsAnswered(questions, answerData),
         });
       }

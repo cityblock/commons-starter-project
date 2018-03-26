@@ -191,6 +191,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "updatedAt": "2017-09-07T13:45:14.532Z",
             "userRole": "physician",
           },
+          "worryScore": 2,
         }
       }
       progressNoteTemplates={
@@ -357,6 +358,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "updatedAt": "2017-09-07T13:45:14.532Z",
             "userRole": "physician",
           },
+          "worryScore": 2,
         }
       }
       updateProgressNote={[Function]}
@@ -556,6 +558,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "updatedAt": "2017-09-07T13:45:14.532Z",
             "userRole": "physician",
           },
+          "worryScore": 2,
         }
       }
       progressNoteTemplates={
@@ -722,6 +725,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "updatedAt": "2017-09-07T13:45:14.532Z",
             "userRole": "physician",
           },
+          "worryScore": 2,
         }
       }
       updateProgressNote={[Function]}

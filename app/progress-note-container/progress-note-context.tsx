@@ -28,6 +28,7 @@ import {
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
+import ProgressNoteWorryScore from './progress-note-worry-score';
 
 interface IProps {
   disabled: boolean;
@@ -43,6 +44,7 @@ interface IProps {
       location: string | null;
       summary: string | null;
       memberConcern: string | null;
+      worryScore: number | null;
     },
   ) => void;
 }
@@ -64,6 +66,7 @@ interface IState {
   progressNoteTemplateId: string | null;
   progressNoteSummary: string | null;
   progressNoteMemberConcern: string | null;
+  progressNoteWorryScore: number | null;
   loading?: boolean;
   error: string | null;
 }
@@ -91,6 +94,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteSummary: progressNote.summary ? progressNote.summary : '',
       progressNoteMemberConcern:
         progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
+      progressNoteWorryScore: progressNote.worryScore,
     };
   }
 
@@ -115,6 +119,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteSummary: progressNote.summary ? progressNote.summary : '',
       progressNoteMemberConcern:
         progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
+      progressNoteWorryScore: progressNote.worryScore,
     });
   }
 
@@ -208,6 +213,13 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     this.deferredSaveProgressNote();
   };
 
+  onProgressNoteWorryScoreChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    await this.setState({
+      progressNoteWorryScore: Number(event.currentTarget.value),
+    });
+    this.deferredSaveProgressNote();
+  };
+
   saveProgressNote = () => {
     const {
       progressNoteTime,
@@ -215,7 +227,9 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteTemplateId,
       progressNoteSummary,
       progressNoteMemberConcern,
+      progressNoteWorryScore,
     } = this.state;
+
     if (progressNoteTemplateId) {
       this.props.onChange({
         progressNoteTemplateId,
@@ -223,6 +237,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         location: progressNoteLocation,
         summary: progressNoteSummary,
         memberConcern: progressNoteMemberConcern,
+        worryScore: progressNoteWorryScore,
       });
     }
   };
@@ -236,6 +251,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteTemplateId,
       progressNoteSummary,
       progressNoteMemberConcern,
+      progressNoteWorryScore,
     } = this.state;
     const encounterTypes = progressNoteTemplates.map(template => (
       <option key={template.id} value={template.id}>
@@ -272,7 +288,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     );
 
     return (
-      <div>
+      <div className={styles.container}>
         <div className={styles.encounterTypeContainer}>
           <FormLabel messageId="progressNote.selectType" htmlFor="contextAndPlan" />
           <Select
@@ -324,6 +340,12 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
             disabled={disabled}
             value={progressNoteSummary || ''}
             onChange={this.onProgressNoteSummaryChange}
+          />
+        </div>
+        <div className={styles.summaryContainer}>
+          <ProgressNoteWorryScore
+            worryScore={progressNoteWorryScore}
+            onChange={this.onProgressNoteWorryScoreChange}
           />
         </div>
       </div>

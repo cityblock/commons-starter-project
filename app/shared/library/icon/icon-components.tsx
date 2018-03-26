@@ -36,8 +36,8 @@ import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
 import InfoOutlineIcon from 'material-ui-icons/InfoOutline';
-import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
+import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from 'material-ui-icons/KeyboardArrowUp';
@@ -56,6 +56,9 @@ import RemoveCircleOutlineIcon from 'material-ui-icons/RemoveCircleOutline';
 import ReportIcon from 'material-ui-icons/Report';
 import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
+import SentimentDissatisfiedIcon from 'material-ui-icons/SentimentDissatisfied';
+import SentimentNeutralIcon from 'material-ui-icons/SentimentNeutral';
+import SentimentSatisfiedIcon from 'material-ui-icons/SentimentSatisfied';
 import StarsIcon from 'material-ui-icons/Stars';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import TextSmsIcon from 'material-ui-icons/Textsms';
@@ -119,6 +122,9 @@ const components: IconComponents = {
   report: ReportIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
+  sentimentDissatisfied: SentimentDissatisfiedIcon,
+  sentimentNeutral: SentimentNeutralIcon,
+  sentimentSatisfied: SentimentSatisfiedIcon,
   slackFull: SlackFullIcon,
   stars: StarsIcon,
   star: GradeIcon,

@@ -1,3 +1,4 @@
+export const container: string;
 export const encounterTypeContainer: string;
 export const locationTimeRow: string;
 export const location: string;

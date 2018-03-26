@@ -48,6 +48,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
         memberConcern: progressNote.memberConcern,
         needsSupervisorReview: progressNote.needsSupervisorReview,
         supervisorId: value,
+        worryScore: progressNote.worryScore,
       });
     }
   };
@@ -66,6 +67,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
         memberConcern: progressNote.memberConcern,
         needsSupervisorReview: value === 'true',
         supervisorId: progressNote.supervisor ? progressNote.supervisor.id : null,
+        worryScore: progressNote.worryScore,
       });
     }
   };

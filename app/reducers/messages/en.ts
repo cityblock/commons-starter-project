@@ -640,6 +640,7 @@ export const ENGLISH_TRANSLATION = {
     'progressNote.close': 'Close',
     'progressNote.emptyDetail': 'Future encounters with this patient will be displayed here',
     'progressNote.emptyHeader': 'No encounter history for this patient',
+    'progressNote.worryScore': 'How worried are you about this member today?',
     'quickCallNote.new': '+ Quick call note',
     'quickCallForm.title': 'Quick call note',
     'quickCallForm.submit': 'Save call',

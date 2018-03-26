@@ -919,6 +919,7 @@ export const progressNote = {
   needsSupervisorReview: null,
   reviewedBySupervisorAt: null,
   supervisorNotes: null,
+  worryScore: 2,
 };
 
 export const quickCall = {

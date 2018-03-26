@@ -1,3 +1,7 @@
+.container {
+  border-bottom: 1px solid var(--border-color);
+}
+
 .encounterTypeContainer {
   background: var(--white-font-color);
   padding: var(--small-gutter);
@@ -23,7 +27,7 @@
 
 .summaryContainer {
   display: block;
-  padding: var(--small-gutter);
+  padding: var(--small-gutter) var(--small-gutter) var(--extra-small-gutter);
 }
 
 .titleLinkGroup {

@@ -1,6 +1,8 @@
 import { get } from 'lodash';
 import * as React from 'react';
+import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
+import { Prompt } from 'react-router';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
@@ -67,6 +69,7 @@ interface IState {
   isSaving?: boolean;
   saveError: string | null;
   saveSuccess?: boolean;
+  hasUnsavedChanges: boolean;
 }
 
 type allState = IState & IEditableFieldState;
@@ -80,6 +83,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     super(props);
     this.state = {
       saveError: null,
+      hasUnsavedChanges: false,
     };
   }
 
@@ -208,7 +212,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
         },
       });
 
-      this.setState({ saveSuccess: true, isSaving: false });
+      this.setState({ saveSuccess: true, isSaving: false, hasUnsavedChanges: false });
       setTimeout(this.resetSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
     } catch (err) {
       this.setState({ saveError: err.message, isSaving: false });
@@ -216,7 +220,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
   };
 
   handleFieldChange = (changedValues: IEditableFieldState) => {
-    this.setState(changedValues as any);
+    this.setState({ ...changedValues, hasUnsavedChanges: true });
   };
 
   renderSaveButton() {
@@ -259,16 +263,24 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const { match, patient } = this.props;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/member-info`;
+    const { hasUnsavedChanges } = this.state;
 
     const isDocuments = subTab === 'documents';
 
+    // This Prompt triggers a save modal that is defined at the root of App on BrowserRouter
     const demographics =
       !isDocuments && patient ? (
-        <PatientDemographics
-          routeBase={routeBase}
-          patient={this.getPatientFields(patient)}
-          onChange={this.handleFieldChange}
-        />
+        <Fragment>
+          <Prompt
+            when={hasUnsavedChanges}
+            message="You haven't saved your changes."
+          />
+          <PatientDemographics
+            routeBase={routeBase}
+            patient={this.getPatientFields(patient)}
+            onChange={this.handleFieldChange}
+          />
+        </Fragment>
       ) : null;
 
     const hasMolst = checkDefined(this.state.hasMolst, get(patient, 'patientInfo.hasMolst'));

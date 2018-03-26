@@ -927,5 +927,8 @@ export const ENGLISH_TRANSLATION = {
     'plan.planId': 'Plan ID:',
     'plan.planType': 'Plan Type:',
     'plan.cin': 'CIN:',
+    'saveModal.cancel': 'Cancel',
+    'saveModal.continueWithoutSaving': 'Continue without saving',
+    'saveModal.subtitle': 'If you continue without saving you will lose these changes',
   },
 };

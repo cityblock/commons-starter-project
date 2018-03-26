@@ -12,6 +12,7 @@ interface IProps {
   onSubmit: () => void;
   isVisible: boolean;
   titleMessageId?: string;
+  titleText?: string;
   subTitleMessageId?: string | null;
   cancelMessageId?: string;
   submitMessageId?: string;
@@ -30,6 +31,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
   const {
     isVisible,
     titleMessageId,
+    titleText,
     subTitleMessageId,
     cancelMessageId,
     submitMessageId,
@@ -56,6 +58,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={popupClassName}>
       <ModalHeader
         titleMessageId={titleMessageId}
+        titleText={titleText}
         bodyMessageId={subTitleMessageId}
         closePopup={onClose}
         color={headerColor}

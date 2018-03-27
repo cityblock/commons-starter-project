@@ -2396,11 +2396,6 @@ declare module 'schema' {
     careTeamAddUser: IUser | null;
 
     /**
-     * Remove user from careTeam
-     */
-    careTeamRemoveUser: Array<IUser> | null;
-
-    /**
      * Reassign a user on a careTeam
      */
     careTeamReassignUser: IUser | null;
@@ -3028,9 +3023,6 @@ declare module 'schema' {
     input?: IClinicCreateInput | null;
   }
   interface ICareTeamAddUserOnRootMutationTypeArguments {
-    input?: ICareTeamInput | null;
-  }
-  interface ICareTeamRemoveUserOnRootMutationTypeArguments {
     input?: ICareTeamInput | null;
   }
   interface ICareTeamReassignUserOnRootMutationTypeArguments {

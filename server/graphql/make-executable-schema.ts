@@ -27,7 +27,6 @@ import {
   careTeamAssignPatients,
   careTeamMakeTeamLead,
   careTeamReassignUser,
-  careTeamRemoveUser,
   resolvePatientCareTeam,
 } from './care-team-resolver';
 import { resolveCBOCategories } from './cbo-category-resolver';
@@ -146,7 +145,11 @@ import {
   resolvePatientGoal,
   resolvePatientGoalsForPatient,
 } from './patient-goal-resolver';
-import { patientInfoEdit, patientNeedToKnowEdit, resolvePatientNeedToKnow } from './patient-info-resolver';
+import {
+  patientInfoEdit,
+  patientNeedToKnowEdit,
+  resolvePatientNeedToKnow,
+} from './patient-info-resolver';
 import {
   patientListCreate,
   patientListDelete,
@@ -450,7 +453,6 @@ const resolveFunctions = {
     careTeamReassignUser,
     careTeamMakeTeamLead,
     careTeamAssignPatients,
-    careTeamRemoveUser,
     emailCreate,
     emailCreateForPatient,
     emailDeleteForPatient,

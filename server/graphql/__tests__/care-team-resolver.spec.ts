@@ -1,7 +1,11 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { find } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
+import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
+import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
+import * as careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
 import Db from '../../db';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
@@ -32,6 +36,10 @@ async function setup(trx: Transaction): Promise<ISetup> {
 describe('care team', () => {
   let db: Db;
   let txn = null as any;
+  const careTeamMakeTeamLeadMutation = print(careTeamMakeTeamLead);
+  const patientCareTeamQuery = print(patientCareTeam);
+  const careTeamAddUserMutation = print(careTeamAddUser);
+  const careTeamReassignUserMutation = print(careTeamReassignUser);
 
   beforeAll(async () => {
     db = await Db.get();
@@ -55,21 +63,25 @@ describe('care team', () => {
     it('adds user to care team', async () => {
       const { user, patient, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
-      const mutation = `mutation {
-          careTeamAddUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
-            id
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        careTeamAddUserMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          userId: user2.id,
+          patientId: patient.id,
+        },
+      );
 
       expect(cloneDeep(result.data!.careTeamAddUser).id).toEqual(user2.id);
-      const patientCareTeam = await CareTeam.getForPatient(patient.id, txn);
-      const patientCareTeamIds = patientCareTeam.map(teamMember => teamMember.id);
+      const careTeam = await CareTeam.getForPatient(patient.id, txn);
+      const patientCareTeamIds = careTeam.map(teamMember => teamMember.id);
 
       expect(patientCareTeamIds).toContain(user.id);
       expect(patientCareTeamIds).toContain(user2.id);
@@ -91,17 +103,18 @@ describe('care team', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          careTeamAddUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
-            id
-          }
-        }`;
-      await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      await graphql(
+        schema,
+        careTeamAddUserMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { userId: user2.id, patientId: patient.id },
+      );
 
       await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
 
@@ -113,81 +126,20 @@ describe('care team', () => {
       expect(refetchedComputedPatientStatus!.hasChp).toEqual(true);
     });
 
-    it('remove user from care team', async () => {
-      const { user, patient } = await setup(txn);
-      const mutation = `mutation {
-          careTeamRemoveUser(input: { userId: "${user.id}", patientId: "${patient.id}" }) {
-            id
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-      const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser).map((u: any) => u.id);
-
-      expect(careTeamUserIds).not.toContain(user.id);
-    });
-
-    it('updates computed patient status when removing a user from a care team', async () => {
-      const { user, patient, clinic } = await setup(txn);
-      const user2 = await User.create(
-        {
-          email: 'chp@cityblock.com',
-          firstName: 'Chp',
-          lastName: 'User',
-          userRole: 'communityHealthPartner',
-          homeClinicId: clinic.id,
-        },
-        txn,
-      );
-      await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
-      const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
-        patient.id,
-        user.id,
-        txn,
-      );
-
-      expect(computedPatientStatus.hasChp).toEqual(true);
-
-      const mutation = `mutation {
-          careTeamRemoveUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
-            id
-          }
-        }`;
-      await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-
-      await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
-
-      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-        patient.id,
-        txn,
-      );
-
-      expect(refetchedComputedPatientStatus!.hasChp).toEqual(false);
-    });
-
     it('resolves a patient care team', async () => {
       const { patient, user } = await setup(txn);
-      const query = `{
-          patientCareTeam(patientId: "${patient.id}") {
-            id
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        patientCareTeamQuery,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient.id },
+      );
       const careTeamUserIds = cloneDeep(result.data!.patientCareTeam).map((u: any) => u.id);
 
       expect(careTeamUserIds).toContain(user.id);
@@ -199,24 +151,23 @@ describe('care team', () => {
       await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
       await CareTeam.makeTeamLead({ userId: user.id, patientId: patient.id }, txn);
 
-      const query = `{
-          patientCareTeam(patientId: "${patient.id}") {
-            id
-            isCareTeamLead
-          }
-        }`;
+      const result = await graphql(
+        schema,
+        patientCareTeamQuery,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+      const careTeam = cloneDeep(result.data!.patientCareTeam);
+      const userCareTeamResult = find(careTeam, ['id', user.id]);
+      const user2CareTeamResult = find(careTeam, ['id', user2.id]);
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
-      const patientCareTeam = cloneDeep(result.data!.patientCareTeam);
-      const userCareTeamResult = find(patientCareTeam, ['id', user.id]);
-      const user2CareTeamResult = find(patientCareTeam, ['id', user2.id]);
-
-      expect(patientCareTeam).toHaveLength(2);
+      expect(careTeam).toHaveLength(2);
       expect(userCareTeamResult.isCareTeamLead).toEqual(true);
       expect(user2CareTeamResult.isCareTeamLead).toEqual(false);
     });
@@ -283,20 +234,22 @@ describe('care team', () => {
       expect(careTeamUserIds).toContain(user.id);
       expect(careTeamUserIds).toContain(user2.id);
 
-      const mutation = `mutation {
-          careTeamReassignUser(input: { userId: "${user.id}", patientId: "${
-        patient.id
-      }", reassignedToId: "${user2.id}" }) {
-            id
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        txn,
-        userId: user2.id,
-      });
+      const result = await graphql(
+        schema,
+        careTeamReassignUserMutation,
+        null,
+        {
+          db,
+          permissions,
+          txn,
+          userId: user2.id,
+        },
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reassignedToId: user2.id,
+        },
+      );
       expect(cloneDeep(result.data!.careTeamReassignUser)).toMatchObject({
         id: user.id,
       });
@@ -327,20 +280,21 @@ describe('care team', () => {
       );
 
       expect(computedPatientStatus.hasChp).toEqual(true);
-
-      const mutation = `mutation {
-          careTeamReassignUser(input: { userId: "${user2.id}", patientId: "${
-        patient.id
-      }", reassignedToId: "${user.id}" }) {
-            id
-          }
-        }`;
-      await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      await graphql(
+        schema,
+        careTeamReassignUserMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          userId: user2.id,
+          patientId: patient.id,
+        },
+      );
 
       await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
 
@@ -364,17 +318,18 @@ describe('care team', () => {
 
       expect(careTeamLead!.id).toEqual(user.id);
 
-      const mutation = `mutation {
-          careTeamMakeTeamLead(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
-            id
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        permissions,
-        txn,
-        userId: user.id,
-      });
+      const result = await graphql(
+        schema,
+        careTeamMakeTeamLeadMutation,
+        null,
+        {
+          db,
+          permissions,
+          txn,
+          userId: user.id,
+        },
+        { userId: user2.id, patientId: patient.id },
+      );
       expect(cloneDeep(result.data!.careTeamMakeTeamLead)).toMatchObject({
         id: user2.id,
       });

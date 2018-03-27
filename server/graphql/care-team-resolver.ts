@@ -51,20 +51,6 @@ export async function careTeamAddUser(
   return careTeam;
 }
 
-export async function careTeamRemoveUser(
-  root: any,
-  { input }: ICareTeamOptions,
-  { txn, userId, permissions }: IContext,
-): Promise<IRootMutationType['careTeamRemoveUser']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
-
-  const careTeam = await CareTeam.delete({ userId: input.userId, patientId: input.patientId }, txn);
-
-  await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
-
-  return careTeam;
-}
-
 export async function careTeamReassignUser(
   root: any,
   { input }: ICareTeamReassignOptions,

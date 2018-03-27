@@ -2319,8 +2319,6 @@ type RootMutationType {
   clinicCreate(input: ClinicCreateInput): Clinic
   # Add user to careTeam
   careTeamAddUser(input: CareTeamInput): User
-  # Remove user from careTeam
-  careTeamRemoveUser(input: CareTeamInput): [User]
   # Reassign a user on a careTeam
   careTeamReassignUser(input: CareTeamReassignInput): User
   # Add multiple patients to careTeam

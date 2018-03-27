@@ -1,0 +1,30 @@
+.container {
+  background-color: var(--gray-background-color);
+  padding: 0 var(--medium-gutter);
+  overflow: scroll;
+  height: 100%;
+}
+
+.eventContainer {
+  display: block;
+  border-radius: 4px;
+  background-color: var(--white-color);
+  padding: var(--small-gutter);
+  margin: var(--small-gutter) 0;
+  border: 1px solid var(--border-color);
+}
+
+.datetime {
+  color: var(--gray-font-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.datetime span:first-child {
+  padding-right: 5px;
+}
+
+.eventTitle {
+  padding-top: var(--extra-small-gutter);
+  font-family: var(--basetica-medium);
+}

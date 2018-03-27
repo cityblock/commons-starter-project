@@ -66,6 +66,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.cbhNumber': 'CBH MRN#',
     'patient.patientInfo': 'Member Info',
     'patient.patientTeam': 'Team',
+    'patient.patientCalendar': 'Calendar',
     'patient.createdPopupHeading': 'successfully enrolled',
     'patient.addToCarePlan': 'Add to care plan',
     'patient.createdPopupBody':

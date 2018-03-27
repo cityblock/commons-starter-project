@@ -9,6 +9,7 @@ import { formatPatientName } from '../shared/helpers/format-helpers';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
+import PatientCalendar from './calendar/patient-calendar';
 import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info/patient-info';
@@ -27,7 +28,8 @@ export type SelectableTabs =
   | 'map'
   | 'tasks'
   | 'tools'
-  | 'team';
+  | 'team'
+  | 'calendar';
 
 interface IProps extends IInjectedProps {
   match: {
@@ -97,6 +99,11 @@ export class PatientProfileContainer extends React.Component<allProps> {
                 href={`/patients/${patientId}/team`}
                 selected={tab === 'team'}
               />
+              <UnderlineTab
+                messageId="patient.patientCalendar"
+                href={`/patients/${patientId}/calendar`}
+                selected={tab === 'calendar'}
+              />
             </UnderlineTabs>
           </div>
           <div className={styles.pageContent}>
@@ -131,6 +138,11 @@ export class PatientProfileContainer extends React.Component<allProps> {
                 component={PatientInfo}
               />
               <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
+              <Route
+                exact
+                path="/patients/:patientId/calendar"
+                render={(props: any) => <PatientCalendar {...props} />}
+              />
             </Switch>
           </div>
         </div>

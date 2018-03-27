@@ -48,6 +48,11 @@ exports[`patient profile container renders patient profile container 1`] = `
           messageId="patient.patientTeam"
           selected={false}
         />
+        <UnderlineTab
+          href="/patients/patient-1/calendar"
+          messageId="patient.patientCalendar"
+          selected={false}
+        />
       </UnderlineTabs>
     </div>
     <div
@@ -83,6 +88,11 @@ exports[`patient profile container renders patient profile container 1`] = `
           component={[Function]}
           exact={true}
           path="/patients/:patientId/team/:subTab?"
+        />
+        <Route
+          exact={true}
+          path="/patients/:patientId/calendar"
+          render={[Function]}
         />
       </Switch>
     </div>

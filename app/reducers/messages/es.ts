@@ -65,6 +65,7 @@ export const SPANISH_TRANSLATION = {
     'patient.medicaid': 'Medicaid',
     'patient.patientInfo': 'Información del Paciente',
     'patient.patientTeam': 'Team',
+    'patient.patientCalendar': 'Calendar',
     'patient.createdPopupHeading': 'Inscrito con éxito',
     'patient.createdPopupBody':
       'Continúe con su perfil de paciente o vuelva a su lista de pacientes.',

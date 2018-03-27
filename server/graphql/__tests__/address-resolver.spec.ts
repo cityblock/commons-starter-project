@@ -1,6 +1,10 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as addressCreateForPatient from '../../../app/graphql/queries/address-create-for-patient-mutation.graphql';
+import * as addressCreate from '../../../app/graphql/queries/address-create-mutation.graphql';
+import * as addressDeleteForPatient from '../../../app/graphql/queries/address-delete-for-patient-mutation.graphql';
+import * as addressEditForPatient from '../../../app/graphql/queries/address-edit-mutation.graphql';
 import Db from '../../db';
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
@@ -47,6 +51,10 @@ describe('address resolver', () => {
   let txn = null as any;
   const log = jest.fn();
   const logger = { log };
+  const addressCreateMutation = print(addressCreate);
+  const addressCreateForPatientMutation = print(addressCreateForPatient);
+  const addressDeleteForPatientMutation = print(addressDeleteForPatient);
+  const addressEditForPatientMutation = print(addressEditForPatient);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -64,25 +72,26 @@ describe('address resolver', () => {
   describe('create address', async () => {
     it('should create address', async () => {
       const { user } = await setup(txn);
-      const query = `mutation {
-          addressCreate(input: {
-            zip: "11238",
-            state: "NY",
-            city: "Brooklyn",
-            street1: "600 Vanderbilt Ave",
-            description: "Some building",
-          }) {
-            id, zip, state, city, street1, description
-          }
-        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressCreateMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          zip: '11238',
+          state: 'NY',
+          city: 'Brooklyn',
+          street1: '600 Vanderbilt Ave',
+          description: 'Some building',
+        },
+      );
 
       expect(cloneDeep(result.data!.addressCreate)).toMatchObject({
         street1: '600 Vanderbilt Ave',
@@ -98,26 +107,26 @@ describe('address resolver', () => {
   describe('create address for patient', async () => {
     it('should create address with patient and associate it with patient', async () => {
       const { patient, user } = await setup(txn);
-      const query = `mutation {
-          addressCreateForPatient(input: {
-            patientId: "${patient.id}",
-            zip: "11238",
-            state: "NY",
-            city: "Brooklyn",
-            street1: "600 Vanderbilt Ave",
-            description: "Some building",
-          }) {
-            id, zip, state, city, street1, description
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressCreateForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          patientId: patient.id,
+          zip: '11238',
+          state: 'NY',
+          city: 'Brooklyn',
+          street1: '600 Vanderbilt Ave',
+          description: 'Some building',
+        },
+      );
       expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
         street1: '600 Vanderbilt Ave',
         zip: '11238',
@@ -134,27 +143,28 @@ describe('address resolver', () => {
 
     it('should create address with patient and make it primary for patient', async () => {
       const { patient, user } = await setup(txn);
-      const query = `mutation {
-          addressCreateForPatient(input: {
-            patientId: "${patient.id}",
-            zip: "11238",
-            state: "NY",
-            city: "Brooklyn",
-            street1: "600 Vanderbilt Ave",
-            description: "Some building",
-            isPrimary: true,
-          }) {
-            id, zip, state, city, street1, description
-          }
-        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressCreateForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          patientId: patient.id,
+          zip: '11238',
+          state: 'NY',
+          city: 'Brooklyn',
+          street1: '600 Vanderbilt Ave',
+          description: 'Some building',
+          isPrimary: true,
+        },
+      );
       expect(cloneDeep(result.data!.addressCreateForPatient)).toMatchObject({
         street1: '600 Vanderbilt Ave',
         zip: '11238',
@@ -176,41 +186,41 @@ describe('address resolver', () => {
   describe('delete address', async () => {
     it('should delete address', async () => {
       const { patient, user } = await setup(txn);
-      const createQuery = `mutation {
-          addressCreateForPatient(input: {
-            patientId: "${patient.id}",
-            zip: "11238",
-            description: "Some address",
-          }) {
-            id, zip, description
-          }
-        }`;
-
-      const createResult = await graphql(schema, createQuery, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const createResult = await graphql(
+        schema,
+        addressCreateForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          patientId: patient.id,
+          zip: '11238',
+          description: 'Some address',
+        },
+      );
       const address = createResult.data!.addressCreateForPatient;
 
-      const query = `mutation {
-          addressDeleteForPatient(input: {
-            addressId: "${address.id}",
-            patientId: "${patient.id}",
-          }) {
-            id, zip, description
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressDeleteForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          addressId: address.id,
+          patientId: patient.id,
+        },
+      );
 
       expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
         id: address.id,
@@ -222,46 +232,46 @@ describe('address resolver', () => {
 
     it('should delete primary address', async () => {
       const { patient, user } = await setup(txn);
-      const createQuery = `mutation {
-          addressCreateForPatient(input: {
-            patientId: "${patient.id}",
-            zip: "11238",
-            description: "Some address",
-            isPrimary: true,
-          }) {
-            id, zip, description
-          }
-        }`;
-
-      const createResult = await graphql(schema, createQuery, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const createResult = await graphql(
+        schema,
+        addressCreateForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          patientId: patient.id,
+          zip: '11238',
+          description: 'Some address',
+          isPrimary: true,
+        },
+      );
       const address = createResult.data!.addressCreateForPatient;
 
       const initialPatientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
       expect(initialPatientInfo.primaryAddressId).toBe(address.id);
 
-      const query = `mutation {
-          addressDeleteForPatient(input: {
-            addressId: "${address.id}",
-            patientId: "${patient.id}",
-            isPrimary: true,
-          }) {
-            id, zip, description
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressDeleteForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          addressId: address.id,
+          patientId: patient.id,
+          isPrimary: true,
+        },
+      );
 
       expect(cloneDeep(result.data!.addressDeleteForPatient)).toMatchObject({
         id: address.id,
@@ -279,27 +289,28 @@ describe('address resolver', () => {
     it('should edit fields on address', async () => {
       const { patient, user } = await setup(txn);
       const address = await Address.create(createMockAddress(user.id), txn);
-      const query = `mutation {
-          addressEdit(input: {
-            addressId: "${address.id}",
-            patientId: "${patient.id}",
-            zip: "11238",
-            state: "CT",
-            city: "Haverford",
-            street1: "600 Vanderbilt Ave",
-            description: "Some building",
-          }) {
-            id, zip, state, city, street1, description
-          }
-        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        logger,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        addressEditForPatientMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        {
+          addressId: address.id,
+          patientId: patient.id,
+          zip: '11238',
+          state: 'CT',
+          city: 'Haverford',
+          street1: '600 Vanderbilt Ave',
+          description: 'Some building',
+        },
+      );
       expect(cloneDeep(result.data!.addressEdit)).toMatchObject({
         street1: '600 Vanderbilt Ave',
         zip: '11238',

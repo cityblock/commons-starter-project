@@ -160,7 +160,7 @@ describe('goal suggestion model', () => {
       expect(await GoalSuggestion.getForAnswer(answer.id, txn)).toEqual([]);
     });
 
-    it('returns goal suggestions for a patient', async () => {
+    it('returns correct goal suggestions for a patient with existing goals in MAP', async () => {
       const { goalSuggestionTemplate, answer, clinic, riskArea, question } = await setup(txn);
 
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
@@ -171,7 +171,10 @@ describe('goal suggestion model', () => {
         txn,
       );
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-      // creates a patient goal with no goal suggestion template
+
+      // Creates a PatientGoal with no goal suggestion template
+      // Important since currentPatientGoalTemplateIdsQuery looks at PatientGoals
+      // Need to ensure that query handles goals with and without a goalSuggestionTempalteID
       await PatientGoal.create(
         {
           title: 'goal title',

@@ -159,7 +159,15 @@ describe('concern suggestion model', () => {
       const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
       const concern1 = await Concern.create({ title: 'Housing' }, txn);
       const concern2 = await Concern.create({ title: 'Food' }, txn);
+      const concern3 = await Concern.create({ title: 'Medical' }, txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+
+      // Add a concern to the patient MAP
+      await PatientConcern.create(
+        { concernId: concern3.id, patientId: patient.id, userId: user.id },
+        txn,
+      );
+
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
@@ -257,16 +265,20 @@ describe('concern suggestion model', () => {
       );
 
       // Now both concerns should be suggested
-
-      const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+      const secondConcernSuggestionIds = (await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
         txn,
-      );
+      )).map(suggestion => suggestion.id);
 
-      expect(secondConcernSuggestions[0].id).toEqual(concern1.id);
-      expect(secondConcernSuggestions[1].id).toEqual(concern2.id);
-      expect(secondConcernSuggestions.length).toEqual(2);
+      expect(secondConcernSuggestionIds).toContainEqual(concern1.id);
+      expect(secondConcernSuggestionIds).toContainEqual(concern2.id);
+      expect(secondConcernSuggestionIds).toHaveLength(2);
+
+      const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
+
+      // PatientConcerns should be both the concern we created at the start + administrative tasks
+      expect(patientConcerns).toHaveLength(2);
     });
 
     it('does not return concern suggestions where one already exists', async () => {
@@ -501,6 +513,9 @@ describe('concern suggestion model', () => {
       );
 
       expect(fourthConcernSuggestions.length).toEqual(0);
+
+      const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
+      expect(patientConcerns).toHaveLength(3);
     });
   });
   describe('utility methods', async () => {

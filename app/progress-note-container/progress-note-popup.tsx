@@ -331,7 +331,13 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
-    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
+    options: {
+      refetchQueries: [
+        'getProgressNotesForPatient',
+        'getProgressNotesForCurrentUser',
+        'getProgressNoteLatestForPatient',
+      ],
+    },
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',

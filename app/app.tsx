@@ -46,7 +46,7 @@ export default class App extends React.Component<IProps> {
       </ApolloProvider>,
       modal,
     );
-  }
+  };
 
   render() {
     return (

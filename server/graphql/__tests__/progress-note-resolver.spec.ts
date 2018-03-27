@@ -582,14 +582,15 @@ describe('progress note resolver', () => {
       const result = await graphql(
         schema,
         progressNoteLatestForPatientQuery,
-        null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      },
-      { patientId: patient.id },
-    );
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient.id },
+      );
 
       expect(cloneDeep(result.data!.progressNoteLatestForPatient)).toMatchObject({
         id: progressNote.id,

@@ -271,10 +271,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const demographics =
       !isDocuments && patient ? (
         <Fragment>
-          <Prompt
-            when={hasUnsavedChanges}
-            message="You haven't saved your changes."
-          />
+          <Prompt when={hasUnsavedChanges} message="You haven't saved your changes." />
           <PatientDemographics
             routeBase={routeBase}
             patient={this.getPatientFields(patient)}

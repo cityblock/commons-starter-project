@@ -4,6 +4,21 @@
   border-bottom: 2px solid var(--border-color);
 }
 
+.redBorder,
+.yellowBorder,
+.greenBorder {
+  padding-top: 15px;
+  border-top: 15px solid var(--red-color);
+}
+
+.yellowBorder {
+  border-top-color: var(--yellow-color);
+}
+
+.greenBorder {
+  border-top-color: var(--green-color);
+}
+
 .info,
 .patient,
 .needToKnow {

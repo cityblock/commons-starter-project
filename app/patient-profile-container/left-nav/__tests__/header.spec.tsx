@@ -5,15 +5,15 @@ import { formatAge, formatPatientNameForProfile } from '../../../shared/helpers/
 import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patient } from '../../../shared/util/test-data';
-import LeftNavHeader from '../header';
+import { LeftNavHeader } from '../header';
 import PatientNeedToKnow, { IProps } from '../patient-need-to-know';
 import LeftNavPreferredName from '../preferred-name';
 
 describe('Patient Left Navigation Header', () => {
-  const wrapper = shallow(<LeftNavHeader patient={patient} />);
+  const wrapper = shallow(<LeftNavHeader patient={patient} latestProgressNote={null} />);
 
-  it('renders container', () => {
-    expect(wrapper.find('.container').length).toBe(1);
+  it('renders container with no border if no latest progress note', () => {
+    expect(wrapper.find('.container').props().className).toBe('container');
   });
 
   it('renders patient photo', () => {
@@ -104,6 +104,16 @@ describe('Patient Left Navigation Header', () => {
 
   it('renders need to know field', () => {
     expect(wrapper.find<IProps>(PatientNeedToKnow).props().patientId).toBe(patient.id);
+  });
+
+  it('renders colored border if worry score present', () => {
+    const latestProgressNote = {
+      id: 'winterIsComing',
+      worryScore: 3,
+    };
+    wrapper.setProps({ latestProgressNote });
+
+    expect(wrapper.find('.container').props().className).toBe('container redBorder');
   });
 
   it('renders nothing if patient is null', () => {

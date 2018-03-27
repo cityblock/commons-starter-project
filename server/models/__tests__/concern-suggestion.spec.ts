@@ -271,8 +271,8 @@ describe('concern suggestion model', () => {
         txn,
       )).map(suggestion => suggestion.id);
 
-      expect(secondConcernSuggestionIds).toContainEqual(concern1.id);
-      expect(secondConcernSuggestionIds).toContainEqual(concern2.id);
+      expect(secondConcernSuggestionIds).toContain(concern1.id);
+      expect(secondConcernSuggestionIds).toContain(concern2.id);
       expect(secondConcernSuggestionIds).toHaveLength(2);
 
       const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);

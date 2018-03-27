@@ -591,7 +591,7 @@ declare module 'schema' {
     patientId: string;
   }
   interface IPatientNeedToKnowOnRootQueryTypeArguments {
-    patientId: string;
+    patientInfoId: string;
   }
   interface IPatientSearchOnRootQueryTypeArguments {
     query: string;
@@ -1085,7 +1085,6 @@ declare module 'schema' {
     cityblockId: number;
     homeClinicId: string | null;
     createdAt: string;
-    scratchPad: string | null;
     careTeam: Array<IUser>;
     patientDataFlags: Array<IPatientDataFlag>;
     computedPatientStatus: IComputedPatientStatus;
@@ -1116,6 +1115,7 @@ declare module 'schema' {
     hasMolst: boolean | null;
     hasDeclinedPhotoUpload: boolean | null;
     hasUploadedPhoto: boolean | null;
+    needToKnow: string | null;
   }
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
@@ -2476,11 +2476,6 @@ declare module 'schema' {
     emailEdit: IEmail | null;
 
     /**
-     * Edit fields on patient stored in the db
-     */
-    patientEdit: IPatient | null;
-
-    /**
      * mark core identity verified on patient stored in the db
      */
     patientCoreIdentityVerify: IPatient | null;
@@ -3083,9 +3078,6 @@ declare module 'schema' {
   interface IEmailEditOnRootMutationTypeArguments {
     input?: IEmailEditInput | null;
   }
-  interface IPatientEditOnRootMutationTypeArguments {
-    input?: IPatientEditInput | null;
-  }
   interface IPatientCoreIdentityVerifyOnRootMutationTypeArguments {
     input?: IPatientCoreIdentityVerifyInput | null;
   }
@@ -3632,17 +3624,6 @@ declare module 'schema' {
   /**
    * params for editing a patient in the db
    */
-  interface IPatientEditInput {
-    patientId: string;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    dateOfBirth?: string | null;
-  }
-
-  /**
-   * params for editing a patient in the db
-   */
   interface IPatientCoreIdentityVerifyInput {
     patientId: string;
   }
@@ -3785,7 +3766,7 @@ declare module 'schema' {
    * params for editing a patient need to know
    */
   interface IPatientNeedToKnowEditInput {
-    patientId: string;
+    patientInfoId: string;
     text: string;
   }
 

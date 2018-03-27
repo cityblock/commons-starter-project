@@ -1,11 +1,14 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
+import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import Db from '../../db';
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientAddress from '../../models/patient-address';
+import PatientInfo from '../../models/patient-info';
 import User from '../../models/user';
 import { createMockAddress, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -24,7 +27,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
     {
       name: 'cool clinic - patient info',
-      departmentId: 1,
+      departmentId: 2,
     },
     txn,
   );
@@ -50,6 +53,8 @@ describe('patient info resolver', () => {
   const logger = { log };
   let txn = null as any;
   let db: Db;
+  const getPatientNeedToKnowQuery = print(getPatientNeedToKnow);
+  const patientNeedToKnowEditMutation = print(patientNeedToKnowEdit);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -105,6 +110,51 @@ describe('patient info resolver', () => {
         txn,
       });
       expect(result2.errors![0].message).toBe('red not able to edit patient');
+    });
+  });
+
+  describe('need to know', () => {
+    it('resolves a patient needToKnow', async () => {
+      const { patient, user } = await setup(txn);
+      await PatientInfo.edit({ needToKnow: 'Test Scratch Pad', updatedById: user.id }, patient.patientInfo.id, txn);
+
+      const result = await graphql(
+        schema,
+        getPatientNeedToKnowQuery,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { patientInfoId: patient.patientInfo.id },
+      );
+
+      expect(cloneDeep(result.data!.patientNeedToKnow)).toMatchObject({
+        text: 'Test Scratch Pad',
+      });
+    });
+
+    it('saves a patient needToKnow', async () => {
+      const { patient, user } = await setup(txn);
+      await PatientInfo.edit({ needToKnow: 'Unedited Scratch Pad', updatedById: user.id }, patient.patientInfo.id, txn);
+      const result = await graphql(
+        schema,
+        patientNeedToKnowEditMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        { patientInfoId: patient.patientInfo.id, text: 'Edited Scratch Pad' },
+      );
+      expect(cloneDeep(result.data!.patientNeedToKnowEdit)).toMatchObject({
+        text: 'Edited Scratch Pad',
+      });
     });
   });
 });

@@ -2698,7 +2698,7 @@ export interface getPatientListsQuery {
 };
 
 export interface getPatientNeedToKnowQueryVariables {
-  patientId: string,
+  patientInfoId: string,
 };
 
 export interface getPatientNeedToKnowQuery {
@@ -6553,38 +6553,6 @@ export interface patientDataFlagCreateMutation {
   } | null,
 };
 
-export interface patientEditMutationVariables {
-  patientId: string,
-  firstName?: string | null,
-  middleName?: string | null,
-  lastName?: string | null,
-  dateOfBirth?: string | null,
-};
-
-export interface patientEditMutation {
-  // Edit fields on patient stored in the db
-  patientEdit:  {
-    id: string,
-    firstName: string,
-    middleName: string | null,
-    lastName: string,
-    dateOfBirth: string | null,
-    createdAt: string,
-    coreIdentityVerifiedAt: string | null,
-    patientInfo:  {
-      id: string,
-      gender: Gender | null,
-      language: string | null,
-      preferredName: string | null,
-      hasUploadedPhoto: boolean | null,
-    },
-    patientState:  {
-      id: string,
-      currentState: CurrentPatientState,
-    },
-  } | null,
-};
-
 export interface patientExternalProviderCreateMutationVariables {
   patientId: string,
   role: ExternalProviderOptions,
@@ -6935,7 +6903,7 @@ export interface patientListEditMutation {
 };
 
 export interface patientNeedToKnowEditMutationVariables {
-  patientId: string,
+  patientInfoId: string,
   text: string,
 };
 

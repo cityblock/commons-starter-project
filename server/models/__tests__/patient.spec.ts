@@ -166,32 +166,6 @@ describe('patient model', () => {
     });
   });
 
-  describe('edit', () => {
-    it('should edit patient', async () => {
-      const { clinic } = await setup(txn);
-      const patient = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
-      const birthday = new Date('02/02/1902');
-      expect(patient).toMatchObject({
-        id: patient.id,
-      });
-      const patientEdit = await Patient.edit(
-        {
-          firstName: 'first',
-          lastName: 'last',
-          dateOfBirth: '02/02/1902',
-        },
-        patient.id,
-        txn,
-      );
-      expect(patientEdit).toMatchObject({
-        id: patient.id,
-        firstName: 'first',
-        lastName: 'last',
-        dateOfBirth: birthday,
-      });
-    });
-  });
-
   describe('create', async () => {
     it('should create a patient', async () => {
       const { clinic } = await setup(txn);

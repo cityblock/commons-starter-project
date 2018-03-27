@@ -66,7 +66,7 @@ export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProp
         <div className={styles.divider} />
       </div>
       <LeftNavPreferredName patient={patient} />
-      <PatientNeedToKnow patientId={patient.id} />
+      <PatientNeedToKnow patientInfoId={patient.patientInfo.id} />
     </div>
   );
 };

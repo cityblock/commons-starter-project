@@ -1,7 +1,6 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
-import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
 import * as getPatientPanel from '../../../app/graphql/queries/get-patient-panel.graphql';
 import * as getPatientSearch from '../../../app/graphql/queries/get-patient-search.graphql';
 import * as getPatient from '../../../app/graphql/queries/get-patient.graphql';
@@ -15,8 +14,6 @@ import * as patientsWithOpenCBOReferrals from '../../../app/graphql/queries/get-
 import * as patientsWithOutOfDateMAP from '../../../app/graphql/queries/get-patients-with-out-of-date-map.graphql';
 import * as patientsWithPendingSuggestions from '../../../app/graphql/queries/get-patients-with-pending-suggestions.graphql';
 import * as patientsWithUrgentTasks from '../../../app/graphql/queries/get-patients-with-urgent-tasks.graphql';
-import * as patientEdit from '../../../app/graphql/queries/patient-edit-mutation.graphql';
-import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -139,9 +136,6 @@ describe('patient', () => {
   const log = jest.fn();
   const logger = { log };
   const getPatientQuery = print(getPatient);
-  const patientEditMutation = print(patientEdit);
-  const getPatientNeedToKnowQuery = print(getPatientNeedToKnow);
-  const patientNeedToKnowEditMutation = print(patientNeedToKnowEdit);
   const getPatientPanelQuery = print(getPatientPanel);
   const getPatientSearchQuery = print(getPatientSearch);
   const patientForComputedListQuery = print(patientForComputedList);
@@ -196,78 +190,6 @@ describe('patient', () => {
         lastName: 'plant',
       });
       expect(log).toBeCalled();
-    });
-  });
-
-  describe('patientEdit', () => {
-    it('edits patient', async () => {
-      const { patient, user } = await setup(txn);
-
-      const result = await graphql(
-        schema,
-        patientEditMutation,
-        null,
-        {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        },
-        { patientId: patient.id, firstName: 'first' },
-      );
-      expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
-        id: patient.id,
-        firstName: 'first',
-      });
-      expect(log).toBeCalled();
-    });
-  });
-
-  describe('resolvePatientneedToKnow', () => {
-    it('resolves a patient needToKnow', async () => {
-      const { patient, user } = await setup(txn);
-      await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id, txn);
-
-      const result = await graphql(
-        schema,
-        getPatientNeedToKnowQuery,
-        null,
-        {
-          db,
-          permissions,
-          userId: user.id,
-          txn,
-        },
-        { patientId: patient.id },
-      );
-
-      expect(cloneDeep(result.data!.patientNeedToKnow)).toMatchObject({
-        text: 'Test Scratch Pad',
-      });
-    });
-  });
-
-  describe('patientNeedToKnowEdit', () => {
-    it('saves a patient needToKnow', async () => {
-      const { patient, user } = await setup(txn);
-      await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id, txn);
-      const result = await graphql(
-        schema,
-        patientNeedToKnowEditMutation,
-        null,
-        {
-          db,
-          permissions,
-          userId: user.id,
-          logger,
-          txn,
-        },
-        { patientId: patient.id, text: 'Edited Scratch Pad' },
-      );
-      expect(cloneDeep(result.data!.patientNeedToKnowEdit)).toMatchObject({
-        text: 'Edited Scratch Pad',
-      });
     });
   });
 

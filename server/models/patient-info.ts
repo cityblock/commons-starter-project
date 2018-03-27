@@ -42,6 +42,7 @@ export interface IPatientInfoOptions {
   hasHealthcareProxy?: boolean;
   hasMolst?: boolean;
   hasDeclinedPhotoUpload?: boolean;
+  needToKnow?: string;
 }
 
 interface IEditPatientInfo {
@@ -62,6 +63,7 @@ interface IEditPatientInfo {
   hasMolst?: boolean;
   hasDeclinedPhotoUpload?: boolean;
   hasUploadedPhoto?: boolean;
+  needToKnow?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -91,6 +93,7 @@ export default class PatientInfo extends Model {
   hasMolst: boolean;
   hasDeclinedPhotoUpload: boolean;
   hasUploadedPhoto: boolean;
+  needToKnow: string | null;
   createdAt: string;
   updatedAt: string;
 
@@ -129,6 +132,7 @@ export default class PatientInfo extends Model {
       hasMolst: { type: 'boolean' },
       hasDeclinedPhotoUpload: { type: 'boolean' },
       hasUploadedPhoto: { type: 'boolean' },
+      needToKnow: { type: 'text' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },

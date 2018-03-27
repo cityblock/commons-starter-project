@@ -354,7 +354,6 @@ type Patient implements uniqueId {
   cityblockId: Int!
   homeClinicId: ID
   createdAt: String!
-  scratchPad: String
   careTeam: [User!]
   patientDataFlags: [PatientDataFlag!]
   computedPatientStatus: ComputedPatientStatus!
@@ -383,6 +382,7 @@ type PatientInfo implements uniqueId {
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
   hasUploadedPhoto: Boolean
+  needToKnow: String
 }
 
 # Patient contact that is editable in Commons
@@ -1574,15 +1574,6 @@ input CareTeamAssignInput {
 }
 
 # params for editing a patient in the db
-input PatientEditInput {
-  patientId: ID!
-  firstName: String
-  middleName: String
-  lastName: String
-  dateOfBirth: String
-}
-
-# params for editing a patient in the db
 input PatientCoreIdentityVerifyInput {
   patientId: ID!
 }
@@ -1678,7 +1669,7 @@ input PatientExternalProviderEditInput {
 
 # params for editing a patient need to know
 input PatientNeedToKnowEditInput {
-  patientId: ID!
+  patientInfoId: ID!
   text: String!
 }
 
@@ -2360,8 +2351,6 @@ type RootMutationType {
   emailDeleteForPatient(input: EmailDeleteForPatientInput): Email
   # Edit an email
   emailEdit(input: EmailEditInput): Email
-  # Edit fields on patient stored in the db
-  patientEdit(input: PatientEditInput): Patient
   # mark core identity verified on patient stored in the db
   patientCoreIdentityVerify(input: PatientCoreIdentityVerifyInput): Patient
   # Edit fields on patient info stored in the db
@@ -2603,7 +2592,7 @@ type RootQueryType {
   # Users on a care team
   patientCareTeam(patientId: ID!): [CareTeamUser!]!
   # Patient need to know
-  patientNeedToKnow(patientId: ID!): PatientNeedToKnow!
+  patientNeedToKnow(patientInfoId: ID!): PatientNeedToKnow!
   # Patient search
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientTableRowEdges!
   # Patients filtered by options

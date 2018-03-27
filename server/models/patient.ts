@@ -53,24 +53,10 @@ export interface IPatientUpdateFields {
   dateOfBirth?: string; // mm/dd/yy
 }
 
-export interface IPatientEditableFields {
-  firstName: string;
-  middleName?: string | undefined | null;
-  lastName: string;
-  homeClinicId: string;
-  dateOfBirth: string; // mm/dd/yy
-  coreIdentityVerifiedAt: string;
-  coreIdentityVerifiedById: string;
-}
-
 export interface IPatientInfoOptions {
   gender?: string;
   language?: string;
   primaryAddressId?: string;
-}
-
-interface IEditPatient extends Partial<IPatientEditableFields> {
-  scratchPad?: string;
 }
 
 interface IPatientSearchResult {
@@ -93,7 +79,6 @@ export default class Patient extends Model {
   dateOfBirth: string;
   homeClinicId: string;
   homeClinic: Clinic;
-  scratchPad: string;
   tasks: Task[];
   patientInfo: PatientInfo;
   careTeam: User[];
@@ -126,7 +111,6 @@ export default class Patient extends Model {
       middleName: { type: 'string' },
       lastName: { type: 'string', minLength: 1 }, // cannot be blank
       dateOfBirth: { type: 'string' },
-      scratchPad: { type: 'text' },
       coreIdentityVerifiedAt: { type: ['string', 'null'] },
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
@@ -323,12 +307,6 @@ export default class Patient extends Model {
       };
     });
     return PatientInfo.query(txn).insert(patientRows as any);
-  }
-
-  static async edit(patient: IEditPatient, patientId: string, txn: Transaction): Promise<Patient> {
-    return this.query(txn)
-      .eager(EAGER_QUERY)
-      .patchAndFetchById(patientId, patient);
   }
 
   static async coreIdentityVerify(

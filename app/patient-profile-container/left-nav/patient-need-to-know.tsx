@@ -11,7 +11,7 @@ import * as styles from './css/patient-need-to-know.css';
 import { PatientNeedToKnowStatus } from './patient-need-to-know-status';
 
 export interface IProps {
-  patientId: string;
+  patientInfoId: string;
   mutate?: any;
 }
 
@@ -24,7 +24,7 @@ interface IGraphqlProps {
   saveNeedToKnow: (
     options: { variables: patientNeedToKnowEditMutationVariables },
   ) => { data: patientNeedToKnowEditMutation };
-  refetchNeedToKnow: (variables: { patientId: string }) => any;
+  refetchNeedToKnow: (variables: { patientInfoId: string }) => any;
 }
 
 interface IState {
@@ -90,7 +90,7 @@ class PatientNeedToKnow extends React.Component<allProps, IState> {
   }
 
   async saveNeedToKnow() {
-    const { saveNeedToKnow, patientId } = this.props;
+    const { saveNeedToKnow, patientInfoId } = this.props;
     const { needToKnow } = this.state;
 
     // TODO: you can't actually delete the scratch pad completely
@@ -98,7 +98,7 @@ class PatientNeedToKnow extends React.Component<allProps, IState> {
       this.setState({ saveError: false, saveSuccess: false });
 
       try {
-        await saveNeedToKnow({ variables: { patientId, text: needToKnow } });
+        await saveNeedToKnow({ variables: { patientInfoId, text: needToKnow } });
         this.setState({ saveSuccess: true, saveError: false });
         setTimeout(this.clearSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
       } catch (err) {
@@ -114,11 +114,11 @@ class PatientNeedToKnow extends React.Component<allProps, IState> {
   }
 
   async reloadPatientNeedToKnow() {
-    const { refetchNeedToKnow, patientId } = this.props;
+    const { refetchNeedToKnow, patientInfoId } = this.props;
 
     try {
       this.setState({ loading: true, error: null });
-      await refetchNeedToKnow({ patientId });
+      await refetchNeedToKnow({ patientInfoId });
     } catch (err) {
       this.setState({ loading: false, error: err.message });
     }
@@ -160,7 +160,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(patientNeedToKnowQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        patientId: props.patientId,
+        patientInfoId: props.patientInfoId,
       },
     }),
     props: ({ data }) => ({

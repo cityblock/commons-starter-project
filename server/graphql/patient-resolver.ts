@@ -1,11 +1,8 @@
-import { isNil, omitBy } from 'lodash';
 import { Transaction } from 'objection';
 import {
   IPatientCoreIdentityVerifyInput,
-  IPatientEditInput,
   IPatientFilterOptions,
   IPatientForDashboardEdges,
-  IPatientNeedToKnow,
   IPatientTableRow,
   IPatientTableRowEdges,
   IPatientTableRowNode,
@@ -41,22 +38,6 @@ export async function resolvePatient(
   return Patient.get(patientId, txn);
 }
 
-export interface IPatientEditOptions {
-  input: IPatientEditInput;
-}
-
-export async function patientEdit(
-  source: any,
-  { input }: IPatientEditOptions,
-  { permissions, userId, logger, txn }: IContext,
-): Promise<IRootMutationType['patientEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
-
-  const filtered = omitBy<IPatientEditInput>(input, isNil);
-  logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
-  return Patient.edit(filtered as any, input.patientId, txn);
-}
-
 export interface IPatientCoreIdentityVerifyOptions {
   input: IPatientCoreIdentityVerifyInput;
 }
@@ -74,38 +55,6 @@ export async function patientCoreIdentityVerify(
 
 export interface IEditPatientRequiredFields {
   patientId: string;
-}
-
-export async function resolvePatientNeedToKnow(
-  root: any,
-  { patientId }: IQuery,
-  { permissions, userId, txn }: IContext,
-): Promise<IPatientNeedToKnow> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
-
-  const patient = await Patient.get(patientId, txn);
-
-  return { text: patient.scratchPad };
-}
-
-export interface IPatientNeedToKnowEditOptions {
-  input: {
-    patientId: string;
-    text: string;
-  };
-}
-
-export async function patientNeedToKnowEdit(
-  root: any,
-  { input }: IPatientNeedToKnowEditOptions,
-  { permissions, userId, txn }: IContext,
-): Promise<IRootQueryType['patientNeedToKnow']> {
-  const { patientId, text } = input;
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
-
-  const patient = await Patient.edit({ scratchPad: text }, patientId, txn);
-
-  return { text: patient.scratchPad };
 }
 
 export async function resolvePatientSearch(

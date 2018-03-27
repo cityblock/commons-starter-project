@@ -103,7 +103,7 @@ describe('Patient Left Navigation Header', () => {
   });
 
   it('renders need to know field', () => {
-    expect(wrapper.find<IProps>(PatientNeedToKnow).props().patientId).toBe(patient.id);
+    expect(wrapper.find<IProps>(PatientNeedToKnow).props().patientInfoId).toBe(patient.patientInfo.id);
   });
 
   it('renders colored border if worry score present', () => {

@@ -146,7 +146,7 @@ import {
   resolvePatientGoal,
   resolvePatientGoalsForPatient,
 } from './patient-goal-resolver';
-import { patientInfoEdit } from './patient-info-resolver';
+import { patientInfoEdit, patientNeedToKnowEdit, resolvePatientNeedToKnow } from './patient-info-resolver';
 import {
   patientListCreate,
   patientListDelete,
@@ -158,8 +158,6 @@ import { resolvePhones } from './patient-phone-resolver';
 import { patientPhotoSignedUrlCreate } from './patient-photo-resolver';
 import {
   patientCoreIdentityVerify,
-  patientEdit,
-  patientNeedToKnowEdit,
   resolvePatient,
   resolvePatientsForComputedList,
   resolvePatientsNewToCareTeam,
@@ -171,7 +169,6 @@ import {
   resolvePatientsWithOutOfDateMAP,
   resolvePatientsWithPendingSuggestions,
   resolvePatientsWithUrgentTasks,
-  resolvePatientNeedToKnow,
   resolvePatientPanel,
   resolvePatientSearch,
 } from './patient-resolver';
@@ -464,7 +461,6 @@ const resolveFunctions = {
     patientExternalProviderCreate,
     patientExternalProviderDelete,
     patientExternalProviderEdit,
-    patientEdit,
     patientCoreIdentityVerify,
     patientInfoEdit,
     patientNeedToKnowEdit,

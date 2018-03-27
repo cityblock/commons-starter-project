@@ -1,7 +1,7 @@
 #import "../fragments/full-patient-need-to-know.graphql"
 
-query getPatientNeedToKnow($patientId: ID!) {
-  patientNeedToKnow(patientId: $patientId) {
+query getPatientNeedToKnow($patientInfoId: ID!) {
+  patientNeedToKnow(patientInfoId: $patientInfoId) {
     ...FullPatientNeedToKnow
   }
 }

@@ -381,9 +381,9 @@
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.1.tgz#a38f69c62528d56ba7bd1f91335a8004988d72f7"
 
-"@types/react-beautiful-dnd@4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-4.0.1.tgz#2dd48a94b2b09238d842513376173cb35380f340"
+"@types/react-beautiful-dnd@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-6.0.0.tgz#fee54e1395a8ce45a4798447a131487ee12401dc"
   dependencies:
     "@types/react" "*"
 

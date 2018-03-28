@@ -1,20 +1,19 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedDate, FormattedTime } from 'react-intl';
 import * as progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment } from '../../graphql/types';
 import progressNoteGlassBreak, {
   IInjectedProps,
 } from '../../shared/glass-break/progress-note-glass-break';
-import Button from '../../shared/library/button/button';
+import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/format-helpers';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../../shared/progress-note-activity/progress-note-activity';
 import * as styles from './css/progress-note-row.css';
 import ProgressNoteRowQuestions from './progress-note-row-questions';
-import ProgressNoteSupervisorBadge from './progress-note-supervisor-badge';
 import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
+import TimelineCard from './shared/timeline-card';
 
 interface IProps extends IInjectedProps {
   progressNoteId: string;
@@ -60,7 +59,7 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
       [styles.tabsNoBorder]: !tab,
     });
     // hide summary when on a tab
-    const summary = tab ? null : <div className={styles.summary}>{progressNote.summary}</div>;
+    const summary = tab ? null : progressNote.summary;
     const onContextClick = () => this.onTabClick('context');
     const onActivityClick = () => this.onTabClick('activity');
     const onSupervisorReviewClick = () => this.onTabClick('supervisor-review');
@@ -91,39 +90,18 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
           supervisorNotes={progressNote.supervisorNotes}
         />
       ) : null;
-    const containerStyles = classNames(styles.container, {
-      [styles.dashed]: progressNote.needsSupervisorReview,
-    });
-    const closeButton =
-      tab !== null ? (
-        <Button
-          color="white"
-          onClick={() => this.onTabClick(null)}
-          messageId="progressNote.close"
-        />
-      ) : null;
+    const onClose = tab !== null ? () => this.onTabClick(null) : null;
+
     return (
-      <div className={containerStyles}>
-        <div className={styles.topBar}>
-          <div className={styles.userSection}>
-            <div className={styles.userName}>{progressNote.user.firstName}</div>
-            <div className={styles.userRole}>{progressNote.user.userRole}</div>
-          </div>
-          <div className={styles.dateSection}>
-            <FormattedTime value={progressNote.createdAt}>
-              {(time: string) => <span className={styles.createdTime}>{time}</span>}
-            </FormattedTime>
-            <FormattedDate value={progressNote.createdAt} />
-          </div>
-        </div>
-        <div className={styles.titleSection}>
-          <div className={styles.title}>
-            {title}
-            <ProgressNoteSupervisorBadge progressNote={progressNote} />
-          </div>
-          {closeButton}
-        </div>
-        {summary}
+      <TimelineCard
+        source={formatFullName(progressNote.user.firstName, progressNote.user.lastName)}
+        sourceDetail={formatCareTeamMemberRole(progressNote.user.userRole)}
+        title={title}
+        date={progressNote.createdAt}
+        notes={summary}
+        onClose={onClose}
+        progressNote={progressNote}
+      >
         <UnderlineTabs color="white" className={tabContainerStyles}>
           <UnderlineTab
             messageId="patient.context"
@@ -140,7 +118,7 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
         {questionsHtml}
         {activityHtml}
         {supervisorTabHtml}
-      </div>
+      </TimelineCard>
     );
   }
 }

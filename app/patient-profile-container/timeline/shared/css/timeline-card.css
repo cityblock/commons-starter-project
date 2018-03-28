@@ -6,10 +6,15 @@
   margin-top: var(--small-gutter);
 }
 
+.container:last-child {
+  margin-bottom: 80px;
+}
+
 .header,
 .sourceInfo,
 .dateInfo,
-.pill {
+.pill,
+.title {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -28,10 +33,9 @@
 
 .container h1 {
   margin: 0;
-  margin-top: var(--small-gutter);
   font-family: var(--basetica-medium);
   font-size: var(--header-font-size);
-  line-height: var(--header-line-height);
+  line-height: 32px;
   color: var(--black-color);
   font-weight: var(--roboto-medium-weight);
 }
@@ -40,6 +44,16 @@
   margin-right: var(--small-gutter);
 }
 
-.topMargin {
+.topMargin,
+.title {
   margin-top: var(--small-gutter);
+}
+
+.titleText {
+  display: flex;
+  align-items: center;
+}
+
+.dashed {
+  border-style: dashed;
 }

@@ -1,6 +1,9 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Button from '../../../../shared/library/button/button';
 import SmallText from '../../../../shared/library/small-text/small-text';
+import { progressNote } from '../../../../shared/util/test-data';
+import ProgressNoteSupervisorBadge from '../../progress-note-supervisor-badge';
 import TimelineCard from '../timeline-card';
 
 describe('Patient Timeline: Timeline Card', () => {
@@ -21,6 +24,9 @@ describe('Patient Timeline: Timeline Card', () => {
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);
+
+    expect(wrapper.find(ProgressNoteSupervisorBadge).length).toBe(0);
+    expect(wrapper.find(Button).length).toBe(0);
   });
 
   it('renders source data', () => {
@@ -187,5 +193,50 @@ describe('Patient Timeline: Timeline Card', () => {
         .at(4)
         .props().className,
     ).toBe('topMargin');
+  });
+
+  it('renders source detail differently if progress note', () => {
+    wrapper.setProps({ progressNote });
+
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().text,
+    ).toBe(sourceDetail);
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().size,
+    ).toBe('medium');
+    expect(
+      wrapper
+        .find(SmallText)
+        .at(1)
+        .props().isBold,
+    ).toBeFalsy();
+  });
+
+  it('renders progress note supervisor badge', () => {
+    expect(wrapper.find(ProgressNoteSupervisorBadge).props().progressNote).toEqual(progressNote);
+  });
+
+  it('applies dashed border if supervisor review needed', () => {
+    const newProgressNote = {
+      ...progressNote,
+      needsSupervisorReview: true,
+    };
+
+    wrapper.setProps({ progressNote: newProgressNote });
+
+    expect(wrapper.find('.container').props().className).toBe('container dashed');
+  });
+
+  it('renders button to close tabs', () => {
+    wrapper.setProps({ onClose: () => true });
+
+    expect(wrapper.find(Button).props().messageId).toBe('progressNote.close');
+    expect(wrapper.find(Button).props().color).toBe('white');
   });
 });

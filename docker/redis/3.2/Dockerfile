@@ -1,4 +1,4 @@
-FROM debian:jessie-slim@sha256:29e224a3894836fc60edae5a6ecf5f9f8ac628d9ad561232ec8517c3d543918d
+FROM debian:jessie-slim@sha256:ab51f41e7a39c62e2045aaff593537858348ee05bc6d7d7c19873ad8ca31c024
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r redis && useradd -r -g redis redis

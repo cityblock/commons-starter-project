@@ -51,7 +51,7 @@ jobs:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
-      - image: redis:4.0.8
+      - image: redis:4.0.8@sha256:26c93c5b06eaa323bb1089500f42b0dd158138772348b865e364127f1d554982
     steps:
       - checkout
       - run: apt-get update && apt-get install -y sudo

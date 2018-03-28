@@ -133,8 +133,8 @@ export class Task extends React.Component<allProps, IState> {
           <Divider />
           <TaskProgress
             taskId={task.id}
-            dueAt={task.dueAt || ''}
-            completedAt={task.completedAt || ''}
+            dueAt={task.dueAt}
+            completedAt={task.completedAt}
             editTask={editTask}
           />
           <Divider />
@@ -175,6 +175,7 @@ export class Task extends React.Component<allProps, IState> {
     } else if (task) {
       return this.renderTask(task);
     }
+    return null;
   }
 }
 

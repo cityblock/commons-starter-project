@@ -5,9 +5,9 @@ import TaskCompletion from './task-completion';
 import TaskDue from './task-due';
 
 interface IProps {
-  dueAt: string;
+  dueAt: string | null;
   taskId: string;
-  completedAt: string;
+  completedAt: string | null;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 

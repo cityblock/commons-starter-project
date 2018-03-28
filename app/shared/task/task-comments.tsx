@@ -176,7 +176,6 @@ export class TaskComments extends React.Component<allProps, IState> {
 
   render() {
     const { commentBody } = this.state;
-
     return (
       <div className={styles.taskComments}>
         <TextAreaWithButton

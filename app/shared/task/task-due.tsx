@@ -7,9 +7,9 @@ import Icon from '../library/icon/icon';
 import * as styles from './css/task-due.css';
 
 export interface IProps {
-  dueAt: string;
+  dueAt: string | null;
   taskId: string;
-  completedAt: string;
+  completedAt: string | null;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
@@ -24,8 +24,8 @@ class TaskDue extends React.Component<IProps> {
 
   render(): JSX.Element {
     const { dueAt, completedAt } = this.props;
-    const dueSoon = isDueSoon(dueAt);
-    const pastDue = isPastDue(dueAt);
+    const dueSoon = dueAt ? isDueSoon(dueAt) : false;
+    const pastDue = dueAt ? isPastDue(dueAt) : false;
 
     const iconStyles = classNames(styles.icon, {
       [styles.dueSoonIcon]: dueSoon,

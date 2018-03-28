@@ -669,13 +669,10 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
     txn,
   );
 
-  await Patient.query(txn).patchAndFetchById(
-    patient2.id,
-    {
-      coreIdentityVerifiedAt: new Date().toISOString(),
-      coreIdentityVerifiedById: user.id,
-    },
-  );
+  await Patient.query(txn).patchAndFetchById(patient2.id, {
+    coreIdentityVerifiedAt: new Date().toISOString(),
+    coreIdentityVerifiedById: user.id,
+  });
   await PatientInfo.edit(
     {
       gender: 'nonbinary',

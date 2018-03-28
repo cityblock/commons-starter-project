@@ -6,6 +6,7 @@ import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-place
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNoteRow from './progress-note-row';
+import TimelineCard from './shared/timeline-card';
 
 interface IProps {
   match: {
@@ -97,7 +98,16 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
     return (
       <div className={styles.progressNotesContainer}>
-        <div className={styles.progressNotes}>{this.renderProgressNotes(progressNotesList)}</div>
+        <div className={styles.progressNotes}>
+          <TimelineCard
+            source="ACPNY - Radiology"
+            sourceDetail="EPIC EHR"
+            title="Ultrasound Kidney Stones"
+            date='2018-03-28T05:23:08.020Z'
+            notes="Sed posuere consectetur est at lobortis. Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Nulla vitae elit libero, a pharetra augue."
+          />
+          {this.renderProgressNotes(progressNotesList)}
+        </div>
       </div>
     );
   }

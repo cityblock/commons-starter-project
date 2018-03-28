@@ -116,7 +116,11 @@ describe('patient info resolver', () => {
   describe('need to know', () => {
     it('resolves a patient needToKnow', async () => {
       const { patient, user } = await setup(txn);
-      await PatientInfo.edit({ needToKnow: 'Test Scratch Pad', updatedById: user.id }, patient.patientInfo.id, txn);
+      await PatientInfo.edit(
+        { needToKnow: 'Test Scratch Pad', updatedById: user.id },
+        patient.patientInfo.id,
+        txn,
+      );
 
       const result = await graphql(
         schema,
@@ -138,7 +142,11 @@ describe('patient info resolver', () => {
 
     it('saves a patient needToKnow', async () => {
       const { patient, user } = await setup(txn);
-      await PatientInfo.edit({ needToKnow: 'Unedited Scratch Pad', updatedById: user.id }, patient.patientInfo.id, txn);
+      await PatientInfo.edit(
+        { needToKnow: 'Unedited Scratch Pad', updatedById: user.id },
+        patient.patientInfo.id,
+        txn,
+      );
       const result = await graphql(
         schema,
         patientNeedToKnowEditMutation,

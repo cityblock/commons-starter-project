@@ -1,5 +1,10 @@
 import { isNil, omitBy } from 'lodash';
-import { IPatientInfoEditInput, IPatientNeedToKnow, IRootMutationType, IRootQueryType } from 'schema';
+import {
+  IPatientInfoEditInput,
+  IPatientNeedToKnow,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import PatientInfo from '../models/patient-info';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -40,7 +45,11 @@ export async function patientNeedToKnowEdit(
   const patientInfo = await PatientInfo.get(patientInfoId, txn);
 
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
-  const updatedPatientInfo = await PatientInfo.edit({ needToKnow: text, updatedById: userId! }, patientInfoId, txn);
+  const updatedPatientInfo = await PatientInfo.edit(
+    { needToKnow: text, updatedById: userId! },
+    patientInfoId,
+    txn,
+  );
 
   return { text: updatedPatientInfo.needToKnow };
 }

@@ -10,10 +10,10 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
-  .alterTable('patient', table => {
-    table.text('scratchPad');
-  })
-  .alterTable('patient_info', table => {
-    table.dropColumn('needToKnow');
-  });
+    .alterTable('patient', table => {
+      table.text('scratchPad');
+    })
+    .alterTable('patient_info', table => {
+      table.dropColumn('needToKnow');
+    });
 };

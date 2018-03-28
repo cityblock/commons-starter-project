@@ -111,13 +111,10 @@ describe('computed patient status model', () => {
       txn,
     );
 
-    await Patient.query(txn).patchAndFetchById(
-      patient2.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
+    await Patient.query(txn).patchAndFetchById(patient2.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
 
     await ComputedPatientStatus.updateForAllPatients(user.id, txn);
 
@@ -324,13 +321,10 @@ describe('computed patient status model', () => {
 
       expect(computedPatientStatus!.isCoreIdentityVerified).toEqual(false);
 
-      await Patient.query(txn).patchAndFetchById(
-        patient.id,
-        {
-          coreIdentityVerifiedAt: new Date().toISOString(),
-          coreIdentityVerifiedById: user.id,
-        },
-      );
+      await Patient.query(txn).patchAndFetchById(patient.id, {
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
+      });
 
       await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
       const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(

@@ -152,7 +152,7 @@
     "@types/react-intl": "2.3.5",
     "@types/react-onclickoutside": "6.0.3",
     "@types/react-redux": "5.0.15",
-    "@types/react-router-dom": "4.2.5",
+    "@types/react-router-dom": "4.2.6",
     "@types/redux-logger": "3.0.5",
     "@types/uuid": "3.4.3",
     "@types/validator": "9.4.0",

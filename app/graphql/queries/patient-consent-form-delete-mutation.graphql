@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-consent-form.graphql"
-
-mutation patientConsentFormDelete($patientConsentFormId: ID!) {
-  patientConsentFormDelete(input: { patientConsentFormId: $patientConsentFormId }) {
-    ...FullPatientConsentForm
-  }
-}

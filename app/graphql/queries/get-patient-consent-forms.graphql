@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-consent-form.graphql"
-
-query getPatientConsentForms($patientId: ID!) {
-  patientConsentFormsForPatient(patientId: $patientId) {
-    ...FullPatientConsentForm
-  }
-}

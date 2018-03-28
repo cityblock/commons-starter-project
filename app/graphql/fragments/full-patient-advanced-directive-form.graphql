@@ -1,8 +1,0 @@
-fragment FullPatientAdvancedDirectiveForm on PatientAdvancedDirectiveForm {
-  patientAdvancedDirectiveFormId
-  patientId
-  userId
-  formId
-  title
-  signedAt
-}

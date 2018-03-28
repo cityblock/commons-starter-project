@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-consent-form.graphql"
-
-mutation patientConsentFormCreate($patientId: ID!, $formId: ID!, $signedAt: String!) {
-  patientConsentFormCreate(input: { patientId: $patientId, formId: $formId, signedAt: $signedAt }) {
-    ...FullPatientConsentForm
-  }
-}

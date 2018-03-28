@@ -1,13 +1,8 @@
-import { find } from 'lodash';
+import { find, isNil } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import AdvancedDirectiveForm, {
-  HEALTHCARE_PROXY_FORM_TITLE,
-  MOLST_FORM_TITLE,
-} from './advanced-directive-form';
 import BaseModel from './base-model';
 import CareTeam from './care-team';
 import Patient from './patient';
-import PatientAdvancedDirectiveForm from './patient-advanced-directive-form';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
 import PatientDocument, { CONSENT_TYPES } from './patient-document';
@@ -175,7 +170,7 @@ export default class ComputedPatientStatus extends BaseModel {
 
   static async isConsentSignedForPatient(patientId: string, txn: Transaction): Promise<boolean> {
     let isConsented = true;
-    const documents = await PatientDocument.getAllForPatient(patientId, txn);
+    const documents = await PatientDocument.getConsentsForPatient(patientId, txn);
 
     if (!documents.length || documents.length < CONSENT_TYPES.length) {
       return false;
@@ -200,48 +195,35 @@ export default class ComputedPatientStatus extends BaseModel {
   ): Promise<boolean> {
     if (hasHealthcareProxy === false && hasMolst === false) {
       return true;
-    } else if (hasHealthcareProxy || hasMolst) {
-      const advancedDirectiveForms = await AdvancedDirectiveForm.getAll(txn);
-      const healthcareProxyForm = find(advancedDirectiveForms, [
-        'title',
-        HEALTHCARE_PROXY_FORM_TITLE,
-      ]);
-      const molstForm = find(advancedDirectiveForms, ['title', MOLST_FORM_TITLE]);
-      const patientAdvancedDirectiveForms = await PatientAdvancedDirectiveForm.getAllForPatient(
+    }
+    if (isNil(hasHealthcareProxy) || isNil(hasMolst)) {
+      return false;
+    }
+
+    if (hasHealthcareProxy) {
+      const healthCareProxyDocuments = await PatientDocument.getHCPsForPatient(patientId, txn);
+
+      if (!healthCareProxyDocuments.length) {
+        return false;
+      }
+      const patientHealthcareProxies = await PatientContact.getHealthcareProxiesForPatient(
         patientId,
         txn,
       );
-
-      if (hasHealthcareProxy && healthcareProxyForm) {
-        const patientHealthcareProxies = await PatientContact.getHealthcareProxiesForPatient(
-          patientId,
-          txn,
-        );
-        const patientSignedHealthcareProxyForm = find(patientAdvancedDirectiveForms, [
-          'formId',
-          healthcareProxyForm.id,
-        ]);
-
-        if (!patientHealthcareProxies.length || !patientSignedHealthcareProxyForm) {
-          return false;
-        }
+      if (patientHealthcareProxies.length < healthCareProxyDocuments.length) {
+        return false;
       }
-
-      if (hasMolst && molstForm) {
-        const patientSignedMolstForm = find(patientAdvancedDirectiveForms, [
-          'formId',
-          molstForm.id,
-        ]);
-
-        if (!patientSignedMolstForm) {
-          return false;
-        }
-      }
-
-      return true;
-    } else {
-      return false;
     }
+
+    if (hasMolst) {
+      const molstDocuments = await PatientDocument.getMOLSTForPatient(patientId, txn);
+
+      if (!molstDocuments.length) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   static async getForPatient(

@@ -65,6 +65,20 @@ export default class PatientDocument extends BaseModel {
     return this.query(txn).where({ patientId, deletedAt: null });
   }
 
+  static async getConsentsForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
+    return this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .whereIn('documentType', CONSENT_TYPES);
+  }
+
+  static async getMOLSTForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
+    return this.query(txn).where({ patientId, deletedAt: null, documentType: 'molst' });
+  }
+
+  static async getHCPsForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
+    return this.query(txn).where({ patientId, deletedAt: null, documentType: 'hcp' });
+  }
+
   static async create(input: IPatientDocumentOptions, txn: Transaction) {
     const patientDocument = await this.query(txn).insertAndFetch(input);
 

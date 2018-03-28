@@ -90,11 +90,6 @@ import {
 } from './goal-suggestion-template-resolver';
 import { resolveAddresses } from './patient-address-resolver';
 import {
-  patientAdvancedDirectiveFormCreate,
-  patientAdvancedDirectiveFormDelete,
-  resolvePatientAdvancedDirectiveFormsForPatient,
-} from './patient-advanced-directive-form-resolver';
-import {
   patientAnswersCreate,
   patientAnswerDelete,
   patientAnswerEdit,
@@ -110,11 +105,6 @@ import {
   resolvePatientConcern,
   resolvePatientConcernsForPatient,
 } from './patient-concern-resolver';
-import {
-  patientConsentFormCreate,
-  patientConsentFormDelete,
-  resolvePatientConsentFormsForPatient,
-} from './patient-consent-form-resolver';
 import {
   patientContactCreate,
   patientContactDelete,
@@ -436,8 +426,6 @@ const resolveFunctions = {
     patientGlassBreakCheck: resolvePatientGlassBreakCheck,
     progressNoteGlassBreakCheck: resolveProgressNoteGlassBreakCheck,
     patientComputedPatientStatus: resolvePatientComputedPatientStatus,
-    patientConsentFormsForPatient: resolvePatientConsentFormsForPatient,
-    patientAdvancedDirectiveFormsForPatient: resolvePatientAdvancedDirectiveFormsForPatient,
     patientAddresses: resolveAddresses,
     patientEmails: resolveEmails,
     patientPhones: resolvePhones,
@@ -568,10 +556,6 @@ const resolveFunctions = {
     patientDataFlagCreate,
     patientGlassBreakCreate,
     progressNoteGlassBreakCreate,
-    patientConsentFormCreate,
-    patientConsentFormDelete,
-    patientAdvancedDirectiveFormCreate,
-    patientAdvancedDirectiveFormDelete,
     patientScratchPadEdit,
     patientPhotoSignedUrlCreate,
   },

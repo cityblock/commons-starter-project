@@ -1,15 +1,10 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
-import AdvancedDirectiveForm, {
-  HEALTHCARE_PROXY_FORM_TITLE,
-  MOLST_FORM_TITLE,
-} from '../advanced-directive-form';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus, { IComputedStatus } from '../computed-patient-status';
 import Patient from '../patient';
-import PatientAdvancedDirectiveForm from '../patient-advanced-directive-form';
 import PatientContact from '../patient-contact';
 import PatientDataFlag from '../patient-data-flag';
 import PatientDocument from '../patient-document';
@@ -604,7 +599,6 @@ describe('computed patient status model', () => {
     describe('when a patient has a MOLST', () => {
       it('correctly calculates when a patient has uploaded the form', async () => {
         const { user, patient } = await setup(txn);
-        const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -622,12 +616,12 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: molstForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'molst',
           },
           txn,
         );
@@ -643,7 +637,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when a patient has not uploaded the form yet', async () => {
         const { user, patient } = await setup(txn);
-        await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -666,7 +659,6 @@ describe('computed patient status model', () => {
     describe('when a patient has a healthcare proxy', () => {
       it('correctly calculates when a patient has added a proxy and no form', async () => {
         const { user, patient } = await setup(txn);
-        await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -709,7 +701,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when a patient has uploaded form and not added proxy', async () => {
         const { user, patient } = await setup(txn);
-        const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -727,12 +718,12 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: hcpForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'hcp',
           },
           txn,
         );
@@ -748,7 +739,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when proxy is added and form is uploaded', async () => {
         const { user, patient } = await setup(txn);
-        const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -766,12 +756,12 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: hcpForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'hcp',
           },
           txn,
         );
@@ -802,8 +792,6 @@ describe('computed patient status model', () => {
     describe('when a patient has a MOLST and a healthcare proxy', () => {
       it('correctly calculates when a patient has completed all components', async () => {
         const { user, patient } = await setup(txn);
-        const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
-        const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -821,21 +809,21 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: molstForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'molst',
           },
           txn,
         );
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: hcpForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'hcp',
           },
           txn,
         );
@@ -864,8 +852,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when a patient has not completed the MOLST', async () => {
         const { user, patient } = await setup(txn);
-        const hcpForm = await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
-        await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -883,12 +869,12 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: hcpForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'hcp',
           },
           txn,
         );
@@ -917,8 +903,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when a patient has completed no components', async () => {
         const { user, patient } = await setup(txn);
-        await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
-        await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -939,8 +923,6 @@ describe('computed patient status model', () => {
 
       it('correctly calculates when a patient has not completed the HCP components', async () => {
         const { user, patient } = await setup(txn);
-        await AdvancedDirectiveForm.create(HEALTHCARE_PROXY_FORM_TITLE, txn);
-        const molstForm = await AdvancedDirectiveForm.create(MOLST_FORM_TITLE, txn);
         await PatientInfo.edit(
           {
             updatedById: user.id,
@@ -958,12 +940,12 @@ describe('computed patient status model', () => {
 
         expect(computedPatientStatus.isAdvancedDirectivesAdded).toEqual(false);
 
-        await PatientAdvancedDirectiveForm.create(
+        await PatientDocument.create(
           {
-            userId: user.id,
-            formId: molstForm.id,
             patientId: patient.id,
-            signedAt: new Date().toISOString(),
+            uploadedById: user.id,
+            filename: 'test.txt',
+            documentType: 'molst',
           },
           txn,
         );

@@ -209,4 +209,224 @@ describe('patient document model', () => {
       expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
     });
   });
+
+  describe('getting a patient document', async () => {
+    it('should get all patient documents', async () => {
+      const { patient, user } = await setup(txn);
+
+      const documents = await PatientDocument.getAllForPatient(patient.id, txn);
+      expect(documents.length).toEqual(0);
+
+      const document = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test.txt',
+          description: 'some file for consent',
+          documentType: 'hcp',
+        },
+        txn,
+      );
+      let refetchedPatientDocuments = await PatientDocument.getAllForPatient(patient.id, txn);
+
+      expect(refetchedPatientDocuments.length).toEqual(1);
+      expect(refetchedPatientDocuments[0]).toMatchObject(document);
+
+      const document2 = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test2.txt',
+        },
+        txn,
+      );
+
+      refetchedPatientDocuments = await PatientDocument.getAllForPatient(patient.id, txn);
+      expect(refetchedPatientDocuments.length).toEqual(2);
+
+      await PatientDocument.delete(document2.id, user.id, txn);
+      refetchedPatientDocuments = await PatientDocument.getAllForPatient(patient.id, txn);
+      expect(refetchedPatientDocuments.length).toEqual(1);
+      expect(refetchedPatientDocuments[0]).toMatchObject(document);
+    });
+  });
+
+  it('should get all consent documents for a patient', async () => {
+    const { patient, user } = await setup(txn);
+
+    const documents = await PatientDocument.getConsentsForPatient(patient.id, txn);
+    expect(documents.length).toEqual(0);
+
+    const document = await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        documentType: 'cityblockConsent',
+      },
+      txn,
+    );
+    let refetchedPatientDocuments = await PatientDocument.getConsentsForPatient(patient.id, txn);
+
+    expect(refetchedPatientDocuments.length).toEqual(1);
+    expect(refetchedPatientDocuments[0]).toMatchObject(document);
+
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        documentType: 'hipaaConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        documentType: 'hieHealthixConsent',
+      },
+      txn,
+    );
+
+    // non consents
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test4.txt',
+        documentType: 'hcp',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test5.txt',
+      },
+      txn,
+    );
+
+    refetchedPatientDocuments = await PatientDocument.getConsentsForPatient(patient.id, txn);
+    expect(refetchedPatientDocuments.length).toEqual(3);
+  });
+
+  it('should get all hcp documents for a patient', async () => {
+    const { patient, user } = await setup(txn);
+
+    const documents = await PatientDocument.getHCPsForPatient(patient.id, txn);
+    expect(documents.length).toEqual(0);
+
+    const document = await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        documentType: 'hcp',
+      },
+      txn,
+    );
+    let refetchedPatientDocuments = await PatientDocument.getHCPsForPatient(patient.id, txn);
+
+    expect(refetchedPatientDocuments.length).toEqual(1);
+    expect(refetchedPatientDocuments[0]).toMatchObject(document);
+
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        documentType: 'hcp',
+      },
+      txn,
+    );
+    const document2 = await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'toDelete.txt',
+        documentType: 'hcp',
+      },
+      txn,
+    );
+    await PatientDocument.delete(document2.id, user.id, txn);
+
+    // non hcp
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test4.txt',
+        documentType: 'cityblockConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test5.txt',
+      },
+      txn,
+    );
+
+    refetchedPatientDocuments = await PatientDocument.getHCPsForPatient(patient.id, txn);
+    expect(refetchedPatientDocuments.length).toEqual(2);
+  });
+
+  it('should get all molst documents for a patient', async () => {
+    const { patient, user } = await setup(txn);
+
+    const documents = await PatientDocument.getMOLSTForPatient(patient.id, txn);
+    expect(documents.length).toEqual(0);
+
+    const document = await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        documentType: 'molst',
+      },
+      txn,
+    );
+    let refetchedPatientDocuments = await PatientDocument.getMOLSTForPatient(patient.id, txn);
+
+    expect(refetchedPatientDocuments.length).toEqual(1);
+    expect(refetchedPatientDocuments[0]).toMatchObject(document);
+
+    const document2 = await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'toDelete.txt',
+        documentType: 'molst',
+      },
+      txn,
+    );
+    await PatientDocument.delete(document2.id, user.id, txn);
+
+    // non molst
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test4.txt',
+        documentType: 'hcp',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test5.txt',
+      },
+      txn,
+    );
+
+    refetchedPatientDocuments = await PatientDocument.getMOLSTForPatient(patient.id, txn);
+    expect(refetchedPatientDocuments.length).toEqual(1);
+  });
 });

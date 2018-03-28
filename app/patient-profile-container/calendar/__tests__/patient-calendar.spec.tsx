@@ -5,11 +5,7 @@ import { patient } from '../../../shared/util/test-data';
 import PatientCalendar from '../patient-calendar';
 
 describe('Render Skinny Patient Calendar', () => {
-  const wrapper = shallow(
-    <PatientCalendar
-      patientId={patient.id}
-    />,
-  );
+  const wrapper = shallow(<PatientCalendar patientId={patient.id} />);
 
   it('renders the calendar list', () => {
     const events = wrapper.find('.eventContainer');

@@ -6,12 +6,11 @@ import AdvancedDirectiveForm, {
 } from './advanced-directive-form';
 import BaseModel from './base-model';
 import CareTeam from './care-team';
-import ConsentForm from './consent-form';
 import Patient from './patient';
 import PatientAdvancedDirectiveForm from './patient-advanced-directive-form';
-import PatientConsentForm from './patient-consent-form';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
+import PatientDocument, { CONSENT_TYPES } from './patient-document';
 import PatientState, { CurrentState } from './patient-state';
 import ProgressNote from './progress-note';
 import User, { UserRole } from './user';
@@ -175,24 +174,22 @@ export default class ComputedPatientStatus extends BaseModel {
   }
 
   static async isConsentSignedForPatient(patientId: string, txn: Transaction): Promise<boolean> {
-    let isConsentSignedForPatient = true;
-    const consentForms = await ConsentForm.getAll(txn);
+    let isConsented = true;
+    const documents = await PatientDocument.getAllForPatient(patientId, txn);
 
-    if (!consentForms.length) {
+    if (!documents.length || documents.length < CONSENT_TYPES.length) {
       return false;
     }
 
-    const patientConsentForms = await PatientConsentForm.getAllForPatient(patientId, txn);
+    CONSENT_TYPES.forEach(consentType => {
+      const document = find(documents, ['documentType', consentType]);
 
-    consentForms.forEach(consentForm => {
-      const patientConsentForm = find(patientConsentForms, ['formId', consentForm.id]);
-
-      if (!patientConsentForm) {
-        isConsentSignedForPatient = false;
+      if (!document) {
+        isConsented = false;
       }
     });
 
-    return isConsentSignedForPatient;
+    return isConsented;
   }
 
   static async getAdvancedDirectivesStatus(

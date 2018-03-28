@@ -2,7 +2,6 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
-import ComputedPatientStatus from '../computed-patient-status';
 import ConsentForm from '../consent-form';
 import Patient from '../patient';
 import PatientConsentForm from '../patient-consent-form';
@@ -132,30 +131,6 @@ describe('patient consent form model', () => {
       expect(refetchedPatientConsentFormIds2).toContain(patientConsentForm3.id);
       expect(refetchedPatientConsentFormIds2).not.toContain(patientConsentForm1.id);
     });
-
-    it('updates the computed patient status', async () => {
-      const { consentForm, patient, user } = await setup(txn);
-      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
-
-      expect(computedPatientStatus!.isConsentSigned).toEqual(false);
-
-      await PatientConsentForm.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          formId: consentForm.id,
-          signedAt: '01/01/1999',
-        },
-        txn,
-      );
-
-      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-        patient.id,
-        txn,
-      );
-
-      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
-    });
   });
 
   describe('deleting a patient consent form', () => {
@@ -190,31 +165,6 @@ describe('patient consent form model', () => {
       );
 
       expect(refetchedPatientConsentForms2.length).toEqual(0);
-    });
-
-    it('updates the computed patient status', async () => {
-      const { consentForm, patient, user } = await setup(txn);
-      const patientConsentForm = await PatientConsentForm.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          formId: consentForm.id,
-          signedAt: '01/01/1999',
-        },
-        txn,
-      );
-      const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
-
-      expect(computedPatientStatus!.isConsentSigned).toEqual(true);
-
-      await PatientConsentForm.delete(patientConsentForm.id, user.id, txn);
-
-      const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-        patient.id,
-        txn,
-      );
-
-      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
     });
   });
 });

@@ -16,15 +16,14 @@ import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
 import ComputedPatientStatus from './models/computed-patient-status';
 import Concern from './models/concern';
-import ConsentForm from './models/consent-form';
 import EventNotification from './models/event-notification';
 import Patient from './models/patient';
 import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
-import PatientConsentForm from './models/patient-consent-form';
 import PatientContact, { PatientRelationOptions } from './models/patient-contact';
+import PatientDocument from './models/patient-document';
 import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
@@ -701,13 +700,33 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
     },
     txn,
   );
-  const consentForm = await ConsentForm.create('Cityblock', txn);
-  await PatientConsentForm.create(
+  await PatientDocument.create(
     {
       patientId: patient2.id,
-      userId: user.id,
-      formId: consentForm.id,
-      signedAt: '01/01/1999',
+      uploadedById: user.id,
+      filename: 'test2.txt',
+      description: 'some file for consent',
+      documentType: 'hipaaConsent',
+    },
+    txn,
+  );
+  await PatientDocument.create(
+    {
+      patientId: patient2.id,
+      uploadedById: user.id,
+      filename: 'test3.txt',
+      description: 'some file for consent',
+      documentType: 'hieHealthixConsent',
+    },
+    txn,
+  );
+  await PatientDocument.create(
+    {
+      patientId: patient2.id,
+      uploadedById: user.id,
+      filename: 'test.txt',
+      description: 'some file for consent',
+      documentType: 'cityblockConsent',
     },
     txn,
   );

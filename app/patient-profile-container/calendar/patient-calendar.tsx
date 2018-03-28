@@ -39,7 +39,10 @@ const EVENTS = [
 export default class PatientCalendar extends React.Component<IProps> {
   renderEvent({ datetime, title }: IEvent) {
     return (
-      <div className={styles.eventContainer} key={`calendarEvent-${format(datetime, 'ddd-MMM-YYYY')}`}>
+      <div
+        className={styles.eventContainer}
+        key={`calendarEvent-${format(datetime, 'ddd-MMM-YYYY')}`}
+      >
         <div className={styles.datetime}>
           <span>{format(datetime, 'ddd, MMM D, YYYY')}</span>
           <span>{format(datetime, 'h:mm a')}</span>
@@ -58,7 +61,7 @@ export default class PatientCalendar extends React.Component<IProps> {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
 
-    const color = (currentMonth === month && currentYear === year) ? 'lightBlue' : 'gray';
+    const color = currentMonth === month && currentYear === year ? 'lightBlue' : 'gray';
 
     const eventsHtml = monthOfEvents.map((event: IEvent) => this.renderEvent(event));
 

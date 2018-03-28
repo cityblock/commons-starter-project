@@ -8,12 +8,11 @@ import AdvancedDirectiveForm, {
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus, { IComputedStatus } from '../computed-patient-status';
-import ConsentForm from '../consent-form';
 import Patient from '../patient';
 import PatientAdvancedDirectiveForm from '../patient-advanced-directive-form';
-import PatientConsentForm from '../patient-consent-form';
 import PatientContact from '../patient-contact';
 import PatientDataFlag from '../patient-data-flag';
+import PatientDocument from '../patient-document';
 import PatientInfo from '../patient-info';
 import PatientState from '../patient-state';
 import ProgressNote from '../progress-note';
@@ -154,13 +153,34 @@ describe('computed patient status model', () => {
       },
       txn,
     );
-    const consentForm = await ConsentForm.create('Cityblock', txn);
-    await PatientConsentForm.create(
+
+    await PatientDocument.create(
       {
         patientId: patient.id,
-        userId: user.id,
-        formId: consentForm.id,
-        signedAt: '01/01/1999',
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        description: 'some file for consent',
+        documentType: 'hipaaConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        description: 'some file for consent',
+        documentType: 'hieHealthixConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        description: 'some file for consent',
+        documentType: 'cityblockConsent',
       },
       txn,
     );
@@ -370,17 +390,37 @@ describe('computed patient status model', () => {
 
   it('correctly calculates isConsentSigned', async () => {
     const { user, patient } = await setup(txn);
-    const consentForm = await ConsentForm.create('Cityblock', txn);
     const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
     expect(computedPatientStatus!.isConsentSigned).toEqual(false);
 
-    await PatientConsentForm.create(
+    await PatientDocument.create(
       {
         patientId: patient.id,
-        userId: user.id,
-        formId: consentForm.id,
-        signedAt: '01/01/1999',
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        description: 'some file for consent',
+        documentType: 'hipaaConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        description: 'some file for consent',
+        documentType: 'hieHealthixConsent',
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        description: 'some file for consent',
+        documentType: 'cityblockConsent',
       },
       txn,
     );

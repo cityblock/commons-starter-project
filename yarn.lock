@@ -6777,9 +6777,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-knex-migrate@1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/knex-migrate/-/knex-migrate-1.5.3.tgz#b4fe90bf66ccd105553830d816898c90264b00f1"
+knex-migrate@1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/knex-migrate/-/knex-migrate-1.5.4.tgz#9005f01ac1334dab4d27b93ace1967d36968337c"
   dependencies:
     bluebird "^3.4.6"
     core-js "^2.5.3"

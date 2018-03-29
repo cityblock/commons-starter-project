@@ -1,5 +1,7 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
+import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import PatientGoal from '../../models/patient-goal';
@@ -29,6 +31,8 @@ const setup = async (trx: Transaction) => {
 
 describe('CBO Referral resolver', () => {
   let txn = null as any;
+  const cboReferralCreateMutation = print(cboReferralCreate);
+  const cboReferralEditMutation = print(cboReferralEdit);
 
   beforeEach(async () => {
     await Db.get();
@@ -48,23 +52,21 @@ describe('CBO Referral resolver', () => {
       const { user } = await setup(txn);
       const cbo = await createCBO(txn);
 
-      const mutation = `mutation {
-          CBOReferralCreate(input: {
-            categoryId: "${cbo.categoryId}"
-            CBOId: "${cbo.id}"
-            diagnosis: "${diagnosis}"
-          }) {
-            categoryId
-            CBOId
-            diagnosis
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        cboReferralCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          categoryId: cbo.categoryId,
+          CBOId: cbo.id,
+          diagnosis,
+        },
+      );
 
       expect(result.data!.CBOReferralCreate).toMatchObject({
         categoryId: cbo.categoryId,
@@ -103,22 +105,21 @@ describe('CBO Referral resolver', () => {
         txn,
       );
 
-      const mutation = `mutation {
-          CBOReferralEdit(input: {
-            CBOReferralId: "${cboReferral.id}"
-            taskId: "${task.id}"
-            sentAt: "${sentAt}"
-          }) {
-            id
-            sentAt
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        cboReferralEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          CBOReferralId: cboReferral.id,
+          taskId: task.id,
+          sentAt,
+        },
+      );
       expect(result.data!.CBOReferralEdit).toMatchObject({
         id: cboReferral.id,
       });

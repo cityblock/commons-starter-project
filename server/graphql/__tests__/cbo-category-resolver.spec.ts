@@ -1,5 +1,6 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import * as cboCategories from '../../../app/graphql/queries/get-cbo-categories.graphql';
 import Db from '../../db';
 import CBOCategory from '../../models/cbo-category';
 import Clinic from '../../models/clinic';
@@ -19,6 +20,7 @@ const setup = async (trx: Transaction) => {
 
 describe('CBO Category resolver', () => {
   let txn = null as any;
+  const cboCategoriesQuery = print(cboCategories);
 
   beforeEach(async () => {
     await Db.get();
@@ -51,14 +53,7 @@ describe('CBO Category resolver', () => {
       txn,
     );
 
-    const query = `{
-        CBOCategories {
-          id
-          title
-        }
-      }`;
-
-    const result = await graphql(schema, query, null, {
+    const result = await graphql(schema, cboCategoriesQuery, null, {
       permissions,
       userId: user.id,
       txn,

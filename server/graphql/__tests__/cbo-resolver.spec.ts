@@ -1,6 +1,12 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
+import * as cboCreate from '../../../app/graphql/queries/cbo-create-mutation.graphql';
+import * as cboDelete from '../../../app/graphql/queries/cbo-delete-mutation.graphql';
+import * as cboEdit from '../../../app/graphql/queries/cbo-edit-mutation.graphql';
+import * as getCbo from '../../../app/graphql/queries/get-cbo.graphql';
+import * as getCbosForCategory from '../../../app/graphql/queries/get-cbos-for-category.graphql';
+import * as getCbos from '../../../app/graphql/queries/get-cbos.graphql';
 import Db from '../../db';
 import CBO from '../../models/cbo';
 import Clinic from '../../models/clinic';
@@ -34,6 +40,12 @@ const setup = async (trx: Transaction) => {
 
 describe('CBO resolver', () => {
   let txn = null as any;
+  const cboCreateMutation = print(cboCreate);
+  const cboEditMutation = print(cboEdit);
+  const getCboQuery = print(getCbo);
+  const getCbosQuery = print(getCbos);
+  const getCbosForCategoryQuery = print(getCbosForCategory);
+  const cboDeleteMutation = print(cboDelete);
 
   beforeEach(async () => {
     await Db.get();
@@ -61,16 +73,7 @@ describe('CBO resolver', () => {
       );
       const cbo2 = await createCBO(txn, name2);
 
-      const query = `{
-          CBOs {
-            id
-            name
-            categoryId
-            address
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
+      const result = await graphql(schema, getCbosQuery, null, {
         permissions,
         userId: user.id,
         txn,
@@ -119,19 +122,17 @@ describe('CBO resolver', () => {
         txn,
       );
 
-      const query = `{
-          CBOsForCategory(categoryId: "${cboCategory.id}") {
-            id
-            name
-            categoryId
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getCbosForCategoryQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { categoryId: cboCategory.id },
+      );
 
       expect(result.data!.CBOsForCategory).toMatchObject([
         {
@@ -158,20 +159,19 @@ describe('CBO resolver', () => {
         txn,
       );
 
-      const query = `{
-          CBO(CBOId: "${cbo.id}") {
-            id
-            name
-            categoryId
-            address
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getCboQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          CBOId: cbo.id,
+        },
+      );
 
       expect(result.data!.CBO).toMatchObject({
         id: cbo.id,
@@ -184,13 +184,18 @@ describe('CBO resolver', () => {
     it('throws an error if CBO not found', async () => {
       const { user } = await setup(txn);
       const fakeId = uuid();
-      const query = `{ CBO(CBOId: "${fakeId}") { id } }`;
 
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getCboQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { CBOId: fakeId },
+      );
 
       expect(result.errors![0].message).toMatch(`No such CBO: ${fakeId}`);
     });
@@ -200,28 +205,26 @@ describe('CBO resolver', () => {
     it('creates a new CBO', async () => {
       const { user, cboCategory } = await setup(txn);
 
-      const mutation = `mutation {
-          CBOCreate(input: {
-            name: "${input.name}",
-            categoryId: "${cboCategory.id}",
-            address: "${input.address}",
-            city: "${input.city}",
-            state: "${input.state}",
-            zip: "${input.zip}",
-            phone: "${input.phone}",
-            url: "${input.url}",
-          }) {
-            name
-            categoryId
-            address
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        cboCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          name: input.name,
+          categoryId: cboCategory.id,
+          address: input.address,
+          city: input.city,
+          state: input.state,
+          zip: input.zip,
+          phone: input.phone,
+          url: input.url,
+        },
+      );
 
       expect(result.data!.CBOCreate).toMatchObject({
         name: input.name,
@@ -247,26 +250,22 @@ describe('CBO resolver', () => {
         txn,
       );
 
-      const mutation = `mutation {
-          CBOEdit(input: {
-            name: "${newName}"
-            address: "${newAddress}"
-            city: "${newCity}"
-            CBOId: "${cbo.id}"
-          }) {
-            id
-            name
-            categoryId
-            address
-            city
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        cboEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          name: newName,
+          address: newAddress,
+          city: newCity,
+          CBOId: cbo.id,
+        },
+      );
 
       expect(result.data!.CBOEdit).toMatchObject({
         id: cbo.id,
@@ -283,17 +282,19 @@ describe('CBO resolver', () => {
       const { user } = await setup(txn);
       const cbo = await createCBO(txn);
 
-      const mutation = `mutation {
-          CBODelete(input: { CBOId: "${cbo.id}"}) {
-            id
-          }
-        }`;
-
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        cboDeleteMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          CBOId: cbo.id,
+        },
+      );
 
       expect(result.data!.CBODelete).toMatchObject({
         id: cbo.id,

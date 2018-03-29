@@ -1,4 +1,4 @@
-import * as stackDriver from '@google-cloud/error-reporting';
+import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
@@ -170,7 +170,7 @@ export default async (
 
   /* istanbul ignore next */
   if (config.NODE_ENV === 'production' && config.GCP_CREDS) {
-    const errors = stackDriver({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+    const errors = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
     process.on('uncaughtException', e => {
       // Write the error to stderr.
       console.error(e);

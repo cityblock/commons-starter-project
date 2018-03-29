@@ -119,6 +119,7 @@ import {
 import {
   patientDocumentCreate,
   patientDocumentDelete,
+  patientDocumentSignedUrlCreate,
   resolvePatientDocuments,
 } from './patient-document-resolver';
 import { resolveEmails } from './patient-email-resolver';
@@ -459,6 +460,7 @@ const resolveFunctions = {
     patientExternalProviderEdit,
     patientDocumentCreate,
     patientDocumentDelete,
+    patientDocumentSignedUrlCreate,
     patientCoreIdentityVerify,
     patientInfoEdit,
     patientNeedToKnowEdit,

@@ -2549,6 +2549,11 @@ declare module 'schema' {
     patientDocumentDelete: IPatientDocument | null;
 
     /**
+     * generate a signed URL for patient document
+     */
+    patientDocumentSignedUrlCreate: ISignedUrl;
+
+    /**
      * Edit a patient need to know
      */
     patientNeedToKnowEdit: IPatientNeedToKnow | null;
@@ -3037,7 +3042,7 @@ declare module 'schema' {
     /**
      * generate a signed URL for patient photo
      */
-    patientPhotoSignedUrlCreate: IPatientPhotoSignedUrl;
+    patientPhotoSignedUrlCreate: ISignedUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3137,6 +3142,9 @@ declare module 'schema' {
   }
   interface IPatientDocumentDeleteOnRootMutationTypeArguments {
     input?: IPatientDocumentDeleteInput | null;
+  }
+  interface IPatientDocumentSignedUrlCreateOnRootMutationTypeArguments {
+    input?: IPatientDocumentSignedUrlCreateInput | null;
   }
   interface IPatientNeedToKnowEditOnRootMutationTypeArguments {
     input?: IPatientNeedToKnowEditInput | null;
@@ -3814,6 +3822,24 @@ declare module 'schema' {
    */
   interface IPatientDocumentDeleteInput {
     patientDocumentId: string;
+  }
+
+  /**
+   * params for generating a signed url for documents
+   */
+  interface IPatientDocumentSignedUrlCreateInput {
+    patientId: string;
+    action: IPatientSignedUrlActionEnum;
+    filename: string;
+  }
+
+  type IPatientSignedUrlActionEnum = 'read' | 'write';
+
+  /**
+   * signed url for patient photo or documents
+   */
+  interface ISignedUrl {
+    signedUrl: string;
   }
 
   /**
@@ -4518,16 +4544,7 @@ declare module 'schema' {
    */
   interface IPatientPhotoSignedUrlCreateInput {
     patientId: string;
-    action: IPatientPhotoSignedUrlActionEnum;
-  }
-
-  type IPatientPhotoSignedUrlActionEnum = 'read' | 'write';
-
-  /**
-   * Patient photo upload url
-   */
-  interface IPatientPhotoSignedUrl {
-    signedUrl: string;
+    action: IPatientSignedUrlActionEnum;
   }
 
   /**

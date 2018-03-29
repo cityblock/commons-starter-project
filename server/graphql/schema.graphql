@@ -266,7 +266,7 @@ enum ExternalProviderOptions {
   otherMedicalSpecialist
 }
 
-enum PatientPhotoSignedUrlAction {
+enum PatientSignedUrlAction {
   read
   write
 }
@@ -1525,8 +1525,8 @@ type PatientScratchPad implements uniqueId {
   body: String!
 }
 
-# Patient photo upload url
-type PatientPhotoSignedUrl {
+# signed url for patient photo or documents
+type SignedUrl {
   signedUrl: String!
 }
 
@@ -1697,6 +1697,13 @@ input PatientDocumentCreateInput {
 # params for deleting a patient document in the db
 input PatientDocumentDeleteInput {
   patientDocumentId: ID!
+}
+
+# params for generating a signed url for documents
+input PatientDocumentSignedUrlCreateInput {
+  patientId: ID!
+  action: PatientSignedUrlAction!
+  filename: String!
 }
 
 # params for editing a patient need to know
@@ -2331,7 +2338,7 @@ input PatientScratchPadEditInput {
 # generate signed url for patient photo
 input PatientPhotoSignedUrlCreateInput {
   patientId: ID!
-  action: PatientPhotoSignedUrlAction!
+  action: PatientSignedUrlAction!
 }
 
 type RootMutationType {
@@ -2401,6 +2408,8 @@ type RootMutationType {
   patientDocumentCreate(input: PatientDocumentCreateInput): PatientDocument
   # Delete patient document
   patientDocumentDelete(input: PatientDocumentDeleteInput): PatientDocument
+  # generate a signed URL for patient document
+  patientDocumentSignedUrlCreate(input: PatientDocumentSignedUrlCreateInput): SignedUrl!
   # Edit a patient need to know
   patientNeedToKnowEdit(input: PatientNeedToKnowEditInput): PatientNeedToKnow
   # Create a task
@@ -2611,7 +2620,7 @@ type RootMutationType {
   # edits a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
   # generate a signed URL for patient photo
-  patientPhotoSignedUrlCreate(input: PatientPhotoSignedUrlCreateInput): PatientPhotoSignedUrl!
+  patientPhotoSignedUrlCreate(input: PatientPhotoSignedUrlCreateInput): SignedUrl!
 }
 
 type RootQueryType {

@@ -374,7 +374,7 @@ export interface PhoneInput {
   description?: string | null,
 };
 
-export enum PatientPhotoSignedUrlAction {
+export enum PatientSignedUrlAction {
   read = "read",
   write = "write",
 }
@@ -6514,6 +6514,19 @@ export interface patientDocumentDeleteMutation {
   } | null,
 };
 
+export interface patientDocumentSignedUrlCreateMutationVariables {
+  patientId: string,
+  filename: string,
+  action: PatientSignedUrlAction,
+};
+
+export interface patientDocumentSignedUrlCreateMutation {
+  // generate a signed URL for patient document
+  patientDocumentSignedUrlCreate:  {
+    signedUrl: string,
+  },
+};
+
 export interface patientExternalProviderCreateMutationVariables {
   patientId: string,
   role: ExternalProviderOptions,
@@ -6877,7 +6890,7 @@ export interface patientNeedToKnowEditMutation {
 
 export interface patientPhotoSignedUrlCreateMutationVariables {
   patientId: string,
-  action: PatientPhotoSignedUrlAction,
+  action: PatientSignedUrlAction,
 };
 
 export interface patientPhotoSignedUrlCreateMutation {

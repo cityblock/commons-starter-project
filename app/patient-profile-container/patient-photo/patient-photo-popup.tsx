@@ -10,7 +10,7 @@ import {
   patientInfoEditMutationVariables,
   patientPhotoSignedUrlCreateMutation,
   patientPhotoSignedUrlCreateMutationVariables,
-  PatientPhotoSignedUrlAction,
+  PatientSignedUrlAction,
 } from '../../graphql/types';
 import { IPatientPhotoPopupOptions } from '../../reducers/popup-reducer';
 import PhotoModal from '../../shared/library/photo-modal/photo-modal';
@@ -42,7 +42,7 @@ export class PatientPhotoPopup extends React.Component<allProps> {
     const { getSignedUploadUrl, editPatientInfo, patientId, patientInfoId } = this.props;
 
     const signedUrlData = await getSignedUploadUrl({
-      variables: { patientId, action: 'write' as PatientPhotoSignedUrlAction },
+      variables: { patientId, action: 'write' as PatientSignedUrlAction },
     });
 
     await axios.put(signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl, imgData, {

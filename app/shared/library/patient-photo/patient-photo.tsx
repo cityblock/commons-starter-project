@@ -5,7 +5,7 @@ import {
   patientPhotoSignedUrlCreateMutation,
   patientPhotoSignedUrlCreateMutationVariables,
   Gender,
-  PatientPhotoSignedUrlAction,
+  PatientSignedUrlAction,
 } from '../../../graphql/types';
 import PatientPhotoImage from './patient-photo-image';
 
@@ -46,7 +46,7 @@ export class PatientPhoto extends React.Component<allProps, IState> {
     if (hasUploadedPhoto) {
       try {
         const signedUrlData = await getSignedPhotoUrl({
-          variables: { patientId, action: 'read' as PatientPhotoSignedUrlAction },
+          variables: { patientId, action: 'read' as PatientSignedUrlAction },
         });
         const imgUrl = signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl;
 

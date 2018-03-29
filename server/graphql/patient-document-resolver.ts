@@ -1,6 +1,13 @@
 import { isNil, omitBy } from 'lodash';
-import { IPatientDocumentCreateInput, IPatientDocumentDeleteInput, IRootQueryType } from 'schema';
+import {
+  IPatientDocumentCreateInput,
+  IPatientDocumentDeleteInput,
+  IPatientDocumentSignedUrlCreateInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import PatientDocument from '../models/patient-document';
+import { loadPatientDocumentUrl } from './shared/gcs/helpers';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -52,4 +59,29 @@ export async function patientDocumentDelete(
   logger.log(`DELETE document ${input.patientDocumentId} by ${userId}`, 2);
 
   return PatientDocument.delete(input.patientDocumentId, userId!, txn);
+}
+
+export interface IPatientDocumentSignedUrlCreateOptions {
+  input: IPatientDocumentSignedUrlCreateInput;
+}
+
+export async function patientDocumentSignedUrlCreate(
+  root: any,
+  { input }: IPatientDocumentSignedUrlCreateOptions,
+  { permissions, userId, txn, testConfig }: IContext,
+): Promise<IRootMutationType['patientDocumentSignedUrlCreate']> {
+  const { patientId, action, filename } = input;
+  if (!patientId) {
+    throw new Error('Must provide patient id');
+  }
+  const permissionAction = action === 'read' ? 'view' : 'edit';
+  await checkUserPermissions(userId, permissions, permissionAction, 'patient', txn, patientId);
+
+  const signedUrl = await loadPatientDocumentUrl(patientId, action, filename, testConfig);
+
+  if (!signedUrl) {
+    throw new Error('Something went wrong, please try again.');
+  }
+
+  return { signedUrl };
 }

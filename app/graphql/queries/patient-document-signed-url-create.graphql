@@ -1,0 +1,11 @@
+mutation patientDocumentSignedUrlCreate(
+  $patientId: ID!
+  $filename: String!
+  $action: PatientSignedUrlAction!
+) {
+  patientDocumentSignedUrlCreate(
+    input: { patientId: $patientId, filename: $filename, action: $action }
+  ) {
+    signedUrl
+  }
+}

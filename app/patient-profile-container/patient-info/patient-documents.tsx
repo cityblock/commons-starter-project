@@ -9,11 +9,7 @@ interface IProps {
 
 class PatientDocuments extends React.Component<IProps> {
   render() {
-    return (
-      <div className={styles.container}>
-        Documents
-      </div>
-    );
+    return <div className={styles.container}>Documents</div>;
   }
 }
 

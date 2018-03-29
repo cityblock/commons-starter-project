@@ -61,11 +61,24 @@ export default class PatientDocument extends BaseModel {
     },
   };
 
+  static async get(patientDocumentId: string, txn: Transaction): Promise<PatientDocument> {
+    const document = await this.query(txn).findOne({ id: patientDocumentId, deletedAt: null });
+
+    if (!document) {
+      return Promise.reject(`No such document: ${patientDocumentId}`);
+    }
+
+    return document;
+  }
+
   static async getAllForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
     return this.query(txn).where({ patientId, deletedAt: null });
   }
 
-  static async getConsentsForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
+  static async getConsentsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientDocument[]> {
     return this.query(txn)
       .where({ patientId, deletedAt: null })
       .whereIn('documentType', CONSENT_TYPES);

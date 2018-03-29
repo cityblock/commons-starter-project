@@ -125,6 +125,11 @@ declare module 'schema' {
     patientExternalProviders: Array<IPatientExternalProvider>;
 
     /**
+     * Patient documents for patient
+     */
+    patientDocuments: Array<IPatientDocument>;
+
+    /**
      * A single clinic
      */
     clinic: IClinic;
@@ -654,6 +659,9 @@ declare module 'schema' {
   interface IPatientExternalProvidersOnRootQueryTypeArguments {
     patientId: string;
   }
+  interface IPatientDocumentsOnRootQueryTypeArguments {
+    patientId: string;
+  }
   interface IClinicOnRootQueryTypeArguments {
     clinicId: string;
   }
@@ -973,6 +981,7 @@ declare module 'schema' {
     | IPatientForDashboard
     | IPatientContact
     | IPatientExternalProvider
+    | IPatientDocument
     | IClinic
     | ITask
     | IPatientGoalShort
@@ -1402,6 +1411,25 @@ declare module 'schema' {
     | 'hematology'
     | 'dermatology'
     | 'otherMedicalSpecialist';
+
+  /**
+   * Documents and consents for a user
+   */
+  interface IPatientDocument {
+    id: string;
+    patientId: string;
+    uploadedById: string;
+    filename: string;
+    description: string | null;
+    documentType: IDocumentTypeOptionsEnum | null;
+  }
+
+  type IDocumentTypeOptionsEnum =
+    | 'cityblockConsent'
+    | 'hipaaConsent'
+    | 'hieHealthixConsent'
+    | 'hcp'
+    | 'molst';
 
   /**
    * Clinic
@@ -2511,6 +2539,16 @@ declare module 'schema' {
     patientExternalProviderEdit: IPatientExternalProvider | null;
 
     /**
+     * Create patient document
+     */
+    patientDocumentCreate: IPatientDocument | null;
+
+    /**
+     * Delete patient document
+     */
+    patientDocumentDelete: IPatientDocument | null;
+
+    /**
      * Edit a patient need to know
      */
     patientNeedToKnowEdit: IPatientNeedToKnow | null;
@@ -3093,6 +3131,12 @@ declare module 'schema' {
   }
   interface IPatientExternalProviderEditOnRootMutationTypeArguments {
     input?: IPatientExternalProviderEditInput | null;
+  }
+  interface IPatientDocumentCreateOnRootMutationTypeArguments {
+    input?: IPatientDocumentCreateInput | null;
+  }
+  interface IPatientDocumentDeleteOnRootMutationTypeArguments {
+    input?: IPatientDocumentDeleteInput | null;
   }
   interface IPatientNeedToKnowEditOnRootMutationTypeArguments {
     input?: IPatientNeedToKnowEditInput | null;
@@ -3752,6 +3796,24 @@ declare module 'schema' {
     description?: string | null;
     email?: IEmailInput | null;
     phone?: IPhoneInput | null;
+  }
+
+  /**
+   * params for creating a patient document in the db
+   */
+  interface IPatientDocumentCreateInput {
+    patientId: string;
+    uploadedById: string;
+    filename: string;
+    description?: string | null;
+    documentType?: IDocumentTypeOptionsEnum | null;
+  }
+
+  /**
+   * params for deleting a patient document in the db
+   */
+  interface IPatientDocumentDeleteInput {
+    patientDocumentId: string;
   }
 
   /**

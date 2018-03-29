@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-document.graphql"
+
+mutation patientDocumentDelete($patientDocumentId: ID!) {
+  patientDocumentDelete(input: { patientDocumentId: $patientDocumentId }) {
+    ...FullPatientDocument
+  }
+}

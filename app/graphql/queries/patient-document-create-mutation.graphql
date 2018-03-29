@@ -1,0 +1,21 @@
+#import "../fragments/full-patient-document.graphql"
+
+mutation patientDocumentCreate(
+  $patientId: ID!
+  $uploadedById: ID!
+  $filename: String!
+  $description: String
+  $documentType: DocumentTypeOptions
+) {
+  patientDocumentCreate(
+    input: {
+      patientId: $patientId
+      uploadedById: $uploadedById
+      filename: $filename
+      description: $description
+      documentType: $documentType
+    }
+  ) {
+    ...FullPatientDocument
+  }
+}

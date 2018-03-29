@@ -1,4 +1,3 @@
-
 exports.up = function(knex, Promise) {
   return (
     knex.schema
@@ -91,4 +90,3 @@ exports.down = function(knex, Promise) {
       'create unique index patientadvanceddirectiveform_patientid_formid_deletedat on patient_advanced_directive_form ("patientId", "formId") where "deletedAt" IS NULL;',
     );
 };
-

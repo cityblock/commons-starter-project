@@ -99,6 +99,15 @@ export enum CoreIdentityOptions {
 }
 
 
+export enum DocumentTypeOptions {
+  cityblockConsent = "cityblockConsent",
+  hcp = "hcp",
+  hieHealthixConsent = "hieHealthixConsent",
+  hipaaConsent = "hipaaConsent",
+  molst = "molst",
+}
+
+
 export enum ExternalProviderOptions {
   cardiology = "cardiology",
   dermatology = "dermatology",
@@ -2574,6 +2583,22 @@ export interface getPatientContactsQuery {
     createdAt: string | null,
     updatedAt: string | null,
     deletedAt: string | null,
+  } > | null,
+};
+
+export interface getPatientDocumentsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientDocumentsQuery {
+  // Patient documents for patient
+  patientDocuments:  Array< {
+    id: string,
+    patientId: string,
+    uploadedById: string,
+    filename: string,
+    description: string | null,
+    documentType: DocumentTypeOptions | null,
   } > | null,
 };
 
@@ -6450,6 +6475,42 @@ export interface patientDataFlagCreateMutation {
     suggestedValue: string | null,
     notes: string | null,
     updatedAt: string | null,
+  } | null,
+};
+
+export interface patientDocumentCreateMutationVariables {
+  patientId: string,
+  uploadedById: string,
+  filename: string,
+  description?: string | null,
+  documentType?: DocumentTypeOptions | null,
+};
+
+export interface patientDocumentCreateMutation {
+  // Create patient document
+  patientDocumentCreate:  {
+    id: string,
+    patientId: string,
+    uploadedById: string,
+    filename: string,
+    description: string | null,
+    documentType: DocumentTypeOptions | null,
+  } | null,
+};
+
+export interface patientDocumentDeleteMutationVariables {
+  patientDocumentId: string,
+};
+
+export interface patientDocumentDeleteMutation {
+  // Delete patient document
+  patientDocumentDelete:  {
+    id: string,
+    patientId: string,
+    uploadedById: string,
+    filename: string,
+    description: string | null,
+    documentType: DocumentTypeOptions | null,
   } | null,
 };
 
@@ -10674,6 +10735,15 @@ export interface FullPatientDataFlagFragment {
   suggestedValue: string | null,
   notes: string | null,
   updatedAt: string | null,
+};
+
+export interface FullPatientDocumentFragment {
+  id: string,
+  patientId: string,
+  uploadedById: string,
+  filename: string,
+  description: string | null,
+  documentType: DocumentTypeOptions | null,
 };
 
 export interface FullPatientExternalProviderFragment {

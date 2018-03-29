@@ -1,0 +1,8 @@
+fragment FullPatientDocument on PatientDocument {
+  id
+  patientId
+  uploadedById
+  filename
+  description
+  documentType
+}

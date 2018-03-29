@@ -116,6 +116,11 @@ import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
 } from './patient-data-flag-resolver';
+import {
+  patientDocumentCreate,
+  patientDocumentDelete,
+  resolvePatientDocuments,
+} from './patient-document-resolver';
 import { resolveEmails } from './patient-email-resolver';
 import {
   patientExternalProviderCreate,
@@ -343,6 +348,7 @@ const resolveFunctions = {
     patientContacts: resolvePatientContactsForPatient,
     patientContactHealthcareProxies: resolveHealthcareProxiesForPatient,
     patientExternalProviders: resolvePatientExternalProvidersForPatient,
+    patientDocuments: resolvePatientDocuments,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
     task: resolveTask,
@@ -451,6 +457,8 @@ const resolveFunctions = {
     patientExternalProviderCreate,
     patientExternalProviderDelete,
     patientExternalProviderEdit,
+    patientDocumentCreate,
+    patientDocumentDelete,
     patientCoreIdentityVerify,
     patientInfoEdit,
     patientNeedToKnowEdit,

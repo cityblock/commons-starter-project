@@ -271,6 +271,14 @@ enum PatientPhotoSignedUrlAction {
   write
 }
 
+enum DocumentTypeOptions {
+  cityblockConsent
+  hipaaConsent
+  hieHealthixConsent
+  hcp
+  molst
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -420,6 +428,16 @@ type PatientExternalProvider implements uniqueId {
   createdAt: String
   updatedAt: String
   deletedAt: String
+}
+
+# Documents and consents for a user
+type PatientDocument implements uniqueId {
+  id: ID!
+  patientId: ID!
+  uploadedById: ID!
+  filename: String!
+  description: String
+  documentType: DocumentTypeOptions
 }
 
 # ComputedPatientStatus
@@ -1667,6 +1685,20 @@ input PatientExternalProviderEditInput {
   phone: PhoneInput
 }
 
+# params for creating a patient document in the db
+input PatientDocumentCreateInput {
+  patientId: ID!
+  uploadedById: ID!
+  filename: String!
+  description: String
+  documentType: DocumentTypeOptions
+}
+
+# params for deleting a patient document in the db
+input PatientDocumentDeleteInput {
+  patientDocumentId: ID!
+}
+
 # params for editing a patient need to know
 input PatientNeedToKnowEditInput {
   patientInfoId: ID!
@@ -2365,6 +2397,10 @@ type RootMutationType {
   patientExternalProviderDelete(input: PatientExternalProviderDeleteInput): PatientExternalProvider
   # Edit fields on patient external provider stored in the db
   patientExternalProviderEdit(input: PatientExternalProviderEditInput): PatientExternalProvider
+  # Create patient document
+  patientDocumentCreate(input: PatientDocumentCreateInput): PatientDocument
+  # Delete patient document
+  patientDocumentDelete(input: PatientDocumentDeleteInput): PatientDocument
   # Edit a patient need to know
   patientNeedToKnowEdit(input: PatientNeedToKnowEditInput): PatientNeedToKnow
   # Create a task
@@ -2630,6 +2666,8 @@ type RootQueryType {
   patientContactHealthcareProxies(patientId: ID!): [PatientContact!]
   # Patient external providers for patient
   patientExternalProviders(patientId: ID!): [PatientExternalProvider!]
+  # Patient documents for patient
+  patientDocuments(patientId: ID!): [PatientDocument!]
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

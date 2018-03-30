@@ -74,6 +74,11 @@ type allProps = IProps & IGraphqlProps & IStateProps;
 export class BuilderContainer extends React.Component<allProps, {}> {
   render() {
     const { subTab, tab } = this.props;
+
+    if (process.env.IS_BUILDER_ENABLED !== 'true') {
+      return null;
+    }
+
     const riskAreaGroupsTabSelected = tab === 'domains';
     const questionsTabSelected = subTab === 'questions';
     const concernsTabSelected = tab === 'concerns';

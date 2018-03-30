@@ -59,6 +59,7 @@
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
     },
+    "testEnvironmentOptions": { "IS_BUILDER_ENABLED": "true" },
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"

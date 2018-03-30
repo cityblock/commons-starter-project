@@ -74,7 +74,7 @@ export class Header extends React.Component<allProps> {
         </Link>
       );
     }
-    if (featureFlags.isBuilderEnabled) {
+    if (featureFlags.isBuilderEnabled && process.env.IS_BUILDER_ENABLED === 'true') {
       builderLink = (
         <Link to={'/builder'} className={this.getNavItemClassnames('/builder')}>
           <div className={styles.tasksIcon} />

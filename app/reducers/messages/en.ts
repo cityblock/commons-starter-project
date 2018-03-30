@@ -933,11 +933,15 @@ export const ENGLISH_TRANSLATION = {
     'saveModal.continueWithoutSaving': 'Continue without saving',
     'saveModal.subtitle': 'If you continue without saving you will lose these changes',
     'patientDocumentModal.title': 'Upload a document',
-    'patientDocumentModal.subtitle': 'Document types supported: pdf, doc, docx, txt, jpg, png',
+    'patientDocumentModal.subtitle':
+      'Document types supported: pdf, doc, docx, txt, jpg, png. Max size: 5MB',
     'patientDocumentModal.submit': 'Upload file',
     'patientDocumentModal.cancel': 'Cancel',
     'patientDocumentModal.fileUploadPlaceholder': 'Choose a file to upload',
     'patientDocument.uploadedBy': 'Uploaded by:',
     'patientDocument.uploadedOn': 'Uploaded on:',
+    'patientDocument.download': 'Download file',
+    'patientDocument.delete': 'Delete file',
+    'fileInput.maxSize': 'This file exceeds the maximum upload size',
   },
 };

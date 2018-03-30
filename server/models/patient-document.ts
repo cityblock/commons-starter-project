@@ -1,5 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import BaseModel from './base-model';
+import * as uuid from 'uuid/v4';
 import ComputedPatientStatus from './computed-patient-status';
 import User from './user';
 
@@ -15,6 +15,7 @@ export type DocumentTypeOptions =
   | 'molst';
 
 export interface IPatientDocumentOptions {
+  id?: string;
   patientId: string;
   uploadedById: string;
   filename: string;
@@ -23,7 +24,7 @@ export interface IPatientDocumentOptions {
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientDocument extends BaseModel {
+export default class PatientDocument extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
@@ -34,6 +35,9 @@ export default class PatientDocument extends BaseModel {
   description: string;
   documentType: DocumentTypeOptions;
   uploadedBy: User;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 
   static tableName = 'patient_document';
   static hasPHI = false;
@@ -73,6 +77,16 @@ export default class PatientDocument extends BaseModel {
       },
     },
   };
+
+  $beforeInsert() {
+    this.id = this.id || uuid();
+    this.createdAt = new Date().toISOString();
+    this.updatedAt = new Date().toISOString();
+  }
+
+  $beforeUpdate() {
+    this.updatedAt = new Date().toISOString();
+  }
 
   static async get(patientDocumentId: string, txn: Transaction): Promise<PatientDocument> {
     const document = await this.query(txn)

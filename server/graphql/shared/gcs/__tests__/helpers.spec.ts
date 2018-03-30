@@ -28,11 +28,17 @@ describe('Google Cloud Storage Helpers', () => {
       };
 
       const patientId = 'sansaStark';
-      const signedUrl = await loadPatientDocumentUrl(patientId, 'read', 'document.pdf', testConfig);
+      const signedUrl = await loadPatientDocumentUrl(
+        patientId,
+        'read',
+        'someUUID',
+        'application/pdf',
+        testConfig,
+      );
 
       expect(signedUrl).toMatch('fake-credentials');
       expect(signedUrl).toMatch(patientId);
-      expect(signedUrl).toMatch('document.pdf');
+      expect(signedUrl).toMatch('someUUID');
     });
   });
 });

@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
@@ -63,6 +64,44 @@ describe('patient document model', () => {
 
       expect(refetchedPatientDocuments.length).toEqual(1);
       expect(refetchedPatientDocuments[0]).toMatchObject(document);
+    });
+
+    it('should create a patient document with supplied id', async () => {
+      const { patient, user } = await setup(txn);
+
+      const document = await PatientDocument.create(
+        {
+          id: uuid(),
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test.txt',
+          description: 'some file for consent',
+          documentType: 'hcp',
+        },
+        txn,
+      );
+      const refetchedPatientDocuments = await PatientDocument.getAllForPatient(patient.id, txn);
+
+      expect(refetchedPatientDocuments.length).toEqual(1);
+      expect(refetchedPatientDocuments[0]).toMatchObject(document);
+    });
+
+    it('should reject creating a patient document with non uuid', async () => {
+      const { patient, user } = await setup(txn);
+
+      await expect(PatientDocument.create(
+        {
+          id: 'something random',
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test.txt',
+          description: 'some file for consent',
+          documentType: 'hcp',
+        },
+        txn,
+      )).rejects.toMatchObject(new Error(
+        'id: should match format "uuid"',
+      ));
     });
 
     it('updates the computed patient status', async () => {

@@ -1,10 +1,16 @@
 mutation patientDocumentSignedUrlCreate(
   $patientId: ID!
-  $filename: String!
+  $documentId: ID!
   $action: PatientSignedUrlAction!
+  $contentType: String
 ) {
   patientDocumentSignedUrlCreate(
-    input: { patientId: $patientId, filename: $filename, action: $action }
+    input: {
+      patientId: $patientId
+      documentId: $documentId
+      action: $action
+      contentType: $contentType
+    }
   ) {
     signedUrl
   }

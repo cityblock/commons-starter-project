@@ -22,8 +22,10 @@ describe('Library File Input Component', () => {
   });
 
   it('renders text over input', () => {
-    const placeholderMessageId = "someId";
-    const wrapper = shallow(<FileInput value="" onChange={onChange} placeholderMessageId={placeholderMessageId} />);
+    const placeholderMessageId = 'someId';
+    const wrapper = shallow(
+      <FileInput value="" onChange={onChange} placeholderMessageId={placeholderMessageId} />,
+    );
 
     const text = wrapper.find(DefaultText);
     expect(text).toHaveLength(1);
@@ -44,7 +46,16 @@ describe('Library File Input Component', () => {
     const name = 'firstFile';
     const id = 'fileId';
     const acceptTypes = '.jpg, .pdf';
-    const wrapper = shallow(<FileInput value={value} onChange={onChange} id={id} name={name} acceptTypes={acceptTypes} required={true} />);
+    const wrapper = shallow(
+      <FileInput
+        value={value}
+        onChange={onChange}
+        id={id}
+        name={name}
+        acceptTypes={acceptTypes}
+        required={true}
+      />,
+    );
 
     const inputProps = wrapper.find('input').props();
     expect(inputProps.name).toBe(name);

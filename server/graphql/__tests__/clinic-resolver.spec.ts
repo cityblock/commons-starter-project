@@ -57,21 +57,21 @@ describe('clinic resolver', () => {
         },
         txn,
       );
-      const clinic2 = await Clinic.create(
+      await Clinic.create(
         {
           departmentId: 2,
           name: 'Center One',
         },
         txn,
       );
-      const clinic3 = await Clinic.create(
+      await Clinic.create(
         {
           departmentId: 3,
           name: 'Center Two',
         },
         txn,
       );
-      const clinic4 = await Clinic.create(
+      await Clinic.create(
         {
           departmentId: 4,
           name: 'Center Three',

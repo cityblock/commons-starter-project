@@ -1688,6 +1688,7 @@ input PatientExternalProviderEditInput {
 
 # params for creating a patient document in the db
 input PatientDocumentCreateInput {
+  id: ID
   patientId: ID!
   filename: String!
   description: String
@@ -1703,7 +1704,8 @@ input PatientDocumentDeleteInput {
 input PatientDocumentSignedUrlCreateInput {
   patientId: ID!
   action: PatientSignedUrlAction!
-  filename: String!
+  documentId: ID!
+  contentType: String
 }
 
 # params for editing a patient need to know

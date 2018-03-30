@@ -71,14 +71,20 @@ export async function patientDocumentSignedUrlCreate(
   { input }: IPatientDocumentSignedUrlCreateOptions,
   { permissions, userId, txn, testConfig }: IContext,
 ): Promise<IRootMutationType['patientDocumentSignedUrlCreate']> {
-  const { patientId, action, filename } = input;
+  const { patientId, action, documentId, contentType } = input;
   if (!patientId) {
     throw new Error('Must provide patient id');
   }
   const permissionAction = action === 'read' ? 'view' : 'edit';
   await checkUserPermissions(userId, permissions, permissionAction, 'patient', txn, patientId);
 
-  const signedUrl = await loadPatientDocumentUrl(patientId, action, filename, testConfig);
+  const signedUrl = await loadPatientDocumentUrl(
+    patientId,
+    action,
+    documentId,
+    contentType,
+    testConfig,
+  );
 
   if (!signedUrl) {
     throw new Error('Something went wrong, please try again.');

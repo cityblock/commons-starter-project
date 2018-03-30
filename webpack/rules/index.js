@@ -10,6 +10,7 @@ module.exports = ({ production = false } = {}) => [
   image(),
   {
     test: /\.json$/,
+    exclude: /node_modules/,
     loader: 'json-loader',
   },
 ];

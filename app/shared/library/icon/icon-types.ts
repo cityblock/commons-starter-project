@@ -26,6 +26,7 @@ export type IconName =
   | 'expandArrow'
   | 'expandLess'
   | 'expandMore'
+  | 'fileDownload'
   | 'flag'
   | 'folderOpen'
   | 'folderShared'

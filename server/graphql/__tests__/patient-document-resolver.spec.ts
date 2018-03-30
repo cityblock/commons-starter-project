@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import * as getPatientDocuments from '../../../app/graphql/queries/get-patient-documents.graphql';
 import * as patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
 import * as patientDocumentDelete from '../../../app/graphql/queries/patient-document-delete-mutation.graphql';
@@ -101,6 +102,72 @@ describe('patient document resolver', () => {
       });
       expect(log).toBeCalled();
     });
+
+    it('should create patient document with supplied id', async () => {
+      const { user, patient } = await setup(txn);
+
+      const patientDocument = {
+        id: uuid(),
+        patientId: patient.id,
+        filename: 'test.pdf',
+        description: 'some description',
+        documentType: 'hcp',
+      };
+
+      const result = await graphql(
+        schema,
+        patientDocumentCreateMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        patientDocument,
+      );
+
+      expect(cloneDeep(result.data!.patientDocumentCreate)).toMatchObject({
+        ...patientDocument,
+        uploadedBy: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      });
+      expect(log).toBeCalled();
+    });
+
+    it('should error on creating a patient document with non uuid id', async () => {
+      const { user, patient } = await setup(txn);
+
+      const patientDocument = {
+        id: 12343,
+        patientId: patient.id,
+        filename: 'test.pdf',
+        description: 'some description',
+        documentType: 'hcp',
+      };
+
+      const result = await graphql(
+        schema,
+        patientDocumentCreateMutation,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          logger,
+          txn,
+        },
+        patientDocument,
+      );
+
+      expect(cloneDeep(result).errors![0].message).toBe(
+        'id: should match format "uuid"',
+      );
+      expect(log).toBeCalled();
+    });
   });
 
   describe('create patient document signed url', async () => {
@@ -128,7 +195,7 @@ describe('patient document resolver', () => {
         {
           patientId: patient.id,
           action: 'write',
-          filename: 'test.pdf',
+          documentId: uuid(),
         },
       );
 
@@ -159,7 +226,7 @@ describe('patient document resolver', () => {
         {
           patientId: '',
           action: 'write',
-          filename: 'test.pdf',
+          documentId: uuid(),
         },
       );
 

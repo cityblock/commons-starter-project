@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { Fragment } from 'react';
 import DefaultText from '../default-text/default-text';
+import SmallText from '../small-text/small-text';
 import * as styles from './css/file-input.css';
 
 interface IProps {
@@ -10,10 +12,20 @@ interface IProps {
   id?: string; // optional id field for input, likely use with label
   required?: boolean;
   acceptTypes?: string;
+  hasMaxSizeError?: boolean; // show file size error
 }
 
 const FileInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, placeholderMessageId, name, id, required, acceptTypes } = props;
+  const {
+    value,
+    onChange,
+    placeholderMessageId,
+    name,
+    id,
+    required,
+    acceptTypes,
+    hasMaxSizeError,
+  } = props;
   const req = required || false;
 
   let bodyHtml = null;
@@ -25,18 +37,23 @@ const FileInput: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   }
 
+  const error = hasMaxSizeError ? <SmallText messageId="fileInput.maxSize" color="red" /> : null;
+
   return (
-    <div className={styles.container}>
-      <input
-        type="file"
-        onChange={onChange}
-        name={name || ''}
-        required={req}
-        id={id || ''}
-        accept={acceptTypes}
-      />
-      {bodyHtml}
-    </div>
+    <Fragment>
+      <div className={styles.container}>
+        <input
+          type="file"
+          onChange={onChange}
+          name={name || ''}
+          required={req}
+          id={id || ''}
+          accept={acceptTypes}
+        />
+        {bodyHtml}
+      </div>
+      {error}
+    </Fragment>
   );
 };
 

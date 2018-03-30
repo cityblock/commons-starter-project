@@ -3811,6 +3811,7 @@ declare module 'schema' {
    * params for creating a patient document in the db
    */
   interface IPatientDocumentCreateInput {
+    id?: string | null;
     patientId: string;
     filename: string;
     description?: string | null;
@@ -3830,7 +3831,8 @@ declare module 'schema' {
   interface IPatientDocumentSignedUrlCreateInput {
     patientId: string;
     action: IPatientSignedUrlActionEnum;
-    filename: string;
+    documentId: string;
+    contentType?: string | null;
   }
 
   type IPatientSignedUrlActionEnum = 'read' | 'write';

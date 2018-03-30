@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { lookup } from 'mime-types';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import * as uuid from 'uuid/v4';
 import * as patientDocumentCreateMutationGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
 import * as patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
@@ -12,6 +14,8 @@ import {
 } from '../../../graphql/types';
 import FileInput from '../../../shared/library/file-input/file-input';
 import Modal from '../../../shared/library/modal/modal';
+
+const MAX_FILE_SIZE = 5 * 1048576;
 
 interface IProps {
   isVisible: boolean;
@@ -32,6 +36,7 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   selectedFile?: File | null;
+  hasFileError?: boolean;
 }
 
 export class PatientDocumentModal extends React.Component<allProps, IState> {
@@ -47,17 +52,25 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
     if (!selectedFile) return;
     const filename = selectedFile.name;
 
+    const id = uuid();
+    const contentType = lookup(filename) || 'application/octet-stream';
     const signedUrlData = await getSignedUploadUrl({
-      variables: { patientId, filename, action: 'write' as PatientSignedUrlAction },
+      variables: {
+        patientId,
+        documentId: id,
+        action: 'write' as PatientSignedUrlAction,
+        contentType,
+      },
     });
 
     await axios.put(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl, selectedFile, {
       headers: {
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': contentType,
+        'Content-Disposition': `filename="${filename}"`,
       },
     });
 
-    await createPatientDocument({ variables: { patientId, filename } });
+    await createPatientDocument({ variables: { id, patientId, filename } });
   };
 
   handleClose = () => {
@@ -68,13 +81,18 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        this.setState({ hasFileError: true });
+        return;
+      }
+
       this.setState({ selectedFile });
     }
   };
 
   render(): JSX.Element {
     const { isVisible } = this.props;
-    const { selectedFile } = this.state;
+    const { selectedFile, hasFileError } = this.state;
     const filename = selectedFile ? selectedFile.name : '';
 
     return (
@@ -92,6 +110,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
           onChange={this.handleFileChange}
           placeholderMessageId="patientDocumentModal.fileUploadPlaceholder"
           acceptTypes=".jpg, .jpeg, .png, .doc, .docx, .txt, .pdf"
+          hasMaxSizeError={hasFileError}
         />
       </Modal>
     );

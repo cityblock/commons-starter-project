@@ -39,6 +39,7 @@ export const loadPatientDocumentUrl = async (
   patientId: string,
   action: IPatientSignedUrlActionEnum,
   filename: string,
+  contentType?: string | null,
   testConfig?: any,
 ): Promise<string | null> => {
   if (!patientId) return null;
@@ -58,8 +59,8 @@ export const loadPatientDocumentUrl = async (
     expires: Date.now() + EXPIRE_TIME,
   };
 
-  if (action === 'write') {
-    signedUrlParams.contentType = 'application/octet-stream';
+  if (action === 'write' && contentType) {
+    signedUrlParams.contentType = contentType;
   }
 
   const signedUrls = await file.getSignedUrl(signedUrlParams);

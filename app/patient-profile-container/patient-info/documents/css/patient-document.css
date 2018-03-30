@@ -32,3 +32,7 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.menu svg {
+  margin-top: var(--extra-small-gutter);
+}

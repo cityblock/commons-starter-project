@@ -6483,6 +6483,7 @@ export interface patientDataFlagCreateMutation {
 };
 
 export interface patientDocumentCreateMutationVariables {
+  id?: string | null,
   patientId: string,
   filename: string,
   description?: string | null,
@@ -6527,8 +6528,9 @@ export interface patientDocumentDeleteMutation {
 
 export interface patientDocumentSignedUrlCreateMutationVariables {
   patientId: string,
-  filename: string,
+  documentId: string,
   action: PatientSignedUrlAction,
+  contentType?: string | null,
 };
 
 export interface patientDocumentSignedUrlCreateMutation {

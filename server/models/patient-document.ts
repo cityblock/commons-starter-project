@@ -1,8 +1,11 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import ComputedPatientStatus from './computed-patient-status';
+import User from './user';
 
 export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent'];
+
+const EAGER_QUERY = '[uploadedBy]';
 
 export type DocumentTypeOptions =
   | 'cityblockConsent'
@@ -30,6 +33,7 @@ export default class PatientDocument extends BaseModel {
   filename: string;
   description: string;
   documentType: DocumentTypeOptions;
+  uploadedBy: User;
 
   static tableName = 'patient_document';
   static hasPHI = false;
@@ -59,10 +63,21 @@ export default class PatientDocument extends BaseModel {
         to: 'patient.id',
       },
     },
+
+    uploadedBy: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'user',
+      join: {
+        from: 'patient_document.uploadedById',
+        to: 'user.id',
+      },
+    },
   };
 
   static async get(patientDocumentId: string, txn: Transaction): Promise<PatientDocument> {
-    const document = await this.query(txn).findOne({ id: patientDocumentId, deletedAt: null });
+    const document = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({ id: patientDocumentId, deletedAt: null });
 
     if (!document) {
       return Promise.reject(`No such document: ${patientDocumentId}`);
@@ -72,7 +87,9 @@ export default class PatientDocument extends BaseModel {
   }
 
   static async getAllForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
-    return this.query(txn).where({ patientId, deletedAt: null });
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, deletedAt: null });
   }
 
   static async getConsentsForPatient(
@@ -80,20 +97,27 @@ export default class PatientDocument extends BaseModel {
     txn: Transaction,
   ): Promise<PatientDocument[]> {
     return this.query(txn)
+      .eager(EAGER_QUERY)
       .where({ patientId, deletedAt: null })
       .whereIn('documentType', CONSENT_TYPES);
   }
 
   static async getMOLSTForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
-    return this.query(txn).where({ patientId, deletedAt: null, documentType: 'molst' });
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, deletedAt: null, documentType: 'molst' });
   }
 
   static async getHCPsForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
-    return this.query(txn).where({ patientId, deletedAt: null, documentType: 'hcp' });
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, deletedAt: null, documentType: 'hcp' });
   }
 
   static async create(input: IPatientDocumentOptions, txn: Transaction) {
-    const patientDocument = await this.query(txn).insertAndFetch(input);
+    const patientDocument = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertAndFetch(input);
 
     await ComputedPatientStatus.updateForPatient(input.patientId, input.uploadedById, txn);
 
@@ -109,7 +133,9 @@ export default class PatientDocument extends BaseModel {
       .where({ id: patientDocumentId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const deleted = await this.query(txn).findById(patientDocumentId);
+    const deleted = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(patientDocumentId);
 
     if (!deleted) {
       return Promise.reject(`No such patient document: ${patientDocumentId}`);

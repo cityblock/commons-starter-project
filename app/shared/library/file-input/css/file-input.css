@@ -1,0 +1,26 @@
+.container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0 var(--small-gutter);
+  font-family: var(--roboto);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  width: 100%;
+  height: var(--input-height);
+  position: relative;
+}
+
+.container input {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.text {
+  font-size: var(--medium-font-size);
+  line-height: var(--input-height);
+}

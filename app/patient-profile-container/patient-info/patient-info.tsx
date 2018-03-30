@@ -19,8 +19,8 @@ import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
 import * as styles from './css/patient-info.css';
+import PatientDocuments from './documents/patient-documents';
 import PatientDemographics, { IDemographics } from './patient-demographics';
-import PatientDocuments from './patient-documents';
 
 export type SelectableTabs = 'demographics' | 'documents';
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
@@ -70,6 +70,7 @@ interface IState {
   saveError: string | null;
   saveSuccess?: boolean;
   hasUnsavedChanges: boolean;
+  isUploadModalVisible: boolean;
 }
 
 type allState = IState & IEditableFieldState;
@@ -84,6 +85,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     this.state = {
       saveError: null,
       hasUnsavedChanges: false,
+      isUploadModalVisible: false,
     };
   }
 
@@ -219,6 +221,14 @@ export class PatientInfo extends React.Component<allProps, allState> {
     }
   };
 
+  handleUploadClick = () => {
+    this.setState({ isUploadModalVisible: true });
+  };
+
+  handleCloseUploadModal = () => {
+    this.setState({ isUploadModalVisible: false });
+  };
+
   handleFieldChange = (changedValues: IEditableFieldState) => {
     this.setState({ ...changedValues, hasUnsavedChanges: true });
   };
@@ -259,11 +269,15 @@ export class PatientInfo extends React.Component<allProps, allState> {
     );
   }
 
+  renderUploadButton() {
+    return <Button messageId="patientInfo.uploadDocument" onClick={this.handleUploadClick} />;
+  }
+
   render(): JSX.Element {
     const { match, patient } = this.props;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/member-info`;
-    const { hasUnsavedChanges } = this.state;
+    const { hasUnsavedChanges, isUploadModalVisible } = this.state;
 
     const isDocuments = subTab === 'documents';
 
@@ -287,12 +301,14 @@ export class PatientInfo extends React.Component<allProps, allState> {
     );
     const documents = isDocuments ? (
       <PatientDocuments
+        closePopup={this.handleCloseUploadModal}
         patientId={match.params.patientId}
         hasMolst={hasMolst}
         hasHealthcareProxy={hasHealthcareProxy}
+        isModalVisible={isUploadModalVisible}
       />
     ) : null;
-    const saveButton = !isDocuments ? this.renderSaveButton() : null;
+    const button = isDocuments ? this.renderUploadButton() : this.renderSaveButton();
 
     return (
       <div className={styles.container}>
@@ -309,7 +325,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
               selected={isDocuments}
             />
           </div>
-          {saveButton}
+          {button}
         </UnderlineTabs>
         <div className={styles.body}>
           {demographics}

@@ -906,5 +906,13 @@ export const SPANISH_TRANSLATION = {
     'plan.planId': 'Plan ID:',
     'plan.planType': 'Plan Type:',
     'plan.cin': 'CIN:',
+    'saveModal.cancel': 'Cancel',
+    'saveModal.continueWithoutSaving': 'Continue without saving',
+    'saveModal.subtitle': 'If you continue without saving you will lose these changes',
+    'patientDocumentModal.title': 'Upload a document',
+    'patientDocumentModal.subtitle': 'Document types supported: pdf, doc, docx, txt, jpg, png',
+    'patientDocumentModal.submit': 'Upload file',
+    'patientDocumentModal.cancel': 'Cancel',
+    'patientDocumentModal.fileUploadPlaceholder': 'Choose a file to upload',
   },
 };

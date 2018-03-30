@@ -434,10 +434,11 @@ type PatientExternalProvider implements uniqueId {
 type PatientDocument implements uniqueId {
   id: ID!
   patientId: ID!
-  uploadedById: ID!
+  uploadedBy: User!
   filename: String!
   description: String
   documentType: DocumentTypeOptions
+  createdAt: String!
 }
 
 # ComputedPatientStatus
@@ -1688,7 +1689,6 @@ input PatientExternalProviderEditInput {
 # params for creating a patient document in the db
 input PatientDocumentCreateInput {
   patientId: ID!
-  uploadedById: ID!
   filename: String!
   description: String
   documentType: DocumentTypeOptions

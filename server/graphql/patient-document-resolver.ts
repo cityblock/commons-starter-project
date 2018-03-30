@@ -39,6 +39,7 @@ export async function patientDocumentCreate(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IPatientDocumentCreateInput>(input, isNil) as any;
+  filtered.uploadedById = userId;
   logger.log(`CREATE document for patient ${input.patientId} by ${userId}`, 2);
 
   return PatientDocument.create(filtered, txn);

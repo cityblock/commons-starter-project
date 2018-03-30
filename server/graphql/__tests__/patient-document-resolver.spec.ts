@@ -73,7 +73,6 @@ describe('patient document resolver', () => {
 
       const patientDocument = {
         patientId: patient.id,
-        uploadedById: user.id,
         filename: 'test.pdf',
         description: 'some description',
         documentType: 'hcp',
@@ -93,7 +92,13 @@ describe('patient document resolver', () => {
         patientDocument,
       );
 
-      expect(cloneDeep(result.data!.patientDocumentCreate)).toMatchObject(patientDocument);
+      expect(cloneDeep(result.data!.patientDocumentCreate)).toMatchObject({
+        ...patientDocument,
+        uploadedBy: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      });
       expect(log).toBeCalled();
     });
   });
@@ -168,11 +173,13 @@ describe('patient document resolver', () => {
 
       const patientDocument = {
         patientId: patient.id,
-        uploadedById: user.id,
         filename: 'test.pdf',
       };
 
-      const document = await PatientDocument.create(patientDocument, txn);
+      const document = await PatientDocument.create(
+        { ...patientDocument, uploadedById: user.id },
+        txn,
+      );
 
       const result = await graphql(
         schema,
@@ -190,7 +197,13 @@ describe('patient document resolver', () => {
         },
       );
 
-      expect(cloneDeep(result.data!.patientDocumentDelete)).toMatchObject(patientDocument);
+      expect(cloneDeep(result.data!.patientDocumentDelete)).toMatchObject({
+        ...patientDocument,
+        uploadedBy: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      });
       expect(log).toBeCalled();
     });
   });
@@ -200,19 +213,17 @@ describe('patient document resolver', () => {
       const { patient, user } = await setup(txn);
       const document1 = {
         patientId: patient.id,
-        uploadedById: user.id,
         filename: 'test2.txt',
         documentType: 'hipaaConsent' as any,
       };
-      await PatientDocument.create(document1, txn);
+      await PatientDocument.create({ ...document1, uploadedById: user.id }, txn);
 
       const document2 = {
         patientId: patient.id,
-        uploadedById: user.id,
         filename: 'test3.txt',
         documentType: 'hieHealthixConsent' as any,
       };
-      await PatientDocument.create(document2, txn);
+      await PatientDocument.create({ ...document2, uploadedById: user.id }, txn);
 
       const result = await graphql(
         schema,
@@ -229,12 +240,25 @@ describe('patient document resolver', () => {
           patientId: patient.id,
         },
       );
+
       expect(cloneDeep(result.data!.patientDocuments).length).toBe(2);
       expect(cloneDeep(result.data!.patientDocuments)).toContainEqual(
-        expect.objectContaining(document1),
+        expect.objectContaining({
+          ...document1,
+          uploadedBy: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        }),
       );
       expect(cloneDeep(result.data!.patientDocuments)).toContainEqual(
-        expect.objectContaining(document2),
+        expect.objectContaining({
+          ...document2,
+          uploadedBy: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        }),
       );
       expect(log).toBeCalled();
     });

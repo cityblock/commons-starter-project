@@ -1418,10 +1418,11 @@ declare module 'schema' {
   interface IPatientDocument {
     id: string;
     patientId: string;
-    uploadedById: string;
+    uploadedBy: IUser;
     filename: string;
     description: string | null;
     documentType: IDocumentTypeOptionsEnum | null;
+    createdAt: string;
   }
 
   type IDocumentTypeOptionsEnum =
@@ -3811,7 +3812,6 @@ declare module 'schema' {
    */
   interface IPatientDocumentCreateInput {
     patientId: string;
-    uploadedById: string;
     filename: string;
     description?: string | null;
     documentType?: IDocumentTypeOptionsEnum | null;

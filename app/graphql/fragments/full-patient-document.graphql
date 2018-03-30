@@ -1,8 +1,12 @@
 fragment FullPatientDocument on PatientDocument {
   id
   patientId
-  uploadedById
+  uploadedBy {
+    firstName
+    lastName
+  }
   filename
   description
   documentType
+  createdAt
 }

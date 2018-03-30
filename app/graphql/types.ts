@@ -2595,10 +2595,14 @@ export interface getPatientDocumentsQuery {
   patientDocuments:  Array< {
     id: string,
     patientId: string,
-    uploadedById: string,
+    uploadedBy:  {
+      firstName: string | null,
+      lastName: string | null,
+    },
     filename: string,
     description: string | null,
     documentType: DocumentTypeOptions | null,
+    createdAt: string,
   } > | null,
 };
 
@@ -6480,7 +6484,6 @@ export interface patientDataFlagCreateMutation {
 
 export interface patientDocumentCreateMutationVariables {
   patientId: string,
-  uploadedById: string,
   filename: string,
   description?: string | null,
   documentType?: DocumentTypeOptions | null,
@@ -6491,10 +6494,14 @@ export interface patientDocumentCreateMutation {
   patientDocumentCreate:  {
     id: string,
     patientId: string,
-    uploadedById: string,
+    uploadedBy:  {
+      firstName: string | null,
+      lastName: string | null,
+    },
     filename: string,
     description: string | null,
     documentType: DocumentTypeOptions | null,
+    createdAt: string,
   } | null,
 };
 
@@ -6507,10 +6514,14 @@ export interface patientDocumentDeleteMutation {
   patientDocumentDelete:  {
     id: string,
     patientId: string,
-    uploadedById: string,
+    uploadedBy:  {
+      firstName: string | null,
+      lastName: string | null,
+    },
     filename: string,
     description: string | null,
     documentType: DocumentTypeOptions | null,
+    createdAt: string,
   } | null,
 };
 
@@ -10753,10 +10764,14 @@ export interface FullPatientDataFlagFragment {
 export interface FullPatientDocumentFragment {
   id: string,
   patientId: string,
-  uploadedById: string,
+  uploadedBy:  {
+    firstName: string | null,
+    lastName: string | null,
+  },
   filename: string,
   description: string | null,
   documentType: DocumentTypeOptions | null,
+  createdAt: string,
 };
 
 export interface FullPatientExternalProviderFragment {

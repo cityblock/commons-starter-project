@@ -2,7 +2,6 @@
 
 mutation patientDocumentCreate(
   $patientId: ID!
-  $uploadedById: ID!
   $filename: String!
   $description: String
   $documentType: DocumentTypeOptions
@@ -10,7 +9,6 @@ mutation patientDocumentCreate(
   patientDocumentCreate(
     input: {
       patientId: $patientId
-      uploadedById: $uploadedById
       filename: $filename
       description: $description
       documentType: $documentType

@@ -77,6 +77,6 @@ describe('Render Patient Info Component', () => {
         .props().selected,
     ).toBeTruthy();
     expect(wrapper.find(PatientDemographics).length).toBe(0);
-    expect(wrapper.find(Button).length).toBe(0);
+    expect(wrapper.find(Button).length).toBe(1);
   });
 });

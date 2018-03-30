@@ -28,18 +28,25 @@ describe('Library File Input Component', () => {
     );
 
     const text = wrapper.find(DefaultText);
-    expect(text).toHaveLength(1);
-    expect(text.props().messageId).toBe(placeholderMessageId);
-    expect(text.props().label).toBeFalsy();
-    expect(text.props().color).toBe('lightGray');
+    expect(text).toHaveLength(2);
+
+    const placeholderProps = text.at(0).props();
+    expect(placeholderProps.messageId).toBe(placeholderMessageId);
+    expect(placeholderProps.label).toBeFalsy();
+    expect(placeholderProps.color).toBe('lightGray');
+
+    const uploadTextProps = text.at(1).props();
+    expect(uploadTextProps.messageId).toBe('fileInput.chooseAFile');
 
     wrapper.setProps({ value });
 
-    const updatedText = wrapper.find(DefaultText);
-    expect(updatedText).toHaveLength(1);
-    expect(updatedText.props().label).toBe(value);
-    expect(updatedText.props().messageId).toBeFalsy();
-    expect(updatedText.props().color).toBe('black');
+    const filenameText = wrapper.find(DefaultText);
+    expect(filenameText).toHaveLength(1);
+
+    const filenameProps = filenameText.props();
+    expect(filenameProps.label).toBe(value);
+    expect(filenameProps.messageId).toBeFalsy();
+    expect(filenameProps.color).toBe('black');
   });
 
   it('passes optional values if included', () => {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { values } from 'lodash';
 import { lookup } from 'mime-types';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -10,10 +11,16 @@ import {
   patientDocumentCreateMutationVariables,
   patientDocumentSignedUrlCreateMutation,
   patientDocumentSignedUrlCreateMutationVariables,
+  DocumentTypeOptions,
   PatientSignedUrlAction,
 } from '../../../graphql/types';
 import FileInput from '../../../shared/library/file-input/file-input';
+import FormLabel from '../../../shared/library/form-label/form-label';
+import * as styles from '../../../shared/library/form/css/form.css';
 import Modal from '../../../shared/library/modal/modal';
+import Select from '../../../shared/library/select/select';
+import Spinner from '../../../shared/library/spinner/spinner';
+import TextArea from '../../../shared/library/textarea/textarea';
 
 const MAX_FILE_SIZE = 5 * 1048576;
 
@@ -37,6 +44,9 @@ type allProps = IProps & IGraphqlProps;
 interface IState {
   selectedFile?: File | null;
   hasFileError?: boolean;
+  documentType?: DocumentTypeOptions | null;
+  description?: string | null;
+  isSaving?: boolean;
 }
 
 export class PatientDocumentModal extends React.Component<allProps, IState> {
@@ -47,34 +57,45 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 
   handleSave = async (): Promise<void> => {
     const { getSignedUploadUrl, patientId, createPatientDocument } = this.props;
-    const { selectedFile } = this.state;
+    const { selectedFile, description, documentType } = this.state;
 
     if (!selectedFile) return;
     const filename = selectedFile.name;
 
+    this.setState({ isSaving: true });
+
     const id = uuid();
     const contentType = lookup(filename) || 'application/octet-stream';
-    const signedUrlData = await getSignedUploadUrl({
-      variables: {
-        patientId,
-        documentId: id,
-        action: 'write' as PatientSignedUrlAction,
-        contentType,
-      },
-    });
+    try {
+      const signedUrlData = await getSignedUploadUrl({
+        variables: {
+          patientId,
+          documentId: id,
+          action: 'write' as PatientSignedUrlAction,
+          contentType,
+        },
+      });
 
-    await axios.put(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl, selectedFile, {
-      headers: {
-        'Content-Type': contentType,
-        'Content-Disposition': `filename="${filename}"`,
-      },
-    });
+      await axios.put(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl, selectedFile, {
+        headers: {
+          'Content-Type': contentType,
+          'Content-Disposition': `filename="${filename}"`,
+        },
+      });
 
-    await createPatientDocument({ variables: { id, patientId, filename } });
+      await createPatientDocument({
+        variables: { id, patientId, filename, description, documentType },
+      });
+
+      this.setState({ isSaving: false });
+      this.handleClose();
+    } catch (err) {
+      // TODO: handle error
+    }
   };
 
   handleClose = () => {
-    this.setState({ selectedFile: null });
+    this.setState({ selectedFile: null, documentType: null, description: null });
     this.props.closePopup();
   };
 
@@ -90,10 +111,59 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
     }
   };
 
-  render(): JSX.Element {
-    const { isVisible } = this.props;
-    const { selectedFile, hasFileError } = this.state;
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  renderForm() {
+    const { selectedFile, hasFileError, documentType, description } = this.state;
     const filename = selectedFile ? selectedFile.name : '';
+
+    return (
+      <React.Fragment>
+        <div className={styles.field}>
+          <FormLabel messageId="patientDocumentModal.fileUpload" />
+          <FileInput
+            value={filename}
+            onChange={this.handleFileChange}
+            placeholderMessageId="patientDocumentModal.fileUploadPlaceholder"
+            acceptTypes=".jpg, .jpeg, .png, .doc, .docx, .txt, .pdf"
+            hasMaxSizeError={hasFileError}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="patientDocumentModal.documentType" />
+          <Select
+            options={values(DocumentTypeOptions)}
+            name="documentType"
+            value={documentType || ''}
+            onChange={this.handleInputChange}
+            large={true}
+            isUnselectable={true}
+            hasPlaceholder={true}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="patientDocumentModal.description" />
+          <TextArea
+            name="description"
+            value={description || ''}
+            onChange={this.handleInputChange}
+            placeholderMessageId="patientDocumentModal.descriptionPlaceholder"
+          />
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    const { isVisible } = this.props;
+    const { isSaving } = this.state;
+
+    const bodyHtml = isSaving ? <Spinner className={styles.spinner} /> : this.renderForm();
 
     return (
       <Modal
@@ -104,14 +174,9 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
         subTitleMessageId="patientDocumentModal.subtitle"
         submitMessageId="patientDocumentModal.submit"
         cancelMessageId="patientDocumentModal.cancel"
+        isButtonHidden={isSaving}
       >
-        <FileInput
-          value={filename}
-          onChange={this.handleFileChange}
-          placeholderMessageId="patientDocumentModal.fileUploadPlaceholder"
-          acceptTypes=".jpg, .jpeg, .png, .doc, .docx, .txt, .pdf"
-          hasMaxSizeError={hasFileError}
-        />
+        {bodyHtml}
       </Modal>
     );
   }

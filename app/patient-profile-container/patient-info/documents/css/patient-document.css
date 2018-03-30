@@ -20,6 +20,10 @@
   margin-right: 80px;
 }
 
+.right {
+  margin-right: var(--gutter);
+}
+
 .title {
   font-family: var(--basetica-medium);
   font-size: var(--medium-large-font-size);
@@ -33,6 +37,6 @@
   justify-content: space-between;
 }
 
-.menu svg {
+.menu > svg {
   margin-top: var(--extra-small-gutter);
 }

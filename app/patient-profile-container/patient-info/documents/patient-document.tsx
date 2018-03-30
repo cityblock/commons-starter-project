@@ -9,6 +9,7 @@ import {
   PatientSignedUrlAction,
 } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
+import DefaultText from '../../../shared/library/default-text/default-text';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import SmallText from '../../../shared/library/small-text/small-text';
@@ -62,13 +63,25 @@ export class PatientDocument extends React.Component<allProps, IState> {
 
   render() {
     const { isMenuVisible } = this.state;
-    const { filename, description, createdAt, uploadedBy } = this.props.patientDocument;
+    const {
+      filename,
+      description,
+      createdAt,
+      uploadedBy,
+      documentType,
+    } = this.props.patientDocument;
     const userName = formatFullName(uploadedBy.firstName, uploadedBy.lastName);
+
+    const titleHtml = documentType ? (
+      <DefaultText messageId={`documentType.${documentType}`} className={styles.title} />
+    ) : (
+      <div className={styles.title}>{filename}</div>
+    );
 
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <div className={styles.title}>{filename}</div>
+          {titleHtml}
           <div className={styles.flexRow}>
             <TextInfo
               messageId="patientDocument.uploadedBy"

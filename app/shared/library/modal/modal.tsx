@@ -11,6 +11,7 @@ interface IProps {
   onClose: () => void;
   onSubmit: () => void;
   isVisible: boolean;
+  isButtonHidden?: boolean;
   titleMessageId?: string;
   titleText?: string;
   subTitleMessageId?: string | null;
@@ -30,6 +31,7 @@ interface IProps {
 const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
   const {
     isVisible,
+    isButtonHidden,
     titleMessageId,
     titleText,
     subTitleMessageId,
@@ -54,6 +56,16 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const popupClassName = className || styles.popup;
 
+  const buttonComponent = !isButtonHidden ? (
+    <ModalButtons
+      cancelMessageId={cancelMessageId}
+      submitMessageId={submitMessageId}
+      cancel={onClose}
+      submit={onSubmit}
+      redSubmit={redSubmitButton}
+    />
+  ) : null;
+
   return (
     <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={popupClassName}>
       <ModalHeader
@@ -69,13 +81,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
       {errorComponent}
       <div className={styles.body}>
         {children}
-        <ModalButtons
-          cancelMessageId={cancelMessageId}
-          submitMessageId={submitMessageId}
-          cancel={onClose}
-          submit={onSubmit}
-          redSubmit={redSubmitButton}
-        />
+        {buttonComponent}
       </div>
     </Popup>
   );

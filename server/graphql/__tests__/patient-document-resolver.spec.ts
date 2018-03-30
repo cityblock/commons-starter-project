@@ -163,9 +163,7 @@ describe('patient document resolver', () => {
         patientDocument,
       );
 
-      expect(cloneDeep(result).errors![0].message).toBe(
-        'id: should match format "uuid"',
-      );
+      expect(cloneDeep(result).errors![0].message).toBe('id: should match format "uuid"');
       expect(log).toBeCalled();
     });
   });

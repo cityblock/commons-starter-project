@@ -89,19 +89,19 @@ describe('patient document model', () => {
     it('should reject creating a patient document with non uuid', async () => {
       const { patient, user } = await setup(txn);
 
-      await expect(PatientDocument.create(
-        {
-          id: 'something random',
-          patientId: patient.id,
-          uploadedById: user.id,
-          filename: 'test.txt',
-          description: 'some file for consent',
-          documentType: 'hcp',
-        },
-        txn,
-      )).rejects.toMatchObject(new Error(
-        'id: should match format "uuid"',
-      ));
+      await expect(
+        PatientDocument.create(
+          {
+            id: 'something random',
+            patientId: patient.id,
+            uploadedById: user.id,
+            filename: 'test.txt',
+            description: 'some file for consent',
+            documentType: 'hcp',
+          },
+          txn,
+        ),
+      ).rejects.toMatchObject(new Error('id: should match format "uuid"'));
     });
 
     it('updates the computed patient status', async () => {

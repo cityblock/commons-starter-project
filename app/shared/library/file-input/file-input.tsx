@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Fragment } from 'react';
 import DefaultText from '../default-text/default-text';
+import Icon from '../icon/icon';
 import SmallText from '../small-text/small-text';
 import * as styles from './css/file-input.css';
 
@@ -30,10 +31,20 @@ const FileInput: React.StatelessComponent<IProps> = (props: IProps) => {
 
   let bodyHtml = null;
   if (value) {
-    bodyHtml = <DefaultText label={value} color="black" className={styles.text} />;
+    bodyHtml = (
+      <div className={styles.flexRow}>
+        <DefaultText label={value} color="black" className={styles.text} />
+      </div>
+    );
   } else if (placeholderMessageId) {
     bodyHtml = (
-      <DefaultText messageId={placeholderMessageId} color="lightGray" className={styles.text} />
+      <div className={styles.flexRow}>
+        <DefaultText messageId={placeholderMessageId} color="lightGray" className={styles.text} />
+        <div className={styles.uploadText}>
+          <Icon name="fileUpload" color="blue" />
+          <DefaultText messageId="fileInput.chooseAFile" />
+        </div>
+      </div>
     );
   }
 

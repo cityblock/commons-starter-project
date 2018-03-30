@@ -8,6 +8,12 @@
   width: 100%;
   height: var(--input-height);
   position: relative;
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+.container:hover {
+  border-color: var(--blue-color);
 }
 
 .container input {
@@ -18,9 +24,36 @@
   top: 0;
   bottom: 0;
   width: 100%;
+  cursor: pointer;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .text {
   font-size: var(--medium-font-size);
   line-height: var(--input-height);
+  flex: 1;
+  text-overflow: ellipsis;
+}
+
+.uploadText {
+  flex-shrink: 0;
+  padding-top: 15px;
+}
+
+.uploadText > p {
+  font-family: var(--basetica-medium);
+  color: var(--blue-color);
+  display: inline-block;
+  line-height: 22px;
+}
+
+.uploadText > svg {
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: bottom;
 }

@@ -29,6 +29,7 @@ import EventNoteIcon from 'material-ui-icons/EventNote';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import FileDownloadIcon from 'material-ui-icons/FileDownload';
+import FileUploadIcon from 'material-ui-icons/FileUpload';
 import FlagIcon from 'material-ui-icons/Flag';
 import FolderOpenIcon from 'material-ui-icons/FolderOpen';
 import FolderSharedIcon from 'material-ui-icons/FolderShared';
@@ -98,6 +99,7 @@ const components: IconComponents = {
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
   fileDownload: FileDownloadIcon,
+  fileUpload: FileUploadIcon,
   flag: FlagIcon,
   folderOpen: FolderOpenIcon,
   folderShared: FolderSharedIcon,

@@ -1,6 +1,7 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as getComputedPatientStatus from '../../../app/graphql/queries/get-patient-computed-patient-status.graphql';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -42,6 +43,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
 describe('computed patient status resolver', () => {
   let db: Db;
   let txn = null as any;
+  const getComputedPatientStatusQuery = print(getComputedPatientStatus);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -61,17 +63,20 @@ describe('computed patient status resolver', () => {
       const { patient, user } = await setup(txn);
       const { computedPatientStatus } = patient;
 
-      const query = `{
-          patientComputedPatientStatus(patientId: "${patient.id}") {
-            id
-          }
-        }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getComputedPatientStatusQuery,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          patientId: patient.id,
+        },
+      );
 
       expect(cloneDeep(result.data!.patientComputedPatientStatus)).toMatchObject({
         id: computedPatientStatus.id,

@@ -1,6 +1,9 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as concernSuggestionCreate from '../../../app/graphql/queries/concern-suggestion-create-mutation.graphql';
+import * as concernSuggestionDelete from '../../../app/graphql/queries/concern-suggestion-delete-mutation.graphql';
+import * as getConcernSuggestionsForAnswer from '../../../app/graphql/queries/get-concern-suggestions-for-answer.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
@@ -53,6 +56,9 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('concern suggestion resolver', () => {
   let txn = null as any;
+  const concernSuggestionCreateMutation = print(concernSuggestionCreate);
+  const concernSuggestionDeleteMutation = print(concernSuggestionDelete);
+  const getConcernSuggestionsForAnswerQuery = print(getConcernSuggestionsForAnswer);
 
   beforeEach(async () => {
     await Db.get();
@@ -71,8 +77,16 @@ describe('concern suggestion resolver', () => {
     it('fetches a concern suggestion', async () => {
       const { answer, user } = await setup(txn);
       const concern = await Concern.create({ title: 'Housing' }, txn);
-      const query = `{ concernsForAnswer(answerId: "${answer.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        getConcernSuggestionsForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          concernId: concern.id,
+        },
+      );
       // null if no suggested concerns
       expect(cloneDeep(result.data!.concernsForAnswer)).toMatchObject([]);
 
@@ -84,7 +98,16 @@ describe('concern suggestion resolver', () => {
         txn,
       );
       // one if suggested concern
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result2 = await graphql(
+        schema,
+        getConcernSuggestionsForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          concernId: concern.id,
+        },
+      );
       expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([{ title: 'Housing' }]);
     });
   });
@@ -93,14 +116,16 @@ describe('concern suggestion resolver', () => {
     it('suggests a concern for an answer', async () => {
       const { answer, user } = await setup(txn);
       const concern = await Concern.create({ title: 'Housing' }, txn);
-      const mutation = `mutation {
-          concernSuggestionCreate(
-            input: { answerId: "${answer.id}", concernId: "${concern.id}" }
-          ) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        concernSuggestionCreateMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          concernId: concern.id,
+        },
+      );
       expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
         {
           title: 'Housing',
@@ -128,17 +153,16 @@ describe('concern suggestion resolver', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          concernSuggestionCreate(
-            input: {
-              screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
-              concernId: "${concern.id}"
-            }
-          ) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        concernSuggestionCreateMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          screeningToolScoreRangeId: screeningToolScoreRange.id,
+          concernId: concern.id,
+        },
+      );
       expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
         {
           title: 'No Housing',
@@ -158,15 +182,27 @@ describe('concern suggestion resolver', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          concernSuggestionDelete(input: { answerId: "${answer.id}", concernId: "${concern.id}" }) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        concernSuggestionDeleteMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          concernId: concern.id,
+        },
+      );
       expect(cloneDeep(result.data!.concernSuggestionDelete)).toMatchObject([]);
-      const query = `{ concernsForAnswer(answerId: "${answer.id}") { title } }`;
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+
+      const result2 = await graphql(
+        schema,
+        getConcernSuggestionsForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+        },
+      );
       // null with no suggested concerns
       expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([]);
     });

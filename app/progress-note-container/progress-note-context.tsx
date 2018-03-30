@@ -2,7 +2,7 @@ import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
+import * as clinicsQuery from '../graphql/queries/get-clinics.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import {
   getClinicsQuery,

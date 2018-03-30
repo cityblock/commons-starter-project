@@ -1,6 +1,10 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as computedFieldCreate from '../../../app/graphql/queries/computed-field-create-mutation.graphql';
+import * as computedFieldDelete from '../../../app/graphql/queries/computed-field-delete-mutation.graphql';
+import * as getComputedField from '../../../app/graphql/queries/get-computed-field.graphql';
+import * as getComputedFields from '../../../app/graphql/queries/get-computed-fields.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import ComputedField from '../../models/computed-field';
@@ -24,6 +28,10 @@ async function setup(trx: Transaction): Promise<ISetup> {
 describe('computed field resolver', () => {
   let txn = null as any;
   let db: Db;
+  const computedFieldQuery = print(getComputedField);
+  const computedFieldsQuery = print(getComputedFields);
+  const computedFieldCreateMutation = print(computedFieldCreate);
+  const computedFieldDeleteMutation = print(computedFieldDelete);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -49,8 +57,13 @@ describe('computed field resolver', () => {
         },
         txn,
       );
-      const query = `{ computedField(computedFieldId: "${computedField.id}") { label } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        computedFieldQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        { computedFieldId: computedField.id },
+      );
       expect(cloneDeep(result.data!.computedField)).toMatchObject({
         label: 'Computed Field',
       });
@@ -77,11 +90,7 @@ describe('computed field resolver', () => {
         txn,
       );
 
-      const query = `{
-          computedFields { label }
-        }`;
-
-      const result = await graphql(schema, query, null, {
+      const result = await graphql(schema, computedFieldsQuery, null, {
         db,
         permissions,
         userId: user.id,
@@ -114,16 +123,20 @@ describe('computed field resolver', () => {
         txn,
       );
 
-      const query = `{
-          computedFields(orderBy: labelDesc) { label }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        userId: user.id,
-        permissions,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        computedFieldsQuery,
+        null,
+        {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        },
+        {
+          orderBy: 'labelDesc',
+        },
+      );
       expect(cloneDeep(result.data!.computedFields)).toMatchObject([
         {
           label: computedField1.label,
@@ -138,14 +151,16 @@ describe('computed field resolver', () => {
   describe('computed field create', () => {
     it('creates a computed field with an auto-generated slug', async () => {
       const { user } = await setup(txn);
-      const mutation = `mutation {
-          computedFieldCreate(input: { label: "Computed Field", dataType: boolean }) {
-            label
-            slug
-            dataType
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        computedFieldCreateMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          label: 'Computed Field',
+          dataType: 'boolean',
+        },
+      );
       expect(cloneDeep(result.data!.computedFieldCreate)).toMatchObject({
         label: 'Computed Field',
         slug: 'computed-field',
@@ -165,12 +180,15 @@ describe('computed field resolver', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          computedFieldDelete(input: { computedFieldId: "${computedField.id}" }) {
-            deletedAt
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        computedFieldDeleteMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          computedFieldId: computedField.id,
+        },
+      );
       expect(cloneDeep(result.data!.computedFieldDelete).deletedAt).not.toBeFalsy();
     });
   });

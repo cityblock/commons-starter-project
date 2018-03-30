@@ -1,9 +1,11 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as computedFieldFlagCreate from '../../../app/graphql/queries/computed-field-flag-create-mutation.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
+import ComputedFieldFlag from '../../models/computed-field-flag';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import Question, { IRiskAreaQuestion } from '../../models/question';
@@ -85,6 +87,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
 describe('computed field flag resolver', () => {
   let db: Db;
   let txn = null as any;
+  const computedFieldFlagCreateMutation = print(computedFieldFlagCreate);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -101,28 +104,26 @@ describe('computed field flag resolver', () => {
 
   it('creates a computed field flag', async () => {
     const { patientAnswers, user } = await setup(txn);
-    const mutation = `mutation {
-        computedFieldFlagCreate(input: {
-          patientAnswerId: "${patientAnswers[0].id}",
-          reason: "${reason}"
-        }) {
-          id
-          patientAnswerId
-          userId
-          reason
-        }
-      }`;
-
-    const result = await graphql(schema, mutation, null, {
-      db,
-      permissions,
-      userId: user.id,
-      txn,
-    });
+    const result = await graphql(
+      schema,
+      computedFieldFlagCreateMutation,
+      null,
+      {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      },
+      {
+        patientAnswerId: patientAnswers[0].id,
+        reason,
+      },
+    );
     const computedFieldFlag = cloneDeep(result.data!.computedFieldFlagCreate);
 
     expect(computedFieldFlag.id).toBeTruthy();
-    expect(computedFieldFlag).toMatchObject({
+    const fetchedFlag = await ComputedFieldFlag.get(computedFieldFlag.id, txn);
+    expect(fetchedFlag).toMatchObject({
       userId: user.id,
       patientAnswerId: patientAnswers[0].id,
       reason,

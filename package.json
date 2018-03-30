@@ -194,7 +194,7 @@
     "lodash": "4.17.5",
     "material-ui": "1.0.0-beta.39",
     "material-ui-icons": "1.0.0-beta.36",
-    "mini-css-extract-plugin": "0.3.0",
+    "mini-css-extract-plugin": "0.4.0",
     "morgan": "1.9.0",
     "nodemon": "1.17.2",
     "objection": "1.0.1",

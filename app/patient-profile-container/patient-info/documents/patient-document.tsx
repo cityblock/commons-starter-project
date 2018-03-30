@@ -1,8 +1,12 @@
+import axios from 'axios';
 import { format } from 'date-fns';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import * as patientDocumentDeleteMutationGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
 import * as patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
+  patientDocumentDeleteMutation,
+  patientDocumentDeleteMutationVariables,
   patientDocumentSignedUrlCreateMutation,
   patientDocumentSignedUrlCreateMutationVariables,
   FullPatientDocumentFragment,
@@ -24,6 +28,9 @@ interface IGraphqlProps {
   getSignedDocumentUrl: (
     options: { variables: patientDocumentSignedUrlCreateMutationVariables },
   ) => { data: patientDocumentSignedUrlCreateMutation };
+  deletePatientDocument: (
+    options: { variables: patientDocumentDeleteMutationVariables },
+  ) => { data: patientDocumentDeleteMutation };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -42,8 +49,20 @@ export class PatientDocument extends React.Component<allProps, IState> {
     this.setState({ isMenuVisible: !this.state.isMenuVisible });
   };
 
-  handleDeleteClick = () => {
-    // TODO
+  handleDeleteClick = async () => {
+    const { getSignedDocumentUrl, patientDocument, deletePatientDocument } = this.props;
+    const { id, patientId } = patientDocument;
+
+    try {
+      const signedUrlData = await getSignedDocumentUrl({
+        variables: { patientId, documentId: id, action: 'delete' as PatientSignedUrlAction },
+      });
+
+      await axios.delete(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl);
+      await deletePatientDocument({ variables: { patientDocumentId: id } });
+    } catch (err) {
+      // TODO: do something with error
+    }
   };
 
   handleDownloadClick = async () => {
@@ -121,6 +140,14 @@ export class PatientDocument extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientDocumentSignedUrlCreate as any, {
-  name: 'getSignedDocumentUrl',
-})(PatientDocument);
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(patientDocumentSignedUrlCreate as any, {
+    name: 'getSignedDocumentUrl',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(patientDocumentDeleteMutationGraphql as any, {
+    name: 'deletePatientDocument',
+    options: {
+      refetchQueries: ['getPatientDocuments'],
+    },
+  }),
+)(PatientDocument);

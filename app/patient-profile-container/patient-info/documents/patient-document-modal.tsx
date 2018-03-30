@@ -27,6 +27,7 @@ const MAX_FILE_SIZE = 5 * 1048576;
 interface IProps {
   isVisible: boolean;
   patientId: string;
+  preferredDocumentType?: DocumentTypeOptions;
   closePopup: () => void;
 }
 
@@ -56,7 +57,12 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
   }
 
   handleSave = async (): Promise<void> => {
-    const { getSignedUploadUrl, patientId, createPatientDocument } = this.props;
+    const {
+      getSignedUploadUrl,
+      patientId,
+      createPatientDocument,
+      preferredDocumentType,
+    } = this.props;
     const { selectedFile, description, documentType } = this.state;
 
     if (!selectedFile) return;
@@ -84,7 +90,13 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
       });
 
       await createPatientDocument({
-        variables: { id, patientId, filename, description, documentType },
+        variables: {
+          id,
+          patientId,
+          filename,
+          description,
+          documentType: documentType || preferredDocumentType,
+        },
       });
 
       this.setState({ isSaving: false });
@@ -118,6 +130,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 
   renderForm() {
     const { selectedFile, hasFileError, documentType, description } = this.state;
+    const { preferredDocumentType } = this.props;
     const filename = selectedFile ? selectedFile.name : '';
 
     return (
@@ -138,7 +151,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
           <Select
             options={values(DocumentTypeOptions)}
             name="documentType"
-            value={documentType || ''}
+            value={documentType || preferredDocumentType || ''}
             onChange={this.handleInputChange}
             large={true}
             isUnselectable={true}

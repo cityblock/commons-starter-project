@@ -269,6 +269,7 @@ enum ExternalProviderOptions {
 enum PatientSignedUrlAction {
   read
   write
+  delete
 }
 
 enum DocumentTypeOptions {

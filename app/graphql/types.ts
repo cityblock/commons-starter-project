@@ -375,6 +375,7 @@ export interface PhoneInput {
 };
 
 export enum PatientSignedUrlAction {
+  delete = "delete",
   read = "read",
   write = "write",
 }
@@ -1092,23 +1093,6 @@ export interface CBOReferralEditMutation {
   } | null,
 };
 
-export interface getClinicsQueryVariables {
-  pageNumber?: number | null,
-  pageSize?: number | null,
-};
-
-export interface getClinicsQuery {
-  // Clinics
-  clinics:  {
-    edges:  Array< {
-      node:  {
-        id: string,
-        name: string,
-      },
-    } >,
-  },
-};
-
 export interface computedFieldCreateMutationVariables {
   label: string,
   dataType: ComputedFieldDataTypes,
@@ -1739,6 +1723,23 @@ export interface getCBOsQuery {
     url: string,
     createdAt: string,
   } >,
+};
+
+export interface getClinicsQueryVariables {
+  pageNumber?: number | null,
+  pageSize?: number | null,
+};
+
+export interface getClinicsQuery {
+  // Clinics
+  clinics:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        name: string,
+      },
+    } >,
+  },
 };
 
 export interface getComputedFieldQueryVariables {

@@ -1,5 +1,5 @@
 .container {
   padding: var(--small-gutter) var(--medium-gutter);
   background-color: var(--gray-background-color);
-  height: 100%;
+  min-height: 100%;
 }

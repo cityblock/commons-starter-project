@@ -9,8 +9,8 @@ import {
   FullPatientContactFragment,
 } from '../../../graphql/types';
 import EditPatientContactModal from '../../../shared/patient-contact-modal/edit-patient-contact-modal';
+import RequiredPlaceholder from '../../required-placeholder';
 import * as styles from '../css/patient-team.css';
-import RequiredPlaceholder from '../required-placeholder';
 import PatientFamilyMember from './patient-family-member';
 
 interface IProps {

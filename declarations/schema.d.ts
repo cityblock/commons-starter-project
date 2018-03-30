@@ -3835,7 +3835,7 @@ declare module 'schema' {
     contentType?: string | null;
   }
 
-  type IPatientSignedUrlActionEnum = 'read' | 'write';
+  type IPatientSignedUrlActionEnum = 'read' | 'write' | 'delete';
 
   /**
    * signed url for patient photo or documents

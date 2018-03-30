@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getPatientCareTeamQuery } from '../../../graphql/types';
-import RequiredPlaceholder from '../required-placeholder';
+import RequiredPlaceholder from '../../required-placeholder';
 
 type RequiredRoleTypes = 'communityHealthPartner' | 'primaryCarePhysician';
 

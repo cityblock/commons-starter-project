@@ -7,7 +7,11 @@ import {
   getProgressNoteLatestForPatientQuery,
   FullPatientForProfileFragment,
 } from '../../graphql/types';
-import { formatAge, formatPatientNameForProfile } from '../../shared/helpers/format-helpers';
+import {
+  formatAge,
+  formatPatientNameForProfile,
+  getPatientStatusColor,
+} from '../../shared/helpers/format-helpers';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../shared/library/small-text/small-text';
 import * as styles from './css/header.css';
@@ -32,6 +36,7 @@ export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProp
   const hasUploadedPhoto = !!patient.patientInfo.hasUploadedPhoto;
   const gender = patient.patientInfo.gender;
   const worryScore = latestProgressNote ? latestProgressNote.worryScore : null;
+  const statusColor = getPatientStatusColor(patient.patientState.currentState);
 
   const containerStyles = classNames(styles.container, {
     [styles.redBorder]: worryScore === 3,
@@ -46,7 +51,7 @@ export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProp
         <div className={styles.patient}>
           <SmallText
             text={capitalize(patient.patientState.currentState)}
-            color="green"
+            color={statusColor}
             size="medium"
             isBold
           />

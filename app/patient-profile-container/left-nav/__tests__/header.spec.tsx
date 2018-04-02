@@ -1,7 +1,11 @@
 import { shallow } from 'enzyme';
 import { capitalize } from 'lodash';
 import * as React from 'react';
-import { formatAge, formatPatientNameForProfile } from '../../../shared/helpers/format-helpers';
+import {
+  formatAge,
+  formatPatientNameForProfile,
+  getPatientStatusColor,
+} from '../../../shared/helpers/format-helpers';
 import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patient } from '../../../shared/util/test-data';
@@ -36,7 +40,7 @@ describe('Patient Left Navigation Header', () => {
         .find(SmallText)
         .at(0)
         .props().color,
-    ).toBe('green');
+    ).toBe(getPatientStatusColor(patient.patientState.currentState));
     expect(
       wrapper
         .find(SmallText)

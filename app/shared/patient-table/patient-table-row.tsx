@@ -3,10 +3,16 @@ import { capitalize } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientTableRowFragment } from '../../graphql/types';
-import { formatAddress, formatCityblockId, formatFullName } from '../helpers/format-helpers';
+import {
+  formatAddress,
+  formatCityblockId,
+  formatFullName,
+  getPatientStatusColor,
+} from '../helpers/format-helpers';
 import Checkbox from '../library/checkbox/checkbox';
 import PatientAge from '../library/patient-age/patient-age';
 import { formatSearchText } from '../library/search/helpers';
+import SmallText from '../library/small-text/small-text';
 import * as styles from './css/patient-table.css';
 
 interface IFormattedPatient extends FullPatientTableRowFragment {
@@ -39,6 +45,7 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
   const formattedAddress = address
     ? formatAddress(address.street1, address.city, address.state, address.zip, address.street2)
     : 'Unknown Address';
+  const statusColor = getPatientStatusColor(patientState.currentState);
 
   return (
     <div className={classNames(styles.rowContainer, { [styles.hasCheck]: !!onSelectToggle })}>
@@ -52,7 +59,7 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
       <Link to={`/patients/${id}/map/active`} className={styles.result}>
         {query && userCareTeam && <div className={styles.userCareTeam} />}
         <h4 className={styles.name}>{formattedName}</h4>
-        <p className={styles.status}>{formattedState}</p>
+        <SmallText text={formattedState} color={statusColor} className={styles.status} />
         <p className={styles.memberId}>{formattedCityblockId}</p>
         <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
         <p className={styles.address}>{formattedAddress}</p>

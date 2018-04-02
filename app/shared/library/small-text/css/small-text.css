@@ -39,6 +39,10 @@
   color: var(--light-blue-color);
 }
 
+.blue {
+  color: var(--blue-color);
+}
+
 .mediumFontSize {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

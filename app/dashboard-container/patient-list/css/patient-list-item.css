@@ -35,7 +35,6 @@
 .container h4,
 .container p {
   margin: 0;
-  color: var(--black-color);
 }
 
 .container h4 {

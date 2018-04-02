@@ -1,11 +1,13 @@
 import { differenceInYears, format } from 'date-fns';
 import { padStart, startCase } from 'lodash';
 import {
+  CurrentPatientState,
   FullPatientAnswerFragment,
   ShortPatientFragment,
   ShortPatientScreeningToolSubmission360Fragment,
   UserRole,
 } from '../../graphql/types';
+import { Color } from '../library/small-text/small-text';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
@@ -168,5 +170,25 @@ export const formatPatientAnswer = (patientAnswer: FullPatientAnswerFragment): s
     return patientAnswer.answerValue;
   } else {
     return patientAnswer.answer.displayValue;
+  }
+};
+
+export const getPatientStatusColor = (patientStatus: CurrentPatientState) => {
+  switch (patientStatus) {
+    case CurrentPatientState.disenrolled:
+    case CurrentPatientState.ineligible:
+      return 'red' as Color;
+    case CurrentPatientState.consented:
+      return 'blue' as Color;
+    case CurrentPatientState.outreach:
+      return 'purple' as Color;
+    case CurrentPatientState.enrolled:
+      return 'green' as Color;
+    case CurrentPatientState.assigned:
+      return 'black' as Color;
+    case CurrentPatientState.attributed:
+      return 'gray' as Color;
+    default:
+      return undefined;
   }
 };

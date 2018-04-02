@@ -124,7 +124,7 @@ jobs:
             - "41:eb:14:fe:32:9c:da:a5:fa:3c:3b:c4:69:18:a8:fd"
       - run:
           name: deploy
-          command: git push git@beta.aptible.com:cityblock-health-phi-ready/commons-staging.git $CIRCLE_SHA1:master
+          command: git push git@beta.aptible.com:cityblock-health/commons-staging.git $CIRCLE_SHA1:master
 
   deploy_production:
     working_directory: ~/repo

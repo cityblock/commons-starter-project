@@ -13,7 +13,8 @@
     "clean": "rimraf public server-compiled",
     "staging-db": "./scripts/aptible-psql.sh commons-staging",
     "prod-db": "./scripts/aptible-psql.sh commons-production",
-    "copy-prod-to-staging": "aptible db:execute commons-staging ./scripts/aptible-copy-production-to-staging.sql",
+    "copy-builder-staging-to-production": "aptible db:execute commons-production ./scripts/aptible-copy-builder-staging-to-production.sql",
+    "update-fdw-production": "aptible db:execute commons-production ./scripts/setup-fdw-production.sql",
     "start": "NODE_ENV=production nodemon ./server-compiled/server/index.js",
     "dev": "yarn check --verify-tree && yarn migrate && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
     "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
@@ -59,7 +60,9 @@
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
     },
-    "testEnvironmentOptions": { "IS_BUILDER_ENABLED": "true" },
+    "testEnvironmentOptions": {
+      "IS_BUILDER_ENABLED": "true"
+    },
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
@@ -92,7 +95,7 @@
     "apollo-codegen": "0.19.0",
     "apollo-link-schema": "1.0.6",
     "axios": "0.18.0",
-    "danger": "3.4.3",
+    "danger": "3.4.4",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "expect": "22.4.3",

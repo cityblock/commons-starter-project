@@ -3300,9 +3300,9 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-danger@3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.4.3.tgz#d47dd5dd7368da32a7ae0fa7db86391681a58e3b"
+danger@3.4.4:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.4.4.tgz#f92b8bbfe514a2b531d1d8db20174a186a87f53c"
   dependencies:
     "@octokit/rest" "^14.0.4"
     babel-polyfill "^6.23.0"
@@ -3329,7 +3329,7 @@ danger@3.4.3:
     require-from-string "^2.0.1"
     rfc6902 "^2.2.2"
     supports-hyperlinks "^1.0.1"
-    vm2 "github:patriksimek/vm2#custom_files"
+    vm2 patriksimek/vm2#custom_files
     voca "^1.4.0"
 
 dargs@^5.1.0:
@@ -12572,7 +12572,6 @@ vm-browserify@0.0.4:
 
 "vm2@github:patriksimek/vm2#custom_files":
   version "3.5.0"
-  uid "7e82f90ac705fc44fad044147cb0df09b4c79a57"
   resolved "https://codeload.github.com/patriksimek/vm2/tar.gz/7e82f90ac705fc44fad044147cb0df09b4c79a57"
 
 voca@^1.4.0:

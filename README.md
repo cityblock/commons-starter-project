@@ -144,6 +144,16 @@ Creek code review][] docs. You should respond within ~2 business hours to reques
 * Commiting directly to master is disabled via Github 'Protected Branches'
 * All commits to master must be made through a pull request that is approved by another engineer
 
+## Builder in production
+
+Tables represented in Builder are not editable in production. Builder is edited in staging and then deployed to production by copying the builder associated tables from staging to production. For more info, see the [builder stability in production][] document.
+
+To copy builder data from staging to production, run `yarn copy-builder-staging-to-production`. If that does not work, or if there are new columns or tables, continue reading.
+
+As we add models or modify tables that are represented in builder, we will need to recreate the foreign tables ([FDW][]) in production. If tables are modified, first run `yarn update-fdw-production` but if new tables were added or removed, add the tables to `setup-fdw-production.sql` and run `yarn update-fdw-production`.
+
+After ensuring the foreign data wrapper is up to date, we then need to copy the builder tables from staging to production. If new columns or tables were added, add them to `aptible-copy-builder-staging-to-production.sql`. Then, once the migrations have run on production, run `yarn copy-builder-staging-to-production`.
+
 ## How-to
 
 ### Use GraphiQL
@@ -409,3 +419,5 @@ Alternatively, you can install following the instructions on the [Redis download
 [kue]: https://github.com/Automattic/kue
 [redis]: https://redis.io/
 [redis download page]: https://redis.io/download
+[fdw]: https://www.postgresql.org/docs/10/static/sql-createforeigndatawrapper.html
+[builder stability in production]: https://docs.google.com/document/d/1BYb66YeQlRTFkdXBtPowrVvR-wyhoaNUM9Hog-7MzkI/edit#heading=h.8jov09o8e1fb

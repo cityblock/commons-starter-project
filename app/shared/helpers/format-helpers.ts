@@ -173,6 +173,17 @@ export const formatPatientAnswer = (patientAnswer: FullPatientAnswerFragment): s
   }
 };
 
+export const formatSocialSecurity = (ssn?: string | null) => {
+  if (!ssn) return '';
+  if (ssn.length === 9) {
+    return `${ssn.substring(0, 3)}-${ssn.substring(3, 5)}-${ssn.substring(5, 9)}`;
+  }
+  if (ssn.length === 4) {
+    return `XXX-XX-${ssn}`;
+  }
+  return ssn;
+};
+
 export const getPatientStatusColor = (patientStatus: CurrentPatientState) => {
   switch (patientStatus) {
     case CurrentPatientState.disenrolled:

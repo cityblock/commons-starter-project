@@ -170,6 +170,7 @@ import {
   resolvePatientsWithUrgentTasks,
   resolvePatientPanel,
   resolvePatientSearch,
+  resolvePatientSocialSecurity,
 } from './patient-resolver';
 import { patientScratchPadEdit, resolvePatientScratchPad } from './patient-scratch-pad-resolver';
 import {
@@ -437,6 +438,7 @@ const resolveFunctions = {
     patientEmails: resolveEmails,
     patientPhones: resolvePhones,
     patientScratchPad: resolvePatientScratchPad,
+    patientSocialSecurity: resolvePatientSocialSecurity,
   },
 
   RootMutationType: {

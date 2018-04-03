@@ -80,9 +80,9 @@ exports[`patient profile container renders patient profile container 1`] = `
           render={[Function]}
         />
         <Route
-          component={[Function]}
           exact={true}
           path="/patients/:patientId/member-info/:subTab?"
+          render={[Function]}
         />
         <Route
           component={[Function]}

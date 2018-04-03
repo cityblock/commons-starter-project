@@ -135,7 +135,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
               <Route
                 exact
                 path="/patients/:patientId/member-info/:subTab?"
-                component={PatientInfo}
+                render={(props: any) => <PatientInfo {...props} glassBreakId={glassBreakId} />}
               />
               <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
               <Route

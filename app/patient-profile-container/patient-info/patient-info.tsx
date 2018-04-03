@@ -32,6 +32,7 @@ interface IProps {
       subTab?: SelectableTabs;
     };
   };
+  glassBreakId?: string;
 }
 
 interface IGraphqlProps {
@@ -96,6 +97,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       middleName,
       firstName,
       dateOfBirth,
+      ssnEnd,
       patientDataFlags,
       patientInfo,
       coreIdentityVerifiedAt,
@@ -120,6 +122,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       hasHealthcareProxy,
       hasDeclinedPhotoUpload,
     } = this.state;
+    const { glassBreakId } = this.props;
 
     return {
       patientId: id,
@@ -130,8 +133,10 @@ export class PatientInfo extends React.Component<allProps, allState> {
         middleName,
         cityblockId,
         dateOfBirth,
+        ssnEnd,
         patientDataFlags: flags || patientDataFlags,
         coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
+        glassBreakId,
       },
       basic: {
         gender: gender || patientInfo.gender,

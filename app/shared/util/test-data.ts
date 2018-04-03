@@ -191,6 +191,7 @@ export const patient = {
   middleName: null,
   lastName: 'Smith',
   dateOfBirth: '01/01/1999',
+  ssnEnd: '1234',
   homeClinicId: clinic.id,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
@@ -1148,6 +1149,7 @@ export const coreIdentity = {
   dateOfBirth: patient.dateOfBirth,
   patientDataFlags: patient.patientDataFlags,
   cityblockId: patient.cityblockId,
+  ssnEnd: patient.ssnEnd,
 };
 
 export const contactInfo = {

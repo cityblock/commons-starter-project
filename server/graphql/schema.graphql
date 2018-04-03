@@ -360,6 +360,7 @@ type Patient implements uniqueId {
   middleName: String
   lastName: String!
   dateOfBirth: String
+  ssnEnd: String
   cityblockId: Int!
   homeClinicId: ID
   createdAt: String!
@@ -1525,6 +1526,12 @@ type PatientScratchPad implements uniqueId {
   patientId: ID!
   userId: ID!
   body: String!
+}
+
+# Patient Full Social Security Number
+type PatientSocialSecurity implements uniqueId {
+  id: ID!
+  ssn: String
 }
 
 # signed url for patient photo or documents
@@ -2891,6 +2898,8 @@ type RootQueryType {
   patientPhones(patientId: ID!): [Phone!]
   # gets a patient scratch pad for given user and patient
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
+  # gets a patients full social security number and records a log of the view by user
+  patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
 }
 
 schema {

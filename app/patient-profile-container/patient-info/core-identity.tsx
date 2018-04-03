@@ -17,15 +17,18 @@ import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';
 import { IEditableFieldState } from './patient-info';
+import SocialSecurityDisplayField from './social-security-display-field';
 
 export interface ICoreIdentity {
   firstName: getPatientQuery['patient']['firstName'];
   middleName: getPatientQuery['patient']['middleName'];
   lastName: getPatientQuery['patient']['lastName'];
   dateOfBirth: getPatientQuery['patient']['dateOfBirth'];
+  ssnEnd: getPatientQuery['patient']['ssnEnd'];
   cityblockId: getPatientQuery['patient']['cityblockId'];
   patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
   coreIdentityVerifiedAt?: string | null;
+  glassBreakId?: string;
 }
 
 interface IProps {
@@ -44,12 +47,13 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isModalVisible: boolean;
+  shouldLoadSSN: boolean;
 }
 
 export class CoreIdentity extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { isModalVisible: false };
+    this.state = { isModalVisible: false, shouldLoadSSN: false };
   }
 
   hasDataFlags() {
@@ -95,6 +99,10 @@ export class CoreIdentity extends React.Component<allProps, IState> {
     }
   };
 
+  handleRequestSSNClick = async () => {
+    this.setState({ shouldLoadSSN: true });
+  };
+
   handleShowModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -110,11 +118,13 @@ export class CoreIdentity extends React.Component<allProps, IState> {
       middleName,
       lastName,
       dateOfBirth,
+      ssnEnd,
       patientDataFlags,
       coreIdentityVerifiedAt,
       cityblockId,
+      glassBreakId,
     } = patientIdentity;
-    const { isModalVisible } = this.state;
+    const { isModalVisible, shouldLoadSSN } = this.state;
 
     let footerState: FooterState = 'confirm';
     let flaggedOn: string | undefined;
@@ -156,10 +166,14 @@ export class CoreIdentity extends React.Component<allProps, IState> {
               value={firstName}
               correctedValue={this.findFlag('firstName')}
             />
-            <FlaggableDisplayField
+            <SocialSecurityDisplayField
               labelMessageId="coreIdentity.socialSecurity"
-              value="XXX-XX-0029"
+              ssnEnd={ssnEnd}
               correctedValue={this.findFlag('socialSecurity')}
+              onClick={this.handleRequestSSNClick}
+              patientId={patientId}
+              glassBreakId={glassBreakId}
+              shouldLoad={shouldLoadSSN}
             />
           </div>
           <div>

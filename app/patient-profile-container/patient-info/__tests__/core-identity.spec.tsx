@@ -5,6 +5,7 @@ import { coreIdentity, patient, user } from '../../../shared/util/test-data';
 import { CoreIdentity } from '../core-identity';
 import FlaggableDisplayCard from '../flaggable-display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
+import SocialSecurityDisplayField from '../social-security-display-field';
 
 describe('Render Core Idenity Component', () => {
   const verifyCoreIdentity = jest.fn();
@@ -28,7 +29,7 @@ describe('Render Core Idenity Component', () => {
 
   it('renders core identity card fields', () => {
     const card = wrapper.find(FlaggableDisplayField);
-    expect(card.length).toBe(8);
+    expect(card.length).toBe(7);
 
     const firstName = wrapper
       .find(FlaggableDisplayField)
@@ -38,48 +39,47 @@ describe('Render Core Idenity Component', () => {
     expect(firstName.value).toBe(coreIdentity.firstName);
 
     const ssn = wrapper
-      .find(FlaggableDisplayField)
-      .at(1)
+      .find(SocialSecurityDisplayField)
       .props();
     expect(ssn.labelMessageId).toBe('coreIdentity.socialSecurity');
 
     const middleName = wrapper
       .find(FlaggableDisplayField)
-      .at(2)
+      .at(1)
       .props();
     expect(middleName.labelMessageId).toBe('coreIdentity.middleName');
     expect(middleName.value).toBe(coreIdentity.middleName);
 
     const cityblockId = wrapper
       .find(FlaggableDisplayField)
-      .at(3)
+      .at(2)
       .props();
     expect(cityblockId.labelMessageId).toBe('coreIdentity.cityblockId');
     expect(cityblockId.value).toBe(formatCityblockId(coreIdentity.cityblockId));
 
     const lastName = wrapper
       .find(FlaggableDisplayField)
-      .at(4)
+      .at(3)
       .props();
     expect(lastName.labelMessageId).toBe('coreIdentity.lastName');
     expect(lastName.value).toBe(coreIdentity.lastName);
 
     const nmiNumber = wrapper
       .find(FlaggableDisplayField)
-      .at(5)
+      .at(4)
       .props();
     expect(nmiNumber.labelMessageId).toBe('coreIdentity.nmiNumber');
 
     const dateOfBirth = wrapper
       .find(FlaggableDisplayField)
-      .at(6)
+      .at(5)
       .props();
     expect(dateOfBirth.labelMessageId).toBe('coreIdentity.dateOfBirth');
     expect(dateOfBirth.value).toBe(coreIdentity.dateOfBirth);
 
     const ehrNumber = wrapper
       .find(FlaggableDisplayField)
-      .at(7)
+      .at(6)
       .props();
     expect(ehrNumber.labelMessageId).toBe('coreIdentity.ehrNumber');
   });

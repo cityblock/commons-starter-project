@@ -39,6 +39,8 @@ export interface IPatientCreateFields {
   lastName: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
+  ssn: string;
+  ssnEnd: string;
   gender: PatientGenderOptions;
   language: string | null;
 }
@@ -77,6 +79,8 @@ export default class Patient extends Model {
   lastName: string;
   middleName: string | null;
   dateOfBirth: string;
+  ssnEnd: string;
+  ssn: string;
   homeClinicId: string;
   homeClinic: Clinic;
   tasks: Task[];
@@ -111,6 +115,8 @@ export default class Patient extends Model {
       middleName: { type: 'string' },
       lastName: { type: 'string', minLength: 1 }, // cannot be blank
       dateOfBirth: { type: 'string' },
+      ssn: { type: 'string', minLength: 1 },
+      ssnEnd: { type: 'string', minLength: 1 },
       coreIdentityVerifiedAt: { type: ['string', 'null'] },
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
@@ -234,6 +240,21 @@ export default class Patient extends Model {
     return patient;
   }
 
+  static async getSocialSecurityNumber(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<Patient | null> {
+    const patient = await this.query(txn)
+      .findOne({ id: patientId })
+      .select('id', 'ssn');
+
+    if (!patient) {
+      return null;
+    }
+
+    return patient;
+  }
+
   static async create(input: IPatientCreateFields, txn: Transaction) {
     const {
       patientId,
@@ -245,6 +266,8 @@ export default class Patient extends Model {
       dateOfBirth,
       gender,
       language,
+      ssn,
+      ssnEnd,
     } = input;
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
     const attributionUser = await User.findOrCreateAttributionUser(txn);
@@ -256,6 +279,8 @@ export default class Patient extends Model {
       lastName,
       homeClinicId,
       dateOfBirth,
+      ssn,
+      ssnEnd,
     });
     await PatientInfo.createInitialPatientInfo(
       {

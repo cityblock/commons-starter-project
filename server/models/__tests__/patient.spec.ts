@@ -179,6 +179,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -205,6 +207,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -227,6 +231,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'male',
           language: 'english',
@@ -248,6 +254,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'male',
           language: 'english',
@@ -274,6 +282,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -313,6 +323,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -348,6 +360,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -385,6 +399,8 @@ describe('patient model', () => {
           middleName: 'middle',
           lastName: 'last',
           dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
           homeClinicId: clinic.id,
           gender: 'female',
           language: 'english',
@@ -1095,6 +1111,19 @@ describe('patient model', () => {
       const patientId = 'aryaStark';
 
       expect(Patient.getPatientIdForResource(patientId)).toBe(patientId);
+    });
+  });
+
+  describe('get patient social security number', async () => {
+    it('returns patient social security number', async () => {
+      const { clinic } = await setup(txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const social = await Patient.getSocialSecurityNumber(patient.id, txn);
+
+      expect(social).toMatchObject({
+        id: patient.id,
+        ssn: patient.ssn,
+      });
     });
   });
 });

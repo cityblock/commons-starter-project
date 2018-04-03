@@ -579,6 +579,11 @@ declare module 'schema' {
      * gets a patient scratch pad for given user and patient
      */
     patientScratchPad: IPatientScratchPad;
+
+    /**
+     * gets a patients full social security number and records a log of the view by user
+     */
+    patientSocialSecurity: IPatientSocialSecurity;
   }
   interface IUsersOnRootQueryTypeArguments {
     pageNumber?: number | null;
@@ -919,6 +924,10 @@ declare module 'schema' {
     patientId: string;
     glassBreakId?: string | null;
   }
+  interface IPatientSocialSecurityOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
 
   type IUserOrderOptionsEnum =
     | 'createdAtDesc'
@@ -1029,6 +1038,7 @@ declare module 'schema' {
     | IPatientGlassBreak
     | IProgressNoteGlassBreak
     | IPatientScratchPad
+    | IPatientSocialSecurity
     | IComputedFieldFlag
     | IConcernDiagnosisCode;
 
@@ -1091,6 +1101,7 @@ declare module 'schema' {
     middleName: string | null;
     lastName: string;
     dateOfBirth: string | null;
+    ssnEnd: string | null;
     cityblockId: number;
     homeClinicId: string | null;
     createdAt: string;
@@ -2380,6 +2391,14 @@ declare module 'schema' {
     patientId: string;
     userId: string;
     body: string;
+  }
+
+  /**
+   * Patient Full Social Security Number
+   */
+  interface IPatientSocialSecurity {
+    id: string;
+    ssn: string | null;
   }
 
   interface IRootMutationType {

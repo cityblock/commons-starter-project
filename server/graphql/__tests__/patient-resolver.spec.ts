@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import * as getPatientPanel from '../../../app/graphql/queries/get-patient-panel.graphql';
 import * as getPatientSearch from '../../../app/graphql/queries/get-patient-search.graphql';
+import * as getPatientSocialSecurity from '../../../app/graphql/queries/get-patient-social-security.graphql';
 import * as getPatient from '../../../app/graphql/queries/get-patient.graphql';
 import * as patientForComputedList from '../../../app/graphql/queries/get-patients-for-computed-list.graphql';
 import * as patientsNewToCareTeam from '../../../app/graphql/queries/get-patients-new-to-care-team.graphql';
@@ -17,6 +18,7 @@ import * as patientsWithUrgentTasks from '../../../app/graphql/queries/get-patie
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
+import PatientGlassBreak from '../../models/patient-glass-break';
 import User from '../../models/user';
 import {
   createPatient,
@@ -138,6 +140,7 @@ describe('patient', () => {
   const getPatientQuery = print(getPatient);
   const getPatientPanelQuery = print(getPatientPanel);
   const getPatientSearchQuery = print(getPatientSearch);
+  const getPatientSocialSecurityQuery = print(getPatientSocialSecurity);
   const patientForComputedListQuery = print(patientForComputedList);
   const patientsNewToCareTeamQuery = print(patientsNewToCareTeam);
   const patientsWithMissingInfoQuery = print(patientsWithMissingInfo);
@@ -190,6 +193,33 @@ describe('patient', () => {
         lastName: 'plant',
       });
       expect(log).toBeCalled();
+    });
+
+    it('won\'t return patient social security number', async () => {
+      const { patient, user } = await setup(txn);
+
+      const query = `{
+        patient(patientId: "${patient.id}") {
+          id
+          ssn
+        }
+      }`;
+
+      const result = await graphql(
+        schema,
+        query,
+        null,
+        {
+          db,
+          userId: user.id,
+          permissions,
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      expect(result.errors![0].message).toMatch('Cannot query field "ssn" on type "Patient"');
     });
   });
 
@@ -957,6 +987,140 @@ describe('patient', () => {
     expect(result.data!.patientsForComputedList.edges[0].node).toMatchObject({
       id: patient1.id,
       firstName: patient1.firstName,
+    });
+  });
+
+  describe('resolves patient social security', () => {
+    it('returns patient social security number for user on care team', async () => {
+      const { patient, user } = await setup(txn);
+
+      const result = await graphql(
+        schema,
+        getPatientSocialSecurityQuery,
+        null,
+        {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      expect(cloneDeep(result.data!.patientSocialSecurity)).toMatchObject({
+        id: patient.id,
+        ssn: patient.ssn,
+      });
+    });
+
+    it('returns patient social security number for user with green permission', async () => {
+      const { patient, homeClinicId } = await setup(txn);
+      const user2 = await User.create(
+        {
+          firstName: 'Cristina',
+          lastName: 'Lozano',
+          email: 'b@c.com',
+          userRole,
+          homeClinicId,
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        getPatientSocialSecurityQuery,
+        null,
+        {
+          db,
+          userId: user2.id,
+          permissions: 'green',
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      expect(cloneDeep(result.data!.patientSocialSecurity)).toMatchObject({
+        id: patient.id,
+        ssn: patient.ssn,
+      });
+    });
+
+    it('doesn\'t return patient social security number for user not on care team', async () => {
+      const { patient, homeClinicId } = await setup(txn);
+      const user2 = await User.create(
+        {
+          firstName: 'Cristina',
+          lastName: 'Lozano',
+          email: 'b@c.com',
+          userRole,
+          homeClinicId,
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        getPatientSocialSecurityQuery,
+        null,
+        {
+          db,
+          userId: user2.id,
+          permissions: 'blue',
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      const error = `User ${user2.id} cannot automatically break the glass for patient ${
+        patient.id
+      }`;
+      expect(result.errors![0].message).toBe(error);
+    });
+
+    it('returns patient social security number for user who broke the glass', async () => {
+      const { patient, homeClinicId } = await setup(txn);
+      const user2 = await User.create(
+        {
+          firstName: 'Cristina',
+          lastName: 'Lozano',
+          email: 'b@c.com',
+          userRole,
+          homeClinicId,
+        },
+        txn,
+      );
+
+      const patientGlassBreak = await PatientGlassBreak.create(
+        {
+          userId: user2.id,
+          patientId: patient.id,
+          reason: 'Needed for routine care',
+          note: null,
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        getPatientSocialSecurityQuery,
+        null,
+        {
+          db,
+          userId: user2.id,
+          permissions: 'blue',
+          logger,
+          txn,
+        },
+        { patientId: patient.id, glassBreakId: patientGlassBreak.id },
+      );
+
+      expect(cloneDeep(result.data!.patientSocialSecurity)).toMatchObject({
+        id: patient.id,
+        ssn: patient.ssn,
+      });
     });
   });
 });

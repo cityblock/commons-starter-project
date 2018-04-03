@@ -3158,6 +3158,19 @@ export interface getPatientSearchQuery {
   },
 };
 
+export interface getPatientSocialSecurityQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getPatientSocialSecurityQuery {
+  // gets a patients full social security number and records a log of the view by user
+  patientSocialSecurity:  {
+    id: string,
+    ssn: string | null,
+  },
+};
+
 export interface getPatientTasksQueryVariables {
   patientId: string,
   pageNumber?: number | null,
@@ -3267,6 +3280,7 @@ export interface getPatientQuery {
     lastName: string,
     cityblockId: number,
     dateOfBirth: string | null,
+    ssnEnd: string | null,
     createdAt: string,
     coreIdentityVerifiedAt: string | null,
     coreIdentityVerifiedById: string | null,
@@ -10872,6 +10886,7 @@ export interface FullPatientForProfileFragment {
   lastName: string,
   cityblockId: number,
   dateOfBirth: string | null,
+  ssnEnd: string | null,
   createdAt: string,
   coreIdentityVerifiedAt: string | null,
   coreIdentityVerifiedById: string | null,

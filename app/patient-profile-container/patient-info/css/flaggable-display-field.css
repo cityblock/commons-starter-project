@@ -31,3 +31,10 @@ svg.flag {
   vertical-align: bottom;
   margin-left: 5px;
 }
+
+.underlined {
+  border-bottom: 1px dashed var(--border-color);
+  cursor: pointer;
+  font-size: var(--medium-font-size);
+  line-height: var(--large-font-line-height);
+}

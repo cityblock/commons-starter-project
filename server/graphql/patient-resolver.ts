@@ -11,7 +11,12 @@ import {
 } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from '../models/patient';
-import checkUserPermissions, { getBusinessToggles } from './shared/permissions-check';
+import PatientGlassBreak from '../models/patient-glass-break';
+import PatientSocialSecurityView from '../models/patient-social-security-view';
+import checkUserPermissions, {
+  getBusinessToggles,
+  validateGlassBreak,
+} from './shared/permissions-check';
 import { formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
@@ -24,6 +29,11 @@ export interface IPatientSearchOptions extends IPaginationOptions {
 
 export interface IPatientComputedListOptions extends IPaginationOptions {
   answerId: string;
+}
+
+export interface IPatientSocialSecurityOptions {
+  patientId: string;
+  glassBreakId?: string | null;
 }
 
 export async function resolvePatient(
@@ -302,5 +312,33 @@ export async function resolvePatientsForComputedList(
     },
     totalCount: patients.total,
   };
+}
+
+export async function resolvePatientSocialSecurity(
+  root: any,
+  args: IPatientSocialSecurityOptions,
+  { permissions, userId, txn }: IContext,
+): Promise<IRootQueryType['patientSocialSecurity'] | null> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+
+  let glassBreakId = args.glassBreakId;
+
+  if (!glassBreakId) {
+    // load the current glass break for user and patient if none provided (refetch query)
+    const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+      userId!,
+      args.patientId,
+      txn,
+    );
+    glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
+  }
+
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
+
+  await PatientSocialSecurityView.create(
+    { patientId: args.patientId, userId: userId!, glassBreakId: args.glassBreakId },
+    txn,
+  );
+  return Patient.getSocialSecurityNumber(args.patientId, txn);
 }
 /* tslint:enable check-is-allowed */

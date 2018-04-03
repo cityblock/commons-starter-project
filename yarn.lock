@@ -2324,9 +2324,9 @@ caniuse-db@^1.0.30000187, caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, ca
   version "1.0.30000813"
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000813.tgz#e0a1c603f8880ad787b2a35652b2733f32a5e29a"
 
-caniuse-lite@1.0.30000821:
-  version "1.0.30000821"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000821.tgz#0f3223f1e048ed96451c56ca6cf197058c42cb93"
+caniuse-lite@1.0.30000823:
+  version "1.0.30000823"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000823.tgz#b79842a5b5a48eaa416b73f5a5d7a23f52d26014"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000792, caniuse-lite@^1.0.30000805, caniuse-lite@^1.0.30000810, caniuse-lite@^1.0.30000813:
   version "1.0.30000813"
@@ -3300,9 +3300,9 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-danger@3.4.4:
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.4.4.tgz#f92b8bbfe514a2b531d1d8db20174a186a87f53c"
+danger@3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.4.5.tgz#8111bf022991a260cbbdb6e8d919c60c54a755ed"
   dependencies:
     "@octokit/rest" "^14.0.4"
     babel-polyfill "^6.23.0"
@@ -8309,9 +8309,9 @@ object.values@^1.0.4:
     function-bind "^1.1.0"
     has "^1.0.1"
 
-objection@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/objection/-/objection-1.1.0.tgz#b7e3703fd0b950180d12e3a8db73775af3ebbe5d"
+objection@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/objection/-/objection-1.1.1.tgz#6993d1c6cf21dd01b0988e642564a635df6a5765"
   dependencies:
     ajv "^6.1.1"
     bluebird "^3.5.1"
@@ -9874,9 +9874,9 @@ react-apollo@2.0.4:
     lodash.pick "^4.4.0"
     prop-types "^15.5.8"
 
-react-beautiful-dnd@6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-6.0.1.tgz#f5b70cc37188bd9e79c2bd2152bebfadb2861cff"
+react-beautiful-dnd@6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-6.0.2.tgz#2e2deec247cc92727fb290ba08cee4db70b0b439"
   dependencies:
     babel-runtime "^6.26.0"
     invariant "^2.2.2"

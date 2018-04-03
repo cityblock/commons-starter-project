@@ -19,6 +19,6 @@ const newMigrations = danger.git.created_files
 if (newMigrations.length > 0) {
   warn('This PR added migrations cc: @tzfirac');
   warn(
-    'Did this PR add migrations for builder tables? If so, be sure to update This PR added migrations cc: @tzfirac',
+    'Did this PR add migrations for tables in builder? If so, be sure to update the builder foreign tables in the production db and then update the copy from staging to production script. More info [here](https://github.com/cityblock/commons#builder-in-production)',
   );
 }

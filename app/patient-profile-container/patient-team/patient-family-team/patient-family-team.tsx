@@ -9,6 +9,7 @@ import {
   FullPatientContactFragment,
 } from '../../../graphql/types';
 import EditPatientContactModal from '../../../shared/patient-contact-modal/edit-patient-contact-modal';
+import withErrorHandler from '../../../shared/with-error-handler/with-error-handler';
 import RequiredPlaceholder from '../../required-placeholder';
 import * as styles from '../css/patient-team.css';
 import PatientFamilyMember from './patient-family-member';
@@ -16,6 +17,7 @@ import PatientFamilyMember from './patient-family-member';
 interface IProps {
   patientId: string;
   onAddEmergencyContact: () => void;
+  openErrorPopup: (message: string) => void;
 }
 
 interface IGraphqlProps {
@@ -42,11 +44,11 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
   }
 
   handleRemove = async (patientContactId: string) => {
-    const { patientContactDelete } = this.props;
+    const { patientContactDelete, openErrorPopup } = this.props;
     try {
       await patientContactDelete({ variables: { patientContactId } });
     } catch (err) {
-      // TODO: handle errors
+      openErrorPopup(err.message);
     }
   };
 
@@ -125,6 +127,7 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(patientContactDeleteMutationGraphql as any, {
     name: 'patientContactDelete',
     options: {

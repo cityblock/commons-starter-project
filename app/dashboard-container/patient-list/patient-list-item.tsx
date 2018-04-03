@@ -4,7 +4,11 @@ import { capitalize } from 'lodash';
 import * as React from 'react';
 import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
-import { formatCityblockId, formatFullName, getPatientStatusColor } from '../../shared/helpers/format-helpers';
+import {
+  formatCityblockId,
+  formatFullName,
+  getPatientStatusColor,
+} from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
 import Icon from '../../shared/library/icon/icon';
 import PatientAge from '../../shared/library/patient-age/patient-age';

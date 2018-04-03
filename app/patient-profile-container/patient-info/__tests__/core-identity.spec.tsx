@@ -38,9 +38,7 @@ describe('Render Core Idenity Component', () => {
     expect(firstName.labelMessageId).toBe('coreIdentity.firstName');
     expect(firstName.value).toBe(coreIdentity.firstName);
 
-    const ssn = wrapper
-      .find(SocialSecurityDisplayField)
-      .props();
+    const ssn = wrapper.find(SocialSecurityDisplayField).props();
     expect(ssn.labelMessageId).toBe('coreIdentity.socialSecurity');
 
     const middleName = wrapper

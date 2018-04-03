@@ -195,7 +195,7 @@ describe('patient', () => {
       expect(log).toBeCalled();
     });
 
-    it('won\'t return patient social security number', async () => {
+    it("won't return patient social security number", async () => {
       const { patient, user } = await setup(txn);
 
       const query = `{
@@ -1047,7 +1047,7 @@ describe('patient', () => {
       });
     });
 
-    it('doesn\'t return patient social security number for user not on care team', async () => {
+    it("doesn't return patient social security number for user not on care team", async () => {
       const { patient, homeClinicId } = await setup(txn);
       const user2 = await User.create(
         {

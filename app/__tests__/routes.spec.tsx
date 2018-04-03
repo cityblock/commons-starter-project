@@ -12,10 +12,11 @@ it('renders routes correctly', () => {
   const mockStore = configureMockStore([]);
 
   const locale = { messages: { 'login.logInGoogle': 'Sign in with Google' } };
+  const popup = { name: '', options: {} };
 
   const tree = render(
     <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale, idle: { isIdle: false } })}>
+      <Provider store={mockStore({ locale, popup, idle: { isIdle: false } })}>
         <ReduxConnectedIntlProvider>
           <BrowserRouter>{Routes}</BrowserRouter>
         </ReduxConnectedIntlProvider>

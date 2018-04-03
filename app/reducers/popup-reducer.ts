@@ -119,6 +119,15 @@ export interface IPatientPhotoPopupOptions {
   patientInfoId: string;
 }
 
+export interface IGlobalErrorPopup {
+  name: 'GLOBAL_ERROR';
+  options: IGlobalErrorPopupOptions;
+}
+
+export interface IGlobalErrorPopupOptions {
+  message: string;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -138,6 +147,7 @@ export type IState =
   | IQuickCallPopup
   | IScreeningToolPopup
   | IPatientPhotoPopup
+  | IGlobalErrorPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

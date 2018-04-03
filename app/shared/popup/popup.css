@@ -10,6 +10,23 @@
   display: flex;
 }
 
+.background.transparent {
+  background: transparent;
+  pointer-events: none;
+}
+
+.background.transparent .content {
+  pointer-events: auto;
+}
+
+.background.bottom {
+  align-items: flex-end;
+}
+
+.background.bottom .content {
+  margin-bottom: var(--medium-gutter);
+}
+
 .content {
   flex: 1;
   max-width: 600px;

@@ -4,6 +4,8 @@ import * as styles from './popup.css';
 
 interface IProps {
   style?: 'no-padding' | 'small-padding';
+  backgroundStyle?: 'default' | 'clear';
+  alignContent?: 'center' | 'bottom';
   visible: boolean;
   children: any;
   closePopup?: () => void;
@@ -12,7 +14,7 @@ interface IProps {
 
 export const Popup: React.StatelessComponent<IProps> = props => {
   // Eventually there will be a transition here...
-  const { style, closePopup, className } = props;
+  const { style, closePopup, className, alignContent, backgroundStyle } = props;
 
   const contentStyles = classNames(
     styles.content,
@@ -23,6 +25,11 @@ export const Popup: React.StatelessComponent<IProps> = props => {
     className,
   );
 
+  const backgroundStyles = classNames(styles.background, {
+    [styles.bottom]: alignContent === 'bottom',
+    [styles.transparent]: backgroundStyle === 'clear',
+  });
+
   // prevent popup from closing if clicking on content
   const stopPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -30,7 +37,7 @@ export const Popup: React.StatelessComponent<IProps> = props => {
 
   if (props.visible) {
     return (
-      <div className={styles.background} onClick={closePopup}>
+      <div className={backgroundStyles} onClick={closePopup}>
         <div className={contentStyles} onClick={stopPropagation}>
           {props.children}
         </div>

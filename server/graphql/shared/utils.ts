@@ -4,6 +4,7 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { transaction, Transaction } from 'objection';
+import { IGraphQLResponseError, IGraphQLResponseRoot } from 'schema';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
 import Db from '../../db';
@@ -122,14 +123,8 @@ export async function getGraphQLContext(
   };
 }
 
-interface IGraphqlError {
-  message: string;
-  locations: any;
-  path: any;
-}
-
 export async function formatResponse(
-  response: any,
+  response: IGraphQLResponseRoot,
   { context }: { context: IContext },
 ): Promise<any> {
   const errorReporting = context.errorReporting;
@@ -144,11 +139,27 @@ export async function formatResponse(
       errorReporting.report(err);
     }
   }
-
-  if (errorReporting && response.errors) {
-    response.errors.forEach((error: IGraphqlError) => errorReporting.report(error));
-  }
   return response;
+}
+
+export function formatError(error: IGraphQLResponseError): IGraphQLResponseError {
+  if (config.GCP_CREDS) {
+    const errorReporting = new ErrorReporting({
+      credentials: JSON.parse(String(config.GCP_CREDS)),
+    });
+    if (error.path || error.name !== 'GraphQLError') {
+      errorReporting.report(error.message);
+    } else {
+      errorReporting.report(`GraphQLWrongQuery: ${error.message}`);
+    }
+  }
+  return {
+    ...error.extensions,
+    message: error.message || 'An unknown error occurred.',
+    locations: error.locations,
+    stack: error.stack && config.NODE_ENV === 'development' ? error.stack.split('\n') : [],
+    path: error.path,
+  };
 }
 
 export interface IPageInfo {

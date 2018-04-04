@@ -13,7 +13,7 @@ import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
-import { formatResponse, getGraphQLContext } from './graphql/shared/utils';
+import { formatError, formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
@@ -147,6 +147,7 @@ export default async (
         errorReporting,
       ),
       formatResponse,
+      formatError,
       debug: false,
       // for apollo-engine
       tracing: true,

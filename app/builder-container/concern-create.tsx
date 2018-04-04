@@ -9,13 +9,16 @@ import * as concernStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: concernCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   routeBase: string;
   onClose: () => any;
   history: History;
@@ -27,7 +30,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   concern: concernCreateMutationVariables;
 }
 
@@ -43,7 +45,6 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       concern: { title: '' },
     };
   }
@@ -67,7 +68,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
   }
 
   async onSubmit() {
-    const { history, routeBase } = this.props;
+    const { history, routeBase, openErrorPopup } = this.props;
     if (this.props.createConcern) {
       try {
         this.setState({ loading: true });
@@ -81,8 +82,9 @@ export class ConcernCreate extends React.Component<allProps, IState> {
         if (concern.data.concernCreate) {
           history.push(`${routeBase}/${concern.data.concernCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        openErrorPopup(err.message);
       }
     }
     return false;
@@ -127,6 +129,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {

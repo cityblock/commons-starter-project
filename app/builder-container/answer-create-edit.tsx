@@ -163,8 +163,8 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       } else {
         this.setState({ loading: false });
       }
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
     }
     return false;
   }

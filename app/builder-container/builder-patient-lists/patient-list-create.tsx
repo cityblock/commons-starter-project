@@ -4,7 +4,9 @@ import * as createPatientListMutationGraphql from '../../graphql/queries/patient
 import { patientListCreateMutation, patientListCreateMutationVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-list-shared.css';
 
 interface IProps extends IInjectedErrorProps {

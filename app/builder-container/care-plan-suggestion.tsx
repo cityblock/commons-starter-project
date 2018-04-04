@@ -13,8 +13,11 @@ import {
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import Icon from '../shared/library/icon/icon';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   answerId: string | null;
   screeningToolScoreRangeId: string | null;
   suggestionType: 'concern' | 'goal';
@@ -33,7 +36,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -41,7 +43,7 @@ type allProps = IProps & IGraphqlProps;
 class CarePlanSuggestion extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { loading: false, error: null };
+    this.state = { loading: false };
   }
 
   onClickDelete = async () => {
@@ -52,9 +54,10 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       screeningToolScoreRangeId,
       deleteConcernSuggestion,
       deleteGoalSuggestion,
+      openErrorPopup,
     } = this.props;
 
-    this.setState({ loading: true, error: null });
+    this.setState({ loading: true });
 
     try {
       if (suggestionType === 'concern') {
@@ -71,9 +74,9 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
         });
       }
 
-      this.setState({ loading: false, error: null });
+      this.setState({ loading: false });
     } catch (err) {
-      this.setState({ loading: false, error: err.message });
+      openErrorPopup(err.message);
     }
   };
 
@@ -133,6 +136,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {

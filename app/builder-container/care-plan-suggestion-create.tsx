@@ -19,11 +19,16 @@ import * as carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   goals: FullGoalSuggestionTemplateFragment[] | null;
+  goalsError?: string | null;
   concerns: FullConcernFragment[] | null;
+  concernsError?: string | null;
   answer: FullAnswerFragment | null;
   screeningToolScoreRange: FullScreeningToolScoreRangeFragment | null;
 }
@@ -42,7 +47,6 @@ interface IState {
   suggestionType: SuggestionType | null;
   suggestionId: string | null;
   loading: boolean;
-  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -58,7 +62,17 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     this.getGoalOptions = this.getGoalOptions.bind(this);
     this.getConcernOptions = this.getConcernOptions.bind(this);
 
-    this.state = { loading: false, suggestionType: null, suggestionId: null, error: null };
+    this.state = { loading: false, suggestionType: null, suggestionId: null };
+  }
+
+  componentDidUpdate(prevProps: allProps) {
+    const { goalsError, concernsError, openErrorPopup } = this.props;
+
+    if (goalsError && goalsError !== prevProps.goalsError) {
+      openErrorPopup(goalsError);
+    } else if (concernsError && concernsError !== prevProps.concernsError) {
+      openErrorPopup(concernsError);
+    }
   }
 
   onUpdateSuggestionType(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -78,9 +92,10 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       createConcernSuggestion,
       answer,
       screeningToolScoreRange,
+      openErrorPopup,
     } = this.props;
 
-    this.setState({ loading: true, error: null });
+    this.setState({ loading: true });
 
     try {
       if (suggestionType === 'concern' && suggestionId && createConcernSuggestion) {
@@ -102,12 +117,11 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       }
       this.setState({
         loading: false,
-        error: null,
         suggestionType: null,
         suggestionId: null,
       });
     } catch (err) {
-      this.setState({ loading: false, error: err.message });
+      openErrorPopup(err.message);
     }
   }
 
@@ -236,10 +250,11 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
-      concernsError: data ? data.error : null,
+      concernsError: data && data.error ? data.error.message : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
@@ -247,7 +262,7 @@ export default compose(
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
-      goalsError: data ? data.error : null,
+      goalsError: data && data.error ? data.error.message : null,
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),

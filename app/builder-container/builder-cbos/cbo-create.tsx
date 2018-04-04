@@ -6,7 +6,9 @@ import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
 import StateSelect from '../../shared/library/state-select/state-select';
 import TextInput from '../../shared/library/text-input/text-input';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/cbo-shared.css';
 
 interface IProps extends IInjectedErrorProps {

@@ -8,7 +8,7 @@ import PatientListEdit from '../patient-list-edit';
 
 describe('Builder Patient List Detail', () => {
   const placeholderFn = () => true as any;
-  const errorFn = (message: string ) => true as any;
+  const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
     <PatientListDetail

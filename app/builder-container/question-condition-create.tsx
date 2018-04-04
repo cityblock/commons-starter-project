@@ -12,6 +12,9 @@ import * as questionConditionStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 import QuestionAnswerOption from './question-answer-option';
 
@@ -19,7 +22,7 @@ export interface ICreateOptions {
   variables: questionConditionCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   questionCondition?: FullQuestionConditionFragment;
   questionId: string;
   answers: FullAnswerFragment[];
@@ -31,7 +34,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   questionCondition: {
     answerId: string;
   };
@@ -53,7 +55,6 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       questionCondition,
     };
   }
@@ -73,8 +74,9 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
         variables: { questionId: this.props.questionId, ...questionCondition },
       });
       this.setState({ loading: false });
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    } catch (err) {
+      this.setState({ loading: false });
+      this.props.openErrorPopup(err.message);
     }
     return false;
   }
@@ -111,6 +113,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(questionConditionCreateMutationGraphql as any, {
     name: 'createQuestionCondition',
     options: {

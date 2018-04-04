@@ -8,7 +8,9 @@ import {
   FullCBOFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import CBOCreate from './cbo-create';
 import CBOEdit from './cbo-edit';
 import * as styles from './css/cbo-detail.css';

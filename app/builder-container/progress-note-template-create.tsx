@@ -11,13 +11,16 @@ import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as progressNoteTemplateStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 export interface IOptions {
   variables: progressNoteTemplateCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   progressNoteTemplateId: string | null;
   routeBase: string;
   onClose: () => any;
@@ -30,7 +33,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   progressNoteTemplate: progressNoteTemplateCreateMutationVariables;
 }
 
@@ -45,7 +47,6 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 
     this.state = {
       loading: false,
-      error: null,
       progressNoteTemplate: {
         title: '',
       },
@@ -76,8 +77,9 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
         if (progressNoteTemplate.data.progressNoteTemplateCreate) {
           history.push(`${routeBase}/${progressNoteTemplate.data.progressNoteTemplateCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        this.props.openErrorPopup(err.message);
       }
     }
     return false;
@@ -120,6 +122,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateCreateMutationGraphql as any, {
     name: 'createProgressNoteTemplate',
     options: {

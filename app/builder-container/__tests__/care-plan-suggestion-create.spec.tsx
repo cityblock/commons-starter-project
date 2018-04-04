@@ -18,6 +18,7 @@ it('renders the correct concern suggestion options', () => {
     title: 'New Concern Title',
     diagnosisCodes: [],
   };
+  const errorFn = (message: string) => true as any;
 
   answer.concernSuggestions = [concern] as any;
   const component = shallow(
@@ -26,6 +27,7 @@ it('renders the correct concern suggestion options', () => {
       concerns={[concern, newConcern]}
       answer={answer}
       screeningToolScoreRange={null}
+      openErrorPopup={errorFn}
     />,
   );
   const instance = component.instance() as Component;
@@ -43,6 +45,7 @@ it('renders the correct goal suggestion options', () => {
     updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
     deletedAt: null,
   };
+  const errorFn = (message: string) => true as any;
 
   screeningToolScoreRange.goalSuggestions = [goalSuggestionTemplate] as any;
   const component = shallow(
@@ -51,6 +54,7 @@ it('renders the correct goal suggestion options', () => {
       concerns={null}
       answer={null}
       screeningToolScoreRange={screeningToolScoreRange}
+      openErrorPopup={errorFn}
     />,
   );
   const instance = component.instance() as Component;

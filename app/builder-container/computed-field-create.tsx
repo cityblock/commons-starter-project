@@ -17,13 +17,16 @@ import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: computedFieldCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   routeBase: string;
   onClose: () => any;
   history: History;
@@ -35,7 +38,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   computedField: computedFieldCreateMutationVariables;
 }
 
@@ -47,7 +49,6 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       computedField: { label: '', dataType: 'boolean' as ComputedFieldDataTypes },
     };
   }
@@ -71,7 +72,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const { createComputedField, onClose, history, routeBase } = this.props;
+    const { createComputedField, onClose, history, routeBase, openErrorPopup } = this.props;
     const { computedField } = this.state;
     const { label, dataType } = computedField;
     const allFieldsComplete = !isEmpty(label) && !isEmpty(dataType);
@@ -93,8 +94,9 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
         if (data.computedFieldCreate) {
           history.push(`${routeBase}/${data.computedFieldCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        openErrorPopup(err.message);
       }
     }
     return false;
@@ -148,6 +150,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(computedFieldCreateMutationGraphql as any, {
     name: 'createComputedField',
     options: {

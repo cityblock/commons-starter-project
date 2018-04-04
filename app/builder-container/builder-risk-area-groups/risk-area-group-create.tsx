@@ -7,7 +7,9 @@ import {
 } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-group-shared.css';
 
 interface IProps extends IInjectedErrorProps {

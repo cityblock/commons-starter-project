@@ -8,8 +8,14 @@ import { CBOCreate } from '../cbo-create';
 
 describe('Builder Patient List Group Create', () => {
   const placeholderFn = () => true as any;
-  const errorFn = (message: string ) => true as any;
-  const wrapper = shallow(<CBOCreate cancelCreateCBO={placeholderFn} createCBO={placeholderFn} openErrorPopup={errorFn} />);
+  const errorFn = (message: string) => true as any;
+  const wrapper = shallow(
+    <CBOCreate
+      cancelCreateCBO={placeholderFn}
+      createCBO={placeholderFn}
+      openErrorPopup={errorFn}
+    />,
+  );
 
   it('renders a button to close', () => {
     expect(wrapper.find(Button).length).toBe(3);

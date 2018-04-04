@@ -12,13 +12,16 @@ import * as goalStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: goalSuggestionTemplateCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   routeBase: string;
   onClose: () => any;
   history: History;
@@ -34,7 +37,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   goal: goalSuggestionTemplateCreateMutationVariables;
 }
 
@@ -50,7 +52,6 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       goal: { title: '' },
     };
   }
@@ -88,8 +89,9 @@ export class GoalCreate extends React.Component<allProps, IState> {
         if (goalResponse.data.goalSuggestionTemplateCreate) {
           history.push(`${routeBase}/${goalResponse.data.goalSuggestionTemplateCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        this.props.openErrorPopup(err.message);
       }
     }
     return false;
@@ -134,6 +136,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {

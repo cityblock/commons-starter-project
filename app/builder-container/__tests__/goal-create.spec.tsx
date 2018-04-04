@@ -33,12 +33,14 @@ describe('shallow rendered', () => {
 
   beforeEach(() => {
     const history = { push: jest.fn } as any;
+    const errorFn = (message: string) => true as any;
     const component = shallow(
       <Component
         history={history}
         routeBase="/builder/concerns"
         createGoal={createGoal}
         onClose={() => false}
+        openErrorPopup={errorFn}
       />,
     );
     instance = component.instance() as Component;

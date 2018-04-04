@@ -18,6 +18,9 @@ import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 const NOT_COMPUTED_FIELD_ID = 'not-computed-field';
@@ -26,7 +29,7 @@ export interface IOptions {
   variables: questionCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   riskAreaId: string | null;
   assessmentType: AssessmentType | null;
   screeningToolId: string | null;
@@ -43,7 +46,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   question: questionCreateMutationVariables;
 }
 
@@ -59,7 +61,6 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       question: {
         title: '',
         order: 1,
@@ -110,7 +111,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
   }
 
   async onSubmit() {
-    const { createQuestion, assessmentType, routeBase, history } = this.props;
+    const { createQuestion, assessmentType, routeBase, history, openErrorPopup } = this.props;
     if (createQuestion) {
       // don't allow submitting automated assessment without computed field
       if (assessmentType === 'automated' && !this.state.question.computedFieldId) return;
@@ -127,8 +128,9 @@ class QuestionCreate extends React.Component<allProps, IState> {
         if (question.data.questionCreate) {
           history.push(`${routeBase}/${question.data.questionCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        openErrorPopup(err.message);
       }
     }
     return false;
@@ -255,6 +257,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {

@@ -8,7 +8,9 @@ import {
   FullPatientListFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-list-detail.css';
 import PatientListCreate from './patient-list-create';
 import PatientListEdit from './patient-list-edit';

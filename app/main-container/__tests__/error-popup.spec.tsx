@@ -36,7 +36,6 @@ describe('Error Popup Component', () => {
     expect(closeIcon.props().onClick).toBe(placeholderFn);
     expect(closeIcon.props().className).toBe('closeIcon');
     expect(closeIcon.props().isExtraLarge).toBeTruthy();
-
   });
 
   it('renders popup body message', () => {

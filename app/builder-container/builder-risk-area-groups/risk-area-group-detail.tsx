@@ -8,7 +8,9 @@ import {
   FullRiskAreaGroupFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
-import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-group-detail.css';
 import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';

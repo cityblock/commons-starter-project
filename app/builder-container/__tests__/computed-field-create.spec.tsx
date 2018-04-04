@@ -8,12 +8,14 @@ describe('shallow rendered', () => {
 
   beforeEach(() => {
     const history = { push: jest.fn } as any;
+    const errorFn = (message: string) => true as any;
     const component = shallow(
       <Component
         routeBase="/builder/computed-fields"
         createComputedField={createComputedField}
         onClose={() => false}
         history={history}
+        openErrorPopup={errorFn}
       />,
     );
     instance = component.instance() as Component;

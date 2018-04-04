@@ -8,7 +8,7 @@ import RiskAreaGroupEdit from '../risk-area-group-edit';
 
 describe('Builder Risk Area Group Detail', () => {
   const placeholderFn = () => true as any;
-  const errorFn = (message: string ) => true as any;
+  const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
     <RiskAreaGroupDetail

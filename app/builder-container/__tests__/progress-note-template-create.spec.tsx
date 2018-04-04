@@ -14,12 +14,14 @@ afterAll(() => {
 it('renders progress note template create', () => {
   const onClose = jest.fn();
   const history = { push: jest.fn() } as any;
+  const errorFn = (message: string) => true as any;
   const component = shallow(
     <ProgressNoteTemplateCreate
       history={history}
       routeBase="/route/base"
       progressNoteTemplateId={progressNoteTemplate.id}
       onClose={onClose}
+      openErrorPopup={errorFn}
     />,
   );
   const instance = component.instance();

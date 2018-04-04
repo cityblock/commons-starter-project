@@ -9,7 +9,9 @@ import {
   FullPatientContactFragment,
 } from '../../../graphql/types';
 import EditPatientContactModal from '../../../shared/patient-contact-modal/edit-patient-contact-modal';
-import withErrorHandler, { IInjectedErrorProps } from '../../../shared/with-error-handler/with-error-handler';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../../shared/with-error-handler/with-error-handler';
 import RequiredPlaceholder from '../../required-placeholder';
 import * as styles from '../css/patient-team.css';
 import PatientFamilyMember from './patient-family-member';

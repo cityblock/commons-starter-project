@@ -7,7 +7,6 @@ import expressConfig from './express';
 
 let logger = console;
 
-/* istanbul ignore next */
 if (process.env.NODE_ENV === 'production') {
   /* tslint:disable no-var-requires */
   const CaptureOutput = require('./lib/capture-output').default;
@@ -20,7 +19,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const app = express();
 
-/* istanbul ignore next */
 if (process.env.NODE_ENV === 'production') {
   // compress all responses
   app.use(compression());
@@ -39,7 +37,6 @@ export async function main(options: IMainOptions) {
   return (app as any).listen(app.get('port'));
 }
 
-/* istanbul ignore next */
 if (require.main === module) {
   try {
     main({ env: process.env.NODE_ENV as Env });

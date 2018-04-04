@@ -70,7 +70,22 @@ export default async (
   txn?: Transaction,
   allowCrossDomainRequests?: boolean,
 ) => {
-  /* istanbul ignore next */
+  let errorReporting: ErrorReporting | undefined;
+  if (config.NODE_ENV === 'production' && config.GCP_CREDS) {
+    errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+    process.on('uncaughtException', e => {
+      // Write the error to stderr.
+      console.error(e);
+      // Report that same error the Stackdriver Error Service
+      if (errorReporting) {
+        errorReporting.report(e);
+      }
+    });
+
+    // Ensure stackdriver is working
+    errorReporting.report('Server Restarting');
+  }
+
   if (config.NODE_ENV === 'development') {
     // enable webpack dev middleware
     const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -84,11 +99,10 @@ export default async (
   }
 
   // This adds request logging using some decent defaults.
-  /* istanbul ignore next */
+
   if (config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (config.NODE_ENV === 'production') {
-    /* istanbul ignore next */
     app.use(morgan('combined'));
   }
 
@@ -130,6 +144,7 @@ export default async (
         logger,
         txn || undefined,
         process.env.DATADOG_API_KEY ? GraphQLDog : null,
+        errorReporting,
       ),
       formatResponse,
       debug: false,
@@ -158,7 +173,6 @@ export default async (
 
   app.get('*', addHeadersMiddleware, renderApp);
 
-  /* istanbul ignore next */
   if (config.NODE_ENV !== 'test') {
     /* tslint:disable no-console */
     console.log('--------------------------');
@@ -168,20 +182,9 @@ export default async (
     /* tslint:enable no-console */
   }
 
-  /* istanbul ignore next */
-  if (config.NODE_ENV === 'production' && config.GCP_CREDS) {
-    const errors = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
-    process.on('uncaughtException', e => {
-      // Write the error to stderr.
-      console.error(e);
-      // Report that same error the Stackdriver Error Service
-      errors.report(e);
-    });
-
-    // Ensure stackdriver is working
-    errors.report('Server Restarting');
+  if (errorReporting) {
     // Note that express error handling middleware should be attached after all
     // the other routes and use() calls.
-    app.use(errors.express);
+    app.use(errorReporting.express);
   }
 };

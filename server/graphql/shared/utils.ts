@@ -1,3 +1,4 @@
+import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
@@ -22,6 +23,7 @@ export interface IContext {
   txn: Transaction;
   datadogContext: any;
   testConfig?: any;
+  errorReporting?: ErrorReporting;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -83,6 +85,7 @@ export async function getGraphQLContext(
   logger: ILogger,
   existingTxn?: Transaction,
   dataDog?: any,
+  errorReporting?: ErrorReporting,
 ): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
@@ -104,6 +107,7 @@ export async function getGraphQLContext(
         logger,
         txn,
         datadogContext,
+        errorReporting,
       };
     }
   }
@@ -114,17 +118,35 @@ export async function getGraphQLContext(
     logger,
     txn,
     datadogContext,
+    errorReporting,
   };
 }
 
-export async function formatResponse(response: any, { context }: any): Promise<any> {
+interface IGraphqlError {
+  message: string;
+  locations: any;
+  path: any;
+}
+
+export async function formatResponse(
+  response: any,
+  { context }: { context: IContext },
+): Promise<any> {
+  const errorReporting = context.errorReporting;
   try {
     await context.txn.commit();
   } catch (err) {
-    await context.trx.rollback();
+    await context.txn.rollback();
     /* tslint:disable no-console */
     console.log('Transaction failed with error: ', err);
     /* tslint:enable no-console */
+    if (errorReporting) {
+      errorReporting.report(err);
+    }
+  }
+
+  if (errorReporting && response.errors) {
+    response.errors.forEach((error: IGraphqlError) => errorReporting.report(error));
   }
   return response;
 }

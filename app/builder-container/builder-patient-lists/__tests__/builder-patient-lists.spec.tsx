@@ -53,12 +53,16 @@ describe('Builder Patient Lists Component', () => {
 
   it('renders patient list detail if patient list selected', () => {
     expect(wrapper.find(PatientListDetail).length).toBe(1);
-    expect(wrapper.find(PatientListDetail).props().patientList).toEqual(patientList);
-    expect(wrapper.find(PatientListDetail).props().createMode).toBeFalsy();
+
+    const detail = wrapper.find(PatientListDetail) as any;
+    expect(detail.props().patientList).toEqual(patientList);
+    expect(detail.props().createMode).toBeFalsy();
   });
 
   it('passes null to patient list detail if no patient list selected', () => {
     wrapper.setProps({ patientListId: null });
-    expect(wrapper.find(PatientListDetail).props().patientList).toBeNull();
+
+    const detail = wrapper.find(PatientListDetail) as any;
+    expect(detail.props().patientList).toBeNull();
   });
 });

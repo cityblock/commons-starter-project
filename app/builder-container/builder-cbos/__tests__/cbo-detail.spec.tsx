@@ -8,6 +8,7 @@ import CBOEdit from '../cbo-edit';
 
 describe('Builder CBO Detail', () => {
   const placeholderFn = () => true as any;
+  const errorFn = (message: string ) => true as any;
 
   const wrapper = shallow(
     <CBODetail
@@ -16,6 +17,7 @@ describe('Builder CBO Detail', () => {
       cancelCreateCBO={placeholderFn}
       deleteCBO={placeholderFn}
       CBO={null}
+      openErrorPopup={errorFn}
     />,
   );
 

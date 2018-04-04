@@ -53,12 +53,16 @@ describe('Builder Risk Area Groups Component', () => {
 
   it('renders risk area group detail if risk area group selected', () => {
     expect(wrapper.find(RiskAreaGroupDetail).length).toBe(1);
-    expect(wrapper.find(RiskAreaGroupDetail).props().riskAreaGroup).toBe(riskAreaGroup);
-    expect(wrapper.find(RiskAreaGroupDetail).props().createMode).toBeFalsy();
+
+    const detail = wrapper.find(RiskAreaGroupDetail) as any;
+    expect(detail.props().riskAreaGroup).toBe(riskAreaGroup);
+    expect(detail.props().createMode).toBeFalsy();
   });
 
   it('passes null to risk area group detail if no risk area group selected', () => {
     wrapper.setProps({ riskAreaGroupId: null });
-    expect(wrapper.find(RiskAreaGroupDetail).props().riskAreaGroup).toBeNull();
+
+    const detail = wrapper.find(RiskAreaGroupDetail) as any;
+    expect(detail.props().riskAreaGroup).toBeNull();
   });
 });

@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as createCBOMutationGraphql from '../../graphql/queries/cbo-create-mutation.graphql';
 import { CBOCreateMutation, CBOCreateMutationVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
 import StateSelect from '../../shared/library/state-select/state-select';
 import TextInput from '../../shared/library/text-input/text-input';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/cbo-shared.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   cancelCreateCBO: () => void;
 }
 
@@ -29,7 +30,6 @@ interface IState {
   phone: string;
   url: string;
   loading: boolean;
-  error: string | null;
 }
 
 type Field = 'name' | 'categoryId' | 'address' | 'city' | 'state' | 'zip' | 'fax' | 'phone' | 'url';
@@ -49,7 +49,6 @@ export class CBOCreate extends React.Component<allProps, IState> {
       phone: '',
       url: '',
       loading: false,
-      error: null,
     };
   }
 
@@ -62,12 +61,12 @@ export class CBOCreate extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const { createCBO, cancelCreateCBO } = this.props;
+    const { createCBO, cancelCreateCBO, openErrorPopup } = this.props;
     const { name, categoryId, address, city, state, zip, fax, phone, url, loading } = this.state;
 
     if (!loading) {
       try {
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true });
         const variables: CBOCreateMutationVariables = {
           name,
           categoryId,
@@ -83,7 +82,7 @@ export class CBOCreate extends React.Component<allProps, IState> {
         await createCBO({ variables });
         cancelCreateCBO();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
     }
     this.setState({ loading: false });
@@ -145,9 +144,12 @@ export class CBOCreate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createCBOMutationGraphql as any, {
-  name: 'createCBO',
-  options: {
-    refetchQueries: ['getCBOs'],
-  },
-})(CBOCreate);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(createCBOMutationGraphql as any, {
+    name: 'createCBO',
+    options: {
+      refetchQueries: ['getCBOs'],
+    },
+  }),
+)(CBOCreate);

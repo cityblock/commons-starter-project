@@ -53,12 +53,16 @@ describe('Builder CBOs Component', () => {
 
   it('renders CBO detail if CBO selected', () => {
     expect(wrapper.find(CBODetail).length).toBe(1);
-    expect(wrapper.find(CBODetail).props().CBO).toEqual(CBO);
-    expect(wrapper.find(CBODetail).props().createMode).toBeFalsy();
+
+    const detail = wrapper.find(CBODetail) as any;
+    expect(detail.props().CBO).toEqual(CBO);
+    expect(detail.props().createMode).toBeFalsy();
   });
 
   it('passes null to CBO detail if no CBO selected', () => {
     wrapper.setProps({ CBOId: null });
-    expect(wrapper.find(CBODetail).props().CBO).toBeNull();
+
+    const detail = wrapper.find(CBODetail) as any;
+    expect(detail.props().CBO).toBeNull();
   });
 });

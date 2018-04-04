@@ -6,10 +6,12 @@ import { RiskAreaGroupCreate } from '../risk-area-group-create';
 
 describe('Builder Risk Area Group Create', () => {
   const placeholderFn = () => true as any;
+  const errorFn = (message: string ) => true as any;
   const wrapper = shallow(
     <RiskAreaGroupCreate
       cancelCreateRiskAreaGroup={placeholderFn}
       createRiskAreaGroup={placeholderFn}
+      openErrorPopup={errorFn}
     />,
   );
 

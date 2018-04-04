@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as createPatientListMutationGraphql from '../../graphql/queries/patient-list-create-mutation.graphql';
 import { patientListCreateMutation, patientListCreateMutationVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-list-shared.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   cancelCreatePatientList: () => void;
 }
 
@@ -23,7 +24,6 @@ interface IState {
   answerId: string;
   order: string;
   loading: boolean;
-  error: string | null;
 }
 
 type Field = 'title' | 'answerId' | 'order';
@@ -37,7 +37,6 @@ export class PatientListCreate extends React.Component<allProps, IState> {
       answerId: '',
       order: '',
       loading: false,
-      error: null,
     };
   }
 
@@ -48,12 +47,12 @@ export class PatientListCreate extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const { createPatientList, cancelCreatePatientList } = this.props;
+    const { createPatientList, cancelCreatePatientList, openErrorPopup } = this.props;
     const { title, answerId, order, loading } = this.state;
 
     if (!loading) {
       try {
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true });
 
         await createPatientList({
           variables: {
@@ -64,7 +63,7 @@ export class PatientListCreate extends React.Component<allProps, IState> {
         });
         cancelCreatePatientList();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
     }
     this.setState({ loading: false });
@@ -116,9 +115,12 @@ export class PatientListCreate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createPatientListMutationGraphql as any, {
-  name: 'createPatientList',
-  options: {
-    refetchQueries: ['getPatientLists'],
-  },
-})(PatientListCreate);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(createPatientListMutationGraphql as any, {
+    name: 'createPatientList',
+    options: {
+      refetchQueries: ['getPatientLists'],
+    },
+  }),
+)(PatientListCreate);

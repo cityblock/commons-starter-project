@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as patientListDeleteMutationGraphql from '../../graphql/queries/patient-list-delete-mutation.graphql';
 import {
   patientListDeleteMutation,
@@ -8,11 +8,12 @@ import {
   FullPatientListFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-list-detail.css';
 import PatientListCreate from './patient-list-create';
 import PatientListEdit from './patient-list-edit';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   patientList: FullPatientListFragment | null;
   close: () => void;
   createMode: boolean;
@@ -30,7 +31,6 @@ type allProps = IGraphqlProps & IProps;
 interface IState {
   deleteMode: boolean;
   loading: boolean;
-  error: string | null;
 }
 
 export class PatientListDetail extends React.Component<allProps, IState> {
@@ -40,7 +40,7 @@ export class PatientListDetail extends React.Component<allProps, IState> {
   }
 
   getInitialState(): IState {
-    return { deleteMode: false, loading: false, error: null };
+    return { deleteMode: false, loading: false };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -51,17 +51,17 @@ export class PatientListDetail extends React.Component<allProps, IState> {
   }
 
   onDelete = async () => {
-    const { deletePatientList, patientList, close } = this.props;
+    const { deletePatientList, patientList, close, openErrorPopup } = this.props;
     if (!patientList) return;
 
     if (!this.state.loading) {
-      this.setState({ loading: true, error: null });
+      this.setState({ loading: true });
 
       try {
         await deletePatientList({ variables: { patientListId: patientList.id } });
         close();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
 
       this.setState({ loading: false });
@@ -97,9 +97,12 @@ export class PatientListDetail extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientListDeleteMutationGraphql as any, {
-  name: 'deletePatientList',
-  options: {
-    refetchQueries: ['getPatientLists'],
-  },
-})(PatientListDetail);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(patientListDeleteMutationGraphql as any, {
+    name: 'deletePatientList',
+    options: {
+      refetchQueries: ['getPatientLists'],
+    },
+  }),
+)(PatientListDetail);

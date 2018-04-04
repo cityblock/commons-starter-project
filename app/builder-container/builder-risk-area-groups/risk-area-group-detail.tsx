@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
 import {
   riskAreaGroupDeleteMutation,
@@ -8,11 +8,12 @@ import {
   FullRiskAreaGroupFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-group-detail.css';
 import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   riskAreaGroup: FullRiskAreaGroupFragment | null;
   close: () => void;
   createMode: boolean;
@@ -30,7 +31,6 @@ type allProps = IGraphqlProps & IProps;
 interface IState {
   deleteMode: boolean;
   loading: boolean;
-  error: string | null;
 }
 
 export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
@@ -40,7 +40,7 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
   }
 
   getInitialState(): IState {
-    return { deleteMode: false, loading: false, error: null };
+    return { deleteMode: false, loading: false };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -51,17 +51,17 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
   }
 
   onDelete = async () => {
-    const { deleteRiskAreaGroup, riskAreaGroup, close } = this.props;
+    const { deleteRiskAreaGroup, riskAreaGroup, close, openErrorPopup } = this.props;
     if (!riskAreaGroup) return;
 
     if (!this.state.loading) {
-      this.setState({ loading: true, error: null });
+      this.setState({ loading: true });
 
       try {
         await deleteRiskAreaGroup({ variables: { riskAreaGroupId: riskAreaGroup.id } });
         close();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
 
       this.setState({ loading: false });
@@ -97,9 +97,12 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupDeleteMutationGraphql as any, {
-  name: 'deleteRiskAreaGroup',
-  options: {
-    refetchQueries: ['getRiskAreaGroups'],
-  },
-})(RiskAreaGroupDetail);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupDeleteMutationGraphql as any, {
+    name: 'deleteRiskAreaGroup',
+    options: {
+      refetchQueries: ['getRiskAreaGroups'],
+    },
+  }),
+)(RiskAreaGroupDetail);

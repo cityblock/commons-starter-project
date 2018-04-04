@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as CBODeleteMutationGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
 import {
   CBODeleteMutation,
@@ -8,11 +8,12 @@ import {
   FullCBOFragment,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import CBOCreate from './cbo-create';
 import CBOEdit from './cbo-edit';
 import * as styles from './css/cbo-detail.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   CBO: FullCBOFragment | null;
   close: () => void;
   createMode: boolean;
@@ -28,7 +29,6 @@ type allProps = IGraphqlProps & IProps;
 interface IState {
   deleteMode: boolean;
   loading: boolean;
-  error: string | null;
 }
 
 export class CBODetail extends React.Component<allProps, IState> {
@@ -38,7 +38,7 @@ export class CBODetail extends React.Component<allProps, IState> {
   }
 
   getInitialState(): IState {
-    return { deleteMode: false, loading: false, error: null };
+    return { deleteMode: false, loading: false };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -49,17 +49,17 @@ export class CBODetail extends React.Component<allProps, IState> {
   }
 
   onDelete = async () => {
-    const { deleteCBO, CBO, close } = this.props;
+    const { deleteCBO, CBO, close, openErrorPopup } = this.props;
     if (!CBO) return;
 
     if (!this.state.loading) {
-      this.setState({ loading: true, error: null });
+      this.setState({ loading: true });
 
       try {
         await deleteCBO({ variables: { CBOId: CBO.id } });
         close();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
 
       this.setState({ loading: false });
@@ -91,9 +91,12 @@ export class CBODetail extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(CBODeleteMutationGraphql as any, {
-  name: 'deleteCBO',
-  options: {
-    refetchQueries: ['getCBOs'],
-  },
-})(CBODetail);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(CBODeleteMutationGraphql as any, {
+    name: 'deleteCBO',
+    options: {
+      refetchQueries: ['getCBOs'],
+    },
+  }),
+)(CBODetail);

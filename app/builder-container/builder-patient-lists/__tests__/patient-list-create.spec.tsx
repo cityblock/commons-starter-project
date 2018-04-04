@@ -6,8 +6,9 @@ import { PatientListCreate } from '../patient-list-create';
 
 describe('Builder Patient List Group Create', () => {
   const placeholderFn = () => true as any;
+  const errorFn = (message: string ) => true as any;
   const wrapper = shallow(
-    <PatientListCreate cancelCreatePatientList={placeholderFn} createPatientList={placeholderFn} />,
+    <PatientListCreate cancelCreatePatientList={placeholderFn} createPatientList={placeholderFn} openErrorPopup={errorFn} />,
   );
 
   it('renders a button to close', () => {

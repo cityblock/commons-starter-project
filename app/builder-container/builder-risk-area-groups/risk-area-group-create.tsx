@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as createRiskAreaGroupMutationGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
 import {
   riskAreaGroupCreateMutation,
@@ -7,9 +7,10 @@ import {
 } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
+import withErrorHandler, { IInjectedErrorProps } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-group-shared.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   cancelCreateRiskAreaGroup: () => void;
 }
 
@@ -28,7 +29,6 @@ interface IState {
   mediumRiskThreshold: string;
   highRiskThreshold: string;
   loading: boolean;
-  error: string | null;
 }
 
 type Field = 'title' | 'shortTitle' | 'order' | 'mediumRiskThreshold' | 'highRiskThreshold';
@@ -44,7 +44,6 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
       mediumRiskThreshold: '',
       highRiskThreshold: '',
       loading: false,
-      error: null,
     };
   }
 
@@ -55,7 +54,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const { createRiskAreaGroup, cancelCreateRiskAreaGroup } = this.props;
+    const { createRiskAreaGroup, cancelCreateRiskAreaGroup, openErrorPopup } = this.props;
     const {
       title,
       shortTitle,
@@ -67,7 +66,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
     // prevent submitting with no risk threshold
     if (!loading && order && mediumRiskThreshold && highRiskThreshold) {
       try {
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true });
 
         await createRiskAreaGroup({
           variables: {
@@ -80,7 +79,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
         });
         cancelCreateRiskAreaGroup();
       } catch (err) {
-        this.setState({ error: err.message });
+        openErrorPopup(err.message);
       }
     }
     this.setState({ loading: false });
@@ -142,9 +141,12 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createRiskAreaGroupMutationGraphql as any, {
-  name: 'createRiskAreaGroup',
-  options: {
-    refetchQueries: ['getRiskAreaGroups'],
-  },
-})(RiskAreaGroupCreate);
+export default compose(
+  withErrorHandler(),
+  graphql<IGraphqlProps, IProps, allProps>(createRiskAreaGroupMutationGraphql as any, {
+    name: 'createRiskAreaGroup',
+    options: {
+      refetchQueries: ['getRiskAreaGroups'],
+    },
+  }),
+)(RiskAreaGroupCreate);

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { omit } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -11,6 +12,7 @@ import {
   patientGlassBreakCreateMutation,
   patientGlassBreakCreateMutationVariables,
 } from '../../graphql/types';
+import ErrorComponent from '../error-component/error-component';
 import { formatPatientName } from '../helpers/format-helpers';
 import Spinner from '../library/spinner/spinner';
 import withCurrentUser, {
@@ -27,7 +29,7 @@ interface IExternalProps {
   patient: getPatientQuery['patient'];
   patientId: string;
   loading?: boolean;
-  error?: string | null;
+  error?: ApolloError;
 }
 
 interface IGraphqlProps {
@@ -85,6 +87,10 @@ const patientGlassBreak = () => <P extends {}>(
     };
 
     render(): JSX.Element {
+      const { error } = this.props;
+      if (error) {
+        return <ErrorComponent error={error!} />;
+      }
       if (this.isLoading()) return <Spinner className={styles.spinner} />;
 
       const { patient, featureFlags, glassBreakCheck } = this.props;

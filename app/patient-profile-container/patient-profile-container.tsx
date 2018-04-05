@@ -1,9 +1,11 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { getPatientQuery } from '../graphql/types';
+import ErrorComponent from '../shared/error-component/error-component';
 import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
 import { formatPatientName } from '../shared/helpers/format-helpers';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
@@ -47,7 +49,7 @@ interface IStateProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  error?: string | null;
+  error?: ApolloError | null;
   patient?: getPatientQuery['patient'];
 }
 
@@ -61,7 +63,12 @@ export class PatientProfileContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { patientId, patient, tab, glassBreakId } = this.props;
+    const { patientId, patient, tab, glassBreakId, error } = this.props;
+
+    if (error) {
+      return <ErrorComponent error={error} />;
+    }
+
     return (
       <div className={styles.container}>
         <PatientModals />

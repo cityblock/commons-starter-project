@@ -1,5 +1,6 @@
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
+import { ErrorLink } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 import { throttle } from 'lodash';
 
@@ -40,8 +41,24 @@ export const getMiddlewareLink = () => {
     return forward ? forward(operation) : null;
   });
 
+  const errorHandler = new ErrorLink(({graphQLErrors, networkError}) => {
+    if (graphQLErrors) {
+      graphQLErrors.map(({ message, locations, path }) => {
+        /* tslint:disable no-console */
+        console.error(`[GraphQL error]: Message: ${message}, Path: ${path}`);
+        /* tslint:enable no-console */
+      });
+    }
+    if (networkError) {
+      /* tslint:disable no-console */
+      console.error(`[Network error]: ${networkError}`);
+      /* tslint:enable no-console */
+    }
+  });
+
   if (process.env.NODE_ENV === 'development') {
     middlewareLink = middlewareLink.concat(loggingMiddleware);
+    middlewareLink = middlewareLink.concat(errorHandler);
   }
   middlewareLink = middlewareLink.concat(lastActionMiddleware);
   return middlewareLink.concat(httpLink);

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
@@ -12,6 +13,7 @@ import {
 } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
 import { ISavedEmail } from '../../shared/email-modal/email-modal';
+import ErrorComponent from '../../shared/error-component/error-component';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
 import SmallText from '../../shared/library/small-text/small-text';
@@ -41,7 +43,7 @@ interface IGraphqlProps {
   ) => { data: patientInfoEditMutation };
   patient?: getPatientQuery['patient'];
   loading?: boolean;
-  error: string | null;
+  error: ApolloError | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -279,10 +281,14 @@ export class PatientInfo extends React.Component<allProps, allState> {
   }
 
   render(): JSX.Element {
-    const { match, patient } = this.props;
+    const { match, patient, error } = this.props;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/member-info`;
     const { hasUnsavedChanges, isUploadModalVisible } = this.state;
+
+    if (error) {
+      return <ErrorComponent error={error} />;
+    }
 
     const isDocuments = subTab === 'documents';
 

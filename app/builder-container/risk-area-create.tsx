@@ -16,13 +16,16 @@ import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import Spinner from '../shared/library/spinner/spinner';
 import TextInput from '../shared/library/text-input/text-input';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: riskAreaCreateMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   routeBase: string;
   onClose: () => any;
   history: History;
@@ -43,7 +46,6 @@ interface IState {
   mediumRiskThreshold: string;
   highRiskThreshold: string;
   loading: boolean;
-  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -68,7 +70,6 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
       mediumRiskThreshold: '',
       highRiskThreshold: '',
       loading: false,
-      error: null,
     };
   }
 
@@ -92,7 +93,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
       assessmentType,
       loading,
     } = this.state;
-    const { routeBase, history } = this.props;
+    const { routeBase, history, openErrorPopup } = this.props;
     if (
       !loading &&
       this.props.createRiskArea &&
@@ -102,7 +103,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
       highRiskThreshold
     ) {
       try {
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true });
         const riskArea = await this.props.createRiskArea({
           variables: {
             title,
@@ -118,8 +119,9 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
         if (riskArea.data.riskAreaCreate) {
           history.push(`${routeBase}/${riskArea.data.riskAreaCreate.id}`);
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ loading: false });
+        openErrorPopup(err.message);
       }
     }
   };
@@ -198,6 +200,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,

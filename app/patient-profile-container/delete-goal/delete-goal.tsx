@@ -56,6 +56,7 @@ export class DeleteGoalModal extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { visible, patientGoalTitle, closePopup } = this.props;
+    const { error } = this.state;
 
     return (
       <DeleteModal
@@ -66,6 +67,7 @@ export class DeleteGoalModal extends React.Component<allProps, IState> {
         deletedItemName={patientGoalTitle}
         closePopup={closePopup}
         deleteItem={this.onDelete}
+        error={error}
       />
     );
   }

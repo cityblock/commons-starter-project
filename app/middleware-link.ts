@@ -41,7 +41,7 @@ export const getMiddlewareLink = () => {
     return forward ? forward(operation) : null;
   });
 
-  const errorHandler = new ErrorLink(({graphQLErrors, networkError}) => {
+  const errorHandler = new ErrorLink(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.map(({ message, locations, path }) => {
         /* tslint:disable no-console */

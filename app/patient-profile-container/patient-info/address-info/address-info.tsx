@@ -13,6 +13,9 @@ import { ISavedAddress } from '../../../shared/address-modal/address-modal';
 import Button from '../../../shared/library/button/button';
 import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../../shared/with-error-handler/with-error-handler';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
@@ -20,7 +23,7 @@ import CreateAddressModal from './create-address-modal';
 import * as styles from './css/address-info.css';
 import EditAddressModal from './edit-address-modal';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -61,7 +64,7 @@ export class AddressInfo extends React.Component<allProps, IState> {
   }
 
   handleAddressDelete = async (addressId: string, isPrimary: boolean) => {
-    const { addressDeleteMutation, patientId, onChange, addresses } = this.props;
+    const { addressDeleteMutation, patientId, onChange, addresses, openErrorPopup } = this.props;
     try {
       await addressDeleteMutation({
         variables: {
@@ -79,7 +82,7 @@ export class AddressInfo extends React.Component<allProps, IState> {
         onChange({ primaryAddress: null });
       }
     } catch (err) {
-      // TODO: handle errors
+      openErrorPopup(err.message);
     }
   };
 
@@ -264,6 +267,7 @@ export class AddressInfo extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(addressDeleteMutationGraphql as any, {
     name: 'addressDeleteMutation',
   }),

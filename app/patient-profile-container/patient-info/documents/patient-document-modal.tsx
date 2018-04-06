@@ -48,6 +48,7 @@ interface IState {
   documentType?: DocumentTypeOptions | null;
   description?: string | null;
   isSaving?: boolean;
+  error?: string | null;
 }
 
 export class PatientDocumentModal extends React.Component<allProps, IState> {
@@ -99,15 +100,15 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
         },
       });
 
-      this.setState({ isSaving: false });
+      this.setState({ isSaving: false, error: null });
       this.handleClose();
     } catch (err) {
-      // TODO: handle error
+      this.setState({ error: err.message });
     }
   };
 
   handleClose = () => {
-    this.setState({ selectedFile: null, documentType: null, description: null });
+    this.setState({ selectedFile: null, documentType: null, description: null, error: null });
     this.props.closePopup();
   };
 
@@ -174,7 +175,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 
   render() {
     const { isVisible } = this.props;
-    const { isSaving } = this.state;
+    const { isSaving, error } = this.state;
 
     const bodyHtml = isSaving ? <Spinner className={styles.spinner} /> : this.renderForm();
 
@@ -188,6 +189,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
         submitMessageId="patientDocumentModal.submit"
         cancelMessageId="patientDocumentModal.cancel"
         isButtonHidden={isSaving}
+        error={error}
       >
         {bodyHtml}
       </Modal>

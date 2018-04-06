@@ -13,6 +13,7 @@ import { EmailInfo } from '../email-info';
 describe('Render Email Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
   const emailDeleteMutation = jest.fn();
+  const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
     <EmailInfo
@@ -22,6 +23,7 @@ describe('Render Email Info Component', () => {
       className="something"
       emailDeleteMutation={emailDeleteMutation}
       error={null}
+      openErrorPopup={errorFn}
     />,
   );
 

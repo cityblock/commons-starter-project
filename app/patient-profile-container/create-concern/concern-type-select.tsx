@@ -19,7 +19,7 @@ const ConcernTypeSelect: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div>
-      <FormLabel messageId="concernCreate.selectConcernTypeLabel" />
+      <FormLabel messageId="concernCreate.selectConcernTypeLabel" topPadding={true} />
       <Select name="concernType" value={value || ''} onChange={onChange} className={styles.select}>
         <Option value="" messageId="concernCreate.selectConcernType" disabled={true} />
         {concernTypeOptionsList}

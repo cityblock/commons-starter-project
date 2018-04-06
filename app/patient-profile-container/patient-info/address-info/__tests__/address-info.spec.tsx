@@ -14,6 +14,7 @@ import EditAddressModal from '../edit-address-modal';
 describe('Render Address Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
   const addressDeleteMutation = jest.fn();
+  const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
     <AddressInfo
@@ -23,6 +24,7 @@ describe('Render Address Info Component', () => {
       className="something"
       addressDeleteMutation={addressDeleteMutation}
       error={null}
+      openErrorPopup={errorFn}
     />,
   );
 

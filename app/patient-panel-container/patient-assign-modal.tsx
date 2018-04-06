@@ -9,6 +9,7 @@ import {
 import { formatFullName } from '../shared/helpers/format-helpers';
 import FormLabel from '../shared/library/form-label/form-label';
 import ModalButtons from '../shared/library/modal-buttons/modal-buttons';
+import ModalError from '../shared/library/modal-error/modal-error';
 import ModalHeader from '../shared/library/modal-header/modal-header';
 import { Popup } from '../shared/popup/popup';
 import CareWorkerSelect from './care-worker-select';
@@ -35,7 +36,7 @@ type allProps = IProps & IGraphqlProps;
 interface IState {
   careWorkerId: string | null;
   assignLoading?: boolean;
-  assignError: boolean;
+  assignError: string | null;
   assignSuccess?: boolean;
   assignedCareWorker: careTeamAssignPatientsMutation['careTeamAssignPatients'];
 }
@@ -46,7 +47,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
 
     this.state = {
       careWorkerId: null,
-      assignError: false,
+      assignError: null,
       assignedCareWorker: { id: '', firstName: '', lastName: '', patientCount: 0 },
     };
   }
@@ -86,14 +87,15 @@ class PatientAssignModal extends React.Component<allProps, IState> {
     closePopup();
     this.setState({
       assignSuccess: false,
-      assignError: false,
+      assignError: null,
       assignLoading: false,
       careWorkerId: null,
     });
   };
 
   renderAssign() {
-    const { careWorkerId } = this.state;
+    const { careWorkerId, assignError } = this.state;
+    const errorComponent = assignError ? <ModalError error={assignError} /> : null;
 
     return (
       <div>
@@ -102,6 +104,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
           bodyMessageId="patientAssignModal.description"
           closePopup={this.handleClose}
         />
+        {errorComponent}
         <div className={styles.body}>
           <FormLabel messageId="patientAssignModal.select" />
           <CareWorkerSelect onChange={this.handleChange} value={careWorkerId} isLarge={true} />

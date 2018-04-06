@@ -61,9 +61,9 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
       this.props.history.push(HOME_ROUTE);
       document.title = LOGGED_IN_TITLE;
-    } catch (e) {
+    } catch (err) {
       await localStorage.removeItem('authToken');
-      this.setState({ error: e.message });
+      this.setState({ error: err.message });
     }
   }
 

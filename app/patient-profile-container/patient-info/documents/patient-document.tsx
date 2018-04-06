@@ -18,9 +18,12 @@ import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/h
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import SmallText from '../../../shared/library/small-text/small-text';
 import TextInfo from '../../../shared/library/text-info/text-info';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-document.css';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   patientDocument: FullPatientDocumentFragment;
 }
 
@@ -50,7 +53,12 @@ export class PatientDocument extends React.Component<allProps, IState> {
   };
 
   handleDeleteClick = async () => {
-    const { getSignedDocumentUrl, patientDocument, deletePatientDocument } = this.props;
+    const {
+      getSignedDocumentUrl,
+      patientDocument,
+      deletePatientDocument,
+      openErrorPopup,
+    } = this.props;
     const { id, patientId } = patientDocument;
 
     try {
@@ -61,12 +69,12 @@ export class PatientDocument extends React.Component<allProps, IState> {
       await axios.delete(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl);
       await deletePatientDocument({ variables: { patientDocumentId: id } });
     } catch (err) {
-      // TODO: do something with error
+      openErrorPopup(err.message);
     }
   };
 
   handleDownloadClick = async () => {
-    const { getSignedDocumentUrl, patientDocument } = this.props;
+    const { getSignedDocumentUrl, patientDocument, openErrorPopup } = this.props;
     const { id, patientId } = patientDocument;
 
     try {
@@ -76,7 +84,7 @@ export class PatientDocument extends React.Component<allProps, IState> {
 
       window.open(signedUrlData.data.patientDocumentSignedUrlCreate.signedUrl, '_blank');
     } catch (err) {
-      // TODO: do something with error
+      openErrorPopup(err.message);
     }
   };
 
@@ -141,6 +149,7 @@ export class PatientDocument extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(patientDocumentSignedUrlCreate as any, {
     name: 'getSignedDocumentUrl',
   }),

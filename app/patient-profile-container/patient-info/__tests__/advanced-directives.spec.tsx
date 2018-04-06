@@ -11,6 +11,7 @@ import DisplayCard from '../display-card';
 describe('Renders Advanced Directives Component', () => {
   const onChange = () => true;
   const patientContactDelete = jest.fn();
+  const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
     <AdvancedDirectives
@@ -21,6 +22,7 @@ describe('Renders Advanced Directives Component', () => {
       onChange={onChange}
       routeBase={'/foo/bar'}
       patientContactDelete={patientContactDelete}
+      openErrorPopup={errorFn}
     />,
   );
 

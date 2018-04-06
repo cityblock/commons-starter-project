@@ -123,7 +123,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       >
         Create score range:
       </div>
-      <Apollo(Apollo(Apollo(ScoreRangeCreateEdit)))
+      <Connect(WithErrorHandler)
         screeningToolId="screening-tool-id"
       />
     </div>

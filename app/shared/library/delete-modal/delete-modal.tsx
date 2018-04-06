@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ErrorComponent from '../../error-component/error-component';
 import { Popup } from '../../popup/popup';
 import DeleteWarning from '../delete-warning/delete-warning';
 import Icon from '../icon/icon';
@@ -12,6 +13,7 @@ interface IProps {
   descriptionMessageId: string;
   deletedItemHeaderMessageId?: string; // optional translate id for red header above item name
   deletedItemName?: string; // optional translate id for name of item to be deleted
+  error?: string | null;
 }
 
 const DeleteModal: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -23,21 +25,28 @@ const DeleteModal: React.StatelessComponent<IProps> = (props: IProps) => {
     deletedItemName,
     closePopup,
     deleteItem,
+    error,
   } = props;
+
+  const body = error ? (
+    <ErrorComponent errorMessage={error} />
+  ) : (
+    <DeleteWarning
+      cancel={closePopup}
+      deleteItem={deleteItem}
+      titleMessageId={titleMessageId}
+      descriptionMessageId={descriptionMessageId}
+      deletedItemName={deletedItemName}
+      deletedItemHeaderMessageId={deletedItemHeaderMessageId}
+      modal={true}
+    />
+  );
 
   return (
     <Popup visible={visible} closePopup={closePopup} style="no-padding" className={styles.popup}>
       <div className={styles.container}>
         <Icon name="close" onClick={closePopup} className={styles.close} />
-        <DeleteWarning
-          cancel={closePopup}
-          deleteItem={deleteItem}
-          titleMessageId={titleMessageId}
-          descriptionMessageId={descriptionMessageId}
-          deletedItemName={deletedItemName}
-          deletedItemHeaderMessageId={deletedItemHeaderMessageId}
-          modal={true}
-        />
+        {body}
       </div>
     </Popup>
   );

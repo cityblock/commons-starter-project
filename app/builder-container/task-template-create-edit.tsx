@@ -179,8 +179,8 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
           goalSuggestionTemplateId,
         },
       });
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
     }
     return false;
   };

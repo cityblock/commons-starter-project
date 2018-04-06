@@ -12,6 +12,9 @@ import {
 import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import { ISavedPhone } from '../../../shared/phone-modal/phone-modal';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../../shared/with-error-handler/with-error-handler';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
@@ -19,7 +22,7 @@ import CreatePhoneModal from './create-phone-modal';
 import * as styles from './css/phone-info.css';
 import EditPhoneModal from './edit-phone-modal';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -59,7 +62,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
   }
 
   handlePhoneDelete = async (phoneId: string, isPrimary: boolean) => {
-    const { phoneDeleteMutation, patientId, onChange, phones } = this.props;
+    const { phoneDeleteMutation, patientId, onChange, phones, openErrorPopup } = this.props;
     try {
       await phoneDeleteMutation({
         variables: {
@@ -77,7 +80,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
         onChange({ primaryPhone: null });
       }
     } catch (err) {
-      // TODO: handle errors
+      openErrorPopup(err.message);
     }
   };
 
@@ -266,6 +269,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(phoneDeleteMutationGraphql as any, {
     name: 'phoneDeleteMutation',
   }),

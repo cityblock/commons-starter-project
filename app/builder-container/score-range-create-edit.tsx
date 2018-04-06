@@ -21,6 +21,9 @@ import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
 
@@ -34,7 +37,7 @@ interface IDeleteOptions {
   variables: screeningToolScoreRangeDeleteMutationVariables;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   scoreRange?: FullScreeningToolScoreRangeFragment | null;
   screeningToolId: string;
   mutate?: any;
@@ -48,7 +51,6 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error: string | null;
   scoreRange: screeningToolScoreRangeCreateMutationVariables;
 }
 
@@ -65,7 +67,6 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      error: null,
       scoreRange: props.scoreRange
         ? props.scoreRange
         : {
@@ -125,8 +126,9 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
         });
       }
       this.setState({ loading: false });
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    } catch (err) {
+      this.setState({ loading: false });
+      this.props.openErrorPopup(err.message);
     }
     return false;
   }
@@ -220,6 +222,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(scoreRangeCreateMutationGraphql as any, {
     name: 'createScoreRange',
     options: {

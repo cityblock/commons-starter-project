@@ -4,16 +4,18 @@ import Icon from '../library/icon/icon';
 import * as styles from './css/error-component.css';
 
 interface IProps {
-  error: ApolloError;
+  error?: ApolloError;
+  errorMessage?: string;
 }
 
 export const ErrorComponent: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { error } = props;
+  const { error, errorMessage } = props;
+  const message = error ? error.message : errorMessage;
 
   return (
     <div className={styles.container}>
       <Icon name="warning" color="red" className={styles.warningIcon} />
-      <div>{error.message}</div>
+      <div>{message}</div>
     </div>
   );
 };

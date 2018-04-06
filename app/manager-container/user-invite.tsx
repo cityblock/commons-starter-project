@@ -44,8 +44,8 @@ class UserInvite extends React.Component<IProps, IState> {
         } else {
           this.setState({ error: "Please enter only the start of an email address (ie: 'logan')" });
         }
-      } catch (e) {
-        this.setState({ error: e.message, loading: false });
+      } catch (err) {
+        this.setState({ error: err.message, loading: false });
       }
     }
     return false;

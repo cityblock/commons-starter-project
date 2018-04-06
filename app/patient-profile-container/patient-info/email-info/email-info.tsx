@@ -13,6 +13,9 @@ import { ISavedEmail } from '../../../shared/email-modal/email-modal';
 import Button from '../../../shared/library/button/button';
 import Checkbox from '../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../shared/library/default-text/default-text';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../../shared/with-error-handler/with-error-handler';
 import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
@@ -20,7 +23,7 @@ import CreateEmailModal from './create-email-modal';
 import * as styles from './css/email-info.css';
 import EditEmailModal from './edit-email-modal';
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -61,7 +64,7 @@ export class EmailInfo extends React.Component<allProps, IState> {
   }
 
   handleEmailDelete = async (emailId: string, isPrimary: boolean) => {
-    const { emailDeleteMutation, patientId, onChange, emails } = this.props;
+    const { emailDeleteMutation, patientId, onChange, emails, openErrorPopup } = this.props;
     try {
       await emailDeleteMutation({
         variables: {
@@ -79,7 +82,7 @@ export class EmailInfo extends React.Component<allProps, IState> {
         onChange({ primaryEmail: null });
       }
     } catch (err) {
-      // TODO: handle errors
+      openErrorPopup(err.message);
     }
   };
 
@@ -267,6 +270,7 @@ export class EmailInfo extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(emailDeleteMutationGraphql as any, {
     name: 'emailDeleteMutation',
   }),

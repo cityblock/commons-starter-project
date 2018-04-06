@@ -21,6 +21,9 @@ import RadioInput from '../../shared/library/radio-input/radio-input';
 import SmallText from '../../shared/library/small-text/small-text';
 import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
 import EditPatientContactModal from '../../shared/patient-contact-modal/edit-patient-contact-modal';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/advanced-directives.css';
 import * as parentStyles from './css/patient-demographics.css';
 import DisplayCard from './display-card';
@@ -31,7 +34,7 @@ export interface IAdvancedDirectives {
   hasMolst?: boolean | null;
 }
 
-interface IProps {
+interface IProps extends IInjectedErrorProps {
   advancedDirectives: IAdvancedDirectives;
   patientId: string;
   patientInfoId: string;
@@ -91,11 +94,11 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   };
 
   handleProxyDelete = async (proxyId: string) => {
-    const { patientContactDelete } = this.props;
+    const { patientContactDelete, openErrorPopup } = this.props;
     try {
       await patientContactDelete({ variables: { patientContactId: proxyId } });
     } catch (err) {
-      // TODO: handle errors
+      openErrorPopup(err.message);
     }
   };
 
@@ -304,6 +307,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withErrorHandler(),
   graphql<IGraphqlProps, IProps, allProps>(patientContactDeleteMutationGraphql as any, {
     name: 'patientContactDelete',
     options: {

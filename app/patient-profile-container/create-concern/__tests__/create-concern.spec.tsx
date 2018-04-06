@@ -1,8 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';
-import ModalHeader from '../../../shared/library/modal-header/modal-header';
-import { Popup } from '../../../shared/popup/popup';
+import Modal from '../../../shared/library/modal/modal';
 import ConcernSearch, { IProps } from '../concern-search';
 import { CreateConcernModal } from '../create-concern';
 
@@ -13,17 +11,16 @@ describe('Create Concern Modal Component', () => {
     <CreateConcernModal visible={false} closePopup={placeholderFn} patientId={patientId} />,
   );
 
-  it('renders popup', () => {
-    expect(wrapper.find(Popup).length).toBe(1);
-    expect(wrapper.find(Popup).props().visible).toBeFalsy();
-    expect(wrapper.find(Popup).props().style).toBe('no-padding');
-    expect(wrapper.find(Popup).props().className).toBe('popup');
-  });
+  it('renders a modal', () => {
+    expect(wrapper.find(Modal)).toHaveLength(1);
 
-  it('renders a modal header', () => {
-    expect(wrapper.find(ModalHeader).length).toBe(1);
-    expect(wrapper.find(ModalHeader).props().titleMessageId).toBe('concernCreate.title');
-    expect(wrapper.find(ModalHeader).props().bodyMessageId).toBe('concernCreate.detail');
+    const modalProps = wrapper.find(Modal).props();
+    expect(modalProps.titleMessageId).toBe('concernCreate.title');
+    expect(modalProps.subTitleMessageId).toBe('concernCreate.detail');
+    expect(modalProps.cancelMessageId).toBe('concernCreate.cancel');
+    expect(modalProps.submitMessageId).toBe('concernCreate.submit');
+    expect(modalProps.isVisible).toBeFalsy();
+    expect(modalProps.className).toBe('popup');
   });
 
   it('renders search box to choose concern', () => {
@@ -57,14 +54,8 @@ describe('Create Concern Modal Component', () => {
     expect(concernSelect.props().showAllConcerns).toBeTruthy();
   });
 
-  it('renders modal buttons', () => {
-    expect(wrapper.find(ModalButtons).length).toBe(1);
-    expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('concernCreate.cancel');
-    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('concernCreate.submit');
-  });
-
   it('opens popup', () => {
     wrapper.setProps({ visible: true });
-    expect(wrapper.find(Popup).props().visible).toBeTruthy();
+    expect(wrapper.find(Modal).props().isVisible).toBeTruthy();
   });
 });

@@ -40,15 +40,20 @@ export class DeleteConcernModal extends React.Component<allProps, IState> {
     this.state = { loading: false, error: null };
   }
 
+  handleClose = () => {
+    this.setState({ loading: false, error: null });
+    this.props.closePopup();
+  };
+
   onDelete = async () => {
-    const { patientConcernId, deletePatientConcern, closePopup } = this.props;
+    const { patientConcernId, deletePatientConcern } = this.props;
 
     if (!this.state.loading) {
       this.setState({ loading: true, error: null });
 
       try {
         await deletePatientConcern({ variables: { patientConcernId } });
-        closePopup();
+        this.handleClose();
       } catch (err) {
         this.setState({ error: err.message });
       }
@@ -58,7 +63,8 @@ export class DeleteConcernModal extends React.Component<allProps, IState> {
   };
 
   render(): JSX.Element {
-    const { visible, patientConcernTitle, closePopup } = this.props;
+    const { visible, patientConcernTitle } = this.props;
+    const { error } = this.state;
 
     return (
       <DeleteModal
@@ -67,8 +73,9 @@ export class DeleteConcernModal extends React.Component<allProps, IState> {
         descriptionMessageId="concernDelete.description"
         deletedItemHeaderMessageId="concernDelete.name"
         deletedItemName={patientConcernTitle}
-        closePopup={closePopup}
+        closePopup={this.handleClose}
         deleteItem={this.onDelete}
+        error={error}
       />
     );
   }

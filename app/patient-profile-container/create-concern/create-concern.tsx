@@ -8,9 +8,7 @@ import {
   patientConcernCreateMutationVariables,
 } from '../../graphql/types';
 import { ICreatePatientConcernPopupOptions } from '../../reducers/popup-reducer';
-import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
-import ModalHeader from '../../shared/library/modal-header/modal-header';
-import { Popup } from '../../shared/popup/popup';
+import Modal from '../../shared/library/modal/modal';
 import { IState as IAppState } from '../../store';
 import ConcernSearch from './concern-search';
 import * as styles from './css/create-concern.css';
@@ -114,41 +112,40 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { visible, patientId } = this.props;
-    const { concernId, concernType, hideSearchResults, searchTerm, showAllConcerns } = this.state;
+    const {
+      concernId,
+      concernType,
+      hideSearchResults,
+      searchTerm,
+      showAllConcerns,
+      concernCreateError,
+    } = this.state;
 
     return (
-      <Popup
-        visible={visible}
-        closePopup={this.onClose}
-        style="no-padding"
+      <Modal
+        isVisible={visible}
         className={styles.popup}
+        onClose={this.onClose}
+        onSubmit={this.onSubmit}
+        titleMessageId="concernCreate.title"
+        subTitleMessageId="concernCreate.detail"
+        cancelMessageId="concernCreate.cancel"
+        submitMessageId="concernCreate.submit"
+        error={concernCreateError}
       >
-        <ModalHeader
-          titleMessageId="concernCreate.title"
-          bodyMessageId="concernCreate.detail"
-          closePopup={this.onClose}
+        <ConcernSearch
+          patientId={patientId}
+          concernId={concernId}
+          concernType={concernType}
+          hideSearchResults={hideSearchResults}
+          onSearchTermChange={this.onSearchTermChange}
+          onSearchTermClick={this.onSearchTermClick}
+          onSelectChange={this.onSelectChange}
+          searchTerm={searchTerm}
+          showAllConcerns={showAllConcerns}
+          toggleShowAllConcerns={this.toggleShowAllConcerns}
         />
-        <div className={styles.fields}>
-          <ConcernSearch
-            patientId={patientId}
-            concernId={concernId}
-            concernType={concernType}
-            hideSearchResults={hideSearchResults}
-            onSearchTermChange={this.onSearchTermChange}
-            onSearchTermClick={this.onSearchTermClick}
-            onSelectChange={this.onSelectChange}
-            searchTerm={searchTerm}
-            showAllConcerns={showAllConcerns}
-            toggleShowAllConcerns={this.toggleShowAllConcerns}
-          />
-          <ModalButtons
-            cancelMessageId="concernCreate.cancel"
-            submitMessageId="concernCreate.submit"
-            cancel={this.onClose}
-            submit={this.onSubmit}
-          />
-        </div>
-      </Popup>
+      </Modal>
     );
   }
 }

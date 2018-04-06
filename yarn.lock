@@ -8454,9 +8454,9 @@ object.values@^1.0.4:
     function-bind "^1.1.0"
     has "^1.0.1"
 
-objection@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/objection/-/objection-1.1.1.tgz#6993d1c6cf21dd01b0988e642564a635df6a5765"
+objection@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/objection/-/objection-1.1.3.tgz#2e0f8bda2cb7ac21bfe576995f2b53946b85d216"
   dependencies:
     ajv "^6.1.1"
     bluebird "^3.5.1"

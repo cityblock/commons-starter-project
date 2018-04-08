@@ -40,6 +40,15 @@ describe('util tests', () => {
         headers: {
           auth_token: authToken,
         },
+        body: {
+          variables: {
+            foo: 'bar',
+          },
+          query: 'foo',
+        },
+      } as any,
+      {
+        status: 200,
       } as any,
       { log: jest.fn() },
       txn,
@@ -62,6 +71,15 @@ describe('util tests', () => {
         headers: {
           auth_token: authToken,
         },
+        body: {
+          variables: {
+            foo: 'bar',
+          },
+          query: 'foo',
+        },
+      } as any,
+      {
+        status: 200,
       } as any,
       { log: jest.fn() },
       txn,

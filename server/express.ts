@@ -137,22 +137,25 @@ export default async (
     '/graphql',
     addHeadersMiddleware,
     bodyParser.json(),
-    graphqlExpress(async (request: express.Request | undefined) => ({
-      schema: schema as any,
-      context: await getGraphQLContext(
-        request!,
-        logger,
-        txn || undefined,
-        process.env.DATADOG_API_KEY ? GraphQLDog : null,
-        errorReporting,
-      ),
-      formatResponse,
-      formatError,
-      debug: false,
-      // for apollo-engine
-      tracing: true,
-      cacheControl: true,
-    })),
+    graphqlExpress(
+      async (request: express.Request | undefined, response: express.Response | undefined) => ({
+        schema: schema as any,
+        context: await getGraphQLContext(
+          request!,
+          response!,
+          logger,
+          txn || undefined,
+          process.env.DATADOG_API_KEY ? GraphQLDog : null,
+          errorReporting,
+        ),
+        formatResponse,
+        formatError,
+        debug: false,
+        // for apollo-engine
+        tracing: true,
+        cacheControl: true,
+      }),
+    ),
   );
 
   // Pingdom check endpoints

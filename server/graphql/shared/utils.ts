@@ -81,8 +81,49 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
   return newerLoginExists || loginTooOld;
 };
 
+export const logGraphQLContext = (
+  req: express.Request,
+  res: express.Response,
+  userId?: string,
+  permissions?: Permissions,
+) => {
+  const { variables } = req.body;
+
+  // Logging is less useful in dev where we have the client-side logging
+  if (config.NODE_ENV === 'production') {
+    const formattedQuery = req.body.query.replace(/\s*\n\s*/g, ' ');
+
+    /* tslint:disable no-console */
+    console.log(
+      `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
+        variables,
+      )}, query: ${formattedQuery}`,
+    );
+    /* tslint:enable no-console */
+
+    // Monkey patch res.write
+    const originalWrite = res.write;
+    res.write = (data: string) => {
+      switch (res.statusCode) {
+        case 200:
+          /* tslint:disable no-console */
+          console.log(
+            `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, data: ${data}`,
+          );
+          /* tslint:enable no-console */
+          break;
+        default:
+          console.error(data);
+      }
+
+      return originalWrite.call(res, data);
+    };
+  }
+};
+
 export async function getGraphQLContext(
   request: express.Request,
+  response: express.Response,
   logger: ILogger,
   existingTxn?: Transaction,
   dataDog?: any,
@@ -102,6 +143,7 @@ export async function getGraphQLContext(
       userId = parsedToken.userId;
       permissions = parsedToken.permissions;
     } catch (e) {
+      logGraphQLContext(request, response, 'anonymous user');
       return {
         db,
         permissions: 'black' as Permissions,
@@ -112,6 +154,7 @@ export async function getGraphQLContext(
       };
     }
   }
+  logGraphQLContext(request, response, userId, permissions);
   return {
     userId,
     permissions,

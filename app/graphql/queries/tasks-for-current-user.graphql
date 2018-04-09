@@ -1,6 +1,6 @@
 #import "../fragments/full-task.graphql"
 
-query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions) {
+query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int, $orderBy: UserTaskOrderOptions) {
   tasksForCurrentUser(pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy) {
     edges {
       node {

@@ -1,16 +1,32 @@
 import * as classNames from 'classnames';
+import { get } from 'lodash';
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
-import { isDueSoon } from '../../shared/helpers/format-helpers';
-import Avatar from '../../shared/library/avatar/avatar';
+import { Gender, ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
+import { formatFullName, isDueSoon } from '../helpers/format-helpers';
+import Avatar from '../library/avatar/avatar';
+import PatientPhoto from '../library/patient-photo/patient-photo';
+import SmallText from '../library/small-text/small-text';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
+interface ITask extends ShortTaskFragment {
+  patient?: {
+    id: string;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    patientInfo: {
+      gender: Gender | null;
+      hasUploadedPhoto: boolean | null;
+    };
+  };
+}
+
 interface IProps {
-  task: ShortTaskFragment;
+  task: ITask;
   selectedTaskId: string;
   routeBase: string;
   condensed?: boolean;
@@ -73,7 +89,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
   });
 
   const followers = renderFollowers(task.followers || []);
-  const assignedTo = renderAssignedTo(task.assignedTo);
+  const assignedTo = condensed ? renderAssignedTo(task.assignedTo) : null;
   const formattedCreatedAt = task.createdAt ? (
     <FormattedRelative value={task.createdAt}>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
@@ -89,10 +105,35 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     </FormattedMessage>
   );
 
+  const patientImageHtml = !condensed ? (
+    <PatientPhoto
+      patientId={task.patientId}
+      gender={get(task, 'patient.patientInfo.gender')}
+      hasUploadedPhoto={!!get(task, 'patient.patientInfo.hasUploadedPhoto')}
+      type="circle"
+      className={styles.patientImage}
+    />
+  ) : null;
+  const patientName = task.patient
+    ? formatFullName(task.patient.firstName, task.patient.lastName)
+    : '';
+  const patientNameHtml = !condensed ? (
+    <SmallText text={patientName} color="gray" className={styles.patientName} />
+  ) : null;
+
+  const querystring = window.location.search.substring(1);
+  const linkTo = `${routeBase}/${task.id}?${querystring}`;
+
   // Note: onClick to stop propagation because otherwise would close task pane
   return (
-    <Link className={taskClass} to={`${routeBase}/${task.id}`} onClick={e => e.stopPropagation()}>
-      <div className={styles.title}>{task.title}</div>
+    <Link className={taskClass} to={linkTo} onClick={e => e.stopPropagation()}>
+      <div className={styles.flexRow}>
+        {patientImageHtml}
+        <div>
+          {patientNameHtml}
+          <div className={styles.title}>{task.title}</div>
+        </div>
+      </div>
       <div className={styles.meta}>
         <div className={styles.followers}>
           {assignedTo}

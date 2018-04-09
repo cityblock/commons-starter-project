@@ -282,12 +282,9 @@ import {
   taskCommentDelete,
   taskCommentEdit,
 } from './task-comment-resolver';
+import { taskUserFollow, taskUserUnfollow } from './task-follower-resolver';
 import {
   resolveCurrentUserTasks,
-  taskUserFollow,
-  taskUserUnfollow,
-} from './task-follower-resolver';
-import {
   resolvePatientTasks,
   resolveTask,
   resolveTasksDueSoonForPatient,

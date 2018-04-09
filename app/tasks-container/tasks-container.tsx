@@ -79,7 +79,7 @@ const getPageParams = (props: IProps) => {
   return {
     pageNumber: 0,
     pageSize: 10,
-    orderBy: pageParams.orderBy || 'createdAtDesc',
+    orderBy: pageParams.orderBy || 'priorityDesc',
   };
 };
 

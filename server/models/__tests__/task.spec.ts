@@ -19,7 +19,7 @@ import User from '../user';
 
 const userRole = 'physician';
 const order = 'asc';
-const orderBy = 'createdAt';
+const orderBy = 'dueAt';
 const pageNumber = 0;
 const pageSize = 10;
 
@@ -377,7 +377,7 @@ describe('task model', () => {
     });
   });
 
-  it('fetches a user tasks tasks', async () => {
+  it('fetches a users tasks', async () => {
     const { patient, user, patientGoal, clinic } = await setup(txn);
 
     const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
@@ -401,13 +401,15 @@ describe('task model', () => {
         description: 'description 2',
         dueAt,
         patientId: patient.id,
-        createdById: user2.id,
-        assignedToId: user.id,
+        createdById: user.id,
+        assignedToId: user2.id,
         priority: 'high',
         patientGoalId: patientGoal.id,
       },
       txn,
     );
+
+    // following a task should not make it included in your tasks
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id }, txn);
     expect(
       await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2, order, orderBy }, txn),
@@ -418,13 +420,8 @@ describe('task model', () => {
           description: 'description',
           priority: 'low',
         },
-        {
-          title: 'title 2',
-          description: 'description 2',
-          priority: 'high',
-        },
       ],
-      total: 2,
+      total: 1,
     });
   });
 

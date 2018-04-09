@@ -1,4 +1,4 @@
-import { Model, RelationMappings, Transaction } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import CBOReferral from './cbo-referral';
@@ -22,9 +22,14 @@ export interface ITaskEditableFields {
 }
 
 export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt' | 'title';
-
 interface ITaskPaginationOptions extends IPaginationOptions {
   orderBy: TaskOrderOptions;
+  order: 'asc' | 'desc';
+}
+
+export type UserTaskOrderOptions = 'priority' | 'dueAt' | 'patient';
+interface IUserTaskPaginationOptions extends IPaginationOptions {
+  orderBy: UserTaskOrderOptions;
   order: 'asc' | 'desc';
 }
 
@@ -230,22 +235,53 @@ export default class Task extends BaseModel {
     };
   }
 
+  static orderByPatientName(
+    queryBuilder: QueryBuilder<Model, Model[], Model[]>,
+    order: 'asc' | 'desc',
+  ) {
+    return queryBuilder.orderBy('patient.firstName', order).orderBy('patient.lastName', order);
+  }
+
+  static orderByPriority(
+    queryBuilder: QueryBuilder<Model, Model[], Model[]>,
+    order: 'asc' | 'desc',
+  ) {
+    return queryBuilder.orderByRaw(`
+        (case priority
+          when 'low' then 2
+          when 'medium' then 3
+          when 'high' then 4
+          else 1
+        end) ${order}
+      `);
+  }
+
   static async getUserTasks(
     userId: string,
-    { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
+    { pageNumber, pageSize, orderBy, order }: IUserTaskPaginationOptions,
     txn: Transaction,
   ): Promise<IPaginatedResults<Task>> {
-    const subquery = TaskFollower.query(txn)
-      .select('taskId')
-      .where({ userId, deletedAt: null }) as any; // TODO: resolve typing issue
-    const userTasks = (await this.query(txn)
-      .where('id', 'in', subquery)
-      .andWhere({ deletedAt: null })
-      .orWhere({ createdById: userId, deletedAt: null })
+    const queryBuilder = this.query(txn)
+      .orWhere({ assignedToId: userId, deletedAt: null })
+      .joinRelation('patient')
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
-      .orderBy(orderBy, order)
-      .page(pageNumber, pageSize)) as any;
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null));
+
+    if (orderBy === 'patient') {
+      this.orderByPatientName(queryBuilder, order);
+      this.orderByPriority(queryBuilder, 'desc');
+      queryBuilder.orderBy('dueAt', 'asc');
+    } else if (orderBy === 'priority') {
+      this.orderByPriority(queryBuilder, order);
+      queryBuilder.orderBy('dueAt', 'asc');
+      this.orderByPatientName(queryBuilder, 'asc');
+    } else if (orderBy === 'dueAt') {
+      queryBuilder.orderBy('dueAt', order);
+      this.orderByPriority(queryBuilder, 'desc');
+      this.orderByPatientName(queryBuilder, 'asc');
+    }
+
+    const userTasks = (await queryBuilder.page(pageNumber, pageSize)) as any;
 
     return {
       results: userTasks.results,

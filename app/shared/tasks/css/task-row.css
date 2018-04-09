@@ -55,6 +55,23 @@
   justify-content: flex-end;
 }
 
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.patientImage {
+  margin-right: var(--extra-small-gutter);
+  height: 35px;
+  width: 35px;
+}
+
+.patientName {
+  margin-bottom: 5px;
+}
+
 .followers {
   display: flex;
   justify-content: flex-end;

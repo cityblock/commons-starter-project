@@ -24,7 +24,7 @@ import * as styles from './css/tasks.css';
 import TaskRow from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
-type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';
+type OrderByOptions = 'priorityDesc' | 'dueAtAsc' | 'patientAsc';
 
 export interface IPageParams {
   orderBy: OrderByOptions;
@@ -68,7 +68,7 @@ const getPageParams = () => {
   return {
     pageNumber: pageParams.pageNumber || 0,
     pageSize: 10,
-    orderBy: pageParams.orderBy || 'createdAtDesc',
+    orderBy: pageParams.orderBy || 'priorityDesc',
   };
 };
 
@@ -78,7 +78,7 @@ export class Tasks extends React.Component<allProps, IState> {
 
     const pageParams = getPageParams();
     this.state = {
-      orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
+      orderBy: (pageParams.orderBy as any) || 'priorityDesc',
       error: null,
     };
   }
@@ -160,7 +160,7 @@ export class Tasks extends React.Component<allProps, IState> {
 
     const RenderedTask = (props: any) => (
       <Task
-        routeBase={routeBase}
+        routeBase={`${routeBase}?${window.location.search.substring(1)}`}
         onDelete={this.onDeleteTask}
         patientGoals={patientGoals}
         taskId={taskId}
@@ -175,12 +175,9 @@ export class Tasks extends React.Component<allProps, IState> {
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={orderBy} onChange={this.onSortChange}>
-                <option value="createdAtDesc">Newest first</option>
-                <option value="createdAtAsc">Oldest first</option>
-                <option value="dueAtAsc">Due soonest</option>
-                <option value="dueAtDesc">Due latest</option>
-                <option value="updatedAtDesc">Last updated</option>
-                <option value="updatedAtAsc">Last updated desc</option>
+                <option value="priorityDesc">Priority</option>
+                <option value="dueAtAsc">Due date</option>
+                <option value="patientAsc">Patient</option>
               </select>
             </div>
           </div>

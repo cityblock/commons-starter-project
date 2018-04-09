@@ -381,6 +381,13 @@ export enum PatientSignedUrlAction {
 }
 
 
+export enum UserTaskOrderOptions {
+  dueAtAsc = "dueAtAsc",
+  patientAsc = "patientAsc",
+  priorityDesc = "priorityDesc",
+}
+
+
 export interface addressCreateForPatientMutationVariables {
   patientId: string,
   zip: string,
@@ -3198,6 +3205,11 @@ export interface getPatientTasksQuery {
           firstName: string,
           middleName: string | null,
           lastName: string,
+          patientInfo:  {
+            id: string,
+            gender: Gender | null,
+            hasUploadedPhoto: boolean | null,
+          },
         },
         assignedToId: string | null,
         assignedTo:  {
@@ -5492,6 +5504,11 @@ export interface getTaskQuery {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -8885,6 +8902,11 @@ export interface taskCompleteMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -8977,6 +8999,11 @@ export interface taskCreateMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -9062,6 +9089,11 @@ export interface taskDeleteMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -9153,6 +9185,11 @@ export interface taskEditMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -9319,6 +9356,11 @@ export interface taskUncompleteMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -9405,6 +9447,11 @@ export interface taskUserFollowMutation {
       firstName: string,
       middleName: string | null,
       lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
     },
     assignedToId: string | null,
     assignedTo:  {
@@ -9471,7 +9518,7 @@ export interface taskUserFollowMutation {
 export interface getTasksForCurrentUserQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
-  orderBy?: TaskOrderOptions | null,
+  orderBy?: UserTaskOrderOptions | null,
 };
 
 export interface getTasksForCurrentUserQuery {
@@ -9494,6 +9541,11 @@ export interface getTasksForCurrentUserQuery {
           firstName: string,
           middleName: string | null,
           lastName: string,
+          patientInfo:  {
+            id: string,
+            gender: Gender | null,
+            hasUploadedPhoto: boolean | null,
+          },
         },
         assignedToId: string | null,
         assignedTo:  {
@@ -12613,6 +12665,11 @@ export interface FullTaskFragment {
     firstName: string,
     middleName: string | null,
     lastName: string,
+    patientInfo:  {
+      id: string,
+      gender: Gender | null,
+      hasUploadedPhoto: boolean | null,
+    },
   },
   assignedToId: string | null,
   assignedTo:  {

@@ -40,6 +40,12 @@ enum TaskOrderOptions {
   titleDesc
 }
 
+enum UserTaskOrderOptions {
+  dueAtAsc
+  priorityDesc
+  patientAsc
+}
+
 enum UserOrderOptions {
   createdAtDesc
   createdAtAsc
@@ -766,6 +772,12 @@ type TaskNode {
 
 # Task edges
 type TaskEdges {
+  edges: [TaskNode!]!
+  pageInfo: PageInfo!
+}
+
+# Task with patient image edges
+type TaskWithImageEdges {
   edges: [TaskNode!]!
   pageInfo: PageInfo!
 }
@@ -2701,7 +2713,11 @@ type RootQueryType {
     orderBy: TaskOrderOptions
   ): TaskEdges!
   # Current user's Tasks
-  tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges!
+  tasksForCurrentUser(
+    pageNumber: Int
+    pageSize: Int
+    orderBy: UserTaskOrderOptions
+  ): TaskWithImageEdges!
   # Tasks due soon for patient - in dashboard
   tasksDueSoonForPatient(patientId: ID!): [Task!]!
   # Tasks with notifications for patient - in dashboard

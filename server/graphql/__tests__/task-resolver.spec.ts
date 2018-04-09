@@ -36,6 +36,9 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const dueAt = new Date().toISOString();
+  const dueAt2 = new Date();
+  dueAt2.setDate(dueAt2.getDate() + 2);
+
   const task1 = await Task.create(
     {
       title: 'Task 1 Title',
@@ -52,7 +55,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       title: 'Task 2 Title',
       description: 'description',
-      dueAt,
+      dueAt: dueAt2.toISOString(),
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
@@ -782,6 +785,127 @@ describe('task tests', () => {
       expect(taskIds).toContain(task1.id);
       expect(taskIds).toContain(task2.id);
       expect(taskIds).toContain(followedTask.id);
+    });
+  });
+
+  describe.only('current user tasks', () => {
+    it('resolves current user tasks', async () => {
+      const { user, user2, patient, task1, task2 } = await setup(txn);
+      await Task.create(
+        {
+          title: 'Task 3 Title',
+          description: 'description',
+          dueAt: new Date().toISOString(),
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user2.id,
+        },
+        txn,
+      );
+
+      const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 10) {
+            edges {
+              node {
+                id, title
+              }
+            }
+          }
+        }`;
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+
+      expect(cloneDeep(result.data!.tasksForCurrentUser.edges)).toHaveLength(2);
+      expect(cloneDeep(result.data!.tasksForCurrentUser.edges)).toContainEqual(
+        expect.objectContaining({
+          node: {
+            id: task1.id,
+            title: task1.title,
+          },
+        }),
+      );
+      expect(cloneDeep(result.data!.tasksForCurrentUser.edges)).toContainEqual(
+        expect.objectContaining({
+          node: {
+            id: task2.id,
+            title: task2.title,
+          },
+        }),
+      );
+    });
+
+    it('returns correct page information', async () => {
+      const { user } = await setup(txn);
+      const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 1) {
+            edges {
+              node {
+                id
+                title
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+            }
+          }
+        }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
+    });
+
+    it('can alter sort order', async () => {
+      const { task1, user } = await setup(txn);
+      const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 1, orderBy: dueAtAsc) {
+            edges {
+              node {
+                id
+                title
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+            }
+          }
+        }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        permissions,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+        edges: [
+          {
+            node: {
+              id: task1.id,
+              title: task1.title,
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
     });
   });
 });

@@ -17,6 +17,11 @@ fragment FullTask on Task {
     firstName
     middleName
     lastName
+    patientInfo {
+      id
+      gender
+      hasUploadedPhoto
+    }
   }
   assignedToId
   assignedTo {

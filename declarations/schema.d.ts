@@ -152,7 +152,7 @@ declare module 'schema' {
     /**
      * Current user's Tasks
      */
-    tasksForCurrentUser: ITaskEdges;
+    tasksForCurrentUser: ITaskWithImageEdges;
 
     /**
      * Tasks due soon for patient - in dashboard
@@ -686,7 +686,7 @@ declare module 'schema' {
   interface ITasksForCurrentUserOnRootQueryTypeArguments {
     pageNumber?: number | null;
     pageSize?: number | null;
-    orderBy?: ITaskOrderOptionsEnum | null;
+    orderBy?: IUserTaskOrderOptionsEnum | null;
   }
   interface ITasksDueSoonForPatientOnRootQueryTypeArguments {
     patientId: string;
@@ -1662,6 +1662,16 @@ declare module 'schema' {
   interface ITaskNode {
     node: ITask | null;
     cursor: string;
+  }
+
+  type IUserTaskOrderOptionsEnum = 'dueAtAsc' | 'priorityDesc' | 'patientAsc';
+
+  /**
+   * Task with patient image edges
+   */
+  interface ITaskWithImageEdges {
+    edges: Array<ITaskNode>;
+    pageInfo: IPageInfo;
   }
 
   /**

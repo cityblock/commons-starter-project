@@ -6,7 +6,7 @@ import {
   ITaskNode,
 } from 'schema';
 import { IPaginationOptions } from '../db';
-import Task, { TaskOrderOptions } from '../models/task';
+import Task, { TaskOrderOptions, UserTaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
 import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
 import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
@@ -328,5 +328,51 @@ export async function resolveTaskIdsWithNotifications(
   checkLoggedInWithPermissions(userId, permissions);
 
   return Task.getTaskIdsWithNotifications(userId!, txn);
+}
+/* tslint:enable:check-is-allowed */
+
+export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
+  userId: string;
+  orderBy: string;
+}
+
+/* tslint:disable:check-is-allowed */
+export async function resolveCurrentUserTasks(
+  root: any,
+  args: ICurrentUserTasksFilterOptions,
+  { permissions, userId, txn, testConfig }: IContext,
+): Promise<IRootQueryType['tasksForCurrentUser']> {
+  checkLoggedInWithPermissions(userId, permissions);
+
+  const pageNumber = args.pageNumber || 0;
+  const pageSize = args.pageSize || 10;
+  const { order, orderBy } = formatOrderOptions<UserTaskOrderOptions>(args.orderBy, {
+    order: 'asc',
+    orderBy: 'dueAt',
+  });
+
+  const tasks = await Task.getUserTasks(
+    userId!,
+    {
+      pageNumber,
+      pageSize,
+      order,
+      orderBy,
+    },
+    txn,
+  );
+
+  const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
+
+  return {
+    edges: taskEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+  };
 }
 /* tslint:enable:check-is-allowed */

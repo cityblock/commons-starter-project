@@ -180,5 +180,8 @@ export function filterPatientState(patientSelectState: object): string[] {
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(careTeamAssignPatientsMutationGraphql as any, {
     name: 'careTeamAssignPatients',
+    options: {
+      refetchQueries: ['getPatientPanel'],
+    },
   }),
 )(PatientAssignModal);

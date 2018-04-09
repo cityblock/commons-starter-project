@@ -85,7 +85,56 @@ describe('computed patient status model', () => {
     expect(refetchedComputedPatientStatus).toMatchObject(updatedComputedPatientStatus);
   });
 
-  it('updates computed patient statuses for all patients', async () => {
+  it('updates computed patient statuses for multiple patients at once', async () => {
+    const { clinic, patient, user } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
+    const patient3 = await createPatient({ cityblockId: 567, homeClinicId: clinic.id }, txn);
+
+    const computedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
+    const computedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);
+    const computedPatientStatus3 = await ComputedPatientStatus.getForPatient(patient3.id, txn);
+
+    expect(computedPatientStatus1!.isCoreIdentityVerified).toEqual(false);
+    expect(computedPatientStatus2!.isCoreIdentityVerified).toEqual(false);
+    expect(computedPatientStatus3!.isCoreIdentityVerified).toEqual(false);
+
+    await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+    await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+    await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+
+    await Patient.query(txn).patchAndFetchById(
+      patient.id,
+      {
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
+      },
+    );
+    await Patient.query(txn).patchAndFetchById(
+      patient2.id,
+      {
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
+      },
+    );
+    await Patient.query(txn).patchAndFetchById(
+      patient3.id,
+      {
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
+      },
+    );
+    await ComputedPatientStatus.updateForMultiplePatients([patient.id, patient2.id], user.id, txn);
+
+    const refetchedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
+    const refetchedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);
+    const refetchedPatientStatus3 = await ComputedPatientStatus.getForPatient(patient3.id, txn);
+
+    expect(refetchedPatientStatus1!.isCoreIdentityVerified).toEqual(true);
+    expect(refetchedPatientStatus2!.isCoreIdentityVerified).toEqual(true);
+    expect(refetchedPatientStatus3!.isCoreIdentityVerified).toEqual(false);
+  });
+
+  it('updates computed patient statuses for all patients at once', async () => {
     const { clinic, patient, user } = await setup(txn);
     const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
 
@@ -97,19 +146,20 @@ describe('computed patient status model', () => {
 
     await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
     await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
-    await PatientDataFlag.create(
+    await Patient.query(txn).patchAndFetchById(
+      patient.id,
       {
-        userId: user.id,
-        patientId: patient.id,
-        fieldName: 'firstName',
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
       },
-      txn,
     );
-
-    await Patient.query(txn).patchAndFetchById(patient2.id, {
-      coreIdentityVerifiedAt: new Date().toISOString(),
-      coreIdentityVerifiedById: user.id,
-    });
+    await Patient.query(txn).patchAndFetchById(
+      patient2.id,
+      {
+        coreIdentityVerifiedAt: new Date().toISOString(),
+        coreIdentityVerifiedById: user.id,
+      },
+    );
 
     await ComputedPatientStatus.updateForAllPatients(user.id, txn);
 

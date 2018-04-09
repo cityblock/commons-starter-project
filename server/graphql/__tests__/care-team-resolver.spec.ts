@@ -221,6 +221,57 @@ describe('care team', () => {
       });
     });
 
+    it('updates computed patient status when bulk assigning patients', async () => {
+      const { patient, user, clinic } = await setup(txn);
+      const patient2 = await createPatient(
+        {
+          cityblockId: 124,
+          homeClinicId: clinic.id,
+        },
+        txn,
+      );
+      const user2 = await User.create(
+        {
+          email: 'chp@cityblock.com',
+          firstName: 'Chp',
+          lastName: 'User',
+          userRole: 'communityHealthPartner',
+          homeClinicId: clinic.id,
+        },
+        txn,
+      );
+      const computedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
+      const computedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient2.id, txn);
+
+      expect(computedPatientStatus1!.hasChp).toEqual(false);
+      expect(computedPatientStatus2!.hasChp).toEqual(false);
+
+      const mutation = `mutation {
+        careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${
+        patient2.id
+      }"], userId: "${user2.id}" }) {
+          id
+        }
+      }`;
+      await graphql(schema, mutation, null, {
+        db,
+        permissions,
+        txn,
+        userId: user.id,
+      });
+      const refetchedComputedPatientStatus1 = await ComputedPatientStatus.getForPatient(
+        patient.id,
+        txn,
+      );
+      const refetchedComputedPatientStatus2 = await ComputedPatientStatus.getForPatient(
+        patient2.id,
+        txn,
+      );
+
+      expect(refetchedComputedPatientStatus1!.hasChp).toEqual(true);
+      expect(refetchedComputedPatientStatus2!.hasChp).toEqual(true);
+    });
+
     it('reassigns a care team member', async () => {
       const { patient, user, clinic } = await setup(txn);
       const user2 = await User.create(

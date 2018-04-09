@@ -93,7 +93,11 @@ export async function careTeamAssignPatients(
   const { patientIds } = input;
   await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
 
-  return CareTeam.createAllForUser({ patientIds, userId: input.userId }, txn);
+  const careTeam = await CareTeam.createAllForUser({ patientIds, userId: input.userId }, txn);
+
+  await ComputedPatientStatus.updateForMultiplePatients(patientIds, userId!, txn);
+
+  return careTeam;
 }
 
 export async function careTeamMakeTeamLead(

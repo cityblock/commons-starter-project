@@ -6,6 +6,7 @@ import * as uuid from 'uuid/v4';
 import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import ComputedPatientStatus from '../../models/computed-patient-status';
 import Patient from '../../models/patient';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import ProgressNote from '../../models/progress-note';
@@ -232,6 +233,37 @@ describe('progress note resolver', () => {
     expect(cloneDeep(result.data!.progressNoteComplete)).toMatchObject({
       id: progressNote.id,
     });
+  });
+
+  it('updates computed patient status when completing a progress note', async () => {
+    const { patient, user, progressNoteTemplate } = await setup(txn);
+
+    const progressNote = await ProgressNote.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      },
+      txn,
+    );
+    const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+    expect(computedPatientStatus!.hasProgressNote).toEqual(false);
+
+    const mutation = `mutation {
+      progressNoteComplete(input: {
+        progressNoteId: "${progressNote.id}"
+      }) {
+        id
+      }
+    }`;
+    await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
+      patient.id,
+      txn,
+    );
+
+    expect(refetchedComputedPatientStatus!.hasProgressNote).toEqual(true);
   });
 
   it('edits a progress note', async () => {

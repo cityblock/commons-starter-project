@@ -7,6 +7,7 @@ import {
   IRootMutationType,
   IRootQueryType,
 } from 'schema';
+import ComputedPatientStatus from '../models/computed-patient-status';
 import ProgressNote from '../models/progress-note';
 import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -74,7 +75,11 @@ export async function progressNoteComplete(
     input.progressNoteId,
   );
 
-  return ProgressNote.complete(input.progressNoteId, txn);
+  const progressNote = await ProgressNote.complete(input.progressNoteId, txn);
+
+  await ComputedPatientStatus.updateForPatient(progressNote.patientId, userId!, txn);
+
+  return progressNote;
 }
 
 export async function progressNoteEdit(

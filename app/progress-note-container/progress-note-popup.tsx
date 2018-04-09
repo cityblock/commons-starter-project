@@ -335,6 +335,8 @@ export default compose(
       refetchQueries: [
         'getProgressNotesForPatient',
         'getProgressNotesForCurrentUser',
+        'getPatientComputedPatientStatus',
+        'getPatient',
         'getProgressNoteLatestForPatient',
       ],
     },

@@ -293,6 +293,20 @@ export default class ComputedPatientStatus extends BaseModel {
     });
   }
 
+  static async updateForMultiplePatients(
+    patientIds: string[],
+    updatedById: string,
+    txn: Transaction,
+  ): Promise<number> {
+    await Promise.all(
+      patientIds.map(async patientId =>
+        ComputedPatientStatus.updateForPatient(patientId, updatedById, txn),
+      ),
+    );
+
+    return patientIds.length;
+  }
+
   static async updateForAllPatients(updatedById: string, txn: Transaction): Promise<number> {
     /* DANGER: This can potentially take a *really long time* to run, and affects every patient.
      *         Use at your own risk and only if absolutely necessary.

@@ -83,7 +83,7 @@ describe('phone resolver', () => {
       });
 
       expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -114,7 +114,7 @@ describe('phone resolver', () => {
       });
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -148,7 +148,7 @@ describe('phone resolver', () => {
       });
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
-        phoneNumber: '111-111-1111',
+        phoneNumber: '+11111111111',
         type: 'mobile',
         description: 'Some phone',
       });
@@ -288,7 +288,7 @@ describe('phone resolver', () => {
         txn,
       });
       expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
-        phoneNumber: '222-222-2222',
+        phoneNumber: '+12222222222',
         description: 'Some phone',
       });
       expect(log).toBeCalled();

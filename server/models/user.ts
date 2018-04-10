@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { IUserWithCount } from 'schema';
 import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import { formatPhoneNumberForTwilio, validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
 import {
   attributionUserEmail,
   attributionUserPermissions,
@@ -127,7 +128,7 @@ export default class User extends BaseModel {
       googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
-      phone: { type: 'string' },
+      phone: { type: 'string', minLength: 12, maxLength: 12 },
       permissions: { type: 'string', enum: PERMISSIONS },
       createdAt: { type: 'string' },
     },
@@ -173,7 +174,13 @@ export default class User extends BaseModel {
   }
 
   static async create(user: ICreateUser, txn: Transaction): Promise<User> {
-    return this.query(txn).insertAndFetch(user);
+    const formattedInput = {
+      ...user,
+      phone: user.phone ? formatPhoneNumberForTwilio(user.phone) : undefined,
+    };
+    await validatePhoneNumberForTwilio(formattedInput.phone);
+
+    return this.query(txn).insertAndFetch(formattedInput);
   }
 
   static async findOrCreateAttributionUser(txn: Transaction): Promise<User> {
@@ -193,7 +200,13 @@ export default class User extends BaseModel {
   }
 
   static async update(userId: string, user: Partial<IUpdateUser>, txn: Transaction): Promise<User> {
-    return this.query(txn).patchAndFetchById(userId, user);
+    const formattedInput = {
+      ...user,
+      phone: user.phone ? formatPhoneNumberForTwilio(user.phone) : undefined,
+    };
+    await validatePhoneNumberForTwilio(formattedInput.phone);
+
+    return this.query(txn).patchAndFetchById(userId, formattedInput);
   }
 
   // NOTE: Separated because it is admin only - a user should not be able to change their own role

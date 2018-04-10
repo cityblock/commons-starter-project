@@ -59,7 +59,7 @@ describe('patient phone model', () => {
 
       expect(patientPhone.length).toBe(1);
       expect(patientPhone[0]).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -79,7 +79,7 @@ describe('patient phone model', () => {
 
       expect(patientPhone.length).toBe(1);
       expect(patientPhone[0]).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -123,11 +123,11 @@ describe('patient phone model', () => {
       const phones = await PatientPhone.getAll(patient.id, txn);
       expect(phones.length).toBe(2);
       expect(phones[0]).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
-      expect(phones[1]).toMatchObject({ phoneNumber: '111-111-1111', type: 'mobile' });
+      expect(phones[1]).toMatchObject({ phoneNumber: '+11111111111', type: 'mobile' });
     });
   });
 });

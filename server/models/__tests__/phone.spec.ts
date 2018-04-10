@@ -48,7 +48,7 @@ describe('phone', () => {
     it('should create phone', async () => {
       const { phone, user } = await setup(txn);
       expect(phone).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
         updatedById: user.id,
@@ -82,7 +82,7 @@ describe('phone', () => {
         txn,
       );
       expect(editedPhone).toMatchObject({
-        phoneNumber: '555-555-5555',
+        phoneNumber: '+15555555555',
         type: 'work',
         description: 'bank job',
         updatedById: user.id,

@@ -73,7 +73,7 @@ describe('patient external provider phone model', () => {
 
       expect(patientExternalProviderPhone.length).toBe(1);
       expect(patientExternalProviderPhone[0]).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -93,7 +93,7 @@ describe('patient external provider phone model', () => {
 
       expect(patientExternalProviderPhone.length).toBe(1);
       expect(patientExternalProviderPhone[0]).toMatchObject({
-        phoneNumber: '123-456-7890',
+        phoneNumber: '+11234567890',
         type: 'home',
         description: 'moms home phone',
       });
@@ -149,7 +149,7 @@ describe('patient external provider phone model', () => {
         txn,
       );
       expect(phones.length).toBe(1);
-      expect(phones[0]).toMatchObject({ phoneNumber: '111-111-1111', type: 'mobile' });
+      expect(phones[0]).toMatchObject({ phoneNumber: '+11111111111', type: 'mobile' });
     });
   });
 });

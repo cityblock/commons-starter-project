@@ -132,7 +132,7 @@ describe('patient info model', () => {
             lastName: "Granger",
             relationToPatient: friend,
             phone: {
-              phoneNumber: "111-222-3344"
+              phoneNumber: "+11112223344"
             },
           }) {
             id,
@@ -165,7 +165,7 @@ describe('patient info model', () => {
         isHealthcareProxy: false,
         isEmergencyContact: false,
         canContact: false,
-        phone: { phoneNumber: '111-222-3344' },
+        phone: { phoneNumber: '+11112223344' },
         email: null,
         address: null,
       });
@@ -196,7 +196,7 @@ describe('patient info model', () => {
             lastName: "Granger",
             relationToPatient: friend,
             phone: {
-              phoneNumber: "111-222-3344"
+              phoneNumber: "+11112223344"
             },
             isEmergencyContact: true,
           }) {
@@ -232,7 +232,7 @@ describe('patient info model', () => {
             isHealthcareProxy: true,
             isEmergencyContact: true,
             phone: {
-              phoneNumber: "111-222-3344",
+              phoneNumber: "+11112223344",
             },
             email: {
               emailAddress: "test@email.com",
@@ -271,7 +271,7 @@ describe('patient info model', () => {
         isHealthcareProxy: true,
         isEmergencyContact: true,
         canContact: true,
-        phone: { phoneNumber: '111-222-3344' },
+        phone: { phoneNumber: '+11112223344' },
         email: { emailAddress: 'test@email.com' },
         address: { zip: '11238' },
       });
@@ -312,7 +312,7 @@ describe('patient info model', () => {
             isHealthcareProxy: true,
             isEmergencyContact: true,
             phone: {
-              phoneNumber: "111-222-3344",
+              phoneNumber: "+11112223344",
             },
             email: {
               emailAddress: "",
@@ -351,7 +351,7 @@ describe('patient info model', () => {
         isHealthcareProxy: true,
         isEmergencyContact: true,
         canContact: true,
-        phone: { phoneNumber: '111-222-3344' },
+        phone: { phoneNumber: '+11112223344' },
         email: null,
         address: null,
       });
@@ -442,7 +442,7 @@ describe('patient info model', () => {
             isHealthcareProxy: true,
             isEmergencyContact: true,
             phone: {
-              phoneNumber: "000-111-2255",
+              phoneNumber: "+10001112255",
             },
             email: {
               emailAddress: "changed@email.com",
@@ -482,7 +482,7 @@ describe('patient info model', () => {
         isHealthcareProxy: true,
         isEmergencyContact: true,
         canContact: true,
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
         address: { zip: '02139', state: 'MA' },
       });
@@ -564,7 +564,7 @@ describe('patient info model', () => {
             isHealthcareProxy: true,
             isEmergencyContact: true,
             phone: {
-              phoneNumber: "000-111-2255",
+              phoneNumber: "+10001112255",
             },
             email: {
               emailAddress: "changed@email.com",
@@ -604,7 +604,7 @@ describe('patient info model', () => {
         isHealthcareProxy: true,
         isEmergencyContact: true,
         canContact: true,
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
         address: { zip: '02139', state: 'MA' },
       });
@@ -639,7 +639,7 @@ describe('patient info model', () => {
             isHealthcareProxy: true,
             isEmergencyContact: true,
             phone: {
-              phoneNumber: "000-111-2255",
+              phoneNumber: "+10001112255",
             },
             email: {
               emailAddress: "",
@@ -679,7 +679,7 @@ describe('patient info model', () => {
         isHealthcareProxy: true,
         isEmergencyContact: true,
         canContact: true,
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: null,
         address: null,
       });

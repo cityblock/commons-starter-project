@@ -1,4 +1,5 @@
 import { Transaction } from 'objection';
+import { formatPhoneNumberForTwilio, validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 
 export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other' | null;
@@ -54,7 +55,13 @@ export default class Phone extends BaseModel {
   }
 
   static async create(input: IPhoneOptions, txn: Transaction) {
-    return this.query(txn).insertAndFetch(input);
+    const formattedInput = {
+      ...input,
+      phoneNumber: input.phoneNumber ? formatPhoneNumberForTwilio(input.phoneNumber) : undefined,
+    };
+    await validatePhoneNumberForTwilio(formattedInput.phoneNumber);
+
+    return this.query(txn).insertAndFetch(formattedInput);
   }
 
   static async delete(phoneId: string, txn: Transaction) {
@@ -72,7 +79,13 @@ export default class Phone extends BaseModel {
   }
 
   static async edit(phone: IPhoneEdit, phoneId: string, txn: Transaction): Promise<Phone> {
-    return this.query(txn).patchAndFetchById(phoneId, phone);
+    const formattedInput = {
+      ...phone,
+      phoneNumber: phone.phoneNumber ? formatPhoneNumberForTwilio(phone.phoneNumber) : undefined,
+    };
+    await validatePhoneNumberForTwilio(formattedInput.phoneNumber);
+
+    return this.query(txn).patchAndFetchById(phoneId, formattedInput);
   }
 }
 /* tslint:enable:member-ordering */

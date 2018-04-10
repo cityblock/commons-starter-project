@@ -149,7 +149,7 @@ describe('patient info model', () => {
   describe('create', async () => {
     it('should create a patient external provider with minimal info', async () => {
       const { patient, user } = await setup(txn);
-      const phone = { phoneNumber: '111-222-3333' };
+      const phone = { phoneNumber: '+11112223333' };
       const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone);
 
       const result = await graphql(
@@ -189,7 +189,7 @@ describe('patient info model', () => {
 
     it('should create a patient external provider with all external provider fields', async () => {
       const { patient, user } = await setup(txn);
-      const phone = { phoneNumber: '111-222-3333' };
+      const phone = { phoneNumber: '+11112223333' };
       const email = { emailAddress: 'test@email.com' };
       const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone, {
         email,
@@ -239,7 +239,7 @@ describe('patient info model', () => {
 
     it('should create a patient external provider but not empty email', async () => {
       const { patient, user } = await setup(txn);
-      const phone = { phoneNumber: '111-222-3333' };
+      const phone = { phoneNumber: '+11112223333' };
       const email = { emailAddress: '' };
       const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone, {
         email,
@@ -377,7 +377,7 @@ describe('patient info model', () => {
         role: 'other',
         agencyName: 'Quibbler',
         roleFreeText: 'magical potion provider',
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
       });
       expect(log).toBeCalled();
@@ -427,7 +427,7 @@ describe('patient info model', () => {
         role: 'dermatology',
         agencyName: 'Quibbler',
         roleFreeText: null,
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { id: email.id, emailAddress: 'changed@email.com' },
       });
       expect(log).toBeCalled();
@@ -477,7 +477,7 @@ describe('patient info model', () => {
         role: 'dermatology',
         agencyName: 'Quibbler',
         roleFreeText: null,
-        phone: { id: phone.id, phoneNumber: '000-111-2255' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: null,
       });
       expect(log).toBeCalled();

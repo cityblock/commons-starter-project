@@ -57,6 +57,7 @@ import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-subm
 import RiskAreaGroup from '../../models/risk-area-group';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
+import SmsMessage from '../../models/sms-message';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
 import TaskEvent from '../../models/task-event';
@@ -124,6 +125,7 @@ export type ModelResource =
   | 'riskAreaGroup'
   | 'screeningTool'
   | 'screeningToolScoreRange'
+  | 'smsMessage'
   | 'task'
   | 'taskComment'
   | 'taskEvent'
@@ -195,6 +197,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   riskAreaGroup: RiskAreaGroup,
   screeningTool: ScreeningTool,
   screeningToolScoreRange: ScreeningToolScoreRange,
+  smsMessage: SmsMessage,
   task: Task,
   taskComment: TaskComment,
   taskEvent: TaskEvent,

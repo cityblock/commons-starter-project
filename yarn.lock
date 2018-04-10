@@ -520,9 +520,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-intl@2.3.5":
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.5.tgz#eafa170d83c06302416075867a6fd219c1cf84d8"
+"@types/react-intl@2.3.6":
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.6.tgz#88063adb515365a8bd3bf62aae4eeb5a43ee86cf"
 
 "@types/react-onclickoutside@6.0.3":
   version "6.0.3"

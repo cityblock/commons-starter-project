@@ -41,7 +41,8 @@ export class PatientDemographics extends React.Component<allProps> {
       const node = ReactDOM.findDOMNode(this.refs[hash]);
 
       if (node) {
-        node.scrollIntoView();
+        // scrollIntoView is on all nodes https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+        (node as any).scrollIntoView();
         history.push(routeBase);
       }
     }

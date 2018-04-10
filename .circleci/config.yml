@@ -18,6 +18,7 @@ jobs:
             - ./node_modules
       - run: yarn lint
       - run: yarn stylelint
+      - run: yarn typecheck
       - run:
           name: check-schema
           command: './scripts/check-schema-in-sync.sh'

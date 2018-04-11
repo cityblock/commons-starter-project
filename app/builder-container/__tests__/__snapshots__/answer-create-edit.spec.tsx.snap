@@ -287,7 +287,7 @@ exports[`renders answer create-edit 1`] = `
           disabled={undefined}
           value="boolean"
         >
-          boolean
+          true / false
         </option>
       </select>
     </div>

@@ -20,6 +20,7 @@ import { IUpdatedField } from '../shared/util/updated-fields';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
+import { getMessageIdForOption } from './answer-create-edit';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
@@ -108,7 +109,11 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
     const dataTypeOptions = ['boolean', 'number', 'string'].map((dataTypeOption, index) => (
-      <Option key={`${dataTypeOption}-${index}`} value={dataTypeOption} label={dataTypeOption} />
+      <Option
+        key={`${dataTypeOption}-${index}`}
+        value={dataTypeOption}
+        messageId={getMessageIdForOption(dataTypeOption)}
+      />
     ));
 
     return (

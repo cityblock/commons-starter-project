@@ -63,6 +63,15 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
+export function getMessageIdForOption(value?: string) {
+  if (value === 'string') {
+    return 'builder.string';
+  } else if (value === 'boolean') {
+    return 'builder.boolean';
+  }
+  return undefined;
+}
+
 class AnswerCreateEdit extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
@@ -182,18 +191,28 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   getValueTypeOptions() {
     const { screeningToolAnswer, dataType } = this.props;
     const { answer } = this.state;
-
     if (screeningToolAnswer) {
       return <Option value="number" />;
     } else if (dataType) {
-      return <Option value={dataType} />;
+      return <Option value={dataType} messageId={getMessageIdForOption(dataType)} />;
     } else if (this.props.answer) {
-      return <Option value={answer.valueType} />;
+      return (
+        <Option value={answer.valueType} messageId={getMessageIdForOption(answer.valueType)} />
+      );
     } else {
       return [
-        <Option key={'default-option'} value="" disabled label="Select Answer value type" />,
-        <Option key={'string-option'} value="string" label="text" />,
-        <Option key={'boolean-option'} value="boolean" label="true / false" />,
+        <Option
+          key={'default-option'}
+          value=""
+          disabled
+          messageId="builder.selectAnswerValueType"
+        />,
+        <Option key={'string-option'} value="string" messageId={getMessageIdForOption('string')} />,
+        <Option
+          key={'boolean-option'}
+          value="boolean"
+          messageId={getMessageIdForOption('boolean')}
+        />,
         <Option key={'number-option'} value="number" />,
       ];
     }

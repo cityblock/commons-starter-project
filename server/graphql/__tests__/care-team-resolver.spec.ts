@@ -247,9 +247,9 @@ describe('care team', () => {
       expect(computedPatientStatus2!.hasChp).toEqual(false);
 
       const mutation = `mutation {
-        careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${
-        patient2.id
-      }"], userId: "${user2.id}" }) {
+        careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${patient2.id}"], userId: "${
+        user2.id
+      }" }) {
           id
         }
       }`;

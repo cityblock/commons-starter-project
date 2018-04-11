@@ -50,8 +50,8 @@ describe('Render Phone Info Component', () => {
 
     expect(wrapper.find(PhoneForm)).toHaveLength(1);
     expect(wrapper.find(PhoneForm).props().phoneNumber).toBe('111-111-1111');
-    expect(wrapper.find(PhoneForm).props().type).toBe('other');
-    expect(wrapper.find(PhoneForm).props().description).toBe('edited phone');
+    expect(wrapper.find(PhoneForm).props().type).toBe('mobile');
+    expect(wrapper.find(PhoneForm).props().description).toBe('main phone number');
   });
 
   it('renders an error bar if there is an error', () => {

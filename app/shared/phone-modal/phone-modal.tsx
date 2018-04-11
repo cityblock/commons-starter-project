@@ -27,8 +27,8 @@ interface IProps {
 
 interface IState {
   phoneNumber?: string | null;
-  type?: PhoneTypeOptions | null;
-  description?: string | null;
+  // type?: PhoneTypeOptions | null;
+  // description?: string | null;
   saveError?: string | null;
   updatedIsPrimary?: boolean | null;
 }
@@ -42,8 +42,8 @@ class PhoneModal extends React.Component<IProps, IState> {
   clearState() {
     this.setState({
       phoneNumber: null,
-      type: null,
-      description: null,
+      // type: null,
+      // description: null,
       saveError: null,
       updatedIsPrimary: null,
     });
@@ -63,14 +63,14 @@ class PhoneModal extends React.Component<IProps, IState> {
   handleSubmit = async () => {
     const { phone, savePhone, onSaved, isPrimary } = this.props;
     const originalPhone = phone || {};
-    const { phoneNumber, type, description, updatedIsPrimary } = this.state;
+    const { phoneNumber, updatedIsPrimary } = this.state;
     const isPrimaryUpdatedToTrue = updatedIsPrimary === true && updatedIsPrimary !== isPrimary;
 
     const updatedPhone = {
       id: originalPhone.id,
       phoneNumber: phoneNumber || originalPhone.phoneNumber,
-      type: type || originalPhone.type,
-      description: description || originalPhone.description,
+      type: originalPhone.type,
+      description: originalPhone.description,
     };
 
     try {
@@ -91,11 +91,11 @@ class PhoneModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, titleMessageId, isPrimary } = this.props;
     const phone = this.props.phone || {};
-    const { saveError, phoneNumber, type, description, updatedIsPrimary } = this.state;
+    const { saveError, phoneNumber, updatedIsPrimary } = this.state;
 
     const updatedPhoneNumber = isNil(phoneNumber) ? phone.phoneNumber : phoneNumber;
-    const updatedType = isNil(type) ? phone.type : type;
-    const updatedDescription = isNil(description) ? phone.description : description;
+    const updatedType = phone.type;
+    const updatedDescription = phone.description;
     const currentIsPrimary = isNil(updatedIsPrimary) ? isPrimary : updatedIsPrimary;
     const onPrimaryChange = phone.id && !isPrimary ? this.handlePrimaryChange : undefined;
 

@@ -1,21 +1,7 @@
 #import "../fragments/full-phone.graphql"
 
-mutation phoneEdit(
-  $phoneId: ID!
-  $patientId: ID!
-  $phoneNumber: String!
-  $type: PhoneTypeOptions
-  $description: String
-) {
-  phoneEdit(
-    input: {
-      phoneId: $phoneId
-      patientId: $patientId
-      phoneNumber: $phoneNumber
-      type: $type
-      description: $description
-    }
-  ) {
+mutation phoneEdit($phoneId: ID!, $patientId: ID!, $phoneNumber: String!) {
+  phoneEdit(input: { phoneId: $phoneId, patientId: $patientId, phoneNumber: $phoneNumber }) {
     ...FullPhone
   }
 }

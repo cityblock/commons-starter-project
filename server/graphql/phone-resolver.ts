@@ -99,8 +99,9 @@ export async function phoneEdit(
 ): Promise<IRootMutationType['phoneEdit']> {
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPhoneEditInput>(input, isNil);
+  // const filtered = omitBy<IPhoneEditInput>(input, isNil);
   logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`, 2);
-
-  return Phone.edit(filtered as any, input.phoneId, txn);
+  // TODO: fix this to create a new phone
+  // return Phone.edit(filtered as any, input.phoneId, txn);
+  return Phone.get(input.phoneId, txn);
 }

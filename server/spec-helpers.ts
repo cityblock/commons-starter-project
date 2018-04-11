@@ -29,7 +29,6 @@ import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import PatientState from './models/patient-state';
-import { PhoneTypeOptions } from './models/phone';
 import ProgressNote from './models/progress-note';
 import ProgressNoteTemplate from './models/progress-note-template';
 import Question from './models/question';
@@ -111,12 +110,9 @@ export function createMockAddress(userId: string) {
   };
 }
 
-export function createMockPhone(userId: string) {
+export function createMockPhone(phoneNumber?: string) {
   return {
-    phoneNumber: '123-456-7890',
-    type: 'home' as PhoneTypeOptions,
-    description: 'moms home phone',
-    updatedById: userId,
+    phoneNumber: phoneNumber || '+11234567890',
   };
 }
 

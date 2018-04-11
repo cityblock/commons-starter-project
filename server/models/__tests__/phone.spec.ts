@@ -1,23 +1,17 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import { createMockClinic, createMockPhone, createMockUser } from '../../spec-helpers';
-import Clinic from '../clinic';
+import { createMockPhone } from '../../spec-helpers';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
-
 interface ISetup {
-  user: User;
   phone: Phone;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
 
-  return { user, phone };
+  return { phone };
 }
 
 describe('phone', () => {
@@ -46,12 +40,29 @@ describe('phone', () => {
 
   describe('create', async () => {
     it('should create phone', async () => {
-      const { phone, user } = await setup(txn);
+      const { phone } = await setup(txn);
       expect(phone).toMatchObject({
         phoneNumber: '+11234567890',
-        type: 'home',
-        description: 'moms home phone',
-        updatedById: user.id,
+      });
+    });
+
+    it('should not create a phone with the same number', async () => {
+      await setup(txn);
+
+      try {
+        await Phone.create(createMockPhone(), txn);
+      } catch (err) {
+        expect(err.constraint).toMatch('phone_number_unique');
+      }
+    });
+
+    it('should create phone with same number if other phone deleted', async () => {
+      const { phone } = await setup(txn);
+      await Phone.delete(phone.id, txn);
+
+      const newPhone = await Phone.create(createMockPhone(), txn);
+      expect(newPhone).toMatchObject({
+        phoneNumber: '+11234567890',
       });
     });
   });
@@ -65,28 +76,6 @@ describe('phone', () => {
       expect(deleted.id).toBe(phone.id);
 
       await expect(Phone.get(phone.id, txn)).rejects.toMatch(`No such phone: ${phone.id}`);
-    });
-  });
-
-  describe('edit', async () => {
-    it('should edit phone', async () => {
-      const { phone, user } = await setup(txn);
-      const editedPhone = await Phone.edit(
-        {
-          phoneNumber: '555-555-5555',
-          type: 'work',
-          description: 'bank job',
-          updatedById: user.id,
-        },
-        phone.id,
-        txn,
-      );
-      expect(editedPhone).toMatchObject({
-        phoneNumber: '+15555555555',
-        type: 'work',
-        description: 'bank job',
-        updatedById: user.id,
-      });
     });
   });
 });

@@ -1,29 +1,21 @@
 import { Transaction } from 'objection';
-import { formatPhoneNumberForTwilio, validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
+import {
+  formatPhoneNumberForTwilio,
+  validatePhoneNumberForTwilio,
+} from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 
-export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other' | null;
-
 export interface IPhoneOptions {
-  updatedById: string;
   phoneNumber: string;
-  type?: PhoneTypeOptions;
-  description?: string;
 }
 
-export interface IPhoneEdit {
-  updatedById: string;
-  phoneNumber: string;
-  type?: PhoneTypeOptions;
-  description?: string;
-}
+// Used in phone related join tables
+export type PhoneType = 'home' | 'work' | 'mobile' | 'other';
+export const PHONE_TYPES = ['home', 'work', 'mobile', 'other'];
 
 /* tslint:disable:member-ordering */
 export default class Phone extends BaseModel {
   phoneNumber: string;
-  type: PhoneTypeOptions;
-  description: string;
-  updatedById: string;
 
   static tableName = 'phone';
 
@@ -33,15 +25,12 @@ export default class Phone extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      phoneNumber: { type: 'string', minLength: 1 },
-      type: { type: 'string', enum: ['home', 'work', 'mobile', 'other'] },
-      description: { type: 'string' },
+      phoneNumber: { type: 'string', minLength: 12, maxLength: 12 },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
-      updatedById: { type: 'string', format: 'uuid' },
     },
-    required: ['phoneNumber', 'updatedById'],
+    required: ['phoneNumber'],
   };
 
   static async get(phoneId: string, txn: Transaction) {
@@ -76,16 +65,6 @@ export default class Phone extends BaseModel {
     }
 
     return deleted;
-  }
-
-  static async edit(phone: IPhoneEdit, phoneId: string, txn: Transaction): Promise<Phone> {
-    const formattedInput = {
-      ...phone,
-      phoneNumber: phone.phoneNumber ? formatPhoneNumberForTwilio(phone.phoneNumber) : undefined,
-    };
-    await validatePhoneNumberForTwilio(formattedInput.phoneNumber);
-
-    return this.query(txn).patchAndFetchById(phoneId, formattedInput);
   }
 }
 /* tslint:enable:member-ordering */

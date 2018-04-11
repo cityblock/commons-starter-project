@@ -29,7 +29,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
 
   return { patient, phone, user, clinic };
 }
@@ -81,9 +81,9 @@ describe('SMS model', () => {
       const { patient, phone, user } = await setup(txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
 
-      const phone2 = await Phone.create(createMockPhone(user.id), txn);
+      const phone2 = await Phone.create(createMockPhone('+11234567891'), txn);
 
-      const phone3 = await Phone.create(createMockPhone(user.id), txn);
+      const phone3 = await Phone.create(createMockPhone('+11234567892'), txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 

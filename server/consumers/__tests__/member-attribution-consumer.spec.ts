@@ -71,7 +71,7 @@ describe('processing memberAttribution jobs', () => {
       const patientId = uuid();
       const data = {
         patientId,
-        cityblockId: 123,
+        cityblockId: 124,
         firstName: 'Bob',
         lastName: 'Smith',
         dateOfBirth: '01/01/1990',
@@ -84,7 +84,7 @@ describe('processing memberAttribution jobs', () => {
 
       const fetchedPatient = await Patient.get(patientId, txn);
       expect(fetchedPatient.patientInfo.gender).toEqual('male');
-      expect(fetchedPatient.cityblockId).toEqual(123);
+      expect(fetchedPatient.cityblockId).toEqual(124);
     });
   });
 

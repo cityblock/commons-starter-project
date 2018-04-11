@@ -13,7 +13,9 @@ export const formatPhoneNumberForTwilio = (phoneNumber: string): string => {
   return `+${strippedNumber}`;
 };
 
-export const validatePhoneNumberForTwilio = (phoneNumber: string | undefined): Promise<void> | void => {
+export const validatePhoneNumberForTwilio = (
+  phoneNumber: string | undefined,
+): Promise<void> | void => {
   if (phoneNumber && !phoneNumber.match(PHONE_REGEX)) {
     return Promise.reject('Phone number must be in +12345678901 format');
   }

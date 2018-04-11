@@ -2,7 +2,10 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { IUserWithCount } from 'schema';
 import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
-import { formatPhoneNumberForTwilio, validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
+import {
+  formatPhoneNumberForTwilio,
+  validatePhoneNumberForTwilio,
+} from '../helpers/twilio-helpers';
 import {
   attributionUserEmail,
   attributionUserPermissions,

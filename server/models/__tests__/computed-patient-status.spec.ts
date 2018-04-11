@@ -102,27 +102,18 @@ describe('computed patient status model', () => {
     await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
     await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
 
-    await Patient.query(txn).patchAndFetchById(
-      patient.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
-    await Patient.query(txn).patchAndFetchById(
-      patient2.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
-    await Patient.query(txn).patchAndFetchById(
-      patient3.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
+    await Patient.query(txn).patchAndFetchById(patient.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
+    await Patient.query(txn).patchAndFetchById(patient2.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
+    await Patient.query(txn).patchAndFetchById(patient3.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
     await ComputedPatientStatus.updateForMultiplePatients([patient.id, patient2.id], user.id, txn);
 
     const refetchedPatientStatus1 = await ComputedPatientStatus.getForPatient(patient.id, txn);
@@ -146,20 +137,14 @@ describe('computed patient status model', () => {
 
     await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
     await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
-    await Patient.query(txn).patchAndFetchById(
-      patient.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
-    await Patient.query(txn).patchAndFetchById(
-      patient2.id,
-      {
-        coreIdentityVerifiedAt: new Date().toISOString(),
-        coreIdentityVerifiedById: user.id,
-      },
-    );
+    await Patient.query(txn).patchAndFetchById(patient.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
+    await Patient.query(txn).patchAndFetchById(patient2.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
 
     await ComputedPatientStatus.updateForAllPatients(user.id, txn);
 

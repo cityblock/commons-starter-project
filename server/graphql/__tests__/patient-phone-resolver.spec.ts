@@ -41,11 +41,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
   const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
-  const primaryPhone = await Phone.create(
-    { phoneNumber: '+11112223333', updatedById: user.id },
-    txn,
-  );
+  const phone = await Phone.create(createMockPhone(), txn);
+  const primaryPhone = await Phone.create({ phoneNumber: '+11112223333' }, txn);
   await PatientPhone.create({ phoneId: phone.id, patientId: patient.id }, txn);
   await PatientPhone.create({ phoneId: primaryPhone.id, patientId: patient.id }, txn);
   await PatientInfo.edit(
@@ -81,7 +78,7 @@ describe('phone resolver', () => {
       const { primaryPhone, phone, patient, user } = await setup(txn);
       const query = `{
           patientPhones(patientId: "${patient.id}") {
-            id, phoneNumber, description
+            id, phoneNumber
           }
         }`;
 
@@ -97,14 +94,12 @@ describe('phone resolver', () => {
         expect.objectContaining({
           id: primaryPhone.id,
           phoneNumber: primaryPhone.phoneNumber,
-          description: primaryPhone.description,
         }),
       );
       expect(cloneDeep(result.data!.patientPhones)).toContainEqual(
         expect.objectContaining({
           id: phone.id,
           phoneNumber: phone.phoneNumber,
-          description: phone.description,
         }),
       );
       expect(log).toBeCalled();

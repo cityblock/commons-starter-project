@@ -53,8 +53,6 @@ export class EditPhoneModal extends React.Component<allProps> {
         patientId,
         phoneId: phone.id,
         phoneNumber: phone.phoneNumber,
-        description: phone.description,
-        type: phone.type,
       },
     });
   };

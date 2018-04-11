@@ -56,8 +56,8 @@ export default class ProgressNoteTemplate extends BaseModel {
 
   static async getAll(txn: Transaction): Promise<ProgressNoteTemplate[]> {
     return this.query(txn)
-      .orderBy('createdAt', 'asc')
-      .where({ deletedAt: null });
+      .where({ deletedAt: null })
+      .orderBy('title', 'asc');
   }
 
   static async create(input: IProgressNoteTemplateEditableFields, txn: Transaction) {

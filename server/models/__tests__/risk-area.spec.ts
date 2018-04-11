@@ -159,6 +159,29 @@ describe('risk area model', () => {
     );
     const riskArea2 = await RiskArea.create(
       {
+        title: 'Housing',
+        order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    // created before next one but with a later title
+    const riskArea3 = await RiskArea.create(
+      {
+        title: 'Housing 3',
+        order: 2,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
+      },
+      txn,
+    );
+    const riskArea4 = await RiskArea.create(
+      {
         title: 'Housing 2',
         order: 2,
         mediumRiskThreshold,
@@ -173,7 +196,8 @@ describe('risk area model', () => {
     const deleted = await RiskArea.delete(riskArea.id, txn);
     expect(deleted.deletedAt).not.toBeFalsy();
 
-    expect(await RiskArea.getAll(txn)).toMatchObject([riskArea2]);
+    // ensure order is correct
+    expect(await RiskArea.getAll(txn)).toMatchObject([riskArea2, riskArea4, riskArea3]);
   });
 
   it('deleted risk area', async () => {

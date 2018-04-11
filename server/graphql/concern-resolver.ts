@@ -63,8 +63,8 @@ export async function resolveConcerns(
   await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
 
   const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
-    orderBy: 'createdAt',
-    order: 'desc',
+    orderBy: 'title',
+    order: 'asc',
   });
 
   return Concern.getAll({ orderBy, order }, txn);

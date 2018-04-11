@@ -56,8 +56,8 @@ export async function resolveComputedFields(
   await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
   const { order, orderBy } = formatOrderOptions<ComputedFieldOrderOptions>(args.orderBy, {
-    orderBy: 'createdAt',
-    order: 'desc',
+    orderBy: 'label',
+    order: 'asc',
   });
 
   return ComputedField.getAll({ orderBy, order }, txn);

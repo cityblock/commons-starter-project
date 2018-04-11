@@ -117,8 +117,9 @@ export default class RiskArea extends BaseModel {
   static async getAll(txn: Transaction): Promise<RiskArea[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .orderBy('order')
-      .where({ deletedAt: null });
+      .where({ deletedAt: null })
+      .orderBy('order', 'asc')
+      .orderBy('title', 'asc');
   }
 
   static async create(input: IRiskAreaEditableFields, txn: Transaction) {

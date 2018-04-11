@@ -267,9 +267,6 @@ class BuilderQuestions extends React.Component<allProps, IState> {
         </option>
       ),
     );
-    const sortOptions = riskAreaSortOptions
-      .concat(screeningToolSortOptions)
-      .concat(progressNoteTemplateSortOptions);
     const selectedValue = toolId || riskAreaId || progressNoteTemplateId;
     return (
       <div className={styles.container}>
@@ -280,7 +277,11 @@ class BuilderQuestions extends React.Component<allProps, IState> {
             </div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={selectedValue || ''} onChange={this.onSortChange}>
-                {sortOptions}
+                <optgroup label="Assessments">{riskAreaSortOptions}</optgroup>
+                <optgroup label="Screening Tools">{screeningToolSortOptions}</optgroup>
+                <optgroup label="Progress Note Templates">
+                  {progressNoteTemplateSortOptions}
+                </optgroup>
               </select>
             </div>
           </div>

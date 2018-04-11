@@ -21,7 +21,17 @@ exports[`builder concerns renders builder questions 1`] = `
         <select
           onChange={[Function]}
           value=""
-        />
+        >
+          <optgroup
+            label="Assessments"
+          />
+          <optgroup
+            label="Screening Tools"
+          />
+          <optgroup
+            label="Progress Note Templates"
+          />
+        </select>
       </div>
     </div>
     <div

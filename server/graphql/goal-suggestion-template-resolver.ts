@@ -45,8 +45,8 @@ export async function resolveGoalSuggestionTemplates(
   await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 
   const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(args.orderBy, {
-    orderBy: 'createdAt',
-    order: 'desc',
+    orderBy: 'title',
+    order: 'asc',
   });
 
   return GoalSuggestionTemplate.getAll({ orderBy, order }, txn);

@@ -66,15 +66,15 @@ describe('progress note template model', () => {
   });
 
   it('gets all progress note template', async () => {
-    const progressNoteTemplate1 = await ProgressNoteTemplate.create(
-      {
-        title: 'title 1',
-      },
-      txn,
-    );
     const progressNoteTemplate2 = await ProgressNoteTemplate.create(
       {
         title: 'title 2',
+      },
+      txn,
+    );
+    const progressNoteTemplate1 = await ProgressNoteTemplate.create(
+      {
+        title: 'title 1',
       },
       txn,
     );

@@ -129,7 +129,7 @@ export default class ScreeningTool extends BaseModel {
         builder.where('goal_suggestion.deletedAt', null),
       )
       .where({ deletedAt: null })
-      .orderBy('createdAt', 'asc');
+      .orderBy('title', 'asc');
   }
 
   static async delete(screeningToolId: string, txn: Transaction): Promise<ScreeningTool> {

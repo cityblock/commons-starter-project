@@ -32,7 +32,7 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 * Install [Zenhub][]
 * [Setup your local database](#create-local-postgres-database)
 * [Install Redis](#install-redis)
-* Ask a Point Person to add you as a user in staging and change your user role to Admin.
+* Ask a Point Person to add you as a user in staging and change your user permissions to 'green' (user role does not affect permissions).
 * [Copy staging database to your local database](#copying-staging-database-to-local-database)
 
 ### Create test postgres database
@@ -136,7 +136,6 @@ Creek code review][] docs. You should respond within ~2 business hours to reques
 
 ## Security Practices
 
-* We scan software installed on our servers using [AppCanary][]
 * In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
   daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
   Lifecycle][] through security focused ts-lint rules.
@@ -158,9 +157,7 @@ After ensuring the foreign data wrapper is up to date, we then need to copy the 
 
 ### Use GraphiQL
 
-GraphiQL is accessible locally at [http://localhost:3000/graphiql](http://localhost:3000/graphiql)
-and on production at
-[https://commons.cityblock.com/graphiql](https://commons.cityblock.com/graphiql). All endpoints
+GraphiQL is accessible locally at [http://localhost:3000/graphiql](http://localhost:3000/graphiql). All endpoints
 except login require you to be authenticated. In order to pass auth information we need to...
 
 1.  create a user (NOTE: You may need to disable authentication checks locally in the `createUser`
@@ -173,7 +170,7 @@ except login require you to be authenticated. In order to pass auth information 
 ### Revert a PR merge into master
 
 1.  As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to
-    production.
+    staging or production if a production deploy was started.
 1.  Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
 1.  GitHub will generate a revert PR on your behalf.
 1.  Merge the generated PR.
@@ -195,8 +192,7 @@ Once you've added the aptible git remote, you can use Aptible toolbelt to interf
 
     yarn prod-db
 
-Or, alternatively, use `aptible db:tunnel commons-staging` or `aptible db:tunnel commons-production`. Note: If you get an auth error here, you may
-need to login to Aptible again. Login tokens last 1 week.
+Or, alternatively, use `aptible db:tunnel commons-staging` or `aptible db:tunnel commons-production`. Note: If you get an auth error here, you may need to login to Aptible again. Login tokens last 12 hours.
 
 ### To push your local version of the server to Aptible, run
 
@@ -282,42 +278,6 @@ First, login with `aptible login`, then:
     psql -d commons -c "CREATE ROLE aptible LOGIN"
     psql commons < commons-staging.dump
     rm commons-staging.dump
-
-### Copying from production to staging
-
-We copy a small selection on NON-PHI tables from production to staging to ensure we can reproduce features like care plan suggestions.
-
-To run that, use `yarn copy-prod-to-staging`.
-
-If that errors, it may be because we added a new table. List the current tables by connecting to staging db and running `\dE *.*`. Currently the list is:
-
-                         List of relations
-       Schema   |            Name            |     Type      |  Owner
-    ------------+----------------------------+---------------+---------
-    production | answer                     | foreign table | aptible
-    production | cbo                        | foreign table | aptible
-    production | cbo_category               | foreign table | aptible
-    production | clinic                     | foreign table | aptible
-    production | computed_field             | foreign table | aptible
-    production | concern                    | foreign table | aptible
-    production | concern_diagnosis_code     | foreign table | aptible
-    production | concern_suggestion         | foreign table | aptible
-    production | diagnosis_code             | foreign table | aptible
-    production | goal_suggestion            | foreign table | aptible
-    production | goal_suggestion_template   | foreign table | aptible
-    production | patient_list               | foreign table | aptible
-    production | progress_note_template     | foreign table | aptible
-    production | question                   | foreign table | aptible
-    production | question_condition         | foreign table | aptible
-    production | risk_area                  | foreign table | aptible
-    production | risk_area_group            | foreign table | aptible
-    production | screening_tool             | foreign table | aptible
-    production | screening_tool_score_range | foreign table | aptible
-    production | task_template              | foreign table | aptible
-
-When adding tables, run `yarn staging-db` and then `IMPORT FOREIGN SCHEMA public LIMIT TO (my_new_table) FROM SERVER commons_production INTO production;`.
-
-After that, you should be able to run `yarn copy-prod-to-staging` again.
 
 ### Create a database schema explorer
 

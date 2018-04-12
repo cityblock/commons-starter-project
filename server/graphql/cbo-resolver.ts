@@ -52,7 +52,7 @@ export async function CBOCreate(
 ): Promise<CBO> {
   await checkUserPermissions(userId, permissions, 'create', 'CBO', txn);
 
-  return CBO.create({ ...input, fax: input.fax || undefined }, txn);
+  return CBO.create({ ...input, fax: input.fax || undefined, url: input.url || undefined }, txn);
 }
 
 export async function CBOEdit(

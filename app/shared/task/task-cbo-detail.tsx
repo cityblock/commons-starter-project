@@ -15,7 +15,7 @@ const TaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) => {
   const { CBO } = CBOReferral;
   const isDefinedCBO = !!CBO;
   const name = isDefinedCBO ? CBO!.name : CBOReferral.name;
-  const href = isDefinedCBO ? CBO!.url : (CBOReferral.url as string);
+  const href = isDefinedCBO ? CBO!.url : CBOReferral.url;
   const faxText =
     isDefinedCBO && CBO!.fax ? (
       <DefaultText label={CBO!.fax as string} className={styles.text} />
@@ -36,7 +36,7 @@ const TaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) => {
           {faxText}
         </div>
       )}
-      <Link to={href} className={styles.link} newTab={true} />
+      {href ? <Link to={href} className={styles.link} newTab={true} /> : null}
     </div>
   );
 };

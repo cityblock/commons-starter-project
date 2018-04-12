@@ -87,7 +87,7 @@ export class CBOEdit extends React.Component<allProps, {}> {
           <h4>Fax number:</h4>
           <EditableMultilineText text={CBO.fax || ''} onEnterPress={this.onEnterPress('fax')} />
           <h4>URL:</h4>
-          <EditableMultilineText text={CBO.url} onEnterPress={this.onEnterPress('url')} />
+          <EditableMultilineText text={CBO.url || ''} onEnterPress={this.onEnterPress('url')} />
         </div>
       </div>
     );

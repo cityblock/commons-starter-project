@@ -13,7 +13,7 @@ interface ICBOEditableFields {
   zip: string;
   fax?: string;
   phone: string;
-  url: string;
+  url?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -24,9 +24,9 @@ export default class CBO extends BaseModel {
   city: string;
   state: string;
   zip: string;
-  fax: string;
+  fax: string | null;
   phone: string;
-  url: string;
+  url: string | null;
   category: CBOCategory;
 
   static tableName = 'cbo';
@@ -45,12 +45,12 @@ export default class CBO extends BaseModel {
       zip: { type: 'string', minLength: 5 }, // at least 5 digits
       fax: { type: ['string', 'null'], minLength: 10 }, // at least 10 digits
       phone: { type: 'string', minLength: 10 }, // at least 10 digits
-      url: { type: 'string', minLength: 1 }, // cannot be blank
+      url: { type: ['string', 'null'] },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['name', 'categoryId', 'address', 'city', 'state', 'zip', 'phone', 'url'],
+    required: ['name', 'categoryId', 'address', 'city', 'state', 'zip', 'phone'],
   };
 
   static relationMappings: RelationMappings = {

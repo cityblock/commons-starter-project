@@ -43,7 +43,7 @@ const CreateTaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) =>
           {faxText}
         </div>
       </div>
-      <Link to={url} label={url} className={styles.link} newTab={true} />
+      {url ? <Link to={url} label={url} className={styles.link} newTab={true} /> : null}
     </div>
   );
 };

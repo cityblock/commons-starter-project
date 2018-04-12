@@ -1632,7 +1632,7 @@ declare module 'schema' {
     zip: string;
     fax: string | null;
     phone: string;
-    url: string;
+    url: string | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -4439,7 +4439,7 @@ declare module 'schema' {
     zip: string;
     fax?: string | null;
     phone: string;
-    url: string;
+    url?: string | null;
   }
 
   /**

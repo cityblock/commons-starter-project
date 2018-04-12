@@ -1444,7 +1444,7 @@ type CBO implements uniqueId {
   zip: String!
   fax: String
   phone: String!
-  url: String!
+  url: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -2257,7 +2257,7 @@ input CBOCreateInput {
   zip: String!
   fax: String
   phone: String!
-  url: String!
+  url: String
 }
 
 # params for editing a CBO

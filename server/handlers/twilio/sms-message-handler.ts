@@ -17,7 +17,7 @@ export async function twilioSmsHandler(req: express.Request, res: express.Respon
   const twilioPayload = req.body;
   const { Body, From, To } = twilioPayload;
 
-  await transaction(SmsMessage.knex(), async txn => {
+  await transaction(res.locals.existingTxn || SmsMessage.knex(), async txn => {
     // figure out which Commons user is recipient of message
     const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
 

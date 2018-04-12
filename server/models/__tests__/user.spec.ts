@@ -144,7 +144,7 @@ describe('user model', () => {
           googleProfileImageUrl: 'http://google.com',
           homeClinicId: clinic2.id,
           googleAuthId: googleAuth.id,
-          twilioSimId: 'DE1cc5f14990cc638580c2a54713dBOGUS',
+          twilioSimId: 'BOGUS5f14990BOGUS580c2a54713dBOGUS',
         },
         txn,
       ),
@@ -155,7 +155,7 @@ describe('user model', () => {
       googleProfileImageUrl: 'http://google.com',
       homeClinicId: clinic2.id,
       googleAuthId: googleAuth.id,
-      twilioSimId: 'DE1cc5f14990cc638580c2a54713dBOGUS',
+      twilioSimId: 'BOGUS5f14990BOGUS580c2a54713dBOGUS',
     });
   });
 

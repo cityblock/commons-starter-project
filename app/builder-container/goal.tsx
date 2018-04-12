@@ -112,7 +112,6 @@ export class Goal extends React.Component<allProps, IState> {
 
   async onConfirmDelete() {
     const { onDelete, goalId } = this.props;
-
     if (goalId) {
       try {
         this.setState({ deleteError: null });

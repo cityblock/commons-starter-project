@@ -104,15 +104,14 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     );
   };
 
-  async onDeleteGoal(goalId: string) {
+  onDeleteGoal = async (goalId: string) => {
     const { history, routeBase, deleteGoal } = this.props;
-
     if (deleteGoal) {
       await deleteGoal({ variables: { goalSuggestionTemplateId: goalId } });
     }
 
     history.push(routeBase);
-  }
+  };
 
   render() {
     const { goals, routeBase, goalId } = this.props;

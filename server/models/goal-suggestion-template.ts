@@ -97,7 +97,9 @@ export default class GoalSuggestionTemplate extends BaseModel {
       .where({ id: goalSuggestionTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const goalSuggestion = await this.query(txn).findById(goalSuggestionTemplateId);
+    const goalSuggestion = await this.query(txn)
+      .findById(goalSuggestionTemplateId)
+      .eager('taskTemplates');
     if (!goalSuggestion) {
       return Promise.reject(`No such goalSuggestionTemplate: ${goalSuggestionTemplateId}`);
     }

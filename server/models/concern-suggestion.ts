@@ -243,11 +243,7 @@ export default class ConcernSuggestion extends Model {
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
       .whereNotIn('concern_suggestion.concernId', currentConcernSuggestionIdsQuery)
-      .andWhere(
-        'concern_suggestion.concernId',
-        'not in',
-        currentPatientConcernIdsQuery,
-      )
+      .andWhere('concern_suggestion.concernId', 'not in', currentPatientConcernIdsQuery)
       .andWhere('patient_answer.deletedAt', null)
       .andWhere('patient_answer.applicable', true)
       .andWhere('patient_answer.patientId', patientId);

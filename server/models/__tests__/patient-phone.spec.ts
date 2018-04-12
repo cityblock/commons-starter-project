@@ -25,7 +25,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
 
   return { patient, phone, user, clinic };
 }
@@ -101,17 +101,11 @@ describe('patient phone model', () => {
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
 
       // second phone for the same patient
-      const phone2 = await Phone.create(
-        { phoneNumber: '111-111-1111', type: 'mobile' },
-        txn,
-      );
+      const phone2 = await Phone.create({ phoneNumber: '111-111-1111', type: 'mobile' }, txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone2.id }, txn);
 
       // third phone for the same patient that gets deleted
-      const phone3 = await Phone.create(
-        { phoneNumber: '222-222-2222', type: 'other' },
-        txn,
-      );
+      const phone3 = await Phone.create({ phoneNumber: '222-222-2222', type: 'other' }, txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 
@@ -128,6 +122,35 @@ describe('patient phone model', () => {
         description: 'moms home phone',
       });
       expect(phones[1]).toMatchObject({ phoneNumber: '+11111111111', type: 'mobile' });
+    });
+  });
+
+  describe('get patient phone number', async () => {
+    it('should get patient id associated with a phone if there is one', async () => {
+      const { patient, phone } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const patientId = await PatientPhone.getPatientIdForPhoneNumber('+11234567890', txn);
+
+      expect(patientId).toBe(patient.id);
+    });
+
+    it('should return null if no patient id associated with phone', async () => {
+      await Phone.create(createMockPhone('727-422-7011'), txn);
+
+      const patientId = await PatientPhone.getPatientIdForPhoneNumber('+17274117011', txn);
+
+      expect(patientId).toBeNull();
+    });
+
+    it('should return null if patient deleted that number', async () => {
+      const { patient, phone } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+      await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const patientId = await PatientPhone.getPatientIdForPhoneNumber('+11234567890', txn);
+
+      expect(patientId).toBeNull();
     });
   });
 });

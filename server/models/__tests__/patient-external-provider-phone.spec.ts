@@ -27,7 +27,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
   const patientExternalProvider = await PatientExternalProvider.create(
     createMockPatientExternalProvider(patient.id, user.id, phone),
     txn,
@@ -124,10 +124,7 @@ describe('patient external provider phone model', () => {
       );
 
       // second phone for the same provider
-      const phone2 = await Phone.create(
-        { phoneNumber: '111-111-1111', type: 'mobile' },
-        txn,
-      );
+      const phone2 = await Phone.create({ phoneNumber: '111-111-1111', type: 'mobile' }, txn);
       await PatientExternalProviderPhone.create(
         { patientExternalProviderId: patientExternalProvider.id, phoneId: phone2.id },
         txn,

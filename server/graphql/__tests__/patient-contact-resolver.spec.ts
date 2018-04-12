@@ -50,7 +50,7 @@ async function setupPatientContact(
   userId: string,
   txn: Transaction,
 ): Promise<ISetupContact> {
-  const phone = await Phone.create(createMockPhone(userId), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
   const address = await Address.create(createMockAddress(userId), txn);
   const email = await Email.create(createMockEmail(userId), txn);
 
@@ -91,7 +91,7 @@ describe('patient info model', () => {
   describe('patient contact resolvers', async () => {
     it('gets all patient contact healthcare proxies for patient with id', async () => {
       const { user, patient } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(user.id), txn);
+      const phone = await Phone.create(createMockPhone(), txn);
       await PatientContact.create(createMockPatientContact(patient.id, user.id, phone), txn);
       const proxy = await PatientContact.create(
         createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
@@ -420,7 +420,7 @@ describe('patient info model', () => {
   describe('edit', async () => {
     it('should edit patient contact and create email and address', async () => {
       const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(user.id), txn);
+      const phone = await Phone.create(createMockPhone(), txn);
 
       const patientContact = await PatientContact.create(
         createMockPatientContact(patient.id, user.id, phone),

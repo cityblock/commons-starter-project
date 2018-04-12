@@ -68,6 +68,23 @@ export default class PatientPhone extends BaseModel {
       .pluck('phone')) as any;
   }
 
+  static async getPatientIdForPhoneNumber(
+    phoneNumber: string,
+    txn: Transaction,
+  ): Promise<string | null> {
+    const patientId = (await PatientPhone.query(txn)
+      .innerJoinRelation('phone')
+      .where({
+        'phone.phoneNumber': phoneNumber,
+        'phone.deletedAt': null,
+        'patient_phone.deletedAt': null,
+      })
+      .pluck('patientId')
+      .first()) as any;
+
+    return patientId || null;
+  }
+
   static async create(
     { phoneId, patientId }: IPatientPhoneOptions,
     txn: Transaction,

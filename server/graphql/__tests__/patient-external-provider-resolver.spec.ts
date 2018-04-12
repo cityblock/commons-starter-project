@@ -51,7 +51,7 @@ async function setupPatientExternalProvider(
   userId: string,
   txn: Transaction,
 ): Promise<ISetupContact> {
-  const phone = await Phone.create(createMockPhone(userId), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
   const email = await Email.create(createMockEmail(userId), txn);
 
   const patientExternalProvider = await PatientExternalProvider.create(
@@ -335,7 +335,7 @@ describe('patient info model', () => {
   describe('edit', async () => {
     it('should edit patient external provider and create email', async () => {
       const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(user.id), txn);
+      const phone = await Phone.create(createMockPhone(), txn);
 
       const patientExternalProvider = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone),

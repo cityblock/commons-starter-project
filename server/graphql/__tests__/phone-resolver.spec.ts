@@ -268,7 +268,7 @@ describe('phone resolver', () => {
   describe('edit phone', async () => {
     it('should edit fields on phone', async () => {
       const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(user.id), txn);
+      const phone = await Phone.create(createMockPhone(), txn);
       const query = `mutation {
           phoneEdit(input: {
             phoneId: "${phone.id}",

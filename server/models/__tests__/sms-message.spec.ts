@@ -16,7 +16,11 @@ import User from '../user';
 const userRole = 'admin';
 const body = 'Winter is coming.';
 const body2 = 'Winter is here.';
-const twilioMessageSid = 'SM7b34ed9b8c100cef235feb6130f12190';
+const twilioPayload = {
+  To: '+17274221111',
+  From: '+11234567777',
+  MessageSid: 'bogusid',
+};
 
 interface ISetup {
   patient: Patient;
@@ -29,7 +33,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(user.id), txn);
+  const phone = await Phone.create(createMockPhone(), txn);
 
   return { patient, phone, user, clinic };
 }
@@ -51,27 +55,52 @@ describe('SMS model', () => {
   });
 
   describe('create', async () => {
-    it('should create sms', async () => {
-      const { phone, user } = await setup(txn);
+    it('should create sms and associate with patient if applicable', async () => {
+      const { phone, user, patient } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
       const sms = await SmsMessage.create(
         {
           userId: user.id,
-          phoneId: phone.id,
-          direction: 'inbound',
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser',
           body,
-          mediaUrls: null,
-          twilioMessageSid,
+          twilioPayload,
         },
         txn,
       );
 
       expect(sms).toMatchObject({
         userId: user.id,
-        phoneId: phone.id,
-        direction: 'inbound',
+        contactNumber: phone.phoneNumber,
+        patientId: patient.id,
+        direction: 'toUser',
         body,
-        mediaUrls: null,
-        twilioMessageSid,
+        twilioPayload,
+      });
+    });
+
+    it('should create sms not associated with patient if applicable', async () => {
+      const { phone, user } = await setup(txn);
+
+      const sms = await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser',
+          body,
+          twilioPayload,
+        },
+        txn,
+      );
+
+      expect(sms).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: null,
+        direction: 'toUser',
+        body,
+        twilioPayload,
       });
     });
   });
@@ -81,20 +110,18 @@ describe('SMS model', () => {
       const { patient, phone, user } = await setup(txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
 
-      const phone2 = await Phone.create(createMockPhone(user.id), txn);
+      const phone2 = await Phone.create(createMockPhone('+12223334444'), txn);
 
-      const phone3 = await Phone.create(createMockPhone(user.id), txn);
+      const phone3 = await Phone.create(createMockPhone('+13334445555'), txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
-      await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 
       const sms = await SmsMessage.create(
         {
           userId: user.id,
-          phoneId: phone.id,
-          direction: 'inbound',
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser',
           body,
-          mediaUrls: null,
-          twilioMessageSid,
+          twilioPayload,
         },
         txn,
       );
@@ -102,11 +129,10 @@ describe('SMS model', () => {
       await SmsMessage.create(
         {
           userId: user.id,
-          phoneId: phone2.id,
-          direction: 'inbound',
+          contactNumber: phone2.phoneNumber,
+          direction: 'toUser',
           body,
-          mediaUrls: null,
-          twilioMessageSid,
+          twilioPayload,
         },
         txn,
       );
@@ -114,14 +140,15 @@ describe('SMS model', () => {
       const sms2 = await SmsMessage.create(
         {
           userId: user.id,
-          phoneId: phone3.id,
-          direction: 'inbound',
+          contactNumber: phone3.phoneNumber,
+          direction: 'toUser',
           body: body2,
-          mediaUrls: null,
-          twilioMessageSid,
+          twilioPayload,
         },
         txn,
       );
+
+      await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 
       const messages = await SmsMessage.getForUserPatient(
         { userId: user.id, patientId: patient.id },

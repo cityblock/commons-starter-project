@@ -1,20 +1,19 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
+import Patient from './patient';
 import PatientPhone from './patient-phone';
-import Phone from './phone';
 import User from './user';
 
-type Direction = 'inbound' | 'outbound';
-const DIRECTION: Direction[] = ['inbound', 'outbound'];
+type Direction = 'toUser' | 'fromUser';
+const DIRECTION: Direction[] = ['toUser', 'fromUser'];
 
 interface ISmsMessageCreate {
   userId: string;
-  phoneId: string;
+  contactNumber: string;
   direction: Direction;
   body: string;
-  mediaUrls: string | null;
-  twilioMessageSid: string;
+  twilioPayload: object;
 }
 
 interface IGetForUserPatientParams {
@@ -26,12 +25,12 @@ interface IGetForUserPatientParams {
 export default class SmsMessage extends BaseModel {
   userId: string;
   user: User;
-  phoneId: string;
-  phone: Phone;
+  contactNumber: string;
+  patientId: string | null;
+  patient: Patient | null;
   direction: Direction;
   body: string;
-  mediaUrls: string | null;
-  twilioMessageSid: string;
+  twilioPayload: object;
 
   static tableName = 'sms_message';
 
@@ -43,17 +42,16 @@ export default class SmsMessage extends BaseModel {
     properties: {
       id: { type: 'string' },
       userId: { type: 'string', format: 'uuid' },
-      phoneId: { type: 'string', format: 'uuid' },
+      contactNumber: { type: 'string', minLength: 12, maxLength: 12 },
+      patientId: { type: ['string', 'null'], format: 'uuid' },
       direction: { type: 'string', enum: DIRECTION },
       body: { type: 'string', minLength: 1 }, // cannot be blank
-      mediaUrls: { type: ['string', 'null'] },
-      twilioMessageSid: { type: 'string', minLength: 34, maxLength: 34 },
-      seenAt: { type: 'string' },
+      twilioPayload: { type: 'json' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['userId', 'phoneId', 'direction', 'body', 'twilioMessageSid'],
+    required: ['userId', 'contactNumber', 'direction', 'body', 'twilioPayload'],
   };
 
   static relationMappings: RelationMappings = {
@@ -65,18 +63,25 @@ export default class SmsMessage extends BaseModel {
         to: 'user.id',
       },
     },
-    phone: {
+    patient: {
       relation: Model.BelongsToOneRelation,
-      modelClass: 'phone',
+      modelClass: 'patient',
       join: {
-        from: 'sms_message.phoneId',
-        to: 'phone.id',
+        from: 'sms_message.patientId',
+        to: 'patient.id',
       },
     },
   };
 
   static async create(input: ISmsMessageCreate, txn: Transaction): Promise<SmsMessage> {
-    return this.query(txn).insertAndFetch(input);
+    // grab patient id currently associated with that number if it exsits
+    const patientId = await PatientPhone.getPatientIdForPhoneNumber(input.contactNumber, txn);
+
+    const inputWithPatient = {
+      ...input,
+      patientId,
+    };
+    return this.query(txn).insertAndFetch(inputWithPatient);
   }
 
   static async getForUserPatient(
@@ -84,13 +89,8 @@ export default class SmsMessage extends BaseModel {
     { pageNumber, pageSize }: IPaginationOptions,
     txn: Transaction,
   ): Promise<IPaginatedResults<SmsMessage>> {
-    const patientPhoneIds = PatientPhone.query(txn)
-      .where({ patientId })
-      .select('phoneId');
-
     const messages = (await this.query(txn)
-      .whereIn('phoneId', patientPhoneIds)
-      .andWhere({ userId, deletedAt: null })
+      .where({ patientId, userId, deletedAt: null })
       .orderBy('createdAt', 'DESC')
       .page(pageNumber, pageSize)) as any;
 

@@ -126,7 +126,7 @@
     "node": "8.11"
   },
   "dependencies": {
-    "@google-cloud/error-reporting": "0.3.2",
+    "@google-cloud/error-reporting": "0.4.0",
     "@google-cloud/storage": "1.6.0",
     "@react-pdf/core": "0.7.6",
     "@react-pdf/node": "0.7.6",

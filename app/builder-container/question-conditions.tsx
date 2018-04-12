@@ -46,7 +46,6 @@ class QuestionConditions extends React.Component<IProps> {
         <br />
         {questionConditionsHtml}
         <br />
-        <div className={styles.smallText}>Create applicable if conditions</div>
         <QuestionConditionCreate questionId={questionId} answers={answers} />
       </div>
     );

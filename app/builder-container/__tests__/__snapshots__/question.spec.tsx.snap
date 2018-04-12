@@ -225,31 +225,18 @@ exports[`shallow rendered renders with screening tool 1`] = `
         questionId="cool-question-id"
         screeningToolAnswer={false}
       />
-      <div
-        className="smallText"
-      >
-        Applicable if type:
-      </div>
       <br />
-      <Select
-        name="applicableIfType"
-        onChange={[Function]}
-        value="allTrue"
-      >
-        <Option
-          disabled={true}
-          label="Select one (Required!)"
-          value="Select one"
-        />
-        <Option
-          label="one true"
-          value="oneTrue"
-        />
-        <Option
-          label="all true"
-          value="allTrue"
-        />
-      </Select>
+      <SmallText
+        color="black"
+        messageId="builder.applicableHeading"
+        size="large"
+      />
+      <br />
+      <SmallText
+        color="black"
+        messageId="builder.applicableBody"
+        size="medium"
+      />
       <br />
       <QuestionConditions
         questionConditions={
@@ -311,6 +298,32 @@ exports[`shallow rendered renders with screening tool 1`] = `
           ]
         }
       />
+      <div
+        className="smallText"
+      >
+        Applicable if type:
+      </div>
+      <br />
+      <Select
+        name="applicableIfType"
+        onChange={[Function]}
+        value="allTrue"
+      >
+        <Option
+          disabled={true}
+          label="Select one (Required!)"
+          value="Select one"
+        />
+        <Option
+          label="one true"
+          value="oneTrue"
+        />
+        <Option
+          label="all true"
+          value="allTrue"
+        />
+      </Select>
+      <br />
     </div>
   </div>
 </div>

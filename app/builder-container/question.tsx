@@ -430,6 +430,16 @@ export class Question extends React.Component<allProps, IState> {
                 screeningToolAnswer={!!question.screeningToolId}
                 dataType={this.getAnswerDataType()}
               />
+              <br />
+              <SmallText color="black" size="large" messageId="builder.applicableHeading" />
+              <br />
+              <SmallText color="black" size="medium" messageId="builder.applicableBody" />
+              <br />
+              <QuestionConditions
+                questions={this.getQuestionsForConditions()}
+                questionConditions={question.applicableIfQuestionConditions}
+                questionId={question.id}
+              />
               <div className={styles.smallText}>Applicable if type:</div>
               <br />
               <Select
@@ -442,11 +452,6 @@ export class Question extends React.Component<allProps, IState> {
                 <Option value="allTrue" label="all true" />
               </Select>
               <br />
-              <QuestionConditions
-                questions={this.getQuestionsForConditions()}
-                questionConditions={question.applicableIfQuestionConditions}
-                questionId={question.id}
-              />
             </div>
           </div>
         </div>

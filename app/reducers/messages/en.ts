@@ -746,6 +746,9 @@ export const ENGLISH_TRANSLATION = {
     'builder.freeTextNote': 'NOTE: Remeber to add exactly one answer for freetext questions',
     'builder.boolean': 'true / false',
     'builder.string': 'text',
+    'builder.applicableHeading': "Choose when this question becomes 'applicable'",
+    'builder.applicableBody':
+      "Applicable questions are visible, and their answers can be used to generate suggestions for other questions. If no conditions are selected, this question is always considered 'applicable' to the patient. If conditions are selected, you must then choose if this question becomes applicable if all the conditions are true (allTrue) or if any of the conditions are true (oneTrue)",
     'manager.inviteUser': 'Invite User',
     'manager.users': 'Users',
     'manager.cancel': 'Cancel',

@@ -16,6 +16,7 @@ import * as builderStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import SmallText from '../shared/library/small-text/small-text';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import withErrorHandler, {
@@ -195,6 +196,10 @@ class QuestionCreate extends React.Component<allProps, IState> {
     const computedFieldOptions = (computedFields || []).map(computedField => (
       <Option key={computedField.id} value={computedField.id} label={computedField.label} />
     ));
+    const answerTypeNote =
+      question.answerType === 'freetext' ? (
+        <SmallText isBold={true} color="black" messageId="builder.freeTextNote" />
+      ) : null;
 
     return (
       <div className={questionStyles.container}>
@@ -241,6 +246,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
               <Option value="allTrue" messageId="question.applicableAllTrue" />
             </Select>
             {this.renderAnswerType()}
+            {answerTypeNote}
             {this.renderOtherTextAnswerOption()}
           </div>
         </div>

@@ -743,6 +743,7 @@ export const ENGLISH_TRANSLATION = {
     'builder.enterQuestionTitle': 'Enter question title',
     'builder.enterQuestionOrder': 'Enter question order',
     'builder.selectAnswerValueType': 'Select Answer value type',
+    'builder.freeTextNote': 'NOTE: Remeber to add exactly one answer for freetext questions',
     'builder.boolean': 'true / false',
     'builder.string': 'text',
     'manager.inviteUser': 'Invite User',

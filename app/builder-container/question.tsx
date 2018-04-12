@@ -14,6 +14,7 @@ import * as styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
+import SmallText from '../shared/library/small-text/small-text';
 import TextInput from '../shared/library/text-input/text-input';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
@@ -307,11 +308,15 @@ export class Question extends React.Component<allProps, IState> {
       [styles.hidden]: !editingOrder,
       [styles.error]: !!editOrderError,
     });
-
     const answers = this.renderAnswers();
     const closeRoute = routeBase || '/builder/questions';
 
     if (question) {
+      const answerTypeNote =
+        question.answerType === 'freetext' ? (
+          <SmallText isBold={true} color="black" messageId="builder.freeTextNote" />
+        ) : null;
+
       const answerDisplayHtml = question.computedField ? (
         <div className={styles.largeText}>{question.answerType}</div>
       ) : (
@@ -414,6 +419,7 @@ export class Question extends React.Component<allProps, IState> {
                 <br />
                 <div className={styles.smallText}>Answer display:</div>
               </div>
+              {answerTypeNote}
               {answerDisplayHtml}
               <br />
               <div className={styles.smallText}>Answers:</div>

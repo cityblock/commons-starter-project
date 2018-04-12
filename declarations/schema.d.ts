@@ -970,6 +970,7 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     permissions: IPermissionsEnum;
+    twilioSimId: string | null;
   }
 
   /**
@@ -1253,6 +1254,7 @@ declare module 'schema' {
     updatedAt: string;
     permissions: IPermissionsEnum;
     isCareTeamLead: boolean;
+    twilioSimId: string | null;
   }
 
   /**

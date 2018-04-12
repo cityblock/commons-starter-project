@@ -48,6 +48,7 @@ interface ICreateUser {
   userRole: UserRole;
   athenaProviderId?: number;
   phone?: string;
+  twilioSimId?: string;
 }
 
 interface IUpdateUser {
@@ -59,6 +60,7 @@ interface IUpdateUser {
   lastName: string;
   lastLoginAt: string;
   phone: string;
+  twilioSimId: string;
 }
 
 interface IGetByOptions {
@@ -66,7 +68,7 @@ interface IGetByOptions {
   field?: string;
 }
 
-type GetByFields = 'email';
+type GetByFields = 'email' | 'phone';
 
 export type UserOrderOptions =
   | 'createdAt'
@@ -103,6 +105,7 @@ export default class User extends BaseModel {
   googleProfileImageUrl: string;
   phone: string;
   permissions: Permissions;
+  twilioSimId: string | null;
 
   static tableName = 'user';
 
@@ -129,6 +132,7 @@ export default class User extends BaseModel {
       athenaProviderId: { type: 'number', minLength: 1 }, // cannot be blank
       googleAuthId: { type: 'string', minLength: 1 }, // cannot be blank
       googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
+      twilioSimId: { type: 'string', minLength: 34, maxLength: 34 }, //
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       phone: { type: 'string', minLength: 12, maxLength: 12 },

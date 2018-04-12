@@ -20,5 +20,7 @@ export default {
   GCS_PROJECT_ID: null,
   GCS_BUCKET: null,
   GCP_CREDS: null,
+  TWILIO_SID: null,
+  TWILIO_AUTH_TOKEN: null,
   ...process.env,
 };

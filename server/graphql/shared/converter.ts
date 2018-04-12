@@ -33,6 +33,7 @@ export function convertUser(user: User): IUser {
     phone: user.phone,
     googleProfileImageUrl: user.googleProfileImageUrl,
     permissions: user.permissions,
+    twilioSimId: user.twilioSimId,
     ...convertGenerated(user),
   };
 }
@@ -50,6 +51,7 @@ export function convertCareTeamUser(user: User, isCareTeamLead: boolean): ICareT
     phone: user.phone,
     googleProfileImageUrl: user.googleProfileImageUrl,
     permissions: user.permissions,
+    twilioSimId: user.twilioSimId,
     isCareTeamLead,
     ...convertGenerated(user),
   };

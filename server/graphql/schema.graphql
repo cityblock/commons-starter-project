@@ -300,6 +300,7 @@ type User implements uniqueId {
   createdAt: String!
   updatedAt: String!
   permissions: Permissions!
+  twilioSimId: String
 }
 
 type UserWithCount {
@@ -325,6 +326,7 @@ type CareTeamUser implements uniqueId {
   updatedAt: String!
   permissions: Permissions!
   isCareTeamLead: Boolean!
+  twilioSimId: String
 }
 
 # The user account with an optional auth token

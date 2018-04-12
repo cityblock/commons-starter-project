@@ -437,7 +437,6 @@ const resolveFunctions = {
     patientScratchPad: resolvePatientScratchPad,
     patientSocialSecurity: resolvePatientSocialSecurity,
   },
-
   RootMutationType: {
     addressCreate,
     addressCreateForPatient,
@@ -567,6 +566,10 @@ const resolveFunctions = {
     progressNoteGlassBreakCreate,
     patientScratchPadEdit,
     patientPhotoSignedUrlCreate,
+  },
+  // From https://github.com/apollographql/graphql-tools/pull/698
+  uniqueId: {
+    __resolveType: ({ type }: { type: string }) => type,
   },
 };
 

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as helperStyles from '../builder-container/css/risk-area-create.css';
@@ -8,6 +9,7 @@ import {
   concernAddDiagnosisCodeMutation,
   concernAddDiagnosisCodeMutationVariables,
 } from '../graphql/types';
+import ErrorComponent from '../shared/error-component/error-component';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
 
@@ -29,7 +31,7 @@ interface IGraphqlProps {
 interface IState {
   newDiagnosisCode: string;
   loading: boolean;
-  error: string | null;
+  error: ApolloError | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -62,7 +64,7 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
       });
       this.setState({ loading: false, error: null, newDiagnosisCode: '' });
     } catch (err) {
-      this.setState({ loading: false, error: err.message });
+      this.setState({ loading: false, error: err });
     }
   };
 
@@ -72,8 +74,8 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
   };
 
   render() {
-    const { newDiagnosisCode } = this.state;
-
+    const { newDiagnosisCode, error } = this.state;
+    const errorComponent = error ? <ErrorComponent error={error} /> : null;
     return (
       <div className={helperStyles.inputGroup}>
         <div className={helperStyles.inlineInputGroup}>
@@ -87,6 +89,7 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
         <div className={helperStyles.inlineInputGroup}>
           <Button onClick={this.onSubmit} messageId="concernDiagnosisCode.addButton" />
         </div>
+        {errorComponent}
       </div>
     );
   }

@@ -281,6 +281,65 @@ describe('concern suggestion model', () => {
       expect(patientConcerns).toHaveLength(2);
     });
 
+    it('returns concern suggestions for a patient even if another patient already has the accepted concern', async () => {
+      const { question, answer, riskArea } = await setup(txn);
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const concern1 = await Concern.create({ title: 'Housing' }, txn);
+      const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
+
+      // Add a concern to the other patient' MAP
+      await PatientConcern.create(
+        { concernId: concern1.id, patientId: patient2.id, userId: user.id },
+        txn,
+      );
+
+      await ConcernSuggestion.create(
+        {
+          concernId: concern1.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          riskAreaId: riskArea.id,
+        },
+        txn,
+      );
+      await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [question.id],
+          answers: [
+            {
+              patientId: patient.id,
+              answerId: answer.id,
+              answerValue: answer.value,
+              applicable: true,
+              questionId: question.id,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+
+      const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+        txn,
+      );
+
+      expect(concernSuggestions[0].id).toEqual(concern1.id);
+      expect(concernSuggestions.length).toEqual(1);
+    });
+
     it('does not return concern suggestions where one already exists', async () => {
       const { question, answer, riskArea } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);

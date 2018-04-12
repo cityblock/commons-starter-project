@@ -4,6 +4,7 @@ import * as uuid from 'uuid/v4';
 import Answer from './answer';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
+import PatientConcern from './patient-concern';
 
 interface IConcernSuggestionEditableFields {
   concernId: string;
@@ -235,15 +236,21 @@ export default class ConcernSuggestion extends Model {
 
   static getAnswerConcernSuggestionsQuery(patientId: string, txn: Transaction) {
     const currentConcernSuggestionIdsQuery = this.currentConcernSuggestionIdsQuery(patientId, txn);
+    const currentPatientConcernIdsQuery = this.currentPatientConcernIdsQuery(patientId, txn);
 
     return this.query(txn)
       .eager('concern')
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
       .whereNotIn('concern_suggestion.concernId', currentConcernSuggestionIdsQuery)
+      .andWhere(
+        'concern_suggestion.concernId',
+        'not in',
+        currentPatientConcernIdsQuery,
+      )
+      .andWhere('patient_answer.deletedAt', null)
       .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_concern.id', null);
+      .andWhere('patient_answer.patientId', patientId);
   }
 
   static currentConcernSuggestionIdsQuery(patientId: string, txn: Transaction) {
@@ -253,6 +260,13 @@ export default class ConcernSuggestion extends Model {
       .andWhere('dismissedAt', null)
       .andWhere('acceptedAt', null)
       .andWhere('suggestionType', 'concern')
+      .select('concernId');
+  }
+
+  static currentPatientConcernIdsQuery(patientId: string, txn: Transaction) {
+    return PatientConcern.query(txn)
+      .where('patientId', patientId)
+      .andWhere('deletedAt', null)
       .select('concernId');
   }
 }

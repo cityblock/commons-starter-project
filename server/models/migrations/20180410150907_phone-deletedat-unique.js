@@ -5,7 +5,6 @@ exports.up = async function(knex, Promise) {
     CREATE TEMPORARY SEQUENCE phonenum START 17185550000;
     UPDATE phone
       SET "phoneNumber"='+' || nextVal('phonenum')::text;
-
     CREATE UNIQUE INDEX phone_number_unique ON phone ("phoneNumber")
     WHERE "deletedAt" IS NULL;
   `,

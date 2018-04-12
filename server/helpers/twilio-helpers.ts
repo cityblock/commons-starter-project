@@ -2,6 +2,7 @@ const PHONE_REGEX = /^\+1\d{10}$/;
 
 // formats phone numbers in Twilio format for easy lookup
 export const formatPhoneNumberForTwilio = (phoneNumber: string): string => {
+  if (!phoneNumber) return '';
   // remove all non-digit characters
   const strippedNumber = phoneNumber.replace(/\D/g, '');
 

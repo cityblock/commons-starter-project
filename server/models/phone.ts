@@ -5,17 +5,19 @@ import {
 } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 
+export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other' | null;
+
 export interface IPhoneOptions {
   phoneNumber: string;
+  type?: PhoneTypeOptions;
+  description?: string;
 }
-
-// Used in phone related join tables
-export type PhoneType = 'home' | 'work' | 'mobile' | 'other';
-export const PHONE_TYPES = ['home', 'work', 'mobile', 'other'];
 
 /* tslint:disable:member-ordering */
 export default class Phone extends BaseModel {
   phoneNumber: string;
+  type: PhoneTypeOptions;
+  description: string;
 
   static tableName = 'phone';
 
@@ -26,6 +28,8 @@ export default class Phone extends BaseModel {
     properties: {
       id: { type: 'string', format: 'uuid' },
       phoneNumber: { type: 'string', minLength: 12, maxLength: 12 },
+      type: { type: 'string', enum: ['home', 'work', 'mobile', 'other'] },
+      description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
@@ -46,7 +50,7 @@ export default class Phone extends BaseModel {
   static async create(input: IPhoneOptions, txn: Transaction) {
     const formattedInput = {
       ...input,
-      phoneNumber: input.phoneNumber ? formatPhoneNumberForTwilio(input.phoneNumber) : undefined,
+      phoneNumber: formatPhoneNumberForTwilio(input.phoneNumber),
     };
     await validatePhoneNumberForTwilio(formattedInput.phoneNumber);
 
@@ -65,6 +69,16 @@ export default class Phone extends BaseModel {
     }
 
     return deleted;
+  }
+
+  static async edit(phone: IPhoneOptions, phoneId: string, txn: Transaction): Promise<Phone> {
+    const formattedInput = {
+      ...phone,
+      phoneNumber: phone.phoneNumber ? formatPhoneNumberForTwilio(phone.phoneNumber) : undefined,
+    };
+    await validatePhoneNumberForTwilio(formattedInput.phoneNumber);
+
+    return this.query(txn).patchAndFetchById(phoneId, formattedInput);
   }
 }
 /* tslint:enable:member-ordering */

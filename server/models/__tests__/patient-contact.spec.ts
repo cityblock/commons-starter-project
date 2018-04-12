@@ -33,7 +33,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(), txn);
+  const phone = await Phone.create(createMockPhone(user.id), txn);
   const patientContact = await PatientContact.create(
     createMockPatientContact(patient.id, user.id, phone),
     txn,

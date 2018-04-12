@@ -27,7 +27,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(), txn);
+  const phone = await Phone.create(createMockPhone(user.id), txn);
   const patientExternalProvider = await PatientExternalProvider.create(
     createMockPatientExternalProvider(patient.id, user.id, phone),
     txn,
@@ -74,6 +74,8 @@ describe('patient external provider phone model', () => {
       expect(patientExternalProviderPhone.length).toBe(1);
       expect(patientExternalProviderPhone[0]).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
     });
   });
@@ -92,6 +94,8 @@ describe('patient external provider phone model', () => {
       expect(patientExternalProviderPhone.length).toBe(1);
       expect(patientExternalProviderPhone[0]).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
 
       const remainingPhones = await PatientExternalProviderPhone.delete(
@@ -120,7 +124,10 @@ describe('patient external provider phone model', () => {
       );
 
       // second phone for the same provider
-      const phone2 = await Phone.create({ phoneNumber: '111-111-1111' }, txn);
+      const phone2 = await Phone.create(
+        { phoneNumber: '111-111-1111', type: 'mobile' },
+        txn,
+      );
       await PatientExternalProviderPhone.create(
         { patientExternalProviderId: patientExternalProvider.id, phoneId: phone2.id },
         txn,
@@ -142,7 +149,7 @@ describe('patient external provider phone model', () => {
         txn,
       );
       expect(phones.length).toBe(1);
-      expect(phones[0]).toMatchObject({ phoneNumber: '+11111111111' });
+      expect(phones[0]).toMatchObject({ phoneNumber: '+11111111111', type: 'mobile' });
     });
   });
 });

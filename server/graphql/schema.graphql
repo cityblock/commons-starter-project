@@ -554,12 +554,16 @@ input AddressDeleteForPatientInput {
 type Phone implements uniqueId {
   id: ID!
   phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
 }
 
 # params for creating or editing phone in the db
 input PhoneInput {
   phoneId: ID
   phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
 }
 
 # Editable fields on a phone
@@ -567,11 +571,15 @@ input PhoneEditInput {
   phoneId: ID!
   patientId: ID!
   phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
 }
 
 # params for creating a phone
 input PhoneCreateInput {
   phoneNumber: String!
+  type: PhoneTypeOptions
+  description: String
 }
 
 # params for creating a phone for a patient in the db

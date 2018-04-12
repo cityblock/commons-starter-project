@@ -72,7 +72,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
         },
       });
 
-      const currentPhones = (this.state.updatedPhones || phones || []) as ISavedPhone[];
+      const currentPhones = this.state.updatedPhones || phones || [];
       const updatedPhones = filter(currentPhones, phone => phone.id !== phoneId);
       this.setState({ updatedPhones });
 
@@ -113,7 +113,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
   handleSaveSuccess = (savedPhone: ISavedPhone) => {
     const { phones } = this.props;
-    const currentPhones = (this.state.updatedPhones || phones || []) as ISavedPhone[];
+    const currentPhones = this.state.updatedPhones || phones || [];
     const index = findIndex(currentPhones, phone => phone.id === savedPhone.id);
 
     if (index < 0) {
@@ -124,7 +124,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
   handleEditSuccess = (savedPhone: ISavedPhone, isPrimaryUpdatedToTrue: boolean) => {
     const { onChange, phones } = this.props;
-    const currentPhones = (this.state.updatedPhones || phones || []) as ISavedPhone[];
+    const currentPhones = this.state.updatedPhones || phones || [];
 
     const index = findIndex(currentPhones, phone => phone.id === savedPhone.id);
     if (index > -1) {
@@ -218,7 +218,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
       updatedPhones,
     } = this.state;
 
-    const currentPhones = (updatedPhones || phones) as ISavedPhone[];
+    const currentPhones = updatedPhones || phones;
     const nonPrimaryPhones = primaryPhone
       ? filter(currentPhones, phone => phone.id !== primaryPhone.id)
       : currentPhones;

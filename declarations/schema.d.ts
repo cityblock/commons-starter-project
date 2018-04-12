@@ -1161,7 +1161,11 @@ declare module 'schema' {
   interface IPhone {
     id: string;
     phoneNumber: string;
+    type: IPhoneTypeOptionsEnum | null;
+    description: string | null;
   }
+
+  type IPhoneTypeOptionsEnum = 'home' | 'work' | 'mobile' | 'other';
 
   /**
    * Email
@@ -3625,13 +3629,13 @@ declare module 'schema' {
     isPrimary?: boolean | null;
   }
 
-  type IPhoneTypeOptionsEnum = 'home' | 'work' | 'mobile' | 'other';
-
   /**
    * params for creating a phone
    */
   interface IPhoneCreateInput {
     phoneNumber: string;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**
@@ -3650,6 +3654,8 @@ declare module 'schema' {
     phoneId: string;
     patientId: string;
     phoneNumber: string;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**
@@ -3789,6 +3795,8 @@ declare module 'schema' {
   interface IPhoneInput {
     phoneId?: string | null;
     phoneNumber: string;
+    type?: IPhoneTypeOptionsEnum | null;
+    description?: string | null;
   }
 
   /**

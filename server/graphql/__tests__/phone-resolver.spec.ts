@@ -67,8 +67,10 @@ describe('phone resolver', () => {
       const query = `mutation {
           phoneCreate(input: {
             phoneNumber: "123-456-7890",
+            type: home,
+            description: "moms home phone",
           }) {
-            id, phoneNumber
+            id, phoneNumber, type, description
           }
         }`;
 
@@ -82,6 +84,8 @@ describe('phone resolver', () => {
 
       expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
       expect(log).toBeCalled();
     });
@@ -94,8 +98,10 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "123-456-7890",
+            type: home,
+            description: "moms home phone",
           }) {
-            id, phoneNumber
+            id, phoneNumber, type, description
           }
         }`;
 
@@ -109,6 +115,8 @@ describe('phone resolver', () => {
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
       expect(log).toBeCalled();
 
@@ -123,9 +131,11 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "111-111-1111",
+            type: mobile,
+            description: "Some phone",
             isPrimary: true,
           }) {
-            id, phoneNumber
+            id, phoneNumber, type, description
           }
         }`;
 
@@ -139,6 +149,8 @@ describe('phone resolver', () => {
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
         phoneNumber: '+11111111111',
+        type: 'mobile',
+        description: 'Some phone',
       });
       expect(log).toBeCalled();
 
@@ -158,8 +170,9 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
+            description: "Some phone",
           }) {
-            id, phoneNumber
+            id, phoneNumber, description
           }
         }`;
 
@@ -177,7 +190,7 @@ describe('phone resolver', () => {
             phoneId: "${phone.id}",
             patientId: "${patient.id}",
           }) {
-            id, phoneNumber
+            id, phoneNumber, description
           }
         }`;
 
@@ -192,6 +205,7 @@ describe('phone resolver', () => {
       expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
         id: phone.id,
         phoneNumber: phone.phoneNumber,
+        description: phone.description,
       });
       expect(log).toBeCalled();
     });
@@ -202,9 +216,10 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
+            description: "Some phone",
             isPrimary: true,
           }) {
-            id, phoneNumber
+            id, phoneNumber, description
           }
         }`;
 
@@ -226,7 +241,7 @@ describe('phone resolver', () => {
             patientId: "${patient.id}",
             isPrimary: true,
           }) {
-            id, phoneNumber
+            id, phoneNumber, description
           }
         }`;
 
@@ -241,6 +256,7 @@ describe('phone resolver', () => {
       expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
         id: phone.id,
         phoneNumber: phone.phoneNumber,
+        description: phone.description,
       });
       expect(log).toBeCalled();
 
@@ -252,14 +268,15 @@ describe('phone resolver', () => {
   describe('edit phone', async () => {
     it('should edit fields on phone', async () => {
       const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(), txn);
+      const phone = await Phone.create(createMockPhone(user.id), txn);
       const query = `mutation {
           phoneEdit(input: {
             phoneId: "${phone.id}",
             patientId: "${patient.id}",
             phoneNumber: "222-222-2222",
+            description: "Some phone",
           }) {
-            id, phoneNumber
+            id, phoneNumber, type, description
           }
         }`;
 
@@ -271,7 +288,8 @@ describe('phone resolver', () => {
         txn,
       });
       expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
-        phoneNumber: '+11234567890',
+        phoneNumber: '+12222222222',
+        description: 'Some phone',
       });
       expect(log).toBeCalled();
     });

@@ -1,23 +1,33 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import { createMockClinic, createMockPhone, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPhone,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientPhone from '../patient-phone';
 import Phone from '../phone';
+import User from '../user';
+
+const userRole = 'admin';
 
 interface ISetup {
   patient: Patient;
+  user: User;
   phone: Phone;
   clinic: Clinic;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone(), txn);
+  const phone = await Phone.create(createMockPhone(user.id), txn);
 
-  return { patient, phone, clinic };
+  return { patient, phone, user, clinic };
 }
 
 describe('patient phone model', () => {
@@ -50,6 +60,8 @@ describe('patient phone model', () => {
       expect(patientPhone.length).toBe(1);
       expect(patientPhone[0]).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
     });
   });
@@ -68,6 +80,8 @@ describe('patient phone model', () => {
       expect(patientPhone.length).toBe(1);
       expect(patientPhone[0]).toMatchObject({
         phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
       });
 
       const remainingPhones = await PatientPhone.delete(
@@ -87,11 +101,17 @@ describe('patient phone model', () => {
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
 
       // second phone for the same patient
-      const phone2 = await Phone.create({ phoneNumber: '111-111-1111' }, txn);
+      const phone2 = await Phone.create(
+        { phoneNumber: '111-111-1111', type: 'mobile' },
+        txn,
+      );
       await PatientPhone.create({ patientId: patient.id, phoneId: phone2.id }, txn);
 
       // third phone for the same patient that gets deleted
-      const phone3 = await Phone.create({ phoneNumber: '222-222-2222' }, txn);
+      const phone3 = await Phone.create(
+        { phoneNumber: '222-222-2222', type: 'other' },
+        txn,
+      );
       await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 
@@ -102,8 +122,12 @@ describe('patient phone model', () => {
 
       const phones = await PatientPhone.getAll(patient.id, txn);
       expect(phones.length).toBe(2);
-      expect(phones[0]).toMatchObject({ phoneNumber: '+11234567890' });
-      expect(phones[1]).toMatchObject({ phoneNumber: '+11111111111' });
+      expect(phones[0]).toMatchObject({
+        phoneNumber: '+11234567890',
+        type: 'home',
+        description: 'moms home phone',
+      });
+      expect(phones[1]).toMatchObject({ phoneNumber: '+11111111111', type: 'mobile' });
     });
   });
 });

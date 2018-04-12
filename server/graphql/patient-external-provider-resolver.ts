@@ -250,9 +250,7 @@ async function updatePhone(
   const currentPhone = phones[0];
 
   // edit existing patient contact phone
-  // const filteredInput = omitBy<IPhoneInput>(phoneInput, isNull) as any;
-  // TODO: Handle after adding additional columns
-  // return Phone.edit({ ...filteredInput, updatedById: userId }, currentPhone.id, txn);
-  return Phone.get(currentPhone.id, txn);
+  const filteredInput = omitBy<IPhoneInput>(phoneInput, isNull) as any;
+  return Phone.edit({ ...filteredInput, updatedById: userId }, currentPhone.id, txn);
 }
 /* tslint:enable check-is-allowed */

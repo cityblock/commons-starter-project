@@ -51,7 +51,7 @@ async function setupPatientExternalProvider(
   userId: string,
   txn: Transaction,
 ): Promise<ISetupContact> {
-  const phone = await Phone.create(createMockPhone(), txn);
+  const phone = await Phone.create(createMockPhone(userId), txn);
   const email = await Email.create(createMockEmail(userId), txn);
 
   const patientExternalProvider = await PatientExternalProvider.create(
@@ -335,7 +335,7 @@ describe('patient info model', () => {
   describe('edit', async () => {
     it('should edit patient external provider and create email', async () => {
       const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(), txn);
+      const phone = await Phone.create(createMockPhone(user.id), txn);
 
       const patientExternalProvider = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone),
@@ -377,7 +377,7 @@ describe('patient info model', () => {
         role: 'other',
         agencyName: 'Quibbler',
         roleFreeText: 'magical potion provider',
-        phone: { id: phone.id, phoneNumber: '+11234567890' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
       });
       expect(log).toBeCalled();
@@ -427,7 +427,7 @@ describe('patient info model', () => {
         role: 'dermatology',
         agencyName: 'Quibbler',
         roleFreeText: null,
-        phone: { id: phone.id, phoneNumber: '+11234567890' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { id: email.id, emailAddress: 'changed@email.com' },
       });
       expect(log).toBeCalled();
@@ -477,7 +477,7 @@ describe('patient info model', () => {
         role: 'dermatology',
         agencyName: 'Quibbler',
         roleFreeText: null,
-        phone: { id: phone.id, phoneNumber: '+11234567890' },
+        phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: null,
       });
       expect(log).toBeCalled();

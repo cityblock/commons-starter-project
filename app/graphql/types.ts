@@ -167,6 +167,14 @@ export enum ContactMethodOptions {
 }
 
 
+export enum PhoneTypeOptions {
+  home = "home",
+  mobile = "mobile",
+  other = "other",
+  work = "work",
+}
+
+
 export enum QuestionConditionTypeOptions {
   allTrue = "allTrue",
   oneTrue = "oneTrue",
@@ -326,6 +334,8 @@ export interface PatientConcernBulkEditFields {
 
 export interface PhoneCreateInput {
   phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
 };
 
 export interface AddressCreateInput {
@@ -360,20 +370,14 @@ export interface EmailInput {
 export interface PhoneInput {
   phoneId?: string | null,
   phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
 };
 
 export enum PatientSignedUrlAction {
   delete = "delete",
   read = "read",
   write = "write",
-}
-
-
-export enum PhoneTypeOptions {
-  home = "home",
-  mobile = "mobile",
-  other = "other",
-  work = "work",
 }
 
 
@@ -2762,6 +2766,8 @@ export interface getPatientPhonesQuery {
   patientPhones:  Array< {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } > | null,
 };
 
@@ -3315,6 +3321,8 @@ export interface getPatientQuery {
       primaryPhone:  {
         id: string,
         phoneNumber: string,
+        type: PhoneTypeOptions | null,
+        description: string | null,
       } | null,
       preferredContactMethod: ContactMethodOptions | null,
       canReceiveCalls: boolean | null,
@@ -7244,11 +7252,15 @@ export interface phoneCreateForPatientMutation {
   phoneCreateForPatient:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } | null,
 };
 
 export interface phoneCreateMutationVariables {
   phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
 };
 
 export interface phoneCreateMutation {
@@ -7256,6 +7268,8 @@ export interface phoneCreateMutation {
   phoneCreate:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } | null,
 };
 
@@ -7270,6 +7284,8 @@ export interface phoneDeleteForPatientMutation {
   phoneDeleteForPatient:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } | null,
 };
 
@@ -7277,6 +7293,8 @@ export interface phoneEditMutationVariables {
   phoneId: string,
   patientId: string,
   phoneNumber: string,
+  type?: PhoneTypeOptions | null,
+  description?: string | null,
 };
 
 export interface phoneEditMutation {
@@ -7284,6 +7302,8 @@ export interface phoneEditMutation {
   phoneEdit:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } | null,
 };
 
@@ -10881,6 +10901,8 @@ export interface FullPatientForCBOReferralFormPDFFragment {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions | null,
+      description: string | null,
     } | null,
   },
 };
@@ -10945,6 +10967,8 @@ export interface FullPatientForProfileFragment {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions | null,
+      description: string | null,
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
     canReceiveCalls: boolean | null,
@@ -11064,6 +11088,8 @@ export interface FullPatientInfoFragment {
   primaryPhone:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions | null,
+    description: string | null,
   } | null,
   preferredContactMethod: ContactMethodOptions | null,
   canReceiveCalls: boolean | null,
@@ -11253,6 +11279,8 @@ export interface FullPatientTableRowFragment {
 export interface FullPhoneFragment {
   id: string,
   phoneNumber: string,
+  type: PhoneTypeOptions | null,
+  description: string | null,
 };
 
 export interface FullProgressNoteActivityFragment {
@@ -12543,6 +12571,8 @@ export interface FullTaskForCBOReferralFormPDFFragment {
       primaryPhone:  {
         id: string,
         phoneNumber: string,
+        type: PhoneTypeOptions | null,
+        description: string | null,
       } | null,
     },
   },

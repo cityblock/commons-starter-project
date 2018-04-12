@@ -89,15 +89,16 @@ export default class PatientPhone extends BaseModel {
     { phoneId, patientId }: IPatientPhoneOptions,
     txn: Transaction,
   ): Promise<Phone[]> {
-    const relations = await PatientPhone.query(txn).where({
-      patientId,
-      phoneId,
-      deletedAt: null,
-    });
+    const phone = await Phone.get(phoneId, txn);
+    const fetchedPatientId = await PatientPhone.getPatientIdForPhoneNumber(phone.phoneNumber, txn);
 
-    if (relations.length < 1) {
-      await PatientPhone.query(txn).insert({ patientId, phoneId });
+    if (fetchedPatientId && fetchedPatientId !== patientId) {
+      return Promise.reject(
+        'Another patient is currently using that number. Please contact us for help.',
+      );
     }
+
+    await PatientPhone.query(txn).insert({ patientId, phoneId });
 
     return this.getAll(patientId, txn);
   }

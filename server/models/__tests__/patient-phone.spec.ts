@@ -64,6 +64,85 @@ describe('patient phone model', () => {
         description: 'moms home phone',
       });
     });
+
+    it('should not create same patient phone entry for given patient and phone id', async () => {
+      const { patient, phone } = await setup(txn);
+      await PatientPhone.create(
+        {
+          patientId: patient.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
+
+      try {
+        await PatientPhone.create(
+          {
+            patientId: patient.id,
+            phoneId: phone.id,
+          },
+          txn,
+        );
+        // ensure error is thrown by failing otherwise
+        expect(false).toBeTruthy();
+      } catch (err) {
+        expect(err.constraint).toBe('patientphone_phoneid_patientid_unique');
+      }
+    });
+
+    it('should not create same patient phone entry if phone number being used by another patient', async () => {
+      const { patient, phone, clinic } = await setup(txn);
+      const patient2 = await createPatient({ cityblockId: 125, homeClinicId: clinic.id }, txn);
+      await PatientPhone.create(
+        {
+          patientId: patient.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
+
+      const phone2 = await Phone.create(createMockPhone(), txn);
+
+      await expect(
+        PatientPhone.create(
+          {
+            patientId: patient2.id,
+            phoneId: phone2.id,
+          },
+          txn,
+        ),
+      ).rejects.toMatch(
+        'Another patient is currently using that number. Please contact us for help.',
+      );
+    });
+
+    it('allows creating patient phone for same number if old patient no longer using it', async () => {
+      const { patient, phone, clinic } = await setup(txn);
+      const patient2 = await createPatient({ cityblockId: 125, homeClinicId: clinic.id }, txn);
+      await PatientPhone.create(
+        {
+          patientId: patient.id,
+          phoneId: phone.id,
+        },
+        txn,
+      );
+      await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const phone2 = await Phone.create(createMockPhone(), txn);
+
+      const patientPhones = await PatientPhone.create(
+        {
+          patientId: patient2.id,
+          phoneId: phone2.id,
+        },
+        txn,
+      );
+
+      expect(patientPhones[0]).toMatchObject({
+        type: 'home',
+        phoneNumber: '+11234567890',
+      });
+    });
   });
 
   describe('delete', async () => {

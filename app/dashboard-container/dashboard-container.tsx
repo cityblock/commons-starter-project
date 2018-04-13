@@ -45,7 +45,11 @@ export class DashboardContainer extends React.Component<IProps> {
   }
 
   render(): JSX.Element {
-    const { match: { params: { list, answerId } } } = this.props;
+    const {
+      match: {
+        params: { list, answerId },
+      },
+    } = this.props;
 
     return (
       <div className={styles.container}>

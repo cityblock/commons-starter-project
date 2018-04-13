@@ -15,7 +15,8 @@ import {
 } from '../../../spec-helpers';
 import { twilioSmsHandler } from '../sms-message-handler';
 
-const expectedTwiml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response><Message to=\"sim:DEBOGUS14990BOGUS580c2a54713dBOGUS\" from=\"+11234567890\">Winter is coming.</Message></Response>";
+const expectedTwiml =
+  '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="sim:DEBOGUS14990BOGUS580c2a54713dBOGUS" from="+11234567890">Winter is coming.</Message></Response>';
 const userRole = 'admin';
 
 interface ISetup {
@@ -53,7 +54,11 @@ describe('SMS Message Handler', () => {
 
   it('saves an incoming SMS', async () => {
     const { user, patient } = await setup(txn);
-    await User.update(user.id, { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' }, txn);
+    await User.update(
+      user.id,
+      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+      txn,
+    );
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
@@ -70,7 +75,8 @@ describe('SMS Message Handler', () => {
     const smsMessages = await SmsMessage.getForUserPatient(
       { userId: user.id, patientId: patient.id },
       { pageNumber: 0, pageSize: 5 },
-      txn);
+      txn,
+    );
 
     expect(smsMessages.total).toBe(1);
     expect(smsMessages.results[0]).toMatchObject({

@@ -58,7 +58,9 @@ class DomainAssessment extends React.Component<IProps> {
       totalScore !== null
         ? forceHighRisk || totalScore >= riskArea.highRiskThreshold
           ? 'high'
-          : totalScore >= riskArea.mediumRiskThreshold ? 'medium' : 'low'
+          : totalScore >= riskArea.mediumRiskThreshold
+            ? 'medium'
+            : 'low'
         : null;
 
     const containerStyles = classNames(styles.container, {

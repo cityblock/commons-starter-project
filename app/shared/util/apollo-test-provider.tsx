@@ -33,7 +33,7 @@ export default class ApolloTestProvider extends React.Component<IProps> {
     // don't bleed into one another
     this.schema = ApolloTestProvider.createSchema();
     this.apolloClient = new ApolloClient<any>({
-      link: new SchemaLink({ schema: this.schema }),
+      link: new SchemaLink({ schema: this.schema }) as any,
       cache: new InMemoryCache().restore({}) as any,
     });
     this.addDefaultMocks();

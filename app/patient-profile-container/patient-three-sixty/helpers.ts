@@ -26,7 +26,9 @@ export const calculateRisk = (
   return riskScore && riskScore.totalScore !== null
     ? riskScore.forceHighRisk || riskScore.totalScore >= highRiskThreshold
       ? 'high'
-      : riskScore.totalScore >= mediumRiskThreshold ? 'medium' : 'low'
+      : riskScore.totalScore >= mediumRiskThreshold
+        ? 'medium'
+        : 'low'
     : null;
 };
 

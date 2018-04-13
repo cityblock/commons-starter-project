@@ -73,7 +73,9 @@ const fetchPatientList = () => <P extends {}>(
   type resultProps = RouteComponentProps<P> & IExternalProps & IInjectedProps;
 
   const FetchPatients: React.StatelessComponent<resultProps> = (props: resultProps) => {
-    const { variables: { pageNumber, pageSize } } = getPageParams(props);
+    const {
+      variables: { pageNumber, pageSize },
+    } = getPageParams(props);
 
     return <Component {...props} pageNumber={pageNumber} pageSize={pageSize} />;
   };
@@ -192,7 +194,9 @@ const fetchPatientList = () => <P extends {}>(
       patientsForComputedListQuery as any,
       {
         options: (props: RouteComponentProps<P> & IExternalProps) => {
-          const { variables: { pageNumber, pageSize } } = getPageParams(props);
+          const {
+            variables: { pageNumber, pageSize },
+          } = getPageParams(props);
 
           return {
             variables: {

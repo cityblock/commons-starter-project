@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
@@ -154,9 +153,6 @@ export class Tasks extends React.Component<allProps, IState> {
 
     const { orderBy } = this.state;
     const tasksList = tasks || [];
-    const taskContainerStyles = classNames(styles.taskContainer, {
-      [styles.visible]: !!taskId,
-    });
 
     const RenderedTask = (props: any) => (
       <Task
@@ -193,7 +189,7 @@ export class Tasks extends React.Component<allProps, IState> {
           >
             {this.renderTasks(tasksList)}
           </InfiniteScroll>
-          <div className={taskContainerStyles}>{taskHtml}</div>
+          {taskHtml}
         </div>
       </div>
     );

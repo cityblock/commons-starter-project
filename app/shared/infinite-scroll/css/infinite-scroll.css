@@ -1,12 +1,11 @@
 .list {
-  display: inline-block;
-  height: calc(100vh - 223px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
   transition: width 0.3s ease-out;
+  margin-top: var(--small-gutter);
 }
 
 .compressed {
-  width: 50%;
+  width: calc(50% - 10px);
 }

@@ -56,7 +56,6 @@ describe('Patient Map Component', () => {
 
     it('renders patient care plan and task in split screen view', () => {
       expect(wrapper2.find('.split').length).toBe(1);
-      expect(wrapper2.find('.tasks').length).toBe(1);
       expect(wrapper2.find('.full').length).toBe(0);
     });
 

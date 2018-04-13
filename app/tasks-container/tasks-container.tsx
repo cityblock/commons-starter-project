@@ -54,21 +54,17 @@ export class TasksContainer extends React.Component<allProps> {
 
     return (
       <div className={styles.container}>
-        <div className={styles.mainBody}>
-          <div>
-            <Tasks
-              fetchMoreTasks={this.props.fetchMoreTasks}
-              updatePageParams={updatePageParams}
-              loading={this.props.tasksLoading}
-              error={this.props.tasksError}
-              hasNextPage={hasNextPage}
-              hasPreviousPage={hasPreviousPage}
-              routeBase={`/tasks`}
-              tasks={tasks}
-              taskId={taskId || ''}
-            />
-          </div>
-        </div>
+        <Tasks
+          fetchMoreTasks={this.props.fetchMoreTasks}
+          updatePageParams={updatePageParams}
+          loading={this.props.tasksLoading}
+          error={this.props.tasksError}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          routeBase={`/tasks`}
+          tasks={tasks}
+          taskId={taskId || ''}
+        />
       </div>
     );
   }

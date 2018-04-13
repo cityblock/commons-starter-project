@@ -112,6 +112,13 @@ export class Task extends React.Component<allProps, IState> {
     );
   }
 
+  // prevent task from closing when task clicked on
+  stopPropagation = (e: React.MouseEvent<HTMLDivElement>): void => {
+    if (this.props.taskId) {
+      e.stopPropagation();
+    }
+  };
+
   renderTask(task: FullTaskFragment) {
     const { routeBase, editTask } = this.props;
     const patientName = task.patient
@@ -121,7 +128,7 @@ export class Task extends React.Component<allProps, IState> {
     const concern = goal && goal.patientConcern && goal.patientConcern.concern;
 
     return (
-      <div className={styles.container}>
+      <div className={styles.container} onClick={this.stopPropagation}>
         <div className={styles.task}>
           <TaskHeader
             taskId={task.id}

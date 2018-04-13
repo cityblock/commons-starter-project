@@ -40,13 +40,6 @@ export class PatientMap extends React.Component<allProps, {}> {
     }
   };
 
-  // prevent task from closing when task clicked on
-  stopPropagation = (e: React.MouseEvent<HTMLDivElement>): void => {
-    if (this.props.taskId) {
-      e.stopPropagation();
-    }
-  };
-
   render(): JSX.Element {
     const {
       patientId,
@@ -61,10 +54,11 @@ export class PatientMap extends React.Component<allProps, {}> {
       [sharedStyles.domains]: !!taskId,
       [styles.split]: !!taskId,
     });
-    const sideBarStyles = classNames({
-      [styles.collapsed]: !taskId,
-      [styles.tasks]: !!taskId,
-    });
+    const sideBarHtml = taskId ? (
+      <Task routeBase={routeBase} taskId={taskId} />
+    ) : (
+      <div className={styles.collapsed} />
+    );
 
     return (
       <React.Fragment>
@@ -80,9 +74,7 @@ export class PatientMap extends React.Component<allProps, {}> {
               selectedTaskId={taskId || ''}
             />
           </div>
-          <div className={sideBarStyles} onClick={this.stopPropagation}>
-            {taskId && <Task routeBase={routeBase} taskId={taskId} />}
-          </div>
+          {sideBarHtml}
         </div>
       </React.Fragment>
     );

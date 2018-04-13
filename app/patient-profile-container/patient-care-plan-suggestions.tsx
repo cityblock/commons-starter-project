@@ -160,7 +160,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
     const { patientId, carePlanSuggestions } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <div className={styles.section}>
           <TextDivider messageId="carePlanSuggestions.concerns" color="navy" />
           <div>{this.renderSuggestions('concern')}</div>
@@ -182,7 +182,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
           suggestion={dismissedSuggestion}
           onDismiss={this.onDismissModalDismiss}
         />
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -207,12 +207,9 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
 
   render() {
     const { carePlanSuggestions } = this.props;
-    const suggestionsHtml =
-      carePlanSuggestions && carePlanSuggestions.length
-        ? this.renderSuggestionsHtml()
-        : this.renderEmptySuggestionsHtml();
-
-    return <div className={styles.carePlanSuggestions}>{suggestionsHtml}</div>;
+    return carePlanSuggestions && carePlanSuggestions.length
+      ? this.renderSuggestionsHtml()
+      : this.renderEmptySuggestionsHtml();
   }
 }
 

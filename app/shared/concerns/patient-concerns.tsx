@@ -4,7 +4,6 @@ import * as getCurrentUserQuery from '../../graphql/queries/get-current-user.gra
 import { FullPatientConcernFragment, FullUserFragment } from '../../graphql/types';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
-import * as styles from './css/patient-concerns.css';
 
 interface IProps {
   concerns: FullPatientConcernFragment[];
@@ -36,12 +35,10 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
 
   if (inactive && (!concerns.length || concerns.every(concern => !!concern.deletedAt))) {
     return (
-      <div className={styles.container}>
-        <EmptyPlaceholder
-          headerMessageId="patientMap.emptyNextUpHeader"
-          detailMessageId="patientMap.emptyNextUpDetail"
-        />
-      </div>
+      <EmptyPlaceholder
+        headerMessageId="patientMap.emptyNextUpHeader"
+        detailMessageId="patientMap.emptyNextUpDetail"
+      />
     );
   }
 
@@ -63,7 +60,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
     );
   });
 
-  return <div className={styles.container}>{renderedConcerns}</div>;
+  return <React.Fragment>{renderedConcerns}</React.Fragment>;
 };
 
 export default graphql<IGraphqlProps, IProps, allProps>(getCurrentUserQuery as any, {

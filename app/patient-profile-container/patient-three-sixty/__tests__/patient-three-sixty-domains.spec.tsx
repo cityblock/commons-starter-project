@@ -45,10 +45,6 @@ describe('Patient 360 Domains Component', () => {
     ).toBe('threeSixty.history');
   });
 
-  it('renders body container', () => {
-    expect(wrapper.find('.body').length).toBe(1);
-  });
-
   it('renders domain summaries', () => {
     expect(wrapper.find(DomainSummaries).length).toBe(1);
     expect(wrapper.find(DomainSummaries).props().patientId).toBe(patientId);

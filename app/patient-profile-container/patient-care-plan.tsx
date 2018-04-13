@@ -62,7 +62,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     if (loading) return <Spinner />;
 
     const { selectedPatientConcernId } = this.state;
-    const carePlanStyles = classNames(styles.carePlan, {
+    const carePlanStyles = classNames({
       [styles.error]: !!error,
     });
 

@@ -1,7 +1,5 @@
 .checklist {
   z-index: 1;
-  margin: 0 auto;
-  max-width: var(--max-width);
   background-color: var(--white-color);
 }
 

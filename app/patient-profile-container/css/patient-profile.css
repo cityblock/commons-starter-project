@@ -21,11 +21,6 @@
   flex-shrink: 0;
 }
 
-.pageContent {
-  flex: 1;
-  overflow: hidden;
-}
-
 .tabs {
   border-bottom: 1px solid var(--dark-gray-background-color);
 }

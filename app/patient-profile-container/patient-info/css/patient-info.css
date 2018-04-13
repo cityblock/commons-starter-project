@@ -1,7 +1,3 @@
-::-webkit-scrollbar {
-  display: none;
-}
-
 .saveMessage {
   display: inline-block;
   padding-right: 15px;
@@ -13,13 +9,6 @@
 
 svg.successIcon {
   fill: var(--blue-color);
-}
-
-.container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 .navBar {

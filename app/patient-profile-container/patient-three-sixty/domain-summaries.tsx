@@ -82,10 +82,10 @@ class DomainSummaries extends React.Component<IProps, IState> {
     );
 
     return (
-      <div className={styles.flex}>
+      <React.Fragment>
         <div className={classNames(styles.scroll, styles.domains)}>{domainSummaries}</div>
         {radarChart}
-      </div>
+      </React.Fragment>
     );
   }
 }

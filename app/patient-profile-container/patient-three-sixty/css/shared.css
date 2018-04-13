@@ -9,9 +9,7 @@
 }
 
 .scroll,
-.body,
 .domains {
-  height: calc(100vh);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
@@ -19,6 +17,7 @@
 .body,
 .bodyFlex {
   padding: 0 var(--medium-gutter);
+  height: 100%;
 }
 
 .bodyFlex,

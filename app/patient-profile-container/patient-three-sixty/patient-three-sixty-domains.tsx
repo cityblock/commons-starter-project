@@ -45,18 +45,16 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
   const body = history ? (
     <PatientThreeSixtyHistory patientId={patientId} glassBreakId={glassBreakId} />
   ) : (
-    <div>
-      <DomainSummaries
-        patientId={patientId}
-        routeBase={routeBase}
-        riskAreaGroups={riskAreaGroups}
-        glassBreakId={glassBreakId}
-      />
-    </div>
+    <DomainSummaries
+      patientId={patientId}
+      routeBase={routeBase}
+      riskAreaGroups={riskAreaGroups}
+      glassBreakId={glassBreakId}
+    />
   );
 
   return (
-    <div className={styles.container}>
+    <React.Fragment>
       <UnderlineTabs className={styles.navBar}>
         <UnderlineTab messageId="threeSixty.summary" selected={!history} href={routeBase} />
         <UnderlineTab
@@ -65,8 +63,8 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
           href={`${routeBase}/${HISTORY_ROUTE}`}
         />
       </UnderlineTabs>
-      <div className={styles.body}>{body}</div>
-    </div>
+      <div className={styles.bodyFlex}>{body}</div>
+    </React.Fragment>
   );
 };
 

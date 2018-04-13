@@ -10,6 +10,7 @@ import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from './modals/modals';
+import * as sharedStyles from './patient-three-sixty/css/shared.css';
 
 export interface IProps {
   patientId: string;
@@ -55,33 +56,35 @@ export class PatientMap extends React.Component<allProps, {}> {
       taskIdsWithNotifications,
       taskId,
     } = this.props;
-    const mainStyles = classNames({
+    const mainStyles = classNames(sharedStyles.scroll, {
       [styles.full]: !taskId,
+      [sharedStyles.domains]: !!taskId,
       [styles.split]: !!taskId,
     });
     const sideBarStyles = classNames({
       [styles.collapsed]: !taskId,
-      [styles.split]: !!taskId,
-      [styles.leftMargin]: !!taskId,
+      [styles.tasks]: !!taskId,
     });
 
     return (
-      <div className={styles.container} onClick={this.closeTask}>
+      <React.Fragment>
         <MapModals />
-        <div className={mainStyles}>
-          <DnDPatientCarePlan
-            loading={loading}
-            carePlan={carePlan}
-            taskIdsWithNotifications={taskIdsWithNotifications}
-            routeBase={routeBase}
-            patientId={patientId}
-            selectedTaskId={taskId || ''}
-          />
+        <div className={sharedStyles.bodyFlex} onClick={this.closeTask}>
+          <div className={mainStyles}>
+            <DnDPatientCarePlan
+              loading={loading}
+              carePlan={carePlan}
+              taskIdsWithNotifications={taskIdsWithNotifications}
+              routeBase={routeBase}
+              patientId={patientId}
+              selectedTaskId={taskId || ''}
+            />
+          </div>
+          <div className={sideBarStyles} onClick={this.stopPropagation}>
+            {taskId && <Task routeBase={routeBase} taskId={taskId} />}
+          </div>
         </div>
-        <div className={sideBarStyles} onClick={this.stopPropagation}>
-          {taskId && <Task routeBase={routeBase} taskId={taskId} />}
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

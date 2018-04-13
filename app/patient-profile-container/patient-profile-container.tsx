@@ -78,8 +78,8 @@ export class PatientProfileContainer extends React.Component<allProps> {
           glassBreakId={glassBreakId}
         />
         <div className={styles.mainBody}>
+          <PatientIntakeChecklist patientId={patientId} />
           <div className={styles.header}>
-            <PatientIntakeChecklist patientId={patientId} />
             <UnderlineTabs color="white" className={styles.tabs}>
               <UnderlineTab
                 messageId="patient.threeSixty"
@@ -113,7 +113,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
               />
             </UnderlineTabs>
           </div>
-          <div className={styles.pageContent}>
+          <React.Fragment>
             <Switch>
               <Route
                 exact
@@ -151,7 +151,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
                 render={(props: any) => <PatientCalendar {...props} />}
               />
             </Switch>
-          </div>
+          </React.Fragment>
         </div>
       </div>
     );

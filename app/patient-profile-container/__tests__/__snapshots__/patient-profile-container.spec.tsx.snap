@@ -13,12 +13,12 @@ exports[`patient profile container renders patient profile container 1`] = `
   <div
     className="mainBody"
   >
+    <Apollo(PatientIntakeChecklist)
+      patientId="patient-1"
+    />
     <div
       className="header"
     >
-      <Apollo(PatientIntakeChecklist)
-        patientId="patient-1"
-      />
       <UnderlineTabs
         className="tabs"
         color="white"
@@ -55,9 +55,7 @@ exports[`patient profile container renders patient profile container 1`] = `
         />
       </UnderlineTabs>
     </div>
-    <div
-      className="pageContent"
-    >
+    <UNDEFINED>
       <Switch>
         <Route
           exact={true}
@@ -95,7 +93,7 @@ exports[`patient profile container renders patient profile container 1`] = `
           render={[Function]}
         />
       </Switch>
-    </div>
+    </UNDEFINED>
   </div>
 </div>
 `;

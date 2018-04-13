@@ -322,7 +322,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const button = isDocuments ? this.renderUploadButton() : this.renderSaveButton();
 
     return (
-      <div className={styles.container}>
+      <React.Fragment>
         <UnderlineTabs className={styles.navBar}>
           <div>
             <UnderlineTab
@@ -342,7 +342,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           {demographics}
           {documents}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

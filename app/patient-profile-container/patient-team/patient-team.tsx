@@ -156,7 +156,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
     ) : null;
 
     return (
-      <div className={styles.subContainer}>
+      <React.Fragment>
         <UnderlineTabs className={styles.navBar}>
           <div>
             <UnderlineTab
@@ -183,7 +183,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
           {familyAndSupportTeam}
           {this.renderAddModal()}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

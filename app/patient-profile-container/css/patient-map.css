@@ -1,24 +1,25 @@
-.container {
-  display: flex;
-}
-
 .full,
 .split,
 .collapsed {
   transition: width 0.2s linear;
+  margin-top: var(--small-gutter);
 }
 
 .full {
   width: 100%;
 }
 
-.split {
-  width: 50%;
-}
-
 .collapsed {
   width: 0%;
   display: none;
+}
+
+.tasks {
+  display: flex;
+  width: calc(50% - 10px);
+  margin-top: var(--small-gutter);
+  min-height: 100%;
+  height: 100%;
 }
 
 .leftMargin {

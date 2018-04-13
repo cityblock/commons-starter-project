@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
@@ -8,6 +9,7 @@ import { IState as IAppState } from '../store';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 import PatientMap from './patient-map';
+import * as sharedStyles from './patient-three-sixty/css/shared.css';
 import PrintMapButton from './print-map-button';
 
 type SelectableTabs = 'active' | 'suggestions';
@@ -49,27 +51,30 @@ export class PatientCarePlanView extends React.Component<allProps> {
     const isSuggestions = subTab === 'suggestions';
 
     const carePlanSuggestions = isSuggestions ? (
-      <PatientCarePlanSuggestions
-        routeBase={routeBase}
-        patientId={patientId}
-        glassBreakId={glassBreakId}
-      />
-    ) : null;
-    const carePlan = !isSuggestions ? (
-      <div className={styles.paddingTop}>
-        <PatientMap
-          routeBase={`${routeBase}/active`}
+      <div
+        onClick={this.onContainerClick}
+        className={classNames(sharedStyles.body, sharedStyles.scroll)}
+      >
+        <PatientCarePlanSuggestions
+          routeBase={routeBase}
           patientId={patientId}
-          taskId={taskId || null}
           glassBreakId={glassBreakId}
         />
       </div>
     ) : null;
+    const carePlan = !isSuggestions ? (
+      <PatientMap
+        routeBase={`${routeBase}/active`}
+        patientId={patientId}
+        taskId={taskId || null}
+        glassBreakId={glassBreakId}
+      />
+    ) : null;
 
     return (
-      <div onClick={this.onContainerClick} className={styles.container}>
+      <React.Fragment>
         <UnderlineTabs className={styles.navBar}>
-          <div>
+          <div onClick={this.onContainerClick}>
             <UnderlineTab
               messageId="patient.activeCarePlan"
               href={`${routeBase}/active`}
@@ -88,11 +93,9 @@ export class PatientCarePlanView extends React.Component<allProps> {
             </div>
           )}
         </UnderlineTabs>
-        <div className={styles.carePlanPanel}>
-          {carePlanSuggestions}
-          {carePlan}
-        </div>
-      </div>
+        {carePlanSuggestions}
+        {carePlan}
+      </React.Fragment>
     );
   }
 }

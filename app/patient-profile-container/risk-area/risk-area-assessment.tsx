@@ -271,7 +271,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const href = noAutomated ? routeBase : `${routeBase}/${riskArea.riskAreaGroupId}`;
 
     return (
-      <div>
+      <React.Fragment>
         {automatedAssessment && <ComputedFieldFlagModal />}
         <UnderlineTabs>
           <div>
@@ -284,7 +284,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
           {submissionPopupVisible && this.renderSubmissionPopup()}
           {editPopupVisible && this.renderEditPopup()}
         </Popup>
-      </div>
+      </React.Fragment>
     );
   }
 }

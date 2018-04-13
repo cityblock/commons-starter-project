@@ -19,7 +19,6 @@ import {
   updateQuestionAnswerHash,
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
-import * as styles from './css/risk-area-assessment-questions.css';
 import RiskAreaAssessmentHeader from './risk-area-assessment-header';
 
 interface IProps {
@@ -125,7 +124,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
       return <Spinner />;
     }
     return (
-      <div className={styles.container}>
+      <React.Fragment>
         <RiskAreaAssessmentHeader
           riskAreaId={riskArea.id}
           riskAreaGroupId={riskArea.riskAreaGroupId}
@@ -133,7 +132,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
           glassBreakId={glassBreakId}
         />
         {this.renderQuestions()}
-      </div>
+      </React.Fragment>
     );
   }
 }

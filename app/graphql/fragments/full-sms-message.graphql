@@ -1,0 +1,8 @@
+fragment FullSmsMessage on SmsMessage {
+  id
+  userId
+  contactNumber
+  patientId
+  direction
+  body
+}

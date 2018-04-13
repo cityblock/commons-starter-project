@@ -286,6 +286,11 @@ enum DocumentTypeOptions {
   molst
 }
 
+enum SmsMessageDirection {
+  toUser
+  fromUser
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -1551,6 +1556,29 @@ type PatientSocialSecurity implements uniqueId {
 # signed url for patient photo or documents
 type SignedUrl {
   signedUrl: String!
+}
+
+# SMS message
+type SmsMessage implements uniqueId {
+  id: ID!
+  userId: ID!
+  contactNumber: String!
+  patientId: String
+  direction: SmsMessageDirection!
+  body: String!
+}
+
+# Patient table row node
+type SmsMessageNode {
+  node: SmsMessage!
+  cursor: String!
+}
+
+# Patient table row edges
+type SmsMessageEdges {
+  edges: [SmsMessageNode!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
 }
 
 #
@@ -2918,6 +2946,8 @@ type RootQueryType {
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
   # gets a patients full social security number and records a log of the view by user
   patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
+  # SMS messages for given user and patient
+  smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
 }
 
 schema {

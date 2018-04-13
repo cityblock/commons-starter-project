@@ -193,6 +193,12 @@ export enum AssessmentType {
 }
 
 
+export enum SmsMessageDirection {
+  fromUser = "fromUser",
+  toUser = "toUser",
+}
+
+
 export enum Priority {
   high = "high",
   low = "low",
@@ -5405,6 +5411,33 @@ export interface getScreeningToolsQuery {
     updatedAt: string,
     deletedAt: string | null,
   } | null >,
+};
+
+export interface getSmsMessagesQueryVariables {
+  patientId: string,
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getSmsMessagesQuery {
+  // SMS messages for given user and patient
+  smsMessages:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        userId: string,
+        contactNumber: string,
+        patientId: string | null,
+        direction: SmsMessageDirection,
+        body: string,
+      },
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
 };
 
 export interface getTaskCommentQueryVariables {
@@ -12435,6 +12468,15 @@ export interface FullScreeningToolFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullSmsMessageFragment {
+  id: string,
+  userId: string,
+  contactNumber: string,
+  patientId: string | null,
+  direction: SmsMessageDirection,
+  body: string,
 };
 
 export interface FullTaskCommentFragment {

@@ -584,6 +584,11 @@ declare module 'schema' {
      * gets a patients full social security number and records a log of the view by user
      */
     patientSocialSecurity: IPatientSocialSecurity;
+
+    /**
+     * SMS messages for given user and patient
+     */
+    smsMessages: ISmsMessageEdges;
   }
   interface IUsersOnRootQueryTypeArguments {
     pageNumber?: number | null;
@@ -928,6 +933,11 @@ declare module 'schema' {
     patientId: string;
     glassBreakId?: string | null;
   }
+  interface ISmsMessagesOnRootQueryTypeArguments {
+    patientId: string;
+    pageNumber: number;
+    pageSize: number;
+  }
 
   type IUserOrderOptionsEnum =
     | 'createdAtDesc'
@@ -1040,6 +1050,7 @@ declare module 'schema' {
     | IProgressNoteGlassBreak
     | IPatientScratchPad
     | IPatientSocialSecurity
+    | ISmsMessage
     | IComputedFieldFlag
     | IConcernDiagnosisCode;
 
@@ -2412,6 +2423,37 @@ declare module 'schema' {
     id: string;
     ssn: string | null;
   }
+
+  /**
+   * Patient table row edges
+   */
+  interface ISmsMessageEdges {
+    edges: Array<ISmsMessageNode>;
+    pageInfo: IPageInfo;
+    totalCount: number;
+  }
+
+  /**
+   * Patient table row node
+   */
+  interface ISmsMessageNode {
+    node: ISmsMessage;
+    cursor: string;
+  }
+
+  /**
+   * SMS message
+   */
+  interface ISmsMessage {
+    id: string;
+    userId: string;
+    contactNumber: string;
+    patientId: string | null;
+    direction: ISmsMessageDirectionEnum;
+    body: string;
+  }
+
+  type ISmsMessageDirectionEnum = 'toUser' | 'fromUser';
 
   interface IRootMutationType {
 

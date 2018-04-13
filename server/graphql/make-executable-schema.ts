@@ -275,6 +275,7 @@ import {
   screeningToolScoreRangeDelete,
   screeningToolScoreRangeEdit,
 } from './screening-tool-score-range-resolver';
+import { resolveSmsMessages } from './sms-message-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -436,6 +437,7 @@ const resolveFunctions = {
     patientPhones: resolvePhones,
     patientScratchPad: resolvePatientScratchPad,
     patientSocialSecurity: resolvePatientSocialSecurity,
+    smsMessages: resolveSmsMessages,
   },
   RootMutationType: {
     addressCreate,

@@ -1,0 +1,16 @@
+#import "../fragments/full-sms-message.graphql"
+
+query getSmsMessages($patientId: ID!, $pageNumber: Int!, $pageSize: Int!) {
+  smsMessages(patientId: $patientId, pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...FullSmsMessage
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+    totalCount
+  }
+}

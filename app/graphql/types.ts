@@ -5430,6 +5430,7 @@ export interface getSmsMessagesQuery {
         patientId: string | null,
         direction: SmsMessageDirection,
         body: string,
+        createdAt: string,
       },
     } >,
     pageInfo:  {
@@ -12477,6 +12478,7 @@ export interface FullSmsMessageFragment {
   patientId: string | null,
   direction: SmsMessageDirection,
   body: string,
+  createdAt: string,
 };
 
 export interface FullTaskCommentFragment {

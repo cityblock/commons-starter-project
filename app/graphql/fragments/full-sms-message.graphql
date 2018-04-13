@@ -5,4 +5,5 @@ fragment FullSmsMessage on SmsMessage {
   patientId
   direction
   body
+  createdAt
 }

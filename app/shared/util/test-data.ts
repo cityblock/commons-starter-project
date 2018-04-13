@@ -1242,3 +1242,23 @@ export const patientScratchPad = {
   userId: user.id,
   body: 'Concerned about Night King Breaching Wall',
 };
+
+export const smsMessage1 = {
+  id: 'sms1',
+  userId: user.id,
+  contactNumber: '+11234567890',
+  patientId: patient.id,
+  direction: 'toUser' as any,
+  body: 'Winter is coming.',
+  createdAt: '2017-11-07T13:45:14.532Z',
+};
+
+export const smsMessage2 = {
+  id: 'sms2',
+  userId: user.id,
+  contactNumber: '+11234567890',
+  patientId: patient.id,
+  direction: 'fromUser' as any,
+  body: 'Winter is here.',
+  createdAt: '2017-11-08T13:50:14.532Z',
+};

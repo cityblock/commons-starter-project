@@ -1566,6 +1566,7 @@ type SmsMessage implements uniqueId {
   patientId: String
   direction: SmsMessageDirection!
   body: String!
+  createdAt: String!
 }
 
 # Patient table row node

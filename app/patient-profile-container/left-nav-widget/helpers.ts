@@ -1,7 +1,11 @@
+import { format } from 'date-fns';
+import { FullSmsMessageFragment } from '../../graphql/types';
 import { Color } from '../../shared/library/icon/icon';
 import { IconName } from '../../shared/library/icon/icon-types';
 import { QuickAction } from './left-nav-quick-action';
 import { Selected } from './left-nav-widget';
+
+const DATE_FORMAT = 'MMM D, YYYY';
 
 type ActionIcons = { [K in Selected]: IconName };
 type QuickActionIcons = { [K in QuickAction]: IconName };
@@ -28,4 +32,11 @@ export const QuickActionColorsMapping: QuickActionColors = {
   administerTool: 'yellow',
   viewDocuments: 'green',
   openFormLibrary: 'purple',
+};
+
+export const isNewDate = (
+  message1: FullSmsMessageFragment,
+  message2: FullSmsMessageFragment,
+): boolean => {
+  return format(message1.createdAt, DATE_FORMAT) !== format(message2.createdAt, DATE_FORMAT);
 };

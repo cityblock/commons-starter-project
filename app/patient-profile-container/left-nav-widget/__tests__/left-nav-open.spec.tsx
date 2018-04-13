@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import LeftNavCareTeam from '../left-nav-care-team';
 import LeftNavHeader from '../left-nav-header';
+import LeftNavMessages from '../left-nav-messages';
 import LeftNavOpen from '../left-nav-open';
 import LeftNavQuickActions from '../left-nav-quick-actions';
 import LeftNavScratchPad, { IProps } from '../left-nav-scratchpad';
@@ -48,6 +49,7 @@ describe('Patient Left Navigation Open Component', () => {
 
     expect(wrapper.find(LeftNavCareTeam).props().patientId).toBe(patientId);
 
+    expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
     expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
   });
@@ -58,8 +60,20 @@ describe('Patient Left Navigation Open Component', () => {
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().patientId).toBe(patientId);
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().glassBreakId).toBe(glassBreakId);
 
+    expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
     expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
+  });
+
+  it('renders messages if selected', () => {
+    wrapper.setProps({ selected: 'message' });
+
+    // type issues because stateless component
+    expect(wrapper.find<any>(LeftNavMessages).props().patientId).toBe(patientId);
+
+    expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
+    expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
+    expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
   });
 
   it('renders quick actions if selected', () => {
@@ -68,6 +82,7 @@ describe('Patient Left Navigation Open Component', () => {
     expect(wrapper.find(LeftNavQuickActions).props().patientId).toBe(patientId);
     expect(wrapper.find(LeftNavQuickActions).props().glassBreakId).toBe(glassBreakId);
 
+    expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
     expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
   });

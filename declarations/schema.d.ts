@@ -2451,6 +2451,7 @@ declare module 'schema' {
     patientId: string | null;
     direction: ISmsMessageDirectionEnum;
     body: string;
+    createdAt: string;
   }
 
   type ISmsMessageDirectionEnum = 'toUser' | 'fromUser';

@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--small-gutter);
+}
+
+.date {
+  height: var(--small-gutter);
+  width: 102px;
+  border: 1px solid var(--gray-background-color);
+  border-radius: var(--extra-small-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider {
+  height: 1px;
+  background: var(--gray-background-color);
+  width: calc(50% - 51px);
+}

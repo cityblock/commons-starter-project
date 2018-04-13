@@ -219,7 +219,7 @@ export const ENGLISH_TRANSLATION = {
     'insuranceForm.issueDate': 'Issue date',
     'insuranceForm.expirationDate': 'Expiration date',
     'leftNavActions.careTeam': 'Care Team',
-    'leftNavActions.message': 'Messaging',
+    'leftNavActions.message': 'Text messages',
     'leftNavActions.quickActions': 'Quick actions',
     'leftNavActions.scratchPad': 'Scratchpad',
     'modalButtons.cancel': 'Cancel',
@@ -967,5 +967,6 @@ export const ENGLISH_TRANSLATION = {
     'documentType.hieHealthixConsent': 'HIE/Healthix consent',
     'documentType.hcp': 'HCP form',
     'documentType.molst': 'MOLST',
+    'messages.empty': 'No history of text messages',
   },
 };

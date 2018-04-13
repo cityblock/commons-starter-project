@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  margin-top: 20%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
+}
+
+svg.icon {
+  height: var(--gutter);
+  width: var(--gutter);
+  margin-bottom: var(--small-gutter);
+}

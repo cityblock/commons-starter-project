@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--small-gutter);
+}
+
+/* first and not last child since direction is reversed */
+.container:first-child {
+  margin-bottom: 0;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+}
+
+.message {
+  border: 1px solid var(--border-color);
+  border-radius: var(--big-border-radius);
+  padding: var(--extra-small-gutter);
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.timestamp {
+  margin-top: 5px;
+}

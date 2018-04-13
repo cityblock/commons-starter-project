@@ -602,7 +602,7 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.0.tgz#b76254453021be05681f6213416766bac9afb99c"
 
-"@types/twilio@^0.0.9":
+"@types/twilio@0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@types/twilio/-/twilio-0.0.9.tgz#dac8236bf714a85955cb6bc63273b2c56c9c484b"
   dependencies:
@@ -12421,7 +12421,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-twilio@^3.14.0:
+twilio@3.14.0:
   version "3.14.0"
   resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.14.0.tgz#77131d8c70fa47b157705f38c334a67cccab7ad9"
   dependencies:

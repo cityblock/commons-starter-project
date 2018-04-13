@@ -99,8 +99,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 
   componentWillReceiveProps(newProps: allProps) {
-    // setup default state
-    if (newProps.progressNote && !this.props.progressNote) {
+    const currentProgressNote = this.props.progressNote;
+    const newProgressNote = newProps.progressNote;
+
+    // setup default state if new progress note
+    if (currentProgressNote.id !== newProgressNote.id) {
       this.setDefaultProgressNoteFields(newProps);
     }
   }

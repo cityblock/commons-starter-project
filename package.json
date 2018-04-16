@@ -146,7 +146,7 @@
     "@types/jsonwebtoken": "7.2.6",
     "@types/knex": "0.14.10",
     "@types/kue": "0.11.8",
-    "@types/lodash": "4.14.106",
+    "@types/lodash": "4.14.107",
     "@types/mime-types": "2.1.0",
     "@types/morgan": "1.7.35",
     "@types/node": "8.10.8",

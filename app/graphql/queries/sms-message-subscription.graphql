@@ -1,0 +1,9 @@
+#import "../fragments/full-sms-message.graphql"
+
+subscription smsMessageCreated($patientId: ID!) {
+  smsMessageCreated(patientId: $patientId) {
+    node {
+      ...FullSmsMessage
+    }
+  }
+}

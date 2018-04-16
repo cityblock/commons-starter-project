@@ -1,6 +1,6 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
-    data?: IRootQueryType | IRootMutationType;
+    data?: IRootQueryType | IRootMutationType | IRootSubscriptionType;
     errors?: Array<IGraphQLResponseError>;
   }
 
@@ -4621,6 +4621,13 @@ declare module 'schema' {
   interface IPatientPhotoSignedUrlCreateInput {
     patientId: string;
     action: IPatientSignedUrlActionEnum;
+  }
+
+  interface IRootSubscriptionType {
+    smsMessageCreated: ISmsMessageNode;
+  }
+  interface ISmsMessageCreatedOnRootSubscriptionTypeArguments {
+    patientId: string;
   }
 
   /**

@@ -6,6 +6,7 @@ import config from '../../config';
 import Db from '../../db';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
+import pubsub from '../../subscriptions';
 
 // TODO: fix type weirdness
 const MessagingResponse = (twilio as any).twiml.MessagingResponse;
@@ -40,7 +41,7 @@ export async function twilioSmsHandler(req: express.Request, res: express.Respon
         Body,
       );
       // store record of message in DB
-      await SmsMessage.create(
+      const smsMessage = await SmsMessage.create(
         {
           userId: user.id,
           contactNumber: From,
@@ -50,6 +51,12 @@ export async function twilioSmsHandler(req: express.Request, res: express.Respon
         },
         txn,
       );
+      // publish notification that message created
+      pubsub.publish('smsMessageCreated', {
+        smsMessageCreated: { node: smsMessage },
+        userId: smsMessage.userId,
+        patientId: smsMessage.patientId,
+      });
     } catch (err) {
       reportError(err, twilioPayload);
     }

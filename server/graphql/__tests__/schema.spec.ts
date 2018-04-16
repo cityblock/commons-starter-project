@@ -36,22 +36,25 @@ describe('util tests', () => {
     });
     const { userId, permissions } = await parseAndVerifyJwt(authToken, txn);
     const context = await getGraphQLContext(
-      {
-        headers: {
-          auth_token: authToken,
-        },
-        body: {
-          variables: {
-            foo: 'bar',
-          },
-          query: 'foo',
-        },
-      } as any,
-      {
-        status: 200,
-      } as any,
+      authToken,
       { log: jest.fn() },
-      txn,
+      {
+        request: {
+          headers: {
+            auth_token: authToken,
+          },
+          body: {
+            variables: {
+              foo: 'bar',
+            },
+            query: 'foo',
+          },
+        } as any,
+        response: {
+          status: 200,
+        } as any,
+        existingTxn: txn,
+      },
     );
     expect(context).toMatchObject({
       userId,
@@ -67,22 +70,25 @@ describe('util tests', () => {
       lastLoginAt: new Date('01/01/2010').toISOString(),
     });
     const context = await getGraphQLContext(
-      {
-        headers: {
-          auth_token: authToken,
-        },
-        body: {
-          variables: {
-            foo: 'bar',
-          },
-          query: 'foo',
-        },
-      } as any,
-      {
-        status: 200,
-      } as any,
+      authToken,
       { log: jest.fn() },
-      txn,
+      {
+        request: {
+          headers: {
+            auth_token: authToken,
+          },
+          body: {
+            variables: {
+              foo: 'bar',
+            },
+            query: 'foo',
+          },
+        } as any,
+        response: {
+          status: 200,
+        } as any,
+        existingTxn: txn,
+      },
     );
     expect(context).toMatchObject({
       permissions: 'black',

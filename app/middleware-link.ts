@@ -2,7 +2,13 @@ import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { ErrorLink } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+import { DocumentNode } from 'graphql';
 import { throttle } from 'lodash';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+
+const SUBSCRIPTION_ENDPOINT = process.env.SUBSCRIPTION_ENDPOINT || 'ws://localhost:3000/subscriptions';
 
 async function setLastAction() {
   await localStorage.setItem('lastAction', new Date().valueOf().toString());
@@ -15,6 +21,16 @@ export const debouncedSetLastAction = throttle(setLastAction, 500, {
 
 export const getMiddlewareLink = () => {
   const httpLink = new HttpLink({ uri: '/graphql' });
+
+  const subscriptionClient = new SubscriptionClient(SUBSCRIPTION_ENDPOINT, {
+    reconnect: true,
+    connectionParams: () => ({
+      authToken: window.localStorage.getItem('authToken'),
+    }),
+    lazy: true, // only connect when a subscription is created
+  });
+
+  const websocketLink = new WebSocketLink(subscriptionClient);
 
   let middlewareLink = setContext(() => ({
     headers: {
@@ -61,5 +77,13 @@ export const getMiddlewareLink = () => {
     middlewareLink = middlewareLink.concat(errorHandler);
   }
   middlewareLink = middlewareLink.concat(lastActionMiddleware);
-  return middlewareLink.concat(httpLink);
+
+  return ApolloLink.split(
+    ({ query }) => {
+      const { kind, operation } = getMainDefinition(query as DocumentNode) as any;
+      return kind === 'OperationDefinition' && operation === 'subscription';
+    },
+    middlewareLink.concat(websocketLink),
+    middlewareLink.concat(httpLink),
+  ) as any;
 };

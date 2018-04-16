@@ -8854,6 +8854,24 @@ export interface screeningToolScoreRangeEditMutation {
   } | null,
 };
 
+export interface smsMessageCreatedSubscriptionVariables {
+  patientId: string,
+};
+
+export interface smsMessageCreatedSubscription {
+  smsMessageCreated:  {
+    node:  {
+      id: string,
+      userId: string,
+      contactNumber: string,
+      patientId: string | null,
+      direction: SmsMessageDirection,
+      body: string,
+      createdAt: string,
+    },
+  },
+};
+
 export interface taskCommentCreateMutationVariables {
   taskId: string,
   body: string,

@@ -275,7 +275,7 @@ import {
   screeningToolScoreRangeDelete,
   screeningToolScoreRangeEdit,
 } from './screening-tool-score-range-resolver';
-import { resolveSmsMessages } from './sms-message-resolver';
+import { resolveSmsMessages, smsMessageSubscribe } from './sms-message-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -568,6 +568,11 @@ const resolveFunctions = {
     progressNoteGlassBreakCreate,
     patientScratchPadEdit,
     patientPhotoSignedUrlCreate,
+  },
+  RootSubscriptionType: {
+    smsMessageCreated: {
+      subscribe: smsMessageSubscribe,
+    },
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

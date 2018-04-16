@@ -2951,7 +2951,12 @@ type RootQueryType {
   smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
 }
 
+type RootSubscriptionType {
+  smsMessageCreated(patientId: ID!): SmsMessageNode!
+}
+
 schema {
   query: RootQueryType
   mutation: RootMutationType
+  subscription: RootSubscriptionType
 }

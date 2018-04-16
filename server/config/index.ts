@@ -22,5 +22,6 @@ export default {
   GCP_CREDS: null,
   TWILIO_SID: null,
   TWILIO_AUTH_TOKEN: null,
+  SUBSCRIPTIONS_ENDPOINT: 'ws://localhost:3000/subscriptions',
   ...process.env,
 };

@@ -24,7 +24,13 @@ describe('Left Nav Messages', () => {
     totalCount: 2,
   };
 
-  const wrapper = shallow(<LeftNavMessages patientId="sansaStark" smsMessages={smsMessages} />);
+  const wrapper = shallow(
+    <LeftNavMessages
+      patientId="sansaStark"
+      smsMessages={smsMessages}
+      subscribeToMore={() => true as any}
+    />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

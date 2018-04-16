@@ -13,6 +13,7 @@ import {
   createMockUser,
   createPatient,
 } from '../../../spec-helpers';
+import pubsub from '../../../subscriptions';
 import { twilioSmsHandler } from '../sms-message-handler';
 
 const expectedTwiml =
@@ -62,6 +63,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
+    pubsub.publish = jest.fn();
     const req = httpMocks.createRequest({
       body: {
         To: '+11234567777',
@@ -83,6 +85,13 @@ describe('SMS Message Handler', () => {
       userId: user.id,
       patientId: patient.id,
       body: 'Winter is coming.',
+    });
+
+    expect(pubsub.publish).toHaveBeenCalledTimes(1);
+    expect(pubsub.publish).toHaveBeenCalledWith('smsMessageCreated', {
+      smsMessageCreated: { node: smsMessages.results[0] },
+      userId: user.id,
+      patientId: patient.id,
     });
 
     expect(res.end).toHaveBeenCalledTimes(1);

@@ -10,8 +10,8 @@ import createStore from './store';
 
 // TODO: Resolve weird apollo types
 const client = new ApolloClient<any>({
-  link: getMiddlewareLink() as any,
-  cache: new InMemoryCache().restore({}) as any,
+  link: getMiddlewareLink(),
+  cache: new InMemoryCache().restore({}),
 });
 
 const history = createHistory();

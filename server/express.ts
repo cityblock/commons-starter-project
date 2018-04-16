@@ -23,6 +23,8 @@ import { createRedisClient } from './lib/redis';
 
 kue.createQueue({ redis: createRedisClient() });
 
+const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
+
 export const checkAuth = (username: string, password: string) => (
   req: express.Request,
   res: express.Response,
@@ -59,7 +61,7 @@ export const addHeadersMiddleware = (
   res.setHeader('Cache-Control', 'no-cache, no-store');
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self' https://accounts.google.com blob:; script-src 'self' *.google.com unpkg.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline' blob:; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' *.googleusercontent.com https://storage.googleapis.com data: blob:; connect-src 'self' https://storage.googleapis.com",
+    `default-src 'self' https://accounts.google.com blob:; script-src 'self' *.google.com unpkg.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline' blob:; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' *.googleusercontent.com https://storage.googleapis.com data: blob:; connect-src 'self' https://storage.googleapis.com ${subscriptionsEndpoint}`,
   );
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   next();
@@ -126,7 +128,13 @@ export default async (
   }
 
   if (config.NODE_ENV === 'development') {
-    app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+    app.get(
+      '/graphiql',
+      graphiqlExpress({
+        endpointURL: '/graphql',
+        subscriptionsEndpoint: `wss://localhost:3000/subscriptions`,
+      }),
+    );
   }
 
   // Used for integration tests
@@ -142,12 +150,15 @@ export default async (
       async (request: express.Request | undefined, response: express.Response | undefined) => ({
         schema: schema as any,
         context: await getGraphQLContext(
-          request!,
-          response!,
+          request!.headers.auth_token as string || '',
           logger,
-          txn || undefined,
-          process.env.DATADOG_API_KEY ? GraphQLDog : null,
-          errorReporting,
+          {
+            existingTxn: txn,
+            request: request!,
+            response: response!,
+            dataDog: process.env.DATADOG_API_KEY ? GraphQLDog : null,
+            errorReporting,
+          },
         ),
         formatResponse,
         formatError,

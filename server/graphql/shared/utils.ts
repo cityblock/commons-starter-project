@@ -16,15 +16,23 @@ export interface ILogger {
   log: (text: string, logLevel: number) => void;
 }
 
+export interface IGraphQLContextOptions {
+  request?: express.Request;
+  response?: express.Response;
+  existingTxn?: Transaction;
+  dataDog?: any;
+  errorReporting?: ErrorReporting;
+}
+
 export interface IContext {
-  db: Db;
-  permissions: Permissions;
-  userId?: string;
   logger: ILogger;
-  txn: Transaction;
   datadogContext: any;
   testConfig?: any;
   errorReporting?: ErrorReporting;
+  db: Db;
+  permissions: Permissions;
+  userId?: string;
+  txn: Transaction;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -122,17 +130,15 @@ export const logGraphQLContext = (
 };
 
 export async function getGraphQLContext(
-  request: express.Request,
-  response: express.Response,
+  authToken: string,
   logger: ILogger,
-  existingTxn?: Transaction,
-  dataDog?: any,
-  errorReporting?: ErrorReporting,
+  options: IGraphQLContextOptions,
 ): Promise<IContext> {
-  const authToken = request.headers.auth_token as string;
   const db = await Db.get();
 
-  const datadogContext = dataDog ? dataDog.context(request) : null;
+  const { dataDog, existingTxn, request, response, errorReporting } = options;
+
+  const datadogContext = dataDog ? dataDog.context(options.request) : null;
   const txn = existingTxn || (await transaction.start(User));
   let permissions: Permissions = 'black';
   let userId;
@@ -143,7 +149,10 @@ export async function getGraphQLContext(
       userId = parsedToken.userId;
       permissions = parsedToken.permissions;
     } catch (e) {
-      logGraphQLContext(request, response, 'anonymous user');
+      if (request && response) {
+        logGraphQLContext(request, response, 'anonymous user');
+      }
+
       return {
         db,
         permissions: 'black' as Permissions,
@@ -154,7 +163,11 @@ export async function getGraphQLContext(
       };
     }
   }
-  logGraphQLContext(request, response, userId, permissions);
+
+  if (request && response) {
+    logGraphQLContext(request, response, userId, permissions);
+  }
+
   return {
     userId,
     permissions,

@@ -441,9 +441,9 @@
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.3.1.tgz#9e113f5d3e6bba6d8babca6be528b5cf19d37a16"
 
-"@types/knex@0.14.10":
-  version "0.14.10"
-  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.10.tgz#e1ae8b9c215b39da2179dff594488f20072a4843"
+"@types/knex@0.14.11":
+  version "0.14.11"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.11.tgz#9c5efd53969d9bdd6c4294567c7e671b4ee9ee10"
   dependencies:
     "@types/bluebird" "*"
     "@types/events" "*"

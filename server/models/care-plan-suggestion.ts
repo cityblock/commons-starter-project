@@ -117,72 +117,74 @@ export default class CarePlanSuggestion extends BaseModel {
     ],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'care_plan_suggestion.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'care_plan_suggestion.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    concern: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'care_plan_suggestion.concernId',
-        to: 'concern.id',
+      concern: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Concern,
+        join: {
+          from: 'care_plan_suggestion.concernId',
+          to: 'concern.id',
+        },
       },
-    },
-    goalSuggestionTemplate: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'goal-suggestion-template',
-      join: {
-        from: 'care_plan_suggestion.goalSuggestionTemplateId',
-        to: 'goal_suggestion_template.id',
+      goalSuggestionTemplate: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: GoalSuggestionTemplate,
+        join: {
+          from: 'care_plan_suggestion.goalSuggestionTemplateId',
+          to: 'goal_suggestion_template.id',
+        },
       },
-    },
-    acceptedBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'care_plan_suggestion.acceptedById',
-        to: 'user.id',
+      acceptedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'care_plan_suggestion.acceptedById',
+          to: 'user.id',
+        },
       },
-    },
-    dismissedBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'care_plan_suggestion.dismissedById',
-        to: 'user.id',
+      dismissedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'care_plan_suggestion.dismissedById',
+          to: 'user.id',
+        },
       },
-    },
-    patientScreeningToolSubmission: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-screening-tool-submission',
-      join: {
-        from: 'care_plan_suggestion.patientScreeningToolSubmissionId',
-        to: 'patient_screening_tool_submission.id',
+      patientScreeningToolSubmission: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientScreeningToolSubmission,
+        join: {
+          from: 'care_plan_suggestion.patientScreeningToolSubmissionId',
+          to: 'patient_screening_tool_submission.id',
+        },
       },
-    },
-    riskAreaAssessmentSubmission: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'risk-area-assessment-submission',
-      join: {
-        from: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
-        to: 'risk_area_assessment_submission.id',
+      riskAreaAssessmentSubmission: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RiskAreaAssessmentSubmission,
+        join: {
+          from: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
+          to: 'risk_area_assessment_submission.id',
+        },
       },
-    },
-    computedField: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'computed-field',
-      join: {
-        from: 'care_plan_suggestion.computedFieldId',
-        to: 'computed_field.id',
+      computedField: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ComputedField,
+        join: {
+          from: 'care_plan_suggestion.computedFieldId',
+          to: 'computed_field.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(
     carePlanSuggestionId: string,

@@ -4,6 +4,7 @@ import BaseModel from './base-model';
 import CBOReferral from './cbo-referral';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
+import TaskComment from './task-comment';
 import TaskEvent from './task-event';
 import TaskFollower from './task-follower';
 import User from './user';
@@ -106,92 +107,94 @@ export default class Task extends BaseModel {
     required: ['title', 'patientId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patientGoal: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient-goal',
-      join: {
-        from: 'task.patientGoalId',
-        to: 'patient_goal.id',
-      },
-    },
-
-    createdBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task.createdById',
-        to: 'user.id',
-      },
-    },
-
-    completedBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task.completedById',
-        to: 'user.id',
-      },
-    },
-
-    assignedTo: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task.assignedToId',
-        to: 'user.id',
-      },
-    },
-
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'task.patientId',
-        to: 'patient.id',
-      },
-    },
-
-    followers: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task.id',
-        through: {
-          from: 'task_follower.taskId',
-          to: 'task_follower.userId',
+  static get relationMappings(): RelationMappings {
+    return {
+      patientGoal: {
+        relation: Model.HasOneRelation,
+        modelClass: PatientGoal,
+        join: {
+          from: 'task.patientGoalId',
+          to: 'patient_goal.id',
         },
-        to: 'user.id',
       },
-    },
 
-    comments: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task-comment',
-      join: {
-        from: 'task.id',
-        to: 'task_comment.id',
+      createdBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task.createdById',
+          to: 'user.id',
+        },
       },
-    },
 
-    taskEvents: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task-event',
-      join: {
-        from: 'task_event.taskId',
-        to: 'task.id',
+      completedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task.completedById',
+          to: 'user.id',
+        },
       },
-    },
 
-    CBOReferral: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'cbo-referral',
-      join: {
-        from: 'task.CBOReferralId',
-        to: 'cbo_referral.id',
+      assignedTo: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task.assignedToId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'task.patientId',
+          to: 'patient.id',
+        },
+      },
+
+      followers: {
+        relation: Model.ManyToManyRelation,
+        modelClass: User,
+        join: {
+          from: 'task.id',
+          through: {
+            from: 'task_follower.taskId',
+            to: 'task_follower.userId',
+          },
+          to: 'user.id',
+        },
+      },
+
+      comments: {
+        relation: Model.HasManyRelation,
+        modelClass: TaskComment,
+        join: {
+          from: 'task.id',
+          to: 'task_comment.id',
+        },
+      },
+
+      taskEvents: {
+        relation: Model.HasManyRelation,
+        modelClass: TaskEvent,
+        join: {
+          from: 'task_event.taskId',
+          to: 'task.id',
+        },
+      },
+
+      CBOReferral: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: CBOReferral,
+        join: {
+          from: 'task.CBOReferralId',
+          to: 'cbo_referral.id',
+        },
+      },
+    };
+  }
 
   static async get(taskId: string, txn: Transaction): Promise<Task> {
     const task = await this.query(txn)

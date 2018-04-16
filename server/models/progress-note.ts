@@ -3,6 +3,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Patient from './patient';
 import ProgressNoteTemplate from './progress-note-template';
+import TaskEvent from './task-event';
 import User from './user';
 
 interface IProgressNoteEditableFields {
@@ -73,7 +74,7 @@ export default class ProgressNote extends BaseModel {
     required: ['patientId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
+  static get relationMappings(): RelationMappings {
     /**
      *  Future relations
      * - Task Events - join on task events with a progress note id
@@ -82,48 +83,49 @@ export default class ProgressNote extends BaseModel {
      * - Quick calls
      * - Patient answers - for questions in the progress note (could just be on question/answer)
      */
-
-    patient: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'progress_note.patientId',
-        to: 'patient.id',
+    return {
+      patient: {
+        relation: Model.HasOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'progress_note.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    user: {
-      relation: Model.HasOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'progress_note.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'progress_note.userId',
+          to: 'user.id',
+        },
       },
-    },
-    supervisor: {
-      relation: Model.HasOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'progress_note.supervisorId',
-        to: 'user.id',
+      supervisor: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'progress_note.supervisorId',
+          to: 'user.id',
+        },
       },
-    },
-    progressNoteTemplate: {
-      relation: Model.HasOneRelation,
-      modelClass: 'progress-note-template',
-      join: {
-        from: 'progress_note.progressNoteTemplateId',
-        to: 'progress_note_template.id',
+      progressNoteTemplate: {
+        relation: Model.HasOneRelation,
+        modelClass: ProgressNoteTemplate,
+        join: {
+          from: 'progress_note.progressNoteTemplateId',
+          to: 'progress_note_template.id',
+        },
       },
-    },
-    taskEvents: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task-event',
-      join: {
-        from: 'progress_note.id',
-        to: 'task_event.progressNoteId',
+      taskEvents: {
+        relation: Model.HasManyRelation,
+        modelClass: TaskEvent,
+        join: {
+          from: 'progress_note.id',
+          to: 'task_event.progressNoteId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(progressNoteId: string, txn: Transaction): Promise<ProgressNote> {
     const progressNote = await this.query(txn)

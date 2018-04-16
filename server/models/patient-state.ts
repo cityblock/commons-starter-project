@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Patient from './patient';
 
 export type CurrentState =
   | 'attributed'
@@ -50,16 +51,18 @@ export default class PatientState extends BaseModel {
     required: ['patientId', 'updatedById', 'currentState'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_state.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_state.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<PatientState | null> {
     const patientState = await this.query(txn)

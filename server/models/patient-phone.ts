@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Patient from './patient';
+import PatientInfo from './patient-info';
 import Phone from './phone';
 
 interface IPatientPhoneOptions {
@@ -32,32 +33,34 @@ export default class PatientPhone extends BaseModel {
     required: ['phoneId', 'patientId'],
   };
 
-  static relationMappings: RelationMappings = {
-    phone: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'patient_phone.phoneId',
-        to: 'phone.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      phone: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Phone,
+        join: {
+          from: 'patient_phone.phoneId',
+          to: 'phone.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_phone.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_phone.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    patientInfo: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-info',
-      join: {
-        from: 'patient_phone.patientId',
-        to: 'patient_info.patientId',
+      patientInfo: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientInfo,
+        join: {
+          from: 'patient_phone.patientId',
+          to: 'patient_info.patientId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getAll(patientId: string, txn: Transaction): Promise<Phone[]> {
     return (await PatientPhone.query(txn)

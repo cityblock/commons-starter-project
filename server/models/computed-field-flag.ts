@@ -36,24 +36,26 @@ export default class ComputedFieldFlag extends BaseModel {
     required: ['patientAnswerId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patientAnswer: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'computed_field_flag.patientAnswerId',
-        to: 'patient_answer.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patientAnswer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'computed_field_flag.patientAnswerId',
+          to: 'patient_answer.id',
+        },
       },
-    },
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'computed_field_flag.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'computed_field_flag.userId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(
     { patientAnswerId, userId, reason }: IComputedFieldFlagCreateFields,

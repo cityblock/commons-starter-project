@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import ComputedPatientStatus from './computed-patient-status';
+import Patient from './patient';
 import User from './user';
 
 export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent'];
@@ -58,25 +59,27 @@ export default class PatientDocument extends Model {
     required: ['patientId', 'uploadedById', 'filename'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_document.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_document.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    uploadedBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_document.uploadedById',
-        to: 'user.id',
+      uploadedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_document.uploadedById',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   $beforeInsert() {
     this.id = this.id || uuid();

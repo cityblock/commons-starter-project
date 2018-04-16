@@ -56,40 +56,42 @@ export default class PatientTaskSuggestion extends BaseModel {
     required: ['patientId', 'taskTemplateId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_task_suggestion.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.HasOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_task_suggestion.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    taskTemplate: {
-      relation: Model.HasOneRelation,
-      modelClass: 'task-template',
-      join: {
-        from: 'patient_task_suggestion.taskTemplateId',
-        to: 'task_template.id',
+      taskTemplate: {
+        relation: Model.HasOneRelation,
+        modelClass: TaskTemplate,
+        join: {
+          from: 'patient_task_suggestion.taskTemplateId',
+          to: 'task_template.id',
+        },
       },
-    },
-    acceptedBy: {
-      relation: Model.HasOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_task_suggestion.acceptedById',
-        to: 'user.id',
+      acceptedBy: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_task_suggestion.acceptedById',
+          to: 'user.id',
+        },
       },
-    },
-    dismissedBy: {
-      relation: Model.HasOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_task_suggestion.dismissedById',
-        to: 'user.id',
+      dismissedBy: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_task_suggestion.dismissedById',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(
     taskSuggestionId: string,

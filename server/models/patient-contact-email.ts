@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Email from './email';
+import Patient from './patient';
 import PatientContact from './patient-contact';
 
 interface IPatientContactEmailOptions {
@@ -32,24 +33,26 @@ export default class PatientContactEmail extends BaseModel {
     required: ['emailId', 'patientContactId'],
   };
 
-  static relationMappings: RelationMappings = {
-    email: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_contact_email.emailId',
-        to: 'email.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      email: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Email,
+        join: {
+          from: 'patient_contact_email.emailId',
+          to: 'email.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_contact_email.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_contact_email.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatientContact(patientContactId: string, txn: Transaction): Promise<Email[]> {
     return (await PatientContactEmail.query(txn)

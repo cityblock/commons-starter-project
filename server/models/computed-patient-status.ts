@@ -92,25 +92,27 @@ export default class ComputedPatientStatus extends BaseModel {
     ],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'computed_patient_status.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'computed_patient_status.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    updatedBy: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'computed_patient_status.updatedById',
-        to: 'user.id',
+      updatedBy: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'computed_patient_status.updatedById',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
     const patient = await Patient.get(patientId, txn);

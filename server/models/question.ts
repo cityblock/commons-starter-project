@@ -97,61 +97,63 @@ export default class Question extends BaseModel {
     required: ['title', 'answerType', 'order'],
   };
 
-  static relationMappings: RelationMappings = {
-    progressNoteTemplate: {
-      relation: Model.HasOneRelation,
-      modelClass: 'progress-note-template',
-      join: {
-        from: 'question.progressNoteTemplateId',
-        to: 'progress_note_template.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      progressNoteTemplate: {
+        relation: Model.HasOneRelation,
+        modelClass: ProgressNoteTemplate,
+        join: {
+          from: 'question.progressNoteTemplateId',
+          to: 'progress_note_template.id',
+        },
       },
-    },
 
-    answers: {
-      relation: Model.HasManyRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'question.id',
-        to: 'answer.questionId',
+      answers: {
+        relation: Model.HasManyRelation,
+        modelClass: Answer,
+        join: {
+          from: 'question.id',
+          to: 'answer.questionId',
+        },
       },
-    },
 
-    applicableIfQuestionConditions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'question-condition',
-      join: {
-        from: 'question.id',
-        to: 'question_condition.questionId',
+      applicableIfQuestionConditions: {
+        relation: Model.HasManyRelation,
+        modelClass: QuestionCondition,
+        join: {
+          from: 'question.id',
+          to: 'question_condition.questionId',
+        },
       },
-    },
 
-    riskArea: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'question.riskAreaId',
-        to: 'risk_area.id',
+      riskArea: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'question.riskAreaId',
+          to: 'risk_area.id',
+        },
       },
-    },
 
-    screeningTool: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'question.screeningToolId',
-        to: 'screening_tool.id',
+      screeningTool: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'question.screeningToolId',
+          to: 'screening_tool.id',
+        },
       },
-    },
 
-    computedField: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'computed-field',
-      join: {
-        from: 'question.computedFieldId',
-        to: 'computed_field.id',
+      computedField: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ComputedField,
+        join: {
+          from: 'question.computedFieldId',
+          to: 'computed_field.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static modifyEager(query: QueryBuilder<Question>): QueryBuilder<Question> {
     return query

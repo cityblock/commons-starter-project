@@ -65,52 +65,54 @@ export default class CarePlanUpdateEvent extends BaseModel {
     required: ['patientId', 'userId', 'eventType'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'care_plan_update_event.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'care_plan_update_event.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'care_plan_update_event.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'care_plan_update_event.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    patientConcern: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-concern',
-      join: {
-        from: 'care_plan_update_event.patientConcernId',
-        to: 'patient_concern.id',
+      patientConcern: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientConcern,
+        join: {
+          from: 'care_plan_update_event.patientConcernId',
+          to: 'patient_concern.id',
+        },
       },
-    },
 
-    patientGoal: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-goal',
-      join: {
-        from: 'care_plan_update_event.patientGoalId',
-        to: 'patient_goal.id',
+      patientGoal: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientGoal,
+        join: {
+          from: 'care_plan_update_event.patientGoalId',
+          to: 'patient_goal.id',
+        },
       },
-    },
 
-    progressNote: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'progress-note',
-      join: {
-        from: 'care_plan_update_event.progressNoteId',
-        to: 'progress_note.id',
+      progressNote: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ProgressNote,
+        join: {
+          from: 'care_plan_update_event.progressNoteId',
+          to: 'progress_note.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(carePlanUpdateEventId: string, txn: Transaction): Promise<CarePlanUpdateEvent> {
     const carePlanUpdateEvent = await this.query(txn)

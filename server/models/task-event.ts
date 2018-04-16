@@ -93,61 +93,63 @@ export default class TaskEvent extends BaseModel {
     required: ['taskId', 'userId', 'eventType'],
   };
 
-  static relationMappings: RelationMappings = {
-    task: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'task',
-      join: {
-        from: 'task_event.taskId',
-        to: 'task.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      task: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Task,
+        join: {
+          from: 'task_event.taskId',
+          to: 'task.id',
+        },
       },
-    },
 
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task_event.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task_event.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    eventComment: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'task-comment',
-      join: {
-        from: 'task_event.eventCommentId',
-        to: 'task_comment.id',
+      eventComment: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: TaskComment,
+        join: {
+          from: 'task_event.eventCommentId',
+          to: 'task_comment.id',
+        },
       },
-    },
 
-    eventUser: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task_event.eventUserId',
-        to: 'user.id',
+      eventUser: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task_event.eventUserId',
+          to: 'user.id',
+        },
       },
-    },
 
-    progressNote: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'progress-note',
-      join: {
-        from: 'task_event.progressNoteId',
-        to: 'progress_note.id',
+      progressNote: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ProgressNote,
+        join: {
+          from: 'task_event.progressNoteId',
+          to: 'progress_note.id',
+        },
       },
-    },
 
-    eventNotifications: {
-      relation: Model.HasManyRelation,
-      modelClass: 'event-notification',
-      join: {
-        from: 'event_notification.taskEventId',
-        to: 'task_event.id',
+      eventNotifications: {
+        relation: Model.HasManyRelation,
+        modelClass: EventNotification,
+        join: {
+          from: 'event_notification.taskEventId',
+          to: 'task_event.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(taskEventId: string, txn: Transaction): Promise<TaskEvent> {
     const taskEvent = await this.query(txn)

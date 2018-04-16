@@ -1,6 +1,7 @@
 import { toUpper } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Concern from './concern';
 
 interface IDiagnosisCodeCreateFields {
   codesetName: string;
@@ -46,20 +47,22 @@ export default class DiagnosisCode extends BaseModel {
     required: ['codesetName', 'label', 'code', 'version'],
   };
 
-  static relationMappings: RelationMappings = {
-    concerns: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'diagnosis_code.id',
-        through: {
-          from: 'concern_diagnosis_code.diagnosisCodeId',
-          to: 'concern_diagnosis_code.concernId',
+  static get relationMappings(): RelationMappings {
+    return {
+      concerns: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Concern,
+        join: {
+          from: 'diagnosis_code.id',
+          through: {
+            from: 'concern_diagnosis_code.diagnosisCodeId',
+            to: 'concern_diagnosis_code.concernId',
+          },
+          to: 'concern.id',
         },
-        to: 'concern.id',
       },
-    },
-  };
+    };
+  }
 
   static async get(diagnosisCodeId: string, txn: Transaction): Promise<DiagnosisCode> {
     const diagnosisCode = await this.query(txn).findOne({ id: diagnosisCodeId, deletedAt: null });

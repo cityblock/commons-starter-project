@@ -60,24 +60,26 @@ export default class CareTeam extends BaseModel {
     required: ['userId', 'patientId'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'care_team.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'care_team.userId',
+          to: 'user.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'care_team.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'care_team.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<User[]> {
     const careTeam = await this.getCareTeamRecordsForPatient(patientId, txn);

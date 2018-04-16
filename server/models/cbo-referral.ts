@@ -58,32 +58,34 @@ export default class CBOReferral extends BaseModel {
     required: ['categoryId'],
   };
 
-  static relationMappings: RelationMappings = {
-    category: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'cbo-category',
-      join: {
-        from: 'cbo_referral.categoryId',
-        to: 'cbo_category.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      category: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: CBOCategory,
+        join: {
+          from: 'cbo_referral.categoryId',
+          to: 'cbo_category.id',
+        },
       },
-    },
-    CBO: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'cbo',
-      join: {
-        from: 'cbo_referral.CBOId',
-        to: 'cbo.id',
+      CBO: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: CBO,
+        join: {
+          from: 'cbo_referral.CBOId',
+          to: 'cbo.id',
+        },
       },
-    },
-    task: {
-      relation: Model.HasOneRelation,
-      modelClass: 'task',
-      join: {
-        from: 'task.cboReferralId',
-        to: 'cbo_referral.id',
+      task: {
+        relation: Model.HasOneRelation,
+        modelClass: Task,
+        join: {
+          from: 'task.cboReferralId',
+          to: 'cbo_referral.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(CBOReferralId: string, txn: Transaction): Promise<CBOReferral> {
     const cboReferral = await this.query(txn)

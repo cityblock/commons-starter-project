@@ -58,40 +58,42 @@ export default class ScreeningToolScoreRange extends BaseModel {
     required: ['screeningToolId', 'description', 'range'],
   };
 
-  static relationMappings: RelationMappings = {
-    screeningTool: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'screening_tool_score_range.screeningToolId',
-        to: 'screening_tool.id',
-      },
-    },
-    concernSuggestions: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'screening_tool_score_range.id',
-        through: {
-          from: 'concern_suggestion.screeningToolScoreRangeId',
-          to: 'concern_suggestion.concernId',
+  static get relationMappings(): RelationMappings {
+    return {
+      screeningTool: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'screening_tool_score_range.screeningToolId',
+          to: 'screening_tool.id',
         },
-        to: 'concern.id',
       },
-    },
-    goalSuggestions: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'goal-suggestion-template',
-      join: {
-        from: 'screening_tool_score_range.id',
-        through: {
-          from: 'goal_suggestion.screeningToolScoreRangeId',
-          to: 'goal_suggestion.goalSuggestionTemplateId',
+      concernSuggestions: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Concern,
+        join: {
+          from: 'screening_tool_score_range.id',
+          through: {
+            from: 'concern_suggestion.screeningToolScoreRangeId',
+            to: 'concern_suggestion.concernId',
+          },
+          to: 'concern.id',
         },
-        to: 'goal_suggestion_template.id',
       },
-    },
-  };
+      goalSuggestions: {
+        relation: Model.ManyToManyRelation,
+        modelClass: GoalSuggestionTemplate,
+        join: {
+          from: 'screening_tool_score_range.id',
+          through: {
+            from: 'goal_suggestion.screeningToolScoreRangeId',
+            to: 'goal_suggestion.goalSuggestionTemplateId',
+          },
+          to: 'goal_suggestion_template.id',
+        },
+      },
+    };
+  }
 
   static withMinimumAndMaximumScore(screeningToolScoreRange: ScreeningToolScoreRange) {
     const rangeMatch = RANGE_REGEX.exec(screeningToolScoreRange.range);

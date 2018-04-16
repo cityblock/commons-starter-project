@@ -5,6 +5,7 @@ import Answer from './answer';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
 import PatientConcern from './patient-concern';
+import ScreeningToolScoreRange from './screening-tool-score-range';
 
 interface IConcernSuggestionEditableFields {
   concernId: string;
@@ -43,32 +44,34 @@ export default class ConcernSuggestion extends Model {
     oneOf: [{ required: ['answerId'] }, { required: ['screeningToolScoreRangeId'] }],
   };
 
-  static relationMappings: RelationMappings = {
-    concern: {
-      relation: Model.HasOneRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'concern_suggestion.concernId',
-        to: 'concern.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      concern: {
+        relation: Model.HasOneRelation,
+        modelClass: Concern,
+        join: {
+          from: 'concern_suggestion.concernId',
+          to: 'concern.id',
+        },
       },
-    },
-    answer: {
-      relation: Model.HasOneRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'concern_suggestion.answerId',
-        to: 'answer.id',
+      answer: {
+        relation: Model.HasOneRelation,
+        modelClass: Answer,
+        join: {
+          from: 'concern_suggestion.answerId',
+          to: 'answer.id',
+        },
       },
-    },
-    screeningToolScoreRange: {
-      relation: Model.HasOneRelation,
-      modelClass: 'screening-tool-score-range',
-      join: {
-        from: 'concern_suggestion.screeningToolScoreRangeId',
-        to: 'screening_tool_score_range.id',
+      screeningToolScoreRange: {
+        relation: Model.HasOneRelation,
+        modelClass: ScreeningToolScoreRange,
+        join: {
+          from: 'concern_suggestion.screeningToolScoreRangeId',
+          to: 'screening_tool_score_range.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   $beforeInsert() {
     this.id = uuid();

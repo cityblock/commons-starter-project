@@ -44,25 +44,27 @@ export default class PatientDataFlag extends BaseModel {
     required: ['patientId', 'userId', 'fieldName'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_data_flag.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_data_flag.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_data_flag.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_data_flag.userId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(
     input: IPatientDataFlagCreateFields,

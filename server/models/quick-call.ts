@@ -64,24 +64,26 @@ export default class QuickCall extends BaseModel {
     ],
   };
 
-  static relationMappings: RelationMappings = {
-    progressNote: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'progress-note',
-      join: {
-        from: 'quick_call.progressNoteId',
-        to: 'progress_note.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      progressNote: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ProgressNote,
+        join: {
+          from: 'quick_call.progressNoteId',
+          to: 'progress_note.id',
+        },
       },
-    },
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'quick_call.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'quick_call.userId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(input: IQuickCallCreateOptions, txn: Transaction): Promise<QuickCall> {
     const progressNote = await ProgressNote.autoOpenIfRequired(

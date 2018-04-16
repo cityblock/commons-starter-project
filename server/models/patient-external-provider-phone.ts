@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Patient from './patient';
 import PatientExternalProvider from './patient-external-provider';
 import Phone from './phone';
 
@@ -32,24 +33,26 @@ export default class PatientExternalProviderPhone extends BaseModel {
     required: ['phoneId', 'patientExternalProviderId'],
   };
 
-  static relationMappings: RelationMappings = {
-    phone: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'patient_external_provider_phone.phoneId',
-        to: 'phone.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      phone: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Phone,
+        join: {
+          from: 'patient_external_provider_phone.phoneId',
+          to: 'phone.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_external_provider_phone.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_external_provider_phone.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatientExternalProvider(
     patientExternalProviderId: string,

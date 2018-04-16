@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import Address from './address';
 import BaseModel from './base-model';
 import Patient from './patient';
+import PatientInfo from './patient-info';
 
 interface IPatientAddressOptions {
   addressId: string;
@@ -32,32 +33,34 @@ export default class PatientAddress extends BaseModel {
     required: ['addressId', 'patientId'],
   };
 
-  static relationMappings: RelationMappings = {
-    address: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'address',
-      join: {
-        from: 'patient_address.addressId',
-        to: 'address.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      address: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Address,
+        join: {
+          from: 'patient_address.addressId',
+          to: 'address.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_address.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_address.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    patientInfo: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-info',
-      join: {
-        from: 'patient_address.patientId',
-        to: 'patient_info.patientId',
+      patientInfo: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientInfo,
+        join: {
+          from: 'patient_address.patientId',
+          to: 'patient_info.patientId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getAll(patientId: string, txn: Transaction): Promise<Address[]> {
     return (await PatientAddress.query(txn)

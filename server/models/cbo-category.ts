@@ -27,16 +27,18 @@ export default class CBOCategory extends BaseModel {
     required: ['title'],
   };
 
-  static relationMappings: RelationMappings = {
-    cbo: {
-      relation: Model.HasManyRelation,
-      modelClass: 'cbo',
-      join: {
-        from: 'cbo.categoryId',
-        to: 'cbo_category.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      cbo: {
+        relation: Model.HasManyRelation,
+        modelClass: Cbo,
+        join: {
+          from: 'cbo.categoryId',
+          to: 'cbo_category.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getAll(txn: Transaction): Promise<CBOCategory[]> {
     return this.query(txn)

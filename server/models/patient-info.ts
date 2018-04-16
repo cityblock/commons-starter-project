@@ -140,43 +140,45 @@ export default class PatientInfo extends Model {
     required: ['patientId', 'updatedById'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_info.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_info.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    primaryAddress: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'address',
-      join: {
-        from: 'address.id',
-        to: 'patient_info.primaryAddressId',
+      primaryAddress: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Address,
+        join: {
+          from: 'address.id',
+          to: 'patient_info.primaryAddressId',
+        },
       },
-    },
 
-    primaryEmail: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'email',
-      join: {
-        from: 'email.id',
-        to: 'patient_info.primaryEmailId',
+      primaryEmail: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Email,
+        join: {
+          from: 'email.id',
+          to: 'patient_info.primaryEmailId',
+        },
       },
-    },
 
-    primaryPhone: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'phone.id',
-        to: 'patient_info.primaryPhoneId',
+      primaryPhone: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Phone,
+        join: {
+          from: 'phone.id',
+          to: 'patient_info.primaryPhoneId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(patientInfoId: string, txn: Transaction): Promise<PatientInfo> {
     const patientInfo = await this.query(txn)

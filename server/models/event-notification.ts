@@ -49,25 +49,27 @@ export default class EventNotification extends BaseModel {
     required: ['userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'event_notification.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'event_notification.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    taskEvent: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'task-event',
-      join: {
-        from: 'event_notification.taskEventId',
-        to: 'task_event.id',
+      taskEvent: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: TaskEvent,
+        join: {
+          from: 'event_notification.taskEventId',
+          to: 'task_event.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(eventNotificationId: string, txn: Transaction): Promise<EventNotification> {
     const eventNotification = await this.query(txn)

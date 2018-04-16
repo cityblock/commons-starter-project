@@ -33,24 +33,26 @@ export default class TaskSuggestion extends BaseModel {
     required: ['answerId', 'taskTemplateId'],
   };
 
-  static relationMappings: RelationMappings = {
-    taskTemplate: {
-      relation: Model.HasOneRelation,
-      modelClass: 'task-template',
-      join: {
-        from: 'task_suggestion.taskTemplateId',
-        to: 'task_template.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      taskTemplate: {
+        relation: Model.HasOneRelation,
+        modelClass: TaskTemplate,
+        join: {
+          from: 'task_suggestion.taskTemplateId',
+          to: 'task_template.id',
+        },
       },
-    },
-    answer: {
-      relation: Model.HasOneRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'task_suggestion.answerId',
-        to: 'answer.id',
+      answer: {
+        relation: Model.HasOneRelation,
+        modelClass: Answer,
+        join: {
+          from: 'task_suggestion.answerId',
+          to: 'answer.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForTaskTemplate(taskTemplate: string, txn: Transaction): Promise<Answer[]> {
     const taskSuggestions = await this.query(txn)

@@ -1,6 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Email from './email';
+import Patient from './patient';
+import PatientExternalProviderEmail from './patient-external-provider-email';
+import PatientExternalProviderPhone from './patient-external-provider-phone';
 import Phone from './phone';
 
 const EAGER_QUERY = '[email, phone]';
@@ -115,45 +118,47 @@ export default class PatientExternalProvider extends Model {
     required: ['patientId', 'updatedById', 'role', 'agencyName'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_external_provider.patientId',
-        to: 'patient.id',
-      },
-    },
-
-    // has only one non-deleted email
-    email: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_external_provider.id',
-        through: {
-          modelClass: 'patient-external-provider-email',
-          from: 'patient_external_provider_email.patientExternalProviderId',
-          to: 'patient_external_provider_email.emailId',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_external_provider.patientId',
+          to: 'patient.id',
         },
-        to: 'email.id',
       },
-    },
 
-    phone: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'patient_external_provider.id',
-        through: {
-          modelClass: 'patient-external-provider-phone',
-          from: 'patient_external_provider_phone.patientExternalProviderId',
-          to: 'patient_external_provider_phone.phoneId',
+      // has only one non-deleted email
+      email: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Email,
+        join: {
+          from: 'patient_external_provider.id',
+          through: {
+            modelClass: PatientExternalProviderEmail,
+            from: 'patient_external_provider_email.patientExternalProviderId',
+            to: 'patient_external_provider_email.emailId',
+          },
+          to: 'email.id',
         },
-        to: 'phone.id',
       },
-    },
-  };
+
+      phone: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Phone,
+        join: {
+          from: 'patient_external_provider.id',
+          through: {
+            modelClass: PatientExternalProviderPhone,
+            from: 'patient_external_provider_phone.patientExternalProviderId',
+            to: 'patient_external_provider_phone.phoneId',
+          },
+          to: 'phone.id',
+        },
+      },
+    };
+  }
 
   static async get(
     patientExternalProviderId: string,

@@ -53,16 +53,18 @@ export default class CBO extends BaseModel {
     required: ['name', 'categoryId', 'address', 'city', 'state', 'zip', 'phone'],
   };
 
-  static relationMappings: RelationMappings = {
-    category: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'cbo-category',
-      join: {
-        from: 'cbo.categoryId',
-        to: 'cbo_category.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      category: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: CBOCategory,
+        join: {
+          from: 'cbo.categoryId',
+          to: 'cbo_category.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(CBOId: string, txn: Transaction): Promise<CBO> {
     const cbo = await this.query(txn)

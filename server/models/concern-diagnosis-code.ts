@@ -32,24 +32,26 @@ export default class ConcernDiagnosisCode extends BaseModel {
     required: ['concernId', 'diagnosisCodeId'],
   };
 
-  static relationMappings: RelationMappings = {
-    concern: {
-      relation: Model.HasOneRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'concern_diagnosis_code.concernId',
-        to: 'concern.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      concern: {
+        relation: Model.HasOneRelation,
+        modelClass: Concern,
+        join: {
+          from: 'concern_diagnosis_code.concernId',
+          to: 'concern.id',
+        },
       },
-    },
-    diagnosisCode: {
-      relation: Model.HasOneRelation,
-      modelClass: 'diagnosis-code',
-      join: {
-        from: 'concern_diagnosis_code.diagnosisCodeId',
-        to: 'diagnosis_code.id',
+      diagnosisCode: {
+        relation: Model.HasOneRelation,
+        modelClass: DiagnosisCode,
+        join: {
+          from: 'concern_diagnosis_code.diagnosisCodeId',
+          to: 'diagnosis_code.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(
     input: IConcernDiagnosisCodeCreateFields,

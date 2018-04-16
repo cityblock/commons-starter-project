@@ -47,52 +47,54 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     required: ['riskAreaId', 'patientId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'risk_area_assessment_submission.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'risk_area_assessment_submission.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'risk_area_assessment_submission.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'risk_area_assessment_submission.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    riskArea: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'risk_area_assessment_submission.riskAreaId',
-        to: 'risk_area.id',
+      riskArea: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'risk_area_assessment_submission.riskAreaId',
+          to: 'risk_area.id',
+        },
       },
-    },
 
-    patientAnswers: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'risk_area_assessment_submission.id',
-        to: 'patient_answer.riskAreaAssessmentSubmissionId',
+      patientAnswers: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'risk_area_assessment_submission.id',
+          to: 'patient_answer.riskAreaAssessmentSubmissionId',
+        },
       },
-    },
 
-    carePlanSuggestions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'care-plan-suggestion',
-      join: {
-        from: 'risk_area_assessment_submission.id',
-        to: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
+      carePlanSuggestions: {
+        relation: Model.HasManyRelation,
+        modelClass: CarePlanSuggestion,
+        join: {
+          from: 'risk_area_assessment_submission.id',
+          to: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(
     input: IRiskAreaAssessmentSubmissionCreateFields,

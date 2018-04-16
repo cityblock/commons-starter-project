@@ -74,74 +74,76 @@ export default class Answer extends BaseModel {
     required: ['displayValue', 'value', 'valueType', 'questionId', 'order'],
   };
 
-  static relationMappings: RelationMappings = {
-    question: {
-      relation: Model.HasOneRelation,
-      modelClass: 'question',
-      join: {
-        from: 'answer.questionId',
-        to: 'question.id',
-      },
-    },
-    concernSuggestions: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'answer.id',
-        through: {
-          from: 'concern_suggestion.answerId',
-          to: 'concern_suggestion.concernId',
+  static get relationMappings(): RelationMappings {
+    return {
+      question: {
+        relation: Model.HasOneRelation,
+        modelClass: Question,
+        join: {
+          from: 'answer.questionId',
+          to: 'question.id',
         },
-        to: 'concern.id',
       },
-    },
-    goalSuggestions: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'goal-suggestion-template',
-      join: {
-        from: 'answer.id',
-        through: {
-          from: 'goal_suggestion.answerId',
-          to: 'goal_suggestion.goalSuggestionTemplateId',
+      concernSuggestions: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Concern,
+        join: {
+          from: 'answer.id',
+          through: {
+            from: 'concern_suggestion.answerId',
+            to: 'concern_suggestion.concernId',
+          },
+          to: 'concern.id',
         },
-        to: 'goal_suggestion_template.id',
       },
-    },
-    patientAnswers: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'answer.id',
-        to: 'patient_answer.answerId',
-      },
-    },
-    riskArea: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'answer.questionId',
-        through: {
-          modelClass: 'question',
-          from: 'question.id',
-          to: 'question.riskAreaId',
+      goalSuggestions: {
+        relation: Model.ManyToManyRelation,
+        modelClass: GoalSuggestionTemplate,
+        join: {
+          from: 'answer.id',
+          through: {
+            from: 'goal_suggestion.answerId',
+            to: 'goal_suggestion.goalSuggestionTemplateId',
+          },
+          to: 'goal_suggestion_template.id',
         },
-        to: 'risk_area.id',
       },
-    },
-    screeningTool: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'answer.questionId',
-        through: {
-          modelClass: 'question',
-          from: 'question.id',
-          to: 'question.screeningToolId',
+      patientAnswers: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'answer.id',
+          to: 'patient_answer.answerId',
         },
-        to: 'screening_tool.id',
       },
-    },
-  };
+      riskArea: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'answer.questionId',
+          through: {
+            modelClass: Question,
+            from: 'question.id',
+            to: 'question.riskAreaId',
+          },
+          to: 'risk_area.id',
+        },
+      },
+      screeningTool: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'answer.questionId',
+          through: {
+            modelClass: Question,
+            from: 'question.id',
+            to: 'question.screeningToolId',
+          },
+          to: 'screening_tool.id',
+        },
+      },
+    };
+  }
 
   static async get(answerId: string, txn: Transaction): Promise<Answer> {
     const answer = await this.getQuery(txn).findOne({ id: answerId, deletedAt: null });

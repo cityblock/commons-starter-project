@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Email from './email';
 import Patient from './patient';
+import PatientInfo from './patient-info';
 
 interface IPatientEmailOptions {
   emailId: string;
@@ -32,32 +33,34 @@ export default class PatientEmail extends BaseModel {
     required: ['emailId', 'patientId'],
   };
 
-  static relationMappings: RelationMappings = {
-    email: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_email.emailId',
-        to: 'email.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      email: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Email,
+        join: {
+          from: 'patient_email.emailId',
+          to: 'email.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_email.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_email.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    patientInfo: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-info',
-      join: {
-        from: 'patient_email.patientId',
-        to: 'patient_info.patientId',
+      patientInfo: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientInfo,
+        join: {
+          from: 'patient_email.patientId',
+          to: 'patient_info.patientId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getAll(patientId: string, txn: Transaction): Promise<Email[]> {
     return (await PatientEmail.query(txn)

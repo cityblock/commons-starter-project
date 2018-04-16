@@ -38,25 +38,27 @@ export default class TaskFollower extends BaseModel {
     required: ['taskId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task_follower.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task_follower.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    task: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'task',
-      join: {
-        from: 'task_follower.taskId',
-        to: 'task.id',
+      task: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Task,
+        join: {
+          from: 'task_follower.taskId',
+          to: 'task.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async followTask(
     { userId, taskId }: ITaskFollowerOptions,

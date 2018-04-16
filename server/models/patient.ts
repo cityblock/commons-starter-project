@@ -126,76 +126,78 @@ export default class Patient extends Model {
     required: ['id', 'cityblockId', 'firstName', 'lastName', 'dateOfBirth'],
   };
 
-  static relationMappings: RelationMappings = {
-    homeClinic: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'clinic',
-      join: {
-        from: 'patient.homeClinicId',
-        to: 'clinic.id',
-      },
-    },
-
-    careTeam: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient.id',
-        through: {
-          from: 'care_team.patientId',
-          to: 'care_team.userId',
+  static get relationMappings(): RelationMappings {
+    return {
+      homeClinic: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Clinic,
+        join: {
+          from: 'patient.homeClinicId',
+          to: 'clinic.id',
         },
-        to: 'user.id',
       },
-    },
 
-    tasks: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task',
-      join: {
-        from: 'task.patientId',
-        to: 'patient.id',
+      careTeam: {
+        relation: Model.ManyToManyRelation,
+        modelClass: User,
+        join: {
+          from: 'patient.id',
+          through: {
+            from: 'care_team.patientId',
+            to: 'care_team.userId',
+          },
+          to: 'user.id',
+        },
       },
-    },
 
-    patientInfo: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-info',
-      join: {
-        from: 'patient_info.patientId',
-        to: 'patient.id',
+      tasks: {
+        relation: Model.HasManyRelation,
+        modelClass: Task,
+        join: {
+          from: 'task.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    patientDataFlags: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-data-flag',
-      join: {
-        from: 'patient_data_flag.patientId',
-        to: 'patient.id',
+      patientInfo: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientInfo,
+        join: {
+          from: 'patient_info.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    computedPatientStatus: {
-      relation: Model.HasOneRelation,
-      modelClass: 'computed-patient-status',
-      join: {
-        from: 'computed_patient_status.patientId',
-        to: 'patient.id',
+      patientDataFlags: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientDataFlag,
+        join: {
+          from: 'patient_data_flag.patientId',
+          to: 'patient.id',
+        },
       },
-      modify: builder => builder.findOne({ deletedAt: null }),
-    },
 
-    patientState: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient-state',
-      join: {
-        from: 'patient_state.patientId',
-        to: 'patient.id',
+      computedPatientStatus: {
+        relation: Model.HasOneRelation,
+        modelClass: ComputedPatientStatus,
+        join: {
+          from: 'computed_patient_status.patientId',
+          to: 'patient.id',
+        },
+        modify: builder => builder.findOne({ deletedAt: null }),
       },
-      modify: builder => builder.findOne({ deletedAt: null }),
-    },
-  };
+
+      patientState: {
+        relation: Model.HasOneRelation,
+        modelClass: PatientState,
+        join: {
+          from: 'patient_state.patientId',
+          to: 'patient.id',
+        },
+        modify: builder => builder.findOne({ deletedAt: null }),
+      },
+    };
+  }
 
   static async get(patientId: string, txn: Transaction): Promise<Patient> {
     const patient = await this.query(txn)

@@ -34,16 +34,18 @@ export default class GoalSuggestionTemplate extends BaseModel {
     required: ['title'],
   };
 
-  static relationMappings: RelationMappings = {
-    taskTemplates: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task-template',
-      join: {
-        from: 'task_template.goalSuggestionTemplateId',
-        to: 'goal_suggestion_template.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      taskTemplates: {
+        relation: Model.HasManyRelation,
+        modelClass: TaskTemplate,
+        join: {
+          from: 'task_template.goalSuggestionTemplateId',
+          to: 'goal_suggestion_template.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(
     goalSuggestionTemplateId: string,

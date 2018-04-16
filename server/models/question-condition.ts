@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
+import Question from './question';
 
 interface IQuestionConditionEditableFields {
   answerId: string;
@@ -29,25 +30,27 @@ export default class QuestionCondition extends BaseModel {
     required: ['questionId', 'answerId'],
   };
 
-  static relationMappings: RelationMappings = {
-    answer: {
-      relation: Model.HasOneRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'question_condition.answerId',
-        to: 'answer.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      answer: {
+        relation: Model.HasOneRelation,
+        modelClass: Answer,
+        join: {
+          from: 'question_condition.answerId',
+          to: 'answer.id',
+        },
       },
-    },
 
-    question: {
-      relation: Model.HasOneRelation,
-      modelClass: 'question',
-      join: {
-        from: 'question_condition.questionId',
-        to: 'question.id',
+      question: {
+        relation: Model.HasOneRelation,
+        modelClass: Question,
+        join: {
+          from: 'question_condition.questionId',
+          to: 'question.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(questionConditionId: string, txn: Transaction): Promise<QuestionCondition> {
     const questionCondition = await this.query(txn).findOne({

@@ -51,40 +51,42 @@ export default class PatientGoal extends BaseModel {
     required: ['patientId', 'title'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_goal.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.HasOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_goal.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    tasks: {
-      relation: Model.HasManyRelation,
-      modelClass: 'task',
-      join: {
-        from: 'patient_goal.id',
-        to: 'task.patientGoalId',
+      tasks: {
+        relation: Model.HasManyRelation,
+        modelClass: Task,
+        join: {
+          from: 'patient_goal.id',
+          to: 'task.patientGoalId',
+        },
       },
-    },
-    patientConcern: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-concern',
-      join: {
-        from: 'patient_goal.patientConcernId',
-        to: 'patient_concern.id',
+      patientConcern: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientConcern,
+        join: {
+          from: 'patient_goal.patientConcernId',
+          to: 'patient_concern.id',
+        },
       },
-    },
-    goalSuggestionTemplate: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'goal-suggestion-template',
-      join: {
-        from: 'patient_goal.goalSuggestionTemplateId',
-        to: 'goal_suggestion_template.id',
+      goalSuggestionTemplate: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: GoalSuggestionTemplate,
+        join: {
+          from: 'patient_goal.goalSuggestionTemplateId',
+          to: 'goal_suggestion_template.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(patientGoalId: string, txn: Transaction): Promise<PatientGoal> {
     const patientGoal = await this.query(txn)

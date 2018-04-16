@@ -43,32 +43,34 @@ export default class ScreeningTool extends BaseModel {
     required: ['title', 'riskAreaId'],
   };
 
-  static relationMappings: RelationMappings = {
-    riskArea: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'screening_tool.riskAreaId',
-        to: 'risk_area.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      riskArea: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'screening_tool.riskAreaId',
+          to: 'risk_area.id',
+        },
       },
-    },
-    screeningToolScoreRanges: {
-      relation: Model.HasManyRelation,
-      modelClass: 'screening-tool-score-range',
-      join: {
-        from: 'screening_tool_score_range.screeningToolId',
-        to: 'screening_tool.id',
+      screeningToolScoreRanges: {
+        relation: Model.HasManyRelation,
+        modelClass: ScreeningToolScoreRange,
+        join: {
+          from: 'screening_tool_score_range.screeningToolId',
+          to: 'screening_tool.id',
+        },
       },
-    },
-    patientScreeningToolSubmissions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-screening-tool-submission',
-      join: {
-        from: 'patient_screening_tool_submission.screeningToolId',
-        to: 'screening_tool.id',
+      patientScreeningToolSubmissions: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientScreeningToolSubmission,
+        join: {
+          from: 'patient_screening_tool_submission.screeningToolId',
+          to: 'screening_tool.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static withFormattedScreeningToolScoreRanges(screeningTool: ScreeningTool) {
     return {

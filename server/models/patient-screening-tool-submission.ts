@@ -6,6 +6,7 @@ import CarePlanSuggestion from './care-plan-suggestion';
 import Patient from './patient';
 import PatientAnswer from './patient-answer';
 import ProgressNote from './progress-note';
+import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 import User from './user';
@@ -62,74 +63,76 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     required: ['screeningToolId', 'patientId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    screeningTool: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'patient_screening_tool_submission.screeningToolId',
-        to: 'screening_tool.id',
-      },
-    },
-
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_screening_tool_submission.patientId',
-        to: 'patient.id',
-      },
-    },
-
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_screening_tool_submission.userId',
-        to: 'user.id',
-      },
-    },
-
-    patientAnswers: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'patient_screening_tool_submission.id',
-        to: 'patient_answer.patientScreeningToolSubmissionId',
-      },
-    },
-
-    carePlanSuggestions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'care-plan-suggestion',
-      join: {
-        from: 'patient_screening_tool_submission.id',
-        to: 'care_plan_suggestion.patientScreeningToolSubmissionId',
-      },
-    },
-
-    screeningToolScoreRange: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'screening-tool-score-range',
-      join: {
-        from: 'patient_screening_tool_submission.screeningToolScoreRangeId',
-        to: 'screening_tool_score_range.id',
-      },
-    },
-    riskArea: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'patient_screening_tool_submission.screeningToolId',
-        through: {
-          modelClass: 'screening-tool',
-          from: 'screening_tool.id',
-          to: 'screening_tool.riskAreaId',
+  static get relationMappings(): RelationMappings {
+    return {
+      screeningTool: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'patient_screening_tool_submission.screeningToolId',
+          to: 'screening_tool.id',
         },
-        to: 'risk_area.id',
       },
-    },
-  };
+
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_screening_tool_submission.patientId',
+          to: 'patient.id',
+        },
+      },
+
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_screening_tool_submission.userId',
+          to: 'user.id',
+        },
+      },
+
+      patientAnswers: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'patient_screening_tool_submission.id',
+          to: 'patient_answer.patientScreeningToolSubmissionId',
+        },
+      },
+
+      carePlanSuggestions: {
+        relation: Model.HasManyRelation,
+        modelClass: CarePlanSuggestion,
+        join: {
+          from: 'patient_screening_tool_submission.id',
+          to: 'care_plan_suggestion.patientScreeningToolSubmissionId',
+        },
+      },
+
+      screeningToolScoreRange: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ScreeningToolScoreRange,
+        join: {
+          from: 'patient_screening_tool_submission.screeningToolScoreRangeId',
+          to: 'screening_tool_score_range.id',
+        },
+      },
+      riskArea: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'patient_screening_tool_submission.screeningToolId',
+          through: {
+            modelClass: ScreeningTool,
+            from: 'screening_tool.id',
+            to: 'screening_tool.riskAreaId',
+          },
+          to: 'risk_area.id',
+        },
+      },
+    };
+  }
 
   static calculateScore(patientAnswers: PatientAnswer[]): number {
     return reduce(

@@ -60,52 +60,54 @@ export default class PatientAnswerEvent extends BaseModel {
     required: ['patientId', 'patientAnswerId', 'eventType'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_answer_event.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_answer_event.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_answer_event.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_answer_event.patientId',
+          to: 'patient.id',
+        },
       },
-    },
 
-    patientAnswer: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'patient_answer_event.patientAnswerId',
-        to: 'patient_answer.id',
+      patientAnswer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'patient_answer_event.patientAnswerId',
+          to: 'patient_answer.id',
+        },
       },
-    },
 
-    previousPatientAnswer: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient-answer',
-      join: {
-        from: 'patient_answer_event.previousPatientAnswerId',
-        to: 'patient_answer.id',
+      previousPatientAnswer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientAnswer,
+        join: {
+          from: 'patient_answer_event.previousPatientAnswerId',
+          to: 'patient_answer.id',
+        },
       },
-    },
 
-    progressNote: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'progress-note',
-      join: {
-        from: 'patient_answer_event.progressNoteId',
-        to: 'progress_note.id',
+      progressNote: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ProgressNote,
+        join: {
+          from: 'patient_answer_event.progressNoteId',
+          to: 'progress_note.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(patientAnswerEventId: string, txn: Transaction): Promise<PatientAnswerEvent> {
     const patientAnswerEvent = await this.query(txn)

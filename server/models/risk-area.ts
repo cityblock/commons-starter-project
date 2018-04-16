@@ -68,40 +68,42 @@ export default class RiskArea extends BaseModel {
     ],
   };
 
-  static relationMappings: RelationMappings = {
-    questions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'question',
-      join: {
-        from: 'risk_area.id',
-        to: 'question.riskAreaId',
+  static get relationMappings(): RelationMappings {
+    return {
+      questions: {
+        relation: Model.HasManyRelation,
+        modelClass: Question,
+        join: {
+          from: 'risk_area.id',
+          to: 'question.riskAreaId',
+        },
       },
-    },
-    riskAreaGroup: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'risk-area-group',
-      join: {
-        from: 'risk_area.riskAreaGroupId',
-        to: 'risk_area_group.id',
+      riskAreaGroup: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: RiskAreaGroup,
+        join: {
+          from: 'risk_area.riskAreaGroupId',
+          to: 'risk_area_group.id',
+        },
       },
-    },
-    riskAreaAssessmentSubmissions: {
-      relation: Model.HasManyRelation,
-      modelClass: 'risk-area-assessment-submission',
-      join: {
-        from: 'risk_area.id',
-        to: 'risk_area_assessment_submission.riskAreaId',
+      riskAreaAssessmentSubmissions: {
+        relation: Model.HasManyRelation,
+        modelClass: RiskAreaAssessmentSubmission,
+        join: {
+          from: 'risk_area.id',
+          to: 'risk_area_assessment_submission.riskAreaId',
+        },
       },
-    },
-    screeningTools: {
-      relation: Model.HasManyRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'screening_tool.riskAreaId',
-        to: 'risk_area.id',
+      screeningTools: {
+        relation: Model.HasManyRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'screening_tool.riskAreaId',
+          to: 'risk_area.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(riskAreaId: string, txn: Transaction): Promise<RiskArea> {
     const riskArea = await this.query(txn)

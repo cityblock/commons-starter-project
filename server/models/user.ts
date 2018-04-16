@@ -12,8 +12,10 @@ import {
   attributionUserUserRole,
 } from '../lib/consts';
 import BaseModel from './base-model';
+import CareTeam from './care-team';
 import Clinic from './clinic';
 import GoogleAuth from './google-auth';
+import Patient from './patient';
 
 export type UserRole =
   | 'physician'
@@ -142,37 +144,39 @@ export default class User extends BaseModel {
     required: ['email', 'homeClinicId', 'userRole'],
   };
 
-  static relationMappings: RelationMappings = {
-    googleAuth: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'google-auth',
-      join: {
-        from: 'user.googleAuthId',
-        to: 'google_auth.id',
-      },
-    },
-    homeClinic: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'clinic',
-      join: {
-        from: 'user.homeClinicId',
-        to: 'clinic.id',
-      },
-    },
-    patients: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'user.id',
-        through: {
-          modelClass: 'care-team',
-          from: 'care_team.userId',
-          to: 'care_team.patientId',
+  static get relationMappings(): RelationMappings {
+    return {
+      googleAuth: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: GoogleAuth,
+        join: {
+          from: 'user.googleAuthId',
+          to: 'google_auth.id',
         },
-        to: 'patient.id',
       },
-    },
-  };
+      homeClinic: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Clinic,
+        join: {
+          from: 'user.homeClinicId',
+          to: 'clinic.id',
+        },
+      },
+      patients: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Patient,
+        join: {
+          from: 'user.id',
+          through: {
+            modelClass: CareTeam,
+            from: 'care_team.userId',
+            to: 'care_team.patientId',
+          },
+          to: 'patient.id',
+        },
+      },
+    };
+  }
 
   static async getLastLoggedIn(userId: string, txn: Transaction): Promise<string | undefined> {
     // TODO: Figure out how to return select fields via knex

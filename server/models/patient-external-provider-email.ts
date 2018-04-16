@@ -1,6 +1,8 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Email from './email';
+import Patient from './patient';
+
 import PatientExternalProvider from './patient-external-provider';
 
 interface IPatientExternalProviderEmailOptions {
@@ -32,24 +34,26 @@ export default class PatientExternalProviderEmail extends BaseModel {
     required: ['emailId', 'patientExternalProviderId'],
   };
 
-  static relationMappings: RelationMappings = {
-    email: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_external_provider_email.emailId',
-        to: 'email.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      email: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Email,
+        join: {
+          from: 'patient_external_provider_email.emailId',
+          to: 'email.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_external_provider_email.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_external_provider_email.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatientExternalProvider(
     patientExternalProviderId: string,

@@ -43,25 +43,27 @@ export default class TaskComment extends BaseModel {
     required: ['taskId', 'userId', 'body'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'task_comment.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'task_comment.userId',
+          to: 'user.id',
+        },
       },
-    },
 
-    task: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'task',
-      join: {
-        from: 'task_comment.taskId',
-        to: 'task.id',
+      task: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Task,
+        join: {
+          from: 'task_comment.taskId',
+          to: 'task.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(taskCommentId: string, txn: Transaction): Promise<TaskComment> {
     const taskComment = await this.query(txn)

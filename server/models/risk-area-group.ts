@@ -40,16 +40,18 @@ export default class RiskAreaGroup extends BaseModel {
     required: ['title', 'shortTitle', 'order', 'mediumRiskThreshold', 'highRiskThreshold'],
   };
 
-  static relationMappings: RelationMappings = {
-    riskAreas: {
-      relation: Model.HasManyRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'risk_area_group.id',
-        to: 'risk_area.riskAreaGroupId',
+  static get relationMappings(): RelationMappings {
+    return {
+      riskAreas: {
+        relation: Model.HasManyRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'risk_area_group.id',
+          to: 'risk_area.riskAreaGroupId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(riskAreaGroupId: string, txn: Transaction): Promise<RiskAreaGroup> {
     const riskAreaGroup = await this.query(txn).findOne({ id: riskAreaGroupId, deletedAt: null });

@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import User from './user';
 
 interface ICreateGoogleAuth {
   accessToken: string;
@@ -29,16 +30,18 @@ export default class GoogleAuth extends BaseModel {
     },
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'google_auth.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'google_auth.userId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async updateOrCreate(options: ICreateGoogleAuth, txn: Transaction): Promise<GoogleAuth> {
     const existingGoogleAuth = await this.query(txn)

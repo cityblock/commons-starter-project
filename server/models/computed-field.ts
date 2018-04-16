@@ -41,16 +41,18 @@ export default class ComputedField extends BaseModel {
     required: ['slug', 'label', 'dataType'],
   };
 
-  static relationMappings: RelationMappings = {
-    question: {
-      relation: Model.HasOneRelation,
-      modelClass: 'question',
-      join: {
-        from: 'computed_field.id',
-        to: 'question.computedFieldId',
+  static get relationMappings(): RelationMappings {
+    return {
+      question: {
+        relation: Model.HasOneRelation,
+        modelClass: Question,
+        join: {
+          from: 'computed_field.id',
+          to: 'question.computedFieldId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(input: IComputedFieldCreateFields, txn: Transaction): Promise<ComputedField> {
     return this.query(txn).insertAndFetch(input);

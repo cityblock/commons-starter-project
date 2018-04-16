@@ -1,4 +1,5 @@
 import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import Answer from './answer';
 import BaseModel from './base-model';
 import ConcernDiagnosisCode from './concern-diagnosis-code';
 import DiagnosisCode from './diagnosis-code';
@@ -43,32 +44,34 @@ export default class Concern extends BaseModel {
     required: ['title'],
   };
 
-  static relationMappings: RelationMappings = {
-    answers: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'concern.id',
-        through: {
-          from: 'concern_suggestion.concernId',
-          to: 'concern_suggestion.answerId',
+  static get relationMappings(): RelationMappings {
+    return {
+      answers: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Answer,
+        join: {
+          from: 'concern.id',
+          through: {
+            from: 'concern_suggestion.concernId',
+            to: 'concern_suggestion.answerId',
+          },
+          to: 'answer.id',
         },
-        to: 'answer.id',
       },
-    },
-    diagnosisCodes: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'diagnosis-code',
-      join: {
-        from: 'concern.id',
-        through: {
-          from: 'concern_diagnosis_code.concernId',
-          to: 'concern_diagnosis_code.diagnosisCodeId',
+      diagnosisCodes: {
+        relation: Model.ManyToManyRelation,
+        modelClass: DiagnosisCode,
+        join: {
+          from: 'concern.id',
+          through: {
+            from: 'concern_diagnosis_code.concernId',
+            to: 'concern_diagnosis_code.diagnosisCodeId',
+          },
+          to: 'diagnosis_code.id',
         },
-        to: 'diagnosis_code.id',
       },
-    },
-  };
+    };
+  }
 
   static async get(concernId: string, txn: Transaction): Promise<Concern> {
     const concern = await this.modifyEager(this.query(txn)).findOne({

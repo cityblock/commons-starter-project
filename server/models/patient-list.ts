@@ -34,16 +34,18 @@ export default class PatientList extends BaseModel {
     required: ['title', 'answerId', 'order'],
   };
 
-  static relationMappings: RelationMappings = {
-    answer: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'patient_list.answerId',
-        to: 'answer.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      answer: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Answer,
+        join: {
+          from: 'patient_list.answerId',
+          to: 'answer.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(patientListId: string, txn: Transaction): Promise<PatientList> {
     const patientList = await this.query(txn).findOne({ id: patientListId, deletedAt: null });

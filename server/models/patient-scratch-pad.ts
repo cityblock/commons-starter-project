@@ -40,24 +40,26 @@ export default class PatientScratchPad extends BaseModel {
     required: ['patientId', 'userId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_scratch_pad.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_scratch_pad.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_scratch_pad.userId',
-        to: 'user.id',
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_scratch_pad.userId',
+          to: 'user.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(
     { patientId, userId }: IPatientScratchPadCreateFields,

@@ -32,7 +32,7 @@ export default class ProgressNoteTemplate extends BaseModel {
   static relationalMappings: RelationMappings = {
     questions: {
       relation: Model.HasManyRelation,
-      modelClass: 'question',
+      modelClass: Question,
       join: {
         from: 'progress_note_template.id',
         to: 'question.progressNoteTemplateId',

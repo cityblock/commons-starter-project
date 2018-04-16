@@ -55,32 +55,34 @@ export default class PatientConcern extends BaseModel {
     required: ['patientId', 'concernId'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_concern.patientId',
-        to: 'patient.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.HasOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_concern.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-    concern: {
-      relation: Model.HasOneRelation,
-      modelClass: 'concern',
-      join: {
-        from: 'patient_concern.concernId',
-        to: 'concern.id',
+      concern: {
+        relation: Model.HasOneRelation,
+        modelClass: Concern,
+        join: {
+          from: 'patient_concern.concernId',
+          to: 'concern.id',
+        },
       },
-    },
-    patientGoals: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient-goal',
-      join: {
-        from: 'patient_concern.id',
-        to: 'patient_goal.patientConcernId',
+      patientGoals: {
+        relation: Model.HasManyRelation,
+        modelClass: PatientGoal,
+        join: {
+          from: 'patient_concern.id',
+          to: 'patient_goal.patientConcernId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(patientConcernId: string, txn: Transaction): Promise<PatientConcern> {
     const patientConcern = await this.query(txn)

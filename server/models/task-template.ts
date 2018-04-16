@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import GoalSuggestion from './goal-suggestion';
 import { Priority, PRIORITY } from './task';
 import { UserRole, USER_ROLE } from './user';
 
@@ -51,16 +52,18 @@ export default class TaskTemplate extends BaseModel {
     required: ['title'],
   };
 
-  static relationMappings: RelationMappings = {
-    goalSuggestion: {
-      relation: Model.HasOneRelation,
-      modelClass: 'goal-suggestion',
-      join: {
-        from: 'task_template.goalSuggestionId',
-        to: 'goal_suggestion.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      goalSuggestion: {
+        relation: Model.HasOneRelation,
+        modelClass: GoalSuggestion,
+        join: {
+          from: 'task_template.goalSuggestionId',
+          to: 'goal_suggestion.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async get(taskTemplateId: string, txn: Transaction): Promise<TaskTemplate> {
     const taskTemplate = await this.query(txn).findOne({ id: taskTemplateId, deletedAt: null });

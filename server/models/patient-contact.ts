@@ -2,6 +2,10 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Address from './address';
 import Email from './email';
+import Patient from './patient';
+import PatientContactAddress from './patient-contact-address';
+import PatientContactEmail from './patient-contact-email';
+import PatientContactPhone from './patient-contact-phone';
 import Phone from './phone';
 
 const EAGER_QUERY = '[address, email, phone]';
@@ -102,60 +106,62 @@ export default class PatientContact extends Model {
     required: ['patientId', 'updatedById', 'relationToPatient', 'firstName', 'lastName'],
   };
 
-  static relationMappings: RelationMappings = {
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_contact.patientId',
-        to: 'patient.id',
-      },
-    },
-
-    // has only one non-deleted address
-    address: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'address',
-      join: {
-        from: 'patient_contact.id',
-        through: {
-          modelClass: 'patient-contact-address',
-          from: 'patient_contact_address.patientContactId',
-          to: 'patient_contact_address.addressId',
+  static get relationMappings(): RelationMappings {
+    return {
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_contact.patientId',
+          to: 'patient.id',
         },
-        to: 'address.id',
       },
-    },
 
-    // has only one non-deleted email
-    email: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'email',
-      join: {
-        from: 'patient_contact.id',
-        through: {
-          modelClass: 'patient-contact-email',
-          from: 'patient_contact_email.patientContactId',
-          to: 'patient_contact_email.emailId',
+      // has only one non-deleted address
+      address: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Address,
+        join: {
+          from: 'patient_contact.id',
+          through: {
+            modelClass: PatientContactAddress,
+            from: 'patient_contact_address.patientContactId',
+            to: 'patient_contact_address.addressId',
+          },
+          to: 'address.id',
         },
-        to: 'email.id',
       },
-    },
 
-    phone: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'phone',
-      join: {
-        from: 'patient_contact.id',
-        through: {
-          modelClass: 'patient-contact-phone',
-          from: 'patient_contact_phone.patientContactId',
-          to: 'patient_contact_phone.phoneId',
+      // has only one non-deleted email
+      email: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Email,
+        join: {
+          from: 'patient_contact.id',
+          through: {
+            modelClass: PatientContactEmail,
+            from: 'patient_contact_email.patientContactId',
+            to: 'patient_contact_email.emailId',
+          },
+          to: 'email.id',
         },
-        to: 'phone.id',
       },
-    },
-  };
+
+      phone: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Phone,
+        join: {
+          from: 'patient_contact.id',
+          through: {
+            modelClass: PatientContactPhone,
+            from: 'patient_contact_phone.patientContactId',
+            to: 'patient_contact_phone.phoneId',
+          },
+          to: 'phone.id',
+        },
+      },
+    };
+  }
 
   static async get(patientContactId: string, txn: Transaction): Promise<PatientContact> {
     const patientContact = await this.query(txn)

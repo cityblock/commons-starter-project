@@ -40,24 +40,26 @@ export default class Clinic extends BaseModel {
     required: ['name', 'departmentId'],
   };
 
-  static relationMappings: RelationMappings = {
-    users: {
-      relation: Model.HasManyRelation,
-      modelClass: 'user',
-      join: {
-        from: 'clinic.id',
-        to: 'user.homeClinicId',
+  static get relationMappings(): RelationMappings {
+    return {
+      users: {
+        relation: Model.HasManyRelation,
+        modelClass: User,
+        join: {
+          from: 'clinic.id',
+          to: 'user.homeClinicId',
+        },
       },
-    },
-    patients: {
-      relation: Model.HasManyRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'clinic.id',
-        to: 'patient.homeClinicId',
+      patients: {
+        relation: Model.HasManyRelation,
+        modelClass: Patient,
+        join: {
+          from: 'clinic.id',
+          to: 'patient.homeClinicId',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(clinic: IClinicEditableFields, txn: Transaction): Promise<Clinic> {
     return this.query(txn).insertAndFetch(clinic);

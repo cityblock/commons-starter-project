@@ -54,24 +54,26 @@ export default class SmsMessage extends BaseModel {
     required: ['userId', 'contactNumber', 'direction', 'body', 'twilioPayload'],
   };
 
-  static relationMappings: RelationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'sms_message.userId',
-        to: 'user.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'sms_message.userId',
+          to: 'user.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'sms_message.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'sms_message.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async create(input: ISmsMessageCreate, txn: Transaction): Promise<SmsMessage> {
     // grab patient id currently associated with that number if it exsits

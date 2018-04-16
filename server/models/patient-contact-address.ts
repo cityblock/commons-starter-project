@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import Address from './address';
 import BaseModel from './base-model';
+import Patient from './patient';
 import PatientContact from './patient-contact';
 
 interface IPatientContactAddressOptions {
@@ -32,24 +33,26 @@ export default class PatientContactAddress extends BaseModel {
     required: ['addressId', 'patientContactId'],
   };
 
-  static relationMappings: RelationMappings = {
-    address: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'address',
-      join: {
-        from: 'patient_contact_address.addressId',
-        to: 'address.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      address: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Address,
+        join: {
+          from: 'patient_contact_address.addressId',
+          to: 'address.id',
+        },
       },
-    },
-    patient: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_contact_address.patientId',
-        to: 'patient.id',
+      patient: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_contact_address.patientId',
+          to: 'patient.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static async getForPatientContact(
     patientContactId: string,

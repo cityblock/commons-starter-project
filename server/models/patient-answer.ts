@@ -3,11 +3,13 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
 import BaseModel from './base-model';
+import Patient from './patient';
 import PatientAnswerEvent, { IPatientAnswerEventOptions } from './patient-answer-event';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import Question from './question';
 import RiskAreaAssessmentSubmission from './risk-area-assessment-submission';
 import ScreeningTool from './screening-tool';
+import User from './user';
 
 type IAnswers = Array<{
   answerId: string;
@@ -110,80 +112,82 @@ export default class PatientAnswer extends BaseModel {
     ],
   };
 
-  static relationMappings: RelationMappings = {
-    answer: {
-      relation: Model.HasOneRelation,
-      modelClass: 'answer',
-      join: {
-        from: 'patient_answer.answerId',
-        to: 'answer.id',
-      },
-    },
-
-    user: {
-      relation: Model.HasOneRelation,
-      modelClass: 'user',
-      join: {
-        from: 'patient_answer.userId',
-        to: 'user.id',
-      },
-    },
-
-    patient: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient',
-      join: {
-        from: 'patient_answer.patientId',
-        to: 'patient.id',
-      },
-    },
-
-    question: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'question',
-      join: {
-        from: 'patient_answer.answerId',
-        through: {
-          modelClass: 'answer',
-          from: 'answer.id',
-          to: 'answer.questionId',
+  static get relationMappings(): RelationMappings {
+    return {
+      answer: {
+        relation: Model.HasOneRelation,
+        modelClass: Answer,
+        join: {
+          from: 'patient_answer.answerId',
+          to: 'answer.id',
         },
-        to: 'question.id',
       },
-    },
 
-    patientScreeningToolSubmission: {
-      relation: Model.HasOneRelation,
-      modelClass: 'patient-screening-tool-submission',
-      join: {
-        from: 'patient_answer.patientScreeningToolSubmissionId',
-        to: 'patient_screening_tool_submission.id',
-      },
-    },
-
-    riskAreaAssessmentSubmission: {
-      relation: Model.HasOneRelation,
-      modelClass: 'risk-area-assessment-submission',
-      join: {
-        from: 'patient_answer.riskAreaAssessmentSubmissionId',
-        to: 'risk_area_assessment_submission.id',
-      },
-    },
-
-    screeningTool: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'screening-tool',
-      join: {
-        from: 'patient_answer.screeningToolSubmissionId',
-        through: {
-          modelClass: 'patient-screening-tool-submission',
-          from: 'patient_screening_tool_submission.id',
-          to: 'patient_screening_tool_submission.screeningToolId',
+      user: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'patient_answer.userId',
+          to: 'user.id',
         },
-        to: 'screening_tool.id',
       },
-    },
-  };
+
+      patient: {
+        relation: Model.HasOneRelation,
+        modelClass: Patient,
+        join: {
+          from: 'patient_answer.patientId',
+          to: 'patient.id',
+        },
+      },
+
+      question: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: Question,
+        join: {
+          from: 'patient_answer.answerId',
+          through: {
+            modelClass: Answer,
+            from: 'answer.id',
+            to: 'answer.questionId',
+          },
+          to: 'question.id',
+        },
+      },
+
+      patientScreeningToolSubmission: {
+        relation: Model.HasOneRelation,
+        modelClass: PatientScreeningToolSubmission,
+        join: {
+          from: 'patient_answer.patientScreeningToolSubmissionId',
+          to: 'patient_screening_tool_submission.id',
+        },
+      },
+
+      riskAreaAssessmentSubmission: {
+        relation: Model.HasOneRelation,
+        modelClass: RiskAreaAssessmentSubmission,
+        join: {
+          from: 'patient_answer.riskAreaAssessmentSubmissionId',
+          to: 'risk_area_assessment_submission.id',
+        },
+      },
+
+      screeningTool: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: ScreeningTool,
+        join: {
+          from: 'patient_answer.screeningToolSubmissionId',
+          through: {
+            modelClass: PatientScreeningToolSubmission,
+            from: 'patient_screening_tool_submission.id',
+            to: 'patient_screening_tool_submission.screeningToolId',
+          },
+          to: 'screening_tool.id',
+        },
+      },
+    };
+  }
 
   static async get(patientAnswerId: string, txn: Transaction): Promise<PatientAnswer> {
     const patientAnswer = await this.query(txn)

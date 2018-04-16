@@ -41,7 +41,6 @@ export default class Db {
           .select('table_name')
           .from('tables')
           .whereRaw(`table_catalog = ? AND table_schema = ? AND table_name != ?`, [
-            trx.client.database(),
             'public',
             'knex_migrations',
           ])
@@ -56,6 +55,7 @@ export default class Db {
   static async release() {
     if (knex) {
       await knex.destroy();
+      knex = null;
     }
     singleton = null;
   }

@@ -60,7 +60,6 @@ describe('User Permissions Check', () => {
 
   beforeAll(async () => {
     await Db.get();
-    await Db.clear();
   });
 
   beforeEach(async () => {

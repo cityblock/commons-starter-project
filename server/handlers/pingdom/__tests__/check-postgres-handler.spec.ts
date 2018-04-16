@@ -21,7 +21,6 @@ describe('postgres pingdom test', () => {
 
   beforeEach(async () => {
     await Db.get();
-    await Db.clear();
     error = console.error;
     console.error = jest.fn();
     txn = await transaction.start(User.knex());
@@ -60,7 +59,7 @@ describe('postgres pingdom test', () => {
     expect(response.sendStatus).toBeCalledWith(200);
   });
 
-  it('errors if athena api call fails', async () => {
+  it('errors if postgres fails', async () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     response.status = jest.fn();

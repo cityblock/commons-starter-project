@@ -28,12 +28,12 @@ describe('main', () => {
     await Db.release();
   });
 
-  it('should be able to Initialize a server (production)', async () => {
+  xit('should be able to Initialize a server (production)', async () => {
     const server = await main({ env: 'production', allowCrossDomainRequests: true });
     return server.close();
   });
 
-  it('should be able to place graphql queries', async () => {
+  xit('should be able to place graphql queries', async () => {
     const user = await transaction(User.knex(), async innerTxn => {
       const clinic = await Clinic.create(
         {
@@ -88,7 +88,7 @@ describe('main', () => {
     return server.close();
   });
 
-  it('returns errors from graphql mutations that throw an error', async () => {
+  xit('returns errors from graphql mutations that throw an error', async () => {
     const email = 'a@b.com';
     const user = await transaction(User.knex(), async innerTxn => {
       const clinic = await Clinic.create(

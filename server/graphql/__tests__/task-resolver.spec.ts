@@ -135,7 +135,7 @@ describe('task tests', () => {
 
   describe('resolve patient tasks', () => {
     it('resolves patient tasks', async () => {
-      const { patient, task2, user } = await setup(txn);
+      const { patient, task1, user } = await setup(txn);
       const query = `{
           tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
             edges {
@@ -156,8 +156,8 @@ describe('task tests', () => {
         edges: [
           {
             node: {
-              id: task2.id,
-              title: task2.title,
+              id: task1.id,
+              title: task1.title,
             },
           },
         ],
@@ -788,7 +788,7 @@ describe('task tests', () => {
     });
   });
 
-  describe.only('current user tasks', () => {
+  describe('current user tasks', () => {
     it('resolves current user tasks', async () => {
       const { user, user2, patient, task1, task2 } = await setup(txn);
       await Task.create(

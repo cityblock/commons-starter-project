@@ -145,7 +145,6 @@ describe('care plan resolver tests', () => {
 
   beforeAll(async () => {
     db = await Db.get();
-    await Db.clear();
   });
 
   beforeEach(async () => {

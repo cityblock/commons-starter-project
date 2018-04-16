@@ -43,7 +43,6 @@ describe('care team', () => {
 
   beforeAll(async () => {
     db = await Db.get();
-    await Db.clear();
   });
 
   beforeEach(async () => {

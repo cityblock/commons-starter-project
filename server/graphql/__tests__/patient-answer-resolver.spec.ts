@@ -108,7 +108,6 @@ describe('patient answer tests', () => {
 
   beforeAll(async () => {
     db = await Db.get();
-    await Db.clear();
   });
 
   beforeEach(async () => {

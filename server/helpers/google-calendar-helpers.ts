@@ -77,19 +77,31 @@ export async function addUserToGoogleCalendar(
 ): Promise<AxiosResponse<any>> {
   const calendar = google.calendar({ version: 'v3' });
 
-  return calendar.acl.insert(
-    {
-      auth: jwtClient,
-      calendarId,
-      resource: {
-        role: 'writer',
-        scope: {
-          type: 'user',
-          value: userEmail,
-        },
+  return calendar.acl.insert({
+    auth: jwtClient,
+    calendarId,
+    resource: {
+      role: 'writer',
+      scope: {
+        type: 'user',
+        value: userEmail,
       },
     },
-  );
+  });
+}
+
+export async function deleteUserFromGoogleCalendar(
+  jwtClient: OAuth2Client,
+  calendarId: string,
+  userEmail: string,
+): Promise<AxiosResponse<any>> {
+  const calendar = google.calendar({ version: 'v3' });
+
+  // TODO: add ACL rule id
+  return calendar.acl.delete({
+    auth: jwtClient,
+    calendarId,
+  });
 }
 
 export async function createGoogleCalendarForPatientWithTeam(
@@ -105,8 +117,46 @@ export async function createGoogleCalendarForPatientWithTeam(
 
   const response = await createGoogleCalendarForPatient(jwtClient, calendarName);
   const calendarId = response.data.id;
-  const promises = userEmails.map(async email => addUserToGoogleCalendar(jwtClient, calendarId, email));
+  const promises = userEmails.map(async email =>
+    addUserToGoogleCalendar(jwtClient, calendarId, email),
+  );
   await Promise.all(promises);
 
   return response;
+}
+
+export interface IGooglePaginationOptions {
+  pageToken: string | null;
+  pageSize: number;
+}
+
+export async function getGoogleCalendarEvents(
+  calendarId: string,
+  { pageToken, pageSize }: IGooglePaginationOptions,
+  testConfig?: any,
+) {
+  // TODO: have the email change to whatever we use for calendars long term
+  const jwtClient = createGoogleCalendarAuth(
+    'cristina@testorg.cityblock.engineering',
+    testConfig,
+  ) as any;
+
+  const calendar = google.calendar({ version: 'v3' });
+  const response = await calendar.events.list({
+    auth: jwtClient,
+    calendarId,
+    maxResults: pageSize,
+    singleEvents: true,
+    orderBy: 'startTime',
+    pageToken,
+  });
+
+  const events = response.data.items.map(item => {
+    return { id: item.id, title: item.summary, startDatetime: item.start.dateTime };
+  });
+
+  return {
+    events,
+    nextPageToken: response.data.nextPageToken,
+  };
 }

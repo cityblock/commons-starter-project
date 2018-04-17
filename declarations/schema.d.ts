@@ -586,6 +586,11 @@ declare module 'schema' {
     patientSocialSecurity: IPatientSocialSecurity;
 
     /**
+     * List of google calendar events for a patient
+     */
+    calendarEventsForPatient: ICalendarEventEdges;
+
+    /**
      * SMS messages for given user and patient
      */
     smsMessages: ISmsMessageEdges;
@@ -933,6 +938,11 @@ declare module 'schema' {
     patientId: string;
     glassBreakId?: string | null;
   }
+  interface ICalendarEventsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    pageSize?: number | null;
+    pageToken?: string | null;
+  }
   interface ISmsMessagesOnRootQueryTypeArguments {
     patientId: string;
     pageNumber: number;
@@ -1148,6 +1158,7 @@ declare module 'schema' {
     hasDeclinedPhotoUpload: boolean | null;
     hasUploadedPhoto: boolean | null;
     needToKnow: string | null;
+    googleCalendarId: string | null;
   }
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
@@ -2422,6 +2433,28 @@ declare module 'schema' {
   interface IPatientSocialSecurity {
     id: string;
     ssn: string | null;
+  }
+
+  /**
+   * Google calendar event list
+   */
+  interface ICalendarEventEdges {
+    events: Array<ICalendarEvent>;
+    pageInfo: IGooglePageInfo | null;
+  }
+
+  interface ICalendarEvent {
+    id: string;
+    startDatetime: string;
+    title: string;
+  }
+
+  /**
+   * Google API page info
+   */
+  interface IGooglePageInfo {
+    nextPageToken: string | null;
+    previousPageToken: string | null;
   }
 
   /**

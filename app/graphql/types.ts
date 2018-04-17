@@ -1676,6 +1676,27 @@ export interface getAnswerQuery {
   } | null,
 };
 
+export interface getCalendarEventsForPatientQueryVariables {
+  patientId: string,
+  pageSize: number,
+  pageToken?: string | null,
+};
+
+export interface getCalendarEventsForPatientQuery {
+  // List of google calendar events for a patient
+  calendarEventsForPatient:  {
+    events:  Array< {
+      id: string,
+      title: string,
+      startDatetime: string,
+    } >,
+    pageInfo:  {
+      nextPageToken: string | null,
+      previousPageToken: string | null,
+    } | null,
+  },
+};
+
 export interface getCBOCategoriesQuery {
   // all CBO categories
   CBOCategories:  Array< {
@@ -3354,6 +3375,7 @@ export interface getPatientQuery {
       hasMolst: boolean | null,
       hasDeclinedPhotoUpload: boolean | null,
       hasUploadedPhoto: boolean | null,
+      googleCalendarId: string | null,
     },
     patientDataFlags:  Array< {
       id: string,
@@ -9860,6 +9882,12 @@ export interface FullAnswerFragment {
   } | null,
 };
 
+export interface FullCalendarEventFragment {
+  id: string,
+  title: string,
+  startDatetime: string,
+};
+
 export interface FullCarePlanSuggestionForPatientFragment {
   id: string,
   patientId: string,
@@ -11066,6 +11094,7 @@ export interface FullPatientForProfileFragment {
     hasMolst: boolean | null,
     hasDeclinedPhotoUpload: boolean | null,
     hasUploadedPhoto: boolean | null,
+    googleCalendarId: string | null,
   },
   patientDataFlags:  Array< {
     id: string,
@@ -11187,6 +11216,7 @@ export interface FullPatientInfoFragment {
   hasMolst: boolean | null,
   hasDeclinedPhotoUpload: boolean | null,
   hasUploadedPhoto: boolean | null,
+  googleCalendarId: string | null,
 };
 
 export interface FullPatientListFragment {

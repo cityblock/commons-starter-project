@@ -1,14 +1,49 @@
 import { intersection } from 'lodash';
-import { ICalendarCreateEventForPatientInput, IRootMutationType } from 'schema';
+import { ICalendarCreateEventForPatientInput, IRootMutationType, IRootQueryType } from 'schema';
 import {
   createGoogleCalendarEventUrl,
   createGoogleCalendarForPatientWithTeam,
+  getGoogleCalendarEvents,
 } from '../helpers/google-calendar-helpers';
 import CareTeam from '../models/care-team';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
+
+export interface IResolveCalendarEventsOptions {
+  patientId: string;
+  pageSize: number;
+  pageToken: string | null;
+}
+
+export async function resolveCalendarEventsForPatient(
+  source: any,
+  { patientId, pageSize, pageToken }: IResolveCalendarEventsOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootQueryType['calendarEventsForPatient']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+
+  logger.log(`GET all calendar events for patient ${patientId} by ${userId}`, 2);
+
+  const patient = await Patient.get(patientId, txn);
+  if (!patient.patientInfo.googleCalendarId) {
+    return { events: [], pageInfo: { nextPageToken: null, previousPageToken: null } };
+  }
+
+  const results = await getGoogleCalendarEvents(patient.patientInfo.googleCalendarId, {
+    pageToken,
+    pageSize,
+  });
+
+  return {
+    events: results.events,
+    pageInfo: {
+      nextPageToken: results.nextPageToken,
+      previousPageToken: pageToken,
+    },
+  };
+}
 
 export interface ICalendarCreateEventForPatientOptions {
   input: ICalendarCreateEventForPatientInput;
@@ -25,15 +60,14 @@ export async function calendarCreateEventForPatient(
   logger.log(`CREATE calendar for patient ${patientId} by ${userId}`, 2);
 
   const patient = await Patient.get(patientId, txn);
-  const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
-  let calendarId = patientInfo.googleCalendarId;
+  let calendarId = patient.patientInfo.googleCalendarId;
   const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
   const careTeamEmails = careTeamRecords.map(record => record.user.email);
 
   // disallow inviting emails of people not on a users care team
   const filteredInvitees = intersection(inviteeEmails, careTeamEmails);
 
-  if (!patientInfo.googleCalendarId) {
+  if (!calendarId) {
     try {
       const response = await createGoogleCalendarForPatientWithTeam(
         `${patient.firstName} ${patient.lastName} - [${patient.cityblockId}]`,
@@ -43,11 +77,10 @@ export async function calendarCreateEventForPatient(
       calendarId = response.data.id;
       await PatientInfo.edit(
         { updatedById: userId!, googleCalendarId: calendarId },
-        patientInfo.id,
+        patient.patientInfo.id,
         txn,
       );
     } catch (err) {
-      console.warn(err);
       throw new Error(`There was an error creating a calendar for patient: ${patientId}`);
     }
   }

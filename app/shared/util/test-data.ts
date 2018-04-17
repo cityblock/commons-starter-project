@@ -217,6 +217,7 @@ export const patient = {
     hasMolst: false,
     hasDeclinedPhotoUpload: false,
     hasUploadedPhoto: false,
+    googleCalendarId: null,
   },
   patientDataFlags: [],
   cityblockId: 123,

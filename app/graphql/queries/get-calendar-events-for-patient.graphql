@@ -1,0 +1,13 @@
+#import "../fragments/full-calendar-event.graphql"
+
+query getCalendarEventsForPatient($patientId: ID!, $pageSize: Int!, $pageToken: String) {
+  calendarEventsForPatient(patientId: $patientId, pageSize: $pageSize, pageToken: $pageToken) {
+    events {
+      ...FullCalendarEvent
+    }
+    pageInfo {
+      nextPageToken
+      previousPageToken
+    }
+  }
+}

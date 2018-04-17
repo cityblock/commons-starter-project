@@ -406,6 +406,7 @@ type PatientInfo implements uniqueId {
   hasDeclinedPhotoUpload: Boolean
   hasUploadedPhoto: Boolean
   needToKnow: String
+  googleCalendarId: String
 }
 
 # Patient contact that is editable in Commons
@@ -1572,6 +1573,24 @@ type SignedUrl {
 # google calendar url for patient calendar event
 type CalendarUrl {
   eventCreateUrl: String!
+}
+
+# Google API page info
+type GooglePageInfo {
+  nextPageToken: String
+  previousPageToken: String
+}
+
+# Google calendar event list
+type CalendarEventEdges {
+  events: [CalendarEvent!]!
+  pageInfo: GooglePageInfo
+}
+
+type CalendarEvent {
+  id: String!
+  startDatetime: String!
+  title: String!
 }
 
 # SMS message
@@ -2972,6 +2991,8 @@ type RootQueryType {
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
   # gets a patients full social security number and records a log of the view by user
   patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
+  # List of google calendar events for a patient
+  calendarEventsForPatient(patientId: ID!, pageSize: Int, pageToken: String): CalendarEventEdges!
   # SMS messages for given user and patient
   smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
 }

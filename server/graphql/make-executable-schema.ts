@@ -16,7 +16,10 @@ import {
   resolveAnswer,
   resolveAnswersForQuestion,
 } from './answer-resolver';
-import { calendarCreateEventForPatient } from './calendar-resolver';
+import {
+  calendarCreateEventForPatient,
+  resolveCalendarEventsForPatient,
+} from './calendar-resolver';
 import {
   carePlanSuggestionAccept,
   carePlanSuggestionDismiss,
@@ -438,6 +441,7 @@ const resolveFunctions = {
     patientPhones: resolvePhones,
     patientScratchPad: resolvePatientScratchPad,
     patientSocialSecurity: resolvePatientSocialSecurity,
+    calendarEventsForPatient: resolveCalendarEventsForPatient,
     smsMessages: resolveSmsMessages,
   },
   RootMutationType: {

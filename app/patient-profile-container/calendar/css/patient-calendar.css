@@ -47,3 +47,10 @@
   padding: 0 var(--medium-gutter);
   justify-content: flex-end;
 }
+
+.empty {
+  text-align: center;
+  padding-top: 100px;
+  color: var(--gray-font-color);
+  font-size: var(--medium-font-size);
+}

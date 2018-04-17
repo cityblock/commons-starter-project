@@ -3,25 +3,36 @@
   display: flex;
   flex-direction: column;
   margin-bottom: var(--small-gutter);
+  flex-shrink: 0;
 }
 
-/* first and not last child since direction is reversed */
-.container:first-child {
-  margin-bottom: 0;
-}
-
-.flex {
+.content {
   display: flex;
   flex-direction: column;
   max-width: 80%;
 }
 
+.alignRight {
+  align-items: flex-end;
+}
+
 .message {
-  border: 1px solid var(--border-color);
+  border: 1px solid transparent;
   border-radius: var(--big-border-radius);
   padding: var(--extra-small-gutter);
   display: inline-block;
+}
+
+.toUser {
   align-self: flex-start;
+  background: var(--white-color);
+  border-color: var(--border-color);
+}
+
+.fromUser {
+  align-self: flex-end;
+  background: var(--gray-background-color);
+  border-color: var(--gray-background-color);
 }
 
 .timestamp {

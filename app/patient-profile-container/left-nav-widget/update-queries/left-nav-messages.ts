@@ -8,14 +8,15 @@ interface ISubscriptionData {
   };
 }
 
-export const leftNavMessagesUpdateQuery = (previousResult: getSmsMessagesQuery, { subscriptionData }: ISubscriptionData) => {
+export const leftNavMessagesUpdateQuery = (
+  previousResult: getSmsMessagesQuery,
+  { subscriptionData }: ISubscriptionData,
+) => {
   if (!subscriptionData.data) return previousResult;
 
   const newMessage = subscriptionData.data.smsMessageCreated;
   // ensure we don't double add
-  if (
-    !previousResult.smsMessages.edges.find(edge => edge.node.id === newMessage.node.id)
-  ) {
+  if (!previousResult.smsMessages.edges.find(edge => edge.node.id === newMessage.node.id)) {
     const smsMessages = {
       ...previousResult.smsMessages,
       totalCount: previousResult.smsMessages.totalCount + 1,

@@ -276,7 +276,7 @@ import {
   screeningToolScoreRangeDelete,
   screeningToolScoreRangeEdit,
 } from './screening-tool-score-range-resolver';
-import { resolveSmsMessages, smsMessageSubscribe } from './sms-message-resolver';
+import { resolveSmsMessages, smsMessageCreate, smsMessageSubscribe } from './sms-message-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -570,6 +570,7 @@ const resolveFunctions = {
     progressNoteGlassBreakCreate,
     patientScratchPadEdit,
     patientPhotoSignedUrlCreate,
+    smsMessageCreate,
   },
   RootSubscriptionType: {
     smsMessageCreated: {

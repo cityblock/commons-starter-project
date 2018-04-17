@@ -8,7 +8,8 @@ import { DocumentNode } from 'graphql';
 import { throttle } from 'lodash';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-const SUBSCRIPTION_ENDPOINT = process.env.SUBSCRIPTION_ENDPOINT || 'ws://localhost:3000/subscriptions';
+const SUBSCRIPTION_ENDPOINT =
+  process.env.SUBSCRIPTION_ENDPOINT || 'ws://localhost:3000/subscriptions';
 
 async function setLastAction() {
   await localStorage.setItem('lastAction', new Date().valueOf().toString());

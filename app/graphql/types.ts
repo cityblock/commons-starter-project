@@ -8871,6 +8871,26 @@ export interface screeningToolScoreRangeEditMutation {
   } | null,
 };
 
+export interface smsMessageCreateMutationVariables {
+  patientId: string,
+  body: string,
+};
+
+export interface smsMessageCreateMutation {
+  // create a SMS message (returns node so fits into paginated results)
+  smsMessageCreate:  {
+    node:  {
+      id: string,
+      userId: string,
+      contactNumber: string,
+      patientId: string | null,
+      direction: SmsMessageDirection,
+      body: string,
+      createdAt: string,
+    },
+  },
+};
+
 export interface smsMessageCreatedSubscriptionVariables {
   patientId: string,
 };

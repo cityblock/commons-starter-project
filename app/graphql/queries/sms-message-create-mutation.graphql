@@ -1,0 +1,9 @@
+#import "../fragments/full-sms-message.graphql"
+
+mutation smsMessageCreate($patientId: ID!, $body: String!) {
+  smsMessageCreate(input: { patientId: $patientId, body: $body }) {
+    node {
+      ...FullSmsMessage
+    }
+  }
+}

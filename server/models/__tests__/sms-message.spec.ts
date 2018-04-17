@@ -54,7 +54,7 @@ describe('SMS model', () => {
     await Db.release();
   });
 
-  describe('create', async () => {
+  describe('create', () => {
     it('should create sms and associate with patient if applicable', async () => {
       const { phone, user, patient } = await setup(txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
@@ -105,7 +105,7 @@ describe('SMS model', () => {
     });
   });
 
-  describe('getForUserPatient', async () => {
+  describe('getForUserPatient', () => {
     it('should get a list of all patient messages for given user and patient', async () => {
       const { patient, phone, user } = await setup(txn);
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);

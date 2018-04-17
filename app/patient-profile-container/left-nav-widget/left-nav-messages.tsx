@@ -3,12 +3,10 @@ import { graphql } from 'react-apollo';
 import * as smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
 import * as smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
 import { getSmsMessagesQuery } from '../../graphql/types';
-import Spinner from '../../shared/library/spinner/spinner';
 import * as styles from './css/left-nav-messages.css';
-import EmptySmsMessages from './empty-sms-messages';
-import { isNewDate } from './helpers';
-import SmsMessage from './sms-message';
-import SmsMessageDate from './sms-message-date';
+import SmsMessageCreate from './sms-message-create';
+import SmsMessages from './sms-messages';
+
 import { leftNavMessagesUpdateQuery } from './update-queries/left-nav-messages';
 
 const INITIAL_PAGE_SIZE = 50;
@@ -51,28 +49,17 @@ export class LeftNavMessages extends React.Component<allProps> {
     }
 
     return null;
-  }
+  };
 
   render(): JSX.Element {
-    const { loading, error, smsMessages } = this.props;
-    if (loading || error) return <Spinner />;
+    const { loading, error, smsMessages, patientId } = this.props;
 
-    const messages: JSX.Element[] = [];
-    const { edges } = smsMessages;
-
-    if (!smsMessages.totalCount) return <EmptySmsMessages />;
-
-    edges.forEach((edge, i) => {
-      messages.push(<SmsMessage key={edge.node.id} smsMessage={edge.node} />);
-
-      // display the date banner if first SMS or change from last SMS
-      // directions are backward since display newest messages at bottom
-      if (i === edges.length - 1 || (edges[i + 1] && isNewDate(edge.node, edges[i + 1].node))) {
-        messages.push(<SmsMessageDate key={i} date={edge.node.createdAt} />);
-      }
-    });
-
-    return <div className={styles.container}>{messages}</div>;
+    return (
+      <div className={styles.container}>
+        <SmsMessages loading={loading} error={error} smsMessages={smsMessages} />
+        <SmsMessageCreate patientId={patientId} />
+      </div>
+    );
   }
 }
 

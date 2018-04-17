@@ -18,7 +18,10 @@ import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
-import { twilioSmsHandler } from './handlers/twilio/sms-message-handler';
+import {
+  twilioIncomingSmsHandler,
+  twilioOutgoingSmsHandler,
+} from './handlers/twilio/sms-message-handler';
 import { createRedisClient } from './lib/redis';
 
 kue.createQueue({ redis: createRedisClient() });
@@ -149,17 +152,13 @@ export default async (
     graphqlExpress(
       async (request: express.Request | undefined, response: express.Response | undefined) => ({
         schema: schema as any,
-        context: await getGraphQLContext(
-          request!.headers.auth_token as string || '',
-          logger,
-          {
-            existingTxn: txn,
-            request: request!,
-            response: response!,
-            dataDog: process.env.DATADOG_API_KEY ? GraphQLDog : null,
-            errorReporting,
-          },
-        ),
+        context: await getGraphQLContext((request!.headers.auth_token as string) || '', logger, {
+          existingTxn: txn,
+          request: request!,
+          response: response!,
+          dataDog: process.env.DATADOG_API_KEY ? GraphQLDog : null,
+          errorReporting,
+        }),
         formatResponse,
         formatError,
         debug: false,
@@ -188,7 +187,8 @@ export default async (
   app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMapPdf);
 
   // Twilio SMS Messages and Calls
-  app.post('/twilio-sms-message', bodyParser(), twilioSmsHandler);
+  app.post('/twilio-incoming-sms-message', bodyParser(), twilioIncomingSmsHandler);
+  app.post('/twilio-outgoing-sms-message', bodyParser(), twilioOutgoingSmsHandler);
 
   app.get('*', addHeadersMiddleware, renderApp);
 

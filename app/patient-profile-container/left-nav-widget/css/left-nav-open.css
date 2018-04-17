@@ -20,9 +20,12 @@
 .content {
   border-right: 1px solid var(--border-color);
   margin-top: 68px;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
 
   /* Account for size of button */
   height: calc(100% - 70px);
+}
+
+.scroll {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

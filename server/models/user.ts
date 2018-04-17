@@ -70,7 +70,7 @@ interface IGetByOptions {
   field?: string;
 }
 
-type GetByFields = 'email' | 'phone';
+type GetByFields = 'email' | 'phone' | 'twilioSimId';
 
 export type UserOrderOptions =
   | 'createdAt'

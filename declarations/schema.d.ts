@@ -3120,6 +3120,11 @@ declare module 'schema' {
     patientPhotoSignedUrlCreate: ISignedUrl;
 
     /**
+     * create a SMS message (returns node so fits into paginated results)
+     */
+    smsMessageCreate: ISmsMessageNode;
+
+    /**
      * creates a calendar event for a patient
      */
     calendarCreateEventForPatient: ICalendarUrl;
@@ -3522,6 +3527,9 @@ declare module 'schema' {
   }
   interface IPatientPhotoSignedUrlCreateOnRootMutationTypeArguments {
     input?: IPatientPhotoSignedUrlCreateInput | null;
+  }
+  interface ISmsMessageCreateOnRootMutationTypeArguments {
+    input?: ISmsMessageCreateInput | null;
   }
   interface ICalendarCreateEventForPatientOnRootMutationTypeArguments {
     input?: ICalendarCreateEventForPatientInput | null;
@@ -4629,6 +4637,11 @@ declare module 'schema' {
   interface IPatientPhotoSignedUrlCreateInput {
     patientId: string;
     action: IPatientSignedUrlActionEnum;
+  }
+
+  interface ISmsMessageCreateInput {
+    patientId: string;
+    body: string;
   }
 
   /**

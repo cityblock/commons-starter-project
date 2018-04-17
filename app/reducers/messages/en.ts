@@ -981,5 +981,7 @@ export const ENGLISH_TRANSLATION = {
     'documentType.hcp': 'HCP form',
     'documentType.molst': 'MOLST',
     'messages.empty': 'No history of text messages',
+    'messages.createPlaceholder': 'Text member',
+    'messages.send': 'Send',
   },
 };

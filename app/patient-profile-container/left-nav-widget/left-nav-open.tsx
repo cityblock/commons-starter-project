@@ -23,11 +23,14 @@ const LeftNavOpen: React.StatelessComponent<IProps> = (props: IProps) => {
     [styles.expanded]: isOpen,
     [styles.collapsed]: !isOpen,
   });
+  const contentStyles = classNames(styles.content, {
+    [styles.scroll]: selected && selected !== 'message',
+  });
 
   return (
     <div className={containerStyles}>
       {selected && <LeftNavHeader selected={selected} onClose={onClose} />}
-      <div className={styles.content}>
+      <div className={contentStyles}>
         {selected === 'careTeam' && <LeftNavCareTeam patientId={patientId} />}
         {selected === 'scratchPad' && (
           <LeftNavScratchPad patientId={patientId} glassBreakId={glassBreakId} />

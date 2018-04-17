@@ -48,6 +48,7 @@ describe('Patient Left Navigation Open Component', () => {
     wrapper.setProps({ selected: 'careTeam' });
 
     expect(wrapper.find(LeftNavCareTeam).props().patientId).toBe(patientId);
+    expect(wrapper.find('.content').props().className).toBe('content scroll');
 
     expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavScratchPad).length).toBe(0);
@@ -59,6 +60,7 @@ describe('Patient Left Navigation Open Component', () => {
 
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().patientId).toBe(patientId);
     expect(wrapper.find<IProps>(LeftNavScratchPad).props().glassBreakId).toBe(glassBreakId);
+    expect(wrapper.find('.content').props().className).toBe('content scroll');
 
     expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
@@ -70,6 +72,7 @@ describe('Patient Left Navigation Open Component', () => {
 
     // type issues because stateless component
     expect(wrapper.find<any>(LeftNavMessages).props().patientId).toBe(patientId);
+    expect(wrapper.find('.content').props().className).toBe('content');
 
     expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);
@@ -81,6 +84,7 @@ describe('Patient Left Navigation Open Component', () => {
 
     expect(wrapper.find(LeftNavQuickActions).props().patientId).toBe(patientId);
     expect(wrapper.find(LeftNavQuickActions).props().glassBreakId).toBe(glassBreakId);
+    expect(wrapper.find('.content').props().className).toBe('content scroll');
 
     expect(wrapper.find(LeftNavMessages).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);

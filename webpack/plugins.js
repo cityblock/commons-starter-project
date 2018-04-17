@@ -6,7 +6,12 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = ({ production = false } = {}) => {
   const plugins = [
-    new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN', 'IS_BUILDER_ENABLED', 'SUBSCRIPTION_ENDPOINT']),
+    new webpack.EnvironmentPlugin([
+      'NODE_ENV',
+      'GOOGLE_OAUTH_TOKEN',
+      'IS_BUILDER_ENABLED',
+      'SUBSCRIPTION_ENDPOINT',
+    ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];
   if (!production) {

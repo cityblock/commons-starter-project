@@ -111,10 +111,10 @@ export function createMockAddress(userId: string) {
   };
 }
 
-export function createMockPhone(phoneNumber?: string) {
+export function createMockPhone(phoneNumber?: string, phoneType?: PhoneTypeOptions) {
   return {
     phoneNumber: phoneNumber || '123-456-7890',
-    type: 'home' as PhoneTypeOptions,
+    type: phoneType || ('home' as PhoneTypeOptions),
     description: 'moms home phone',
   };
 }

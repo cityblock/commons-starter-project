@@ -2410,6 +2410,11 @@ input PatientPhotoSignedUrlCreateInput {
   action: PatientSignedUrlAction!
 }
 
+input SmsMessageCreateInput {
+  patientId: ID!
+  body: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2690,6 +2695,8 @@ type RootMutationType {
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
   # generate a signed URL for patient photo
   patientPhotoSignedUrlCreate(input: PatientPhotoSignedUrlCreateInput): SignedUrl!
+  # create a SMS message (returns node so fits into paginated results)
+  smsMessageCreate(input: SmsMessageCreateInput): SmsMessageNode!
   # creates a calendar event for a patient
   calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
 }

@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  margin-bottom: var(--small-gutter);
+  margin-bottom: var(--medium-gutter);
 }
 
 .date {

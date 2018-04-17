@@ -19,6 +19,10 @@ import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler'
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
 import {
+  twilioCompleteCallHandler,
+  twilioIncomingCallHandler,
+} from './handlers/twilio/phone-call-handler';
+import {
   twilioIncomingSmsHandler,
   twilioOutgoingSmsHandler,
 } from './handlers/twilio/sms-message-handler';
@@ -27,6 +31,7 @@ import { createRedisClient } from './lib/redis';
 kue.createQueue({ redis: createRedisClient() });
 
 const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
+export const TWILIO_COMPLETE_ENDPOINT = '/twilio-complete-phone-call';
 
 export const checkAuth = (username: string, password: string) => (
   req: express.Request,
@@ -189,6 +194,8 @@ export default async (
   // Twilio SMS Messages and Calls
   app.post('/twilio-incoming-sms-message', bodyParser(), twilioIncomingSmsHandler);
   app.post('/twilio-outgoing-sms-message', bodyParser(), twilioOutgoingSmsHandler);
+  app.post('/twilio-incoming-phone-call', bodyParser(), twilioIncomingCallHandler);
+  app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser(), twilioCompleteCallHandler);
 
   app.get('*', addHeadersMiddleware, renderApp);
 

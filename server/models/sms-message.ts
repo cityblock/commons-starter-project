@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import { validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientPhone from './patient-phone';
@@ -76,6 +77,8 @@ export default class SmsMessage extends BaseModel {
   }
 
   static async create(input: ISmsMessageCreate, txn: Transaction): Promise<SmsMessage> {
+    await validatePhoneNumberForTwilio(input.contactNumber);
+
     // grab patient id currently associated with that number if it exsits
     const patientId = await PatientPhone.getPatientIdForPhoneNumber(input.contactNumber, txn);
 

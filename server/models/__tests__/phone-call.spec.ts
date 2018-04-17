@@ -104,6 +104,24 @@ describe('Phone Call Model', () => {
         twilioPayload,
       });
     });
+
+    it('should not create a phone call with invalid contact number', async () => {
+      const { user } = await setup(txn);
+
+      await expect(
+        PhoneCall.create(
+          {
+            userId: user.id,
+            contactNumber: '(123) 456-7890',
+            direction: 'toUser',
+            duration: 11,
+            callStatus,
+            twilioPayload,
+          },
+          txn,
+        ),
+      ).rejects.toMatch('Phone number must be in +12345678901 format');
+    });
   });
 
   describe('getForUserPatient', () => {

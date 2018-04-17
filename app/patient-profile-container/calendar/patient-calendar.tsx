@@ -113,10 +113,8 @@ export class PatientCalendar extends React.Component<allProps, IState> {
 
     const thisYearEventsHtml = this.renderYear(thisYearEvents);
     const nextYearEventsHtml = this.renderYear(nextYearEvents);
-    const emptyHtml = (!events.length) ? (
-      <div className={styles.empty}>
-        There are currently no appointments for this patient
-      </div>
+    const emptyHtml = !events.length ? (
+      <div className={styles.empty}>There are currently no appointments for this patient</div>
     ) : null;
 
     return (

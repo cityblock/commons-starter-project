@@ -103,6 +103,23 @@ describe('SMS model', () => {
         twilioPayload,
       });
     });
+
+    it('should not create a phone call with invalid contact number', async () => {
+      const { user } = await setup(txn);
+
+      await expect(
+        SmsMessage.create(
+          {
+            userId: user.id,
+            contactNumber: '(123) 456-7890',
+            direction: 'toUser',
+            body,
+            twilioPayload,
+          },
+          txn,
+        ),
+      ).rejects.toMatch('Phone number must be in +12345678901 format');
+    });
   });
 
   describe('getForUserPatient', () => {

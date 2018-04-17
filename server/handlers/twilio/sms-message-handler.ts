@@ -8,7 +8,7 @@ import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
 import pubsub from '../../subscriptions';
 
-const SIM_PREFIX = 'sim:';
+export const SIM_PREFIX = 'sim:';
 
 // TODO: fix type weirdness
 const MessagingResponse = (twilio as any).twiml.MessagingResponse;
@@ -25,14 +25,17 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
     const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
 
     if (!user) {
-      // TODO: handle (very unlikely) case when no user with that twilio number found
+      // TODO: handle (very unlikely) case when no user with that twilio number found'
+      twiml.message(
+        "We're sorry, we don't have a user with that phone number. Please call us for help",
+      );
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       return res.end(twiml.toString());
     }
 
     try {
       if (!user.twilioSimId) {
-        throw new Error('User does not have Twilio SIM registered');
+        throw new Error(`User ${user.id} does not have Twilio SIM registered`);
       }
       // relay the SMS message to the user
       twiml.message(

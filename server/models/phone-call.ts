@@ -3,16 +3,35 @@ import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientPhone from './patient-phone';
+import { Direction, DIRECTION } from './sms-message';
 import User from './user';
 
-export type Direction = 'toUser' | 'fromUser';
-export const DIRECTION: Direction[] = ['toUser', 'fromUser'];
+type CallStatus =
+  | 'completed'
+  | 'busy'
+  | 'no-answer'
+  | 'failed'
+  | 'canceled'
+  | 'queued'
+  | 'ringing'
+  | 'in-progress';
+const CALL_STATUS: CallStatus[] = [
+  'completed',
+  'busy',
+  'no-answer',
+  'failed',
+  'canceled',
+  'queued',
+  'ringing',
+  'in-progress',
+];
 
-interface ISmsMessageCreate {
+interface IPhoneCallCreate {
   userId: string;
   contactNumber: string;
   direction: Direction;
-  body: string;
+  callStatus: CallStatus;
+  duration: number;
   twilioPayload: object;
 }
 
@@ -22,17 +41,18 @@ interface IGetForUserPatientParams {
 }
 
 /* tslint:disable:member-ordering */
-export default class SmsMessage extends BaseModel {
+export default class PhoneCall extends BaseModel {
   userId: string;
   user: User;
   contactNumber: string;
   patientId: string | null;
   patient: Patient | null;
   direction: Direction;
-  body: string;
+  callStatus: CallStatus;
+  duration: number;
   twilioPayload: object;
 
-  static tableName = 'sms_message';
+  static tableName = 'phone_call';
 
   // Not using for now as we will validate through patient model
   static hasPHI = false;
@@ -45,13 +65,14 @@ export default class SmsMessage extends BaseModel {
       contactNumber: { type: 'string', minLength: 12, maxLength: 12 },
       patientId: { type: ['string', 'null'], format: 'uuid' },
       direction: { type: 'string', enum: DIRECTION },
-      body: { type: 'string', minLength: 1 }, // cannot be blank
+      callStatus: { type: 'string', enum: CALL_STATUS },
+      duration: { type: 'integer', minimum: 0 },
       twilioPayload: { type: 'json' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['userId', 'contactNumber', 'direction', 'body', 'twilioPayload'],
+    required: ['userId', 'contactNumber', 'direction', 'callStatus', 'duration', 'twilioPayload'],
   };
 
   static get relationMappings(): RelationMappings {
@@ -60,7 +81,7 @@ export default class SmsMessage extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: User,
         join: {
-          from: 'sms_message.userId',
+          from: 'phone_call.userId',
           to: 'user.id',
         },
       },
@@ -68,14 +89,14 @@ export default class SmsMessage extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: Patient,
         join: {
-          from: 'sms_message.patientId',
+          from: 'phone_call.patientId',
           to: 'patient.id',
         },
       },
     };
   }
 
-  static async create(input: ISmsMessageCreate, txn: Transaction): Promise<SmsMessage> {
+  static async create(input: IPhoneCallCreate, txn: Transaction): Promise<PhoneCall> {
     // grab patient id currently associated with that number if it exsits
     const patientId = await PatientPhone.getPatientIdForPhoneNumber(input.contactNumber, txn);
 
@@ -90,15 +111,15 @@ export default class SmsMessage extends BaseModel {
     { userId, patientId }: IGetForUserPatientParams,
     { pageNumber, pageSize }: IPaginationOptions,
     txn: Transaction,
-  ): Promise<IPaginatedResults<SmsMessage>> {
-    const messages = (await this.query(txn)
+  ): Promise<IPaginatedResults<PhoneCall>> {
+    const phoneCalls = (await this.query(txn)
       .where({ patientId, userId, deletedAt: null })
       .orderBy('createdAt', 'DESC')
       .page(pageNumber, pageSize)) as any;
 
     return {
-      results: messages.results,
-      total: messages.total,
+      results: phoneCalls.results,
+      total: phoneCalls.total,
     };
   }
 }

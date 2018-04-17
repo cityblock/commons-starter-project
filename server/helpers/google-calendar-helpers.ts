@@ -60,14 +60,12 @@ export async function createGoogleCalendarForPatient(
   calendarName: string,
 ): Promise<AxiosResponse<ICalendar>> {
   const calendar = google.calendar({ version: 'v3' });
-  return calendar.calendars.insert(
-    {
-      auth: jwtClient,
-      resource: {
-        summary: calendarName,
-      },
+  return calendar.calendars.insert({
+    auth: jwtClient,
+    resource: {
+      summary: calendarName,
     },
-  );
+  });
 }
 
 export async function addUserToGoogleCalendar(

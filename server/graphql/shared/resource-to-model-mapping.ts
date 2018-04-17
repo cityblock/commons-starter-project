@@ -46,6 +46,7 @@ import PatientSocialSecurityView from '../../models/patient-social-security-view
 import PatientState from '../../models/patient-state';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import Phone from '../../models/phone';
+import PhoneCall from '../../models/phone-call';
 import ProgressNote from '../../models/progress-note';
 import ProgressNoteGlassBreak from '../../models/progress-note-glass-break';
 import ProgressNoteTemplate from '../../models/progress-note-template';
@@ -114,6 +115,7 @@ export type ModelResource =
   | 'patientState'
   | 'patientTaskSuggestion'
   | 'phone'
+  | 'phoneCall'
   | 'progressNote'
   | 'progressNoteGlassBreak'
   | 'progressNoteTemplate'
@@ -186,6 +188,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientState: PatientState,
   patientTaskSuggestion: PatientTaskSuggestion,
   phone: Phone,
+  phoneCall: PhoneCall,
   progressNote: ProgressNote,
   progressNoteGlassBreak: ProgressNoteGlassBreak,
   progressNoteTemplate: ProgressNoteTemplate,

@@ -55,7 +55,7 @@
   "jest": {
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",
-      "^.+\\.(j|t)sx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
@@ -72,10 +72,10 @@
       "tsx",
       "js",
       "jsx",
-      "json"
+      "json",
+      "node"
     ],
     "setupFiles": [
-      "raf/polyfill",
       "./browser-mocks.js",
       "./enzyme-setup.js"
     ],

@@ -2,13 +2,19 @@ import { format } from 'date-fns';
 import { filter, groupBy } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
+import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import * as styles from './css/patient-calendar.css';
+import PatientAppointmentModal from './patient-appointment-modal';
 
 interface IProps {
+  match: {
+    params: {
+      patientId: string;
+    };
+  };
   loading?: boolean;
-  patientId: string;
 }
 
 interface IEvent {
@@ -36,7 +42,28 @@ const EVENTS = [
   },
 ];
 
-export default class PatientCalendar extends React.Component<IProps> {
+interface IState {
+  isEventModalVisible: boolean;
+}
+
+export default class PatientCalendar extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = { isEventModalVisible: false };
+  }
+
+  handleAddEventClick = () => {
+    this.setState({ isEventModalVisible: true });
+  };
+
+  handleClose = () => {
+    this.setState({ isEventModalVisible: false });
+  };
+
+  handleViewCalendarClick = () => {
+    // TODO: have link to patients google calendar
+  };
+
   renderEvent({ datetime, title }: IEvent) {
     return (
       <div
@@ -81,7 +108,8 @@ export default class PatientCalendar extends React.Component<IProps> {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, match } = this.props;
+    const { isEventModalVisible } = this.state;
 
     if (loading) return <Spinner />;
 
@@ -96,8 +124,23 @@ export default class PatientCalendar extends React.Component<IProps> {
 
     return (
       <div className={styles.container}>
-        {thisYearEventsHtml}
-        {nextYearEventsHtml}
+        <div className={styles.navBar}>
+          <Button
+            messageId="patientCalendar.viewGoogleCalender"
+            onClick={this.handleViewCalendarClick}
+            color="white"
+          />
+          <Button messageId="patientCalendar.addEvent" onClick={this.handleAddEventClick} />
+        </div>
+        <div className={styles.body}>
+          {thisYearEventsHtml}
+          {nextYearEventsHtml}
+        </div>
+        <PatientAppointmentModal
+          isVisible={isEventModalVisible}
+          patientId={match.params.patientId}
+          closePopup={this.handleClose}
+        />
       </div>
     );
   }

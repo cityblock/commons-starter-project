@@ -1,0 +1,23 @@
+mutation calendarCreateEventForPatient(
+  $patientId: ID!
+  $startDatetime: String!
+  $endDatetime: String!
+  $inviteeEmails: [String!]!
+  $location: String!
+  $title: String!
+  $reason: String!
+) {
+  calendarCreateEventForPatient(
+    input: {
+      patientId: $patientId
+      startDatetime: $startDatetime
+      endDatetime: $endDatetime
+      inviteeEmails: $inviteeEmails
+      location: $location
+      title: $title
+      reason: $reason
+    }
+  ) {
+    eventCreateUrl
+  }
+}

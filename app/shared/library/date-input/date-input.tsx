@@ -7,7 +7,8 @@ export const DEFAULT_FORMAT = 'YYYY-MM-DD';
 
 interface IProps {
   value: string | null; // use timestamp
-  onChange: (newDate: string | null) => void;
+  name?: string;
+  onChange: (newDate: string | null, name?: string) => void;
   className?: string;
   small?: boolean; // optionally apply small styles
   disabled?: boolean;
@@ -33,7 +34,7 @@ export class DateInput extends React.Component<IProps, IState> {
           ? format(e.currentTarget.value, DEFAULT_FORMAT)
           : null;
 
-        await this.props.onChange(newDate);
+        await this.props.onChange(newDate, this.props.name);
         this.setState({ loading: false });
       } catch (err) {
         this.setState({ error: err.message, loading: false });
@@ -42,7 +43,7 @@ export class DateInput extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { value, className, small, disabled } = this.props;
+    const { value, className, small, disabled, name } = this.props;
     const { loading, error } = this.state;
 
     const formattedValue = value ? format(value, DEFAULT_FORMAT) : '';
@@ -59,6 +60,7 @@ export class DateInput extends React.Component<IProps, IState> {
 
     return (
       <input
+        name={name}
         type="date"
         value={formattedValue}
         onChange={this.handleChange}

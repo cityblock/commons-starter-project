@@ -28,9 +28,13 @@
   margin-bottom: 0;
 }
 
-.hidden {
+.invisible {
   visibility: hidden;
   opacity: 0;
+}
+
+.hidden {
+  display: none;
 }
 
 .required::after {

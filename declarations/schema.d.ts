@@ -3118,6 +3118,11 @@ declare module 'schema' {
      * generate a signed URL for patient photo
      */
     patientPhotoSignedUrlCreate: ISignedUrl;
+
+    /**
+     * creates a calendar event for a patient
+     */
+    calendarCreateEventForPatient: ICalendarUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3517,6 +3522,9 @@ declare module 'schema' {
   }
   interface IPatientPhotoSignedUrlCreateOnRootMutationTypeArguments {
     input?: IPatientPhotoSignedUrlCreateInput | null;
+  }
+  interface ICalendarCreateEventForPatientOnRootMutationTypeArguments {
+    input?: ICalendarCreateEventForPatientInput | null;
   }
 
   /**
@@ -4621,6 +4629,26 @@ declare module 'schema' {
   interface IPatientPhotoSignedUrlCreateInput {
     patientId: string;
     action: IPatientSignedUrlActionEnum;
+  }
+
+  /**
+   * params for creating a patient calendar event
+   */
+  interface ICalendarCreateEventForPatientInput {
+    patientId: string;
+    startDatetime: string;
+    endDatetime: string;
+    inviteeEmails: Array<string>;
+    location: string;
+    title: string;
+    reason: string;
+  }
+
+  /**
+   * google calendar url for patient calendar event
+   */
+  interface ICalendarUrl {
+    eventCreateUrl: string;
   }
 
   interface IRootSubscriptionType {

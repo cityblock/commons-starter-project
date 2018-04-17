@@ -1,8 +1,16 @@
 .container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.body {
   background-color: var(--gray-background-color);
   padding: 0 var(--medium-gutter);
   overflow: scroll;
   height: 100%;
+  flex: 1;
 }
 
 .eventContainer {
@@ -27,4 +35,15 @@
 .eventTitle {
   padding-top: var(--extra-small-gutter);
   font-family: var(--basetica-medium);
+}
+
+.navBar {
+  background: var(--dark-gray-background-color);
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 0 var(--medium-gutter);
+  justify-content: flex-end;
 }

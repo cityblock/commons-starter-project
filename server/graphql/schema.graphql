@@ -647,6 +647,17 @@ input EmailDeleteForPatientInput {
   isPrimary: Boolean
 }
 
+# params for creating a patient calendar event
+input CalendarCreateEventForPatientInput {
+  patientId: ID!
+  startDatetime: String!
+  endDatetime: String!
+  inviteeEmails: [String!]!
+  location: String!
+  title: String!
+  reason: String!
+}
+
 # Patient node
 type PatientNode {
   node: Patient
@@ -1556,6 +1567,11 @@ type PatientSocialSecurity implements uniqueId {
 # signed url for patient photo or documents
 type SignedUrl {
   signedUrl: String!
+}
+
+# google calendar url for patient calendar event
+type CalendarUrl {
+  eventCreateUrl: String!
 }
 
 # SMS message
@@ -2674,6 +2690,8 @@ type RootMutationType {
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
   # generate a signed URL for patient photo
   patientPhotoSignedUrlCreate(input: PatientPhotoSignedUrlCreateInput): SignedUrl!
+  # creates a calendar event for a patient
+  calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
 }
 
 type RootQueryType {

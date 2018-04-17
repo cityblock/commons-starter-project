@@ -16,6 +16,7 @@ import {
   resolveAnswer,
   resolveAnswersForQuestion,
 } from './answer-resolver';
+import { calendarCreateEventForPatient } from './calendar-resolver';
 import {
   carePlanSuggestionAccept,
   carePlanSuggestionDismiss,
@@ -444,6 +445,7 @@ const resolveFunctions = {
     addressCreateForPatient,
     addressDeleteForPatient,
     addressEdit,
+    calendarCreateEventForPatient,
     careTeamAddUser,
     careTeamReassignUser,
     careTeamMakeTeamLead,

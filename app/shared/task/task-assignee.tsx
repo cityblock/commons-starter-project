@@ -10,7 +10,7 @@ import * as styles from './css/task-body.css';
 
 export interface IProps {
   patientId: string;
-  onAssigneeClick: (assignedToId: string) => void;
+  onAssigneeClick: (assignedToId: string, assignedToEmail: string | null) => void;
   assignee?: ShortUserFragment;
   selectedAssigneeId?: string;
   messageId?: string;
@@ -43,14 +43,14 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     };
   }
 
-  onNewAssigneeClick = async (careTeamMemberId: string) => {
+  onNewAssigneeClick = async (careTeamMemberId: string, careTeamMemberEmail: string | null) => {
     const { onAssigneeClick } = this.props;
 
     if (!this.state.loading) {
       this.setState({ loading: true, changeAssigneeError: '' });
 
       try {
-        await onAssigneeClick(careTeamMemberId);
+        await onAssigneeClick(careTeamMemberId, careTeamMemberEmail);
         this.setState(() => ({ loading: false }));
       } catch (err) {
         this.setState({ loading: false, changeAssigneeError: err.message });
@@ -73,7 +73,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
       return (
         <SelectDropdownOption
           key={assigneeOption.id}
-          onClick={async () => this.onNewAssigneeClick(assigneeOption.id)}
+          onClick={async () => this.onNewAssigneeClick(assigneeOption.id, assigneeOption.email)}
           avatarUrl={avatar}
           value={name}
           detail={role}

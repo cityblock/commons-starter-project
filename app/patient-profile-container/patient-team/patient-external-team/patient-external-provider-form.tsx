@@ -111,7 +111,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
             />
           </div>
 
-          <div className={classNames(styles.field, { [styles.hidden]: !isOtherRole })}>
+          <div className={classNames(styles.field, { [styles.invisible]: !isOtherRole })}>
             <FormLabel
               messageId="patientExternalProvider.roleFreeText"
               className={styles.required}

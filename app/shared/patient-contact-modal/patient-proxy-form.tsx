@@ -78,7 +78,7 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
           />
         </div>
 
-        <div className={classNames(styles.field, { [styles.hidden]: !isOtherRelation })}>
+        <div className={classNames(styles.field, { [styles.invisible]: !isOtherRelation })}>
           <FormLabel messageId="patientContact.relationFreeText" className={styles.required} />
           <TextInput
             name="relationFreeText"

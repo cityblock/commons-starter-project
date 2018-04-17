@@ -64,6 +64,7 @@ interface IEditPatientInfo {
   hasDeclinedPhotoUpload?: boolean;
   hasUploadedPhoto?: boolean;
   needToKnow?: string;
+  googleCalendarId?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -94,6 +95,7 @@ export default class PatientInfo extends Model {
   hasDeclinedPhotoUpload: boolean;
   hasUploadedPhoto: boolean;
   needToKnow: string | null;
+  googleCalendarId: string;
   createdAt: string;
   updatedAt: string;
 
@@ -133,6 +135,7 @@ export default class PatientInfo extends Model {
       hasDeclinedPhotoUpload: { type: 'boolean' },
       hasUploadedPhoto: { type: 'boolean' },
       needToKnow: { type: 'text' },
+      googleCalendarId: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },

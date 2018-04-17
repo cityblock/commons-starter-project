@@ -683,6 +683,23 @@ export interface answerEditMutation {
   } | null,
 };
 
+export interface calendarCreateEventForPatientMutationVariables {
+  patientId: string,
+  startDatetime: string,
+  endDatetime: string,
+  inviteeEmails: Array< string >,
+  location: string,
+  title: string,
+  reason: string,
+};
+
+export interface calendarCreateEventForPatientMutation {
+  // creates a calendar event for a patient
+  calendarCreateEventForPatient:  {
+    eventCreateUrl: string,
+  },
+};
+
 export interface carePlanSuggestionAcceptMutationVariables {
   carePlanSuggestionId: string,
   patientConcernId?: string | null,

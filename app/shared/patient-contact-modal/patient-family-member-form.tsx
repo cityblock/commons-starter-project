@@ -183,7 +183,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
             />
           </div>
 
-          <div className={classNames(styles.field, { [styles.hidden]: !isOtherRelation })}>
+          <div className={classNames(styles.field, { [styles.invisible]: !isOtherRelation })}>
             <FormLabel messageId="patientContact.relationFreeText" className={styles.required} />
             <TextInput
               name="relationFreeText"

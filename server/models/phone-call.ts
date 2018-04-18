@@ -34,6 +34,12 @@ interface IPhoneCallCreate {
   callStatus: CallStatus;
   duration: number;
   twilioPayload: object;
+  callSid: string;
+}
+
+interface IPhoneCallUpdate {
+  voicemailUrl: string;
+  voicemailPayload: object;
 }
 
 interface IGetForUserPatientParams {
@@ -52,6 +58,9 @@ export default class PhoneCall extends BaseModel {
   callStatus: CallStatus;
   duration: number;
   twilioPayload: object;
+  callSid: string;
+  voicemailUrl: string | null;
+  voicemailPayload: object | null;
 
   static tableName = 'phone_call';
 
@@ -69,11 +78,22 @@ export default class PhoneCall extends BaseModel {
       callStatus: { type: 'string', enum: CALL_STATUS },
       duration: { type: 'integer', minimum: 0 },
       twilioPayload: { type: 'json' },
+      callSid: { type: 'string', minLength: 34, maxLength: 34 },
+      voicemailUrl: { type: ['string', 'null'] },
+      voicemailPayload: { type: 'json' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['userId', 'contactNumber', 'direction', 'callStatus', 'duration', 'twilioPayload'],
+    required: [
+      'userId',
+      'contactNumber',
+      'direction',
+      'callStatus',
+      'duration',
+      'twilioPayload',
+      'callSid',
+    ],
   };
 
   static get relationMappings(): RelationMappings {
@@ -123,6 +143,20 @@ export default class PhoneCall extends BaseModel {
       results: phoneCalls.results,
       total: phoneCalls.total,
     };
+  }
+
+  static async getByCallSid(callSid: string, txn: Transaction): Promise<PhoneCall | null> {
+    const phoneCall = await this.query(txn).findOne({ callSid, deletedAt: null });
+
+    return phoneCall || null;
+  }
+
+  static async update(
+    phoneCallId: string,
+    phoneCall: IPhoneCallUpdate,
+    txn: Transaction,
+  ): Promise<PhoneCall> {
+    return this.query(txn).patchAndFetchById(phoneCallId, phoneCall);
   }
 }
 /* tslint:enable:member-ordering */

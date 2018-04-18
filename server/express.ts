@@ -21,6 +21,7 @@ import { pubsubValidator } from './handlers/pubsub/validator';
 import {
   twilioCompleteCallHandler,
   twilioIncomingCallHandler,
+  twilioVoicemailHandler,
 } from './handlers/twilio/phone-call-handler';
 import {
   twilioIncomingSmsHandler,
@@ -32,6 +33,7 @@ kue.createQueue({ redis: createRedisClient() });
 
 const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
 export const TWILIO_COMPLETE_ENDPOINT = '/twilio-complete-phone-call';
+export const TWILIO_VOICEMAIL_ENDPOINT = '/twilio-voicemail';
 
 export const checkAuth = (username: string, password: string) => (
   req: express.Request,
@@ -196,6 +198,7 @@ export default async (
   app.post('/twilio-outgoing-sms-message', bodyParser(), twilioOutgoingSmsHandler);
   app.post('/twilio-incoming-phone-call', bodyParser(), twilioIncomingCallHandler);
   app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser(), twilioCompleteCallHandler);
+  app.post(TWILIO_VOICEMAIL_ENDPOINT, bodyParser(), twilioVoicemailHandler);
 
   app.get('*', addHeadersMiddleware, renderApp);
 

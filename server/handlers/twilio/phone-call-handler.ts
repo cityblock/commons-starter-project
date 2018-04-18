@@ -4,9 +4,12 @@ import { transaction } from 'objection';
 import * as twilio from 'twilio';
 import config from '../../config';
 import Db from '../../db';
-import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
+import { TWILIO_COMPLETE_ENDPOINT, TWILIO_VOICEMAIL_ENDPOINT } from '../../express';
 import PhoneCall from '../../models/phone-call';
 import User from '../../models/user';
+
+const VOICEMAIL_TIMEOUT = '20';
+const MAX_VOICEMAIL_LENGTH = '20';
 
 // TODO: Fix type weirdness
 const VoiceResponse = (twilio as any).twiml.VoiceResponse;
@@ -38,6 +41,7 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
         action: TWILIO_COMPLETE_ENDPOINT,
         method: 'POST',
         from: From,
+        timeout: VOICEMAIL_TIMEOUT,
       });
 
       dial.sim(user.twilioSimId);
@@ -54,7 +58,7 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
   const twiml = new VoiceResponse();
   await Db.get();
   const twilioPayload = req.body;
-  const { To, From, DialCallStatus, DialCallDuration } = twilioPayload;
+  const { To, From, DialCallStatus, DialCallDuration, Direction, CallSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
     const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
@@ -64,19 +68,54 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         throw new Error(`There is not user with the Twilio Phone Number: ${To}`);
       }
 
+      // if patient called us and no one answered, start recording voicemail
+      if (Direction === 'inbound' && DialCallStatus === 'no-answer') {
+        twiml.say("We're sorry we missed your call. Please leave a message at the beep.");
+
+        twiml.record({
+          action: TWILIO_VOICEMAIL_ENDPOINT,
+          method: 'POST',
+          maxLength: MAX_VOICEMAIL_LENGTH,
+          playBeep: true,
+        });
+      }
+
       await PhoneCall.create(
         {
           userId: user.id,
-          contactNumber: From,
-          direction: 'toUser',
+          contactNumber: Direction === 'inbound' ? From : To,
+          direction: Direction === 'inbound' ? 'toUser' : 'fromUser',
           callStatus: DialCallStatus,
           duration: DialCallDuration ? Number(DialCallDuration) : 0,
           twilioPayload,
+          callSid: CallSid,
         },
         txn,
       );
     } catch (err) {
       reportError(err, twilioPayload);
+    }
+  });
+
+  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  return res.end(twiml.toString());
+}
+
+export async function twilioVoicemailHandler(req: express.Request, res: express.Response) {
+  const twiml = new VoiceResponse();
+  const voicemailPayload = req.body;
+  const { CallSid, RecordingUrl } = voicemailPayload;
+
+  await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
+    try {
+      // find the phone call by the callSid provided by Twilio and update voicemail URL
+      const phoneCall = await PhoneCall.getByCallSid(CallSid, txn);
+
+      if (phoneCall) {
+        await PhoneCall.update(phoneCall.id, { voicemailUrl: RecordingUrl, voicemailPayload }, txn);
+      }
+    } catch (err) {
+      reportError(err, voicemailPayload);
     }
   });
 

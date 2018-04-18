@@ -1,7 +1,10 @@
 import * as classNames from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
+import { compose } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
+import { updatePatientLeftNavSelected } from '../../actions/patient-left-nav-action';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
@@ -16,7 +19,7 @@ interface IContainerProps {
 
 export type DisplayOptions = 'task' | 'conversations' | 'progress' | 'default';
 
-interface IProps {
+export interface IProps {
   patient: FullPatientForDashboardFragment;
   displayType?: DisplayOptions; // optional body view option
   tasksDueCount?: number | null; // number of tasks due, only for task view
@@ -32,10 +35,21 @@ interface IProps {
   };
 }
 
-export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps) => {
+interface IDispatchProps {
+  openMessages: () => void;
+}
+
+type allProps = IProps & IDispatchProps;
+
+export const PatientListItem: React.StatelessComponent<allProps> = (props: allProps) => {
   const { patient, displayType, tasksDueCount, notificationsCount, selected, history } = props;
 
   const redirectToPatient = () => {
+    // if in conversations view, open messages on linking
+    if (displayType === 'conversations') {
+      props.openMessages();
+    }
+
     history.push(getActiveMapRoute(patient.id));
   };
 
@@ -75,4 +89,12 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
   );
 };
 
-export default withRouter<IProps>(PatientListItem);
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+  return {
+    openMessages: () => dispatch(updatePatientLeftNavSelected('message')),
+  };
+};
+
+export default compose(withRouter, connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps))(
+  PatientListItem,
+);

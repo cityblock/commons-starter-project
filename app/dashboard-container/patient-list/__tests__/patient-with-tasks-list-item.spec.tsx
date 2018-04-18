@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient, task } from '../../../shared/util/test-data';
 import PatientTasks from '../../tasks/patient-tasks';
-import PatientListItem from '../patient-list-item';
+import PatientListItem, { IProps } from '../patient-list-item';
 import { PatientWithTasksListItem } from '../patient-with-tasks-list-item';
 
 describe('Dashboard Patient with Tasks List Item', () => {
@@ -21,9 +21,9 @@ describe('Dashboard Patient with Tasks List Item', () => {
 
   it('returns patient list item for urgent tasks view', () => {
     expect(wrapper.find(PatientListItem).length).toBe(1);
-    expect(wrapper.find(PatientListItem).props().patient).toEqual(patient);
-    expect(wrapper.find(PatientListItem).props().displayType).toBe('task');
-    expect(wrapper.find(PatientListItem).props().selected).toBeFalsy();
+    expect(wrapper.find<IProps>(PatientListItem).props().patient).toEqual(patient);
+    expect(wrapper.find<IProps>(PatientListItem).props().displayType).toBe('task');
+    expect(wrapper.find<IProps>(PatientListItem).props().selected).toBeFalsy();
   });
 
   it('does not render patient tasks if not selected or loading', () => {
@@ -49,7 +49,7 @@ describe('Dashboard Patient with Tasks List Item', () => {
   });
 
   it('applies sticky scroll styles to selected patient', () => {
-    expect(wrapper.find(PatientListItem).props().selected).toBeTruthy();
+    expect(wrapper.find<IProps>(PatientListItem).props().selected).toBeTruthy();
   });
 
   it('does not apply opaque styles if selected', () => {

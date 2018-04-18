@@ -11,7 +11,13 @@ describe('Dashboard Patient List Item', () => {
   const location = {} as any;
   const match = {} as any;
   const wrapper = shallow(
-    <PatientListItem match={match} location={location} history={history} patient={patient} />,
+    <PatientListItem
+      openMessages={() => true as any}
+      match={match}
+      location={location}
+      history={history}
+      patient={patient}
+    />,
   );
 
   it('wraps item in link to patient profile', () => {

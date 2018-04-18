@@ -1,33 +1,50 @@
 import * as React from 'react';
+import { connect, Dispatch } from 'react-redux';
+import { updatePatientLeftNavSelected } from '../../actions/patient-left-nav-action';
+import { IState as Selected } from '../../reducers/patient-left-nav-reducer';
+import { IState as IAppState } from '../../store';
 import LeftNavActions from './left-nav-actions';
 import LeftNavOpen from './left-nav-open';
-
-export type Selected = 'careTeam' | 'scratchPad' | 'message' | 'quickActions';
 
 interface IProps {
   patientId: string;
   glassBreakId: string | null;
 }
 
+interface IStateProps {
+  selected: Selected;
+}
+
+interface IDispatchProps {
+  updateSelected: (selected: Selected) => void;
+}
+
+type allProps = IProps & IStateProps & IDispatchProps;
+
 interface IState {
-  selected: Selected | null;
   isOpen: boolean;
 }
 
-class LeftNavWidget extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class LeftNavWidget extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
-
-    this.state = { selected: null, isOpen: false };
+    // open left nav if something selected
+    this.state = { isOpen: !!props.selected };
   }
 
   handleClick = (selected: Selected): void => {
-    this.setState({ selected, isOpen: true });
+    this.props.updateSelected(selected);
+    this.setState({ isOpen: true });
   };
 
+  componentWillUnmount(): void {
+    // if unmounting, deselect open left nav
+    this.props.updateSelected(null);
+  }
+
   render(): JSX.Element {
-    const { patientId, glassBreakId } = this.props;
-    const { selected, isOpen } = this.state;
+    const { patientId, glassBreakId, selected } = this.props;
+    const { isOpen } = this.state;
 
     return (
       <div>
@@ -44,4 +61,19 @@ class LeftNavWidget extends React.Component<IProps, IState> {
   }
 }
 
-export default LeftNavWidget;
+const mapStateToProps = (state: IAppState): IStateProps => {
+  return {
+    selected: state.patientLeftNav,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+  return {
+    updateSelected: (selected: Selected) => dispatch(updatePatientLeftNavSelected(selected)),
+  };
+};
+
+export default connect<IStateProps, IDispatchProps, IProps>(
+  mapStateToProps as (args?: any) => IStateProps,
+  mapDispatchToProps,
+)(LeftNavWidget);

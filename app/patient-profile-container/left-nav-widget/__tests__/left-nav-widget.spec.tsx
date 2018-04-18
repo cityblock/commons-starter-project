@@ -2,13 +2,20 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import LeftNavActions from '../left-nav-actions';
 import LeftNavOpen from '../left-nav-open';
-import LeftNavWidget from '../left-nav-widget';
+import { LeftNavWidget } from '../left-nav-widget';
 
 describe('Patient Left Navigation Widget', () => {
   const patientId = 'sansaStark';
   const glassBreakId = 'lady';
 
-  const wrapper = shallow(<LeftNavWidget patientId={patientId} glassBreakId={glassBreakId} />);
+  const wrapper = shallow(
+    <LeftNavWidget
+      patientId={patientId}
+      glassBreakId={glassBreakId}
+      updateSelected={() => true as any}
+      selected={null}
+    />,
+  );
 
   it('renders left navigation component', () => {
     expect(wrapper.find(LeftNavOpen).props().patientId).toBe(patientId);
@@ -17,7 +24,8 @@ describe('Patient Left Navigation Widget', () => {
   });
 
   it('opens left navigation', () => {
-    wrapper.setState({ selected: 'careTeam', isOpen: true });
+    wrapper.setProps({ selected: 'careTeam' });
+    wrapper.setState({ isOpen: true });
 
     expect(wrapper.find(LeftNavOpen).props().selected).toBe('careTeam');
     expect(wrapper.find(LeftNavOpen).props().isOpen).toBeTruthy();

@@ -17,6 +17,7 @@
 }
 
 .message {
+  word-break: break-word;
   border: 1px solid transparent;
   border-radius: var(--big-border-radius);
   padding: var(--extra-small-gutter);

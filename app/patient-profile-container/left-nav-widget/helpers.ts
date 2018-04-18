@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 import { FullSmsMessageFragment } from '../../graphql/types';
+import { Selected } from '../../reducers/patient-left-nav-reducer';
 import { Color } from '../../shared/library/icon/icon';
 import { IconName } from '../../shared/library/icon/icon-types';
 import { QuickAction } from './left-nav-quick-action';
-import { Selected } from './left-nav-widget';
 
 const DATE_FORMAT = 'MMM D, YYYY';
 

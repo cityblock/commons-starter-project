@@ -115,14 +115,14 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
   onClose = () => {
     const { closePopup } = this.props;
 
-    this.setState({ reassignedToId: null, reassignUserError: null });
+    this.setState({ reassignedToId: null, reassignUserError: null, reassignUserLoading: false });
 
     closePopup();
   };
 
   render() {
     const { isVisible, isTasksLoading, careTeamMemberTasks, careTeam, careTeamMember } = this.props;
-    const { reassignedToId, reassignUserError } = this.state;
+    const { reassignedToId, reassignUserError, reassignUserLoading } = this.state;
 
     const modalTitleBodyMessageId = isTasksLoading
       ? 'patientTeam.removeCityblockTeamModalHeaderBody'
@@ -147,6 +147,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
         headerIconColor="red"
         headerIconSize="extraLarge"
         error={reassignUserError}
+        isLoading={reassignUserLoading}
       >
         <RemoveCareTeamMember
           onChange={this.onChangeReassignedTo}

@@ -8,10 +8,7 @@ import {
 } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import FormLabel from '../shared/library/form-label/form-label';
-import ModalButtons from '../shared/library/modal-buttons/modal-buttons';
-import ModalError from '../shared/library/modal-error/modal-error';
-import ModalHeader from '../shared/library/modal-header/modal-header';
-import { Popup } from '../shared/popup/popup';
+import Modal from '../shared/library/modal/modal';
 import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-assign-modal.css';
 
@@ -62,6 +59,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
     }
 
     try {
+      this.setState({ assignLoading: true });
       const result = await careTeamAssignPatients({
         variables: {
           patientIds,
@@ -71,10 +69,11 @@ class PatientAssignModal extends React.Component<allProps, IState> {
 
       this.setState({
         assignSuccess: true,
+        assignLoading: false,
         assignedCareWorker: result.data.careTeamAssignPatients,
       });
     } catch (err) {
-      this.setState({ assignError: err.message });
+      this.setState({ assignError: err.message, assignLoading: false });
     }
   };
 
@@ -93,33 +92,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
     });
   };
 
-  renderAssign() {
-    const { careWorkerId, assignError } = this.state;
-    const errorComponent = assignError ? <ModalError error={assignError} /> : null;
-
-    return (
-      <div>
-        <ModalHeader
-          titleMessageId="patientAssignModal.title"
-          bodyMessageId="patientAssignModal.description"
-          closePopup={this.handleClose}
-        />
-        {errorComponent}
-        <div className={styles.body}>
-          <FormLabel messageId="patientAssignModal.select" />
-          <CareWorkerSelect onChange={this.handleChange} value={careWorkerId} isLarge={true} />
-          <ModalButtons
-            cancel={this.handleClose}
-            submit={this.handleAssignMembers}
-            cancelMessageId="patientAssignModal.cancel"
-            submitMessageId="patientAssignModal.assign"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  renderSaveSuccessful() {
+  renderSaveSuccessfulBody() {
     const { patientSelectState } = this.props;
     const { assignedCareWorker } = this.state;
     const numberSelected = filterPatientState(patientSelectState).length;
@@ -130,42 +103,56 @@ class PatientAssignModal extends React.Component<allProps, IState> {
     }
 
     return (
-      <div>
-        <ModalHeader
-          titleMessageId="patientAssignModal.assignSuccessTitle"
-          closePopup={this.handleClose}
-          color="white"
-        >
-          <FormattedMessage id={assignedMessageId}>
-            {(message: string) => (
-              <div>
-                <span className={styles.blueHighlight}>{numberSelected}</span> {message}
-              </div>
-            )}
-          </FormattedMessage>
-        </ModalHeader>
-        <div className={styles.body}>
-          {hasWorker && (
-            <div className={styles.box}>
-              {formatFullName(assignedCareWorker!.firstName, assignedCareWorker!.lastName)}
-              <span className={styles.blueHighlight}> ({assignedCareWorker!.patientCount})</span>
+      <React.Fragment>
+        <FormattedMessage id={assignedMessageId}>
+          {(message: string) => (
+            <div className={styles.padding}>
+              <span className={styles.blueHighlight}>{numberSelected}</span> {message}
             </div>
           )}
-          <ModalButtons submit={this.handleClose} submitMessageId="patientAssignModal.done" />
-        </div>
-      </div>
+        </FormattedMessage>
+        {hasWorker && (
+          <div className={styles.box}>
+            {formatFullName(assignedCareWorker!.firstName, assignedCareWorker!.lastName)}
+            <span className={styles.blueHighlight}> ({assignedCareWorker!.patientCount})</span>
+          </div>
+        )}
+      </React.Fragment>
     );
   }
 
   render() {
     const { isVisible } = this.props;
-    const { assignSuccess } = this.state;
+    const { careWorkerId, assignError, assignLoading, assignSuccess } = this.state;
+
+    const bodyHtml = assignSuccess ? (
+      this.renderSaveSuccessfulBody()
+    ) : (
+      <React.Fragment>
+        <FormLabel messageId="patientAssignModal.select" />
+        <CareWorkerSelect onChange={this.handleChange} value={careWorkerId} isLarge={true} />
+      </React.Fragment>
+    );
+
+    const title = assignSuccess
+      ? 'patientAssignModal.assignSuccessTitle'
+      : 'patientAssignModal.title';
+    const subtitle = assignSuccess ? undefined : 'patientAssignModal.description';
 
     return (
-      <Popup visible={isVisible} closePopup={this.handleClose} style="no-padding">
-        {assignSuccess && this.renderSaveSuccessful()}
-        {!assignSuccess && this.renderAssign()}
-      </Popup>
+      <Modal
+        titleMessageId={title}
+        subTitleMessageId={subtitle}
+        cancelMessageId="patientAssignModal.cancel"
+        submitMessageId="patientAssignModal.assign"
+        onClose={this.handleClose}
+        onSubmit={this.handleAssignMembers}
+        isVisible={isVisible}
+        isLoading={assignLoading}
+        error={assignError}
+      >
+        {bodyHtml}
+      </Modal>
     );
   }
 }

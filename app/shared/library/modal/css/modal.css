@@ -8,3 +8,7 @@
 .popup {
   border-radius: var(--big-border-radius);
 }
+
+.spinner {
+  margin: var(--gutter);
+}

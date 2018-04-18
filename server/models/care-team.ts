@@ -1,6 +1,5 @@
 import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import {
   addUserToGoogleCalendar,
@@ -154,14 +153,15 @@ export default class CareTeam extends BaseModel {
     { userId, patientIds }: ICareTeamAssignOptions,
     txn: Transaction,
   ): Promise<User & IUserPatientCount> {
-    const rows = patientIds.map(id => {
-      return { id: uuid(), userId, patientId: id };
+    const promises = patientIds.map(async patientId => {
+      const relations = await CareTeam.query(txn).where({ userId, patientId, deletedAt: null });
+
+      if (relations.length < 1) {
+        const googleCalendarAclRuleId = await this.addCalendarPermissions(userId, patientId, txn);
+        return CareTeam.query(txn).insert({ patientId, userId, googleCalendarAclRuleId });
+      }
     });
-    const insertQuery = txn
-      .table('care_team')
-      .insert(rows)
-      .toString();
-    await txn.raw(`${insertQuery} ON CONFLICT DO NOTHING`);
+    await Promise.all(promises);
 
     const user = (await CareTeam.query(txn)
       .joinRelation('user')

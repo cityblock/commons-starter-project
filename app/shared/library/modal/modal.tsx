@@ -5,6 +5,7 @@ import { IconName } from '../icon/icon-types';
 import ModalButtons from '../modal-buttons/modal-buttons';
 import ModalError from '../modal-error/modal-error';
 import ModalHeader, { Color } from '../modal-header/modal-header';
+import Spinner from '../spinner/spinner';
 import * as styles from './css/modal.css';
 
 interface IProps {
@@ -27,6 +28,7 @@ interface IProps {
   headerIconSize?: 'large' | 'extraLarge';
   className?: string;
   headerClassName?: string;
+  isLoading?: boolean;
 }
 
 const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -50,6 +52,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     headerIconSize,
     className,
     headerClassName,
+    isLoading,
   } = props;
 
   const errorComponent = error ? (
@@ -65,8 +68,11 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
       cancel={onClose}
       submit={onSubmit}
       redSubmit={redSubmitButton}
+      isLoading={isLoading}
     />
   ) : null;
+
+  const bodyHtml = isLoading ? <Spinner className={styles.spinner} /> : children;
 
   return (
     <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={popupClassName}>
@@ -83,7 +89,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
       />
       {errorComponent}
       <div className={styles.body}>
-        {children}
+        {bodyHtml}
         {buttonComponent}
       </div>
     </Popup>

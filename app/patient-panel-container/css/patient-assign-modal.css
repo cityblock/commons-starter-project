@@ -1,5 +1,5 @@
-.body {
-  padding: var(--gutter);
+.padding {
+  padding-bottom: var(--small-gutter);
 }
 
 .blueHighlight {

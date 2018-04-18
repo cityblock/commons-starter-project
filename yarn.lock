@@ -5882,7 +5882,7 @@ invariant@^2.0.0, invariant@^2.1.1, invariant@^2.2.1:
   dependencies:
     loose-envify "^1.0.0"
 
-invariant@^2.2.0, invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.2.0, invariant@^2.2.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -10281,12 +10281,11 @@ react-apollo@2.0.4:
     lodash.pick "^4.4.0"
     prop-types "^15.5.8"
 
-react-beautiful-dnd@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-7.0.1.tgz#a08373bbc43c51450f0b6f99358e257f657ac63a"
+react-beautiful-dnd@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-7.0.2.tgz#a04986f7b395398ce7dff9b49dd2f31c169d01dd"
   dependencies:
     babel-runtime "^6.26.0"
-    invariant "^2.2.4"
     memoize-one "^3.1.1"
     prop-types "^15.6.0"
     raf-schd "^2.1.1"
@@ -10295,6 +10294,7 @@ react-beautiful-dnd@7.0.1:
     redux "^3.7.2"
     redux-thunk "^2.2.0"
     reselect "^3.0.1"
+    tiny-invariant "^0.0.3"
 
 react-chartjs-2@2.7.0:
   version "2.7.0"
@@ -12391,6 +12391,10 @@ timers-browserify@^2.0.4:
 tiny-inflate@^1.0.0, tiny-inflate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/tiny-inflate/-/tiny-inflate-1.0.2.tgz#93d9decffc8805bd57eae4310f0b745e9b6fb3a7"
+
+tiny-invariant@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-0.0.3.tgz#4c7283c950e290889e9e94f64d3586ec9156cf44"
 
 title-case@^2.1.0:
   version "2.1.1"

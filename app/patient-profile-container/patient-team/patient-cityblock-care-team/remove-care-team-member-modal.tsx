@@ -9,6 +9,7 @@ import {
   getTasksForUserForPatientQuery,
   FullUserFragment,
 } from '../../../graphql/types';
+import { formatErrorMessage } from '../../../shared/helpers/format-helpers';
 import Modal from '../../../shared/library/modal/modal';
 import * as styles from './css/remove-care-team-member-modal.css';
 import RemoveCareTeamMember from './remove-care-team-member';
@@ -103,7 +104,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
       this.setState({ reassignUserLoading: false, reassignedToId: null });
       closePopup();
     } catch (err) {
-      this.setState({ reassignUserLoading: false, reassignUserError: err.message });
+      this.setState({ reassignUserLoading: false, reassignUserError: formatErrorMessage(err) });
     }
   };
 
@@ -114,14 +115,14 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
   onClose = () => {
     const { closePopup } = this.props;
 
-    this.setState({ reassignedToId: null });
+    this.setState({ reassignedToId: null, reassignUserError: null });
 
     closePopup();
   };
 
   render() {
     const { isVisible, isTasksLoading, careTeamMemberTasks, careTeam, careTeamMember } = this.props;
-    const { reassignedToId } = this.state;
+    const { reassignedToId, reassignUserError } = this.state;
 
     const modalTitleBodyMessageId = isTasksLoading
       ? 'patientTeam.removeCityblockTeamModalHeaderBody'
@@ -133,6 +134,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
     return (
       <Modal
         className={styles.removeCareTeamMemberModal}
+        headerClassName={styles.header}
         isVisible={isVisible}
         headerColor="white"
         onClose={this.onClose}
@@ -144,6 +146,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
         headerIconName="errorOutline"
         headerIconColor="red"
         headerIconSize="extraLarge"
+        error={reassignUserError}
       >
         <RemoveCareTeamMember
           onChange={this.onChangeReassignedTo}

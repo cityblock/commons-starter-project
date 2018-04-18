@@ -12,13 +12,19 @@ import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';
 import Patient from '../../models/patient';
 import User from '../../models/user';
-import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockUser,
+  createPatient,
+  mockGoogleCredentials,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
   clinic: Clinic;
   patient: Patient;
   user: User;
+  testConfig: any;
 }
 
 const userRole = 'physician';
@@ -29,8 +35,9 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), trx);
   const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, trx);
   await CareTeam.create({ userId: user.id, patientId: patient.id }, trx);
+  const testConfig = mockGoogleCredentials();
 
-  return { clinic, user, patient };
+  return { clinic, user, patient, testConfig };
 }
 
 describe('care team', () => {
@@ -272,7 +279,7 @@ describe('care team', () => {
     });
 
     it('reassigns a care team member', async () => {
-      const { patient, user, clinic } = await setup(txn);
+      const { patient, user, clinic, testConfig } = await setup(txn);
       const user2 = await User.create(
         createMockUser(12, clinic.id, userRole, 'care2@care.com'),
         txn,
@@ -293,6 +300,7 @@ describe('care team', () => {
           permissions,
           txn,
           userId: user2.id,
+          testConfig,
         },
         {
           userId: user.id,
@@ -311,7 +319,7 @@ describe('care team', () => {
     });
 
     it('updates computed patient status when reassigning a care team member', async () => {
-      const { user, patient, clinic } = await setup(txn);
+      const { user, patient, clinic, testConfig } = await setup(txn);
       const user2 = await User.create(
         {
           email: 'chp@cityblock.com',
@@ -339,6 +347,7 @@ describe('care team', () => {
           permissions,
           userId: user.id,
           txn,
+          testConfig,
         },
         {
           userId: user2.id,

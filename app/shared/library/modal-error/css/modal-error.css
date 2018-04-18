@@ -1,10 +1,8 @@
 .container {
   background-color: var(--red-color);
   padding: 0 var(--medium-gutter);
-}
-
-.container svg {
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
 }
 
 .label,

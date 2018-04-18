@@ -39,7 +39,7 @@ export function createGoogleCalendarEventUrl(metadata: IMetadata): string {
 }
 
 // create a JWT auth client for service account spoofing the given subject
-export function createGoogleCalendarAuth(subject?: string, testConfig?: any) {
+export function createGoogleCalendarAuth(testConfig?: any) {
   const finalConfig = testConfig || config;
   const credentials = JSON.parse(finalConfig.GCP_CREDS || '');
 
@@ -47,7 +47,10 @@ export function createGoogleCalendarAuth(subject?: string, testConfig?: any) {
     email: credentials.client_email,
     key: credentials.private_key,
     scopes: ['https://www.googleapis.com/auth/calendar'],
-    subject,
+    subject:
+      testConfig && testConfig.subject
+        ? testConfig.subject
+        : 'cristina@testorg.cityblock.engineering',
   });
 }
 
@@ -72,10 +75,10 @@ export async function addUserToGoogleCalendar(
   jwtClient: OAuth2Client,
   calendarId: string,
   userEmail: string,
-): Promise<AxiosResponse<any>> {
+) {
   const calendar = google.calendar({ version: 'v3' });
 
-  return calendar.acl.insert({
+  const response = await calendar.acl.insert({
     auth: jwtClient,
     calendarId,
     resource: {
@@ -86,19 +89,21 @@ export async function addUserToGoogleCalendar(
       },
     },
   });
+
+  return response.data.id;
 }
 
 export async function deleteUserFromGoogleCalendar(
   jwtClient: OAuth2Client,
   calendarId: string,
-  userEmail: string,
+  googleCalendarAclRuleId: string,
 ): Promise<AxiosResponse<any>> {
   const calendar = google.calendar({ version: 'v3' });
 
-  // TODO: add ACL rule id
   return calendar.acl.delete({
     auth: jwtClient,
     calendarId,
+    ruleId: googleCalendarAclRuleId,
   });
 }
 
@@ -107,11 +112,7 @@ export async function createGoogleCalendarForPatientWithTeam(
   userEmails: string[],
   testConfig?: any,
 ) {
-  // TODO: have the email change to whatever we use for calendars long term
-  const jwtClient = createGoogleCalendarAuth(
-    'cristina@testorg.cityblock.engineering',
-    testConfig,
-  ) as any;
+  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
 
   const response = await createGoogleCalendarForPatient(jwtClient, calendarName);
   const calendarId = response.data.id;
@@ -133,11 +134,7 @@ export async function getGoogleCalendarEvents(
   { pageToken, pageSize }: IGooglePaginationOptions,
   testConfig?: any,
 ) {
-  // TODO: have the email change to whatever we use for calendars long term
-  const jwtClient = createGoogleCalendarAuth(
-    'cristina@testorg.cityblock.engineering',
-    testConfig,
-  ) as any;
+  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
 
   const calendar = google.calendar({ version: 'v3' });
   const response = await calendar.events.list({

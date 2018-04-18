@@ -54,7 +54,7 @@ export async function careTeamAddUser(
 export async function careTeamReassignUser(
   root: any,
   { input }: ICareTeamReassignOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, txn, testConfig }: IContext,
 ): Promise<IRootMutationType['careTeamReassignUser']> {
   await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
 
@@ -65,6 +65,7 @@ export async function careTeamReassignUser(
       reassignedToId: input.reassignedToId,
     },
     txn,
+    testConfig,
   );
 
   await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);

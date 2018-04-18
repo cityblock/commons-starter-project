@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { differenceInYears, format } from 'date-fns';
 import { padStart, startCase } from 'lodash';
 import {
@@ -202,4 +203,14 @@ export const getPatientStatusColor = (patientStatus: CurrentPatientState) => {
     default:
       return undefined;
   }
+};
+
+export const formatErrorMessage = (err: ApolloError) => {
+  if (err.graphQLErrors && err.graphQLErrors.length !== 0) {
+    return err.graphQLErrors[0].message;
+  }
+  if (err.networkError) {
+    return err.networkError.message;
+  }
+  return 'There was an error';
 };

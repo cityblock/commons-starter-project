@@ -1,7 +1,12 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockUser,
+  createPatient,
+  mockGoogleCredentials,
+} from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ProgressNote from '../progress-note';
@@ -14,11 +19,13 @@ const userRole = 'physician';
 
 interface ISetup {
   clinic: Clinic;
+  testConfig: any;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  return { clinic };
+  const testConfig = mockGoogleCredentials();
+  return { clinic, testConfig };
 }
 
 describe('care team model', () => {
@@ -281,7 +288,7 @@ describe('care team model', () => {
 
   describe('reassignUser', () => {
     it('reassigns tasks and removes the user from a care team', async () => {
-      const { clinic } = await setup(txn);
+      const { clinic, testConfig } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const user2 = await User.create(
         createMockUser(12, clinic.id, userRole, 'care2@care.com'),
@@ -349,6 +356,7 @@ describe('care team model', () => {
       await CareTeam.reassignUser(
         { userId: user.id, patientId: patient.id, reassignedToId: user3.id },
         txn,
+        testConfig,
       );
 
       const refetchedCareTeam = await CareTeam.getForPatient(patient.id, txn);
@@ -372,7 +380,7 @@ describe('care team model', () => {
     });
 
     it('throws an error if there are tasks to be reassigned and no new user provided', async () => {
-      const { clinic } = await setup(txn);
+      const { clinic, testConfig } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const user2 = await User.create(
         createMockUser(12, clinic.id, userRole, 'care2@care.com'),
@@ -421,12 +429,12 @@ describe('care team model', () => {
       );
 
       await expect(
-        CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn),
+        CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn, testConfig),
       ).rejects.toMatch('Must provide a replacement user when there are tasks to reassign');
     });
 
     it('throws an error if the user has an open progress note for the patient', async () => {
-      const { clinic } = await setup(txn);
+      const { clinic, testConfig } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const patient = await createPatient(
         {
@@ -451,7 +459,7 @@ describe('care team model', () => {
         txn,
       );
       await expect(
-        CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn),
+        CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn, testConfig),
       ).rejects.toMatch(
         'This user has an open Progress Note. Please submit before removing from care team.',
       );

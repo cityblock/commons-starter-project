@@ -18,6 +18,7 @@ interface IProps {
   headerIconName?: IconName;
   headerIconColor?: IconColor;
   headerIconSize?: 'large' | 'extraLarge';
+  className?: string;
 }
 
 const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -32,10 +33,11 @@ const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
     headerIconName,
     headerIconColor,
     headerIconSize,
+    className,
   } = props;
   const navy = color === 'navy';
   const white = color === 'white';
-  const containerStyles = classNames(styles.container, {
+  const containerStyles = classNames(styles.container, className, {
     [styles.navyContainer]: navy,
     [styles.whiteContainer]: white,
   });

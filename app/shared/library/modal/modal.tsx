@@ -26,6 +26,7 @@ interface IProps {
   headerIconColor?: IconColor;
   headerIconSize?: 'large' | 'extraLarge';
   className?: string;
+  headerClassName?: string;
 }
 
 const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -48,6 +49,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     headerIconColor,
     headerIconSize,
     className,
+    headerClassName,
   } = props;
 
   const errorComponent = error ? (
@@ -77,6 +79,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
         headerIconName={headerIconName}
         headerIconColor={headerIconColor}
         headerIconSize={headerIconSize}
+        className={headerClassName}
       />
       {errorComponent}
       <div className={styles.body}>

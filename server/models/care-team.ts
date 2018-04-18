@@ -2,6 +2,11 @@ import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import {
+  addUserToGoogleCalendar,
+  createGoogleCalendarAuth,
+  deleteUserFromGoogleCalendar,
+} from '../helpers/google-calendar-helpers';
 import BaseModel from './base-model';
 import Patient from './patient';
 import ProgressNote from './progress-note';
@@ -18,6 +23,7 @@ interface ICareTeamReassignOptions {
 interface ICareTeamOptions {
   userId: string;
   patientId: string;
+  googleCalendarAclRuleId?: string;
 }
 
 interface ICareTeamAssignOptions {
@@ -41,6 +47,7 @@ export default class CareTeam extends BaseModel {
   user: User;
   userId: string;
   isCareTeamLead: boolean;
+  googleCalendarAclRuleId: string;
 
   static tableName = 'care_team';
 
@@ -53,6 +60,7 @@ export default class CareTeam extends BaseModel {
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       userId: { type: 'string', minLength: 1 }, // cannot be blank
       isCareTeamLead: { type: 'boolean' },
+      googleCalendarAclRuleId: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
       createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
@@ -79,6 +87,14 @@ export default class CareTeam extends BaseModel {
         },
       },
     };
+  }
+
+  static async get(
+    patientId: string,
+    userId: string,
+    txn: Transaction,
+  ): Promise<CareTeam | undefined> {
+    return CareTeam.query(txn).findOne({ patientId, userId, deletedAt: null });
   }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<User[]> {
@@ -127,7 +143,8 @@ export default class CareTeam extends BaseModel {
     const relations = await CareTeam.query(txn).where({ userId, patientId, deletedAt: null });
 
     if (relations.length < 1) {
-      await CareTeam.query(txn).insert({ patientId, userId });
+      const googleCalendarAclRuleId = await this.addCalendarPermissions(userId, patientId, txn);
+      await CareTeam.query(txn).insert({ patientId, userId, googleCalendarAclRuleId });
     }
 
     return User.get(userId, txn);
@@ -157,9 +174,21 @@ export default class CareTeam extends BaseModel {
     return user[0];
   }
 
+  static async editGoogleCalendarAclRuleId(
+    googleCalendarAclRuleId: string,
+    userId: string,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<void> {
+    await this.query(txn)
+      .where({ userId, patientId, deletedAt: null })
+      .patch({ googleCalendarAclRuleId });
+  }
+
   static async reassignUser(
     { userId, patientId, reassignedToId }: ICareTeamReassignOptions,
     txn: Transaction,
+    testConfig?: any,
   ): Promise<User> {
     const tasksToBeReassigned = await Task.getAllUserPatientTasks({ userId, patientId }, txn);
     const openProgressNote = await ProgressNote.getForUserForPatient(userId, patientId, txn);
@@ -174,6 +203,9 @@ export default class CareTeam extends BaseModel {
       return Promise.reject('Must provide a replacement user when there are tasks to reassign');
     }
 
+    const patient = await Patient.get(patientId, txn);
+    const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+
     if (reassignedToId) {
       // Reassign all tasks
       await Task.reassignForUserForPatient({ userId, patientId, reassignedToId }, txn);
@@ -182,9 +214,29 @@ export default class CareTeam extends BaseModel {
         { userId, patientId, newFollowerId: reassignedToId },
         txn,
       );
+      if (patient.patientInfo.googleCalendarId) {
+        const newUser = await User.get(reassignedToId, txn);
+        const googleCalendarAclRuleId = await addUserToGoogleCalendar(
+          jwtClient,
+          patient.patientInfo.googleCalendarId,
+          newUser.email,
+        );
+        await this.editGoogleCalendarAclRuleId(googleCalendarAclRuleId, userId, patientId, txn);
+      }
     }
 
     // Remove user from CareTeam
+    if (patient.patientInfo.googleCalendarId) {
+      const careTeam = await this.get(patientId, userId, txn);
+
+      if (careTeam) {
+        await deleteUserFromGoogleCalendar(
+          jwtClient,
+          patient.patientInfo.googleCalendarId,
+          careTeam.googleCalendarAclRuleId,
+        );
+      }
+    }
     await this.delete({ userId, patientId }, txn);
 
     return User.get(userId, txn);
@@ -233,6 +285,15 @@ export default class CareTeam extends BaseModel {
     const result = await this.query(txn).where({ userId, patientId, deletedAt: null });
 
     return !!result.length;
+  }
+
+  static async addCalendarPermissions(userId: string, patientId: string, txn: Transaction) {
+    const patient = await Patient.get(patientId, txn);
+    if (patient.patientInfo.googleCalendarId) {
+      const user = await User.get(userId, txn);
+      const jwtClient = createGoogleCalendarAuth() as any;
+      return addUserToGoogleCalendar(jwtClient, patient.patientInfo.googleCalendarId, user.email);
+    }
   }
 }
 /* tslint:enable:member-ordering */

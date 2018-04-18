@@ -1,0 +1,16 @@
+#import "../fragments/full-patient-for-dashboard.graphql"
+
+query getPatientsWithRecentConversations($pageNumber: Int!, $pageSize: Int!) {
+  patientsWithRecentConversations(pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...FullPatientForDashboard
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+    totalCount
+  }
+}

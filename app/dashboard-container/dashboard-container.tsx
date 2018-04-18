@@ -8,6 +8,7 @@ import DashboardNavigation from './navigation/navigation';
 
 export type Selected =
   | 'tasks'
+  | 'conversations'
   | 'referrals'
   | 'new'
   | 'suggestions'

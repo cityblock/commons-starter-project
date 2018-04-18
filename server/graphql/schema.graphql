@@ -2744,6 +2744,8 @@ type RootQueryType {
   ): PatientTableRowEdges!
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - recent conversations
+  patientsWithRecentConversations(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - new to user care team
   patientsNewToCareTeam(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - pending MAP suggestions

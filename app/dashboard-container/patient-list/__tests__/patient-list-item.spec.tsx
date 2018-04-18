@@ -1,12 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
-import Icon from '../../../shared/library/icon/icon';
-import PatientAge from '../../../shared/library/patient-age/patient-age';
 import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import { patient } from '../../../shared/util/test-data';
-import PatientTaskCount from '../../tasks/patient-task-count';
 import { PatientListItem } from '../patient-list-item';
+import PatientListItemBody from '../patient-list-item-body';
 
 describe('Dashboard Patient List Item', () => {
   const history = { push: jest.fn() } as any;
@@ -40,41 +38,11 @@ describe('Dashboard Patient List Item', () => {
     expect(wrapper.find('h4').text()).toBe(formatFullName(patient.firstName, patient.lastName));
   });
 
-  it('renders arrow link to patient profile', () => {
-    expect(
-      wrapper
-        .find('div')
-        .at(3)
-        .props().className,
-    ).toBe('profileLink');
-  });
-
-  it('renders arrow icon inside arrow link', () => {
-    expect(wrapper.find(Icon).length).toBe(1);
-    expect(wrapper.find(Icon).props().name).toBe('keyboardArrowRight');
-    expect(wrapper.find(Icon).props().className).toBe('arrow');
-  });
-
-  it('renders patient age information', () => {
-    expect(wrapper.find(PatientAge).length).toBe(1);
-    expect(wrapper.find(PatientAge).props().dateOfBirth).toBe(patient.dateOfBirth);
-    expect(wrapper.find(PatientAge).props().gender).toBe(patient.patientInfo.gender);
-  });
-
-  it('does not render task count if not on patient task view', () => {
-    expect(wrapper.find(PatientTaskCount).length).toBe(0);
-  });
-
-  it('renders patient task count if on patient task view', () => {
-    const tasksDueCount = 11;
-    const notificationsCount = 12;
-    wrapper.setProps({ displayType: 'task', tasksDueCount, notificationsCount });
-
-    expect(wrapper.find(PatientTaskCount).length).toBe(1);
-    expect(wrapper.find(PatientTaskCount).props().tasksDueCount).toBe(tasksDueCount);
-    expect(wrapper.find(PatientTaskCount).props().notificationsCount).toBe(notificationsCount);
-
-    expect(wrapper.find(PatientAge).length).toBe(0);
+  it('renders patient list item body', () => {
+    expect(wrapper.find(PatientListItemBody).props().patient).toEqual(patient);
+    expect(wrapper.find(PatientListItemBody).props().displayType).toBeFalsy();
+    expect(wrapper.find(PatientListItemBody).props().tasksDueCount).toBeFalsy();
+    expect(wrapper.find(PatientListItemBody).props().notificationsCount).toBeFalsy();
   });
 
   it('applies sticky scroll styles if patient selected', () => {
@@ -86,5 +54,15 @@ describe('Dashboard Patient List Item', () => {
         .at(0)
         .props().className,
     ).toBe('container sticky');
+  });
+
+  it('passes props for display type, tasks due, and notifications to body', () => {
+    const tasksDueCount = 11;
+    const notificationsCount = 12;
+    wrapper.setProps({ displayType: 'task', tasksDueCount, notificationsCount });
+
+    expect(wrapper.find(PatientListItemBody).props().displayType).toBe('task');
+    expect(wrapper.find(PatientListItemBody).props().tasksDueCount).toBe(tasksDueCount);
+    expect(wrapper.find(PatientListItemBody).props().notificationsCount).toBe(notificationsCount);
   });
 });

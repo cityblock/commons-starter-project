@@ -15,6 +15,7 @@ import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIcon from 'material-ui-icons/Assignment';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
+import ChatIcon from 'material-ui-icons/Chat';
 import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
@@ -84,6 +85,7 @@ const components: IconComponents = {
   assignment: AssignmentIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
+  chat: ChatIcon,
   check: CheckIcon,
   checkCircle: CheckCircleIcon,
   close: CloseIcon,

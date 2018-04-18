@@ -179,6 +179,19 @@ export async function resolvePatientsWithUrgentTasks(
   );
 }
 
+export async function resolvePatientsWithRecentConversations(
+  root: any,
+  pageOptions: IPaginationOptions,
+  context: IContext,
+): Promise<IPatientForDashboardEdges> {
+  return resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithRecentConversations,
+  );
+}
+
 export async function resolvePatientsNewToCareTeam(
   root: any,
   pageOptions: IPaginationOptions,

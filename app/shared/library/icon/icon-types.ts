@@ -12,6 +12,7 @@ export type IconName =
   | 'assignment'
   | 'assignmentInd'
   | 'assignmentTurnedIn'
+  | 'chat'
   | 'check'
   | 'checkCircle'
   | 'close'

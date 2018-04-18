@@ -65,6 +65,11 @@ declare module 'schema' {
     patientsWithUrgentTasks: IPatientForDashboardEdges;
 
     /**
+     * Patient dashboard - recent conversations
+     */
+    patientsWithRecentConversations: IPatientForDashboardEdges;
+
+    /**
      * Patient dashboard - new to user care team
      */
     patientsNewToCareTeam: IPatientForDashboardEdges;
@@ -625,6 +630,10 @@ declare module 'schema' {
     showAllPatients?: boolean | null;
   }
   interface IPatientsWithUrgentTasksOnRootQueryTypeArguments {
+    pageNumber: number;
+    pageSize: number;
+  }
+  interface IPatientsWithRecentConversationsOnRootQueryTypeArguments {
     pageNumber: number;
     pageSize: number;
   }

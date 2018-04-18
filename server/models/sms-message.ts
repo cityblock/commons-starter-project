@@ -104,5 +104,17 @@ export default class SmsMessage extends BaseModel {
       total: messages.total,
     };
   }
+
+  static async getLatestForUserPatient(
+    { userId, patientId }: IGetForUserPatientParams,
+    txn: Transaction,
+  ): Promise<SmsMessage | null> {
+    const message = await this.query(txn)
+      .where({ patientId, userId, deletedAt: null })
+      .orderBy('createdAt', 'DESC')
+      .first();
+
+    return message || null;
+  }
 }
 /* tslint:enable:member-ordering */

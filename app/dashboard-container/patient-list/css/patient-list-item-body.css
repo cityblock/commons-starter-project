@@ -1,0 +1,28 @@
+.info,
+.profileLink {
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  justify-content: space-between;
+  width: 100%;
+  padding-left: var(--small-gutter);
+}
+
+.profileLink {
+  border: 1px solid var(--blue-color);
+  border-radius: var(--border-radius);
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--gray-background-color);
+  }
+}
+
+svg.arrow {
+  height: 24px;
+  width: 24px;
+  margin: 5px;
+  fill: var(--blue-color);
+}

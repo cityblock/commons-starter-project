@@ -11,6 +11,7 @@ import * as styles from './css/dashboard-patients.css';
 import { Selected } from './dashboard-container';
 import fetchPatientList, { IInjectedProps, PatientResults } from './fetch-patient-list';
 import PatientList from './patient-list/patient-list';
+import { DisplayOptions } from './patient-list/patient-list-item';
 import PatientWithTasksList from './patient-list/patient-with-tasks-list';
 
 interface IPageProps {
@@ -67,7 +68,11 @@ export class DashboardPatients extends React.Component<allProps> {
     const patients =
       patientResults && patientResults.edges ? patientResults.edges.map(result => result.node) : [];
 
-    const displayType = selected === 'intake' ? 'progress' : 'default';
+    let displayType: DisplayOptions = 'default';
+
+    if (selected === 'intake') displayType = 'progress';
+    if (selected === 'conversations') displayType = 'conversations';
+
     const patientList =
       selected === 'tasks' ? (
         <PatientWithTasksList

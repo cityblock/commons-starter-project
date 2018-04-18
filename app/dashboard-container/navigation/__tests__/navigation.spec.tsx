@@ -32,7 +32,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for task notifications', () => {
-    expect(wrapper.find(NavigationItem).length).toBe(9);
+    expect(wrapper.find(NavigationItem).length).toBe(10);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -59,29 +59,58 @@ describe('Dashboard Navigation', () => {
     ).toBe('notifications');
   });
 
-  it('renders navigation item for open CBO referrals', () => {
+  it('renders navigation item for recent conversations', () => {
+    const position = 1;
+
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(1)
+        .at(position)
         .props().selected,
-    ).toBe('referrals');
+    ).toBe('conversations');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(1)
+        .at(position)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(1)
+        .at(position)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(1)
+        .at(position)
+        .props().icon,
+    ).toBe('chat');
+  });
+
+  it('renders navigation item for open CBO referrals', () => {
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(2)
+        .props().selected,
+    ).toBe('referrals');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(2)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(2)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(2)
         .props().icon,
     ).toBe('assignmentInd');
   });
@@ -90,25 +119,25 @@ describe('Dashboard Navigation', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(2)
+        .at(3)
         .props().selected,
     ).toBe('new');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(2)
+        .at(3)
         .props().isSelected,
     ).toBeTruthy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(2)
+        .at(3)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(2)
+        .at(3)
         .props().icon,
     ).toBe('addCircle');
   });
@@ -117,31 +146,31 @@ describe('Dashboard Navigation', () => {
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(3)
+        .at(4)
         .props().selected,
     ).toBe('assigned');
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(3)
+        .at(4)
         .props().isSelected,
     ).toBeFalsy();
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(3)
+        .at(4)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
-        .at(3)
+        .at(4)
         .props().icon,
     ).toBe('assignment');
   });
 
   it('renders navigation item for intake in progress', () => {
-    const position = 4;
+    const position = 5;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -169,7 +198,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for pending MAP suggestions', () => {
-    const position = 5;
+    const position = 6;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -197,7 +226,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for patients with missing info', () => {
-    const position = 6;
+    const position = 7;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -225,7 +254,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for no recent engagement', () => {
-    const position = 7;
+    const position = 8;
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -253,7 +282,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for out of date MAP', () => {
-    const position = 8;
+    const position = 9;
     expect(
       wrapper
         .find<IProps>(NavigationItem)

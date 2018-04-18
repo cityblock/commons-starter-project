@@ -14,6 +14,7 @@ import * as patientsWithNoRecentEngagement from '../../../app/graphql/queries/ge
 import * as patientsWithOpenCBOReferrals from '../../../app/graphql/queries/get-patients-with-open-cbo-referrals.graphql';
 import * as patientsWithOutOfDateMAP from '../../../app/graphql/queries/get-patients-with-out-of-date-map.graphql';
 import * as patientsWithPendingSuggestions from '../../../app/graphql/queries/get-patients-with-pending-suggestions.graphql';
+import * as patientsWithRecentConversations from '../../../app/graphql/queries/get-patients-with-recent-conversations.graphql';
 import * as patientsWithUrgentTasks from '../../../app/graphql/queries/get-patients-with-urgent-tasks.graphql';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
@@ -32,6 +33,7 @@ import {
   setupPatientsWithOpenCBOReferrals,
   setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
+  setupRecentConversations,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -149,6 +151,7 @@ describe('patient', () => {
   const patientsWithOutOfDateMAPQuery = print(patientsWithOutOfDateMAP);
   const patientsWithPendingSuggestionsQuery = print(patientsWithPendingSuggestions);
   const patientsWithUrgentTasksQuery = print(patientsWithUrgentTasks);
+  const patientsWithRecentConversationsQuery = print(patientsWithRecentConversations);
   const patientsWithAssignedStateQuery = print(patientsWithAssignedState);
   const patientsWithIntakeInProgressQuery = print(patientsWithIntakeInProgress);
 
@@ -765,6 +768,38 @@ describe('patient', () => {
         result.data!.patientsWithUrgentTasks.edges[0].node.firstName,
         result.data!.patientsWithUrgentTasks.edges[1].node.firstName,
       ]).toContain(patient5.firstName);
+    });
+  });
+
+  it('gets patients that have had recent conversations with user', async () => {
+    const { user, patient1, patient5 } = await setupRecentConversations(txn);
+
+    const result = await graphql(
+      schema,
+      patientsWithRecentConversationsQuery,
+      null,
+      {
+        permissions,
+        userId: user.id,
+        txn,
+      },
+      { pageNumber: 0, pageSize: 10 },
+    );
+
+    expect(result.data!.patientsWithRecentConversations.totalCount).toBe(2);
+    expect(result.data!.patientsWithRecentConversations.edges[0]).toMatchObject({
+      node: {
+        id: patient1.id,
+        firstName: patient1.firstName,
+      },
+    });
+
+    expect(result.data!.patientsWithRecentConversations.totalCount).toBe(2);
+    expect(result.data!.patientsWithRecentConversations.edges[1]).toMatchObject({
+      node: {
+        id: patient5.id,
+        firstName: patient5.firstName,
+      },
     });
   });
 

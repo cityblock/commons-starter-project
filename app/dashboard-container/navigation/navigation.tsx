@@ -56,6 +56,13 @@ export const DashboardNavigation: React.StatelessComponent<allProps> = (props: a
           isSelected={selected === 'tasks'}
           routeBase={ROUTE_BASE}
           icon="notifications"
+          noDivider={selected === 'conversations'}
+        />
+        <NavigationItem
+          selected="conversations"
+          isSelected={selected === 'conversations'}
+          routeBase={ROUTE_BASE}
+          icon="chat"
           noDivider={selected === 'referrals'}
         />
         <NavigationItem

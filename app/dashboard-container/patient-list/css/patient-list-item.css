@@ -8,9 +8,7 @@
 }
 
 .container,
-.patient,
-.info,
-.profileLink {
+.patient {
   display: flex;
   align-items: center;
 }
@@ -24,12 +22,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-}
-
-.info {
-  justify-content: space-between;
-  width: 100%;
-  padding-left: var(--small-gutter);
 }
 
 .container h4,
@@ -48,21 +40,4 @@
 .container p {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
-}
-
-.profileLink {
-  border: 1px solid var(--blue-color);
-  border-radius: var(--border-radius);
-  transition: background 0.2s;
-
-  &:hover {
-    background: var(--gray-background-color);
-  }
-}
-
-svg.arrow {
-  height: 24px;
-  width: 24px;
-  margin: 5px;
-  fill: var(--blue-color);
 }

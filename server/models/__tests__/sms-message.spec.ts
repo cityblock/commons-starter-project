@@ -178,4 +178,80 @@ describe('SMS model', () => {
       expect(messages.results[1]).toMatchObject(sms);
     });
   });
+
+  describe('getLatestForUserPatient', () => {
+    it('returns latest SMS message between user and patient if one exists', async () => {
+      const { patient, phone, user } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const phone2 = await Phone.create(createMockPhone('+12223334444'), txn);
+
+      const phone3 = await Phone.create(createMockPhone('+13334445555'), txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
+
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser',
+          body,
+          twilioPayload,
+        },
+        txn,
+      );
+
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone2.phoneNumber,
+          direction: 'toUser',
+          body,
+          twilioPayload,
+        },
+        txn,
+      );
+
+      const sms2 = await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone3.phoneNumber,
+          direction: 'toUser',
+          body: body2,
+          twilioPayload,
+        },
+        txn,
+      );
+
+      await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
+
+      const message = await SmsMessage.getLatestForUserPatient(
+        { userId: user.id, patientId: patient.id },
+        txn,
+      );
+
+      expect(message).toMatchObject(sms2);
+    });
+
+    it('returns null if no messages between user and patient', async () => {
+      const { patient, phone, user } = await setup(txn);
+
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser',
+          body,
+          twilioPayload,
+        },
+        txn,
+      );
+
+      const message = await SmsMessage.getLatestForUserPatient(
+        { userId: user.id, patientId: patient.id },
+        txn,
+      );
+
+      expect(message).toBeNull();
+    });
+  });
 });

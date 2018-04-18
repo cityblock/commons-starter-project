@@ -11,6 +11,7 @@ import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-pat
 import * as patientsWithOpenCBOReferralsQuery from '../graphql/queries/get-patients-with-open-cbo-referrals.graphql';
 import * as patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-with-out-of-date-map.graphql';
 import * as patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
+import * as patientsWithRecentConversationsQuery from '../graphql/queries/get-patients-with-recent-conversations.graphql';
 import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
 import {
   getPatientsForComputedListQuery,
@@ -22,6 +23,7 @@ import {
   getPatientsWithOpenCBOReferralsQuery,
   getPatientsWithOutOfDateMAPQuery,
   getPatientsWithPendingSuggestionsQuery,
+  getPatientsWithRecentConversationsQuery,
   getPatientsWithUrgentTasksQuery,
 } from '../graphql/types';
 import { Selected } from './dashboard-container';
@@ -50,7 +52,8 @@ export type PatientResults =
   | getPatientsWithOpenCBOReferralsQuery['patientsWithOpenCBOReferrals']
   | getPatientsForComputedListQuery['patientsForComputedList']
   | getPatientsWithAssignedStateQuery['patientsWithAssignedState']
-  | getPatientsWithIntakeInProgressQuery['patientsWithIntakeInProgress'];
+  | getPatientsWithIntakeInProgressQuery['patientsWithIntakeInProgress']
+  | getPatientsWithRecentConversationsQuery['patientsWithRecentConversations'];
 
 export interface IInjectedProps {
   loading: boolean;
@@ -91,6 +94,18 @@ const fetchPatientList = () => <P extends {}>(
           loading: data ? data.loading : false,
           error: data ? data.error : null,
           patientResults: data ? (data as any).patientsWithUrgentTasks : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithRecentConversationsQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'conversations',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithRecentConversations : null,
         }),
       },
     ),

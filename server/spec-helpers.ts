@@ -1190,6 +1190,17 @@ export async function setupRecentConversations(txn: Transaction) {
   await SmsMessage.create(
     {
       userId: user.id,
+      contactNumber: phone3.phoneNumber,
+      direction: 'fromUser',
+      body: 'You know nothing Jon Snow.',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.create(
+    {
+      userId: user.id,
       contactNumber: phone1.phoneNumber,
       direction: 'fromUser',
       body: 'Winter is here',

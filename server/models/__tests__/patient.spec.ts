@@ -16,6 +16,7 @@ import {
   setupPatientsWithOpenCBOReferrals,
   setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
+  setupRecentConversations,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import CareTeam from '../care-team';
@@ -935,6 +936,27 @@ describe('patient model', () => {
       expect(results[0]).toMatchObject({
         id: patient1.id,
         firstName: patient1.firstName,
+      });
+    });
+
+    it('returns patients on care team with converations', async () => {
+      const { user, patient1, patient5 } = await setupRecentConversations(txn);
+
+      const { total, results } = await Patient.getPatientsWithRecentConversations(
+        { pageNumber: 0, pageSize: 10 },
+        user.id,
+        txn,
+      );
+
+      expect(total).toBe(2);
+      expect(results[0]).toMatchObject({
+        id: patient1.id,
+        firstName: patient1.firstName,
+      });
+
+      expect(results[1]).toMatchObject({
+        id: patient5.id,
+        firstName: patient5.firstName,
       });
     });
 

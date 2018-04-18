@@ -27,9 +27,10 @@ import PatientDocument from './models/patient-document';
 import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
+import PatientPhone from './models/patient-phone';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import PatientState from './models/patient-state';
-import { PhoneTypeOptions } from './models/phone';
+import Phone, { PhoneTypeOptions } from './models/phone';
 import ProgressNote from './models/progress-note';
 import ProgressNoteTemplate from './models/progress-note-template';
 import Question from './models/question';
@@ -38,6 +39,7 @@ import RiskAreaAssessmentSubmission from './models/risk-area-assessment-submissi
 import RiskAreaGroup from './models/risk-area-group';
 import ScreeningTool from './models/screening-tool';
 import ScreeningToolScoreRange from './models/screening-tool-score-range';
+import SmsMessage from './models/sms-message';
 import Task from './models/task';
 import TaskEvent from './models/task-event';
 import User from './models/user';
@@ -1088,6 +1090,141 @@ export async function setupUrgentTasks(txn: Transaction) {
   await EventNotification.dismiss(eventNotification2.id, txn);
 
   return { user, user2, patient1, patient5, task, task1, eventNotification };
+}
+
+export async function setupRecentConversations(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
+  const user = await User.create(createMockUser(111, clinic.id), txn);
+  const user2 = await User.create(createMockUser(121, clinic.id), txn);
+  const phone1 = await Phone.create(createMockPhone('(123) 456-1111'), txn);
+  const phone2 = await Phone.create(createMockPhone('(123) 456-2222'), txn);
+  const phone3 = await Phone.create(createMockPhone('(123) 456-3333'), txn);
+  const phone4 = await Phone.create(createMockPhone('(123) 456-4444'), txn);
+  const phone5 = await Phone.create(createMockPhone('(123) 456-5555'), txn);
+
+  const patient1 = await createPatient(
+    {
+      cityblockId: 123,
+      firstName: patient1Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient2 = await createPatient(
+    {
+      cityblockId: 234,
+      firstName: patient2Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient3 = await await createPatient(
+    {
+      cityblockId: 345,
+      firstName: patient3Name,
+      homeClinicId: clinic.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+  const patient4 = await createPatient(
+    {
+      cityblockId: 456,
+      firstName: patient4Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  const patient5 = await createPatient(
+    {
+      cityblockId: 567,
+      firstName: patient5Name,
+      homeClinicId: clinic.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  await PatientPhone.create({ patientId: patient1.id, phoneId: phone1.id }, txn);
+  await PatientPhone.create({ patientId: patient2.id, phoneId: phone2.id }, txn);
+  await PatientPhone.create({ patientId: patient3.id, phoneId: phone3.id }, txn);
+  await PatientPhone.create({ patientId: patient4.id, phoneId: phone4.id }, txn);
+  await PatientPhone.create({ patientId: patient5.id, phoneId: phone5.id }, txn);
+
+  await SmsMessage.create(
+    {
+      userId: user.id,
+      contactNumber: phone1.phoneNumber,
+      direction: 'toUser',
+      body: 'Winter is coming',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.create(
+    {
+      userId: user.id,
+      contactNumber: phone5.phoneNumber,
+      direction: 'fromUser',
+      body: 'All men must die. But we are not men.',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.create(
+    {
+      userId: user2.id,
+      contactNumber: phone3.phoneNumber,
+      direction: 'fromUser',
+      body: 'All men must die. But we are not men.',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.create(
+    {
+      userId: user.id,
+      contactNumber: phone1.phoneNumber,
+      direction: 'fromUser',
+      body: 'Winter is here',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.create(
+    {
+      userId: user2.id,
+      contactNumber: phone5.phoneNumber,
+      direction: 'fromUser',
+      body: 'Where are my dragons?!',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  const sms = await SmsMessage.create(
+    {
+      userId: user.id,
+      contactNumber: phone4.phoneNumber,
+      direction: 'fromUser',
+      body: 'I drink and I know things.',
+      twilioPayload: {},
+    },
+    txn,
+  );
+
+  await SmsMessage.query(txn).patchAndFetchById(sms.id, {
+    createdAt: new Date('2017-01-01').toISOString(),
+  });
+
+  return { user, patient1, patient5 };
 }
 
 function getDateOfBirthForAge(age: number) {

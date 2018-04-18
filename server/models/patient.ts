@@ -491,6 +491,33 @@ export default class Patient extends Model {
       .page(pageNumber, pageSize);
   }
 
+  static async getPatientsWithRecentConversations(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
+      .joinRaw(
+        `
+        INNER JOIN (
+          SELECT sms_message."patientId", MAX(sms_message."createdAt") AS latest_timestamp
+          FROM sms_message
+          WHERE sms_message."patientId" IS NOT NULL
+          AND sms_message."deletedAt" IS NULL
+          AND sms_message."userId" = ?
+          AND (sms_message."createdAt" > now() - interval \'7 days\')
+          GROUP BY sms_message."patientId"
+        ) groupedSmsMessages
+        ON groupedSmsMessages."patientId" = patient.id
+      `,
+        userId,
+      )
+      .orderBy('latest_timestamp', 'DESC')
+      .page(pageNumber, pageSize);
+  }
+
   static async getPatientsNewToCareTeam(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,

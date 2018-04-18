@@ -1,5 +1,6 @@
 import {
   getActiveMapRoute,
+  getContactsVcfRoute,
   getCBOReferralPdfRoute,
   getMapTaskRoute,
   getPatientRoute,
@@ -8,6 +9,7 @@ import {
 describe('Shared Route Helpers', () => {
   const patientId = 'danyTargaryen';
   const taskId = 'defeatCersei';
+  const authToken = 'motherOfDragons';
 
   it('returns base route to patient profile', () => {
     expect(getPatientRoute(patientId)).toBe(`/patients/${patientId}`);
@@ -24,10 +26,12 @@ describe('Shared Route Helpers', () => {
   });
 
   it('returns a route to CBO referral form', () => {
-    const authToken = 'abc123';
-
     expect(getCBOReferralPdfRoute(taskId, authToken)).toBe(
       `/pdf/${taskId}/referral-form.pdf?token=${authToken}`,
     );
+  });
+
+  it('returns a route for VCF contacts', () => {
+    expect(getContactsVcfRoute(authToken)).toBe(`/vcf-contacts?token=${authToken}`);
   });
 });

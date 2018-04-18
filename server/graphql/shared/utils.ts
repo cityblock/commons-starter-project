@@ -54,16 +54,21 @@ export interface IJWTForPDFData {
   userId: string;
 }
 
+export interface IJWTForVCFData {
+  createdAt: string;
+  userId: string;
+}
+
 export const signJwt = (
-  jwtData: IJWTData | IJWTForPDFData,
+  jwtData: IJWTData | IJWTForPDFData | IJWTForVCFData,
   expiresIn: string | number = config.JWT_EXPIRY,
 ) => sign(jwtData, config.JWT_SECRET, { expiresIn });
 
-export async function decodeJwt(jwt: string): Promise<IJWTData | IJWTForPDFData> {
+export async function decodeJwt(jwt: string): Promise<IJWTData | IJWTForPDFData | IJWTForVCFData> {
   // verify throws an error if jwt is not valid and if expiry passed
   await verify(jwt, config.JWT_SECRET);
 
-  return decode(jwt) as IJWTData | IJWTForPDFData;
+  return decode(jwt) as IJWTData | IJWTForPDFData | IJWTForVCFData;
 }
 
 // only use with non-PDF related tokens

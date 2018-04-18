@@ -23,6 +23,7 @@ import checkUserPermissions, {
 import { formatOrderOptions, formatRelayEdge, signJwt, IContext } from './shared/utils';
 
 const GENERATE_PDF_EXPIRY = '5m'; // 5 minutes
+const DOWNLOAD_VCF_EXPIRY = '5m'; // 5 minutes
 
 export interface IUserCreateArgs {
   input: IUserCreateInput;
@@ -218,7 +219,6 @@ export async function JwtForPdfCreate(
   { input }: IUserJwtForPdfArgs,
   { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['JwtForPdfCreate']> {
-  checkLoggedInWithPermissions(userId, permissions);
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, input.patientId);
 
   // load the current glass break for user and patient
@@ -237,6 +237,22 @@ export async function JwtForPdfCreate(
   };
 
   const authToken = signJwt(jwtData, GENERATE_PDF_EXPIRY);
+  return { authToken };
+}
+
+export async function JwtForVcfCreate(
+  root: {},
+  input: {},
+  { permissions, userId, txn }: IContext,
+): Promise<IRootMutationType['JwtForVcfCreate']> {
+  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+
+  const jwtData = {
+    createdAt: new Date().toISOString(),
+    userId: userId!,
+  };
+
+  const authToken = signJwt(jwtData, DOWNLOAD_VCF_EXPIRY);
   return { authToken };
 }
 

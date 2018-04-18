@@ -7,6 +7,7 @@ import * as getCurrentUser from '../../../app/graphql/queries/get-current-user.g
 import * as getUserSummaryList from '../../../app/graphql/queries/get-user-summary-list.graphql';
 import * as getUsers from '../../../app/graphql/queries/get-users.graphql';
 import * as getJwtForPdfCreate from '../../../app/graphql/queries/jwt-for-pdf-create.graphql';
+import * as jwtForVcfCreate from '../../../app/graphql/queries/jwt-for-vcf-create.graphql';
 import * as userLogin from '../../../app/graphql/queries/log-in-user-mutation.graphql';
 import * as userCreate from '../../../app/graphql/queries/user-create-mutation.graphql';
 import * as userDelete from '../../../app/graphql/queries/user-delete-mutation.graphql';
@@ -42,6 +43,7 @@ describe('user tests', () => {
   const usersQuery = print(getUsers);
   const currentUserQuery = print(getCurrentUser);
   const jwtForPdfCreateMutation = print(getJwtForPdfCreate);
+  const jwtForVcfCreateMutation = print(jwtForVcfCreate);
   const userCreateMutation = print(userCreate);
   const userDeleteMutation = print(userDelete);
   const userEditPermissionsMutation = print(userEditPermissions);
@@ -688,6 +690,36 @@ describe('user tests', () => {
       }`;
 
       expect(result.errors![0].message).toBe(message);
+    });
+  });
+
+  describe('JwtForVcfCreate', () => {
+    it('generates a Jwt token for VCF viewing', async () => {
+      const { clinic } = await setup(txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      const result = await graphql(schema, jwtForVcfCreateMutation, null, {
+        db,
+        permissions: 'blue',
+        txn,
+        userId: user.id,
+      });
+
+      expect(result.data!.JwtForVcfCreate.authToken).toBeTruthy();
+    });
+
+    it('does not allow generating Jwt token for VCF if no relevant permissions', async () => {
+      const { clinic } = await setup(txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      const result = await graphql(schema, jwtForVcfCreateMutation, null, {
+        db,
+        permissions: 'black',
+        txn,
+        userId: user.id,
+      });
+
+      expect(result.errors![0].message).toBe('black not able to view allPatients');
     });
   });
 });

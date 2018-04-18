@@ -985,5 +985,6 @@ export const ENGLISH_TRANSLATION = {
     'messages.empty': 'No history of text messages',
     'messages.createPlaceholder': 'Text member',
     'messages.send': 'Send',
+    'contacts.download': 'Download Contacts',
   },
 };

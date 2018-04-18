@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Authentication from './authentication-container/authentication-container';
 import Builder from './builder-container/builder-container';
+import Contacts from './contacts-container/contacts-container';
 import Dashboard from './dashboard-container/dashboard-container';
 import LogIn from './login-container/login-container';
 import Main from './main-container/main-container';
@@ -35,6 +36,7 @@ export default (
         <Route path="/patients/:patientId/:tab" component={PatientProfile} />
         <Route path="/builder/:tab?/:objectId?/:subTab?/:subTabId?" component={Builder} />
         <Route path="/manager/:tabId?/:objectId?" component={Manager} />
+        <Route path="/contacts" component={Contacts} />
       </Authentication>
     </Switch>
   </Main>

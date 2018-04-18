@@ -27,6 +27,7 @@ import {
   twilioIncomingSmsHandler,
   twilioOutgoingSmsHandler,
 } from './handlers/twilio/sms-message-handler';
+import { contactsVcfHandler } from './handlers/vcf/vcard-handler';
 import { createRedisClient } from './lib/redis';
 
 kue.createQueue({ redis: createRedisClient() });
@@ -199,6 +200,9 @@ export default async (
   app.post('/twilio-incoming-phone-call', bodyParser(), twilioIncomingCallHandler);
   app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser(), twilioCompleteCallHandler);
   app.post(TWILIO_VOICEMAIL_ENDPOINT, bodyParser(), twilioVoicemailHandler);
+
+  // vCard Generation
+  app.get('/vcf-contacts', contactsVcfHandler);
 
   app.get('*', addHeadersMiddleware, renderApp);
 

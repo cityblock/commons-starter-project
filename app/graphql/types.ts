@@ -5969,6 +5969,13 @@ export interface JwtForPdfCreateMutation {
   },
 };
 
+export interface JwtForVcfCreateMutation {
+  // creates a JWT to download VCF
+  JwtForVcfCreate:  {
+    authToken: string,
+  },
+};
+
 export interface logInUserMutationVariables {
   googleAuthCode: string,
 };

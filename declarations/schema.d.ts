@@ -3178,6 +3178,11 @@ declare module 'schema' {
      * creates a calendar event for a patient
      */
     calendarCreateEventForPatient: ICalendarUrl;
+
+    /**
+     * creates a JWT to download VCF
+     */
+    JwtForVcfCreate: IJwtForVcf;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -4712,6 +4717,13 @@ declare module 'schema' {
    */
   interface ICalendarUrl {
     eventCreateUrl: string;
+  }
+
+  /**
+   * JWT for downloading vCard
+   */
+  interface IJwtForVcf {
+    authToken: string;
   }
 
   interface IRootSubscriptionType {

@@ -17,3 +17,7 @@ export const getCBOReferralPdfRoute = (taskId: string, authToken: string): strin
 export const getPrintableMapPdfRoute = (patientId: string, authToken: string): string => {
   return `/pdf/${patientId}/printable-map.pdf?token=${authToken}`;
 };
+
+export const getContactsVcfRoute = (authToken: string): string => {
+  return `/vcf-contacts?token=${authToken}`;
+};

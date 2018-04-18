@@ -1490,6 +1490,11 @@ type JwtForPdf {
   authToken: String!
 }
 
+# JWT for downloading vCard
+type JwtForVcf {
+  authToken: String!
+}
+
 # Patient Data Flag
 type PatientDataFlag implements uniqueId {
   id: ID!
@@ -2718,6 +2723,8 @@ type RootMutationType {
   smsMessageCreate(input: SmsMessageCreateInput): SmsMessageNode!
   # creates a calendar event for a patient
   calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
+  # creates a JWT to download VCF
+  JwtForVcfCreate: JwtForVcf!
 }
 
 type RootQueryType {

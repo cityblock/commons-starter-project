@@ -7,6 +7,7 @@ import PatientAge from '../../../shared/library/patient-age/patient-age';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patient } from '../../../shared/util/test-data';
 import PatientTaskCount from '../../tasks/patient-task-count';
+import PatientLatestSmsMessage from '../patient-latest-sms-message';
 import PatientListItemBody from '../patient-list-item-body';
 
 describe('Dashboard Patient List Item Body', () => {
@@ -69,9 +70,10 @@ describe('Dashboard Patient List Item Body', () => {
     expect(wrapper.find(PatientTaskCount).length).toBe(0);
   });
 
-  it('does not render cityblock id or status if conversations view', () => {
+  it('does renders latest SMS message if conversations view', () => {
     wrapper.setProps({ displayType: 'conversations' });
 
+    expect(wrapper.find(PatientLatestSmsMessage).props().patientId).toBe(patient.id);
     expect(wrapper.find(SmallText).length).toBe(0);
   });
 

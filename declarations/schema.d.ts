@@ -599,6 +599,11 @@ declare module 'schema' {
      * SMS messages for given user and patient
      */
     smsMessages: ISmsMessageEdges;
+
+    /**
+     * latest SMS message between given user and patient
+     */
+    smsMessageLatest: ISmsMessage | null;
   }
   interface IUsersOnRootQueryTypeArguments {
     pageNumber?: number | null;
@@ -956,6 +961,9 @@ declare module 'schema' {
     patientId: string;
     pageNumber: number;
     pageSize: number;
+  }
+  interface ISmsMessageLatestOnRootQueryTypeArguments {
+    patientId: string;
   }
 
   type IUserOrderOptionsEnum =

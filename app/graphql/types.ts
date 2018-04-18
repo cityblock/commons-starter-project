@@ -5493,6 +5493,23 @@ export interface getScreeningToolsQuery {
   } | null >,
 };
 
+export interface getSmsMessageLatestQueryVariables {
+  patientId: string,
+};
+
+export interface getSmsMessageLatestQuery {
+  // latest SMS message between given user and patient
+  smsMessageLatest:  {
+    id: string,
+    userId: string,
+    contactNumber: string,
+    patientId: string | null,
+    direction: SmsMessageDirection,
+    body: string,
+    createdAt: string,
+  } | null,
+};
+
 export interface getSmsMessagesQueryVariables {
   patientId: string,
   pageNumber: number,

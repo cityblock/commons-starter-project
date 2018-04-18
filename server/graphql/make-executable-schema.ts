@@ -280,7 +280,12 @@ import {
   screeningToolScoreRangeDelete,
   screeningToolScoreRangeEdit,
 } from './screening-tool-score-range-resolver';
-import { resolveSmsMessages, smsMessageCreate, smsMessageSubscribe } from './sms-message-resolver';
+import {
+  resolveSmsMessages,
+  resolveSmsMessageLatest,
+  smsMessageCreate,
+  smsMessageSubscribe,
+} from './sms-message-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -445,6 +450,7 @@ const resolveFunctions = {
     patientSocialSecurity: resolvePatientSocialSecurity,
     calendarEventsForPatient: resolveCalendarEventsForPatient,
     smsMessages: resolveSmsMessages,
+    smsMessageLatest: resolveSmsMessageLatest,
   },
   RootMutationType: {
     addressCreate,

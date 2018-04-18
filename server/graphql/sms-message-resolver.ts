@@ -15,6 +15,10 @@ interface IQuery extends IPaginationOptions {
   patientId: string;
 }
 
+interface ILatestQuery {
+  patientId: string;
+}
+
 interface ISmsMessageCreateOptions {
   input: ISmsMessageCreateInput;
 }
@@ -49,6 +53,18 @@ export async function resolveSmsMessages(
     },
     totalCount: smsMessages.total,
   };
+}
+
+export async function resolveSmsMessageLatest(
+  root: any,
+  { patientId }: ILatestQuery,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootQueryType['smsMessageLatest']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+
+  logger.log(`GET latest SMS message between patient ${patientId} and user ${userId}`, 2);
+
+  return SmsMessage.getLatestForUserPatient({ userId: userId!, patientId }, txn);
 }
 
 export async function smsMessageCreate(

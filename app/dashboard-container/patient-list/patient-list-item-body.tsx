@@ -8,6 +8,7 @@ import SmallText from '../../shared/library/small-text/small-text';
 import PatientTaskCount from '../tasks/patient-task-count';
 import * as styles from './css/patient-list-item-body.css';
 import PatientIntakeProgressBar from './patient-intake-progress-bar';
+import PatientLatestSmsMessage from './patient-latest-sms-message';
 import { DisplayOptions } from './patient-list-item';
 
 interface IProps {
@@ -35,6 +36,8 @@ const PatientListItemBody: React.StatelessComponent<IProps> = (props: IProps) =>
     );
   } else if (displayType === 'progress') {
     itemBody = <PatientIntakeProgressBar computedPatientStatus={patient.computedPatientStatus} />;
+  } else if (displayType === 'conversations') {
+    itemBody = <PatientLatestSmsMessage patientId={patient.id} />;
   } else {
     itemBody = <PatientAge dateOfBirth={patient.dateOfBirth} gender={gender} />;
   }

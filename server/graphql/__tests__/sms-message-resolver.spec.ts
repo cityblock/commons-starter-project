@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import * as getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
 import * as getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
 import * as smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
 import Db from '../../db';
@@ -54,6 +55,7 @@ describe('SMS Message Resolver', () => {
   let txn = null as any;
   let db: Db;
   const getSmsMessagesQuery = print(getSmsMessages);
+  const getSmsMessageLatestQuery = print(getSmsMessageLatest);
   const smsMessageCreateMutation = print(smsMessageCreate);
 
   beforeEach(async () => {
@@ -139,6 +141,86 @@ describe('SMS Message Resolver', () => {
         patientId: patient.id,
         direction: 'toUser',
       });
+    });
+  });
+
+  describe('resolveSmsMessageLatest', () => {
+    it('returns latest SMS message between user and patient', async () => {
+      const { patient, user, phone } = await setup(txn);
+
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: '+11234567890',
+          direction: 'toUser',
+          body: body1,
+          twilioPayload: {},
+        },
+        txn,
+      );
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: '+11234567890',
+          direction: 'toUser',
+          body: body2,
+          twilioPayload: {},
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        getSmsMessageLatestQuery,
+        null,
+        {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      expect(result.data!.smsMessageLatest).toMatchObject({
+        userId: user.id,
+        patientId: patient.id,
+        direction: 'toUser',
+        body: body2,
+        contactNumber: phone.phoneNumber,
+      });
+    });
+
+    it('returns null if no SMS messages between user and patient', async () => {
+      const { patient, user } = await setup(txn);
+
+      await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: '+11234565555',
+          direction: 'toUser',
+          body: 'Not from patient',
+          twilioPayload: {},
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        getSmsMessageLatestQuery,
+        null,
+        {
+          db,
+          userId: user.id,
+          permissions: 'blue',
+          logger,
+          txn,
+        },
+        { patientId: patient.id },
+      );
+
+      expect(result.data!.smsMessageLatest).toBeNull();
     });
   });
 

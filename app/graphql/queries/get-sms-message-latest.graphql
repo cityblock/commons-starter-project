@@ -1,0 +1,7 @@
+#import "../fragments/full-sms-message.graphql"
+
+query getSmsMessageLatest($patientId: ID!) {
+  smsMessageLatest(patientId: $patientId) {
+    ...FullSmsMessage
+  }
+}

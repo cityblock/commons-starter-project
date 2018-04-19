@@ -132,7 +132,8 @@ describe('patient info model', () => {
             lastName: "Granger",
             relationToPatient: friend,
             phone: {
-              phoneNumber: "+11112223344"
+              phoneNumber: "+11112223344",
+              type: mobile
             },
           }) {
             id,
@@ -196,7 +197,8 @@ describe('patient info model', () => {
             lastName: "Granger",
             relationToPatient: friend,
             phone: {
-              phoneNumber: "+11112223344"
+              phoneNumber: "+11112223344",
+              type: mobile
             },
             isEmergencyContact: true,
           }) {
@@ -233,6 +235,7 @@ describe('patient info model', () => {
             isEmergencyContact: true,
             phone: {
               phoneNumber: "+11112223344",
+              type: mobile
             },
             email: {
               emailAddress: "test@email.com",
@@ -313,6 +316,7 @@ describe('patient info model', () => {
             isEmergencyContact: true,
             phone: {
               phoneNumber: "+11112223344",
+              type: mobile
             },
             email: {
               emailAddress: "",
@@ -443,6 +447,7 @@ describe('patient info model', () => {
             isEmergencyContact: true,
             phone: {
               phoneNumber: "+10001112255",
+              type: mobile
             },
             email: {
               emailAddress: "changed@email.com",
@@ -565,6 +570,7 @@ describe('patient info model', () => {
             isEmergencyContact: true,
             phone: {
               phoneNumber: "+10001112255",
+              type: mobile,
             },
             email: {
               emailAddress: "changed@email.com",

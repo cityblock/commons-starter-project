@@ -562,7 +562,7 @@ input AddressDeleteForPatientInput {
 type Phone implements uniqueId {
   id: ID!
   phoneNumber: String!
-  type: PhoneTypeOptions
+  type: PhoneTypeOptions!
   description: String
 }
 
@@ -586,7 +586,7 @@ input PhoneEditInput {
 # params for creating a phone
 input PhoneCreateInput {
   phoneNumber: String!
-  type: PhoneTypeOptions
+  type: PhoneTypeOptions!
   description: String
 }
 
@@ -594,7 +594,7 @@ input PhoneCreateInput {
 input PhoneCreateForPatientInput {
   patientId: ID!
   phoneNumber: String!
-  type: PhoneTypeOptions
+  type: PhoneTypeOptions!
   description: String
   isPrimary: Boolean
 }

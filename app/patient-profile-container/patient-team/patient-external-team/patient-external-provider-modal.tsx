@@ -1,6 +1,6 @@
 import { get, isNil } from 'lodash';
 import * as React from 'react';
-import { EmailInput, ExternalProviderOptions, PhoneInput } from '../../../graphql/types';
+import { EmailInput, ExternalProviderOptions, PhoneCreateInput } from '../../../graphql/types';
 import Modal from '../../../shared/library/modal/modal';
 import PatientExternalProviderForm from './patient-external-provider-form';
 
@@ -10,7 +10,7 @@ export interface IPatientExternalProvider {
   role: ExternalProviderOptions;
   roleFreeText?: string | null;
   agencyName: string;
-  phone: PhoneInput;
+  phone: PhoneCreateInput;
   email?: EmailInput | null;
   description?: string | null;
 }

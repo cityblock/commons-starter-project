@@ -195,7 +195,7 @@ export function createMockPatientContact(
 export function createMockPatientExternalProvider(
   patientId: string,
   userId: string,
-  phone: { phoneNumber: string },
+  { phoneNumber }: { phoneNumber: string },
   options?: {
     email?: { emailAddress: string };
     firstName?: string;
@@ -207,7 +207,7 @@ export function createMockPatientExternalProvider(
   },
 ) {
   return {
-    phone,
+    phone: { phoneNumber, type: 'mobile' },
     updatedById: userId,
     patientId,
     firstName: get(options, 'firstName') || 'Hermione',

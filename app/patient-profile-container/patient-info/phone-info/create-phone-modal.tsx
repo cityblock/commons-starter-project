@@ -25,7 +25,7 @@ type allProps = IProps & IGraphqlProps;
 
 export class CreatePhoneModal extends React.Component<allProps> {
   createPhone = async (phone: IPhone) => {
-    if (phone.id || !phone.phoneNumber) {
+    if (phone.id || !phone.phoneNumber || !phone.type) {
       return;
     }
 

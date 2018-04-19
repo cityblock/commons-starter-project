@@ -91,6 +91,14 @@ export enum PatientRelationOptions {
 }
 
 
+export enum PhoneTypeOptions {
+  home = "home",
+  mobile = "mobile",
+  other = "other",
+  work = "work",
+}
+
+
 export enum CoreIdentityOptions {
   dateOfBirth = "dateOfBirth",
   firstName = "firstName",
@@ -164,14 +172,6 @@ export enum ContactMethodOptions {
   email = "email",
   phone = "phone",
   text = "text",
-}
-
-
-export enum PhoneTypeOptions {
-  home = "home",
-  mobile = "mobile",
-  other = "other",
-  work = "work",
 }
 
 
@@ -340,7 +340,7 @@ export interface PatientConcernBulkEditFields {
 
 export interface PhoneCreateInput {
   phoneNumber: string,
-  type?: PhoneTypeOptions | null,
+  type: PhoneTypeOptions,
   description?: string | null,
 };
 
@@ -2591,6 +2591,7 @@ export interface getPatientContactHealthcareProxiesQuery {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -2631,6 +2632,7 @@ export interface getPatientContactsQuery {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -2693,6 +2695,7 @@ export interface getPatientExternalProvidersQuery {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -2810,7 +2813,7 @@ export interface getPatientPhonesQuery {
   patientPhones:  Array< {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } > | null,
 };
@@ -3365,7 +3368,7 @@ export interface getPatientQuery {
       primaryPhone:  {
         id: string,
         phoneNumber: string,
-        type: PhoneTypeOptions | null,
+        type: PhoneTypeOptions,
         description: string | null,
       } | null,
       preferredContactMethod: ContactMethodOptions | null,
@@ -6506,6 +6509,7 @@ export interface patientContactCreateMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -6546,6 +6550,7 @@ export interface patientContactDeleteMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -6597,6 +6602,7 @@ export interface patientContactEditMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -6740,6 +6746,7 @@ export interface patientExternalProviderCreateMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -6769,6 +6776,7 @@ export interface patientExternalProviderDeleteMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -6806,6 +6814,7 @@ export interface patientExternalProviderEditMutation {
     phone:  {
       id: string,
       phoneNumber: string,
+      type: PhoneTypeOptions,
     },
     createdAt: string | null,
     updatedAt: string | null,
@@ -7380,7 +7389,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
 export interface phoneCreateForPatientMutationVariables {
   patientId: string,
   phoneNumber: string,
-  type?: PhoneTypeOptions | null,
+  type: PhoneTypeOptions,
   description?: string | null,
   isPrimary?: boolean | null,
 };
@@ -7390,14 +7399,14 @@ export interface phoneCreateForPatientMutation {
   phoneCreateForPatient:  {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } | null,
 };
 
 export interface phoneCreateMutationVariables {
   phoneNumber: string,
-  type?: PhoneTypeOptions | null,
+  type: PhoneTypeOptions,
   description?: string | null,
 };
 
@@ -7406,7 +7415,7 @@ export interface phoneCreateMutation {
   phoneCreate:  {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } | null,
 };
@@ -7422,7 +7431,7 @@ export interface phoneDeleteForPatientMutation {
   phoneDeleteForPatient:  {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } | null,
 };
@@ -7440,7 +7449,7 @@ export interface phoneEditMutation {
   phoneEdit:  {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } | null,
 };
@@ -10996,6 +11005,7 @@ export interface FullPatientContactFragment {
   phone:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions,
   },
   createdAt: string | null,
   updatedAt: string | null,
@@ -11041,6 +11051,7 @@ export interface FullPatientExternalProviderFragment {
   phone:  {
     id: string,
     phoneNumber: string,
+    type: PhoneTypeOptions,
   },
   createdAt: string | null,
   updatedAt: string | null,
@@ -11083,7 +11094,7 @@ export interface FullPatientForCBOReferralFormPDFFragment {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
-      type: PhoneTypeOptions | null,
+      type: PhoneTypeOptions,
       description: string | null,
     } | null,
   },
@@ -11149,7 +11160,7 @@ export interface FullPatientForProfileFragment {
     primaryPhone:  {
       id: string,
       phoneNumber: string,
-      type: PhoneTypeOptions | null,
+      type: PhoneTypeOptions,
       description: string | null,
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
@@ -11271,7 +11282,7 @@ export interface FullPatientInfoFragment {
   primaryPhone:  {
     id: string,
     phoneNumber: string,
-    type: PhoneTypeOptions | null,
+    type: PhoneTypeOptions,
     description: string | null,
   } | null,
   preferredContactMethod: ContactMethodOptions | null,
@@ -11463,7 +11474,7 @@ export interface FullPatientTableRowFragment {
 export interface FullPhoneFragment {
   id: string,
   phoneNumber: string,
-  type: PhoneTypeOptions | null,
+  type: PhoneTypeOptions,
   description: string | null,
 };
 
@@ -12765,7 +12776,7 @@ export interface FullTaskForCBOReferralFormPDFFragment {
       primaryPhone:  {
         id: string,
         phoneNumber: string,
-        type: PhoneTypeOptions | null,
+        type: PhoneTypeOptions,
         description: string | null,
       } | null,
     },

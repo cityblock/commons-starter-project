@@ -5,11 +5,11 @@ import {
 } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 
-export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other' | null;
+export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other';
 
 export interface IPhoneOptions {
   phoneNumber: string;
-  type?: PhoneTypeOptions;
+  type: PhoneTypeOptions;
   description?: string;
 }
 
@@ -17,7 +17,7 @@ export interface IPhoneOptions {
 export default class Phone extends BaseModel {
   phoneNumber: string;
   type: PhoneTypeOptions;
-  description: string;
+  description: string | null;
 
   static tableName = 'phone';
 
@@ -34,7 +34,7 @@ export default class Phone extends BaseModel {
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: ['phoneNumber'],
+    required: ['phoneNumber', 'type'],
   };
 
   static async get(phoneId: string, txn: Transaction) {
@@ -71,7 +71,7 @@ export default class Phone extends BaseModel {
     return deleted;
   }
 
-  static async edit(phone: IPhoneOptions, phoneId: string, txn: Transaction): Promise<Phone> {
+  static async edit(phone: Partial<IPhoneOptions>, phoneId: string, txn: Transaction): Promise<Phone> {
     const formattedInput = {
       ...phone,
       phoneNumber: phone.phoneNumber ? formatPhoneNumberForTwilio(phone.phoneNumber) : undefined,

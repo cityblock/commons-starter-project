@@ -170,6 +170,7 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
+            type: mobile,
             description: "Some phone",
           }) {
             id, phoneNumber, description
@@ -216,6 +217,7 @@ describe('phone resolver', () => {
           phoneCreateForPatient(input: {
             patientId: "${patient.id}",
             phoneNumber: "3332228899",
+            type: mobile,
             description: "Some phone",
             isPrimary: true,
           }) {

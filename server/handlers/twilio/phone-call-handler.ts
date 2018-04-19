@@ -70,14 +70,7 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
 
       // if patient called us and no one answered, start recording voicemail
       if (Direction === 'inbound' && DialCallStatus === 'no-answer') {
-        twiml.say("We're sorry we missed your call. Please leave a message at the beep.");
-
-        twiml.record({
-          action: TWILIO_VOICEMAIL_ENDPOINT,
-          method: 'POST',
-          maxLength: MAX_VOICEMAIL_LENGTH,
-          playBeep: true,
-        });
+        recordVoicemail(twiml);
       }
 
       await PhoneCall.create(
@@ -122,6 +115,17 @@ export async function twilioVoicemailHandler(req: express.Request, res: express.
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   return res.end(twiml.toString());
 }
+
+const recordVoicemail = (twiml: any) => {
+  twiml.say("We're sorry we missed your call. Please leave a message at the beep.");
+
+  twiml.record({
+    action: TWILIO_VOICEMAIL_ENDPOINT,
+    method: 'POST',
+    maxLength: MAX_VOICEMAIL_LENGTH,
+    playBeep: true,
+  });
+};
 
 const reportError = (error: Error, payload: object) => {
   const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });

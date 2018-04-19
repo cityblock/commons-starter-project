@@ -176,7 +176,7 @@ interface IEmail {
 interface IPhone {
   id: string;
   phoneNumber: string;
-  type: PhoneTypeOptions | null;
+  type: PhoneTypeOptions;
   description: string | null;
 }
 
@@ -1067,6 +1067,7 @@ export const healthcareProxy = {
   phone: {
     id: phone1.id,
     phoneNumber: phone1.phoneNumber,
+    type: 'mobile' as PhoneTypeOptions,
   },
   email: {
     id: email1.id,
@@ -1101,6 +1102,7 @@ export const externalProviderPerson = {
   phone: {
     id: phone1.id,
     phoneNumber: phone1.phoneNumber,
+    type: 'mobile' as PhoneTypeOptions,
   },
   email: {
     id: email1.id,

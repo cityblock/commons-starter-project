@@ -190,7 +190,7 @@ describe('patient phone model', () => {
 
       // phone for another patient
       const patient2 = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
-      const phone4 = await Phone.create({ phoneNumber: '333-333-3333' }, txn);
+      const phone4 = await Phone.create({ phoneNumber: '333-333-3333', type: 'other' }, txn);
       await PatientPhone.create({ patientId: patient2.id, phoneId: phone4.id }, txn);
 
       const phones = await PatientPhone.getAll(patient.id, txn);

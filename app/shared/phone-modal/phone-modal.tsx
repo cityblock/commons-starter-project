@@ -6,7 +6,7 @@ import PhoneForm from './phone-form';
 
 export interface IPhone {
   phoneNumber?: string | null;
-  type?: PhoneTypeOptions | null;
+  type?: PhoneTypeOptions;
   description?: string | null;
   id?: string;
 }

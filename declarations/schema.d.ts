@@ -1201,7 +1201,7 @@ declare module 'schema' {
   interface IPhone {
     id: string;
     phoneNumber: string;
-    type: IPhoneTypeOptionsEnum | null;
+    type: IPhoneTypeOptionsEnum;
     description: string | null;
   }
 
@@ -3740,7 +3740,7 @@ declare module 'schema' {
   interface IPhoneCreateForPatientInput {
     patientId: string;
     phoneNumber: string;
-    type?: IPhoneTypeOptionsEnum | null;
+    type: IPhoneTypeOptionsEnum;
     description?: string | null;
     isPrimary?: boolean | null;
   }
@@ -3750,7 +3750,7 @@ declare module 'schema' {
    */
   interface IPhoneCreateInput {
     phoneNumber: string;
-    type?: IPhoneTypeOptionsEnum | null;
+    type: IPhoneTypeOptionsEnum;
     description?: string | null;
   }
 

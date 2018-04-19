@@ -21,6 +21,7 @@ fragment FullPatientContact on PatientContact {
   phone {
     id
     phoneNumber
+    type
   }
   createdAt
   updatedAt

@@ -3,7 +3,7 @@
 mutation phoneCreateForPatient(
   $patientId: ID!
   $phoneNumber: String!
-  $type: PhoneTypeOptions
+  $type: PhoneTypeOptions!
   $description: String
   $isPrimary: Boolean
 ) {

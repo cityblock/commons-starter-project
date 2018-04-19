@@ -42,7 +42,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
   const phone = await Phone.create(createMockPhone(), txn);
-  const primaryPhone = await Phone.create({ phoneNumber: '+11112223333' }, txn);
+  const primaryPhone = await Phone.create({ phoneNumber: '+11112223333', type: 'mobile' }, txn);
   await PatientPhone.create({ phoneId: phone.id, patientId: patient.id }, txn);
   await PatientPhone.create({ phoneId: primaryPhone.id, patientId: patient.id }, txn);
   await PatientInfo.edit(

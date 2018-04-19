@@ -131,7 +131,7 @@ describe('patient external provider phone model', () => {
       );
 
       // phone for another patientExternalProvider
-      const phone4 = await Phone.create({ phoneNumber: '333-333-3333' }, txn);
+      const phone4 = await Phone.create({ phoneNumber: '333-333-3333', type: 'mobile' }, txn);
       const patientExternalProvider2 = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone4),
         txn,

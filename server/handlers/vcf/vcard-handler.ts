@@ -29,6 +29,7 @@ export const contactsVcfHandler = async (req: express.Request, res: express.Resp
   card.firstName = 'Sansa';
   card.lastName = 'Stark';
   card.cellPhone = '+17274222222';
+  card.uid = 'a3db17cd-b09b-4822-bb7f-d9ee7c5c311e';
 
   let result = card.getFormattedString();
 
@@ -38,6 +39,7 @@ export const contactsVcfHandler = async (req: express.Request, res: express.Resp
   card2.lastName = 'Targaryen';
   card2.cellPhone = '+17274567890';
   card2.homePhone = '+17274445555';
+  card2.uid = 'd71df610-6f3e-4e61-9255-380399efc688';
 
   result += card2.getFormattedString();
 

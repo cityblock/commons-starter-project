@@ -103,7 +103,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={goalStyles.container}>
-        <form onSubmit={this.onSubmit}>
+        <div>
           <div className={styles.formTop}>
             <div className={styles.close} onClick={this.props.onClose} />
           </div>
@@ -128,7 +128,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
               <Button onClick={this.onSubmit} label="Add goal" />
             </div>
           </div>
-        </form>
+        </div>
       </div>
     );
   }
@@ -140,7 +140,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {
-      refetchQueries: ['goalSuggestionTemplates'],
+      refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
 )(GoalCreate);

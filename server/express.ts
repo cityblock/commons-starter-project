@@ -195,11 +195,11 @@ export default async (
   app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMapPdf);
 
   // Twilio SMS Messages and Calls
-  app.post('/twilio-incoming-sms-message', bodyParser(), twilioIncomingSmsHandler);
-  app.post('/twilio-outgoing-sms-message', bodyParser(), twilioOutgoingSmsHandler);
-  app.post('/twilio-incoming-phone-call', bodyParser(), twilioIncomingCallHandler);
-  app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser(), twilioCompleteCallHandler);
-  app.post(TWILIO_VOICEMAIL_ENDPOINT, bodyParser(), twilioVoicemailHandler);
+  app.post('/twilio-incoming-sms-message', bodyParser.json(), twilioIncomingSmsHandler);
+  app.post('/twilio-outgoing-sms-message', bodyParser.json(), twilioOutgoingSmsHandler);
+  app.post('/twilio-incoming-phone-call', bodyParser.json(), twilioIncomingCallHandler);
+  app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser.json(), twilioCompleteCallHandler);
+  app.post(TWILIO_VOICEMAIL_ENDPOINT, bodyParser.json(), twilioVoicemailHandler);
 
   // vCard Generation
   app.get('/vcf-contacts', contactsVcfHandler);

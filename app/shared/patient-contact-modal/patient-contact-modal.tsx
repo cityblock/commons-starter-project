@@ -1,6 +1,11 @@
 import { get, isNil } from 'lodash';
 import * as React from 'react';
-import { AddressInput, EmailInput, PatientRelationOptions, PhoneCreateInput } from '../../graphql/types';
+import {
+  AddressInput,
+  EmailInput,
+  PatientRelationOptions,
+  PhoneCreateInput,
+} from '../../graphql/types';
 import Modal from '../library/modal/modal';
 import PatientFamilyMemberForm from './patient-family-member-form';
 import PatientProxyForm from './patient-proxy-form';

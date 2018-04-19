@@ -71,7 +71,11 @@ export default class Phone extends BaseModel {
     return deleted;
   }
 
-  static async edit(phone: Partial<IPhoneOptions>, phoneId: string, txn: Transaction): Promise<Phone> {
+  static async edit(
+    phone: Partial<IPhoneOptions>,
+    phoneId: string,
+    txn: Transaction,
+  ): Promise<Phone> {
     const formattedInput = {
       ...phone,
       phoneNumber: phone.phoneNumber ? formatPhoneNumberForTwilio(phone.phoneNumber) : undefined,

@@ -5,6 +5,10 @@
     "module": "commonjs"
   },
   "include": ["./declarations/*"],
-  "files": ["./server/index"],
+  "files": [
+    "./server/index",
+    "./server/consumers/computed-field-consumer",
+    "./server/consumers/member-attribution-consumer"
+  ],
   "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
 }

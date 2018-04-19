@@ -218,7 +218,7 @@
     string-format-obj "^1.0.0"
     through2 "^2.0.0"
 
-"@google-cloud/trace-agent@^2.7.2":
+"@google-cloud/trace-agent@2.7.2":
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/@google-cloud/trace-agent/-/trace-agent-2.7.2.tgz#bab3e48b28b2cae8ccd0cd382d7e24a848533145"
   dependencies:

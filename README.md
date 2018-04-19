@@ -18,7 +18,6 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 * **Point People:** @zamiang, @loganhasson
 * **Pingdom:** [http://stats.pingdom.com/8uqm3ndqqgmh](http://stats.pingdom.com/8uqm3ndqqgmh)
 * **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
-* **Logentries:** [https://logentries.com/app/87be99c5#/sets](https://logentries.com/app/87be99c5#/sets)
 * **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
 * **Stackdriver:** [https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607](https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607)
 * **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)

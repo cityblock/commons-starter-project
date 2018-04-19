@@ -10,17 +10,7 @@ import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 
-let logger = console;
-
-if (process.env.NODE_ENV === 'production') {
-  /* tslint:disable no-var-requires */
-  const CaptureOutput = require('./lib/capture-output').default;
-  /* tslint:enable no-var-requires */
-
-  const captureOutput = new CaptureOutput('web');
-  captureOutput.capture();
-  logger = captureOutput;
-}
+const logger = console;
 
 const app = express();
 
@@ -66,6 +56,6 @@ if (require.main === module) {
   try {
     main({ env: process.env.NODE_ENV as Env });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
   }
 }

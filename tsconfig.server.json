@@ -5,6 +5,6 @@
     "module": "commonjs"
   },
   "include": ["./declarations/*"],
-  "files": ["./server/index", "./server/lib/capture-output"],
+  "files": ["./server/index"],
   "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
 }

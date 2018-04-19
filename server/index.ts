@@ -1,5 +1,18 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import config from './config';
+if (config.NODE_ENV !== 'test') {
+  /* tslint:disable no-var-requires */
+  const credentials = JSON.parse(String(config.GCP_CREDS));
+  require('@google-cloud/trace-agent').start({
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
+    projectId: credentials.project_id,
+  });
+}
+/* tslint:enable no-var-requires */
 import * as compression from 'compression';
 import * as express from 'express';
 import { execute, subscribe } from 'graphql';

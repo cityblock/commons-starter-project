@@ -1,15 +1,20 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
+import { format } from 'date-fns';
 import * as express from 'express';
 import { transaction } from 'objection';
 import * as twilio from 'twilio';
 import config from '../../config';
 import Db from '../../db';
 import { TWILIO_COMPLETE_ENDPOINT, TWILIO_VOICEMAIL_ENDPOINT } from '../../express';
+import { formatAbbreviatedName } from '../../helpers/format-helpers';
 import PhoneCall from '../../models/phone-call';
 import User from '../../models/user';
+import TwilioClient from '../../twilio-client';
 
 const VOICEMAIL_TIMEOUT = '20';
-const MAX_VOICEMAIL_LENGTH = '20';
+const MAX_VOICEMAIL_LENGTH = '120';
+export const CITYBLOCK_VOICEMAIL = '+16469417791';
+export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
 
 // TODO: Fix type weirdness
 const VoiceResponse = (twilio as any).twiml.VoiceResponse;
@@ -18,7 +23,7 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
   const twiml = new VoiceResponse();
   await Db.get();
   const twilioPayload = req.body;
-  const { From, To } = twilioPayload;
+  const { To } = twilioPayload;
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
     const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
@@ -40,7 +45,6 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
       const dial = twiml.dial({
         action: TWILIO_COMPLETE_ENDPOINT,
         method: 'POST',
-        from: From,
         timeout: VOICEMAIL_TIMEOUT,
       });
 
@@ -105,7 +109,12 @@ export async function twilioVoicemailHandler(req: express.Request, res: express.
       const phoneCall = await PhoneCall.getByCallSid(CallSid, txn);
 
       if (phoneCall) {
-        await PhoneCall.update(phoneCall.id, { voicemailUrl: RecordingUrl, voicemailPayload }, txn);
+        const updatedCall = await PhoneCall.update(
+          phoneCall.id,
+          { voicemailUrl: RecordingUrl, voicemailPayload },
+          txn,
+        );
+        notifyUserOfVoicemail(updatedCall);
       }
     } catch (err) {
       reportError(err, voicemailPayload);
@@ -127,7 +136,35 @@ const recordVoicemail = (twiml: any) => {
   });
 };
 
-const reportError = (error: Error, payload: object) => {
+export const notifyUserOfVoicemail = async (phoneCall: PhoneCall): Promise<void> => {
+  const twilioClient = TwilioClient.get();
+  const { patient, user, voicemailUrl } = phoneCall;
+
+  const voicemailIdentity = patient
+    ? `${formatAbbreviatedName(patient.firstName, patient.lastName)} at `
+    : '';
+  const formattedDate = format(phoneCall.updatedAt, VOICEMAIL_DATE_FORMAT);
+  const body = `${voicemailIdentity}${
+    phoneCall.contactNumber
+  } left you a voicemail at ${formattedDate}`;
+
+  try {
+    await twilioClient.messages.create({
+      from: CITYBLOCK_VOICEMAIL,
+      to: user.phone,
+      body,
+    });
+    await twilioClient.messages.create({
+      from: CITYBLOCK_VOICEMAIL,
+      to: user.phone,
+      body: voicemailUrl,
+    });
+  } catch (err) {
+    reportError(err, phoneCall.voicemailPayload);
+  }
+};
+
+const reportError = (error: Error, payload: object | null) => {
   const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
 
   // Ensure stackdriver is working

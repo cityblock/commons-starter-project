@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import Db from '../../../db';
@@ -13,14 +14,18 @@ import {
   createMockUser,
   createPatient,
 } from '../../../spec-helpers';
+import TwilioClient from '../../../twilio-client';
 import {
+  notifyUserOfVoicemail,
   twilioCompleteCallHandler,
   twilioIncomingCallHandler,
   twilioVoicemailHandler,
+  CITYBLOCK_VOICEMAIL,
+  VOICEMAIL_DATE_FORMAT,
 } from '../phone-call-handler';
 
 const expectedIncomingTwiml =
-  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" from="+11234567890" timeout="20"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
+  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" timeout="20"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
 const expectedCompleteTwiml = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const voicemailUrl = 'https://winter.is.here';
@@ -46,10 +51,18 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('Phone Call Handler', () => {
   let txn = null as any;
+  let createMessage = null as any;
 
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(PhoneCall.knex());
+    createMessage = jest.fn();
+
+    TwilioClient.get = jest.fn().mockReturnValue({
+      messages: {
+        create: createMessage,
+      },
+    });
   });
 
   afterEach(async () => {
@@ -133,6 +146,7 @@ describe('Phone Call Handler', () => {
 
   it('handles a voicemail recording', async () => {
     const { user, patient, phone } = await setup(txn);
+
     await User.update(
       user.id,
       { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
@@ -185,5 +199,101 @@ describe('Phone Call Handler', () => {
 
     expect(res.end).toHaveBeenCalledTimes(1);
     expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+  });
+
+  describe('notifyUserOfVoicemail', () => {
+    it('notifies user of patient voicemail', async () => {
+      const { user, phone } = await setup(txn);
+
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const phoneCall = await PhoneCall.create(
+        {
+          direction: 'toUser',
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          twilioPayload: {},
+          callSid,
+          callStatus: 'no-answer',
+          duration: 0,
+        },
+        txn,
+      );
+
+      const updatedPhoneCall = await PhoneCall.update(
+        phoneCall.id,
+        { voicemailUrl, voicemailPayload: {} },
+        txn,
+      );
+
+      await notifyUserOfVoicemail(updatedPhoneCall);
+
+      const args = createMessage.mock.calls;
+
+      expect(createMessage).toHaveBeenCalledTimes(2);
+      expect(args[0][0]).toMatchObject({
+        from: CITYBLOCK_VOICEMAIL,
+        to: '+11234567777',
+        body: `Dan P. at +11234567890 left you a voicemail at ${format(
+          updatedPhoneCall.updatedAt,
+          VOICEMAIL_DATE_FORMAT,
+        )}`,
+      });
+      expect(args[1][0]).toMatchObject({
+        from: CITYBLOCK_VOICEMAIL,
+        to: '+11234567777',
+        body: voicemailUrl,
+      });
+    });
+
+    it('notifies user of non-patient voicemail', async () => {
+      const { user } = await setup(txn);
+
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const phoneCall = await PhoneCall.create(
+        {
+          direction: 'toUser',
+          userId: user.id,
+          contactNumber: '+12223334444',
+          twilioPayload: {},
+          callSid,
+          callStatus: 'no-answer',
+          duration: 0,
+        },
+        txn,
+      );
+
+      const updatedPhoneCall = await PhoneCall.update(
+        phoneCall.id,
+        { voicemailUrl, voicemailPayload: {} },
+        txn,
+      );
+
+      await notifyUserOfVoicemail(updatedPhoneCall);
+
+      const args = createMessage.mock.calls;
+
+      expect(createMessage).toHaveBeenCalledTimes(2);
+      expect(args[0][0]).toMatchObject({
+        from: CITYBLOCK_VOICEMAIL,
+        to: '+11234567777',
+        body: `+12223334444 left you a voicemail at ${format(
+          updatedPhoneCall.updatedAt,
+          VOICEMAIL_DATE_FORMAT,
+        )}`,
+      });
+      expect(args[1][0]).toMatchObject({
+        from: CITYBLOCK_VOICEMAIL,
+        to: '+11234567777',
+        body: voicemailUrl,
+      });
+    });
   });
 });

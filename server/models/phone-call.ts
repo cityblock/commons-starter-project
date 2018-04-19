@@ -47,6 +47,8 @@ interface IGetForUserPatientParams {
   patientId: string;
 }
 
+const EAGER_QUERY = '[user, patient]';
+
 /* tslint:disable:member-ordering */
 export default class PhoneCall extends BaseModel {
   userId: string;
@@ -156,7 +158,9 @@ export default class PhoneCall extends BaseModel {
     phoneCall: IPhoneCallUpdate,
     txn: Transaction,
   ): Promise<PhoneCall> {
-    return this.query(txn).patchAndFetchById(phoneCallId, phoneCall);
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .patchAndFetchById(phoneCallId, phoneCall);
   }
 }
 /* tslint:enable:member-ordering */

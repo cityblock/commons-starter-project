@@ -20,8 +20,6 @@ import {
 import TwilioClient from '../../twilio-client';
 import schema from '../make-executable-schema';
 
-jest.mock('../../twilio-client');
-
 const userRole = 'admin';
 const userPhone = '+11234445555';
 const body1 = 'Winter is coming.';

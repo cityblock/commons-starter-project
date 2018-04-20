@@ -29,10 +29,11 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
     const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
 
     if (!user) {
-      // TODO: handle (very unlikely) case when no user with that twilio number found
       twiml.say(
         "We're sorry, we don't have a user with that phone number. Please call us for help",
       );
+      reportError(`no associated user with phone number: ${To}`, twilioPayload);
+
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       return res.end(twiml.toString());
     }
@@ -58,14 +59,53 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
   });
 }
 
+export async function twilioOutgoingCallHandler(req: express.Request, res: express.Response) {
+  const twiml = new VoiceResponse();
+  await Db.get();
+  const twilioPayload = req.body;
+  const { From, To } = twilioPayload;
+  // grab Twilio SIM id without "sim:" prefix
+  const twilioSimId = From.substring(4);
+
+  await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
+    const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
+
+    if (!user) {
+      reportError(`no associated user with twilioSimId: ${twilioSimId}`, twilioPayload);
+
+      res.writeHead(200, { 'Content-Type': 'text/xml' });
+      return res.end(twiml.toString());
+    }
+
+    try {
+      // add outbound parameter to complete endpoint as twilio classifies both calls as inbound
+      const dial = twiml.dial({
+        action: `${TWILIO_COMPLETE_ENDPOINT}?outbound=true`,
+        method: 'POST',
+        callerId: user.phone,
+      });
+
+      dial.number(To);
+    } catch (err) {
+      reportError(err, twilioPayload);
+    }
+  });
+
+  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  res.end(twiml.toString());
+}
+
 export async function twilioCompleteCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
   await Db.get();
   const twilioPayload = req.body;
-  const { To, From, DialCallStatus, DialCallDuration, Direction, CallSid } = twilioPayload;
+  const isInbound = !req.query.outbound;
+  const { To, From, DialCallStatus, DialCallDuration, CallSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
-    const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
+    const user = isInbound
+      ? await User.getBy({ fieldName: 'phone', field: To }, txn)
+      : await User.getBy({ fieldName: 'twilioSimId', field: From.substring(4) }, txn);
 
     try {
       if (!user) {
@@ -73,15 +113,15 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
       }
 
       // if patient called us and no one answered, start recording voicemail
-      if (Direction === 'inbound' && DialCallStatus === 'no-answer') {
+      if (isInbound && DialCallStatus === 'no-answer') {
         recordVoicemail(twiml);
       }
 
       await PhoneCall.create(
         {
           userId: user.id,
-          contactNumber: Direction === 'inbound' ? From : To,
-          direction: Direction === 'inbound' ? 'toUser' : 'fromUser',
+          contactNumber: isInbound ? From : To,
+          direction: isInbound ? 'toUser' : 'fromUser',
           callStatus: DialCallStatus,
           duration: DialCallDuration ? Number(DialCallDuration) : 0,
           twilioPayload,
@@ -149,6 +189,7 @@ export const notifyUserOfVoicemail = async (phoneCall: PhoneCall): Promise<void>
   } left you a voicemail at ${formattedDate}`;
 
   try {
+    // send two separate SMS so URL doesn't get cut off (too long for one)
     await twilioClient.messages.create({
       from: CITYBLOCK_VOICEMAIL,
       to: user.phone,
@@ -164,7 +205,7 @@ export const notifyUserOfVoicemail = async (phoneCall: PhoneCall): Promise<void>
   }
 };
 
-const reportError = (error: Error, payload: object | null) => {
+const reportError = (error: Error | string, payload: object | null) => {
   const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
 
   // Ensure stackdriver is working

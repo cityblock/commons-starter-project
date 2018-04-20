@@ -20,6 +20,7 @@ import { pubsubValidator } from './handlers/pubsub/validator';
 import {
   twilioCompleteCallHandler,
   twilioIncomingCallHandler,
+  twilioOutgoingCallHandler,
   twilioVoicemailHandler,
 } from './handlers/twilio/phone-call-handler';
 import {
@@ -184,11 +185,36 @@ export default async (
   app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMapPdf);
 
   // Twilio SMS Messages and Calls
-  app.post('/twilio-incoming-sms-message', bodyParser.urlencoded({ extended: true }), twilioIncomingSmsHandler);
-  app.post('/twilio-outgoing-sms-message', bodyParser.urlencoded({ extended: true }), twilioOutgoingSmsHandler);
-  app.post('/twilio-incoming-phone-call', bodyParser.urlencoded({ extended: true }), twilioIncomingCallHandler);
-  app.post(TWILIO_COMPLETE_ENDPOINT, bodyParser.urlencoded({ extended: true }), twilioCompleteCallHandler);
-  app.post(TWILIO_VOICEMAIL_ENDPOINT, bodyParser.urlencoded({ extended: true }), twilioVoicemailHandler);
+  app.post(
+    '/twilio-incoming-sms-message',
+    bodyParser.urlencoded({ extended: true }),
+    twilioIncomingSmsHandler,
+  );
+  app.post(
+    '/twilio-outgoing-sms-message',
+    bodyParser.urlencoded({ extended: true }),
+    twilioOutgoingSmsHandler,
+  );
+  app.post(
+    '/twilio-incoming-phone-call',
+    bodyParser.urlencoded({ extended: true }),
+    twilioIncomingCallHandler,
+  );
+  app.post(
+    '/twilio-outgoing-phone-call',
+    bodyParser.urlencoded({ extended: true }),
+    twilioOutgoingCallHandler,
+  );
+  app.post(
+    TWILIO_COMPLETE_ENDPOINT,
+    bodyParser.urlencoded({ extended: true }),
+    twilioCompleteCallHandler,
+  );
+  app.post(
+    TWILIO_VOICEMAIL_ENDPOINT,
+    bodyParser.urlencoded({ extended: true }),
+    twilioVoicemailHandler,
+  );
 
   // vCard Generation
   app.get('/vcf-contacts', contactsVcfHandler);

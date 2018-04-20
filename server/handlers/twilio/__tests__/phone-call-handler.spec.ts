@@ -19,6 +19,7 @@ import {
   notifyUserOfVoicemail,
   twilioCompleteCallHandler,
   twilioIncomingCallHandler,
+  twilioOutgoingCallHandler,
   twilioVoicemailHandler,
   CITYBLOCK_VOICEMAIL,
   VOICEMAIL_DATE_FORMAT,
@@ -26,6 +27,8 @@ import {
 
 const expectedIncomingTwiml =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" timeout="20"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
+const expectedOutgoingTwiml =
+  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call?outbound=true" method="POST" callerId="+11234567777"><Number>+11234567890</Number></Dial></Response>';
 const expectedCompleteTwiml = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const voicemailUrl = 'https://winter.is.here';
@@ -73,132 +76,211 @@ describe('Phone Call Handler', () => {
     await Db.release();
   });
 
-  it('handles an incoming phone call', async () => {
-    const { user } = await setup(txn);
-    await User.update(
-      user.id,
-      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
-      txn,
-    );
-    const res = httpMocks.createResponse();
-    res.locals = { existingTxn: txn };
-    res.end = jest.fn();
-    const req = httpMocks.createRequest({
-      body: {
-        To: '+11234567777',
-        From: '+11234567890',
-        Direction: 'inbound',
-      },
+  describe('twilioIncomingCallHandler', () => {
+    it('handles an incoming phone call', async () => {
+      const { user } = await setup(txn);
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567777',
+          From: '+11234567890',
+          Direction: 'inbound',
+        },
+      });
+
+      await twilioIncomingCallHandler(req, res);
+
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith(expectedIncomingTwiml);
     });
-
-    await twilioIncomingCallHandler(req, res);
-
-    expect(res.end).toHaveBeenCalledTimes(1);
-    expect(res.end).toHaveBeenCalledWith(expectedIncomingTwiml);
   });
 
-  it('handles a complete inbound phone call', async () => {
-    const { user, patient, phone } = await setup(txn);
-    await User.update(
-      user.id,
-      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
-      txn,
-    );
-    const res = httpMocks.createResponse();
-    res.locals = { existingTxn: txn };
-    res.end = jest.fn();
-    const req = httpMocks.createRequest({
-      body: {
-        To: '+11234567777',
-        From: '+11234567890',
-        DialCallStatus: 'completed',
-        DialCallDuration: '11',
-        Direction: 'inbound',
-        CallSid: callSid,
-      },
+  describe('twilioOutgoingCallHandler', () => {
+    it('handles an outgoing phone call', async () => {
+      const { user } = await setup(txn);
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567890',
+          From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        },
+      });
+
+      await twilioOutgoingCallHandler(req, res);
+
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith(expectedOutgoingTwiml);
     });
-
-    await twilioCompleteCallHandler(req, res);
-
-    const phoneCalls = await PhoneCall.getForUserPatient(
-      { userId: user.id, patientId: patient.id },
-      { pageNumber: 0, pageSize: 5 },
-      txn,
-    );
-
-    expect(phoneCalls.total).toBe(1);
-    expect(phoneCalls.results[0]).toMatchObject({
-      userId: user.id,
-      patientId: patient.id,
-      contactNumber: phone.phoneNumber,
-      direction: 'toUser',
-      duration: 11,
-      callStatus: 'completed',
-      twilioPayload: req.body,
-      callSid,
-      voicemailUrl: null,
-      voicemailPayload: null,
-    });
-
-    expect(res.end).toHaveBeenCalledTimes(1);
-    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
   });
 
-  it('handles a voicemail recording', async () => {
-    const { user, patient, phone } = await setup(txn);
+  describe('twilioCompleteCallHandler', () => {
+    it('handles a complete inbound phone call', async () => {
+      const { user, patient, phone } = await setup(txn);
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567777',
+          From: '+11234567890',
+          DialCallStatus: 'completed',
+          DialCallDuration: '11',
+          Direction: 'inbound',
+          CallSid: callSid,
+        },
+      });
 
-    await User.update(
-      user.id,
-      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
-      txn,
-    );
-    await PhoneCall.create(
-      {
-        direction: 'toUser',
+      await twilioCompleteCallHandler(req, res);
+
+      const phoneCalls = await PhoneCall.getForUserPatient(
+        { userId: user.id, patientId: patient.id },
+        { pageNumber: 0, pageSize: 5 },
+        txn,
+      );
+
+      expect(phoneCalls.total).toBe(1);
+      expect(phoneCalls.results[0]).toMatchObject({
         userId: user.id,
+        patientId: patient.id,
         contactNumber: phone.phoneNumber,
+        direction: 'toUser',
+        duration: 11,
+        callStatus: 'completed',
+        twilioPayload: req.body,
+        callSid,
+        voicemailUrl: null,
+        voicemailPayload: null,
+      });
+
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+    });
+
+    it('handles a complete outbound phone call', async () => {
+      const { user, patient, phone } = await setup(txn);
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567890',
+          From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+          DialCallStatus: 'completed',
+          DialCallDuration: '11',
+          Direction: 'inbound',
+          CallSid: callSid,
+        },
+        query: { outbound: true },
+      });
+
+      await twilioCompleteCallHandler(req, res);
+
+      const phoneCalls = await PhoneCall.getForUserPatient(
+        { userId: user.id, patientId: patient.id },
+        { pageNumber: 0, pageSize: 5 },
+        txn,
+      );
+
+      expect(phoneCalls.total).toBe(1);
+      expect(phoneCalls.results[0]).toMatchObject({
+        userId: user.id,
+        patientId: patient.id,
+        contactNumber: phone.phoneNumber,
+        direction: 'fromUser',
+        duration: 11,
+        callStatus: 'completed',
+        twilioPayload: req.body,
+        callSid,
+        voicemailUrl: null,
+        voicemailPayload: null,
+      });
+
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+    });
+  });
+
+  describe('twilioVoicemailHandler', () => {
+    it('handles a voicemail recording', async () => {
+      const { user, patient, phone } = await setup(txn);
+
+      await User.update(
+        user.id,
+        { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+        txn,
+      );
+      await PhoneCall.create(
+        {
+          direction: 'toUser',
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          twilioPayload: {},
+          callSid,
+          callStatus: 'no-answer',
+          duration: 0,
+        },
+        txn,
+      );
+
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      const req = httpMocks.createRequest({
+        body: {
+          RecordingUrl: voicemailUrl,
+          CallSid: callSid,
+        },
+      });
+
+      await twilioVoicemailHandler(req, res);
+
+      const phoneCalls = await PhoneCall.getForUserPatient(
+        { userId: user.id, patientId: patient.id },
+        { pageNumber: 0, pageSize: 5 },
+        txn,
+      );
+
+      expect(phoneCalls.total).toBe(1);
+      expect(phoneCalls.results[0]).toMatchObject({
+        userId: user.id,
+        patientId: patient.id,
+        contactNumber: phone.phoneNumber,
+        direction: 'toUser',
+        duration: 0,
+        callStatus: 'no-answer',
         twilioPayload: {},
         callSid,
-        callStatus: 'no-answer',
-        duration: 0,
-      },
-      txn,
-    );
+        voicemailUrl,
+        voicemailPayload: req.body,
+      });
 
-    const res = httpMocks.createResponse();
-    res.locals = { existingTxn: txn };
-    res.end = jest.fn();
-    const req = httpMocks.createRequest({
-      body: {
-        RecordingUrl: voicemailUrl,
-        CallSid: callSid,
-      },
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
     });
-
-    await twilioVoicemailHandler(req, res);
-
-    const phoneCalls = await PhoneCall.getForUserPatient(
-      { userId: user.id, patientId: patient.id },
-      { pageNumber: 0, pageSize: 5 },
-      txn,
-    );
-
-    expect(phoneCalls.total).toBe(1);
-    expect(phoneCalls.results[0]).toMatchObject({
-      userId: user.id,
-      patientId: patient.id,
-      contactNumber: phone.phoneNumber,
-      direction: 'toUser',
-      duration: 0,
-      callStatus: 'no-answer',
-      twilioPayload: {},
-      callSid,
-      voicemailUrl,
-      voicemailPayload: req.body,
-    });
-
-    expect(res.end).toHaveBeenCalledTimes(1);
-    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
   });
 
   describe('notifyUserOfVoicemail', () => {

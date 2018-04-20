@@ -2,7 +2,6 @@ import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import GraphQLDog from 'graphql-dog';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
@@ -132,12 +131,6 @@ export default async (
 
   app.use('/assets', express.static(path.join(__dirname, '..', '..', 'public')));
 
-  // should be near in this list to when we add the graphql middleware
-  if (process.env.DATADOG_API_KEY) {
-    GraphQLDog.instrumentSchema(schema);
-    app.use(GraphQLDog.middleware());
-  }
-
   if (config.NODE_ENV === 'development') {
     app.get(
       '/graphiql',
@@ -164,15 +157,11 @@ export default async (
           existingTxn: txn,
           request: request!,
           response: response!,
-          dataDog: process.env.DATADOG_API_KEY ? GraphQLDog : null,
           errorReporting,
         }),
         formatResponse,
         formatError,
         debug: false,
-        // for apollo-engine
-        tracing: true,
-        cacheControl: true,
       }),
     ),
   );

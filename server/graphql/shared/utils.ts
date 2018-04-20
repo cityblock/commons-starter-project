@@ -1,4 +1,5 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
+import * as trace from '@google-cloud/trace-agent';
 import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
@@ -20,13 +21,11 @@ export interface IGraphQLContextOptions {
   request?: express.Request;
   response?: express.Response;
   existingTxn?: Transaction;
-  dataDog?: any;
   errorReporting?: ErrorReporting;
 }
 
 export interface IContext {
   logger: ILogger;
-  datadogContext: any;
   testConfig?: any;
   errorReporting?: ErrorReporting;
   db: Db;
@@ -102,36 +101,37 @@ export const logGraphQLContext = (
 ) => {
   const { variables } = req.body;
 
-  // Logging is less useful in dev where we have the client-side logging
-  if (config.NODE_ENV === 'production') {
-    const formattedQuery = req.body.query.replace(/\s*\n\s*/g, ' ');
+  const traceAgent = trace.get();
+  const childSpan = traceAgent.createChildSpan({ name: req.body.operationName });
 
-    /* tslint:disable no-console */
-    console.log(
-      `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
-        variables,
-      )}, query: ${formattedQuery}`,
-    );
-    /* tslint:enable no-console */
+  /* tslint:disable no-console */
+  console.log(
+    `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
+      variables,
+    )}, operation: ${req.body.operationName}`,
+  );
+  /* tslint:enable no-console */
 
-    // Monkey patch res.write
-    const originalWrite = res.write;
-    res.write = (data: string) => {
-      switch (res.statusCode) {
-        case 200:
-          /* tslint:disable no-console */
-          console.log(
-            `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, data: ${data}`,
-          );
-          /* tslint:enable no-console */
-          break;
-        default:
-          console.error(data);
-      }
+  // Monkey patch res.write
+  const originalWrite = res.write;
+  res.write = (data: string) => {
+    childSpan.endSpan();
+    switch (res.statusCode) {
+      case 200:
+        /* tslint:disable no-console */
+        console.log(
+          `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, operation: ${
+            req.body.operationName
+          }`,
+        );
+        /* tslint:enable no-console */
+        break;
+      default:
+        console.error(data);
+    }
 
-      return originalWrite.call(res, data);
-    };
-  }
+    return originalWrite.call(res, data);
+  };
 };
 
 export async function getGraphQLContext(
@@ -141,9 +141,11 @@ export async function getGraphQLContext(
 ): Promise<IContext> {
   const db = await Db.get();
 
-  const { dataDog, existingTxn, request, response, errorReporting } = options;
+  const { existingTxn, request, response, errorReporting } = options;
 
-  const datadogContext = dataDog ? dataDog.context(options.request) : null;
+  const traceAgent = trace.get();
+  const childSpan = traceAgent.createChildSpan({ name: 'authentication' });
+
   const txn = existingTxn || (await transaction.start(User));
   let permissions: Permissions = 'black';
   let userId;
@@ -163,11 +165,12 @@ export async function getGraphQLContext(
         permissions: 'black' as Permissions,
         logger,
         txn,
-        datadogContext,
         errorReporting,
       };
     }
   }
+
+  childSpan.endSpan();
 
   if (request && response) {
     logGraphQLContext(request, response, userId, permissions);
@@ -179,7 +182,6 @@ export async function getGraphQLContext(
     db,
     logger,
     txn,
-    datadogContext,
     errorReporting,
   };
 }

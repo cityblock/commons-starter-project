@@ -1,10 +1,11 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import * as trace from '@google-cloud/trace-agent';
 import config from './config';
 if (config.NODE_ENV !== 'test') {
   /* tslint:disable no-var-requires */
   const credentials = JSON.parse(String(config.GCP_CREDS));
-  require('@google-cloud/trace-agent').start({
+  trace.start({
     credentials: {
       client_email: credentials.client_email,
       private_key: credentials.private_key,

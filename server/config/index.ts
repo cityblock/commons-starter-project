@@ -12,7 +12,6 @@ export default {
   TIME_ZONE: '-04:00',
   JWT_SECRET: 'topsecret',
   JWT_EXPIRY: '1d',
-  DATADOG_API_KEY: null,
   REDIS_HOST: '127.0.0.1',
   REDIS_PORT: 6379,
   REDIS_PASSWORD: undefined, // Null breaks things, unfortunately

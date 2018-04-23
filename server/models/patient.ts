@@ -14,6 +14,7 @@ import PatientDataFlag from './patient-data-flag';
 import PatientInfo from './patient-info';
 import { PatientGenderOptions } from './patient-info';
 import PatientState from './patient-state';
+import Phone from './phone';
 import Task from './task';
 import User from './user';
 
@@ -91,6 +92,7 @@ export default class Patient extends Model {
   coreIdentityVerifiedById: string | null;
   computedPatientStatus: ComputedPatientStatus;
   patientState: PatientState;
+  phones: Phone[];
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();
@@ -195,6 +197,19 @@ export default class Patient extends Model {
           to: 'patient.id',
         },
         modify: builder => builder.findOne({ deletedAt: null }),
+      },
+
+      phones: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Phone,
+        join: {
+          from: 'patient.id',
+          through: {
+            from: 'patient_phone.patientId',
+            to: 'patient_phone.phoneId',
+          },
+          to: 'phone.id',
+        },
       },
     };
   }
@@ -730,6 +745,23 @@ export default class Patient extends Model {
 
   static getPatientIdForResource(patientId: string, txn?: Transaction) {
     return patientId;
+  }
+
+  static async getPatientsWithPhonesForUser(userId: string, txn: Transaction): Promise<Patient[]> {
+    return this.query(txn)
+      .eager('[patientInfo, phones]', {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('patientInfo.preferredName', 'ASC').orderBy('phone.createdAt', 'ASC');
+        },
+      })
+      .modifyEager('phones', builder => {
+        builder.where({ 'phone.deletedAt': null, 'patient_phone.deletedAt': null });
+      })
+      .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .orderBy('middleName', 'ASC')
+      .orderBy('createdAt', 'ASC');
   }
 }
 /* tslint:enable:member-ordering */

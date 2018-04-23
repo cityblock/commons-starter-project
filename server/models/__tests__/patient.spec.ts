@@ -4,6 +4,7 @@ import Db from '../../db';
 import { adminTasksConcernTitle } from '../../lib/consts';
 import {
   createMockClinic,
+  createMockPhone,
   createMockUser,
   createPatient,
   setupComputedPatientList,
@@ -25,7 +26,9 @@ import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientDataFlag from '../patient-data-flag';
+import PatientPhone from '../patient-phone';
 import PatientState from '../patient-state';
+import Phone from '../phone';
 import User from '../user';
 
 const userRole = 'physician';
@@ -1145,6 +1148,151 @@ describe('patient model', () => {
       expect(social).toMatchObject({
         id: patient.id,
         ssn: patient.ssn,
+      });
+    });
+  });
+
+  describe('get patients on user care team with phones', () => {
+    it('returns patients with phones for given user', async () => {
+      const { clinic } = await setup(txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      const patient1 = await createPatient(
+        {
+          cityblockId: 123,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          lastName: 'Stark',
+          firstName: 'Sansa',
+        },
+        txn,
+      );
+      const patient2 = await createPatient(
+        { cityblockId: 234, homeClinicId: clinic.id, userId: user.id, lastName: 'Targaryen' },
+        txn,
+      );
+      const patient3 = await createPatient(
+        {
+          cityblockId: 345,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          lastName: 'Stark',
+          firstName: 'Arya',
+        },
+        txn,
+      );
+      const patient4 = await createPatient(
+        { cityblockId: 456, homeClinicId: clinic.id, lastName: 'Lannister' },
+        txn,
+      );
+
+      // create phones for patient 1
+      const phone = await Phone.create(createMockPhone('123-456-1111', 'mobile'), txn);
+      const phone2 = await Phone.create(createMockPhone('123-456-2222', 'home'), txn);
+      const phone3 = await Phone.create(createMockPhone('123-456-3333', 'other'), txn);
+
+      await PatientPhone.create({ phoneId: phone.id, patientId: patient1.id }, txn);
+      await PatientPhone.create({ phoneId: phone2.id, patientId: patient1.id }, txn);
+      await PatientPhone.create({ phoneId: phone3.id, patientId: patient1.id }, txn);
+
+      await PatientPhone.delete({ phoneId: phone3.id, patientId: patient1.id }, txn);
+
+      // create phones for patient 2
+      const phone4 = await Phone.create(createMockPhone('123-456-4444', 'mobile'), txn);
+      await PatientPhone.create({ phoneId: phone4.id, patientId: patient2.id }, txn);
+
+      // create phone for patient 4
+      const phone5 = await Phone.create(createMockPhone('123-456-5555', 'mobile'), txn);
+      await PatientPhone.create({ phoneId: phone5.id, patientId: patient4.id }, txn);
+
+      const patients = await Patient.getPatientsWithPhonesForUser(user.id, txn);
+
+      expect(patients[0]).toMatchObject({
+        lastName: 'Stark',
+        firstName: 'Arya',
+        cityblockId: 345,
+        id: patient3.id,
+        phones: [],
+      });
+      expect(patients[1]).toMatchObject({
+        firstName: 'Sansa',
+        lastName: 'Stark',
+        cityblockId: 123,
+        id: patient1.id,
+        phones: [
+          {
+            id: phone.id,
+            type: 'mobile',
+          },
+          {
+            id: phone2.id,
+            type: 'home',
+          },
+        ],
+      });
+      expect(patients[2]).toMatchObject({
+        lastName: 'Targaryen',
+        cityblockId: 234,
+        id: patient2.id,
+        phones: [
+          {
+            id: phone4.id,
+            type: 'mobile',
+          },
+        ],
+      });
+    });
+
+    it('returns patients in correct order in case of duplicates', async () => {
+      const { clinic } = await setup(txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+      const patient1 = await createPatient(
+        {
+          cityblockId: 123,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          lastName: 'Stark',
+          firstName: 'Arya',
+        },
+        txn,
+      );
+      const patient2 = await createPatient(
+        { cityblockId: 234, homeClinicId: clinic.id, userId: user.id, lastName: 'Targaryen' },
+        txn,
+      );
+      const patient3 = await createPatient(
+        {
+          cityblockId: 345,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          lastName: 'Stark',
+          firstName: 'Arya',
+        },
+        txn,
+      );
+
+      const patients = await Patient.getPatientsWithPhonesForUser(user.id, txn);
+
+      expect(patients[0]).toMatchObject({
+        lastName: 'Stark',
+        firstName: 'Arya',
+        cityblockId: 123,
+        id: patient1.id,
+        phones: [],
+      });
+      expect(patients[1]).toMatchObject({
+        lastName: 'Stark',
+        firstName: 'Arya',
+        cityblockId: 345,
+        id: patient3.id,
+        phones: [],
+      });
+      expect(patients[2]).toMatchObject({
+        lastName: 'Targaryen',
+        cityblockId: 234,
+        id: patient2.id,
+        phones: [],
       });
     });
   });

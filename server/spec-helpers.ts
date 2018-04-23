@@ -59,13 +59,39 @@ export interface ICreatePatient {
   userId?: string;
   gender?: PatientGenderOptions;
   language?: string;
+  ssn?: string;
+  middleName?: string;
+  ssnEnd?: string;
 }
 
 export async function createPatient(patient: ICreatePatient, txn: Transaction): Promise<Patient> {
-  const { cityblockId, firstName, lastName, dateOfBirth, gender, userId, homeClinicId } = patient;
+  const {
+    cityblockId,
+    firstName,
+    lastName,
+    dateOfBirth,
+    gender,
+    userId,
+    homeClinicId,
+    ssn,
+    middleName,
+    ssnEnd,
+    language,
+  } = patient;
 
   const mockPatient = await Patient.create(
-    createMockPatient(cityblockId, homeClinicId, firstName, lastName, dateOfBirth, gender),
+    createMockPatient(
+      cityblockId,
+      homeClinicId,
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      language,
+      ssn,
+      ssnEnd,
+      middleName,
+    ),
     txn,
   );
 
@@ -139,11 +165,13 @@ export function createMockPatient(
   language?: string,
   ssn?: string,
   ssnEnd?: string,
+  middleName?: string,
 ) {
   return {
     patientId: uuid(),
     cityblockId,
     firstName: firstName || 'dan',
+    middleName: middleName || undefined,
     lastName: lastName || 'plant',
     gender: (gender || 'male') as PatientGenderOptions,
     ssn: ssn || '123456789',

@@ -1,8 +1,31 @@
 import * as express from 'express';
+import { transaction } from 'objection';
 import * as vCard from 'vcards-js';
-import { decodeJwt } from '../../graphql/shared/utils';
+import { decodeJwt, IJWTForVCFData } from '../../graphql/shared/utils';
+import Patient from '../../models/patient';
 
-export const validateJwtForVcf = async (token: string | null): Promise<boolean> => {
+interface IPhonesForCard {
+  home: string[];
+  mobile: string[];
+  other: string[];
+  work: string[];
+}
+
+interface ICard {
+  uid: number;
+  firstName: string;
+  middleName?: string;
+  nickname?: string;
+  lastName: string;
+  note: string;
+  getFormattedString: () => string;
+  homePhone: string[];
+  cellPhone: string[];
+  otherPhone: string[];
+  workPhone: string[];
+}
+
+export const validateJwtForVcf = async (token: string | null): Promise<IJWTForVCFData> => {
   let decoded = null;
 
   if (token) {
@@ -13,38 +36,111 @@ export const validateJwtForVcf = async (token: string | null): Promise<boolean> 
     }
   }
 
-  return !!decoded;
+  return decoded as IJWTForVCFData;
 };
 
 export const contactsVcfHandler = async (req: express.Request, res: express.Response) => {
   const { token } = req.query;
-  const isValidToken = await validateJwtForVcf(token || null);
+  const decoded = await validateJwtForVcf(token || null);
 
-  if (!isValidToken) {
+  if (!decoded || !decoded.userId) {
     return res.status(401).send('Invalid token');
   }
-  // TODO: Add logic to load actual user's contacts
+
+  let result = '';
+  let error = '';
+
+  await transaction(res.locals.existingTxn || Patient.knex(), async txn => {
+    const patients = await Patient.getPatientsWithPhonesForUser(decoded.userId, txn);
+
+    /* tslint:disable:prefer-for-of */
+    for (let i = 0; i < patients.length; i++) {
+      const patient = patients[i];
+      const previousPatient = i > 0 ? patients[i - 1] : null;
+
+      // if duplicate name, throw an error
+      if (isDuplicateName(patient, previousPatient)) {
+        error = `You have two patients with the name ${patient.firstName} ${
+          patient.lastName
+        } on your care team. Please edit their preferred name or contact us for help.`;
+        break;
+      }
+
+      const card = createvCardForPatient(patient);
+
+      if (card) {
+        result += card.getFormattedString();
+      }
+    }
+    /* tslint:enable:prefer-for-of */
+  });
+
+  if (error) {
+    res.status(409).send(error);
+  } else {
+    res.set('Content-Type', 'text/vcard; name="contacts.vcf"');
+    res.set('Content-Disposition', 'attachment; filename="contacts.vcf"');
+
+    res.send(result);
+  }
+};
+
+export const createvCardForPatient = (patient: Patient): ICard | null => {
+  // do not send vCard if patient has no phones
+  if (!patient.phones || !patient.phones.length) return null;
+
   const card = vCard();
 
-  card.firstName = 'Sansa';
-  card.lastName = 'Stark';
-  card.cellPhone = '+17274222222';
-  card.uid = 'a3db17cd-b09b-4822-bb7f-d9ee7c5c311e';
+  formatvCardNameForPatient(card, patient);
 
-  let result = card.getFormattedString();
+  const phones: IPhonesForCard = {
+    home: [],
+    mobile: [],
+    other: [],
+    work: [],
+  };
 
-  const card2 = vCard();
+  patient.phones.forEach(phone => {
+    phones[phone.type].push(phone.phoneNumber);
+  });
 
-  card2.firstName = 'Daenerys';
-  card2.lastName = 'Targaryen';
-  card2.cellPhone = '+17274567890';
-  card2.homePhone = '+17274445555';
-  card2.uid = 'd71df610-6f3e-4e61-9255-380399efc688';
+  card.homePhone = phones.home;
+  card.cellPhone = phones.mobile;
+  card.otherPhone = phones.other;
+  card.workPhone = phones.work;
 
-  result += card2.getFormattedString();
+  return card;
+};
 
-  res.set('Content-Type', 'text/vcard; name="contacts.vcf"');
-  res.set('Content-Disposition', 'attachment; filename="contacts.vcf"');
+export const formatvCardNameForPatient = (card: ICard, patient: Patient): void => {
+  card.uid = patient.cityblockId;
+  card.firstName = patient.firstName;
+  card.lastName = patient.lastName;
+  card.note = `CBH-${patient.cityblockId}`;
 
-  res.send(result);
+  // add middle initial if available
+  if (patient.middleName) {
+    card.middleName = patient.middleName[0];
+  }
+  // add preferred name if available
+  if (patient.patientInfo.preferredName) {
+    card.nickname = patient.patientInfo.preferredName;
+  }
+};
+
+export const isDuplicateName = (patient: Patient, previousPatient: Patient | null): boolean => {
+  // if no previous patient, it cannot be a duplicate name
+  if (!previousPatient) return false;
+  // if middle names do not match, not a duplicate
+  if (patient.middleName !== previousPatient.middleName) {
+    return false;
+  }
+  // if preferred names do not match, not a duplicate
+  if (patient.patientInfo.preferredName !== previousPatient.patientInfo.preferredName) {
+    return false;
+  }
+
+  return (
+    patient.lastName === previousPatient.lastName && patient.firstName === previousPatient.firstName
+  );
 };

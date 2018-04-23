@@ -109,3 +109,30 @@
   overflow: hidden;
   display: flex;
 }
+
+@media screen and (max-width: 430px) {
+  .form {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .title {
+    color: var(--white-color);
+  }
+
+  .button {
+    width: calc(100% - 40px);
+    padding-top: var(--small-gutter);
+    padding-bottom: var(--small-gutter);
+  }
+
+  .buttonText {
+    font-size: var(--medium-large-font-size);
+  }
+
+  .formErrorContainer {
+    min-width: 100%;
+  }
+}

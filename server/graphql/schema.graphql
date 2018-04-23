@@ -1596,6 +1596,8 @@ type CalendarEvent {
   id: String!
   startDatetime: String!
   title: String!
+  status: String!
+  htmlLink: String!
 }
 
 # SMS message
@@ -3001,7 +3003,9 @@ type RootQueryType {
   # gets a patients full social security number and records a log of the view by user
   patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
   # List of google calendar events for a patient
-  calendarEventsForPatient(patientId: ID!, pageSize: Int, pageToken: String): CalendarEventEdges!
+  calendarEventsForPatient(patientId: ID!, pageSize: Int!, pageToken: String): CalendarEventEdges!
+  # List of google calendar events for the logged in user
+  calendarEventsForCurrentUser(pageSize: Int!, pageToken: String): CalendarEventEdges!
   # SMS messages for given user and patient
   smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
   # latest SMS message between given user and patient

@@ -3,15 +3,18 @@ import { ICalendarCreateEventForPatientInput, IRootMutationType, IRootQueryType 
 import {
   createGoogleCalendarEventUrl,
   createGoogleCalendarForPatientWithTeam,
-  getGoogleCalendarEvents,
+  getGoogleCalendarEventsForCurrentUser,
+  getGoogleCalendarEventsForPatient,
 } from '../helpers/google-calendar-helpers';
 import CareTeam from '../models/care-team';
+import GoogleAuth from '../models/google-auth';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
-import checkUserPermissions from './shared/permissions-check';
+import User from '../models/user';
+import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
-export interface IResolveCalendarEventsOptions {
+export interface IResolvePatientCalendarEventsOptions {
   patientId: string;
   pageSize: number;
   pageToken: string | null;
@@ -19,7 +22,7 @@ export interface IResolveCalendarEventsOptions {
 
 export async function resolveCalendarEventsForPatient(
   source: any,
-  { patientId, pageSize, pageToken }: IResolveCalendarEventsOptions,
+  { patientId, pageSize, pageToken }: IResolvePatientCalendarEventsOptions,
   { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootQueryType['calendarEventsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
@@ -31,7 +34,7 @@ export async function resolveCalendarEventsForPatient(
     return { events: [], pageInfo: { nextPageToken: null, previousPageToken: null } };
   }
 
-  const results = await getGoogleCalendarEvents(patient.patientInfo.googleCalendarId, {
+  const results = await getGoogleCalendarEventsForPatient(patient.patientInfo.googleCalendarId, {
     pageToken,
     pageSize,
   });
@@ -43,6 +46,41 @@ export async function resolveCalendarEventsForPatient(
       previousPageToken: pageToken,
     },
   };
+}
+
+export interface IResolveCalendarEventsOptions {
+  pageSize: number;
+  pageToken: string | null;
+}
+
+export async function resolveCalendarEventsForCurrentUser(
+  source: any,
+  { pageSize, pageToken }: IResolveCalendarEventsOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootQueryType['calendarEventsForCurrentUser']> {
+  checkLoggedInWithPermissions(userId, permissions);
+
+  logger.log(`GET all calendar events for user ${userId}`, 2);
+
+  const user = await User.get(userId!, txn);
+  const googleAuth = await GoogleAuth.get(user.googleAuthId, txn);
+
+  try {
+    const results = await getGoogleCalendarEventsForCurrentUser(user.email, googleAuth, {
+      pageToken,
+      pageSize,
+    });
+
+    return {
+      events: results.events,
+      pageInfo: {
+        nextPageToken: results.nextPageToken,
+        previousPageToken: pageToken,
+      },
+    };
+  } catch (err) {
+    throw new Error(`There was an error reading the calendar for user: ${userId}`);
+  }
 }
 
 export interface ICalendarCreateEventForPatientOptions {

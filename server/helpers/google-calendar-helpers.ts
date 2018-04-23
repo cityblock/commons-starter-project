@@ -3,6 +3,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import * as querystring from 'querystring';
 import config from '../config';
+import GoogleAuth from '../models/google-auth';
 
 const BASE_CREATE_URL = 'https://www.google.com/calendar/event';
 
@@ -129,25 +130,61 @@ export interface IGooglePaginationOptions {
   pageSize: number;
 }
 
-export async function getGoogleCalendarEvents(
+export async function getGoogleCalendarEventsForPatient(
   calendarId: string,
-  { pageToken, pageSize }: IGooglePaginationOptions,
+  pageOptions: IGooglePaginationOptions,
   testConfig?: any,
 ) {
   const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+  return getGoogleCalendarEvents(calendarId, jwtClient, pageOptions, testConfig);
+}
 
+export async function getGoogleCalendarEventsForCurrentUser(
+  calendarId: string,
+  googleAuth: GoogleAuth,
+  pageOptions: IGooglePaginationOptions,
+  testConfig?: any,
+) {
+  const oauth2Client = new google.auth.OAuth2(
+    config.GOOGLE_OAUTH_TOKEN as any,
+    config.GOOGLE_OAUTH_SECRET as any,
+    config.GOOGLE_OAUTH_REDIRECT_URI,
+  );
+
+  oauth2Client.setCredentials({
+    access_token: googleAuth.accessToken,
+    refresh_token: googleAuth.refreshToken,
+    expiry_date: new Date(googleAuth.expiresAt).valueOf(),
+  });
+
+  return getGoogleCalendarEvents(calendarId, oauth2Client, pageOptions, testConfig);
+}
+
+async function getGoogleCalendarEvents(
+  calendarId: string,
+  auth: any,
+  { pageToken, pageSize }: IGooglePaginationOptions,
+  testConfig?: any,
+) {
   const calendar = google.calendar({ version: 'v3' });
   const response = await calendar.events.list({
-    auth: jwtClient,
+    auth,
     calendarId,
     maxResults: pageSize,
     singleEvents: true,
     orderBy: 'startTime',
+    timeMin: new Date().toISOString(),
     pageToken,
   });
 
   const events = response.data.items.map(item => {
-    return { id: item.id, title: item.summary, startDatetime: item.start.dateTime };
+    return {
+      id: item.id,
+      title: item.summary,
+      startDatetime: item.start.dateTime,
+      status: item.status,
+      htmlLink: item.htmlLink,
+    };
   });
 
   return {

@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formatFullName } from '../shared/helpers/format-helpers';
+import Icon from '../shared/library/icon/icon';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/header.css';
 import { getHomeRoute } from './helpers';
@@ -94,6 +95,17 @@ export class Header extends React.Component<allProps> {
         </Link>
       );
     }
+    const calendarLink = (
+      <Link
+        to={'/calendar'}
+        className={classNames(this.getNavItemClassnames('/calendar'), styles.relativeNavItem)}
+      >
+        <Icon className={styles.calendarIcon} name="today" color="white" />
+        <FormattedMessage id="header.calendar">
+          {(message: string) => <div className={styles.navText}>{message}</div>}
+        </FormattedMessage>
+      </Link>
+    );
 
     return (
       <div className={styles.header}>
@@ -105,6 +117,7 @@ export class Header extends React.Component<allProps> {
             {searchLink}
             {patientLink}
             {taskLink}
+            {calendarLink}
             {builderLink}
             {managerLink}
           </div>

@@ -1676,6 +1676,28 @@ export interface getAnswerQuery {
   } | null,
 };
 
+export interface getCalendarEventsForCurrentUserQueryVariables {
+  pageSize: number,
+  pageToken?: string | null,
+};
+
+export interface getCalendarEventsForCurrentUserQuery {
+  // List of google calendar events for the logged in user
+  calendarEventsForCurrentUser:  {
+    events:  Array< {
+      id: string,
+      title: string,
+      startDatetime: string,
+      status: string,
+      htmlLink: string,
+    } >,
+    pageInfo:  {
+      nextPageToken: string | null,
+      previousPageToken: string | null,
+    } | null,
+  },
+};
+
 export interface getCalendarEventsForPatientQueryVariables {
   patientId: string,
   pageSize: number,
@@ -1689,6 +1711,8 @@ export interface getCalendarEventsForPatientQuery {
       id: string,
       title: string,
       startDatetime: string,
+      status: string,
+      htmlLink: string,
     } >,
     pageInfo:  {
       nextPageToken: string | null,
@@ -9960,6 +9984,8 @@ export interface FullCalendarEventFragment {
   id: string,
   title: string,
   startDatetime: string,
+  status: string,
+  htmlLink: string,
 };
 
 export interface FullCarePlanSuggestionForPatientFragment {

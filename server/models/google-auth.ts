@@ -4,6 +4,7 @@ import User from './user';
 
 interface ICreateGoogleAuth {
   accessToken: string;
+  refreshToken?: string;
   expiresAt: string;
   userId: string;
 }
@@ -11,6 +12,7 @@ interface ICreateGoogleAuth {
 /* tslint:disable:member-ordering */
 export default class GoogleAuth extends BaseModel {
   accessToken: string;
+  refreshToken: string;
   expiresAt: string;
 
   static tableName = 'google_auth';
@@ -23,6 +25,7 @@ export default class GoogleAuth extends BaseModel {
     properties: {
       id: { type: 'string' },
       accessToken: { type: 'string' },
+      refreshToken: { type: 'string' },
       expiresAt: { type: 'string' },
       userId: { type: 'string' },
       updatedAt: { type: 'string' },
@@ -41,6 +44,15 @@ export default class GoogleAuth extends BaseModel {
         },
       },
     };
+  }
+
+  static async get(googleAuthId: string, txn: Transaction): Promise<GoogleAuth> {
+    const googleAuth = await this.query(txn).findById(googleAuthId);
+
+    if (!googleAuth) {
+      return Promise.reject(`No such google auth: ${googleAuthId}`);
+    }
+    return googleAuth;
   }
 
   static async updateOrCreate(options: ICreateGoogleAuth, txn: Transaction): Promise<GoogleAuth> {

@@ -99,6 +99,7 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
                   className={styles.button}
+                  accessType="offline"
                 >
                   <span className={styles.googleIcon} />
                   <FormattedMessage id="login.logInGoogle">

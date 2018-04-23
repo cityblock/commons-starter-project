@@ -284,6 +284,7 @@ export async function userLogin(
   const googleAuth = await GoogleAuth.updateOrCreate(
     {
       accessToken: oauth.access_token,
+      refreshToken: oauth.refresh_token,
       expiresAt: new Date(new Date().valueOf() + oauth.expires_in).toISOString(),
       userId: user.id,
     },

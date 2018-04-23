@@ -1,0 +1,13 @@
+#import "../fragments/full-calendar-event.graphql"
+
+query getCalendarEventsForCurrentUser($pageSize: Int!, $pageToken: String) {
+  calendarEventsForCurrentUser(pageSize: $pageSize, pageToken: $pageToken) {
+    events {
+      ...FullCalendarEvent
+    }
+    pageInfo {
+      nextPageToken
+      previousPageToken
+    }
+  }
+}

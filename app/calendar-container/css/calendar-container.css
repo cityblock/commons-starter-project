@@ -1,0 +1,22 @@
+.container {
+  flex: 1;
+  order: 0;
+  overflow: auto;
+  justify-content: flex-end;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.topBar {
+  padding: 0 var(--medium-gutter);
+  height: 50px;
+  background-color: var(--dark-gray-background-color);
+  align-items: center;
+  justify-content: flex-end;
+  display: flex;
+}
+
+.button {
+  margin-left: var(--extra-small-gutter);
+}

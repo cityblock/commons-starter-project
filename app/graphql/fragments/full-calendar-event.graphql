@@ -2,4 +2,6 @@ fragment FullCalendarEvent on CalendarEvent {
   id
   title
   startDatetime
+  status
+  htmlLink
 }

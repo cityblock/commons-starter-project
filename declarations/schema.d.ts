@@ -596,6 +596,11 @@ declare module 'schema' {
     calendarEventsForPatient: ICalendarEventEdges;
 
     /**
+     * List of google calendar events for the logged in user
+     */
+    calendarEventsForCurrentUser: ICalendarEventEdges;
+
+    /**
      * SMS messages for given user and patient
      */
     smsMessages: ISmsMessageEdges;
@@ -954,7 +959,11 @@ declare module 'schema' {
   }
   interface ICalendarEventsForPatientOnRootQueryTypeArguments {
     patientId: string;
-    pageSize?: number | null;
+    pageSize: number;
+    pageToken?: string | null;
+  }
+  interface ICalendarEventsForCurrentUserOnRootQueryTypeArguments {
+    pageSize: number;
     pageToken?: string | null;
   }
   interface ISmsMessagesOnRootQueryTypeArguments {
@@ -2464,6 +2473,8 @@ declare module 'schema' {
     id: string;
     startDatetime: string;
     title: string;
+    status: string;
+    htmlLink: string;
   }
 
   /**

@@ -65,6 +65,7 @@ import SentimentSatisfiedIcon from 'material-ui-icons/SentimentSatisfied';
 import StarsIcon from 'material-ui-icons/Stars';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import TextSmsIcon from 'material-ui-icons/Textsms';
+import TodayIcon from 'material-ui-icons/Today';
 import WarningIcon from 'material-ui-icons/Warning';
 import { SvgIconProps } from 'material-ui/SvgIcon';
 import SlackFullIcon from './custom/slack-full';
@@ -136,6 +137,7 @@ const components: IconComponents = {
   star: GradeIcon,
   syncProblem: SyncProblemIcon,
   textSms: TextSmsIcon,
+  today: TodayIcon,
   warning: WarningIcon,
 };
 

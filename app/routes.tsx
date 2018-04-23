@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Authentication from './authentication-container/authentication-container';
 import Builder from './builder-container/builder-container';
+import Calendar from './calendar-container/calendar-container';
 import Contacts from './contacts-container/contacts-container';
 import Dashboard from './dashboard-container/dashboard-container';
 import LogIn from './login-container/login-container';
@@ -29,6 +30,7 @@ export default (
       <Authentication>
         <Route path="/dashboard/:list/:answerId?" component={Dashboard} />
         <Route path="/tasks/:taskId?" component={Tasks} />
+        <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
         <Route path="/search" component={PatientSearch} />
         <Route exact path="/patients/:patientId" component={PatientRedirect} />

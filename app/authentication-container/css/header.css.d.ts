@@ -9,6 +9,7 @@ export const selected: string;
 export const searchIcon: string;
 export const patientsIcon: string;
 export const tasksIcon: string;
+export const calendarIcon: string;
 export const left: string;
 export const right: string;
 export const userInfo: string;

@@ -59,10 +59,6 @@ class QuestionCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onFieldUpdate = this.onFieldUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
-
     this.state = {
       loading: false,
       question: {
@@ -79,7 +75,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
     };
   }
 
-  onFieldUpdate(updatedField: IUpdatedField) {
+  onFieldUpdate = (updatedField: IUpdatedField) => {
     const { question } = this.state;
     const { fieldName, fieldValue } = updatedField;
 
@@ -99,9 +95,9 @@ class QuestionCreate extends React.Component<allProps, IState> {
     }
 
     this.setState({ question });
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const fieldName = event.target.name;
     let fieldValue: any = event.target.value;
 
@@ -112,9 +108,9 @@ class QuestionCreate extends React.Component<allProps, IState> {
     }
 
     this.onFieldUpdate({ fieldName, fieldValue });
-  }
+  };
 
-  async onSubmit() {
+  onSubmit = async () => {
     const { createQuestion, assessmentType, routeBase, history, openErrorPopup } = this.props;
     if (createQuestion) {
       // don't allow submitting automated assessment without computed field
@@ -138,7 +134,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
       }
     }
     return false;
-  }
+  };
 
   renderAnswerType() {
     const { question } = this.state;

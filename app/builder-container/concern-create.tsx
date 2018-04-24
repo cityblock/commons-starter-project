@@ -99,32 +99,30 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 
     return (
       <div className={concernStyles.container}>
-        <form onSubmit={this.onSubmit}>
-          <div className={styles.formTop}>
-            <div className={styles.close} onClick={this.props.onClose} />
-          </div>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
-            </div>
-            <div className={styles.inputGroup}>
-              <TextInput
-                name="title"
-                value={concern.title}
-                placeholderMessageId="builder.enterConcernTitle"
-                onChange={this.onChange}
-              />
+        <div className={styles.formTop}>
+          <div className={styles.close} onClick={this.props.onClose} />
+        </div>
+        <div className={styles.formCenter}>
+          <div className={loadingClass}>
+            <div className={styles.loadingContainer}>
+              <div className={loadingStyles.loadingSpinner} />
             </div>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <Button color="white" messageId="builder.cancel" onClick={this.props.onClose} />
-              <Button onClick={this.onSubmit} label="Add concern" />
-            </div>
+          <div className={styles.inputGroup}>
+            <TextInput
+              name="title"
+              value={concern.title}
+              placeholderMessageId="builder.enterConcernTitle"
+              onChange={this.onChange}
+            />
           </div>
-        </form>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <Button color="white" messageId="builder.cancel" onClick={this.props.onClose} />
+            <Button onClick={this.onSubmit} label="Add concern" />
+          </div>
+        </div>
       </div>
     );
   }

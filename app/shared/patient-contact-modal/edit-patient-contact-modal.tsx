@@ -77,9 +77,9 @@ export class EditPatientContactModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(editPatientContactMutationGraphql as any, {
+export default graphql<any>(editPatientContactMutationGraphql as any, {
   name: 'editPatientContactMutation',
   options: {
     refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
   },
-})(EditPatientContactModal);
+})(EditPatientContactModal) as React.ComponentClass<IProps>;

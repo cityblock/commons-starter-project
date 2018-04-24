@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
@@ -15,8 +16,8 @@ interface IProps {
 
 interface IGraphqlProps {
   patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
-  isLoading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 export type allProps = IGraphqlProps & IProps;
@@ -42,10 +43,10 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   };
 
   renderCareTeamMembers() {
-    const { patientCareTeam, isLoading, patientId } = this.props;
+    const { patientCareTeam, loading, patientId } = this.props;
     const careTeam = patientCareTeam || [];
 
-    if (isLoading || !careTeam.length) {
+    if (loading || !careTeam.length) {
       return null;
     }
 
@@ -60,20 +61,20 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   }
 
   render(): JSX.Element {
-    const { patientCareTeam, isLoading, patientId, onAddCareTeamMember } = this.props;
+    const { patientCareTeam, loading, patientId, onAddCareTeamMember } = this.props;
     const { isRemoveModalVisible, careTeamMemberToRemove } = this.state;
 
     return (
       <div className={styles.container}>
         <RequiredTeamMember
           patientCareTeam={patientCareTeam}
-          isLoading={isLoading}
+          isLoading={loading}
           requiredRoleType="communityHealthPartner"
           onClick={() => onAddCareTeamMember('communityHealthPartner')}
         />
         <RequiredTeamMember
           patientCareTeam={patientCareTeam}
-          isLoading={isLoading}
+          isLoading={loading}
           requiredRoleType="primaryCarePhysician"
           onClick={() => onAddCareTeamMember('primaryCarePhysician')}
         />
@@ -90,14 +91,14 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
+export default graphql(patientCareTeamQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
   }),
-  props: ({ data }) => ({
-    isLoading: data ? data.loading : false,
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
     error: data ? data.error : null,
     patientCareTeam: data ? (data as any).patientCareTeam : null,
   }),

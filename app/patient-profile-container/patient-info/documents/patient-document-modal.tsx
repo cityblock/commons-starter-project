@@ -198,13 +198,13 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientDocumentSignedUrlCreate as any, {
+  graphql(patientDocumentSignedUrlCreate as any, {
     name: 'getSignedUploadUrl',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientDocumentCreateMutationGraphql as any, {
+  graphql(patientDocumentCreateMutationGraphql as any, {
     name: 'createPatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],
     },
   }),
-)(PatientDocumentModal);
+)(PatientDocumentModal) as React.ComponentClass<IProps>;

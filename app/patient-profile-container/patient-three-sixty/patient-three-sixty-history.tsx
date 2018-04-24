@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientScreeningToolSubmissionsFor360Query from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
@@ -13,8 +14,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   submissions: ShortPatientScreeningToolSubmission360Fragment[];
 }
 
@@ -52,20 +53,17 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
   return <div className={styles.container}>{renderedSubmissions}</div>;
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  patientScreeningToolSubmissionsFor360Query as any,
-  {
-    options: (props: IProps) => {
-      const { patientId, glassBreakId } = props;
-      return {
-        variables: { patientId, glassBreakId },
-        fetchPolicy: 'cache-and-network', // Always get the latest submissions
-      };
-    },
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      submissions: data ? (data as any).patientScreeningToolSubmissionsFor360 : null,
-    }),
+export default graphql(patientScreeningToolSubmissionsFor360Query as any, {
+  options: (props: IProps) => {
+    const { patientId, glassBreakId } = props;
+    return {
+      variables: { patientId, glassBreakId },
+      fetchPolicy: 'cache-and-network', // Always get the latest submissions
+    };
   },
-)(PatientThreeSixtyHistory);
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    submissions: data ? (data as any).patientScreeningToolSubmissionsFor360 : null,
+  }),
+})(PatientThreeSixtyHistory);

@@ -163,7 +163,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(tasksForUserForPatientQuery as any, {
+  graphql(tasksForUserForPatientQuery as any, {
     skip: (props: IProps) => !props.careTeamMember,
     options: (props: IProps) => ({
       variables: {
@@ -177,10 +177,10 @@ export default compose(
       careTeamMemberTasks: data ? (data as any).tasksForUserForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(careTeamReassignUserMutationGraphql as any, {
+  graphql(careTeamReassignUserMutationGraphql as any, {
     name: 'careTeamReassignUser',
     options: {
       refetchQueries: ['getPatientCareTeam', 'getUserSummaryList', 'getPatient'],
     },
   }),
-)(RemoveCareTeamMemberModal);
+)(RemoveCareTeamMemberModal) as React.ComponentClass<IProps>;

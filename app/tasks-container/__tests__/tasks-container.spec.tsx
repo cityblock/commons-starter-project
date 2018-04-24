@@ -37,6 +37,6 @@ describe('tasks container', () => {
 
   it('renders tasks list', () => {
     expect(wrapper.find('.container').length).toBe(1);
-    expect(wrapper.find<IProps>(Tasks).props().taskId).toBe(taskWithComment.id);
+    expect(wrapper.find<IProps>(Tasks as any).props().taskId).toBe(taskWithComment.id);
   });
 });

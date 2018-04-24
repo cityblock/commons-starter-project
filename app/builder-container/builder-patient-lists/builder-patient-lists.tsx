@@ -100,11 +100,11 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(patientListsQuery as any, {
+  graphql(patientListsQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       patientLists: data ? (data as any).patientLists : null,
     }),
   }),
-)(AdminPatientLists);
+)(AdminPatientLists) as React.ComponentClass<IProps>;

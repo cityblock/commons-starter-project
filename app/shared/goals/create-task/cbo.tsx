@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
@@ -13,8 +14,8 @@ import CreateTaskOtherCBO from './other-cbo';
 
 interface IGraphqlProps {
   CBOs: FullCBOFragment[];
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 interface IProps {
@@ -59,9 +60,9 @@ export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProp
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(CBOsForCategoryQuery as any, {
+export default graphql(CBOsForCategoryQuery as any, {
   skip: ({ categoryId }) => !categoryId,
-  options: ({ categoryId }) => ({
+  options: ({ categoryId }: IProps) => ({
     variables: { categoryId },
   }),
   props: ({ data }) => ({

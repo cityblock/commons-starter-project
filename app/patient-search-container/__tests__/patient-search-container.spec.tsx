@@ -40,6 +40,7 @@ describe('Patient Search Container', () => {
       pageSize={pageSize}
       loading={false}
       searchResults={searchResults as any}
+      error={null}
       refetch={() => {
         return;
       }}

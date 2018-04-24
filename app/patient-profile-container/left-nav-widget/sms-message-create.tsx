@@ -83,6 +83,6 @@ export class SmsMessageCreate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(smsMessageCreateMutationGraphql as any, {
+export default graphql<any>(smsMessageCreateMutationGraphql as any, {
   name: 'createSmsMessage',
-})(SmsMessageCreate);
+})(SmsMessageCreate) as React.ComponentClass<IProps>;

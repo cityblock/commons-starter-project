@@ -18,6 +18,8 @@ describe('Patient 360 History Component', () => {
       patientId={patientId}
       submissions={[shortPatientScreeningToolSubmission, shortPatientScreeningToolSubmission2]}
       glassBreakId={glassBreakId}
+      loading={false}
+      error={null}
     />,
   );
 

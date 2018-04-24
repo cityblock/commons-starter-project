@@ -7,7 +7,12 @@ import { TaskNotifications } from '../task-notifications';
 
 describe('Dashboard Task Notifications Component', () => {
   const wrapper = shallow(
-    <TaskNotifications taskId={task.id} notifications={[eventNotification]} />,
+    <TaskNotifications
+      loading={false}
+      error={null}
+      taskId={task.id}
+      notifications={[eventNotification]}
+    />,
   );
 
   it('renders container', () => {

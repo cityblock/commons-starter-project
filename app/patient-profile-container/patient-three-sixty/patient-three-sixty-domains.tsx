@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as riskAreaGroupsQuery from '../../graphql/queries/get-risk-area-groups.graphql';
@@ -19,8 +20,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  riskAreaGroupsLoading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   riskAreaGroups: getRiskAreaGroupsQuery['riskAreaGroups'];
 }
 
@@ -32,15 +33,8 @@ export interface IRiskAreaGroupScore {
 }
 
 export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (props: allProps) => {
-  const {
-    patientId,
-    routeBase,
-    riskAreaGroups,
-    riskAreaGroupsLoading,
-    history,
-    glassBreakId,
-  } = props;
-  if (riskAreaGroupsLoading) return <Spinner />;
+  const { patientId, routeBase, riskAreaGroups, loading, history, glassBreakId } = props;
+  if (loading) return <Spinner />;
 
   const body = history ? (
     <PatientThreeSixtyHistory patientId={patientId} glassBreakId={glassBreakId} />
@@ -68,11 +62,11 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
+export default graphql<any, any, any, any>(riskAreaGroupsQuery as any, {
   skip: (props: IProps) => props.history,
-  props: ({ data }) => ({
-    riskAreaGroupsLoading: data ? data.loading : false,
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
     error: data ? data.error : null,
     riskAreaGroups: data ? (data as any).riskAreaGroups : null,
   }),
-})(PatientThreeSixtyDomains);
+})(PatientThreeSixtyDomains) as React.ComponentClass<IProps>;

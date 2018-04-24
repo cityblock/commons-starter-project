@@ -94,7 +94,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql<IGraphqlProps, IProps, resultProps>(progressNoteGlassBreakCheckQuery as any, {
+    graphql(progressNoteGlassBreakCheckQuery as any, {
       options: (props: IProps) => ({
         variables: {
           progressNoteId: props.progressNoteId,
@@ -106,7 +106,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).progressNoteGlassBreakCheck : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(progressNoteGlassBreaksForUserQuery as any, {
+    graphql(progressNoteGlassBreaksForUserQuery as any, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
         fetchPolicy: 'cache-and-network',

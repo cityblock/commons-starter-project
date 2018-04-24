@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as userSummaryListQuery from '../graphql/queries/get-user-summary-list.graphql';
-import { ShortUserFragment } from '../graphql/types';
+import { getUserSummaryListQuery, ShortUserFragment } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import OptGroup from '../shared/library/optgroup/optgroup';
 import Option from '../shared/library/option/option';
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  userSummaryList: ShortUserFragment[];
+  userSummaryList: getUserSummaryListQuery['userSummaryList'];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -79,17 +79,13 @@ class CareWorkerSelect extends React.Component<allProps> {
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(userSummaryListQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        userRoleFilters: CARE_WORKER_ROLES,
-      },
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      userSummaryList: data ? data.userSummaryList : null,
-    }),
+export default graphql(userSummaryListQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      userRoleFilters: CARE_WORKER_ROLES,
+    },
   }),
-)(CareWorkerSelect);
+  props: ({ data }): IGraphqlProps => ({
+    userSummaryList: data ? (data as any).userSummaryList : null,
+  }),
+})(CareWorkerSelect);

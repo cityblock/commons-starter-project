@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
@@ -12,8 +13,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
 }
 
@@ -35,12 +36,12 @@ export const RiskAreaAssessmentHeader: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
+export default graphql(getRiskAreaGroupForPatientGraphql as any, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId, glassBreakId } = props;
     return { variables: { riskAreaGroupId, patientId, glassBreakId } };
   },
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     riskAreaGroup: data ? (data as any).riskAreaGroupForPatient : null,

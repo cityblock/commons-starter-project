@@ -145,14 +145,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(computedFieldsQuery as any, {
+  graphql(computedFieldsQuery as any, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,
       computedFields: data ? (data as any).computedFields : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(computedFieldDeleteMutationGraphql as any, {
+  graphql(computedFieldDeleteMutationGraphql as any, {
     name: 'deleteComputedField',
   }),
-)(BuilderComputedFields);
+)(BuilderComputedFields) as React.ComponentClass<IProps>;

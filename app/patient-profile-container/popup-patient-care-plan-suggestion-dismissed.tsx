@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as carePlanSuggestionDismissMutationGraphql from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
   carePlanSuggestionDismissMutation,
@@ -105,11 +105,9 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(carePlanSuggestionDismissMutationGraphql as any, {
-    name: 'dismissCarePlanSuggestion',
-    options: {
-      refetchQueries: ['getPatientCarePlanSuggestions'],
-    },
-  }),
-)(PopupPatientCarePlanSuggestionDismissed);
+export default graphql<any>(carePlanSuggestionDismissMutationGraphql as any, {
+  name: 'dismissCarePlanSuggestion',
+  options: {
+    refetchQueries: ['getPatientCarePlanSuggestions'],
+  },
+})(PopupPatientCarePlanSuggestionDismissed) as React.ComponentClass<IProps>;

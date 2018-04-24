@@ -160,9 +160,9 @@ export class FlaggingModal extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientFlagCreateMutationGraphql as any, {
+export default graphql<any>(patientFlagCreateMutationGraphql as any, {
   name: 'createFlag',
   options: {
     refetchQueries: ['getPatientComputedPatientStatus'],
   },
-})(FlaggingModal);
+})(FlaggingModal) as React.ComponentClass<IProps>;

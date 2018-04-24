@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -12,8 +13,8 @@ import { EventNotificationsLoadingError } from './event-notifications-loading-er
 
 interface IProps {
   eventNotifications?: FullEventNotificationFragment[];
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   fetchMoreEventNotifications: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;

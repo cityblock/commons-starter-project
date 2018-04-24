@@ -20,10 +20,13 @@ export interface IOptions {
   variables: progressNoteTemplateCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   progressNoteTemplateId: string | null;
   routeBase: string;
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -36,7 +39,7 @@ interface IState {
   progressNoteTemplate: progressNoteTemplateCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 export class ProgressNoteTemplateCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -123,10 +126,10 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateCreateMutationGraphql as any, {
+  graphql(progressNoteTemplateCreateMutationGraphql as any, {
     name: 'createProgressNoteTemplate',
     options: {
       refetchQueries: ['getProgressNoteTemplates'],
     },
   }),
-)(ProgressNoteTemplateCreate);
+)(ProgressNoteTemplateCreate) as React.ComponentClass<IProps>;

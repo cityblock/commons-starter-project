@@ -63,7 +63,7 @@ const RiskAreaRow: React.StatelessComponent<allProps> = (props: allProps) => {
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupShortQueryGraphql as any, {
+export default graphql(riskAreaGroupShortQueryGraphql as any, {
   options: (props: IProps) => ({
     variables: { riskAreaGroupId: props.riskArea.riskAreaGroupId },
   }),

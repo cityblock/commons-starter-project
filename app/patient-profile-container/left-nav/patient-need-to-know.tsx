@@ -154,10 +154,10 @@ class PatientNeedToKnow extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(savePatientNeedToKnowMutationGraphql as any, {
+  graphql(savePatientNeedToKnowMutationGraphql as any, {
     name: 'saveNeedToKnow',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientNeedToKnowQuery as any, {
+  graphql(patientNeedToKnowQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientInfoId: props.patientInfoId,
@@ -170,4 +170,4 @@ export default compose(
       refetchNeedToKnow: data ? data.refetch : null,
     }),
   }),
-)(PatientNeedToKnow);
+)(PatientNeedToKnow) as React.ComponentClass<IProps>;

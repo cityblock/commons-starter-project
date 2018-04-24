@@ -63,6 +63,6 @@ export class CreatePhoneModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createPhoneMutationGraphql as any, {
+export default graphql<any>(createPhoneMutationGraphql as any, {
   name: 'createPhoneMutation',
-})(CreatePhoneModal);
+})(CreatePhoneModal) as React.ComponentClass<IProps>;

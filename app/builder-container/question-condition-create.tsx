@@ -22,7 +22,7 @@ export interface ICreateOptions {
   variables: questionConditionCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   questionCondition?: FullQuestionConditionFragment;
   questionId: string;
   answers: FullAnswerFragment[];
@@ -39,7 +39,7 @@ interface IState {
   };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 class QuestionConditionCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -114,10 +114,10 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(questionConditionCreateMutationGraphql as any, {
+  graphql(questionConditionCreateMutationGraphql as any, {
     name: 'createQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],
     },
   }),
-)(QuestionConditionCreate);
+)(QuestionConditionCreate) as React.ComponentClass<IProps>;

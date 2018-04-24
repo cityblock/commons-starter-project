@@ -76,7 +76,7 @@ describe('Task Component', () => {
 
   it('renders task assignee with correct props', () => {
     const wrapper = container.update();
-    const assignee = wrapper.find<IProps>(TaskAssignee);
+    const assignee = wrapper.find<IProps>(TaskAssignee as any);
 
     expect(assignee.length).toBe(1);
     expect(assignee.props().patientId).toBe(patientId);
@@ -96,7 +96,7 @@ describe('Task Component', () => {
 
   it('renders task comments with correct props', () => {
     const wrapper = container.update(); // .find(TaskContainer);
-    const comments = wrapper.find<ITaskCommentsProps>(TaskComments);
+    const comments = wrapper.find<ITaskCommentsProps>(TaskComments as any);
 
     expect(comments.length).toBe(1);
     expect(comments.props().taskId).toBe(taskId);

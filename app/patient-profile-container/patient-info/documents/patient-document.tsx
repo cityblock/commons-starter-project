@@ -23,7 +23,7 @@ import withErrorHandler, {
 } from '../../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-document.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   patientDocument: FullPatientDocumentFragment;
 }
 
@@ -36,7 +36,7 @@ interface IGraphqlProps {
   ) => { data: patientDocumentDeleteMutation };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   isMenuVisible: boolean;
@@ -150,13 +150,13 @@ export class PatientDocument extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(patientDocumentSignedUrlCreate as any, {
+  graphql(patientDocumentSignedUrlCreate as any, {
     name: 'getSignedDocumentUrl',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientDocumentDeleteMutationGraphql as any, {
+  graphql(patientDocumentDeleteMutationGraphql as any, {
     name: 'deletePatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],
     },
   }),
-)(PatientDocument);
+)(PatientDocument) as React.ComponentClass<IProps>;

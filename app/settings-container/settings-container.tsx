@@ -152,7 +152,7 @@ class SettingsContainer extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+  graphql(currentUserQuery as any, {
     options: (props: IProps) => ({
       variables: {},
     }),
@@ -162,5 +162,5 @@ export default compose(
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(userMutation as any, { name: 'updateUser' }),
-)(SettingsContainer);
+  graphql(userMutation as any, { name: 'updateUser' }),
+)(SettingsContainer) as React.ComponentClass<IProps>;

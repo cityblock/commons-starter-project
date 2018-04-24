@@ -25,9 +25,12 @@ interface IOptions {
   variables: riskAreaCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   routeBase: string;
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -48,7 +51,7 @@ interface IState {
   loading: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 type Field =
   | 'title'
@@ -201,17 +204,17 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
+  graphql(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,
       error: data ? data.error : null,
       riskAreaGroups: data ? (data as any).riskAreaGroups : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaCreateMutationGraphql as any, {
+  graphql(riskAreaCreateMutationGraphql as any, {
     name: 'createRiskArea',
     options: {
       refetchQueries: ['getRiskAreas'],
     },
   }),
-)(RiskAreaCreate);
+)(RiskAreaCreate) as React.ComponentClass<IProps>;

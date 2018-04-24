@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { FullPatientListFragment } from '../../graphql/types';
 import NavigationItem from './navigation-item';
@@ -5,7 +6,7 @@ import NavigationItem from './navigation-item';
 interface IProps {
   patientLists: FullPatientListFragment[];
   loading: boolean;
-  error: string | null;
+  error: ApolloError | null | undefined;
   routeBase: string;
   answerId: string | null;
 }

@@ -15,7 +15,7 @@ import * as styles from './css/patient-list-detail.css';
 import PatientListCreate from './patient-list-create';
 import PatientListEdit from './patient-list-edit';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   patientList: FullPatientListFragment | null;
   close: () => void;
   createMode: boolean;
@@ -28,7 +28,7 @@ interface IGraphqlProps {
   ) => { data: patientListDeleteMutation };
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   deleteMode: boolean;
@@ -101,10 +101,10 @@ export class PatientListDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(patientListDeleteMutationGraphql as any, {
+  graphql(patientListDeleteMutationGraphql as any, {
     name: 'deletePatientList',
     options: {
       refetchQueries: ['getPatientLists'],
     },
   }),
-)(PatientListDetail);
+)(PatientListDetail) as React.ComponentClass<IProps>;

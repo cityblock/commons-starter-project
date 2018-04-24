@@ -30,15 +30,18 @@ export interface IOptions {
   variables: questionCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
-  riskAreaId: string | null;
-  assessmentType: AssessmentType | null;
-  screeningToolId: string | null;
-  progressNoteTemplateId: string | null;
+interface IProps {
+  riskAreaId?: string | null;
+  assessmentType?: AssessmentType | null;
+  screeningToolId?: string | null;
+  progressNoteTemplateId?: string | null;
   routeBase: string;
-  history: History;
   onClose: () => any;
   computedFields?: FullComputedFieldFragment[];
+}
+
+interface IRouterProps {
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -50,7 +53,7 @@ interface IState {
   question: questionCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 class QuestionCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -264,10 +267,10 @@ class QuestionCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(questionCreateMutationGraphql as any, {
+  graphql(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {
       refetchQueries: ['getQuestions', 'getComputedFields'],
     },
   }),
-)(QuestionCreate);
+)(QuestionCreate) as React.ComponentClass<IProps>;

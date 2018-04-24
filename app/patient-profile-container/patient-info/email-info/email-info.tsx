@@ -23,7 +23,7 @@ import CreateEmailModal from './create-email-modal';
 import * as styles from './css/email-info.css';
 import EditEmailModal from './edit-email-modal';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -41,7 +41,7 @@ interface IGraphqlProps {
   error: string | null;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
@@ -271,10 +271,10 @@ export class EmailInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(emailDeleteMutationGraphql as any, {
+  graphql(emailDeleteMutationGraphql as any, {
     name: 'emailDeleteMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(emailsQuery as any, {
+  graphql(emailsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -286,4 +286,4 @@ export default compose(
       emails: data ? (data as any).patientEmails : null,
     }),
   }),
-)(EmailInfo);
+)(EmailInfo) as React.ComponentClass<IProps>;

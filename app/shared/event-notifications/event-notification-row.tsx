@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
@@ -13,13 +14,13 @@ interface IProps {
 
 interface IGraphqlProps {
   task?: FullTaskFragment;
-  taskLoading?: boolean;
-  taskError?: string;
+  loading?: boolean;
+  error: ApolloError | null | undefined;
 }
 
 type allProps = IProps & IGraphqlProps;
 
-class EventNotificationRow extends React.Component<allProps, {}> {
+class EventNotificationRow extends React.Component<allProps> {
   render() {
     const { notification, onDismiss, task } = this.props;
     const eventLink = task ? `/tasks/${task.id}` : '#';
@@ -43,20 +44,19 @@ class EventNotificationRow extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(taskQuery as any, {
+export default graphql(taskQuery as any, {
   skip: (props: allProps) => {
     const taskEvent = props.notification.taskEvent;
     return taskEvent && taskEvent.taskId ? false : true;
   },
-  options: (props: allProps) => ({
+  options: (props: IProps) => ({
     variables: {
       taskId: props.notification.taskEvent ? props.notification.taskEvent.taskId : null,
     },
   }),
-  props: ({ data }) => ({
-    taskLoading: data ? data.loading : false,
-    taskError: data ? data.error : null,
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
     task: data ? (data as any).task : null,
-    refetchTask: data ? data.refetch : null,
   }),
 })(EventNotificationRow);

@@ -91,6 +91,6 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupEditMutationGraphql as any, {
+export default graphql<any>(riskAreaGroupEditMutationGraphql as any, {
   name: 'editRiskAreaGroup',
-})(RiskAreaGroupEdit);
+})(RiskAreaGroupEdit) as React.ComponentClass<IProps>;

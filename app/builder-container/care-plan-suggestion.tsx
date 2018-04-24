@@ -17,12 +17,11 @@ import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
 
-interface IProps extends IInjectedErrorProps {
-  answerId: string | null;
-  screeningToolScoreRangeId: string | null;
+interface IProps {
+  answerId?: string | null;
+  screeningToolScoreRangeId?: string | null;
   suggestionType: 'concern' | 'goal';
   suggestion: FullGoalSuggestionTemplateFragment | FullConcernFragment;
-  mutate?: any;
 }
 
 interface IGraphqlProps {
@@ -38,7 +37,7 @@ interface IState {
   loading: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 class CarePlanSuggestion extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -137,16 +136,16 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(concernSuggestionDeleteMutationGraphql as any, {
+  graphql(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionDeleteMutationGraphql as any, {
+  graphql(goalSuggestionDeleteMutationGraphql as any, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-)(CarePlanSuggestion);
+)(CarePlanSuggestion) as React.ComponentClass<IProps>;

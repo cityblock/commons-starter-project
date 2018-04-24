@@ -22,7 +22,7 @@ import CreatePhoneModal from './create-phone-modal';
 import * as styles from './css/phone-info.css';
 import EditPhoneModal from './edit-phone-modal';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -39,7 +39,7 @@ interface IGraphqlProps {
   error: string | null;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
@@ -270,10 +270,10 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(phoneDeleteMutationGraphql as any, {
+  graphql(phoneDeleteMutationGraphql as any, {
     name: 'phoneDeleteMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(phonesQuery as any, {
+  graphql(phonesQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -285,4 +285,4 @@ export default compose(
       phones: data ? (data as any).patientPhones : null,
     }),
   }),
-)(PhoneInfo);
+)(PhoneInfo) as React.ComponentClass<IProps>;

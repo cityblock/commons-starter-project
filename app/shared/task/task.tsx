@@ -30,9 +30,9 @@ export const Divider: React.StatelessComponent<{}> = () => <div className={style
 export interface IProps {
   routeBase: string;
   taskId: string;
-  dismissTaskNotifications: (
-    options: { variables: eventNotificationsForTaskDismissMutationVariables },
-  ) => { data: { eventNotificationsForTaskDismiss: FullEventNotificationFragment } };
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -40,6 +40,9 @@ interface IGraphqlProps {
   task: FullTaskFragment;
   taskLoading?: boolean;
   taskError: string | null;
+  dismissTaskNotifications: (
+    options: { variables: eventNotificationsForTaskDismissMutationVariables },
+  ) => { data: { eventNotificationsForTaskDismiss: FullEventNotificationFragment } };
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
@@ -47,7 +50,7 @@ interface IState {
   deleteConfirmation: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IRouterProps;
 
 export class Task extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -188,10 +191,10 @@ export class Task extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps, IProps, allProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
-  graphql<IGraphqlProps, allProps>(taskQuery as any, {
-    skip: (props: allProps) => !props.taskId,
-    options: (props: allProps) => ({ variables: { taskId: props.taskId } }),
+  graphql(taskEditMutationGraphql as any, { name: 'editTask' }),
+  graphql(taskQuery as any, {
+    skip: (props: IProps) => !props.taskId,
+    options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
       taskLoading: data ? data.loading : false,
       taskError: data ? data.error : null,
@@ -199,10 +202,10 @@ export default compose(
       refetchTask: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(eventNotificationsForTaskDismissMutation as any, {
+  graphql(eventNotificationsForTaskDismissMutation as any, {
     name: 'dismissTaskNotifications',
     options: {
       refetchQueries: ['getTaskIdsWithNotifications'],
     },
   }),
-)(Task);
+)(Task) as React.ComponentClass<IProps>;

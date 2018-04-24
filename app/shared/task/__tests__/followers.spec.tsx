@@ -19,8 +19,8 @@ describe('Task Followers Component', () => {
 
   it('renders add task follower component', () => {
     expect(wrapper.find(AddTaskFollower).length).toBe(1);
-    expect(wrapper.find<IProps>(AddTaskFollower).props().patientId).toBe(patientId);
-    expect(wrapper.find<IProps>(AddTaskFollower).props().taskId).toBe(taskId);
-    expect(wrapper.find<IProps>(AddTaskFollower).props().followers).toEqual(followers);
+    expect(wrapper.find<IProps>(AddTaskFollower as any).props().patientId).toBe(patientId);
+    expect(wrapper.find<IProps>(AddTaskFollower as any).props().taskId).toBe(taskId);
+    expect(wrapper.find<IProps>(AddTaskFollower as any).props().followers).toEqual(followers);
   });
 });

@@ -178,11 +178,11 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(CBOReferralEditMutationGraphql as any, {
+  graphql(CBOReferralEditMutationGraphql as any, {
     name: 'editCBOReferral',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskEditMutationGraphql as any, {
+  graphql(taskEditMutationGraphql as any, {
     name: 'editTask',
     options: { refetchQueries: ['getPatientCarePlan'] },
   }),
-)(TaskCBOAddInformationPopup);
+)(TaskCBOAddInformationPopup) as React.ComponentClass<IProps>;

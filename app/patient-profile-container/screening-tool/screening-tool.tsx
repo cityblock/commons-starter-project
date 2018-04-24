@@ -314,11 +314,11 @@ const getPatientScreeningToolSubmissionId = (props: allProps) => {
 };
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreate as any, {
+  graphql(patientAnswersCreate as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionCreate as any, {
+  graphql(patientScreeningToolSubmissionCreate as any, {
     name: 'createScreeningToolSubmission',
     options: {
       refetchQueries: [
@@ -327,7 +327,7 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionScore as any, {
+  graphql(patientScreeningToolSubmissionScore as any, {
     name: 'scoreScreeningToolSubmission',
     options: {
       refetchQueries: [
@@ -336,7 +336,7 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
+  graphql(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.match.params.screeningToolId,
@@ -348,7 +348,7 @@ export default compose(
       screeningTool: data ? (data as any).screeningTool : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuestionsQuery as any, {
+  graphql(screeningToolQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
@@ -361,7 +361,7 @@ export default compose(
       screeningToolQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionQuery as any, {
+  graphql(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.match.params.screeningToolId,
     options: (props: IProps) => ({
       variables: {
@@ -378,7 +378,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery as any, {
     skip: (props: allProps) => !getPatientScreeningToolSubmissionId(props),
     options: (props: IProps) => ({
       variables: {
@@ -393,4 +393,4 @@ export default compose(
       patientAnswers: data ? (data as any).patientAnswers : null,
     }),
   }),
-)(ScreeningTool);
+)(ScreeningTool) as React.ComponentClass<IProps>;

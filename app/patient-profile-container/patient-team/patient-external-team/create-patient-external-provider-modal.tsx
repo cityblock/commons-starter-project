@@ -57,12 +57,9 @@ export class CreatePatientExternalProviderModal extends React.Component<allProps
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  createPatientExternalProviderMutationGraphql as any,
-  {
-    name: 'createPatientExternalProviderMutation',
-    options: {
-      refetchQueries: ['getPatientExternalProviders', 'getPatient'],
-    },
+export default graphql<any>(createPatientExternalProviderMutationGraphql as any, {
+  name: 'createPatientExternalProviderMutation',
+  options: {
+    refetchQueries: ['getPatientExternalProviders', 'getPatient'],
   },
-)(CreatePatientExternalProviderModal);
+})(CreatePatientExternalProviderModal) as React.ComponentClass<IProps>;

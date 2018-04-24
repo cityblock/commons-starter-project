@@ -17,6 +17,6 @@ it('renders patient care plan suggestions', () => {
       glassBreakId="lady"
     />,
   );
-  const suggestionAccepted = wrapper.find<IProps>(PopupPatientCarePlanSuggestionAccepted);
+  const suggestionAccepted = wrapper.find<IProps>(PopupPatientCarePlanSuggestionAccepted as any);
   expect(suggestionAccepted.props().patientId).toBe(carePlanSuggestionWithConcern.patientId);
 });

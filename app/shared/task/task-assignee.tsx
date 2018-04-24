@@ -1,5 +1,6 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import { FullUserFragment, ShortUserFragment } from '../../graphql/types';
@@ -11,7 +12,7 @@ import * as styles from './css/task-body.css';
 export interface IProps {
   patientId: string;
   onAssigneeClick: (assignedToId: string, assignedToEmail: string | null) => void;
-  assignee?: ShortUserFragment;
+  assignee?: ShortUserFragment | null;
   selectedAssigneeId?: string;
   messageId?: string;
   messageStyles?: string;
@@ -22,7 +23,7 @@ export interface IProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  error: string;
+  error: ApolloError | null | undefined;
   careTeam: FullUserFragment[];
 }
 
@@ -121,17 +122,15 @@ export class TaskAssignee extends React.Component<allProps, IState> {
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.patientId,
-      },
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      careTeam: data ? (data as any).patientCareTeam : null,
-    }),
+export default graphql(careTeamQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+    },
   }),
-)(TaskAssignee);
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    careTeam: data ? (data as any).patientCareTeam : null,
+  }),
+})(TaskAssignee);

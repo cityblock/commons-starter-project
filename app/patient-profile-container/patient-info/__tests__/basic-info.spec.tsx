@@ -16,6 +16,8 @@ describe('Render Basic Information Component', () => {
       patientInfoId={patient.patientInfo.id}
       onChange={onChange}
       className="infoStyles"
+      loading={false}
+      error={null}
     />,
   );
 

@@ -88,7 +88,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(riskAreaShortQueryGraphql as any, {
+export default graphql(riskAreaShortQueryGraphql as any, {
   options: (props: IProps) => ({
     variables: { riskAreaId: props.submission.screeningTool.riskAreaId },
   }),

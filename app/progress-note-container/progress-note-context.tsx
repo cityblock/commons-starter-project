@@ -27,6 +27,7 @@ import {
 } from '../shared/question/question-helpers';
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
+import { IUpdateProgressNoteOptions } from './progress-note-popup';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 import ProgressNoteWorryScore from './progress-note-worry-score';
 
@@ -37,16 +38,7 @@ interface IProps {
   progressNoteTemplates: FullProgressNoteTemplateFragment[];
   patientAnswers?: getPatientAnswersQuery['patientAnswers'];
   questions: getQuestionsQuery['questions'];
-  onChange: (
-    options: {
-      progressNoteTemplateId: string;
-      startedAt: string | null;
-      location: string | null;
-      summary: string | null;
-      memberConcern: string | null;
-      worryScore: number | null;
-    },
-  ) => void;
+  onChange: (options: IUpdateProgressNoteOptions) => void;
 }
 
 interface IGraphqlProps {
@@ -357,11 +349,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
+  graphql(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(clinicsQuery as any, {
+  graphql(clinicsQuery as any, {
     options: {
       variables: {
         pageNumber: 0,
@@ -374,4 +366,4 @@ export default compose(
       clinics: data ? (data as any).clinics : null,
     }),
   }),
-)(ProgressNoteContext);
+)(ProgressNoteContext) as React.ComponentClass<IProps>;

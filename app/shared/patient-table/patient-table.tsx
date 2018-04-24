@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { FullPatientTableRowFragment } from '../../graphql/types';
 import Spinner from '../library/spinner/spinner';
@@ -19,7 +20,7 @@ interface IProps {
   onSelectToggle?: ((selectState: object) => any) | null;
   onSelectAll?: (isSelected: boolean) => any;
   isGloballySelected?: boolean;
-  error?: string;
+  error: ApolloError | undefined | null;
   query?: string;
 }
 

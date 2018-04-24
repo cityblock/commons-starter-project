@@ -248,7 +248,7 @@ export class Question extends React.Component<allProps, IState> {
             screeningToolAnswer={!!question.screeningToolId}
             answer={answer}
             questionId={question.id}
-            dataType={this.getAnswerDataType()}
+            dataType={this.getAnswerDataType() || undefined}
           />
         ));
     }
@@ -428,7 +428,7 @@ export class Question extends React.Component<allProps, IState> {
               <AnswerCreateEdit
                 questionId={question.id}
                 screeningToolAnswer={!!question.screeningToolId}
-                dataType={this.getAnswerDataType()}
+                dataType={this.getAnswerDataType() || undefined}
               />
               <br />
               <SmallText color="black" size="large" messageId="builder.applicableHeading" />
@@ -492,10 +492,10 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(questionEditMutationGraphql as any, {
+  graphql(questionEditMutationGraphql as any, {
     name: 'editQuestion',
   }),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(questionQuery as any, {
+  graphql(questionQuery as any, {
     skip: (props: IProps & IStateProps) => !props.questionId,
     options: (props: IProps & IStateProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({
@@ -505,4 +505,4 @@ export default compose(
       refetchQuestion: data ? data.refetch : null,
     }),
   }),
-)(Question);
+)(Question) as React.ComponentClass<IProps>;

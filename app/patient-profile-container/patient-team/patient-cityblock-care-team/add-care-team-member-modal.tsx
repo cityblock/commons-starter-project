@@ -262,7 +262,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(userSummaryListQuery as any, {
+  graphql(userSummaryListQuery as any, {
     options: (props: IProps) => ({
       variables: {
         userRoleFilters: Object.keys(UserRole),
@@ -271,10 +271,10 @@ export default compose(
     props: ({ data }) => ({
       isUserSummaryListLoading: data ? data.loading : false,
       userSummaryListError: data ? data.error : null,
-      userSummaryList: data ? data.userSummaryList : null,
+      userSummaryList: data ? (data as any).userSummaryList : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
+  graphql(patientCareTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -283,13 +283,13 @@ export default compose(
     props: ({ data }) => ({
       isPatientCareTeamLoading: data ? data.loading : false,
       patientCareTeamError: data ? data.error : null,
-      patientCareTeam: data ? data.patientCareTeam : null,
+      patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientCareTeamAddUserMutationGraphql as any, {
+  graphql(patientCareTeamAddUserMutationGraphql as any, {
     name: 'addUserToPatientCareTeamMutation',
     options: {
       refetchQueries: ['getPatientCareTeam', 'getUserSummaryList', 'getPatient'],
     },
   }),
-)(AddCareTeamMemberModal);
+)(AddCareTeamMemberModal) as React.ComponentClass<IProps>;

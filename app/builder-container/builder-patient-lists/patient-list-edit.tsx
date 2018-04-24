@@ -81,6 +81,6 @@ export class PatientListEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientListEditMutationGraphql as any, {
+export default graphql<any>(patientListEditMutationGraphql as any, {
   name: 'editPatientList',
-})(PatientListEdit);
+})(PatientListEdit) as React.ComponentClass<IProps>;

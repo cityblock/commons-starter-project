@@ -12,9 +12,9 @@ import BuilderQuestions from '../builder-questions';
 const match = {
   params: {
     riskAreaId: riskArea.id,
-    progressNoteTemplateId: null,
-    toolId: null,
-    questionId: null,
+    progressNoteTemplateId: undefined,
+    toolId: undefined,
+    questionId: undefined,
   },
 };
 
@@ -28,13 +28,7 @@ describe('builder concerns', () => {
         <Provider store={mockStore({ locale, riskArea })}>
           <ReduxConnectedIntlProvider>
             <BrowserRouter>
-              <BuilderQuestions
-                match={match}
-                routeBase="/route/base"
-                riskAreaId="risk-area-id"
-                questionId="cool-question-id"
-                riskAreas={[riskArea]}
-              />
+              <BuilderQuestions match={match} history={{} as any} />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>

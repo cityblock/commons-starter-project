@@ -321,10 +321,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionTemplateEditMutationGraphql as any, {
+  graphql(goalSuggestionTemplateEditMutationGraphql as any, {
     name: 'editGoal',
   }),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(goalSuggestionTemplateQuery as any, {
+  graphql(goalSuggestionTemplateQuery as any, {
     skip: (props: IProps & IStateProps) => !props.goalId,
     options: (props: IProps & IStateProps) => ({
       variables: { goalSuggestionTemplateId: props.goalId },
@@ -336,4 +336,4 @@ export default compose(
       refetchGoal: data ? data.refetch : null,
     }),
   }),
-)(Goal);
+)(Goal) as React.ComponentClass<IProps>;

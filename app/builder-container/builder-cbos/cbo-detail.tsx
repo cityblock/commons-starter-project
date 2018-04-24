@@ -15,7 +15,7 @@ import CBOCreate from './cbo-create';
 import CBOEdit from './cbo-edit';
 import * as styles from './css/cbo-detail.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   CBO: FullCBOFragment | null;
   close: () => void;
   createMode: boolean;
@@ -26,7 +26,7 @@ interface IGraphqlProps {
   deleteCBO: (options: { variables: CBODeleteMutationVariables }) => { data: CBODeleteMutation };
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   deleteMode: boolean;
@@ -95,10 +95,10 @@ export class CBODetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(CBODeleteMutationGraphql as any, {
+  graphql(CBODeleteMutationGraphql as any, {
     name: 'deleteCBO',
     options: {
       refetchQueries: ['getCBOs'],
     },
   }),
-)(CBODetail);
+)(CBODetail) as React.ComponentClass<IProps>;

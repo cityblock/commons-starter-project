@@ -304,10 +304,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(concernEditMutationGraphql as any, {
+  graphql(concernEditMutationGraphql as any, {
     name: 'editConcern',
   }),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(concernQuery as any, {
+  graphql(concernQuery as any, {
     skip: (props: IProps & IStateProps) => !props.concernId,
     options: (props: IProps & IStateProps) => ({ variables: { concernId: props.concernId } }),
     props: ({ data }) => ({
@@ -317,4 +317,4 @@ export default compose(
       refetchConcern: data ? data.refetch : null,
     }),
   }),
-)(Concern);
+)(Concern) as React.ComponentClass<IProps>;

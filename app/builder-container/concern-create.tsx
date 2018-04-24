@@ -18,9 +18,12 @@ interface IOptions {
   variables: concernCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   routeBase: string;
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -33,7 +36,7 @@ interface IState {
   concern: concernCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 export class ConcernCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -130,10 +133,10 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(concernCreateMutationGraphql as any, {
+  graphql(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {
       refetchQueries: ['getConcerns'],
     },
   }),
-)(ConcernCreate);
+)(ConcernCreate) as React.ComponentClass<IProps>;

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as getEventNotificationsForUserTaskQuery from '../../graphql/queries/get-event-notifications-for-user-task.graphql';
@@ -11,8 +12,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   notifications: ShortEventNotificationsForUserTaskFragment[];
 }
 
@@ -29,16 +30,13 @@ export const TaskNotifications: React.StatelessComponent<allProps> = (props: all
   return <div className={styles.container}>{renderedNotifications}</div>;
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  getEventNotificationsForUserTaskQuery as any,
-  {
-    options: ({ taskId }) => ({
-      variables: { taskId },
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      notifications: data ? (data as any).eventNotificationsForUserTask : null,
-    }),
-  },
-)(TaskNotifications);
+export default graphql(getEventNotificationsForUserTaskQuery as any, {
+  options: ({ taskId }: IProps) => ({
+    variables: { taskId },
+  }),
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    notifications: data ? (data as any).eventNotificationsForUserTask : null,
+  }),
+})(TaskNotifications);

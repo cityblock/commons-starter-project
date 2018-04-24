@@ -95,11 +95,11 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(CBOsQuery as any, {
+  graphql(CBOsQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       CBOItems: data ? (data as any).CBOs : null,
     }),
   }),
-)(AdminCBOs);
+)(AdminCBOs) as React.ComponentClass<IProps>;

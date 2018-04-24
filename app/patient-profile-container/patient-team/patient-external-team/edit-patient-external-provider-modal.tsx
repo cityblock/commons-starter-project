@@ -60,12 +60,9 @@ export class EditPatientExternalProviderModal extends React.Component<allProps> 
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  editPatientExternalProviderMutationGraphql as any,
-  {
-    name: 'editPatientExternalProviderMutation',
-    options: {
-      refetchQueries: ['getPatientExternalProviders', 'getPatient'],
-    },
+export default graphql<any>(editPatientExternalProviderMutationGraphql as any, {
+  name: 'editPatientExternalProviderMutation',
+  options: {
+    refetchQueries: ['getPatientExternalProviders', 'getPatient'],
   },
-)(EditPatientExternalProviderModal);
+})(EditPatientExternalProviderModal) as React.ComponentClass<IProps>;

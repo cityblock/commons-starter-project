@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import { isNil, omitBy } from 'lodash';
 import * as querystring from 'querystring';
@@ -32,7 +33,7 @@ const INITIAL_PAGE_SIZE = 10;
 interface IGraphqlProps {
   refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => void;
   loading: boolean;
-  error?: string;
+  error: ApolloError | null | undefined;
   patientPanel?: getPatientPanelQuery['patientPanel'];
   currentUser?: getCurrentUserQuery['currentUser'];
 }
@@ -44,13 +45,12 @@ interface IStateProps {
   showAllPatients: boolean;
 }
 
-interface IProps extends IInjectedProps {
-  mutate?: any;
+interface IProps {
   history: History;
   location: Location;
 }
 
-type allProps = IGraphqlProps & IProps & IStateProps;
+type allProps = IGraphqlProps & IProps & IStateProps & IInjectedProps;
 
 interface IState {
   hasNextPage?: boolean;
@@ -348,7 +348,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   }
 }
 
-const mapStateToProps = (state: IState, props: IProps): IStateProps => {
+const mapStateToProps = (state: IState, props: allProps): IStateProps => {
   const searchParams = querystring.parse(props.location.search.substring(1));
   const showAllPatientsSearchParam = searchParams.showAllPatients as string;
   let showAllPatients = true;
@@ -382,25 +382,22 @@ export default compose(
   withRouter,
   withCurrentUser(),
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientPanelQuery as any, {
-    options: ({ pageNumber, pageSize, filters, showAllPatients }) => ({
+  graphql(patientPanelQuery as any, {
+    options: ({ pageNumber, pageSize, filters, showAllPatients }: any) => ({
       variables: { pageNumber, pageSize, filters, showAllPatients },
     }),
-    props: ({ data }) => ({
-      refetchPatientPanel: data ? data.refetch : null,
+    props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       patientPanel: data ? (data as any).patientPanel : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+  graphql(currentUserQuery as any, {
     options: (props: IProps) => ({
       variables: {},
     }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
+    props: ({ data }): Partial<IGraphqlProps> => ({
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-)(PatientPanelContainer);
+)(PatientPanelContainer) as React.ComponentClass<{}>;

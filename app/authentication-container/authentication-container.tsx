@@ -6,7 +6,6 @@ import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { getCurrentUserQuery } from '../graphql/types';
-import { IGraphqlProps } from '../manager-container/manager-users';
 import ProgressNoteContainer from '../progress-note-container/progress-note-container';
 import { Lang } from '../reducers/locale-reducer';
 import { IState as IAppState } from '../store';
@@ -154,11 +153,11 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps,
   ),
-  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+  graphql(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-)(AuthenticationContainer);
+)(AuthenticationContainer) as React.ComponentClass<IProps>;

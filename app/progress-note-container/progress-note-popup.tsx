@@ -42,8 +42,8 @@ export interface IUpdateProgressNoteOptions {
   location: string | null;
   summary: string | null;
   memberConcern: string | null;
-  needsSupervisorReview: boolean | null;
-  supervisorId: string | null;
+  needsSupervisorReview?: boolean | null;
+  supervisorId?: string | null;
   worryScore: number | null;
 }
 
@@ -206,14 +206,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   };
 
   render() {
-    const {
-      close,
-      progressNoteTemplates,
-      progressNote,
-      currentUser,
-      questions,
-      patientAnswers,
-    } = this.props;
+    const { close, progressNoteTemplates, progressNote, questions, patientAnswers } = this.props;
     const { tab, isReadyToSubmit, isInSupervisorMode } = this.state;
 
     const context =
@@ -224,7 +217,6 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
-          currentUser={currentUser}
           disabled={isInSupervisorMode}
           close={close}
         />
@@ -329,7 +321,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteCompleteMutationGraphql as any, {
+  graphql(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
     options: {
       refetchQueries: [
@@ -341,7 +333,7 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
+  graphql(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
     options: {
       refetchQueries: [
@@ -351,16 +343,13 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(
-    progressNoteCompleteSupervisorReviewMutationGraphql as any,
-    {
-      name: 'completeProgressNoteSupervisorReview',
-      options: {
-        refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
-      },
+  graphql(progressNoteCompleteSupervisorReviewMutationGraphql as any, {
+    name: 'completeProgressNoteSupervisorReview',
+    options: {
+      refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
     },
-  ),
-  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
+  }),
+  graphql(questionsQuery as any, {
     skip: (props: IProps) => !props.progressNote.progressNoteTemplate,
     options: (props: IProps) => ({
       variables: {
@@ -374,7 +363,7 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNote',
@@ -388,4 +377,4 @@ export default compose(
       patientAnswers: data ? (data as any).patientAnswers : null,
     }),
   }),
-)(ProgressNotePopup);
+)(ProgressNotePopup) as React.ComponentClass<IProps>;

@@ -128,12 +128,9 @@ export class CareTeamMember extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  careTeamMakeTeamLeadMutationGraphql as any,
-  {
-    name: 'careTeamMakeTeamLead',
-    options: {
-      refetchQueries: ['getPatientCareTeam'],
-    },
+export default graphql<any>(careTeamMakeTeamLeadMutationGraphql as any, {
+  name: 'careTeamMakeTeamLead',
+  options: {
+    refetchQueries: ['getPatientCareTeam'],
   },
-)(CareTeamMember);
+})(CareTeamMember) as React.ComponentClass<IProps>;

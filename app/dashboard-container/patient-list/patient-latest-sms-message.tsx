@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { format, isToday } from 'date-fns';
 import { capitalize, truncate } from 'lodash';
 import * as React from 'react';
@@ -16,8 +17,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   smsMessage: getSmsMessageLatestQuery['smsMessageLatest'];
 }
 
@@ -56,11 +57,11 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(smsMessageLatestQuery as any, {
-  options: ({ patientId }) => ({
+export default graphql(smsMessageLatestQuery as any, {
+  options: ({ patientId }: IProps) => ({
     variables: { patientId },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     smsMessage: data ? (data as any).smsMessageLatest : null,

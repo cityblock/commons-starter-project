@@ -70,22 +70,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
   >
     <Apollo(Apollo(ProgressNoteContext))
       close={[MockFunction]}
-      currentUser={
-        Object {
-          "createdAt": "2017-09-07T13:45:14.532Z",
-          "email": "a@b.com",
-          "firstName": "first",
-          "googleProfileImageUrl": null,
-          "homeClinicId": "clinic-id",
-          "id": "id",
-          "lastName": "last",
-          "locale": "en",
-          "permissions": "orange",
-          "phone": "(212) 555-8394",
-          "updatedAt": "2017-09-07T13:45:14.532Z",
-          "userRole": "physician",
-        }
-      }
       disabled={false}
       onChange={[Function]}
       patientAnswers={undefined}
@@ -441,22 +425,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
   >
     <Apollo(Apollo(ProgressNoteContext))
       close={[MockFunction]}
-      currentUser={
-        Object {
-          "createdAt": "2017-09-07T13:45:14.532Z",
-          "email": "a@b.com",
-          "firstName": "first",
-          "googleProfileImageUrl": null,
-          "homeClinicId": "clinic-id",
-          "id": "id",
-          "lastName": "last",
-          "locale": "en",
-          "permissions": "orange",
-          "phone": "(212) 555-8394",
-          "updatedAt": "2017-09-07T13:45:14.532Z",
-          "userRole": "physician",
-        }
-      }
       disabled={false}
       onChange={[Function]}
       patientAnswers={undefined}

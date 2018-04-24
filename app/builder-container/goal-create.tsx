@@ -21,9 +21,12 @@ interface IOptions {
   variables: goalSuggestionTemplateCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   routeBase: string;
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -40,7 +43,7 @@ interface IState {
   goal: goalSuggestionTemplateCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 export class GoalCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -137,10 +140,10 @@ export class GoalCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
+  graphql(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
-)(GoalCreate);
+)(GoalCreate) as React.ComponentClass<IProps>;

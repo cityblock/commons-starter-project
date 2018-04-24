@@ -19,14 +19,16 @@ describe('Dashboard Patient with Tasks List', () => {
 
   it('renders patient with tasks list item', () => {
     expect(wrapper.find(PatientWithTasksListItem).length).toBe(1);
-    expect(wrapper.find<IProps>(PatientWithTasksListItem).props().patient).toEqual(patient);
-    expect(wrapper.find<IProps>(PatientWithTasksListItem).props().selectedPatientId).toBeNull();
+    expect(wrapper.find<IProps>(PatientWithTasksListItem as any).props().patient).toEqual(patient);
+    expect(
+      wrapper.find<IProps>(PatientWithTasksListItem as any).props().selectedPatientId,
+    ).toBeNull();
   });
 
   it('passes selected patient id to patient list', () => {
     wrapper.setState({ selectedPatientId });
 
-    expect(wrapper.find<IProps>(PatientWithTasksListItem).props().selectedPatientId).toBe(
+    expect(wrapper.find<IProps>(PatientWithTasksListItem as any).props().selectedPatientId).toBe(
       selectedPatientId,
     );
   });

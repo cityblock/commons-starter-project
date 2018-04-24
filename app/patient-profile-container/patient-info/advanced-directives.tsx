@@ -34,7 +34,7 @@ export interface IAdvancedDirectives {
   hasMolst?: boolean | null;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   advancedDirectives: IAdvancedDirectives;
   patientId: string;
   patientInfoId: string;
@@ -49,7 +49,7 @@ interface IGraphqlProps {
   ) => { data: patientContactDeleteMutation };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
@@ -308,13 +308,13 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(patientContactDeleteMutationGraphql as any, {
+  graphql(patientContactDeleteMutationGraphql as any, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContactHealthcareProxies'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(healthcareProxiesQuery as any, {
+  graphql(healthcareProxiesQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -326,4 +326,4 @@ export default compose(
       healthcareProxies: data ? (data as any).patientContactHealthcareProxies : null,
     }),
   }),
-)(AdvancedDirectives);
+)(AdvancedDirectives) as React.ComponentClass<IProps>;

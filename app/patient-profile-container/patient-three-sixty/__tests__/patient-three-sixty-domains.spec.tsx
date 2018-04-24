@@ -19,6 +19,8 @@ describe('Patient 360 Domains Component', () => {
       riskAreaGroups={[riskAreaGroup]}
       history={false}
       glassBreakId="nymeria"
+      loading={false}
+      error={null}
     />,
   );
 
@@ -60,7 +62,7 @@ describe('Patient 360 Domains Component', () => {
   });
 
   it('renders a spinner if loading', () => {
-    wrapper.setProps({ riskAreaGroupsLoading: true });
+    wrapper.setProps({ loading: true });
     expect(wrapper.find(Spinner).length).toBe(1);
     expect(wrapper.find('.container').length).toBe(0);
   });

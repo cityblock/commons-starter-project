@@ -96,7 +96,12 @@ class CarePlanSuggestions extends React.Component<IProps> {
         {this.renderCarePlanSuggestions()}
         <br />
         <div className={styles.smallText}>Add Care Plan Suggestion</div>
-        <CarePlanSuggestionCreate answer={answer} screeningToolScoreRange={scoreRange} />
+        <CarePlanSuggestionCreate
+          answer={answer || null}
+          screeningToolScoreRange={scoreRange || null}
+          goals={null}
+          concerns={null}
+        />
       </div>
     );
   }

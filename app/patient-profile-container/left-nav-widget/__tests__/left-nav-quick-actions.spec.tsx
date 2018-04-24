@@ -19,7 +19,9 @@ describe('Patient Left Navigation Quick Actions', () => {
   );
 
   it('renders quick action to add progress note', () => {
-    expect(wrapper.find<IAddProgressNoteProps>(AddProgressNote).props().patientId).toBe(patientId);
+    expect(wrapper.find<IAddProgressNoteProps>(AddProgressNote as any).props().patientId).toBe(
+      patientId,
+    );
   });
 
   it('renders quick action to add quick call', () => {

@@ -145,14 +145,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
+  graphql(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(concernDeleteMutationGraphql as any, {
+  graphql(concernDeleteMutationGraphql as any, {
     name: 'deleteConcern',
   }),
-)(BuilderConcerns);
+)(BuilderConcerns) as React.ComponentClass<IProps>;

@@ -65,6 +65,6 @@ export class CreateAddressModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createAddressMutationGraphql as any, {
+export default graphql<any>(createAddressMutationGraphql as any, {
   name: 'createAddressMutation',
-})(CreateAddressModal);
+})(CreateAddressModal) as React.ComponentClass<IProps>;

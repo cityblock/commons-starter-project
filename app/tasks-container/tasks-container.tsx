@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
@@ -5,7 +6,11 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
-import { getTasksForCurrentUserQuery, FullTaskFragment } from '../graphql/types';
+import {
+  getTasksForCurrentUserQuery,
+  getTasksForCurrentUserQueryVariables,
+  FullTaskFragment,
+} from '../graphql/types';
 import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
 import * as styles from './css/tasks-container.css';
@@ -26,7 +31,7 @@ interface IProps {
 
 interface IGraphqlProps {
   tasksLoading: boolean;
-  tasksError: string | null;
+  tasksError?: ApolloError | null;
   tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
 }
@@ -70,25 +75,24 @@ export class TasksContainer extends React.Component<allProps> {
   }
 }
 
-const getPageParams = (props: IProps) => {
+const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
   const pageParams = querystring.parse(props.location.search.substring(1));
   return {
     pageNumber: 0,
     pageSize: 10,
-    orderBy: pageParams.orderBy || 'priorityDesc',
+    orderBy: pageParams.orderBy || ('priorityDesc' as any),
   };
 };
 
-export default compose(
-  withRouter,
-  graphql<IGraphqlProps, IProps, allProps>(tasksQuery as any, {
-    options: (props: IProps) => ({ variables: getPageParams(props) }),
-    props: ({ data, ownProps }) => ({
-      fetchMoreTasks: () =>
-        fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
-      tasksLoading: data ? data.loading : false,
-      tasksError: data ? data.error : null,
-      tasksResponse: data ? (data as any).tasksForCurrentUser : null,
-    }),
+const withQuery = graphql(tasksQuery as any, {
+  options: (props: IProps) => ({ variables: getPageParams(props) }),
+  props: ({ data, ownProps }) => ({
+    fetchMoreTasks: () =>
+      fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
+    tasksLoading: data ? data.loading : false,
+    tasksError: data ? data.error : null,
+    tasksResponse: data ? (data as any).tasksForCurrentUser : null,
   }),
-)(TasksContainer);
+});
+
+export default compose(withRouter, withQuery)(TasksContainer) as React.ComponentClass<IProps>;

@@ -7,7 +7,12 @@ import { LeftNavCareTeam } from '../left-nav-care-team';
 
 describe('Patient Left Navigation Care Team View', () => {
   const wrapper = shallow(
-    <LeftNavCareTeam patientId="sansaStark" careTeam={[userForCareTeam, currentUserForCareTeam]} />,
+    <LeftNavCareTeam
+      patientId="sansaStark"
+      careTeam={[userForCareTeam, currentUserForCareTeam]}
+      loading={false}
+      error={null}
+    />,
   );
 
   it('renders container', () => {

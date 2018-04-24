@@ -30,6 +30,8 @@ describe('Render Patient Cityblock Care Team', () => {
       patientId={patient.id}
       onAddCareTeamMember={onAddCareTeamMember}
       patientCareTeam={[userForCareTeam, user2]}
+      loading={false}
+      error={null}
     />,
   );
 

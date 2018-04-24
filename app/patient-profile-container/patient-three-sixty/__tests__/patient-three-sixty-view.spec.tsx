@@ -40,7 +40,7 @@ describe('Patient 360 View Component', () => {
     const params3 = { patientId, riskAreaGroupId, riskAreaId };
     wrapper.setProps({ match: { params: params3 } });
 
-    const riskAreaAssessment = wrapper.find<IProps>(RiskAreaAssessment);
+    const riskAreaAssessment = wrapper.find<IProps>(RiskAreaAssessment as any);
 
     expect(riskAreaAssessment.length).toBe(1);
     expect(riskAreaAssessment.props().routeBase).toBe(routeBase);

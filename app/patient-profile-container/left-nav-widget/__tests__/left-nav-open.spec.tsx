@@ -58,8 +58,8 @@ describe('Patient Left Navigation Open Component', () => {
   it('renders scratch pad if selected', () => {
     wrapper.setProps({ selected: 'scratchPad' });
 
-    expect(wrapper.find<IProps>(LeftNavScratchPad).props().patientId).toBe(patientId);
-    expect(wrapper.find<IProps>(LeftNavScratchPad).props().glassBreakId).toBe(glassBreakId);
+    expect(wrapper.find<IProps>(LeftNavScratchPad as any).props().patientId).toBe(patientId);
+    expect(wrapper.find<IProps>(LeftNavScratchPad as any).props().glassBreakId).toBe(glassBreakId);
     expect(wrapper.find('.content').props().className).toBe('content scroll');
 
     expect(wrapper.find(LeftNavMessages).length).toBe(0);
@@ -71,7 +71,7 @@ describe('Patient Left Navigation Open Component', () => {
     wrapper.setProps({ selected: 'message' });
 
     // type issues because stateless component
-    expect(wrapper.find<any>(LeftNavMessages).props().patientId).toBe(patientId);
+    expect(wrapper.find<IProps>(LeftNavMessages as any).props().patientId).toBe(patientId);
     expect(wrapper.find('.content').props().className).toBe('content');
 
     expect(wrapper.find(LeftNavQuickActions).length).toBe(0);

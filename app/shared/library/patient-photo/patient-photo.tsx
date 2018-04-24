@@ -72,6 +72,6 @@ export class PatientPhoto extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientPhotoSignedUrlCreate as any, {
+export default graphql<any>(patientPhotoSignedUrlCreate as any, {
   name: 'getSignedPhotoUrl',
-})(PatientPhoto);
+})(PatientPhoto) as React.ComponentClass<IProps>;

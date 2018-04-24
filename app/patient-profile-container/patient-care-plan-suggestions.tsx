@@ -1,5 +1,6 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as patientCarePlanSuggestionsQuery from '../graphql/queries/get-patient-care-plan-suggestions.graphql';
 import {
   getPatientCarePlanSuggestionsQuery,
@@ -30,8 +31,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   refetchCarePlanSuggestions?: () => any;
 }
@@ -213,20 +214,17 @@ export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphq
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps>(patientCarePlanSuggestionsQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.patientId,
-        glassBreakId: props.glassBreakId,
-      },
-      fetchPolicy: 'cache-and-network', // Always get the latest suggestions, but return cache first
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      carePlanSuggestions: data ? (data as any).carePlanSuggestionsForPatient : null,
-      refetchCarePlanSuggestions: data ? data.refetch : null,
-    }),
+export default graphql(patientCarePlanSuggestionsQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+      glassBreakId: props.glassBreakId,
+    },
+    fetchPolicy: 'cache-and-network', // Always get the latest suggestions, but return cache first
   }),
-)(PatientCarePlanSuggestions);
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    carePlanSuggestions: data ? (data as any).carePlanSuggestionsForPatient : null,
+  }),
+})(PatientCarePlanSuggestions);

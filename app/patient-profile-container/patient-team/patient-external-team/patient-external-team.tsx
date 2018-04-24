@@ -114,13 +114,13 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientExternalProviderDeleteMutationGraphql as any, {
+  graphql(patientExternalProviderDeleteMutationGraphql as any, {
     name: 'patientExternalProviderDelete',
     options: {
       refetchQueries: ['getPatientExternalProviders'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientExternalProvidersQuery as any, {
+  graphql(patientExternalProvidersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -132,4 +132,4 @@ export default compose(
       patientExternalProviders: data ? (data as any).patientExternalProviders : null,
     }),
   }),
-)(PatientExternalTeam);
+)(PatientExternalTeam) as React.ComponentClass<IProps>;

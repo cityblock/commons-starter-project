@@ -7,7 +7,6 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { goal } from '../../shared/util/test-data';
 import BuilderGoals, { BuilderGoals as Component } from '../builder-goals';
 
 const oldDate = Date.now;
@@ -34,12 +33,7 @@ it('renders builder goals', () => {
       <Provider store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <BrowserRouter>
-            <BuilderGoals
-              match={match}
-              refetchGoals={() => false}
-              routeBase="/route/base"
-              goals={[goal]}
-            />
+            <BuilderGoals history={{} as any} match={match} />
           </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

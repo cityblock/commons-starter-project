@@ -107,7 +107,7 @@ describe('Patient Left Navigation Header', () => {
   });
 
   it('renders need to know field', () => {
-    expect(wrapper.find<IProps>(PatientNeedToKnow).props().patientInfoId).toBe(
+    expect(wrapper.find<IProps>(PatientNeedToKnow as any).props().patientInfoId).toBe(
       patient.patientInfo.id,
     );
   });

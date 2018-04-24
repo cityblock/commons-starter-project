@@ -120,5 +120,5 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
 export default compose(
   withRouter,
   withCurrentUser(),
-  graphql<IGraphqlProps, IProps, allProps>(loginMutation as any, { name: 'logIn' }),
-)(LoginContainer);
+  graphql(loginMutation as any, { name: 'logIn' }),
+)(LoginContainer) as React.ComponentClass<IProps>;

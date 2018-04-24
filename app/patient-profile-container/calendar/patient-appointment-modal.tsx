@@ -155,7 +155,7 @@ export class PatientAppointmentModal extends React.Component<allProps, IState> {
           <FormLabel messageId="patientAppointmentModal.invitee" />
           <TaskAssignee
             patientId={patientId}
-            selectedAssigneeId={inviteeId}
+            selectedAssigneeId={inviteeId || undefined}
             onAssigneeClick={this.handleInviteeChange}
             messageStyles={styles.hidden}
           />
@@ -188,9 +188,6 @@ export class PatientAppointmentModal extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  calendarCreateEventForPatientMutationGraphql as any,
-  {
-    name: 'getCalendarEventUrl',
-  },
-)(PatientAppointmentModal);
+export default graphql<any>(calendarCreateEventForPatientMutationGraphql as any, {
+  name: 'getCalendarEventUrl',
+})(PatientAppointmentModal) as React.ComponentClass<IProps>;

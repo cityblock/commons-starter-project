@@ -15,6 +15,7 @@ describe('Patient Table', () => {
     <PatientTable
       query={query}
       isQueried={!!query}
+      error={null}
       isLoading={false}
       patients={[result1, result2] as any}
       messageIdPrefix="patientTable"

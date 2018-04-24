@@ -12,7 +12,7 @@ import withErrorHandler, {
 } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-group-shared.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   cancelCreateRiskAreaGroup: () => void;
 }
 
@@ -22,7 +22,7 @@ interface IGraphqlProps {
   ) => { data: riskAreaGroupCreateMutation };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   title: string;
@@ -145,10 +145,10 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(createRiskAreaGroupMutationGraphql as any, {
+  graphql(createRiskAreaGroupMutationGraphql as any, {
     name: 'createRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],
     },
   }),
-)(RiskAreaGroupCreate);
+)(RiskAreaGroupCreate) as React.ComponentClass<IProps>;

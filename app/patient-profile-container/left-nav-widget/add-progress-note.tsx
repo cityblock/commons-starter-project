@@ -68,8 +68,8 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 
 export default compose(
   connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
+  graphql(progressNoteCreateMutationGraphql as any, {
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
   }),
-)(AddProgressNote);
+)(AddProgressNote) as React.ComponentClass<IProps>;

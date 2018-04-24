@@ -13,6 +13,8 @@ describe('Patient Intake Checklist', () => {
       <PatientIntakeChecklist
         patientId="patientId"
         computedPatientStatus={incompleteComputedPatientStatus}
+        loading={false}
+        error={null}
       />,
     );
 
@@ -27,6 +29,8 @@ describe('Patient Intake Checklist', () => {
       <PatientIntakeChecklist
         patientId="patientId"
         computedPatientStatus={completeComputedPatientStatus}
+        loading={false}
+        error={null}
       />,
     );
 

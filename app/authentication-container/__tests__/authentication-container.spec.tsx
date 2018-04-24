@@ -15,7 +15,7 @@ it('renders authentication container correctly', () => {
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ idle: { isIdle: false } })}>
-        <AuthenticationContainer loading={true} isIdle={false}>
+        <AuthenticationContainer loading={true}>
           <div />
         </AuthenticationContainer>
       </Provider>

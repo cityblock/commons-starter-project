@@ -49,15 +49,15 @@ class QuestionConditionRow extends React.Component<IProps & IGraphqlProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(answerQuery as any, {
+  graphql(answerQuery as any, {
     options: (props: IProps) => ({
       variables: { answerId: props.questionCondition.answerId },
     }),
-    props: ({ data }) => ({
+    props: ({ data }): IGraphqlProps => ({
       answer: data ? (data as any).answer : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(questionConditionDeleteMutationGraphql as any, {
+  graphql(questionConditionDeleteMutationGraphql as any, {
     name: 'deleteQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

@@ -190,13 +190,13 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(commentCreateMutationGraphql as any, {
+  graphql(commentCreateMutationGraphql as any, {
     name: 'createComment',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(commentEditMutationGraphql as any, {
+  graphql(commentEditMutationGraphql as any, {
     name: 'editComment',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskCommentsQuery as any, {
+  graphql(taskCommentsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         taskId: props.taskId,
@@ -212,4 +212,4 @@ export default compose(
       updateTaskComments: data ? data.updateQuery : null,
     }),
   }),
-)(TaskComments);
+)(TaskComments) as React.ComponentClass<IProps>;

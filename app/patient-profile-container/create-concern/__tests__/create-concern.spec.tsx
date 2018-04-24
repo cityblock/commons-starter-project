@@ -24,7 +24,7 @@ describe('Create Concern Modal Component', () => {
   });
 
   it('renders search box to choose concern', () => {
-    const concernSelect = wrapper.find<IProps>(ConcernSearch);
+    const concernSelect = wrapper.find<IProps>(ConcernSearch as any);
     expect(concernSelect.length).toBe(1);
     expect(concernSelect.props().concernId).toBeFalsy();
     expect(concernSelect.props().patientId).toBe(patientId);
@@ -36,20 +36,20 @@ describe('Create Concern Modal Component', () => {
   it('updates concern id', () => {
     const concernId = 'nancyWheeler';
     wrapper.setState({ concernId });
-    const concernSelect = wrapper.find<IProps>(ConcernSearch);
+    const concernSelect = wrapper.find<IProps>(ConcernSearch as any);
     expect(concernSelect.props().concernId).toBe(concernId);
   });
 
   it('updates search term', () => {
     const searchTerm = 'shadow monster';
     wrapper.setState({ searchTerm });
-    const concernSelect = wrapper.find<IProps>(ConcernSearch);
+    const concernSelect = wrapper.find<IProps>(ConcernSearch as any);
     expect(concernSelect.props().searchTerm).toBe(searchTerm);
   });
 
   it('updates hide search results and show all concerns', () => {
     wrapper.setState({ hideSearchResults: true, showAllConcerns: true });
-    const concernSelect = wrapper.find<IProps>(ConcernSearch);
+    const concernSelect = wrapper.find<IProps>(ConcernSearch as any);
     expect(concernSelect.props().hideSearchResults).toBeTruthy();
     expect(concernSelect.props().showAllConcerns).toBeTruthy();
   });

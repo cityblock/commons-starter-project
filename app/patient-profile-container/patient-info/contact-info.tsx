@@ -127,7 +127,7 @@ export default class ContactInfo extends React.Component<IProps> {
 
   render() {
     const { onChange, contactInfo, patientId, patientInfoId } = this.props;
-    const { emails, primaryEmail, phones, primaryPhone, hasEmail } = contactInfo;
+    const { primaryEmail, primaryPhone, hasEmail } = contactInfo;
 
     return (
       <div className={styles.section}>
@@ -139,7 +139,6 @@ export default class ContactInfo extends React.Component<IProps> {
           patientInfoId={patientInfoId}
           onChange={onChange}
           primaryPhone={primaryPhone}
-          phones={phones}
           className={styles.subSection}
         />
         <EmailInfo
@@ -147,7 +146,6 @@ export default class ContactInfo extends React.Component<IProps> {
           patientInfoId={patientInfoId}
           onChange={onChange}
           primaryEmail={primaryEmail}
-          emails={emails}
           hasEmail={hasEmail}
           className={styles.subSection}
         />

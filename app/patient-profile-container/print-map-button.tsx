@@ -66,6 +66,6 @@ export class PrintMapButton extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(JwtForPdfCreate as any, {
+export default graphql<any>(JwtForPdfCreate as any, {
   name: 'generateJwtForPdf',
-})(PrintMapButton);
+})(PrintMapButton) as React.ComponentClass<IProps>;

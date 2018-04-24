@@ -24,7 +24,7 @@ import withErrorHandler, {
 } from '../shared/with-error-handler/with-error-handler';
 import * as styles from './css/risk-area-create.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   goals: FullGoalSuggestionTemplateFragment[] | null;
   goalsError?: string | null;
   concerns: FullConcernFragment[] | null;
@@ -49,7 +49,7 @@ interface IState {
   loading: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 export class CarePlanSuggestionCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -251,14 +251,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
+  graphql(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data && data.error ? data.error.message : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(goalsQuery as any, {
+  graphql(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -266,16 +266,16 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(concernSuggestionCreateMutationGraphql as any, {
+  graphql(concernSuggestionCreateMutationGraphql as any, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionCreateMutationGraphql as any, {
+  graphql(goalSuggestionCreateMutationGraphql as any, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-)(CarePlanSuggestionCreate);
+)(CarePlanSuggestionCreate) as React.ComponentClass<IProps>;

@@ -82,10 +82,10 @@ export class EditEmailModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(editEmailMutationGraphql as any, {
+  graphql(editEmailMutationGraphql as any, {
     name: 'editEmailMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
   }),
-)(EditEmailModal);
+)(EditEmailModal) as React.ComponentClass<IProps>;

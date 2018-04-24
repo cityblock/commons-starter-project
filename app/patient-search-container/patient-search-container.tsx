@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
@@ -28,9 +29,9 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
-  refetch: (variables: { pageNumber: number; pageSize: number }) => void;
+  refetch: ((variables: { pageNumber: number; pageSize: number }) => void) | null;
   loading: boolean;
-  error?: string;
+  error: ApolloError | undefined | null;
   searchResults?: getPatientSearchQuery['patientSearch'];
 }
 
@@ -56,7 +57,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
   }
 
   async reloadCurrentPage() {
-    await this.props.refetch({
+    await this.props.refetch!({
       pageNumber: this.props.pageNumber,
       pageSize: this.props.pageSize,
     });
@@ -141,12 +142,12 @@ const mapStateToProps = (state: IAppState, props: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientSearchQuery as any, {
+  graphql(patientSearchQuery as any, {
     skip: (props: IProps & IStateProps) => !props.query,
-    options: ({ query, pageNumber, pageSize }) => ({
+    options: ({ query, pageNumber, pageSize }: IProps & IStateProps) => ({
       variables: { query, pageNumber, pageSize },
     }),
-    props: ({ data }) => ({
+    props: ({ data }): IGraphqlProps => ({
       refetch: data ? data.refetch : null,
       loading: data ? data.loading : false,
       error: data ? data.error : null,

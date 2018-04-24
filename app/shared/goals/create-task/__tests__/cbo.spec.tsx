@@ -21,6 +21,8 @@ describe('Create Task Modal CBO Component', () => {
       CBOUrl=""
       CBOId=""
       onChange={placeholderFn}
+      loading={false}
+      error={null}
     />,
   );
 

@@ -24,10 +24,13 @@ interface IOptions {
   variables: screeningToolCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   routeBase: string;
   riskAreas?: FullRiskAreaFragment[];
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -40,7 +43,7 @@ interface IState {
   screeningTool: screeningToolCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 class ScreeningToolCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -160,10 +163,10 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolCreateMutationGraphql as any, {
+  graphql(screeningToolCreateMutationGraphql as any, {
     name: 'createScreeningTool',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-)(ScreeningToolCreate);
+)(ScreeningToolCreate) as React.ComponentClass<IProps>;

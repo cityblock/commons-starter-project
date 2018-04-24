@@ -63,8 +63,8 @@ export class LeftNavMessages extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(smsMessagesQuery as any, {
-  options: ({ patientId }) => ({
+export default graphql(smsMessagesQuery as any, {
+  options: ({ patientId }: IProps) => ({
     variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
   }),
   props: ({ data, ownProps }) => ({
@@ -73,4 +73,4 @@ export default graphql<IGraphqlProps, IProps, allProps>(smsMessagesQuery as any,
     smsMessages: data ? (data as any).smsMessages : null,
     subscribeToMore: data ? data.subscribeToMore : null,
   }),
-})(LeftNavMessages);
+})(LeftNavMessages as any);

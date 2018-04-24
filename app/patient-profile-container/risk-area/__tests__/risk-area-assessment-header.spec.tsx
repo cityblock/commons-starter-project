@@ -30,6 +30,8 @@ describe('Risk Area Assessment Header', () => {
       riskAreaId={riskArea.id}
       riskAreaGroup={riskAreaGroup}
       glassBreakId={glassBreakId}
+      loading={false}
+      error={null}
     />,
   );
 

@@ -74,12 +74,9 @@ export class ConcernDiagnosisCode extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  concernRemoveDiagnosisCodeMutationGraphql as any,
-  {
-    name: 'concernRemoveDiagnosisCode',
-    options: {
-      refetchQueries: ['concern'],
-    },
+export default graphql<any>(concernRemoveDiagnosisCodeMutationGraphql as any, {
+  name: 'concernRemoveDiagnosisCode',
+  options: {
+    refetchQueries: ['concern'],
   },
-)(ConcernDiagnosisCode);
+})(ConcernDiagnosisCode) as React.ComponentClass<IProps>;

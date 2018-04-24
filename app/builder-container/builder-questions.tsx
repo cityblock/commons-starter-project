@@ -351,10 +351,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(questionDeleteMutationGraphql as any, {
+  graphql(questionDeleteMutationGraphql as any, {
     name: 'deleteQuestion',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
+  graphql(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
@@ -366,32 +366,32 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
+  graphql(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery as any, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
+  graphql(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(computedFieldsQuery as any, {
+  graphql(computedFieldsQuery as any, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,
       computedFields: data ? (data as any).computedFields : null,
     }),
   }),
-)(BuilderQuestions);
+)(BuilderQuestions) as React.ComponentClass<IProps>;

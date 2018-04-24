@@ -30,11 +30,15 @@ it('correctly renders a comment as editable or not', () => {
     comment,
     currentUser,
     onEdit: () => true,
+    loading: false,
+    error: null,
   });
   const nonEditable = new Comment({
     comment,
     currentUser: user,
     onEdit: () => true,
+    loading: false,
+    error: null,
   });
 
   expect(editable.isEditable()).toEqual(true);

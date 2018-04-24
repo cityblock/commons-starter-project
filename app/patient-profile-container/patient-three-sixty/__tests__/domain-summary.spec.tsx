@@ -24,6 +24,8 @@ describe('Patient 360 Domain Summary', () => {
       risk={risk}
       updateRiskAreaGroupScore={placeholderFn}
       glassBreakId={glassBreakId}
+      loading={false}
+      error={null}
     />,
   );
 

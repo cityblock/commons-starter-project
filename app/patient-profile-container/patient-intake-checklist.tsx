@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import { filter } from 'lodash';
 import { Fragment } from 'react';
@@ -17,8 +18,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   computedPatientStatus?: getPatientComputedPatientStatusQuery['patientComputedPatientStatus'];
 }
 
@@ -28,8 +29,8 @@ interface IState {
   expanded: boolean;
 }
 
-export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlProps, IState> {
-  constructor(props: IProps & IGraphqlProps) {
+export class PatientIntakeChecklist extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = { expanded: false };
@@ -217,13 +218,13 @@ export class PatientIntakeChecklist extends React.Component<IProps & IGraphqlPro
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(computedPatientStatusQuery as any, {
+export default graphql(computedPatientStatusQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     computedPatientStatus: data ? (data as any).patientComputedPatientStatus : null,

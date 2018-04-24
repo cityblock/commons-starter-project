@@ -18,7 +18,7 @@ export interface IProps {
   visible: boolean;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   suggestion: FullCarePlanSuggestionForPatientFragment | null;
-  taskTemplateIds: string | null[];
+  taskTemplateIds: string[] | null[];
   patientId: string;
   onDismiss: () => any;
 }
@@ -153,7 +153,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
 }
 
 export default compose(
-  graphql<IGraphqlProps, allProps>(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery as any, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
@@ -165,17 +165,17 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, allProps>(concernsQuery as any, {
+  graphql(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(carePlanSuggestionAcceptMutationGraphql as any, {
+  graphql(carePlanSuggestionAcceptMutationGraphql as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],
     },
   }),
-)(PopupPatientCarePlanSuggestionAccepted);
+)(PopupPatientCarePlanSuggestionAccepted) as React.ComponentClass<IProps>;

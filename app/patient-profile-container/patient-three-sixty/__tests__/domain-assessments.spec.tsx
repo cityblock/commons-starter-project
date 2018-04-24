@@ -19,6 +19,8 @@ describe('Patient 360 Domain Assessments Container', () => {
       riskAreaGroupId={riskAreaGroupId}
       riskAreaGroup={riskAreaGroup}
       glassBreakId="silver"
+      loading={false}
+      error={null}
     />,
   );
 

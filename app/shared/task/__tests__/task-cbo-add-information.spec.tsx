@@ -8,7 +8,9 @@ import TaskCBOAddInformationPopup, { IProps } from '../task-cbo-add-information-
 describe('CBO Referral Task Add Information Button', () => {
   const taskId = 'defeatCersei';
 
-  const wrapper = shallow(<TaskCBOAddInformation taskId={taskId} task={task} />);
+  const wrapper = shallow(
+    <TaskCBOAddInformation taskId={taskId} task={task} loading={false} error={null} />,
+  );
 
   it('renders button to add information', () => {
     expect(wrapper.find(Button).length).toBe(1);
@@ -18,13 +20,13 @@ describe('CBO Referral Task Add Information Button', () => {
 
   it('renders popup to add CBO referral information', () => {
     expect(wrapper.find(TaskCBOAddInformationPopup).length).toBe(1);
-    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().isVisible).toBeFalsy();
-    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().task).toEqual(task);
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup as any).props().isVisible).toBeFalsy();
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup as any).props().task).toEqual(task);
   });
 
   it('opens popup to add information to CBO referral', () => {
     wrapper.setState({ isPopupVisible: true });
-    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().isVisible).toBeTruthy();
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup as any).props().isVisible).toBeTruthy();
   });
 
   it('renders nothing if loading', () => {

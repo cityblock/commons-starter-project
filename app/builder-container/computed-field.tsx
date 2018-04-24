@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -15,6 +16,7 @@ interface IStateProps {
 
 interface IProps {
   routeBase: string;
+  onDelete: (computedFieldId: string) => any;
   match?: {
     params: {
       objectId: string | null;
@@ -25,10 +27,9 @@ interface IProps {
 
 interface IGraphqlProps {
   computedField?: FullComputedFieldFragment;
-  computedFieldLoading?: boolean;
-  computedFieldError: string | null;
-  refetchComputedField: () => any;
-  onDelete: (computedFieldId: string) => any;
+  computedFieldLoading: boolean;
+  computedFieldError: ApolloError | null | undefined;
+  refetchComputedField: (() => any) | null;
 }
 
 interface IState {
@@ -187,12 +188,12 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(computedFieldQuery as any, {
+  graphql(computedFieldQuery as any, {
     skip: (props: IProps & IStateProps) => !props.computedFieldId,
     options: (props: IProps & IStateProps) => ({
       variables: { computedFieldId: props.computedFieldId },
     }),
-    props: ({ data }) => ({
+    props: ({ data }): IGraphqlProps => ({
       computedFieldLoading: data ? data.loading : false,
       computedFieldError: data ? data.error : null,
       computedField: data ? (data as any).computedField : null,

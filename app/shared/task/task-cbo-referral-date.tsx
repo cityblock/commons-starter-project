@@ -82,6 +82,6 @@ export class TaskCBOReferralDate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(CBOReferralEditMutationGraphql as any, {
+export default graphql<any>(CBOReferralEditMutationGraphql as any, {
   name: 'editCBOReferral',
-})(TaskCBOReferralDate);
+})(TaskCBOReferralDate) as React.ComponentClass<IProps>;

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/tasks.css';
@@ -5,7 +6,7 @@ import * as styles from './css/tasks.css';
 interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
-  error: string | null;
+  error?: ApolloError | null;
 }
 
 export const TasksLoadingError: React.StatelessComponent<IProps> = props => {

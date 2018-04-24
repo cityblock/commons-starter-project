@@ -296,10 +296,10 @@ function getProgressNoteTemplateId(ownProps: IProps): string | null {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateEditMutationGraphql as any, {
+  graphql(progressNoteTemplateEditMutationGraphql as any, {
     name: 'editProgressNoteTemplate',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateQuery as any, {
+  graphql(progressNoteTemplateQuery as any, {
     skip: (props: IProps) => !getProgressNoteTemplateId(props),
     options: (props: IProps) => ({
       variables: { progressNoteTemplateId: getProgressNoteTemplateId(props) },
@@ -311,4 +311,4 @@ export default compose(
       refetchProgressNoteTemplate: data ? data.refetch : null,
     }),
   }),
-)(ProgressNoteTemplate);
+)(ProgressNoteTemplate) as React.ComponentClass<IProps>;

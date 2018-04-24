@@ -76,7 +76,7 @@ export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProp
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(progressNoteLatestForPatientQuery as any, {
+export default graphql(progressNoteLatestForPatientQuery as any, {
   skip: ({ patient }: IProps) => !patient,
   options: ({ patient }: IProps) => {
     const patientId = patient ? patient.id : '';

@@ -138,11 +138,11 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
+  graphql(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaQuestionsQuery as any, {
+  graphql(riskAreaQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -155,7 +155,7 @@ export default compose(
       riskAreaQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -169,4 +169,4 @@ export default compose(
       patientAnswers: data ? (data as any).patientAnswers : null,
     }),
   }),
-)(RiskAreaAssessmentQuestions);
+)(RiskAreaAssessmentQuestions) as React.ComponentClass<IProps>;

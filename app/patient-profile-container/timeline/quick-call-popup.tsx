@@ -319,10 +319,10 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps,
   ),
-  graphql<IGraphqlProps, IStateProps & IDispatchProps>(quickCallCreateMutationGraphql as any, {
+  graphql(quickCallCreateMutationGraphql as any, {
     name: 'createQuickCall',
   }),
-  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(patientCareTeamQuery as any, {
+  graphql(patientCareTeamQuery as any, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,
     options: (props: IStateProps & IDispatchProps) => ({
       variables: {
@@ -335,7 +335,7 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql<IGraphqlProps, IStateProps & IDispatchProps>(patientQuery as any, {
+  graphql(patientQuery as any, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,
     options: (props: IStateProps & IDispatchProps) => ({
       variables: {

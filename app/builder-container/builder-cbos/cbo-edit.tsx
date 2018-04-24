@@ -94,6 +94,6 @@ export class CBOEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(CBOEditMutationGraphql as any, {
+export default graphql<any>(CBOEditMutationGraphql as any, {
   name: 'editCBO',
-})(CBOEdit);
+})(CBOEdit) as React.ComponentClass<IProps>;

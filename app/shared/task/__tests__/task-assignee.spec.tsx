@@ -16,7 +16,7 @@ describe('Task Assignee Component', () => {
       onAssigneeClick={onAssigneeClick}
       assignee={currentUser}
       loading={false}
-      error=""
+      error={null}
       careTeam={[currentUser, user]}
     />,
   );
@@ -40,7 +40,7 @@ describe('Task Assignee Component', () => {
         patientId={patientId}
         onAssigneeClick={onAssigneeClick}
         loading={false}
-        error=""
+        error={null}
         careTeam={[currentUser, user]}
         selectedAssigneeId={selectedAssigneeId}
       />,
@@ -58,7 +58,7 @@ describe('Task Assignee Component', () => {
         onAssigneeClick={onAssigneeClick}
         assignee={currentUser}
         loading={false}
-        error=""
+        error={null}
         careTeam={[currentUser, user]}
         messageId={messageId}
       />,

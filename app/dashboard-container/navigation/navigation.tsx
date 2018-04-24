@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
@@ -14,7 +15,7 @@ export const ROUTE_BASE = '/dashboard';
 interface IGraphqlProps {
   patientLists: FullPatientListFragment[];
   loading: boolean;
-  error: string | null;
+  error: ApolloError | null | undefined;
 }
 
 interface IProps {
@@ -133,10 +134,10 @@ export const DashboardNavigation: React.StatelessComponent<allProps> = (props: a
   );
 };
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientListsQuery as any, {
-  props: ({ data }) => ({
+export default graphql<any, any, any, any>(patientListsQuery as any, {
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     patientLists: data ? (data as any).patientLists : null,
   }),
-})(DashboardNavigation);
+})(DashboardNavigation) as React.ComponentClass<IProps>;

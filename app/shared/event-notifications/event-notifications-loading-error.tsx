@@ -1,11 +1,12 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/event-notifications.css';
 
 interface IProps {
   onRetryClick: () => any;
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 export const EventNotificationsLoadingError: React.StatelessComponent<IProps> = props => {

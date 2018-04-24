@@ -37,7 +37,7 @@ interface IDeleteOptions {
   variables: screeningToolScoreRangeDeleteMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   scoreRange?: FullScreeningToolScoreRangeFragment | null;
   screeningToolId: string;
   mutate?: any;
@@ -54,7 +54,7 @@ interface IState {
   scoreRange: screeningToolScoreRangeCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -223,19 +223,19 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(scoreRangeCreateMutationGraphql as any, {
+  graphql(scoreRangeCreateMutationGraphql as any, {
     name: 'createScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(scoreRangeEditMutationGraphql as any, {
+  graphql(scoreRangeEditMutationGraphql as any, {
     name: 'editScoreRange',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(scoreRangeDeleteMutationGraphql as any, {
+  graphql(scoreRangeDeleteMutationGraphql as any, {
     name: 'deleteScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-)(ScoreRangeCreateEdit);
+)(ScoreRangeCreateEdit) as React.ComponentClass<IProps>;

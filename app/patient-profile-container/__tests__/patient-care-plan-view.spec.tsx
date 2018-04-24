@@ -25,7 +25,7 @@ describe('Patient Care Plan View Component', () => {
   );
 
   it('renders patient MAP when on active tab', () => {
-    const map = wrapper.find<IProps>(PatientMap);
+    const map = wrapper.find<IProps>(PatientMap as any);
 
     expect(map.length).toBe(1);
     expect(map.props().routeBase).toBe(`${routeBase}/${patient.id}/map/active`);

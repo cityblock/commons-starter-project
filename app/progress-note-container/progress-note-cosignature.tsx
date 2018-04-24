@@ -17,7 +17,6 @@ import { IUpdateProgressNoteOptions } from './progress-note-popup';
 
 interface IProps {
   disabled: boolean;
-  patientId: string | null;
   progressNote?: FullProgressNoteFragment;
   updateProgressNote: (options: IUpdateProgressNoteOptions) => void;
 }
@@ -124,7 +123,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
+  graphql(patientCareTeamQuery as any, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -137,11 +136,11 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+  graphql(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-)(ProgressNoteCosignature);
+)(ProgressNoteCosignature) as React.ComponentClass<IProps>;

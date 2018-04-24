@@ -68,6 +68,6 @@ export class TaskCBOReferralView extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(JwtForPdfCreate as any, {
+export default graphql<any>(JwtForPdfCreate as any, {
   name: 'generateJwtForPdf',
-})(TaskCBOReferralView);
+})(TaskCBOReferralView) as React.ComponentClass<IProps>;

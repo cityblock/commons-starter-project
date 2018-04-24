@@ -235,10 +235,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaEditMutationGraphql as any, {
+  graphql(riskAreaEditMutationGraphql as any, {
     name: 'editRiskArea',
   }),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(riskAreaQuery as any, {
+  graphql(riskAreaQuery as any, {
     skip: (props: IProps & IStateProps) => !props.riskAreaId,
     options: (props: IProps & IStateProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
     props: ({ data }) => ({
@@ -248,4 +248,4 @@ export default compose(
       refetchRiskArea: data ? data.refetch : null,
     }),
   }),
-)(RiskArea);
+)(RiskArea) as React.ComponentClass<IProps>;

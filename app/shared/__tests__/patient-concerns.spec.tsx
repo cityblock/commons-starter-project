@@ -18,6 +18,8 @@ describe('Patient Care Plan Concerns Component', () => {
         selectedPatientConcernId={selectedPatientConcernId}
         inactive={true}
         currentUser={currentUser}
+        loading={false}
+        error={null}
       />,
     );
 
@@ -49,6 +51,8 @@ describe('Patient Care Plan Concerns Component', () => {
         selectedTaskId=""
         selectedPatientConcernId={selectedPatientConcernId}
         currentUser={currentUser}
+        loading={false}
+        error={null}
       />,
     );
 

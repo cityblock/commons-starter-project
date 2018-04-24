@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as careTeamAssignPatientsMutationGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
 import {
@@ -164,11 +164,9 @@ export function filterPatientState(patientSelectState: object): string[] {
   });
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(careTeamAssignPatientsMutationGraphql as any, {
-    name: 'careTeamAssignPatients',
-    options: {
-      refetchQueries: ['getPatientPanel'],
-    },
-  }),
-)(PatientAssignModal);
+export default graphql<any>(careTeamAssignPatientsMutationGraphql as any, {
+  name: 'careTeamAssignPatients',
+  options: {
+    refetchQueries: ['getPatientPanel'],
+  },
+})(PatientAssignModal) as React.ComponentClass<IProps>;

@@ -19,6 +19,9 @@ import { ProgressNoteSmallRow } from './progress-note-small-row';
 
 interface IProps {
   currentUser: getCurrentUserQuery['currentUser'];
+}
+
+interface IRouterProps {
   match: {
     params: {
       patientId: string;
@@ -48,7 +51,7 @@ interface IDispatchProps {
   openProgressNotesDrawer: () => any;
 }
 
-type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps & IRouterProps;
 
 export class ProgressNoteContainer extends React.Component<allProps> {
   constructor(props: allProps) {
@@ -175,7 +178,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps,
   ),
-  graphql<IGraphqlProps, {}, allProps>(progressNotesForCurrentUserQuery as any, {
+  graphql(progressNotesForCurrentUserQuery as any, {
     options: () => ({
       variables: {
         completed: false,
@@ -188,7 +191,7 @@ export default compose(
       refetchProgressNotes: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, {}, allProps>(progressNotesForSupervisorReviewQuery as any, {
+  graphql(progressNotesForSupervisorReviewQuery as any, {
     props: ({ data }) => ({
       progressNotesForSupervisorReviewLoading: data ? data.loading : false,
       progressNotesForSupervisorReviewError: data ? data.error : null,
@@ -198,4 +201,4 @@ export default compose(
       refetchProgressNotes: data ? data.refetch : null,
     }),
   }),
-)(ProgressNoteContainer);
+)(ProgressNoteContainer) as React.ComponentClass<IProps>;

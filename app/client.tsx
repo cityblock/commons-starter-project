@@ -9,7 +9,7 @@ import { getMiddlewareLink } from './middleware-link';
 import createStore from './store';
 
 // TODO: Resolve weird apollo types
-const client = new ApolloClient<any>({
+const client = new ApolloClient({
   link: getMiddlewareLink(),
   cache: new InMemoryCache().restore({}),
 });

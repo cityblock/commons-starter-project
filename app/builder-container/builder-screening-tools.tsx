@@ -28,6 +28,9 @@ interface IProps {
     };
   };
   mutate?: any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -52,7 +55,7 @@ interface IState {
   error: string | null;
 }
 
-type allProps = IProps & IGraphqlProps & IStateProps;
+type allProps = IProps & IGraphqlProps & IStateProps & IRouterProps;
 
 class BuilderScreeningTools extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -175,21 +178,21 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolDeleteMutationGraphql as any, {
+  graphql(screeningToolDeleteMutationGraphql as any, {
     name: 'deleteScreeningTool',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
+  graphql(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
+  graphql(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
-)(BuilderScreeningTools);
+)(BuilderScreeningTools) as React.ComponentClass<IProps>;

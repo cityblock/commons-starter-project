@@ -290,25 +290,19 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(
-    riskAreaAssessmentSubmissionCompleteMutationGraphql as any,
-    {
-      name: 'riskAreaAssessmentSubmissionComplete',
-      options: {
-        refetchQueries: ['getProgressNotesForCurrentUser'],
-      },
+  graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql as any, {
+    name: 'riskAreaAssessmentSubmissionComplete',
+    options: {
+      refetchQueries: ['getProgressNotesForCurrentUser'],
     },
-  ),
-  graphql<IGraphqlProps, IProps, allProps>(
-    riskAreaAssessmentSubmissionCreateMutationGraphql as any,
-    {
-      name: 'riskAreaAssessmentSubmissionCreate',
-      options: {
-        refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
-      },
+  }),
+  graphql(riskAreaAssessmentSubmissionCreateMutationGraphql as any, {
+    name: 'riskAreaAssessmentSubmissionCreate',
+    options: {
+      refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
     },
-  ),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaQuery as any, {
+  }),
+  graphql(riskAreaQuery as any, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -320,7 +314,7 @@ export default compose(
       riskArea: data ? (data as any).riskArea : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaAssessmentSubmissionForPatientQuery as any, {
+  graphql(riskAreaAssessmentSubmissionForPatientQuery as any, {
     skip: (props: IProps) => !props.riskAreaId,
     options: (props: IProps) => ({
       variables: {
@@ -337,7 +331,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
+  graphql(getRiskAreaGroupForPatientGraphql as any, {
     options: (props: IProps) => {
       const { riskAreaGroupId, patientId, glassBreakId } = props;
       return { variables: { riskAreaGroupId, patientId, glassBreakId } };
@@ -348,4 +342,4 @@ export default compose(
       riskAreaGroup: data ? (data as any).riskAreaGroupForPatient : null,
     }),
   }),
-)(RiskAreaAssessment);
+)(RiskAreaAssessment) as React.ComponentClass<IProps>;

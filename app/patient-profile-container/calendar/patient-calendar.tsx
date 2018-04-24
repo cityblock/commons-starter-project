@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
@@ -18,8 +19,8 @@ interface IProps {
 
 interface IGraphqlProps {
   calendarEventsResponse?: getCalendarEventsForPatientQuery['calendarEventsForPatient'];
-  isLoading?: boolean;
-  error?: string | null;
+  isLoading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -67,14 +68,14 @@ export class PatientCalendar extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(calendarEventsForPatientQuery as any, {
+export default graphql(calendarEventsForPatientQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,
       pageSize: 20,
     },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     isLoading: data ? data.loading : false,
     error: data ? data.error : null,
     calendarEventsResponse: data ? (data as any).calendarEventsForPatient : null,

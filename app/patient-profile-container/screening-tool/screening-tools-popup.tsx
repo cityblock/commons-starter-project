@@ -115,11 +115,11 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps,
   ),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
+  graphql(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
-)(ScreeningToolsPopup);
+)(ScreeningToolsPopup) as React.ComponentClass<{}>;

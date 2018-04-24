@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
@@ -20,14 +21,14 @@ interface IProps {
 
 interface IGraphqlProps {
   calendarLoading: boolean;
-  calendarError: string | null;
+  calendarError: ApolloError | null | undefined;
   calendarResponse?: getCalendarEventsForCurrentUserQuery['calendarEventsForCurrentUser'];
   fetchMoreCalendar: () => any;
 }
 
 type allProps = IProps & IGraphqlProps;
 
-export class CalendarContainer extends React.Component<IGraphqlProps> {
+export class CalendarContainer extends React.Component<allProps> {
   componentWillReceiveProps() {
     document.title = `My Calendar | Commons`;
   }
@@ -77,10 +78,9 @@ const getPageParams = (props: IProps) => {
     pageSize: 20,
   };
 };
-
-export default graphql<IGraphqlProps, IProps, allProps>(calendarQuery as any, {
+export default graphql(calendarQuery as any, {
   options: (props: IProps) => ({ variables: getPageParams(props) }),
-  props: ({ data, ownProps }) => ({
+  props: ({ data, ownProps }): IGraphqlProps => ({
     fetchMoreCalendar: () =>
       fetchMore<FullCalendarEventFragment>(
         data as any,

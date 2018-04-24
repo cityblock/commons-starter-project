@@ -1,5 +1,6 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as progressNoteIdsQuery from '../../graphql/queries/get-progress-note-ids-for-patient.graphql';
 import { getProgressNoteIdsForPatientQuery } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
@@ -18,14 +19,14 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   progressNoteIds?: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'];
 }
 
 interface IState {
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   isQuickCallPopupVisible: boolean;
 }
 
@@ -75,6 +76,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
           key={index}
           progressNoteId={progressNoteId}
           patientId={this.props.match.params.patientId}
+          glassBreakId={this.props.glassBreakId}
         />
       );
     }
@@ -113,20 +115,18 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteIdsQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.match.params.patientId,
-        glassBreakId: props.glassBreakId,
-        completed: true,
-      },
-      fetchPolicy: 'cache-and-network', // Always get the latest progress note ids
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      progressNoteIds: data ? (data as any).progressNoteIdsForPatient : null,
-    }),
+export default graphql(progressNoteIdsQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.match.params.patientId,
+      glassBreakId: props.glassBreakId,
+      completed: true,
+    },
+    fetchPolicy: 'cache-and-network', // Always get the latest progress note ids
   }),
-)(PatientTimeline);
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    progressNoteIds: data ? (data as any).progressNoteIdsForPatient : null,
+  }),
+})(PatientTimeline);

@@ -205,13 +205,13 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(taskCreateMutationGraphql as any, {
+  graphql(taskCreateMutationGraphql as any, {
     name: 'createTask',
     options: {
       refetchQueries: ['getPatientCarePlan'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(CBOReferralCreateMutationGraphql as any, {
+  graphql(CBOReferralCreateMutationGraphql as any, {
     name: 'createCBOReferral',
   }),
-)(CreateTaskModal);
+)(CreateTaskModal) as React.ComponentClass<IProps>;

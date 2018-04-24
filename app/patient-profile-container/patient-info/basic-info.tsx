@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as langs from 'langs';
 import { values } from 'lodash';
@@ -39,8 +40,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   computedPatientStatus?: getPatientComputedPatientStatusQuery['patientComputedPatientStatus'];
 }
 
@@ -163,7 +164,7 @@ export class BasicInfo extends React.Component<allProps> {
 
   render() {
     const { patientInformation, onChange, patientId, patientInfoId } = this.props;
-    const { primaryAddress, addresses, isMarginallyHoused } = patientInformation;
+    const { primaryAddress, isMarginallyHoused } = patientInformation;
 
     return (
       <div className={styles.section}>
@@ -175,7 +176,6 @@ export class BasicInfo extends React.Component<allProps> {
           patientId={patientId}
           patientInfoId={patientInfoId}
           primaryAddress={primaryAddress}
-          addresses={addresses}
           onChange={onChange}
           isMarginallyHoused={isMarginallyHoused}
         />
@@ -184,13 +184,13 @@ export class BasicInfo extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(computedPatientStatusQuery as any, {
+export default graphql(computedPatientStatusQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     computedPatientStatus: data ? (data as any).patientComputedPatientStatus : null,

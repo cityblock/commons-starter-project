@@ -23,7 +23,7 @@ import CreateAddressModal from './create-address-modal';
 import * as styles from './css/address-info.css';
 import EditAddressModal from './edit-address-modal';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   onChange: (field: IEditableFieldState) => void;
   patientId: string;
   patientInfoId: string;
@@ -41,7 +41,7 @@ interface IGraphqlProps {
   error: string | null;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
@@ -268,10 +268,10 @@ export class AddressInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(addressDeleteMutationGraphql as any, {
+  graphql(addressDeleteMutationGraphql as any, {
     name: 'addressDeleteMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(addressesQuery as any, {
+  graphql(addressesQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -283,4 +283,4 @@ export default compose(
       addresses: data ? (data as any).patientAddresses : null,
     }),
   }),
-)(AddressInfo);
+)(AddressInfo) as React.ComponentClass<IProps>;

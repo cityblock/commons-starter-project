@@ -114,10 +114,10 @@ export class LeftNavScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(savePatientScratchPadMutationGraphql as any, {
+  graphql(savePatientScratchPadMutationGraphql as any, {
     name: 'saveScratchPad',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientScratchPadQuery as any, {
+  graphql(patientScratchPadQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -131,4 +131,4 @@ export default compose(
       refetchScratchPad: data ? data.refetch : null,
     }),
   }),
-)(LeftNavScratchPad);
+)(LeftNavScratchPad) as React.ComponentClass<IProps>;

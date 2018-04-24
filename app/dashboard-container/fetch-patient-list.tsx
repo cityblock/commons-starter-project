@@ -85,150 +85,117 @@ const fetchPatientList = () => <P extends {}>(
 
   return compose(
     withRouter,
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithUrgentTasksQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'tasks',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithUrgentTasks : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithRecentConversationsQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'conversations',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithRecentConversations : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithOpenCBOReferralsQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'referrals',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithOpenCBOReferrals : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsNewToCareTeamQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'new',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsNewToCareTeam : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithPendingSuggestionsQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'suggestions',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithPendingSuggestions : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithMissingInfoQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'demographics',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithMissingInfo : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithNoRecentEngagementQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'engage',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithNoRecentEngagement : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithOutOfDateMAPQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'updateMAP',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithAssignedStateQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'assigned',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithAssignedState : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
-      patientsWithIntakeInProgressQuery as any,
-      {
-        options: getPageParams,
-        skip: ({ selected }) => selected !== 'intake',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsWithIntakeInProgress : null,
-        }),
-      },
-    ),
-    graphql<IInjectedProps, RouteComponentProps<P> & IExternalProps, resultProps>(
-      patientsForComputedListQuery as any,
-      {
-        options: (props: RouteComponentProps<P> & IExternalProps) => {
-          const {
-            variables: { pageNumber, pageSize },
-          } = getPageParams(props);
+    graphql(patientsWithUrgentTasksQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'tasks',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithUrgentTasks : null,
+      }),
+    }),
+    graphql(patientsWithRecentConversationsQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'conversations',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithRecentConversations : null,
+      }),
+    }),
+    graphql(patientsWithOpenCBOReferralsQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'referrals',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithOpenCBOReferrals : null,
+      }),
+    }),
+    graphql(patientsNewToCareTeamQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'new',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsNewToCareTeam : null,
+      }),
+    }),
+    graphql(patientsWithPendingSuggestionsQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'suggestions',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithPendingSuggestions : null,
+      }),
+    }),
+    graphql(patientsWithMissingInfoQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'demographics',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithMissingInfo : null,
+      }),
+    }),
+    graphql(patientsWithNoRecentEngagementQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'engage',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithNoRecentEngagement : null,
+      }),
+    }),
+    graphql(patientsWithOutOfDateMAPQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'updateMAP',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
+      }),
+    }),
+    graphql(patientsWithAssignedStateQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'assigned',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithAssignedState : null,
+      }),
+    }),
+    graphql(patientsWithIntakeInProgressQuery as any, {
+      options: getPageParams,
+      skip: ({ selected }) => selected !== 'intake',
+      props: ({ data }) => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsWithIntakeInProgress : null,
+      }),
+    }),
+    graphql(patientsForComputedListQuery as any, {
+      options: (props: RouteComponentProps<P> & IExternalProps) => {
+        const {
+          variables: { pageNumber, pageSize },
+        } = getPageParams(props);
 
-          return {
-            variables: {
-              answerId: props.answerId,
-              pageNumber,
-              pageSize,
-            },
-          };
-        },
-        skip: ({ selected }) => selected !== 'computed',
-        props: ({ data }) => ({
-          loading: data ? data.loading : false,
-          error: data ? data.error : null,
-          patientResults: data ? (data as any).patientsForComputedList : null,
-        }),
+        return {
+          variables: {
+            answerId: props.answerId,
+            pageNumber,
+            pageSize,
+          },
+        };
       },
-    ),
+      skip: ({ selected }) => selected !== 'computed',
+      props: ({ data }): any => ({
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        patientResults: data ? (data as any).patientsForComputedList : null,
+      }),
+    }),
   )(FetchPatients);
 };
 

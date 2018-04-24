@@ -93,16 +93,16 @@ export class CreatePatientContactModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(createPatientContactMutationGraphql as any, {
+  graphql(createPatientContactMutationGraphql as any, {
     name: 'createPatientContactMutation',
     options: {
       refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatientComputedPatientStatus'],
     },
   }),
-)(CreatePatientContactModal);
+)(CreatePatientContactModal) as React.ComponentClass<IProps>;

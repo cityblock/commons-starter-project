@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
@@ -27,8 +28,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   riskAreaGroup: RiskAreaGroup;
 }
 
@@ -154,12 +155,12 @@ export class DomainSummary extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
+export default graphql(getRiskAreaGroupForPatientGraphql as any, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId, glassBreakId } = props;
     return { variables: { riskAreaGroupId, patientId, glassBreakId }, fetchPolicy: 'network-only' };
   },
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     riskAreaGroup: data ? (data as any).riskAreaGroupForPatient : null,

@@ -167,13 +167,13 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientQuery as any, {
+  graphql(patientQuery as any, {
     options: (props: IProps & IStateProps) => ({
       variables: {
         patientId: props.patientId,
       },
     }),
-    props: ({ data }) => ({
+    props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       patient: data ? (data as any).patient : null,

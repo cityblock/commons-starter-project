@@ -328,19 +328,19 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(taskTemplateCreateMutationGraphql as any, {
+  graphql(taskTemplateCreateMutationGraphql as any, {
     name: 'createTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskTemplateEditMutationGraphql as any, {
+  graphql(taskTemplateEditMutationGraphql as any, {
     name: 'editTaskTemplate',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskTemplateDeleteMutationGraphql as any, {
+  graphql(taskTemplateDeleteMutationGraphql as any, {
     name: 'deleteTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
-)(TaskTemplateCreateEdit);
+)(TaskTemplateCreateEdit) as React.ComponentClass<IProps>;

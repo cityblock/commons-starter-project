@@ -27,9 +27,12 @@ interface IOptions {
   variables: computedFieldCreateMutationVariables;
 }
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   routeBase: string;
   onClose: () => any;
+}
+
+interface IRouterProps {
   history: History;
 }
 
@@ -42,7 +45,7 @@ interface IState {
   computedField: computedFieldCreateMutationVariables;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
 
 export class ComputedFieldCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -156,10 +159,10 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(computedFieldCreateMutationGraphql as any, {
+  graphql(computedFieldCreateMutationGraphql as any, {
     name: 'createComputedField',
     options: {
       refetchQueries: ['getComputedFields'],
     },
   }),
-)(ComputedFieldCreate);
+)(ComputedFieldCreate) as React.ComponentClass<IProps>;

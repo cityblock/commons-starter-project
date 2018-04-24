@@ -180,10 +180,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateDeleteMutationGraphql as any, {
+  graphql(progressNoteTemplateDeleteMutationGraphql as any, {
     name: 'deleteProgressNoteTemplate',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery as any, {
     props: ({ data, ownProps }) => ({
       progressNoteTemplatesRefetch: data ? data.refetch : false,
       progressNoteTemplatesLoading: data ? data.loading : false,
@@ -191,4 +191,4 @@ export default compose(
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-)(BuilderProgressNoteTemplates);
+)(BuilderProgressNoteTemplates) as React.ComponentClass<IProps>;

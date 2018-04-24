@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ProgressNoteLoadingError } from '../progress-note-loading-error';
 
 it('renders progress note error', () => {
-  const component = shallow(<ProgressNoteLoadingError error={'error'} loading={false} />);
+  const component = shallow(<ProgressNoteLoadingError error={'error' as any} loading={false} />);
   expect(component.find('.errorLabel').length).toBe(1);
   expect(
     component
@@ -14,7 +14,7 @@ it('renders progress note error', () => {
 });
 
 it('renders progress note loading', () => {
-  const component = shallow(<ProgressNoteLoadingError loading={true} />);
+  const component = shallow(<ProgressNoteLoadingError loading={true} error={null} />);
   expect(component.find('.loading').length).toBe(1);
   expect(
     component

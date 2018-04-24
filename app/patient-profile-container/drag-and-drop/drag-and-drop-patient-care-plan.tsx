@@ -207,9 +207,6 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  patientConcernBulkEditMutationGraphql as any,
-  {
-    name: 'patientConcernBulkEdit',
-  },
-)(DnDPatientCarePlan);
+export default graphql<any>(patientConcernBulkEditMutationGraphql as any, {
+  name: 'patientConcernBulkEdit',
+})(DnDPatientCarePlan) as React.ComponentClass<IProps>;

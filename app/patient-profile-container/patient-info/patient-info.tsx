@@ -348,13 +348,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {
+  graphql(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,
@@ -367,4 +367,4 @@ export default compose(
       patient: data ? (data as any).patient : null,
     }),
   }),
-)(PatientInfo);
+)(PatientInfo) as React.ComponentClass<IProps>;

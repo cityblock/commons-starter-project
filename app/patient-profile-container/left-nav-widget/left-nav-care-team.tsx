@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
@@ -11,8 +12,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   careTeam: getPatientCareTeamQuery['patientCareTeam'];
 }
 
@@ -59,11 +60,11 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
+export default graphql(careTeamQuery as any, {
   options: (props: IProps) => ({
     variables: { patientId: props.patientId },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     careTeam: data ? (data as any).patientCareTeam : null,

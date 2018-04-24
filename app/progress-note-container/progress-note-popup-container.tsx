@@ -15,7 +15,7 @@ import ProgressNotePopup from './progress-note-popup';
 interface IProps {
   currentUser: getCurrentUserQuery['currentUser'];
   close: () => void;
-  progressNoteId: string;
+  progressNoteId: string | null;
   visible: boolean;
   mutate?: any;
 }
@@ -62,7 +62,7 @@ export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
+  graphql(progressNoteQuery as any, {
     skip: (props: IProps) => !props.progressNoteId,
     options: (props: IProps) => ({
       variables: {
@@ -76,11 +76,11 @@ export default compose(
       progressNote: data ? (data as any).progressNote : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery as any, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-)(ProgressNotePopupContainer);
+)(ProgressNotePopupContainer) as React.ComponentClass<IProps>;

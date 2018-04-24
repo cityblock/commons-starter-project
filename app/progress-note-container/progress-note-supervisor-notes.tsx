@@ -104,9 +104,6 @@ export class ProgressNoteSupervisorNotes extends React.Component<allProps, IStat
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  progressNoteAddSupervisorNotesMutationGraphql as any,
-  {
-    name: 'progressNoteAddSupervisorNotes',
-  },
-)(ProgressNoteSupervisorNotes);
+export default graphql<any>(progressNoteAddSupervisorNotesMutationGraphql as any, {
+  name: 'progressNoteAddSupervisorNotes',
+})(ProgressNoteSupervisorNotes) as React.ComponentClass<IProps>;

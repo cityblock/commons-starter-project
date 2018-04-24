@@ -14,6 +14,8 @@ describe('CBO Category Select', () => {
       categoryId={categoryId}
       onChange={placeholderFn}
       CBOCategories={[CBOCategory, CBOCategory2]}
+      loading={false}
+      error={null}
     />,
   );
 

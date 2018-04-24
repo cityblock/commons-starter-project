@@ -43,7 +43,7 @@ describe('Create Task Share Fields', () => {
   });
 
   it('renders task assignee component', () => {
-    const assignee = wrapper.find<IProps>(TaskAssignee);
+    const assignee = wrapper.find<IProps>(TaskAssignee as any);
     expect(assignee.length).toBe(1);
     expect(assignee.props().patientId).toBe(patientId);
     expect(assignee.props().selectedAssigneeId).toBeFalsy();

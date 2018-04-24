@@ -30,11 +30,11 @@ class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(questionQuery as any, {
+export default graphql(questionQuery as any, {
   options: (props: IProps) => ({
     variables: { questionId: props.answer.questionId },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     question: data ? (data as any).question : null,
   }),
 })(QuestionAnswerOption);

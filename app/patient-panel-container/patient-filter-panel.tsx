@@ -155,7 +155,7 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
               isLarge={true}
               isUnselectable={true}
               onChange={this.handleChange}
-              value={careWorkerId}
+              value={careWorkerId || null}
             />
           </div>
 

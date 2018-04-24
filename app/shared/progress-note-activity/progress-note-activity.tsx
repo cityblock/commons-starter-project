@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -16,15 +17,15 @@ interface IProps {
 
 interface IGraphqlProps {
   progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
-  progressNoteActivityLoading?: boolean;
-  progressNoteActivityError: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 type allProps = IProps & IGraphqlProps;
 
 class ProgressNoteActivity extends React.Component<allProps> {
   render() {
-    const { progressNoteActivity, progressNoteActivityLoading } = this.props;
+    const { progressNoteActivity, loading } = this.props;
     const count = progressNoteActivity
       ? progressNoteActivity.carePlanUpdateEvents.length +
         progressNoteActivity.patientAnswerEvents.length +
@@ -32,7 +33,7 @@ class ProgressNoteActivity extends React.Component<allProps> {
         progressNoteActivity.quickCallEvents.length +
         progressNoteActivity.taskEvents.length
       : 0;
-    if (progressNoteActivityLoading) {
+    if (loading) {
       return (
         <div className={styles.empty}>
           <Spinner />
@@ -74,16 +75,16 @@ class ProgressNoteActivity extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(progressNoteActivityQuery as any, {
+export default graphql(progressNoteActivityQuery as any, {
   skip: (props: IProps) => !props.progressNote,
   options: (props: IProps) => ({
     variables: {
       progressNoteId: props.progressNote!.id,
     },
   }),
-  props: ({ data }) => ({
-    progressNoteActivityLoading: data ? data.loading : false,
-    progressNoteActivityError: data ? data.error : null,
+  props: ({ data }): IGraphqlProps => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
     progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
   }),
 })(ProgressNoteActivity);

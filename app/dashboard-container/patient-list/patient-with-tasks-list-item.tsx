@@ -89,8 +89,8 @@ export class PatientWithTasksListItem extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(tasksDueSoonForPatientQuery as any, {
-    options: ({ patient }) => ({
+  graphql(tasksDueSoonForPatientQuery as any, {
+    options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),
     props: ({ data }) => ({
@@ -99,8 +99,8 @@ export default compose(
       tasksDueSoon: data ? (data as any).tasksDueSoonForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(tasksWithNotificationsForPatientQuery as any, {
-    options: ({ patient }) => ({
+  graphql(tasksWithNotificationsForPatientQuery as any, {
+    options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),
     props: ({ data }) => ({
@@ -109,4 +109,4 @@ export default compose(
       tasksWithNotifications: data ? (data as any).tasksWithNotificationsForPatient : null,
     }),
   }),
-)(PatientWithTasksListItem);
+)(PatientWithTasksListItem) as React.ComponentClass<IProps>;

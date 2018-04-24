@@ -11,7 +11,7 @@ import withErrorHandler, {
 } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/cbo-shared.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   cancelCreateCBO: () => void;
 }
 
@@ -19,7 +19,7 @@ interface IGraphqlProps {
   createCBO: (options: { variables: CBOCreateMutationVariables }) => { data: CBOCreateMutation };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   name: string;
@@ -148,10 +148,10 @@ export class CBOCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(createCBOMutationGraphql as any, {
+  graphql(createCBOMutationGraphql as any, {
     name: 'createCBO',
     options: {
       refetchQueries: ['getCBOs'],
     },
   }),
-)(CBOCreate);
+)(CBOCreate) as React.ComponentClass<IProps>;

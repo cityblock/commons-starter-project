@@ -15,7 +15,7 @@ import * as styles from './css/risk-area-group-detail.css';
 import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   riskAreaGroup: FullRiskAreaGroupFragment | null;
   close: () => void;
   createMode: boolean;
@@ -28,7 +28,7 @@ interface IGraphqlProps {
   ) => { data: riskAreaGroupDeleteMutation };
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   deleteMode: boolean;
@@ -101,10 +101,10 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupDeleteMutationGraphql as any, {
+  graphql(riskAreaGroupDeleteMutationGraphql as any, {
     name: 'deleteRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],
     },
   }),
-)(RiskAreaGroupDetail);
+)(RiskAreaGroupDetail) as React.ComponentClass<IProps>;

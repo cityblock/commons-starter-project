@@ -6,7 +6,6 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { riskArea, screeningTool } from '../../shared/util/test-data';
 import BuilderScreeningTools from '../builder-screening-tools';
 
 const oldDate = Date.now;
@@ -21,6 +20,7 @@ describe('builder screening tools', () => {
   const match = {
     params: {
       goalId: null,
+      toolId: null,
     },
   };
 
@@ -33,13 +33,7 @@ describe('builder screening tools', () => {
         <Provider store={mockStore({ locale })}>
           <ReduxConnectedIntlProvider>
             <BrowserRouter>
-              <BuilderScreeningTools
-                match={match}
-                routeBase="/foo/bar"
-                screeningToolId={screeningTool.id}
-                screeningTools={[screeningTool]}
-                riskAreas={[riskArea]}
-              />
+              <BuilderScreeningTools match={match} />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>

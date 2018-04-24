@@ -36,6 +36,7 @@ describe('Create Goal Modal', () => {
       loading={false}
       goalSuggestionTemplateIds={goalSuggestionTemplateIds}
       closePopup={placeholderFn}
+      error={null}
     />,
   );
 

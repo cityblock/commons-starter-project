@@ -88,10 +88,10 @@ export class EditAddressModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(editAddressMutationGraphql as any, {
+  graphql(editAddressMutationGraphql as any, {
     name: 'editAddressMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
   }),
-)(EditAddressModal);
+)(EditAddressModal) as React.ComponentClass<IProps>;

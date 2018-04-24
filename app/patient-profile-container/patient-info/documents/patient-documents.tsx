@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { find } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
@@ -24,8 +25,8 @@ interface IProps {
 
 interface IGraphqlProps {
   patientDocuments?: getPatientDocumentsQuery['patientDocuments'];
-  isLoading?: boolean;
-  error?: string | null;
+  isLoading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 export type allProps = IGraphqlProps & IProps;
@@ -103,7 +104,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
           closePopup={this.handleClosePopup}
           isVisible={!!modalDocumentType || isModalVisible}
           patientId={patientId}
-          preferredDocumentType={modalDocumentType}
+          preferredDocumentType={modalDocumentType || undefined}
         />
         {this.renderRequiredDocuments()}
         {this.renderOtherDocuments()}
@@ -112,13 +113,13 @@ class PatientDocuments extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientDocumentsQuery as any, {
+export default graphql(patientDocumentsQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
   }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     isLoading: data ? data.loading : false,
     error: data ? data.error : null,
     patientDocuments: data ? (data as any).patientDocuments : null,

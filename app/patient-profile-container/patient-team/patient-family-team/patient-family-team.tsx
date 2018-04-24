@@ -16,7 +16,7 @@ import RequiredPlaceholder from '../../required-placeholder';
 import * as styles from '../css/patient-team.css';
 import PatientFamilyMember from './patient-family-member';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   patientId: string;
   onAddEmergencyContact: () => void;
 }
@@ -30,7 +30,7 @@ interface IGraphqlProps {
   error?: string | null;
 }
 
-export type allProps = IGraphqlProps & IProps;
+export type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
@@ -129,13 +129,13 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(patientContactDeleteMutationGraphql as any, {
+  graphql(patientContactDeleteMutationGraphql as any, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContacts'],
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientContactsQuery as any, {
+  graphql(patientContactsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -147,4 +147,4 @@ export default compose(
       patientContacts: data ? (data as any).patientContacts : null,
     }),
   }),
-)(PatientFamilyTeam);
+)(PatientFamilyTeam) as React.ComponentClass<IProps>;

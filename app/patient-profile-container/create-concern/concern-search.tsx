@@ -18,7 +18,7 @@ export interface IProps {
   hideSearchResults: boolean;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onSearchTermChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSearchTermClick: (concernId: string) => void;
+  onSearchTermClick: (concernId: string, concernTitle: string) => void;
   searchTerm: string;
   showAllConcerns: boolean;
   toggleShowAllConcerns: () => void;
@@ -90,16 +90,16 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 };
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
+  graphql(concernsQuery as any, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
-      concerns: data ? data.concerns : null,
+      concerns: data ? (data as any).concerns : null,
     }),
   }),
   // For now this will be cached. Can reassess later to see if this is good enough.
-  graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -111,4 +111,4 @@ export default compose(
       patientCarePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-)(ConcernSearch);
+)(ConcernSearch) as React.ComponentClass<IProps>;

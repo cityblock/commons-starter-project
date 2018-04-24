@@ -162,8 +162,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
-  graphql<IGraphqlProps, IProps, allProps>(goalsQuery as any, {
+  graphql(goalDeleteMutation as any, { name: 'deleteGoal' }),
+  graphql(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -171,4 +171,4 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-)(BuilderGoals);
+)(BuilderGoals) as React.ComponentClass<IProps>;

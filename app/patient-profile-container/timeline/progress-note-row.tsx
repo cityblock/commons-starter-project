@@ -125,7 +125,7 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
 
 export default compose(
   progressNoteGlassBreak(),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
+  graphql(progressNoteQuery as any, {
     options: (props: IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
@@ -138,4 +138,4 @@ export default compose(
       progressNote: data ? (data as any).progressNote : null,
     }),
   }),
-)(ProgressNoteRow);
+)(ProgressNoteRow) as React.ComponentClass<IProps>;

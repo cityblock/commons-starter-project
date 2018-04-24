@@ -100,11 +100,11 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
+  graphql(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       riskAreaGroups: data ? (data as any).riskAreaGroups : null,
     }),
   }),
-)(AdminRiskAreaGroups);
+)(AdminRiskAreaGroups) as React.ComponentClass<IProps>;

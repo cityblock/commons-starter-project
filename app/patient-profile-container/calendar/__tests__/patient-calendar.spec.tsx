@@ -25,7 +25,14 @@ describe('Render Skinny Patient Calendar', () => {
     ],
     pageInfo: null,
   };
-  const wrapper = shallow(<PatientCalendar match={match} calendarEventsResponse={response} />);
+  const wrapper = shallow(
+    <PatientCalendar
+      match={match}
+      calendarEventsResponse={response}
+      isLoading={false}
+      error={null}
+    />,
+  );
 
   it('renders the calendar list', () => {
     const events = wrapper.find(Calendar);

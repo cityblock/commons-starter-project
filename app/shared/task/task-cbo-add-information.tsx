@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
@@ -11,8 +12,8 @@ interface IProps {
 
 interface IGraphqlProps {
   task: FullTaskFragment;
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -51,10 +52,10 @@ export class TaskCBOAddInformation extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(taskQuery as any, {
+export default graphql(taskQuery as any, {
   skip: (props: IProps) => !props.taskId,
   options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
-  props: ({ data }) => ({
+  props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
     task: data ? (data as any).task : null,

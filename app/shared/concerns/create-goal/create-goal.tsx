@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -34,7 +35,7 @@ interface IGraphqlProps {
   ) => { data: patientGoalCreateMutation };
   goalSuggestionTemplates: FullGoalSuggestionTemplateFragment[];
   loading: boolean;
-  error?: string;
+  error: ApolloError | null | undefined;
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
@@ -283,18 +284,18 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps,
   ),
-  graphql<IGraphqlProps, {}, allProps>(patientGoalCreateMutationGraphql as any, {
+  graphql(patientGoalCreateMutationGraphql as any, {
     name: 'createPatientGoal',
     options: {
       refetchQueries: ['getPatientCarePlan'],
     },
   }),
-  graphql<IGraphqlProps, {}, allProps>(goalSuggestionTemplatesQuery as any, {
+  graphql(goalSuggestionTemplatesQuery as any, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
-    props: ({ data }) => ({
+    props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
-      goalSuggestionTemplates: data ? data.goalSuggestionTemplates : null,
+      goalSuggestionTemplates: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-)(CreateGoalModal);
+)(CreateGoalModal) as React.ComponentClass<{}>;

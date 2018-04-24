@@ -167,14 +167,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
+  graphql(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(riskAreaDeleteMutationGraphql as any, {
+  graphql(riskAreaDeleteMutationGraphql as any, {
     name: 'deleteRiskArea',
   }),
-)(AdminRiskAreas);
+)(AdminRiskAreas) as React.ComponentClass<IProps>;

@@ -86,7 +86,7 @@ export class ProgressNoteRowQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteActivityQuery as any, {
+  graphql(progressNoteActivityQuery as any, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -99,7 +99,7 @@ export default compose(
       progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterId: props.progressNote.id,
@@ -113,4 +113,4 @@ export default compose(
       answers: data ? (data as any).patientAnswers : null,
     }),
   }),
-)(ProgressNoteRowQuestions);
+)(ProgressNoteRowQuestions) as React.ComponentClass<IProps>;

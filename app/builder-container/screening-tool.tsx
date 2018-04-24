@@ -316,10 +316,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolEditMutation as any, {
+  graphql(screeningToolEditMutation as any, {
     name: 'editScreeningTool',
   }),
-  graphql<IGraphqlProps, IProps & IStateProps, allProps>(screeningToolQuery as any, {
+  graphql(screeningToolQuery as any, {
     skip: (props: IProps & IStateProps) => !props.screeningToolId,
     options: (props: IProps & IStateProps) => ({
       variables: { screeningToolId: props.screeningToolId },
@@ -331,4 +331,4 @@ export default compose(
       refetcScreeningTool: data ? data.refetch : null,
     }),
   }),
-)(ScreeningTool);
+)(ScreeningTool) as React.ComponentClass<IProps>;

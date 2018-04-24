@@ -19,8 +19,10 @@ export interface IProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   taskIdsWithNotifications?: string[];
   taskId: string | null;
-  history: History;
   glassBreakId: string | null;
+}
+interface IRouterProps {
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -30,7 +32,7 @@ interface IGraphqlProps {
   error?: string | null;
 }
 
-export type allProps = IGraphqlProps & IProps;
+export type allProps = IGraphqlProps & IProps & IRouterProps;
 
 export class PatientMap extends React.Component<allProps, {}> {
   closeTask = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -83,7 +85,7 @@ export class PatientMap extends React.Component<allProps, {}> {
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -97,7 +99,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsQuery as any, {
+  graphql(taskIdsWithNotificationsQuery as any, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
@@ -115,4 +117,4 @@ export default compose(
       };
     },
   }),
-)(PatientMap);
+)(PatientMap) as React.ComponentClass<IProps>;

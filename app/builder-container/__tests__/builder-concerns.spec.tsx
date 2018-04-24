@@ -12,7 +12,7 @@ import BuilderConcerns from '../builder-concerns';
 const oldDate = Date.now;
 const match = {
   params: {
-    goalId: null,
+    concernId: concern.id,
   },
 };
 
@@ -32,12 +32,7 @@ describe('builder concerns', () => {
         <Provider store={mockStore({ locale, concern })}>
           <ReduxConnectedIntlProvider>
             <BrowserRouter>
-              <BuilderConcerns
-                match={match}
-                routeBase="/route/base"
-                concernId={concern.id}
-                concerns={[concern]}
-              />
+              <BuilderConcerns match={match} history={{} as any} />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>

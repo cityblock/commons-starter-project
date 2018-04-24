@@ -9,7 +9,7 @@ import withErrorHandler, {
 } from '../../shared/with-error-handler/with-error-handler';
 import * as styles from './css/patient-list-shared.css';
 
-interface IProps extends IInjectedErrorProps {
+interface IProps {
   cancelCreatePatientList: () => void;
 }
 
@@ -19,7 +19,7 @@ interface IGraphqlProps {
   ) => { data: patientListCreateMutation };
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
   title: string;
@@ -119,10 +119,10 @@ export class PatientListCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql<IGraphqlProps, IProps, allProps>(createPatientListMutationGraphql as any, {
+  graphql(createPatientListMutationGraphql as any, {
     name: 'createPatientList',
     options: {
       refetchQueries: ['getPatientLists'],
     },
   }),
-)(PatientListCreate);
+)(PatientListCreate) as React.ComponentClass<IProps>;

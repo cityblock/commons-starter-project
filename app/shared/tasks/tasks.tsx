@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
@@ -5,7 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as getCurrentUserQuery from '../../graphql/queries/get-current-user.graphql';
+import * as getCurrentUserQueryGraphql from '../../graphql/queries/get-current-user.graphql';
 import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
 import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
@@ -34,15 +35,17 @@ export interface IProps {
   patientGoals?: FullPatientGoalFragment[];
   tasks?: FullTaskFragment[];
   loading?: boolean;
-  error: string | null;
+  error?: ApolloError | null;
   updatePageParams: (params: IPageParams) => any;
   fetchMoreTasks: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
-  mutate?: any;
   taskId: string;
-  history: History;
   taskIdsWithNotifications?: string[];
+}
+
+interface IRouterProps {
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -56,10 +59,10 @@ interface IGraphqlProps {
 interface IState {
   orderBy: OrderByOptions;
   loading?: boolean;
-  error: string | null;
+  error?: ApolloError | null;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IRouterProps;
 
 const getPageParams = () => {
   const pageParams = querystring.parse(window.location.search.substring(1));
@@ -199,7 +202,7 @@ export class Tasks extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   graphql<IGraphqlProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
-  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsQuery as any, {
+  graphql(taskIdsWithNotificationsQuery as any, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
@@ -217,11 +220,11 @@ export default compose(
       };
     },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(getCurrentUserQuery as any, {
+  graphql(getCurrentUserQueryGraphql as any, {
     props: ({ data }) => ({
       currentUserLoading: data ? data.loading : false,
       currentUserError: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-)(Tasks);
+)(Tasks) as React.ComponentClass<IProps>;

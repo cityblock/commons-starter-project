@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import { History } from 'history';
 import { pickBy } from 'lodash';
@@ -50,8 +51,13 @@ interface IPageParams {
 interface IProps {
   hasLoggedIn: boolean;
   routeBase: string;
+}
+
+interface IRouterProps {
   history: History;
 }
+
+type allProps = IProps & IGraphqlProps & IRouterProps;
 
 interface IState {
   showInviteUser: boolean;
@@ -60,8 +66,8 @@ interface IState {
 
 export interface IGraphqlProps {
   currentUser?: FullUserFragment;
-  loading?: boolean;
-  error: string | null;
+  loading: boolean;
+  error: ApolloError | null | undefined;
   deleteUser?: (
     options: { variables: userDeleteMutationVariables },
   ) => { data: userDeleteMutation };
@@ -74,13 +80,12 @@ export interface IGraphqlProps {
   createUser?: (
     options: { variables: userCreateMutationVariables },
   ) => { data: userCreateMutation };
-  mutate?: any;
   usersResponse?: getUsersQuery['users'];
   fetchMoreUsers: () => any;
 }
 
-export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState> {
-  constructor(props: IProps & IGraphqlProps) {
+export class ManagerUsers extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     const pageParams = getPageParams(props);
@@ -243,31 +248,31 @@ const getPageParams = (props: IProps): getUsersQueryVariables => {
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps, IProps>(userDeleteMutationGraphql as any, {
+  graphql(userDeleteMutationGraphql as any, {
     name: 'deleteUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(userEditPermissionsMutationGraphql as any, {
+  graphql(userEditPermissionsMutationGraphql as any, {
     name: 'editUserPermissions',
   }),
 
-  graphql<IGraphqlProps, IProps>(userEditRoleMutationGraphql as any, {
+  graphql(userEditRoleMutationGraphql as any, {
     name: 'editUserRole',
   }),
-  graphql<IGraphqlProps, IProps>(userCreateMutationGraphql as any, {
+  graphql(userCreateMutationGraphql as any, {
     name: 'createUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
+  graphql(currentUserQuery as any, {
     props: ({ data }) => ({
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(usersQuery as any, {
+  graphql(usersQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
       fetchMoreUsers: () =>
@@ -277,4 +282,4 @@ export default compose(
       usersResponse: data ? (data as any).users : null,
     }),
   }),
-)(ManagerUsers);
+)(ManagerUsers) as React.ComponentClass<IProps>;

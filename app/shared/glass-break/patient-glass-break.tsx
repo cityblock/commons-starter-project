@@ -112,7 +112,7 @@ const patientGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql<IGraphqlProps, IProps, resultProps>(patientGlassBreakCheckQuery as any, {
+    graphql(patientGlassBreakCheckQuery as any, {
       options: (props: IProps) => ({
         variables: {
           patientId: props.patientId,
@@ -124,7 +124,7 @@ const patientGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).patientGlassBreakCheck : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(patientGlassBreaksForUserQuery as any, {
+    graphql(patientGlassBreaksForUserQuery as any, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
         fetchPolicy: 'cache-and-network',

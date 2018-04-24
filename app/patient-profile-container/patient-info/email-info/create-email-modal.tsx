@@ -62,6 +62,6 @@ export class CreateEmailModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(createEmailMutationGraphql as any, {
+export default graphql<any>(createEmailMutationGraphql as any, {
   name: 'createEmailMutation',
-})(CreateEmailModal);
+})(CreateEmailModal) as React.ComponentClass<IProps>;

@@ -83,10 +83,10 @@ export class EditPhoneModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(editPhoneMutationGraphql as any, {
+  graphql(editPhoneMutationGraphql as any, {
     name: 'editPhoneMutation',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql as any, {
     name: 'editPatientInfoMutation',
   }),
-)(EditPhoneModal);
+)(EditPhoneModal) as React.ComponentClass<IProps>;

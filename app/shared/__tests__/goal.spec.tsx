@@ -33,15 +33,15 @@ describe('Patient Goal Component', () => {
 
   it('renders modal component to create task', () => {
     expect(wrapper.find(CreateTaskModal).length).toBe(1);
-    expect(wrapper.find<IProps>(CreateTaskModal).props().visible).toBeFalsy();
-    expect(wrapper.find<IProps>(CreateTaskModal).props().concern).toBe(concernTitle);
-    expect(wrapper.find<IProps>(CreateTaskModal).props().goal).toBe(patientGoal.title);
-    expect(wrapper.find<IProps>(CreateTaskModal).props().patientGoalId).toBe(patientGoal.id);
+    expect(wrapper.find<IProps>(CreateTaskModal as any).props().visible).toBeFalsy();
+    expect(wrapper.find<IProps>(CreateTaskModal as any).props().concern).toBe(concernTitle);
+    expect(wrapper.find<IProps>(CreateTaskModal as any).props().goal).toBe(patientGoal.title);
+    expect(wrapper.find<IProps>(CreateTaskModal as any).props().patientGoalId).toBe(patientGoal.id);
   });
 
   it('opens modal to create task', () => {
     wrapper.setState({ createTaskModal: true });
-    expect(wrapper.find<IProps>(CreateTaskModal).props().visible).toBeTruthy();
+    expect(wrapper.find<IProps>(CreateTaskModal as any).props().visible).toBeTruthy();
   });
 
   it('applies inactive styles if a task selected', () => {

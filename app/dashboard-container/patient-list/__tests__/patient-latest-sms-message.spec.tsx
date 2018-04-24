@@ -8,7 +8,12 @@ import { PatientLatestSmsMessage, TIMESTAMP_FORMAT } from '../patient-latest-sms
 
 describe('Patient Latest SMS Message', () => {
   const wrapper = shallow(
-    <PatientLatestSmsMessage patientId="khalDrogo" smsMessage={smsMessage1} />,
+    <PatientLatestSmsMessage
+      loading={false}
+      error={null}
+      patientId="khalDrogo"
+      smsMessage={smsMessage1}
+    />,
   );
 
   const newMessage = {

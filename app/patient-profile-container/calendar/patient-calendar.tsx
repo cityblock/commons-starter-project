@@ -44,7 +44,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
 
   handleRefetch = () => {
     // TODO
-  }
+  };
 
   render() {
     const { loading, match, calendarEventsResponse } = this.props;
@@ -56,11 +56,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
         <div className={styles.navBar}>
           <Button messageId="calendar.addAppointment" onClick={this.handleAddEventClick} />
         </div>
-        <Calendar
-          fetchMore={this.handleRefetch}
-          loading={loading}
-          calendarEvents={events}
-        />
+        <Calendar fetchMore={this.handleRefetch} loading={loading} calendarEvents={events} />
         <PatientAppointmentModal
           isVisible={isEventModalVisible}
           patientId={match.params.patientId}

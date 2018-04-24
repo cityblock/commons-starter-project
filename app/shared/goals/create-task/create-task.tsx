@@ -10,11 +10,8 @@ import {
   Priority,
 } from '../../../graphql/types';
 import { formatCBOReferralTaskTitle } from '../../helpers/format-helpers';
-import ModalButtons from '../../library/modal-buttons/modal-buttons';
-import ModalHeader from '../../library/modal-header/modal-header';
-import { Popup } from '../../popup/popup';
+import Modal from '../../library/modal/modal';
 import CreateTaskFields from './create-task-fields';
-import * as styles from './css/create-task.css';
 import CreateTaskInfo from './info';
 
 export const OTHER_CBO = 'OtherCBO';
@@ -176,46 +173,33 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { visible, patientId, goal, concern } = this.props;
-    const { taskType, categoryId } = this.state;
+    const { taskType, categoryId, error, loading } = this.state;
     const isButtonsVisible = taskType ? taskType === 'general' || categoryId : false;
 
     return (
-      <Popup
-        visible={visible}
-        closePopup={this.onClose}
-        style="no-padding"
-        className={styles.popup}
+      <Modal
+        isVisible={visible}
+        onClose={this.onClose}
+        titleMessageId="taskCreate.addTask"
+        subTitleMessageId="taskCreate.detail"
+        headerColor="navy"
+        isButtonHidden={!isButtonsVisible}
+        cancelMessageId="taskCreate.cancel"
+        submitMessageId="taskCreate.submit"
+        onSubmit={this.onSubmit}
+        error={error}
+        isLoading={loading}
       >
-        <div>
-          <ModalHeader
-            titleMessageId="taskCreate.addTask"
-            bodyMessageId="taskCreate.detail"
-            color="navy"
-            closePopup={this.onClose}
-          />
-          <div className={styles.scroll}>
-            <CreateTaskInfo goal={goal} concern={concern} />
-            <div className={styles.fields}>
-              <CreateTaskFields
-                taskFields={this.state}
-                patientId={patientId}
-                onChange={this.onChange}
-                onAssigneeClick={this.onAssigneeClick}
-                onPriorityClick={this.onPriorityClick}
-                onDueAtChange={this.onDueAtChange}
-              />
-              {isButtonsVisible && (
-                <ModalButtons
-                  cancelMessageId="taskCreate.cancel"
-                  submitMessageId="taskCreate.submit"
-                  cancel={this.onClose}
-                  submit={this.onSubmit}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      </Popup>
+        <CreateTaskInfo goal={goal} concern={concern} />
+        <CreateTaskFields
+          taskFields={this.state}
+          patientId={patientId}
+          onChange={this.onChange}
+          onAssigneeClick={this.onAssigneeClick}
+          onPriorityClick={this.onPriorityClick}
+          onDueAtChange={this.onDueAtChange}
+        />
+      </Modal>
     );
   }
 }

@@ -5,7 +5,7 @@
 
 .button {
   width: calc(50% - 10px);
-  margin-top: var(--medium-gutter);
+  margin-top: var(--small-gutter);
   height: 42px;
   padding-top: 12px;
 }

@@ -1,8 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import ModalButtons from '../../../library/modal-buttons/modal-buttons';
-import ModalHeader from '../../../library/modal-header/modal-header';
-import { Popup } from '../../../popup/popup';
+import Modal from '../../../library/modal/modal';
 import { CreateTaskModal } from '../create-task';
 import CreateTaskFields from '../create-task-fields';
 import CreateTaskInfo from '../info';
@@ -27,11 +25,16 @@ describe('Create Task Modal Component', () => {
     />,
   );
 
-  it('renders task header component', () => {
-    expect(wrapper.find(ModalHeader).length).toBe(1);
-    expect(wrapper.find(ModalHeader).props().titleMessageId).toBe('taskCreate.addTask');
-    expect(wrapper.find(ModalHeader).props().bodyMessageId).toBe('taskCreate.detail');
-    expect(wrapper.find(ModalHeader).props().color).toBe('navy');
+  it('renders task modal component', () => {
+    expect(wrapper.find(Modal).length).toBe(1);
+
+    const modalProps = wrapper.find(Modal).props();
+    expect(modalProps.titleMessageId).toBe('taskCreate.addTask');
+    expect(modalProps.subTitleMessageId).toBe('taskCreate.detail');
+    expect(modalProps.headerColor).toBe('navy');
+    expect(modalProps.isVisible).toBeFalsy();
+    expect(modalProps.cancelMessageId).toBe('taskCreate.cancel');
+    expect(modalProps.submitMessageId).toBe('taskCreate.submit');
   });
 
   it('renders task info component with correct props', () => {
@@ -39,20 +42,9 @@ describe('Create Task Modal Component', () => {
     expect(wrapper.find(CreateTaskInfo).props().concern).toBe(concern);
   });
 
-  it('renders popup component', () => {
-    expect(wrapper.find(Popup).length).toBe(1);
-    expect(wrapper.find(Popup).props().visible).toBeFalsy();
-    expect(wrapper.find(Popup).props().style).toBe('no-padding');
-    expect(wrapper.find(Popup).props().className).toBe('popup');
-  });
-
   it('makes popup visible after receiving new props', () => {
     wrapper.setProps({ visible: true });
-    expect(wrapper.find(Popup).props().visible).toBeTruthy();
-  });
-
-  it('renders fields with correct styles', () => {
-    expect(wrapper.find('.fields').length).toBe(1);
+    expect(wrapper.find(Modal).props().isVisible).toBeTruthy();
   });
 
   it('renders create task fields', () => {
@@ -70,14 +62,11 @@ describe('Create Task Modal Component', () => {
   });
 
   it('does not render modal buttons if no category selected', () => {
-    expect(wrapper.find(ModalButtons).length).toBe(0);
+    expect(wrapper.find(Modal).props().isButtonHidden).toBeTruthy();
   });
 
   it('renders modal buttons if task type selected', () => {
     wrapper.setState({ taskType: 'general' });
-
-    expect(wrapper.find(ModalButtons).length).toBe(1);
-    expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('taskCreate.cancel');
-    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('taskCreate.submit');
+    expect(wrapper.find(Modal).props().isButtonHidden).toBeFalsy();
   });
 });

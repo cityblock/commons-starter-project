@@ -181,7 +181,7 @@ async function getGoogleCalendarEvents(
     return {
       id: item.id,
       title: item.summary,
-      startDatetime: item.start.dateTime,
+      startDatetime: item.start.dateTime || item.start.date,
       status: item.status,
       htmlLink: item.htmlLink,
     };

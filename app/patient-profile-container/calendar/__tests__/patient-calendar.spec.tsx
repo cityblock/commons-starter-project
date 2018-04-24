@@ -8,8 +8,20 @@ describe('Render Skinny Patient Calendar', () => {
   const match = { params: { patientId: patient.id } };
   const response = {
     events: [
-      { id: 'id0', title: 'First Appointment', startDatetime: new Date().toISOString(), htmlLink: 'www.fakeurl.com', status: 'confirmed' },
-      { id: 'id1', title: 'Second Appointment', startDatetime: new Date().toISOString(), htmlLink: 'www.fakeurl.com', status: 'cancelled' },
+      {
+        id: 'id0',
+        title: 'First Appointment',
+        startDatetime: new Date().toISOString(),
+        htmlLink: 'www.fakeurl.com',
+        status: 'confirmed',
+      },
+      {
+        id: 'id1',
+        title: 'Second Appointment',
+        startDatetime: new Date().toISOString(),
+        htmlLink: 'www.fakeurl.com',
+        status: 'cancelled',
+      },
     ],
     pageInfo: null,
   };

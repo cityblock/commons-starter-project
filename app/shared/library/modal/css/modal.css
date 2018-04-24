@@ -1,14 +1,28 @@
-.body {
-  padding: var(--medium-gutter);
-  max-height: 650px;
-  overflow: scroll;
+.popup {
+  max-height: 648px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--big-border-radius);
 }
 
-.body,
-.popup {
-  border-radius: var(--big-border-radius);
+.body {
+  padding: var(--medium-gutter);
+  overflow: scroll;
+  flex: 1;
 }
 
 .spinner {
   margin: var(--gutter);
+}
+
+.buttons {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border-color);
+  padding: 0 var(--medium-gutter) var(--small-gutter);
+  background-color: var(--highlight-background-color);
+}
+
+.header {
+  flex-shrink: 0;
 }

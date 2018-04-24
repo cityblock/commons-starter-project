@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { Popup } from '../../popup/popup';
 import { Color as IconColor } from '../icon/icon';
@@ -9,8 +10,8 @@ import Spinner from '../spinner/spinner';
 import * as styles from './css/modal.css';
 
 interface IProps {
-  onClose: () => void;
-  onSubmit: () => void;
+  onClose?: () => void;
+  onSubmit?: () => void;
   isVisible: boolean;
   isButtonHidden?: boolean;
   titleMessageId?: string;
@@ -69,6 +70,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
       submit={onSubmit}
       redSubmit={redSubmitButton}
       isLoading={isLoading}
+      className={styles.buttons}
     />
   ) : null;
 
@@ -85,13 +87,11 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
         headerIconName={headerIconName}
         headerIconColor={headerIconColor}
         headerIconSize={headerIconSize}
-        className={headerClassName}
+        className={classNames(headerClassName, styles.header)}
       />
       {errorComponent}
-      <div className={styles.body}>
-        {bodyHtml}
-        {buttonComponent}
-      </div>
+      <div className={styles.body}>{bodyHtml}</div>
+      {buttonComponent}
     </Popup>
   );
 };

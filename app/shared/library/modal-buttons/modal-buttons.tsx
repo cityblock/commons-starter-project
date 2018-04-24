@@ -10,17 +10,26 @@ interface IProps {
   submit?: () => void; // click handler for submit button
   redSubmit?: boolean; // if true, makes submit button red
   isLoading?: boolean; // if true, disable submit button
+  className?: string;
 }
 
 const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { cancelMessageId, submitMessageId, cancel, submit, redSubmit, isLoading } = props;
+  const {
+    cancelMessageId,
+    submitMessageId,
+    cancel,
+    submit,
+    redSubmit,
+    isLoading,
+    className,
+  } = props;
   const submitButtonMessageId = isLoading
     ? 'modalButtons.loading'
     : submitMessageId || 'modalButtons.submit';
 
   return (
     <div
-      className={classNames(styles.flex, {
+      className={classNames(className, styles.flex, {
         [styles.single]: !(cancel && submit),
       })}
     >

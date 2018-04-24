@@ -1,6 +1,7 @@
 import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { isMobile } from 'react-device-detect';
 import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
@@ -30,7 +31,8 @@ interface IGoogleLoginError {
 type allProps = IGraphqlProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
-const HOME_ROUTE = '/dashboard/tasks';
+const DESKTOP_HOME_ROUTE = '/dashboard/tasks';
+const MOBILE_HOME_ROUTE = '/contacts';
 const LOGGED_IN_TITLE = 'Commons | A Cityblock Health product';
 
 export class LoginContainer extends React.Component<allProps, { error: string | null }> {
@@ -59,7 +61,9 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
-      this.props.history.push(HOME_ROUTE);
+
+      const redirectRoute = isMobile ? MOBILE_HOME_ROUTE : DESKTOP_HOME_ROUTE;
+      this.props.history.push(redirectRoute);
       document.title = LOGGED_IN_TITLE;
     } catch (err) {
       await localStorage.removeItem('authToken');

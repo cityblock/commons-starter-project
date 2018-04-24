@@ -35,6 +35,11 @@ export class Header extends React.Component<allProps> {
   render() {
     const { currentUser, featureFlags } = this.props;
 
+    // if on contacts view, don't show navigation
+    if (this.props.location.pathname === '/contacts') {
+      return null;
+    }
+
     const name = currentUser ? formatFullName(currentUser.firstName, currentUser.lastName) : null;
     let searchLink = null;
     let patientLink = null;

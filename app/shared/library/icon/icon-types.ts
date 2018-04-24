@@ -17,6 +17,7 @@ export type IconName =
   | 'checkCircle'
   | 'close'
   | 'contactPhone'
+  | 'contacts'
   | 'contentPaste'
   | 'create'
   | 'delete'

@@ -20,6 +20,7 @@ import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 import CloseIcon from 'material-ui-icons/Close';
 import ContactPhoneIcon from 'material-ui-icons/ContactPhone';
+import ContactsIcon from 'material-ui-icons/Contacts';
 import ContentPasteIcon from 'material-ui-icons/ContentPaste';
 import Create from 'material-ui-icons/Create';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -39,8 +40,8 @@ import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
 import InboxIcon from 'material-ui-icons/Inbox';
 import InfoOutlineIcon from 'material-ui-icons/InfoOutline';
-import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
 import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
+import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from 'material-ui-icons/KeyboardArrowUp';
@@ -91,6 +92,7 @@ const components: IconComponents = {
   checkCircle: CheckCircleIcon,
   close: CloseIcon,
   contactPhone: ContactPhoneIcon,
+  contacts: ContactsIcon,
   contentPaste: ContentPasteIcon,
   create: Create,
   delete: DeleteIcon,

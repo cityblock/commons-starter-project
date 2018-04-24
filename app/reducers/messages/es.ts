@@ -477,6 +477,7 @@ export const SPANISH_TRANSLATION = {
     'header.patients': 'Pacientes',
     'header.tasks': 'Mis tareas',
     'header.calendar': 'Mi calendario',
+    'header.contacts': 'Update Contacts',
     'header.logOut': 'Cerrar sesión',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
@@ -955,6 +956,7 @@ export const SPANISH_TRANSLATION = {
     'messages.empty': 'No history of text messages',
     'messages.createPlaceholder': 'Text member',
     'messages.send': 'Send',
-    'contacts.download': 'Download Contacts',
+    'contacts.download': 'Download',
+    'contacts.update': 'Update your contacts',
   },
 };

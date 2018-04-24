@@ -493,6 +493,7 @@ export const ENGLISH_TRANSLATION = {
     'header.patients': 'Members',
     'header.tasks': 'My Tasks',
     'header.calendar': 'My Calendar',
+    'header.contacts': 'Update Contacts',
     'header.logOut': 'Logout',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
@@ -986,6 +987,9 @@ export const ENGLISH_TRANSLATION = {
     'messages.empty': 'No history of text messages',
     'messages.createPlaceholder': 'Text member',
     'messages.send': 'Send',
-    'contacts.download': 'Download Contacts',
+    'contacts.download': 'Download',
+    'contacts.update': 'Update your contacts',
+    'contacts.info1': 'Download the latest version of your',
+    'contacts.info2': ' patients’ contact information.',
   },
 };

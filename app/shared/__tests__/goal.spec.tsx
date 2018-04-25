@@ -25,7 +25,7 @@ describe('Patient Goal Component', () => {
 
   it('renders patient goal options menu', () => {
     expect(wrapper.find(GoalOptions).length).toBe(1);
-    expect(wrapper.find(GoalOptions).props().open).toBeFalsy();
+    expect((wrapper.find(GoalOptions).props() as any).open).toBeFalsy();
     expect(wrapper.find(GoalOptions).props().patientGoalId).toBe(patientGoal.id);
     expect(wrapper.find(GoalOptions).props().patientGoalTitle).toBe(patientGoal.title);
     expect(wrapper.find(GoalOptions).props().canDelete).toBeFalsy();

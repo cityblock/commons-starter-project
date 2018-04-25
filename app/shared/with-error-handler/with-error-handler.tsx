@@ -17,7 +17,7 @@ const withErrorHandler = () => <P extends {}>(
     return <Component {...props} />;
   };
 
-  const mapDispatchToProps = (dispatch: Dispatch<() => void>): IInjectedErrorProps => {
+  const mapDispatchToProps = (dispatch: Dispatch<any>): IInjectedErrorProps => {
     return {
       openErrorPopup: (message: string) =>
         dispatch(
@@ -29,7 +29,7 @@ const withErrorHandler = () => <P extends {}>(
     };
   };
 
-  return connect(null, mapDispatchToProps)(WithErrorHandler);
+  return connect(null, mapDispatchToProps as any)(WithErrorHandler);
 };
 
 export default withErrorHandler;

@@ -77,14 +77,14 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { isVisible, patientId, patientInfoId };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => ({
   closePatientPhotoPopup: () => dispatch(closePopup()),
 });
 
 export default compose(
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(
     patientPhotoSignedUrlCreate as any,

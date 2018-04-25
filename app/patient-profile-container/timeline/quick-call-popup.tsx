@@ -308,7 +308,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { visible, patientId };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   const close = () => dispatch(closePopup());
 
   return { close };
@@ -317,7 +317,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 export default compose(
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql(quickCallCreateMutationGraphql as any, {
     name: 'createQuickCall',

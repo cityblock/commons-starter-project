@@ -51,11 +51,11 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { isVisible, message };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => ({
   closeErrorPopup: () => dispatch(closePopup()),
 });
 
 export default connect<IStateProps, IDispatchProps, {}>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(ErrorPopup);

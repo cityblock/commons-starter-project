@@ -42,10 +42,13 @@ describe('Patient 360 Radar Chart', () => {
   });
 
   it('renders correct data', () => {
-    expect(wrapper.find(Radar).props().data.labels).toEqual([riskAreaGroup.title, title]);
-    expect(wrapper.find(Radar).props().data.datasets[0]).toMatchObject(dataOptions);
-    expect(wrapper.find(Radar).props().data.datasets[0].data).toEqual([mediumValue, NaN]);
-    expect(wrapper.find(Radar).props().data.datasets[0].pointBackgroundColor).toEqual([yellow, '']);
+    expect(wrapper.find<any>(Radar).props().data.labels).toEqual([riskAreaGroup.title, title]);
+    expect(wrapper.find<any>(Radar).props().data.datasets[0]).toMatchObject(dataOptions);
+    expect(wrapper.find<any>(Radar).props().data.datasets[0].data).toEqual([mediumValue, NaN]);
+    expect(wrapper.find<any>(Radar).props().data.datasets[0].pointBackgroundColor).toEqual([
+      yellow,
+      '',
+    ]);
   });
 
   it('renders loading spinner if no risk area groups yet', () => {

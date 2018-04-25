@@ -86,7 +86,7 @@ export class PatientPhoto extends React.Component<allProps> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => {
   return {
     openPatientPhotoPopup: () =>
       dispatch(
@@ -101,4 +101,4 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(PatientPhoto);
+export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps as any)(PatientPhoto);

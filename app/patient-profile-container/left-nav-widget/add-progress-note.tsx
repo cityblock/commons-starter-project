@@ -52,7 +52,7 @@ export class AddProgressNote extends React.Component<allProps> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   return {
     openProgressNotePopup: (progressNoteId: string) =>
       dispatch(
@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 };
 
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
+  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps as any),
   graphql(progressNoteCreateMutationGraphql as any, {
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },

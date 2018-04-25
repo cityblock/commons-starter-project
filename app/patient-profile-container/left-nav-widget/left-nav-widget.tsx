@@ -67,7 +67,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   return {
     updateSelected: (selected: Selected) => dispatch(updatePatientLeftNavSelected(selected)),
   };
@@ -75,5 +75,5 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 
 export default connect<IStateProps, IDispatchProps, IProps>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(LeftNavWidget);

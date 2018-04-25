@@ -53,7 +53,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
   return { open };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => {
   const { patientGoalId, patientGoalTitle } = ownProps;
 
   const openMenu = () =>
@@ -85,5 +85,5 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default connect<IStateProps, IDispatchProps, IProps>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(GoalOptions);

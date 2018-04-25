@@ -102,7 +102,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 
     return (
       <div>
-        <FormattedMessage id={messageId || 'task.assign'}>
+        <FormattedMessage id={(messageId || 'task.assign') as any}>
           {(message: string) => <h3 className={messageStyles || styles.label}>{message}</h3>}
         </FormattedMessage>
         <SelectDropdown

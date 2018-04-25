@@ -139,7 +139,7 @@ function mapStateToProps(state: IAppState, ownProps: any): IStateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
   return {
     selectLocale: (lang: Lang) => dispatch(selectLocale(lang)),
     idleStart: () => dispatch(idleStart()),
@@ -151,7 +151,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 export default compose(
   connect<IStateProps, IDispatchProps, allProps>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql(currentUserQuery as any, {
     props: ({ data }) => ({

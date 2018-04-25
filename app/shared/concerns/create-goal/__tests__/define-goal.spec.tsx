@@ -42,8 +42,8 @@ describe('Create Goal Modal', () => {
     expect(wrapper.find(Search).length).toBe(1);
     expect(wrapper.find(Search).props().value).toBe(title);
     expect(wrapper.find(Search).props().searchOptions).toEqual([]);
-    expect(wrapper.find(Search).props().hideSearchResults).toBeFalsy();
-    expect(wrapper.find(Search).props().showAllGoals).toBeFalsy();
+    expect((wrapper.find(Search).props() as any).hideSearchResults).toBeFalsy();
+    expect((wrapper.find(Search).props() as any).showAllGoals).toBeFalsy();
     expect(wrapper.find(Search).props().placeholderMessageId).toBe('goalCreate.search');
     expect(wrapper.find(Search).props().emptyPlaceholderMessageId).toBe('goalCreate.noResults');
   });

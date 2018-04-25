@@ -120,7 +120,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { visible, patientAnswerIds };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   const closePopup = () => dispatch(closePopupAction());
   return { closePopup };
 };
@@ -128,7 +128,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 export default compose(
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql<IGraphqlProps, {}, allProps>(computedFieldFlagCreateMutationGraphql as any, {
     name: 'flagComputedField',

@@ -82,7 +82,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { visible, patientGoalTitle, patientGoalId };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   const closePopup = () => dispatch(closePopupAction());
   return { closePopup };
 };
@@ -90,7 +90,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
 export default compose(
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql<IGraphqlProps, {}, allProps>(patientGoalDeleteMutationGraphql as any, {
     name: 'deletePatientGoal',

@@ -107,7 +107,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { isPopupOpen };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => {
   const addConcern = () =>
     dispatch(
       openPopup({
@@ -124,5 +124,5 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default connect<IStateProps, IDispatchProps, IProps>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(PatientCarePlanView);

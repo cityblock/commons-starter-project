@@ -22,7 +22,7 @@ export const AddQuickCall: React.StatelessComponent<allProps> = (props: allProps
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => {
   return {
     openQuickCallPopup: () =>
       dispatch(
@@ -36,4 +36,4 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(AddQuickCall);
+export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps as any)(AddQuickCall);

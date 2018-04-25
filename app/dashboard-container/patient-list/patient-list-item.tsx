@@ -89,12 +89,13 @@ export const PatientListItem: React.StatelessComponent<allProps> = (props: allPr
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   return {
     openMessages: () => dispatch(updatePatientLeftNavSelected('message')),
   };
 };
 
-export default compose(withRouter, connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps))(
-  PatientListItem,
-);
+export default compose(
+  withRouter,
+  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps as any),
+)(PatientListItem);

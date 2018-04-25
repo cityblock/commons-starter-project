@@ -1,7 +1,7 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
-import PatientCarePlanDnD, { allProps } from '../drag-and-drop/drag-and-drop-patient-care-plan';
+import PatientCarePlanDnD from '../drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from '../modals/modals';
 import { PatientMap } from '../patient-map';
 
@@ -23,7 +23,7 @@ describe('Patient Map Component', () => {
   );
 
   it('renders patient care plan', () => {
-    expect((wrapper.find(PatientCarePlanDnD) as ShallowWrapper<allProps>).length).toBe(1);
+    expect((wrapper.find(PatientCarePlanDnD) as any).length).toBe(1);
     expect(wrapper.find(PatientCarePlanDnD).props().routeBase).toBe(routeBase);
     expect(wrapper.find(PatientCarePlanDnD).props().patientId).toBe(patientId);
     expect(wrapper.find(PatientCarePlanDnD).props().selectedTaskId).toBeFalsy();

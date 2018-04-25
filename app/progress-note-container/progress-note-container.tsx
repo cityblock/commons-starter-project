@@ -150,7 +150,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
   return {
     openProgressNotesDrawer: () =>
       dispatch(
@@ -176,7 +176,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 export default compose(
   connect<IStateProps, IDispatchProps, allProps>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql(progressNotesForCurrentUserQuery as any, {
     options: () => ({

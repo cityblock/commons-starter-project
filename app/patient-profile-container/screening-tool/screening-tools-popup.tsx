@@ -103,7 +103,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   return { isVisible, patientRoute };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
   const onDismiss = () => dispatch(closePopup());
 
   return { onDismiss };
@@ -113,7 +113,7 @@ export default compose(
   withRouter,
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql(screeningToolsQuery as any, {
     props: ({ data }) => ({

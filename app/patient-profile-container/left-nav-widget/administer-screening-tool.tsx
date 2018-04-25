@@ -26,7 +26,7 @@ export const AdministerScreeningTool: React.StatelessComponent<allProps> = (prop
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => {
   return {
     openScreeningToolsPopup: () =>
       dispatch(
@@ -40,6 +40,6 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(
+export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps as any)(
   AdministerScreeningTool,
 );

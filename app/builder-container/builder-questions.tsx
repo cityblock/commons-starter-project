@@ -12,6 +12,7 @@ import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
 import {
+  getQuestionsQueryVariables,
   questionDeleteMutation,
   questionDeleteMutationVariables,
   FullComputedFieldFragment,
@@ -19,6 +20,7 @@ import {
   FullQuestionFragment,
   FullRiskAreaFragment,
   FullScreeningToolFragment,
+  QuestionFilterType,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
@@ -277,6 +279,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
             </div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={selectedValue || ''} onChange={this.onSortChange}>
+                <option value="">nothing selected</option>
                 <optgroup label="Assessments">{riskAreaSortOptions}</optgroup>
                 <optgroup label="Screening Tools">{screeningToolSortOptions}</optgroup>
                 <optgroup label="Progress Note Templates">
@@ -299,27 +302,25 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   }
 }
 
-function getPageParams(props: IProps) {
+function getPageParams(props: IProps): getQuestionsQueryVariables | null {
   const { match } = props;
   if (match.params.riskAreaId && match.params.riskAreaId !== 'redirect') {
     return {
-      filterType: 'riskArea',
+      filterType: 'riskArea' as QuestionFilterType,
       filterId: match.params.riskAreaId,
     };
   } else if (match.params.toolId) {
     return {
-      filterType: 'screeningTool',
+      filterType: 'screeningTool' as QuestionFilterType,
       filterId: match.params.toolId,
     };
   } else if (match.params.progressNoteTemplateId) {
     return {
-      filterType: 'progressNoteTemplate',
+      filterType: 'progressNoteTemplate' as QuestionFilterType,
       filterId: match.params.progressNoteTemplateId,
     };
   }
-  return {
-    filterId: null,
-  };
+  return null;
 }
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
@@ -358,7 +359,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
-    skip: (props: IProps) => !getPageParams(props).filterId,
+    skip: (props: IProps) => !getPageParams(props),
     props: ({ data, ownProps }) => ({
       questionsRefetch: data ? data.refetch : false,
       questionsLoading: data ? data.loading : false,

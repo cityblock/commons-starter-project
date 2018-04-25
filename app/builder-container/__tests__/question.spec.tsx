@@ -27,7 +27,7 @@ it('renders question', () => {
       <Provider store={mockStore({ locale, question })}>
         <ReduxConnectedIntlProvider>
           <BrowserRouter>
-            <Question routeBase="/route/base" match={match} />
+            <Question routeBase="/route/base" match={match} questions={[]} />
           </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
@@ -50,8 +50,8 @@ describe('shallow rendered', () => {
         question={question}
         questions={[question]}
         questionId={question.id}
-        questionLoading={false}
-        questionError={null}
+        loading={false}
+        error={null}
         onDelete={onDelete}
         refetchQuestion={refetchQuestion}
         editQuestion={editQuestion}
@@ -112,8 +112,8 @@ describe('shallow rendered with other text answer', () => {
         question={questionWithOtherTextAnswer}
         questions={[questionWithOtherTextAnswer]}
         questionId={questionWithOtherTextAnswer.id}
-        questionLoading={false}
-        questionError={null}
+        loading={false}
+        error={null}
         onDelete={onDelete}
         refetchQuestion={refetchQuestion}
         editQuestion={editQuestion}

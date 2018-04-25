@@ -22,6 +22,11 @@ exports[`builder concerns renders builder questions 1`] = `
           onChange={[Function]}
           value=""
         >
+          <option
+            value=""
+          >
+            nothing selected
+          </option>
           <optgroup
             label="Assessments"
           />

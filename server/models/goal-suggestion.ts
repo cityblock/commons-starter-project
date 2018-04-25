@@ -13,6 +13,8 @@ interface IGoalSuggestionEditableFields {
   screeningToolScoreRangeId?: string;
 }
 
+const EAGER_QUERY = 'goalSuggestionTemplate.[taskTemplates]';
+
 // NOTE: Does not extend base model since GoalSuggestions should never be updated
 /* tslint:disable:member-ordering */
 export default class GoalSuggestion extends Model {
@@ -96,7 +98,7 @@ export default class GoalSuggestion extends Model {
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
-      .eager('goalSuggestionTemplate')) as any;
+      .eager(EAGER_QUERY)) as any;
     return goalSuggestionAnswers.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
     );
@@ -110,7 +112,7 @@ export default class GoalSuggestion extends Model {
       .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
-      .eager('goalSuggestionTemplate')) as any;
+      .eager(EAGER_QUERY)) as any;
     return goalSuggestionAnswers.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
     );
@@ -157,7 +159,7 @@ export default class GoalSuggestion extends Model {
 
     // goal suggestions based on score ranges
     const scoreRangeGoalSuggestions = (await this.query(txn)
-      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .eager(EAGER_QUERY)
       .joinRelation('screeningToolScoreRange')
       .join(
         'patient_screening_tool_submission',

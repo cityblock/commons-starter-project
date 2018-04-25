@@ -1,6 +1,9 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as goalSuggestionTemplateForAnswer from '../../../app/graphql/queries/get-goal-suggestions-for-answer.graphql';
+import * as goalSuggestionCreate from '../../../app/graphql/queries/goal-suggestion-create-mutation.graphql';
+import * as goalSuggestionDelete from '../../../app/graphql/queries/goal-suggestion-delete-mutation.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
@@ -60,6 +63,9 @@ async function setup(trx: Transaction): Promise<ISetup> {
 
 describe('goal suggestion resolver', () => {
   let txn = null as any;
+  const goalSuggestionTemplateForAnswerQuery = print(goalSuggestionTemplateForAnswer);
+  const goalSuggestionCreateMutation = print(goalSuggestionCreate);
+  const goalSuggestionDeleteMutation = print(goalSuggestionDelete);
 
   beforeEach(async () => {
     await Db.get();
@@ -77,8 +83,13 @@ describe('goal suggestion resolver', () => {
   describe('resolve goals for answer', () => {
     it('fetches a goal', async () => {
       const { answer, goalSuggestionTemplate, user } = await setup(txn);
-      const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        goalSuggestionTemplateForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        { answerId: answer.id },
+      );
       // null if no suggested goals
       expect(cloneDeep(result.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
 
@@ -90,7 +101,13 @@ describe('goal suggestion resolver', () => {
         txn,
       );
       // one if suggested goal
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result2 = await graphql(
+        schema,
+        goalSuggestionTemplateForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        { answerId: answer.id },
+      );
       expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([
         { title: 'Fix housing' },
       ]);
@@ -100,16 +117,16 @@ describe('goal suggestion resolver', () => {
   describe('goal suggestion create', () => {
     it('suggests a goal for an answer', async () => {
       const { answer, goalSuggestionTemplate, user } = await setup(txn);
-      const mutation = `mutation {
-          goalSuggestionCreate(
-            input: {
-              answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
-            }
-          ) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        goalSuggestionCreateMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        },
+      );
       expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
         {
           title: 'Fix housing',
@@ -136,17 +153,16 @@ describe('goal suggestion resolver', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          goalSuggestionCreate(
-            input: {
-              screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
-              goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
-            }
-          ) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        goalSuggestionCreateMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          screeningToolScoreRangeId: screeningToolScoreRange.id,
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        },
+      );
       expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
         {
           title: 'Fix housing',
@@ -165,19 +181,26 @@ describe('goal suggestion resolver', () => {
         },
         txn,
       );
-      const mutation = `mutation {
-          goalSuggestionDelete(input: {
-            answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
-          }) {
-            title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(
+        schema,
+        goalSuggestionDeleteMutation,
+        null,
+        { userId: user.id, permissions, txn },
+        {
+          answerId: answer.id,
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        },
+      );
       expect(cloneDeep(result.data!.goalSuggestionDelete)).toMatchObject([]);
 
       // empty with no suggested goals
-      const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result2 = await graphql(
+        schema,
+        goalSuggestionTemplateForAnswerQuery,
+        null,
+        { userId: user.id, permissions, txn },
+        { answerId: answer.id },
+      );
       expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
     });
   });

@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -25,6 +26,7 @@ interface IStateProps {
 }
 
 interface IProps {
+  questions: FullQuestionFragment[];
   routeBase: string;
   match?: {
     params: {
@@ -34,11 +36,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  questions: FullQuestionFragment[];
   question?: FullQuestionFragment;
-  questionLoading?: boolean;
-  questionError: string | null;
-  refetchQuestion: () => any;
+  loading: boolean;
+  error: ApolloError | null | undefined;
+  refetchQuestion: (() => any) | null;
   editQuestion: (
     options: { variables: questionEditMutationVariables },
   ) => { data: questionEditMutation };
@@ -457,14 +458,14 @@ export class Question extends React.Component<allProps, IState> {
         </div>
       );
     } else {
-      const { questionLoading, questionError } = this.props;
-      if (questionLoading) {
+      const { loading, error } = this.props;
+      if (loading) {
         return (
           <div className={styles.container}>
             <div className={styles.loading}>Loading...</div>
           </div>
         );
-      } else if (!!questionError) {
+      } else if (!!error) {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
@@ -496,11 +497,11 @@ export default compose(
     name: 'editQuestion',
   }),
   graphql(questionQuery as any, {
-    skip: (props: IProps & IStateProps) => !props.questionId,
+    skip: (props: IProps & IStateProps) => !props.questionId || props.questionId === 'builder',
     options: (props: IProps & IStateProps) => ({ variables: { questionId: props.questionId } }),
-    props: ({ data }) => ({
-      questionLoading: data ? data.loading : false,
-      questionError: data ? data.error : null,
+    props: ({ data }): Partial<IGraphqlProps> => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
       question: data ? (data as any).question : null,
       refetchQuestion: data ? data.refetch : null,
     }),

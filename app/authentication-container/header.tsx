@@ -23,9 +23,11 @@ export class Header extends React.Component<allProps> {
     window.location.href = '/';
   };
 
-  getNavItemClassnames(path: string) {
+  getNavItemClassnames(path: string, exactMatch = false) {
     const { location } = this.props;
-    const selected = matchPath(location.pathname, { path }) !== null;
+    const selected = exactMatch
+      ? path === location.pathname
+      : matchPath(location.pathname, { path }) !== null;
 
     return classNames(styles.navItem, {
       [styles.selected]: selected,
@@ -58,7 +60,7 @@ export class Header extends React.Component<allProps> {
     }
     if (featureFlags.canViewAllMembers || featureFlags.canViewMembersOnPanel) {
       patientLink = (
-        <Link to={'/patients'} className={this.getNavItemClassnames('/patients')}>
+        <Link to={'/patients'} className={this.getNavItemClassnames('/patients', true)}>
           <div className={styles.patientsIcon} />
           <FormattedMessage id="header.patients">
             {(message: string) => <div className={styles.navText}>{message}</div>}

@@ -840,7 +840,7 @@ export const SPANISH_TRANSLATION = {
     'patientIntakeChecklist.consentSignedLabel': 'Collect member consents',
     'patientIntakeChecklist.consentSignedSubtext':
       'Walk the member through our consent forms and have them digitally sign each one.',
-    'patientIntakeChecklist.consentSignedButton': 'Sign consents',
+    'patientIntakeChecklist.consentSignedButton': 'Upload documents',
     'patientIntakeChecklist.photoUploadedLabel': 'Add member photo',
     'patientIntakeChecklist.photoUploadedSubtext':
       'Including a member photo will make their profile more personal.',

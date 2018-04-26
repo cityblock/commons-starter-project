@@ -5,6 +5,7 @@
   height: 34px;
   border: 1px solid var(--border-color);
   transition: border 0.2s linear;
+  color: var(--black-color);
   padding-left: var(--small-gutter);
   border-radius: var(--border-radius);
   background-image: url('../../../../assets/down-arrow.svg');
@@ -14,10 +15,9 @@
   width: 100%;
   cursor: pointer;
   appearance: none;
-  color: var(--light-gray-font-color);
 
   &:valid {
-    color: black;
+    color: var(--black-color);
   }
 
   &:hover,

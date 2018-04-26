@@ -74,8 +74,8 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     />
   ) : null;
 
-  const bodyHtml = isLoading ? <Spinner className={styles.spinner} /> : children;
-
+  const bodyContent = isLoading ? <Spinner className={styles.spinner} /> : children;
+  const bodyHtml = bodyContent ? <div className={styles.body}>{bodyContent}</div> : null;
   return (
     <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={popupClassName}>
       <ModalHeader
@@ -90,7 +90,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
         className={classNames(headerClassName, styles.header)}
       />
       {errorComponent}
-      <div className={styles.body}>{bodyHtml}</div>
+      {bodyHtml}
       {buttonComponent}
     </Popup>
   );

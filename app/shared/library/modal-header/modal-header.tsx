@@ -69,6 +69,7 @@ const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
           color={headerIconColor}
           isLarge={isHeaderIconLarge}
           isExtraLarge={isHeaderIconExtraLarge}
+          className={styles.iconMargin}
         />
       )}
       {title}

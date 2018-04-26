@@ -3,6 +3,7 @@ import { get } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
@@ -296,7 +297,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const demographics =
       !isDocuments && patient ? (
         <Fragment>
-          <Prompt when={hasUnsavedChanges} message="You haven't saved your changes." />
+          <FormattedMessage id="patientInfo.unsavedChanges">
+            {(message: string) => <Prompt when={hasUnsavedChanges} message={message} />}
+          </FormattedMessage>
           <PatientDemographics
             routeBase={routeBase}
             patient={this.getPatientFields(patient)}

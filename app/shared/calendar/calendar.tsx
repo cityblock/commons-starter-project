@@ -1,16 +1,20 @@
+import { ApolloError } from 'apollo-client';
 import { format } from 'date-fns';
 import { filter, groupBy } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { FullCalendarEventFragment } from '../../graphql/types';
-import Spinner from '../../shared/library/spinner/spinner';
-import TextDivider from '../../shared/library/text-divider/text-divider';
+import InfiniteScroll from '../infinite-scroll/infinite-scroll';
+import Spinner from '../library/spinner/spinner';
+import TextDivider from '../library/text-divider/text-divider';
 import * as styles from './css/calendar.css';
 
 interface IProps {
   calendarEvents?: FullCalendarEventFragment[];
   fetchMore: () => void;
+  hasNextPage?: boolean;
   loading?: boolean;
+  error?: ApolloError | null;
 }
 
 interface IEvent {
@@ -61,7 +65,7 @@ export default class Calendar extends React.Component<IProps> {
   }
 
   render() {
-    const { loading, calendarEvents } = this.props;
+    const { loading, calendarEvents, error, fetchMore, hasNextPage } = this.props;
 
     if (loading) return <Spinner />;
 
@@ -86,9 +90,17 @@ export default class Calendar extends React.Component<IProps> {
 
     return (
       <div className={styles.container}>
-        {thisYearEventsHtml}
-        {nextYearEventsHtml}
-        {emptyHtml}
+        <InfiniteScroll
+          fetchMore={fetchMore}
+          error={error || null}
+          loading={loading}
+          hasNextPage={hasNextPage}
+          isEmpty={calendarEvents ? calendarEvents.length > 0 : true}
+        >
+          {thisYearEventsHtml}
+          {nextYearEventsHtml}
+          {emptyHtml}
+        </InfiniteScroll>
       </div>
     );
   }

@@ -25,10 +25,12 @@ describe('Render Skinny Patient Calendar', () => {
     ],
     pageInfo: null,
   };
+  const fetchMoreCalendarEvents = jest.fn() as any;
   const wrapper = shallow(
     <PatientCalendar
       match={match}
       calendarEventsResponse={response}
+      fetchMoreCalendarEvents={fetchMoreCalendarEvents}
       isLoading={false}
       error={null}
     />,

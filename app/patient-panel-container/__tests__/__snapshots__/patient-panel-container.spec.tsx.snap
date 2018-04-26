@@ -277,6 +277,12 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            disabled={false}
+            value=""
+          >
+            Select gender
+          </option>
+          <option
             disabled={undefined}
             value="female"
           >

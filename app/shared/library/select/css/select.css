@@ -38,6 +38,10 @@
   color: var(--light-gray-font-color);
 }
 
+.select.blue.select.noValue option {
+  color: var(--black-color);
+}
+
 .large {
   height: var(--input-height);
   font-size: var(--medium-font-size);

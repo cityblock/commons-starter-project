@@ -135,6 +135,7 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
               isUnselectable={true}
               onChange={this.handleChange}
               value={gender || ''}
+              hasPlaceholder={true}
               options={values(Gender)}
             />
           </div>

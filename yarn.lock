@@ -524,6 +524,20 @@
   version "8.10.10"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.10.tgz#fec07bc2ad549d9e6d2f7aa0fb0be3491b83163a"
 
+"@types/pg-types@*":
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/@types/pg-types/-/pg-types-1.11.4.tgz#8d7c59fb509ce3dca3f8bae589252051c639a9a8"
+  dependencies:
+    moment ">=2.14.0"
+
+"@types/pg@^7.4.7":
+  version "7.4.7"
+  resolved "https://registry.yarnpkg.com/@types/pg/-/pg-7.4.7.tgz#135798d82201b4cc4a96e1331ee900f1d0f87832"
+  dependencies:
+    "@types/events" "*"
+    "@types/node" "*"
+    "@types/pg-types" "*"
+
 "@types/prop-types@15.5.2":
   version "15.5.2"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.2.tgz#3c6b8dceb2906cc87fe4358e809f9d20c8d59be1"
@@ -8033,6 +8047,10 @@ moment@2.19.3:
 "moment@>= 2.9.0", moment@^2.19:
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.0.tgz#7921ade01017dd45186e7fee5f424f0b8663a730"
+
+moment@>=2.14.0:
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
 moment@^2.10.2:
   version "2.21.0"

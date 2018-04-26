@@ -19,6 +19,7 @@ import * as express from 'express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import { Transaction } from 'objection';
+import * as pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
@@ -32,6 +33,12 @@ if (process.env.NODE_ENV === 'production') {
   // compress all responses
   app.use(compression());
 }
+
+// Adjust how postgres deserializes date columns from postgres so that date strings are returned instead of timestamps
+const DATE_OID = 1082;
+pg.types.setTypeParser(DATE_OID, val => {
+  return val;
+});
 
 export type Env = 'production' | 'development' | 'test';
 

@@ -5,6 +5,7 @@ module.exports = {
     connection: {
       database: 'commons',
       host: '127.0.0.1',
+      timezone: 'UTC',
     },
     migrations: {
       directory: __dirname + '/migrations',
@@ -22,6 +23,7 @@ module.exports = {
       port: process.env.DB_PORT,
       ssl: true,
       user: process.env.DB_USER,
+      timezone: 'UTC',
     },
     migrations: {
       directory: __dirname + '/migrations',
@@ -33,6 +35,7 @@ module.exports = {
       database: 'commons_test',
       host: '127.0.0.1',
       user: process.env.DB_USER || 'root',
+      timezone: 'UTC',
     },
     migrations: {
       directory: __dirname + '/migrations',

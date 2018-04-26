@@ -9,7 +9,7 @@ export default {
   GOOGLE_OAUTH_REDIRECT_URI: 'http://localhost:3000',
   GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: '@cityblock.com',
   PUBSUB_HMAC_SECRET: 'supertopsecret',
-  TIME_ZONE: '-04:00',
+  TZ: 'UTC',
   JWT_SECRET: 'topsecret',
   JWT_EXPIRY: '1d',
   REDIS_HOST: '127.0.0.1',

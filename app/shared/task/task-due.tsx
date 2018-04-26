@@ -16,7 +16,6 @@ export interface IProps {
 class TaskDue extends React.Component<IProps> {
   onDueDateChange = async (dueAt: string | null) => {
     const { taskId, editTask } = this.props;
-
     if (taskId) {
       await editTask({ variables: { taskId, dueAt } });
     }

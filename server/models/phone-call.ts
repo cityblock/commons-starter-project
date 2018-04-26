@@ -6,6 +6,7 @@ import Patient from './patient';
 import PatientPhone from './patient-phone';
 import { Direction, DIRECTION } from './sms-message';
 import User from './user';
+import Voicemail from './voicemail';
 
 type CallStatus =
   | 'completed'
@@ -16,6 +17,7 @@ type CallStatus =
   | 'queued'
   | 'ringing'
   | 'in-progress';
+
 const CALL_STATUS: CallStatus[] = [
   'completed',
   'busy',
@@ -37,17 +39,10 @@ interface IPhoneCallCreate {
   callSid: string;
 }
 
-interface IPhoneCallUpdate {
-  voicemailUrl: string;
-  voicemailPayload: object;
-}
-
 interface IGetForUserPatientParams {
   userId: string;
   patientId: string;
 }
-
-const EAGER_QUERY = '[user, patient]';
 
 /* tslint:disable:member-ordering */
 export default class PhoneCall extends BaseModel {
@@ -61,8 +56,7 @@ export default class PhoneCall extends BaseModel {
   duration: number;
   twilioPayload: object;
   callSid: string;
-  voicemailUrl: string | null;
-  voicemailPayload: object | null;
+  voicemail: Voicemail | null;
 
   static tableName = 'phone_call';
 
@@ -81,8 +75,6 @@ export default class PhoneCall extends BaseModel {
       duration: { type: 'integer', minimum: 0 },
       twilioPayload: { type: 'json' },
       callSid: { type: 'string', minLength: 34, maxLength: 34 },
-      voicemailUrl: { type: ['string', 'null'] },
-      voicemailPayload: { type: 'json' },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
@@ -114,6 +106,14 @@ export default class PhoneCall extends BaseModel {
         join: {
           from: 'phone_call.patientId',
           to: 'patient.id',
+        },
+      },
+      voicemail: {
+        relation: Model.HasOneRelation,
+        modelClass: Voicemail,
+        join: {
+          from: 'phone_call.id',
+          to: 'voicemail.phoneCallId',
         },
       },
     };
@@ -151,16 +151,6 @@ export default class PhoneCall extends BaseModel {
     const phoneCall = await this.query(txn).findOne({ callSid, deletedAt: null });
 
     return phoneCall || null;
-  }
-
-  static async update(
-    phoneCallId: string,
-    phoneCall: IPhoneCallUpdate,
-    txn: Transaction,
-  ): Promise<PhoneCall> {
-    return this.query(txn)
-      .eager(EAGER_QUERY)
-      .patchAndFetchById(phoneCallId, phoneCall);
   }
 }
 /* tslint:enable:member-ordering */

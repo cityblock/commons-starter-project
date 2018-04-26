@@ -79,8 +79,6 @@ describe('Phone Call Model', () => {
         duration: 11,
         callStatus,
         twilioPayload,
-        voicemailUrl: null,
-        voicemailPayload: null,
       });
     });
 
@@ -107,8 +105,6 @@ describe('Phone Call Model', () => {
         duration: 11,
         callStatus,
         twilioPayload,
-        voicemailUrl: null,
-        voicemailPayload: null,
       });
     });
 
@@ -227,48 +223,6 @@ describe('Phone Call Model', () => {
     it('returns null if no phone call for a given sid found', async () => {
       const fetchedCall = await PhoneCall.getByCallSid('CAide57a569adc67124a71a10f965BOGUS', txn);
       expect(fetchedCall).toBeNull();
-    });
-  });
-
-  describe('update', () => {
-    it('updates the voicemail URL of a given call', async () => {
-      const { phone, user } = await setup(txn);
-
-      const phoneCall = await PhoneCall.create(
-        {
-          userId: user.id,
-          contactNumber: phone.phoneNumber,
-          direction: 'toUser',
-          duration: 11,
-          callStatus,
-          twilioPayload,
-          callSid,
-        },
-        txn,
-      );
-
-      const voicemailUrl = 'https://winter.is.coming';
-      const voicemailPayload = {
-        CallSid: 'bogusid2',
-        voicemailUrl,
-      };
-
-      const updatedCall = await PhoneCall.update(
-        phoneCall.id,
-        { voicemailUrl, voicemailPayload },
-        txn,
-      );
-
-      expect(updatedCall).toMatchObject({
-        userId: user.id,
-        contactNumber: phone.phoneNumber,
-        patientId: null,
-        duration: 11,
-        callStatus,
-        twilioPayload,
-        voicemailUrl,
-        voicemailPayload,
-      });
     });
   });
 });

@@ -1,15 +1,12 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import { format } from 'date-fns';
 import * as express from 'express';
 import { transaction } from 'objection';
 import * as twilio from 'twilio';
 import config from '../../config';
 import Db from '../../db';
-import { TWILIO_COMPLETE_ENDPOINT, TWILIO_VOICEMAIL_ENDPOINT } from '../../express';
-import { formatAbbreviatedName } from '../../helpers/format-helpers';
+import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
 import PhoneCall from '../../models/phone-call';
 import User from '../../models/user';
-import TwilioClient from '../../twilio-client';
 
 const VOICEMAIL_TIMEOUT = '20';
 const MAX_VOICEMAIL_LENGTH = '120';
@@ -138,71 +135,16 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
   return res.end(twiml.toString());
 }
 
-export async function twilioVoicemailHandler(req: express.Request, res: express.Response) {
-  const twiml = new VoiceResponse();
-  const voicemailPayload = req.body;
-  const { CallSid, RecordingUrl } = voicemailPayload;
-
-  await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
-    try {
-      // find the phone call by the callSid provided by Twilio and update voicemail URL
-      const phoneCall = await PhoneCall.getByCallSid(CallSid, txn);
-
-      if (phoneCall) {
-        const updatedCall = await PhoneCall.update(
-          phoneCall.id,
-          { voicemailUrl: RecordingUrl, voicemailPayload },
-          txn,
-        );
-        notifyUserOfVoicemail(updatedCall);
-      }
-    } catch (err) {
-      reportError(err, voicemailPayload);
-    }
-  });
-
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
-  return res.end(twiml.toString());
-}
-
 const recordVoicemail = (twiml: any) => {
-  twiml.say("We're sorry we missed your call. Please leave a message at the beep.");
+  twiml.say(
+    { voice: 'alice' },
+    "We're sorry we missed your call. Please leave a message at the beep.",
+  );
 
   twiml.record({
-    action: TWILIO_VOICEMAIL_ENDPOINT,
-    method: 'POST',
     maxLength: MAX_VOICEMAIL_LENGTH,
     playBeep: true,
   });
-};
-
-export const notifyUserOfVoicemail = async (phoneCall: PhoneCall): Promise<void> => {
-  const twilioClient = TwilioClient.get();
-  const { patient, user, voicemailUrl } = phoneCall;
-
-  const voicemailIdentity = patient
-    ? `${formatAbbreviatedName(patient.firstName, patient.lastName)} at `
-    : '';
-  const formattedDate = format(phoneCall.updatedAt, VOICEMAIL_DATE_FORMAT);
-  const body = `${voicemailIdentity}${
-    phoneCall.contactNumber
-  } left you a voicemail at ${formattedDate}`;
-
-  try {
-    // send two separate SMS so URL doesn't get cut off (too long for one)
-    await twilioClient.messages.create({
-      from: CITYBLOCK_VOICEMAIL,
-      to: user.phone,
-      body,
-    });
-    await twilioClient.messages.create({
-      from: CITYBLOCK_VOICEMAIL,
-      to: user.phone,
-      body: voicemailUrl,
-    });
-  } catch (err) {
-    reportError(err, phoneCall.voicemailPayload);
-  }
 };
 
 const reportError = (error: Error | string, payload: object | null) => {

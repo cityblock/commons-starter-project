@@ -3,7 +3,6 @@
   bottom: 0;
   right: 0;
   z-index: 10;
-  box-shadow: var(--login-drop-shadow);
 }
 
 .topBar {
@@ -11,21 +10,23 @@
   padding: 15px var(--small-gutter);
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   cursor: pointer;
+  max-width: 62px;
+  margin-left: auto;
 }
 
 .text {
+  color: var(--white-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--extra-small-font-size);
+}
+
+.count {
   color: var(--white-color);
   font-family: var(--basetica-medium);
   font-size: var(--medium-font-size);
-  margin-right: var(--gutter);
-}
-
-svg.icon {
-  fill: var(--white-color);
-  height: 27px;
-  width: 27px;
 }
 
 .progressNotes {
@@ -33,4 +34,5 @@ svg.icon {
   transition: height 0.3s ease-in-out;
   overflow: auto;
   max-height: calc(100vh - 117px);
+  box-shadow: var(--login-drop-shadow);
 }

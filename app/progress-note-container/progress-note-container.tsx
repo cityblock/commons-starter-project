@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup, openPopup } from '../actions/popup-action';
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
@@ -11,7 +10,6 @@ import {
   getProgressNotesForSupervisorReviewQuery,
 } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
-import Icon from '../shared/library/icon/icon';
 import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-container.css';
 import ProgressNotesPopupContainer from './progress-note-popup-container';
@@ -67,7 +65,7 @@ export class ProgressNoteContainer extends React.Component<allProps> {
       drawerIsOpen,
     } = this.props;
     const notes = (progressNotesForSupervisorReview || []).concat(progressNotes || []);
-    const height = drawerIsOpen && notes ? notes.length * 63 : 0;
+    const height = drawerIsOpen && notes ? notes.length * 61 : 0;
     const currentUserId = currentUser ? currentUser.id : '';
     const progressNotesHtml = notes.map(
       progressNote =>
@@ -101,11 +99,6 @@ export class ProgressNoteContainer extends React.Component<allProps> {
     const progressNotesCount =
       (progressNotes || []).length + (progressNotesForSupervisorReview || []).length;
     const progressNotesHtml = this.getProgressNotesHtml();
-    const icon = drawerIsOpen ? (
-      <Icon name="expandMore" onClick={closeProgressNotesDrawer} className={styles.icon} />
-    ) : (
-      <Icon name="expandLess" onClick={openProgressNotesDrawer} className={styles.icon} />
-    );
     const topBarAction = drawerIsOpen ? closeProgressNotesDrawer : openProgressNotesDrawer;
     // Hide the popup if no open progress notes
     if (progressNotesCount < 1) {
@@ -115,14 +108,8 @@ export class ProgressNoteContainer extends React.Component<allProps> {
       <div>
         <div className={styles.container}>
           <div className={styles.topBar} onClick={topBarAction}>
-            <FormattedMessage id="progressNote.progressNotes">
-              {(message: string) => (
-                <div className={styles.text}>
-                  {message} ({progressNotesCount})
-                </div>
-              )}
-            </FormattedMessage>
-            {icon}
+            <div className={styles.count}>{progressNotesCount}</div>
+            <div className={styles.text}>{progressNotesCount > 1 ? 'notes' : 'note'}</div>
           </div>
           {progressNotesHtml}
         </div>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
+import { withRouter } from 'react-router';
 import { closePopup, openPopup } from '../actions/popup-action';
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
 import * as progressNotesForSupervisorReviewQuery from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
@@ -15,15 +16,15 @@ import * as styles from './css/progress-note-container.css';
 import ProgressNotesPopupContainer from './progress-note-popup-container';
 import { ProgressNoteSmallRow } from './progress-note-small-row';
 
+const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager'];
+
 interface IProps {
   currentUser: getCurrentUserQuery['currentUser'];
 }
 
 interface IRouterProps {
-  match: {
-    params: {
-      patientId: string;
-    };
+  location: {
+    pathname: string;
   };
 }
 
@@ -85,6 +86,14 @@ export class ProgressNoteContainer extends React.Component<allProps> {
     );
   }
 
+  isOnProgressNoteHideRoute() {
+    const { location } = this.props;
+    if (PROGRESS_NOTE_HIDE_ROUTES.indexOf(location.pathname.split('/')[1]) > -1) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const {
       progressNotes,
@@ -96,6 +105,7 @@ export class ProgressNoteContainer extends React.Component<allProps> {
       openProgressNotesDrawer,
       closeProgressNotesDrawer,
     } = this.props;
+
     const progressNotesCount =
       (progressNotes || []).length + (progressNotesForSupervisorReview || []).length;
     const progressNotesHtml = this.getProgressNotesHtml();
@@ -104,6 +114,11 @@ export class ProgressNoteContainer extends React.Component<allProps> {
     if (progressNotesCount < 1) {
       return null;
     }
+    // Hide the popup if you are on a 'progress note hide' route
+    if (this.isOnProgressNoteHideRoute()) {
+      return null;
+    }
+
     return (
       <div>
         <div className={styles.container}>
@@ -161,6 +176,7 @@ function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
 }
 
 export default compose(
+  withRouter,
   connect<IStateProps, IDispatchProps, allProps>(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,

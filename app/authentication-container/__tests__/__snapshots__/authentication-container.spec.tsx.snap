@@ -10,7 +10,7 @@ exports[`shallow rendered renders authentication container correctly with curren
   >
     <div />
   </div>
-  <Connect(Apollo(Apollo(ProgressNoteContainer)))
+  <withRouter(Connect(Apollo(Apollo(ProgressNoteContainer))))
     currentUser={
       Object {
         "createdAt": "2017-09-07T13:45:14.532Z",

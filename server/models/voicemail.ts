@@ -11,6 +11,8 @@ interface IVoicemailCreate {
   jobId: string;
 }
 
+const EAGER_QUERY = 'phoneCall.[user, patient]';
+
 /* tslint:disable:member-ordering */
 export default class Voicemail extends BaseModel {
   id: string;
@@ -79,7 +81,9 @@ export default class Voicemail extends BaseModel {
       phoneCallId: phoneCall.id,
     };
 
-    return this.query(txn).insertAndFetch(formattedInput);
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertAndFetch(formattedInput);
   }
 }
 /* tslint:enable:member-ordering */

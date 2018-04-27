@@ -13,7 +13,6 @@ import {
   createMockUser,
   createPatient,
 } from '../../../spec-helpers';
-import TwilioClient from '../../../twilio-client';
 import {
   twilioCompleteCallHandler,
   twilioIncomingCallHandler,
@@ -48,18 +47,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('Phone Call Handler', () => {
   let txn = null as any;
-  let createMessage = null as any;
 
   beforeEach(async () => {
     await Db.get();
     txn = await transaction.start(PhoneCall.knex());
-    createMessage = jest.fn();
-
-    TwilioClient.get = jest.fn().mockReturnValue({
-      messages: {
-        create: createMessage,
-      },
-    });
   });
 
   afterEach(async () => {

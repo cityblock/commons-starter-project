@@ -17,7 +17,8 @@ export default {
   REDIS_PASSWORD: undefined, // Null breaks things, unfortunately
   PERMISSIONS_SESSION_IN_HOURS: 8,
   GCS_PROJECT_ID: null,
-  GCS_BUCKET: null,
+  GCS_PATIENT_BUCKET: null,
+  GCS_USER_BUCKET: null,
   GCP_CREDS: null,
   TWILIO_SID: null,
   TWILIO_AUTH_TOKEN: null,

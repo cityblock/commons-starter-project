@@ -4744,6 +4744,8 @@ declare module 'schema' {
     patientId: string;
   }
 
+  type IUserSignedUrlActionEnum = 'read' | 'write';
+
   /**
    * Patient node
    */

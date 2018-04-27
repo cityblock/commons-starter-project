@@ -278,6 +278,11 @@ enum PatientSignedUrlAction {
   delete
 }
 
+enum UserSignedUrlAction {
+  read
+  write
+}
+
 enum DocumentTypeOptions {
   cityblockConsent
   hipaaConsent

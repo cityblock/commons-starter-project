@@ -17,6 +17,7 @@ const twilioPayload = {
 
 interface ISetup {
   phoneCall: PhoneCall;
+  user: User;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -35,7 +36,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { phoneCall };
+  return { phoneCall, user };
 }
 
 describe('Voicemail Model', () => {
@@ -56,7 +57,7 @@ describe('Voicemail Model', () => {
 
   describe('create', () => {
     it('should create a voicemail associated with a phone call', async () => {
-      const { phoneCall } = await setup(txn);
+      const { phoneCall, user } = await setup(txn);
       const jobId = uuid();
 
       const voicemail = await Voicemail.create(
@@ -79,6 +80,12 @@ describe('Voicemail Model', () => {
         twilioUpdatedAt: new Date('2017-09-07T13:48:00.000Z'),
         deletedAt: null,
         jobId,
+        phoneCall: {
+          id: phoneCall.id,
+          userId: user.id,
+          user,
+          patient: null,
+        },
       });
     });
 

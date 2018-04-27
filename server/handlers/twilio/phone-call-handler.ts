@@ -10,8 +10,6 @@ import User from '../../models/user';
 
 const VOICEMAIL_TIMEOUT = '20';
 const MAX_VOICEMAIL_LENGTH = '120';
-export const CITYBLOCK_VOICEMAIL = '+16469417791';
-export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
 
 // TODO: Fix type weirdness
 const VoiceResponse = (twilio as any).twiml.VoiceResponse;

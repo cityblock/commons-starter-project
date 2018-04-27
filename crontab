@@ -1,0 +1,2 @@
+# Run every minute
+*/1 * * * * yarn run jobs:process-voicemail:production

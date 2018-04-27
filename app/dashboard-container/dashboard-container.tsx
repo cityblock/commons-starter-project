@@ -30,6 +30,11 @@ interface IProps extends IInjectedProps {
 }
 
 export class DashboardContainer extends React.Component<IProps> {
+  title = 'Dashboard';
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
+  }
   render(): JSX.Element {
     const {
       match: {

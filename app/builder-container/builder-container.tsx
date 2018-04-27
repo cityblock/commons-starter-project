@@ -72,6 +72,12 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps & IStateProps;
 
 export class BuilderContainer extends React.Component<allProps, {}> {
+  title = 'Builder';
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
+  }
+
   render() {
     const { subTab, tab } = this.props;
 

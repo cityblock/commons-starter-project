@@ -39,8 +39,10 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class TasksContainer extends React.Component<allProps> {
-  componentWillReceiveProps() {
-    document.title = `My Tasks | Commons`;
+  title = 'My Tasks';
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
   }
 
   render() {

@@ -42,11 +42,17 @@ interface IState {
 }
 
 export class PatientSearchContainer extends React.Component<allProps, IState> {
+  title = 'Search';
+
   constructor(props: allProps) {
     super(props);
 
     this.reloadCurrentPage = this.reloadCurrentPage.bind(this);
     this.state = { searchTerm: '' };
+  }
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
   }
 
   componentWillReceiveProps(nextProps: allProps) {

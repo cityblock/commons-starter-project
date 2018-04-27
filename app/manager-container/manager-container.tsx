@@ -17,6 +17,12 @@ interface IProps {
 }
 
 export class ManagerContainer extends React.Component<IProps, {}> {
+  title = 'Manager';
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
+  }
+
   render() {
     const { tabId } = this.props;
     const usersTabSelected = tabId === 'users';

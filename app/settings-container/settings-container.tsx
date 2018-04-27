@@ -31,6 +31,8 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 class SettingsContainer extends React.Component<allProps, IState> {
+  title = 'Settings';
+
   constructor(props: allProps) {
     super(props);
     this.updateUserLocale = this.updateUserLocale.bind(this);
@@ -42,6 +44,10 @@ class SettingsContainer extends React.Component<allProps, IState> {
       editedPhone: phone || '',
       error: null,
     };
+  }
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
   }
 
   updateUserLocale = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -95,10 +101,6 @@ class SettingsContainer extends React.Component<allProps, IState> {
         editedPhone: currentUser.phone,
       });
     }
-  }
-
-  componentDidMount() {
-    document.title = 'Settings | Commons';
   }
 
   render() {

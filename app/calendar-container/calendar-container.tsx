@@ -31,8 +31,10 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class CalendarContainer extends React.Component<allProps> {
-  componentWillReceiveProps() {
-    document.title = `My Calendar | Commons`;
+  title = 'My Calendar';
+
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
   }
 
   handleAddAppointmentClick = () => {

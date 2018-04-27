@@ -530,7 +530,7 @@
   dependencies:
     moment ">=2.14.0"
 
-"@types/pg@^7.4.7":
+"@types/pg@7.4.7":
   version "7.4.7"
   resolved "https://registry.yarnpkg.com/@types/pg/-/pg-7.4.7.tgz#135798d82201b4cc4a96e1331ee900f1d0f87832"
   dependencies:

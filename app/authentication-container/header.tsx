@@ -8,21 +8,16 @@ import { formatFullName } from '../shared/helpers/format-helpers';
 import Icon from '../shared/library/icon/icon';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/header.css';
-import { getHomeRoute } from './helpers';
 
 interface IProps extends IInjectedProps {
   mutate?: any;
   location: History.LocationState;
+  logout: () => any;
 }
 
 type allProps = IProps & RouteComponentProps<IProps>;
 
 export class Header extends React.Component<allProps> {
-  logout = async (): Promise<void> => {
-    await localStorage.removeItem('authToken');
-    window.location.href = '/';
-  };
-
   getNavItemClassnames(path: string, exactMatch = false) {
     const { location } = this.props;
     const selected = exactMatch
@@ -118,7 +113,7 @@ export class Header extends React.Component<allProps> {
       <div className={styles.header}>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Link className={styles.link} to={getHomeRoute(featureFlags)}>
+            <Link className={styles.link} to={'/'}>
               <div className={styles.mark} />
             </Link>
             {searchLink}
@@ -144,7 +139,7 @@ export class Header extends React.Component<allProps> {
                 <div className={styles.settingsIcon} />
                 <FormattedMessage id="header.settings" />
               </Link>
-              <a onClick={this.logout}>
+              <a onClick={this.props.logout}>
                 <div className={styles.logoutIcon} />
                 <FormattedMessage id="header.logOut" />
               </a>

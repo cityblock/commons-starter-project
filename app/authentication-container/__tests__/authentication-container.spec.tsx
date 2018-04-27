@@ -1,28 +1,8 @@
 import { shallow } from 'enzyme';
 import { clone } from 'lodash';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
 import { currentUser } from '../../shared/util/test-data';
-import AuthenticationContainer, {
-  AuthenticationContainer as Component,
-} from '../authentication-container';
-
-it('renders authentication container correctly', () => {
-  const mockStore = configureMockStore([]);
-  const tree = create(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ idle: { isIdle: false } })}>
-        <AuthenticationContainer loading={true}>
-          <div />
-        </AuthenticationContainer>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+import { AuthenticationContainer as Component } from '../authentication-container';
 
 describe('shallow rendered', () => {
   const idleStart = jest.fn();
@@ -35,6 +15,8 @@ describe('shallow rendered', () => {
     const component = shallow(
       <Component
         loading={false}
+        error={null}
+        isAuthenticated={true}
         currentUser={currentUser}
         isIdle={false}
         idleStart={idleStart}
@@ -46,10 +28,6 @@ describe('shallow rendered', () => {
       </Component>,
     );
     instance = component.instance() as Component;
-  });
-
-  it('renders authentication container correctly with current user', () => {
-    expect(instance.render()).toMatchSnapshot();
   });
 
   it('check idle calls idle start', async () => {

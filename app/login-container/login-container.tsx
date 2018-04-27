@@ -1,26 +1,45 @@
+import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { isMobile } from 'react-device-detect';
 import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
-import { getHomeRoute } from '../authentication-container/helpers';
+import { Redirect } from 'react-router-dom';
+import { setCurrentUser } from '../actions/current-user-action';
+import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
 import { logInUserMutationVariables } from '../graphql/types';
-import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
+import { getCurrentUserQuery } from '../graphql/types';
+import { IState as IAppState } from '../store';
 import * as styles from './css/login.css';
 import Footer from './footer';
 
-interface IProps extends IInjectedProps {
+interface IProps {
   mutate?: any;
   history: History;
+  location: {
+    state?: {
+      from: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
+  error: ApolloError | null | undefined;
   loading: boolean;
-  error: string | null;
+  currentUser?: getCurrentUserQuery['currentUser'];
+  refetchCurrentUser: () => Promise<{ data: getCurrentUserQuery }>;
+}
+
+interface IStateProps {
+  isAuthenticated: boolean;
+}
+
+interface IDispatchProps {
+  setCurrentUser: (currentUser: getCurrentUserQuery['currentUser']) => void;
 }
 
 interface IGoogleLoginError {
@@ -28,11 +47,9 @@ interface IGoogleLoginError {
   details: string;
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IStateProps & IDispatchProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
-const DESKTOP_HOME_ROUTE = '/dashboard/tasks';
-const MOBILE_HOME_ROUTE = '/contacts';
 const LOGGED_IN_TITLE = 'Commons | A Cityblock Health product';
 
 export class LoginContainer extends React.Component<allProps, { error: string | null }> {
@@ -45,14 +62,6 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
     };
   }
 
-  componentWillReceiveProps(newProps: allProps) {
-    if (newProps.currentUser) {
-      // Log in succeeded. Navigate to the patients list scene.
-      this.props.history.push(getHomeRoute(newProps.featureFlags));
-      document.title = LOGGED_IN_TITLE;
-    }
-  }
-
   componentDidMount() {
     document.title = 'Log in | Commons';
   }
@@ -61,10 +70,9 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
-
-      const redirectRoute = isMobile ? MOBILE_HOME_ROUTE : DESKTOP_HOME_ROUTE;
-      this.props.history.push(redirectRoute);
+      const result = await this.props.refetchCurrentUser();
       document.title = LOGGED_IN_TITLE;
+      this.props.setCurrentUser(result.data.currentUser);
     } catch (err) {
       await localStorage.removeItem('authToken');
       this.setState({ error: err.message });
@@ -77,6 +85,22 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
 
   render() {
     const { error } = this.state;
+    const { isAuthenticated } = this.props;
+
+    if (isAuthenticated) {
+      const to =
+        this.props.location.state && this.props.location.state.from !== '/'
+          ? this.props.location.state.from
+          : '/dashboard/tasks';
+      return (
+        <Redirect
+          to={{
+            pathname: to,
+          }}
+        />
+      );
+    }
+
     let errorHtml = null;
     if (error) {
       errorHtml = (
@@ -121,8 +145,32 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
   }
 }
 
+function mapStateToProps(state: IAppState, ownProps: any): IStateProps {
+  return {
+    isAuthenticated: state.currentUser.isAuthenticated,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
+  return {
+    setCurrentUser: (currentUser: getCurrentUserQuery['currentUser']) =>
+      dispatch(setCurrentUser(currentUser)),
+  };
+}
+
 export default compose(
   withRouter,
-  withCurrentUser(),
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps as any,
+  ),
+  graphql(currentUserQuery as any, {
+    props: ({ data }): Partial<IGraphqlProps> => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
+      refetchCurrentUser: data ? (data as any).refetch : null,
+    }),
+  }),
   graphql(loginMutation as any, { name: 'logIn' }),
 )(LoginContainer) as React.ComponentClass<IProps>;

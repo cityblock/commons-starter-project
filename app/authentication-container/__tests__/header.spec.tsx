@@ -25,6 +25,7 @@ it('renders header', () => {
               featureFlags={featureFlags}
               match={{} as any}
               history={{} as any}
+              logout={jest.fn()}
             />
           </BrowserRouter>
         </ReduxConnectedIntlProvider>

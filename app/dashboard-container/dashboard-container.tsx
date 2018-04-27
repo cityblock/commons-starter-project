@@ -1,6 +1,5 @@
 import { History } from 'history';
 import * as React from 'react';
-import { getHomeRoute } from '../authentication-container/helpers';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import * as styles from './css/dashboard-container.css';
 import DashboardPatients from './dashboard-patients';
@@ -31,20 +30,6 @@ interface IProps extends IInjectedProps {
 }
 
 export class DashboardContainer extends React.Component<IProps> {
-  componentDidMount(): void {
-    this.redirectIfNeeded();
-  }
-
-  redirectIfNeeded(): void {
-    const { featureFlags, history } = this.props;
-
-    const homeRoute = getHomeRoute(featureFlags);
-
-    if (homeRoute !== '/dashboard/tasks') {
-      history.push(homeRoute);
-    }
-  }
-
   render(): JSX.Element {
     const {
       match: {

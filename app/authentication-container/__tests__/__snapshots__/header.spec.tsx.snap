@@ -12,7 +12,7 @@ exports[`renders header 1`] = `
     >
       <a
         className="link"
-        href="/dashboard/tasks"
+        href="/"
         onClick={[Function]}
       >
         <div
@@ -128,7 +128,7 @@ exports[`renders header 1`] = `
           </span>
         </a>
         <a
-          onClick={[Function]}
+          onClick={[MockFunction]}
         >
           <div
             className="logoutIcon"

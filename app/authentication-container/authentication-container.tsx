@@ -1,6 +1,8 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
@@ -15,6 +17,7 @@ import { IdlePopup } from './idle-popup';
 
 interface IStateProps {
   isIdle: boolean;
+  isAuthenticated: boolean;
 }
 
 type CurrentUser = getCurrentUserQuery['currentUser'];
@@ -27,16 +30,19 @@ export interface IDispatchProps {
 }
 
 interface IProps {
-  error?: string | null;
-  loading?: boolean;
-  currentUser?: CurrentUser;
   children: any;
   data?: any;
 }
 
+interface IGraphqlProps {
+  error: ApolloError | null | undefined;
+  loading: boolean;
+  currentUser?: getCurrentUserQuery['currentUser'];
+}
+
 const IDLE_TIME = 1000000; // 18 minutes
 
-type allProps = IProps & IStateProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
 
 /**
  * Logs user out if idle
@@ -53,7 +59,7 @@ type allProps = IProps & IStateProps & IDispatchProps;
 export class AuthenticationContainer extends React.Component<allProps> {
   idleInterval: NodeJS.Timer;
 
-  async componentWillReceiveProps(newProps: IProps) {
+  async componentWillReceiveProps(newProps: allProps) {
     const currentLocale = this.props.currentUser ? this.props.currentUser.locale : null;
     if (!newProps.loading && this.props.loading && !newProps.currentUser) {
       this.logout();
@@ -80,7 +86,6 @@ export class AuthenticationContainer extends React.Component<allProps> {
   logout = async (): Promise<void> => {
     await localStorage.removeItem('authToken');
     this.props.setCurrentUser(null);
-    window.location.pathname = '/';
   };
 
   checkIdle = async (): Promise<void> => {
@@ -110,32 +115,34 @@ export class AuthenticationContainer extends React.Component<allProps> {
   };
 
   render() {
-    const { isIdle, currentUser } = this.props;
-
-    let header = null;
-    let app = null;
-    let idle = null;
-    let progressNote = null;
-    if (currentUser) {
-      header = <Header />;
-      app = <div className={styles.app}>{this.props.children}</div>;
-      idle = <IdlePopup idleEnd={this.idleEnd} isIdle={isIdle} logout={this.logout} />;
-      progressNote = <ProgressNoteContainer currentUser={currentUser} />;
+    const { isIdle, currentUser, isAuthenticated, loading } = this.props;
+    if (isAuthenticated && currentUser) {
+      return (
+        <React.Fragment>
+          <Header logout={this.logout} />
+          <div className={styles.app}>{this.props.children}</div>
+          <IdlePopup idleEnd={this.idleEnd} isIdle={isIdle} logout={this.logout} />
+          <ProgressNoteContainer currentUser={currentUser} />
+        </React.Fragment>
+      );
+    } else if (!isAuthenticated && !loading) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/',
+            state: { from: window.location.pathname },
+          }}
+        />
+      );
     }
-    return (
-      <div>
-        {header}
-        {app}
-        {progressNote}
-        {idle}
-      </div>
-    );
+    return null;
   }
 }
 
 function mapStateToProps(state: IAppState, ownProps: any): IStateProps {
   return {
     isIdle: state.idle.isIdle,
+    isAuthenticated: state.currentUser.isAuthenticated,
   };
 }
 
@@ -154,7 +161,7 @@ export default compose(
     mapDispatchToProps as any,
   ),
   graphql(currentUserQuery as any, {
-    props: ({ data }) => ({
+    props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,

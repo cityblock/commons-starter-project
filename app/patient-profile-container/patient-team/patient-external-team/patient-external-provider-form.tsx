@@ -1,14 +1,18 @@
 import * as classNames from 'classnames';
+import { values } from 'lodash';
 import * as React from 'react';
+import { PhoneTypeOptions } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import * as styles from '../../../shared/library/form/css/form.css';
+import Select from '../../../shared/library/select/select';
 import TextInput from '../../../shared/library/text-input/text-input';
 import ExternalProviderRoleSelect from './external-provider-role-select';
 
 interface IProps {
   emailAddress?: string | null;
   phoneNumber?: string | null;
+  phoneType?: PhoneTypeOptions | null;
   firstName?: string | null;
   lastName?: string | null;
   role?: string | null;
@@ -23,7 +27,7 @@ interface IState {
   showDescriptionForm: boolean;
 }
 
-export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
+export class PatientExternalProviderForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -63,6 +67,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
       onChange,
       emailAddress,
       phoneNumber,
+      phoneType,
       firstName,
       lastName,
       role,
@@ -143,9 +148,23 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
           </div>
 
           <div className={styles.field}>
-            <FormLabel messageId="patientExternalProvider.emailAddress" />
-            <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
+            <FormLabel messageId="phone.type" className={styles.required} />
+            <Select
+              name="phoneType"
+              value={phoneType || ''}
+              prefix="phone"
+              onChange={onChange}
+              options={values(PhoneTypeOptions)}
+              large={true}
+              errorMessageId="patientContact.fieldEmptyError"
+              hasError={hasFieldError.phoneType}
+            />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="patientExternalProvider.emailAddress" />
+          <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
         </div>
 
         {this.renderDescriptionSection()}
@@ -154,4 +173,4 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
   }
 }
 
-export default PatientFamilyMemberForm;
+export default PatientExternalProviderForm;

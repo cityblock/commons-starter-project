@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -20,7 +21,7 @@ interface IProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error?: ApolloError | null | undefined;
   careTeam?: FullUserFragment[];
   addTaskFollower: (
     options: { variables: taskUserFollowMutationVariables },

@@ -1,6 +1,11 @@
 import { get, isNil } from 'lodash';
 import * as React from 'react';
-import { EmailInput, ExternalProviderOptions, PhoneCreateInput } from '../../../graphql/types';
+import {
+  EmailInput,
+  ExternalProviderOptions,
+  PhoneCreateInput,
+  PhoneTypeOptions,
+} from '../../../graphql/types';
 import Modal from '../../../shared/library/modal/modal';
 import PatientExternalProviderForm from './patient-external-provider-form';
 
@@ -33,6 +38,7 @@ interface IEditableFieldState {
   description?: string | null;
   emailAddress?: string | null;
   phoneNumber?: string | null;
+  phoneType?: PhoneTypeOptions | null;
 }
 
 interface IState {
@@ -42,7 +48,7 @@ interface IState {
 
 type allState = IState & IEditableFieldState;
 
-const REQUIRED_FIELDS = ['role', 'agencyName', 'phoneNumber'];
+const REQUIRED_FIELDS = ['role', 'agencyName', 'phoneNumber', 'phoneType'];
 
 class PatientExternalProviderModal extends React.Component<IProps, allState> {
   constructor(props: IProps) {
@@ -58,6 +64,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
       description: patientExternalProvider.description,
       emailAddress: get(patientExternalProvider, 'email.emailAddress'),
       phoneNumber: get(patientExternalProvider, 'phone.phoneNumber'),
+      phoneType: get(patientExternalProvider, 'phone.type'),
     };
   }
 
@@ -75,6 +82,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
         description: patientExternalProvider.description,
         emailAddress: get(patientExternalProvider, 'email.emailAddress'),
         phoneNumber: get(patientExternalProvider, 'phone.phoneNumber'),
+        phoneType: get(patientExternalProvider, 'phone.type'),
       });
     }
   }
@@ -129,6 +137,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
       roleFreeText,
       agencyName,
       phoneNumber,
+      phoneType,
       emailAddress,
       description,
     } = this.state;
@@ -141,7 +150,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
     const updatedPatientExternalProvider = {
       role: role!,
       agencyName: agencyName!,
-      phone: { phoneNumber: phoneNumber! },
+      phone: { phoneNumber: phoneNumber!, type: phoneType! },
       roleFreeText,
       firstName,
       lastName,
@@ -162,6 +171,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
     const {
       emailAddress,
       phoneNumber,
+      phoneType,
       firstName,
       lastName,
       role,
@@ -175,6 +185,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
       <PatientExternalProviderForm
         emailAddress={emailAddress}
         phoneNumber={phoneNumber}
+        phoneType={phoneType}
         firstName={firstName}
         lastName={lastName}
         role={role}

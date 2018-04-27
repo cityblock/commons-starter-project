@@ -1,18 +1,17 @@
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as calendarCreateEventForPatientMutationGraphql from '../../graphql/queries/calendar-create-event-for-patient-mutation.graphql';
 import {
   calendarCreateEventForPatientMutation,
   calendarCreateEventForPatientMutationVariables,
+  FullAddressFragment,
 } from '../../graphql/types';
-import FormLabel from '../../shared/library/form-label/form-label';
+import { IUser } from '../../shared/care-team-multi-select/care-team-multi-select';
 import * as styles from '../../shared/library/form/css/form.css';
 import Modal from '../../shared/library/modal/modal';
 import Spinner from '../../shared/library/spinner/spinner';
-import TextInput from '../../shared/library/text-input/text-input';
-import TextArea from '../../shared/library/textarea/textarea';
-import TaskAssignee from '../../shared/task/task-assignee';
+import PatientAppointmentForm from './patient-appointment-form';
 
 interface IProps {
   isVisible: boolean;
@@ -29,13 +28,15 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 interface IState {
-  startDatetime: string | null;
-  endDatetime: string | null;
+  appointmentDate: string | null;
+  startTime: string | null;
+  endTime: string | null;
   title?: string | null;
-  reason?: string | null;
-  inviteeEmail?: string | null;
-  inviteeId?: string | null;
+  description?: string | null;
+  internalGuests: IUser[];
+  externalGuests: IUser[];
   location?: string | null;
+  selectedAddress?: FullAddressFragment | { description: 'External location' } | null;
   isSaving?: boolean;
   error?: string | null;
 }
@@ -43,33 +44,60 @@ interface IState {
 export class PatientAppointmentModal extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    const currentTime = format(new Date(), 'YYYY-MM-DDTHH:MM');
+    const currentDate = format(new Date(), 'YYYY-MM-DD');
     this.state = {
-      startDatetime: currentTime,
-      endDatetime: currentTime,
+      appointmentDate: currentDate,
+      startTime: null,
+      endTime: null,
+      internalGuests: [],
+      externalGuests: [],
     };
+  }
+
+  getStructuredDescription(): string {
+    const { description, externalGuests } = this.state;
+
+    return `
+      ${description}
+
+      <b>External Guests:<b> ${externalGuests.map(guest => guest.name).join(', ')}
+
+      <a href="${window.location.href}">Patient's Profile</a>
+    `;
   }
 
   handleSubmit = async (): Promise<void> => {
     const { getCalendarEventUrl, patientId } = this.props;
-    const { title, reason, inviteeEmail, startDatetime, endDatetime, location } = this.state;
+    const { title, internalGuests, appointmentDate, startTime, endTime, location } = this.state;
+    const inviteeEmails = internalGuests.map(guest => guest.email || '');
 
-    this.setState({ isSaving: true });
-    if (!startDatetime || !endDatetime) {
+    if (!appointmentDate) {
+      this.setState({ error: 'You must set a date' });
+      return;
+    }
+    if (!startTime || !endTime) {
       this.setState({ error: 'You must set a start and end time' });
       return;
     }
+    if (isAfter(new Date(startTime), new Date(endTime))) {
+      this.setState({ error: 'The end time must be later than the start time' });
+      return;
+    }
+
+    this.setState({ isSaving: true });
+    const startDatetime = new Date(`${appointmentDate}T${startTime}`).toISOString();
+    const endDatetime = new Date(`${appointmentDate}T${endTime}`).toISOString();
 
     try {
       const calendarEventUrl = await getCalendarEventUrl({
         variables: {
           patientId,
           title: title || '',
-          reason: reason || '',
+          reason: this.getStructuredDescription(),
           location: location || '',
-          inviteeEmails: [inviteeEmail || '', 'cristina.m.lozano@gmail.com'],
-          startDatetime: new Date(startDatetime).toISOString(),
-          endDatetime: new Date(endDatetime).toISOString(),
+          inviteeEmails,
+          startDatetime,
+          endDatetime,
         },
       });
 
@@ -85,90 +113,58 @@ export class PatientAppointmentModal extends React.Component<allProps, IState> {
   handleClose = () => {
     this.setState({
       title: null,
-      reason: null,
-      inviteeEmail: null,
-      inviteeId: null,
-      startDatetime: null,
-      endDatetime: null,
+      description: null,
+      internalGuests: [],
+      externalGuests: [],
+      startTime: null,
+      endTime: null,
       location: null,
+      selectedAddress: null,
       isSaving: false,
       error: null,
     });
     this.props.closePopup();
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+  handleChange = (values: { [key: string]: string | null }) => {
+    this.setState(values as any);
   };
-
-  handleInviteeChange = (assignedToId: string, assignedToEmail: string | null) => {
-    this.setState({ inviteeEmail: assignedToEmail, inviteeId: assignedToId });
-  };
-
-  renderForm() {
-    const { title, reason, startDatetime, endDatetime, inviteeId, location } = this.state;
-    const { patientId } = this.props;
-    const currentTime = format(new Date(), 'YYYY-MM-DDTHH:MM');
-
-    return (
-      <React.Fragment>
-        <div className={styles.field}>
-          <FormLabel messageId="patientAppointmentModal.appointmentTitle" />
-          <TextInput name="title" value={title || ''} onChange={this.handleInputChange} />
-        </div>
-
-        <div className={styles.field}>
-          <FormLabel messageId="patientAppointmentModal.reason" />
-          <TextArea name="reason" value={reason || ''} onChange={this.handleInputChange} />
-        </div>
-
-        <div className={styles.field}>
-          <FormLabel messageId="patientAppointmentModal.location" />
-          <TextInput name="location" value={location || ''} onChange={this.handleInputChange} />
-        </div>
-
-        <div className={styles.field}>
-          <div className={styles.field}>
-            <FormLabel messageId="patientAppointmentModal.startTime" />
-            <TextInput
-              onChange={this.handleInputChange}
-              value={startDatetime || currentTime}
-              inputType="datetime-local"
-              name="startDatetime"
-              required
-            />
-          </div>
-          <div className={styles.field}>
-            <FormLabel messageId="patientAppointmentModal.endTime" />
-            <TextInput
-              onChange={this.handleInputChange}
-              value={endDatetime || startDatetime || currentTime}
-              inputType="datetime-local"
-              name="endDatetime"
-              required
-            />
-          </div>
-        </div>
-
-        <div className={styles.field}>
-          <FormLabel messageId="patientAppointmentModal.invitee" />
-          <TaskAssignee
-            patientId={patientId}
-            selectedAssigneeId={inviteeId || undefined}
-            onAssigneeClick={this.handleInviteeChange}
-            messageStyles={styles.hidden}
-          />
-        </div>
-      </React.Fragment>
-    );
-  }
 
   render() {
-    const { isVisible } = this.props;
-    const { isSaving, error } = this.state;
+    const { isVisible, patientId } = this.props;
+    const {
+      isSaving,
+      error,
+      appointmentDate,
+      startTime,
+      endTime,
+      title,
+      description,
+      internalGuests,
+      externalGuests,
+      location,
+      selectedAddress,
+    } = this.state;
 
-    const bodyHtml = isSaving ? <Spinner className={styles.spinner} /> : this.renderForm();
+    const bodyHtml = isSaving ? (
+      <Spinner className={styles.spinner} />
+    ) : (
+      <PatientAppointmentForm
+        patientId={patientId}
+        onChange={this.handleChange}
+        appointmentDate={appointmentDate}
+        startTime={startTime}
+        endTime={endTime}
+        title={title}
+        description={description}
+        internalGuests={internalGuests}
+        externalGuests={externalGuests}
+        location={location}
+        selectedAddress={selectedAddress}
+        error={error}
+        isSaving={isSaving}
+      />
+    );
 
     return (
       <Modal
@@ -176,7 +172,6 @@ export class PatientAppointmentModal extends React.Component<allProps, IState> {
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}
         titleMessageId="patientAppointmentModal.title"
-        subTitleMessageId="patientAppointmentModal.subtitle"
         submitMessageId="patientAppointmentModal.submit"
         cancelMessageId="patientAppointmentModal.cancel"
         isButtonHidden={isSaving}

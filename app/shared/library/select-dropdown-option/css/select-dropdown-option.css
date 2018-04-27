@@ -12,3 +12,7 @@
 .avatar {
   margin-right: var(--extra-small-gutter);
 }
+
+.option p.noMargin {
+  margin: 0;
+}

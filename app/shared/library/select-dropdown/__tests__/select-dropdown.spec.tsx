@@ -81,6 +81,6 @@ describe('Library Select Dropdown Component', () => {
         .at(1)
         .props().className,
     ).toBe('container largeFont');
-    expect(wrapper.find(Avatar).props().className).toBe('avatar avatarLargeMargin');
+    expect(wrapper.find(Avatar).props().className).toBe('avatar largeLeftMargin');
   });
 });

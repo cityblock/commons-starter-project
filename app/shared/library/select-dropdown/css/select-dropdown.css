@@ -69,6 +69,6 @@
   margin: 0 var(--extra-small-gutter);
 }
 
-.avatarLargeMargin {
+.main .container .largeLeftMargin {
   margin-left: var(--small-gutter);
 }

@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import FormLabel from '../../../../shared/library/form-label/form-label';
+import Select from '../../../../shared/library/select/select';
 import TextInput from '../../../../shared/library/text-input/text-input';
 import ExternalProviderRoleSelect from '../external-provider-role-select';
 import PatientExternalProviderForm from '../patient-external-provider-form';
@@ -15,9 +16,11 @@ describe('Render Patient External Provider Form', () => {
   it('renders empty external provider form', () => {
     const labels = wrapper.find(FormLabel);
     const inputs = wrapper.find(TextInput);
-    const select = wrapper.find(ExternalProviderRoleSelect);
-    expect(labels).toHaveLength(7);
+    const select = wrapper.find(Select);
+    const providerSelect = wrapper.find(ExternalProviderRoleSelect);
+    expect(labels).toHaveLength(8);
     expect(inputs).toHaveLength(6);
+    expect(providerSelect).toHaveLength(1);
     expect(select).toHaveLength(1);
 
     expect(labels.at(0).props().messageId).toBe('patientExternalProvider.agencyName');
@@ -38,9 +41,9 @@ describe('Render Patient External Provider Form', () => {
     expect(inputs.at(2).props().name).toBe('lastName');
 
     expect(labels.at(3).props().messageId).toBe('patientExternalProvider.role');
-    expect(select.props().value).toBeFalsy();
-    expect(select.props().onChange).toBe(onChange);
-    expect(select.props().hasError).toBeFalsy();
+    expect(providerSelect.at(0).props().value).toBeFalsy();
+    expect(providerSelect.at(0).props().onChange).toBe(onChange);
+    expect(providerSelect.at(0).props().hasError).toBeFalsy();
 
     expect(labels.at(4).props().messageId).toBe('patientExternalProvider.roleFreeText');
     expect(inputs.at(3).props().value).toBeFalsy();
@@ -55,7 +58,12 @@ describe('Render Patient External Provider Form', () => {
     expect(inputs.at(4).props().hasError).toBeFalsy();
     expect(inputs.at(4).props().required).toBeTruthy();
 
-    expect(labels.at(6).props().messageId).toBe('patientExternalProvider.emailAddress');
+    expect(labels.at(6).props().messageId).toBe('phone.type');
+    expect(select.props().value).toBeFalsy();
+    expect(select.props().onChange).toBe(onChange);
+    expect(select.props().hasError).toBeFalsy();
+
+    expect(labels.at(7).props().messageId).toBe('patientExternalProvider.emailAddress');
     expect(inputs.at(5).props().value).toBeFalsy();
     expect(inputs.at(5).props().onChange).toBe(onChange);
     expect(inputs.at(5).props().name).toBe('emailAddress');
@@ -64,6 +72,7 @@ describe('Render Patient External Provider Form', () => {
   it('renders filled out external provider form', () => {
     wrapper.setProps({
       phoneNumber: '1',
+      phoneType: 'work',
       description: 'D',
       emailAddress: 'a',
       firstName: 'b',
@@ -90,6 +99,8 @@ describe('Render Patient External Provider Form', () => {
 
     expect(inputs.at(4).props().value).toBe('1');
     expect(inputs.at(4).props().name).toBe('phoneNumber');
+
+    expect(wrapper.find(Select).props().value).toBe('work');
 
     expect(inputs.at(5).props().value).toBe('a');
     expect(inputs.at(5).props().name).toBe('emailAddress');

@@ -16,7 +16,7 @@ interface IProps {
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   smallInput?: boolean;
-  inputType?: 'datetime-local'; // default is text
+  inputType?: 'datetime-local' | 'time'; // default is text
   required?: boolean;
   pattern?: string;
   errorMessageId?: string;

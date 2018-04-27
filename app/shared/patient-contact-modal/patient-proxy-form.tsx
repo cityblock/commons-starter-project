@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import { values } from 'lodash';
 import * as React from 'react';
-import { PatientRelationOptions } from '../../graphql/types';
+import { PatientRelationOptions, PhoneTypeOptions } from '../../graphql/types';
 import FormLabel from '../library/form-label/form-label';
 import * as styles from '../library/form/css/form.css';
 import Select from '../library/select/select';
@@ -10,6 +10,7 @@ import TextInput from '../library/text-input/text-input';
 interface IProps {
   emailAddress?: string | null;
   phoneNumber?: string | null;
+  phoneType?: PhoneTypeOptions | null;
   firstName?: string | null;
   lastName?: string | null;
   relationToPatient?: string | null;
@@ -24,6 +25,7 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
     onChange,
     emailAddress,
     phoneNumber,
+    phoneType,
     firstName,
     lastName,
     relationToPatient,
@@ -105,9 +107,23 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
         </div>
 
         <div className={styles.field}>
-          <FormLabel messageId="patientContact.emailAddress" />
-          <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
+          <FormLabel messageId="phone.type" className={styles.required} />
+          <Select
+            name="phoneType"
+            value={phoneType || ''}
+            prefix="phone"
+            onChange={onChange}
+            options={values(PhoneTypeOptions)}
+            large={true}
+            errorMessageId="patientContact.fieldEmptyError"
+            hasError={hasFieldError.phoneType}
+          />
         </div>
+      </div>
+
+      <div className={styles.field}>
+        <FormLabel messageId="patientContact.emailAddress" />
+        <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
       </div>
 
       <div className={styles.field}>

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import { values } from 'lodash';
 import * as React from 'react';
-import { AddressInput, PatientRelationOptions } from '../../graphql/types';
+import { AddressInput, PatientRelationOptions, PhoneTypeOptions } from '../../graphql/types';
 import AddressForm from '../address-modal/address-form';
 import Button from '../library/button/button';
 import FormLabel from '../library/form-label/form-label';
@@ -14,6 +14,7 @@ import TextInput from '../library/text-input/text-input';
 interface IProps {
   emailAddress?: string | null;
   phoneNumber?: string | null;
+  phoneType?: PhoneTypeOptions | null;
   address?: AddressInput | null;
   firstName?: string | null;
   lastName?: string | null;
@@ -109,6 +110,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
       onRadioChange,
       emailAddress,
       phoneNumber,
+      phoneType,
       firstName,
       lastName,
       relationToPatient,
@@ -162,9 +164,23 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
           </div>
 
           <div className={styles.field}>
-            <FormLabel messageId="patientContact.emailAddress" />
-            <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
+            <FormLabel messageId="phone.type" className={styles.required} />
+            <Select
+              name="phoneType"
+              value={phoneType || ''}
+              prefix="phone"
+              onChange={onChange}
+              options={values(PhoneTypeOptions)}
+              large={true}
+              errorMessageId="patientContact.fieldEmptyError"
+              hasError={hasFieldError.phoneType}
+            />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="patientContact.emailAddress" />
+          <TextInput name="emailAddress" value={emailAddress || ''} onChange={onChange} />
         </div>
 
         <div className={styles.fieldRow}>

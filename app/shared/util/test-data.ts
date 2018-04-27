@@ -124,11 +124,15 @@ export const address2 = {
   city: 'Cambridge',
   state: 'MA',
   zip: '02139',
+  description: null,
 };
 
 export const address3 = {
   id: 'address-3-id',
   street1: '20 Main St',
+  street2: null,
+  city: null,
+  state: null,
   zip: '12345',
   description: 'generic',
 };

@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import Avatar from '../avatar/avatar';
 import SelectDropdownOption from '../select-dropdown-option/select-dropdown-option';
+import SmallText from '../small-text/small-text';
 import * as styles from './css/select-dropdown.css';
 
 interface IProps {
@@ -14,6 +15,7 @@ interface IProps {
   className?: string;
   menuStyles?: string;
   largeFont?: boolean; // if true
+  placeholderMessageId?: string;
 }
 
 interface IState {
@@ -70,6 +72,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
       children,
       menuStyles,
       largeFont,
+      placeholderMessageId,
     } = this.props;
     const isOpen = this.state.open && children;
     const containerStyles = classNames(
@@ -81,7 +84,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
       className,
     );
     const avatarStyles = classNames(styles.avatar, {
-      [styles.avatarLargeMargin]: !!largeFont,
+      [styles.largeLeftMargin]: !!largeFont,
     });
 
     const options = isOpen ? (
@@ -94,6 +97,21 @@ class SelectDropdown extends React.Component<IProps, IState> {
       )
     ) : null;
 
+    const bodyHtml = value ? (
+      <React.Fragment>
+        <Avatar src={avatarUrl} size="medium" className={avatarStyles} />
+        <h4>{value}</h4>
+        {detail && <p>{`(${detail})`}</p>}
+      </React.Fragment>
+    ) : (
+      <SmallText
+        color="gray"
+        messageId={placeholderMessageId}
+        size={largeFont ? 'largest' : 'large'}
+        className={styles.largeLeftMargin}
+      />
+    );
+
     return (
       <div className={styles.main}>
         <div
@@ -104,9 +122,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
           onClick={this.onClick}
           tabIndex={0}
         >
-          <Avatar src={avatarUrl} size="medium" className={avatarStyles} />
-          <h4>{value}</h4>
-          {detail && <p>{`(${detail})`}</p>}
+          {bodyHtml}
           {options}
         </div>
         {error && <h4 className={styles.errorText}>{error}</h4>}

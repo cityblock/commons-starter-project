@@ -5,6 +5,7 @@ import {
   EmailInput,
   PatientRelationOptions,
   PhoneCreateInput,
+  PhoneTypeOptions,
 } from '../../graphql/types';
 import Modal from '../library/modal/modal';
 import PatientFamilyMemberForm from './patient-family-member-form';
@@ -45,6 +46,7 @@ interface IEditableFieldState {
   description?: string | null;
   emailAddress?: string | null;
   phoneNumber?: string | null;
+  phoneType?: PhoneTypeOptions | null;
   isEmergencyContact?: boolean | null;
   canContact?: boolean | null;
   address?: AddressInput | null;
@@ -57,7 +59,7 @@ interface IState {
 
 type allState = IState & IEditableFieldState;
 
-const REQUIRED_FIELDS = ['firstName', 'lastName', 'phoneNumber', 'relationToPatient'];
+const REQUIRED_FIELDS = ['firstName', 'lastName', 'phoneNumber', 'phoneType', 'relationToPatient'];
 
 class PatientContactModal extends React.Component<IProps, allState> {
   constructor(props: IProps) {
@@ -73,6 +75,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       description: patientContact.description,
       emailAddress: get(patientContact, 'email.emailAddress'),
       phoneNumber: get(patientContact, 'phone.phoneNumber'),
+      phoneType: get(patientContact, 'phone.type'),
       address: patientContact.address,
       isEmergencyContact: patientContact.isEmergencyContact || contactType === 'emergencyContact',
       canContact: patientContact.canContact,
@@ -96,6 +99,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
         description: patientContact.description,
         emailAddress: get(patientContact, 'email.emailAddress'),
         phoneNumber: get(patientContact, 'phone.phoneNumber'),
+        phoneType: get(patientContact, 'phone.type'),
         address: patientContact.address,
         isEmergencyContact: patientContact.isEmergencyContact,
         canContact: patientContact.canContact,
@@ -167,6 +171,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       relationToPatient,
       relationFreeText,
       phoneNumber,
+      phoneType,
       emailAddress,
       description,
       isEmergencyContact,
@@ -182,7 +187,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       firstName: firstName!,
       lastName: lastName!,
       relationToPatient: relationToPatient!,
-      phone: { phoneNumber: phoneNumber! },
+      phone: { phoneNumber: phoneNumber!, type: phoneType! },
       description,
       isEmergencyContact,
       canContact,
@@ -221,6 +226,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
     const {
       emailAddress,
       phoneNumber,
+      phoneType,
       address,
       firstName,
       lastName,
@@ -237,6 +243,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
         <PatientProxyForm
           emailAddress={emailAddress}
           phoneNumber={phoneNumber}
+          phoneType={phoneType}
           firstName={firstName}
           lastName={lastName}
           relationToPatient={relationToPatient}
@@ -252,6 +259,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       <PatientFamilyMemberForm
         emailAddress={emailAddress}
         phoneNumber={phoneNumber}
+        phoneType={phoneType}
         address={address}
         firstName={firstName}
         lastName={lastName}

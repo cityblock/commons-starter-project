@@ -1,12 +1,14 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { getFamilyMemberInfo } from '../../../shared/care-team-multi-select/external-care-team-multi-select';
-import { getUserInfo } from '../../../shared/care-team-multi-select/internal-care-team-multi-select';
 import Modal from '../../../shared/library/modal/modal';
-import { healthcareProxy, user } from '../../../shared/util/test-data';
-import PatientAppointmentForm from '../patient-appointment-form';
-import { PatientAppointmentModal } from '../patient-appointment-modal';
+import {
+  getFamilyMemberInfo,
+  getUserInfo,
+} from '../../../shared/user-multi-select/get-info-helpers';
+import { currentUser, featureFlags, healthcareProxy, user } from '../../../shared/util/test-data';
+import AppointmentForm from '../appointment-form';
+import { AppointmentModal } from '../appointment-modal';
 
 describe('Render Patient Appointment Modal', () => {
   const closePopup = () => true;
@@ -14,11 +16,14 @@ describe('Render Patient Appointment Modal', () => {
   const patientId = '123';
 
   const wrapper = shallow(
-    <PatientAppointmentModal
+    <AppointmentModal
       closePopup={closePopup}
+      currentUser={currentUser}
+      featureFlags={featureFlags}
       isVisible={false}
       patientId={patientId}
-      getCalendarEventUrl={getCalendarEventUrl}
+      getCalendarEventUrlForPatient={getCalendarEventUrl}
+      getCalendarEventUrlForUser={getCalendarEventUrl}
     />,
   );
 
@@ -26,15 +31,15 @@ describe('Render Patient Appointment Modal', () => {
     expect(wrapper.find(Modal).length).toBe(1);
     expect(wrapper.find(Modal).props().isVisible).toBeFalsy();
     expect(wrapper.find(Modal).props().onClose).not.toBe(closePopup);
-    expect(wrapper.find(Modal).props().cancelMessageId).toBe('patientAppointmentModal.cancel');
-    expect(wrapper.find(Modal).props().submitMessageId).toBe('patientAppointmentModal.submit');
-    expect(wrapper.find(Modal).props().titleMessageId).toBe('patientAppointmentModal.title');
+    expect(wrapper.find(Modal).props().cancelMessageId).toBe('appointmentModal.cancel');
+    expect(wrapper.find(Modal).props().submitMessageId).toBe('appointmentModal.submit');
+    expect(wrapper.find(Modal).props().titleMessageId).toBe('appointmentModal.title');
   });
 
   it('renders appointment modal form empty', () => {
-    expect(wrapper.find(PatientAppointmentForm).length).toBe(1);
+    expect(wrapper.find(AppointmentForm).length).toBe(1);
 
-    const formProps = wrapper.find(PatientAppointmentForm).props();
+    const formProps = wrapper.find(AppointmentForm).props();
     expect(formProps.patientId).toBe(patientId);
     expect(formProps.onChange).not.toBe(closePopup);
     expect(formProps.appointmentDate).toBe(format(new Date(), 'YYYY-MM-DD'));
@@ -61,7 +66,7 @@ describe('Render Patient Appointment Modal', () => {
       selectedAddress: { description: 'External location' },
     });
 
-    const formProps = wrapper.find(PatientAppointmentForm).props();
+    const formProps = wrapper.find(AppointmentForm).props();
     expect(formProps.appointmentDate).toBe('2018-12-20');
     expect(formProps.startTime).toBe('13:30:00');
     expect(formProps.endTime).toBe('15:00:00');

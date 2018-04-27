@@ -4,22 +4,12 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
 import { getCalendarEventsForCurrentUserQuery, FullCalendarEventFragment } from '../graphql/types';
+import AppointmentModal from '../shared/appointment-modal/appointment-modal';
 import Calendar from '../shared/calendar/calendar';
 import Button from '../shared/library/button/button';
 import * as styles from './css/calendar-container.css';
 
 const DEFAULT_PAGE_SIZE = 20;
-
-interface IProps {
-  match?: {
-    isExact: boolean;
-    params: {
-      taskId: string;
-    };
-    path: string;
-    url: string;
-  };
-}
 
 interface IGraphqlProps {
   calendarLoading: boolean;
@@ -28,17 +18,28 @@ interface IGraphqlProps {
   fetchMoreCalendarEvents: () => any;
 }
 
-type allProps = IProps & IGraphqlProps;
+interface IState {
+  isAppointmentModalVisible: boolean;
+}
 
-export class CalendarContainer extends React.Component<allProps> {
+export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
   title = 'My Calendar';
+
+  constructor(props: IGraphqlProps) {
+    super(props);
+    this.state = { isAppointmentModalVisible: false };
+  }
 
   componentDidMount() {
     document.title = `${this.title} | Commons`;
   }
 
   handleAddAppointmentClick = () => {
-    // TODO
+    this.setState({ isAppointmentModalVisible: true });
+  };
+
+  handleClose = () => {
+    this.setState({ isAppointmentModalVisible: false });
   };
 
   handleOpenCalendarClick = () => {
@@ -52,6 +53,8 @@ export class CalendarContainer extends React.Component<allProps> {
       fetchMoreCalendarEvents,
       calendarError,
     } = this.props;
+
+    const { isAppointmentModalVisible } = this.state;
 
     const calendarEvents =
       calendarResponse && calendarResponse.events ? calendarResponse.events : [];
@@ -79,6 +82,7 @@ export class CalendarContainer extends React.Component<allProps> {
           error={calendarError}
           hasNextPage={hasNextPage}
         />
+        <AppointmentModal isVisible={isAppointmentModalVisible} closePopup={this.handleClose} />
       </div>
     );
   }

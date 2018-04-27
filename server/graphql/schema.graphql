@@ -320,6 +320,7 @@ type UserWithCount {
   userRole: UserRole!
   googleProfileImageUrl: String
   patientCount: Int
+  email: String
 }
 
 type CareTeamUser implements uniqueId {
@@ -651,6 +652,16 @@ input EmailDeleteForPatientInput {
   patientId: ID!
   emailId: ID!
   isPrimary: Boolean
+}
+
+# params for creating a current user calendar event
+input CalendarCreateEventForCurrentUserInput {
+  startDatetime: String!
+  endDatetime: String!
+  inviteeEmails: [String!]!
+  location: String!
+  title: String!
+  reason: String!
 }
 
 # params for creating a patient calendar event
@@ -2735,6 +2746,8 @@ type RootMutationType {
   smsMessageCreate(input: SmsMessageCreateInput): SmsMessageNode!
   # creates a calendar event for a patient
   calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
+  # creates a calendar event for current user
+  calendarCreateEventForCurrentUser(input: CalendarCreateEventForCurrentUserInput): CalendarUrl!
   # creates a JWT to download VCF
   JwtForVcfCreate: JwtForVcf!
   # generate a signed URL for voicemail

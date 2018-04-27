@@ -3,8 +3,8 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import { FullUserFragment } from '../../graphql/types';
-import { formatFullName } from '../helpers/format-helpers';
-import CareTeamMultiSelect, { IUser } from './care-team-multi-select';
+import { getUserInfo } from './get-info-helpers';
+import UserMultiSelect, { IUser } from './user-multi-select';
 
 export interface IProps {
   patientId: string;
@@ -22,32 +22,12 @@ interface IGraphqlProps {
 
 export type allProps = IProps & IGraphqlProps;
 
-export const getUserInfo = (user: FullUserFragment) => {
-  return {
-    id: user.id,
-    email: user.email,
-    avatar: user.googleProfileImageUrl,
-    name: formatFullName(user.firstName, user.lastName),
-    role: user.userRole,
-  };
-};
-
 export const InternalCareTeamMultiSelect: React.StatelessComponent<allProps> = props => {
-  const {
-    loading,
-    error,
-    careTeam,
-    placeholderMessageId,
-    patientId,
-    onChange,
-    selectedUsers,
-    name,
-  } = props;
-  const formattedCareTeam = careTeam ? careTeam.map(getUserInfo) : [];
+  const { loading, error, careTeam, placeholderMessageId, onChange, selectedUsers, name } = props;
+  const formattedCareTeam = careTeam ? careTeam.map(member => getUserInfo(member, false)) : [];
 
   return (
-    <CareTeamMultiSelect
-      patientId={patientId}
+    <UserMultiSelect
       onChange={onChange}
       selectedUsers={selectedUsers}
       users={formattedCareTeam}

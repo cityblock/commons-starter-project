@@ -295,6 +295,7 @@ export default class User extends BaseModel {
         'user.id',
         'user.firstName',
         'user.lastName',
+        'user.email',
         this.raw('count(patients.id)::integer as "patientCount"'),
       )
       .groupBy('user.id')

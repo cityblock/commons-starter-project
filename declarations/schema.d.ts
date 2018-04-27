@@ -1137,6 +1137,7 @@ declare module 'schema' {
     userRole: IUserRoleEnum;
     googleProfileImageUrl: string | null;
     patientCount: number | null;
+    email: string | null;
   }
 
   /**
@@ -3191,6 +3192,11 @@ declare module 'schema' {
     calendarCreateEventForPatient: ICalendarUrl;
 
     /**
+     * creates a calendar event for current user
+     */
+    calendarCreateEventForCurrentUser: ICalendarUrl;
+
+    /**
      * creates a JWT to download VCF
      */
     JwtForVcfCreate: IJwtForVcf;
@@ -3604,6 +3610,9 @@ declare module 'schema' {
   }
   interface ICalendarCreateEventForPatientOnRootMutationTypeArguments {
     input?: ICalendarCreateEventForPatientInput | null;
+  }
+  interface ICalendarCreateEventForCurrentUserOnRootMutationTypeArguments {
+    input?: ICalendarCreateEventForCurrentUserInput | null;
   }
   interface IUserVoicemailSignedUrlCreateOnRootMutationTypeArguments {
     input?: IUserVoicemailSignedUrlCreateInput | null;
@@ -4736,6 +4745,18 @@ declare module 'schema' {
    */
   interface ICalendarUrl {
     eventCreateUrl: string;
+  }
+
+  /**
+   * params for creating a current user calendar event
+   */
+  interface ICalendarCreateEventForCurrentUserInput {
+    startDatetime: string;
+    endDatetime: string;
+    inviteeEmails: Array<string>;
+    location: string;
+    title: string;
+    reason: string;
   }
 
   /**

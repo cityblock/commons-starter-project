@@ -7,8 +7,8 @@ import {
   FullPatientContactFragment,
   FullPatientExternalProviderFragment,
 } from '../../graphql/types';
-import { formatFullName } from '../helpers/format-helpers';
-import CareTeamMultiSelect, { IUser } from './care-team-multi-select';
+import { getFamilyMemberInfo, getProviderInfo } from './get-info-helpers';
+import UserMultiSelect, { IUser } from './user-multi-select';
 
 export interface IProps {
   patientId: string;
@@ -29,26 +29,6 @@ interface IGraphqlProps {
 
 export type allProps = IProps & IGraphqlProps;
 
-export const getProviderInfo = (provider: FullPatientExternalProviderFragment) => {
-  return {
-    id: provider.id,
-    name: formatFullName(provider.firstName, provider.lastName),
-    roleMessageId: provider.role ? `externalProviderRole.${provider.role}` : null,
-    role: provider.roleFreeText,
-  } as IUser;
-};
-
-export const getFamilyMemberInfo = (member: FullPatientContactFragment) => {
-  return {
-    id: member.id,
-    name: formatFullName(member.firstName, member.lastName),
-    roleMessageId: member.relationToPatient
-      ? `relationToPatient.${member.relationToPatient}`
-      : null,
-    role: member.relationFreeText,
-  } as IUser;
-};
-
 export class ExternalCareTeamMultiSelect extends React.Component<allProps> {
   render() {
     const {
@@ -59,7 +39,6 @@ export class ExternalCareTeamMultiSelect extends React.Component<allProps> {
       family,
       externalProviders,
       placeholderMessageId,
-      patientId,
       onChange,
       selectedUsers,
       name,
@@ -71,8 +50,7 @@ export class ExternalCareTeamMultiSelect extends React.Component<allProps> {
     const error = externalProvidersError || familyError;
 
     return (
-      <CareTeamMultiSelect
-        patientId={patientId}
+      <UserMultiSelect
         onChange={onChange}
         selectedUsers={selectedUsers}
         users={formattedProviders.concat(formattedFamily)}

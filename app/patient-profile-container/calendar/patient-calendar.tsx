@@ -4,10 +4,10 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
 import { getCalendarEventsForPatientQuery, FullCalendarEventFragment } from '../../graphql/types';
+import AppointmentModal from '../../shared/appointment-modal/appointment-modal';
 import Calendar from '../../shared/calendar/calendar';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/patient-calendar.css';
-import PatientAppointmentModal from './patient-appointment-modal';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -29,33 +29,33 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 interface IState {
-  isEventModalVisible: boolean;
+  isAppointmentModalVisible: boolean;
 }
 
 export class PatientCalendar extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { isEventModalVisible: false };
+    this.state = { isAppointmentModalVisible: false };
   }
 
-  handleAddEventClick = () => {
-    this.setState({ isEventModalVisible: true });
+  handleAddAppointmentClick = () => {
+    this.setState({ isAppointmentModalVisible: true });
   };
 
   handleClose = () => {
-    this.setState({ isEventModalVisible: false });
+    this.setState({ isAppointmentModalVisible: false });
   };
 
   render() {
     const { isLoading, match, calendarEventsResponse, fetchMoreCalendarEvents, error } = this.props;
-    const { isEventModalVisible } = this.state;
+    const { isAppointmentModalVisible } = this.state;
     const events = calendarEventsResponse ? calendarEventsResponse.events : [];
     const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
 
     return (
       <div className={styles.container}>
         <div className={styles.navBar}>
-          <Button messageId="calendar.addAppointment" onClick={this.handleAddEventClick} />
+          <Button messageId="calendar.addAppointment" onClick={this.handleAddAppointmentClick} />
         </div>
         <Calendar
           fetchMore={fetchMoreCalendarEvents}
@@ -64,8 +64,8 @@ export class PatientCalendar extends React.Component<allProps, IState> {
           error={error}
           hasNextPage={hasNextPage}
         />
-        <PatientAppointmentModal
-          isVisible={isEventModalVisible}
+        <AppointmentModal
+          isVisible={isAppointmentModalVisible}
           patientId={match.params.patientId}
           closePopup={this.handleClose}
         />

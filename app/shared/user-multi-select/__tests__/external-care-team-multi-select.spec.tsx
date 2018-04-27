@@ -3,17 +3,15 @@ import * as React from 'react';
 import * as uuid from 'uuid/v4';
 import ApolloTestProvider from '../../util/apollo-test-provider';
 import { externalProviderPerson, healthcareProxy, patient } from '../../util/test-data';
-import CareTeamMultiSelect from '../care-team-multi-select';
-import ExternalCareTeamMultiSelectContainer, {
-  getFamilyMemberInfo,
-  getProviderInfo,
-} from '../external-care-team-multi-select';
+import ExternalCareTeamMultiSelectContainer from '../external-care-team-multi-select';
+import { getFamilyMemberInfo, getProviderInfo } from '../get-info-helpers';
+import CareTeamMultiSelect from '../user-multi-select';
 
 describe('External Care Team Multi Select', () => {
   const placeholderFn = () => true as any;
   const patientId = patient.id;
   const name = 'familyMember';
-  const placeholderMessageId = 'patientAppointmentModal.externalGuestPlaceholder';
+  const placeholderMessageId = 'appointmentModal.externalGuestPlaceholder';
   const selectedUsers = [] as any;
   const familyQuery = () => ({ ...healthcareProxy, id: uuid() });
   const externalProvidersQuery = () => ({ ...externalProviderPerson, id: uuid() });
@@ -44,7 +42,6 @@ describe('External Care Team Multi Select', () => {
     delete externalMember.id;
 
     const selectProps = wrapper.find(CareTeamMultiSelect).props();
-    expect(selectProps.patientId).toBe(patientId);
     expect(selectProps.onChange).toBe(placeholderFn);
     expect(selectProps.selectedUsers).toBe(selectedUsers);
     expect(selectProps.placeholderMessageId).toBe(placeholderMessageId);

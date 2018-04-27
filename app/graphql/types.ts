@@ -683,6 +683,22 @@ export interface answerEditMutation {
   } | null,
 };
 
+export interface calendarCreateEventForCurrentUserMutationVariables {
+  startDatetime: string,
+  endDatetime: string,
+  inviteeEmails: Array< string >,
+  location: string,
+  title: string,
+  reason: string,
+};
+
+export interface calendarCreateEventForCurrentUserMutation {
+  // creates a calendar event for current user
+  calendarCreateEventForCurrentUser:  {
+    eventCreateUrl: string,
+  },
+};
+
 export interface calendarCreateEventForPatientMutationVariables {
   patientId: string,
   startDatetime: string,
@@ -5799,6 +5815,7 @@ export interface getUserSummaryListQuery {
     userRole: UserRole,
     googleProfileImageUrl: string | null,
     patientCount: number | null,
+    email: string | null,
   } >,
 };
 
@@ -13157,6 +13174,7 @@ export interface ShortUserWithCountFragment {
   userRole: UserRole,
   googleProfileImageUrl: string | null,
   patientCount: number | null,
+  email: string | null,
 };
 
 export interface ShortUserFragment {

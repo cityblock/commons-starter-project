@@ -5,4 +5,5 @@ fragment ShortUserWithCount on UserWithCount {
   userRole
   googleProfileImageUrl
   patientCount
+  email
 }

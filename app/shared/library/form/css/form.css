@@ -44,3 +44,13 @@
 .spinner {
   margin: var(--gutter);
 }
+
+.link {
+  display: block;
+  margin-top: var(--extra-small-gutter);
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+}

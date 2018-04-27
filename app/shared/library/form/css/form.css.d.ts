@@ -5,3 +5,4 @@ export const invisible: string;
 export const hidden: string;
 export const required: string;
 export const spinner: string;
+export const link: string;

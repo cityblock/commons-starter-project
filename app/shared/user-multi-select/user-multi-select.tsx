@@ -12,10 +12,10 @@ export interface IUser {
   role?: string;
   email?: string | null;
   avatar?: string | null;
+  isPermanent?: boolean;
 }
 
 export interface IProps {
-  patientId: string;
   onChange: (users: IUser[], name?: string) => void;
   selectedUsers: IUser[];
   users?: IUser[];
@@ -67,22 +67,23 @@ export default class CareTeamMultiSelect extends React.Component<IProps> {
     const { selectedUsers } = this.props;
 
     return selectedUsers.map(selectedUser => {
-      const { avatar, name } = selectedUser;
+      const { avatar, name, isPermanent } = selectedUser;
+
+      const closeButton = !isPermanent ? (
+        <Icon
+          name="close"
+          className={styles.remove}
+          onClick={() => this.handleRemoveUserClick(selectedUser)}
+        />
+      ) : null;
 
       return (
-        <div
-          key={selectedUser.id}
-          className={styles.user}
-        >
+        <div key={selectedUser.id} className={styles.user}>
           <div className={styles.info}>
             <Avatar src={avatar} size="medium" />
             <h4>{name}</h4>
           </div>
-          <Icon
-            name="close"
-            className={styles.remove}
-            onClick={() => this.handleRemoveUserClick(selectedUser)}
-          />
+          {closeButton}
         </div>
       );
     });

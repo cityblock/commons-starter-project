@@ -2,11 +2,10 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import SelectDropdownOption from '../../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../../library/select-dropdown/select-dropdown';
-import CareTeamMultiSelect from '../care-team-multi-select';
+import UserMultiSelect from '../user-multi-select';
 
 describe('Care Team Multi Select', () => {
   const placeholderFn = () => true as any;
-  const patientId = 'testId';
   const name = 'careMember';
   const placeholderMessageId = 'something.id';
 
@@ -27,8 +26,7 @@ describe('Care Team Multi Select', () => {
   };
 
   const wrapper = shallow(
-    <CareTeamMultiSelect
-      patientId={patientId}
+    <UserMultiSelect
       onChange={placeholderFn}
       selectedUsers={[]}
       users={[user1, user2]}

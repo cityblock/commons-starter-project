@@ -1,5 +1,10 @@
 import { intersection } from 'lodash';
-import { ICalendarCreateEventForPatientInput, IRootMutationType, IRootQueryType } from 'schema';
+import {
+  ICalendarCreateEventForCurrentUserInput,
+  ICalendarCreateEventForPatientInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import {
   createGoogleCalendarEventUrl,
   createGoogleCalendarForPatientWithTeam,
@@ -128,6 +133,35 @@ export async function calendarCreateEventForPatient(
     startDatetime,
     endDatetime,
     inviteeEmails: filteredInvitees,
+    location,
+    title,
+    reason,
+  });
+
+  return { eventCreateUrl };
+}
+
+export interface ICalendarCreateEventForCurrentUserOptions {
+  input: ICalendarCreateEventForCurrentUserInput;
+}
+
+export async function calendarCreateEventForCurrentUser(
+  source: any,
+  { input }: ICalendarCreateEventForCurrentUserOptions,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootMutationType['calendarCreateEventForCurrentUser']> {
+  const { startDatetime, endDatetime, inviteeEmails, location, title, reason } = input;
+  checkLoggedInWithPermissions(userId, permissions);
+
+  logger.log(`CREATE calendar event for current user ${userId}`, 2);
+
+  const user = await User.get(userId!, txn);
+
+  const eventCreateUrl = createGoogleCalendarEventUrl({
+    calendarId: user.email,
+    startDatetime,
+    endDatetime,
+    inviteeEmails,
     location,
     title,
     reason,

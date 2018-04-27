@@ -3,16 +3,15 @@ import * as React from 'react';
 import * as uuid from 'uuid/v4';
 import ApolloTestProvider from '../../util/apollo-test-provider';
 import { patient, userForCareTeam } from '../../util/test-data';
-import CareTeamMultiSelect from '../care-team-multi-select';
-import InternalCareTeamMultiSelectContainer, {
-  getUserInfo,
-} from '../internal-care-team-multi-select';
+import { getUserInfo } from '../get-info-helpers';
+import InternalCareTeamMultiSelectContainer from '../internal-care-team-multi-select';
+import UserMultiSelect from '../user-multi-select';
 
 describe('Internal Care Team Multi Select', () => {
   const placeholderFn = () => true as any;
   const patientId = patient.id;
   const name = 'careMember';
-  const placeholderMessageId = 'patientAppointmentModal.guestPlaceholder';
+  const placeholderMessageId = 'appointmentModal.guestPlaceholder';
   const selectedUsers = [] as any;
   const careTeamQuery = () => ({ ...userForCareTeam, id: uuid() });
   const graphqlMocks = () => ({
@@ -33,13 +32,12 @@ describe('Internal Care Team Multi Select', () => {
 
   it('renders care team multi select component', () => {
     const wrapper = container.update();
-    expect(wrapper.find(CareTeamMultiSelect).length).toBe(1);
+    expect(wrapper.find(UserMultiSelect).length).toBe(1);
 
     const member = getUserInfo(userForCareTeam);
     delete member.id;
 
-    const selectProps = wrapper.find(CareTeamMultiSelect).props();
-    expect(selectProps.patientId).toBe(patientId);
+    const selectProps = wrapper.find(UserMultiSelect).props();
     expect(selectProps.onChange).toBe(placeholderFn);
     expect(selectProps.selectedUsers).toBe(selectedUsers);
     expect(selectProps.placeholderMessageId).toBe(placeholderMessageId);

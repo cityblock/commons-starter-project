@@ -5,19 +5,19 @@ import SelectDropdownOption from '../../../shared/library/select-dropdown-option
 import SelectDropdown from '../../../shared/library/select-dropdown/select-dropdown';
 import TextInput from '../../../shared/library/text-input/text-input';
 import { address1, address2, address3 } from '../../../shared/util/test-data';
-import { PatientAddressSelect } from '../patient-address-select';
+import { AddressSelect } from '../address-select';
 
 describe('Patient Address Select', () => {
   const placeholderFn = () => true as any;
   const patientId = 'testId';
-  const placeholderMessageId = 'patientAppointmentModal.locationPlaceholder';
+  const placeholderMessageId = 'appointmentModal.locationPlaceholder';
 
   const wrapper = shallow(
-    <PatientAddressSelect
+    <AddressSelect
       patientId={patientId}
       onChange={placeholderFn}
       placeholderMessageId={placeholderMessageId}
-      addresses={[address1, address2, address3]}
+      patientAddresses={[address1, address2, address3]}
       isLoading={false}
       error={null}
     />,

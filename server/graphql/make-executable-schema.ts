@@ -17,6 +17,7 @@ import {
   resolveAnswersForQuestion,
 } from './answer-resolver';
 import {
+  calendarCreateEventForCurrentUser,
   calendarCreateEventForPatient,
   resolveCalendarEventsForCurrentUser,
   resolveCalendarEventsForPatient,
@@ -461,6 +462,7 @@ const resolveFunctions = {
     addressCreateForPatient,
     addressDeleteForPatient,
     addressEdit,
+    calendarCreateEventForCurrentUser,
     calendarCreateEventForPatient,
     careTeamAddUser,
     careTeamReassignUser,

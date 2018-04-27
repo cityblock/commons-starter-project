@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as addressesQuery from '../../graphql/queries/get-patient-addresses.graphql';
+import * as patientAddressesQuery from '../../graphql/queries/get-patient-addresses.graphql';
 import { getPatientAddressesQuery, FullAddressFragment } from '../../graphql/types';
 import { formatAddress } from '../../shared/helpers/format-helpers';
 import FormLabel from '../../shared/library/form-label/form-label';
@@ -11,7 +11,7 @@ import SelectDropdown from '../../shared/library/select-dropdown/select-dropdown
 import TextInput from '../../shared/library/text-input/text-input';
 
 export interface IProps {
-  patientId: string;
+  patientId?: string;
   onChange: (values: { [key: string]: any }) => void;
   selectedAddress?: FullAddressFragment | { description: string } | null;
   location?: string | null;
@@ -21,12 +21,12 @@ export interface IProps {
 interface IGraphqlProps {
   isLoading: boolean;
   error: ApolloError | null | undefined;
-  addresses: getPatientAddressesQuery['patientAddresses'];
+  patientAddresses: getPatientAddressesQuery['patientAddresses'];
 }
 
 export type allProps = IProps & IGraphqlProps;
 
-export class PatientAddressSelect extends React.Component<allProps> {
+export class AddressSelect extends React.Component<allProps> {
   constructor(props: allProps) {
     super(props);
     this.state = {};
@@ -51,8 +51,8 @@ export class PatientAddressSelect extends React.Component<allProps> {
   };
 
   renderAddressOptions(): JSX.Element[] {
-    const { addresses } = this.props;
-    return (addresses || []).map(address => {
+    const { patientAddresses } = this.props;
+    return (patientAddresses || []).map(address => {
       const { id, city, state, street1, street2, zip, description } = address;
       const formattedAddress = formatAddress(street1, city, state, zip, street2);
 
@@ -75,12 +75,12 @@ export class PatientAddressSelect extends React.Component<allProps> {
 
     const externalLocationField = isExternalSelected ? (
       <div className={styles.field}>
-        <FormLabel messageId="patientAppointmentModal.externalLocation" />
+        <FormLabel messageId="appointmentModal.externalLocation" />
         <TextInput
           name="location"
           value={location || ''}
           onChange={this.handleInputChange}
-          placeholderMessageId="patientAppointmentModal.externalLocationPlaceholder"
+          placeholderMessageId="appointmentModal.externalLocationPlaceholder"
         />
       </div>
     ) : null;
@@ -107,7 +107,8 @@ export class PatientAddressSelect extends React.Component<allProps> {
   }
 }
 
-export default graphql(addressesQuery as any, {
+export default graphql(patientAddressesQuery as any, {
+  skip: (props: IProps) => !props.patientId,
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
@@ -116,6 +117,6 @@ export default graphql(addressesQuery as any, {
   props: ({ data }) => ({
     isLoading: data ? data.loading : false,
     error: data ? data.error : null,
-    addresses: data ? (data as any).patientAddresses : null,
+    patientAddresses: data ? (data as any).patientAddresses : null,
   }),
-})(PatientAddressSelect);
+})(AddressSelect);

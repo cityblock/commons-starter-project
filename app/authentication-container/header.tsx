@@ -33,7 +33,10 @@ export class Header extends React.Component<allProps> {
     const { currentUser, featureFlags } = this.props;
 
     // if on contacts view, don't show navigation
-    if (this.props.location.pathname === '/contacts') {
+    if (
+      this.props.location.pathname === '/contacts' ||
+      this.props.location.pathname.includes('voicemails')
+    ) {
       return null;
     }
 

@@ -491,6 +491,7 @@ export const SPANISH_TRANSLATION = {
     'header.logOut': 'Cerrar sesión',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
+    'header.voicemail': 'Voicemail',
     'patientLists.answerId': 'Enter answer id for patient list',
     'patientLists.close': 'Close',
     'patientLists.create': 'Create Patient List',
@@ -968,5 +969,6 @@ export const SPANISH_TRANSLATION = {
     'messages.send': 'Send',
     'contacts.download': 'Download',
     'contacts.update': 'Update your contacts',
+    'voicemail.loading': 'Voicemail loading...',
   },
 };

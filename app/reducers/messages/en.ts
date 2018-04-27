@@ -507,6 +507,7 @@ export const ENGLISH_TRANSLATION = {
     'header.logOut': 'Logout',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
+    'header.voicemail': 'Voicemail',
     'patientLists.answerId': 'Enter answer id for patient list',
     'patientLists.close': 'Close',
     'patientLists.create': 'Create Patient List',
@@ -1001,5 +1002,6 @@ export const ENGLISH_TRANSLATION = {
     'contacts.update': 'Update your contacts',
     'contacts.info1': 'Download the latest version of your',
     'contacts.info2': ' patients’ contact information.',
+    'voicemail.loading': 'Voicemail loading...',
   },
 };

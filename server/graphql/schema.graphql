@@ -2446,6 +2446,11 @@ input SmsMessageCreateInput {
   body: String!
 }
 
+# params for generating a signed url for voicemail
+input UserVoicemailSignedUrlCreateInput {
+  voicemailId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2732,6 +2737,8 @@ type RootMutationType {
   calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
   # creates a JWT to download VCF
   JwtForVcfCreate: JwtForVcf!
+  # generate a signed URL for voicemail
+  userVoicemailSignedUrlCreate(input: UserVoicemailSignedUrlCreateInput): SignedUrl!
 }
 
 type RootQueryType {

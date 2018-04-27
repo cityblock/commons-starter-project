@@ -3194,6 +3194,11 @@ declare module 'schema' {
      * creates a JWT to download VCF
      */
     JwtForVcfCreate: IJwtForVcf;
+
+    /**
+     * generate a signed URL for voicemail
+     */
+    userVoicemailSignedUrlCreate: ISignedUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3599,6 +3604,9 @@ declare module 'schema' {
   }
   interface ICalendarCreateEventForPatientOnRootMutationTypeArguments {
     input?: ICalendarCreateEventForPatientInput | null;
+  }
+  interface IUserVoicemailSignedUrlCreateOnRootMutationTypeArguments {
+    input?: IUserVoicemailSignedUrlCreateInput | null;
   }
 
   /**
@@ -4735,6 +4743,13 @@ declare module 'schema' {
    */
   interface IJwtForVcf {
     authToken: string;
+  }
+
+  /**
+   * params for generating a signed url for voicemail
+   */
+  interface IUserVoicemailSignedUrlCreateInput {
+    voicemailId: string;
   }
 
   interface IRootSubscriptionType {

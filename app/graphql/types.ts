@@ -9915,6 +9915,17 @@ export interface userEditRoleMutation {
   } | null,
 };
 
+export interface userVoicemailSignedUrlCreateMutationVariables {
+  voicemailId: string,
+};
+
+export interface userVoicemailSignedUrlCreateMutation {
+  // generate a signed URL for voicemail
+  userVoicemailSignedUrlCreate:  {
+    signedUrl: string,
+  },
+};
+
 export interface FullAddressFragment {
   id: string,
   city: string | null,

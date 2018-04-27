@@ -3,9 +3,9 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
+import MobileHeader from '../../shared/library/mobile-header/mobile-header';
 import { patient } from '../../shared/util/test-data';
 import { ContactsContainer } from '../contacts-container';
-import ContactsHeader from '../contacts-header';
 
 const patientPanel = {
   totalCount: 11,
@@ -28,8 +28,8 @@ describe('Contacts Container', () => {
     <ContactsContainer generateJwtForVcf={() => true as any} patientPanel={patientPanel} />,
   );
 
-  it('renders contacts header', () => {
-    expect(wrapper.find(ContactsHeader).length).toBe(1);
+  it('renders mobile header', () => {
+    expect(wrapper.find(MobileHeader).props().messageId).toBe('header.contacts');
   });
 
   it('renders blue contacts icon', () => {

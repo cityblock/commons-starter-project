@@ -48,7 +48,7 @@ exports[`renders header 1`] = `
         </div>
       </a>
       <a
-        className="navItem relativeNavItem"
+        className="navItem selected relativeNavItem"
         href="/tasks"
         onClick={[Function]}
       >

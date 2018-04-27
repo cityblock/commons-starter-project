@@ -16,7 +16,7 @@ import * as styles from './css/progress-note-container.css';
 import ProgressNotesPopupContainer from './progress-note-popup-container';
 import { ProgressNoteSmallRow } from './progress-note-small-row';
 
-const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager'];
+const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager', 'voicemails'];
 
 interface IProps {
   currentUser: getCurrentUserQuery['currentUser'];

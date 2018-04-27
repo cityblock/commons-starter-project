@@ -1,9 +1,8 @@
-import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as express from 'express';
 import { transaction } from 'objection';
 import * as twilio from 'twilio';
-import config from '../../config';
 import Db from '../../db';
+import { reportError } from '../../helpers/error-helpers';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
 import pubsub from '../../subscriptions';
@@ -59,7 +58,7 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
       // publish notification that message created
       publishMessage(smsMessage);
     } catch (err) {
-      reportError(err, twilioPayload);
+      reportError(err, 'SMS failed to record', twilioPayload);
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -109,22 +108,13 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
       // publish notification that message created
       publishMessage(smsMessage);
     } catch (err) {
-      reportError(err, twilioPayload);
+      reportError(err, 'SMS failed to record', twilioPayload);
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   });
 }
-
-const reportError = (error: Error, payload: object) => {
-  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
-
-  // Ensure stackdriver is working
-  errorReporting.report(
-    `SMS failed to record. Error: ${error}, payload: ${JSON.stringify(payload)}`,
-  );
-};
 
 const publishMessage = (smsMessage: SmsMessage) => {
   pubsub.publish('smsMessageCreated', {

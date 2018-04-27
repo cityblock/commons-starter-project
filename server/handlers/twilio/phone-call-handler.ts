@@ -1,10 +1,9 @@
-import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as express from 'express';
 import { transaction } from 'objection';
 import * as twilio from 'twilio';
-import config from '../../config';
 import Db from '../../db';
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
+import { reportError } from '../../helpers/error-helpers';
 import PhoneCall from '../../models/phone-call';
 import User from '../../models/user';
 
@@ -27,7 +26,11 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
       twiml.say(
         "We're sorry, we don't have a user with that phone number. Please call us for help",
       );
-      reportError(`no associated user with phone number: ${To}`, twilioPayload);
+      reportError(
+        new Error(`no associated user with phone number: ${To}`),
+        'Error handling incoming call',
+        twilioPayload,
+      );
 
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       return res.end(twiml.toString());
@@ -46,7 +49,7 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
 
       dial.sim(user.twilioSimId);
     } catch (err) {
-      reportError(err, twilioPayload);
+      reportError(err, 'Error handling incoming call', twilioPayload);
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -66,7 +69,11 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
     const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
 
     if (!user) {
-      reportError(`no associated user with twilioSimId: ${twilioSimId}`, twilioPayload);
+      reportError(
+        new Error(`no associated user with twilioSimId: ${twilioSimId}`),
+        'Error handling outgoing call',
+        twilioPayload,
+      );
 
       res.writeHead(200, { 'Content-Type': 'text/xml' });
       return res.end(twiml.toString());
@@ -82,7 +89,7 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
 
       dial.number(To);
     } catch (err) {
-      reportError(err, twilioPayload);
+      reportError(err, 'Error handling outgoing call', twilioPayload);
     }
   });
 
@@ -125,7 +132,7 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         txn,
       );
     } catch (err) {
-      reportError(err, twilioPayload);
+      reportError(err, 'Error processing completed phone call', twilioPayload);
     }
   });
 
@@ -143,13 +150,4 @@ const recordVoicemail = (twiml: any) => {
     maxLength: MAX_VOICEMAIL_LENGTH,
     playBeep: true,
   });
-};
-
-const reportError = (error: Error | string, payload: object | null) => {
-  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
-
-  // Ensure stackdriver is working
-  errorReporting.report(
-    `Phone call failed to record. Error: ${error}, payload: ${JSON.stringify(payload)}`,
-  );
 };

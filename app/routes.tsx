@@ -13,6 +13,7 @@ import PatientProfile from './patient-profile-container/patient-profile-containe
 import PatientSearch from './patient-search-container/patient-search-container';
 import Settings from './settings-container/settings-container';
 import Tasks from './tasks-container/tasks-container';
+import Voicemail from './voicemail-container/voicemail-container';
 
 const PatientRedirect = (options: any) => (
   <Redirect to={`/patients/${options.match.params.patientId}/map/active`} />
@@ -39,6 +40,7 @@ export default (
         <Route path="/builder/:tab?/:objectId?/:subTab?/:subTabId?" component={Builder} />
         <Route path="/manager/:tabId?/:objectId?" component={Manager} />
         <Route path="/contacts" component={Contacts} />
+        <Route path="/voicemails/:voicemailId" component={Voicemail} />
       </Authentication>
     </Switch>
   </Main>

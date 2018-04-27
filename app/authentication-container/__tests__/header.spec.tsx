@@ -21,7 +21,7 @@ it('renders header', () => {
           <BrowserRouter>
             <Header
               currentUser={currentUser}
-              location="/tasks"
+              location={{ pathname: '/tasks' }}
               featureFlags={featureFlags}
               match={{} as any}
               history={{} as any}

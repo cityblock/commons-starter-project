@@ -334,6 +334,7 @@ import {
   JwtForPdfCreate,
   JwtForVcfCreate,
 } from './user-resolver';
+import { userVoicemailSignedUrlCreate } from './user-voicemail-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
@@ -587,6 +588,7 @@ const resolveFunctions = {
     patientScratchPadEdit,
     patientPhotoSignedUrlCreate,
     smsMessageCreate,
+    userVoicemailSignedUrlCreate,
   },
   RootSubscriptionType: {
     smsMessageCreated: {

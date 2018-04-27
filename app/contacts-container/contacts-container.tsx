@@ -8,7 +8,7 @@ import { getPatientPanelQuery, JwtForVcfCreateMutation } from '../graphql/types'
 import { getContactsVcfRoute } from '../shared/helpers/route-helpers';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
-import ContactsHeader from './contacts-header';
+import MobileHeader from '../shared/library/mobile-header/mobile-header';
 import * as styles from './css/contacts-container.css';
 
 interface IGraphqlProps {
@@ -28,6 +28,10 @@ export class ContactsContainer extends React.Component<IGraphqlProps, IState> {
     super(props);
 
     this.state = { loading: false, error: null };
+  }
+
+  componentDidMount() {
+    document.title = 'Download Contacts | Commons';
   }
 
   handleClick = async (): Promise<void> => {
@@ -51,7 +55,7 @@ export class ContactsContainer extends React.Component<IGraphqlProps, IState> {
 
     return (
       <div>
-        <ContactsHeader />
+        <MobileHeader messageId="header.contacts" />
         <div className={styles.container}>
           <Icon name="contacts" color="blue" className={styles.icon} />
           <FormattedMessage id="contacts.update">

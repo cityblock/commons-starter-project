@@ -1,8 +1,10 @@
 import { shallow } from 'enzyme';
 import { clone } from 'lodash';
 import * as React from 'react';
+import { Redirect } from 'react-router-dom';
 import { currentUser } from '../../shared/util/test-data';
 import { AuthenticationContainer as Component } from '../authentication-container';
+import { Header } from '../header';
 
 describe('shallow rendered', () => {
   const idleStart = jest.fn();
@@ -10,9 +12,10 @@ describe('shallow rendered', () => {
   const selectLocal = jest.fn();
   const setCurrentUser = jest.fn();
   let instance: any;
+  let component: any;
 
   beforeEach(() => {
-    const component = shallow(
+    component = shallow(
       <Component
         loading={false}
         error={null}
@@ -45,5 +48,44 @@ describe('shallow rendered', () => {
     });
     expect(selectLocal).toBeCalled();
     expect(setCurrentUser).toBeCalled();
+  });
+
+  it('logout should set current user to null', async () => {
+    await instance.logout();
+    expect(setCurrentUser).toBeCalledWith(null);
+  });
+
+  it('renders header if authenticated', async () => {
+    component.setProps({
+      isAuthenticated: true,
+      loading: false,
+      currentUser,
+    });
+    // Can't yet match against React.Fragment
+    expect(component).toMatchSnapshot();
+  });
+
+  it('renders redirect if not authenticated', async () => {
+    component.setProps({
+      isAuthenticated: false,
+      currentUser: null,
+      loading: false,
+    });
+    expect(component.find(Header).length).toBe(0);
+    expect(component.find(Redirect).length).toBe(1);
+    expect(component.find(Redirect).props().to).toMatchObject({
+      pathname: '/',
+      state: { from: 'blank' },
+    });
+  });
+
+  it('renders null if authenticated but no current user', async () => {
+    component.setProps({
+      isAuthenticated: true,
+      loading: false,
+      currentUser: null,
+    });
+    expect(component.find(Header).length).toBe(0);
+    expect(component.find(Redirect).length).toBe(0);
   });
 });

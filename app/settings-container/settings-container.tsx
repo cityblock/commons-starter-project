@@ -4,12 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import * as userMutation from '../graphql/queries/current-user-edit-mutation.graphql';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { currentUserEditMutationVariables, FullUserFragment } from '../graphql/types';
-import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import * as formStyles from '../shared/library/form/css/form.css';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
-import TextInput from '../shared/library/text-input/text-input';
 import * as styles from './css/settings.css';
 
 interface IProps {
@@ -24,7 +22,6 @@ interface IGraphqlProps {
 }
 
 interface IState {
-  editedPhone: string;
   error: string | null;
 }
 
@@ -35,13 +32,8 @@ class SettingsContainer extends React.Component<allProps, IState> {
 
   constructor(props: allProps) {
     super(props);
-    this.updateUserLocale = this.updateUserLocale.bind(this);
-    this.updateUserPhone = this.updateUserPhone.bind(this);
-    this.onChange = this.onChange.bind(this);
 
-    const phone = props.currentUser && props.currentUser.phone;
     this.state = {
-      editedPhone: phone || '',
       error: null,
     };
   }
@@ -50,7 +42,7 @@ class SettingsContainer extends React.Component<allProps, IState> {
     document.title = `${this.title} | Commons`;
   }
 
-  updateUserLocale = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  updateUserLocale = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const { currentUser } = this.props;
 
     if (currentUser) {
@@ -68,43 +60,15 @@ class SettingsContainer extends React.Component<allProps, IState> {
     }
   };
 
-  updateUserPhone = () => {
-    const { currentUser } = this.props;
-
-    if (currentUser) {
-      const { phone, locale, firstName, lastName } = currentUser;
-      const { editedPhone } = this.state;
-
-      this.props.updateUser({
-        variables: {
-          firstName: firstName || '',
-          lastName: lastName || '',
-          locale,
-          phone: editedPhone || phone,
-        },
-      });
-    }
-  };
-
-  onChange(event: React.ChangeEvent<HTMLInputElement>) {
+  onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
     this.setState({ [name as any]: value || '' });
   }
 
-  componentWillReceiveProps(nextProps: allProps) {
-    const { currentUser } = nextProps;
-
-    if (currentUser && currentUser.phone) {
-      this.setState({
-        editedPhone: currentUser.phone,
-      });
-    }
-  }
-
   render() {
-    const { error, editedPhone } = this.state;
+    const { error } = this.state;
     const { currentUser } = this.props;
     let errorHtml = null;
     if (error) {
@@ -130,22 +94,6 @@ class SettingsContainer extends React.Component<allProps, IState> {
                 </Select>
               </div>
             </div>
-            <div className={formStyles.fieldRow}>
-              <div className={formStyles.field}>
-                <FormLabel htmlFor="local" messageId="settings.phone" />
-                <TextInput
-                  name="editedPhone"
-                  value={editedPhone}
-                  placeholderMessageId="settings.enterPhone"
-                  onChange={this.onChange}
-                />
-              </div>
-            </div>
-            <Button
-              messageId="settings.save"
-              onClick={this.updateUserPhone}
-              className={styles.saveButton}
-            />
           </div>
         </div>
       </div>

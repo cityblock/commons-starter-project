@@ -218,7 +218,7 @@
     "nodemon": "1.17.3",
     "objection": "1.1.7",
     "pg": "7.4.1",
-    "pm2": "2.10.2",
+    "pm2": "2.10.3",
     "postcss-cssnext": "3.1.0",
     "postcss-loader": "2.1.4",
     "postcss-reporter": "5.0.0",

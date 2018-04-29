@@ -155,7 +155,7 @@
     "@types/mime-types": "2.1.0",
     "@types/morgan": "1.7.35",
     "@types/node": "8.10.10",
-    "@types/pg": "7.4.7",
+    "@types/pg": "7.4.8",
     "@types/prop-types": "15.5.2",
     "@types/qs": "6.5.1",
     "@types/react-beautiful-dnd": "6.0.1",

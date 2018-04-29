@@ -348,9 +348,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/bcrypt@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-1.0.0.tgz#2c523da191db7d41c06d17de235335c985effe9b"
+"@types/bcrypt@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-2.0.0.tgz#74cccef82026341fd786cf2eb9c912c7f9107c55"
 
 "@types/bluebird@*":
   version "3.5.20"

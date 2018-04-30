@@ -1,42 +1,28 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { IScreeningToolResultSummary } from 'schema';
 import * as styles from './css/domain-summary-bullets.css';
 import { DomainSummaryBulletItems } from './domain-summary-bullet-items';
-import { IScreeningToolResultSummary } from './helpers';
 
 interface IProps {
   automatedSummaryText: string[];
   manualSummaryText: string[];
-  isRiskCalculated: boolean;
   screeningToolResultSummaries: IScreeningToolResultSummary[];
 }
 
 const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) => {
-  const {
-    automatedSummaryText,
-    manualSummaryText,
-    isRiskCalculated,
-    screeningToolResultSummaries,
-  } = props;
+  const { automatedSummaryText, manualSummaryText, screeningToolResultSummaries } = props;
 
   if (
     !automatedSummaryText.length &&
     !manualSummaryText.length &&
     !screeningToolResultSummaries.length
   ) {
-    if (isRiskCalculated) {
-      return (
-        <FormattedMessage id="threeSixty.noSummary">
-          {(message: string) => <p className={styles.noAssessments}>{message}</p>}
-        </FormattedMessage>
-      );
-    } else {
-      return (
-        <FormattedMessage id="threeSixty.noAssessments">
-          {(message: string) => <p className={styles.noAssessments}>{message}</p>}
-        </FormattedMessage>
-      );
-    }
+    return (
+      <FormattedMessage id="threeSixty.noAssessments">
+        {(message: string) => <p className={styles.noAssessments}>{message}</p>}
+      </FormattedMessage>
+    );
   }
   // Only one assessment type if both are empty or lengths are unequal
   const bothEmpty = !automatedSummaryText.length && !manualSummaryText.length;

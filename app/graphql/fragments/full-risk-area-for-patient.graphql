@@ -1,32 +1,16 @@
-#import "./full-screening-tool-for-patient.graphql"
-
 fragment FullRiskAreaForPatient on RiskAreaForPatient {
   id
   title
   assessmentType
   mediumRiskThreshold
   highRiskThreshold
-  questions {
-    id
-    answers {
-      id
-      inSummary
-      riskAdjustmentType
-      summaryText
-      patientAnswers {
-        id
-        patientId
-        createdAt
-        updatedAt
-        answerValue
-      }
-    }
-  }
   riskAreaAssessmentSubmissions {
     id
     createdAt
   }
-  screeningTools {
-    ...FullScreeningToolForPatient
-  }
+  lastUpdated
+  forceHighRisk
+  totalScore
+  riskScore
+  summaryText
 }

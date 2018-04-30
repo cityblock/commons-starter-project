@@ -123,9 +123,9 @@ describe('Render Patient Appointment Form', () => {
 
     expect(internalSelect.props().selectedUsers).toMatchObject([getUserInfo(user)]);
 
-    expect(externalSelect.props().selectedUsers).toMatchObject(
-      [getFamilyMemberInfo(healthcareProxy)],
-    );
+    expect(externalSelect.props().selectedUsers).toMatchObject([
+      getFamilyMemberInfo(healthcareProxy),
+    ]);
 
     expect(addressSelect.props().selectedAddress).toMatchObject({
       description: 'External location',

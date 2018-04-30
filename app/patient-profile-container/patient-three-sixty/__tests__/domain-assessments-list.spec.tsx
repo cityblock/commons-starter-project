@@ -3,7 +3,7 @@ import * as React from 'react';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import TextDivider from '../../../shared/library/text-divider/text-divider';
 import { riskArea } from '../../../shared/util/test-data';
-import DomainAssessment from '../domain-assessment';
+import { DomainAssessment } from '../domain-assessment';
 import DomainAssessmentsList from '../domain-assessments-list';
 
 describe('Patient 360 Domain Assessments List', () => {

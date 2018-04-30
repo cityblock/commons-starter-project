@@ -1,10 +1,9 @@
 import { shallow } from 'enzyme';
-import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import DateInfo from '../../../shared/library/date-info/date-info';
 import Icon from '../../../shared/library/icon/icon';
-import { riskAreaGroup } from '../../../shared/util/test-data';
+import { automatedRiskArea, fullRiskAreaGroup, riskArea } from '../../../shared/util/test-data';
 import { DomainSummary } from '../domain-summary';
 import DomainSummaryBullets from '../domain-summary-bullets';
 
@@ -12,27 +11,21 @@ describe('Patient 360 Domain Summary', () => {
   const routeBase = '/needle';
   const patientId = 'aryaStark';
   const glassBreakId = 'nymeria';
-  const risk = 'high';
-  const placeholderFn = () => true as any;
 
   const wrapper = shallow(
     <DomainSummary
       routeBase={routeBase}
       patientId={patientId}
-      riskAreaGroup={riskAreaGroup}
-      riskAreaGroupId={riskAreaGroup.id}
-      risk={risk}
-      updateRiskAreaGroupScore={placeholderFn}
+      riskAreaGroup={fullRiskAreaGroup}
       glassBreakId={glassBreakId}
-      loading={false}
-      error={null}
     />,
   );
 
-  it('renders link to domain detail view', () => {
+  it('renders link to domain detail view for automated assessments', () => {
+    wrapper.setProps({ riskAreaGroup: { ...fullRiskAreaGroup, riskAreas: [automatedRiskArea] } });
     expect(wrapper.find(Link).length).toBe(1);
-    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${riskAreaGroup.id}`);
-    expect(wrapper.find(Link).props().className).toBe('domain redBorder');
+    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${fullRiskAreaGroup.id}`);
+    expect(wrapper.find(Link).props().className).toBe('domain greenBorder');
   });
 
   it('renders icon', () => {
@@ -40,45 +33,32 @@ describe('Patient 360 Domain Summary', () => {
     expect(wrapper.find(Icon).props().className).toBe('icon');
   });
 
-  it('does not render date info if no last updated', () => {
-    expect(wrapper.find(DateInfo).length).toBe(0);
+  it('renders date info', () => {
+    expect(wrapper.find(DateInfo).length).toBe(1);
   });
 
   it('renders domain title', () => {
     expect(wrapper.find('h3').length).toBe(1);
-    expect(wrapper.find('h3').text()).toBe(riskAreaGroup.title);
+    expect(wrapper.find('h3').text()).toBe(fullRiskAreaGroup.title);
   });
 
   it('renders domain summary bullets', () => {
     expect(wrapper.find(DomainSummaryBullets).length).toBe(1);
     expect(wrapper.find(DomainSummaryBullets).props().automatedSummaryText).toEqual([]);
     expect(wrapper.find(DomainSummaryBullets).props().manualSummaryText).toEqual([]);
-    expect(wrapper.find(DomainSummaryBullets).props().screeningToolResultSummaries).toEqual([]);
-    expect(wrapper.find(DomainSummaryBullets).props().isRiskCalculated).toBeTruthy();
-  });
-
-  it('renders date info if last updated', () => {
-    const lastUpdated = 'notToday';
-    wrapper.setState({ lastUpdated });
-
-    expect(wrapper.find(DateInfo).length).toBe(1);
-    expect(wrapper.find(DateInfo).props().label).toBe('updated');
-    expect(wrapper.find(DateInfo).props().date).toBe(lastUpdated);
+    expect(wrapper.find(DomainSummaryBullets).props().screeningToolResultSummaries).toEqual([
+      {
+        description: 'dire wolf in dire straits ',
+        score: 4,
+        title: 'result summary',
+      },
+    ]);
   });
 
   it('links directly to assessment if no automated assessments', () => {
-    const id = 'lady';
-    const riskAreaGroup2 = cloneDeep(riskAreaGroup);
-    riskAreaGroup2.riskAreas = [
-      {
-        id,
-        questions: [],
-        screeningTools: [],
-      },
-    ] as any;
-    wrapper.setProps({ riskAreaGroup: riskAreaGroup2 });
+    wrapper.setProps({ riskAreaGroup: { ...fullRiskAreaGroup, riskAreas: [riskArea] } });
     expect(wrapper.find(Link).props().to).toBe(
-      `${routeBase}/${riskAreaGroup2.id}/assessment/${id}`,
+      `${routeBase}/${fullRiskAreaGroup.id}/assessment/${riskArea.id}`,
     );
   });
 });

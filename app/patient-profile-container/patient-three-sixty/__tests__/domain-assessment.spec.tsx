@@ -9,7 +9,7 @@ import {
   riskArea as rawRiskArea,
   riskAreaAssessmentSubmission,
 } from '../../../shared/util/test-data';
-import DomainAssessment from '../domain-assessment';
+import { DomainAssessment } from '../domain-assessment';
 
 describe('Patient 360 Domain Assessment List Item', () => {
   const routeBase = '/winterfell';
@@ -27,6 +27,11 @@ describe('Patient 360 Domain Assessment List Item', () => {
       },
     ],
     riskAreaAssessmentSubmissions: [riskAreaAssessmentSubmission],
+    lastUpdated: patientAnswer.updatedAt,
+    forceHighRisk: false,
+    totalScore: 10,
+    riskScore: 'low' as any,
+    summaryText: [answer.summaryText],
   };
 
   const wrapper = shallow(
@@ -92,28 +97,6 @@ describe('Patient 360 Domain Assessment List Item', () => {
 
   it('renders summary text', () => {
     expect(wrapper.find('.detail').length).toBe(1);
-    expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
-  });
-
-  it('does not render duplicated summary text', () => {
-    const riskArea2 = {
-      ...rawRiskArea,
-      questions: [
-        {
-          ...question,
-          answers: [
-            {
-              ...answer,
-              patientAnswers: [patientAnswer, patientAnswer],
-            },
-          ],
-        },
-      ],
-      riskAreaAssessmentSubmissions: [riskAreaAssessmentSubmission],
-    };
-
-    wrapper.setProps({ riskArea: riskArea2 });
-
     expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
   });
 

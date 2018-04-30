@@ -107,12 +107,26 @@ export default class RiskAreaGroup extends BaseModel {
     patientId: string,
     txn: Transaction,
   ): Promise<RiskAreaGroup> {
+    const riskAreaGroup = await this.getForPatientQuery(patientId, txn).findById(riskAreaGroupId);
+
+    if (!riskAreaGroup) {
+      return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
+    }
+
+    return riskAreaGroup;
+  }
+
+  static async getAllForPatient(patientId: string, txn: Transaction): Promise<RiskAreaGroup[]> {
+    return this.getForPatientQuery(patientId, txn);
+  }
+
+  static getForPatientQuery(patientId: string, txn: Transaction) {
     /* tslint:disable:max-line-length */
     const EAGER_QUERY =
       '[riskAreas.[questions.answers.patientAnswers, riskAreaAssessmentSubmissions, screeningTools.[patientScreeningToolSubmissions.[screeningToolScoreRange, patientAnswers.[answer]]]]]';
     /* tslint:enable:max-line-length */
 
-    const riskAreaGroup = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('riskAreas', builder => {
         builder.where({ deletedAt: null });
@@ -142,14 +156,7 @@ export default class RiskAreaGroup extends BaseModel {
         builder => {
           builder.where({ patientId, deletedAt: null, applicable: true });
         },
-      )
-      .findById(riskAreaGroupId);
-
-    if (!riskAreaGroup) {
-      return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
-    }
-
-    return riskAreaGroup;
+      );
   }
 }
 /* tslint:enable:member-ordering */

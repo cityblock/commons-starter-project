@@ -3,24 +3,22 @@ import * as React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
 import UnderlineTab from '../../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../../shared/library/underline-tabs/underline-tabs';
-import { riskAreaGroup } from '../../../shared/util/test-data';
-import DomainSummaries from '../domain-summaries';
+import { fullRiskAreaGroup } from '../../../shared/util/test-data';
+import { DomainSummaries } from '../domain-summaries';
 import { PatientThreeSixtyDomains } from '../patient-three-sixty-domains';
 import PatientThreeSixtyHistory from '../patient-three-sixty-history';
 
 describe('Patient 360 Domains Component', () => {
   const patientId = 'aryaStark';
   const routeBase = '/needle';
-
   const wrapper = shallow(
     <PatientThreeSixtyDomains
       patientId={patientId}
       routeBase={routeBase}
-      riskAreaGroups={[riskAreaGroup]}
+      riskAreaGroups={[fullRiskAreaGroup]}
       history={false}
       glassBreakId="nymeria"
       loading={false}
-      error={null}
     />,
   );
 

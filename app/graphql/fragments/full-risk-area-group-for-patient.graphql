@@ -1,0 +1,26 @@
+fragment FullRiskAreaGroupForPatient on FullRiskAreaGroupForPatient {
+  id
+  createdAt
+  updatedAt
+  deletedAt
+  title
+  shortTitle
+  order
+  mediumRiskThreshold
+  highRiskThreshold
+  automatedSummaryText
+  manualSummaryText
+  screeningToolResultSummaries {
+    title
+    score
+    description
+  }
+  lastUpdated
+  forceHighRisk
+  totalScore
+  riskScore
+  riskAreas {
+    id
+    assessmentType
+  }
+}

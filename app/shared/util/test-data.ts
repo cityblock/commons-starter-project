@@ -275,6 +275,32 @@ export const riskArea = {
   screeningTools: [],
 };
 
+export const fullRiskAreaGroup = {
+  id: 'ghost',
+  title: "Jon Snow's Direwolf",
+  shortTitle: 'Ghost',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  order: 1,
+  mediumRiskThreshold: 30,
+  highRiskThreshold: 9000,
+  forceHighRisk: false,
+  lastUpdated: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  riskAreas: [riskArea],
+  totalScore: 3,
+  riskScore: 'low' as any,
+  automatedSummaryText: [],
+  manualSummaryText: [],
+  screeningToolResultSummaries: [
+    {
+      title: 'result summary',
+      score: 4,
+      description: 'dire wolf in dire straits ',
+    },
+  ],
+};
+
 export const automatedRiskArea = {
   id: 'ghost',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',

@@ -4,7 +4,7 @@ import {
   riskArea as rawRiskArea,
   riskAreaGroup as rawRiskAreaGroup,
 } from '../../../shared/util/test-data';
-import DomainAssessment from '../../patient-three-sixty/domain-assessment';
+import { DomainAssessment } from '../../patient-three-sixty/domain-assessment';
 import { RiskAreaAssessmentHeader } from '../risk-area-assessment-header';
 
 describe('Risk Area Assessment Header', () => {
@@ -13,6 +13,11 @@ describe('Risk Area Assessment Header', () => {
   const riskArea = {
     ...rawRiskArea,
     riskAreaAssessmentSubmissions: [],
+    lastUpdated: rawRiskArea.createdAt,
+    forceHighRisk: false,
+    totalScore: 10,
+    riskScore: 'low' as any,
+    summaryText: ['summary'],
   };
   const riskAreaGroup = {
     ...rawRiskAreaGroup,

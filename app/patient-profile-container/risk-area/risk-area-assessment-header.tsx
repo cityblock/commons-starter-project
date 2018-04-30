@@ -3,7 +3,7 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
-import DomainAssessment from '../patient-three-sixty/domain-assessment';
+import { DomainAssessment } from '../patient-three-sixty/domain-assessment';
 
 interface IProps {
   riskAreaId: string;

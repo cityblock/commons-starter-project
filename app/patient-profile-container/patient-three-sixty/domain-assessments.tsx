@@ -39,7 +39,7 @@ export class DomainAssessments extends React.Component<allProps, {}> {
     const updatedRouteBase = `${routeBase}/${riskAreaGroupId}`;
 
     return (
-      <div>
+      <React.Fragment>
         <UnderlineTabs>
           <BackLink href={routeBase} messageId="threeSixty.back" />
         </UnderlineTabs>
@@ -55,7 +55,7 @@ export class DomainAssessments extends React.Component<allProps, {}> {
             riskAreas={this.getAssessments('manual')}
           />
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -53,7 +53,6 @@ describe('Domain Summary Bullet Components', () => {
       <DomainSummaryBullets
         manualSummaryText={manualSummaryText}
         automatedSummaryText={[]}
-        isRiskCalculated={true}
         screeningToolResultSummaries={[]}
       />,
     );
@@ -137,11 +136,9 @@ describe('Domain Summary Bullet Components', () => {
       expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.noAssessments');
     });
 
-    it('renders no summary message if no bullets but risk calculated', () => {
-      wrapper.setProps({ isRiskCalculated: true });
-
+    it('renders no assessments if no assessments', () => {
       expect(wrapper.find(FormattedMessage).length).toBe(1);
-      expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.noSummary');
+      expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.noAssessments');
     });
   });
 });

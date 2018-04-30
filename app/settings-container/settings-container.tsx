@@ -65,7 +65,7 @@ class SettingsContainer extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
 
     this.setState({ [name as any]: value || '' });
-  }
+  };
 
   render() {
     const { error } = this.state;

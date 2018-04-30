@@ -11,4 +11,5 @@
   padding: 20px var(--medium-gutter);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  flex: 1;
 }

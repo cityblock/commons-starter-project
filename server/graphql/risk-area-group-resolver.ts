@@ -7,6 +7,7 @@ import {
 } from 'schema';
 import RiskAreaGroup from '../models/risk-area-group';
 import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
+import { formatRiskAreaGroupForPatient } from './shared/risk-area-group-format-for-patient';
 import { IContext } from './shared/utils';
 
 export interface IRiskAreaGroupCreateArgs {
@@ -53,7 +54,24 @@ export async function resolveRiskAreaGroupForPatient(
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
   await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
 
-  return RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, txn);
+  const riskAreaGroupForPatient = await RiskAreaGroup.getForPatient(
+    args.riskAreaGroupId,
+    args.patientId,
+    txn,
+  );
+  return formatRiskAreaGroupForPatient(riskAreaGroupForPatient);
+}
+
+export async function resolveRiskAreaGroupsForPatient(
+  root: any,
+  args: { patientId: string; glassBreakId: string },
+  { userId, permissions, txn }: IContext,
+): Promise<IRootQueryType['riskAreaGroupsForPatient']> {
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+
+  const riskAreaGroups = await RiskAreaGroup.getAllForPatient(args.patientId, txn);
+  return riskAreaGroups.map(formatRiskAreaGroupForPatient);
 }
 
 export async function riskAreaGroupCreate(

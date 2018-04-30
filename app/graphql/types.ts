@@ -193,16 +193,16 @@ export enum AssessmentType {
 }
 
 
-export enum SmsMessageDirection {
-  fromUser = "fromUser",
-  toUser = "toUser",
-}
-
-
 export enum Priority {
   high = "high",
   low = "low",
   medium = "medium",
+}
+
+
+export enum SmsMessageDirection {
+  fromUser = "fromUser",
+  toUser = "toUser",
 }
 
 
@@ -5271,55 +5271,15 @@ export interface getRiskAreaGroupForPatientQuery {
       assessmentType: AssessmentType,
       mediumRiskThreshold: number,
       highRiskThreshold: number,
-      questions:  Array< {
-        id: string,
-        answers:  Array< {
-          id: string,
-          inSummary: boolean | null,
-          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
-          summaryText: string | null,
-          patientAnswers:  Array< {
-            id: string,
-            patientId: string,
-            createdAt: string,
-            updatedAt: string,
-            answerValue: string,
-          } >,
-        } > | null,
-      } >,
       riskAreaAssessmentSubmissions:  Array< {
         id: string,
         createdAt: string,
       } >,
-      screeningTools:  Array< {
-        id: string,
-        title: string,
-        patientScreeningToolSubmissions:  Array< {
-          id: string,
-          screeningToolId: string,
-          patientId: string,
-          userId: string,
-          score: number | null,
-          screeningToolScoreRangeId: string | null,
-          screeningToolScoreRange:  {
-            id: string,
-            riskAdjustmentType: RiskAdjustmentTypeOptions,
-            description: string,
-          } | null,
-          patientAnswers:  Array< {
-            updatedAt: string,
-            answer:  {
-              id: string,
-              riskAdjustmentType: RiskAdjustmentTypeOptions | null,
-              inSummary: boolean | null,
-              summaryText: string | null,
-            },
-          } > | null,
-        } >,
-        createdAt: string,
-        updatedAt: string,
-        deletedAt: string | null,
-      } >,
+      lastUpdated: string,
+      forceHighRisk: boolean,
+      totalScore: number | null,
+      riskScore: Priority | null,
+      summaryText: Array< string >,
     } >,
   },
 };
@@ -5335,6 +5295,41 @@ export interface getRiskAreaGroupShortQuery {
     title: string,
     shortTitle: string,
   },
+};
+
+export interface getRiskAreaGroupsForPatientQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getRiskAreaGroupsForPatientQuery {
+  // RiskAreaGroupsForPatient
+  riskAreaGroupsForPatient:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    shortTitle: string,
+    order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    automatedSummaryText: Array< string >,
+    manualSummaryText: Array< string >,
+    screeningToolResultSummaries:  Array< {
+      title: string,
+      score: number | null,
+      description: string,
+    } >,
+    lastUpdated: string,
+    forceHighRisk: boolean,
+    totalScore: number | null,
+    riskScore: Priority | null,
+    riskAreas:  Array< {
+      id: string,
+      assessmentType: AssessmentType,
+    } >,
+  } >,
 };
 
 export interface getRiskAreaGroupsQuery {
@@ -12459,54 +12454,41 @@ export interface FullRiskAreaForPatientFragment {
   assessmentType: AssessmentType,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
-  questions:  Array< {
-    id: string,
-    answers:  Array< {
-      id: string,
-      inSummary: boolean | null,
-      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
-      summaryText: string | null,
-      patientAnswers:  Array< {
-        id: string,
-        patientId: string,
-        createdAt: string,
-        updatedAt: string,
-        answerValue: string,
-      } >,
-    } > | null,
-  } >,
   riskAreaAssessmentSubmissions:  Array< {
     id: string,
     createdAt: string,
   } >,
-  screeningTools:  Array< {
-    id: string,
+  lastUpdated: string,
+  forceHighRisk: boolean,
+  totalScore: number | null,
+  riskScore: Priority | null,
+  summaryText: Array< string >,
+};
+
+export interface FullRiskAreaGroupForPatientFragment {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  title: string,
+  shortTitle: string,
+  order: number,
+  mediumRiskThreshold: number,
+  highRiskThreshold: number,
+  automatedSummaryText: Array< string >,
+  manualSummaryText: Array< string >,
+  screeningToolResultSummaries:  Array< {
     title: string,
-    patientScreeningToolSubmissions:  Array< {
-      id: string,
-      screeningToolId: string,
-      patientId: string,
-      userId: string,
-      score: number | null,
-      screeningToolScoreRangeId: string | null,
-      screeningToolScoreRange:  {
-        id: string,
-        riskAdjustmentType: RiskAdjustmentTypeOptions,
-        description: string,
-      } | null,
-      patientAnswers:  Array< {
-        updatedAt: string,
-        answer:  {
-          id: string,
-          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
-          inSummary: boolean | null,
-          summaryText: string | null,
-        },
-      } > | null,
-    } >,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null,
+    score: number | null,
+    description: string,
+  } >,
+  lastUpdated: string,
+  forceHighRisk: boolean,
+  totalScore: number | null,
+  riskScore: Priority | null,
+  riskAreas:  Array< {
+    id: string,
+    assessmentType: AssessmentType,
   } >,
 };
 
@@ -12544,36 +12526,6 @@ export interface FullRiskAreaFragment {
 export interface FullRiskScoreFragment {
   score: number,
   forceHighRisk: boolean,
-};
-
-export interface FullScreeningToolForPatientFragment {
-  id: string,
-  title: string,
-  patientScreeningToolSubmissions:  Array< {
-    id: string,
-    screeningToolId: string,
-    patientId: string,
-    userId: string,
-    score: number | null,
-    screeningToolScoreRangeId: string | null,
-    screeningToolScoreRange:  {
-      id: string,
-      riskAdjustmentType: RiskAdjustmentTypeOptions,
-      description: string,
-    } | null,
-    patientAnswers:  Array< {
-      updatedAt: string,
-      answer:  {
-        id: string,
-        riskAdjustmentType: RiskAdjustmentTypeOptions | null,
-        inSummary: boolean | null,
-        summaryText: string | null,
-      },
-    } > | null,
-  } >,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
 };
 
 export interface FullScreeningToolScoreRangeFragment {

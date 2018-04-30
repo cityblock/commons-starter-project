@@ -5,7 +5,9 @@ import Calendar from '../calendar';
 
 describe('Render Calendar List', () => {
   const startDatetime = new Date().toISOString();
-  const fetchMore = () => { return true; };
+  const fetchMore = () => {
+    return true;
+  };
   const calendarEvents = [
     {
       id: 'id0',

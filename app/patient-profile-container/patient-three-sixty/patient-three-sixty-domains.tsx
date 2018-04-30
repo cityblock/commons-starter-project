@@ -1,13 +1,12 @@
-import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as riskAreaGroupsQuery from '../../graphql/queries/get-risk-area-groups.graphql';
-import { getRiskAreaGroupsQuery } from '../../graphql/types';
+import * as riskAreaGroupsForPatientQuery from '../../graphql/queries/get-risk-area-groups-for-patient.graphql';
+import { getRiskAreaGroupsForPatientQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import * as styles from './css/shared.css';
-import DomainSummaries from './domain-summaries';
+import { DomainSummaries } from './domain-summaries';
 import PatientThreeSixtyHistory from './patient-three-sixty-history';
 
 export const HISTORY_ROUTE = 'history';
@@ -21,16 +20,10 @@ interface IProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  error: ApolloError | null | undefined;
-  riskAreaGroups: getRiskAreaGroupsQuery['riskAreaGroups'];
+  riskAreaGroups: getRiskAreaGroupsForPatientQuery['riskAreaGroupsForPatient'];
 }
 
 type allProps = IGraphqlProps & IProps;
-
-export interface IRiskAreaGroupScore {
-  totalScore: number | null;
-  forceHighRisk: boolean;
-}
 
 export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (props: allProps) => {
   const { patientId, routeBase, riskAreaGroups, loading, history, glassBreakId } = props;
@@ -62,11 +55,15 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql<any, any, any, any>(riskAreaGroupsQuery as any, {
+export default graphql(riskAreaGroupsForPatientQuery as any, {
   skip: (props: IProps) => props.history,
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+    },
+  }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    riskAreaGroups: data ? (data as any).riskAreaGroups : null,
+    riskAreaGroups: data ? (data as any).riskAreaGroupsForPatient : null,
   }),
-})(PatientThreeSixtyDomains) as React.ComponentClass<IProps>;
+})(PatientThreeSixtyDomains);

@@ -205,6 +205,11 @@ declare module 'schema' {
     riskAreaGroups: Array<IRiskAreaGroup>;
 
     /**
+     * RiskAreaGroupsForPatient
+     */
+    riskAreaGroupsForPatient: Array<IFullRiskAreaGroupForPatient>;
+
+    /**
      * RiskArea
      */
     riskArea: IRiskArea;
@@ -743,6 +748,10 @@ declare module 'schema' {
     patientId: string;
     glassBreakId?: string | null;
   }
+  interface IRiskAreaGroupsForPatientOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
   interface IRiskAreaOnRootQueryTypeArguments {
     riskAreaId: string;
   }
@@ -1073,6 +1082,7 @@ declare module 'schema' {
     | IRiskAreaAssessmentSubmission
     | IScreeningToolScoreRangeForPatientScreeningToolSubmission
     | IScreeningToolForPatient
+    | IFullRiskAreaGroupForPatient
     | IEventNotification
     | ITaskEvent
     | IProgressNote
@@ -1960,6 +1970,11 @@ declare module 'schema' {
     questions: Array<IQuestionWithPatientAnswer>;
     riskAreaAssessmentSubmissions: Array<IRiskAreaAssessmentSubmission>;
     screeningTools: Array<IScreeningToolForPatient>;
+    lastUpdated: string;
+    forceHighRisk: boolean;
+    totalScore: number | null;
+    riskScore: IPriorityEnum | null;
+    summaryText: Array<string>;
   }
 
   /**
@@ -2108,6 +2123,32 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+  }
+
+  interface IFullRiskAreaGroupForPatient {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    title: string;
+    shortTitle: string;
+    order: number;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
+    riskAreas: Array<IRiskAreaForPatient>;
+    automatedSummaryText: Array<string>;
+    manualSummaryText: Array<string>;
+    screeningToolResultSummaries: Array<IScreeningToolResultSummary>;
+    lastUpdated: string;
+    forceHighRisk: boolean;
+    totalScore: number | null;
+    riskScore: IPriorityEnum | null;
+  }
+
+  interface IScreeningToolResultSummary {
+    title: string;
+    score: number | null;
+    description: string;
   }
 
   type IQuestionFilterTypeEnum =

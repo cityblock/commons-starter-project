@@ -7,7 +7,6 @@ import DateInfo from '../../shared/library/date-info/date-info';
 import SmallText from '../../shared/library/small-text/small-text';
 import TextInfo from '../../shared/library/text-info/text-info';
 import * as styles from './css/domain-assessment.css';
-import { calculateRiskAreaSummaryStats } from './helpers';
 
 interface IProps {
   routeBase: string | null;
@@ -17,117 +16,78 @@ interface IProps {
   assessmentDetailView?: boolean;
 }
 
-class DomainAssessment extends React.Component<IProps> {
-  calculateSummaryStats() {
-    const { riskArea, markAsSuppressed } = this.props;
+export const DomainAssessment: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { routeBase, riskArea, suppressed, assessmentDetailView } = props;
 
-    const { lastUpdated, totalScore, forceHighRisk, summaryText } = calculateRiskAreaSummaryStats(
-      riskArea,
-      {
-        lastUpdated: '',
-        totalScore: null,
-        forceHighRisk: false,
-        summaryText: [],
-      },
+  if (suppressed) return null;
+
+  const started =
+    riskArea.riskAreaAssessmentSubmissions && riskArea.riskAreaAssessmentSubmissions.length
+      ? riskArea.riskAreaAssessmentSubmissions[0].createdAt
+      : null;
+
+  const containerStyles = classNames(styles.container, {
+    [styles.greenBorder]: !assessmentDetailView && riskArea.riskScore === 'low',
+    [styles.yellowBorder]: !assessmentDetailView && riskArea.riskScore === 'medium',
+    [styles.redBorder]: !assessmentDetailView && riskArea.riskScore === 'high',
+    [styles.noLink]: !!assessmentDetailView,
+  });
+  const datesStyles = classNames(styles.dates, {
+    [styles.alignEnd]: !assessmentDetailView,
+  });
+  const notCompleted = !riskArea.totalScore && !riskArea.forceHighRisk;
+
+  let formattedSummaryText = null;
+  if (!assessmentDetailView && notCompleted) {
+    formattedSummaryText = (
+      <FormattedMessage id="threeSixty.notCompleted">
+        {(message: string) => <p className={styles.detail}>{message}</p>}
+      </FormattedMessage>
     );
-
-    // do not show this card if automated with zero or null risk score
-    if (
-      markAsSuppressed &&
-      riskArea.assessmentType === 'automated' &&
-      !totalScore &&
-      !forceHighRisk
-    ) {
-      markAsSuppressed(riskArea.id);
-    }
-
-    return { lastUpdated, totalScore, forceHighRisk, summaryText };
+  } else if (!assessmentDetailView) {
+    formattedSummaryText = <p className={styles.detail}>{riskArea.summaryText.join(' | ')}</p>;
   }
 
-  render(): JSX.Element | null {
-    const { routeBase, riskArea, suppressed, assessmentDetailView } = this.props;
-    if (suppressed) return null;
+  const dateText = notCompleted ? (
+    <SmallText messageId="threeSixty.notCompletedShort" />
+  ) : (
+    <div className={datesStyles}>
+      {riskArea.assessmentType === 'manual' &&
+        (started ? (
+          <DateInfo
+            messageId="threeSixty.initialAssessment"
+            date={started}
+            className={styles.date}
+          />
+        ) : (
+          <TextInfo
+            messageId="threeSixty.initialAssessment"
+            textMessageId="threeSixty.never"
+            className={styles.date}
+          />
+        ))}
+      <DateInfo label="updated" date={riskArea.lastUpdated} />
+    </div>
+  );
 
-    const { lastUpdated, totalScore, forceHighRisk, summaryText } = this.calculateSummaryStats();
-    const started =
-      riskArea.riskAreaAssessmentSubmissions && riskArea.riskAreaAssessmentSubmissions.length
-        ? riskArea.riskAreaAssessmentSubmissions[0].createdAt
-        : null;
-
-    const risk =
-      totalScore !== null
-        ? forceHighRisk || totalScore >= riskArea.highRiskThreshold
-          ? 'high'
-          : totalScore >= riskArea.mediumRiskThreshold
-            ? 'medium'
-            : 'low'
-        : null;
-
-    const containerStyles = classNames(styles.container, {
-      [styles.greenBorder]: !assessmentDetailView && risk === 'low',
-      [styles.yellowBorder]: !assessmentDetailView && risk === 'medium',
-      [styles.redBorder]: !assessmentDetailView && risk === 'high',
-      [styles.noLink]: !!assessmentDetailView,
-    });
-    const datesStyles = classNames(styles.dates, {
-      [styles.alignEnd]: !assessmentDetailView,
-    });
-    const notCompleted = !totalScore && !forceHighRisk;
-
-    let formattedSummaryText = null;
-    if (!assessmentDetailView && notCompleted) {
-      formattedSummaryText = (
-        <FormattedMessage id="threeSixty.notCompleted">
-          {(message: string) => <p className={styles.detail}>{message}</p>}
-        </FormattedMessage>
-      );
-    } else if (!assessmentDetailView) {
-      formattedSummaryText = <p className={styles.detail}>{summaryText.join(' | ')}</p>;
-    }
-
-    const dateText = notCompleted ? (
-      <SmallText messageId="threeSixty.notCompletedShort" />
-    ) : (
-      <div className={datesStyles}>
-        {riskArea.assessmentType === 'manual' &&
-          (started ? (
-            <DateInfo
-              messageId="threeSixty.initialAssessment"
-              date={started}
-              className={styles.date}
-            />
-          ) : (
-            <TextInfo
-              messageId="threeSixty.initialAssessment"
-              textMessageId="threeSixty.never"
-              className={styles.date}
-            />
-          ))}
-        <DateInfo label="updated" date={lastUpdated} />
-      </div>
-    );
-
-    const linkProps: LinkProps = {
-      to: `${routeBase}/assessment/${riskArea.id}`,
-      className: styles.link,
-    };
-    // if already viewing assessment detail, do not do anything when clicking link
-    if (!routeBase) {
-      linkProps.onClick = (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault();
-    }
-
-    return (
-      <div className={containerStyles}>
-        <Link {...linkProps}>
-          <h2>{riskArea.title}</h2>
-          <div className={styles.flex}>
-            {formattedSummaryText}
-            {dateText}
-          </div>
-        </Link>
-      </div>
-    );
+  const linkProps: LinkProps = {
+    to: `${routeBase}/assessment/${riskArea.id}`,
+    className: styles.link,
+  };
+  // if already viewing assessment detail, do not do anything when clicking link
+  if (!routeBase) {
+    linkProps.onClick = (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault();
   }
-}
 
-export default DomainAssessment;
+  return (
+    <div className={containerStyles}>
+      <Link {...linkProps}>
+        <h2>{riskArea.title}</h2>
+        <div className={styles.flex}>
+          {formattedSummaryText}
+          {dateText}
+        </div>
+      </Link>
+    </div>
+  );
+};

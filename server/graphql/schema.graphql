@@ -978,6 +978,32 @@ type RiskAreaGroupForPatient implements uniqueId {
   riskAreas: [RiskAreaForPatient!]!
 }
 
+type ScreeningToolResultSummary {
+  title: String!
+  score: Int
+  description: String!
+}
+
+type FullRiskAreaGroupForPatient implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  title: String!
+  shortTitle: String!
+  order: Int!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
+  riskAreas: [RiskAreaForPatient!]!
+  automatedSummaryText: [String!]!
+  manualSummaryText: [String!]!
+  screeningToolResultSummaries: [ScreeningToolResultSummary!]!
+  lastUpdated: String!
+  forceHighRisk: Boolean!
+  totalScore: Int
+  riskScore: Priority
+}
+
 # Risk Area
 type RiskArea implements uniqueId {
   id: ID!
@@ -1013,6 +1039,11 @@ type RiskAreaForPatient implements uniqueId {
   questions: [QuestionWithPatientAnswer!]!
   riskAreaAssessmentSubmissions: [RiskAreaAssessmentSubmission!]!
   screeningTools: [ScreeningToolForPatient!]!
+  lastUpdated: String!
+  forceHighRisk: Boolean!
+  totalScore: Int
+  riskScore: Priority
+  summaryText: [String!]!
 }
 
 type RiskScore {
@@ -2851,6 +2882,8 @@ type RootQueryType {
   ): RiskAreaGroupForPatient!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
+  # RiskAreaGroupsForPatient
+  riskAreaGroupsForPatient(patientId: ID!, glassBreakId: ID): [FullRiskAreaGroupForPatient!]!
   # RiskArea
   riskArea(riskAreaId: ID!): RiskArea!
   # RiskAreas

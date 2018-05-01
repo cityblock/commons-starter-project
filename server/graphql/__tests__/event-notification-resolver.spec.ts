@@ -3,8 +3,10 @@ import { transaction, Transaction } from 'objection';
 import { IEventNotificationNode } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import Concern from '../../models/concern';
 import EventNotification from '../../models/event-notification';
 import Patient from '../../models/patient';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
@@ -42,8 +44,22 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
     trx,
   );
   const dueAt = new Date().toISOString();
+  const concern = await Concern.create({ title: 'Concern Title' }, trx);
+  const patientConcern = await PatientConcern.create(
+    {
+      patientId: patient.id,
+      concernId: concern.id,
+      userId: user.id,
+    },
+    trx,
+  );
   const patientGoal = await PatientGoal.create(
-    { patientId: patient.id, title: 'goal title', userId: user.id },
+    {
+      patientId: patient.id,
+      title: 'goal title',
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+    },
     trx,
   );
   const task = await Task.create(

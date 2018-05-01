@@ -10,6 +10,7 @@ import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
@@ -59,6 +60,14 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
   it('creates the correct suggestions for a computed field answer', async () => {
     const { user, patient, riskArea } = await setup(txn);
     const concern = await Concern.create({ title: 'Concern' }, txn);
+    const patientConcern = await PatientConcern.create(
+      {
+        concernId: concern.id,
+        patientId: patient.id,
+        userId: user.id,
+      },
+      txn,
+    );
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       { title: 'GoalTemplate' },
       txn,
@@ -126,6 +135,7 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
         patientId: patient.id,
         userId: user.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -164,8 +174,7 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
       return a.suggestionType < b.suggestionType ? -1 : 1;
     });
 
-    expect(sortedSuggestions.length).toEqual(2);
-    expect(sortedSuggestions[0].concern!.id).toEqual(concern.id);
-    expect(sortedSuggestions[1].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
+    expect(sortedSuggestions.length).toEqual(1);
+    expect(sortedSuggestions[0].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
   });
 });

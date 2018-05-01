@@ -4,8 +4,6 @@ import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-cr
 import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
-import PatientGoal from '../../models/patient-goal';
-import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import {
@@ -14,6 +12,7 @@ import {
   createMockClinic,
   createMockUser,
   createPatient,
+  createTask,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -78,29 +77,17 @@ describe('CBO Referral resolver', () => {
 
   describe('CBO Referral edit', () => {
     it('edits a CBO referral and creates associated task events', async () => {
-      const taskTitle = 'Defeat Night King';
-      const goalTitle = 'Save the world';
-
       const { user, clinic } = await setup(txn);
       const cboReferral = await createCBOReferral(txn);
       expect(cboReferral.sentAt).toBeFalsy();
       const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
-      const patientGoal = await PatientGoal.create(
+      const laterDueDate = '2050-11-07T13:45:14.532Z';
+      const task = await createTask(
         {
+          patientId: patient.id,
+          cboReferralId: cboReferral.id,
           userId: user.id,
-          patientId: patient.id,
-          title: goalTitle,
-        },
-        txn,
-      );
-
-      const task = await Task.create(
-        {
-          title: taskTitle,
-          patientId: patient.id,
-          CBOReferralId: cboReferral.id,
-          patientGoalId: patientGoal.id,
-          createdById: user.id,
+          dueAt: laterDueDate,
         },
         txn,
       );

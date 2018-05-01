@@ -4352,8 +4352,7 @@ declare module 'schema' {
   interface IPatientGoalEditInput {
     patientGoalId: string;
     title: string;
-    patientConcernId?: string | null;
-    goalSuggestionTemplateId?: string | null;
+    patientConcernId: string;
   }
 
   interface IPatientGoalDeleteInput {

@@ -16,7 +16,9 @@ import * as taskUncomplete from '../../../app/graphql/queries/task-uncomplete-mu
 import * as tasksForCurrentUser from '../../../app/graphql/queries/tasks-for-current-user.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import Concern from '../../models/concern';
 import Patient from '../../models/patient';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
@@ -49,8 +51,22 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
-    { patientId: patient.id, title: 'goal title', userId: user.id },
+    {
+      patientId: patient.id,
+      title: 'goal title',
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+    },
     txn,
   );
   const dueAt = new Date().toISOString();

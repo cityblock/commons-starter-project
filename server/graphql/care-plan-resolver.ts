@@ -160,6 +160,9 @@ export async function carePlanSuggestionAccept(
         txn,
       );
     }
+    if (!patientConcernId) {
+      throw new Error('patientConcernId is required');
+    }
 
     await PatientGoal.create(
       {
@@ -167,7 +170,7 @@ export async function carePlanSuggestionAccept(
         goalSuggestionTemplateId: goalSuggestionTemplateId || null,
         patientId: carePlanSuggestion.patientId,
         title: carePlanSuggestion.goalSuggestionTemplate.title,
-        patientConcernId: patientConcernId || null,
+        patientConcernId,
         taskTemplateIds: taskTemplateIds || [],
       },
       txn,

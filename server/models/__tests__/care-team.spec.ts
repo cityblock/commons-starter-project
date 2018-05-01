@@ -10,6 +10,8 @@ import {
 } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
+import Concern from '../concern';
+import PatientConcern from '../patient-concern';
 import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import Task from '../task';
@@ -309,8 +311,22 @@ describe('care team model', () => {
       );
       await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
       await CareTeam.create({ userId: user3.id, patientId: patient.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       const task1 = await Task.create(
@@ -407,8 +423,22 @@ describe('care team model', () => {
         },
         txn,
       );
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);

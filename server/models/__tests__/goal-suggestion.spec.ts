@@ -10,9 +10,11 @@ import {
 import Answer from '../answer';
 import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
+import Concern from '../concern';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import PatientAnswer from '../patient-answer';
+import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import Question from '../question';
 import RiskArea from '../risk-area';
@@ -171,6 +173,15 @@ describe('goal suggestion model', () => {
         txn,
       );
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
 
       // Creates a PatientGoal with no goal suggestion template
       // Important since currentPatientGoalTemplateIdsQuery looks at PatientGoals
@@ -180,6 +191,7 @@ describe('goal suggestion model', () => {
           title: 'goal title',
           patientId: patient.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
@@ -477,6 +489,15 @@ describe('goal suggestion model', () => {
         },
         txn,
       );
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
 
       await PatientGoal.create(
         {
@@ -484,6 +505,7 @@ describe('goal suggestion model', () => {
           patientId: patient.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
@@ -571,12 +593,23 @@ describe('goal suggestion model', () => {
       ]);
 
       await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
       const patientGoal = await PatientGoal.create(
         {
           title: 'Patient Goal',
           patientId: patient.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );

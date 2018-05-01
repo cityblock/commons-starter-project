@@ -1,11 +1,9 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient, createTask } from '../../spec-helpers';
 import Clinic from '../clinic';
-import PatientGoal from '../patient-goal';
 import ProgressNote from '../progress-note';
-import Task from '../task';
 import TaskEvent from '../task-event';
 import User from '../user';
 
@@ -32,22 +30,8 @@ describe('task event model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
+
     const taskEvent = await TaskEvent.create(
       {
         taskId: task.id,
@@ -78,22 +62,8 @@ describe('task event model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
+
     const taskEvent = await TaskEvent.create(
       {
         taskId: task.id,
@@ -116,22 +86,7 @@ describe('task event model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
 
     await TaskEvent.create(
       {
@@ -174,22 +129,7 @@ describe('task event model', () => {
     const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
 
     await TaskEvent.create(
       {
@@ -257,22 +197,7 @@ describe('task event model', () => {
       txn,
     );
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
 
     const toNotBeDeletedEvent = await TaskEvent.create(
       {
@@ -313,22 +238,7 @@ describe('task event model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
-    const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
-      txn,
-    );
-    const task = await Task.create(
-      {
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-        patientGoalId: patientGoal.id,
-      },
-      txn,
-    );
+    const task = await createTask({ userId: user.id, patientId: patient.id, dueAt }, txn);
 
     const taskEvent = await TaskEvent.create(
       {

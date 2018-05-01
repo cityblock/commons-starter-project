@@ -6,7 +6,9 @@ import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';
 import Db from '../../../db';
 import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
+import Concern from '../../../models/concern';
 import Patient from '../../../models/patient';
+import PatientConcern from '../../../models/patient-concern';
 import PatientGoal from '../../../models/patient-goal';
 import Task from '../../../models/task';
 import User from '../../../models/user';
@@ -51,8 +53,22 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const cboReferral = await createCBOReferral(txn);
   const dueAt = new Date().toISOString();
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
-    { patientId: patient.id, title: 'goal title', userId: user.id },
+    {
+      patientId: patient.id,
+      title: 'goal title',
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+    },
     txn,
   );
   const task = await Task.create(

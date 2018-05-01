@@ -310,6 +310,16 @@ export default class Task extends BaseModel {
   }
 
   static async create(input: ITaskEditableFields, txn: Transaction) {
+    const patientGoal = await PatientGoal.get(input.patientGoalId, txn);
+
+    if (patientGoal.patientId !== input.patientId) {
+      throw new Error(
+        `Cannot add a task for patient ${input.patientId} to a goal for patient ${
+          patientGoal.patientId
+        }`,
+      );
+    }
+
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))

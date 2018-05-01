@@ -224,7 +224,7 @@ describe('care plan suggestion', () => {
         txn,
       );
 
-      await PatientConcern.create(
+      const patientConcern = await PatientConcern.create(
         {
           patientId: patient.id,
           concernId: concern.id,
@@ -238,6 +238,7 @@ describe('care plan suggestion', () => {
           userId: user.id,
           patientId: patient.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );

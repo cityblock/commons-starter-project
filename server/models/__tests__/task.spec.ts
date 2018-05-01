@@ -34,11 +34,21 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
     {
       title: 'patient goal',
       patientId: patient.id,
       userId: user.id,
+      patientConcernId: patientConcern.id,
     },
     txn,
   );
@@ -107,6 +117,7 @@ describe('task model', () => {
     await PatientGoal.update(
       patientGoal.id,
       {
+        title: 'omg title',
         patientConcernId: patientConcern.id,
       },
       user.id,
@@ -539,8 +550,39 @@ describe('task model', () => {
       const { patient, user, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
+        txn,
+      );
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient2.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const patientGoal2 = await PatientGoal.create(
+        {
+          patientId: patient2.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern2.id,
+        },
         txn,
       );
       const assignedTask1 = await Task.create(
@@ -575,7 +617,7 @@ describe('task model', () => {
           patientId: patient2.id,
           createdById: user.id,
           assignedToId: user.id,
-          patientGoalId: patientGoal.id,
+          patientGoalId: patientGoal2.id,
         },
         txn,
       );
@@ -641,8 +683,22 @@ describe('task model', () => {
     it('reassigns tasks from one user to another', async () => {
       const { patient, user, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       const task1 = await Task.create(

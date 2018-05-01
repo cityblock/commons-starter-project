@@ -4,6 +4,8 @@ import Db from '../../db';
 import PatientGoal from '../../models/patient-goal';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
+import Concern from '../concern';
+import PatientConcern from '../patient-concern';
 import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
@@ -35,8 +37,22 @@ describe('task followers', () => {
       );
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient1.id,
+          userId: user1.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient1.id, title: 'goal title', userId: user2.id },
+        {
+          patientId: patient1.id,
+          title: 'goal title',
+          userId: user2.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       const task1 = await Task.create(
@@ -69,8 +85,22 @@ describe('task followers', () => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       const task = await Task.create(
@@ -97,8 +127,22 @@ describe('task followers', () => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
       const patientGoal = await PatientGoal.create(
-        { patientId: patient.id, title: 'goal title', userId: user.id },
+        {
+          patientId: patient.id,
+          title: 'goal title',
+          userId: user.id,
+          patientConcernId: patientConcern.id,
+        },
         txn,
       );
       const task = await Task.create(
@@ -156,12 +200,40 @@ describe('task followers', () => {
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern1 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient1.id,
+          userId: user1.id,
+        },
+        txn,
+      );
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient2.id,
+          userId: user1.id,
+        },
+        txn,
+      );
+
       const patientGoalForPatient1 = await PatientGoal.create(
-        { patientId: patient1.id, title: 'goal title', userId: user1.id },
+        {
+          patientId: patient1.id,
+          title: 'goal title',
+          userId: user1.id,
+          patientConcernId: patientConcern1.id,
+        },
         txn,
       );
       const patientGoalForPatient2 = await PatientGoal.create(
-        { patientId: patient2.id, title: 'goal title', userId: user1.id },
+        {
+          patientId: patient2.id,
+          title: 'goal title',
+          userId: user1.id,
+          patientConcernId: patientConcern2.id,
+        },
         txn,
       );
       const task1 = await Task.create(
@@ -257,12 +329,40 @@ describe('task followers', () => {
       const user3 = await User.create(createMockUser(11, clinic.id, userRole, 'c@d.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+      const patientConcern1 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient1.id,
+          userId: user1.id,
+        },
+        txn,
+      );
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient2.id,
+          userId: user1.id,
+        },
+        txn,
+      );
+
       const patientGoalForPatient1 = await PatientGoal.create(
-        { patientId: patient1.id, title: 'goal title', userId: user1.id },
+        {
+          patientId: patient1.id,
+          title: 'goal title',
+          userId: user1.id,
+          patientConcernId: patientConcern1.id,
+        },
         txn,
       );
       const patientGoalForPatient2 = await PatientGoal.create(
-        { patientId: patient2.id, title: 'goal title', userId: user1.id },
+        {
+          patientId: patient2.id,
+          title: 'goal title',
+          userId: user1.id,
+          patientConcernId: patientConcern2.id,
+        },
         txn,
       );
 

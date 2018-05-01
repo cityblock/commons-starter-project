@@ -179,6 +179,7 @@ describe('care plan resolver tests', () => {
           title: 'Patient Goal',
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
@@ -221,6 +222,7 @@ describe('care plan resolver tests', () => {
           title: 'Patient Goal',
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );

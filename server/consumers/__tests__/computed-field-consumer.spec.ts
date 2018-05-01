@@ -11,6 +11,7 @@ import ConcernSuggestion from '../../models/concern-suggestion';
 import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
@@ -203,11 +204,20 @@ describe('processing computedField jobs', () => {
       txn,
     );
     // So that we can check that existing PatientGoals are filtered out
+    const patientConcern = await PatientConcern.create(
+      {
+        concernId: concern.id,
+        patientId: patient.id,
+        userId: user.id,
+      },
+      txn,
+    );
     await PatientGoal.create(
       {
         patientId: patient.id,
         userId: user.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );

@@ -105,7 +105,15 @@ export async function patientGoalEdit(
     args.input.patientGoalId,
   );
 
-  return PatientGoal.update(args.input.patientGoalId, args.input, userId!, txn);
+  return PatientGoal.update(
+    args.input.patientGoalId,
+    {
+      title: args.input.title,
+      patientConcernId: args.input.patientConcernId,
+    },
+    userId!,
+    txn,
+  );
 }
 
 export async function patientGoalDelete(

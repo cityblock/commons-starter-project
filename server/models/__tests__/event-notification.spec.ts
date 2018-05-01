@@ -9,8 +9,10 @@ import {
   setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import Concern from '../concern';
 import EventNotification from '../event-notification';
 import Patient from '../patient';
+import PatientConcern from '../patient-concern';
 import Task from '../task';
 import TaskEvent from '../task-event';
 import TaskFollower from '../task-follower';
@@ -32,8 +34,22 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
-    { patientId: patient.id, title: 'goal title', userId: user.id },
+    {
+      patientId: patient.id,
+      title: 'goal title',
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+    },
     txn,
   );
   const task = await Task.create(

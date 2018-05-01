@@ -45,6 +45,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       patientId: patient.id,
       userId: user.id,
       title: 'Patient Goal',
+      patientConcernId: patientConcern.id,
     },
     txn,
   );

@@ -9,13 +9,18 @@ import PatientConcern from './patient-concern';
 import Task from './task';
 import TaskTemplate from './task-template';
 
-interface IPatientGoalEditableFields {
+interface IPatientGoalCreateFields {
   title?: string;
   patientId: string;
   goalSuggestionTemplateId?: string | null;
   taskTemplateIds?: string[];
-  patientConcernId?: string | null;
+  patientConcernId: string;
   userId: string;
+}
+
+interface IPatientGoalEditFields {
+  title: string;
+  patientConcernId: string;
 }
 
 export const EAGER_QUERY =
@@ -48,7 +53,7 @@ export default class PatientGoal extends BaseModel {
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['patientId', 'title'],
+    required: ['patientId', 'title', 'patientConcernId'],
   };
 
   static get relationMappings(): RelationMappings {
@@ -103,11 +108,21 @@ export default class PatientGoal extends BaseModel {
     return patientGoal;
   }
 
-  static async create(input: IPatientGoalEditableFields, txn: Transaction) {
+  static async create(input: IPatientGoalCreateFields, txn: Transaction) {
     const { taskTemplateIds, goalSuggestionTemplateId, userId, patientId, title } = input;
 
     if (!goalSuggestionTemplateId && !title) {
       return Promise.reject('Must include either goal suggestion template id or title');
+    }
+
+    // Ensure we don't add a patient goal for patient A to a patient concern for patient B
+    const patientConcern = await PatientConcern.get(input.patientConcernId, txn);
+    if (patientConcern.patientId !== input.patientId) {
+      throw new Error(
+        `Cannot add patient goal for patient: ${input.patientId} to a concern for patient ${
+          patientConcern.patientId
+        }`,
+      );
     }
 
     let patientGoal: PatientGoal;
@@ -163,13 +178,24 @@ export default class PatientGoal extends BaseModel {
 
   static async update(
     patientGoalId: string,
-    patientGoal: Partial<IPatientGoalEditableFields>,
+    patientGoalInput: IPatientGoalEditFields,
     userId: string,
     txn: Transaction,
   ): Promise<PatientGoal> {
+    // Ensure we don't add a patient goal for patient A to a patient concern for patient B
+    const patientConcern = await PatientConcern.get(patientGoalInput.patientConcernId, txn);
+    const patientGoal = await this.get(patientGoalId, txn);
+    if (patientConcern.patientId !== patientGoal.patientId) {
+      throw new Error(
+        `Cannot add patient goal for patient: ${patientGoal.patientId} to a concern for patient ${
+          patientConcern.patientId
+        }`,
+      );
+    }
+
     const updatedPatientGoal = await this.query(txn)
       .eager(EAGER_QUERY)
-      .patchAndFetchById(patientGoalId, patientGoal);
+      .patchAndFetchById(patientGoalId, patientGoalInput);
 
     await CarePlanUpdateEvent.create(
       {

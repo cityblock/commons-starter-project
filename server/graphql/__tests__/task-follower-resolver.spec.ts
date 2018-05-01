@@ -3,7 +3,9 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import Concern from '../../models/concern';
 import Patient from '../../models/patient';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
@@ -26,8 +28,22 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
   const dueAt = new Date().toISOString();
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
-    { patientId: patient.id, title: 'goal title', userId: user.id },
+    {
+      patientId: patient.id,
+      title: 'goal title',
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+    },
     txn,
   );
   const task = await Task.create(

@@ -391,10 +391,33 @@ interface ICreateTaskOptions {
   patientId: string;
   userId: string;
   dueAt: string;
-  patientGoalId: string;
+  patientGoalId?: string;
+  cboReferralId?: string;
 }
 
 export async function createTask(options: ICreateTaskOptions, txn: Transaction) {
+  let patientGoalId = options.patientGoalId;
+  if (!options.patientGoalId) {
+    const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+    const patientConcern = await PatientConcern.create(
+      {
+        concernId: concern.id,
+        patientId: options.patientId,
+        userId: options.userId,
+      },
+      txn,
+    );
+    const patientGoal = await PatientGoal.create(
+      {
+        patientId: options.patientId,
+        title: 'goal title',
+        userId: options.userId,
+        patientConcernId: patientConcern.id,
+      },
+      txn,
+    );
+    patientGoalId = patientGoal.id;
+  }
   return Task.create(
     {
       title: 'Defeat Night King',
@@ -402,7 +425,8 @@ export async function createTask(options: ICreateTaskOptions, txn: Transaction) 
       patientId: options.patientId,
       createdById: options.userId,
       assignedToId: options.userId,
-      patientGoalId: options.patientGoalId,
+      patientGoalId: patientGoalId!,
+      CBOReferralId: options.cboReferralId,
       priority: 'high',
     },
     txn,
@@ -415,8 +439,17 @@ export async function createCBOReferralTask(
   CBOReferralId: string,
   txn: Transaction,
 ) {
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId,
+      userId,
+    },
+    txn,
+  );
   const patientGoal = await PatientGoal.create(
-    { userId, patientId, title: 'CBO referral goal' },
+    { userId, patientId, title: 'CBO referral goal', patientConcernId: patientConcern.id },
     txn,
   );
   return Task.create(
@@ -1088,18 +1121,68 @@ export async function setupUrgentTasks(txn: Transaction) {
 
   const soonDueDate = '2017-09-07T13:45:14.532Z';
   const laterDueDate = '2050-11-07T13:45:14.532Z';
-
-  const patientGoal = await PatientGoal.create(
-    { userId: user.id, patientId: patient1.id, title: 'urgent tasks goal' },
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern1 = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient1.id,
+      userId: user.id,
+    },
     txn,
   );
 
+  const patientGoal1 = await PatientGoal.create(
+    {
+      userId: user.id,
+      patientId: patient1.id,
+      title: 'urgent tasks goal',
+      patientConcernId: patientConcern1.id,
+    },
+    txn,
+  );
+
+  const patientConcern2 = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient2.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  const patientGoal2 = await PatientGoal.create(
+    {
+      userId: user.id,
+      patientId: patient2.id,
+      title: 'urgent tasks goal',
+      patientConcernId: patientConcern2.id,
+    },
+    txn,
+  );
+  const patientConcern5 = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient5.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  const patientGoal5 = await PatientGoal.create(
+    {
+      userId: user.id,
+      patientId: patient5.id,
+      title: 'urgent tasks goal',
+      patientConcernId: patientConcern5.id,
+    },
+    txn,
+  );
   const task1 = await createTask(
     {
       patientId: patient1.id,
       userId: user.id,
       dueAt: soonDueDate,
-      patientGoalId: patientGoal.id,
+      patientGoalId: patientGoal1.id,
     },
     txn,
   );
@@ -1108,7 +1191,7 @@ export async function setupUrgentTasks(txn: Transaction) {
       patientId: patient1.id,
       userId: user.id,
       dueAt: laterDueDate,
-      patientGoalId: patientGoal.id,
+      patientGoalId: patientGoal1.id,
     },
     txn,
   );
@@ -1117,16 +1200,26 @@ export async function setupUrgentTasks(txn: Transaction) {
       patientId: patient2.id,
       userId: user.id,
       dueAt: laterDueDate,
-      patientGoalId: patientGoal.id,
+      patientGoalId: patientGoal2.id,
     },
     txn,
   );
   const task = await createTask(
-    { patientId: patient5.id, userId: user.id, dueAt: laterDueDate, patientGoalId: patientGoal.id },
+    {
+      patientId: patient5.id,
+      userId: user.id,
+      dueAt: laterDueDate,
+      patientGoalId: patientGoal5.id,
+    },
     txn,
   );
   await createTask(
-    { patientId: patient5.id, userId: user2.id, dueAt: soonDueDate, patientGoalId: patientGoal.id },
+    {
+      patientId: patient5.id,
+      userId: user2.id,
+      dueAt: soonDueDate,
+      patientGoalId: patientGoal5.id,
+    },
     txn,
   );
 

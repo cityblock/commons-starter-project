@@ -22,6 +22,7 @@ const userRole = 'physician';
 interface ISetup {
   patient: Patient;
   user: User;
+  patientConcern: PatientConcern;
   clinic: Clinic;
 }
 
@@ -36,7 +37,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  return { clinic, user, patient };
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  return { clinic, user, patient, patientConcern };
 }
 
 describe('patient goal model', () => {
@@ -56,12 +66,13 @@ describe('patient goal model', () => {
   });
 
   it('creates and gets patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -70,13 +81,14 @@ describe('patient goal model', () => {
   });
 
   it('creates the correct CarePlanUpdateEvent when creating a patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -88,13 +100,13 @@ describe('patient goal model', () => {
       },
       txn,
     );
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(1);
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2);
     expect(fetchedCarePlanUpdateEvents.results[0].patientGoalId).toEqual(patientGoal.id);
     expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('create_patient_goal');
   });
 
   it('creates a patient goal and links to goal template', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       {
@@ -108,6 +120,7 @@ describe('patient goal model', () => {
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -118,7 +131,7 @@ describe('patient goal model', () => {
   });
 
   it('creates tasks when taskTemplates are provided as input', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       { title: 'Fix housing' },
@@ -143,6 +156,7 @@ describe('patient goal model', () => {
         title: 'Patient Goal',
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        patientConcernId: patientConcern.id,
         userId: user.id,
         taskTemplateIds: [taskTemplate.id],
       },
@@ -176,7 +190,7 @@ describe('patient goal model', () => {
   });
 
   it('correctly assigns tasks when taskTemplates have an default assignee role', async () => {
-    const { patient, user, clinic } = await setup(txn);
+    const { patient, user, clinic, patientConcern } = await setup(txn);
 
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       { title: 'Fix housing' },
@@ -202,6 +216,7 @@ describe('patient goal model', () => {
 
     await PatientGoal.create(
       {
+        patientConcernId: patientConcern.id,
         title: 'Patient Goal',
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -225,7 +240,7 @@ describe('patient goal model', () => {
   });
 
   it('does not assign tasks when there is no care team member for assigned role', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       { title: 'Fix housing' },
@@ -245,6 +260,7 @@ describe('patient goal model', () => {
 
     await PatientGoal.create(
       {
+        patientConcernId: patientConcern.id,
         title: 'Patient Goal',
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -269,7 +285,7 @@ describe('patient goal model', () => {
   });
 
   it('correctly sets dueAt when taskTemplates have interval and number set', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const oldDate = Date.now;
     Date.now = jest.fn(() => 1501632000000);
@@ -294,6 +310,7 @@ describe('patient goal model', () => {
 
     await PatientGoal.create(
       {
+        patientConcernId: patientConcern.id,
         title: 'Patient Goal',
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -320,7 +337,7 @@ describe('patient goal model', () => {
   });
 
   it('does not create tasks for invalid taskTemplates that are provided as input', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
       { title: 'Fix housing' },
@@ -342,6 +359,7 @@ describe('patient goal model', () => {
 
     await PatientGoal.create(
       {
+        patientConcernId: patientConcern.id,
         title: 'Patient Goal',
         patientId: patient.id,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -584,13 +602,14 @@ describe('patient goal model', () => {
   });
 
   it('edits patient goal title', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -598,6 +617,7 @@ describe('patient goal model', () => {
       patientGoal.id,
       {
         title: 'new title',
+        patientConcernId: patientConcern.id,
       },
       user.id,
       txn,
@@ -606,13 +626,14 @@ describe('patient goal model', () => {
   });
 
   it('creates the correct CarePlanUpdateEvent when editing a patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -620,6 +641,7 @@ describe('patient goal model', () => {
       patientGoal.id,
       {
         title: 'new title',
+        patientConcernId: patientConcern.id,
       },
       user.id,
       txn,
@@ -633,7 +655,7 @@ describe('patient goal model', () => {
       txn,
     );
 
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for edit
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(3); // One for create and one for edit
     const expectedEventTypes = fetchedCarePlanUpdateEvents.results.map(
       taskEvent => taskEvent.eventType,
     );
@@ -641,13 +663,14 @@ describe('patient goal model', () => {
   });
 
   it('deletes patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -656,13 +679,14 @@ describe('patient goal model', () => {
   });
 
   it('creates the correct CarePlanUpdateEvent when deleting a patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
 
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );
@@ -677,7 +701,7 @@ describe('patient goal model', () => {
       txn,
     );
 
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for delete
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(3); // One for create and one for delete
     const expectedEventTypes = fetchedCarePlanUpdateEvents.results.map(
       taskEvent => taskEvent.eventType,
     );
@@ -685,12 +709,13 @@ describe('patient goal model', () => {
   });
 
   it('gets associated patient id for a patient goal', async () => {
-    const { patient, user } = await setup(txn);
+    const { patient, user, patientConcern } = await setup(txn);
     const patientGoal = await PatientGoal.create(
       {
         title: 'title',
         patientId: patient.id,
         userId: user.id,
+        patientConcernId: patientConcern.id,
       },
       txn,
     );

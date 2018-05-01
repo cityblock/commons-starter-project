@@ -92,8 +92,22 @@ describe('progress note resolver', () => {
       },
       txn,
     );
+    const concern = await Concern.create({ title: 'Concern Title' }, txn);
+    const patientConcern = await PatientConcern.create(
+      {
+        patientId: patient.id,
+        concernId: concern.id,
+        userId: user.id,
+      },
+      txn,
+    );
     const patientGoal = await PatientGoal.create(
-      { patientId: patient.id, title: 'goal title', userId: user.id },
+      {
+        patientId: patient.id,
+        title: 'goal title',
+        userId: user.id,
+        patientConcernId: patientConcern.id,
+      },
       txn,
     );
     const task = await Task.create(
@@ -114,15 +128,6 @@ describe('progress note resolver', () => {
         userId: user.id,
         eventType: 'edit_assignee',
         progressNoteId: progressNote.id,
-      },
-      txn,
-    );
-    const concern = await Concern.create({ title: 'Concern Title' }, txn);
-    const patientConcern = await PatientConcern.create(
-      {
-        patientId: patient.id,
-        concernId: concern.id,
-        userId: user.id,
       },
       txn,
     );

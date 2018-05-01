@@ -1,10 +1,14 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import * as patientGoalCreate from '../../../app/graphql/queries/patient-goal-create-mutation.graphql';
+import * as patientGoalDelete from '../../../app/graphql/queries/patient-goal-delete-mutation.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
+import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
@@ -14,6 +18,7 @@ import schema from '../make-executable-schema';
 interface ISetup {
   patient: Patient;
   user: User;
+  patientConcern: PatientConcern;
 }
 
 const userRole = 'admin';
@@ -23,13 +28,23 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-
-  return { patient, user };
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+  const patientConcern = await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    },
+    txn,
+  );
+  return { patient, user, patientConcern };
 }
 
 describe('patient goal resolver', () => {
   let txn = null as any;
   let db: Db;
+  const patientGoalCreateMutation = print(patientGoalCreate);
+  const patientGoalDeleteMutation = print(patientGoalDelete);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -46,12 +61,13 @@ describe('patient goal resolver', () => {
 
   describe('resolve patient goal', () => {
     it('fetches a patient goal', async () => {
-      const { patient, user } = await setup(txn);
+      const { patient, user, patientConcern } = await setup(txn);
       const patientGoal = await PatientGoal.create(
         {
           title: 'title',
           patientId: patient.id,
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
@@ -68,15 +84,14 @@ describe('patient goal resolver', () => {
 
   describe('patient goal create', () => {
     it('creates a patient goal', async () => {
-      const { patient, user } = await setup(txn);
-      const mutation = `mutation {
-          patientGoalCreate(
-            input: { patientId: "${patient.id}", title: "title" }
-          ) {
-            patientId, title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const { patient, user, patientConcern } = await setup(txn);
+      const result = await graphql(
+        schema,
+        patientGoalCreateMutation,
+        null,
+        { permissions, userId: user.id, txn },
+        { patientId: patient.id, title: 'title', patientConcernId: patientConcern.id },
+      );
       expect(cloneDeep(result.data!.patientGoalCreate)).toMatchObject({
         patientId: patient.id,
         title: 'title',
@@ -84,7 +99,7 @@ describe('patient goal resolver', () => {
     });
 
     it('creates a patient goal and tasks', async () => {
-      const { patient, user } = await setup(txn);
+      const { patient, user, patientConcern } = await setup(txn);
       const title = 'Fix housing';
       const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title }, txn);
       const taskTemplate = await TaskTemplate.create(
@@ -100,18 +115,18 @@ describe('patient goal resolver', () => {
         txn,
       );
 
-      const mutation = `mutation {
-          patientGoalCreate(
-            input: {
-              patientId: "${patient.id}",
-              goalSuggestionTemplateId: "${goalSuggestionTemplate.id}",
-              taskTemplateIds: ["${taskTemplate.id}"]
-            }
-          ) {
-            patientId, title
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(
+        schema,
+        patientGoalCreateMutation,
+        null,
+        { permissions, userId: user.id, txn },
+        {
+          patientId: patient.id,
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          taskTemplateIds: [taskTemplate.id],
+          patientConcernId: patientConcern.id,
+        },
+      );
       expect(cloneDeep(result.data!.patientGoalCreate)).toMatchObject({
         patientId: patient.id,
         title,
@@ -121,17 +136,20 @@ describe('patient goal resolver', () => {
 
   describe('patient goal Edit', () => {
     it('edits a patient goal', async () => {
-      const { patient, user } = await setup(txn);
+      const { patient, user, patientConcern } = await setup(txn);
       const patientGoal = await PatientGoal.create(
         {
           patientId: patient.id,
           title: 'title',
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
       const mutation = `mutation {
-          patientGoalEdit(input: { title: "better title", patientGoalId: "${patientGoal.id}" }) {
+          patientGoalEdit(input: { title: "better title", patientGoalId: "${
+            patientGoal.id
+          }", patientConcernId: "${patientConcern.id}" }) {
             title
           }
         }`;
@@ -144,33 +162,37 @@ describe('patient goal resolver', () => {
 
   describe('patient goal delete', () => {
     it('deletes a patient goal', async () => {
-      const { patient, user } = await setup(txn);
+      const { patient, user, patientConcern } = await setup(txn);
       const patientGoal = await PatientGoal.create(
         {
           patientId: patient.id,
           title: 'title',
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );
-      const mutation = `mutation {
-          patientGoalDelete(input: { patientGoalId: "${patientGoal.id}" }) {
-            deletedAt
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(
+        schema,
+        patientGoalDeleteMutation,
+        null,
+        { permissions, userId: user.id, txn },
+        { patientGoalId: patientGoal.id },
+      );
       expect(cloneDeep(result.data!.patientGoalDelete).deletedAt).not.toBeFalsy();
     });
   });
 
   describe('patient goals for patient', () => {
     it('returns patient goals for patient', async () => {
-      const { patient, user } = await setup(txn);
+      const { patient, user, patientConcern } = await setup(txn);
+
       await PatientGoal.create(
         {
           patientId: patient.id,
           title: 'title',
           userId: user.id,
+          patientConcernId: patientConcern.id,
         },
         txn,
       );

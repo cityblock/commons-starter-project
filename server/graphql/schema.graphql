@@ -2163,8 +2163,7 @@ input PatientGoalCreateInput {
 input PatientGoalEditInput {
   patientGoalId: ID!
   title: String!
-  patientConcernId: ID
-  goalSuggestionTemplateId: ID
+  patientConcernId: ID!
 }
 
 input PatientGoalDeleteInput {

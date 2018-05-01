@@ -23,5 +23,8 @@ export default {
   TWILIO_SID: null,
   TWILIO_AUTH_TOKEN: null,
   SUBSCRIPTIONS_ENDPOINT: 'ws://localhost:3000/subscriptions',
+  MATTERMOST_TOKEN: 'winterIsComing',
+  MATTERMOST_TEAM_ID: 'CITYBLOCKPARTY',
+  MATTERMOST_URL: 'https://mattermost-test.cityblock.com/api/v4',
   ...process.env,
 };

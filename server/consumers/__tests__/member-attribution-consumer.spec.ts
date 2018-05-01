@@ -3,6 +3,7 @@ import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
@@ -67,11 +68,17 @@ describe('processing memberAttribution jobs', () => {
 
   describe('with a new patient', () => {
     it('creates a new patient', async () => {
+      const createChannel = jest.fn();
+
+      Mattermost.get = jest.fn().mockReturnValue({
+        createChannelForPatient: createChannel,
+      });
+
       const { clinic } = await setup(txn);
       const patientId = uuid();
       const data = {
         patientId,
-        cityblockId: 123,
+        cityblockId: 124,
         firstName: 'Bob',
         lastName: 'Smith',
         dateOfBirth: '01/01/1990',
@@ -84,7 +91,9 @@ describe('processing memberAttribution jobs', () => {
 
       const fetchedPatient = await Patient.get(patientId, txn);
       expect(fetchedPatient.patientInfo.gender).toEqual('male');
-      expect(fetchedPatient.cityblockId).toEqual(123);
+      expect(fetchedPatient.cityblockId).toEqual(124);
+
+      expect(createChannel).toBeCalledWith(fetchedPatient);
     });
   });
 

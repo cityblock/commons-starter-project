@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import Db from '../db';
 import { IMemberAttributionMessageData } from '../handlers/pubsub/push-handler';
 import { createRedisClient } from '../lib/redis';
+import Mattermost from '../mattermost';
 import Patient, { IPatientCreateFields, IPatientUpdateFields } from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
 
@@ -65,7 +66,7 @@ export async function processNewMemberAttributionMessage(
       // else, create a new one
     } else {
       const dataForCreate = pickBy<IPatientCreateFields>(data);
-      await Patient.create(
+      const newPatient = await Patient.create(
         {
           ...dataForCreate,
           patientId,
@@ -73,6 +74,9 @@ export async function processNewMemberAttributionMessage(
         } as any, // TODO: Fix type
         txn,
       );
+      // and create associated patient channel in mattermost
+      const mattermost = Mattermost.get();
+      await mattermost.createChannelForPatient(newPatient);
     }
   });
 }

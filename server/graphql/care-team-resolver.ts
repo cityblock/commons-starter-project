@@ -8,6 +8,7 @@ import {
 } from 'schema';
 import { IPaginationOptions } from '../db';
 import { convertCareTeamUser } from '../graphql/shared/converter';
+import Mattermost from '../mattermost';
 import CareTeam from '../models/care-team';
 import ComputedPatientStatus from '../models/computed-patient-status';
 import checkUserPermissions from './shared/permissions-check';
@@ -69,6 +70,10 @@ export async function careTeamReassignUser(
   );
 
   await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
+
+  // remove user for patient channel in Mattermost
+  const mattermost = Mattermost.get();
+  await mattermost.removeUserFromPatientChannel(input.patientId, input.userId, txn);
 
   return careTeam;
 }

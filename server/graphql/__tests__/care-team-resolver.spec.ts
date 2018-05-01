@@ -1,12 +1,13 @@
 import { graphql, print } from 'graphql';
-import { cloneDeep } from 'lodash';
 import { find } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
 import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
 import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
 import * as careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
 import Db from '../../db';
+import Mattermost from '../../mattermost';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';
@@ -291,6 +292,12 @@ describe('care team', () => {
       expect(careTeamUserIds).toContain(user.id);
       expect(careTeamUserIds).toContain(user2.id);
 
+      const removeUserFromChannel = jest.fn();
+
+      Mattermost.get = jest.fn().mockReturnValue({
+        removeUserFromPatientChannel: removeUserFromChannel,
+      });
+
       const result = await graphql(
         schema,
         careTeamReassignUserMutation,
@@ -316,6 +323,8 @@ describe('care team', () => {
       const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
       expect(refetchedCareTeam).toHaveLength(1);
       expect(refetchedCareTeamUserIds).toContain(user2.id);
+
+      expect(removeUserFromChannel).toBeCalledWith(patient.id, user.id, txn);
     });
 
     it('updates computed patient status when reassigning a care team member', async () => {

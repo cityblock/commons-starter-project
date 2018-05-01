@@ -4,10 +4,12 @@ import Db from '../db';
 import Mattermost from '../mattermost';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
-import { createMockClinic, createPatient } from '../spec-helpers';
+import User from '../models/user';
+import { createMockClinic, createMockUser, createPatient } from '../spec-helpers';
 
 interface ISetup {
   patient: Patient;
+  user: User;
 }
 
 const mattermostUrl = 'https://mattermost-test.cityblock.com/api/v4';
@@ -15,9 +17,13 @@ const teamId = 'CITYBLOCKPARTY';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic('The Wall', 123455), txn);
-  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const patient = await createPatient(
+    { cityblockId: 123, homeClinicId: clinic.id, userId: user.id },
+    txn,
+  );
 
-  return { patient };
+  return { patient, user };
 }
 
 describe('Mattermost', () => {
@@ -29,6 +35,8 @@ describe('Mattermost', () => {
     await Db.get();
     txn = await transaction.start(Patient.knex());
     axios.post = jest.fn();
+    axios.get = jest.fn().mockReturnValue({ data: { id: 'fakeId' } });
+    axios.delete = jest.fn();
   });
 
   afterEach(async () => {
@@ -57,4 +65,26 @@ describe('Mattermost', () => {
       );
     });
   });
+
+  describe('remove user from patient channel', () => {
+    it("removes a user from a given patient's channel", async () => {
+      const { user, patient } = await setup(txn);
+
+      await mattermost.removeUserFromPatientChannel(patient.id, user.id, txn);
+
+      expect(axios.get).toBeCalledWith(
+        `${mattermostUrl}/teams/${teamId}/channels/name/dan-plant-123`,
+        { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
+      );
+
+      expect(axios.get).toBeCalledWith(`${mattermostUrl}/users/email/${user.email}`, {
+        headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' },
+      });
+
+      expect(axios.delete).toBeCalledWith(`${mattermostUrl}/channels/fakeId/members/fakeId`, {
+        headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' },
+      });
+    });
+  });
+
 });

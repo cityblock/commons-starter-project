@@ -53,8 +53,7 @@
     "computed-patient-status:update-all:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",
     "computed-patient-status:update-all:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",
     "jobs:process-voicemail:dev": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/jobs/process-voicemail.js",
-    "jobs:process-voicemail:production": "NODE_ENV=productiontre pm2 start --no-daemon ./server-compiled/server/jobs/process-voicemail.js",
-    "mattermost": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/mattermost.js"
+    "jobs:process-voicemail:production": "NODE_ENV=production pm2 start --no-daemon ./server-compiled/server/jobs/process-voicemail.js"
   },
   "author": "Brennan Moore",
   "jest": {

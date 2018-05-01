@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
+import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -25,6 +26,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 11, homeClinicId: clinic.id }, txn);
   const dueAt = new Date().toISOString();
+  const patientGoal = await PatientGoal.create(
+    { patientId: patient.id, title: 'goal title', userId: user.id },
+    txn,
+  );
   const task = await Task.create(
     {
       title: 'Task A Title',
@@ -33,6 +38,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     },
     txn,
   );

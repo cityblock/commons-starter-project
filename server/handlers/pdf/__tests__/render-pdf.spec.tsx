@@ -7,6 +7,7 @@ import Db from '../../../db';
 import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
+import PatientGoal from '../../../models/patient-goal';
 import Task from '../../../models/task';
 import User from '../../../models/user';
 import {
@@ -50,6 +51,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const cboReferral = await createCBOReferral(txn);
   const dueAt = new Date().toISOString();
+  const patientGoal = await PatientGoal.create(
+    { patientId: patient.id, title: 'goal title', userId: user.id },
+    txn,
+  );
   const task = await Task.create(
     {
       title: 'Defeat Night King',
@@ -60,6 +65,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       assignedToId: user.id,
       priority: 'high',
       CBOReferralId: cboReferral.id,
+      patientGoalId: patientGoal.id,
     },
     txn,
   );

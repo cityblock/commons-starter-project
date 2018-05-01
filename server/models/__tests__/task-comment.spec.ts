@@ -3,6 +3,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
+import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskComment from '../task-comment';
 import User from '../user';
@@ -30,6 +31,11 @@ describe('task comment model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
+
     const task = await Task.create(
       {
         title: 'title',
@@ -38,6 +44,7 @@ describe('task comment model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );
@@ -76,6 +83,11 @@ describe('task comment model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
+
     const task = await Task.create(
       {
         title: 'title',
@@ -84,6 +96,7 @@ describe('task comment model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );
@@ -105,6 +118,11 @@ describe('task comment model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
+
     const task = await Task.create(
       {
         title: 'title',
@@ -113,6 +131,7 @@ describe('task comment model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );
@@ -163,6 +182,11 @@ describe('task comment model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
+
     const task = await Task.create(
       {
         title: 'title',
@@ -171,6 +195,7 @@ describe('task comment model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );
@@ -185,6 +210,11 @@ describe('task comment model', () => {
     const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
     const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
     const dueAt = new Date().toISOString();
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
+
     const task = await Task.create(
       {
         title: 'title',
@@ -193,6 +223,7 @@ describe('task comment model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );

@@ -25,6 +25,7 @@ import PatientConcern from './models/patient-concern';
 import PatientContact, { PatientRelationOptions } from './models/patient-contact';
 import PatientDocument from './models/patient-document';
 import { ExternalProviderOptions } from './models/patient-external-provider';
+import PatientGoal from './models/patient-goal';
 import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientPhone from './models/patient-phone';
@@ -386,19 +387,22 @@ export async function cleanCarePlanUpdateEvents(patientId: string, txn: Transact
   await Promise.all(carePlanUpdateEventDeletions);
 }
 
-export async function createTask(
-  patientId: string,
-  userId: string,
-  dueAt: string,
-  txn: Transaction,
-) {
+interface ICreateTaskOptions {
+  patientId: string;
+  userId: string;
+  dueAt: string;
+  patientGoalId: string;
+}
+
+export async function createTask(options: ICreateTaskOptions, txn: Transaction) {
   return Task.create(
     {
       title: 'Defeat Night King',
-      dueAt,
-      patientId,
-      createdById: userId,
-      assignedToId: userId,
+      dueAt: options.dueAt,
+      patientId: options.patientId,
+      createdById: options.userId,
+      assignedToId: options.userId,
+      patientGoalId: options.patientGoalId,
       priority: 'high',
     },
     txn,
@@ -411,6 +415,10 @@ export async function createCBOReferralTask(
   CBOReferralId: string,
   txn: Transaction,
 ) {
+  const patientGoal = await PatientGoal.create(
+    { userId, patientId, title: 'CBO referral goal' },
+    txn,
+  );
   return Task.create(
     {
       title: 'Defeat Cersei and Lannister Army',
@@ -420,6 +428,7 @@ export async function createCBOReferralTask(
       assignedToId: userId,
       priority: 'high',
       CBOReferralId,
+      patientGoalId: patientGoal.id,
     },
     txn,
   );
@@ -1080,11 +1089,46 @@ export async function setupUrgentTasks(txn: Transaction) {
   const soonDueDate = '2017-09-07T13:45:14.532Z';
   const laterDueDate = '2050-11-07T13:45:14.532Z';
 
-  const task1 = await createTask(patient1.id, user.id, soonDueDate, txn);
-  await createTask(patient1.id, user.id, laterDueDate, txn);
-  await createTask(patient2.id, user.id, laterDueDate, txn);
-  const task = await createTask(patient5.id, user.id, laterDueDate, txn);
-  await createTask(patient5.id, user2.id, soonDueDate, txn);
+  const patientGoal = await PatientGoal.create(
+    { userId: user.id, patientId: patient1.id, title: 'urgent tasks goal' },
+    txn,
+  );
+
+  const task1 = await createTask(
+    {
+      patientId: patient1.id,
+      userId: user.id,
+      dueAt: soonDueDate,
+      patientGoalId: patientGoal.id,
+    },
+    txn,
+  );
+  await createTask(
+    {
+      patientId: patient1.id,
+      userId: user.id,
+      dueAt: laterDueDate,
+      patientGoalId: patientGoal.id,
+    },
+    txn,
+  );
+  await createTask(
+    {
+      patientId: patient2.id,
+      userId: user.id,
+      dueAt: laterDueDate,
+      patientGoalId: patientGoal.id,
+    },
+    txn,
+  );
+  const task = await createTask(
+    { patientId: patient5.id, userId: user.id, dueAt: laterDueDate, patientGoalId: patientGoal.id },
+    txn,
+  );
+  await createTask(
+    { patientId: patient5.id, userId: user2.id, dueAt: soonDueDate, patientGoalId: patientGoal.id },
+    txn,
+  );
 
   const taskEvent = await TaskEvent.create(
     {

@@ -77,7 +77,7 @@ export async function taskCreate(
       patientId,
       priority: priority || undefined,
       assignedToId: assignedToId || undefined,
-      patientGoalId: patientGoalId || undefined,
+      patientGoalId,
       CBOReferralId,
     },
     txn,

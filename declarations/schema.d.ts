@@ -350,11 +350,6 @@ declare module 'schema' {
     taskTemplatesForAnswer: Array<ITaskTemplate>;
 
     /**
-     * patient task suggestions
-     */
-    patientTaskSuggestions: Array<IPatientTaskSuggestion>;
-
-    /**
      * Care Plan Suggestions
      */
     carePlanSuggestionsForPatient: Array<ICarePlanSuggestion>;
@@ -840,9 +835,6 @@ declare module 'schema' {
   interface ITaskTemplatesForAnswerOnRootQueryTypeArguments {
     answerId: string;
   }
-  interface IPatientTaskSuggestionsOnRootQueryTypeArguments {
-    patientId: string;
-  }
   interface ICarePlanSuggestionsForPatientOnRootQueryTypeArguments {
     patientId: string;
     glassBreakId?: string | null;
@@ -1087,7 +1079,6 @@ declare module 'schema' {
     | ITaskEvent
     | IProgressNote
     | IProgressNoteTemplate
-    | IPatientTaskSuggestion
     | IPatientAnswerEvent
     | ICarePlanUpdateEvent
     | IQuickCall
@@ -1098,7 +1089,8 @@ declare module 'schema' {
     | IPatientSocialSecurity
     | ISmsMessage
     | IComputedFieldFlag
-    | IConcernDiagnosisCode;
+    | IConcernDiagnosisCode
+    | IPatientTaskSuggestion;
 
   /**
    * An object with a Globally Unique ID
@@ -2296,23 +2288,6 @@ declare module 'schema' {
     | 'updatedAtDesc'
     | 'updatedAtAsc';
 
-  interface IPatientTaskSuggestion {
-    id: string;
-    patientId: string;
-    patient: IPatient;
-    taskTemplateId: string | null;
-    taskTemplate: ITaskTemplate | null;
-    acceptedById: string | null;
-    acceptedBy: IUser | null;
-    dismissedById: string | null;
-    dismissedBy: IUser | null;
-    dismissedReason: string | null;
-    createdAt: string;
-    updatedAt: string;
-    dismissedAt: string | null;
-    acceptedAt: string | null;
-  }
-
   interface ICarePlan {
     goals: Array<IPatientGoal>;
     concerns: Array<IPatientConcern>;
@@ -2972,16 +2947,6 @@ declare module 'schema' {
     taskSuggestionDelete: Array<ITaskTemplate> | null;
 
     /**
-     * patient task suggestion accept
-     */
-    patientTaskSuggestionAccept: IPatientTaskSuggestion | null;
-
-    /**
-     * patient task suggestion dismiss
-     */
-    patientTaskSuggestionDismiss: IPatientTaskSuggestion | null;
-
-    /**
      * patient goal create
      */
     patientGoalCreate: IPatientGoal | null;
@@ -3492,12 +3457,6 @@ declare module 'schema' {
   }
   interface ITaskSuggestionDeleteOnRootMutationTypeArguments {
     input?: ITaskSuggestInput | null;
-  }
-  interface IPatientTaskSuggestionAcceptOnRootMutationTypeArguments {
-    input?: IPatientTaskSuggestionAcceptInput | null;
-  }
-  interface IPatientTaskSuggestionDismissOnRootMutationTypeArguments {
-    input?: IPatientTaskSuggestionDismissInput | null;
   }
   interface IPatientGoalCreateOnRootMutationTypeArguments {
     input?: IPatientGoalCreateInput | null;
@@ -4075,7 +4034,7 @@ declare module 'schema' {
     dueAt?: string | null;
     patientId: string;
     assignedToId?: string | null;
-    patientGoalId?: string | null;
+    patientGoalId: string;
     priority?: IPriorityEnum | null;
     CBOReferralId?: string | null;
   }
@@ -4377,15 +4336,6 @@ declare module 'schema' {
   interface ITaskSuggestInput {
     answerId: string;
     taskTemplateId: string;
-  }
-
-  interface IPatientTaskSuggestionAcceptInput {
-    patientTaskSuggestionId: string;
-  }
-
-  interface IPatientTaskSuggestionDismissInput {
-    patientTaskSuggestionId: string;
-    dismissedReason: string;
   }
 
   interface IPatientGoalCreateInput {
@@ -4868,6 +4818,23 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+  }
+
+  interface IPatientTaskSuggestion {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    taskTemplateId: string | null;
+    taskTemplate: ITaskTemplate | null;
+    acceptedById: string | null;
+    acceptedBy: IUser | null;
+    dismissedById: string | null;
+    dismissedBy: IUser | null;
+    dismissedReason: string | null;
+    createdAt: string;
+    updatedAt: string;
+    dismissedAt: string | null;
+    acceptedAt: string | null;
   }
 }
 

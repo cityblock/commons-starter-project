@@ -539,6 +539,10 @@ describe('task model', () => {
       const { patient, user, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       const assignedTask1 = await Task.create(
         {
           title: 'assigned task 1',
@@ -547,6 +551,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -558,6 +563,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -569,6 +575,7 @@ describe('task model', () => {
           patientId: patient2.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -580,6 +587,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -591,6 +599,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -603,6 +612,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user2.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -631,6 +641,10 @@ describe('task model', () => {
     it('reassigns tasks from one user to another', async () => {
       const { patient, user, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       const task1 = await Task.create(
         {
           title: 'assigned task 1',
@@ -639,6 +653,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -650,6 +665,7 @@ describe('task model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );

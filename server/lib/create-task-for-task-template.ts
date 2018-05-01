@@ -12,7 +12,7 @@ export async function createTaskForTaskTemplate(
   userId: string,
   patientId: string,
   txn: Transaction,
-  patientGoalId?: string,
+  patientGoalId: string,
 ) {
   const {
     careTeamAssigneeRole,

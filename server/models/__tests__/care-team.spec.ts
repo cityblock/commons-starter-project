@@ -1,6 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import PatientGoal from '../../models/patient-goal';
 import {
   createMockClinic,
   createMockUser,
@@ -308,6 +309,10 @@ describe('care team model', () => {
       );
       await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
       await CareTeam.create({ userId: user3.id, patientId: patient.id }, txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       const task1 = await Task.create(
         {
           title: 'title',
@@ -315,6 +320,7 @@ describe('care team model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -325,6 +331,7 @@ describe('care team model', () => {
           patientId: patient.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -335,7 +342,6 @@ describe('care team model', () => {
         },
         txn,
       );
-
       const careTeam = await CareTeam.getForPatient(patient.id, txn);
       const careTeamUserIds = careTeam.map(careTeamUser => careTeamUser.id);
       const userTasks = await Task.getAllUserPatientTasks(
@@ -352,6 +358,9 @@ describe('care team model', () => {
       expect(careTeamUserIds).toContain(user3.id);
       expect(userTasks).toHaveLength(2);
       expect(user3Tasks).toHaveLength(0);
+
+      const progressNote = await ProgressNote.getForUserForPatient(user.id, patient.id, txn);
+      await ProgressNote.complete(progressNote!.id, txn);
 
       await CareTeam.reassignUser(
         { userId: user.id, patientId: patient.id, reassignedToId: user3.id },
@@ -398,6 +407,10 @@ describe('care team model', () => {
         },
         txn,
       );
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
       await CareTeam.create({ userId: user3.id, patientId: patient.id }, txn);
       await Task.create(
@@ -407,6 +420,7 @@ describe('care team model', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -417,6 +431,7 @@ describe('care team model', () => {
           patientId: patient.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -427,6 +442,9 @@ describe('care team model', () => {
         },
         txn,
       );
+
+      const progressNote = await ProgressNote.getForUserForPatient(user.id, patient.id, txn);
+      await ProgressNote.complete(progressNote!.id, txn);
 
       await expect(
         CareTeam.reassignUser({ userId: user.id, patientId: patient.id }, txn, testConfig),

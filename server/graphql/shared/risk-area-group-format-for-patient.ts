@@ -109,7 +109,7 @@ export const calculateRiskAreaSummaryStats = (
   };
 };
 
-const calculateRisk = (
+export const calculateRisk = (
   riskScore: IRiskAreaGroupScore | null,
   mediumRiskThreshold: number,
   highRiskThreshold: number,

@@ -1,6 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import PatientGoal from '../../models/patient-goal';
 import {
   createMockClinic,
   createMockUser,
@@ -23,6 +24,7 @@ interface ISetup {
   patient: Patient;
   task: Task;
   clinic: Clinic;
+  patientGoal: PatientGoal;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -30,6 +32,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+  const patientGoal = await PatientGoal.create(
+    { patientId: patient.id, title: 'goal title', userId: user.id },
+    txn,
+  );
   const task = await Task.create(
     {
       title: 'title',
@@ -38,10 +44,11 @@ async function setup(txn: Transaction): Promise<ISetup> {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     },
     txn,
   );
-  return { clinic, user, user2, patient, task };
+  return { clinic, user, user2, patient, task, patientGoal };
 }
 
 describe('task event model', () => {
@@ -370,7 +377,7 @@ describe('task event model', () => {
   });
 
   it('dismisses all notifications for a user on a task', async () => {
-    const { user, user2, task, patient } = await setup(txn);
+    const { user, user2, task, patient, patientGoal } = await setup(txn);
 
     // first notification on user 1's first task
     const taskEvent111 = await TaskEvent.create(
@@ -415,6 +422,7 @@ describe('task event model', () => {
         patientId: patient.id,
         createdById: user2.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );
@@ -444,6 +452,7 @@ describe('task event model', () => {
         patientId: patient.id,
         createdById: user2.id,
         assignedToId: user2.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );

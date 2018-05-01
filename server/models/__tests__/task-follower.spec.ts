@@ -1,6 +1,7 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import PatientGoal from '../../models/patient-goal';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Task from '../task';
@@ -34,6 +35,10 @@ describe('task followers', () => {
       );
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient1.id, title: 'goal title', userId: user2.id },
+        txn,
+      );
       const task1 = await Task.create(
         {
           title: 'title',
@@ -41,6 +46,7 @@ describe('task followers', () => {
           patientId: patient1.id,
           createdById: user1.id,
           assignedToId: user1.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -63,6 +69,10 @@ describe('task followers', () => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       const task = await Task.create(
         {
           title: 'title',
@@ -70,6 +80,7 @@ describe('task followers', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -86,6 +97,10 @@ describe('task followers', () => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
+      const patientGoal = await PatientGoal.create(
+        { patientId: patient.id, title: 'goal title', userId: user.id },
+        txn,
+      );
       const task = await Task.create(
         {
           title: 'title',
@@ -93,6 +108,7 @@ describe('task followers', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
+          patientGoalId: patientGoal.id,
         },
         txn,
       );
@@ -140,6 +156,14 @@ describe('task followers', () => {
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const patientGoalForPatient1 = await PatientGoal.create(
+        { patientId: patient1.id, title: 'goal title', userId: user1.id },
+        txn,
+      );
+      const patientGoalForPatient2 = await PatientGoal.create(
+        { patientId: patient2.id, title: 'goal title', userId: user1.id },
+        txn,
+      );
       const task1 = await Task.create(
         {
           title: 'title',
@@ -147,6 +171,7 @@ describe('task followers', () => {
           patientId: patient1.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient1.id,
         },
         txn,
       );
@@ -157,6 +182,7 @@ describe('task followers', () => {
           patientId: patient1.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient1.id,
         },
         txn,
       );
@@ -167,6 +193,7 @@ describe('task followers', () => {
           patientId: patient2.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient2.id,
         },
         txn,
       );
@@ -230,6 +257,15 @@ describe('task followers', () => {
       const user3 = await User.create(createMockUser(11, clinic.id, userRole, 'c@d.com'), txn);
       const patient1 = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      const patientGoalForPatient1 = await PatientGoal.create(
+        { patientId: patient1.id, title: 'goal title', userId: user1.id },
+        txn,
+      );
+      const patientGoalForPatient2 = await PatientGoal.create(
+        { patientId: patient2.id, title: 'goal title', userId: user1.id },
+        txn,
+      );
+
       const task1 = await Task.create(
         {
           title: 'title',
@@ -237,6 +273,7 @@ describe('task followers', () => {
           patientId: patient1.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient1.id,
         },
         txn,
       );
@@ -247,6 +284,7 @@ describe('task followers', () => {
           patientId: patient1.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient1.id,
         },
         txn,
       );
@@ -257,6 +295,7 @@ describe('task followers', () => {
           patientId: patient2.id,
           createdById: user2.id,
           assignedToId: user2.id,
+          patientGoalId: patientGoalForPatient2.id,
         },
         txn,
       );

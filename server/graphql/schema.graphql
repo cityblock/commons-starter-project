@@ -1869,7 +1869,7 @@ input TaskCreateInput {
   dueAt: String
   patientId: ID!
   assignedToId: ID
-  patientGoalId: ID
+  patientGoalId: ID!
   priority: Priority
   CBOReferralId: ID
 }
@@ -2201,15 +2201,6 @@ input TaskTemplateDeleteInput {
 input TaskSuggestInput {
   answerId: ID!
   taskTemplateId: ID!
-}
-
-input PatientTaskSuggestionAcceptInput {
-  patientTaskSuggestionId: ID!
-}
-
-input PatientTaskSuggestionDismissInput {
-  patientTaskSuggestionId: ID!
-  dismissedReason: String!
 }
 
 input CarePlanSuggestionAcceptInput {
@@ -2658,10 +2649,6 @@ type RootMutationType {
   taskSuggestionCreate(input: TaskSuggestInput): [TaskTemplate]
   # unsuggest a task template for an answer
   taskSuggestionDelete(input: TaskSuggestInput): [TaskTemplate]
-  # patient task suggestion accept
-  patientTaskSuggestionAccept(input: PatientTaskSuggestionAcceptInput): PatientTaskSuggestion
-  # patient task suggestion dismiss
-  patientTaskSuggestionDismiss(input: PatientTaskSuggestionDismissInput): PatientTaskSuggestion
   # patient goal create
   patientGoalCreate(input: PatientGoalCreateInput): PatientGoal
   # patient goal edit
@@ -2944,8 +2931,6 @@ type RootQueryType {
   taskTemplates: [TaskTemplate]!
   # Task templates suggested for answer
   taskTemplatesForAnswer(answerId: ID!): [TaskTemplate]!
-  # patient task suggestions
-  patientTaskSuggestions(patientId: ID!): [PatientTaskSuggestion]!
   # Care Plan Suggestions
   carePlanSuggestionsForPatient(patientId: ID!, glassBreakId: ID): [CarePlanSuggestion]!
   # Care Plan

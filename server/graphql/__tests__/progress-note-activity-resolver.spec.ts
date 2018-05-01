@@ -11,6 +11,7 @@ import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
+import PatientGoal from '../../models/patient-goal';
 import ProgressNote from '../../models/progress-note';
 import Question from '../../models/question';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
@@ -91,6 +92,10 @@ describe('progress note resolver', () => {
       },
       txn,
     );
+    const patientGoal = await PatientGoal.create(
+      { patientId: patient.id, title: 'goal title', userId: user.id },
+      txn,
+    );
     const task = await Task.create(
       {
         title: 'Task Title',
@@ -99,6 +104,7 @@ describe('progress note resolver', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
+        patientGoalId: patientGoal.id,
       },
       txn,
     );

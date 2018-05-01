@@ -14,7 +14,7 @@ export interface ITaskEditableFields {
   description?: string;
   dueAt?: string | null;
   patientId: string;
-  patientGoalId?: string;
+  patientGoalId: string;
   createdById: string;
   completedById?: string;
   assignedToId?: string;
@@ -104,7 +104,7 @@ export default class Task extends BaseModel {
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['title', 'patientId'],
+    required: ['title', 'patientId', 'patientGoalId'],
   };
 
   static get relationMappings(): RelationMappings {

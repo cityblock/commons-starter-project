@@ -5,6 +5,7 @@ import Db from '../../db';
 import Clinic from '../../models/clinic';
 import EventNotification from '../../models/event-notification';
 import Patient from '../../models/patient';
+import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -25,6 +26,7 @@ interface ISetup {
   patient: Patient;
   clinic: Clinic;
   dueAt: string;
+  patientGoal: PatientGoal;
 }
 
 async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
@@ -40,7 +42,10 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
     trx,
   );
   const dueAt = new Date().toISOString();
-
+  const patientGoal = await PatientGoal.create(
+    { patientId: patient.id, title: 'goal title', userId: user.id },
+    trx,
+  );
   const task = await Task.create(
     {
       title: 'title',
@@ -50,6 +55,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
       createdById: user.id,
       assignedToId: user.id,
       priority: 'low',
+      patientGoalId: patientGoal.id,
     },
     trx,
   );
@@ -71,6 +77,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
     dueAt,
     task,
     taskEvent,
+    patientGoal,
   };
 }
 
@@ -489,7 +496,7 @@ describe('event notification tests', () => {
     });
 
     it('does not dismiss notifications for other tasks', async () => {
-      const { user, task, taskEvent, dueAt, patient } = await setup(txn, userRole);
+      const { user, task, taskEvent, dueAt, patient, patientGoal } = await setup(txn, userRole);
       const task2 = await Task.create(
         {
           title: 'title',
@@ -499,6 +506,7 @@ describe('event notification tests', () => {
           createdById: user.id,
           assignedToId: user.id,
           priority: 'low',
+          patientGoalId: patientGoal.id,
         },
         txn,
       );

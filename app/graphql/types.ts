@@ -9198,7 +9198,7 @@ export interface taskCreateMutationVariables {
   patientId: string,
   priority?: Priority | null,
   assignedToId?: string | null,
-  patientGoalId?: string | null,
+  patientGoalId: string,
   CBOReferralId?: string | null,
 };
 

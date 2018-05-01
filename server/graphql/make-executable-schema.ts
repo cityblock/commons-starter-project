@@ -190,11 +190,6 @@ import {
   resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
 } from './patient-screening-tool-submission-resolver';
 import {
-  patientTaskSuggestionAccept,
-  patientTaskSuggestionDismiss,
-  resolvePatientTaskSuggestions,
-} from './patient-task-suggestion-resolver';
-import {
   phoneCreate,
   phoneCreateForPatient,
   phoneDeleteForPatient,
@@ -408,7 +403,6 @@ const resolveFunctions = {
     taskTemplate: resolveTaskTemplate,
     taskTemplates: resolveTaskTemplates,
     taskTemplatesForAnswer: resolveTaskSuggestionTemplatesForAnswer,
-    patientTaskSuggestions: resolvePatientTaskSuggestions,
     carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
     carePlanForPatient: resolveCarePlanForPatient,
     screeningTool: resolveScreeningTool,
@@ -543,8 +537,6 @@ const resolveFunctions = {
     taskTemplateDelete,
     taskSuggestionCreate,
     taskSuggestionDelete,
-    patientTaskSuggestionAccept,
-    patientTaskSuggestionDismiss,
     patientConcernCreate,
     patientConcernDelete,
     patientConcernEdit,

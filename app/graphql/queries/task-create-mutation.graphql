@@ -7,7 +7,7 @@ mutation taskCreate(
   $patientId: ID!
   $priority: Priority
   $assignedToId: ID
-  $patientGoalId: ID
+  $patientGoalId: ID!
   $CBOReferralId: ID
 ) {
   taskCreate(

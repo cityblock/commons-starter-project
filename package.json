@@ -203,7 +203,7 @@
     "graphql": "0.13.2",
     "graphql-server-express": "1.3.6",
     "graphql-subscriptions": "0.5.8",
-    "graphql-tag": "2.9.1",
+    "graphql-tag": "2.9.2",
     "graphql-tools": "3.0.0",
     "jsonwebtoken": "8.2.1",
     "knex": "0.14.6",

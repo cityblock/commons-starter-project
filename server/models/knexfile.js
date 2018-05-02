@@ -7,6 +7,13 @@ module.exports = {
       host: '127.0.0.1',
       timezone: 'UTC',
     },
+    pool: {
+      min: 4,
+      max: 20,
+      idleTimeoutMillis: 1000,
+      reapIntervalMillis: 1000,
+      acquireTimeoutMillis: 1000,
+    },
     migrations: {
       directory: __dirname + '/migrations',
     },
@@ -24,6 +31,13 @@ module.exports = {
       ssl: true,
       user: process.env.DB_USER,
       timezone: 'UTC',
+    },
+    pool: {
+      min: 4,
+      max: 20,
+      idleTimeoutMillis: 1000,
+      reapIntervalMillis: 1000,
+      acquireTimeoutMillis: 1000,
     },
     migrations: {
       directory: __dirname + '/migrations',

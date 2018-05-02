@@ -29,7 +29,7 @@ const logger = console;
 
 const app = express();
 
-if (process.env.NODE_ENV === 'production') {
+if (config.NODE_ENV === 'production') {
   // compress all responses
   app.use(compression());
 }
@@ -75,7 +75,7 @@ export async function main(options: IMainOptions) {
 
 if (require.main === module) {
   try {
-    main({ env: process.env.NODE_ENV as Env });
+    main({ env: config.NODE_ENV as Env });
   } catch (err) {
     logger.error(err);
   }

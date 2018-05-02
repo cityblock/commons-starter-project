@@ -19,6 +19,7 @@
     "strictPropertyInitialization": false
   },
   "include": [
+    "./scripts/**/*.ts",
     "./server/**/*.ts",
     "./server/**/*.tsx",
     "./app/**/*.ts",

@@ -168,7 +168,7 @@ export default async (
   // Pingdom check endpoints
   app.get(
     '/ping/postgres',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
+    checkAuth('pingdom', config.PINGDOM_CHECK_PASSWORD),
     checkPostgresHandler,
   );
 
@@ -176,7 +176,7 @@ export default async (
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
 
   // Kue UI
-  app.use('/kue', checkAuth('jobManager', process.env.KUE_UI_PASSWORD || 'fake'), kue.app);
+  app.use('/kue', checkAuth('jobManager', config.KUE_UI_PASSWORD), kue.app);
 
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPdf);

@@ -12,8 +12,8 @@
 */
 
 /* tslint:disable no-console */
-import fs = require('fs');
-import readline = require('readline');
+import * as fs from 'fs';
+import { transaction } from 'objection';
 import Db from '../server/db';
 import DiagnosisCode from '../server/models/diagnosis-code';
 
@@ -27,7 +27,7 @@ export async function importCodeset() {
     console.log(
       'Must provide the following environment variables: CODESET_FILE_PATH, CODESET_VERSION',
     );
-    process.exit(1);
+    return process.exit(1);
   }
 
   const codesToImport = fs
@@ -41,17 +41,23 @@ export async function importCodeset() {
   for (const codeLine of codesToImport) {
     try {
       const regexp = /^(\S+)\s+(.+)$/;
-      const [_, code, label] = codeLine.trim().match(regexp);
+      const matched = codeLine.trim().match(regexp) as string[];
+      const code = matched[1];
+      const label = matched[2];
 
       if (!!code && !!label) {
         console.log(`Importing code: ${code} - ${label}`);
-
-        await DiagnosisCode.create({
-          codesetName: 'ICD-10',
-          label,
-          code,
-          version,
-        });
+        const txn = await transaction.start(DiagnosisCode.knex());
+        await DiagnosisCode.create(
+          {
+            codesetName: 'ICD-10',
+            label,
+            code,
+            version,
+          },
+          txn,
+        );
+        await txn.commit();
       }
 
       successCount += 1;

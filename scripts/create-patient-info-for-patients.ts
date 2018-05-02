@@ -18,8 +18,11 @@ export async function createInfo() {
     );
 
     if (!user) {
+      /* tslint:disable no-console */
       console.log(`No user found with email: ${email}`);
+      /* tslint:enable no-console */
       process.exit(1);
+      return;
     }
 
     await Patient.createAllPatientInfo(user.id, txn);
@@ -29,4 +32,3 @@ export async function createInfo() {
 createInfo().then(() => {
   process.exit(0);
 });
-/* tslint:enable no-console */

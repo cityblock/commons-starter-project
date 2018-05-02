@@ -1,4 +1,5 @@
 /* tslint:disable no-console */
+import { transaction } from 'objection';
 import Db from '../server/db';
 import { adminTasksConcernTitle } from '../server/lib/consts';
 import Concern from '../server/models/concern';
@@ -10,18 +11,22 @@ const email = process.env.EMAIL || 'brennan@cityblock.com';
 
 export async function createAdminTasksConcernForPatients() {
   await Db.get();
+  const txn = await transaction.start(User.knex());
 
-  const user = await User.getBy({
-    fieldName: 'email',
-    field: email,
-  });
+  const user = await User.getBy(
+    {
+      fieldName: 'email',
+      field: email,
+    },
+    txn,
+  );
 
   if (!user) {
     console.log(`No user found with email: ${email}`);
     process.exit(1);
   }
 
-  const adminTasksConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle);
+  const adminTasksConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
   const skippablePatientIds = PatientConcern.query()
     .select('patientId')
     .where({ concernId: adminTasksConcern.id });
@@ -29,15 +34,19 @@ export async function createAdminTasksConcernForPatients() {
     .select('id')
     .where('id', 'not in', skippablePatientIds)) as any;
   const patientConcernPromises = patientsMissingConcern.map(async (patient: any) =>
-    PatientConcern.create({
-      concernId: adminTasksConcern.id,
-      patientId: patient.id,
-      userId: user!.id,
-      startedAt: new Date().toISOString(),
-    }),
+    PatientConcern.create(
+      {
+        concernId: adminTasksConcern.id,
+        patientId: patient.id,
+        userId: user!.id,
+        startedAt: new Date().toISOString(),
+      },
+      txn,
+    ),
   );
 
   await Promise.all(patientConcernPromises);
+  await txn.commit();
 }
 
 createAdminTasksConcernForPatients().then(() => {

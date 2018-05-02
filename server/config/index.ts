@@ -26,5 +26,7 @@ export default {
   MATTERMOST_TOKEN: 'winterIsComing',
   MATTERMOST_TEAM_ID: 'CITYBLOCKPARTY',
   MATTERMOST_URL: 'https://mattermost-test.cityblock.com/api/v4',
+  PINGDOM_CHECK_PASSWORD: 'secret',
+  KUE_UI_PASSWORD: 'fake',
   ...process.env,
 };

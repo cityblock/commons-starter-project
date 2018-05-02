@@ -16,6 +16,7 @@ export async function updateAllComputedPatientStatuses() {
       console.log(`No user found with email: ${email}`);
       await txn.rollback();
       process.exit(1);
+      return;
     }
 
     await ComputedPatientStatus.updateForAllPatients(user.id, txn);

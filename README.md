@@ -12,6 +12,8 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 * **State:** development
 * **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
 * **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
+* **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+* **Kue Staging:** [http://commons-staging.cityblock.com/kue](http://commons-staging.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
 * **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
 * **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
   `cityblock/commons#master` are automatically deployed to staging

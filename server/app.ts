@@ -1,4 +1,5 @@
 import * as express from 'express';
+import config from './config';
 
 export default function app(req: express.Request, res: express.Response) {
   /**
@@ -8,7 +9,7 @@ export default function app(req: express.Request, res: express.Response) {
    * downside: flash of unstyled html on pageload
    */
   const stylesheet =
-    process.env.NODE_ENV !== 'development'
+    config.NODE_ENV !== 'development'
       ? `<link rel='stylesheet' href='/assets/styles/main.css'>`
       : '';
   const html = `

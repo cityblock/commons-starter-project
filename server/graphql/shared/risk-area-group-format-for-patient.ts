@@ -9,7 +9,7 @@ interface IScreeningToolResultSummary {
 }
 
 interface ISummaryStats {
-  lastUpdated: string;
+  lastUpdated: string | null;
   totalScore: number | null;
   forceHighRisk: boolean;
   summaryText: string[];
@@ -33,7 +33,6 @@ export const calculateRiskAreaSummaryStats = (
       if (answer.patientAnswers && answer.patientAnswers.length) {
         answer.patientAnswers.forEach(patientAnswer => {
           if (totalScore === null) totalScore = 0;
-
           if (!lastUpdated || isAfter(patientAnswer.updatedAt, lastUpdated)) {
             lastUpdated = patientAnswer.updatedAt;
           }
@@ -43,7 +42,6 @@ export const calculateRiskAreaSummaryStats = (
           } else if (answer.riskAdjustmentType === 'increment') {
             totalScore++;
           }
-
           if (answer.inSummary && answer.summaryText && !summaryText.includes(answer.summaryText)) {
             summaryText.push(answer.summaryText);
           }
@@ -51,7 +49,7 @@ export const calculateRiskAreaSummaryStats = (
       }
     });
   });
-  riskArea.screeningTools!.forEach(screeningTool => {
+  (riskArea.screeningTools || []).forEach(screeningTool => {
     const { title } = screeningTool;
     screeningTool.patientScreeningToolSubmissions.forEach(submission => {
       const { screeningToolScoreRange, patientAnswers, score } = submission;
@@ -131,7 +129,7 @@ export const formatRiskAreaGroupForPatient = (
   let automatedSummaryText: string[] = [];
   let manualSummaryText: string[] = [];
   const screeningToolResultSummaries: IScreeningToolResultSummary[] = [];
-  let lastUpdated = '';
+  let lastUpdated: string | null = null;
 
   const riskAreas = riskAreaGroup.riskAreas.map(riskArea => {
     const isAutomated = riskArea.assessmentType === 'automated';
@@ -148,9 +146,12 @@ export const formatRiskAreaGroupForPatient = (
     // ensure we don't mark forceHighRiskFalse
     forceHighRisk = riskAreaSummaryStats.forceHighRisk ? true : false;
     screeningToolResultSummaries.concat(riskAreaSummaryStats.screeningToolResultSummaries || []);
-    lastUpdated = isAfter(lastUpdated, riskAreaSummaryStats.lastUpdated)
-      ? riskAreaSummaryStats.lastUpdated
-      : lastUpdated;
+    lastUpdated =
+      lastUpdated &&
+      riskAreaSummaryStats.lastUpdated &&
+      isAfter(lastUpdated, riskAreaSummaryStats.lastUpdated)
+        ? riskAreaSummaryStats.lastUpdated
+        : lastUpdated;
 
     if (isAutomated) {
       automatedSummaryText = riskAreaSummaryStats.summaryText;

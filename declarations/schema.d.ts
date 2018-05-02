@@ -1962,7 +1962,7 @@ declare module 'schema' {
     questions: Array<IQuestionWithPatientAnswer>;
     riskAreaAssessmentSubmissions: Array<IRiskAreaAssessmentSubmission>;
     screeningTools: Array<IScreeningToolForPatient>;
-    lastUpdated: string;
+    lastUpdated: string | null;
     forceHighRisk: boolean;
     totalScore: number | null;
     riskScore: IPriorityEnum | null;
@@ -2131,7 +2131,7 @@ declare module 'schema' {
     automatedSummaryText: Array<string>;
     manualSummaryText: Array<string>;
     screeningToolResultSummaries: Array<IScreeningToolResultSummary>;
-    lastUpdated: string;
+    lastUpdated: string | null;
     forceHighRisk: boolean;
     totalScore: number | null;
     riskScore: IPriorityEnum | null;

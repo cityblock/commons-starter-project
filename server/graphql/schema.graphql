@@ -998,7 +998,7 @@ type FullRiskAreaGroupForPatient implements uniqueId {
   automatedSummaryText: [String!]!
   manualSummaryText: [String!]!
   screeningToolResultSummaries: [ScreeningToolResultSummary!]!
-  lastUpdated: String!
+  lastUpdated: String
   forceHighRisk: Boolean!
   totalScore: Int
   riskScore: Priority
@@ -1039,7 +1039,7 @@ type RiskAreaForPatient implements uniqueId {
   questions: [QuestionWithPatientAnswer!]!
   riskAreaAssessmentSubmissions: [RiskAreaAssessmentSubmission!]!
   screeningTools: [ScreeningToolForPatient!]!
-  lastUpdated: String!
+  lastUpdated: String
   forceHighRisk: Boolean!
   totalScore: Int
   riskScore: Priority

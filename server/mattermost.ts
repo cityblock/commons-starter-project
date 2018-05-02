@@ -12,6 +12,13 @@ let singleton: Mattermost | null = null;
 
 export const ADD_USER_TO_CHANNEL_TOPIC = 'addUserToPatientChannel';
 
+interface IMattermostUser {
+  id: string;
+  notify_props: {
+    channel: 'true' | 'false';
+  };
+}
+
 class Mattermost {
   static get(): Mattermost {
     if (singleton) return singleton;
@@ -68,17 +75,25 @@ class Mattermost {
     await Db.get();
 
     await transaction(existingTxn || Patient.knex(), async txn => {
-      const channelId = await this.getChannelIdForPatient(patientId, txn);
-      const mattermostUserId = await this.getUserId(userId, txn);
-
       try {
+        const channelId = await this.getChannelIdForPatient(patientId, txn);
+        const mattermostUser = await this.getUser(userId, txn);
+
+        // store old notifications, and temporarily mute channel nofitications
+        const oldNotifications = this.getUserNotifications(mattermostUser);
+        const muteNotifications = { ...oldNotifications, channel: 'false' };
+        await this.updateChannelNotifications(mattermostUser.id, muteNotifications);
+
         await axios.post(
           `${this.mattermostUrl}/channels/${channelId}/members`,
           {
-            user_id: mattermostUserId,
+            user_id: mattermostUser.id,
           },
           { headers: this.headers },
         );
+
+        // restore old notifications
+        await this.updateChannelNotifications(mattermostUser.id, oldNotifications);
       } catch (err) {
         reportError(
           err,
@@ -95,10 +110,10 @@ class Mattermost {
   ): Promise<void> {
     try {
       const channelId = await this.getChannelIdForPatient(patientId, txn);
-      const mattermostUserId = await this.getUserId(userId, txn);
+      const mattermostUser = await this.getUser(userId, txn);
 
       await axios.delete(
-        `${this.mattermostUrl}/channels/${channelId}/members/${mattermostUserId}`,
+        `${this.mattermostUrl}/channels/${channelId}/members/${mattermostUser.id}`,
         {
           headers: this.headers,
         },
@@ -127,14 +142,28 @@ class Mattermost {
     return response.data.id;
   }
 
-  private async getUserId(userId: string, txn: Transaction): Promise<string> {
+  private async getUser(userId: string, txn: Transaction): Promise<IMattermostUser> {
     const user = await User.get(userId, txn);
 
     const response = await axios.get(`${this.mattermostUrl}/users/email/${user.email}`, {
       headers: this.headers,
     });
 
-    return response.data.id;
+    return response.data;
+  }
+
+  private getUserNotifications(user: IMattermostUser): object {
+    return user.notify_props || {};
+  }
+
+  private async updateChannelNotifications(userId: string, notifications: object): Promise<void> {
+    await axios.put(
+      `${this.mattermostUrl}/users/${userId}/patch`,
+      {
+        notify_props: notifications,
+      },
+      { headers: this.headers },
+    );
   }
 }
 

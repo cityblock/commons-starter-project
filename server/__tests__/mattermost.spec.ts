@@ -41,6 +41,7 @@ describe('Mattermost', () => {
     await Db.get();
     txn = await transaction.start(Patient.knex());
     axios.post = jest.fn();
+    axios.put = jest.fn();
     axios.get = jest.fn().mockReturnValue({ data: { id: 'fakeId' } });
     axios.delete = jest.fn();
   });
@@ -99,6 +100,16 @@ describe('Mattermost', () => {
 
       await mattermost.addUserToPatientChannel(patient.id, user.id, txn);
 
+      expect(axios.put).toHaveBeenCalledTimes(2);
+
+      expect(axios.put).toBeCalledWith(
+        `${mattermostUrl}/users/fakeId/patch`,
+        {
+          notify_props: { channel: 'false' },
+        },
+        { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
+      );
+
       expect(axios.post).toBeCalledWith(
         `${mattermostUrl}/channels/fakeId/members`,
         {
@@ -106,11 +117,19 @@ describe('Mattermost', () => {
         },
         { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
       );
+
+      expect(axios.put).toBeCalledWith(
+        `${mattermostUrl}/users/fakeId/patch`,
+        {
+          notify_props: {},
+        },
+        { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
+      );
     });
   });
 
   describe('remove user from patient channel', () => {
-    it("removes a user from a given patient's cghannel", async () => {
+    it("removes a user from a given patient's channel", async () => {
       const { user, patient } = await setup(txn);
 
       await mattermost.removeUserFromPatientChannel(patient.id, user.id, txn);

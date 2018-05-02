@@ -440,6 +440,7 @@ export const ENGLISH_TRANSLATION = {
     'patientSearch.searchTitle': 'Search for member',
     'calendar.openCalendar': 'Open Google cal',
     'calendar.addAppointment': 'Add appointment',
+    'calendar.edit': 'Edit appointment',
     'appointmentModal.title': 'Add an appointment',
     'appointmentModal.submit': 'Create appointment',
     'appointmentModal.cancel': 'Cancel',

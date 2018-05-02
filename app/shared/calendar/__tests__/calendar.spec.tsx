@@ -1,27 +1,31 @@
+import { addMinutes } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import TextDivider from '../../../shared/library/text-divider/text-divider';
+import { partialCalendarEvent, partialCalendarEventSIU } from '../../util/test-data';
 import Calendar from '../calendar';
+import CalendarEvent from '../calendar-event';
 
 describe('Render Calendar List', () => {
   const startDatetime = new Date().toISOString();
+  const endDatetime = addMinutes(startDatetime, 30).toISOString();
   const fetchMore = () => {
     return true;
   };
   const calendarEvents = [
     {
-      id: 'id0',
-      title: 'First Appointment',
-      startDatetime,
-      htmlLink: 'www.fakeurl.com',
-      status: 'confirmed',
+      startDate: startDatetime,
+      startTime: startDatetime,
+      endDate: endDatetime,
+      endTime: endDatetime,
+      ...partialCalendarEventSIU,
     },
     {
-      id: 'id1',
-      title: 'Second Appointment',
-      startDatetime,
-      htmlLink: 'www.fakeurl.com',
-      status: 'cancelled',
+      startDate: startDatetime,
+      startTime: null,
+      endDate: endDatetime,
+      endTime: null,
+      ...partialCalendarEvent,
     },
   ];
 
@@ -30,7 +34,7 @@ describe('Render Calendar List', () => {
   );
 
   it('renders the calendar list', () => {
-    const events = wrapper.find('.eventContainer');
+    const events = wrapper.find(CalendarEvent);
     expect(events).toHaveLength(2);
 
     const dividers = wrapper.find(TextDivider);

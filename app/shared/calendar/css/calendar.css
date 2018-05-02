@@ -7,7 +7,9 @@
 }
 
 .eventContainer {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 4px;
   background-color: var(--white-color);
   padding: var(--small-gutter);
@@ -15,14 +17,19 @@
   border: 1px solid var(--border-color);
 }
 
-.datetime {
+.meta {
   color: var(--gray-font-color);
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
 }
 
-.datetime span:first-child {
-  padding-right: 5px;
+.meta .element {
+  padding-right: var(--medium-gutter);
+}
+
+.eventIcon {
+  margin-left: 5px;
+  margin-right: var(--medium-gutter);
 }
 
 .eventTitle {
@@ -30,9 +37,22 @@
   font-family: var(--basetica-medium);
 }
 
+.eventBody {
+  flex: 1;
+}
+
+.menu {
+  flex-shrink: 0;
+}
+
 .empty {
   text-align: center;
   padding-top: 100px;
   color: var(--gray-font-color);
   font-size: var(--medium-font-size);
+}
+
+.light {
+  padding-left: 5px;
+  color: var(--light-gray-font-color);
 }

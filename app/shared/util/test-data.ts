@@ -4,6 +4,7 @@ import {
   CurrentPatientState,
   ExternalProviderOptions,
   Gender,
+  GoogleCalendarEventType,
   PatientRelationOptions,
   PhoneTypeOptions,
 } from '../../graphql/types';
@@ -1294,4 +1295,22 @@ export const smsMessage2 = {
   direction: 'fromUser' as any,
   body: 'Winter is here.',
   createdAt: '2017-11-08T13:50:14.532Z',
+};
+
+export const partialCalendarEvent = {
+  id: 'id0',
+  title: 'First Appointment',
+  htmlLink: 'www.fakeurl.com',
+  description: 'some appointment',
+  guests: [],
+  eventType: 'siu' as GoogleCalendarEventType,
+};
+
+export const partialCalendarEventSIU = {
+  id: 'id0',
+  title: 'First Appointment',
+  htmlLink: 'www.fakeurl.com',
+  description: 'some appointment',
+  guests: [],
+  eventType: 'siu' as GoogleCalendarEventType,
 };

@@ -15,6 +15,12 @@ export enum RiskAdjustmentTypeOptions {
 }
 
 
+export enum GoogleCalendarEventType {
+  cityblock = "cityblock",
+  siu = "siu",
+}
+
+
 export enum CarePlanSuggestionType {
   concern = "concern",
   goal = "goal",
@@ -1703,9 +1709,14 @@ export interface getCalendarEventsForCurrentUserQuery {
     events:  Array< {
       id: string,
       title: string,
-      startDatetime: string,
-      status: string,
+      startDate: string,
+      startTime: string | null,
+      endDate: string,
+      endTime: string | null,
       htmlLink: string,
+      description: string | null,
+      guests: Array< string | null > | null,
+      eventType: GoogleCalendarEventType | null,
     } >,
     pageInfo:  {
       nextPageToken: string | null,
@@ -1726,9 +1737,14 @@ export interface getCalendarEventsForPatientQuery {
     events:  Array< {
       id: string,
       title: string,
-      startDatetime: string,
-      status: string,
+      startDate: string,
+      startTime: string | null,
+      endDate: string,
+      endTime: string | null,
       htmlLink: string,
+      description: string | null,
+      guests: Array< string | null > | null,
+      eventType: GoogleCalendarEventType | null,
     } >,
     pageInfo:  {
       nextPageToken: string | null,
@@ -10006,9 +10022,14 @@ export interface FullAnswerFragment {
 export interface FullCalendarEventFragment {
   id: string,
   title: string,
-  startDatetime: string,
-  status: string,
+  startDate: string,
+  startTime: string | null,
+  endDate: string,
+  endTime: string | null,
   htmlLink: string,
+  description: string | null,
+  guests: Array< string | null > | null,
+  eventType: GoogleCalendarEventType | null,
 };
 
 export interface FullCarePlanSuggestionForPatientFragment {

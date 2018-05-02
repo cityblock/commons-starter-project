@@ -2488,11 +2488,18 @@ declare module 'schema' {
 
   interface ICalendarEvent {
     id: string;
-    startDatetime: string;
+    startDate: string;
+    startTime: string | null;
+    endDate: string;
+    endTime: string | null;
     title: string;
-    status: string;
     htmlLink: string;
+    description: string | null;
+    guests: Array<string> | null;
+    eventType: IGoogleCalendarEventTypeEnum | null;
   }
+
+  type IGoogleCalendarEventTypeEnum = 'cityblock' | 'siu';
 
   /**
    * Google API page info

@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
+import { get } from 'lodash';
 import * as querystring from 'querystring';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
@@ -181,9 +182,15 @@ async function getGoogleCalendarEvents(
     return {
       id: item.id,
       title: item.summary,
-      startDatetime: item.start.dateTime || item.start.date,
+      startDate: item.start.dateTime || item.start.date,
+      startTime: item.start.dateTime,
+      endDate: item.end.dateTime || item.end.date,
+      endTime: item.end.dateTime,
       status: item.status,
       htmlLink: item.htmlLink,
+      description: item.description,
+      guests: (item.attendees || []).map(attendee => attendee.displayName || attendee.email),
+      eventType: get(item, 'extendedProperties.shared.generatedBy') || 'cityblock',
     };
   });
 

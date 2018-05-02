@@ -296,6 +296,11 @@ enum SmsMessageDirection {
   fromUser
 }
 
+enum GoogleCalendarEventType {
+  cityblock
+  siu
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -1641,10 +1646,15 @@ type CalendarEventEdges {
 
 type CalendarEvent {
   id: String!
-  startDatetime: String!
+  startDate: String!
+  startTime: String
+  endDate: String!
+  endTime: String
   title: String!
-  status: String!
   htmlLink: String!
+  description: String
+  guests: [String]
+  eventType: GoogleCalendarEventType
 }
 
 # SMS message

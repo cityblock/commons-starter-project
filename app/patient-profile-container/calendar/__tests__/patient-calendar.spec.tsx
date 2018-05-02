@@ -1,26 +1,29 @@
+import { addMinutes } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Calendar from '../../../shared/calendar/calendar';
-import { patient } from '../../../shared/util/test-data';
+import { partialCalendarEvent, partialCalendarEventSIU, patient } from '../../../shared/util/test-data';
 import { PatientCalendar } from '../patient-calendar';
 
 describe('Render Skinny Patient Calendar', () => {
   const match = { params: { patientId: patient.id } };
+  const startDatetime = new Date().toISOString();
+  const endDatetime = addMinutes(startDatetime, 30).toISOString();
   const response = {
     events: [
       {
-        id: 'id0',
-        title: 'First Appointment',
-        startDatetime: new Date().toISOString(),
-        htmlLink: 'www.fakeurl.com',
-        status: 'confirmed',
+        startDate: startDatetime,
+        startTime: startDatetime,
+        endDate: endDatetime,
+        endTime: endDatetime,
+        ...partialCalendarEventSIU,
       },
       {
-        id: 'id1',
-        title: 'Second Appointment',
-        startDatetime: new Date().toISOString(),
-        htmlLink: 'www.fakeurl.com',
-        status: 'cancelled',
+        startDate: startDatetime,
+        startTime: null,
+        endDate: endDatetime,
+        endTime: null,
+        ...partialCalendarEvent,
       },
     ],
     pageInfo: null,

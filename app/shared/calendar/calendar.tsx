@@ -3,10 +3,11 @@ import { format } from 'date-fns';
 import { filter, groupBy } from 'lodash';
 import * as React from 'react';
 import { Fragment } from 'react';
-import { FullCalendarEventFragment } from '../../graphql/types';
+import { FullCalendarEventFragment, GoogleCalendarEventType } from '../../graphql/types';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Spinner from '../library/spinner/spinner';
 import TextDivider from '../library/text-divider/text-divider';
+import CalendarEvent from './calendar-event';
 import * as styles from './css/calendar.css';
 
 interface IProps {
@@ -17,29 +18,24 @@ interface IProps {
   error?: ApolloError | null;
 }
 
-interface IEvent {
-  startDatetime: string;
+export interface IEvent {
+  startDate: string;
+  startTime?: string | null;
+  endDate: string;
+  endTime?: string | null;
   title: string;
   id: string;
+  htmlLink: string;
+  description: string;
+  guests: string[];
+  eventType: GoogleCalendarEventType;
 }
 
 export default class Calendar extends React.Component<IProps> {
-  renderEvent({ startDatetime, title, id }: IEvent) {
-    return (
-      <div className={styles.eventContainer} key={`calendarEvent-${id}`}>
-        <div className={styles.datetime}>
-          <span>{format(startDatetime, 'ddd, MMM D, YYYY')}</span>
-          <span>{format(startDatetime, 'h:mm a')}</span>
-        </div>
-        <div className={styles.eventTitle}>{title}</div>
-      </div>
-    );
-  }
-
   renderMonth(monthOfEvents: any) {
-    const month = new Date(monthOfEvents[0].startDatetime).getMonth();
-    const year = new Date(monthOfEvents[0].startDatetime).getFullYear();
-    const monthLabel = format(monthOfEvents[0].startDatetime, 'MMMM YYYY');
+    const month = new Date(monthOfEvents[0].startDate).getMonth();
+    const year = new Date(monthOfEvents[0].startDate).getFullYear();
+    const monthLabel = format(monthOfEvents[0].startDate, 'MMMM YYYY');
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -47,7 +43,9 @@ export default class Calendar extends React.Component<IProps> {
 
     const color = currentMonth === month && currentYear === year ? 'lightBlue' : 'gray';
 
-    const eventsHtml = monthOfEvents.map((event: IEvent) => this.renderEvent(event));
+    const eventsHtml = monthOfEvents.map((event: IEvent) => (
+      <CalendarEvent calendarEvent={event} key={`event-${event.id}`} />
+    ));
 
     return (
       <Fragment key={`monthGroup-${month}-year-${year}`}>
@@ -58,7 +56,7 @@ export default class Calendar extends React.Component<IProps> {
   }
 
   renderYear(yearOfEvents: object) {
-    const eventsByMonth = groupBy(yearOfEvents, event => new Date(event.startDatetime).getMonth());
+    const eventsByMonth = groupBy(yearOfEvents, event => new Date(event.startDate).getMonth());
     const months = Object.keys(eventsByMonth).sort();
 
     return months.map(month => this.renderMonth(eventsByMonth[month]));
@@ -74,11 +72,11 @@ export default class Calendar extends React.Component<IProps> {
 
     const thisYearEvents = filter(
       calendarEvents,
-      event => new Date(event.startDatetime).getFullYear() === currentYear,
+      event => new Date(event.startDate).getFullYear() === currentYear,
     );
     const nextYearEvents = filter(
       calendarEvents,
-      event => new Date(event.startDatetime).getFullYear() === nextYear,
+      event => new Date(event.startDate).getFullYear() === nextYear,
     );
 
     const thisYearEventsHtml = this.renderYear(thisYearEvents);

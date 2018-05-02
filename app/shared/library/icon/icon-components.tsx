@@ -15,6 +15,7 @@ import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentIcon from 'material-ui-icons/Assignment';
 import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
+import BusinessIcon from 'material-ui-icons/Business';
 import ChatIcon from 'material-ui-icons/Chat';
 import CheckIcon from 'material-ui-icons/Check';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
@@ -47,6 +48,7 @@ import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from 'material-ui-icons/KeyboardArrowUp';
 import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
 import ListIcon from 'material-ui-icons/List';
+import LocalHospitalIcon from 'material-ui-icons/LocalHospital';
 import LockOutlineIcon from 'material-ui-icons/LockOutline';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import NoteAddIcon from 'material-ui-icons/NoteAdd';
@@ -87,6 +89,7 @@ const components: IconComponents = {
   assignment: AssignmentIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
+  business: BusinessIcon,
   chat: ChatIcon,
   check: CheckIcon,
   checkCircle: CheckCircleIcon,
@@ -118,6 +121,7 @@ const components: IconComponents = {
   keyboardArrowUp: KeyboardArrowUpIcon,
   labelOutline: LabelOutlineIcon,
   list: ListIcon,
+  localHospital: LocalHospitalIcon,
   lockOutline: LockOutlineIcon,
   moreVert: MoreVertIcon,
   noteAdd: NoteAddIcon,

@@ -1,7 +1,12 @@
 fragment FullCalendarEvent on CalendarEvent {
   id
   title
-  startDatetime
-  status
+  startDate
+  startTime
+  endDate
+  endTime
   htmlLink
+  description
+  guests
+  eventType
 }

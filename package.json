@@ -99,7 +99,7 @@
     "apollo-codegen": "0.19.1",
     "apollo-link-schema": "1.1.0",
     "axios": "0.18.0",
-    "danger": "3.6.1",
+    "danger": "3.6.2",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "expect": "22.4.3",

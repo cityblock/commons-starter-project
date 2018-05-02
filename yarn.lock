@@ -3469,9 +3469,9 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-danger@3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.1.tgz#c3fa0be9ece97d012428fb59e43776ebd23db5c8"
+danger@3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.2.tgz#454b25208233f10a863d2beee67133344acbdf1a"
   dependencies:
     "@octokit/rest" "^15.2.6"
     babel-polyfill "^6.23.0"
@@ -3489,6 +3489,7 @@ danger@3.6.1:
     lodash.keys "^4.0.8"
     node-cleanup "^2.1.2"
     node-fetch "^2.1.2"
+    p-limit "^1.2.0"
     parse-diff "^0.4.2"
     parse-git-config "^2.0.2"
     parse-github-url "^1.0.2"
@@ -8769,7 +8770,7 @@ p-lazy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-lazy/-/p-lazy-1.0.0.tgz#ec53c802f2ee3ac28f166cc82d0b2b02de27a835"
 
-p-limit@^1.0.0, p-limit@^1.1.0:
+p-limit@^1.0.0, p-limit@^1.1.0, p-limit@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.2.0.tgz#0e92b6bedcb59f022c13d0f1949dc82d15909f1c"
   dependencies:

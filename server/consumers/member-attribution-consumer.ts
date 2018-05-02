@@ -3,6 +3,7 @@ import { pickBy, toNumber } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import Db from '../db';
 import { IMemberAttributionMessageData } from '../handlers/pubsub/push-handler';
+import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import Mattermost from '../mattermost';
 import Patient, { IPatientCreateFields, IPatientUpdateFields } from '../models/patient';
@@ -19,11 +20,9 @@ queue.process('memberAttribution', async (job, done) => {
   }
 });
 
-/* tslint:disable:no-console */
 queue.on('error', err => {
-  console.log(`Kue error: ${err}`);
+  reportError(err, 'Kue error');
 });
-/* tslint:enable:no-console */
 
 export async function processNewMemberAttributionMessage(
   data: IMemberAttributionMessageData,

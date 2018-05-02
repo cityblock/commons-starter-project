@@ -29,7 +29,7 @@ import {
 // allows mocking without type errors below
 /* tslint:disable:prefer-const */
 let gcsHelpers = gcsHelpersRaw as any;
-/* tslint:enable:max-line-length */
+/* tslint:enable:prefer-const */
 
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const twilioPayload = {

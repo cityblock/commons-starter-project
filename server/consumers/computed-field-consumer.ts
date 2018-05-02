@@ -2,6 +2,7 @@ import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import Db from '../db';
 import { IComputedFieldMessageData } from '../handlers/pubsub/push-handler';
+import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import { createSuggestionsForComputedFieldAnswer } from '../lib/suggestions';
 import Answer from '../models/answer';
@@ -19,11 +20,9 @@ queue.process('computedField', async (job, done) => {
   }
 });
 
-/* tslint:disable:no-console */
 queue.on('error', err => {
-  console.log(`Kue error: ${err}`);
+  reportError(err, 'Kue error');
 });
-/* tslint:enable:no-console */
 
 export async function processNewComputedFieldValue(
   data: IComputedFieldMessageData,

@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import config from './config';
+import Db from './db';
 import { reportError } from './helpers/error-helpers';
 import { formatChannelDisplayName, formatChannelName } from './helpers/format-helpers';
+import { addJobToQueue } from './helpers/queue-helpers';
 import Patient from './models/patient';
 import User from './models/user';
 
 let singleton: Mattermost | null = null;
+
+export const ADD_USER_TO_CHANNEL_TOPIC = 'addUserToPatientChannel';
 
 class Mattermost {
   static get(): Mattermost {
@@ -48,6 +52,40 @@ class Mattermost {
     } catch (err) {
       reportError(err, `Error creating Mattermost channel for patient: ${id}`, options);
     }
+  }
+
+  public queueAddUserToPatientChannel(patientId: string, userId: string): void {
+    const message = `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${patientId} and user: ${userId}`;
+
+    addJobToQueue(ADD_USER_TO_CHANNEL_TOPIC, { patientId, userId }, message);
+  }
+
+  public async addUserToPatientChannel(
+    patientId: string,
+    userId: string,
+    existingTxn?: Transaction,
+  ): Promise<void> {
+    await Db.get();
+
+    await transaction(existingTxn || Patient.knex(), async txn => {
+      const channelId = await this.getChannelIdForPatient(patientId, txn);
+      const mattermostUserId = await this.getUserId(userId, txn);
+
+      try {
+        await axios.post(
+          `${this.mattermostUrl}/channels/${channelId}/members`,
+          {
+            user_id: mattermostUserId,
+          },
+          { headers: this.headers },
+        );
+      } catch (err) {
+        reportError(
+          err,
+          `Error adding user ${userId} to Mattermost channel for patient ${patientId}`,
+        );
+      }
+    });
   }
 
   public async removeUserFromPatientChannel(

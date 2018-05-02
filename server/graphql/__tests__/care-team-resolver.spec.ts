@@ -70,6 +70,13 @@ describe('care team', () => {
     it('adds user to care team', async () => {
       const { user, patient, clinic } = await setup(txn);
       const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
+
+      const addUserToChannel = jest.fn();
+
+      Mattermost.get = jest.fn().mockReturnValue({
+        queueAddUserToPatientChannel: addUserToChannel,
+      });
+
       const result = await graphql(
         schema,
         careTeamAddUserMutation,
@@ -92,6 +99,7 @@ describe('care team', () => {
 
       expect(patientCareTeamIds).toContain(user.id);
       expect(patientCareTeamIds).toContain(user2.id);
+      expect(addUserToChannel).toBeCalledWith(patient.id, user2.id);
     });
 
     it('updates computed patient status when adding a user to a care team', async () => {
@@ -203,6 +211,12 @@ describe('care team', () => {
         txn,
       );
 
+      const addUserToChannel = jest.fn();
+
+      Mattermost.get = jest.fn().mockReturnValue({
+        queueAddUserToPatientChannel: addUserToChannel,
+      });
+
       const mutation = `mutation {
           careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${
         patient2.id
@@ -226,6 +240,9 @@ describe('care team', () => {
         lastName: 'plant',
         patientCount: 2,
       });
+      expect(addUserToChannel).toHaveBeenCalledTimes(2);
+      expect(addUserToChannel).toBeCalledWith(patient.id, user.id);
+      expect(addUserToChannel).toBeCalledWith(patient2.id, user.id);
     });
 
     it('updates computed patient status when bulk assigning patients', async () => {

@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import Db from '../db';
-import Mattermost from '../mattermost';
+import * as queueHelpersRaw from '../helpers/queue-helpers';
+import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import User from '../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../spec-helpers';
+
+// allows mocking without type errors below
+/* tslint:disable:prefer-const */
+let queueHelpers = queueHelpersRaw as any;
+/* tslint:enable:prefer-const */
 
 interface ISetup {
   patient: Patient;
@@ -66,8 +72,45 @@ describe('Mattermost', () => {
     });
   });
 
+  describe('queue adding user to patient channel', () => {
+    it('creates a job to add user to patient channel', async () => {
+      const { user, patient } = await setup(txn);
+
+      queueHelpers.addJobToQueue = jest.fn();
+
+      mattermost.queueAddUserToPatientChannel(patient.id, user.id);
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        ADD_USER_TO_CHANNEL_TOPIC,
+        {
+          userId: user.id,
+          patientId: patient.id,
+        },
+        `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${patient.id} and user: ${
+          user.id
+        }`,
+      );
+    });
+  });
+
+  describe('add a user to patient channel', () => {
+    it('adds a user to patient channel', async () => {
+      const { user, patient } = await setup(txn);
+
+      await mattermost.addUserToPatientChannel(patient.id, user.id, txn);
+
+      expect(axios.post).toBeCalledWith(
+        `${mattermostUrl}/channels/fakeId/members`,
+        {
+          user_id: 'fakeId',
+        },
+        { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
+      );
+    });
+  });
+
   describe('remove user from patient channel', () => {
-    it("removes a user from a given patient's channel", async () => {
+    it("removes a user from a given patient's cghannel", async () => {
       const { user, patient } = await setup(txn);
 
       await mattermost.removeUserFromPatientChannel(patient.id, user.id, txn);

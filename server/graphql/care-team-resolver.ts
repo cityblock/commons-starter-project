@@ -49,6 +49,10 @@ export async function careTeamAddUser(
 
   await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
 
+  // add user to patient channel in Mattermost
+  const mattermost = Mattermost.get();
+  mattermost.queueAddUserToPatientChannel(input.patientId, input.userId);
+
   return careTeam;
 }
 
@@ -71,7 +75,7 @@ export async function careTeamReassignUser(
 
   await ComputedPatientStatus.updateForPatient(input.patientId, input.userId, txn);
 
-  // remove user for patient channel in Mattermost
+  // remove user from patient channel in Mattermost
   const mattermost = Mattermost.get();
   await mattermost.removeUserFromPatientChannel(input.patientId, input.userId, txn);
 
@@ -102,6 +106,13 @@ export async function careTeamAssignPatients(
   const careTeam = await CareTeam.createAllForUser({ patientIds, userId: input.userId }, txn);
 
   await ComputedPatientStatus.updateForMultiplePatients(patientIds, userId!, txn);
+
+  // add user to patient channels in Mattermost
+  const mattermost = Mattermost.get();
+
+  patientIds.forEach(patientId => {
+    mattermost.queueAddUserToPatientChannel(patientId, input.userId);
+  });
 
   return careTeam;
 }

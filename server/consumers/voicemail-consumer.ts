@@ -40,11 +40,9 @@ queue.process(VOICEMAIL_TOPIC, async (job, done) => {
   }
 });
 
-/* tslint:disable:no-console */
 queue.on('error', err => {
   reportError(err, 'Kue error');
 });
-/* tslint:enable:no-console */
 
 export async function processVoicemails(data: IProcessVoicemailData, existingTxn?: Transaction) {
   const twilioClient = TwilioClient.get();

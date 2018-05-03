@@ -70,14 +70,14 @@ export class AppointmentModal extends React.Component<allProps, IState> {
     const { description, externalGuests } = this.state;
 
     return patientId
-      ? description || ''
-      : `
-      ${description}
+      ? `
+        ${description}
 
-      <b>External Guests:<b> ${externalGuests.map(guest => guest.name).join(', ')}
+        <b>External Guests:<b> ${externalGuests.map(guest => guest.name).join(', ')}
 
-      <a href="${window.location.href}">Patient's Profile</a>
-    `;
+        <a href="${window.location.href}">Patient's Profile</a>
+      `
+      : description || '';
   }
 
   validateFields() {
@@ -133,8 +133,6 @@ export class AppointmentModal extends React.Component<allProps, IState> {
       }
 
       window.open(calendarEventUrl, '_blank');
-
-      this.setState({ isSaving: false, error: null });
       this.handleClose();
     } catch (err) {
       this.setState({ error: err.message });

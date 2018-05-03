@@ -8,6 +8,7 @@ import * as styles from './css/calendar.css';
 
 interface IProps {
   calendarEvent: IEvent;
+  showRefreshModal: () => void;
 }
 
 interface IState {
@@ -26,6 +27,7 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
 
   handleEditClick = (editUrl: string) => {
     window.open(editUrl, '_blank');
+    this.props.showRefreshModal();
   };
 
   render() {
@@ -64,17 +66,8 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
         <Icon name="business" color="gray" isLarge={true} className={styles.eventIcon} />
       );
 
-    return (
-      <div className={styles.eventContainer} key={`calendarEvent-${id}`}>
-        {icon}
-        <div className={styles.eventBody}>
-          <div className={styles.meta}>
-            <span className={styles.element}>{format(startDate, 'ddd, MMM D, YYYY')}</span>
-            {startHtml}
-            {guestsHtml}
-          </div>
-          <div className={styles.eventTitle}>{title}</div>
-        </div>
+    const editMenu =
+      eventType !== 'siu' ? (
         <HamburgerMenu
           open={isMenuVisible}
           onMenuToggle={this.handleMenuToggle}
@@ -86,6 +79,20 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
             onClick={() => this.handleEditClick(htmlLink)}
           />
         </HamburgerMenu>
+      ) : null;
+
+    return (
+      <div className={styles.eventContainer} key={`calendarEvent-${id}`}>
+        {icon}
+        <div className={styles.eventBody}>
+          <div className={styles.meta}>
+            <span className={styles.element}>{format(startDate, 'ddd, MMM D, YYYY')}</span>
+            {startHtml}
+            {guestsHtml}
+          </div>
+          <div className={styles.eventTitle}>{title}</div>
+        </div>
+        {editMenu}
       </div>
     );
   }

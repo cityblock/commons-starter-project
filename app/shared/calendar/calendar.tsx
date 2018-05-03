@@ -13,6 +13,7 @@ import * as styles from './css/calendar.css';
 interface IProps {
   calendarEvents?: FullCalendarEventFragment[];
   fetchMore: () => void;
+  showRefreshModal: () => void;
   hasNextPage?: boolean;
   loading?: boolean;
   error?: ApolloError | null;
@@ -33,6 +34,7 @@ export interface IEvent {
 
 export default class Calendar extends React.Component<IProps> {
   renderMonth(monthOfEvents: any) {
+    const { showRefreshModal } = this.props;
     const month = new Date(monthOfEvents[0].startDate).getMonth();
     const year = new Date(monthOfEvents[0].startDate).getFullYear();
     const monthLabel = format(monthOfEvents[0].startDate, 'MMMM YYYY');
@@ -44,7 +46,11 @@ export default class Calendar extends React.Component<IProps> {
     const color = currentMonth === month && currentYear === year ? 'lightBlue' : 'gray';
 
     const eventsHtml = monthOfEvents.map((event: IEvent) => (
-      <CalendarEvent calendarEvent={event} key={`event-${event.id}`} />
+      <CalendarEvent
+        calendarEvent={event}
+        key={`event-${event.id}`}
+        showRefreshModal={showRefreshModal}
+      />
     ));
 
     return (

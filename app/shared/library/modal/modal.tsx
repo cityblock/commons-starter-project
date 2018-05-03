@@ -56,11 +56,15 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     isLoading,
   } = props;
 
+  const popupClassName = className || styles.popup;
+  const bodyContent = isLoading ? <Spinner className={styles.spinner} /> : children;
+  const bodyHtml = bodyContent ? <div className={styles.body}>{bodyContent}</div> : null;
+
   const errorComponent = error ? (
     <ModalError errorMessageId={errorMessageId} error={error} />
   ) : null;
 
-  const popupClassName = className || styles.popup;
+  const buttonClassName = classNames(styles.buttons, { [styles.buttonsNoBody]: !bodyContent });
 
   const buttonComponent = !isButtonHidden ? (
     <ModalButtons
@@ -70,12 +74,13 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
       submit={onSubmit}
       redSubmit={redSubmitButton}
       isLoading={isLoading}
-      className={styles.buttons}
+      className={buttonClassName}
     />
   ) : null;
 
-  const bodyContent = isLoading ? <Spinner className={styles.spinner} /> : children;
-  const bodyHtml = bodyContent ? <div className={styles.body}>{bodyContent}</div> : null;
+  const headerClassNames = classNames(headerClassName, styles.header, {
+    [styles.headerNoBody]: !bodyContent,
+  });
   return (
     <Popup visible={isVisible} closePopup={onClose} style="no-padding" className={popupClassName}>
       <ModalHeader
@@ -87,7 +92,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
         headerIconName={headerIconName}
         headerIconColor={headerIconColor}
         headerIconSize={headerIconSize}
-        className={classNames(headerClassName, styles.header)}
+        className={headerClassNames}
       />
       {errorComponent}
       {bodyHtml}

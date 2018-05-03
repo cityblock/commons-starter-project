@@ -12,6 +12,7 @@ describe('Render Calendar List', () => {
   const fetchMore = () => {
     return true;
   };
+  const showRefreshModal = () => true;
   const calendarEvents = [
     {
       startDate: startDatetime,
@@ -30,7 +31,12 @@ describe('Render Calendar List', () => {
   ];
 
   const wrapper = shallow(
-    <Calendar calendarEvents={calendarEvents} loading={false} fetchMore={fetchMore} />,
+    <Calendar
+      calendarEvents={calendarEvents}
+      loading={false}
+      fetchMore={fetchMore}
+      showRefreshModal={showRefreshModal}
+    />,
   );
 
   it('renders the calendar list', () => {

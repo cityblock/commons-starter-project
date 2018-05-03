@@ -23,6 +23,15 @@
   background-color: var(--highlight-background-color);
 }
 
+.buttons.buttonsNoBody {
+  background-color: var(--white-color);
+  border-top: none;
+}
+
 .header {
   flex-shrink: 0;
+}
+
+.header.headerNoBody {
+  background-color: var(--white-color);
 }

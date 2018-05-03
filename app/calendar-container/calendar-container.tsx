@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import * as calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
 import { getCalendarEventsForCurrentUserQuery, FullCalendarEventFragment } from '../graphql/types';
 import AppointmentModal from '../shared/appointment-modal/appointment-modal';
+import RequestRefreshModal from '../shared/appointment-modal/request-refresh-modal';
 import Calendar from '../shared/calendar/calendar';
 import Button from '../shared/library/button/button';
 import * as styles from './css/calendar-container.css';
@@ -16,10 +17,13 @@ interface IGraphqlProps {
   calendarError: ApolloError | null | undefined;
   calendarResponse?: getCalendarEventsForCurrentUserQuery['calendarEventsForCurrentUser'];
   fetchMoreCalendarEvents: () => any;
+  refetchCalendar: () => any;
 }
 
 interface IState {
   isAppointmentModalVisible: boolean;
+  isRefreshModalVisible: boolean;
+  refreshType: 'create' | 'edit';
 }
 
 export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
@@ -27,7 +31,11 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
 
   constructor(props: IGraphqlProps) {
     super(props);
-    this.state = { isAppointmentModalVisible: false };
+    this.state = {
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: false,
+      refreshType: 'create',
+    };
   }
 
   componentDidMount() {
@@ -38,12 +46,29 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
     this.setState({ isAppointmentModalVisible: true });
   };
 
-  handleClose = () => {
-    this.setState({ isAppointmentModalVisible: false });
+  handleAppointmentClose = () => {
+    this.setState({
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: true,
+      refreshType: 'create',
+    });
   };
 
   handleOpenCalendarClick = () => {
     // TODO
+  };
+
+  handleRefreshClose = () => {
+    this.setState({ isRefreshModalVisible: false });
+  };
+
+  handleRefreshRefetchAndClose = () => {
+    this.props.refetchCalendar();
+    this.handleRefreshClose();
+  };
+
+  handleEditRefreshOpen = () => {
+    this.setState({ isRefreshModalVisible: true, refreshType: 'edit' });
   };
 
   render() {
@@ -54,7 +79,7 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
       calendarError,
     } = this.props;
 
-    const { isAppointmentModalVisible } = this.state;
+    const { isAppointmentModalVisible, isRefreshModalVisible, refreshType } = this.state;
 
     const calendarEvents =
       calendarResponse && calendarResponse.events ? calendarResponse.events : [];
@@ -81,8 +106,18 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
           calendarEvents={calendarEvents}
           error={calendarError}
           hasNextPage={hasNextPage}
+          showRefreshModal={this.handleEditRefreshOpen}
         />
-        <AppointmentModal isVisible={isAppointmentModalVisible} closePopup={this.handleClose} />
+        <AppointmentModal
+          isVisible={isAppointmentModalVisible}
+          closePopup={this.handleAppointmentClose}
+        />
+        <RequestRefreshModal
+          isVisible={isRefreshModalVisible}
+          onClose={this.handleRefreshClose}
+          onRequestRefresh={this.handleRefreshRefetchAndClose}
+          refreshType={refreshType}
+        />
       </div>
     );
   }
@@ -132,5 +167,10 @@ export default graphql(calendarQuery as any, {
     calendarLoading: data ? data.loading : false,
     calendarError: data ? data.error : null,
     calendarResponse: data ? (data as any).calendarEventsForCurrentUser : null,
+    refetchCalendar: () => {
+      if (data && data.refetch) {
+        return data.refetch();
+      }
+    },
   }),
 })(CalendarContainer);

@@ -444,6 +444,14 @@ export const SPANISH_TRANSLATION = {
     'appointmentModal.locationPlaceholder': 'Select location of appointment...',
     'appointmentModal.externalLocation': 'External location',
     'appointmentModal.externalLocationPlaceholder': 'Enter where the appointment is...',
+    'refreshModal.editTitle': 'Editing the appointment...',
+    'refreshModal.editSubTitle':
+      'The appointment is being edited on the Google calendar in a new tab.\n Once the changes have been saved in the Google calendar, click "refesh" to update the appointments in Commons.',
+    'refreshModal.createTitle': 'Creating the appointment...',
+    'refreshModal.createSubTitle':
+      'The appointment is being created on the Google calendar in a new tab.\n If the appointment has been saved to the Google calendar, click "refesh" to show the appointment in Commons.',
+    'refreshModal.close': 'Close',
+    'refreshModal.refresh': 'Refresh',
     'CBOs.address': 'Enter street address of CBO',
     'CBOs.category': 'Select category of CBO',
     'CBOs.city': 'Enter city of CBO',

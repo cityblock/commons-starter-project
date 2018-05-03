@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import * as calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
 import { getCalendarEventsForPatientQuery, FullCalendarEventFragment } from '../../graphql/types';
 import AppointmentModal from '../../shared/appointment-modal/appointment-modal';
+import RequestRefreshModal from '../../shared/appointment-modal/request-refresh-modal';
 import Calendar from '../../shared/calendar/calendar';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/patient-calendar.css';
@@ -24,31 +25,55 @@ interface IGraphqlProps {
   isLoading?: boolean;
   error: ApolloError | null | undefined;
   fetchMoreCalendarEvents: () => any;
+  refetchCalendar: () => any;
 }
 
 type allProps = IProps & IGraphqlProps;
 
 interface IState {
   isAppointmentModalVisible: boolean;
+  isRefreshModalVisible: boolean;
+  refreshType: 'create' | 'edit';
 }
 
 export class PatientCalendar extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { isAppointmentModalVisible: false };
+    this.state = {
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: false,
+      refreshType: 'create',
+    };
   }
 
   handleAddAppointmentClick = () => {
     this.setState({ isAppointmentModalVisible: true });
   };
 
-  handleClose = () => {
-    this.setState({ isAppointmentModalVisible: false });
+  handleAppointmentClose = () => {
+    this.setState({
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: true,
+      refreshType: 'create',
+    });
+  };
+
+  handleRefreshClose = () => {
+    this.setState({ isRefreshModalVisible: false });
+  };
+
+  handleRefreshRefetchAndClose = () => {
+    this.props.refetchCalendar();
+    this.handleRefreshClose();
+  };
+
+  handleEditRefreshOpen = () => {
+    this.setState({ isRefreshModalVisible: true, refreshType: 'edit' });
   };
 
   render() {
     const { isLoading, match, calendarEventsResponse, fetchMoreCalendarEvents, error } = this.props;
-    const { isAppointmentModalVisible } = this.state;
+    const { isAppointmentModalVisible, isRefreshModalVisible, refreshType } = this.state;
     const events = calendarEventsResponse ? calendarEventsResponse.events : [];
     const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
 
@@ -63,11 +88,18 @@ export class PatientCalendar extends React.Component<allProps, IState> {
           calendarEvents={events}
           error={error}
           hasNextPage={hasNextPage}
+          showRefreshModal={this.handleEditRefreshOpen}
         />
         <AppointmentModal
           isVisible={isAppointmentModalVisible}
           patientId={match.params.patientId}
-          closePopup={this.handleClose}
+          closePopup={this.handleAppointmentClose}
+        />
+        <RequestRefreshModal
+          isVisible={isRefreshModalVisible}
+          onClose={this.handleRefreshClose}
+          onRequestRefresh={this.handleRefreshRefetchAndClose}
+          refreshType={refreshType}
         />
       </div>
     );
@@ -124,5 +156,10 @@ export default graphql(calendarEventsForPatientQuery as any, {
     isLoading: data ? data.loading : false,
     error: data ? data.error : null,
     calendarEventsResponse: data ? (data as any).calendarEventsForPatient : null,
+    refetchCalendar: () => {
+      if (data && data.refetch) {
+        return data.refetch();
+      }
+    },
   }),
 })(PatientCalendar);

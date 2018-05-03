@@ -8,10 +8,8 @@ describe('Left Nav Care Team Mattermost', () => {
   const patientId = 'aryaStark';
 
   const wrapper = shallow(
-    <CareTeamMattermost
-      patientId={patientId}
-      getMattermostLink={() => true as any}
-    />);
+    <CareTeamMattermost patientId={patientId} getMattermostLink={() => true as any} />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

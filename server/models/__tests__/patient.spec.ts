@@ -61,6 +61,7 @@ async function patientsSetup(txn: Transaction): Promise<IPatientsSetup> {
 interface ISearchSetup {
   user: User;
   jonSnow: Patient;
+  jonArryn: Patient;
 }
 
 async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
@@ -86,6 +87,16 @@ async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
     },
     txn,
   );
+  const jonArryn = await createPatient(
+    {
+      cityblockId: 789,
+      homeClinicId: clinic.id,
+      firstName: 'Jon',
+      lastName: 'Arryn',
+      userId: user.id,
+    },
+    txn,
+  );
   await createPatient(
     {
       cityblockId: 345,
@@ -107,7 +118,7 @@ async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
     txn,
   );
 
-  return { user, jonSnow };
+  return { user, jonSnow, jonArryn };
 }
 
 describe('patient model', () => {
@@ -810,7 +821,8 @@ describe('patient model', () => {
   describe('search', () => {
     it('returns single result', async () => {
       const { user } = await searchSetup(txn);
-      const query = 'jon';
+
+      const query = 'jon snow';
       expect(
         await Patient.search(query, { pageNumber: 0, pageSize: 1 }, user.id, txn),
       ).toMatchObject({
@@ -825,7 +837,39 @@ describe('patient model', () => {
             },
           },
         ],
-        total: 1,
+        total: 2,
+      });
+    });
+
+    it('does not show previous panel member as on panel', async () => {
+      const { user, jonArryn } = await searchSetup(txn);
+      await CareTeam.delete({ patientId: jonArryn.id, userId: user.id }, txn);
+
+      const query = 'jon';
+      expect(
+        await Patient.search(query, { pageNumber: 0, pageSize: 2 }, user.id, txn),
+      ).toMatchObject({
+        results: [
+          {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            userCareTeam: true,
+            patientInfo: {
+              gender: 'male',
+              language: 'en',
+            },
+          },
+          {
+            firstName: 'Jon',
+            lastName: 'Arryn',
+            userCareTeam: false,
+            patientInfo: {
+              gender: 'male',
+              language: 'en',
+            },
+          },
+        ],
+        total: 2,
       });
     });
 

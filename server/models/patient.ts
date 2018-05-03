@@ -388,7 +388,7 @@ export default class Patient extends Model {
         ),
       )
       .joinRaw(
-        'LEFT JOIN care_team ON patient.id = care_team."patientId" AND care_team."userId" = ?',
+        'LEFT JOIN care_team ON patient.id = care_team."patientId" AND care_team."userId" = ? AND care_team."deletedAt" IS NULL',
         userId,
       )
       .whereRaw(

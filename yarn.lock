@@ -3479,9 +3479,9 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-danger@3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.2.tgz#454b25208233f10a863d2beee67133344acbdf1a"
+danger@3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.4.tgz#c5f02b5154bcd7cee111bb910fe6c9d7c811333f"
   dependencies:
     "@octokit/rest" "^15.2.6"
     babel-polyfill "^6.23.0"

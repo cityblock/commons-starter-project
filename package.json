@@ -134,7 +134,7 @@
   "dependencies": {
     "@google-cloud/error-reporting": "0.4.0",
     "@google-cloud/storage": "1.6.0",
-    "@google-cloud/trace-agent": "2.7.2",
+    "@google-cloud/trace-agent": "2.8.1",
     "@react-pdf/core": "0.7.6",
     "@react-pdf/node": "0.7.6",
     "@types/acl": "0.4.34",

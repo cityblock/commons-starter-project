@@ -42,7 +42,7 @@ describe('Mattermost', () => {
     txn = await transaction.start(Patient.knex());
     axios.post = jest.fn();
     axios.put = jest.fn();
-    axios.get = jest.fn().mockReturnValue({ data: { id: 'fakeId' } });
+    axios.get = jest.fn().mockReturnValue({ data: { id: 'fakeId', username: 'dan' } });
     axios.delete = jest.fn();
   });
 
@@ -146,6 +146,34 @@ describe('Mattermost', () => {
       expect(axios.delete).toBeCalledWith(`${mattermostUrl}/channels/fakeId/members/fakeId`, {
         headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' },
       });
+    });
+  });
+
+  describe('get user', () => {
+    it('gets a user', async () => {
+      const { user } = await setup(txn);
+
+      const mattermostUser = await mattermost.getUser(user.id, txn);
+
+      expect(axios.get).toBeCalledWith(`${mattermostUrl}/users/email/${user.email}`, {
+        headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' },
+      });
+
+      expect(mattermostUser).toMatchObject({ id: 'fakeId', username: 'dan' });
+    });
+  });
+
+  describe('get link to message user', () => {
+    it('gets a link to message user', async () => {
+      const { user } = await setup(txn);
+
+      const link = await mattermost.getLinkToMessageUser(user.email);
+
+      expect(axios.get).toBeCalledWith(`${mattermostUrl}/users/email/${user.email}`, {
+        headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' },
+      });
+
+      expect(link).toBe('https://mattermost-test.cityblock.com/cityblock/messages/@dan');
     });
   });
 });

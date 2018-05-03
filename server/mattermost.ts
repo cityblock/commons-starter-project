@@ -14,6 +14,7 @@ export const ADD_USER_TO_CHANNEL_TOPIC = 'addUserToPatientChannel';
 
 interface IMattermostUser {
   id: string;
+  username: string;
   notify_props: {
     channel: 'true' | 'false';
   };
@@ -26,6 +27,7 @@ class Mattermost {
     return singleton;
   }
 
+  private mattermostApiUrl: string;
   private mattermostUrl: string;
   private teamId: string;
   private headers: {
@@ -34,6 +36,7 @@ class Mattermost {
   };
 
   constructor() {
+    this.mattermostApiUrl = `${config.MATTERMOST_URL}/api/v4` || '';
     this.mattermostUrl = config.MATTERMOST_URL || '';
     this.teamId = config.MATTERMOST_TEAM_ID || '';
     this.headers = {
@@ -53,7 +56,7 @@ class Mattermost {
     };
 
     try {
-      await axios.post(`${this.mattermostUrl}/channels`, options, {
+      await axios.post(`${this.mattermostApiUrl}/channels`, options, {
         headers: this.headers,
       });
     } catch (err) {
@@ -85,7 +88,7 @@ class Mattermost {
         await this.updateChannelNotifications(mattermostUser.id, muteNotifications);
 
         await axios.post(
-          `${this.mattermostUrl}/channels/${channelId}/members`,
+          `${this.mattermostApiUrl}/channels/${channelId}/members`,
           {
             user_id: mattermostUser.id,
           },
@@ -113,7 +116,7 @@ class Mattermost {
       const mattermostUser = await this.getUser(userId, txn);
 
       await axios.delete(
-        `${this.mattermostUrl}/channels/${channelId}/members/${mattermostUser.id}`,
+        `${this.mattermostApiUrl}/channels/${channelId}/members/${mattermostUser.id}`,
         {
           headers: this.headers,
         },
@@ -126,6 +129,26 @@ class Mattermost {
     }
   }
 
+  public async getUser(userId: string, txn: Transaction): Promise<IMattermostUser> {
+    const user = await User.get(userId, txn);
+
+    return this.getUserByEmail(user.email);
+  }
+
+  public async getLinkToMessageUser(email: string): Promise<string> {
+    const mattermostUser = await this.getUserByEmail(email);
+
+    return `${this.mattermostUrl}/cityblock/messages/@${mattermostUser.username}`;
+  }
+
+  private async getUserByEmail(email: string): Promise<IMattermostUser> {
+    const response = await axios.get(`${this.mattermostApiUrl}/users/email/${email}`, {
+      headers: this.headers,
+    });
+
+    return response.data;
+  }
+
   private async getChannelIdForPatient(patientId: string, txn: Transaction): Promise<string> {
     const patient = await Patient.get(patientId, txn);
     const { firstName, lastName, cityblockId } = patient;
@@ -133,7 +156,7 @@ class Mattermost {
     const channelName = formatChannelName(firstName, lastName, cityblockId);
 
     const response = await axios.get(
-      `${this.mattermostUrl}/teams/${this.teamId}/channels/name/${channelName}`,
+      `${this.mattermostApiUrl}/teams/${this.teamId}/channels/name/${channelName}`,
       {
         headers: this.headers,
       },
@@ -142,23 +165,13 @@ class Mattermost {
     return response.data.id;
   }
 
-  private async getUser(userId: string, txn: Transaction): Promise<IMattermostUser> {
-    const user = await User.get(userId, txn);
-
-    const response = await axios.get(`${this.mattermostUrl}/users/email/${user.email}`, {
-      headers: this.headers,
-    });
-
-    return response.data;
-  }
-
   private getUserNotifications(user: IMattermostUser): object {
     return user.notify_props || {};
   }
 
   private async updateChannelNotifications(userId: string, notifications: object): Promise<void> {
     await axios.put(
-      `${this.mattermostUrl}/users/${userId}/patch`,
+      `${this.mattermostApiUrl}/users/${userId}/patch`,
       {
         notify_props: notifications,
       },

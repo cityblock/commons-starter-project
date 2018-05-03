@@ -43,6 +43,7 @@ const CareTeamMember: React.StatelessComponent<IProps> = (props: IProps) => {
       <CareTeamMemberContact
         careTeamMemberId={careTeamMember.id}
         firstName={careTeamMember.firstName || 'Unknown'}
+        email={careTeamMember.email || ''}
         isVisible={isSelected}
       />
       {!isSelected && <div className={styles.divider} />}

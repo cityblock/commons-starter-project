@@ -29,7 +29,16 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { startDate, startTime, endDate, guests, title, id, htmlLink, eventType } = this.props.calendarEvent;
+    const {
+      startDate,
+      startTime,
+      endDate,
+      guests,
+      title,
+      id,
+      htmlLink,
+      eventType,
+    } = this.props.calendarEvent;
     const { isMenuVisible } = this.state;
     const duration = startTime && endDate ? differenceInMinutes(endDate, startTime) : null;
 
@@ -48,11 +57,12 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
         </span>
       ) : null;
 
-    const icon = (eventType === 'siu') ? (
-      <Icon name="localHospital" color="red" isLarge={true} className={styles.eventIcon} />
-    ) : (
-      <Icon name="business" color="gray" isLarge={true} className={styles.eventIcon} />
-    );
+    const icon =
+      eventType === 'siu' ? (
+        <Icon name="localHospital" color="red" isLarge={true} className={styles.eventIcon} />
+      ) : (
+        <Icon name="business" color="gray" isLarge={true} className={styles.eventIcon} />
+      );
 
     return (
       <div className={styles.eventContainer} key={`calendarEvent-${id}`}>

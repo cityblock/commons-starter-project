@@ -88,7 +88,7 @@ export const ENGLISH_TRANSLATION = {
     'error.tableLoading': 'Loading',
     'backLink.back': 'Back',
     'careTeam.call': 'Call {name}',
-    'careTeam.slack': 'Message {name} on Slack',
+    'careTeam.mattermost': 'Message {name} on Mattermost',
     'careTeam.email': 'Send an email',
     'computedField.flag': 'Flag for review',
     'computedField.flagDetail':

@@ -71,7 +71,7 @@ import TextSmsIcon from 'material-ui-icons/Textsms';
 import TodayIcon from 'material-ui-icons/Today';
 import WarningIcon from 'material-ui-icons/Warning';
 import { SvgIconProps } from 'material-ui/SvgIcon';
-import SlackFullIcon from './custom/slack-full';
+import MattermostIcon from './custom/mattermost';
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
@@ -123,6 +123,7 @@ const components: IconComponents = {
   list: ListIcon,
   localHospital: LocalHospitalIcon,
   lockOutline: LockOutlineIcon,
+  mattermost: MattermostIcon,
   moreVert: MoreVertIcon,
   noteAdd: NoteAddIcon,
   notifications: NotificationsIcon,
@@ -138,7 +139,6 @@ const components: IconComponents = {
   sentimentDissatisfied: SentimentDissatisfiedIcon,
   sentimentNeutral: SentimentNeutralIcon,
   sentimentSatisfied: SentimentSatisfiedIcon,
-  slackFull: SlackFullIcon,
   stars: StarsIcon,
   star: GradeIcon,
   syncProblem: SyncProblemIcon,

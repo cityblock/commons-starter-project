@@ -85,7 +85,7 @@ export const SPANISH_TRANSLATION = {
     'error.tableLoadingButton': 'Inténtalo de nuevo',
     'error.tableLoading': 'Cargando',
     'backLink.back': 'Regreso',
-    'careTeam.slack': 'Mensaje {name} de Slack',
+    'careTeam.mattermost': 'Message {name} on Mattermost',
     'careTeam.call': 'Call {name}',
     'careTeam.text': 'Envía un mensaje de texto',
     'careTeam.email': 'Enviar un correo electrónico',

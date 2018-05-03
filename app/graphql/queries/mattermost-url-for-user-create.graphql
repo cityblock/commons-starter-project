@@ -1,0 +1,5 @@
+mutation mattermostUrlForUserCreate($email: String!) {
+  mattermostUrlForUserCreate(input: { email: $email }) {
+    url
+  }
+}

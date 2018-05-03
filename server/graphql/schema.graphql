@@ -1644,6 +1644,11 @@ type CalendarEventEdges {
   pageInfo: GooglePageInfo
 }
 
+# Deep link to mattermost
+type MattermostUrl {
+  url: String!
+}
+
 type CalendarEvent {
   id: String!
   startDate: String!
@@ -2493,6 +2498,11 @@ input UserVoicemailSignedUrlCreateInput {
   voicemailId: ID!
 }
 
+# params for getting Mattermost url to specific user
+input MattermostUrlForUserInput {
+  email: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2779,6 +2789,8 @@ type RootMutationType {
   JwtForVcfCreate: JwtForVcf!
   # generate a signed URL for voicemail
   userVoicemailSignedUrlCreate(input: UserVoicemailSignedUrlCreateInput): SignedUrl!
+  # mattermost url
+  mattermostUrlForUserCreate(input: MattermostUrlForUserInput): MattermostUrl!
 }
 
 type RootQueryType {

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
-import CareTeamMemberContact from '../care-team-member-contact';
+import { CareTeamMemberContact } from '../care-team-member-contact';
 
 describe('Patient Left Navigation Care Team Contact', () => {
   const careTeamMemberId = 'sansaStark';
@@ -13,6 +13,8 @@ describe('Patient Left Navigation Care Team Contact', () => {
       careTeamMemberId={careTeamMemberId}
       firstName={firstName}
       isVisible={true}
+      email="sansa@cityblock.com"
+      getMattermostLink={() => true as any}
     />,
   );
 
@@ -66,16 +68,16 @@ describe('Patient Left Navigation Care Team Contact', () => {
     ).toBe('medium');
   });
 
-  it('renders slack icon', () => {
+  it('renders mattermost icon', () => {
     expect(
       wrapper
         .find(Icon)
         .at(1)
         .props().name,
-    ).toBe('slackFull');
+    ).toBe('mattermost');
   });
 
-  it('renders small text to slack care team member', () => {
+  it('renders small text to mattermost care team member', () => {
     expect(wrapper.find(SmallText).length).toBe(2);
 
     expect(
@@ -83,7 +85,7 @@ describe('Patient Left Navigation Care Team Contact', () => {
         .find(SmallText)
         .at(1)
         .props().messageId,
-    ).toBe('careTeam.slack');
+    ).toBe('careTeam.mattermost');
     expect(
       wrapper
         .find(SmallText)

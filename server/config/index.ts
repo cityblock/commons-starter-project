@@ -25,7 +25,7 @@ export default {
   SUBSCRIPTIONS_ENDPOINT: 'ws://localhost:3000/subscriptions',
   MATTERMOST_TOKEN: 'winterIsComing',
   MATTERMOST_TEAM_ID: 'CITYBLOCKPARTY',
-  MATTERMOST_URL: 'https://mattermost-test.cityblock.com/api/v4',
+  MATTERMOST_URL: 'https://mattermost-test.cityblock.com',
   PINGDOM_CHECK_PASSWORD: 'secret',
   KUE_UI_PASSWORD: 'fake',
   ...process.env,

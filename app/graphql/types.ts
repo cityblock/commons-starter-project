@@ -6057,6 +6057,17 @@ export interface logInUserMutation {
   } | null,
 };
 
+export interface mattermostUrlForUserCreateMutationVariables {
+  email: string,
+};
+
+export interface mattermostUrlForUserCreateMutation {
+  // mattermost url
+  mattermostUrlForUserCreate:  {
+    url: string,
+  },
+};
+
 export interface patientAnswersCreateMutationVariables {
   patientId: string,
   patientAnswers: Array< PatientAnswerInput | null >,

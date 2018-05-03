@@ -3218,6 +3218,11 @@ declare module 'schema' {
      * generate a signed URL for voicemail
      */
     userVoicemailSignedUrlCreate: ISignedUrl;
+
+    /**
+     * mattermost url
+     */
+    mattermostUrlForUserCreate: IMattermostUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3623,6 +3628,9 @@ declare module 'schema' {
   }
   interface IUserVoicemailSignedUrlCreateOnRootMutationTypeArguments {
     input?: IUserVoicemailSignedUrlCreateInput | null;
+  }
+  interface IMattermostUrlForUserCreateOnRootMutationTypeArguments {
+    input?: IMattermostUrlForUserInput | null;
   }
 
   /**
@@ -4768,6 +4776,20 @@ declare module 'schema' {
    */
   interface IUserVoicemailSignedUrlCreateInput {
     voicemailId: string;
+  }
+
+  /**
+   * params for getting Mattermost url to specific user
+   */
+  interface IMattermostUrlForUserInput {
+    email: string;
+  }
+
+  /**
+   * Deep link to mattermost
+   */
+  interface IMattermostUrl {
+    url: string;
   }
 
   interface IRootSubscriptionType {

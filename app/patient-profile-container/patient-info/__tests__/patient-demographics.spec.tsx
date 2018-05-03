@@ -66,7 +66,7 @@ describe('Render Patient Demographics Component', () => {
     expect(wrapper.find(PlanInfo).props().patientId).toBe(patient.id);
   });
 
-  it('advanced directives', () => {
+  it('advance directive', () => {
     expect(wrapper.find(AdvancedDirectives)).toHaveLength(1);
   });
 

@@ -343,7 +343,7 @@ export const ENGLISH_TRANSLATION = {
     'phone.mobile': 'Mobile',
     'phone.other': 'Other',
     'phone.home': 'Home',
-    'advancedDirectives.sectionTitle': 'Advanced Directives',
+    'advancedDirectives.sectionTitle': 'Advance Directive',
     'advancedDirectives.hasMolst':
       'Does the member have a completed Medical Orders for Life-Sustaining Treatment (MOLST)?',
     'advancedDirectives.molstForms':
@@ -881,9 +881,9 @@ export const ENGLISH_TRANSLATION = {
     'patientIntakeChecklist.emergencyContactSubtext':
       'Add any existing care team members this member had prior to Cityblock as well as at least one emergency contact.',
     'patientIntakeChecklist.emergencyContactButton': 'Add team',
-    'patientIntakeChecklist.advancedDirectivesLabel': 'Advanced directives',
+    'patientIntakeChecklist.advancedDirectivesLabel': 'Advance Directive',
     'patientIntakeChecklist.advancedDirectivesSubtext':
-      'Ask the member about their advanced directives and add that information to their profile.',
+      'Ask the member about their advance directive and add that information to their profile.',
     'patientIntakeChecklist.advancedDirectivesButton': 'Add directives',
     'patientIntakeChecklist.consentSignedLabel': 'Collect member consents',
     'patientIntakeChecklist.consentSignedSubtext':

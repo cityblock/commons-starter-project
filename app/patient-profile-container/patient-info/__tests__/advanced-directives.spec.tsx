@@ -8,7 +8,7 @@ import { advancedDirectives, healthcareProxy, patient } from '../../../shared/ut
 import { AdvancedDirectives } from '../advanced-directives';
 import DisplayCard from '../display-card';
 
-describe('Renders Advanced Directives Component', () => {
+describe('Renders advance directive Component', () => {
   const onChange = () => true;
   const patientContactDelete = jest.fn();
   const errorFn = (message: string) => true as any;

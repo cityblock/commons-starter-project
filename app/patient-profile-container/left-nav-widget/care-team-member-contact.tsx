@@ -89,4 +89,4 @@ export class CareTeamMemberContact extends React.Component<allProps, IState> {
 
 export default graphql<any>(mattermostUrlForUserCreate as any, {
   name: 'getMattermostLink',
-})(CareTeamMemberContact);
+})(CareTeamMemberContact) as React.ComponentClass<IProps>;

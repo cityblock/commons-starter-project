@@ -29,3 +29,13 @@
 .bottomMargin {
   margin-bottom: 5px;
 }
+
+.iconContainer {
+  border: 1px solid var(--blue-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--gutter);
+  width: var(--gutter);
+}

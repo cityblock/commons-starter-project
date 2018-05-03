@@ -90,6 +90,8 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.call': 'Call {name}',
     'careTeam.mattermost': 'Message {name} on Mattermost',
     'careTeam.email': 'Send an email',
+    'careTeam.chat': 'Chat with care team',
+    'careTeam.chatDetail': 'Mattermost team channel',
     'computedField.flag': 'Flag for review',
     'computedField.flagDetail':
       'Provide the following information for this question to be reviewed',

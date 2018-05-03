@@ -89,6 +89,8 @@ export const SPANISH_TRANSLATION = {
     'careTeam.call': 'Call {name}',
     'careTeam.text': 'Envía un mensaje de texto',
     'careTeam.email': 'Enviar un correo electrónico',
+    'careTeam.chat': 'Chat with care team',
+    'careTeam.chatDetail': 'Mattermost team channel',
     'careTeam.profile': 'Ir al perfil',
     'computedField.flag': 'Bandera para revisión',
     'computedField.flagDetail':

@@ -2,13 +2,16 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
 import { currentUserForCareTeam, userForCareTeam } from '../../../shared/util/test-data';
+import CareTeamMattermost from '../care-team-mattermost';
 import CareTeamMember from '../care-team-member';
 import { LeftNavCareTeam } from '../left-nav-care-team';
 
 describe('Patient Left Navigation Care Team View', () => {
+  const patientId = 'sansaStark';
+
   const wrapper = shallow(
     <LeftNavCareTeam
-      patientId="sansaStark"
+      patientId={patientId}
       careTeam={[userForCareTeam, currentUserForCareTeam]}
       loading={false}
       error={null}
@@ -17,6 +20,10 @@ describe('Patient Left Navigation Care Team View', () => {
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);
+  });
+
+  it('renders option to chat with care team on Mattermost', () => {
+    expect(wrapper.find(CareTeamMattermost).props().patientId).toBe(patientId);
   });
 
   it('renders care team member component for each user on care team', () => {

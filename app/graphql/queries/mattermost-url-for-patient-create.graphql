@@ -1,0 +1,5 @@
+mutation mattermostUrlForPatientCreate($patientId: ID!) {
+  mattermostUrlForPatientCreate(input: { patientId: $patientId }) {
+    url
+  }
+}

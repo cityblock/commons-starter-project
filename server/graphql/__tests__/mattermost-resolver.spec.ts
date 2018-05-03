@@ -1,22 +1,29 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import * as mattermostUrlForPatientCreate from '../../../app/graphql/queries/mattermost-url-for-patient-create.graphql';
 import * as mattermostUrlForUserCreate from '../../../app/graphql/queries/mattermost-url-for-user-create.graphql';
 import Db from '../../db';
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';
+import Patient from '../../models/patient';
 import User from '../../models/user';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
   user: User;
+  patient: Patient;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const patient = await createPatient(
+    { cityblockId: 123, homeClinicId: clinic.id, firstName: 'Arya', lastName: 'Stark' },
+    txn,
+  );
 
-  return { user };
+  return { user, patient };
 }
 
 const permissions = 'blue';
@@ -26,6 +33,7 @@ describe('Mattermost Resolver', () => {
   const log = jest.fn();
   const logger = { log };
   const mattermostUrlForUserCreateMutation = print(mattermostUrlForUserCreate);
+  const mattermostUrlForPatientCreateMutation = print(mattermostUrlForPatientCreate);
 
   beforeAll(async () => {
     await Db.get();
@@ -69,6 +77,35 @@ describe('Mattermost Resolver', () => {
     );
 
     expect(result.data!.mattermostUrlForUserCreate.url).toBe(dmLink);
+    expect(log).toBeCalled();
+  });
+
+  it('gets a link to patient channel', async () => {
+    const { patient, user } = await setup(txn);
+
+    const channelLink = 'https://mattermost.com/channels/sansa-stark-123';
+    const getLinkToMessageCareTeam = jest.fn().mockReturnValue(channelLink);
+
+    Mattermost.get = jest.fn().mockReturnValue({
+      getLinkToMessageCareTeam,
+    });
+
+    const result = await graphql(
+      schema,
+      mattermostUrlForPatientCreateMutation,
+      null,
+      {
+        userId: user.id,
+        logger,
+        permissions,
+        txn,
+      },
+      {
+        patientId: patient.id,
+      },
+    );
+
+    expect(result.data!.mattermostUrlForPatientCreate.url).toBe(channelLink);
     expect(log).toBeCalled();
   });
 });

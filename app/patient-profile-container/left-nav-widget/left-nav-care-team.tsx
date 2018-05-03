@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import { getPatientCareTeamQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
+import CareTeamMattermost from './care-team-mattermost';
 import CareTeamMember from './care-team-member';
 import * as styles from './css/left-nav-care-team.css';
 
@@ -41,7 +42,7 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
   };
 
   render(): JSX.Element {
-    const { loading, error, careTeam } = this.props;
+    const { loading, error, careTeam, patientId } = this.props;
     const { selectedCareTeamMemberId } = this.state;
 
     if (loading || error) return <Spinner />;
@@ -56,7 +57,12 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
       />
     ));
 
-    return <div className={styles.container}>{careTeamMembers}</div>;
+    return (
+      <div className={styles.container}>
+        <CareTeamMattermost patientId={patientId} />
+        {careTeamMembers}
+      </div>
+    );
   }
 }
 

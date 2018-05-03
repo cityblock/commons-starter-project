@@ -3220,9 +3220,14 @@ declare module 'schema' {
     userVoicemailSignedUrlCreate: ISignedUrl;
 
     /**
-     * mattermost url
+     * mattermost url to DM user
      */
     mattermostUrlForUserCreate: IMattermostUrl;
+
+    /**
+     * mattermost url for patient channel
+     */
+    mattermostUrlForPatientCreate: IMattermostUrl;
   }
   interface IUserCreateOnRootMutationTypeArguments {
     input?: IUserCreateInput | null;
@@ -3631,6 +3636,9 @@ declare module 'schema' {
   }
   interface IMattermostUrlForUserCreateOnRootMutationTypeArguments {
     input?: IMattermostUrlForUserInput | null;
+  }
+  interface IMattermostUrlForPatientCreateOnRootMutationTypeArguments {
+    input?: IMattermostUrlForPatientInput | null;
   }
 
   /**
@@ -4790,6 +4798,13 @@ declare module 'schema' {
    */
   interface IMattermostUrl {
     url: string;
+  }
+
+  /**
+   * params for getting Mattermost url to patient channel
+   */
+  interface IMattermostUrlForPatientInput {
+    patientId: string;
   }
 
   interface IRootSubscriptionType {

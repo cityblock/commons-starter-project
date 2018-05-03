@@ -141,6 +141,15 @@ class Mattermost {
     return `${this.mattermostUrl}/cityblock/messages/@${mattermostUser.username}`;
   }
 
+  public async getLinkToMessageCareTeam(patientId: string, txn: Transaction): Promise<string> {
+    const patient = await Patient.get(patientId, txn);
+    const { firstName, lastName, cityblockId } = patient;
+
+    const channelName = formatChannelName(firstName, lastName, cityblockId);
+
+    return `${this.mattermostUrl}/cityblock/channels/${channelName}`;
+  }
+
   private async getUserByEmail(email: string): Promise<IMattermostUser> {
     const response = await axios.get(`${this.mattermostApiUrl}/users/email/${email}`, {
       headers: this.headers,

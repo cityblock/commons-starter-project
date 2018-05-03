@@ -2503,6 +2503,11 @@ input MattermostUrlForUserInput {
   email: String!
 }
 
+# params for getting Mattermost url to patient channel
+input MattermostUrlForPatientInput {
+  patientId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2789,8 +2794,10 @@ type RootMutationType {
   JwtForVcfCreate: JwtForVcf!
   # generate a signed URL for voicemail
   userVoicemailSignedUrlCreate(input: UserVoicemailSignedUrlCreateInput): SignedUrl!
-  # mattermost url
+  # mattermost url to DM user
   mattermostUrlForUserCreate(input: MattermostUrlForUserInput): MattermostUrl!
+  # mattermost url for patient channel
+  mattermostUrlForPatientCreate(input: MattermostUrlForPatientInput): MattermostUrl!
 }
 
 type RootQueryType {

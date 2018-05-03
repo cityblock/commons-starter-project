@@ -94,7 +94,7 @@ import {
   resolveGoalSuggestionTemplate,
   resolveGoalSuggestionTemplates,
 } from './goal-suggestion-template-resolver';
-import { mattermostUrlForUserCreate } from './mattermost-resolver';
+import { mattermostUrlForPatientCreate, mattermostUrlForUserCreate } from './mattermost-resolver';
 import { resolveAddresses } from './patient-address-resolver';
 import {
   patientAnswersCreate,
@@ -587,6 +587,7 @@ const resolveFunctions = {
     smsMessageCreate,
     userVoicemailSignedUrlCreate,
     mattermostUrlForUserCreate,
+    mattermostUrlForPatientCreate,
   },
   RootSubscriptionType: {
     smsMessageCreated: {

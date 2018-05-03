@@ -25,7 +25,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic('The Wall', 123455), txn);
   const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
   const patient = await createPatient(
-    { cityblockId: 123, homeClinicId: clinic.id, userId: user.id },
+    {
+      cityblockId: 123,
+      homeClinicId: clinic.id,
+      userId: user.id,
+      firstName: 'Sansa',
+      lastName: 'Stark',
+    },
     txn,
   );
 
@@ -63,8 +69,8 @@ describe('Mattermost', () => {
       expect(axios.post).toBeCalledWith(
         `${mattermostUrl}/channels`,
         {
-          display_name: 'Dan Plant 123',
-          name: 'dan-plant-123',
+          display_name: 'Sansa Stark 123',
+          name: 'sansa-stark-123',
           team_id: teamId,
           type: 'P',
         },
@@ -135,7 +141,7 @@ describe('Mattermost', () => {
       await mattermost.removeUserFromPatientChannel(patient.id, user.id, txn);
 
       expect(axios.get).toBeCalledWith(
-        `${mattermostUrl}/teams/${teamId}/channels/name/dan-plant-123`,
+        `${mattermostUrl}/teams/${teamId}/channels/name/sansa-stark-123`,
         { headers: { Authorization: 'Bearer winterIsComing', 'Content-type': 'application/json' } },
       );
 
@@ -174,6 +180,16 @@ describe('Mattermost', () => {
       });
 
       expect(link).toBe('https://mattermost-test.cityblock.com/cityblock/messages/@dan');
+    });
+  });
+
+  describe('get link to message care team', () => {
+    it('gets a link to message care team', async () => {
+      const { patient } = await setup(txn);
+
+      const link = await mattermost.getLinkToMessageCareTeam(patient.id, txn);
+
+      expect(link).toBe('https://mattermost-test.cityblock.com/cityblock/channels/sansa-stark-123');
     });
   });
 });

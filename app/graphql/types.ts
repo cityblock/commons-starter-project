@@ -6057,12 +6057,23 @@ export interface logInUserMutation {
   } | null,
 };
 
+export interface mattermostUrlForPatientCreateMutationVariables {
+  patientId: string,
+};
+
+export interface mattermostUrlForPatientCreateMutation {
+  // mattermost url for patient channel
+  mattermostUrlForPatientCreate:  {
+    url: string,
+  },
+};
+
 export interface mattermostUrlForUserCreateMutationVariables {
   email: string,
 };
 
 export interface mattermostUrlForUserCreateMutation {
-  // mattermost url
+  // mattermost url to DM user
   mattermostUrlForUserCreate:  {
     url: string,
   },

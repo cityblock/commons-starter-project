@@ -22,6 +22,12 @@ export function pubsubValidator(
   let reqHmac: string | null = null;
   let data: IComputedFieldMessageData | IMemberAttributionMessageData;
 
+  console.log('Request body data:');
+  console.log(req.body.message.data);
+
+  console.log('Request body attributes:');
+  console.log(req.body.message.attributes);
+
   try {
     data = JSON.parse(Buffer.from(req.body.message.data, 'base64').toString('utf-8'));
   } catch (err) {

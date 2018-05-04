@@ -686,9 +686,9 @@
     "@types/uglify-js" "*"
     source-map "^0.6.0"
 
-"@types/ws@4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-4.0.2.tgz#b29037627dd7ba31ec49a4f1584840422efb856f"
+"@types/ws@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-5.1.0.tgz#a6382c1ad2dc3a68d0650fbb4ce214ca78f2e5bf"
   dependencies:
     "@types/events" "*"
     "@types/node" "*"

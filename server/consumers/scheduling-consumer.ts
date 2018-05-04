@@ -6,6 +6,7 @@ import { transaction, Transaction } from 'objection';
 import Db from '../db';
 import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
 import {
+  createGoogleCalendarAuth,
   createGoogleCalendarEvent,
   deleteGoogleCalendarEvent,
   getGoogleCalendarFieldsFromSIU,
@@ -68,8 +69,10 @@ export async function processNewSchedulingMessage(
     if (!googleCalendarId) {
       try {
         const attributionUser = await User.findOrCreateAttributionUser(txn);
-        googleCalendarId = await createCalendarForPatient(patient.id, attributionUser.id, txn);
-        await addCareTeamToPatientCalendar(patient.id, googleCalendarId, txn);
+        const jwtClient = createGoogleCalendarAuth() as any;
+
+        googleCalendarId = await createCalendarForPatient(patient.id, attributionUser.id, jwtClient, txn);
+        await addCareTeamToPatientCalendar(patient.id, googleCalendarId, jwtClient, txn);
       } catch (err) {
         return Promise.reject(`There was an error creating a calendar for patient: ${patientId}. ${err}`);
       }

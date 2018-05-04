@@ -7,6 +7,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import {
+  createGoogleCalendarAuth,
   createGoogleCalendarEventUrl,
   getGoogleCalendarEventsForCurrentUser,
   getGoogleCalendarEventsForPatient,
@@ -148,7 +149,7 @@ export interface ICalendarCreateForPatientOptions {
 export async function calendarCreateForPatient(
   source: any,
   { input }: ICalendarCreateForPatientOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testConfig, txn }: IContext,
 ): Promise<IRootMutationType['calendarCreateForPatient']> {
   const { patientId } = input;
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
@@ -160,8 +161,9 @@ export async function calendarCreateForPatient(
 
   if (!calendarId) {
     try {
-      calendarId = await createCalendarForPatient(patient.id, userId!, txn);
-      await addCareTeamToPatientCalendar(patient.id, calendarId, txn);
+      const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+      calendarId = await createCalendarForPatient(patient.id, userId!, jwtClient, txn, testConfig);
+      await addCareTeamToPatientCalendar(patient.id, calendarId, jwtClient, txn, testConfig);
     } catch (err) {
       throw new Error(`There was an error creating a calendar for patient: ${patientId}. ${err}`);
     }

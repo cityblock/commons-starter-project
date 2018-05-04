@@ -6,14 +6,12 @@ import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
 import {
   addUserToGoogleCalendar,
-  createGoogleCalendarAuth,
   createGoogleCalendarForPatient,
 } from './google-calendar-helpers';
 
-export async function createCalendarForPatient(patientId: string, userId: string, txn: Transaction) {
+export async function createCalendarForPatient(patientId: string, userId: string, jwtClient: OAuth2Client, txn: Transaction, testConfig?: any) {
   const patient = await Patient.get(patientId, txn);
 
-  const jwtClient = createGoogleCalendarAuth() as any;
   const response = await createGoogleCalendarForPatient(
     jwtClient,
     `${patient.firstName} ${patient.lastName} - [${patient.cityblockId}]`,
@@ -29,9 +27,8 @@ export async function createCalendarForPatient(patientId: string, userId: string
   return calendarId;
 }
 
-export async function addCareTeamToPatientCalendar(patientId: string, calendarId: string, txn: Transaction) {
+export async function addCareTeamToPatientCalendar(patientId: string, calendarId: string, jwtClient: OAuth2Client, txn: Transaction, testConfig?: any) {
   const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
-  const jwtClient = createGoogleCalendarAuth() as any;
 
   const maxAttempts = 3;
   const retryInterval = 500;

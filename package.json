@@ -48,6 +48,8 @@
     "consume:computed-fields:production": "NODE_ENV=production pm2 start --no-daemon ./server-compiled/server/consumers/computed-field-consumer.js",
     "consume:member-attribution:dev": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/consumers/member-attribution-consumer.js",
     "consume:member-attribution:production": "NODE_ENV=production pm2 start --no-daemon ./server-compiled/server/consumers/member-attribution-consumer.js",
+    "consume:scheduling:dev": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/consumers/scheduling-consumer.js",
+    "consume:scheduling:production": "NODE_ENV=production pm2 start --no-daemon ./server-compiled/server/consumers/scheduling-consumer.js",
     "consume:voicemail:dev": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/consumers/voicemail-consumer.js",
     "consume:voicemail:production": "NODE_ENV=production pm2 start --no-daemon ./server-compiled/server/consumers/voicemail-consumer.js",
     "consume:mattermost:dev": "NODE_ENV=development pm2 start --no-daemon ./server-compiled/server/consumers/mattermost-consumer.js",

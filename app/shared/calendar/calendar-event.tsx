@@ -40,6 +40,8 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
       id,
       htmlLink,
       eventType,
+      providerName,
+      providerCredentials,
     } = this.props.calendarEvent;
     const { isMenuVisible } = this.state;
     const duration = startTime && endDate ? differenceInMinutes(endDate, startTime) : null;
@@ -51,13 +53,20 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
       </span>
     ) : null;
 
+    const providerHtml = providerName ? (
+      <span className={styles.element}>
+        <span>{providerName}</span>
+        {providerCredentials ? <span className={styles.light}>{providerCredentials}</span> : null}
+      </span>
+    ) : null;
+
     const guestsHtml =
       guests && guests.length ? (
         <span className={styles.element}>
           <span> {guests[0]}</span>
           {guests.length > 1 ? <span className={styles.light}>(+{guests.length - 1})</span> : null}
         </span>
-      ) : null;
+      ) : providerHtml;
 
     const icon =
       eventType === 'siu' ? (

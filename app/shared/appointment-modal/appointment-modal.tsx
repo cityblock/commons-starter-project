@@ -22,6 +22,8 @@ interface IProps {
   isVisible: boolean;
   patientId?: string;
   closePopup: () => void;
+  createCalendarError?: string | null;
+  googleCalendarId?: string | null;
 }
 
 interface IGraphqlProps extends IInjectedProps {
@@ -99,7 +101,7 @@ export class AppointmentModal extends React.Component<allProps, IState> {
   }
 
   handleSubmit = async (): Promise<void> => {
-    const { getCalendarEventUrlForPatient, getCalendarEventUrlForUser, patientId } = this.props;
+    const { getCalendarEventUrlForPatient, getCalendarEventUrlForUser, patientId, googleCalendarId } = this.props;
     const { title, internalGuests, appointmentDate, startTime, endTime, location } = this.state;
     const inviteeEmails = internalGuests.map(guest => guest.email || '');
 
@@ -123,10 +125,14 @@ export class AppointmentModal extends React.Component<allProps, IState> {
     try {
       let calendarEventUrl;
       if (patientId) {
-        const response = await getCalendarEventUrlForPatient({
-          variables: { ...variables, patientId },
-        });
-        calendarEventUrl = response.data.calendarCreateEventForPatient.eventCreateUrl;
+        if (googleCalendarId) {
+          const response = await getCalendarEventUrlForPatient({
+            variables: { ...variables, patientId, googleCalendarId },
+          });
+          calendarEventUrl = response.data.calendarCreateEventForPatient.eventCreateUrl;
+        } else {
+          this.setState({ error: 'This patient does not have a google calendar created for them. Try again.' });
+        }
       } else {
         const response = await getCalendarEventUrlForUser({ variables });
         calendarEventUrl = response.data.calendarCreateEventForCurrentUser.eventCreateUrl;
@@ -163,7 +169,7 @@ export class AppointmentModal extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { isVisible, patientId, currentUser } = this.props;
+    const { isVisible, patientId, currentUser, createCalendarError } = this.props;
     const {
       isSaving,
       error,
@@ -194,7 +200,7 @@ export class AppointmentModal extends React.Component<allProps, IState> {
         externalGuests={externalGuests}
         location={location}
         selectedAddress={selectedAddress}
-        error={error}
+        error={error || createCalendarError}
         isSaving={isSaving}
       />
     );

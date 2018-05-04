@@ -19,8 +19,10 @@ import {
 import {
   calendarCreateEventForCurrentUser,
   calendarCreateEventForPatient,
+  calendarCreateForPatient,
   resolveCalendarEventsForCurrentUser,
   resolveCalendarEventsForPatient,
+  resolveCalendarForPatient,
 } from './calendar-resolver';
 import {
   carePlanSuggestionAccept,
@@ -451,6 +453,7 @@ const resolveFunctions = {
     patientSocialSecurity: resolvePatientSocialSecurity,
     calendarEventsForCurrentUser: resolveCalendarEventsForCurrentUser,
     calendarEventsForPatient: resolveCalendarEventsForPatient,
+    calendarForPatient: resolveCalendarForPatient,
     smsMessages: resolveSmsMessages,
     smsMessageLatest: resolveSmsMessageLatest,
   },
@@ -461,6 +464,7 @@ const resolveFunctions = {
     addressEdit,
     calendarCreateEventForCurrentUser,
     calendarCreateEventForPatient,
+    calendarCreateForPatient,
     careTeamAddUser,
     careTeamReassignUser,
     careTeamMakeTeamLead,

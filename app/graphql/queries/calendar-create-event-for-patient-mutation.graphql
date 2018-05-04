@@ -6,10 +6,12 @@ mutation calendarCreateEventForPatient(
   $location: String!
   $title: String!
   $reason: String!
+  $googleCalendarId: String!
 ) {
   calendarCreateEventForPatient(
     input: {
       patientId: $patientId
+      googleCalendarId: $googleCalendarId
       startDatetime: $startDatetime
       endDatetime: $endDatetime
       inviteeEmails: $inviteeEmails

@@ -591,6 +591,11 @@ declare module 'schema' {
     patientSocialSecurity: IPatientSocialSecurity;
 
     /**
+     * Google calendar id for a patient calendar
+     */
+    calendarForPatient: ICalendar;
+
+    /**
      * List of google calendar events for a patient
      */
     calendarEventsForPatient: ICalendarEventEdges;
@@ -957,6 +962,9 @@ declare module 'schema' {
   interface IPatientSocialSecurityOnRootQueryTypeArguments {
     patientId: string;
     glassBreakId?: string | null;
+  }
+  interface ICalendarForPatientOnRootQueryTypeArguments {
+    patientId: string;
   }
   interface ICalendarEventsForPatientOnRootQueryTypeArguments {
     patientId: string;
@@ -2479,6 +2487,14 @@ declare module 'schema' {
   }
 
   /**
+   * google calendar id for patient calendar
+   */
+  interface ICalendar {
+    patientId: string;
+    googleCalendarId: string | null;
+  }
+
+  /**
    * Google calendar event list
    */
   interface ICalendarEventEdges {
@@ -2497,6 +2513,8 @@ declare module 'schema' {
     description: string | null;
     guests: Array<string> | null;
     eventType: IGoogleCalendarEventTypeEnum | null;
+    providerName: string | null;
+    providerCredentials: string | null;
   }
 
   type IGoogleCalendarEventTypeEnum = 'cityblock' | 'siu';
@@ -3200,6 +3218,11 @@ declare module 'schema' {
     smsMessageCreate: ISmsMessageNode;
 
     /**
+     * creates a calendar for a patient
+     */
+    calendarCreateForPatient: ICalendar;
+
+    /**
      * creates a calendar event for a patient
      */
     calendarCreateEventForPatient: ICalendarUrl;
@@ -3624,6 +3647,9 @@ declare module 'schema' {
   }
   interface ISmsMessageCreateOnRootMutationTypeArguments {
     input?: ISmsMessageCreateInput | null;
+  }
+  interface ICalendarCreateForPatientOnRootMutationTypeArguments {
+    input?: ICalendarCreateForPatientInput | null;
   }
   interface ICalendarCreateEventForPatientOnRootMutationTypeArguments {
     input?: ICalendarCreateEventForPatientInput | null;
@@ -4741,10 +4767,18 @@ declare module 'schema' {
   }
 
   /**
+   * params for creating a patient calendar
+   */
+  interface ICalendarCreateForPatientInput {
+    patientId: string;
+  }
+
+  /**
    * params for creating a patient calendar event
    */
   interface ICalendarCreateEventForPatientInput {
     patientId: string;
+    googleCalendarId: string;
     startDatetime: string;
     endDatetime: string;
     inviteeEmails: Array<string>;

@@ -9,4 +9,6 @@ fragment FullCalendarEvent on CalendarEvent {
   description
   guests
   eventType
+  providerName
+  providerCredentials
 }

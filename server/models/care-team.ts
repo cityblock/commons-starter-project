@@ -183,6 +183,8 @@ export default class CareTeam extends BaseModel {
     await this.query(txn)
       .where({ userId, patientId, deletedAt: null })
       .patch({ googleCalendarAclRuleId });
+
+    return Promise.resolve();
   }
 
   static async reassignUser(

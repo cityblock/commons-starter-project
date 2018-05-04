@@ -1,9 +1,11 @@
 import { AxiosResponse } from 'axios';
+import { addMinutes } from 'date-fns';
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import { get } from 'lodash';
 import * as querystring from 'querystring';
 import config from '../config';
+import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
 import GoogleAuth from '../models/google-auth';
 
 const BASE_CREATE_URL = 'https://www.google.com/calendar/event';
@@ -109,23 +111,6 @@ export async function deleteUserFromGoogleCalendar(
   });
 }
 
-export async function createGoogleCalendarForPatientWithTeam(
-  calendarName: string,
-  userEmails: string[],
-  testConfig?: any,
-) {
-  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-
-  const response = await createGoogleCalendarForPatient(jwtClient, calendarName);
-  const calendarId = response.data.id;
-  const promises = userEmails.map(async email =>
-    addUserToGoogleCalendar(jwtClient, calendarId, email),
-  );
-  await Promise.all(promises);
-
-  return response;
-}
-
 export interface IGooglePaginationOptions {
   pageToken: string | null;
   pageSize: number;
@@ -161,6 +146,75 @@ export async function getGoogleCalendarEventsForCurrentUser(
   return getGoogleCalendarEvents(calendarId, oauth2Client, pageOptions, testConfig);
 }
 
+export async function createGoogleCalendarEvent(
+  calendarId: string,
+  resource: { [key: string]: any },
+  testConfig?: any,
+): Promise<AxiosResponse<ICalendar>> {
+  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+
+  const calendar = google.calendar({ version: 'v3' });
+  return calendar.events.insert({
+    auth: jwtClient,
+    calendarId,
+    resource,
+  });
+}
+
+export async function updateGoogleCalendarEvent(
+  calendarId: string,
+  eventId: string,
+  resource: { [key: string]: any },
+  testConfig?: any,
+): Promise<AxiosResponse<ICalendar>> {
+  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+
+  const calendar = google.calendar({ version: 'v3' });
+  return calendar.events.update({
+    auth: jwtClient,
+    calendarId,
+    eventId,
+    resource,
+  });
+}
+
+export async function deleteGoogleCalendarEvent(
+  calendarId: string,
+  eventId: string,
+  testConfig?: any,
+): Promise<AxiosResponse> {
+  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+
+  const calendar = google.calendar({ version: 'v3' });
+  return calendar.events.delete({
+    auth: jwtClient,
+    calendarId,
+    eventId,
+  });
+}
+
+export function getGoogleCalendarFieldsFromSIU(data: ISchedulingMessageData) {
+  const endTime = addMinutes(data.dateTime, data.duration).toISOString();
+  const { provider } = data;
+  const providerName = provider ? [provider.firstName, provider.lastName].filter(Boolean).join(' ') : null;
+  const providerCredentials = (provider && provider.credentials) ? provider.credentials.join(', ') : null;
+
+  return {
+    start: { dateTime: data.dateTime },
+    end: { dateTime: endTime },
+    location: data.facility,
+    description: data.instructions ? data.instructions.join('\n') : null,
+    summary: `[EPIC] ${data.facilityDepartment}`,
+    extendedProperties: {
+      shared: {
+        generatedBy: 'siu',
+        providerName,
+        providerCredentials,
+      },
+    },
+  };
+}
+
 async function getGoogleCalendarEvents(
   calendarId: string,
   auth: any,
@@ -191,6 +245,8 @@ async function getGoogleCalendarEvents(
       description: item.description,
       guests: (item.attendees || []).map(attendee => attendee.displayName || attendee.email),
       eventType: get(item, 'extendedProperties.shared.generatedBy') || 'cityblock',
+      providerName: get(item, 'extendedProperties.shared.providerName'),
+      providerCredentials: get(item, 'extendedProperties.shared.providerCredentials'),
     };
   });
 

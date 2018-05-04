@@ -30,6 +30,8 @@ export interface IEvent {
   description: string;
   guests: string[];
   eventType: GoogleCalendarEventType;
+  providerName?: string;
+  providerCredentials?: string;
 }
 
 export default class Calendar extends React.Component<IProps> {

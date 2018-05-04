@@ -1304,6 +1304,8 @@ export const partialCalendarEvent = {
   description: 'some appointment',
   guests: [],
   eventType: 'siu' as GoogleCalendarEventType,
+  providerName: null,
+  providerCredentials: null,
 };
 
 export const partialCalendarEventSIU = {
@@ -1313,4 +1315,6 @@ export const partialCalendarEventSIU = {
   description: 'some appointment',
   guests: [],
   eventType: 'siu' as GoogleCalendarEventType,
+  providerName: 'Jane Doctor',
+  providerCredentials: 'MD, DDS',
 };

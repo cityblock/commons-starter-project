@@ -713,12 +713,25 @@ export interface calendarCreateEventForPatientMutationVariables {
   location: string,
   title: string,
   reason: string,
+  googleCalendarId: string,
 };
 
 export interface calendarCreateEventForPatientMutation {
   // creates a calendar event for a patient
   calendarCreateEventForPatient:  {
     eventCreateUrl: string,
+  },
+};
+
+export interface calendarCreateForPatientMutationVariables {
+  patientId: string,
+};
+
+export interface calendarCreateForPatientMutation {
+  // creates a calendar for a patient
+  calendarCreateForPatient:  {
+    googleCalendarId: string | null,
+    patientId: string,
   },
 };
 
@@ -1717,6 +1730,8 @@ export interface getCalendarEventsForCurrentUserQuery {
       description: string | null,
       guests: Array< string | null > | null,
       eventType: GoogleCalendarEventType | null,
+      providerName: string | null,
+      providerCredentials: string | null,
     } >,
     pageInfo:  {
       nextPageToken: string | null,
@@ -1745,11 +1760,25 @@ export interface getCalendarEventsForPatientQuery {
       description: string | null,
       guests: Array< string | null > | null,
       eventType: GoogleCalendarEventType | null,
+      providerName: string | null,
+      providerCredentials: string | null,
     } >,
     pageInfo:  {
       nextPageToken: string | null,
       previousPageToken: string | null,
     } | null,
+  },
+};
+
+export interface getCalendarForPatientQueryVariables {
+  patientId: string,
+};
+
+export interface getCalendarForPatientQuery {
+  // Google calendar id for a patient calendar
+  calendarForPatient:  {
+    googleCalendarId: string | null,
+    patientId: string,
   },
 };
 
@@ -10052,6 +10081,8 @@ export interface FullCalendarEventFragment {
   description: string | null,
   guests: Array< string | null > | null,
   eventType: GoogleCalendarEventType | null,
+  providerName: string | null,
+  providerCredentials: string | null,
 };
 
 export interface FullCarePlanSuggestionForPatientFragment {

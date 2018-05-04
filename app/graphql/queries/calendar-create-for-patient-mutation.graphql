@@ -1,0 +1,12 @@
+mutation calendarCreateForPatient(
+  $patientId: ID!
+) {
+  calendarCreateForPatient(
+    input: {
+      patientId: $patientId
+    }
+  ) {
+    googleCalendarId
+    patientId
+  }
+}

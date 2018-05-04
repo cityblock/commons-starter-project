@@ -66,7 +66,9 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
           <span> {guests[0]}</span>
           {guests.length > 1 ? <span className={styles.light}>(+{guests.length - 1})</span> : null}
         </span>
-      ) : providerHtml;
+      ) : (
+        providerHtml
+      );
 
     const icon =
       eventType === 'siu' ? (

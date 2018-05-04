@@ -1,11 +1,5 @@
-mutation calendarCreateForPatient(
-  $patientId: ID!
-) {
-  calendarCreateForPatient(
-    input: {
-      patientId: $patientId
-    }
-  ) {
+mutation calendarCreateForPatient($patientId: ID!) {
+  calendarCreateForPatient(input: { patientId: $patientId }) {
     googleCalendarId
     patientId
   }

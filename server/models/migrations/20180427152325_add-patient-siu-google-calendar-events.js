@@ -3,7 +3,10 @@ exports.up = function(knex, Promise) {
     if (!exists) {
       return knex.schema.createTable('patient_siu_event', table => {
         table.uuid('id').primary();
-        table.string('visitId').unique().notNullable();
+        table
+          .string('visitId')
+          .unique()
+          .notNullable();
         table
           .uuid('patientId')
           .references('id')

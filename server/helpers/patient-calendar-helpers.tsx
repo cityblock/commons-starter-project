@@ -1,15 +1,17 @@
-
 import { OAuth2Client } from 'google-auth-library';
 import { Transaction } from 'objection';
 import CareTeam from '../models/care-team';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
-import {
-  addUserToGoogleCalendar,
-  createGoogleCalendarForPatient,
-} from './google-calendar-helpers';
+import { addUserToGoogleCalendar, createGoogleCalendarForPatient } from './google-calendar-helpers';
 
-export async function createCalendarForPatient(patientId: string, userId: string, jwtClient: OAuth2Client, txn: Transaction, testConfig?: any) {
+export async function createCalendarForPatient(
+  patientId: string,
+  userId: string,
+  jwtClient: OAuth2Client,
+  txn: Transaction,
+  testConfig?: any,
+) {
   const patient = await Patient.get(patientId, txn);
 
   const response = await createGoogleCalendarForPatient(
@@ -27,19 +29,30 @@ export async function createCalendarForPatient(patientId: string, userId: string
   return calendarId;
 }
 
-export async function addCareTeamToPatientCalendar(patientId: string, calendarId: string, jwtClient: OAuth2Client, txn: Transaction, testConfig?: any) {
+export async function addCareTeamToPatientCalendar(
+  patientId: string,
+  calendarId: string,
+  jwtClient: OAuth2Client,
+  txn: Transaction,
+  testConfig?: any,
+) {
   const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
 
   const maxAttempts = 3;
   const retryInterval = 500;
   const promises = careTeamRecords.map(async record => {
-    return addCareTeamUser(maxAttempts, retryInterval, {
-      jwtClient,
-      calendarId,
-      patientId,
-      userEmail: record.user.email,
-      userId: record.user.id,
-    }, txn);
+    return addCareTeamUser(
+      maxAttempts,
+      retryInterval,
+      {
+        jwtClient,
+        calendarId,
+        patientId,
+        userEmail: record.user.email,
+        userId: record.user.id,
+      },
+      txn,
+    );
   });
 
   return Promise.all(promises);
@@ -53,10 +66,18 @@ interface IAddMemberOptions {
   userId: string;
 }
 
-async function addCareTeamUser(retries: number, retryInterval: number, options: IAddMemberOptions, txn: Transaction, error?: any): Promise<void> {
+async function addCareTeamUser(
+  retries: number,
+  retryInterval: number,
+  options: IAddMemberOptions,
+  txn: Transaction,
+  error?: any,
+): Promise<void> {
   if (retries === 0) {
     return Promise.reject(
-      `There was an error adding permissions for user ${options.userId} to calendar for patient, error: ${error}`,
+      `There was an error adding permissions for user ${
+        options.userId
+      } to calendar for patient, error: ${error}`,
     );
   }
 

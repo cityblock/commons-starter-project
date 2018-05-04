@@ -93,8 +93,20 @@ export class PatientCalendar extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { isLoading, match, calendarEventsResponse, calendarResponse, fetchMoreCalendarEvents, error } = this.props;
-    const { isAppointmentModalVisible, createCalendarError, isRefreshModalVisible, refreshType } = this.state;
+    const {
+      isLoading,
+      match,
+      calendarEventsResponse,
+      calendarResponse,
+      fetchMoreCalendarEvents,
+      error,
+    } = this.props;
+    const {
+      isAppointmentModalVisible,
+      createCalendarError,
+      isRefreshModalVisible,
+      refreshType,
+    } = this.state;
     const events = calendarEventsResponse ? calendarEventsResponse.events : [];
     const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
     const googleCalendarId = calendarResponse ? calendarResponse.googleCalendarId : null;

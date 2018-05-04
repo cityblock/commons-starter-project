@@ -46,14 +46,7 @@ export async function processNewSchedulingMessage(
   const { patientId, eventType, transmissionId, visitId, dateTime, duration } = data;
 
   // TODO: Make this less strict
-  if (
-    !patientId ||
-    !eventType ||
-    !transmissionId ||
-    !visitId ||
-    !dateTime ||
-    !duration
-  ) {
+  if (!patientId || !eventType || !transmissionId || !visitId || !dateTime || !duration) {
     return Promise.reject(
       'Missing either patientId, eventType, transmissionId, visitId, dateTime, or duration',
     );
@@ -71,10 +64,17 @@ export async function processNewSchedulingMessage(
         const attributionUser = await User.findOrCreateAttributionUser(txn);
         const jwtClient = createGoogleCalendarAuth() as any;
 
-        googleCalendarId = await createCalendarForPatient(patient.id, attributionUser.id, jwtClient, txn);
+        googleCalendarId = await createCalendarForPatient(
+          patient.id,
+          attributionUser.id,
+          jwtClient,
+          txn,
+        );
         await addCareTeamToPatientCalendar(patient.id, googleCalendarId, jwtClient, txn);
       } catch (err) {
-        return Promise.reject(`There was an error creating a calendar for patient: ${patientId}. ${err}`);
+        return Promise.reject(
+          `There was an error creating a calendar for patient: ${patientId}. ${err}`,
+        );
       }
     }
 
@@ -87,22 +87,11 @@ export async function processNewSchedulingMessage(
       if (eventType === 'Reschedule' || eventType === 'Modification') {
         const calendarFields = getGoogleCalendarFieldsFromSIU(data);
 
-        await updateGoogleCalendarEvent(
-          googleCalendarId,
-          siuEvent.googleEventId,
-          calendarFields,
-        );
+        await updateGoogleCalendarEvent(googleCalendarId, siuEvent.googleEventId, calendarFields);
 
-        await PatientSiuEvent.edit(
-          siuEvent.id,
-          { transmissionId },
-          txn,
-        );
+        await PatientSiuEvent.edit(siuEvent.id, { transmissionId }, txn);
       } else if (eventType === 'Cancel') {
-        await deleteGoogleCalendarEvent(
-          googleCalendarId,
-          siuEvent.googleEventId,
-        );
+        await deleteGoogleCalendarEvent(googleCalendarId, siuEvent.googleEventId);
 
         await PatientSiuEvent.edit(
           siuEvent.id,
@@ -113,10 +102,7 @@ export async function processNewSchedulingMessage(
     } else {
       const calendarFields = getGoogleCalendarFieldsFromSIU(data);
 
-      const response = await createGoogleCalendarEvent(
-        googleCalendarId,
-        calendarFields,
-      );
+      const response = await createGoogleCalendarEvent(googleCalendarId, calendarFields);
       await PatientSiuEvent.create(
         {
           visitId,

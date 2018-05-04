@@ -54,8 +54,7 @@ export default class PatientSiuEvent extends BaseModel {
   }
 
   static async getByVisitId(visitId: string, txn: Transaction): Promise<PatientSiuEvent | null> {
-    const siuEvent = await this.query(txn)
-      .findOne({ visitId, deletedAt: null });
+    const siuEvent = await this.query(txn).findOne({ visitId, deletedAt: null });
 
     if (!siuEvent) {
       return null;
@@ -68,8 +67,7 @@ export default class PatientSiuEvent extends BaseModel {
     options: IPatientSiuEventOptions,
     txn: Transaction,
   ): Promise<PatientSiuEvent> {
-    return this.query(txn)
-      .insert(options);
+    return this.query(txn).insert(options);
   }
 
   static async edit(
@@ -77,8 +75,7 @@ export default class PatientSiuEvent extends BaseModel {
     options: IPatientSiuEventEditOptions,
     txn: Transaction,
   ): Promise<PatientSiuEvent> {
-    return this.query(txn)
-      .patchAndFetchById(id, options);
+    return this.query(txn).patchAndFetchById(id, options);
   }
 
   static async editByVisitId(
@@ -87,7 +84,8 @@ export default class PatientSiuEvent extends BaseModel {
     txn: Transaction,
   ): Promise<PatientSiuEvent> {
     return this.query(txn)
-      .where({ visitId, deletedAt: null }).patchAndFetch(options);
+      .where({ visitId, deletedAt: null })
+      .patchAndFetch(options);
   }
 }
 /* tslint:enable:member-ordering */

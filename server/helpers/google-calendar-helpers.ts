@@ -196,8 +196,11 @@ export async function deleteGoogleCalendarEvent(
 export function getGoogleCalendarFieldsFromSIU(data: ISchedulingMessageData) {
   const endTime = addMinutes(data.dateTime, data.duration).toISOString();
   const { provider } = data;
-  const providerName = provider ? [provider.firstName, provider.lastName].filter(Boolean).join(' ') : null;
-  const providerCredentials = (provider && provider.credentials) ? provider.credentials.join(', ') : null;
+  const providerName = provider
+    ? [provider.firstName, provider.lastName].filter(Boolean).join(' ')
+    : null;
+  const providerCredentials =
+    provider && provider.credentials ? provider.credentials.join(', ') : null;
 
   return {
     start: { dateTime: data.dateTime },

@@ -1,7 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
-import { currentUser, currentUserForCareTeam, featureFlags, userForCareTeam } from '../../../shared/util/test-data';
+import {
+  currentUser,
+  currentUserForCareTeam,
+  featureFlags,
+  userForCareTeam,
+} from '../../../shared/util/test-data';
 import CareTeamMattermost from '../care-team-mattermost';
 import CareTeamMember from '../care-team-member';
 import { LeftNavCareTeam } from '../left-nav-care-team';
@@ -88,7 +93,7 @@ describe('Patient Left Navigation Care Team View', () => {
   });
 
   it('does not render option to chat with care team on mattermost if not on care team', () => {
-    wrapper.setProps({ currentUser: { id: 'otherId' }});
+    wrapper.setProps({ currentUser: { id: 'otherId' } });
 
     expect(wrapper.find(CareTeamMattermost).length).toBe(0);
   });

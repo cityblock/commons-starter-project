@@ -101,7 +101,12 @@ export class AppointmentModal extends React.Component<allProps, IState> {
   }
 
   handleSubmit = async (): Promise<void> => {
-    const { getCalendarEventUrlForPatient, getCalendarEventUrlForUser, patientId, googleCalendarId } = this.props;
+    const {
+      getCalendarEventUrlForPatient,
+      getCalendarEventUrlForUser,
+      patientId,
+      googleCalendarId,
+    } = this.props;
     const { title, internalGuests, appointmentDate, startTime, endTime, location } = this.state;
     const inviteeEmails = internalGuests.map(guest => guest.email || '');
 
@@ -131,7 +136,9 @@ export class AppointmentModal extends React.Component<allProps, IState> {
           });
           calendarEventUrl = response.data.calendarCreateEventForPatient.eventCreateUrl;
         } else {
-          this.setState({ error: 'This patient does not have a google calendar created for them. Try again.' });
+          this.setState({
+            error: 'This patient does not have a google calendar created for them. Try again.',
+          });
         }
       } else {
         const response = await getCalendarEventUrlForUser({ variables });

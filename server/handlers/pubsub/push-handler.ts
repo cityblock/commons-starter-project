@@ -17,7 +17,16 @@ export interface IMemberAttributionMessageData extends IPatientCreateFields {
   jobId: string;
 }
 
-export type SchedulingEventType = 'New' | 'Reschedule' | 'Modification' | 'Cancel' | 'NoShow' | 'AvailableSlots' | 'AvailableSlotsResponse' | 'Booked' | 'BookedResponse';
+export type SchedulingEventType =
+  | 'New'
+  | 'Reschedule'
+  | 'Modification'
+  | 'Cancel'
+  | 'NoShow'
+  | 'AvailableSlots'
+  | 'AvailableSlotsResponse'
+  | 'Booked'
+  | 'BookedResponse';
 export type SchedulingStatusType = 'Scheduled';
 
 export interface IProvider {
@@ -117,7 +126,7 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
           if (err) {
             console.log(
               `Error enqueuing ${topic} job. patientId: ${patientId}, visitId: ${data.visitId},
-                transmissionId: ${ data.transmissionId }`,
+                transmissionId: ${data.transmissionId}`,
               err.message,
             );
           }

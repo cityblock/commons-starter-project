@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { transaction } from 'objection';
+import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
 import Db from '../../db';
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
@@ -123,7 +124,9 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         {
           userId: user.id,
           contactNumber: isInbound ? From : To,
-          direction: isInbound ? 'toUser' : 'fromUser',
+          direction: isInbound
+            ? ('toUser' as SmsMessageDirection)
+            : ('fromUser' as SmsMessageDirection),
           callStatus: DialCallStatus,
           duration: DialCallDuration ? Number(DialCallDuration) : 0,
           twilioPayload,

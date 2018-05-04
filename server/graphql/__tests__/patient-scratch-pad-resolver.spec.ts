@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -10,7 +11,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const body = 'Wants to be Queen of Seven Kingdoms';
 
 interface ISetup {

@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import PatientGoal from '../../models/patient-goal';
@@ -10,7 +11,7 @@ import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 describe('task followers', () => {
   let txn = null as any;

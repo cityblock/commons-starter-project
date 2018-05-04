@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { Gender, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -14,7 +15,7 @@ import Patient from '../patient';
 import PatientInfo from '../patient-info';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -72,7 +73,7 @@ describe('patient info model', () => {
       const { patient, user } = await setup(txn);
       const result = await PatientInfo.edit(
         {
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'ch',
           updatedById: user.id,
         },
@@ -83,7 +84,7 @@ describe('patient info model', () => {
       expect(result).toMatchObject({
         patientId: patient.id,
         id: patient.patientInfo.id,
-        gender: 'female',
+        gender: 'female' as Gender,
         language: 'ch',
         primaryAddress: null,
       });
@@ -114,7 +115,7 @@ describe('patient info model', () => {
       expect(result).toMatchObject({
         patientId: patient.id,
         id: patient.patientInfo.id,
-        gender: 'male',
+        gender: 'male' as Gender,
         language: 'en',
         primaryAddress: {
           street1: '44 Washington St',
@@ -134,7 +135,7 @@ describe('patient info model', () => {
 
       await PatientInfo.edit(
         {
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'ch',
           updatedById: user.id,
         },
@@ -165,7 +166,7 @@ describe('patient info model', () => {
       expect(result).toMatchObject({
         patientId: patient.id,
         id: patient.patientInfo.id,
-        gender: 'male',
+        gender: 'male' as Gender,
         language: 'en',
         primaryEmail: {
           emailAddress: 'spam@email.com',

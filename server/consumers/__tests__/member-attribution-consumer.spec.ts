@@ -1,6 +1,7 @@
 // TODO: Write a full integration test once final core data/demo data is available
 import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
+import { Gender, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Mattermost from '../../mattermost';
@@ -20,7 +21,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'physician' as UserRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return {
@@ -82,7 +83,7 @@ describe('processing memberAttribution jobs', () => {
         firstName: 'Bob',
         lastName: 'Smith',
         dateOfBirth: '01/01/1990',
-        gender: 'male',
+        gender: 'male' as Gender,
         language: 'en',
         jobId: 'jobId',
         homeClinicId: clinic.id,

@@ -2,6 +2,7 @@ import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -23,7 +24,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 const title = 'Night King Breached the Wall!';
 const shortTitle = 'FML';

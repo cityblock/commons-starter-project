@@ -28,6 +28,7 @@ import {
 } from './handlers/twilio/sms-message-handler';
 import { contactsVcfHandler } from './handlers/vcf/vcard-handler';
 import { createRedisClient } from './lib/redis';
+import Logging from './logging';
 
 kue.createQueue({ redis: createRedisClient() });
 
@@ -78,7 +79,7 @@ export const addHeadersMiddleware = (
 
 export default async (
   app: express.Application,
-  logger: Console,
+  logger: Logging,
   txn?: Transaction,
   allowCrossDomainRequests?: boolean,
 ) => {
@@ -111,7 +112,6 @@ export default async (
   }
 
   // This adds request logging using some decent defaults.
-
   if (config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (config.NODE_ENV === 'production') {
@@ -215,11 +215,10 @@ export default async (
   app.get('*', addHeadersMiddleware, renderApp);
 
   if (config.NODE_ENV !== 'test') {
-    /* tslint:disable no-console */
-    console.log('--------------------------');
-    console.log(`  Starting server on port: ${app.get('port')}`);
-    console.log(`  Environment: ${config.NODE_ENV}`);
-    console.log('--------------------------');
+    logger.log('--------------------------');
+    logger.log(`  Starting server on port: ${app.get('port')}`);
+    logger.log(`  Environment: ${config.NODE_ENV}`);
+    logger.log('--------------------------');
     /* tslint:enable no-console */
   }
 

@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import * as trace from '@google-cloud/trace-agent';
 import config from './config';
+import Logging from './logging';
 if (config.NODE_ENV !== 'test') {
   /* tslint:disable no-var-requires */
   const credentials = JSON.parse(String(config.GCP_CREDS));
@@ -25,7 +26,7 @@ import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 
-const logger = console;
+const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
 const app = express();
 

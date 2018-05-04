@@ -1,5 +1,5 @@
 import { addDays, addHours, addMonths, addWeeks, addYears } from 'date-fns';
-import { CompletedWithinInterval } from '../models/task-template';
+import { CompletedWithinInterval } from 'schema';
 
 // helper for date math
 export function dateAdd(

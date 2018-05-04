@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { DocumentTypeOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
@@ -7,13 +8,6 @@ import User from './user';
 export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent'];
 
 const EAGER_QUERY = '[uploadedBy]';
-
-export type DocumentTypeOptions =
-  | 'cityblockConsent'
-  | 'hipaaConsent'
-  | 'hieHealthixConsent'
-  | 'hcp'
-  | 'molst';
 
 export interface IPatientDocumentOptions {
   id?: string;

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
+import { UserSignedUrlAction } from 'schema';
 import config from '../config';
 import Db from '../db';
 import { loadUserVoicemailUrl } from '../graphql/shared/gcs/helpers';
@@ -110,7 +111,7 @@ export async function createVoicemail(
 }
 
 export async function uploadVoicemail(twilioUrl: string, userId: string, voicemailId: string) {
-  const signedUrl = await loadUserVoicemailUrl(userId, voicemailId, 'write');
+  const signedUrl = await loadUserVoicemailUrl(userId, voicemailId, 'write' as UserSignedUrlAction);
   const audioFile = await axios.get(twilioUrl, {
     responseType: 'arraybuffer',
     headers: {

@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as getClinics from '../../../app/graphql/queries/get-clinics.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -9,7 +10,7 @@ import { createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('clinic resolver', () => {
-  const userRole = 'admin';
+  const userRole = 'admin' as UserRole;
   const permissions = 'green';
   let txn = null as any;
   let db: Db;

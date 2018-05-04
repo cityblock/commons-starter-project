@@ -5,6 +5,7 @@ import {
   ITaskCommentDeleteInput,
   ITaskCommentEditInput,
   ITaskCommentNode,
+  TaskEventTypes,
 } from 'schema';
 import { IPaginationOptions } from '../db';
 import TaskComment from '../models/task-comment';
@@ -35,7 +36,7 @@ export async function taskCommentCreate(
     {
       taskId,
       userId: userId!,
-      eventType: 'add_comment',
+      eventType: 'add_comment' as TaskEventTypes,
       eventCommentId: taskComment.id,
     },
     txn,
@@ -63,7 +64,7 @@ export async function taskCommentEdit(
     {
       taskId: taskComment.taskId,
       userId: userId!,
-      eventType: 'edit_comment',
+      eventType: 'edit_comment' as TaskEventTypes,
       eventCommentId: taskComment.id,
     },
     txn,
@@ -90,7 +91,7 @@ export async function taskCommentDelete(
     {
       taskId: taskComment.taskId,
       userId: userId!,
-      eventType: 'delete_comment',
+      eventType: 'delete_comment' as TaskEventTypes,
       eventCommentId: taskComment.id,
     },
     txn,

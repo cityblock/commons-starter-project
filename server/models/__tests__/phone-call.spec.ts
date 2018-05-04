@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -13,7 +14,7 @@ import Phone from '../phone';
 import PhoneCall from '../phone-call';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const callStatus = 'completed';
 const twilioPayload = {
   To: '+17274221111',
@@ -63,7 +64,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 11,
           callStatus,
           twilioPayload,
@@ -89,7 +90,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 11,
           callStatus,
           twilioPayload,
@@ -116,7 +117,7 @@ describe('Phone Call Model', () => {
           {
             userId: user.id,
             contactNumber: '(123) 456-7890',
-            direction: 'toUser',
+            direction: 'toUser' as SmsMessageDirection,
             duration: 11,
             callStatus,
             twilioPayload,
@@ -142,7 +143,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 11,
           callStatus,
           twilioPayload,
@@ -155,7 +156,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone2.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 12,
           callStatus,
           twilioPayload,
@@ -168,7 +169,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone3.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 13,
           callStatus,
           twilioPayload,
@@ -199,7 +200,7 @@ describe('Phone Call Model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           duration: 11,
           callStatus,
           twilioPayload,

@@ -1,4 +1,5 @@
 import { Transaction } from 'objection';
+import { TaskEventTypes } from 'schema';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../shared/constants';
 import { dateAdd } from '../lib/date';
 import CareTeam from '../models/care-team';
@@ -71,7 +72,7 @@ export async function createTaskForTaskTemplate(
     {
       taskId: task.id,
       userId,
-      eventType: 'create_task',
+      eventType: 'create_task' as TaskEventTypes,
     },
     txn,
   );
@@ -81,7 +82,7 @@ export async function createTaskForTaskTemplate(
       {
         taskId: task.id,
         userId,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
         eventUserId: assignedToId,
       },
       txn,

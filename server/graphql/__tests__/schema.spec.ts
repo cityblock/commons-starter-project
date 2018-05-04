@@ -35,27 +35,23 @@ describe('util tests', () => {
       lastLoginAt: new Date().toISOString(),
     });
     const { userId, permissions } = await parseAndVerifyJwt(authToken, txn);
-    const context = await getGraphQLContext(
-      authToken,
-      { log: jest.fn() },
-      {
-        request: {
-          headers: {
-            auth_token: authToken,
+    const context = await getGraphQLContext(authToken, { log: jest.fn() } as any, {
+      request: {
+        headers: {
+          auth_token: authToken,
+        },
+        body: {
+          variables: {
+            foo: 'bar',
           },
-          body: {
-            variables: {
-              foo: 'bar',
-            },
-            query: 'foo',
-          },
-        } as any,
-        response: {
-          status: 200,
-        } as any,
-        existingTxn: txn,
-      },
-    );
+          query: 'foo',
+        },
+      } as any,
+      response: {
+        status: 200,
+      } as any,
+      existingTxn: txn,
+    });
     expect(context).toMatchObject({
       userId,
       permissions,
@@ -69,27 +65,23 @@ describe('util tests', () => {
       permissions: 'green',
       lastLoginAt: new Date('01/01/2010').toISOString(),
     });
-    const context = await getGraphQLContext(
-      authToken,
-      { log: jest.fn() },
-      {
-        request: {
-          headers: {
-            auth_token: authToken,
+    const context = await getGraphQLContext(authToken, { log: jest.fn() } as any, {
+      request: {
+        headers: {
+          auth_token: authToken,
+        },
+        body: {
+          variables: {
+            foo: 'bar',
           },
-          body: {
-            variables: {
-              foo: 'bar',
-            },
-            query: 'foo',
-          },
-        } as any,
-        response: {
-          status: 200,
-        } as any,
-        existingTxn: txn,
-      },
-    );
+          query: 'foo',
+        },
+      } as any,
+      response: {
+        status: 200,
+      } as any,
+      existingTxn: txn,
+    });
     expect(context).toMatchObject({
       permissions: 'black',
       txn,

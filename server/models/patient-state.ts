@@ -1,37 +1,29 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CurrentPatientState } from 'schema';
 import BaseModel from './base-model';
 import Patient from './patient';
 
-export type CurrentState =
-  | 'attributed'
-  | 'assigned'
-  | 'outreach'
-  | 'consented'
-  | 'enrolled'
-  | 'disenrolled'
-  | 'ineligible';
-
-const CURRENT_STATE: CurrentState[] = [
-  'attributed',
-  'assigned',
-  'outreach',
-  'consented',
-  'enrolled',
-  'disenrolled',
-  'ineligible',
+const CURRENT_STATE: CurrentPatientState[] = [
+  'attributed' as CurrentPatientState,
+  'assigned' as CurrentPatientState,
+  'outreach' as CurrentPatientState,
+  'consented' as CurrentPatientState,
+  'enrolled' as CurrentPatientState,
+  'disenrolled' as CurrentPatientState,
+  'ineligible' as CurrentPatientState,
 ];
 
 interface IUpdatePatientState {
   patientId: string;
   updatedById: string;
-  currentState: CurrentState;
+  currentState: CurrentPatientState;
 }
 
 /* tslint:disable:member-ordering */
 export default class PatientState extends BaseModel {
   patientId: string;
   updatedById: string;
-  currentState: CurrentState;
+  currentState: CurrentPatientState;
 
   static tableName = 'patient_state';
 

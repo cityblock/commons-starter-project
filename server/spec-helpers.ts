@@ -2,8 +2,25 @@ import { format } from 'date-fns';
 import { get, isNil } from 'lodash';
 import * as nock from 'nock';
 import { Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  AssessmentType,
+  CarePlanSuggestionType,
+  ComputedFieldDataTypes,
+  CurrentPatientState,
+  DocumentTypeOptions,
+  ExternalProviderOptions,
+  Gender,
+  PatientRelationOptions,
+  PhoneTypeOptions,
+  Priority,
+  RiskAdjustmentTypeOptions,
+  SmsMessageDirection,
+  TaskEventTypes,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
-import { AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from '../app/graphql/types';
 import Address from './models/address';
 import Answer from './models/answer';
 import CarePlanSuggestion from './models/care-plan-suggestion';
@@ -22,16 +39,15 @@ import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
-import PatientContact, { PatientRelationOptions } from './models/patient-contact';
+import PatientContact from './models/patient-contact';
 import PatientDocument from './models/patient-document';
-import { ExternalProviderOptions } from './models/patient-external-provider';
 import PatientGoal from './models/patient-goal';
-import PatientInfo, { PatientGenderOptions } from './models/patient-info';
+import PatientInfo from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientPhone from './models/patient-phone';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import PatientState from './models/patient-state';
-import Phone, { PhoneTypeOptions } from './models/phone';
+import Phone from './models/phone';
 import ProgressNote from './models/progress-note';
 import ProgressNoteTemplate from './models/progress-note-template';
 import Question from './models/question';
@@ -44,7 +60,6 @@ import SmsMessage from './models/sms-message';
 import Task from './models/task';
 import TaskEvent from './models/task-event';
 import User from './models/user';
-import { UserRole } from './models/user';
 
 export interface ICreateRiskArea {
   title?: string;
@@ -58,7 +73,7 @@ export interface ICreatePatient {
   lastName?: string;
   dateOfBirth?: string;
   userId?: string;
-  gender?: PatientGenderOptions;
+  gender?: Gender;
   language?: string;
   ssn?: string;
   middleName?: string;
@@ -162,7 +177,7 @@ export function createMockPatient(
   firstName?: string,
   lastName?: string,
   dateOfBirth?: string,
-  gender?: PatientGenderOptions,
+  gender?: Gender,
   language?: string,
   ssn?: string,
   ssnEnd?: string,
@@ -174,7 +189,7 @@ export function createMockPatient(
     firstName: firstName || 'dan',
     middleName: middleName || undefined,
     lastName: lastName || 'plant',
-    gender: (gender || 'male') as PatientGenderOptions,
+    gender: (gender || 'male') as Gender,
     ssn: ssn || '123456789',
     ssnEnd: ssnEnd || '6789',
     language: language || 'en',
@@ -251,7 +266,7 @@ export function createMockPatientExternalProvider(
 
 export function createMockPatientInfo(primaryAddressId?: string) {
   return {
-    gender: 'male' as PatientGenderOptions,
+    gender: 'male' as Gender,
     language: 'en',
     primaryAddressId,
   };
@@ -260,7 +275,7 @@ export function createMockPatientInfo(primaryAddressId?: string) {
 export function createMockUser(
   athenaProviderId = 1,
   homeClinicId: string,
-  userRole: UserRole = 'admin',
+  userRole: UserRole = 'admin' as UserRole,
   email: string = 'dan@plant.com',
 ) {
   return {
@@ -287,7 +302,7 @@ export async function createRiskArea(input: ICreateRiskArea, txn: Transaction): 
   return RiskArea.create(
     {
       title,
-      assessmentType: 'manual',
+      assessmentType: 'manual' as AssessmentType,
       riskAreaGroupId: riskAreaGroup.id,
       order,
       mediumRiskThreshold: 5,
@@ -315,7 +330,7 @@ export function createMockRiskAreaGroup(
 export function createMockQuestion(riskAreaId: string) {
   return {
     title: 'Who will win the War for the Dawn?',
-    answerType: 'dropdown',
+    answerType: 'dropdown' as AnswerTypeOptions,
     riskAreaId,
     type: 'riskArea',
     order: 1,
@@ -427,7 +442,7 @@ export async function createTask(options: ICreateTaskOptions, txn: Transaction) 
       assignedToId: options.userId,
       patientGoalId: patientGoalId!,
       CBOReferralId: options.cboReferralId,
-      priority: 'high',
+      priority: 'high' as Priority,
     },
     txn,
   );
@@ -459,7 +474,7 @@ export async function createCBOReferralTask(
       patientId,
       createdById: userId,
       assignedToId: userId,
-      priority: 'high',
+      priority: 'high' as Priority,
       CBOReferralId,
       patientGoalId: patientGoal.id,
     },
@@ -558,7 +573,7 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
     {
       slug: 'drogon',
       label: 'Has a massive dragon',
-      dataType: 'boolean',
+      dataType: 'boolean' as ComputedFieldDataTypes,
     },
     txn,
   );
@@ -567,7 +582,7 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
     {
       patientId: patient1.id,
       concernId: concern.id,
-      suggestionType: 'concern',
+      suggestionType: 'concern' as CarePlanSuggestionType,
       type: 'computedFieldAnswer',
       computedFieldId: computedField.id,
     },
@@ -577,7 +592,7 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
     {
       patientId: patient2.id,
       concernId: concern.id,
-      suggestionType: 'concern',
+      suggestionType: 'concern' as CarePlanSuggestionType,
       type: 'computedFieldAnswer',
       computedFieldId: computedField.id,
     },
@@ -587,7 +602,7 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
     {
       patientId: patient4.id,
       concernId: concern.id,
-      suggestionType: 'concern',
+      suggestionType: 'concern' as CarePlanSuggestionType,
       type: 'computedFieldAnswer',
       computedFieldId: computedField.id,
     },
@@ -621,7 +636,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
       dateOfBirth: '01/01/1900',
       ssn: '123456789',
       ssnEnd: '6789',
-      gender: null,
+      gender: null as any,
       language: null,
     },
     txn,
@@ -638,7 +653,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
       dateOfBirth: '01/01/1900',
       ssn: '012345678',
       ssnEnd: '5678',
-      gender: null,
+      gender: null as any,
       language: null,
     },
     txn,
@@ -655,7 +670,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
       dateOfBirth: '01/01/1910',
       ssn: '234567890',
       ssnEnd: '7890',
-      gender: null,
+      gender: null as any,
       language: null,
     },
     txn,
@@ -714,17 +729,29 @@ export async function setupPatientsWithAssignedState(txn: Transaction) {
   );
 
   await PatientState.updateForPatient(
-    { patientId: patient1.id, updatedById: user.id, currentState: 'assigned' },
+    {
+      patientId: patient1.id,
+      updatedById: user.id,
+      currentState: 'assigned' as CurrentPatientState,
+    },
     txn,
   );
 
   await PatientState.updateForPatient(
-    { patientId: patient2.id, updatedById: user.id, currentState: 'assigned' },
+    {
+      patientId: patient2.id,
+      updatedById: user.id,
+      currentState: 'assigned' as CurrentPatientState,
+    },
     txn,
   );
 
   await PatientState.updateForPatient(
-    { patientId: patient3.id, updatedById: user.id, currentState: 'enrolled' },
+    {
+      patientId: patient3.id,
+      updatedById: user.id,
+      currentState: 'enrolled' as CurrentPatientState,
+    },
     txn,
   );
 
@@ -764,7 +791,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
   });
   await PatientInfo.edit(
     {
-      gender: 'nonbinary',
+      gender: 'nonbinary' as Gender,
       hasHealthcareProxy: false,
       hasMolst: false,
       hasDeclinedPhotoUpload: true,
@@ -777,7 +804,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
     {
       patientId: patient2.id,
       updatedById: user.id,
-      relationToPatient: 'sibling',
+      relationToPatient: 'sibling' as PatientRelationOptions,
       firstName: 'Aya',
       lastName: 'Stark',
       isEmergencyContact: true,
@@ -792,7 +819,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
       uploadedById: user.id,
       filename: 'test2.txt',
       description: 'some file for consent',
-      documentType: 'hipaaConsent',
+      documentType: 'hipaaConsent' as DocumentTypeOptions,
     },
     txn,
   );
@@ -802,7 +829,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
       uploadedById: user.id,
       filename: 'test3.txt',
       description: 'some file for consent',
-      documentType: 'hieHealthixConsent',
+      documentType: 'hieHealthixConsent' as DocumentTypeOptions,
     },
     txn,
   );
@@ -812,7 +839,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
       uploadedById: user.id,
       filename: 'test.txt',
       description: 'some file for consent',
-      documentType: 'cityblockConsent',
+      documentType: 'cityblockConsent' as DocumentTypeOptions,
     },
     txn,
   );
@@ -830,7 +857,7 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
   );
   await PatientInfo.edit(
     {
-      gender: 'nonbinary',
+      gender: 'nonbinary' as Gender,
       hasHealthcareProxy: false,
       hasMolst: false,
       hasDeclinedPhotoUpload: true,
@@ -1227,7 +1254,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     {
       taskId: task.id,
       userId: user.id,
-      eventType: 'edit_description',
+      eventType: 'edit_description' as TaskEventTypes,
     },
     txn,
   );
@@ -1242,7 +1269,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     {
       taskId: task.id,
       userId: user.id,
-      eventType: 'edit_description',
+      eventType: 'edit_description' as TaskEventTypes,
     },
     txn,
   );
@@ -1331,7 +1358,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user.id,
       contactNumber: phone1.phoneNumber,
-      direction: 'toUser',
+      direction: 'toUser' as SmsMessageDirection,
       body: 'Winter is coming',
       twilioPayload: {},
     },
@@ -1342,7 +1369,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user.id,
       contactNumber: phone5.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'All men must die. But we are not men.',
       twilioPayload: {},
     },
@@ -1353,7 +1380,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user2.id,
       contactNumber: phone3.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'All men must die. But we are not men.',
       twilioPayload: {},
     },
@@ -1364,7 +1391,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user.id,
       contactNumber: phone3.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'You know nothing Jon Snow.',
       twilioPayload: {},
     },
@@ -1375,7 +1402,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user.id,
       contactNumber: phone1.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'Winter is here',
       twilioPayload: {},
     },
@@ -1386,7 +1413,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user2.id,
       contactNumber: phone5.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'Where are my dragons?!',
       twilioPayload: {},
     },
@@ -1397,7 +1424,7 @@ export async function setupRecentConversations(txn: Transaction) {
     {
       userId: user.id,
       contactNumber: phone4.phoneNumber,
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
       body: 'I drink and I know things.',
       twilioPayload: {},
     },
@@ -1457,7 +1484,7 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
       homeClinicId: clinic.id,
       dateOfBirth: getDateOfBirthForAge(20),
       userId: user.id,
-      gender: 'female',
+      gender: 'female' as Gender,
     },
     txn,
   );
@@ -1471,7 +1498,7 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
       homeClinicId: clinic.id,
       dateOfBirth: getDateOfBirthForAge(23),
       userId: user.id,
-      gender: 'female',
+      gender: 'female' as Gender,
     },
     txn,
   );
@@ -1485,14 +1512,18 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
       homeClinicId: clinic.id,
       dateOfBirth: getDateOfBirthForAge(73),
       userId: user2.id,
-      gender: 'female',
+      gender: 'female' as Gender,
     },
     txn,
   );
   await createPrimaryAddressForPatient('11211', patient5.id, patient5.patientInfo.id, user.id, txn);
   await CareTeam.create({ patientId: patient5.id, userId: user3.id }, txn);
   await PatientState.updateForPatient(
-    { patientId: patient5.id, updatedById: user.id, currentState: 'enrolled' },
+    {
+      patientId: patient5.id,
+      updatedById: user.id,
+      currentState: 'enrolled' as CurrentPatientState,
+    },
     txn,
   );
 
@@ -1505,7 +1536,7 @@ export async function createAnswerAssociations(txn: Transaction) {
     {
       title: 'Night King Destroyed the Wall',
       riskAreaGroupId: riskAreaGroup.id,
-      assessmentType: 'manual',
+      assessmentType: 'manual' as AssessmentType,
       order: 1,
       mediumRiskThreshold: 4,
       highRiskThreshold: 8,
@@ -1516,7 +1547,7 @@ export async function createAnswerAssociations(txn: Transaction) {
   const question = await Question.create(
     {
       title: 'Who will win the war for the dawn?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -1528,8 +1559,8 @@ export async function createAnswerAssociations(txn: Transaction) {
     {
       displayValue: 'zombieViscerion',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'increment',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon has blue eyes',
       questionId: question.id,
@@ -1541,8 +1572,8 @@ export async function createAnswerAssociations(txn: Transaction) {
     {
       displayValue: 'nightKingMagic',
       value: '4',
-      valueType: 'number',
-      riskAdjustmentType: 'increment',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon breathes blue fire',
       questionId: question.id,
@@ -1554,8 +1585,8 @@ export async function createAnswerAssociations(txn: Transaction) {
     {
       displayValue: 'theDragonHasThreeHeads',
       value: '5',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon is ridden by Night King',
       questionId: question.id,
@@ -1605,7 +1636,7 @@ export async function setupComputedPatientList(txn: Transaction) {
     {
       title: 'Night King Destroyed the Wall',
       riskAreaGroupId: riskAreaGroup.id,
-      assessmentType: 'manual',
+      assessmentType: 'manual' as AssessmentType,
       order: 1,
       mediumRiskThreshold: 4,
       highRiskThreshold: 8,
@@ -1616,7 +1647,7 @@ export async function setupComputedPatientList(txn: Transaction) {
   const question = await Question.create(
     {
       title: 'Who will win the war for the dawn?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -1628,8 +1659,8 @@ export async function setupComputedPatientList(txn: Transaction) {
     {
       displayValue: 'zombieViscerion',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'increment',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon has blue eyes',
       questionId: question.id,
@@ -1775,7 +1806,7 @@ export async function createFullRiskAreaGroupAssociations(
     {
       title: riskAreaTitle,
       riskAreaGroupId,
-      assessmentType: 'manual',
+      assessmentType: 'manual' as AssessmentType,
       order: 1,
       mediumRiskThreshold: 4,
       highRiskThreshold: 8,
@@ -1786,7 +1817,7 @@ export async function createFullRiskAreaGroupAssociations(
     {
       title: riskAreaTitle2,
       riskAreaGroupId,
-      assessmentType: 'automated',
+      assessmentType: 'automated' as AssessmentType,
       order: 2,
       mediumRiskThreshold: 4,
       highRiskThreshold: 8,
@@ -1796,7 +1827,7 @@ export async function createFullRiskAreaGroupAssociations(
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -1806,7 +1837,7 @@ export async function createFullRiskAreaGroupAssociations(
   const question2 = await Question.create(
     {
       title: 'hate writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 2,
@@ -1816,7 +1847,7 @@ export async function createFullRiskAreaGroupAssociations(
   const question3 = await Question.create(
     {
       title: 'really hate writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -1827,8 +1858,8 @@ export async function createFullRiskAreaGroupAssociations(
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'increment',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon has blue eyes',
       questionId: question.id,
@@ -1840,8 +1871,8 @@ export async function createFullRiskAreaGroupAssociations(
     {
       displayValue: 'hates writing tests!',
       value: '4',
-      valueType: 'number',
-      riskAdjustmentType: 'increment',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon breathes blue fire',
       questionId: question2.id,
@@ -1853,8 +1884,8 @@ export async function createFullRiskAreaGroupAssociations(
     {
       displayValue: 'really hates writing tests!',
       value: '5',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: true,
       summaryText: 'Dragon is ridden by Night King',
       questionId: question3.id,
@@ -1883,14 +1914,14 @@ export async function createFullRiskAreaGroupAssociations(
       description: 'Score Range Description',
       minimumScore: 1,
       maximumScore: 5,
-      riskAdjustmentType: 'increment',
+      riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
     },
     txn,
   );
   const screeningToolQuestion = await Question.create(
     {
       title: 'screening tool says what?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       screeningToolId: screeningTool.id,
       type: 'screeningTool',
       order: 1,
@@ -1901,8 +1932,8 @@ export async function createFullRiskAreaGroupAssociations(
     {
       displayValue: 'screening tool says answer 1',
       value: '0',
-      valueType: 'number',
-      riskAdjustmentType: 'inactive',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'inactive' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: screeningToolQuestion.id,
       order: 1,
@@ -1913,8 +1944,8 @@ export async function createFullRiskAreaGroupAssociations(
     {
       displayValue: 'screening tool says answer 2',
       value: '1',
-      valueType: 'number',
-      riskAdjustmentType: 'inactive',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'inactive' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: screeningToolQuestion.id,
       order: 2,

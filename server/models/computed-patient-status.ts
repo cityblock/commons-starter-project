@@ -1,14 +1,15 @@
 import { find, isNil } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CurrentPatientState, UserRole } from 'schema';
 import BaseModel from './base-model';
 import CareTeam from './care-team';
 import Patient from './patient';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
 import PatientDocument, { CONSENT_TYPES } from './patient-document';
-import PatientState, { CurrentState } from './patient-state';
+import PatientState from './patient-state';
 import ProgressNote from './progress-note';
-import User, { UserRole } from './user';
+import User from './user';
 
 export interface IComputedStatus {
   isCoreIdentityVerified: boolean;
@@ -139,9 +140,12 @@ export default class ComputedPatientStatus extends BaseModel {
     );
     const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
     const hasProgressNote = patientProgressNoteCount > 0;
-    const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'communityHealthPartner');
-    const hasOutreachSpecialist = this.isRoleOnCareTeam(patientCareTeam, 'outreachSpecialist');
-    const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician');
+    const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'communityHealthPartner' as UserRole);
+    const hasOutreachSpecialist = this.isRoleOnCareTeam(
+      patientCareTeam,
+      'outreachSpecialist' as UserRole,
+    );
+    const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician' as UserRole);
     const isAssessed = false;
     const isPhotoAddedOrDeclined = hasUploadedPhoto || !!hasDeclinedPhotoUpload;
     const isIneligible = false;
@@ -243,7 +247,10 @@ export default class ComputedPatientStatus extends BaseModel {
     return computedPatientStatus;
   }
 
-  static getCurrentPatientState(computedStatus: IComputedStatus, txn: Transaction): CurrentState {
+  static getCurrentPatientState(
+    computedStatus: IComputedStatus,
+    txn: Transaction,
+  ): CurrentPatientState {
     let currentStatus = 'attributed';
     const isAssigned = computedStatus.hasOutreachSpecialist || computedStatus.hasChp;
     const isInOutreach = isAssigned && computedStatus.hasProgressNote;
@@ -260,7 +267,7 @@ export default class ComputedPatientStatus extends BaseModel {
       currentStatus = 'assigned';
     }
 
-    return currentStatus as CurrentState;
+    return currentStatus as CurrentPatientState;
   }
 
   static async updateForPatient(

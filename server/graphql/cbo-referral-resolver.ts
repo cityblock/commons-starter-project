@@ -1,4 +1,9 @@
-import { ICBOReferralCreateInput, ICBOReferralEditInput, IRootMutationType } from 'schema';
+import {
+  ICBOReferralCreateInput,
+  ICBOReferralEditInput,
+  IRootMutationType,
+  TaskEventTypes,
+} from 'schema';
 import CBOReferral from '../models/cbo-referral';
 import TaskEvent from '../models/task-event';
 import checkUserPermissions from './shared/permissions-check';
@@ -36,7 +41,7 @@ export async function CBOReferralEdit(
       {
         taskId: input.taskId,
         userId: userId!,
-        eventType: 'cbo_referral_edit_sent_at',
+        eventType: 'cbo_referral_edit_sent_at' as TaskEventTypes,
       },
       txn,
     );
@@ -47,7 +52,7 @@ export async function CBOReferralEdit(
       {
         taskId: input.taskId,
         userId: userId!,
-        eventType: 'cbo_referral_edit_acknowledged_at',
+        eventType: 'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
       },
       txn,
     );

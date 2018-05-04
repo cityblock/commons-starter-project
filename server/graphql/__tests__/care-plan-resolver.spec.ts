@@ -2,6 +2,14 @@ import { subHours } from 'date-fns';
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  CarePlanSuggestionType,
+  Priority,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import * as carePlanSuggestionAccept from '../../../app/graphql/queries/care-plan-suggestion-accept-mutation.graphql';
 import * as carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
@@ -58,8 +66,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
       title: 'Housing Task',
       repeating: false,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
-      priority: 'low',
-      careTeamAssigneeRole: 'physician',
+      priority: 'low' as Priority,
+      careTeamAssigneeRole: 'physician' as UserRole,
     },
     trx,
   );
@@ -68,7 +76,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -78,7 +86,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const question2 = await Question.create(
     {
       title: 'hate writing tests',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea2.id,
       type: 'riskArea',
       order: 2,
@@ -89,8 +97,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -101,8 +109,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'hates writing tests!',
       value: '4',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question2.id,
       order: 2,
@@ -348,7 +356,7 @@ describe('care plan resolver tests', () => {
       const suggestion1 = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -358,7 +366,7 @@ describe('care plan resolver tests', () => {
       const suggestion2 = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -494,7 +502,7 @@ describe('care plan resolver tests', () => {
       const suggestion1 = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -532,7 +540,7 @@ describe('care plan resolver tests', () => {
       const suggestion1 = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -542,7 +550,7 @@ describe('care plan resolver tests', () => {
       const suggestion2 = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern2.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -592,7 +600,7 @@ describe('care plan resolver tests', () => {
       const suggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -637,7 +645,7 @@ describe('care plan resolver tests', () => {
       const concernSuggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -647,7 +655,7 @@ describe('care plan resolver tests', () => {
       const goalSuggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -691,7 +699,7 @@ describe('care plan resolver tests', () => {
       const suggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -702,7 +710,7 @@ describe('care plan resolver tests', () => {
       const dupeSuggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -771,7 +779,7 @@ describe('care plan resolver tests', () => {
       const suggestion = await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,

@@ -1,5 +1,6 @@
 import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { BirthSexOptions, ContactMethodOptions, Gender } from 'schema';
 import * as uuid from 'uuid/v4';
 import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';
@@ -13,14 +14,10 @@ const EAGER_QUERY = `[
   primaryPhone,
 ]`;
 
-export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
-export type BirthSexOptions = 'male' | 'female' | null;
-export type ContactMethodOptions = 'phone' | 'text' | 'email';
-
 export interface IInitialPatientInfoOptions {
   patientId: string;
   updatedById: string;
-  gender?: PatientGenderOptions;
+  gender?: Gender;
   language?: string | null;
 }
 
@@ -28,7 +25,7 @@ export interface IPatientInfoOptions {
   patientId: string;
   updatedById: string;
   preferredName?: string;
-  gender?: PatientGenderOptions;
+  gender?: Gender;
   sexAtBirth?: BirthSexOptions;
   language?: string;
   isMarginallyHoused?: boolean;
@@ -48,7 +45,7 @@ export interface IPatientInfoOptions {
 interface IEditPatientInfo {
   updatedById: string;
   preferredName?: string;
-  gender?: PatientGenderOptions;
+  gender?: Gender;
   sexAtBirth?: BirthSexOptions;
   language?: string;
   isMarginallyHoused?: boolean;
@@ -76,7 +73,7 @@ export default class PatientInfo extends Model {
   patientId: string;
   patient: Patient;
   preferredName: string;
-  gender: PatientGenderOptions;
+  gender: Gender;
   sexAtBirth: BirthSexOptions;
   language: string;
   isMarginallyHoused: boolean;

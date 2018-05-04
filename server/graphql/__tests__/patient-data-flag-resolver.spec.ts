@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { CoreIdentityOptions, UserRole } from 'schema';
 import { IPatientDataFlag } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -10,7 +11,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 interface ISetup {
@@ -57,7 +58,7 @@ describe('computed field resolver', () => {
         {
           patientId: patient.id,
           userId: user.id,
-          fieldName: 'firstName',
+          fieldName: 'firstName' as CoreIdentityOptions,
           suggestedValue: 'Darth',
         },
         txn,
@@ -66,7 +67,7 @@ describe('computed field resolver', () => {
         {
           patientId: patient.id,
           userId: user.id,
-          fieldName: 'lastName',
+          fieldName: 'lastName' as CoreIdentityOptions,
           suggestedValue: 'Vader',
         },
         txn,

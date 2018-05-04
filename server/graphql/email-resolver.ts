@@ -26,7 +26,7 @@ export async function emailCreateForPatient(
 
   const filtered = omitBy<IEmailCreateForPatientInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
 
   const email = await Email.create(filtered, txn);
   await PatientEmail.create({ patientId: input.patientId, emailId: email.id }, txn);
@@ -56,7 +56,7 @@ export async function emailCreate(
 
   const filtered = omitBy<IEmailCreateInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE email by ${userId}`, 2);
+  logger.log(`CREATE email by ${userId}`);
 
   return Email.create(filtered, txn);
 }
@@ -72,7 +72,7 @@ export async function emailDeleteForPatient(
 ): Promise<Email> {
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE email for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`DELETE email for patient ${input.patientId} by ${userId}`);
 
   await PatientEmail.delete({ patientId: input.patientId, emailId: input.emailId }, txn);
 
@@ -100,7 +100,7 @@ export async function emailEdit(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IEmailEditInput>(input, isNil);
-  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
 
   return Email.edit(filtered as any, input.emailId, txn);
 }

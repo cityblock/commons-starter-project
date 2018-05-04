@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { AnswerValueTypeOptions, ComputedFieldDataTypes, UserRole } from 'schema';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
@@ -11,7 +12,7 @@ import { createRiskArea } from '../../spec-helpers';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 interface ISetup {
@@ -48,7 +49,7 @@ describe('computed field schema resolver', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -56,7 +57,7 @@ describe('computed field schema resolver', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -77,7 +78,7 @@ describe('computed field schema resolver', () => {
           questionId: question.id,
           displayValue: 'Answer Display Value',
           value: 'true',
-          valueType: 'boolean',
+          valueType: 'boolean' as AnswerValueTypeOptions,
           order: 1,
           inSummary: false,
         },
@@ -88,7 +89,7 @@ describe('computed field schema resolver', () => {
           questionId: question.id,
           displayValue: 'Answer Display Value',
           value: 'false',
-          valueType: 'boolean',
+          valueType: 'boolean' as AnswerValueTypeOptions,
           order: 2,
           inSummary: false,
         },
@@ -115,7 +116,7 @@ describe('computed field schema resolver', () => {
         computedFields: [
           {
             slug: 'computed-field-1',
-            dataType: 'boolean',
+            dataType: 'boolean' as ComputedFieldDataTypes,
             values: ['true', 'false'],
           },
         ],

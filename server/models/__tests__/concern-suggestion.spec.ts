@@ -1,4 +1,11 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  CarePlanSuggestionType,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -19,6 +26,8 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
+const physicianUserRole = 'physician' as UserRole;
+
 interface ISetup {
   answer: Answer;
   question: Question;
@@ -30,7 +39,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -41,8 +50,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -75,8 +84,8 @@ describe('concern suggestion model', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
           order: 2,
@@ -156,7 +165,7 @@ describe('concern suggestion model', () => {
     it('returns concern suggestions for a patient', async () => {
       const { question, answer, riskArea } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const user = await User.create(createMockUser(11, clinic.id, physicianUserRole), txn);
       const concern1 = await Concern.create({ title: 'Housing' }, txn);
       const concern2 = await Concern.create({ title: 'Food' }, txn);
       const concern3 = await Concern.create({ title: 'Medical' }, txn);
@@ -171,7 +180,7 @@ describe('concern suggestion model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -182,8 +191,8 @@ describe('concern suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -284,7 +293,7 @@ describe('concern suggestion model', () => {
     it('returns concern suggestions for a patient even if another patient already has the accepted concern', async () => {
       const { question, answer, riskArea } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const user = await User.create(createMockUser(11, clinic.id, physicianUserRole), txn);
       const concern1 = await Concern.create({ title: 'Housing' }, txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const patient2 = await createPatient({ cityblockId: 456, homeClinicId: clinic.id }, txn);
@@ -343,14 +352,14 @@ describe('concern suggestion model', () => {
     it('does not return concern suggestions where one already exists', async () => {
       const { question, answer, riskArea } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const user = await User.create(createMockUser(11, clinic.id, physicianUserRole), txn);
       const concern1 = await Concern.create({ title: 'Housing' }, txn);
       const concern2 = await Concern.create({ title: 'Food' }, txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -361,8 +370,8 @@ describe('concern suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -424,7 +433,7 @@ describe('concern suggestion model', () => {
       await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern1.id,
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -445,14 +454,14 @@ describe('concern suggestion model', () => {
     it('does not return suggestions for concerns that are already in the care plan', async () => {
       const { question, answer, riskArea } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const user = await User.create(createMockUser(11, clinic.id, physicianUserRole), txn);
       const concern1 = await Concern.create({ title: 'Housing' }, txn);
       const concern2 = await Concern.create({ title: 'Food' }, txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           type: 'riskArea',
           riskAreaId: riskArea.id,
           order: 1,
@@ -463,8 +472,8 @@ describe('concern suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -538,7 +547,7 @@ describe('concern suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern1.id,
         },
         txn,
@@ -581,7 +590,7 @@ describe('concern suggestion model', () => {
     it('gets correct current concern suggestions', async () => {
       const { riskArea, question, answer } = await setup(txn);
       const clinic = await Clinic.create(createMockClinic(), txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+      const user = await User.create(createMockUser(11, clinic.id, physicianUserRole), txn);
       const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
       const concern = await Concern.create({ title: 'Housing' }, txn);
 
@@ -626,7 +635,7 @@ describe('concern suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -659,7 +668,7 @@ describe('concern suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,

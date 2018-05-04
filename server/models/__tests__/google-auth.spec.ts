@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
@@ -24,7 +25,7 @@ describe('google auth model', () => {
   it('should get and create', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
     const user = await User.create(
-      createMockUser(11, clinic.id, 'physician', 'care@care.com'),
+      createMockUser(11, clinic.id, 'physician' as UserRole, 'care@care.com'),
       txn,
     );
 

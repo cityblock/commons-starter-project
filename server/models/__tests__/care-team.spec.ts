@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import PatientGoal from '../../models/patient-goal';
@@ -18,7 +19,7 @@ import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   clinic: Clinic;

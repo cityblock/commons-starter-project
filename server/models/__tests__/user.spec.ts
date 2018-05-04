@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { Permissions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { attributionUserEmail } from '../../lib/consts';
@@ -6,9 +7,9 @@ import { createMockClinic, createMockUser, createPatient } from '../../spec-help
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
-import User, { UserRole } from '../user';
+import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 describe('user model', () => {
   let txn = null as any;
@@ -229,8 +230,8 @@ describe('user model', () => {
 
   it('fetches a limited set of shortened user objects', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const userRole2 = 'healthCoach';
-    const userRole3 = 'nurseCareManager';
+    const userRole2 = 'healthCoach' as UserRole;
+    const userRole3 = 'nurseCareManager' as UserRole;
     const userRoleFilters: UserRole[] = [userRole, userRole2];
     const userRoleFilters2: UserRole[] = [userRole3];
 
@@ -264,7 +265,7 @@ describe('user model', () => {
 
   it('returns the correct patient count in the summary list', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const healthCoachUserRole = 'healthCoach';
+    const healthCoachUserRole = 'healthCoach' as UserRole;
 
     const user1 = await User.create(
       createMockUser(11, clinic.id, healthCoachUserRole, 'a@b.com'),
@@ -303,8 +304,8 @@ describe('user model', () => {
 
   it('fetches a shortened list of user objects where the users have logged in', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const userRole2 = 'healthCoach';
-    const userRole3 = 'nurseCareManager';
+    const userRole2 = 'healthCoach' as UserRole;
+    const userRole3 = 'nurseCareManager' as UserRole;
     const userRoleFilters: UserRole[] = [userRole2, userRole3];
 
     const user1 = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
@@ -363,7 +364,7 @@ describe('user model', () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
     const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'), txn);
     expect(user1.userRole).toEqual(userRole);
-    await User.updateUserRole(user1.id, 'nurseCareManager', txn);
+    await User.updateUserRole(user1.id, 'nurseCareManager' as UserRole, txn);
     const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
     expect(fetchedUser1!.userRole).toEqual('nurseCareManager');
   });
@@ -372,7 +373,7 @@ describe('user model', () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
     const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'), txn);
     expect(user1.permissions).toBe('red');
-    await User.updateUserPermissions(user1.id, 'blue', txn);
+    await User.updateUserPermissions(user1.id, 'blue' as Permissions, txn);
     const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
     expect(fetchedUser1!.permissions).toBe('blue');
   });

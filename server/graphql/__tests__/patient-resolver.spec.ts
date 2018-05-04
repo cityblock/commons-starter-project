@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { Gender, Permissions, UserRole } from 'schema';
 import * as getPatientPanel from '../../../app/graphql/queries/get-patient-panel.graphql';
 import * as getPatientSearch from '../../../app/graphql/queries/get-patient-search.graphql';
 import * as getPatientSocialSecurity from '../../../app/graphql/queries/get-patient-social-security.graphql';
@@ -44,7 +45,7 @@ interface ISetup {
   homeClinicId: string;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -521,7 +522,7 @@ describe('patient', () => {
               firstName: 'Mark',
               lastName: 'Man',
               patientInfo: {
-                gender: 'male',
+                gender: 'male' as Gender,
               },
             },
           },
@@ -570,7 +571,7 @@ describe('patient', () => {
               firstName: 'Robb',
               lastName: 'Stark',
               patientInfo: {
-                gender: 'male',
+                gender: 'male' as Gender,
               },
             },
           },
@@ -617,7 +618,7 @@ describe('patient', () => {
         firstName: 'Mark',
         lastName: 'Man',
         patientInfo: {
-          gender: 'male',
+          gender: 'male' as Gender,
         },
       });
     });
@@ -642,7 +643,7 @@ describe('patient', () => {
         firstName: 'Juanita',
         lastName: 'Jacobs',
         patientInfo: {
-          gender: 'female',
+          gender: 'female' as Gender,
         },
       });
     });
@@ -678,7 +679,7 @@ describe('patient', () => {
           userId: user.id,
           txn,
         },
-        { pageNumber: 0, pageSize: 10, filters: { gender: 'female', zip: '11211' } },
+        { pageNumber: 0, pageSize: 10, filters: { gender: 'female' as Gender, zip: '11211' } },
       );
 
       expect(result.data!.patientPanel.totalCount).toBe(1);
@@ -691,7 +692,7 @@ describe('patient', () => {
     describe('with permissions that do not allow filtering entire patient panel', () => {
       it('still only returns results from care team when showAllMembers is true', async () => {
         const { user } = await setupPatientsForPanelFilter(txn);
-        await User.updateUserPermissions(user.id, 'pink', txn);
+        await User.updateUserPermissions(user.id, 'pink' as Permissions, txn);
         const result = await graphql(
           schema,
           getPatientPanelQuery,

@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -14,7 +15,7 @@ import PatientExternalProviderPhone from '../patient-external-provider-phone';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patientExternalProvider: PatientExternalProvider;
@@ -124,14 +125,20 @@ describe('patient external provider phone model', () => {
       );
 
       // second phone for the same provider
-      const phone2 = await Phone.create({ phoneNumber: '111-111-1111', type: 'mobile' }, txn);
+      const phone2 = await Phone.create(
+        { phoneNumber: '111-111-1111', type: 'mobile' as PhoneTypeOptions },
+        txn,
+      );
       await PatientExternalProviderPhone.create(
         { patientExternalProviderId: patientExternalProvider.id, phoneId: phone2.id },
         txn,
       );
 
       // phone for another patientExternalProvider
-      const phone4 = await Phone.create({ phoneNumber: '333-333-3333', type: 'mobile' }, txn);
+      const phone4 = await Phone.create(
+        { phoneNumber: '333-333-3333', type: 'mobile' as PhoneTypeOptions },
+        txn,
+      );
       const patientExternalProvider2 = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone4),
         txn,

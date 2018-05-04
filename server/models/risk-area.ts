@@ -1,6 +1,6 @@
 import { last, values } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema';
+import { AssessmentType, IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema';
 import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
@@ -21,8 +21,6 @@ export interface IRiskScore {
   score: number;
   forceHighRisk: boolean;
 }
-
-export type AssessmentType = 'manual' | 'automated';
 
 const EAGER_QUERY = '[riskAreaGroup]';
 
@@ -49,7 +47,7 @@ export default class RiskArea extends BaseModel {
     properties: {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 },
-      assessmentType: { type: 'string', enum: ['manual', 'automated'] },
+      assessmentType: { type: 'string', enum: ['manual' as AssessmentType, 'automated'] },
       riskAreaGroupId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },

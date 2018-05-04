@@ -1,5 +1,6 @@
 import { isEmpty, uniqBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PatientAnswerEventTypes } from 'schema';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -328,7 +329,7 @@ export default class PatientAnswer extends BaseModel {
       const patientAnswerEvent: IPatientAnswerEventOptions = {
         patientId: patientAnswer.patientId,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       };
 
       if (patientAnswer.userId) {

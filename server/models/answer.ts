@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from 'schema';
 import BaseModel from './base-model';
 import Concern from './concern';
 import GoalSuggestionTemplate from './goal-suggestion-template';
@@ -10,8 +11,8 @@ import ScreeningTool from './screening-tool';
 interface IAnswerEditableFields {
   displayValue: string;
   value: string;
-  valueType: ValueTypeOptions;
-  riskAdjustmentType?: RiskAdjustmentType | null;
+  valueType: AnswerValueTypeOptions;
+  riskAdjustmentType?: RiskAdjustmentTypeOptions | null;
   inSummary?: boolean | null;
   summaryText?: string | null;
   order: number;
@@ -26,9 +27,6 @@ interface IGetByComputedFieldSlugAndValueOptions {
   value: string | boolean | number;
 }
 
-type ValueTypeOptions = 'string' | 'boolean' | 'number';
-type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
-
 const EAGER_QUERY = '[concernSuggestions, goalSuggestions.[taskTemplates]]';
 
 /* tslint:disable:member-ordering */
@@ -36,8 +34,8 @@ export default class Answer extends BaseModel {
   id: string;
   displayValue: string;
   value: string;
-  valueType: ValueTypeOptions;
-  riskAdjustmentType: RiskAdjustmentType;
+  valueType: AnswerValueTypeOptions;
+  riskAdjustmentType: RiskAdjustmentTypeOptions;
   inSummary: boolean;
   summaryText: string | null;
   question: Question;

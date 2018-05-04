@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { TaskEventTypes, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient, createTask } from '../../spec-helpers';
@@ -7,7 +8,7 @@ import ProgressNote from '../progress-note';
 import TaskEvent from '../task-event';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 describe('task event model', () => {
   let txn = null as any;
@@ -36,7 +37,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -44,13 +45,13 @@ describe('task event model', () => {
       id: taskEvent.id,
       taskId: task.id,
       userId: user.id,
-      eventType: 'edit_assignee',
+      eventType: 'edit_assignee' as TaskEventTypes,
     });
     expect(await TaskEvent.get(taskEvent.id, txn)).toMatchObject({
       id: taskEvent.id,
       taskId: task.id,
       userId: user.id,
-      eventType: 'edit_assignee',
+      eventType: 'edit_assignee' as TaskEventTypes,
     });
     expect(taskEvent.deletedAt).toBeFalsy();
     expect(taskEvent.createdAt).not.toBeFalsy();
@@ -68,7 +69,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -92,7 +93,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'add_comment',
+        eventType: 'add_comment' as TaskEventTypes,
       },
       txn,
     );
@@ -100,7 +101,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_comment',
+        eventType: 'edit_comment' as TaskEventTypes,
       },
       txn,
     );
@@ -118,7 +119,7 @@ describe('task event model', () => {
     expect(
       await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 }, txn),
     ).toMatchObject({
-      results: [{ eventType: 'add_comment' }],
+      results: [{ eventType: 'add_comment' as TaskEventTypes }],
       total: 1,
     });
   });
@@ -135,7 +136,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'add_comment',
+        eventType: 'add_comment' as TaskEventTypes,
       },
       txn,
     );
@@ -143,7 +144,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user2.id,
-        eventType: 'delete_comment',
+        eventType: 'delete_comment' as TaskEventTypes,
       },
       txn,
     );
@@ -151,7 +152,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_comment',
+        eventType: 'edit_comment' as TaskEventTypes,
       },
       txn,
     );
@@ -203,7 +204,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'add_comment',
+        eventType: 'add_comment' as TaskEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -212,7 +213,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_comment',
+        eventType: 'edit_comment' as TaskEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -244,7 +245,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'complete_task',
+        eventType: 'complete_task' as TaskEventTypes,
       },
       txn,
     );

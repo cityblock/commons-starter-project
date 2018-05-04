@@ -24,7 +24,7 @@ export async function mattermostUrlForUserCreate(
 ): Promise<IRootMutationType['mattermostUrlForUserCreate']> {
   await checkLoggedInWithPermissions(userId, permissions);
 
-  logger.log(`GET Mattermost link to chat what with ${input.email} by ${userId}`, 2);
+  logger.log(`GET Mattermost link to chat what with ${input.email} by ${userId}`);
 
   const mattermost = Mattermost.get();
   const url = await mattermost.getLinkToMessageUser(input.email);
@@ -42,7 +42,6 @@ export async function mattermostUrlForPatientCreate(
 
   logger.log(
     `GET Mattermost link to chat with care team for patient ${input.patientId} by ${userId}`,
-    2,
   );
 
   const mattermost = Mattermost.get();

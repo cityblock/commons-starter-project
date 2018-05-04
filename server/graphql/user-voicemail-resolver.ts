@@ -1,4 +1,4 @@
-import { IRootMutationType, IUserVoicemailSignedUrlCreateInput } from 'schema';
+import { IRootMutationType, IUserVoicemailSignedUrlCreateInput, UserSignedUrlAction } from 'schema';
 import { loadUserVoicemailUrl } from './shared/gcs/helpers';
 import { checkLoggedInWithPermissions } from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -21,9 +21,14 @@ export async function userVoicemailSignedUrlCreate(
     throw new Error('Must provide voicemail id');
   }
 
-  logger.log(`GET voicemail ${voicemailId} by ${userId}`, 2);
+  logger.log(`GET voicemail ${voicemailId} by ${userId}`);
 
-  const signedUrl = await loadUserVoicemailUrl(userId!, voicemailId, 'read', testConfig);
+  const signedUrl = await loadUserVoicemailUrl(
+    userId!,
+    voicemailId,
+    'read' as UserSignedUrlAction,
+    testConfig,
+  );
 
   if (!signedUrl) {
     throw new Error('Something went wrong, please try again.');

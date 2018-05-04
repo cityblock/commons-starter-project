@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as getPatientExternalProviders from '../../../app/graphql/queries/get-patient-external-providers.graphql';
 import * as patientExternalProviderCreate from '../../../app/graphql/queries/patient-external-provider-create-mutation.graphql';
 import * as patientExternalProviderDelete from '../../../app/graphql/queries/patient-external-provider-delete-mutation.graphql';
@@ -24,7 +25,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 interface ISetup {

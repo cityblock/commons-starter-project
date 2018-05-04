@@ -1,5 +1,6 @@
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, UserRole } from 'schema';
 import * as vCard from 'vcards-js';
 import Db from '../../../db';
 import { signJwt } from '../../../graphql/shared/utils';
@@ -34,7 +35,7 @@ interface ISetup {
 
 const setup = async (txn: Transaction): Promise<ISetup> => {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return { clinic, user, patient };
@@ -131,9 +132,18 @@ describe('vCard Handler', () => {
       );
 
       // create phones for patient 1
-      const phone = await Phone.create(createMockPhone('123-456-1111', 'mobile'), txn);
-      const phone2 = await Phone.create(createMockPhone('123-456-2222', 'home'), txn);
-      const phone3 = await Phone.create(createMockPhone('123-456-3333', 'other'), txn);
+      const phone = await Phone.create(
+        createMockPhone('123-456-1111', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
+      const phone2 = await Phone.create(
+        createMockPhone('123-456-2222', 'home' as PhoneTypeOptions),
+        txn,
+      );
+      const phone3 = await Phone.create(
+        createMockPhone('123-456-3333', 'other' as PhoneTypeOptions),
+        txn,
+      );
 
       await PatientPhone.create({ phoneId: phone.id, patientId: patient1.id }, txn);
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient1.id }, txn);
@@ -142,20 +152,35 @@ describe('vCard Handler', () => {
       await PatientPhone.delete({ phoneId: phone3.id, patientId: patient1.id }, txn);
 
       // create phones for patient 2
-      const phone4 = await Phone.create(createMockPhone('123-456-4444', 'mobile'), txn);
+      const phone4 = await Phone.create(
+        createMockPhone('123-456-4444', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone4.id, patientId: patient2.id }, txn);
 
       // create phone for patient 3
-      const phone8 = await Phone.create(createMockPhone('123-456-8888', 'mobile'), txn);
+      const phone8 = await Phone.create(
+        createMockPhone('123-456-8888', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone8.id, patientId: patient3.id }, txn);
 
       // create phone for patient 4
-      const phone5 = await Phone.create(createMockPhone('123-456-5555', 'mobile'), txn);
+      const phone5 = await Phone.create(
+        createMockPhone('123-456-5555', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone5.id, patientId: patient4.id }, txn);
 
       // create phone for patient 5
-      const phone6 = await Phone.create(createMockPhone('123-456-6666', 'mobile'), txn);
-      const phone7 = await Phone.create(createMockPhone('123-456-7777', 'mobile'), txn);
+      const phone6 = await Phone.create(
+        createMockPhone('123-456-6666', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
+      const phone7 = await Phone.create(
+        createMockPhone('123-456-7777', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
 
       await PatientPhone.create({ phoneId: phone6.id, patientId: patient5.id }, txn);
       await PatientPhone.create({ phoneId: phone7.id, patientId: patient5.id }, txn);
@@ -279,11 +304,26 @@ describe('vCard Handler', () => {
         txn,
       );
 
-      const phone = await Phone.create(createMockPhone('123-456-1111', 'mobile'), txn);
-      const phone2 = await Phone.create(createMockPhone('123-456-2222', 'home'), txn);
-      const phone3 = await Phone.create(createMockPhone('123-456-3333', 'other'), txn);
-      const phone4 = await Phone.create(createMockPhone('123-456-4444', 'work'), txn);
-      const phone5 = await Phone.create(createMockPhone('123-456-5555', 'other'), txn);
+      const phone = await Phone.create(
+        createMockPhone('123-456-1111', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
+      const phone2 = await Phone.create(
+        createMockPhone('123-456-2222', 'home' as PhoneTypeOptions),
+        txn,
+      );
+      const phone3 = await Phone.create(
+        createMockPhone('123-456-3333', 'other' as PhoneTypeOptions),
+        txn,
+      );
+      const phone4 = await Phone.create(
+        createMockPhone('123-456-4444', 'work' as PhoneTypeOptions),
+        txn,
+      );
+      const phone5 = await Phone.create(
+        createMockPhone('123-456-5555', 'other' as PhoneTypeOptions),
+        txn,
+      );
 
       await PatientPhone.create({ phoneId: phone.id, patientId: patient.id }, txn);
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient.id }, txn);

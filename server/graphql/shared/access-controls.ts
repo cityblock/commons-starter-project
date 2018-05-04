@@ -1,6 +1,6 @@
 import * as acl from 'acl';
+import { UserRole } from 'schema';
 import { BusinessToggleName } from '../../../shared/permissions/business-toggle-names';
-import { UserRole } from '../../models/user';
 import aclJson from './acl';
 
 export type Action = 'view' | 'edit' | 'delete' | 'create' | 'disenroll';

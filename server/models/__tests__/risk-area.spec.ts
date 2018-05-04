@@ -1,4 +1,10 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  AssessmentType,
+  RiskAdjustmentTypeOptions,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -28,7 +34,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 const mediumRiskThreshold = 5;
 const highRiskThreshold = 8;
-const assessmentType = 'manual';
+const assessmentType = 'manual' as AssessmentType;
 
 interface ISetup2 {
   question: Question;
@@ -54,7 +60,7 @@ async function setup2(riskAreaGroup: RiskAreaGroup, txn: Transaction): Promise<I
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -134,7 +140,11 @@ describe('risk area model', () => {
     );
     expect(riskArea.title).toEqual('Housing');
     const editedRiskArea = await RiskArea.edit(
-      { title: 'Mental Health', mediumRiskThreshold: 6, assessmentType: 'automated' },
+      {
+        title: 'Mental Health',
+        mediumRiskThreshold: 6,
+        assessmentType: 'automated' as AssessmentType,
+      },
       riskArea.id,
       txn,
     );
@@ -231,8 +241,8 @@ describe('risk area model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question.id,
@@ -276,8 +286,8 @@ describe('risk area model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'increment',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question.id,
@@ -288,7 +298,7 @@ describe('risk area model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 2,
@@ -299,8 +309,8 @@ describe('risk area model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '4',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question2.id,
@@ -373,7 +383,7 @@ describe('risk area model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 2,
@@ -383,7 +393,7 @@ describe('risk area model', () => {
       const question3 = await Question.create(
         {
           title: 'really hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea2.id,
           type: 'riskArea',
           order: 1,
@@ -394,8 +404,8 @@ describe('risk area model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'increment',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'loves writing tests summary text!',
           questionId: question.id,
@@ -407,8 +417,8 @@ describe('risk area model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '4',
-          valueType: 'number',
-          riskAdjustmentType: 'increment',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'hates writing tests summary text!',
           questionId: question2.id,
@@ -420,8 +430,8 @@ describe('risk area model', () => {
         {
           displayValue: 'really hates writing tests!',
           value: '5',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'really hates writing tests summary text!',
           questionId: question3.id,

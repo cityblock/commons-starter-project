@@ -2,6 +2,7 @@ import ReactPDF from '@react-pdf/node';
 import * as express from 'express';
 import { transaction } from 'objection';
 import * as React from 'react';
+import { PatientSignedUrlAction } from 'schema';
 import CBOReferral from '../../../app/pdf/cbo-referral/cbo-referral';
 import PrintableMAP from '../../../app/pdf/printable-map/printable-map';
 import { loadPatientPhotoUrl } from '../../graphql/shared/gcs/helpers';
@@ -119,7 +120,7 @@ export const renderPrintableMapPdf = async (req: express.Request, res: express.R
 
   let profilePhotoUrl = null;
   if (patient.patientInfo.hasUploadedPhoto) {
-    profilePhotoUrl = await loadPatientPhotoUrl(patientId, 'read');
+    profilePhotoUrl = await loadPatientPhotoUrl(patientId, 'read' as PatientSignedUrlAction);
   }
 
   try {

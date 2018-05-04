@@ -1,4 +1,10 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  PatientAnswerEventTypes,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -30,7 +36,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -41,7 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       riskAreaId: riskArea.id,
       title: 'Question Title',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       type: 'riskArea',
       order: 1,
     },
@@ -52,7 +58,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       questionId: question.id,
       displayValue: '1',
       value: '1',
-      valueType: 'number',
+      valueType: 'number' as AnswerValueTypeOptions,
       order: 1,
       inSummary: false,
     },
@@ -123,7 +129,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -134,7 +140,7 @@ describe('patient answer event model', () => {
       id: patientAnswerEvent.id,
       patientId: patientAnswerEvent.patientId,
       userId: patientAnswerEvent.userId,
-      eventType: 'create_patient_answer',
+      eventType: 'create_patient_answer' as PatientAnswerEventTypes,
     });
     expect(fetchedPatientAnswerEvent.deletedAt).toBeFalsy();
     expect(fetchedPatientAnswerEvent.createdAt).not.toBeFalsy();
@@ -148,7 +154,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -193,13 +199,13 @@ describe('patient answer event model', () => {
             patientId: patient.id,
             userId: user.id,
             patientAnswerId: patientAnswer.id,
-            eventType: 'create_patient_answer',
+            eventType: 'create_patient_answer' as PatientAnswerEventTypes,
           },
           {
             patientId: patient.id,
             userId: user.id,
             patientAnswerId: patientAnswer2.id,
-            eventType: 'create_patient_answer',
+            eventType: 'create_patient_answer' as PatientAnswerEventTypes,
           },
         ],
       },
@@ -265,13 +271,13 @@ describe('patient answer event model', () => {
             patientId: patient.id,
             userId: user.id,
             patientAnswerId: patientAnswer.id,
-            eventType: 'create_patient_answer',
+            eventType: 'create_patient_answer' as PatientAnswerEventTypes,
           },
           {
             patientId: patient.id,
             userId: user.id,
             patientAnswerId: patientAnswer2.id,
-            eventType: 'create_patient_answer',
+            eventType: 'create_patient_answer' as PatientAnswerEventTypes,
           },
         ],
       },
@@ -296,7 +302,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -316,7 +322,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -325,7 +331,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -368,7 +374,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -377,7 +383,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -417,7 +423,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -426,7 +432,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
       },
       txn,
     );
@@ -476,7 +482,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -486,7 +492,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -523,7 +529,7 @@ describe('patient answer event model', () => {
         questionId: question.id,
         displayValue: '2',
         value: '2',
-        valueType: 'number',
+        valueType: 'number' as AnswerValueTypeOptions,
         order: 2,
       },
       txn,
@@ -541,7 +547,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -572,7 +578,7 @@ describe('patient answer event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: secondPatientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,

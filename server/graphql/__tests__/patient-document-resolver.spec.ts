@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as getPatientDocuments from '../../../app/graphql/queries/get-patient-documents.graphql';
 import * as patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
@@ -19,7 +20,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {

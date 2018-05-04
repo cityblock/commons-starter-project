@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, SmsMessageDirection, UserRole } from 'schema';
 import * as getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
 import * as getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
 import * as smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
@@ -20,7 +21,7 @@ import {
 import TwilioClient from '../../twilio-client';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const userPhone = '+11234445555';
 const body1 = 'Winter is coming.';
 const body2 = 'Winter is here.';
@@ -41,7 +42,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
-  const phone = await Phone.create(createMockPhone('123-456-7890', 'mobile'), txn);
+  const phone = await Phone.create(
+    createMockPhone('123-456-7890', 'mobile' as PhoneTypeOptions),
+    txn,
+  );
   await PatientPhone.create({ phoneId: phone.id, patientId: patient.id }, txn);
 
   return { patient, user, clinic, phone };
@@ -83,7 +87,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234567890',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body1,
           twilioPayload: {},
         },
@@ -94,7 +98,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234565555',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: 'Not from patient',
           twilioPayload: {},
         },
@@ -105,7 +109,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234567890',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload: {},
         },
@@ -131,13 +135,13 @@ describe('SMS Message Resolver', () => {
         body: body2,
         userId: user.id,
         patientId: patient.id,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
       });
       expect(result.data!.smsMessages.edges[1].node).toMatchObject({
         body: body1,
         userId: user.id,
         patientId: patient.id,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
       });
     });
   });
@@ -150,7 +154,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234567890',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body1,
           twilioPayload: {},
         },
@@ -160,7 +164,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234567890',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload: {},
         },
@@ -184,7 +188,7 @@ describe('SMS Message Resolver', () => {
       expect(result.data!.smsMessageLatest).toMatchObject({
         userId: user.id,
         patientId: patient.id,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
         body: body2,
         contactNumber: phone.phoneNumber,
       });
@@ -197,7 +201,7 @@ describe('SMS Message Resolver', () => {
         {
           userId: user.id,
           contactNumber: '+11234565555',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: 'Not from patient',
           twilioPayload: {},
         },
@@ -309,7 +313,10 @@ describe('SMS Message Resolver', () => {
       );
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
 
-      const phone2 = await Phone.create(createMockPhone('123-456-7777', 'mobile'), txn);
+      const phone2 = await Phone.create(
+        createMockPhone('123-456-7777', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient.id }, txn);
 
       const result = await graphql(
@@ -344,14 +351,17 @@ describe('SMS Message Resolver', () => {
       );
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
 
-      const phone2 = await Phone.create(createMockPhone('123-456-7777', 'home'), txn);
+      const phone2 = await Phone.create(
+        createMockPhone('123-456-7777', 'home' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient.id }, txn);
       await SmsMessage.create(
         {
           userId: user.id,
           body: body2,
           contactNumber: '+11234567777',
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           twilioPayload: mockTwilioPayload,
         },
         txn,

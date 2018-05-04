@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient, createTask } from '../../spec-helpers';
@@ -7,7 +8,7 @@ import Task from '../task';
 import TaskComment from '../task-comment';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 describe('task comment model', () => {
   let txn = null as any;

@@ -64,7 +64,7 @@ export async function patientInfoEdit(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
 
   const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
-  logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`, 2);
+  logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`);
 
   return PatientInfo.edit({ ...(filtered as any), updatedById: userId }, input.patientInfoId, txn);
 }

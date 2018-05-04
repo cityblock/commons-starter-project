@@ -1,5 +1,6 @@
 import * as httpMocks from 'node-mocks-http';
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../../db';
 import Clinic from '../../../models/clinic';
 import User from '../../../models/user';
@@ -9,7 +10,7 @@ import { checkPostgresHandler } from '../check-postgres-handler';
 describe('postgres pingdom test', () => {
   let error: any;
   let txn = null as any;
-  const userRole = 'physician';
+  const userRole = 'physician' as UserRole;
 
   afterEach(async () => {
     await txn.rollback();

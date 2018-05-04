@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { CoreIdentityOptions, Gender, PhoneTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { adminTasksConcernTitle } from '../../lib/consts';
@@ -31,7 +32,7 @@ import PatientState from '../patient-state';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   clinic: Clinic;
@@ -197,7 +198,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
@@ -225,7 +226,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
@@ -249,7 +250,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'male',
+          gender: 'male' as Gender,
           language: 'english',
         },
         txn,
@@ -272,7 +273,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'male',
+          gender: 'male' as Gender,
           language: 'english',
         },
         txn,
@@ -300,7 +301,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
@@ -341,12 +342,15 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
       );
-      await PatientDataFlag.create({ patientId, userId: user.id, fieldName: 'firstName' }, txn);
+      await PatientDataFlag.create(
+        { patientId, userId: user.id, fieldName: 'firstName' as CoreIdentityOptions },
+        txn,
+      );
 
       const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
       expect(patientDataFlags.length).toEqual(1);
@@ -378,7 +382,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
@@ -417,7 +421,7 @@ describe('patient model', () => {
           ssn: '123456789',
           ssnEnd: '6789',
           homeClinicId: clinic.id,
-          gender: 'female',
+          gender: 'female' as Gender,
           language: 'english',
         },
         txn,
@@ -519,7 +523,7 @@ describe('patient model', () => {
             firstName: 'Mark',
             lastName: 'Man',
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '10001',
@@ -565,7 +569,7 @@ describe('patient model', () => {
             firstName: 'Robb',
             lastName: 'Stark',
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '11211',
@@ -611,7 +615,7 @@ describe('patient model', () => {
             firstName: 'Mark',
             lastName: 'Man',
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '10001',
@@ -633,7 +637,7 @@ describe('patient model', () => {
             firstName: 'Juanita',
             lastName: 'Jacobs',
             patientInfo: {
-              gender: 'female',
+              gender: 'female' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '11211',
@@ -650,7 +654,7 @@ describe('patient model', () => {
       const patientResults = await Patient.filter(
         user.id,
         { pageNumber: 0, pageSize: 10 },
-        { gender: 'female' },
+        { gender: 'female' as Gender },
         false,
         txn,
       );
@@ -675,7 +679,7 @@ describe('patient model', () => {
         await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female', zip: '11211' },
+          { gender: 'female' as Gender, zip: '11211' },
           false,
           txn,
         ),
@@ -685,7 +689,7 @@ describe('patient model', () => {
             firstName: 'Jane',
             lastName: 'Jacobs',
             patientInfo: {
-              gender: 'female',
+              gender: 'female' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '11211',
@@ -703,7 +707,7 @@ describe('patient model', () => {
         await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female', zip: '11211', ageMin: 19, ageMax: 30 },
+          { gender: 'female' as Gender, zip: '11211', ageMin: 19, ageMax: 30 },
           false,
           txn,
         ),
@@ -713,7 +717,7 @@ describe('patient model', () => {
             firstName: 'Jane',
             lastName: 'Jacobs',
             patientInfo: {
-              gender: 'female',
+              gender: 'female' as Gender,
               language: 'en',
               primaryAddress: {
                 zip: '11211',
@@ -742,7 +746,7 @@ describe('patient model', () => {
             firstName: 'Juanita',
             lastName: 'Jacobs',
             patientInfo: {
-              gender: 'female',
+              gender: 'female' as Gender,
               language: 'en',
             },
           },
@@ -768,7 +772,7 @@ describe('patient model', () => {
             firstName: 'Juanita',
             lastName: 'Jacobs',
             patientInfo: {
-              gender: 'female',
+              gender: 'female' as Gender,
               language: 'en',
             },
           },
@@ -783,7 +787,7 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female' },
+          { gender: 'female' as Gender },
           false,
           txn,
         );
@@ -797,7 +801,7 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female' },
+          { gender: 'female' as Gender },
           true,
           txn,
         );
@@ -809,7 +813,7 @@ describe('patient model', () => {
         const patients = await Patient.filter(
           user.id,
           { pageNumber: 0, pageSize: 10 },
-          { gender: 'female' },
+          { gender: 'female' as Gender },
           false,
           txn,
         );
@@ -832,7 +836,7 @@ describe('patient model', () => {
             lastName: 'Snow',
             userCareTeam: true,
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
             },
           },
@@ -855,7 +859,7 @@ describe('patient model', () => {
             lastName: 'Snow',
             userCareTeam: true,
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
             },
           },
@@ -864,7 +868,7 @@ describe('patient model', () => {
             lastName: 'Arryn',
             userCareTeam: false,
             patientInfo: {
-              gender: 'male',
+              gender: 'male' as Gender,
               language: 'en',
             },
           },
@@ -1231,9 +1235,18 @@ describe('patient model', () => {
       );
 
       // create phones for patient 1
-      const phone = await Phone.create(createMockPhone('123-456-1111', 'mobile'), txn);
-      const phone2 = await Phone.create(createMockPhone('123-456-2222', 'home'), txn);
-      const phone3 = await Phone.create(createMockPhone('123-456-3333', 'other'), txn);
+      const phone = await Phone.create(
+        createMockPhone('123-456-1111', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
+      const phone2 = await Phone.create(
+        createMockPhone('123-456-2222', 'home' as PhoneTypeOptions),
+        txn,
+      );
+      const phone3 = await Phone.create(
+        createMockPhone('123-456-3333', 'other' as PhoneTypeOptions),
+        txn,
+      );
 
       await PatientPhone.create({ phoneId: phone.id, patientId: patient1.id }, txn);
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient1.id }, txn);
@@ -1242,11 +1255,17 @@ describe('patient model', () => {
       await PatientPhone.delete({ phoneId: phone3.id, patientId: patient1.id }, txn);
 
       // create phones for patient 2
-      const phone4 = await Phone.create(createMockPhone('123-456-4444', 'mobile'), txn);
+      const phone4 = await Phone.create(
+        createMockPhone('123-456-4444', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone4.id, patientId: patient2.id }, txn);
 
       // create phone for patient 4
-      const phone5 = await Phone.create(createMockPhone('123-456-5555', 'mobile'), txn);
+      const phone5 = await Phone.create(
+        createMockPhone('123-456-5555', 'mobile' as PhoneTypeOptions),
+        txn,
+      );
       await PatientPhone.create({ phoneId: phone5.id, patientId: patient4.id }, txn);
 
       const patients = await Patient.getPatientsWithPhonesForUser(user.id, txn);

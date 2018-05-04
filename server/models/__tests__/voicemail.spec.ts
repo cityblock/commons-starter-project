@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
@@ -22,12 +23,12 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic('The Wall', 123455), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
   const phoneCall = await PhoneCall.create(
     {
       userId: user.id,
       contactNumber: '+11234567890',
-      direction: 'toUser',
+      direction: 'toUser' as SmsMessageDirection,
       duration: 11,
       callStatus: 'no-answer',
       twilioPayload,

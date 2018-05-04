@@ -1,6 +1,13 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  Priority,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
@@ -18,7 +25,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -28,7 +35,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 1,
@@ -39,8 +46,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -51,8 +58,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       title: 'Housing',
       repeating: false,
-      priority: 'low',
-      careTeamAssigneeRole: 'physician',
+      priority: 'low' as Priority,
+      careTeamAssigneeRole: 'physician' as UserRole,
     },
     txn,
   );

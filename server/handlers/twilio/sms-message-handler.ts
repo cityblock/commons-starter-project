@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { transaction } from 'objection';
+import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
 import Db from '../../db';
 import { reportError } from '../../helpers/error-helpers';
@@ -49,7 +50,7 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
         {
           userId: user.id,
           contactNumber: From,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: Body,
           twilioPayload,
         },
@@ -99,7 +100,7 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
         {
           userId: user.id,
           contactNumber: To,
-          direction: 'fromUser',
+          direction: 'fromUser' as SmsMessageDirection,
           body: Body,
           twilioPayload,
         },

@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { TaskEventTypes } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import EventNotification from './event-notification';
@@ -10,48 +11,30 @@ import User from './user';
 interface ITaskEventOptions {
   taskId: string;
   userId: string;
-  eventType: EventTypes;
+  eventType: TaskEventTypes;
   eventCommentId?: string;
   eventUserId?: string;
   skipNotifsCreate?: boolean;
   progressNoteId?: string;
 }
 
-type EventTypes =
-  | 'create_task'
-  | 'add_follower'
-  | 'remove_follower'
-  | 'complete_task'
-  | 'uncomplete_task'
-  | 'delete_task'
-  | 'add_comment'
-  | 'edit_comment'
-  | 'delete_comment'
-  | 'edit_priority'
-  | 'edit_due_date'
-  | 'edit_assignee'
-  | 'edit_title'
-  | 'edit_description'
-  | 'cbo_referral_edit_sent_at'
-  | 'cbo_referral_edit_acknowledged_at';
-
-const EVENT_TYPES: EventTypes[] = [
-  'create_task',
-  'add_follower',
-  'remove_follower',
-  'complete_task',
-  'uncomplete_task',
-  'delete_task',
-  'add_comment',
-  'edit_comment',
-  'delete_comment',
-  'edit_priority',
-  'edit_due_date',
-  'edit_assignee',
-  'edit_title',
-  'edit_description',
-  'cbo_referral_edit_sent_at',
-  'cbo_referral_edit_acknowledged_at',
+const EVENT_TYPES: TaskEventTypes[] = [
+  'create_task' as TaskEventTypes,
+  'add_follower' as TaskEventTypes,
+  'remove_follower' as TaskEventTypes,
+  'complete_task' as TaskEventTypes,
+  'uncomplete_task' as TaskEventTypes,
+  'delete_task' as TaskEventTypes,
+  'add_comment' as TaskEventTypes,
+  'edit_comment' as TaskEventTypes,
+  'delete_comment' as TaskEventTypes,
+  'edit_priority' as TaskEventTypes,
+  'edit_due_date' as TaskEventTypes,
+  'edit_assignee' as TaskEventTypes,
+  'edit_title' as TaskEventTypes,
+  'edit_description' as TaskEventTypes,
+  'cbo_referral_edit_sent_at' as TaskEventTypes,
+  'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
 ];
 
 const EAGER_QUERY =
@@ -63,7 +46,7 @@ export default class TaskEvent extends BaseModel {
   task: Task;
   userId: string;
   user: User;
-  eventType: EventTypes;
+  eventType: TaskEventTypes;
   eventCommentId: string;
   eventComment: TaskComment;
   eventUserId: string;

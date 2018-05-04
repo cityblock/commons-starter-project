@@ -1,4 +1,5 @@
 import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { Priority } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import CBOReferral from './cbo-referral';
@@ -45,8 +46,7 @@ interface ITaskReassignOptions {
   reassignedToId: string;
 }
 
-export type Priority = 'low' | 'medium' | 'high';
-export const PRIORITY: Priority[] = ['low', 'medium', 'high'];
+export const PRIORITY: Priority[] = ['low' as Priority, 'medium' as Priority, 'high' as Priority];
 
 // TODO: Only fetch needed eager models
 const EAGER_QUERY = `[

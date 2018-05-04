@@ -1,6 +1,13 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  Priority,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -39,7 +46,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -49,7 +56,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -60,8 +67,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -72,8 +79,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'hates writing tests!',
       value: '4',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 2,
@@ -306,7 +313,7 @@ describe('patient answer tests', () => {
       const differentQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea2.id,
           type: 'riskArea',
           order: 1,
@@ -317,8 +324,8 @@ describe('patient answer tests', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: differentQuestion.id,
           order: 1,
@@ -417,7 +424,7 @@ describe('patient answer tests', () => {
       const screeningToolQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -428,8 +435,8 @@ describe('patient answer tests', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion.id,
           order: 1,
@@ -765,8 +772,8 @@ describe('patient answer tests', () => {
           title: 'Task',
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           repeating: false,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );

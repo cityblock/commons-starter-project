@@ -1,6 +1,11 @@
 import { withFilter } from 'graphql-subscriptions';
 import { Transaction } from 'objection';
-import { IRootMutationType, IRootQueryType, ISmsMessageCreateInput } from 'schema';
+import {
+  IRootMutationType,
+  IRootQueryType,
+  ISmsMessageCreateInput,
+  SmsMessageDirection,
+} from 'schema';
 import { IPaginationOptions } from '../db';
 import Patient from '../models/patient';
 import PatientPhone from '../models/patient-phone';
@@ -30,7 +35,7 @@ export async function resolveSmsMessages(
 ): Promise<IRootQueryType['smsMessages']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET SMS messages between patient ${patientId} and user ${userId}`, 2);
+  logger.log(`GET SMS messages between patient ${patientId} and user ${userId}`);
 
   const smsMessages = await SmsMessage.getForUserPatient(
     { patientId, userId: userId! },
@@ -62,7 +67,7 @@ export async function resolveSmsMessageLatest(
 ): Promise<IRootQueryType['smsMessageLatest']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET latest SMS message between patient ${patientId} and user ${userId}`, 2);
+  logger.log(`GET latest SMS message between patient ${patientId} and user ${userId}`);
 
   return SmsMessage.getLatestForUserPatient({ userId: userId!, patientId }, txn);
 }
@@ -75,7 +80,7 @@ export async function smsMessageCreate(
   const { patientId, body } = input;
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  logger.log(`CREATE SMS messages between patient ${patientId} and user ${userId}`, 2);
+  logger.log(`CREATE SMS messages between patient ${patientId} and user ${userId}`);
 
   const user = await User.get(userId!, txn);
   if (!user.phone) {
@@ -112,7 +117,7 @@ export async function smsMessageCreate(
         {
           userId: userId!,
           contactNumber: patientPhoneNumber,
-          direction: 'fromUser',
+          direction: 'fromUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -148,7 +153,7 @@ export async function smsMessageSubscribe(
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, query.patientId);
 
   // only listen to messages between given patient and user
-  logger.log(`SUBSCRIBE SMS messages between patient ${query.patientId} and user ${userId}`, 2);
+  logger.log(`SUBSCRIBE SMS messages between patient ${query.patientId} and user ${userId}`);
 
   return withFilter(
     () => pubsub.asyncIterator('smsMessageCreated'),

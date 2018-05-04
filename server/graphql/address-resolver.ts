@@ -26,7 +26,7 @@ export async function addressCreateForPatient(
 
   const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
 
   const address = await Address.create(filtered, txn);
   await PatientAddress.create({ patientId: input.patientId, addressId: address.id }, txn);
@@ -56,7 +56,7 @@ export async function addressCreate(
 
   const filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE address by ${userId}`, 2);
+  logger.log(`CREATE address by ${userId}`);
 
   return Address.create(filtered, txn);
 }
@@ -72,7 +72,7 @@ export async function addressDeleteForPatient(
 ): Promise<Address> {
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE address for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`DELETE address for patient ${input.patientId} by ${userId}`);
 
   await PatientAddress.delete({ patientId: input.patientId, addressId: input.addressId }, txn);
 
@@ -100,7 +100,7 @@ export async function addressEdit(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IAddressEditInput>(input, isNil);
-  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
 
   return Address.edit(filtered as any, input.addressId, txn);
 }

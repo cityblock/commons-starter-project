@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as userVoicemailSignedUrlCreate from '../../../app/graphql/queries/user-voicemail-signed-url-create.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -13,7 +14,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
 
   return { user };
 }

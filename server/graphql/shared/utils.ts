@@ -9,13 +9,10 @@ import { IGraphQLResponseError, IGraphQLResponseRoot } from 'schema';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
 import Db from '../../db';
+import Logger from '../../logging';
 import User from '../../models/user';
 
 export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
-
-export interface ILogger {
-  log: (text: string, logLevel: number) => void;
-}
 
 export interface IGraphQLContextOptions {
   request?: express.Request;
@@ -25,7 +22,7 @@ export interface IGraphQLContextOptions {
 }
 
 export interface IContext {
-  logger: ILogger;
+  logger: Logger;
   testConfig?: any;
   errorReporting?: ErrorReporting;
   db: Db;
@@ -96,6 +93,7 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 export const logGraphQLContext = (
   req: express.Request,
   res: express.Response,
+  logger: Logger,
   userId?: string,
   permissions?: Permissions,
 ) => {
@@ -103,14 +101,13 @@ export const logGraphQLContext = (
 
   const traceAgent = trace.get();
   const childSpan = traceAgent.createChildSpan({ name: req.body.operationName });
+  const formattedQuery = req.body.query.replace(/\s*\n\s*/g, ' ');
 
-  /* tslint:disable no-console */
-  console.log(
+  logger.log(
     `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
       variables,
-    )}, operation: ${req.body.operationName}`,
+    )}, operation: ${req.body.operationName}, query: ${formattedQuery}`,
   );
-  /* tslint:enable no-console */
 
   // Monkey patch res.write
   const originalWrite = res.write;
@@ -118,13 +115,11 @@ export const logGraphQLContext = (
     childSpan.endSpan();
     switch (res.statusCode) {
       case 200:
-        /* tslint:disable no-console */
-        console.log(
+        logger.log(
           `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, operation: ${
             req.body.operationName
-          }`,
+          }, data: ${data}`,
         );
-        /* tslint:enable no-console */
         break;
       default:
         console.error(data);
@@ -136,7 +131,7 @@ export const logGraphQLContext = (
 
 export async function getGraphQLContext(
   authToken: string,
-  logger: ILogger,
+  logger: Logger,
   options: IGraphQLContextOptions,
 ): Promise<IContext> {
   const db = await Db.get();
@@ -157,7 +152,7 @@ export async function getGraphQLContext(
       permissions = parsedToken.permissions;
     } catch (e) {
       if (request && response) {
-        logGraphQLContext(request, response, 'anonymous user');
+        logGraphQLContext(request, response, logger, 'anonymous user');
       }
 
       return {
@@ -173,7 +168,7 @@ export async function getGraphQLContext(
   childSpan.endSpan();
 
   if (request && response) {
-    logGraphQLContext(request, response, userId, permissions);
+    logGraphQLContext(request, response, logger, userId, permissions);
   }
 
   return {

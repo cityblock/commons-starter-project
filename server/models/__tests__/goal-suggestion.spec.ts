@@ -1,4 +1,11 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  CarePlanSuggestionType,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -21,7 +28,7 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   answer: Answer;
@@ -37,7 +44,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -48,8 +55,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -198,7 +205,7 @@ describe('goal suggestion model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -209,8 +216,8 @@ describe('goal suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -314,7 +321,7 @@ describe('goal suggestion model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -325,8 +332,8 @@ describe('goal suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -388,7 +395,7 @@ describe('goal suggestion model', () => {
       await CarePlanSuggestion.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           type: 'riskAreaAssessmentSubmission',
@@ -419,7 +426,7 @@ describe('goal suggestion model', () => {
       const question2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -430,8 +437,8 @@ describe('goal suggestion model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question2.id,
           order: 1,
@@ -516,7 +523,7 @@ describe('goal suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,
@@ -581,7 +588,7 @@ describe('goal suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,
@@ -627,7 +634,7 @@ describe('goal suggestion model', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,

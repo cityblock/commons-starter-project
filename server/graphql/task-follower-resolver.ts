@@ -1,4 +1,4 @@
-import { IRootMutationType, ITaskFollowInput } from 'schema';
+import { IRootMutationType, ITaskFollowInput, TaskEventTypes } from 'schema';
 import Task from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskFollower from '../models/task-follower';
@@ -33,7 +33,7 @@ export async function taskUserFollow(
     {
       taskId,
       userId: userId!,
-      eventType: 'add_follower',
+      eventType: 'add_follower' as TaskEventTypes,
       eventUserId: input.userId,
     },
     txn,
@@ -62,7 +62,7 @@ export async function taskUserUnfollow(
     {
       taskId,
       userId: userId!,
-      eventType: 'remove_follower',
+      eventType: 'remove_follower' as TaskEventTypes,
       eventUserId: input.userId,
     },
     txn,

@@ -9,13 +9,15 @@ import {
   IUserEditRoleInput,
   IUserLoginInput,
   IUserNode,
+  Permissions,
+  UserRole,
 } from 'schema';
 import { GENERATE_PDF_JWT_TYPE } from '../../server/handlers/pdf/render-pdf';
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
 import PatientGlassBreak from '../models/patient-glass-break';
-import User, { IUserFilterOptions, Locale, UserOrderOptions, UserRole } from '../models/user';
+import User, { IUserFilterOptions, Locale, UserOrderOptions } from '../models/user';
 import checkUserPermissions, {
   checkLoggedInWithPermissions,
   validateGlassBreak,
@@ -77,7 +79,7 @@ export async function userCreate(
     return User.create(
       {
         email,
-        userRole: 'healthCoach',
+        userRole: 'healthCoach' as UserRole,
         homeClinicId,
       },
       txn,
@@ -92,7 +94,7 @@ export async function userEditRole(
 ): Promise<IRootMutationType['userEditRole']> {
   const { userRole, email } = input;
 
-  await checkUserPermissions(userId, permissions, 'edit', 'user', txn);
+  await checkUserPermissions(userId, permissions as Permissions, 'edit', 'user', txn);
 
   const user = await User.getBy({ fieldName: 'email', field: email }, txn);
   if (!user) {
@@ -308,7 +310,7 @@ export async function userLogin(
     lastLoginAt,
   });
 
-  logger.log(`User login for ${user.id}`, 2);
+  logger.log(`User login for ${user.id}`);
   return { authToken, user: updatedUser };
 }
 /* tslint:enable check-is-allowed */

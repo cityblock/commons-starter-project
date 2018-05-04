@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as mattermostUrlForPatientCreate from '../../../app/graphql/queries/mattermost-url-for-patient-create.graphql';
 import * as mattermostUrlForUserCreate from '../../../app/graphql/queries/mattermost-url-for-user-create.graphql';
 import Db from '../../db';
@@ -17,7 +18,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
   const patient = await createPatient(
     { cityblockId: 123, homeClinicId: clinic.id, firstName: 'Arya', lastName: 'Stark' },
     txn,

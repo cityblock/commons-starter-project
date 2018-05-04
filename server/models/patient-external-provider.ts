@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { ExternalProviderOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import Email from './email';
 import Patient from './patient';
@@ -7,42 +8,6 @@ import PatientExternalProviderPhone from './patient-external-provider-phone';
 import Phone from './phone';
 
 const EAGER_QUERY = '[email, phone]';
-
-export type ExternalProviderOptions =
-  | 'substanceUseCounselor'
-  | 'therapistMentalHealth'
-  | 'therapistPhysical'
-  | 'psychiatrist'
-  | 'dialysis'
-  | 'housingCaseManager'
-  | 'hasaCaseManager'
-  | 'pharmacy'
-  | 'homeAttendant'
-  | 'visitingNurse'
-  | 'durableMedicalEquipment'
-  | 'healthHomeCareManager'
-  | 'insurancePlanCareManager'
-  | 'otherCaseManagement'
-  | 'formalCaregiver'
-  | 'other'
-  | 'urology'
-  | 'endocrinology'
-  | 'ophthalmology'
-  | 'cardiology'
-  | 'podiatry'
-  | 'orthopedics'
-  | 'infectiousDisease'
-  | 'obgyn'
-  | 'pulmonology'
-  | 'nephrology'
-  | 'hepatology'
-  | 'gastroenterology'
-  | 'ent'
-  | 'vascular'
-  | 'oncology'
-  | 'hematology'
-  | 'dermatology'
-  | 'otherMedicalSpecialist';
 
 export interface IPatientExternalProviderOptions {
   patientId: string;

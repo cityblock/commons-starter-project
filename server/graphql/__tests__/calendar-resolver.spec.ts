@@ -7,17 +7,22 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import * as nock from 'nock';
 import { transaction, Transaction } from 'objection';
+import { Permissions, UserRole } from 'schema';
 import * as calendarCreateEventForPatient from '../../../app/graphql/queries/calendar-create-event-for-patient-mutation.graphql';
 import * as calendarCreateForPatient from '../../../app/graphql/queries/calendar-create-for-patient-mutation.graphql';
 import Db from '../../db';
-import {
-  createGoogleCalendarEventUrl,
-} from '../../helpers/google-calendar-helpers';
+import { createGoogleCalendarEventUrl } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
 import User from '../../models/user';
-import { createMockClinic, createMockUser, createPatient, mockGoogleCredentials, mockGoogleOauthAuthorize } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockUser,
+  createPatient,
+  mockGoogleCredentials,
+  mockGoogleOauthAuthorize,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -26,8 +31,8 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'admin';
-const permissions = 'green';
+const userRole = 'admin' as UserRole;
+const permissions = 'green' as Permissions;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -127,13 +132,15 @@ describe('calendar tests', () => {
       mockGoogleOauthAuthorize(cityblockToken);
 
       nock('https://www.googleapis.com/calendar/v3/calendars')
-        .post('', { summary: `${patient.firstName} ${patient.lastName} - [${patient.cityblockId}]` })
+        .post('', {
+          summary: `${patient.firstName} ${patient.lastName} - [${patient.cityblockId}]`,
+        })
         .reply(200, {
           id: googleCalendarId,
         });
 
       nock(`https://www.googleapis.com/calendar/v3/calendars/${googleCalendarId}/acl`)
-        .post('', {role: 'writer', scope: { type: 'user', value: user.email }})
+        .post('', { role: 'writer', scope: { type: 'user', value: user.email } })
         .reply(200, {});
 
       const testConfig = mockGoogleCredentials();

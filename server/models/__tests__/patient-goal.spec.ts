@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
+import { CompletedWithinInterval, Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -17,7 +18,7 @@ import TaskFollower from '../task-follower';
 import TaskTemplate from '../task-template';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -141,11 +142,11 @@ describe('patient goal model', () => {
     const taskTemplate = await TaskTemplate.create(
       {
         title: 'Task 1',
-        priority: 'high',
+        priority: 'high' as Priority,
         repeating: false,
-        completedWithinInterval: 'week',
+        completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 1,
-        careTeamAssigneeRole: 'physician',
+        careTeamAssigneeRole: 'physician' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -197,7 +198,7 @@ describe('patient goal model', () => {
       txn,
     );
     const user2 = await User.create(
-      createMockUser(11, clinic.id, 'healthCoach', 'care@care2.com'),
+      createMockUser(11, clinic.id, 'healthCoach' as UserRole, 'care@care2.com'),
       txn,
     );
 
@@ -206,9 +207,9 @@ describe('patient goal model', () => {
     const taskTemplate = await TaskTemplate.create(
       {
         title: 'Task 1',
-        priority: 'high',
+        priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach',
+        careTeamAssigneeRole: 'healthCoach' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -250,9 +251,9 @@ describe('patient goal model', () => {
     const taskTemplate = await TaskTemplate.create(
       {
         title: 'Task 1',
-        priority: 'high',
+        priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach',
+        careTeamAssigneeRole: 'healthCoach' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -298,10 +299,10 @@ describe('patient goal model', () => {
     const taskTemplate = await TaskTemplate.create(
       {
         title: 'Task 1',
-        priority: 'high',
+        priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach',
-        completedWithinInterval: 'week',
+        careTeamAssigneeRole: 'healthCoach' as UserRole,
+        completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 2,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
@@ -347,11 +348,11 @@ describe('patient goal model', () => {
     const taskTemplate = await TaskTemplate.create(
       {
         title: 'Task 1',
-        priority: 'high',
+        priority: 'high' as Priority,
         repeating: false,
-        completedWithinInterval: 'week',
+        completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 1,
-        careTeamAssigneeRole: 'physician',
+        careTeamAssigneeRole: 'physician' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,

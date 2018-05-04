@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
-import { IEventNotificationNode } from 'schema';
+import { IEventNotificationNode, Priority, TaskEventTypes, UserRole } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
@@ -11,7 +11,6 @@ import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { UserRole } from '../../models/user';
 import {
   createMockClinic,
   createMockUser,
@@ -70,7 +69,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
-      priority: 'low',
+      priority: 'low' as Priority,
       patientGoalId: patientGoal.id,
     },
     trx,
@@ -80,7 +79,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
     {
       taskId: task.id,
       userId: user.id,
-      eventType: 'add_comment',
+      eventType: 'add_comment' as TaskEventTypes,
     },
     trx,
   );
@@ -98,7 +97,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
 }
 
 describe('event notification tests', () => {
-  const userRole = 'physician';
+  const userRole = 'physician' as UserRole;
   const permissions = 'green';
   let txn = null as any;
   let db: Db;
@@ -442,7 +441,7 @@ describe('event notification tests', () => {
         {
           taskId: task.id,
           userId: user2.id,
-          eventType: 'add_comment',
+          eventType: 'add_comment' as TaskEventTypes,
         },
         txn,
       );
@@ -521,7 +520,7 @@ describe('event notification tests', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user.id,
-          priority: 'low',
+          priority: 'low' as Priority,
           patientGoalId: patientGoal.id,
         },
         txn,
@@ -530,7 +529,7 @@ describe('event notification tests', () => {
         {
           taskId: task2.id,
           userId: user.id,
-          eventType: 'add_comment',
+          eventType: 'add_comment' as TaskEventTypes,
         },
         txn,
       );

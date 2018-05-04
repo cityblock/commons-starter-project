@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -12,7 +13,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {

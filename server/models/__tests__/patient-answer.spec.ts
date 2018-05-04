@@ -1,4 +1,10 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -22,7 +28,7 @@ import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import ScreeningTool from '../screening-tool';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const longAnswerValue = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec.`;
 
 interface ISetup {
@@ -41,7 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -52,8 +58,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -118,7 +124,7 @@ describe('answer model', () => {
       const progressNoteTemplateQuestion = await Question.create(
         {
           title: 'like writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           progressNoteTemplateId: progressNoteTemplate.id,
           type: 'progressNoteTemplate',
           order: 1,
@@ -129,8 +135,8 @@ describe('answer model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: progressNoteTemplateQuestion.id,
           order: 1,
@@ -254,8 +260,8 @@ describe('answer model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '4',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
           order: 2,
@@ -374,7 +380,7 @@ describe('answer model', () => {
       const question = await Question.create(
         {
           title: 'like writing tests?',
-          answerType: 'multiselect',
+          answerType: 'multiselect' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -385,8 +391,8 @@ describe('answer model', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
           order: 1,
@@ -646,7 +652,7 @@ describe('answer model', () => {
       const screeningToolQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -657,8 +663,8 @@ describe('answer model', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion.id,
           order: 1,
@@ -711,7 +717,7 @@ describe('answer model', () => {
       const screeningToolQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -722,8 +728,8 @@ describe('answer model', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion.id,
           order: 1,
@@ -776,7 +782,7 @@ describe('answer model', () => {
       const screeningToolQuestion1 = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           order: 1,
           type: 'screeningTool',
@@ -786,7 +792,7 @@ describe('answer model', () => {
       const screeningToolQuestion2 = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           order: 2,
           type: 'screeningTool',
@@ -797,8 +803,8 @@ describe('answer model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion1.id,
           order: 1,
@@ -809,8 +815,8 @@ describe('answer model', () => {
         {
           displayValue: 'hates writing tests!',
           value: '4',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion2.id,
           order: 1,

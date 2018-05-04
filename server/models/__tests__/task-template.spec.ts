@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createCBOCategory } from '../../spec-helpers';
@@ -44,8 +45,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -63,8 +64,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
           CBOCategoryId: CBOCategory.id,
         },
         txn,
@@ -89,8 +90,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -112,8 +113,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -130,8 +131,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -140,8 +141,8 @@ describe('task template model', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );

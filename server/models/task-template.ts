@@ -1,10 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CompletedWithinInterval, Priority, UserRole } from 'schema';
 import BaseModel from './base-model';
 import GoalSuggestion from './goal-suggestion';
-import { Priority, PRIORITY } from './task';
-import { UserRole, USER_ROLE } from './user';
-
-export type CompletedWithinInterval = 'hour' | 'day' | 'week' | 'month' | 'year';
+import { PRIORITY } from './task';
+import { USER_ROLE } from './user';
 
 interface ITaskTemplateEditableFields {
   title: string;
@@ -40,7 +39,10 @@ export default class TaskTemplate extends BaseModel {
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       completedWithinNumber: { type: 'number', minimum: 1 }, // cannot be zero or negative
-      completedWithinInterval: { type: 'string', enum: ['hour', 'day', 'week', 'month', 'year'] },
+      completedWithinInterval: {
+        type: 'string',
+        enum: ['hour', 'day', 'week' as CompletedWithinInterval, 'month', 'year'],
+      },
       repeating: { type: 'boolean' },
       goalSuggestionTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       priority: { type: 'string', enum: PRIORITY },

@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CarePlanUpdateEventTypes } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -7,20 +8,12 @@ import PatientGoal from './patient-goal';
 import ProgressNote from './progress-note';
 import User from './user';
 
-type EventTypes =
-  | 'create_patient_concern'
-  | 'edit_patient_concern'
-  | 'delete_patient_concern'
-  | 'create_patient_goal'
-  | 'edit_patient_goal'
-  | 'delete_patient_goal';
-
 interface ICarePlanUpdateEventOptions {
   patientId: string;
   userId: string;
   patientConcernId?: string;
   patientGoalId?: string;
-  eventType: EventTypes;
+  eventType: CarePlanUpdateEventTypes;
   progressNoteId?: string;
 }
 
@@ -40,7 +33,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
   patientConcern: PatientConcern;
   patientGoalId: string;
   patientGoal: PatientGoal;
-  eventType: EventTypes;
+  eventType: CarePlanUpdateEventTypes;
   progressNoteId: string;
   progressNote: ProgressNote;
 

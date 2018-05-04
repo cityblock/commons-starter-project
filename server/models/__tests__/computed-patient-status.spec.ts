@@ -1,4 +1,11 @@
 import { transaction, Transaction } from 'objection';
+import {
+  CoreIdentityOptions,
+  DocumentTypeOptions,
+  Gender,
+  PatientRelationOptions,
+  UserRole,
+} from 'schema';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
@@ -14,7 +21,7 @@ import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   clinic: Clinic;
@@ -66,7 +73,7 @@ describe('computed patient status model', () => {
       {
         userId: user.id,
         patientId: patient.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
       },
       txn,
     );
@@ -167,7 +174,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         email: 'outreach@cityblock.com',
-        userRole: 'outreachSpecialist',
+        userRole: 'outreachSpecialist' as UserRole,
       },
       txn,
     );
@@ -187,7 +194,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test2.txt',
         description: 'some file for consent',
-        documentType: 'hipaaConsent',
+        documentType: 'hipaaConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -197,7 +204,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test3.txt',
         description: 'some file for consent',
-        documentType: 'hieHealthixConsent',
+        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -207,7 +214,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test.txt',
         description: 'some file for consent',
-        documentType: 'cityblockConsent',
+        documentType: 'cityblockConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -375,7 +382,7 @@ describe('computed patient status model', () => {
         {
           userId: user.id,
           patientId: patient.id,
-          fieldName: 'firstName',
+          fieldName: 'firstName' as CoreIdentityOptions,
         },
         txn,
       );
@@ -397,7 +404,7 @@ describe('computed patient status model', () => {
 
     await PatientInfo.edit(
       {
-        gender: 'nonbinary',
+        gender: 'nonbinary' as Gender,
         updatedById: user.id,
       },
       patient.patientInfo.id,
@@ -424,7 +431,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test2.txt',
         description: 'some file for consent',
-        documentType: 'hipaaConsent',
+        documentType: 'hipaaConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -434,7 +441,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test3.txt',
         description: 'some file for consent',
-        documentType: 'hieHealthixConsent',
+        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -444,7 +451,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test.txt',
         description: 'some file for consent',
-        documentType: 'cityblockConsent',
+        documentType: 'cityblockConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -466,7 +473,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         updatedById: user.id,
-        relationToPatient: 'sibling',
+        relationToPatient: 'sibling' as PatientRelationOptions,
         firstName: 'Aya',
         lastName: 'Stark',
         isEmergencyContact: false,
@@ -483,7 +490,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         updatedById: user.id,
-        relationToPatient: 'sibling',
+        relationToPatient: 'sibling' as PatientRelationOptions,
         firstName: 'Aya',
         lastName: 'Stark',
         isEmergencyContact: true,
@@ -533,7 +540,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         homeClinicId: clinic.id,
-        userRole: 'communityHealthPartner',
+        userRole: 'communityHealthPartner' as UserRole,
       },
       txn,
     );
@@ -560,7 +567,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         homeClinicId: clinic.id,
-        userRole: 'outreachSpecialist',
+        userRole: 'outreachSpecialist' as UserRole,
       },
       txn,
     );
@@ -587,7 +594,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         homeClinicId: clinic.id,
-        userRole: 'primaryCarePhysician',
+        userRole: 'primaryCarePhysician' as UserRole,
       },
       txn,
     );
@@ -656,7 +663,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'molst',
+            documentType: 'molst' as DocumentTypeOptions,
           },
           txn,
         );
@@ -715,7 +722,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sibling',
+            relationToPatient: 'sibling' as PatientRelationOptions,
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -758,7 +765,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'hcp',
+            documentType: 'hcp' as DocumentTypeOptions,
           },
           txn,
         );
@@ -796,7 +803,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'hcp',
+            documentType: 'hcp' as DocumentTypeOptions,
           },
           txn,
         );
@@ -804,7 +811,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sibling',
+            relationToPatient: 'sibling' as PatientRelationOptions,
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -849,7 +856,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'molst',
+            documentType: 'molst' as DocumentTypeOptions,
           },
           txn,
         );
@@ -858,7 +865,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'hcp',
+            documentType: 'hcp' as DocumentTypeOptions,
           },
           txn,
         );
@@ -866,7 +873,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sibling',
+            relationToPatient: 'sibling' as PatientRelationOptions,
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -909,7 +916,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'hcp',
+            documentType: 'hcp' as DocumentTypeOptions,
           },
           txn,
         );
@@ -917,7 +924,7 @@ describe('computed patient status model', () => {
           {
             patientId: patient.id,
             updatedById: user.id,
-            relationToPatient: 'sibling',
+            relationToPatient: 'sibling' as PatientRelationOptions,
             firstName: 'Aya',
             lastName: 'Stark',
             isEmergencyContact: false,
@@ -980,7 +987,7 @@ describe('computed patient status model', () => {
             patientId: patient.id,
             uploadedById: user.id,
             filename: 'test.txt',
-            documentType: 'molst',
+            documentType: 'molst' as DocumentTypeOptions,
           },
           txn,
         );

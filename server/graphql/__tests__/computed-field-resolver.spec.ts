@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { ComputedFieldDataTypes, UserRole } from 'schema';
 import * as computedFieldCreate from '../../../app/graphql/queries/computed-field-create-mutation.graphql';
 import * as computedFieldDelete from '../../../app/graphql/queries/computed-field-delete-mutation.graphql';
 import * as getComputedField from '../../../app/graphql/queries/get-computed-field.graphql';
@@ -12,7 +13,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 interface ISetup {
@@ -53,7 +54,7 @@ describe('computed field resolver', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -77,7 +78,7 @@ describe('computed field resolver', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -85,7 +86,7 @@ describe('computed field resolver', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -110,7 +111,7 @@ describe('computed field resolver', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -118,7 +119,7 @@ describe('computed field resolver', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -158,13 +159,13 @@ describe('computed field resolver', () => {
         { userId: user.id, permissions, txn },
         {
           label: 'Computed Field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
       );
       expect(cloneDeep(result.data!.computedFieldCreate)).toMatchObject({
         label: 'Computed Field',
         slug: 'computed-field',
-        dataType: 'boolean',
+        dataType: 'boolean' as ComputedFieldDataTypes,
       });
     });
   });
@@ -176,7 +177,7 @@ describe('computed field resolver', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );

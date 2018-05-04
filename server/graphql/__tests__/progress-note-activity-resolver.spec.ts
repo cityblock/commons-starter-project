@@ -1,6 +1,14 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  CarePlanUpdateEventTypes,
+  PatientAnswerEventTypes,
+  TaskEventTypes,
+  UserRole,
+} from 'schema';
 import * as progressNoteActivity from '../../../app/graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -34,7 +42,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -126,7 +134,7 @@ describe('progress note resolver', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -137,7 +145,7 @@ describe('progress note resolver', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
+        eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -147,7 +155,7 @@ describe('progress note resolver', () => {
       {
         riskAreaId: riskArea.id,
         title: 'Question Title',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         type: 'riskArea',
         order: 1,
       },
@@ -158,7 +166,7 @@ describe('progress note resolver', () => {
         questionId: question.id,
         displayValue: '1',
         value: '1',
-        valueType: 'number',
+        valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
       },
@@ -189,7 +197,7 @@ describe('progress note resolver', () => {
         patientId: patient.id,
         userId: user.id,
         patientAnswerId: patientAnswer.id,
-        eventType: 'create_patient_answer',
+        eventType: 'create_patient_answer' as PatientAnswerEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,

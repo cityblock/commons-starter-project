@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { CoreIdentityOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import Patient from '../patient';
 import PatientDataFlag from '../patient-data-flag';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   user: User;
@@ -45,7 +46,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Bob',
       },
       txn,
@@ -65,7 +66,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Bob',
       },
       txn,
@@ -95,7 +96,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -104,7 +105,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName',
+        fieldName: 'lastName' as CoreIdentityOptions,
         suggestedValue: 'Vader',
       },
       txn,
@@ -126,7 +127,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -136,7 +137,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName',
+        fieldName: 'lastName' as CoreIdentityOptions,
         suggestedValue: 'Vader',
       },
       txn,
@@ -150,7 +151,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Luke',
       },
       txn,
@@ -175,7 +176,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName',
+        fieldName: 'firstName' as CoreIdentityOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -184,7 +185,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName',
+        fieldName: 'lastName' as CoreIdentityOptions,
         suggestedValue: 'Vader',
       },
       txn,

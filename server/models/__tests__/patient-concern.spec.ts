@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -19,7 +20,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const concern = await Concern.create(

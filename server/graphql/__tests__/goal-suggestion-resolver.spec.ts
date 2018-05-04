@@ -1,6 +1,12 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as goalSuggestionTemplateForAnswer from '../../../app/graphql/queries/get-goal-suggestions-for-answer.graphql';
 import * as goalSuggestionCreate from '../../../app/graphql/queries/goal-suggestion-create-mutation.graphql';
 import * as goalSuggestionDelete from '../../../app/graphql/queries/goal-suggestion-delete-mutation.graphql';
@@ -22,7 +28,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -32,7 +38,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -43,8 +49,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,

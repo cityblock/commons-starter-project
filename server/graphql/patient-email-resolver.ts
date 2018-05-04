@@ -14,7 +14,7 @@ export async function resolveEmails(
 ): Promise<IRootQueryType['patientEmails']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all emails for patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET all emails for patient ${patientId} by ${userId}`);
 
   return PatientEmail.getAll(patientId, txn);
 }

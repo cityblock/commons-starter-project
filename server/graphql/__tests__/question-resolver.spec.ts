@@ -1,6 +1,12 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -21,7 +27,7 @@ interface ISetup {
   riskArea: RiskArea;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -31,7 +37,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -41,9 +47,9 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const answer = await Answer.create(
     {
       value: '3',
-      valueType: 'number',
+      valueType: 'number' as AnswerValueTypeOptions,
       displayValue: 'loves writing tests!',
-      riskAdjustmentType: 'forceHighRisk',
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -136,7 +142,7 @@ describe('question tests', () => {
       const newQuestion = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -168,7 +174,7 @@ describe('question tests', () => {
       const newQuestion = await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -214,7 +220,7 @@ describe('question tests', () => {
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
           title: 'like writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           order: 1,
           answers: [{ id: answer.id }],
         },
@@ -234,7 +240,7 @@ describe('question tests', () => {
       await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -256,7 +262,7 @@ describe('question tests', () => {
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           order: 1,
           answers: [],
         },
@@ -270,7 +276,7 @@ describe('question tests', () => {
       await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           progressNoteTemplateId: progressNoteTemplate.id,
           type: 'progressNoteTemplate',
           order: 1,
@@ -292,7 +298,7 @@ describe('question tests', () => {
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           order: 1,
           answers: [],
         },
@@ -343,7 +349,7 @@ describe('question tests', () => {
       await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -385,7 +391,7 @@ describe('question tests', () => {
       await Question.create(
         {
           title: 'hate writing tests?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           progressNoteTemplateId: progressNoteTemplate.id,
           type: 'progressNoteTemplate',
           order: 1,
@@ -443,7 +449,7 @@ describe('question tests', () => {
       const clonedResult = cloneDeep(result.data!.questionCreate);
       expect(clonedResult).toMatchObject({
         title: 'new title',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         validatedSource: 'logan',
         riskAreaId: riskArea.id,
         order: 2,

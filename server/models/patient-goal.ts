@@ -1,5 +1,6 @@
 import { omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CarePlanUpdateEventTypes } from 'schema';
 import { createTaskForTaskTemplate } from '../lib/create-task-for-task-template';
 import BaseModel from './base-model';
 import CarePlanUpdateEvent from './care-plan-update-event';
@@ -157,7 +158,7 @@ export default class PatientGoal extends BaseModel {
         patientId,
         userId,
         patientGoalId: patientGoal.id,
-        eventType: 'create_patient_goal',
+        eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -202,7 +203,7 @@ export default class PatientGoal extends BaseModel {
         patientId: updatedPatientGoal.patientId,
         userId,
         patientGoalId: updatedPatientGoal.id,
-        eventType: 'edit_patient_goal',
+        eventType: 'edit_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -249,7 +250,7 @@ export default class PatientGoal extends BaseModel {
         patientId: patientGoal.patientId,
         userId,
         patientGoalId: patientGoal.id,
-        eventType: 'delete_patient_goal',
+        eventType: 'delete_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );

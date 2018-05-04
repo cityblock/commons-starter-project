@@ -133,10 +133,15 @@
   "engines": {
     "node": "8.11"
   },
+  "resolutions": {
+    "node-pre-gyp": "0.10.0"
+  },
   "dependencies": {
     "@google-cloud/error-reporting": "0.4.0",
+    "@google-cloud/logging": "1.2.0",
     "@google-cloud/storage": "1.6.0",
     "@google-cloud/trace-agent": "2.8.1",
+    "@material-ui/icons": "^1.0.0-beta.43",
     "@react-pdf/core": "0.7.6",
     "@react-pdf/node": "0.7.6",
     "@types/acl": "0.4.34",
@@ -215,10 +220,10 @@
     "langs": "2.0.0",
     "lodash": "4.17.10",
     "material-ui": "1.0.0-beta.41",
-    "material-ui-icons": "1.0.0-beta.36",
     "mime-types": "2.1.18",
     "mini-css-extract-plugin": "0.4.0",
     "morgan": "1.9.0",
+    "node-pre-gyp": "0.10.0",
     "nodemon": "1.17.3",
     "objection": "1.1.7",
     "pg": "7.4.1",

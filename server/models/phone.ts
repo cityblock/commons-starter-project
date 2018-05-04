@@ -1,11 +1,10 @@
 import { Transaction } from 'objection';
+import { PhoneTypeOptions } from 'schema';
 import {
   formatPhoneNumberForTwilio,
   validatePhoneNumberForTwilio,
 } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
-
-export type PhoneTypeOptions = 'home' | 'work' | 'mobile' | 'other';
 
 export interface IPhoneOptions {
   phoneNumber: string;

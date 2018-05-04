@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import { permissionsMappings } from '../../../../shared/permissions/permissions-mapping';
 import Db from '../../../db';
@@ -20,6 +21,7 @@ import checkUserPermissions, {
 } from '../permissions-check';
 
 const reason = "Demogorgon says it's cool";
+const adminUserRole = 'admin' as UserRole;
 
 interface ISetup {
   clinic: Clinic;
@@ -31,7 +33,7 @@ interface ISetup {
 
 async function setup(trx: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), trx);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), trx);
+  const user = await User.create(createMockUser(11, clinic.id, adminUserRole), trx);
   const patient = await createPatient(
     { cityblockId: 12, homeClinicId: clinic.id, userId: user.id },
     trx,
@@ -100,9 +102,12 @@ describe('User Permissions Check', () => {
 
     it('throws an error if action allowed but user not on relevant care team', async () => {
       const { clinic } = await setup(txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'admin', 'care@care.com'), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, adminUserRole, 'care@care.com'),
+        txn,
+      );
       const user2 = await User.create(
-        createMockUser(12, clinic.id, 'admin', 'care2@care.com'),
+        createMockUser(12, clinic.id, adminUserRole, 'care2@care.com'),
         txn,
       );
       const patient = await createPatient(
@@ -120,7 +125,10 @@ describe('User Permissions Check', () => {
 
     it('returns true if action conditionally allowed but user on relevant care team', async () => {
       const { clinic } = await setup(txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'admin', 'care@care.com'), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, adminUserRole, 'care@care.com'),
+        txn,
+      );
 
       const patient = await createPatient(
         {
@@ -164,7 +172,10 @@ describe('User Permissions Check', () => {
 
     it('returns false if check required but no resource id provided', async () => {
       const { clinic } = await setup(txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'admin', 'care@care.com'), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, adminUserRole, 'care@care.com'),
+        txn,
+      );
       const result = await isUserOnPatientCareTeam(user.id, 'patient', '', txn);
 
       expect(result).toBe(false);
@@ -172,9 +183,12 @@ describe('User Permissions Check', () => {
 
     it('returns false if user not on resource care team', async () => {
       const { clinic } = await setup(txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'admin', 'care@care.com'), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, adminUserRole, 'care@care.com'),
+        txn,
+      );
       const user2 = await User.create(
-        createMockUser(12, clinic.id, 'admin', 'care2@care.com'),
+        createMockUser(12, clinic.id, adminUserRole, 'care2@care.com'),
         txn,
       );
       const patient = await createPatient(
@@ -192,7 +206,10 @@ describe('User Permissions Check', () => {
 
     it('returns true if user on resource care team', async () => {
       const { clinic } = await setup(txn);
-      const user = await User.create(createMockUser(11, clinic.id, 'admin', 'care@care.com'), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, adminUserRole, 'care@care.com'),
+        txn,
+      );
       const patient = await createPatient(
         {
           cityblockId: 123,
@@ -305,7 +322,7 @@ describe('User Permissions Check', () => {
 
     it('invalidates glass break not needed if user not on patient care team', async () => {
       const { patient, clinic } = await setup(txn);
-      const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, adminUserRole), txn);
 
       try {
         await validateGlassBreak(user2.id, 'blue', 'patient', patient.id, txn, null);
@@ -331,7 +348,7 @@ describe('User Permissions Check', () => {
 
       it('returns false if patient not on care team', async () => {
         const { patient, clinic } = await setup(txn);
-        const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+        const user2 = await User.create(createMockUser(11, clinic.id, adminUserRole), txn);
 
         const result = await validateGlassBreakNotNeeded(user2.id, 'patient', patient.id, txn);
 
@@ -341,7 +358,7 @@ describe('User Permissions Check', () => {
 
     it('validates glass break not needed for progress notes whose templates do not require glass break', async () => {
       const { progressNote, clinic } = await setup(txn);
-      const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, adminUserRole), txn);
 
       expect(
         await validateGlassBreakNotNeeded(user2.id, 'progressNote', progressNote.id, txn),
@@ -361,7 +378,7 @@ describe('User Permissions Check', () => {
 
     it('validates glass break not needed for progress notes supervised by given user', async () => {
       const { progressNote, progressNoteTemplate, clinic } = await setup(txn);
-      const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, adminUserRole), txn);
 
       await ProgressNoteTemplate.query(txn)
         .where({ id: progressNoteTemplate.id })
@@ -382,7 +399,7 @@ describe('User Permissions Check', () => {
         .where({ id: progressNoteTemplate.id })
         .patch({ requiresGlassBreak: true });
 
-      const user2 = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+      const user2 = await User.create(createMockUser(11, clinic.id, adminUserRole), txn);
 
       expect(
         await validateGlassBreakNotNeeded(user2.id, 'progressNote', progressNote.id, txn),

@@ -1,5 +1,6 @@
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import Db from '../../../db';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
@@ -26,7 +27,7 @@ const expectedOutgoingTwiml =
 const expectedCompleteTwiml = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -147,7 +148,7 @@ describe('Phone Call Handler', () => {
         userId: user.id,
         patientId: patient.id,
         contactNumber: phone.phoneNumber,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
         duration: 11,
         callStatus: 'completed',
         twilioPayload: req.body,
@@ -193,7 +194,7 @@ describe('Phone Call Handler', () => {
         userId: user.id,
         patientId: patient.id,
         contactNumber: phone.phoneNumber,
-        direction: 'fromUser',
+        direction: 'fromUser' as SmsMessageDirection,
         duration: 11,
         callStatus: 'completed',
         twilioPayload: req.body,

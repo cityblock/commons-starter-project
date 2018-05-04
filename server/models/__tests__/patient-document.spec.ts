@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { DocumentTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import Patient from '../patient';
 import PatientDocument from '../patient-document';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -56,7 +57,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'hcp',
+          documentType: 'hcp' as DocumentTypeOptions,
         },
         txn,
       );
@@ -76,7 +77,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'hcp',
+          documentType: 'hcp' as DocumentTypeOptions,
         },
         txn,
       );
@@ -97,7 +98,7 @@ describe('patient document model', () => {
             uploadedById: user.id,
             filename: 'test.txt',
             description: 'some file for consent',
-            documentType: 'hcp',
+            documentType: 'hcp' as DocumentTypeOptions,
           },
           txn,
         ),
@@ -134,7 +135,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent',
+          documentType: 'cityblockConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -152,7 +153,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test2.txt',
           description: 'some file for consent',
-          documentType: 'hipaaConsent',
+          documentType: 'hipaaConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -162,7 +163,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test3.txt',
           description: 'some file for consent',
-          documentType: 'hieHealthixConsent',
+          documentType: 'hieHealthixConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -186,7 +187,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent',
+          documentType: 'cityblockConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -210,7 +211,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test2.txt',
           description: 'some file for consent',
-          documentType: 'hipaaConsent',
+          documentType: 'hipaaConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -220,7 +221,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test3.txt',
           description: 'some file for consent',
-          documentType: 'hieHealthixConsent',
+          documentType: 'hieHealthixConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -230,7 +231,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent',
+          documentType: 'cityblockConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -262,7 +263,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'hcp',
+          documentType: 'hcp' as DocumentTypeOptions,
         },
         txn,
       );
@@ -301,7 +302,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test.txt',
-        documentType: 'cityblockConsent',
+        documentType: 'cityblockConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -315,7 +316,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test2.txt',
-        documentType: 'hipaaConsent',
+        documentType: 'hipaaConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -324,7 +325,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test3.txt',
-        documentType: 'hieHealthixConsent',
+        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -335,7 +336,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test4.txt',
-        documentType: 'hcp',
+        documentType: 'hcp' as DocumentTypeOptions,
       },
       txn,
     );
@@ -363,7 +364,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test.txt',
-        documentType: 'hcp',
+        documentType: 'hcp' as DocumentTypeOptions,
       },
       txn,
     );
@@ -377,7 +378,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test2.txt',
-        documentType: 'hcp',
+        documentType: 'hcp' as DocumentTypeOptions,
       },
       txn,
     );
@@ -386,7 +387,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'toDelete.txt',
-        documentType: 'hcp',
+        documentType: 'hcp' as DocumentTypeOptions,
       },
       txn,
     );
@@ -398,7 +399,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test4.txt',
-        documentType: 'cityblockConsent',
+        documentType: 'cityblockConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -426,7 +427,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test.txt',
-        documentType: 'molst',
+        documentType: 'molst' as DocumentTypeOptions,
       },
       txn,
     );
@@ -440,7 +441,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'toDelete.txt',
-        documentType: 'molst',
+        documentType: 'molst' as DocumentTypeOptions,
       },
       txn,
     );
@@ -452,7 +453,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test4.txt',
-        documentType: 'hcp',
+        documentType: 'hcp' as DocumentTypeOptions,
       },
       txn,
     );

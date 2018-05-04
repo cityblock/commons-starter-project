@@ -1,9 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { ComputedFieldDataTypes } from 'schema';
 import BaseModel from './base-model';
 import Question from './question';
 
 export type ComputedFieldOrderOptions = 'createdAt' | 'slug' | 'label';
-type ComputedFieldDataTypes = 'boolean' | 'number' | 'string';
 type GetByOptions = 'slug' | 'label';
 
 interface IComputedFieldCreateFields {

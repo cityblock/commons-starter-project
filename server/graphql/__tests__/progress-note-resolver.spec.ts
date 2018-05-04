@@ -2,6 +2,7 @@ import { subHours } from 'date-fns';
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
 import Db from '../../db';
@@ -22,7 +23,7 @@ interface ISetup {
   patient: Patient;
   clinic: Clinic;
 }
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {

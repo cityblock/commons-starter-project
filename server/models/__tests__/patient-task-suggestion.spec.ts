@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import PatientTaskSuggestion from '../patient-task-suggestion';
 import TaskTemplate from '../task-template';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -25,8 +26,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       title: 'Housing',
       repeating: false,
-      priority: 'low',
-      careTeamAssigneeRole: 'physician',
+      priority: 'low' as Priority,
+      careTeamAssigneeRole: userRole,
     },
     txn,
   );

@@ -1,5 +1,6 @@
 import { subHours } from 'date-fns';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import Patient from '../patient';
 import PatientGlassBreak from '../patient-glass-break';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const reason = 'Other';
 const note = 'New phone who dis';
 

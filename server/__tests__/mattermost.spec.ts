@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../db';
 import * as queueHelpersRaw from '../helpers/queue-helpers';
 import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
@@ -23,7 +24,7 @@ const teamId = 'CITYBLOCKPARTY';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic('The Wall', 123455), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
   const patient = await createPatient(
     {
       cityblockId: 123,

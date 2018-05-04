@@ -1,5 +1,6 @@
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import Db from '../../../db';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
@@ -20,7 +21,7 @@ const expectedIncomingTwiml =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="sim:DEBOGUS14990BOGUS580c2a54713dBOGUS" from="+11234567890">Winter is coming.</Message></Response>';
 const expectedOutgoingTwiml =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="+11234567890" from="+11234567777">Winter is here.</Message></Response>';
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -87,7 +88,7 @@ describe('SMS Message Handler', () => {
       userId: user.id,
       patientId: patient.id,
       body: 'Winter is coming.',
-      direction: 'toUser',
+      direction: 'toUser' as SmsMessageDirection,
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);
@@ -133,7 +134,7 @@ describe('SMS Message Handler', () => {
       userId: user.id,
       patientId: patient.id,
       body: 'Winter is here.',
-      direction: 'fromUser',
+      direction: 'fromUser' as SmsMessageDirection,
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);

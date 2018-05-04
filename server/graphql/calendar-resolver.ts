@@ -34,7 +34,7 @@ export async function resolveCalendarForPatient(
 ): Promise<IRootQueryType['calendarForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET calendar id for patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET calendar id for patient ${patientId} by ${userId}`);
 
   const patient = await Patient.get(patientId, txn);
   return { patientId, googleCalendarId: patient.patientInfo.googleCalendarId };
@@ -53,7 +53,7 @@ export async function resolveCalendarEventsForPatient(
 ): Promise<IRootQueryType['calendarEventsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all calendar events for patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET all calendar events for patient ${patientId} by ${userId}`);
 
   const patient = await Patient.get(patientId, txn);
   if (!patient.patientInfo.googleCalendarId) {
@@ -86,7 +86,7 @@ export async function resolveCalendarEventsForCurrentUser(
 ): Promise<IRootQueryType['calendarEventsForCurrentUser']> {
   checkLoggedInWithPermissions(userId, permissions);
 
-  logger.log(`GET all calendar events for user ${userId}`, 2);
+  logger.log(`GET all calendar events for user ${userId}`);
 
   const user = await User.get(userId!, txn);
   const googleAuth = await GoogleAuth.get(user.googleAuthId, txn);
@@ -118,10 +118,19 @@ export async function calendarCreateEventForPatient(
   { input }: ICalendarCreateEventForPatientOptions,
   { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootMutationType['calendarCreateEventForPatient']> {
-  const { patientId, startDatetime, endDatetime, inviteeEmails, location, title, reason, googleCalendarId } = input;
+  const {
+    patientId,
+    startDatetime,
+    endDatetime,
+    inviteeEmails,
+    location,
+    title,
+    reason,
+    googleCalendarId,
+  } = input;
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  logger.log(`CREATE calendar event for patient ${patientId} by ${userId}`, 2);
+  logger.log(`CREATE calendar for patient ${patientId} by ${userId}`);
 
   const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
   const careTeamEmails = careTeamRecords.map(record => record.user.email);
@@ -154,7 +163,7 @@ export async function calendarCreateForPatient(
   const { patientId } = input;
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  logger.log(`CREATE calendar for patient ${patientId} by ${userId}`, 2);
+  logger.log(`CREATE calendar for patient ${patientId} by ${userId}`);
 
   const patient = await Patient.get(patientId, txn);
   let calendarId = patient.patientInfo.googleCalendarId;
@@ -184,7 +193,7 @@ export async function calendarCreateEventForCurrentUser(
   const { startDatetime, endDatetime, inviteeEmails, location, title, reason } = input;
   checkLoggedInWithPermissions(userId, permissions);
 
-  logger.log(`CREATE calendar event for current user ${userId}`, 2);
+  logger.log(`CREATE calendar event for current user ${userId}`);
 
   const user = await User.get(userId!, txn);
 

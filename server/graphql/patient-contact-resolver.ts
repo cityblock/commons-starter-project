@@ -47,7 +47,7 @@ export async function resolveHealthcareProxiesForPatient(
 ): Promise<IRootQueryType['patientContactHealthcareProxies']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient contact healthcare proxies for ${patientId} by ${userId}`, 2);
+  logger.log(`GET patient contact healthcare proxies for ${patientId} by ${userId}`);
   return PatientContact.getHealthcareProxiesForPatient(patientId, txn);
 }
 
@@ -58,7 +58,7 @@ export async function resolvePatientContactsForPatient(
 ): Promise<IRootQueryType['patientContacts']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient contacts for ${patientId} by ${userId}`, 2);
+  logger.log(`GET patient contacts for ${patientId} by ${userId}`);
   return PatientContact.getAllForPatient(patientId, txn);
 }
 
@@ -70,7 +70,7 @@ export async function patientContactDelete(
   const patientContact = await PatientContact.get(input.patientContactId, txn);
 
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientContact.patientId);
-  logger.log(`DELETE patient contact ${input.patientContactId} by ${userId}`, 2);
+  logger.log(`DELETE patient contact ${input.patientContactId} by ${userId}`);
   const { id, address, email, phone } = patientContact;
   const promises: Array<Promise<any>> = [];
 
@@ -106,7 +106,7 @@ export async function patientContactCreate(
   delete filtered.address;
   delete filtered.email;
 
-  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
   const patientContact = await PatientContact.create({ ...filtered, updatedById: userId! }, txn);
 
   const promises = [
@@ -128,7 +128,7 @@ export async function patientContactEdit(
   const patientContact = await PatientContact.get(input.patientContactId, txn);
 
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientContact.patientId);
-  logger.log(`EDIT patient contact ${input.patientContactId} by ${userId}`, 2);
+  logger.log(`EDIT patient contact ${input.patientContactId} by ${userId}`);
 
   const promises = [
     updateAddress(patientContact.id, userId!, input.address, txn),

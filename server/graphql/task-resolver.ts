@@ -4,6 +4,7 @@ import {
   ITaskCreateInput,
   ITaskEditInput,
   ITaskNode,
+  TaskEventTypes,
 } from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions, UserTaskOrderOptions } from '../models/task';
@@ -87,7 +88,7 @@ export async function taskCreate(
     {
       taskId: task.id,
       userId: userId!,
-      eventType: 'create_task',
+      eventType: 'create_task' as TaskEventTypes,
     },
     txn,
   );
@@ -97,7 +98,7 @@ export async function taskCreate(
       {
         taskId: task.id,
         userId: userId!,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
         eventUserId: assignedToId,
       },
       txn,
@@ -134,7 +135,7 @@ export async function taskEdit(
       {
         taskId: args.input.taskId,
         userId: userId!,
-        eventType: 'edit_priority',
+        eventType: 'edit_priority' as TaskEventTypes,
       },
       txn,
     );
@@ -145,7 +146,7 @@ export async function taskEdit(
       {
         taskId: args.input.taskId,
         userId: userId!,
-        eventType: 'edit_due_date',
+        eventType: 'edit_due_date' as TaskEventTypes,
       },
       txn,
     );
@@ -156,7 +157,7 @@ export async function taskEdit(
       {
         taskId: args.input.taskId,
         userId: userId!,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
         eventUserId: args.input.assignedToId,
       },
       txn,
@@ -168,7 +169,7 @@ export async function taskEdit(
       {
         taskId: args.input.taskId,
         userId: userId!,
-        eventType: 'edit_title',
+        eventType: 'edit_title' as TaskEventTypes,
       },
       txn,
     );
@@ -179,7 +180,7 @@ export async function taskEdit(
       {
         taskId: args.input.taskId,
         userId: userId!,
-        eventType: 'edit_description',
+        eventType: 'edit_description' as TaskEventTypes,
       },
       txn,
     );
@@ -201,7 +202,7 @@ export async function taskDelete(
     {
       taskId: args.input.taskId,
       userId: userId!,
-      eventType: 'delete_task',
+      eventType: 'delete_task' as TaskEventTypes,
     },
     txn,
   );
@@ -222,7 +223,7 @@ export async function taskComplete(
     {
       taskId: args.input.taskId,
       userId: userId!,
-      eventType: 'complete_task',
+      eventType: 'complete_task' as TaskEventTypes,
     },
     txn,
   );
@@ -243,7 +244,7 @@ export async function taskUncomplete(
     {
       taskId: args.input.taskId,
       userId: userId!,
-      eventType: 'uncomplete_task',
+      eventType: 'uncomplete_task' as TaskEventTypes,
     },
     txn,
   );

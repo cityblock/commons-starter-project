@@ -1,11 +1,12 @@
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, UserRole } from 'schema';
 import Db from '../../db';
 import { createMockClinic, createMockPhone, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   user: User;
@@ -73,7 +74,7 @@ describe('phone', () => {
       const editedPhone = await Phone.edit(
         {
           phoneNumber: '555-555-5555',
-          type: 'work',
+          type: 'work' as PhoneTypeOptions,
           description: 'bank job',
         },
         phone.id,

@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { Gender, UserRole } from 'schema';
 import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
 import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import Db from '../../db';
@@ -20,7 +21,7 @@ interface ISetup {
   homeClinicId: string;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -93,7 +94,7 @@ describe('patient info resolver', () => {
       });
       expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
         id: patient.patientInfo.id,
-        gender: 'male',
+        gender: 'male' as Gender,
         language: 'ch',
         primaryAddress: {
           id: address.id,

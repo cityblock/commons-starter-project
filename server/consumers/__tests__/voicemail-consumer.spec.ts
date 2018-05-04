@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import * as gcsHelpersRaw from '../../graphql/shared/gcs/helpers';
@@ -52,7 +53,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic('The Wall', 123455), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const phone = await Phone.create(createMockPhone(), txn);
   await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
@@ -61,7 +62,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       userId: user.id,
       contactNumber: '+11234561111',
-      direction: 'toUser',
+      direction: 'toUser' as SmsMessageDirection,
       duration: 11,
       callStatus: 'no-answer',
       twilioPayload,
@@ -239,7 +240,7 @@ describe('Voicemail Consumer', () => {
       );
       await PhoneCall.create(
         {
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           userId: user.id,
           contactNumber: phone.phoneNumber,
           twilioPayload: {},

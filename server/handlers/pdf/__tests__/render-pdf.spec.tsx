@@ -2,6 +2,7 @@ import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import * as React from 'react';
 import 'regenerator-runtime/runtime';
+import { Priority, UserRole } from 'schema';
 import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';
 import Db from '../../../db';
 import { signJwt } from '../../../graphql/shared/utils';
@@ -27,7 +28,7 @@ import {
   GENERATE_PDF_JWT_TYPE,
 } from '../render-pdf';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 const EXPIRED_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiZ2VuZXJhdGVQREZKd3QiLCJpYXQiOjE1MTczMzcwNDUsImV4cCI6MTUxNzMzNzM0NX0.4OG2ho0S5Wj074KpcEP4Qpdqdj2jZ8Kh4rjBtH2kigU';
@@ -79,7 +80,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
-      priority: 'high',
+      priority: 'high' as Priority,
       CBOReferralId: cboReferral.id,
       patientGoalId: patientGoal.id,
     },

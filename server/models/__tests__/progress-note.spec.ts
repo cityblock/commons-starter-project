@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   progressNoteTemplate: ProgressNoteTemplate;

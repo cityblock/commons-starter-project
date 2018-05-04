@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -9,7 +10,7 @@ import User from '../../models/user';
 import { createAnswerAssociations, createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 const title = 'The Faith Militant';
 const order = 11;

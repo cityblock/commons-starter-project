@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import { AnswerValueTypeOptions, ComputedFieldDataTypes } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -31,7 +32,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -47,7 +48,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -57,7 +58,7 @@ describe('computed field model', () => {
           {
             label: 'Different Computed Field with Same Slug',
             slug: 'computed-field',
-            dataType: 'string',
+            dataType: 'string' as ComputedFieldDataTypes,
           },
           txn,
         );
@@ -75,7 +76,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -87,7 +88,7 @@ describe('computed field model', () => {
           {
             label: 'Same Slug as Deleted Computed Field',
             slug: 'computed-field',
-            dataType: 'string',
+            dataType: 'string' as ComputedFieldDataTypes,
           },
           txn,
         );
@@ -112,7 +113,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug,
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -127,7 +128,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -144,7 +145,7 @@ describe('computed field model', () => {
         {
           label,
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -159,7 +160,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -174,7 +175,7 @@ describe('computed field model', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -182,7 +183,7 @@ describe('computed field model', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'number',
+          dataType: 'number' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -198,7 +199,7 @@ describe('computed field model', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -206,7 +207,7 @@ describe('computed field model', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'number',
+          dataType: 'number' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -222,7 +223,7 @@ describe('computed field model', () => {
         {
           label: 'def',
           slug: 'computed-field-1',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -230,7 +231,7 @@ describe('computed field model', () => {
         {
           label: 'abc',
           slug: 'computed-field-2',
-          dataType: 'number',
+          dataType: 'number' as ComputedFieldDataTypes,
         },
         txn,
       );
@@ -251,7 +252,7 @@ describe('computed field model', () => {
           questionId: question.id,
           displayValue: 'Answer Display Value',
           value: 'true',
-          valueType: 'boolean',
+          valueType: 'boolean' as AnswerValueTypeOptions,
           inSummary: false,
           order: 1,
         },
@@ -278,7 +279,7 @@ describe('computed field model', () => {
         {
           label: 'Computed Field',
           slug: 'computed-field',
-          dataType: 'boolean',
+          dataType: 'boolean' as ComputedFieldDataTypes,
         },
         txn,
       );

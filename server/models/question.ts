@@ -1,5 +1,6 @@
 import { isEmpty, omit } from 'lodash';
 import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { AnswerTypeOptions, AnswerValueTypeOptions, QuestionConditionTypeOptions } from 'schema';
 import Answer from './answer';
 import BaseModel from './base-model';
 import ComputedField from './computed-field';
@@ -10,19 +11,19 @@ import ScreeningTool from './screening-tool';
 
 interface IQuestionEditableFields {
   title: string;
-  answerType: AnswerType;
+  answerType: AnswerTypeOptions;
   validatedSource?: string;
   order: number;
-  applicableIfType?: QuestionConditionType;
+  applicableIfType?: QuestionConditionTypeOptions;
   hasOtherTextAnswer?: boolean;
 }
 
 interface IQuestionCreatableFields {
   title: string;
-  answerType: AnswerType;
+  answerType: AnswerTypeOptions;
   validatedSource?: string;
   order: number;
-  applicableIfType?: QuestionConditionType;
+  applicableIfType?: QuestionConditionTypeOptions;
   computedFieldId?: string;
   hasOtherTextAnswer?: boolean;
 }
@@ -47,9 +48,6 @@ type IQuestionCreateFields =
   | IScreeningToolQuestion
   | IProgressNoteTemplateQuestion;
 
-type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
-type QuestionConditionType = 'allTrue' | 'oneTrue';
-
 const EAGER_QUERY =
   '[computedField, progressNoteTemplate, applicableIfQuestionConditions, answers(orderByOrder).[concernSuggestions, goalSuggestions.[taskTemplates]]]';
 
@@ -57,7 +55,7 @@ const EAGER_QUERY =
 export default class Question extends BaseModel {
   title: string;
   answers: Answer[];
-  answerType: AnswerType;
+  answerType: AnswerTypeOptions;
   riskAreaId: string;
   riskArea: RiskArea;
   screeningToolId: string;
@@ -65,7 +63,7 @@ export default class Question extends BaseModel {
   progressNoteTemplateId: string;
   progressNoteTemplate: ProgressNoteTemplate;
   applicableIfQuestionConditions: QuestionCondition[];
-  applicableIfType: QuestionConditionType;
+  applicableIfType: QuestionConditionTypeOptions;
   validatedSource: string;
   order: number;
   computedFieldId: string;
@@ -195,7 +193,7 @@ export default class Question extends BaseModel {
     const { computedFieldId } = input;
 
     if (computedFieldId) {
-      input.answerType = 'radio';
+      input.answerType = 'radio' as AnswerTypeOptions;
     }
 
     let question = await this.modifyEager(this.query(txn)).insertAndFetch(input);
@@ -211,7 +209,7 @@ export default class Question extends BaseModel {
           questionId: question.id,
           displayValue: 'Other',
           value: 'other',
-          valueType: 'string',
+          valueType: 'string' as AnswerValueTypeOptions,
           order: 0,
         },
         txn,
@@ -286,7 +284,7 @@ export default class Question extends BaseModel {
               questionId,
               displayValue: 'Other',
               value: 'other',
-              valueType: 'string',
+              valueType: 'string' as AnswerValueTypeOptions,
               order: 0,
             },
             txn,

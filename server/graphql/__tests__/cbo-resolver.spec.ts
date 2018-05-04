@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as cboCreate from '../../../app/graphql/queries/cbo-create-mutation.graphql';
 import * as cboDelete from '../../../app/graphql/queries/cbo-delete-mutation.graphql';
@@ -27,7 +28,7 @@ const input = {
   phone: '(000) 000-0000',
   url: 'www.facelessmen.com',
 };
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 const setup = async (trx: Transaction) => {

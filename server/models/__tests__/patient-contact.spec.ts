@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { PatientRelationOptions, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockAddress,
@@ -20,7 +21,7 @@ import PatientContactPhone from '../patient-contact-phone';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -177,7 +178,7 @@ describe('patient info model', () => {
         {
           firstName: 'ron',
           lastName: 'weasley',
-          relationToPatient: 'friend',
+          relationToPatient: 'friend' as PatientRelationOptions,
           isEmergencyContact: true,
           isHealthcareProxy: true,
           canContact: true,

@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { CompletedWithinInterval, Priority, UserRole } from 'schema';
 import * as patientGoalCreate from '../../../app/graphql/queries/patient-goal-create-mutation.graphql';
 import * as patientGoalDelete from '../../../app/graphql/queries/patient-goal-delete-mutation.graphql';
 import Db from '../../db';
@@ -21,7 +22,7 @@ interface ISetup {
   patientConcern: PatientConcern;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -105,11 +106,11 @@ describe('patient goal resolver', () => {
       const taskTemplate = await TaskTemplate.create(
         {
           title: 'Task 1',
-          priority: 'high',
+          priority: 'high' as Priority,
           repeating: false,
-          completedWithinInterval: 'week',
+          completedWithinInterval: 'week' as CompletedWithinInterval,
           completedWithinNumber: 1,
-          careTeamAssigneeRole: 'physician',
+          careTeamAssigneeRole: 'physician' as UserRole,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,

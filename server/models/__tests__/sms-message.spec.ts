@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { SmsMessageDirection, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -13,7 +14,7 @@ import Phone from '../phone';
 import SmsMessage from '../sms-message';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const body = 'Winter is coming.';
 const body2 = 'Winter is here.';
 const twilioPayload = {
@@ -63,7 +64,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -74,7 +75,7 @@ describe('SMS model', () => {
         userId: user.id,
         contactNumber: phone.phoneNumber,
         patientId: patient.id,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
         body,
         twilioPayload,
       });
@@ -87,7 +88,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -98,7 +99,7 @@ describe('SMS model', () => {
         userId: user.id,
         contactNumber: phone.phoneNumber,
         patientId: null,
-        direction: 'toUser',
+        direction: 'toUser' as SmsMessageDirection,
         body,
         twilioPayload,
       });
@@ -112,7 +113,7 @@ describe('SMS model', () => {
           {
             userId: user.id,
             contactNumber: '(123) 456-7890',
-            direction: 'toUser',
+            direction: 'toUser' as SmsMessageDirection,
             body,
             twilioPayload,
           },
@@ -136,7 +137,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -147,7 +148,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone2.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -158,7 +159,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone3.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload,
         },
@@ -193,7 +194,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -204,7 +205,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone2.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },
@@ -215,7 +216,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone3.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload,
         },
@@ -239,7 +240,7 @@ describe('SMS model', () => {
         {
           userId: user.id,
           contactNumber: phone.phoneNumber,
-          direction: 'toUser',
+          direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
         },

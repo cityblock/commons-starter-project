@@ -1,12 +1,12 @@
 import * as Storage from '@google-cloud/storage';
-import { IPatientSignedUrlActionEnum, IUserSignedUrlActionEnum } from 'schema';
+import { PatientSignedUrlAction, UserSignedUrlAction } from 'schema';
 import config from '../../../config';
 
 const EXPIRE_TIME = 1000 * 60 * 5; // 5 minutes
 
 export const loadPatientPhotoUrl = async (
   patientId: string,
-  action: IPatientSignedUrlActionEnum,
+  action: PatientSignedUrlAction,
   testConfig?: any,
 ): Promise<string | null> => {
   if (!patientId) return null;
@@ -37,7 +37,7 @@ export const loadPatientPhotoUrl = async (
 
 export const loadPatientDocumentUrl = async (
   patientId: string,
-  action: IPatientSignedUrlActionEnum,
+  action: PatientSignedUrlAction,
   filename: string,
   contentType?: string | null,
   testConfig?: any,
@@ -71,7 +71,7 @@ export const loadPatientDocumentUrl = async (
 export const loadUserVoicemailUrl = async (
   userId: string,
   voicemailId: string,
-  action: IUserSignedUrlActionEnum,
+  action: UserSignedUrlAction,
   testConfig?: any,
 ): Promise<string | null> => {
   if (!userId || !voicemailId) return null;

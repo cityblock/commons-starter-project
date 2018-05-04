@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as currentUserEdit from '../../../app/graphql/queries/current-user-edit-mutation.graphql';
 import * as getCurrentUser from '../../../app/graphql/queries/get-current-user.graphql';
@@ -36,7 +37,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('user tests', () => {
-  const userRole = 'physician';
+  const userRole = 'physician' as UserRole;
   const permissions = 'green';
   const currentUserEditMutation = print(currentUserEdit);
   const userSummaryListQuery = print(getUserSummaryList);
@@ -74,7 +75,7 @@ describe('user tests', () => {
   describe('resolves a limited set of shortened user objects given some user role filters', () => {
     it('can a fetch a set of shortened user', async () => {
       const { clinic } = await setup(txn);
-      const userRole2 = 'admin';
+      const userRole2 = 'admin' as UserRole;
 
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
       const user2 = await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
@@ -107,7 +108,7 @@ describe('user tests', () => {
 
     it('gives you nothing if there are no users with that user role', async () => {
       const { clinic } = await setup(txn);
-      const userRole2 = 'admin';
+      const userRole2 = 'admin' as UserRole;
 
       const user = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
       const user2 = await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);

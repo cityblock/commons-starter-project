@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { QuickCallDirection, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -6,7 +7,8 @@ import Clinic from '../clinic';
 import Patient from '../patient';
 import QuickCall from '../quick-call';
 import User from '../user';
-const userRole = 'physician';
+
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   user: User;
@@ -46,7 +48,7 @@ describe('quick call model', () => {
         reason: 'Had to call the son',
         summary: 'package is on the way',
         startTime: new Date().toISOString(),
-        direction: 'Outbound',
+        direction: 'Outbound' as QuickCallDirection,
         callRecipient: 'The son',
         wasSuccessful: true,
       },
@@ -74,7 +76,7 @@ describe('quick call model', () => {
         reason: 'Had to call the son',
         summary: 'package is on the way',
         startTime: new Date().toISOString(),
-        direction: 'Outbound',
+        direction: 'Outbound' as QuickCallDirection,
         callRecipient: 'The son',
         wasSuccessful: true,
       },
@@ -88,7 +90,7 @@ describe('quick call model', () => {
         reason: 'Had to call the son',
         summary: 'package is on the way',
         startTime: new Date().toISOString(),
-        direction: 'Outbound',
+        direction: 'Outbound' as QuickCallDirection,
         callRecipient: 'The son',
         wasSuccessful: true,
       },
@@ -118,7 +120,7 @@ describe('quick call model', () => {
         reason: 'Had to call the son',
         summary: 'package is on the way',
         startTime: new Date().toISOString(),
-        direction: 'Outbound',
+        direction: 'Outbound' as QuickCallDirection,
         callRecipient: 'The son',
         wasSuccessful: true,
       },

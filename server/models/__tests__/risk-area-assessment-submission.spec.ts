@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -21,7 +22,7 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   riskArea: RiskArea;
@@ -135,7 +136,7 @@ describe('patient risk area assessment submission model', () => {
     const question = await Question.create(
       {
         title: 'Question Title',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -145,7 +146,7 @@ describe('patient risk area assessment submission model', () => {
     const question2 = await Question.create(
       {
         title: 'Question 2 Title',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 2,
@@ -157,7 +158,7 @@ describe('patient risk area assessment submission model', () => {
         questionId: question.id,
         displayValue: '1',
         value: '1',
-        valueType: 'number',
+        valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
       },
@@ -168,7 +169,7 @@ describe('patient risk area assessment submission model', () => {
         questionId: question2.id,
         displayValue: '4',
         value: '4',
-        valueType: 'number',
+        valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
       },

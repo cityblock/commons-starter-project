@@ -1,5 +1,6 @@
 import { isNumber, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { RiskAdjustmentTypeOptions } from 'schema';
 import BaseModel from './base-model';
 import Concern from './concern';
 import GoalSuggestionTemplate from './goal-suggestion-template';
@@ -10,7 +11,7 @@ interface IScreeningToolScoreRangeCreateFields {
   description: string;
   minimumScore: number;
   maximumScore: number;
-  riskAdjustmentType?: RiskAdjustmentType;
+  riskAdjustmentType?: RiskAdjustmentTypeOptions;
 }
 
 interface IScreeningToolScoreRangeEditableFields {
@@ -19,10 +20,8 @@ interface IScreeningToolScoreRangeEditableFields {
   minimumScore?: number;
   maximumScore?: number;
   deletedAt?: string;
-  riskAdjustmentType?: RiskAdjustmentType;
+  riskAdjustmentType?: RiskAdjustmentTypeOptions;
 }
-
-type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
 export const EAGER_QUERY = '[screeningTool, concernSuggestions]';
 export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
@@ -35,7 +34,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   range: string;
   minimumScore: number;
   maximumScore: number;
-  riskAdjustmentType: RiskAdjustmentType;
+  riskAdjustmentType: RiskAdjustmentTypeOptions;
   concernSuggestions: Concern[];
   goalSuggestions: GoalSuggestionTemplate[];
 

@@ -1,10 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CoreIdentityOptions } from 'schema';
 import BaseModel from './base-model';
 import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';
-
-type CoreIdentityOptions = 'firstName' | 'middleName' | 'lastName' | 'dateOfBirth';
 
 interface IPatientDataFlagCreateFields {
   patientId: string;

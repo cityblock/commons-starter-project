@@ -2,9 +2,9 @@ import {
   IQuestionCreateInput,
   IQuestionDeleteInput,
   IQuestionEditInput,
-  IQuestionFilterTypeEnum,
   IRootMutationType,
   IRootQueryType,
+  QuestionFilterType,
 } from 'schema';
 import Question from '../models/question';
 import checkUserPermissions from './shared/permissions-check';
@@ -77,7 +77,7 @@ export async function questionCreate(
 
 export async function resolveQuestions(
   root: any,
-  args: { filterId: string; filterType: IQuestionFilterTypeEnum },
+  args: { filterId: string; filterType: QuestionFilterType },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['questions']> {
   await checkUserPermissions(userId, permissions, 'view', 'question', txn);

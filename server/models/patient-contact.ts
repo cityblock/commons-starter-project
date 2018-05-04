@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PatientRelationOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import Address from './address';
 import Email from './email';
@@ -9,19 +10,6 @@ import PatientContactPhone from './patient-contact-phone';
 import Phone from './phone';
 
 const EAGER_QUERY = '[address, email, phone]';
-
-export type PatientRelationOptions =
-  | 'parent'
-  | 'grandparent'
-  | 'child'
-  | 'sibling'
-  | 'grandchild'
-  | 'roommate'
-  | 'friend'
-  | 'neighbor'
-  | 'partner'
-  | 'spouse'
-  | 'other';
 
 export interface IPatientContactOptions {
   patientId: string;

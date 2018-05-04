@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { AnswerTypeOptions, AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -19,7 +20,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -29,7 +30,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question2 = await Question.create(
     {
       title: 'really like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 2,
@@ -40,8 +41,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -113,8 +114,8 @@ describe('question condition model', () => {
       {
         displayValue: 'meh about writing tests!',
         value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
         inSummary: false,
         questionId: question.id,
         order: 1,

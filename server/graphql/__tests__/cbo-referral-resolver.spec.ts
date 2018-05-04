@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
 import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
 import Db from '../../db';
@@ -16,7 +17,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 const sentAt = '2018-01-11T05:00:00.000Z';
 const diagnosis = 'Winter is here';

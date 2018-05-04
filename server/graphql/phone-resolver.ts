@@ -26,7 +26,7 @@ export async function phoneCreateForPatient(
 
   const filtered = omitBy<IPhoneCreateForPatientInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
 
   const phone = await Phone.create(filtered, txn);
   await PatientPhone.create({ patientId: input.patientId, phoneId: phone.id }, txn);
@@ -56,7 +56,7 @@ export async function phoneCreate(
 
   const filtered = omitBy<IPhoneCreateInput>(input, isNil) as any;
   filtered.updatedById = userId;
-  logger.log(`CREATE phone by ${userId}`, 2);
+  logger.log(`CREATE phone by ${userId}`);
 
   return Phone.create(filtered, txn);
 }
@@ -72,7 +72,7 @@ export async function phoneDeleteForPatient(
 ): Promise<Phone> {
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE phone for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`DELETE phone for patient ${input.patientId} by ${userId}`);
 
   await PatientPhone.delete({ patientId: input.patientId, phoneId: input.phoneId }, txn);
 
@@ -100,7 +100,7 @@ export async function phoneEdit(
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IPhoneEditInput>(input, isNil);
-  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
 
   return Phone.edit(filtered as any, input.phoneId, txn);
 }

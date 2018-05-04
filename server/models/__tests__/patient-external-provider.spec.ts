@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { ExternalProviderOptions, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -17,7 +18,7 @@ import PatientExternalProviderPhone from '../patient-external-provider-phone';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -95,7 +96,7 @@ describe('patient external provider model', () => {
       const patientExternalProvider = await PatientExternalProvider.create(
         createMockPatientExternalProvider(patient.id, user.id, phone, {
           email,
-          role: 'otherMedicalSpecialist',
+          role: 'otherMedicalSpecialist' as ExternalProviderOptions,
           roleFreeText: 'potion intern',
         }),
         txn,
@@ -148,7 +149,7 @@ describe('patient external provider model', () => {
         {
           firstName: 'Ron',
           lastName: 'Weasley',
-          role: 'oncology',
+          role: 'oncology' as ExternalProviderOptions,
           agencyName: 'Hogwarts Cancer Ward',
           description: 'magical cancer treatments',
           updatedById: user.id,

@@ -1,6 +1,6 @@
 import { isEmpty, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import { IPatientFilterOptions } from 'schema';
+import { Gender, IPatientFilterOptions } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { adminTasksConcernTitle } from '../lib/consts';
 import CarePlanSuggestion from './care-plan-suggestion';
@@ -12,7 +12,6 @@ import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
 import PatientDataFlag from './patient-data-flag';
 import PatientInfo from './patient-info';
-import { PatientGenderOptions } from './patient-info';
 import PatientState from './patient-state';
 import Phone from './phone';
 import Task from './task';
@@ -42,7 +41,7 @@ export interface IPatientCreateFields {
   dateOfBirth: string; // mm/dd/yy
   ssn: string;
   ssnEnd: string;
-  gender: PatientGenderOptions;
+  gender: Gender;
   language: string | null;
 }
 

@@ -1,4 +1,10 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import Db from '../../../db';
 import Answer from '../../../models/answer';
 import Clinic from '../../../models/clinic';
@@ -30,7 +36,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -59,7 +65,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -70,8 +76,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: true,
       questionId: question.id,
       summaryText: 'omg summary',
@@ -83,8 +89,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'hates writing tests!',
       value: '4',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 2,
@@ -270,7 +276,7 @@ describe('risk area group format', () => {
       const screeningToolQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -281,8 +287,8 @@ describe('risk area group format', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion.id,
           order: 1,
@@ -417,7 +423,7 @@ describe('risk area group format', () => {
       const screeningToolQuestion = await Question.create(
         {
           title: 'like writing tests again?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -428,8 +434,8 @@ describe('risk area group format', () => {
         {
           displayValue: 'loves writing more tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: screeningToolQuestion.id,
           order: 1,

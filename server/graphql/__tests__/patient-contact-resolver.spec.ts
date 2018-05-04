@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { PatientRelationOptions, UserRole } from 'schema';
 import Db from '../../db';
 import Address from '../../models/address';
 import Clinic from '../../models/clinic';
@@ -24,7 +25,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 interface ISetup {
@@ -514,7 +515,7 @@ describe('patient info model', () => {
         {
           patientId: patient.id,
           updatedById: user.id,
-          relationToPatient: 'friend',
+          relationToPatient: 'friend' as PatientRelationOptions,
           firstName: 'Person',
           lastName: 'Last',
           isEmergencyContact: true,

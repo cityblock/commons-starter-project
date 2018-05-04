@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
@@ -8,7 +9,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 interface ISetup {

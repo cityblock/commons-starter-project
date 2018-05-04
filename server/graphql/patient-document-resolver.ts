@@ -22,7 +22,7 @@ export async function resolvePatientDocuments(
 ): Promise<IRootQueryType['patientDocuments']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all documents for patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET all documents for patient ${patientId} by ${userId}`);
 
   return PatientDocument.getAllForPatient(patientId, txn);
 }
@@ -40,7 +40,7 @@ export async function patientDocumentCreate(
 
   const filtered = omitBy<IPatientDocumentCreateInput>(input, isNil) as any;
   filtered.uploadedById = userId;
-  logger.log(`CREATE document for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE document for patient ${input.patientId} by ${userId}`);
 
   return PatientDocument.create(filtered, txn);
 }
@@ -57,7 +57,7 @@ export async function patientDocumentDelete(
   const document = await PatientDocument.get(input.patientDocumentId, txn);
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, document.patientId);
 
-  logger.log(`DELETE document ${input.patientDocumentId} by ${userId}`, 2);
+  logger.log(`DELETE document ${input.patientDocumentId} by ${userId}`);
 
   return PatientDocument.delete(input.patientDocumentId, userId!, txn);
 }

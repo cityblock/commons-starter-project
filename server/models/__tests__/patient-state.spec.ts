@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { CurrentPatientState, UserRole } from 'schema';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
@@ -6,7 +7,7 @@ import Patient from '../patient';
 import PatientState from '../patient-state';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   clinic: Clinic;
@@ -62,7 +63,7 @@ describe('patient state model', () => {
       {
         patientId: patient.id,
         updatedById: user.id,
-        currentState: 'assigned',
+        currentState: 'assigned' as CurrentPatientState,
       },
       txn,
     );

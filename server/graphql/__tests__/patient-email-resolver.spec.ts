@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Email from '../../models/email';
@@ -18,7 +19,7 @@ interface ISetup {
   primaryEmail: Email;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {

@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as computedFieldFlagCreate from '../../../app/graphql/queries/computed-field-flag-create-mutation.graphql';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -22,7 +23,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 const reason = 'Viscerion destroyed the Wall';
 

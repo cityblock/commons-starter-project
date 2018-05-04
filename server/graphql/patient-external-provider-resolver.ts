@@ -43,7 +43,7 @@ export async function resolvePatientExternalProvidersForPatient(
 ): Promise<IRootQueryType['patientExternalProviders']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient external providers for ${patientId} by ${userId}`, 2);
+  logger.log(`GET patient external providers for ${patientId} by ${userId}`);
   return PatientExternalProvider.getAllForPatient(patientId, txn);
 }
 
@@ -65,7 +65,7 @@ export async function patientExternalProviderDelete(
     txn,
     patientExternalProvider.patientId,
   );
-  logger.log(`DELETE patient contact ${input.patientExternalProviderId} by ${userId}`, 2);
+  logger.log(`DELETE patient contact ${input.patientExternalProviderId} by ${userId}`);
   const { id, email, phone } = patientExternalProvider;
   const promises: Array<Promise<any>> = [];
 
@@ -102,7 +102,7 @@ export async function patientExternalProviderCreate(
   delete filtered.phone;
   delete filtered.email;
 
-  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
   const patientExternalProvider = await PatientExternalProvider.create(
     { ...filtered, updatedById: userId! },
     txn,
@@ -136,7 +136,7 @@ export async function patientExternalProviderEdit(
     txn,
     patientExternalProvider.patientId,
   );
-  logger.log(`EDIT patient contact ${input.patientExternalProviderId} by ${userId}`, 2);
+  logger.log(`EDIT patient contact ${input.patientExternalProviderId} by ${userId}`);
 
   const promises = [
     updateEmail(patientExternalProvider.id, userId!, input.email, txn),

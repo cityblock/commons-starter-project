@@ -1,10 +1,9 @@
 import { omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { QuickCallDirection } from 'schema';
 import BaseModel from './base-model';
 import ProgressNote from './progress-note';
 import User from './user';
-
-type direction = 'Inbound' | 'Outbound';
 
 const EAGER_QUERY = '[user, progressNote]';
 
@@ -13,7 +12,7 @@ interface IQuickCallCreateOptions {
   patientId: string; // Needed to lookup or create progressNoteId
   reason: string;
   summary: string;
-  direction: direction;
+  direction: QuickCallDirection;
   callRecipient: string;
   wasSuccessful: boolean;
   startTime: string;
@@ -25,7 +24,7 @@ export default class QuickCall extends BaseModel {
   progressNoteId: string;
   reason: string;
   summary: string;
-  direction: direction;
+  direction: QuickCallDirection;
   callRecipient: string;
   wasSuccessful: boolean;
   startTime: string;

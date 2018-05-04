@@ -1,5 +1,5 @@
 import { isAfter } from 'date-fns';
-import { IFullRiskAreaGroupForPatient, IPriorityEnum, IRiskAreaForPatient } from 'schema';
+import { IFullRiskAreaGroupForPatient, IRiskAreaForPatient, Priority } from 'schema';
 import RiskAreaGroup from '../../models/risk-area-group';
 
 interface IScreeningToolResultSummary {
@@ -111,13 +111,13 @@ export const calculateRisk = (
   riskScore: IRiskAreaGroupScore | null,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
-): IPriorityEnum | null => {
+): Priority | null => {
   return riskScore && riskScore.totalScore !== null
     ? riskScore.forceHighRisk || riskScore.totalScore >= highRiskThreshold
-      ? ('high' as IPriorityEnum)
+      ? ('high' as Priority)
       : riskScore.totalScore >= mediumRiskThreshold
-        ? ('medium' as IPriorityEnum)
-        : ('low' as IPriorityEnum)
+        ? ('medium' as Priority)
+        : ('low' as Priority)
     : null;
 };
 

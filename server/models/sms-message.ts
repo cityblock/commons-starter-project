@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { SmsMessageDirection } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
@@ -6,13 +7,15 @@ import Patient from './patient';
 import PatientPhone from './patient-phone';
 import User from './user';
 
-export type Direction = 'toUser' | 'fromUser';
-export const DIRECTION: Direction[] = ['toUser', 'fromUser'];
+export const DIRECTION: SmsMessageDirection[] = [
+  'toUser' as SmsMessageDirection,
+  'fromUser' as SmsMessageDirection,
+];
 
 interface ISmsMessageCreate {
   userId: string;
   contactNumber: string;
-  direction: Direction;
+  direction: SmsMessageDirection;
   body: string;
   twilioPayload: object;
 }
@@ -29,7 +32,7 @@ export default class SmsMessage extends BaseModel {
   contactNumber: string;
   patientId: string | null;
   patient: Patient | null;
-  direction: Direction;
+  direction: SmsMessageDirection;
   body: string;
   twilioPayload: object;
 

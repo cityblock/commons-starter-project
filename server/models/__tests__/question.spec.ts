@@ -1,4 +1,10 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  ComputedFieldDataTypes,
+  RiskAdjustmentTypeOptions,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -55,7 +61,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -64,13 +70,13 @@ describe('question model', () => {
     );
     expect(question).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       order: 1,
     });
     expect(await Question.get(question.id, txn)).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       order: 1,
     });
@@ -82,7 +88,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         screeningToolId: screeningTool.id,
         type: 'screeningTool',
         order: 1,
@@ -91,13 +97,13 @@ describe('question model', () => {
     );
     expect(question).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       screeningToolId: screeningTool.id,
       order: 1,
     });
     expect(await Question.get(question.id, txn)).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       screeningToolId: screeningTool.id,
       order: 1,
     });
@@ -109,7 +115,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         progressNoteTemplateId: progressNoteTemplate.id,
         type: 'progressNoteTemplate',
         order: 1,
@@ -118,13 +124,13 @@ describe('question model', () => {
     );
     expect(question).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       progressNoteTemplateId: progressNoteTemplate.id,
       order: 1,
     });
     expect(await Question.get(question.id, txn)).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       progressNoteTemplateId: progressNoteTemplate.id,
       order: 1,
     });
@@ -137,14 +143,14 @@ describe('question model', () => {
       {
         label: 'Computed Field',
         slug: 'computed-field',
-        dataType: 'boolean',
+        dataType: 'boolean' as ComputedFieldDataTypes,
       },
       txn,
     );
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -172,7 +178,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -185,7 +191,7 @@ describe('question model', () => {
     expect(question.otherTextAnswerId).toEqual(answers[0].id);
     expect(await Question.get(question.id, txn)).toMatchObject({
       title: 'testing?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       order: 1,
       otherTextAnswerId: answers[0].id,
@@ -197,7 +203,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'radio',
+        answerType: 'radio' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -215,7 +221,7 @@ describe('question model', () => {
     const { riskArea } = await setup(txn);
     const computedField = await ComputedField.create(
       {
-        dataType: 'string',
+        dataType: 'string' as ComputedFieldDataTypes,
         label: 'computed field',
         slug: 'computed-field',
       },
@@ -224,7 +230,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         computedFieldId: computedField.id,
         riskAreaId: riskArea.id,
         type: 'riskArea',
@@ -244,7 +250,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         screeningToolId: screeningTool.id,
         type: 'screeningTool',
         order: 1,
@@ -268,7 +274,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -286,7 +292,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -318,7 +324,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -352,7 +358,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -385,7 +391,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -416,7 +422,7 @@ describe('question model', () => {
       const { riskArea } = await setup(txn);
       const computedField = await ComputedField.create(
         {
-          dataType: 'string',
+          dataType: 'string' as ComputedFieldDataTypes,
           label: 'computed field',
           slug: 'computed-field',
         },
@@ -425,7 +431,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           computedFieldId: computedField.id,
           riskAreaId: riskArea.id,
           type: 'riskArea',
@@ -458,7 +464,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           screeningToolId: screeningTool.id,
           type: 'screeningTool',
           order: 1,
@@ -490,7 +496,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -503,9 +509,9 @@ describe('question model', () => {
       expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
       expect(fetchedAnswers.length).toEqual(1);
 
-      await expect(Question.edit({ answerType: 'radio' }, question.id, txn)).rejects.toMatch(
-        'Cannot change answerType for a question with an "other" answer',
-      );
+      await expect(
+        Question.edit({ answerType: 'radio' as AnswerTypeOptions }, question.id, txn),
+      ).rejects.toMatch('Cannot change answerType for a question with an "other" answer');
     });
 
     it('errors when adding "other" question to non-dropdown question', async () => {
@@ -513,7 +519,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'radio',
+          answerType: 'radio' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -535,7 +541,7 @@ describe('question model', () => {
       const question = await Question.create(
         {
           title: 'testing?',
-          answerType: 'radio',
+          answerType: 'radio' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -547,7 +553,11 @@ describe('question model', () => {
       expect(fetchedQuestion.otherTextAnswerId).toBeNull();
       expect(fetchedAnswers.length).toEqual(0);
 
-      await Question.edit({ hasOtherTextAnswer: true, answerType: 'dropdown' }, question.id, txn);
+      await Question.edit(
+        { hasOtherTextAnswer: true, answerType: 'dropdown' as AnswerTypeOptions },
+        question.id,
+        txn,
+      );
 
       const refetchedQuestion = await Question.get(question.id, txn);
       const refetchedAnswers = await Answer.getAllForQuestion(question.id, txn);
@@ -562,7 +572,7 @@ describe('question model', () => {
     const question1 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -572,7 +582,7 @@ describe('question model', () => {
     const question2 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 2,
@@ -582,7 +592,7 @@ describe('question model', () => {
     const question3 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         screeningToolId: screeningTool.id,
         type: 'screeningTool',
         order: 3,
@@ -602,7 +612,7 @@ describe('question model', () => {
     const question1 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         screeningToolId: screeningTool.id,
         type: 'screeningTool',
         order: 1,
@@ -612,7 +622,7 @@ describe('question model', () => {
     const question2 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         screeningToolId: screeningTool.id,
         type: 'screeningTool',
         order: 2,
@@ -622,7 +632,7 @@ describe('question model', () => {
     const question3 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 3,
@@ -642,7 +652,7 @@ describe('question model', () => {
     const question1 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         progressNoteTemplateId: progressNoteTemplate.id,
         type: 'progressNoteTemplate',
         order: 1,
@@ -652,7 +662,7 @@ describe('question model', () => {
     const question2 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         progressNoteTemplateId: progressNoteTemplate.id,
         type: 'progressNoteTemplate',
         order: 2,
@@ -662,7 +672,7 @@ describe('question model', () => {
     const question3 = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 3,
@@ -685,7 +695,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -696,8 +706,8 @@ describe('question model', () => {
       {
         displayValue: 'loves writing tests!',
         value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
         inSummary: false,
         questionId: question.id,
         order: 2,
@@ -708,8 +718,8 @@ describe('question model', () => {
       {
         displayValue: 'loves writing tests!',
         value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
         inSummary: false,
         questionId: question.id,
         order: 1,
@@ -720,8 +730,8 @@ describe('question model', () => {
       {
         displayValue: 'loves writing tests!',
         value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
         inSummary: false,
         questionId: question.id,
         order: 1,
@@ -739,7 +749,7 @@ describe('question model', () => {
     const question = await Question.create(
       {
         title: 'testing?',
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,

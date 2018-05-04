@@ -1,5 +1,6 @@
 import { keys, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CarePlanUpdateEventTypes } from 'schema';
 import { attributionUserEmail } from '../lib/consts';
 import BaseModel from './base-model';
 import CarePlanUpdateEvent from './care-plan-update-event';
@@ -121,7 +122,7 @@ export default class PatientConcern extends BaseModel {
           patientId: input.patientId,
           userId: input.userId,
           patientConcernId: patientConcern.id,
-          eventType: 'create_patient_concern',
+          eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
         },
         txn,
       );
@@ -145,7 +146,7 @@ export default class PatientConcern extends BaseModel {
         patientId: updatedPatientConcern.patientId,
         userId,
         patientConcernId: updatedPatientConcern.id,
-        eventType: 'edit_patient_concern',
+        eventType: 'edit_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -202,7 +203,7 @@ export default class PatientConcern extends BaseModel {
         patientId: patientConcern.patientId,
         userId,
         patientConcernId: patientConcern.id,
-        eventType: 'delete_patient_concern',
+        eventType: 'delete_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );

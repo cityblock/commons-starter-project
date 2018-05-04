@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as cboCategories from '../../../app/graphql/queries/get-cbo-categories.graphql';
 import Db from '../../db';
 import CBOCategory from '../../models/cbo-category';
@@ -8,7 +9,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 const setup = async (trx: Transaction) => {

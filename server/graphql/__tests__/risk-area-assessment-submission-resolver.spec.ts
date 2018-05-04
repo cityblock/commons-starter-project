@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -27,7 +28,7 @@ interface ISetup {
   submission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -174,7 +175,7 @@ describe('risk area assessment resolver tests', () => {
       const question = await Question.create(
         {
           title: 'Question Title',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 1,
@@ -184,7 +185,7 @@ describe('risk area assessment resolver tests', () => {
       const question2 = await Question.create(
         {
           title: 'Question 2 Title',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           riskAreaId: riskArea.id,
           type: 'riskArea',
           order: 2,
@@ -196,7 +197,7 @@ describe('risk area assessment resolver tests', () => {
           questionId: question.id,
           displayValue: '1',
           value: '1',
-          valueType: 'number',
+          valueType: 'number' as AnswerValueTypeOptions,
           order: 1,
           inSummary: false,
         },
@@ -207,7 +208,7 @@ describe('risk area assessment resolver tests', () => {
           questionId: question2.id,
           displayValue: '4',
           value: '4',
-          valueType: 'number',
+          valueType: 'number' as AnswerValueTypeOptions,
           order: 1,
           inSummary: false,
         },

@@ -1,6 +1,12 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import * as answerCreate from '../../../app/graphql/queries/answer-create-mutation.graphql';
 import * as answerDelete from '../../../app/graphql/queries/answer-delete-mutation.graphql';
@@ -24,7 +30,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -34,7 +40,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
@@ -45,8 +51,8 @@ async function setup(trx: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -105,8 +111,8 @@ describe('answer tests', () => {
         id: answer.id,
         displayValue: 'loves writing tests!',
         value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
         inSummary: false,
         order: 1,
         questionId: question.id,
@@ -194,8 +200,8 @@ describe('answer tests', () => {
         {
           displayValue: 'loves writing tests too!',
           value: '2',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
           order: 1,

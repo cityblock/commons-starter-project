@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { CarePlanUpdateEventTypes, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -25,7 +26,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -85,7 +86,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
+        eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -114,7 +115,7 @@ describe('care plan update event model', () => {
           userId: user.id,
           patientConcernId: patientConcern.id,
           patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
+          eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
         },
         txn,
       );
@@ -132,7 +133,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
+        eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -154,7 +155,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
+        eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -174,7 +175,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
+        eventType: 'create_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -183,7 +184,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'edit_patient_concern',
+        eventType: 'edit_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -220,7 +221,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'create_patient_goal',
+        eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -229,7 +230,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'edit_patient_goal',
+        eventType: 'edit_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -266,7 +267,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'create_patient_goal',
+        eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -275,7 +276,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'edit_patient_concern',
+        eventType: 'edit_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -315,7 +316,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'create_patient_goal',
+        eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -324,7 +325,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientConcernId: patientConcern.id,
-        eventType: 'edit_patient_concern',
+        eventType: 'edit_patient_concern' as CarePlanUpdateEventTypes,
       },
       txn,
     );
@@ -374,7 +375,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'create_patient_goal',
+        eventType: 'create_patient_goal' as CarePlanUpdateEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,
@@ -384,7 +385,7 @@ describe('care plan update event model', () => {
         patientId: patient.id,
         userId: user.id,
         patientGoalId: patientGoal.id,
-        eventType: 'edit_patient_goal',
+        eventType: 'edit_patient_goal' as CarePlanUpdateEventTypes,
         progressNoteId: progressNote.id,
       },
       txn,

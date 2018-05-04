@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PatientAnswerEventTypes } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -6,14 +7,12 @@ import PatientAnswer from './patient-answer';
 import ProgressNote from './progress-note';
 import User from './user';
 
-type EventTypes = 'create_patient_answer';
-
 export interface IPatientAnswerEventOptions {
   patientId: string;
   userId?: string;
   patientAnswerId: string;
   previousPatientAnswerId?: string;
-  eventType: EventTypes;
+  eventType: PatientAnswerEventTypes.create_patient_answer;
   progressNoteId?: string;
   computedFieldId?: string;
 }
@@ -35,7 +34,7 @@ export default class PatientAnswerEvent extends BaseModel {
   patientAnswer: PatientAnswer;
   previousPatientAnswerId: string;
   previousPatientAnswer: PatientAnswer;
-  eventType: EventTypes;
+  eventType: PatientAnswerEventTypes.create_patient_answer;
   progressNoteId: string;
   progressNote: ProgressNote;
 

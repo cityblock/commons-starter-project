@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -17,7 +18,7 @@ import PatientExternalProviderPhone from '../patient-external-provider-phone';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;

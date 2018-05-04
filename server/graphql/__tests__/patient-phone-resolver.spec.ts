@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, UserRole } from 'schema';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -18,7 +19,7 @@ interface ISetup {
   primaryPhone: Phone;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -42,7 +43,10 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const patient = await createPatient({ cityblockId: 1, homeClinicId }, txn);
   const phone = await Phone.create(createMockPhone(), txn);
-  const primaryPhone = await Phone.create({ phoneNumber: '+11112223333', type: 'mobile' }, txn);
+  const primaryPhone = await Phone.create(
+    { phoneNumber: '+11112223333', type: 'mobile' as PhoneTypeOptions },
+    txn,
+  );
   await PatientPhone.create({ phoneId: phone.id, patientId: patient.id }, txn);
   await PatientPhone.create({ phoneId: primaryPhone.id, patientId: patient.id }, txn);
   await PatientInfo.edit(

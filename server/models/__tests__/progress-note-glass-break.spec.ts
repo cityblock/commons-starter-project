@@ -1,5 +1,6 @@
 import { subHours } from 'date-fns';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
@@ -10,7 +11,7 @@ import ProgressNoteGlassBreak from '../progress-note-glass-break';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const reason = 'Other';
 const note = 'New phone who dis';
 

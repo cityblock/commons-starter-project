@@ -1,10 +1,11 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { SmsMessageDirection } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { validatePhoneNumberForTwilio } from '../helpers/twilio-helpers';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientPhone from './patient-phone';
-import { Direction, DIRECTION } from './sms-message';
+import { DIRECTION } from './sms-message';
 import User from './user';
 import Voicemail from './voicemail';
 
@@ -32,7 +33,7 @@ const CALL_STATUS: CallStatus[] = [
 interface IPhoneCallCreate {
   userId: string;
   contactNumber: string;
-  direction: Direction;
+  direction: SmsMessageDirection;
   callStatus: CallStatus;
   duration: number;
   twilioPayload: object;
@@ -51,7 +52,7 @@ export default class PhoneCall extends BaseModel {
   contactNumber: string;
   patientId: string | null;
   patient: Patient | null;
-  direction: Direction;
+  direction: SmsMessageDirection;
   callStatus: CallStatus;
   duration: number;
   twilioPayload: object;

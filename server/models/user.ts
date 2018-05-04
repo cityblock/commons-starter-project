@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import { IUserWithCount } from 'schema';
-import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
+import { IUserWithCount, Permissions, UserRole } from 'schema';
+import { PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import {
   formatPhoneNumberForTwilio,
@@ -17,26 +17,16 @@ import Clinic from './clinic';
 import GoogleAuth from './google-auth';
 import Patient from './patient';
 
-export type UserRole =
-  | 'physician'
-  | 'nurseCareManager'
-  | 'healthCoach'
-  | 'familyMember'
-  | 'anonymousUser'
-  | 'admin'
-  | 'communityHealthPartner'
-  | 'outreachSpecialist'
-  | 'primaryCarePhysician';
 export const USER_ROLE: UserRole[] = [
-  'physician',
-  'nurseCareManager',
-  'healthCoach',
-  'familyMember',
-  'anonymousUser',
-  'admin',
-  'communityHealthPartner',
-  'outreachSpecialist',
-  'primaryCarePhysician',
+  'physician' as UserRole,
+  'nurseCareManager' as UserRole,
+  'healthCoach' as UserRole,
+  'familyMember' as UserRole,
+  'anonymousUser' as UserRole,
+  'admin' as UserRole,
+  'communityHealthPartner' as UserRole,
+  'outreachSpecialist' as UserRole,
+  'primaryCarePhysician' as UserRole,
 ];
 
 export type Locale = 'en' | 'es';
@@ -202,9 +192,9 @@ export default class User extends BaseModel {
       return this.query(txn).insertAndFetch({
         email: attributionUserEmail,
         permissions: attributionUserPermissions,
-        userRole: attributionUserUserRole,
+        userRole: attributionUserUserRole as UserRole,
         homeClinicId: clinic.id,
-      });
+      } as any); // TODO
     }
 
     return user;

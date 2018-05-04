@@ -1,4 +1,11 @@
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  Priority,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -19,7 +26,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       order: 1,
       type: 'riskArea',
       riskAreaId: riskArea.id,
@@ -30,8 +37,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       displayValue: 'loves writing tests!',
       value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
+      valueType: 'number' as AnswerValueTypeOptions,
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -42,8 +49,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     {
       title: 'Housing',
       repeating: false,
-      priority: 'low',
-      careTeamAssigneeRole: 'physician',
+      priority: 'low' as Priority,
+      careTeamAssigneeRole: 'physician' as UserRole,
     },
     txn,
   );
@@ -73,8 +80,8 @@ describe('task suggestion model', () => {
         {
           title: 'Housing',
           repeating: false,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );

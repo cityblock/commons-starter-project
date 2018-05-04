@@ -1,7 +1,8 @@
 import { graphql, print } from 'graphql';
-import { find } from 'lodash';
 import { cloneDeep } from 'lodash';
+import { find } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
 import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
 import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
@@ -28,7 +29,7 @@ interface ISetup {
   testConfig: any;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -113,7 +114,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner',
+          userRole: 'communityHealthPartner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,
@@ -259,7 +260,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner',
+          userRole: 'communityHealthPartner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,
@@ -351,7 +352,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner',
+          userRole: 'communityHealthPartner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,

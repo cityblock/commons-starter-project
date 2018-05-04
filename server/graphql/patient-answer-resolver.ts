@@ -1,5 +1,5 @@
 import {
-  IAnswerFilterTypeEnum,
+  AnswerFilterType,
   IPatientAnswersCreateInput,
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
@@ -94,7 +94,7 @@ export async function patientAnswersCreate(
 
 export async function resolvePatientAnswers(
   root: any,
-  args: { filterId: string; filterType: IAnswerFilterTypeEnum; patientId: string },
+  args: { filterId: string; filterType: AnswerFilterType; patientId: string },
   { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['patientAnswers']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);

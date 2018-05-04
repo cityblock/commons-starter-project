@@ -1,3 +1,4 @@
+import { PatientSignedUrlAction, UserSignedUrlAction } from 'schema';
 import { loadPatientDocumentUrl, loadPatientPhotoUrl, loadUserVoicemailUrl } from '../helpers';
 
 describe('Google Cloud Storage Helpers', () => {
@@ -11,7 +12,11 @@ describe('Google Cloud Storage Helpers', () => {
       };
 
       const patientId = 'sansaStark';
-      const signedUrl = await loadPatientPhotoUrl(patientId, 'read', testConfig);
+      const signedUrl = await loadPatientPhotoUrl(
+        patientId,
+        'read' as PatientSignedUrlAction,
+        testConfig,
+      );
 
       expect(signedUrl).toMatch('fake-credentials');
       expect(signedUrl).toMatch(patientId);
@@ -30,7 +35,7 @@ describe('Google Cloud Storage Helpers', () => {
       const patientId = 'sansaStark';
       const signedUrl = await loadPatientDocumentUrl(
         patientId,
-        'read',
+        'read' as PatientSignedUrlAction,
         'someUUID',
         'application/pdf',
         testConfig,
@@ -53,7 +58,12 @@ describe('Google Cloud Storage Helpers', () => {
 
       const userId = 'jonSnow';
       const voicemailId = 'winterIsComing';
-      const signedUrl = await loadUserVoicemailUrl(userId, voicemailId, 'read', testConfig);
+      const signedUrl = await loadUserVoicemailUrl(
+        userId,
+        voicemailId,
+        'read' as UserSignedUrlAction,
+        testConfig,
+      );
 
       expect(signedUrl).toMatch('fake-credentials');
       expect(signedUrl).toMatch(userId);

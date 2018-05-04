@@ -1,5 +1,5 @@
+import EventIcon from '@material-ui/icons/Event';
 import { shallow } from 'enzyme';
-import EventIcon from 'material-ui-icons/Event';
 import * as React from 'react';
 import Icon from '../icon';
 

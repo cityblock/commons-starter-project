@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { TaskEventTypes, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import PatientGoal from '../../models/patient-goal';
@@ -18,7 +19,7 @@ import TaskEvent from '../task-event';
 import TaskFollower from '../task-follower';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 
 interface ISetup {
   user: User;
@@ -89,7 +90,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -120,7 +121,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -155,7 +156,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -204,7 +205,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -252,7 +253,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -296,7 +297,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user2.id,
-        eventType: 'add_follower',
+        eventType: 'add_follower' as TaskEventTypes,
         skipNotifsCreate: true,
       },
       txn,
@@ -356,7 +357,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -400,7 +401,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -417,7 +418,7 @@ describe('task event model', () => {
       {
         taskId: task.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -447,7 +448,7 @@ describe('task event model', () => {
       {
         taskId: task12.id,
         userId: user.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );
@@ -478,7 +479,7 @@ describe('task event model', () => {
       {
         taskId: task21.id,
         userId: user2.id,
-        eventType: 'edit_assignee',
+        eventType: 'edit_assignee' as TaskEventTypes,
       },
       txn,
     );

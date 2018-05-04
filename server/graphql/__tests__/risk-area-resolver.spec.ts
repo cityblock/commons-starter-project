@@ -1,6 +1,13 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  AssessmentType,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -30,7 +37,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -40,7 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 1,
@@ -191,7 +198,7 @@ describe('answer tests', () => {
       });
       expect(cloneDeep(result.data!.riskAreaCreate)).toMatchObject({
         title: 'new risk area',
-        assessmentType: 'manual',
+        assessmentType: 'manual' as AssessmentType,
         mediumRiskThreshold: 5,
         highRiskThreshold: 8,
         riskAreaGroupId: riskAreaGroup.id,
@@ -226,8 +233,8 @@ describe('answer tests', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question.id,
@@ -279,8 +286,8 @@ describe('answer tests', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'the patient said: {answer}',
           questionId: question.id,
@@ -332,8 +339,8 @@ describe('answer tests', () => {
         {
           displayValue: 'loves writing tests!',
           value: '3',
-          valueType: 'number',
-          riskAdjustmentType: 'increment',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question.id,
@@ -344,7 +351,7 @@ describe('answer tests', () => {
       const question2 = await Question.create(
         {
           title: 'other question',
-          answerType: 'dropdown',
+          answerType: 'dropdown' as AnswerTypeOptions,
           type: 'riskArea',
           riskAreaId: riskArea.id,
           order: 2,
@@ -355,8 +362,8 @@ describe('answer tests', () => {
         {
           displayValue: 'loves writing tests!',
           value: '4',
-          valueType: 'number',
-          riskAdjustmentType: 'forceHighRisk',
+          valueType: 'number' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: true,
           summaryText: 'summary text!',
           questionId: question2.id,

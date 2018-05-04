@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { Priority, UserRole } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
@@ -14,7 +15,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -55,8 +56,8 @@ describe('task template resolver', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -98,8 +99,8 @@ describe('task template resolver', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -123,8 +124,8 @@ describe('task template resolver', () => {
           title: 'Housing',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -146,8 +147,8 @@ describe('task template resolver', () => {
           title: 'Housing 1',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );
@@ -156,8 +157,8 @@ describe('task template resolver', () => {
           title: 'Housing 2',
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          priority: 'low',
-          careTeamAssigneeRole: 'physician',
+          priority: 'low' as Priority,
+          careTeamAssigneeRole: 'physician' as UserRole,
         },
         txn,
       );

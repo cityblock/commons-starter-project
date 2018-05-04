@@ -1,5 +1,11 @@
 import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  ComputedFieldDataTypes,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -31,7 +37,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'physician' as UserRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const riskArea = await createRiskArea({ title: 'testing' }, txn);
 
@@ -100,14 +106,14 @@ describe('processing computedField jobs', () => {
       {
         label: 'Computed Field',
         slug: 'computed-field',
-        dataType: 'string',
+        dataType: 'string' as ComputedFieldDataTypes,
       },
       txn,
     );
     const question = await Question.create(
       {
         title: 'Question',
-        answerType: 'radio',
+        answerType: 'radio' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -120,7 +126,7 @@ describe('processing computedField jobs', () => {
         questionId: question.id,
         displayValue: 'Answer',
         value: 'answer',
-        valueType: 'string',
+        valueType: 'string' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
       },
@@ -156,14 +162,14 @@ describe('processing computedField jobs', () => {
       {
         label: 'Computed Field',
         slug: 'computed-field',
-        dataType: 'string',
+        dataType: 'string' as ComputedFieldDataTypes,
       },
       txn,
     );
     const question = await Question.create(
       {
         title: 'Question',
-        answerType: 'radio',
+        answerType: 'radio' as AnswerTypeOptions,
         riskAreaId: riskArea.id,
         type: 'riskArea',
         order: 1,
@@ -176,7 +182,7 @@ describe('processing computedField jobs', () => {
         questionId: question.id,
         displayValue: 'Answer',
         value: 'answer',
-        valueType: 'string',
+        valueType: 'string' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
       },

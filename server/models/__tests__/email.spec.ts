@@ -1,11 +1,12 @@
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import Db from '../../db';
 import { createMockClinic, createMockEmail, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Email from '../email';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   user: User;

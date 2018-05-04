@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { QuickCallDirection, UserRole } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -14,7 +15,7 @@ interface ISetup {
   patient: Patient;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -53,7 +54,7 @@ describe('quick call resolver', () => {
         reason: 'Had to call the son',
         summary: 'package is on the way',
         startTime: new Date().toISOString(),
-        direction: 'Outbound',
+        direction: 'Outbound' as QuickCallDirection,
         callRecipient: 'The son',
         wasSuccessful: true,
       },
@@ -103,7 +104,7 @@ describe('quick call resolver', () => {
           reason: 'Had to call the son',
           summary: 'package is on the way',
           startTime: new Date().toISOString(),
-          direction: 'Outbound',
+          direction: 'Outbound' as QuickCallDirection,
           callRecipient: 'The son',
           wasSuccessful: true,
         },
@@ -117,7 +118,7 @@ describe('quick call resolver', () => {
           reason: 'Had to call the son',
           summary: 'package is on the way',
           startTime: new Date().toISOString(),
-          direction: 'Outbound',
+          direction: 'Outbound' as QuickCallDirection,
           callRecipient: 'The son',
           wasSuccessful: true,
         },

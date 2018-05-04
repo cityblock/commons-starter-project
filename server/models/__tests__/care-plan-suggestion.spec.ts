@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { CarePlanSuggestionType, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -30,7 +31,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'physician' as UserRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const concern = await Concern.create({ title: 'Concern' }, txn);
   const riskArea = await createRiskArea({ title: 'testing' }, txn);
@@ -81,7 +82,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -107,7 +108,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -143,14 +144,14 @@ describe('care plan suggestion', () => {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'concern',
+              suggestionType: 'concern' as CarePlanSuggestionType,
               concernId: concern.id,
             },
             {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'goal',
+              suggestionType: 'goal' as CarePlanSuggestionType,
               goalSuggestionTemplateId: goalSuggestionTemplate.id,
             },
           ],
@@ -179,7 +180,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -209,14 +210,14 @@ describe('care plan suggestion', () => {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'concern',
+              suggestionType: 'concern' as CarePlanSuggestionType,
               concernId: concern.id,
             },
             {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'concern',
+              suggestionType: 'concern' as CarePlanSuggestionType,
               concernId: concern2.id,
             },
           ],
@@ -261,7 +262,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -284,14 +285,14 @@ describe('care plan suggestion', () => {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'concern',
+              suggestionType: 'concern' as CarePlanSuggestionType,
               concernId: concern.id,
             },
             {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'concern',
+              suggestionType: 'concern' as CarePlanSuggestionType,
               concernId: concern.id,
             },
           ],
@@ -338,14 +339,14 @@ describe('care plan suggestion', () => {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'goal',
+              suggestionType: 'goal' as CarePlanSuggestionType,
               goalSuggestionTemplateId: goalSuggestionTemplate.id,
             },
             {
               type: 'riskAreaAssessmentSubmission',
               riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
               patientId: patient.id,
-              suggestionType: 'goal',
+              suggestionType: 'goal' as CarePlanSuggestionType,
               goalSuggestionTemplateId: goalSuggestionTemplate.id,
             },
           ],
@@ -388,7 +389,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -424,7 +425,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern.id,
         },
         txn,
@@ -434,7 +435,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'concern',
+          suggestionType: 'concern' as CarePlanSuggestionType,
           concernId: concern2.id,
         },
         txn,
@@ -444,7 +445,7 @@ describe('care plan suggestion', () => {
           type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           patientId: patient.id,
-          suggestionType: 'goal',
+          suggestionType: 'goal' as CarePlanSuggestionType,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,
@@ -474,7 +475,7 @@ describe('care plan suggestion', () => {
         type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         patientId: patient.id,
-        suggestionType: 'concern',
+        suggestionType: 'concern' as CarePlanSuggestionType,
         concernId: concern.id,
       },
       txn,

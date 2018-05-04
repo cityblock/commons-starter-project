@@ -1,5 +1,6 @@
 import request from 'axios';
 import { transaction } from 'objection';
+import { UserRole } from 'schema';
 import config from '../config';
 import Db from '../db';
 import { signJwt } from '../graphql/shared/utils';
@@ -43,7 +44,7 @@ describe('main', () => {
         innerTxn,
       );
       return User.create(
-        { homeClinicId: clinic.id, email: 'a@b.com', userRole: 'admin' },
+        { homeClinicId: clinic.id, email: 'a@b.com', userRole: 'admin' as UserRole },
         innerTxn,
       );
     });
@@ -98,7 +99,10 @@ describe('main', () => {
         },
         innerTxn,
       );
-      return User.create({ homeClinicId: clinic.id, email, userRole: 'admin' }, innerTxn);
+      return User.create(
+        { homeClinicId: clinic.id, email, userRole: 'admin' as UserRole },
+        innerTxn,
+      );
     });
     const authToken = signJwt({
       userId: user.id,

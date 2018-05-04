@@ -14,7 +14,7 @@ export async function resolvePhones(
 ): Promise<IRootQueryType['patientPhones']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all phones for patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET all phones for patient ${patientId} by ${userId}`);
 
   return PatientPhone.getAll(patientId, txn);
 }

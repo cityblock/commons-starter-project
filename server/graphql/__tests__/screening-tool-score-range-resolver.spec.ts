@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { RiskAdjustmentTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -20,7 +21,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -302,7 +303,7 @@ describe('screening tool score range resolver tests', () => {
         description: 'A Description',
         minimumScore: 50,
         maximumScore: 100,
-        riskAdjustmentType: 'increment',
+        riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       });
     });
   });

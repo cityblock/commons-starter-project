@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { UserRole } from 'schema';
 import * as concernAddDiagnosisCode from '../../../app/graphql/queries/concern-add-diagnosis-code-mutation.graphql';
 import * as concernCreate from '../../../app/graphql/queries/concern-create-mutation.graphql';
 import * as concernDelete from '../../../app/graphql/queries/concern-delete-mutation.graphql';
@@ -16,7 +17,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 interface ISetup {

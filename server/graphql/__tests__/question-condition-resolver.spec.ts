@@ -1,6 +1,12 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -18,7 +24,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -29,7 +35,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question = await Question.create(
     {
       title: 'like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 1,
@@ -39,7 +45,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const question2 = await Question.create(
     {
       title: 'really like writing tests?',
-      answerType: 'dropdown',
+      answerType: 'dropdown' as AnswerTypeOptions,
       type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 2,
@@ -49,9 +55,9 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const answer = await Answer.create(
     {
       value: '3',
-      valueType: 'number',
+      valueType: 'number' as AnswerValueTypeOptions,
       displayValue: 'loves writing tests!',
-      riskAdjustmentType: 'forceHighRisk',
+      riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
       order: 1,
@@ -173,9 +179,9 @@ describe('questionCondition tests', () => {
       const answer2 = await Answer.create(
         {
           value: '2',
-          valueType: 'number',
+          valueType: 'number' as AnswerValueTypeOptions,
           displayValue: 'meh writing tests!',
-          riskAdjustmentType: 'forceHighRisk',
+          riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
           order: 2,

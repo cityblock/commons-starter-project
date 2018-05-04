@@ -1,6 +1,7 @@
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as getTasksForPatient from '../../../app/graphql/queries/get-patient-tasks.graphql';
 import * as taskIdsWithNotifications from '../../../app/graphql/queries/get-task-ids-with-notifications.graphql';
@@ -43,7 +44,7 @@ interface ISetup {
   patientGoal: PatientGoal;
 }
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -81,7 +82,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
-      priority: 'low',
+      priority: 'low' as Priority,
       patientGoalId: patientGoal.id,
     },
     txn,
@@ -306,7 +307,7 @@ describe('task tests', () => {
           userId: user.id,
           txn,
         },
-        { priority: 'high', taskId: task1.id },
+        { priority: 'high' as Priority, taskId: task1.id },
       );
       const task = cloneDeep(result.data!.taskEdit);
       const taskEvents = await TaskEvent.getTaskEvents(
@@ -763,7 +764,7 @@ describe('task tests', () => {
           patientId: patient.id,
           createdById: user.id,
           assignedToId: user2.id,
-          priority: 'low',
+          priority: 'low' as Priority,
           patientGoalId: patientGoal.id,
         },
         txn,

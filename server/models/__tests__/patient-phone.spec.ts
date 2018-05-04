@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { PhoneTypeOptions, UserRole } from 'schema';
 import Db from '../../db';
 import {
   createMockClinic,
@@ -12,7 +13,7 @@ import PatientPhone from '../patient-phone';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'admin';
+const userRole = 'admin' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -180,17 +181,26 @@ describe('patient phone model', () => {
       await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
 
       // second phone for the same patient
-      const phone2 = await Phone.create({ phoneNumber: '111-111-1111', type: 'mobile' }, txn);
+      const phone2 = await Phone.create(
+        { phoneNumber: '111-111-1111', type: 'mobile' as PhoneTypeOptions },
+        txn,
+      );
       await PatientPhone.create({ patientId: patient.id, phoneId: phone2.id }, txn);
 
       // third phone for the same patient that gets deleted
-      const phone3 = await Phone.create({ phoneNumber: '222-222-2222', type: 'other' }, txn);
+      const phone3 = await Phone.create(
+        { phoneNumber: '222-222-2222', type: 'other' as PhoneTypeOptions },
+        txn,
+      );
       await PatientPhone.create({ patientId: patient.id, phoneId: phone3.id }, txn);
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone3.id }, txn);
 
       // phone for another patient
       const patient2 = await createPatient({ cityblockId: 124, homeClinicId: clinic.id }, txn);
-      const phone4 = await Phone.create({ phoneNumber: '333-333-3333', type: 'other' }, txn);
+      const phone4 = await Phone.create(
+        { phoneNumber: '333-333-3333', type: 'other' as PhoneTypeOptions },
+        txn,
+      );
       await PatientPhone.create({ patientId: patient2.id, phoneId: phone4.id }, txn);
 
       const phones = await PatientPhone.getAll(patient.id, txn);

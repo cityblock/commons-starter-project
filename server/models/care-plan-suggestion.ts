@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { CarePlanSuggestionType } from 'schema';
 import BaseModel from './base-model';
 import ComputedField from './computed-field';
 import Concern from './concern';
@@ -9,11 +10,9 @@ import PatientScreeningToolSubmission from './patient-screening-tool-submission'
 import RiskAreaAssessmentSubmission from './risk-area-assessment-submission';
 import User from './user';
 
-type SuggestionType = 'concern' | 'goal';
-
 export interface ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission {
   patientId: string;
-  suggestionType: SuggestionType;
+  suggestionType: CarePlanSuggestionType;
   concernId?: string;
   goalSuggestionTemplateId?: string;
   patientScreeningToolSubmissionId: string;
@@ -22,7 +21,7 @@ export interface ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission 
 
 export interface ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission {
   patientId: string;
-  suggestionType: SuggestionType;
+  suggestionType: CarePlanSuggestionType;
   concernId?: string;
   goalSuggestionTemplateId?: string;
   riskAreaAssessmentSubmissionId: string;
@@ -31,7 +30,7 @@ export interface ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission {
 
 export interface ICarePlanSuggestionCreateArgsForComputedFieldAnswer {
   patientId: string;
-  suggestionType: SuggestionType;
+  suggestionType: CarePlanSuggestionType;
   concernId?: string;
   goalSuggestionTemplateId?: string;
   computedFieldId: string;
@@ -66,7 +65,7 @@ export const SUPER_EAGER_QUERY =
 export default class CarePlanSuggestion extends BaseModel {
   patientId: string;
   patient: Patient;
-  suggestionType: SuggestionType;
+  suggestionType: CarePlanSuggestionType;
   concernId: string | null;
   concern: Concern | null;
   goalSuggestionTemplateId: string | null;

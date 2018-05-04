@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -17,7 +18,7 @@ import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
 
-const userRole = 'physician';
+const userRole = 'physician' as UserRole;
 const order = 'asc';
 const orderBy = 'dueAt';
 const pageNumber = 0;
@@ -401,7 +402,7 @@ describe('task model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user.id,
-        priority: 'low',
+        priority: 'low' as Priority,
         patientGoalId: patientGoal.id,
       },
       txn,
@@ -414,7 +415,7 @@ describe('task model', () => {
         patientId: patient.id,
         createdById: user.id,
         assignedToId: user2.id,
-        priority: 'high',
+        priority: 'high' as Priority,
         patientGoalId: patientGoal.id,
       },
       txn,
@@ -429,7 +430,7 @@ describe('task model', () => {
         {
           title: 'title',
           description: 'description',
-          priority: 'low',
+          priority: 'low' as Priority,
         },
       ],
       total: 1,

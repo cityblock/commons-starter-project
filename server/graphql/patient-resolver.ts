@@ -43,7 +43,7 @@ export async function resolvePatient(
 ): Promise<IRootQueryType['patient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient ${patientId} by ${userId}`, 2);
+  logger.log(`GET patient ${patientId} by ${userId}`);
 
   return Patient.get(patientId, txn);
 }
@@ -59,7 +59,7 @@ export async function patientCoreIdentityVerify(
 ): Promise<IRootMutationType['patientCoreIdentityVerify']> {
   await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`VERIFY patient ${input.patientId} by ${userId}`, 2);
+  logger.log(`VERIFY patient ${input.patientId} by ${userId}`);
   return Patient.coreIdentityVerify(input.patientId, userId!, txn);
 }
 

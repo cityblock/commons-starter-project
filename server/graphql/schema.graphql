@@ -3092,9 +3092,18 @@ type RootQueryType {
   # Google calendar id for a patient calendar
   calendarForPatient(patientId: ID!): Calendar!
   # List of google calendar events for a patient
-  calendarEventsForPatient(patientId: ID!, pageSize: Int!, pageToken: String): CalendarEventEdges!
+  calendarEventsForPatient(
+    patientId: ID!
+    timeMin: String!
+    pageSize: Int!
+    pageToken: String
+  ): CalendarEventEdges!
   # List of google calendar events for the logged in user
-  calendarEventsForCurrentUser(pageSize: Int!, pageToken: String): CalendarEventEdges!
+  calendarEventsForCurrentUser(
+    timeMin: String!
+    pageSize: Int!
+    pageToken: String
+  ): CalendarEventEdges!
   # SMS messages for given user and patient
   smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
   # latest SMS message between given user and patient

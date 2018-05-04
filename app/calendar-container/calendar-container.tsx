@@ -148,11 +148,14 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
 };
 
 export default graphql(calendarQuery as any, {
-  options: () => ({ variables: { pageSize: DEFAULT_PAGE_SIZE } }),
+  options: () => ({
+    variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
+  }),
   props: ({ data }): IGraphqlProps => ({
     fetchMoreCalendarEvents: () => {
       if (get(data, 'calendarEventsForCurrentUser') && get(data, 'fetchMore')) {
         const variables = {
+          timeMin: new Date().toISOString(),
           pageSize: DEFAULT_PAGE_SIZE,
           pageToken: (data as any).calendarEventsForCurrentUser.pageInfo.nextPageToken,
         };

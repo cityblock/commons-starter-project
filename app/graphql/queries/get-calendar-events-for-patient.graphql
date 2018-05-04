@@ -1,7 +1,17 @@
 #import "../fragments/full-calendar-event.graphql"
 
-query getCalendarEventsForPatient($patientId: ID!, $pageSize: Int!, $pageToken: String) {
-  calendarEventsForPatient(patientId: $patientId, pageSize: $pageSize, pageToken: $pageToken) {
+query getCalendarEventsForPatient(
+  $patientId: ID!
+  $timeMin: String!
+  $pageSize: Int!
+  $pageToken: String
+) {
+  calendarEventsForPatient(
+    patientId: $patientId
+    timeMin: $timeMin
+    pageSize: $pageSize
+    pageToken: $pageToken
+  ) {
     events {
       ...FullCalendarEvent
     }

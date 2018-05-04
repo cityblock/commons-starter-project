@@ -1712,6 +1712,7 @@ export interface getAnswerQuery {
 };
 
 export interface getCalendarEventsForCurrentUserQueryVariables {
+  timeMin: string,
   pageSize: number,
   pageToken?: string | null,
 };
@@ -1742,6 +1743,7 @@ export interface getCalendarEventsForCurrentUserQuery {
 
 export interface getCalendarEventsForPatientQueryVariables {
   patientId: string,
+  timeMin: string,
   pageSize: number,
   pageToken?: string | null,
 };

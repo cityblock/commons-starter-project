@@ -1067,11 +1067,13 @@ declare module 'schema' {
 
   interface ICalendarEventsForPatientOnRootQueryTypeArguments {
     patientId: string;
+    timeMin: string;
     pageSize: number;
     pageToken?: string | null;
   }
 
   interface ICalendarEventsForCurrentUserOnRootQueryTypeArguments {
+    timeMin: string;
     pageSize: number;
     pageToken?: string | null;
   }

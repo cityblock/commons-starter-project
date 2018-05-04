@@ -184,6 +184,7 @@ export default compose(
   graphql(calendarEventsForPatientQuery as any, {
     options: (props: IProps) => ({
       variables: {
+        timeMin: new Date().toISOString(),
         patientId: props.match.params.patientId,
         pageSize: DEFAULT_PAGE_SIZE,
       },
@@ -192,6 +193,7 @@ export default compose(
       fetchMoreCalendarEvents: () => {
         if (data && (data as any).calendarEventsForPatient && data.fetchMore) {
           const variables = {
+            timeMin: new Date().toISOString(),
             patientId: ownProps.match.params.patientId,
             pageSize: DEFAULT_PAGE_SIZE,
             pageToken: (data as any).calendarEventsForPatient.pageInfo.nextPageToken,

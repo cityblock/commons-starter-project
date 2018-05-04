@@ -118,15 +118,17 @@ export interface IGooglePaginationOptions {
 
 export async function getGoogleCalendarEventsForPatient(
   calendarId: string,
+  timeMin: string,
   pageOptions: IGooglePaginationOptions,
   testConfig?: any,
 ) {
   const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-  return getGoogleCalendarEvents(calendarId, jwtClient, pageOptions, testConfig);
+  return getGoogleCalendarEvents(calendarId, timeMin, jwtClient, pageOptions, testConfig);
 }
 
 export async function getGoogleCalendarEventsForCurrentUser(
   calendarId: string,
+  timeMin: string,
   googleAuth: GoogleAuth,
   pageOptions: IGooglePaginationOptions,
   testConfig?: any,
@@ -143,7 +145,7 @@ export async function getGoogleCalendarEventsForCurrentUser(
     expiry_date: new Date(googleAuth.expiresAt).valueOf(),
   });
 
-  return getGoogleCalendarEvents(calendarId, oauth2Client, pageOptions, testConfig);
+  return getGoogleCalendarEvents(calendarId, timeMin, oauth2Client, pageOptions, testConfig);
 }
 
 export async function createGoogleCalendarEvent(
@@ -220,6 +222,7 @@ export function getGoogleCalendarFieldsFromSIU(data: ISchedulingMessageData) {
 
 async function getGoogleCalendarEvents(
   calendarId: string,
+  timeMin: string,
   auth: any,
   { pageToken, pageSize }: IGooglePaginationOptions,
   testConfig?: any,
@@ -231,7 +234,7 @@ async function getGoogleCalendarEvents(
     maxResults: pageSize,
     singleEvents: true,
     orderBy: 'startTime',
-    timeMin: new Date().toISOString(),
+    timeMin,
     pageToken,
   });
 

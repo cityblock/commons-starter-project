@@ -42,14 +42,15 @@ export async function resolveCalendarForPatient(
 
 export interface IResolvePatientCalendarEventsOptions {
   patientId: string;
+  timeMin: string;
   pageSize: number;
   pageToken: string | null;
 }
 
 export async function resolveCalendarEventsForPatient(
   source: any,
-  { patientId, pageSize, pageToken }: IResolvePatientCalendarEventsOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { patientId, timeMin, pageSize, pageToken }: IResolvePatientCalendarEventsOptions,
+  { permissions, userId, logger, testConfig, txn }: IContext,
 ): Promise<IRootQueryType['calendarEventsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
@@ -60,10 +61,12 @@ export async function resolveCalendarEventsForPatient(
     return { events: [], pageInfo: { nextPageToken: null, previousPageToken: null } };
   }
 
-  const results = await getGoogleCalendarEventsForPatient(patient.patientInfo.googleCalendarId, {
-    pageToken,
-    pageSize,
-  });
+  const results = await getGoogleCalendarEventsForPatient(
+    patient.patientInfo.googleCalendarId,
+    timeMin,
+    { pageToken, pageSize },
+    testConfig,
+  );
 
   return {
     events: results.events,
@@ -75,14 +78,15 @@ export async function resolveCalendarEventsForPatient(
 }
 
 export interface IResolveCalendarEventsOptions {
+  timeMin: string;
   pageSize: number;
   pageToken: string | null;
 }
 
 export async function resolveCalendarEventsForCurrentUser(
   source: any,
-  { pageSize, pageToken }: IResolveCalendarEventsOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { timeMin, pageSize, pageToken }: IResolveCalendarEventsOptions,
+  { permissions, userId, logger, testConfig, txn }: IContext,
 ): Promise<IRootQueryType['calendarEventsForCurrentUser']> {
   checkLoggedInWithPermissions(userId, permissions);
 
@@ -92,10 +96,16 @@ export async function resolveCalendarEventsForCurrentUser(
   const googleAuth = await GoogleAuth.get(user.googleAuthId, txn);
 
   try {
-    const results = await getGoogleCalendarEventsForCurrentUser(user.email, googleAuth, {
-      pageToken,
-      pageSize,
-    });
+    const results = await getGoogleCalendarEventsForCurrentUser(
+      user.email,
+      timeMin,
+      googleAuth,
+      {
+        pageToken,
+        pageSize,
+      },
+      testConfig,
+    );
 
     return {
       events: results.events,
@@ -105,6 +115,7 @@ export async function resolveCalendarEventsForCurrentUser(
       },
     };
   } catch (err) {
+    console.warn(err);
     throw new Error(`There was an error reading the calendar for user: ${userId}`);
   }
 }

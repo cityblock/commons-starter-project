@@ -258,14 +258,14 @@
     shimmer "^1.2.0"
     uuid "^3.0.1"
 
-"@gql2ts/from-query@^1.6.0-2":
+"@gql2ts/from-query@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.8.0.tgz#a5dd66aaba57a4e51a60205352d0562214917313"
   dependencies:
     "@gql2ts/language-typescript" "^1.8.0"
     "@gql2ts/util" "^1.8.0"
 
-"@gql2ts/from-schema@^1.6.0-2":
+"@gql2ts/from-schema@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.8.0.tgz#12f2b860c0a7948d048e1155845fdba5a2be4a1d"
   dependencies:
@@ -282,7 +282,7 @@
     humps "^2.0.0"
     typescript "^2.2.2"
 
-"@gql2ts/util@^1.6.0-2", "@gql2ts/util@^1.8.0":
+"@gql2ts/util@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.0.tgz#23612425b43ba1a6534e7783137276f4f567a417"
 
@@ -5228,13 +5228,13 @@ got@^8.2.0:
     url-parse-lax "^3.0.0"
     url-to-options "^1.0.1"
 
-gql2ts@1.6.0-2:
-  version "1.6.0-2"
-  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.6.0-2.tgz#ce13465f6b1f20bbad43d94e8f4f7a51a553db0d"
+gql2ts@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.8.0.tgz#45af71a4aa5db0caa20fcb3b10b3c46bdacf321e"
   dependencies:
-    "@gql2ts/from-query" "^1.6.0-2"
-    "@gql2ts/from-schema" "^1.6.0-2"
-    "@gql2ts/util" "^1.6.0-2"
+    "@gql2ts/from-query" "^1.8.0"
+    "@gql2ts/from-schema" "^1.8.0"
+    "@gql2ts/util" "^1.8.0"
     commander "^2.9.0"
     graphql ">= 0.10 <1.0.0"
 

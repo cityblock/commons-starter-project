@@ -67,7 +67,16 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 
   return (
     <div>
-      <FormLabel messageId="concernCreate.selectLabel" />
+      <div className={styles.header}>
+        <FormLabel messageId="concernCreate.selectLabel" />
+        <div onClick={toggleShowAllConcerns} className={styles.showAll}>
+          <FormattedMessage
+            id={showAllConcerns ? 'concernCreate.hideAll' : 'concernCreate.showAll'}
+          >
+            {(message: string) => <p>{message}</p>}
+          </FormattedMessage>
+        </div>
+      </div>
       <Search
         value={searchTerm}
         onChange={onSearchTermChange}
@@ -79,12 +88,11 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
         emptyPlaceholderMessageId="concernCreate.noResults"
         fuseOptions={createConcernFuseOptions}
       />
-      <div onClick={toggleShowAllConcerns} className={styles.showAll}>
-        <FormattedMessage id={showAllConcerns ? 'concernCreate.hideAll' : 'concernCreate.showAll'}>
-          {(message: string) => <p>{message}</p>}
-        </FormattedMessage>
-      </div>
-      {concernId && <ConcernTypeSelect value={concernType} onChange={onSelectChange} />}
+      {concernId ? (
+        <ConcernTypeSelect value={concernType} onChange={onSelectChange} />
+      ) : (
+        <div className={styles.spacer} />
+      )}
     </div>
   );
 };

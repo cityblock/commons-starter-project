@@ -62,6 +62,10 @@ describe('Create Concern Modal Concern Select Component', () => {
     expect(wrapper.find(Search).props().emptyPlaceholderMessageId).toBe('concernCreate.noResults');
   });
 
+  it('renders spacer if concern not selected', () => {
+    expect(wrapper.find('.spacer').length).toBe(1);
+  });
+
   it('renders toggle to show all concerns', () => {
     expect(wrapper.find('.showAll').length).toBe(1);
     expect(wrapper.find(FormattedMessage).length).toBe(1);
@@ -80,6 +84,8 @@ describe('Create Concern Modal Concern Select Component', () => {
   it('renders select for concern type after selecting concern', () => {
     wrapper.setProps({ concernId: 'ladyOfWinterfell' });
     expect(wrapper.find(ConcernTypeSelect).length).toBe(1);
+
+    expect(wrapper.find('.spacer').length).toBe(0);
   });
 
   it('renders a spinner if loading', () => {

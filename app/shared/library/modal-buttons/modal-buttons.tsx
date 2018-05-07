@@ -29,9 +29,13 @@ const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div
-      className={classNames(className, styles.flex, {
-        [styles.single]: !(cancel && submit),
-      })}
+      className={classNames(
+        styles.flex,
+        {
+          [styles.single]: !(cancel && submit),
+        },
+        className,
+      )}
     >
       {cancel && (
         <Button

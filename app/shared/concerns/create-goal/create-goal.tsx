@@ -150,6 +150,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
       title: e.currentTarget.value,
       goalSuggestionTemplateId: null,
       hideSearchResults: false,
+      showAllGoals: false,
     });
   };
 

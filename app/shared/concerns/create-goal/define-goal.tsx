@@ -43,7 +43,14 @@ const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
         closePopup={closePopup}
       />
       <div className={styles.fields}>
-        <FormLabel messageId="goalCreate.selectLabel" topPadding={true} />
+        <div className={styles.header}>
+          <FormLabel messageId="goalCreate.selectLabel" topPadding={true} />
+          <div onClick={toggleShowAllGoals} className={styles.showAll}>
+            <FormattedMessage id={showAllGoals ? 'goalCreate.hideAll' : 'goalCreate.showAll'}>
+              {(message: string) => <p>{message}</p>}
+            </FormattedMessage>
+          </div>
+        </div>
         <Search
           value={title}
           onChange={onTitleChange}
@@ -54,16 +61,12 @@ const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
           placeholderMessageId="goalCreate.search"
           emptyPlaceholderMessageId="goalCreate.noResults"
         />
-        <div onClick={toggleShowAllGoals} className={styles.showAll}>
-          <FormattedMessage id={showAllGoals ? 'goalCreate.hideAll' : 'goalCreate.showAll'}>
-            {(message: string) => <p>{message}</p>}
-          </FormattedMessage>
-        </div>
         <ModalButtons
           cancelMessageId="goalCreate.cancel"
           submitMessageId="goalCreate.submit"
           cancel={closePopup}
           submit={onSubmit}
+          className={styles.buttons}
         />
       </div>
     </div>

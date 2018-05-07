@@ -8,4 +8,6 @@
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   padding: var(--extra-small-gutter) 0;
+  position: absolute;
+  width: 540px;
 }

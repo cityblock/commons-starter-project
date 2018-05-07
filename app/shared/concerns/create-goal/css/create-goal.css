@@ -28,8 +28,18 @@
 
 .showAll p {
   margin: 0;
-  padding-top: var(--extra-small-gutter);
+  padding-top: var(--medium-gutter);
   color: var(--light-blue-color);
   font-family: var(--basetica-medium);
   font-weight: var(--roboto-medium-weight);
+  line-height: var(--medium-font-line-height);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons {
+  margin-top: 50px;
 }

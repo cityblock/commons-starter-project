@@ -94,6 +94,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
       searchTerm: e.currentTarget.value,
       concernId: null,
       hideSearchResults: false,
+      showAllConcerns: false,
     });
   };
 

@@ -9,8 +9,19 @@
 
 .showAll p {
   margin: 0;
-  padding-top: var(--extra-small-gutter);
+  margin-bottom: var(--extra-small-gutter);
   color: var(--light-blue-color);
   font-family: var(--basetica-medium);
   font-weight: var(--roboto-medium-weight);
+  line-height: var(--medium-font-line-height);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spacer {
+  height: var(--gutter);
 }

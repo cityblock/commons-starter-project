@@ -65,5 +65,6 @@ describe('Create Goal Modal', () => {
     expect(wrapper.find(ModalButtons).length).toBe(1);
     expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('goalCreate.cancel');
     expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('goalCreate.submit');
+    expect(wrapper.find(ModalButtons).props().className).toBe('buttons');
   });
 });

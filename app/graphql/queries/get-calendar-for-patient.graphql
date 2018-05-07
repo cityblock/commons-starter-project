@@ -1,6 +1,7 @@
 query getCalendarForPatient($patientId: ID!) {
   calendarForPatient(patientId: $patientId) {
-    googleCalendarId
     patientId
+    googleCalendarId
+    googleCalendarUrl
   }
 }

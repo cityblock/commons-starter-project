@@ -1772,15 +1772,24 @@ export interface getCalendarEventsForPatientQuery {
   },
 };
 
+export interface getCalendarForCurrentUserQuery {
+  // Google calendar id and url for the current user
+  calendarForCurrentUser:  {
+    googleCalendarId: string,
+    googleCalendarUrl: string | null,
+  },
+};
+
 export interface getCalendarForPatientQueryVariables {
   patientId: string,
 };
 
 export interface getCalendarForPatientQuery {
-  // Google calendar id for a patient calendar
+  // Google calendar id and url for a patient calendar
   calendarForPatient:  {
-    googleCalendarId: string | null,
     patientId: string,
+    googleCalendarId: string | null,
+    googleCalendarUrl: string | null,
   },
 };
 

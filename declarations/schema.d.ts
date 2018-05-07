@@ -591,9 +591,14 @@ declare module 'schema' {
     patientSocialSecurity: IPatientSocialSecurity;
 
     /**
-     * Google calendar id for a patient calendar
+     * Google calendar id and url for the current user
      */
-    calendarForPatient: ICalendar;
+    calendarForCurrentUser: ICalendar;
+
+    /**
+     * Google calendar id and url for a patient calendar
+     */
+    calendarForPatient: IPatientCalendar;
 
     /**
      * List of google calendar events for a patient
@@ -2657,11 +2662,20 @@ declare module 'schema' {
   }
 
   /**
-   * google calendar id for patient calendar
+   * google calendar id and url for current user calendar
    */
   interface ICalendar {
+    googleCalendarId: string;
+    googleCalendarUrl: string | null;
+  }
+
+  /**
+   * google calendar id and url for patient calendar
+   */
+  interface IPatientCalendar {
     patientId: string;
     googleCalendarId: string | null;
+    googleCalendarUrl: string | null;
   }
 
   /**
@@ -3396,7 +3410,7 @@ declare module 'schema' {
     /**
      * creates a calendar for a patient
      */
-    calendarCreateForPatient: ICalendar;
+    calendarCreateForPatient: IPatientCalendar;
 
     /**
      * creates a calendar event for a patient

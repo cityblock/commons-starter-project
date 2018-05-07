@@ -1,9 +1,14 @@
 import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
-import { getCalendarEventsForCurrentUserQuery, FullCalendarEventFragment } from '../graphql/types';
+import * as calendarForCurrentUserQuery from '../graphql/queries/get-calendar-for-current-user.graphql';
+import {
+  getCalendarEventsForCurrentUserQuery,
+  getCalendarForCurrentUserQuery,
+  FullCalendarEventFragment,
+} from '../graphql/types';
 import AppointmentModal from '../shared/appointment-modal/appointment-modal';
 import RequestRefreshModal from '../shared/appointment-modal/request-refresh-modal';
 import Calendar from '../shared/calendar/calendar';
@@ -15,7 +20,8 @@ const DEFAULT_PAGE_SIZE = 20;
 interface IGraphqlProps {
   calendarLoading: boolean;
   calendarError: ApolloError | null | undefined;
-  calendarResponse?: getCalendarEventsForCurrentUserQuery['calendarEventsForCurrentUser'];
+  calendarEventsResponse?: getCalendarEventsForCurrentUserQuery['calendarEventsForCurrentUser'];
+  calendarResponse?: getCalendarForCurrentUserQuery['calendarForCurrentUser'];
   fetchMoreCalendarEvents: () => any;
   refetchCalendar: () => any;
 }
@@ -55,7 +61,11 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
   };
 
   handleOpenCalendarClick = () => {
-    // TODO
+    const { calendarResponse } = this.props;
+    const calendarUrl = calendarResponse ? calendarResponse.googleCalendarUrl : null;
+    if (calendarUrl) {
+      window.open(calendarUrl, '_blank');
+    }
   };
 
   handleRefreshClose = () => {
@@ -73,7 +83,7 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
 
   render() {
     const {
-      calendarResponse,
+      calendarEventsResponse,
       calendarLoading,
       fetchMoreCalendarEvents,
       calendarError,
@@ -82,8 +92,8 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
     const { isAppointmentModalVisible, isRefreshModalVisible, refreshType } = this.state;
 
     const calendarEvents =
-      calendarResponse && calendarResponse.events ? calendarResponse.events : [];
-    const hasNextPage = !!get(calendarResponse, 'pageInfo.nextPageToken');
+      calendarEventsResponse && calendarEventsResponse.events ? calendarEventsResponse.events : [];
+    const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
 
     return (
       <div className={styles.container}>
@@ -147,33 +157,40 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
   } as any;
 };
 
-export default graphql(calendarQuery as any, {
-  options: () => ({
-    variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
-  }),
-  props: ({ data }): IGraphqlProps => ({
-    fetchMoreCalendarEvents: () => {
-      if (get(data, 'calendarEventsForCurrentUser') && get(data, 'fetchMore')) {
-        const variables = {
-          timeMin: new Date().toISOString(),
-          pageSize: DEFAULT_PAGE_SIZE,
-          pageToken: (data as any).calendarEventsForCurrentUser.pageInfo.nextPageToken,
-        };
+export default compose(
+  graphql(calendarQuery as any, {
+    options: () => ({
+      variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
+    }),
+    props: ({ data }): IGraphqlProps => ({
+      fetchMoreCalendarEvents: () => {
+        if (get(data, 'calendarEventsForCurrentUser') && get(data, 'fetchMore')) {
+          const variables = {
+            timeMin: new Date().toISOString(),
+            pageSize: DEFAULT_PAGE_SIZE,
+            pageToken: (data as any).calendarEventsForCurrentUser.pageInfo.nextPageToken,
+          };
 
-        return data!.fetchMore({
-          variables,
-          updateQuery: (previousResult: IResponse, d: any) =>
-            updateQuery(previousResult, d.fetchMoreResult),
-        });
-      }
-    },
-    calendarLoading: data ? data.loading : false,
-    calendarError: data ? data.error : null,
-    calendarResponse: data ? (data as any).calendarEventsForCurrentUser : null,
-    refetchCalendar: () => {
-      if (data && data.refetch) {
-        return data.refetch();
-      }
-    },
+          return data!.fetchMore({
+            variables,
+            updateQuery: (previousResult: IResponse, d: any) =>
+              updateQuery(previousResult, d.fetchMoreResult),
+          });
+        }
+      },
+      calendarLoading: data ? data.loading : false,
+      calendarError: data ? data.error : null,
+      calendarEventsResponse: data ? (data as any).calendarEventsForCurrentUser : null,
+      refetchCalendar: () => {
+        if (data && data.refetch) {
+          return data.refetch();
+        }
+      },
+    }),
   }),
-})(CalendarContainer);
+  graphql(calendarForCurrentUserQuery as any, {
+    props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
+      calendarResponse: data ? (data as any).calendarForCurrentUser : null,
+    }),
+  }),
+)(CalendarContainer) as React.ComponentClass<IGraphqlProps>;

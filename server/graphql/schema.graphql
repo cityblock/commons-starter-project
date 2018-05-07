@@ -1638,10 +1638,17 @@ type CalendarUrl {
   eventCreateUrl: String!
 }
 
-# google calendar id for patient calendar
-type Calendar {
+# google calendar id and url for patient calendar
+type PatientCalendar {
   patientId: ID!
   googleCalendarId: String
+  googleCalendarUrl: String
+}
+
+# google calendar id and url for current user calendar
+type Calendar {
+  googleCalendarId: String!
+  googleCalendarUrl: String
 }
 
 # Google API page info
@@ -2801,7 +2808,7 @@ type RootMutationType {
   # create a SMS message (returns node so fits into paginated results)
   smsMessageCreate(input: SmsMessageCreateInput): SmsMessageNode!
   # creates a calendar for a patient
-  calendarCreateForPatient(input: CalendarCreateForPatientInput): Calendar!
+  calendarCreateForPatient(input: CalendarCreateForPatientInput): PatientCalendar!
   # creates a calendar event for a patient
   calendarCreateEventForPatient(input: CalendarCreateEventForPatientInput): CalendarUrl!
   # creates a calendar event for current user
@@ -3089,8 +3096,10 @@ type RootQueryType {
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
   # gets a patients full social security number and records a log of the view by user
   patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
-  # Google calendar id for a patient calendar
-  calendarForPatient(patientId: ID!): Calendar!
+  # Google calendar id and url for the current user
+  calendarForCurrentUser: Calendar!
+  # Google calendar id and url for a patient calendar
+  calendarForPatient(patientId: ID!): PatientCalendar!
   # List of google calendar events for a patient
   calendarEventsForPatient(
     patientId: ID!

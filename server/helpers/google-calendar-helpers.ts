@@ -259,3 +259,7 @@ async function getGoogleCalendarEvents(
     nextPageToken: response.data.nextPageToken,
   };
 }
+
+export function getGoogleCalendarUrl(calendarId: string) {
+  return calendarId ? `https://calendar.google.com/calendar/embed?src=${calendarId}` : null;
+}

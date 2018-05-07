@@ -48,6 +48,10 @@
   justify-content: flex-end;
 }
 
+.button {
+  margin-left: var(--extra-small-gutter);
+}
+
 .empty {
   text-align: center;
   padding-top: 100px;

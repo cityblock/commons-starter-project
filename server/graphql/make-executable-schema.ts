@@ -22,6 +22,7 @@ import {
   calendarCreateForPatient,
   resolveCalendarEventsForCurrentUser,
   resolveCalendarEventsForPatient,
+  resolveCalendarForCurrentUser,
   resolveCalendarForPatient,
 } from './calendar-resolver';
 import {
@@ -453,6 +454,7 @@ const resolveFunctions = {
     patientSocialSecurity: resolvePatientSocialSecurity,
     calendarEventsForCurrentUser: resolveCalendarEventsForCurrentUser,
     calendarEventsForPatient: resolveCalendarEventsForPatient,
+    calendarForCurrentUser: resolveCalendarForCurrentUser,
     calendarForPatient: resolveCalendarForPatient,
     smsMessages: resolveSmsMessages,
     smsMessageLatest: resolveSmsMessageLatest,

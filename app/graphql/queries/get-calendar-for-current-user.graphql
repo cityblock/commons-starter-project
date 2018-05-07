@@ -1,0 +1,6 @@
+query getCalendarForCurrentUser {
+  calendarForCurrentUser {
+    googleCalendarId
+    googleCalendarUrl
+  }
+}

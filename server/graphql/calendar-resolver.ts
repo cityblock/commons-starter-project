@@ -11,6 +11,7 @@ import {
   createGoogleCalendarEventUrl,
   getGoogleCalendarEventsForCurrentUser,
   getGoogleCalendarEventsForPatient,
+  getGoogleCalendarUrl,
 } from '../helpers/google-calendar-helpers';
 import {
   addCareTeamToPatientCalendar,
@@ -37,7 +38,24 @@ export async function resolveCalendarForPatient(
   logger.log(`GET calendar id for patient ${patientId} by ${userId}`);
 
   const patient = await Patient.get(patientId, txn);
-  return { patientId, googleCalendarId: patient.patientInfo.googleCalendarId };
+  const { googleCalendarId } = patient.patientInfo;
+  const googleCalendarUrl = getGoogleCalendarUrl(googleCalendarId);
+  return { patientId, googleCalendarId, googleCalendarUrl };
+}
+
+export async function resolveCalendarForCurrentUser(
+  source: any,
+  {}: any,
+  { permissions, userId, logger, txn }: IContext,
+): Promise<IRootQueryType['calendarForCurrentUser']> {
+  checkLoggedInWithPermissions(userId, permissions);
+
+  logger.log(`GET calendar for user ${userId}`);
+
+  const user = await User.get(userId!, txn);
+  const googleCalendarId = user.email;
+  const googleCalendarUrl = getGoogleCalendarUrl(googleCalendarId);
+  return { googleCalendarId, googleCalendarUrl };
 }
 
 export interface IResolvePatientCalendarEventsOptions {
@@ -188,7 +206,8 @@ export async function calendarCreateForPatient(
     }
   }
 
-  return { googleCalendarId: calendarId, patientId };
+  const googleCalendarUrl = getGoogleCalendarUrl(calendarId);
+  return { googleCalendarId: calendarId, googleCalendarUrl, patientId };
 }
 
 export interface ICalendarCreateEventForCurrentUserOptions {

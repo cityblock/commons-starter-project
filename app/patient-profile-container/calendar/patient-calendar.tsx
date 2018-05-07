@@ -92,6 +92,15 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     this.setState({ isRefreshModalVisible: true, refreshType: 'edit' });
   };
 
+  handleOpenCalendarClick = () => {
+    const { calendarResponse } = this.props;
+    const googleCalendarUrl = calendarResponse ? calendarResponse.googleCalendarUrl : null;
+
+    if (googleCalendarUrl) {
+      window.open(googleCalendarUrl, '_blank');
+    }
+  };
+
   render() {
     const {
       isLoading,
@@ -110,11 +119,26 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     const events = calendarEventsResponse ? calendarEventsResponse.events : [];
     const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
     const googleCalendarId = calendarResponse ? calendarResponse.googleCalendarId : null;
+    const googleCalendarUrl = calendarResponse ? calendarResponse.googleCalendarUrl : null;
+
+    const calendarButton = googleCalendarUrl ? (
+      <Button
+        messageId="calendar.openCalendar"
+        color="white"
+        onClick={this.handleOpenCalendarClick}
+        className={styles.button}
+      />
+    ) : null;
 
     return (
       <div className={styles.container}>
         <div className={styles.navBar}>
-          <Button messageId="calendar.addAppointment" onClick={this.handleAddAppointmentClick} />
+          {calendarButton}
+          <Button
+            messageId="calendar.addAppointment"
+            onClick={this.handleAddAppointmentClick}
+            className={styles.button}
+          />
         </div>
         <Calendar
           fetchMore={fetchMoreCalendarEvents}

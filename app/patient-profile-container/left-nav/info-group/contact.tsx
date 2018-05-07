@@ -5,7 +5,7 @@ import {
   formatAddressFirstLine,
   formatAddressSecondLine,
 } from '../../../shared/helpers/format-helpers';
-import { Selected } from '../left-nav';
+import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
 import * as styles from './css/shared.css';
 import InfoGroupHeader from './header';
@@ -13,7 +13,7 @@ import InfoGroupItem from './item';
 
 interface IProps {
   isOpen: boolean;
-  onClick: (clicked: Selected) => void;
+  onClick: (clicked: Accordion) => void;
   patient: FullPatientForProfileFragment;
 }
 

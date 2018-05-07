@@ -1,89 +1,81 @@
 import * as classNames from 'classnames';
-import { capitalize } from 'lodash';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import * as progressNoteLatestForPatientQuery from '../../graphql/queries/get-progress-note-latest-for-patient.graphql';
 import {
   getProgressNoteLatestForPatientQuery,
   FullPatientForProfileFragment,
 } from '../../graphql/types';
-import {
-  formatAge,
-  formatPatientNameForProfile,
-  getPatientStatusColor,
-} from '../../shared/helpers/format-helpers';
-import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../shared/library/small-text/small-text';
+import { IState as IAppState } from '../../store';
 import * as styles from './css/header.css';
+import LeftNavHeaderPatient from './header-patient';
 import PatientNeedToKnow from './patient-need-to-know';
 import LeftNavPreferredName from './preferred-name';
 
-interface IProps {
+export interface IProps {
   patient: FullPatientForProfileFragment | null;
+}
+
+interface IStateProps {
+  isWidgetOpen: boolean;
 }
 
 interface IGraphqlProps {
   latestProgressNote: getProgressNoteLatestForPatientQuery['progressNoteLatestForPatient'];
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IGraphqlProps;
 
 export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { patient, latestProgressNote } = props;
+  const { patient, latestProgressNote, isWidgetOpen } = props;
 
   if (!patient) return null;
 
-  const hasUploadedPhoto = !!patient.patientInfo.hasUploadedPhoto;
-  const gender = patient.patientInfo.gender;
   const worryScore = latestProgressNote ? latestProgressNote.worryScore : null;
-  const statusColor = getPatientStatusColor(patient.patientState.currentState);
 
-  const containerStyles = classNames(styles.container, {
+  const borderStyles = classNames(styles.border, {
     [styles.redBorder]: worryScore === 3,
     [styles.yellowBorder]: worryScore === 2,
     [styles.greenBorder]: worryScore === 1,
+    [styles.smallBorder]: isWidgetOpen,
   });
 
   return (
-    <div className={containerStyles}>
-      <div className={styles.info}>
-        <PatientPhoto patientId={patient.id} hasUploadedPhoto={hasUploadedPhoto} gender={gender} />
-        <div className={styles.patient}>
-          <SmallText
-            text={capitalize(patient.patientState.currentState)}
-            color={statusColor}
-            size="medium"
-            isBold
-          />
-          <h1>{formatPatientNameForProfile(patient)}</h1>
-          <SmallText
-            messageId="patientInfo.age"
-            messageValues={{ age: formatAge(patient.dateOfBirth) }}
-            size="large"
-            color="black"
-            isBold
-          />
+    <div>
+      <div className={borderStyles} />
+      <LeftNavHeaderPatient patient={patient} isWidgetOpen={isWidgetOpen} />
+      <div className={styles.container}>
+        <div className={styles.needToKnow}>
+          <div className={styles.divider} />
+          <SmallText messageId="patientInfo.needToKnow" />
+          <div className={styles.divider} />
         </div>
+        <LeftNavPreferredName patient={patient} />
+        <PatientNeedToKnow patientInfoId={patient.patientInfo.id} />
       </div>
-      <div className={styles.needToKnow}>
-        <div className={styles.divider} />
-        <SmallText messageId="patientInfo.needToKnow" />
-        <div className={styles.divider} />
-      </div>
-      <LeftNavPreferredName patient={patient} />
-      <PatientNeedToKnow patientInfoId={patient.patientInfo.id} />
     </div>
   );
 };
 
-export default graphql(progressNoteLatestForPatientQuery as any, {
-  skip: ({ patient }: IProps) => !patient,
-  options: ({ patient }: IProps) => {
-    const patientId = patient ? patient.id : '';
+const mapStateToProps = (state: IAppState): IStateProps => {
+  return {
+    isWidgetOpen: !!state.patientLeftNav,
+  };
+};
 
-    return { variables: { patientId } };
-  },
-  props: ({ data }) => ({
-    latestProgressNote: data ? (data as any).progressNoteLatestForPatient : null,
+export default compose(
+  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
+  graphql(progressNoteLatestForPatientQuery as any, {
+    skip: ({ patient }: IProps) => !patient,
+    options: ({ patient }: IProps) => {
+      const patientId = patient ? patient.id : '';
+
+      return { variables: { patientId } };
+    },
+    props: ({ data }) => ({
+      latestProgressNote: data ? (data as any).progressNoteLatestForPatient : null,
+    }),
   }),
-})(LeftNavHeader);
+)(LeftNavHeader);

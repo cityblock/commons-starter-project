@@ -17,7 +17,8 @@ const PatientPhotoImage: React.StatelessComponent<IProps> = (props: IProps) => {
   if (imgUrl) {
     const imgStyles = classNames(
       {
-        [styles.large]: type === 'large',
+        [styles.squareLarge]: type === 'squareLarge',
+        [styles.square]: type === 'square',
         [styles.circle]: type === 'circle',
         [styles.circleLarge]: type === 'circleLarge',
       },
@@ -32,7 +33,8 @@ const PatientPhotoImage: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const missingStyles = classNames(
     {
-      [styles.large]: type === 'large',
+      [styles.squareLarge]: type === 'squareLarge',
+      [styles.square]: type === 'square',
       [styles.circleSvg]: type === 'circle',
       [styles.circleSvgLarge]: type === 'circleLarge',
       [styles.male]: isMale,

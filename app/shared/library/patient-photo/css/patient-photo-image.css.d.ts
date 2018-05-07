@@ -1,4 +1,5 @@
-export const large: string;
+export const squareLarge: string;
+export const square: string;
 export const circle: string;
 export const circleSvg: string;
 export const circleLarge: string;

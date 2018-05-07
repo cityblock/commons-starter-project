@@ -9,15 +9,16 @@ import {
 } from '../../../graphql/types';
 import PatientPhotoImage from './patient-photo-image';
 
-// large is square, circle and circleLarge are 30x30 and 40x40 respectively
-export type PhotoType = 'large' | 'circle' | 'circleLarge';
+// square and squareLarge are 44x50 and 110x148 respectively
+// circle and circleLarge are 30x30 and 40x40 respectively
+export type PhotoType = 'square' | 'squareLarge' | 'circle' | 'circleLarge';
 
 interface IProps {
   patientId: string;
   hasUploadedPhoto: boolean;
   gender: Gender | null;
   className?: string | null;
-  type?: PhotoType; // default is large
+  type?: PhotoType; // default is squareLarge
 }
 
 interface IGraphqlProps {
@@ -66,7 +67,7 @@ export class PatientPhoto extends React.Component<allProps, IState> {
         imgUrl={imgUrl}
         gender={gender}
         className={className || null}
-        type={type || 'large'}
+        type={type || 'squareLarge'}
       />
     );
   }

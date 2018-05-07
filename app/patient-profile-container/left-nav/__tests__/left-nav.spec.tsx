@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient } from '../../../shared/util/test-data';
-import LeftNavHeader from '../header';
+import LeftNavHeader, { IProps } from '../header';
 import Contact from '../info-group/contact';
 import Demographics from '../info-group/demographics';
 import Medications from '../info-group/medications';
@@ -13,7 +13,7 @@ describe('Patient Left Navigation', () => {
   const wrapper = shallow(<LeftNav patient={patient} />);
 
   it('renders left nav header', () => {
-    expect(wrapper.find(LeftNavHeader).props().patient).toEqual(patient);
+    expect(wrapper.find<IProps>(LeftNavHeader).props().patient).toEqual(patient);
   });
 
   it('renders demographics', () => {

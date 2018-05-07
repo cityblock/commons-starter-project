@@ -1,105 +1,33 @@
 import { shallow } from 'enzyme';
-import { capitalize } from 'lodash';
 import * as React from 'react';
-import {
-  formatAge,
-  formatPatientNameForProfile,
-  getPatientStatusColor,
-} from '../../../shared/helpers/format-helpers';
-import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
 import SmallText from '../../../shared/library/small-text/small-text';
 import { patient } from '../../../shared/util/test-data';
 import { LeftNavHeader } from '../header';
+import LeftNavHeaderPatient from '../header-patient';
 import PatientNeedToKnow, { IProps } from '../patient-need-to-know';
 import LeftNavPreferredName from '../preferred-name';
 
 describe('Patient Left Navigation Header', () => {
-  const wrapper = shallow(<LeftNavHeader patient={patient} latestProgressNote={null} />);
+  const wrapper = shallow(
+    <LeftNavHeader patient={patient} latestProgressNote={null} isWidgetOpen={false} />,
+  );
 
-  it('renders container with no border if no latest progress note', () => {
+  it('renders white border if no worry score', () => {
+    expect(wrapper.find('.border').props().className).toBe('border');
+  });
+
+  it('renders container', () => {
     expect(wrapper.find('.container').props().className).toBe('container');
   });
 
-  it('renders patient photo', () => {
-    expect(wrapper.find(PatientPhoto).props().patientId).toBe(patient.id);
-    expect(wrapper.find(PatientPhoto).props().hasUploadedPhoto).toBe(
-      patient.patientInfo.hasUploadedPhoto,
-    );
-    expect(wrapper.find(PatientPhoto).props().gender).toBe(patient.patientInfo.gender);
-  });
-
-  it('renders text for patient state', () => {
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(0)
-        .props().text,
-    ).toBe(capitalize(patient.patientState.currentState));
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(0)
-        .props().color,
-    ).toBe(getPatientStatusColor(patient.patientState.currentState));
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(0)
-        .props().size,
-    ).toBe('medium');
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(0)
-        .props().isBold,
-    ).toBeTruthy();
-  });
-
-  it('renders patient name', () => {
-    expect(wrapper.find('h1').text()).toBe(formatPatientNameForProfile(patient));
-  });
-
-  it('renders patient age', () => {
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(1)
-        .props().messageId,
-    ).toBe('patientInfo.age');
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(1)
-        .props().messageValues,
-    ).toEqual({ age: formatAge(patient.dateOfBirth) });
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(1)
-        .props().size,
-    ).toBe('large');
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(1)
-        .props().color,
-    ).toBe('black');
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(1)
-        .props().isBold,
-    ).toBeTruthy();
+  it('renders patient header', () => {
+    expect(wrapper.find(LeftNavHeaderPatient).props().patient).toEqual(patient);
+    expect(wrapper.find(LeftNavHeaderPatient).props().isWidgetOpen).toBeFalsy();
   });
 
   it('renders need to know divider', () => {
     expect(wrapper.find('.divider').length).toBe(2);
-    expect(
-      wrapper
-        .find(SmallText)
-        .at(2)
-        .props().messageId,
-    ).toBe('patientInfo.needToKnow');
+    expect(wrapper.find(SmallText).props().messageId).toBe('patientInfo.needToKnow');
   });
 
   it('renders preferred name component', () => {
@@ -119,7 +47,17 @@ describe('Patient Left Navigation Header', () => {
     };
     wrapper.setProps({ latestProgressNote });
 
-    expect(wrapper.find('.container').props().className).toBe('container redBorder');
+    expect(wrapper.find('.border').props().className).toBe('border redBorder');
+  });
+
+  it('renders smaller border if widget open', () => {
+    wrapper.setProps({ isWidgetOpen: true });
+
+    expect(wrapper.find('.border').props().className).toBe('border redBorder smallBorder');
+  });
+
+  it('indicates to patient info header that widget is open', () => {
+    expect(wrapper.find(LeftNavHeaderPatient).props().isWidgetOpen).toBeTruthy();
   });
 
   it('renders nothing if patient is null', () => {

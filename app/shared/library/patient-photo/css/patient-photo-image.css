@@ -1,6 +1,11 @@
-.large {
+.squareLarge {
   width: 112px;
   height: 150px;
+}
+
+.square {
+  height: 50px;
+  width: 44px;
 }
 
 .circle,
@@ -25,12 +30,14 @@
 }
 
 .circle,
-.circleLarge {
+.circleLarge,
+.square {
   object-fit: cover;
 }
 
 .circleSvg,
-.circleSvgLarge {
+.circleSvgLarge,
+.square {
   background-size: 100% 100%;
 }
 
@@ -53,8 +60,14 @@
   border: 1px solid var(--border-color);
 }
 
-.large.male,
-.large.female,
-.large.unspecified {
+.squareLarge.male,
+.squareLarge.female,
+.squareLarge.unspecified {
   min-width: 112px;
+}
+
+.square.male,
+.square.female,
+.square.unspecified {
+  min-width: 44px;
 }

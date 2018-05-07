@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { capitalize } from 'lodash';
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../../graphql/types';
-import { Selected } from '../left-nav';
+import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
 import * as styles from './css/shared.css';
 import InfoGroupHeader from './header';
@@ -12,7 +12,7 @@ const DATE_OF_BIRTH_FORMAT = 'MMM D, YYYY';
 
 interface IProps {
   isOpen: boolean;
-  onClick: (clicked: Selected) => void;
+  onClick: (clicked: Accordion) => void;
   patient: FullPatientForProfileFragment;
 }
 

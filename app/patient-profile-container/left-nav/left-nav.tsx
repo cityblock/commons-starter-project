@@ -8,14 +8,14 @@ import Medications from './info-group/medications';
 import Plan from './info-group/plan';
 import ProblemList from './info-group/problem-list';
 
-export type Selected = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
+export type Accordion = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
 
 interface IProps {
   patient: FullPatientForProfileFragment | null;
 }
 
 interface IState {
-  selected: Selected | null;
+  selected: Accordion | null;
 }
 
 class LeftNav extends React.Component<IProps, IState> {
@@ -25,7 +25,7 @@ class LeftNav extends React.Component<IProps, IState> {
     this.state = { selected: null };
   }
 
-  handleClick = (clicked: Selected): void => {
+  handleClick = (clicked: Accordion): void => {
     const { selected } = this.state;
 
     if (clicked === selected) {

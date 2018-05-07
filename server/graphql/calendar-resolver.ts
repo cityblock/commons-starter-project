@@ -45,7 +45,7 @@ export async function resolveCalendarForPatient(
 
 export async function resolveCalendarForCurrentUser(
   source: any,
-  {}: any,
+  {  }: any,
   { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootQueryType['calendarForCurrentUser']> {
   checkLoggedInWithPermissions(userId, permissions);

@@ -21,7 +21,7 @@ describe('Library Patient Photo Component', () => {
     expect(wrapper.find(PatientPhotoImage).props().imgUrl).toBeNull();
     expect(wrapper.find(PatientPhotoImage).props().gender).toBe('female');
     expect(wrapper.find(PatientPhotoImage).props().className).toBeNull();
-    expect(wrapper.find(PatientPhotoImage).props().type).toBe('large');
+    expect(wrapper.find(PatientPhotoImage).props().type).toBe('squareLarge');
   });
 
   it('passes on image url after fetching it', () => {

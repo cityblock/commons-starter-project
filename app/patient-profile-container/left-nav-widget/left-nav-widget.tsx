@@ -25,6 +25,8 @@ interface IState {
   isOpen: boolean;
 }
 
+const ANIMATION_TIME = 300;
+
 export class LeftNavWidget extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
@@ -42,6 +44,13 @@ export class LeftNavWidget extends React.Component<allProps, IState> {
     this.props.updateSelected(null);
   }
 
+  handleClose = (): void => {
+    this.setState({ isOpen: false });
+
+    // don't update state until transition complete
+    setTimeout(() => this.props.updateSelected(null), ANIMATION_TIME);
+  };
+
   render(): JSX.Element {
     const { patientId, glassBreakId, selected } = this.props;
     const { isOpen } = this.state;
@@ -52,7 +61,7 @@ export class LeftNavWidget extends React.Component<allProps, IState> {
           patientId={patientId}
           isOpen={isOpen}
           selected={selected}
-          onClose={() => this.setState({ isOpen: false })}
+          onClose={this.handleClose}
           glassBreakId={glassBreakId}
         />
         <LeftNavActions onClick={this.handleClick} />
@@ -75,5 +84,5 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
 
 export default connect<IStateProps, IDispatchProps, IProps>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps as any,
+  mapDispatchToProps,
 )(LeftNavWidget);

@@ -10,7 +10,7 @@
 
 .expanded {
   /* Leave room for main navigation and patient info in left rail */
-  height: calc(100vh - 250px);
+  height: calc(100vh - 115px);
 }
 
 .collapsed {

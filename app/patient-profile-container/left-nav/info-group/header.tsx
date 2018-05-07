@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
-import { Selected } from '../left-nav';
+import { Accordion } from '../left-nav';
 import * as styles from './css/header.css';
 
 interface IProps {
   isOpen: boolean;
-  selected: Selected;
-  onClick: (clicked: Selected) => void;
+  selected: Accordion;
+  onClick: (clicked: Accordion) => void;
   itemCount?: number; // if passed, shows count of items
 }
 

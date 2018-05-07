@@ -1,5 +1,6 @@
 import { differenceInMinutes, format } from 'date-fns';
 import * as React from 'react';
+import { formatGoogleCalendarDescription } from '../helpers/format-helpers';
 import HamburgerMenuOption from '../library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../library/hamburger-menu/hamburger-menu';
 import Icon from '../library/icon/icon';
@@ -40,6 +41,7 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
       id,
       htmlLink,
       eventType,
+      description,
       providerName,
       providerCredentials,
     } = this.props.calendarEvent;
@@ -92,18 +94,25 @@ export default class CalendarEvent extends React.Component<IProps, IState> {
         </HamburgerMenu>
       ) : null;
 
+    const descriptionHtml = description ? (
+      <div className={styles.eventDescription}>{formatGoogleCalendarDescription(description)}</div>
+    ) : null;
+
     return (
-      <div className={styles.eventContainer} key={`calendarEvent-${id}`}>
-        {icon}
-        <div className={styles.eventBody}>
-          <div className={styles.meta}>
-            <span className={styles.element}>{format(startDate, 'ddd, MMM D, YYYY')}</span>
-            {startHtml}
-            {guestsHtml}
+      <div className={styles.eventWrapper} key={`calendarEvent-${id}`}>
+        <div className={styles.eventContainer}>
+          {icon}
+          <div className={styles.eventBody}>
+            <div className={styles.meta}>
+              <span className={styles.element}>{format(startDate, 'ddd, MMM D, YYYY')}</span>
+              {startHtml}
+              {guestsHtml}
+            </div>
+            <div className={styles.eventTitle}>{title}</div>
           </div>
-          <div className={styles.eventTitle}>{title}</div>
+          {editMenu}
         </div>
-        {editMenu}
+        {descriptionHtml}
       </div>
     );
   }

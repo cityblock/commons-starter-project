@@ -18,6 +18,7 @@ describe('Render Patient Appointment Modal', () => {
   const wrapper = shallow(
     <AppointmentModal
       closePopup={closePopup}
+      onSubmit={closePopup}
       currentUser={currentUser}
       featureFlags={featureFlags}
       isVisible={false}

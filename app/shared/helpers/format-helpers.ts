@@ -214,3 +214,12 @@ export const formatErrorMessage = (err: ApolloError) => {
   }
   return 'There was an error';
 };
+
+export const formatGoogleCalendarDescription = (description: string) => {
+  return description
+    .replace("Patient's Profile", '')
+    .replace('<br>', '\n')
+    .replace(/[\n]+/g, '\n')
+    .replace(/(<([^>]+)>)/gi, '')
+    .trim();
+};

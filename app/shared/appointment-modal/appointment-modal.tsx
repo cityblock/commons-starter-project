@@ -22,6 +22,7 @@ interface IProps {
   isVisible: boolean;
   patientId?: string;
   closePopup: () => void;
+  onSubmit: () => void;
   createCalendarError?: string | null;
   googleCalendarId?: string | null;
 }
@@ -72,13 +73,10 @@ export class AppointmentModal extends React.Component<allProps, IState> {
     const { description, externalGuests } = this.state;
 
     return patientId
-      ? `
-        ${description}
-
-        <b>External Guests:<b> ${externalGuests.map(guest => guest.name).join(', ')}
-
-        <a href="${window.location.href}">Patient's Profile</a>
-      `
+      ? `${description}\n\n` +
+          `<b>External Guests:<b> ${externalGuests.map(guest => guest.name).join(', ') ||
+            'None'}\n\n` +
+          `<a href="${window.location.href}">Patient's Profile</a>`
       : description || '';
   }
 
@@ -100,12 +98,31 @@ export class AppointmentModal extends React.Component<allProps, IState> {
     return true;
   }
 
+  cleanupState() {
+    const { patientId, currentUser } = this.props;
+    const internalGuests = !patientId && currentUser ? [getUserInfo(currentUser, true)] : [];
+
+    this.setState({
+      title: null,
+      description: null,
+      internalGuests,
+      externalGuests: [],
+      startTime: null,
+      endTime: null,
+      location: null,
+      selectedAddress: null,
+      isSaving: false,
+      error: null,
+    });
+  }
+
   handleSubmit = async (): Promise<void> => {
     const {
       getCalendarEventUrlForPatient,
       getCalendarEventUrlForUser,
       patientId,
       googleCalendarId,
+      onSubmit,
     } = this.props;
     const { title, internalGuests, appointmentDate, startTime, endTime, location } = this.state;
     const inviteeEmails = internalGuests.map(guest => guest.email || '');
@@ -146,28 +163,15 @@ export class AppointmentModal extends React.Component<allProps, IState> {
       }
 
       window.open(calendarEventUrl, '_blank');
-      this.handleClose();
+      this.cleanupState();
+      onSubmit();
     } catch (err) {
       this.setState({ error: err.message });
     }
   };
 
   handleClose = () => {
-    const { patientId, currentUser } = this.props;
-    const internalGuests = !patientId && currentUser ? [getUserInfo(currentUser, true)] : [];
-
-    this.setState({
-      title: null,
-      description: null,
-      internalGuests,
-      externalGuests: [],
-      startTime: null,
-      endTime: null,
-      location: null,
-      selectedAddress: null,
-      isSaving: false,
-      error: null,
-    });
+    this.cleanupState();
     this.props.closePopup();
   };
 

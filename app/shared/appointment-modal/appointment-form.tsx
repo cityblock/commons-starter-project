@@ -83,7 +83,8 @@ export class AppointmentForm extends React.Component<IProps> {
     ) : null;
 
     const cityblockUserSelect = patientId ? (
-      <React.Fragment>
+      <div className={styles.field}>
+        <FormLabel messageId="appointmentModal.guest" className={styles.required} />
         <InternalCareTeamMultiSelect
           patientId={patientId}
           onChange={this.handleChange}
@@ -92,20 +93,23 @@ export class AppointmentForm extends React.Component<IProps> {
           placeholderMessageId="appointmentModal.guestPlaceholder"
         />
         {addSelfLink}
-      </React.Fragment>
+      </div>
     ) : (
-      <AllCareWorkerMultiSelect
-        onChange={this.handleChange}
-        selectedUsers={internalGuests}
-        name="internalGuests"
-        placeholderMessageId="appointmentModal.guestPlaceholder"
-      />
+      <div className={styles.field}>
+        <FormLabel messageId="appointmentModal.guest" />
+        <AllCareWorkerMultiSelect
+          onChange={this.handleChange}
+          selectedUsers={internalGuests}
+          name="internalGuests"
+          placeholderMessageId="appointmentModal.guestPlaceholder"
+        />
+      </div>
     );
 
     return (
       <React.Fragment>
         <div className={styles.field}>
-          <FormLabel messageId="appointmentModal.appointmentTitle" />
+          <FormLabel messageId="appointmentModal.appointmentTitle" className={styles.required} />
           <TextInput
             name="title"
             value={title || ''}
@@ -114,14 +118,10 @@ export class AppointmentForm extends React.Component<IProps> {
           />
         </div>
 
-        <div className={styles.field}>
-          <FormLabel messageId="appointmentModal.guest" />
-          {cityblockUserSelect}
-        </div>
-
+        {cityblockUserSelect}
         {externalSelect}
 
-        <FormLabel messageId="appointmentModal.location" />
+        <FormLabel messageId="appointmentModal.location" className={styles.required} />
         <AddressSelect
           patientId={patientId}
           onChange={onChange}
@@ -131,7 +131,7 @@ export class AppointmentForm extends React.Component<IProps> {
         />
 
         <div className={styles.field}>
-          <FormLabel messageId="appointmentModal.description" />
+          <FormLabel messageId="appointmentModal.description" className={styles.required} />
           <TextArea
             name="description"
             value={description || ''}
@@ -141,13 +141,13 @@ export class AppointmentForm extends React.Component<IProps> {
         </div>
 
         <div className={styles.field}>
-          <FormLabel messageId="appointmentModal.date" />
+          <FormLabel messageId="appointmentModal.date" className={styles.required} />
           <DateInput value={appointmentDate} onChange={this.handleChange} name="appointmentDate" />
         </div>
 
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <FormLabel messageId="appointmentModal.startTime" />
+            <FormLabel messageId="appointmentModal.startTime" className={styles.required} />
             <TextInput
               onChange={this.handleInputChange}
               value={startTime || ''}
@@ -157,7 +157,7 @@ export class AppointmentForm extends React.Component<IProps> {
             />
           </div>
           <div className={styles.field}>
-            <FormLabel messageId="appointmentModal.endTime" />
+            <FormLabel messageId="appointmentModal.endTime" className={styles.required} />
             <TextInput
               onChange={this.handleInputChange}
               value={endTime || ''}

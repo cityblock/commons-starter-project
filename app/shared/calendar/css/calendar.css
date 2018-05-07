@@ -6,15 +6,18 @@
   flex: 1;
 }
 
+.eventWrapper {
+  border-radius: 4px;
+  background-color: var(--white-color);
+  margin: var(--small-gutter) 0;
+  border: 1px solid var(--border-color);
+}
+
 .eventContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 4px;
-  background-color: var(--white-color);
   padding: var(--small-gutter);
-  margin: var(--small-gutter) 0;
-  border: 1px solid var(--border-color);
 }
 
 .meta {
@@ -39,6 +42,13 @@
 
 .eventBody {
   flex: 1;
+}
+
+.eventDescription {
+  padding: var(--small-gutter);
+  background-color: var(--highlight-background-color);
+  border-top: dashed 2px var(--border-color);
+  white-space: pre-wrap;
 }
 
 .menu {

@@ -53,11 +53,7 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
   };
 
   handleAppointmentClose = () => {
-    this.setState({
-      isAppointmentModalVisible: false,
-      isRefreshModalVisible: true,
-      refreshType: 'create',
-    });
+    this.setState({ isAppointmentModalVisible: false });
   };
 
   handleOpenCalendarClick = () => {
@@ -79,6 +75,14 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
 
   handleEditRefreshOpen = () => {
     this.setState({ isRefreshModalVisible: true, refreshType: 'edit' });
+  };
+
+  handleCreateRefreshOpen = () => {
+    this.setState({
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: true,
+      refreshType: 'create',
+    });
   };
 
   render() {
@@ -121,6 +125,7 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
         <AppointmentModal
           isVisible={isAppointmentModalVisible}
           closePopup={this.handleAppointmentClose}
+          onSubmit={this.handleCreateRefreshOpen}
         />
         <RequestRefreshModal
           isVisible={isRefreshModalVisible}

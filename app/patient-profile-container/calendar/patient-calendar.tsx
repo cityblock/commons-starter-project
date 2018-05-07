@@ -72,11 +72,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
   };
 
   handleAppointmentClose = () => {
-    this.setState({
-      isAppointmentModalVisible: false,
-      isRefreshModalVisible: true,
-      refreshType: 'create',
-    });
+    this.setState({ isAppointmentModalVisible: false });
   };
 
   handleRefreshClose = () => {
@@ -90,6 +86,14 @@ export class PatientCalendar extends React.Component<allProps, IState> {
 
   handleEditRefreshOpen = () => {
     this.setState({ isRefreshModalVisible: true, refreshType: 'edit' });
+  };
+
+  handleCreateRefreshOpen = () => {
+    this.setState({
+      isAppointmentModalVisible: false,
+      isRefreshModalVisible: true,
+      refreshType: 'create',
+    });
   };
 
   handleOpenCalendarClick = () => {
@@ -152,6 +156,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
           isVisible={isAppointmentModalVisible}
           patientId={match.params.patientId}
           closePopup={this.handleAppointmentClose}
+          onSubmit={this.handleCreateRefreshOpen}
           createCalendarError={createCalendarError ? createCalendarError.message : null}
           googleCalendarId={googleCalendarId}
         />

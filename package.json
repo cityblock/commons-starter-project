@@ -226,7 +226,7 @@
     "node-pre-gyp": "0.10.0",
     "nodemon": "1.17.4",
     "objection": "1.1.7",
-    "pg": "7.4.2",
+    "pg": "7.4.1",
     "pm2": "2.10.3",
     "postcss-cssnext": "3.1.0",
     "postcss-loader": "2.1.5",

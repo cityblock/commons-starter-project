@@ -115,7 +115,6 @@ export async function resolveCalendarEventsForCurrentUser(
       },
     };
   } catch (err) {
-    console.warn(err);
     throw new Error(`There was an error reading the calendar for user: ${userId}`);
   }
 }

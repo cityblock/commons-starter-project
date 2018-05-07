@@ -149,12 +149,11 @@ export async function getGoogleCalendarEventsForCurrentUser(
 }
 
 export async function createGoogleCalendarEvent(
+  jwtClient: OAuth2Client,
   calendarId: string,
   resource: { [key: string]: any },
   testConfig?: any,
 ): Promise<AxiosResponse<ICalendar>> {
-  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-
   const calendar = google.calendar({ version: 'v3' });
   return calendar.events.insert({
     auth: jwtClient,
@@ -164,13 +163,12 @@ export async function createGoogleCalendarEvent(
 }
 
 export async function updateGoogleCalendarEvent(
+  jwtClient: OAuth2Client,
   calendarId: string,
   eventId: string,
   resource: { [key: string]: any },
   testConfig?: any,
 ): Promise<AxiosResponse<ICalendar>> {
-  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-
   const calendar = google.calendar({ version: 'v3' });
   return calendar.events.update({
     auth: jwtClient,
@@ -181,12 +179,11 @@ export async function updateGoogleCalendarEvent(
 }
 
 export async function deleteGoogleCalendarEvent(
+  jwtClient: OAuth2Client,
   calendarId: string,
   eventId: string,
   testConfig?: any,
 ): Promise<AxiosResponse> {
-  const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-
   const calendar = google.calendar({ version: 'v3' });
   return calendar.events.delete({
     auth: jwtClient,
@@ -210,6 +207,7 @@ export function getGoogleCalendarFieldsFromSIU(data: ISchedulingMessageData) {
     location: data.facility,
     description: data.instructions ? data.instructions.join('\n') : null,
     summary: `[EPIC] ${data.facilityDepartment}`,
+    status: data.eventType === 'Cancel' ? 'cancelled' : 'confirmed',
     extendedProperties: {
       shared: {
         generatedBy: 'siu',

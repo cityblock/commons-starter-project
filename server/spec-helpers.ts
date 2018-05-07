@@ -2065,3 +2065,75 @@ export async function createCBOReferral(txn: Transaction) {
     txn,
   );
 }
+
+interface ISiuMessageOptions {
+  patientId: string;
+  dateTime: string;
+  transmissionId?: number;
+  eventType?: 'New' | 'Modification' | 'Cancel' | 'Reschedule';
+}
+
+export function createMockSiuMessage(options: ISiuMessageOptions) {
+  return {
+    patientId: options.patientId,
+    eventType: options.eventType || 'New',
+    transmissionId: options.transmissionId || 230086677,
+    visitId: '4557',
+    dateTime: options.dateTime,
+    duration: 15,
+    status: 'Scheduled',
+    reason: null,
+    cancelReason: null,
+    instructions: [
+      'Please arrive 15 minutes prior to scheduled appointment time to complete required paperwork. Check in with the reception staff as soon as you arrive. This will allow time to complete required paperwork if needed.',
+      'Please bring your current legal photo ID, current insurance card and any referrals (if applicable)  to ALL of your appointments. Just as a reminder all applicable copays are due at time of service.',
+      'If you will be late to your appointment, please call the appropriate medical office.',
+    ],
+    facility: 'WHMO',
+    facilityType: null,
+    facilityDepartment: 'WHMO INTERNAL MED',
+    facilityRoom: null,
+    provider: {
+      id: null,
+      idType: null,
+      credentials: ['MD', 'DDS'],
+      firstName: 'Navarra',
+      lastName: 'Rodriguez',
+    },
+    attendingProvider: {
+      id: null,
+      idType: null,
+      credentials: [],
+      firstName: null,
+      lastName: null,
+    },
+    consultingProvider: {
+      id: null,
+      idType: null,
+      credentials: [],
+      firstName: null,
+      lastName: null,
+    },
+    referringProvider: {
+      id: null,
+      idType: null,
+      credentials: [],
+      firstName: null,
+      lastName: null,
+    },
+    diagnoses: [
+      {
+        code: null,
+        codeset: null,
+        name: null,
+        diagnosisType: null,
+      },
+      {
+        code: 'Hello',
+        codeset: 'SNOMED',
+        name: 'Fake Diagnosis',
+        diagnosisType: 'Bad',
+      },
+    ],
+  };
+}

@@ -1,7 +1,11 @@
-import { createGoogleCalendarEventUrl } from '../google-calendar-helpers';
+import { createMockSiuMessage } from '../../spec-helpers';
+import {
+  createGoogleCalendarEventUrl,
+  getGoogleCalendarFieldsFromSIU,
+} from '../google-calendar-helpers';
 
 describe('Google Calendar Helpers', () => {
-  it('returns base route to patient profile', () => {
+  it('creates a url to create new calendar event', () => {
     const metadata = {
       calendarId: 'cityblock.com_s1se7cgek1lr08r2qq01r4gg28@group.calendar.google.com',
       title: 'Test Event',
@@ -21,5 +25,30 @@ describe('Google Calendar Helpers', () => {
         'add=user%40cityblock.com&add=user2%40cityblock.com&' +
         'dates=20180410T190000Z%2F20180410T210000Z',
     );
+  });
+
+  it('turns siu message in to google calendar event fields', () => {
+    const patientId = '12345';
+    const dateTime = '2018-04-17T12:30:00.000Z';
+    const message = createMockSiuMessage({ patientId, dateTime });
+
+    expect(getGoogleCalendarFieldsFromSIU(message as any)).toMatchObject({
+      start: { dateTime },
+      end: { dateTime: '2018-04-17T12:45:00.000Z' },
+      location: 'WHMO',
+      description:
+        'Please arrive 15 minutes prior to scheduled appointment time to complete required paperwork. Check in with the reception staff as soon as you arrive. This will allow time to complete required paperwork if needed.\n' +
+        'Please bring your current legal photo ID, current insurance card and any referrals (if applicable)  to ALL of your appointments. Just as a reminder all applicable copays are due at time of service.\n' +
+        'If you will be late to your appointment, please call the appropriate medical office.',
+      summary: `[EPIC] WHMO INTERNAL MED`,
+      status: 'confirmed',
+      extendedProperties: {
+        shared: {
+          generatedBy: 'siu',
+          providerName: 'Navarra Rodriguez',
+          providerCredentials: 'MD, DDS',
+        },
+      },
+    });
   });
 });

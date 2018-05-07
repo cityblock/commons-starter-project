@@ -7,6 +7,7 @@ export interface IPatientSiuEventOptions {
   visitId: string;
   transmissionId: number;
   googleEventId: string;
+  deletedAt?: string;
 }
 
 export interface IPatientSiuEventEditOptions {

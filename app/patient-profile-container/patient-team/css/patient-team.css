@@ -3,7 +3,7 @@
 }
 
 .container {
-  padding: var(--small-gutter) var(--medium-gutter);
+  padding: var(--small-gutter) var(--medium-gutter) 120px;
   background-color: var(--gray-background-color);
   min-height: 100%;
 }

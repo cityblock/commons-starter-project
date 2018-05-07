@@ -5,13 +5,13 @@
 .container label {
   color: var(--gray-background-color);
   text-align: center;
-  padding: 0 var(--medium-gutter);
-  display: inline-block;
-  box-sizing: border-box;
-  height: var(--input-height);
+  padding: var(--small-gutter) var(--medium-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: var(--medium-font-size);
-  line-height: 50px;
   min-width: 100px;
+  height: 100%;
   border: 1px solid var(--border-color);
   border-right-width: 0;
   cursor: pointer;

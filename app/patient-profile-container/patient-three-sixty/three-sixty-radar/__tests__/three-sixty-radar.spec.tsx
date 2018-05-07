@@ -24,7 +24,7 @@ describe('Patient 360 Radar Chart', () => {
   });
 
   it('renders correct data', () => {
-    expect(wrapper.find<any>(Radar).props().data.labels).toEqual([fullRiskAreaGroup.title]);
+    expect(wrapper.find<any>(Radar).props().data.labels).toEqual([fullRiskAreaGroup.shortTitle]);
     expect(wrapper.find<any>(Radar).props().data.datasets[0]).toMatchObject(dataOptions);
     expect(wrapper.find<any>(Radar).props().data.datasets[0].data).toEqual([1]);
     expect(wrapper.find<any>(Radar).props().data.datasets[0].pointBackgroundColor).toEqual([green]);

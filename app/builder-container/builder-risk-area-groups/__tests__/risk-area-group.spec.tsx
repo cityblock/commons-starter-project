@@ -7,6 +7,7 @@ import RiskAreaGroup from '../risk-area-group';
 describe('Builder Risk Area Group Row Component', () => {
   const id = 'viscerion';
   const title = 'Viscerion is an ice dragon :(';
+  const shortTitle = 'Viscerion';
   const createdAt = 'nightKingJavelin';
   const order = 2;
   const mediumRiskThreshold = 50;
@@ -16,11 +17,14 @@ describe('Builder Risk Area Group Row Component', () => {
   const riskAreaGroup = {
     id,
     title,
+    shortTitle,
     order,
     createdAt,
+    updatedAt: createdAt,
+    deletedAt: null,
     mediumRiskThreshold,
     highRiskThreshold,
-  } as any;
+  };
 
   const wrapper = shallow(
     <RiskAreaGroup riskAreaGroup={riskAreaGroup} routeBase={routeBase} selected={false} />,

@@ -16,7 +16,7 @@ const getRadarData = (riskAreaGroups: FullRiskAreaGroupForPatientFragment[]) => 
   const pointLabelColor: string[] = [];
 
   riskAreaGroups.forEach(group => {
-    labels.push(group.title);
+    labels.push(group.shortTitle || group.title);
 
     data.push(group.riskScore ? pointData[group.riskScore] : NaN);
     pointBackgroundColor.push(group.riskScore ? pointColors[group.riskScore] : '');

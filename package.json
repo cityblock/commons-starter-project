@@ -251,7 +251,7 @@
     "regenerator-runtime": "0.11.1",
     "rimraf": "2.6.2",
     "style-loader": "0.21.0",
-    "subscriptions-transport-ws": "0.9.8",
+    "subscriptions-transport-ws": "0.9.9",
     "ts-loader": "4.3.0",
     "ts-node": "6.0.3",
     "twilio": "3.16.0",

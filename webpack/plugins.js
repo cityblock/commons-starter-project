@@ -10,7 +10,7 @@ module.exports = ({ production = false } = {}) => {
       'NODE_ENV',
       'GOOGLE_OAUTH_TOKEN',
       'IS_BUILDER_ENABLED',
-      'SUBSCRIPTION_ENDPOINT',
+      'SUBSCRIPTIONS_ENDPOINT',
     ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];

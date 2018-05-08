@@ -8,8 +8,8 @@ import { DocumentNode } from 'graphql';
 import { throttle } from 'lodash';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-const SUBSCRIPTION_ENDPOINT =
-  process.env.SUBSCRIPTION_ENDPOINT || 'ws://localhost:3000/subscriptions';
+const SUBSCRIPTIONS_ENDPOINT =
+  process.env.SUBSCRIPTIONS_ENDPOINT || 'ws://localhost:3000/subscriptions';
 
 async function setLastAction() {
   await localStorage.setItem('lastAction', new Date().valueOf().toString());
@@ -23,7 +23,7 @@ export const debouncedSetLastAction = throttle(setLastAction, 500, {
 export const getMiddlewareLink = () => {
   const httpLink = new HttpLink({ uri: '/graphql' });
 
-  const subscriptionClient = new SubscriptionClient(SUBSCRIPTION_ENDPOINT, {
+  const subscriptionClient = new SubscriptionClient(SUBSCRIPTIONS_ENDPOINT, {
     reconnect: true,
     connectionParams: () => ({
       authToken: window.localStorage.getItem('authToken'),

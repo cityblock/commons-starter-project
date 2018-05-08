@@ -2769,6 +2769,24 @@ export interface getPatientEmailsQuery {
   } > | null,
 };
 
+export interface getPatientEncountersQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getPatientEncountersQuery {
+  // gets patient encounters (external to Commons)
+  patientEncounters:  Array< {
+    id: string,
+    location: string | null,
+    source: string | null,
+    date: string,
+    title: string | null,
+    notes: string | null,
+    progressNoteId: string | null,
+  } >,
+};
+
 export interface getPatientExternalProvidersQueryVariables {
   patientId: string,
 };
@@ -2845,6 +2863,19 @@ export interface getPatientListsQuery {
   } >,
 };
 
+export interface getPatientMedicationsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientMedicationsQuery {
+  // gets patient medications
+  patientMedications:  Array< {
+    id: string,
+    name: string,
+    dosage: string,
+  } >,
+};
+
 export interface getPatientNeedToKnowQueryVariables {
   patientInfoId: string,
 };
@@ -2912,6 +2943,19 @@ export interface getPatientPhonesQuery {
     type: PhoneTypeOptions,
     description: string | null,
   } > | null,
+};
+
+export interface getPatientProblemListQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientProblemListQuery {
+  // gets a patient problem list
+  patientProblemList:  Array< {
+    id: string,
+    name: string,
+    code: string,
+  } >,
 };
 
 export interface getPatientRiskScoreForRiskAreaQueryVariables {
@@ -4611,7 +4655,10 @@ export interface getProgressNoteIdsForPatientQueryVariables {
 
 export interface getProgressNoteIdsForPatientQuery {
   // progress note ids for patient
-  progressNoteIdsForPatient: Array< string >,
+  progressNoteIdsForPatient:  Array< {
+    id: string,
+    createdAt: string,
+  } >,
 };
 
 export interface getProgressNoteLatestForPatientQueryVariables {
@@ -11167,6 +11214,16 @@ export interface FullPatientDocumentFragment {
   description: string | null,
   documentType: DocumentTypeOptions | null,
   createdAt: string,
+};
+
+export interface FullPatientEncounterFragment {
+  id: string,
+  location: string | null,
+  source: string | null,
+  date: string,
+  title: string | null,
+  notes: string | null,
+  progressNoteId: string | null,
 };
 
 export interface FullPatientExternalProviderFragment {

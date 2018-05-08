@@ -133,6 +133,7 @@ import {
   resolvePatientDocuments,
 } from './patient-document-resolver';
 import { resolveEmails } from './patient-email-resolver';
+import { resolvePatientEncounters } from './patient-encounter-resolver';
 import {
   patientExternalProviderCreate,
   patientExternalProviderDelete,
@@ -163,8 +164,10 @@ import {
   resolvePatientList,
   resolvePatientLists,
 } from './patient-list-resolver';
+import { resolvePatientMedications } from './patient-medication-resolver';
 import { resolvePhones } from './patient-phone-resolver';
 import { patientPhotoSignedUrlCreate } from './patient-photo-resolver';
+import { resolvePatientProblemList } from './patient-problem-list-resolver';
 import {
   patientCoreIdentityVerify,
   resolvePatient,
@@ -451,6 +454,9 @@ const resolveFunctions = {
     patientEmails: resolveEmails,
     patientPhones: resolvePhones,
     patientScratchPad: resolvePatientScratchPad,
+    patientProblemList: resolvePatientProblemList,
+    patientMedications: resolvePatientMedications,
+    patientEncounters: resolvePatientEncounters,
     patientSocialSecurity: resolvePatientSocialSecurity,
     calendarEventsForCurrentUser: resolveCalendarEventsForCurrentUser,
     calendarEventsForPatient: resolveCalendarEventsForPatient,

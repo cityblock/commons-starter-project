@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as styles from './css/patient-timeline.css';
 
 interface IProps {
-  loading: boolean;
+  loading?: boolean;
   error: ApolloError | null | undefined;
 }
 

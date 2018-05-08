@@ -1,35 +1,49 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import * as React from 'react';
+import * as uuid from 'uuid/v4';
+import ApolloTestProvider from '../../../../shared/util/apollo-test-provider';
+import { patientDiagnosis } from '../../../../shared/util/test-data';
 import InfoGroupContainer from '../container';
 import InfoGroupHeader from '../header';
 import InfoGroupItem from '../item';
 import ProblemList from '../problem-list';
 
 describe('Patient Left Nav Problem List Accordion', () => {
-  const wrapper = shallow(<ProblemList isOpen={false} onClick={() => true as any} />);
-
-  it('renders container', () => {
-    expect(wrapper.find('.container').length).toBe(1);
+  const patientDiagnosisQuery = () => ({ ...patientDiagnosis, id: uuid() });
+  const graphqlMocks = () => ({
+    PatientDiagnosis: patientDiagnosisQuery,
   });
+  const container = mount(
+    <ApolloTestProvider graphqlMocks={graphqlMocks()}>
+      <ProblemList patientId="patientId" isOpen={false} onClick={() => true as any} />
+    </ApolloTestProvider>,
+  );
 
   it('renders info group header', () => {
+    const wrapper = container.update();
     expect(wrapper.find(InfoGroupHeader).props().selected).toBe('problemList');
     expect(wrapper.find(InfoGroupHeader).props().isOpen).toBeFalsy();
-    expect(wrapper.find(InfoGroupHeader).props().itemCount).toBe(5);
+    expect(wrapper.find(InfoGroupHeader).props().itemCount).toBe(2);
   });
 
   it('renders info group container', () => {
+    const wrapper = container.update();
     expect(wrapper.find(InfoGroupContainer).props().isOpen).toBeFalsy();
   });
 
   it('renders info group items for each problem', () => {
-    expect(wrapper.find(InfoGroupItem).length).toBe(5);
+    const wrapper = container.update();
+    expect(wrapper.find(InfoGroupItem).length).toBe(2);
   });
 
-  it('opens info group container and header', () => {
-    wrapper.setProps({ isOpen: true });
+  it('opens info group header', () => {
+    const openContainer = mount(
+      <ApolloTestProvider graphqlMocks={graphqlMocks()}>
+        <ProblemList patientId="patientId" isOpen={true} onClick={() => true as any} />
+      </ApolloTestProvider>,
+    );
+    const wrapper = openContainer.update();
 
-    expect(wrapper.find(InfoGroupContainer).props().isOpen).toBeTruthy();
-    expect(wrapper.find(InfoGroupContainer).props().isOpen).toBeTruthy();
+    expect(wrapper.find(InfoGroupHeader).props().isOpen).toBeTruthy();
   });
 });

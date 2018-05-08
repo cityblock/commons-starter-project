@@ -7,7 +7,13 @@ const match = { params: { patientId: patient.id } };
 
 it('renders timeline', () => {
   const component = shallow(
-    <Component loading={false} match={match} error={null} glassBreakId="glassBreakId" />,
+    <Component
+      loading={false}
+      match={match}
+      error={null}
+      glassBreakId="glassBreakId"
+      patientEncounters={[]}
+    />,
   );
   const instance = component.instance() as Component;
   const result = instance.render();

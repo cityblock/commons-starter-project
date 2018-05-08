@@ -1,0 +1,7 @@
+query getPatientMedications($patientId: ID!) {
+  patientMedications(patientId: $patientId) {
+    id
+    name
+    dosage
+  }
+}

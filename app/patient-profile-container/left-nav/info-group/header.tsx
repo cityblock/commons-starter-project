@@ -8,7 +8,7 @@ interface IProps {
   isOpen: boolean;
   selected: Accordion;
   onClick: (clicked: Accordion) => void;
-  itemCount?: number; // if passed, shows count of items
+  itemCount?: number | null; // if passed, shows count of items
 }
 
 const InfoGroupHeader: React.StatelessComponent<IProps> = (props: IProps) => {

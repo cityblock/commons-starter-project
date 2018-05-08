@@ -366,6 +366,7 @@ export function mockGoogleCredentials() {
     GCP_CREDS:
       '{"private_key":"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyxrqMnMzxS81l\\n0fbRMDgg2je3wDLBOg96cSnIcb4cq2mmKQwYUQyzSikcVhBF4OwJOuybntOtxlyG\\nDz9f66rW8G4hKdcz0m7Og6fcMP25BT4plVOMNPZPjFu66RJE1ZNqiv6uzZXEgOAn\\na2xlXg+o0ejaqvpxe/meNad4cLjsjM2/pOqy9Pk2sBp3yFggyO1tECVFnitik+Oq\\nRm45796fCmUh8GcvPiJUg+x/u0Url0VZzVBwhiQtdEUYx/tUSWxVggNJGPUcUER2\\nFm+xcfeN5GhaxS5+ZTTZyEWhZJQxeASE17jBl8c7XkDqMQlwotK0GS/hhLluFJvP\\nBAF5B4+dAgMBAAECggEAEcRAK9M1ZtGCsxi/r6BcI5+sI9287YkImsF+RoZPP2gl\\nkrbHle8QFQ1Msp029srYij5J31lUbhOlhEklojG4g63XNAKFeYfzLSDWYMKZpHaJ\\n6/YEHI3y4IrxXszk3ORgxxjTIKobtTCdli1N03Eam0tpGboeM4L/lqJ8ZzLEnfVh\\nXr9A47wgJpB4CZh1ipjmqDQJQ8Ej3JygaXErT04J0mmGs9ZO2M/ijl2PubqibcQs\\njt2MKGMcwVTXxjqES5tjUYKzYpl9IW2528SRUiYH5egQiEr7EUd4m2dWouiQ4UEj\\nJGCbrrOySzMLFcLD7XwuLyze6kkz121MM4vSG8rS4QKBgQD1HvHBuYN4eUd08gkb\\npDZs4zFBjI8okNkZfsvr/o8GFHdm+5in60dXda13ZtrzYT+Bl+ck/jarEZlWgqV6\\nEcti6i58xVP7FLc3bAZg0BMrYAEDYlVeuFZex99nbaawUlY6JyPQppgCX6AY1EhD\\nnfgS1yXl5Ziiom1ASQEiulU7hQKBgQC6tfqsBWRM8l5xUlCz0UJi7+G9kKLbIUQL\\nnJQRP3PTX9/KzUZi5EOzKLp3zEEz3N8fLn9YI9hUu7qAGC/ZLrHORIfOeOL6Tt2C\\nvcrWNlYHzxVp6LG2r6vyYA1XpeDheyMIXuRKPYjAJU91ru70vpPOyQ8xVUKYt2fa\\nhv40zQvDOQKBgE6yhanN1tDqFzALuTLfsP2an6jM6PV8M8eEtxHoo6CvF3q/0k4v\\nMrN4u523LxquoUYJMBPnbkPUHafxwBEF/4edahly/TiCeSRZEV8pzs3BP/IHMyN7\\nCXfasfYx9S9s7/QxtsT5h5pTe0Idfan/4LKj0q4R3cRxY6QdDDlLG6xFAoGAPueQ\\nzOQEJuiBaSyShAK8mxi2tWdFdw5+Hmtid20pWM20WF9Ql4DQTkwqhrIKRa7kfVzt\\nCoUJHYMiEoYTmNhij1wHZUjVL//iIWpQLFuiIH9kd4ouVZ5aEA7Mb/szCMSzyN4v\\ni9Ovfw0S+FM3rr2GjuSuebB//3PLSZSxkJiEngECgYEA416H0a457vjnN6mzTktD\\nXI3Na36Q/VdXmMR5f9GXagpsBIO101XM7U3YY36jD7GzQaOQpZvwiZKy0jVLfx8B\\nXb1Ugj9ljqyWt9K0Fni+LrsvkV2pPURokdT3j+DfcnOklUMAPQzzZZ2FfkFX80do\\ngnIFsJBQxOKRwboOpg2YZtl=\\n-----END PRIVATE KEY-----\\n","client_email":"laura-robot@fake-credentials.iam.gserviceaccount.com"}',
     subject: 'test@faketestorg.cityblock.engineering',
+    GCS_BUCKET: 'test-patient-data',
   };
 }
 
@@ -2064,6 +2065,192 @@ export async function createCBOReferral(txn: Transaction) {
     },
     txn,
   );
+}
+
+// Google Cloud Storage
+export function mockGoogleCloudStorageAggregatedDataFileDownload(
+  bucket: string,
+  patientId: string,
+  file: 'medications' | 'diagnoses' | 'encounters',
+  fileContents: string,
+) {
+  nock(
+    `https://www.googleapis.com/storage/v1/b/${bucket}/o/${patientId}%2Faggregated_data%2F${file}.json`,
+  )
+    .get('')
+    .reply(200, [Buffer.from(fileContents, 'utf8')]);
+}
+
+export function createMockPatientProblemFile() {
+  return `
+    [
+      {
+        "timestamp": "2018-05-07T17:33:41.381Z",
+        "messageId": "345514190",
+        "patient": {
+          "patientId": "d78b790a-b0c1-4ce7-aed1-6e5384eb2f47",
+          "externalId": "123",
+          "source": {
+            "name": "ACPNY"
+          }
+        },
+        "problem": {
+          "StartDate": "2017-10-23",
+          "EndDate": "",
+          "Code": "15640441000119104",
+          "CodeSystem": "2.16.840.1.113883.6.96",
+          "CodeSystemName": "SNOMED CT",
+          "Name": "Primary open angle glaucoma of right eye",
+          "Category": {
+            "Code": "55607006",
+            "CodeSystem": "2.16.840.1.113883.6.96",
+            "CodeSystemName": "SNOMED CT",
+            "Name": "Problem"
+          },
+          "HealthStatus": {
+            "Code": "",
+            "CodeSystem": "",
+            "CodeSystemName": "",
+            "Name": ""
+          },
+          "Status": {
+            "Code": "55561003",
+            "CodeSystem": "2.16.840.1.113883.6.96",
+            "CodeSystemName": "SNOMED CT",
+            "Name": "Active"
+          }
+        }
+      },
+      {
+        "timestamp": "2018-05-07T17:33:41.381Z",
+        "messageId": "345514190",
+        "patient": {
+          "patientId": "d78b790a-b0c1-4ce7-aed1-6e5384eb2f47",
+          "externalId": "5826211",
+          "source": {
+            "name": "ACPNY"
+          }
+        },
+        "problem": {
+          "StartDate": "2017-10-23",
+          "EndDate": "",
+          "Code": "426875007",
+          "CodeSystem": "2.16.840.1.113883.6.96",
+          "CodeSystemName": "SNOMED CT",
+          "Name": "Diabetes 1.5, managed as type 2 (HCC)",
+          "Category": {
+            "Code": "55607006",
+            "CodeSystem": "2.16.840.1.113883.6.96",
+            "CodeSystemName": "SNOMED CT",
+            "Name": "Problem"
+          },
+          "HealthStatus": {
+            "Code": "",
+            "CodeSystem": "",
+            "CodeSystemName": "",
+            "Name": ""
+          },
+          "Status": {
+            "Code": "55561003",
+            "CodeSystem": "2.16.840.1.113883.6.96",
+            "CodeSystemName": "SNOMED CT",
+            "Name": "Active"
+          }
+        }
+      },
+    ]
+  `;
+}
+
+export function createMockPatientMedicationsFile() {
+  return `
+    [
+      {
+        "timestamp": "2018-05-07T17:33:41.410Z",
+        "messageId": "345514190",
+        "patient": {
+          "patientId": "d78b790a-b0c1-4ce7-aed1-6e5384eb2f47",
+          "externalId": "123",
+          "source": {
+            "name": "ACPNY"
+          }
+        },
+        "medication": {
+          "Prescription": true,
+          "FreeTextSig": "",
+          "Dose": {
+            "Quantity": "5",
+            "Units": "MG"
+          },
+          "Rate": {
+            "Quantity": "",
+            "Units": ""
+          },
+          "Route": {
+            "Code": "PO",
+            "CodeSystem": "2.16.840.1.113883.3.26.1.1",
+            "CodeSystemName": "NCI Thesaurus",
+            "Name": "Oral"
+          },
+          "StartDate": "",
+          "EndDate": "",
+          "Frequency": {
+            "Period": "",
+            "Unit": ""
+          },
+          "IsPRN": false,
+          "Product": {
+            "Code": "1049621",
+            "CodeSystem": "2.16.840.1.113883.6.88",
+            "CodeSystemName": "RxNorm",
+            "Name": "oxyCODONE (ROXICODONE) 5 MG immediate release tablet"
+          }
+        }
+      },
+      {
+        "timestamp": "2018-05-07T17:33:41.410Z",
+        "messageId": "345514190",
+        "patient": {
+          "patientId": "d78b790a-b0c1-4ce7-aed1-6e5384eb2f47",
+          "externalId": "5826211",
+          "source": {
+            "name": "ACPNY"
+          }
+        },
+        "medication": {
+          "Prescription": true,
+          "FreeTextSig": "",
+          "Dose": {
+            "Quantity": "5",
+            "Units": "MG"
+          },
+          "Rate": {
+            "Quantity": "",
+            "Units": ""
+          },
+          "Route": {
+            "Code": "NEBULIZATION",
+            "CodeSystem": "2.16.840.1.113883.3.26.1.1",
+            "CodeSystemName": "NCI Thesaurus",
+            "Name": "Nebulization"
+          },
+          "StartDate": "2016-08-17T19:15:00.000Z",
+          "EndDate": "",
+          "Frequency": {
+            "Period": "",
+            "Unit": ""
+          },
+          "IsPRN": false,
+          "Product": {
+            "Code": "245314",
+            "CodeSystem": "2.16.840.1.113883.6.88",
+            "CodeSystemName": "RxNorm",
+            "Name": "albuterol (PROVENTIL) nebulizer solution 5 mg"
+          }
+        }
+      }
+    ]
+  `;
 }
 
 interface ISiuMessageOptions {

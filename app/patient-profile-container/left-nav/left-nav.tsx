@@ -51,8 +51,16 @@ class LeftNav extends React.Component<IProps, IState> {
             />
             <Contact patient={patient} isOpen={selected === 'contact'} onClick={this.handleClick} />
             <Plan patient={patient} isOpen={selected === 'plan'} onClick={this.handleClick} />
-            <Medications isOpen={selected === 'medications'} onClick={this.handleClick} />
-            <ProblemList isOpen={selected === 'problemList'} onClick={this.handleClick} />
+            <Medications
+              patientId={patient.id}
+              isOpen={selected === 'medications'}
+              onClick={this.handleClick}
+            />
+            <ProblemList
+              patientId={patient.id}
+              isOpen={selected === 'problemList'}
+              onClick={this.handleClick}
+            />
           </div>
         )}
       </div>

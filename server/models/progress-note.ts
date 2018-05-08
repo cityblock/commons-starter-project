@@ -24,6 +24,11 @@ interface IProgressNoteAutoOpenFields {
   userId: string;
 }
 
+interface IProgressNoteId {
+  id: string;
+  createdAt: string;
+}
+
 const EAGER_QUERY = '[progressNoteTemplate, user, patient.[patientInfo, patientState], supervisor]';
 
 /* tslint:disable:member-ordering */
@@ -162,10 +167,9 @@ export default class ProgressNote extends BaseModel {
     patientId: string,
     completed: boolean,
     txn: Transaction,
-  ): Promise<string[]> {
+  ): Promise<IProgressNoteId[]> {
     const query = this.query(txn)
-      .pluck('id')
-      .eager(EAGER_QUERY)
+      .select(['id', 'createdAt'])
       .orderBy('createdAt', 'desc')
       .where({ deletedAt: null, patientId });
 
@@ -174,7 +178,7 @@ export default class ProgressNote extends BaseModel {
     } else {
       query.whereNull('completedAt');
     }
-    return query as any;
+    return query;
   }
 
   static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {

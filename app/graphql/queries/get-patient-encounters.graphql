@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-encounter.graphql"
+
+query getPatientEncounters($patientId: ID!, $glassBreakId: ID) {
+  patientEncounters(patientId: $patientId, glassBreakId: $glassBreakId) {
+    ...FullPatientEncounter
+  }
+}

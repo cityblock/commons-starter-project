@@ -769,11 +769,39 @@ type Clinic implements uniqueId {
   updatedAt: String!
 }
 
-# PatientDiagnosis
+# PatientProblem
 type PatientDiagnosis {
+  id: ID!
+  name: String!
   code: String!
-  codeSystem: String!
-  description: String!
+  startDate: String!
+  endDate: String!
+}
+
+# PatientMedication
+type PatientMedication {
+  id: ID!
+  name: String!
+  dosage: String!
+  startDate: String!
+  endDate: String!
+}
+
+# PatientEncounter
+type PatientEncounter {
+  id: ID!
+  location: String
+  source: String
+  date: String!
+  title: String
+  notes: String
+  progressNoteId: String
+}
+
+# PatientProgressNoteId
+type PatientProgressNoteId {
+  id: ID!
+  createdAt: String!
 }
 
 # Patient Scratch Pad
@@ -3031,7 +3059,11 @@ type RootQueryType {
   # progress note
   progressNote(progressNoteId: ID!, glassBreakId: ID): ProgressNote!
   # progress note ids for patient
-  progressNoteIdsForPatient(patientId: ID!, completed: Boolean!, glassBreakId: ID): [ID!]!
+  progressNoteIdsForPatient(
+    patientId: ID!
+    completed: Boolean!
+    glassBreakId: ID
+  ): [PatientProgressNoteId!]!
   # progress notes for current user
   progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]!
   # progress notes for supervisor review
@@ -3094,6 +3126,12 @@ type RootQueryType {
   patientPhones(patientId: ID!): [Phone!]
   # gets a patient scratch pad for given user and patient
   patientScratchPad(patientId: ID!, glassBreakId: ID): PatientScratchPad!
+  # gets a patient problem list
+  patientProblemList(patientId: ID!): [PatientDiagnosis!]!
+  # gets patient medications
+  patientMedications(patientId: ID!): [PatientMedication!]!
+  # gets patient encounters (external to Commons)
+  patientEncounters(patientId: ID!, glassBreakId: ID): [PatientEncounter!]!
   # gets a patients full social security number and records a log of the view by user
   patientSocialSecurity(patientId: ID!, glassBreakId: ID): PatientSocialSecurity!
   # Google calendar id and url for the current user

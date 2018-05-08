@@ -1,4 +1,8 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
+import * as patientMedicationsQuery from '../../../graphql/queries/get-patient-medications.graphql';
+import { getPatientMedicationsQuery } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
 import * as styles from './css/shared.css';
@@ -6,25 +10,61 @@ import InfoGroupHeader from './header';
 import InfoGroupItem from './item';
 
 interface IProps {
+  patientId: string;
   isOpen: boolean;
   onClick: (clicked: Accordion) => void;
 }
 
-// TODO: Remove hard coded values
-const Medications: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { isOpen, onClick } = props;
+interface IGraphqlProps {
+  patientMedications: getPatientMedicationsQuery['patientMedications'];
+  isLoading: boolean;
+  error: ApolloError | null | undefined;
+}
+
+export type allProps = IGraphqlProps & IProps;
+
+export const Medications: React.StatelessComponent<allProps> = (props: allProps) => {
+  const { isOpen, onClick, patientMedications, isLoading, error } = props;
+
+  let itemCount: number | null = null;
+  let medicationsContainerHtml = null;
+
+  if (!isLoading && !error && !!patientMedications && patientMedications.length) {
+    itemCount = patientMedications.length;
+    const patientMedicationsHtml = patientMedications.map((medication, index) => (
+      <InfoGroupItem
+        key={`patient-medication-${index}`}
+        label={medication.name}
+        value={medication.dosage}
+      />
+    ));
+    medicationsContainerHtml = (
+      <InfoGroupContainer isOpen={isOpen}>{patientMedicationsHtml}</InfoGroupContainer>
+    );
+  }
 
   return (
     <div className={styles.container}>
-      <InfoGroupHeader selected="medications" isOpen={isOpen} onClick={onClick} itemCount={4} />
-      <InfoGroupContainer isOpen={isOpen}>
-        <InfoGroupItem label="Aspirin" value="81 mg" />
-        <InfoGroupItem label="Acarbose (Precose)" value="11 mg" />
-        <InfoGroupItem label="Accolate (Zafirlukast)" value="21 mg" />
-        <InfoGroupItem label="Accretropin (Somatropin Injection)" value="2 mL" />
-      </InfoGroupContainer>
+      <InfoGroupHeader
+        selected="medications"
+        isOpen={isOpen}
+        onClick={onClick}
+        itemCount={itemCount}
+      />
+      {medicationsContainerHtml}
     </div>
   );
 };
 
-export default Medications;
+export default graphql(patientMedicationsQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+    },
+  }),
+  props: ({ data }) => ({
+    isLoading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientMedications: data ? (data as any).patientMedications : null,
+  }),
+})(Medications);

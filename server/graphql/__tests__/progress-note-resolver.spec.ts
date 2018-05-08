@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
+import * as progressNoteIdsForPatient from '../../../app/graphql/queries/get-progress-note-ids-for-patient.graphql';
 import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -50,6 +51,7 @@ describe('progress note resolver', () => {
   let txn = null as any;
   let db: Db;
   const progressNoteLatestForPatientQuery = print(progressNoteLatestForPatient);
+  const progressNoteIdsForPatientQuery = print(progressNoteIdsForPatient);
 
   beforeEach(async () => {
     db = await Db.get();
@@ -441,20 +443,23 @@ describe('progress note resolver', () => {
         txn,
       );
 
-      const query = `{
-          progressNoteIdsForPatient(patientId: "${patient.id}", completed: false)
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        progressNoteIdsForPatientQuery,
+        null,
+        {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient.id, completed: false },
+      );
       const progressNoteIds = cloneDeep(result.data!.progressNoteIdsForPatient);
+      const mappedProgressNoteIds = progressNoteIds.map((progressNoteId: any) => progressNoteId.id);
 
-      expect(progressNoteIds).toContain(progressNote1.id);
-      expect(progressNoteIds).toContain(progressNote2.id);
+      expect(mappedProgressNoteIds).toContain(progressNote1.id);
+      expect(mappedProgressNoteIds).toContain(progressNote2.id);
     });
 
     it('blocks progress notes for patient with invalid glass break', async () => {
@@ -467,18 +472,18 @@ describe('progress note resolver', () => {
         txn,
       );
 
-      const query = `{
-          progressNoteIdsForPatient(patientId: "${
-            patient2.id
-          }", completed: false, glassBreakId: "${uuid()}")
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions: 'blue',
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        progressNoteIdsForPatientQuery,
+        null,
+        {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient2.id, completed: false, glassBreakId: uuid() },
+      );
 
       expect(result.errors![0].message).toBe(
         'You must break the glass again to view this patient. Please refresh the page.',
@@ -509,18 +514,18 @@ describe('progress note resolver', () => {
         .where({ userId: user.id, patientId: patient2.id })
         .patch({ createdAt: subHours(new Date(), 9).toISOString() });
 
-      const query = `{
-          progressNoteIdsForPatient(patientId: "${patient2.id}", completed: false, glassBreakId: "${
-        patientGlassBreak.id
-      }")
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        db,
-        permissions: 'blue',
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        progressNoteIdsForPatientQuery,
+        null,
+        {
+          db,
+          permissions: 'blue',
+          userId: user.id,
+          txn,
+        },
+        { patientId: patient2.id, completed: false, glassBreakId: patientGlassBreak.id },
+      );
 
       expect(result.errors![0].message).toBe(
         'You must break the glass again to view this patient. Please refresh the page.',

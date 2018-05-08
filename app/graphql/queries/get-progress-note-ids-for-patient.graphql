@@ -3,5 +3,8 @@ query getProgressNoteIdsForPatient($patientId: ID!, $completed: Boolean!, $glass
     patientId: $patientId
     completed: $completed
     glassBreakId: $glassBreakId
-  )
+  ) {
+    id
+    createdAt
+  }
 }

@@ -436,7 +436,7 @@ declare module 'schema' {
     /**
      * progress note ids for patient
      */
-    progressNoteIdsForPatient: Array<string>;
+    progressNoteIdsForPatient: Array<IPatientProgressNoteId>;
 
     /**
      * progress notes for current user
@@ -584,6 +584,21 @@ declare module 'schema' {
      * gets a patient scratch pad for given user and patient
      */
     patientScratchPad: IPatientScratchPad;
+
+    /**
+     * gets a patient problem list
+     */
+    patientProblemList: Array<IPatientDiagnosis>;
+
+    /**
+     * gets patient medications
+     */
+    patientMedications: Array<IPatientMedication>;
+
+    /**
+     * gets patient encounters (external to Commons)
+     */
+    patientEncounters: Array<IPatientEncounter>;
 
     /**
      * gets a patients full social security number and records a log of the view by user
@@ -1057,6 +1072,19 @@ declare module 'schema' {
   }
 
   interface IPatientScratchPadOnRootQueryTypeArguments {
+    patientId: string;
+    glassBreakId?: string | null;
+  }
+
+  interface IPatientProblemListOnRootQueryTypeArguments {
+    patientId: string;
+  }
+
+  interface IPatientMedicationsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+
+  interface IPatientEncountersOnRootQueryTypeArguments {
     patientId: string;
     glassBreakId?: string | null;
   }
@@ -2469,6 +2497,14 @@ declare module 'schema' {
     concerns: Array<IPatientConcern>;
   }
 
+  /**
+   * PatientProgressNoteId
+   */
+  interface IPatientProgressNoteId {
+    id: string;
+    createdAt: string;
+  }
+
   interface IProgressNoteActivity {
     taskEvents: Array<ITaskEvent>;
     patientAnswerEvents: Array<IPatientAnswerEvent>;
@@ -2651,6 +2687,41 @@ declare module 'schema' {
     patientId: string;
     userId: string;
     body: string;
+  }
+
+  /**
+   * PatientProblem
+   */
+  interface IPatientDiagnosis {
+    id: string;
+    name: string;
+    code: string;
+    startDate: string;
+    endDate: string;
+  }
+
+  /**
+   * PatientMedication
+   */
+  interface IPatientMedication {
+    id: string;
+    name: string;
+    dosage: string;
+    startDate: string;
+    endDate: string;
+  }
+
+  /**
+   * PatientEncounter
+   */
+  interface IPatientEncounter {
+    id: string;
+    location: string | null;
+    source: string | null;
+    date: string;
+    title: string | null;
+    notes: string | null;
+    progressNoteId: string | null;
   }
 
   /**
@@ -5200,15 +5271,6 @@ declare module 'schema' {
   interface IPatientEdges {
     edges: Array<IPatientNode>;
     pageInfo: IPageInfo;
-  }
-
-  /**
-   * PatientDiagnosis
-   */
-  interface IPatientDiagnosis {
-    code: string;
-    codeSystem: string;
-    description: string;
   }
 
   interface IRiskAreaStatistic {

@@ -107,7 +107,7 @@ describe('progress note model', () => {
       txn,
     );
     const progressNotes = await ProgressNote.getAllIdsForPatient(patient.id, false, txn);
-    expect(progressNotes).toEqual([createdNote.id]);
+    expect(progressNotes).toMatchObject([{ createdAt: createdNote.createdAt, id: createdNote.id }]);
   });
 
   it('gets progress notes for a user', async () => {

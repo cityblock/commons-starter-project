@@ -1277,6 +1277,21 @@ export const patientScratchPad = {
   body: 'Concerned about Night King Breaching Wall',
 };
 
+export const patientMedication = {
+  id: 'patientMedicationId',
+  name: 'Advil',
+  dosage: '200mg',
+  instructions: 'Take every 8 hours',
+  prescribedBy: 'John Snow',
+  prescribedOn: 'May 26, 2005',
+};
+
+export const patientDiagnosis = {
+  id: 'patientDiagnosisId',
+  name: 'Cholesteatoma of middle ear',
+  code: 'H71',
+};
+
 export const smsMessage1 = {
   id: 'sms1',
   userId: user.id,

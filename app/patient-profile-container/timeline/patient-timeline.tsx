@@ -1,8 +1,9 @@
 import { ApolloError } from 'apollo-client';
+import { toString } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as progressNoteIdsQuery from '../../graphql/queries/get-progress-note-ids-for-patient.graphql';
-import { getProgressNoteIdsForPatientQuery } from '../../graphql/types';
+import * as patientEncountersQuery from '../../graphql/queries/get-patient-encounters.graphql';
+import { getPatientEncountersQuery, FullPatientEncounterFragment } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
@@ -21,11 +22,11 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  progressNoteIds?: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'];
+  patientEncounters: getPatientEncountersQuery['patientEncounters'];
 }
 
 interface IState {
-  loading: boolean;
+  loading?: boolean;
   error: ApolloError | null | undefined;
   isQuickCallPopupVisible: boolean;
 }
@@ -35,6 +36,7 @@ type allProps = IProps & IGraphqlProps;
 export class PatientTimeline extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
+
     this.state = {
       loading: props.loading,
       error: props.error,
@@ -48,12 +50,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     this.setState({ loading, error });
   }
 
-  renderProgressNotes = (
-    progressNoteIds: getProgressNoteIdsForPatientQuery['progressNoteIdsForPatient'],
-  ) => {
+  renderPatientEncounters = () => {
+    const patientEncounters = this.props.patientEncounters || [];
     const { loading, error } = this.state;
-    if (progressNoteIds && progressNoteIds.length) {
-      return progressNoteIds.map(this.renderPatientEncounter);
+
+    if (patientEncounters && patientEncounters.length) {
+      return patientEncounters.map(this.renderPatientEncounter);
     } else if (!loading && !error) {
       return (
         <div className={styles.empty}>
@@ -69,14 +71,28 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  renderPatientEncounter = (progressNoteId: string, index: number) => {
+  renderPatientEncounter = (patientEncounter: FullPatientEncounterFragment) => {
+    const { id, location, source, date, title, notes, progressNoteId } = patientEncounter;
+    const { patientId } = this.props.match.params;
+
     if (progressNoteId) {
       return (
         <ProgressNoteRow
-          key={index}
+          key={progressNoteId}
           progressNoteId={progressNoteId}
-          patientId={this.props.match.params.patientId}
+          patientId={patientId}
           glassBreakId={this.props.glassBreakId}
+        />
+      );
+    } else {
+      return (
+        <TimelineCard
+          key={id}
+          source={toString(location)}
+          sourceDetail={toString(source)}
+          title={toString(title)}
+          date={date}
+          notes={notes}
         />
       );
     }
@@ -95,38 +111,25 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { progressNoteIds } = this.props;
-    const progressNotesList = progressNoteIds || [];
-
     return (
       <div className={styles.progressNotesContainer}>
-        <div className={styles.progressNotes}>
-          <TimelineCard
-            source="ACPNY - Radiology"
-            sourceDetail="EPIC EHR"
-            title="Ultrasound Kidney Stones"
-            date="2018-03-28T05:23:08.020Z"
-            notes="Sed posuere consectetur est at lobortis. Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Nulla vitae elit libero, a pharetra augue."
-          />
-          {this.renderProgressNotes(progressNotesList)}
-        </div>
+        <div className={styles.progressNotes}>{this.renderPatientEncounters()}</div>
       </div>
     );
   }
 }
 
-export default graphql(progressNoteIdsQuery as any, {
+export default graphql(patientEncountersQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,
       glassBreakId: props.glassBreakId,
-      completed: true,
     },
-    fetchPolicy: 'cache-and-network', // Always get the latest progress note ids
+    fetchPolicy: 'cache-and-network',
   }),
-  props: ({ data }): IGraphqlProps => ({
+  props: ({ data }) => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
-    progressNoteIds: data ? (data as any).progressNoteIdsForPatient : null,
+    patientEncounters: data ? (data as any).patientEncounters : null,
   }),
 })(PatientTimeline);

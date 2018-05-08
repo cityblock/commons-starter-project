@@ -1,0 +1,7 @@
+query getPatientProblemList($patientId: ID!) {
+  patientProblemList(patientId: $patientId) {
+    id
+    name
+    code
+  }
+}

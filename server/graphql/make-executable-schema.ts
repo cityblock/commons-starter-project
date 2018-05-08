@@ -56,7 +56,6 @@ import {
   resolveComputedField,
   resolveComputedFields,
 } from './computed-field-resolver';
-import { resolveComputedFieldsSchema } from './computed-field-schema-resolver';
 import { resolvePatientComputedPatientStatus } from './computed-patient-status-resolver';
 import {
   concernAddDiagnosisCode,
@@ -437,7 +436,6 @@ const resolveFunctions = {
     quickCallsForProgressNote: resolveQuickCallsForProgressNote,
     computedField: resolveComputedField,
     computedFields: resolveComputedFields,
-    computedFieldsSchema: resolveComputedFieldsSchema,
     patientLists: resolvePatientLists,
     patientList: resolvePatientList,
     CBOCategories: resolveCBOCategories,

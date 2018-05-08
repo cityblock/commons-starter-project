@@ -11,17 +11,18 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 * **State:** development
 * **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
+* **Demo:** [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
 * **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
-* **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
 * **Kue Staging:** [http://commons-staging.cityblock.com/kue](http://commons-staging.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+* **Kue Demo:** [http://commons-demo.cityblock.com/kue](http://commons-demo.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+* **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
 * **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
 * **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
   `cityblock/commons#master` are automatically deployed to staging
 * **Point People:** @zamiang, @loganhasson
-* **Pingdom:** [http://stats.pingdom.com/8uqm3ndqqgmh](http://stats.pingdom.com/8uqm3ndqqgmh)
+* **Stackdriver:** [https://app.google.stackdriver.com/?project=commons-183915](https://app.google.stackdriver.com/?project=commons-183915)
 * **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
 * **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
-* **Stackdriver:** [https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607](https://console.cloud.google.com/errors?time=PT1H&order=COUNT_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production&authuser=1&organizationId=250790368607)
 * **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
 * **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
 

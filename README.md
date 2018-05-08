@@ -30,7 +30,7 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 The goal of this section give us high visibility of both documentation and test plans for features in order to keep us accountable when they are missing. Also to indicate point people for questions.
 
-| **Feature**                   | **Eng who built** | **Test Plan**                                                                                                            | **Design / UX Doc**                                                                      | **PRD**                                                                                     |
+| **Feature**                   | **Point Person** | **Test Plan**                                                                                                            | **Design Doc**                                                                      | **PRD**                                                                                     |
 | ----------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | Progress Note                 | Brennan           | [Test Plan](https://docs.google.com/document/d/1JDekPxDBsGFs3SEUwfEmdYNLSLB4hwgCCBD8um_gDMc/edit#heading=h.se1fcozgemyu) |                                                                                          | [PRD](https://docs.google.com/document/d/1NK0qMw_nnK6rsh1schnzmphksJQ_QJ4zfUbgDyhLp4M/edit) |
 | Timeline                      | Brennan / Logan   | See Progress Note Test Plan                                                                                              |                                                                                          |                                                                                             |
@@ -413,4 +413,4 @@ Alternatively, you can install following the instructions on the [Redis download
 [redis download page]: https://redis.io/download
 [fdw]: https://www.postgresql.org/docs/10/static/sql-createforeigndatawrapper.html
 [builder stability in production]: https://docs.google.com/document/d/1BYb66YeQlRTFkdXBtPowrVvR-wyhoaNUM9Hog-7MzkI/edit#heading=h.8jov09o8e1fb
-[mardowntablemaker]: https://chrome.google.com/webstore/detail/markdowntablemaker/cofkbgfmijanlcdooemafafokhhaeold?hl=en
+[MarkdownTableMaker]: https://chrome.google.com/webstore/detail/markdowntablemaker/cofkbgfmijanlcdooemafafokhhaeold?hl=en

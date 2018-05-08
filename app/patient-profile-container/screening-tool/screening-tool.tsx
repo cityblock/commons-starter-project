@@ -286,7 +286,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
       return <Spinner />;
     }
     return (
-      <div>
+      <React.Fragment>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
           <Button
             messageId="screeningTool.submit"
@@ -303,7 +303,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
             bodyMessageId="screeningTool.resultsBody"
           />
         </Popup>
-      </div>
+      </React.Fragment>
     );
   }
 }

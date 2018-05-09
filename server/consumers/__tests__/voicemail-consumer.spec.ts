@@ -78,6 +78,7 @@ describe('Voicemail Consumer', () => {
   let txn = null as any;
   let createMessage = null as any;
   let removeRecording = null as any;
+  let exit = null as any;
   const jobId = uuid();
 
   beforeEach(async () => {
@@ -89,6 +90,7 @@ describe('Voicemail Consumer', () => {
     axios.put = jest.fn();
     createMessage = jest.fn();
     removeRecording = jest.fn();
+    exit = jest.spyOn(process, 'exit');
 
     TwilioClient.get = jest.fn().mockReturnValue({
       messages: {
@@ -126,6 +128,7 @@ describe('Voicemail Consumer', () => {
       expect(voicemail.twilioCreatedAt).toEqual(new Date('2018-04-26T18:21:00.235Z'));
       expect(voicemail.twilioUpdatedAt).toEqual(new Date('2018-04-26T18:27:00.235Z'));
       expect(voicemail.jobId).toBe(jobId);
+      expect(exit).not.toHaveBeenCalled();
     });
 
     it('throws an error if cannot create voicemail', async () => {
@@ -141,6 +144,7 @@ describe('Voicemail Consumer', () => {
         expect(true).toBeFalsy();
       } catch (err) {
         expect(err).toBe('No such phone call with sid: FAKESID');
+        expect(exit).not.toHaveBeenCalled();
       }
     });
   });
@@ -164,6 +168,7 @@ describe('Voicemail Consumer', () => {
           'Content-Type': 'audio/mpeg',
         },
       });
+      expect(exit).not.toHaveBeenCalled();
     });
 
     it('throws an error if no signed url', async () => {
@@ -189,6 +194,7 @@ describe('Voicemail Consumer', () => {
         expect(true).toBeFalsy();
       } catch (err) {
         expect(err).toEqual(new Error('No signed url or audio file'));
+        expect(exit).not.toHaveBeenCalled();
       }
     });
   });
@@ -229,6 +235,7 @@ describe('Voicemail Consumer', () => {
         to: '+11234567777',
         body: `http://localhost:3000/voicemails/${voicemail.id}`,
       });
+      expect(exit).not.toHaveBeenCalled();
     });
 
     it('sends SMS notifying user of voicemail with associated patient', async () => {
@@ -278,6 +285,7 @@ describe('Voicemail Consumer', () => {
         to: '+11234567777',
         body: `http://localhost:3000/voicemails/${voicemail.id}`,
       });
+      expect(exit).not.toHaveBeenCalled();
     });
   });
 
@@ -288,6 +296,7 @@ describe('Voicemail Consumer', () => {
       await deleteVoicemail(sid);
 
       expect(removeRecording).toBeCalled();
+      expect(exit).not.toHaveBeenCalled();
     });
   });
 });

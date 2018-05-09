@@ -11,7 +11,6 @@ import Db from '../db';
 import { loadUserVoicemailUrl } from '../graphql/shared/gcs/helpers';
 import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
-import { IProcessVoicemailData, VOICEMAIL_TOPIC } from '../jobs/process-voicemail';
 import { createRedisClient } from '../lib/redis';
 import Voicemail from '../models/voicemail';
 import TwilioClient from '../twilio-client';
@@ -19,6 +18,11 @@ import TwilioClient from '../twilio-client';
 const TWILIO_ROOT = 'https://api.twilio.com';
 export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
 export const CITYBLOCK_VOICEMAIL = '+16469417791';
+
+interface IProcessVoicemailData {
+  title: string;
+  jobId: string;
+}
 
 interface ITwilioRecording {
   sid: string;
@@ -32,11 +36,15 @@ interface ITwilioRecording {
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
-queue.process(VOICEMAIL_TOPIC, async (job, done) => {
+queue.process('processVoicemail', async (job, done) => {
   try {
+    await Db.get();
     await processVoicemails(job.data);
+
+    await Db.release();
     return done();
   } catch (err) {
+    await Db.release();
     return done(err);
   }
 });
@@ -46,11 +54,15 @@ queue.on('error', err => {
 });
 
 export async function processVoicemails(data: IProcessVoicemailData, existingTxn?: Transaction) {
-  const twilioClient = TwilioClient.get();
+  try {
+    const twilioClient = TwilioClient.get();
 
-  twilioClient.recordings.each((voicemail: ITwilioRecording) => {
-    processVoicemail(voicemail, data.jobId, existingTxn);
-  });
+    twilioClient.recordings.each((voicemail: ITwilioRecording) => {
+      processVoicemail(voicemail, data.jobId, existingTxn);
+    });
+  } catch (err) {
+    reportError(err, 'Error transferring voicemails', data);
+  }
 }
 
 export async function processVoicemail(
@@ -86,8 +98,6 @@ export async function createVoicemail(
   const { callSid, duration, dateCreated, dateUpdated } = recording;
 
   let voicemail: Voicemail | null = null;
-
-  await Db.get();
 
   await transaction(existingTxn || Voicemail.knex(), async txn => {
     voicemail = await Voicemail.create(

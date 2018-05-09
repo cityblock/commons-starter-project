@@ -5,16 +5,11 @@ import { createRedisClient } from '../lib/redis';
 
 export const VOICEMAIL_TOPIC = 'processVoicemail';
 
-export interface IProcessVoicemailData {
-  title: string;
-  jobId: string;
-}
-
 const queue = kue.createQueue({ redis: createRedisClient() });
 
 export async function enqueueProcessVoicemail(): Promise<void> {
   await queue
-    .create(VOICEMAIL_TOPIC, {
+    .create('processVoicemail', {
       title: `Handling ${VOICEMAIL_TOPIC} at ${new Date().toISOString()}`,
       jobId: uuid(),
     })

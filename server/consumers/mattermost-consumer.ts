@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import * as kue from 'kue';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';

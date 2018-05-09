@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import Db from '../db';

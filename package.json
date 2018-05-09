@@ -173,7 +173,7 @@
     "@types/react-hot-loader": "3.0.6",
     "@types/react-intl": "2.3.7",
     "@types/react-onclickoutside": "6.0.3",
-    "@types/react-redux": "5.0.19",
+    "@types/react-redux": "5.0.20",
     "@types/react-router-dom": "4.2.6",
     "@types/redux-logger": "3.0.6",
     "@types/twilio": "0.0.9",

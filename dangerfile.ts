@@ -9,9 +9,9 @@ const modifiedMigrations = danger.git.modified_files
   .filter(filesOnly);
 
 const checkPackageJson = async () => {
-  const changelogDiff = await danger.git.diffForFile('package.json');
+  const packageDiff = await danger.git.diffForFile('package.json');
 
-  if (changelogDiff) {
+  if (packageDiff) {
     const problematicModules = [
       'kue',
       'react-beautiful-dnd',
@@ -20,7 +20,7 @@ const checkPackageJson = async () => {
       'chart.js',
     ];
     problematicModules.map(name => {
-      if (changelogDiff.diff.includes(name)) {
+      if (packageDiff.added.includes(name)) {
         warn(
           `Please be careful updating the node module "${name}". Ensure you have tested locally and then test it on staging before deploy`,
         );

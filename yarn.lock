@@ -535,9 +535,9 @@
     csstype "^2.0.0"
     indefinite-observable "^1.0.1"
 
-"@types/knex@0.14.13":
-  version "0.14.13"
-  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.13.tgz#0c5d269c2790dd3f5b8a49fe046b856f461383f8"
+"@types/knex@0.14.14":
+  version "0.14.14"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.14.tgz#0fb45549e7cc8ea8400e42a9a61fa650cefe512f"
   dependencies:
     "@types/bluebird" "*"
     "@types/events" "*"

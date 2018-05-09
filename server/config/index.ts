@@ -4,6 +4,7 @@ export default {
   PORT: '3000',
   NODE_ENV: 'development',
   IS_BUILDER_ENABLED: 'true',
+  KUE_STATS_URL: 'http://localhost:3000/kue/stats',
   GOOGLE_OAUTH_TOKEN: null,
   GOOGLE_OAUTH_SECRET: null,
   GOOGLE_OAUTH_REDIRECT_URI: 'http://localhost:3000',

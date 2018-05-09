@@ -15,6 +15,7 @@ import schema from './graphql/make-executable-schema';
 import { formatError, formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
+import { checkRedisHandler } from './handlers/pingdom/check-redis-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
 import {
@@ -164,6 +165,7 @@ export default async (
     checkAuth('pingdom', config.PINGDOM_CHECK_PASSWORD),
     checkPostgresHandler,
   );
+  app.get('/ping/redis', checkAuth('pingdom', config.PINGDOM_CHECK_PASSWORD), checkRedisHandler);
 
   // Google PubSub
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);

@@ -49,6 +49,7 @@ export default class Logger {
 
   error(text: string) {
     const entry = this.errorLog.entry(this.metadata, text);
+
     return this.errorLog.write(entry).catch((error: string) => {
       console.error('ERROR WRITING ERROR:', error);
     });

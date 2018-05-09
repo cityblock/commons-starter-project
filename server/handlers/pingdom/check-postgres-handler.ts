@@ -1,10 +1,14 @@
+import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as express from 'express';
 import { transaction } from 'objection';
+import config from '../../config';
 import Db from '../../db';
 import User from '../../models/user';
 
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {
   const existingTxn = res.locals.existingTxn;
+  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+
   try {
     await Db.get();
     // NOTE: This test succeeds if the email is incorrect
@@ -18,11 +22,9 @@ export async function checkPostgresHandler(req: express.Request, res: express.Re
       );
     });
     res.sendStatus(200);
-  } catch (err) {
-    console.error('PostgreSQL check failed!');
-    console.error(err.message);
-    console.error('Full error object:');
-    console.error(err);
-    res.status(500).send(err.message);
+  } catch (error) {
+    errorReporting.report('PostgreSQL check failed!');
+    errorReporting.report(error);
+    res.status(500).send(error.message);
   }
 }

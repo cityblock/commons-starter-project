@@ -14,6 +14,9 @@ import {
 
 describe('util tests', () => {
   let txn = null as any;
+  const errorReporting = {
+    report: jest.fn(),
+  } as any;
 
   beforeEach(async () => {
     await Db.get();
@@ -51,6 +54,7 @@ describe('util tests', () => {
         status: 200,
       } as any,
       existingTxn: txn,
+      errorReporting,
     });
     expect(context).toMatchObject({
       userId,
@@ -80,6 +84,7 @@ describe('util tests', () => {
       response: {
         status: 200,
       } as any,
+      errorReporting,
       existingTxn: txn,
     });
     expect(context).toMatchObject({

@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as trace from '@google-cloud/trace-agent';
 import config from './config';
 import Logging from './logging';
@@ -50,7 +51,15 @@ export interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
-  await expressConfig(app, logger, options.transaction, options.allowCrossDomainRequests);
+  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+
+  await expressConfig(
+    app,
+    logger,
+    errorReporting,
+    options.transaction,
+    options.allowCrossDomainRequests,
+  );
 
   const ws = createServer(app);
 
@@ -62,7 +71,9 @@ export async function main(options: IMainOptions) {
         subscribe,
         schema,
         onConnect: async (connectionParams: { authToken: string }) => {
-          return getGraphQLContext(connectionParams.authToken, logger, {});
+          return getGraphQLContext(connectionParams.authToken, logger, {
+            errorReporting,
+          });
         },
       } as any,
       {

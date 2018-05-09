@@ -80,24 +80,17 @@ export const addHeadersMiddleware = (
 export default async (
   app: express.Application,
   logger: Logging,
+  errorReporting: ErrorReporting,
   txn?: Transaction,
   allowCrossDomainRequests?: boolean,
 ) => {
-  let errorReporting: ErrorReporting | undefined;
-  if (config.NODE_ENV === 'production' && config.GCP_CREDS) {
-    errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
-    process.on('uncaughtException', e => {
-      // Write the error to stderr.
-      console.error(e);
-      // Report that same error the Stackdriver Error Service
-      if (errorReporting) {
-        errorReporting.report(e);
-      }
-    });
-
-    // Ensure stackdriver is working
-    errorReporting.report('Server Restarting');
-  }
+  process.on('uncaughtException', e => {
+    const text = `Uncaught Exception ${e.message} ${e.stack}`;
+    // Write the error to stderr.
+    console.error(text);
+    // Report that same error the Stackdriver Error Service
+    errorReporting.report(text);
+  });
 
   if (config.NODE_ENV === 'development') {
     // enable webpack dev middleware
@@ -222,9 +215,6 @@ export default async (
     /* tslint:enable no-console */
   }
 
-  if (errorReporting) {
-    // Note that express error handling middleware should be attached after all
-    // the other routes and use() calls.
-    app.use(errorReporting.express);
-  }
+  // Note that express error handling middleware should be attached after all other routes and use() calls.
+  app.use(errorReporting.express);
 };

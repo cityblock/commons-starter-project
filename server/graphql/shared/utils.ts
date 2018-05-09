@@ -18,13 +18,13 @@ export interface IGraphQLContextOptions {
   request?: express.Request;
   response?: express.Response;
   existingTxn?: Transaction;
-  errorReporting?: ErrorReporting;
+  errorReporting: ErrorReporting;
 }
 
 export interface IContext {
   logger: Logger;
   testConfig?: any;
-  errorReporting?: ErrorReporting;
+  errorReporting: ErrorReporting;
   db: Db;
   permissions: Permissions;
   userId?: string;
@@ -141,7 +141,7 @@ export async function getGraphQLContext(
   const traceAgent = trace.get();
   const childSpan = traceAgent.createChildSpan({ name: 'authentication' });
 
-  const txn = existingTxn || (await transaction.start(User));
+  const txn = existingTxn || (await transaction.start(User.knex()));
   let permissions: Permissions = 'black';
   let userId;
 
@@ -193,23 +193,19 @@ export async function formatResponse(
     /* tslint:disable no-console */
     console.log('Transaction failed with error: ', err);
     /* tslint:enable no-console */
-    if (errorReporting) {
-      errorReporting.report(err);
-    }
+    errorReporting.report(err);
   }
   return response;
 }
 
 export function formatError(error: IGraphQLResponseError): IGraphQLResponseError {
-  if (config.GCP_CREDS) {
-    const errorReporting = new ErrorReporting({
-      credentials: JSON.parse(String(config.GCP_CREDS)),
-    });
-    if (error.path || error.name !== 'GraphQLError') {
-      errorReporting.report(error.message);
-    } else {
-      errorReporting.report(`GraphQLWrongQuery: ${error.message}`);
-    }
+  const errorReporting = new ErrorReporting({
+    credentials: JSON.parse(String(config.GCP_CREDS)),
+  });
+  if (error.path || error.name !== 'GraphQLError') {
+    errorReporting.report(error.message);
+  } else {
+    errorReporting.report(`GraphQLWrongQuery: ${error.message}`);
   }
   return {
     ...error.extensions,

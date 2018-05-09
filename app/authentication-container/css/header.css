@@ -22,6 +22,17 @@
   text-decoration: none;
 }
 
+.zendeskIconContainer {
+  margin-right: 23px;
+  text-decoration: none;
+  display: flex;
+}
+
+svg.zendeskIcon {
+  height: 36px;
+  width: 36px;
+}
+
 .mark {
   height: 60px;
   width: 80px;
@@ -62,9 +73,7 @@
   background: var(--navy-color);
 }
 
-.searchIcon,
-.patientsIcon,
-.tasksIcon {
+.defaultIcon {
   height: 24px;
   width: 24px;
   background-repeat: no-repeat;
@@ -166,16 +175,19 @@
   }
 }
 
-.right:hover {
+.dropdownContainer {
+  padding: 10px 0;
+}
+
+.dropdownContainer:hover {
   cursor: pointer;
 }
 
-.right:hover .dropdown {
+.dropdownContainer:hover .dropdown {
   display: block;
 }
 
-.settingsIcon,
-.logoutIcon {
+.smallIcon {
   background-repeat: no-repeat;
   background-position: center center;
   width: 18px;

@@ -133,9 +133,6 @@
   "engines": {
     "node": "8.11"
   },
-  "resolutions": {
-    "node-pre-gyp": "0.10.0"
-  },
   "dependencies": {
     "@google-cloud/error-reporting": "0.4.0",
     "@google-cloud/logging": "1.2.0",
@@ -223,9 +220,8 @@
     "mime-types": "2.1.18",
     "mini-css-extract-plugin": "0.4.0",
     "morgan": "1.9.0",
-    "node-pre-gyp": "0.10.0",
     "nodemon": "1.17.4",
-    "objection": "1.1.7",
+    "objection": "1.1.8",
     "pg": "7.4.3",
     "pm2": "2.10.3",
     "postcss-cssnext": "3.1.0",

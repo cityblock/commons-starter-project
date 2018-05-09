@@ -37,6 +37,7 @@ import FlagIcon from '@material-ui/icons/Flag';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import FolderSharedIcon from '@material-ui/icons/FolderShared';
 import GradeIcon from '@material-ui/icons/Grade';
+import HelpIcon from '@material-ui/icons/Help';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import HomeIcon from '@material-ui/icons/Home';
 import InboxIcon from '@material-ui/icons/Inbox';
@@ -144,6 +145,7 @@ const components: IconComponents = {
   syncProblem: SyncProblemIcon,
   textSms: TextSmsIcon,
   today: TodayIcon,
+  help: HelpIcon,
   warning: WarningIcon,
 };
 

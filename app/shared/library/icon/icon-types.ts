@@ -67,4 +67,5 @@ export type IconName =
   | 'syncProblem'
   | 'textSms'
   | 'today'
+  | 'help'
   | 'warning';

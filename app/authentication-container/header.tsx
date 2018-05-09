@@ -49,7 +49,7 @@ export class Header extends React.Component<allProps> {
     if (featureFlags.canViewAllMembers) {
       searchLink = (
         <Link to={'/search'} className={this.getNavItemClassnames('/search')}>
-          <div className={styles.searchIcon} />
+          <div className={classNames(styles.defaultIcon, styles.searchIcon)} />
           <FormattedMessage id="header.search">
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
@@ -59,7 +59,7 @@ export class Header extends React.Component<allProps> {
     if (featureFlags.canViewAllMembers || featureFlags.canViewMembersOnPanel) {
       patientLink = (
         <Link to={'/patients'} className={this.getNavItemClassnames('/patients', true)}>
-          <div className={styles.patientsIcon} />
+          <div className={classNames(styles.defaultIcon, styles.patientsIcon)} />
           <FormattedMessage id="header.patients">
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
@@ -72,7 +72,7 @@ export class Header extends React.Component<allProps> {
           to={'/tasks'}
           className={classNames(this.getNavItemClassnames('/tasks'), styles.relativeNavItem)}
         >
-          <div className={styles.tasksIcon} />
+          <div className={classNames(styles.defaultIcon, styles.tasksIcon)} />
           <FormattedMessage id="header.tasks">
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
@@ -112,6 +112,16 @@ export class Header extends React.Component<allProps> {
       </Link>
     );
 
+    const zendeskLink = (
+      <Link
+        to={'https://cityblock.zendesk.com/hc/en-us/requests/new'}
+        target="_blank"
+        className={styles.zendeskIconContainer}
+      >
+        <Icon className={styles.zendeskIcon} name="help" color="white" />
+      </Link>
+    );
+
     return (
       <div className={styles.header}>
         <div className={styles.container}>
@@ -127,25 +137,28 @@ export class Header extends React.Component<allProps> {
             {managerLink}
           </div>
           <div className={styles.right}>
-            <div className={styles.userInfo}>
-              <div className={styles.userName}>{name}</div>
-              <div className={styles.userRole}>{currentUser ? currentUser.userRole : ''}</div>
-            </div>
-            <div
-              className={styles.userPhoto}
-              style={{
-                backgroundImage: `url('${currentUser ? currentUser.googleProfileImageUrl : ''}')`,
-              }}
-            />
-            <div className={styles.dropdown}>
-              <Link to={'/settings'}>
-                <div className={styles.settingsIcon} />
-                <FormattedMessage id="header.settings" />
-              </Link>
-              <a onClick={this.props.logout}>
-                <div className={styles.logoutIcon} />
-                <FormattedMessage id="header.logOut" />
-              </a>
+            {zendeskLink}
+            <div className={styles.dropdownContainer}>
+              <div className={styles.userInfo}>
+                <div className={styles.userName}>{name}</div>
+                <div className={styles.userRole}>{currentUser ? currentUser.userRole : ''}</div>
+              </div>
+              <div
+                className={styles.userPhoto}
+                style={{
+                  backgroundImage: `url('${currentUser ? currentUser.googleProfileImageUrl : ''}')`,
+                }}
+              />
+              <div className={styles.dropdown}>
+                <Link to={'/settings'}>
+                  <div className={classNames(styles.smallIcon, styles.settingsIcon)} />
+                  <FormattedMessage id="header.settings" />
+                </Link>
+                <a onClick={this.props.logout}>
+                  <div className={classNames(styles.smallIcon, styles.logoutIcon)} />
+                  <FormattedMessage id="header.logOut" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

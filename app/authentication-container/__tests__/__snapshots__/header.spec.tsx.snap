@@ -25,7 +25,7 @@ exports[`renders header 1`] = `
         onClick={[Function]}
       >
         <div
-          className="searchIcon"
+          className="defaultIcon searchIcon"
         />
         <div
           className="navText"
@@ -39,7 +39,7 @@ exports[`renders header 1`] = `
         onClick={[Function]}
       >
         <div
-          className="patientsIcon"
+          className="defaultIcon patientsIcon"
         />
         <div
           className="navText"
@@ -53,7 +53,7 @@ exports[`renders header 1`] = `
         onClick={[Function]}
       >
         <div
-          className="tasksIcon"
+          className="defaultIcon tasksIcon"
         />
         <div
           className="navText"
@@ -93,52 +93,77 @@ exports[`renders header 1`] = `
     <div
       className="right"
     >
+      <a
+        className="zendeskIconContainer"
+        href="https://cityblock.zendesk.com/hc/en-us/requests/new"
+        onClick={[Function]}
+        target="_blank"
+      >
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-1 icon white zendeskIcon"
+          color={undefined}
+          focusable="false"
+          onClick={undefined}
+          viewBox="0 0 24 24"
+        >
+          <g>
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+            />
+          </g>
+        </svg>
+      </a>
       <div
-        className="userInfo"
+        className="dropdownContainer"
       >
         <div
-          className="userName"
+          className="userInfo"
         >
-          first last
+          <div
+            className="userName"
+          >
+            first last
+          </div>
+          <div
+            className="userRole"
+          >
+            physician
+          </div>
         </div>
         <div
-          className="userRole"
-        >
-          physician
-        </div>
-      </div>
-      <div
-        className="userPhoto"
-        style={
-          Object {
-            "backgroundImage": "url('null')",
+          className="userPhoto"
+          style={
+            Object {
+              "backgroundImage": "url('null')",
+            }
           }
-        }
-      />
-      <div
-        className="dropdown"
-      >
-        <a
-          href="/settings"
-          onClick={[Function]}
+        />
+        <div
+          className="dropdown"
         >
-          <div
-            className="settingsIcon"
-          />
-          <span>
-            Settings
-          </span>
-        </a>
-        <a
-          onClick={[MockFunction]}
-        >
-          <div
-            className="logoutIcon"
-          />
-          <span>
-            Logout
-          </span>
-        </a>
+          <a
+            href="/settings"
+            onClick={[Function]}
+          >
+            <div
+              className="smallIcon settingsIcon"
+            />
+            <span>
+              Settings
+            </span>
+          </a>
+          <a
+            onClick={[MockFunction]}
+          >
+            <div
+              className="smallIcon logoutIcon"
+            />
+            <span>
+              Logout
+            </span>
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -171,6 +171,7 @@ describe('care team model', () => {
     it('should fetch care team records', async () => {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
+      const user2 = await User.create(createMockUser(12, clinic.id, userRole, 'care2@care.com'), txn);
       const patient = await createPatient(
         {
           cityblockId: 123,
@@ -179,6 +180,10 @@ describe('care team model', () => {
         },
         txn,
       );
+      // ensure deleted care team member not returned
+      await CareTeam.create({ patientId: patient.id, userId: user2.id }, txn);
+      await CareTeam.delete({ patientId: patient.id, userId: user2.id }, txn);
+
       const careTeam = await CareTeam.getCareTeamRecordsForPatient(patient.id, txn);
 
       expect(careTeam).toHaveLength(1);

@@ -12,9 +12,8 @@ export interface IProcessVoicemailData {
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
-/* tslint:disable no-console */
 export async function enqueueProcessVoicemail(): Promise<void> {
-  queue
+  await queue
     .create(VOICEMAIL_TOPIC, {
       title: `Handling ${VOICEMAIL_TOPIC} at ${new Date().toISOString()}`,
       jobId: uuid(),
@@ -25,9 +24,11 @@ export async function enqueueProcessVoicemail(): Promise<void> {
     .save((err: Error) => {
       if (err) {
         reportError(err, `Error enqueuing ${VOICEMAIL_TOPIC} job`);
+        process.exit(1);
       }
+
+      process.exit(0);
     });
 }
-/* tslint:enable no-console */
 
 enqueueProcessVoicemail();

@@ -48,3 +48,8 @@ button.button {
   padding: var(--extra-small-gutter);
   padding-top: 0;
 }
+
+button.button:hover {
+  background: var(--white-color);
+  opacity: 0.4;
+}

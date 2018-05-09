@@ -11,6 +11,7 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
   submitMessageId?: string;
+  loadingMessageId?: string;
   placeholderMessageId?: string;
 }
 
@@ -72,13 +73,17 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { value, onChange, submitMessageId, placeholderMessageId } = this.props;
-    const buttonMessageId = submitMessageId || 'modalButtons.submit';
+    const { value, onChange, submitMessageId, placeholderMessageId, loadingMessageId } = this.props;
+    const { isEditing, error, loading } = this.state;
+
+    const buttonMessageId = loading
+      ? loadingMessageId || 'modalButtons.submitting'
+      : submitMessageId || 'modalButtons.submit';
     const textMessageId = placeholderMessageId || 'task.addComment';
 
     const containerStyles = classNames(styles.container, {
-      [styles.blueBorder]: this.state.isEditing,
-      [styles.redBorder]: !!this.state.error,
+      [styles.blueBorder]: isEditing,
+      [styles.redBorder]: !!error,
     });
 
     return (
@@ -99,6 +104,7 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
               color="white"
               onClick={this.handleClick}
               className={styles.button}
+              disabled={loading}
             />
           </div>
         )}

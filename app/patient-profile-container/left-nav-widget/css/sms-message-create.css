@@ -4,28 +4,3 @@
   border-top: 1px solid var(--border-color);
   padding: var(--small-gutter);
 }
-
-.content {
-  border: 1px solid var(--border-color);
-  border-radius: var(--big-border-radius);
-  background: var(--white-color);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.input {
-  resize: none;
-  border: none;
-  border-radius: var(--big-border-radius);
-  height: var(--input-height);
-  font-size: var(--default-font-size);
-  padding: var(--extra-small-gutter);
-  padding-bottom: 0;
-}
-
-.button {
-  border: none;
-  padding: var(--extra-small-gutter);
-  font-size: var(--small-font-size);
-}

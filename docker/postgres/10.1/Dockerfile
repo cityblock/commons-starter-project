@@ -1,4 +1,4 @@
-FROM postgres:10.3@sha256:7299646996aba8e5ca2a5e345dc6b9f9b0f3278bea63aacbe3be6ff6482ce4dc
+FROM postgres:10.3@sha256:4bee009f05db292e794d4c288b587be60c3a526cc3bf669100be981ef0551284
 MAINTAINER https://github.com/muccg/
 
 ENV DEBIAN_FRONTEND noninteractive

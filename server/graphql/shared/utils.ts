@@ -189,11 +189,12 @@ export async function formatResponse(
   try {
     await context.txn.commit();
   } catch (err) {
-    await context.txn.rollback();
     /* tslint:disable no-console */
-    console.log('Transaction failed with error: ', err);
+    console.error('Transaction failed with error: ', err);
     /* tslint:enable no-console */
     errorReporting.report(err);
+
+    await context.txn.rollback();
   }
   return response;
 }

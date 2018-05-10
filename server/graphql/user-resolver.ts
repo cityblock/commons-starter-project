@@ -263,7 +263,7 @@ export async function JwtForVcfCreate(
 export async function userLogin(
   root: any,
   { input }: IUserLoginOptions,
-  { db, logger, txn }: IContext,
+  { logger, txn }: IContext,
 ): Promise<IRootMutationType['userLogin']> {
   const { googleAuthCode } = input;
 

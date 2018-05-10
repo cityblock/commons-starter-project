@@ -22,7 +22,18 @@ describe('main', () => {
 
   afterEach(async () => {
     await txn.rollback();
-    await Db.clear();
+    const destroyTransaction = await transaction.start(User.knex());
+    await destroyTransaction
+      .withSchema('information_schema')
+      .select('table_name')
+      .from('tables')
+      .whereRaw(`table_catalog = ? AND table_schema = ? AND table_name != ?`, [
+        'public',
+        'knex_migrations',
+      ])
+      .map(async (row: any) => {
+        await destroyTransaction.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`);
+      });
   });
 
   afterAll(async () => {

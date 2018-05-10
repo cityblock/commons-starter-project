@@ -6,7 +6,7 @@ import { IContext } from './shared/utils';
 export async function resolveCBOCategories(
   root: any,
   args: {},
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBOCategories']> {
   await checkUserPermissions(userId, permissions, 'view', 'CBOCategory', txn);
 

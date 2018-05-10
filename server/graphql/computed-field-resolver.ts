@@ -41,7 +41,7 @@ export async function computedFieldCreate(
 export async function resolveComputedField(
   root: any,
   args: IResolveComputedFieldOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['computedField']> {
   await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
@@ -51,7 +51,7 @@ export async function resolveComputedField(
 export async function resolveComputedFields(
   root: any,
   args: IResolveComputedFieldsOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['computedFields']> {
   await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
@@ -66,7 +66,7 @@ export async function resolveComputedFields(
 export async function computedFieldDelete(
   root: any,
   args: IDeleteComputedFieldOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['computedFieldDelete']> {
   await checkUserPermissions(userId, permissions, 'delete', 'computedField', txn);
 

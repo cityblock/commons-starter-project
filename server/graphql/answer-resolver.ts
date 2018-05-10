@@ -50,7 +50,7 @@ export async function answerCreate(
 export async function resolveAnswersForQuestion(
   root: any,
   args: { questionId: string },
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['answersForQuestion']> {
   await checkUserPermissions(userId, permissions, 'view', 'answer', txn);
 
@@ -60,7 +60,7 @@ export async function resolveAnswersForQuestion(
 export async function resolveAnswer(
   root: any,
   args: { answerId: string },
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['answer']> {
   await checkUserPermissions(userId, permissions, 'view', 'answer', txn);
 
@@ -70,7 +70,7 @@ export async function resolveAnswer(
 export async function answerEdit(
   root: any,
   args: IEditAnswerOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['answerEdit']> {
   await checkUserPermissions(userId, permissions, 'edit', 'answer', txn);
 
@@ -82,7 +82,7 @@ export async function answerEdit(
 export async function answerDelete(
   root: any,
   args: IDeleteAnswerOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['answerDelete']> {
   await checkUserPermissions(userId, permissions, 'delete', 'answer', txn);
 

@@ -18,7 +18,7 @@ export interface IDeleteCBOOptions {
 export async function resolveCBOs(
   root: any,
   args: {},
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBOs']> {
   await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
@@ -28,7 +28,7 @@ export async function resolveCBOs(
 export async function resolveCBOsForCategory(
   root: any,
   args: { categoryId: string },
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBOsForCategory']> {
   await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
@@ -38,7 +38,7 @@ export async function resolveCBOsForCategory(
 export async function resolveCBO(
   root: any,
   args: { CBOId: string },
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBO']> {
   await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
@@ -48,7 +48,7 @@ export async function resolveCBO(
 export async function CBOCreate(
   root: any,
   { input }: ICBOCreateArgs,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<CBO> {
   await checkUserPermissions(userId, permissions, 'create', 'CBO', txn);
 
@@ -58,7 +58,7 @@ export async function CBOCreate(
 export async function CBOEdit(
   root: any,
   { input }: IEditCBOOptions,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<CBO> {
   await checkUserPermissions(userId, permissions, 'edit', 'CBO', txn);
 
@@ -69,7 +69,7 @@ export async function CBOEdit(
 export async function CBODelete(
   root: any,
   { input }: IDeleteCBOOptions,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<CBO> {
   await checkUserPermissions(userId, permissions, 'delete', 'CBO', txn);
 

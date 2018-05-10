@@ -40,7 +40,7 @@ export interface ICarePlanSuggestionDismissArgs {
 export async function resolveCarePlanSuggestionsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
   await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
@@ -51,7 +51,7 @@ export async function resolveCarePlanSuggestionsForPatient(
 export async function resolveCarePlanForPatient(
   root: any,
   args: IResolveCarePlanOptions,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanForPatient']> {
   await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
@@ -81,7 +81,7 @@ export async function resolveCarePlanForPatient(
 export async function carePlanSuggestionDismiss(
   root: any,
   { input }: ICarePlanSuggestionDismissArgs,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['carePlanSuggestionDismiss']> {
   await checkUserPermissions(
     userId,

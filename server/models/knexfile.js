@@ -12,7 +12,7 @@ module.exports = {
       max: 20,
       idleTimeoutMillis: 1000,
       reapIntervalMillis: 1000,
-      acquireTimeoutMillis: 1000,
+      acquireTimeoutMillis: 20000,
     },
     migrations: {
       directory: __dirname + '/migrations',
@@ -37,7 +37,7 @@ module.exports = {
       max: 20,
       idleTimeoutMillis: 1000,
       reapIntervalMillis: 1000,
-      acquireTimeoutMillis: 1000,
+      acquireTimeoutMillis: 20000,
     },
     migrations: {
       directory: __dirname + '/migrations',

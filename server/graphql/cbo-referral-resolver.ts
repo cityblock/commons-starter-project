@@ -20,7 +20,7 @@ export interface IEditCBOReferralOptions {
 export async function CBOReferralCreate(
   root: any,
   { input }: ICBOReferralCreateArgs,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['CBOReferralCreate']> {
   await checkUserPermissions(userId, permissions, 'create', 'CBOReferral', txn);
 
@@ -30,7 +30,7 @@ export async function CBOReferralCreate(
 export async function CBOReferralEdit(
   root: any,
   { input }: IEditCBOReferralOptions,
-  { db, permissions, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['CBOReferralEdit']> {
   await checkUserPermissions(userId, permissions, 'edit', 'task', txn, input.taskId);
 

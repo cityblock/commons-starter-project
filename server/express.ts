@@ -3,9 +3,11 @@ import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
+import * as Knex from 'knex';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
 import { Transaction } from 'objection';
+import { Model } from 'objection';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
@@ -30,6 +32,13 @@ import {
 import { contactsVcfHandler } from './handlers/vcf/vcard-handler';
 import { createRedisClient } from './lib/redis';
 import Logging from './logging';
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
 
 kue.createQueue({ redis: createRedisClient() });
 

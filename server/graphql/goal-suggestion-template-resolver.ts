@@ -40,7 +40,7 @@ export async function goalSuggestionTemplateCreate(
 export async function resolveGoalSuggestionTemplates(
   root: any,
   args: any,
-  { db, userId, permissions, txn }: IContext,
+  { userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplates']> {
   await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 

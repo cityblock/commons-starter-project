@@ -37,24 +37,6 @@ export default class Db {
     return singleton;
   }
 
-  static async clear() {
-    if (knex) {
-      return knex.transaction(async trx => {
-        await trx
-          .withSchema('information_schema')
-          .select('table_name')
-          .from('tables')
-          .whereRaw(`table_catalog = ? AND table_schema = ? AND table_name != ?`, [
-            'public',
-            'knex_migrations',
-          ])
-          .map(async (row: any) => {
-            await trx.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`);
-          });
-      });
-    }
-  }
-
   // Used in tests to ensure they do not share db connections
   static async release() {
     logger.log('db.ts: Releasing db connection');

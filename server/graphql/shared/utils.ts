@@ -8,7 +8,6 @@ import { transaction, Transaction } from 'objection';
 import { IGraphQLResponseError, IGraphQLResponseRoot } from 'schema';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
-import Db from '../../db';
 import Logger from '../../logging';
 import User from '../../models/user';
 
@@ -25,7 +24,6 @@ export interface IContext {
   logger: Logger;
   testConfig?: any;
   errorReporting: ErrorReporting;
-  db: Db;
   permissions: Permissions;
   userId?: string;
   txn: Transaction;
@@ -134,8 +132,6 @@ export async function getGraphQLContext(
   logger: Logger,
   options: IGraphQLContextOptions,
 ): Promise<IContext> {
-  const db = await Db.get();
-
   const { existingTxn, request, response, errorReporting } = options;
 
   const traceAgent = trace.get();
@@ -156,7 +152,6 @@ export async function getGraphQLContext(
       }
 
       return {
-        db,
         permissions: 'black' as Permissions,
         logger,
         txn,
@@ -174,7 +169,6 @@ export async function getGraphQLContext(
   return {
     userId,
     permissions,
-    db,
     logger,
     txn,
     errorReporting,

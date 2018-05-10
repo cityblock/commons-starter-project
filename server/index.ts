@@ -51,7 +51,9 @@ export interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
-  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+  const errorReporting = new ErrorReporting({
+    credentials: JSON.parse(String(config.GCP_CREDS)),
+  });
 
   await expressConfig(
     app,

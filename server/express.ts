@@ -12,7 +12,7 @@ import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
-import { formatError, formatResponse, getGraphQLContext } from './graphql/shared/utils';
+import { formatError, formatResponse, getGraphQLContext, IContext } from './graphql/shared/utils';
 import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRedisHandler } from './handlers/pingdom/check-redis-handler';
@@ -144,18 +144,28 @@ export default async (
     addHeadersMiddleware,
     bodyParser.json(),
     graphqlExpress(
-      async (request: express.Request | undefined, response: express.Response | undefined) => ({
-        schema: schema as any,
-        context: await getGraphQLContext((request!.headers.auth_token as string) || '', logger, {
-          existingTxn: txn,
-          request: request!,
-          response: response!,
-          errorReporting,
-        }),
-        formatResponse,
-        formatError,
-        debug: false,
-      }),
+      async (request: express.Request | undefined, response: express.Response | undefined) => {
+        let context: null | IContext = null;
+        try {
+          context = await getGraphQLContext((request!.headers.auth_token as string) || '', logger, {
+            existingTxn: txn,
+            request,
+            response,
+            errorReporting,
+          });
+        } catch (e) {
+          errorReporting.report(e);
+          console.error(e);
+        }
+
+        return {
+          schema: schema as any,
+          context,
+          formatResponse,
+          formatError,
+          debug: false,
+        };
+      },
     ),
   );
 

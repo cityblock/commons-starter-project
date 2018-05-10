@@ -40,6 +40,8 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class LeftNavScratchPad extends React.Component<allProps, IState> {
+  private _isMounted: boolean = false;
+
   constructor(props: allProps) {
     super(props);
 
@@ -52,12 +54,23 @@ export class LeftNavScratchPad extends React.Component<allProps, IState> {
     };
   }
 
+  componentDidMount(): void {
+    this._isMounted = true;
+    if (this.props.scratchPad) {
+      this.setState({ editedScratchPad: this.props.scratchPad.body });
+    }
+  }
+
   componentWillReceiveProps(nextProps: allProps): void {
     if (!this.state.editedScratchPad) {
       this.setState({
         editedScratchPad: (nextProps.scratchPad && nextProps.scratchPad.body) || '',
       });
     }
+  }
+
+  componentWillUnmount(): void {
+    this._isMounted = false;
   }
 
   saveScratchPad = async (): Promise<void> => {
@@ -70,8 +83,13 @@ export class LeftNavScratchPad extends React.Component<allProps, IState> {
       await saveScratchPad({
         variables: { patientScratchPadId: scratchPad.id, body: editedScratchPad },
       });
+
       this.setState({ saveSuccess: true, saveError: false });
-      setTimeout(() => this.setState({ saveSuccess: false }), SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
+      setTimeout(() => {
+        if (this._isMounted) {
+          this.setState({ saveSuccess: false });
+        }
+      }, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
     } catch (err) {
       this.setState({ saveSuccess: false, saveError: true });
     }

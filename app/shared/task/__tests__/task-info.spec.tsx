@@ -49,7 +49,10 @@ describe('Task Info Component', () => {
         .props().disabled,
     ).toBeFalsy();
     expect(
-      wrapper.find(EditableMultilineText).at(0).props().showSaveWarning,
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().showSaveWarning,
     ).toBeTruthy();
   });
 
@@ -79,7 +82,10 @@ describe('Task Info Component', () => {
         .props().disabled,
     ).toBeFalsy();
     expect(
-      wrapper.find(EditableMultilineText).at(1).props().showSaveWarning,
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().showSaveWarning,
     ).toBeTruthy();
   });
 

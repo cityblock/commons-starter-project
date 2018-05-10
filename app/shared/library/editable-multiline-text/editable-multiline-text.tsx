@@ -1,129 +1,94 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import SmallText from '../small-text/small-text';
+import TextAreaWithButton from '../textarea-with-button/textarea-with-button';
 import * as styles from './css/editable-multiline-text.css';
-
-const FOCUS_TIMEOUT = 100; // ms
-const BASE_TEXT_HEIGHT = '2px';
 
 interface IProps {
   text: string;
-  onEnterPress: (newText: string) => void;
-  descriptionField?: boolean; // optional flag that field is description (default is title styles)
-  editStyles?: string; // optional edit styles to be applied on top of defaults
+  onSubmit: (newText: string) => void;
   placeholderMessageId?: string; // optional translate message id for when field is empty
-  disabled?: boolean; // if true, does not allow editing on click
+  disabled?: boolean; // if true, cannot click to edit
+  descriptionField?: boolean; // if true, applies description field styles
 }
 
 interface IState {
   editMode: boolean;
   editedText: string;
-  error: string;
 }
 
+// TODO: Modal when navigating away!
 export class EditableMultilineText extends React.Component<IProps, IState> {
-  private editText: HTMLTextAreaElement | null;
-
   constructor(props: IProps) {
     super(props);
 
     this.state = {
       editMode: false,
       editedText: props.text,
-      error: '',
     };
   }
 
   componentWillReceiveProps(nextProps: IProps): void {
-    // ensure that state reflects latest text, especially if multiple instances of component
     if (nextProps.text !== this.props.text) {
       this.setState({ editedText: nextProps.text });
     }
   }
 
-  componentDidMount(): void {
-    this.updateTextHeight();
-  }
-
-  componentDidUpdate(): void {
-    this.updateTextHeight();
-  }
-
-  updateTextHeight(): void {
-    // reset height otherwise scrollHeight won't shrink if needed
-    if (this.editText) this.editText.style.height = BASE_TEXT_HEIGHT;
-    const height = this.editText ? `${this.editText.scrollHeight + 2}px` : BASE_TEXT_HEIGHT;
-
-    if (this.editText && height !== BASE_TEXT_HEIGHT) {
-      this.editText.style.height = height;
-    }
-  }
-
-  onClick = (): void => {
-    this.setState({ editMode: true });
-    setTimeout(() => this.focusInput(this.editText), FOCUS_TIMEOUT);
-  };
-
-  onChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    const editedText = e.currentTarget.value;
-    this.setState({ editedText });
-  };
-
-  onKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // if enter was pressed
-    if (e.keyCode === 13) {
-      e.preventDefault();
-
-      try {
-        await this.props.onEnterPress(this.state.editedText);
-        this.setState({ editMode: false, error: '' });
-      } catch (err) {
-        this.setState({ error: err.message });
-      }
+  handleClick = (): void => {
+    if (!this.props.disabled) {
+      this.setState({ editMode: true });
     }
   };
 
-  focusInput = (input: HTMLTextAreaElement | null): void => {
-    if (input) input.focus();
+  handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    this.setState({ editedText: e.currentTarget.value });
   };
 
-  onBlur = (e: React.FocusEvent<HTMLTextAreaElement>): void => {
-    this.setState({ editMode: false, editedText: this.props.text });
+  handleSubmit = async (): Promise<void> => {
+    await this.props.onSubmit(this.state.editedText);
+
+    this.setState({ editMode: false });
   };
 
   render(): JSX.Element {
-    const { editStyles, descriptionField, placeholderMessageId, disabled } = this.props;
-    const { editMode, editedText, error } = this.state;
+    const { text, placeholderMessageId, descriptionField } = this.props;
+    const { editedText, editMode } = this.state;
 
-    const fullEditStyles = classNames(
-      styles.edit,
-      {
-        [styles.error]: !!error,
-        [styles.descriptionEdit]: descriptionField,
-        [styles.disabled]: !editMode,
-      },
-      editStyles,
-    );
-    const handleClick = !disabled ? this.onClick : undefined;
+    if (editMode) {
+      return (
+        <TextAreaWithButton
+          value={editedText}
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+          submitMessageId="editableText.save"
+          loadingMessageId="editableText.saving"
+          placeholderMessageId={placeholderMessageId}
+          titleStyles={!descriptionField}
+        />
+      );
+    }
+
+    if (!text) {
+      return (
+        <div onClick={this.handleClick}>
+          <SmallText
+            messageId={placeholderMessageId || 'editableText.clickToEdit'}
+            font="basetica"
+            color="lightGray"
+            size="large"
+          />
+        </div>
+      );
+    }
+
+    const textStyles = classNames(styles.text, {
+      [styles.description]: !!descriptionField,
+    });
 
     return (
-      <FormattedMessage id={placeholderMessageId || 'editableText.default'}>
-        {(message: string) => (
-          <div className={styles.container} onClick={handleClick}>
-            <textarea
-              ref={area => (this.editText = area)}
-              value={editedText}
-              className={fullEditStyles}
-              onChange={this.onChange}
-              onBlur={this.onBlur}
-              onKeyDown={this.onKeyDown}
-              disabled={!editMode}
-              spellCheck={editMode}
-              placeholder={message}
-            />
-          </div>
-        )}
-      </FormattedMessage>
+      <div onClick={this.handleClick}>
+        <p className={textStyles}>{text}</p>
+      </div>
     );
   }
 }

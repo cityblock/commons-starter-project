@@ -102,7 +102,7 @@ export class RiskArea extends React.Component<allProps, IState> {
     this.setState({ [name as any]: value || '' });
   };
 
-  onEnterPress = (field: string) => {
+  onSubmit = (field: string) => {
     const { riskAreaId, editRiskArea } = this.props;
 
     return async (newText: string) => {
@@ -170,10 +170,7 @@ export class RiskArea extends React.Component<allProps, IState> {
             </div>
             <div className={styles.itemBody}>
               <p>Title:</p>
-              <EditableMultilineText
-                text={riskArea.title}
-                onEnterPress={this.onEnterPress('title')}
-              />
+              <EditableMultilineText text={riskArea.title} onSubmit={this.onSubmit('title')} />
               <p>Domain:</p>
               {riskArea.riskAreaGroupId && (
                 <p className={styles.uneditable}>{riskArea.riskAreaGroupId}</p>
@@ -181,19 +178,16 @@ export class RiskArea extends React.Component<allProps, IState> {
               <p>Assessment Type:</p>
               <p className={styles.uneditable}>{riskArea.assessmentType}</p>
               <p>Order:</p>
-              <EditableMultilineText
-                text={`${riskArea.order}`}
-                onEnterPress={this.onEnterPress('order')}
-              />
+              <EditableMultilineText text={`${riskArea.order}`} onSubmit={this.onSubmit('order')} />
               <p>Medium Risk Threshold:</p>
               <EditableMultilineText
                 text={`${riskArea.mediumRiskThreshold}`}
-                onEnterPress={this.onEnterPress('mediumRiskThreshold')}
+                onSubmit={this.onSubmit('mediumRiskThreshold')}
               />
               <p>High Risk Threshold:</p>
               <EditableMultilineText
                 text={`${riskArea.highRiskThreshold}`}
-                onEnterPress={this.onEnterPress('highRiskThreshold')}
+                onSubmit={this.onSubmit('highRiskThreshold')}
               />
             </div>
           </div>

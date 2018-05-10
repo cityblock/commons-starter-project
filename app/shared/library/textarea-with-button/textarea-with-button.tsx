@@ -13,6 +13,7 @@ interface IProps {
   submitMessageId?: string;
   loadingMessageId?: string;
   placeholderMessageId?: string;
+  titleStyles?: boolean; // if true, apply title styles when editing
 }
 
 interface IState {
@@ -23,6 +24,7 @@ interface IState {
 
 class TextAreaWithButton extends React.Component<IProps, IState> {
   private textarea: HTMLTextAreaElement | null;
+  private _isMounted: boolean;
 
   constructor(props: IProps) {
     super(props);
@@ -31,11 +33,16 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
   }
 
   componentDidMount(): void {
+    this._isMounted = true;
     this.updateTextHeight();
   }
 
   componentDidUpdate(): void {
     this.updateTextHeight();
+  }
+
+  componentWillUnmount(): void {
+    this._isMounted = false;
   }
 
   updateTextHeight(): void {
@@ -61,7 +68,10 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
         this.setState({ error: err.message });
       }
 
-      this.setState({ loading: false });
+      // avoid calling setState if component unmounted
+      if (this._isMounted) {
+        this.setState({ loading: false });
+      }
     }
   };
 
@@ -73,7 +83,14 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { value, onChange, submitMessageId, placeholderMessageId, loadingMessageId } = this.props;
+    const {
+      value,
+      onChange,
+      submitMessageId,
+      placeholderMessageId,
+      loadingMessageId,
+      titleStyles,
+    } = this.props;
     const { isEditing, error, loading } = this.state;
 
     const buttonMessageId = loading
@@ -82,6 +99,7 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
     const textMessageId = placeholderMessageId || 'task.addComment';
 
     const containerStyles = classNames(styles.container, {
+      [styles.title]: !!titleStyles,
       [styles.blueBorder]: isEditing,
       [styles.redBorder]: !!error,
     });

@@ -982,5 +982,8 @@ export const SPANISH_TRANSLATION = {
     'contacts.download': 'Download',
     'contacts.update': 'Update your contacts',
     'voicemail.loading': 'Voicemail loading...',
+    'editableText.clickToEdit': 'Click to edit...',
+    'editableText.save': 'Save',
+    'editableText.saving': 'Saving',
   },
 };

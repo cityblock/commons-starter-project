@@ -53,3 +53,11 @@ button.button:hover {
   background: var(--white-color);
   opacity: 0.4;
 }
+
+.title .textarea {
+  font-family: var(--basetica-medium);
+  font-size: var(--header-font-size);
+  line-height: var(--header-line-height);
+  color: var(--black-color);
+  font-weight: var(--default-font-weight);
+}

@@ -1016,5 +1016,8 @@ export const ENGLISH_TRANSLATION = {
     'contacts.info1': 'Download the latest version of your',
     'contacts.info2': ' patients’ contact information.',
     'voicemail.loading': 'Voicemail loading...',
+    'editableText.clickToEdit': 'Click to edit...',
+    'editableText.save': 'Save',
+    'editableText.saving': 'Saving',
   },
 };

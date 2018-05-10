@@ -25,7 +25,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class PatientListEdit extends React.Component<allProps, {}> {
-  onEnterPress(field: string) {
+  onSubmit(field: string) {
     const { patientList, editPatientList } = this.props;
 
     return async (newText: string) => {
@@ -61,20 +61,11 @@ export class PatientListEdit extends React.Component<allProps, {}> {
         </div>
         <div className={styles.fields}>
           <h4>Title:</h4>
-          <EditableMultilineText
-            text={patientList.title}
-            onEnterPress={this.onEnterPress('title')}
-          />
+          <EditableMultilineText text={patientList.title} onSubmit={this.onSubmit('title')} />
           <h4>Answer Id:</h4>
-          <EditableMultilineText
-            text={patientList.answerId}
-            onEnterPress={this.onEnterPress('answerId')}
-          />
+          <EditableMultilineText text={patientList.answerId} onSubmit={this.onSubmit('answerId')} />
           <h4>Order:</h4>
-          <EditableMultilineText
-            text={`${patientList.order}`}
-            onEnterPress={this.onEnterPress('order')}
-          />
+          <EditableMultilineText text={`${patientList.order}`} onSubmit={this.onSubmit('order')} />
         </div>
       </div>
     );

@@ -1,42 +1,15 @@
-.container {
-  cursor: text;
-}
-
-.edit {
-  width: 100%;
-  margin: 0;
-  background: var(--white-color);
-  color: var(--black-color);
+.text {
   font-family: var(--basetica-medium);
-  font-weight: var(--roboto-medium-weight);
-  border: 1px solid var(--blue-color);
-  border-radius: var(--border-radius);
-  font-size: 21px;
-  outline: none;
-  resize: none;
-  word-wrap: break-word;
-  transition: border 0.2s linear;
+  font-size: var(--header-font-size);
+  line-height: var(--header-line-height);
+  color: var(--black-color);
+  font-weight: var(--default-font-weight);
+  white-space: pre-wrap;
 }
 
-.descriptionEdit {
+.description {
   font-family: var(--roboto);
-  color: var(--gray-font-color);
   font-size: var(--default-font-size);
   line-height: var(--body-copy-line-height);
-  font-weight: var(--default-font-weight);
-}
-
-.edit::-webkit-input-placeholder {
-  color: var(--light-gray-font-color);
-  font-family: var(--basetica-medium);
-  font-weight: var(--roboto-medium-weight);
-}
-
-.error {
-  border-color: var(--red-color);
-}
-
-.disabled {
-  border-color: transparent;
-  cursor: text;
+  color: var(--gray-font-color);
 }

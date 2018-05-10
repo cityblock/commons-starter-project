@@ -25,7 +25,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
-  onEnterPress(field: string) {
+  onSubmit(field: string) {
     const { riskAreaGroup, editRiskAreaGroup } = this.props;
 
     return async (newText: string) => {
@@ -61,29 +61,26 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
         </div>
         <div className={styles.fields}>
           <h4>Title:</h4>
-          <EditableMultilineText
-            text={riskAreaGroup.title}
-            onEnterPress={this.onEnterPress('title')}
-          />
+          <EditableMultilineText text={riskAreaGroup.title} onSubmit={this.onSubmit('title')} />
           <h4>Short Title:</h4>
           <EditableMultilineText
             text={riskAreaGroup.shortTitle}
-            onEnterPress={this.onEnterPress('shortTitle')}
+            onSubmit={this.onSubmit('shortTitle')}
           />
           <h4>Order:</h4>
           <EditableMultilineText
             text={`${riskAreaGroup.order}`}
-            onEnterPress={this.onEnterPress('order')}
+            onSubmit={this.onSubmit('order')}
           />
           <h4>Medium Risk Threshold:</h4>
           <EditableMultilineText
             text={`${riskAreaGroup.mediumRiskThreshold}`}
-            onEnterPress={this.onEnterPress('mediumRiskThreshold')}
+            onSubmit={this.onSubmit('mediumRiskThreshold')}
           />
           <h4>High Risk Threshold:</h4>
           <EditableMultilineText
             text={`${riskAreaGroup.highRiskThreshold}`}
-            onEnterPress={this.onEnterPress('highRiskThreshold')}
+            onSubmit={this.onSubmit('highRiskThreshold')}
           />
         </div>
       </div>

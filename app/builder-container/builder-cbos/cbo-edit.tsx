@@ -21,7 +21,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class CBOEdit extends React.Component<allProps, {}> {
-  onEnterPress(field: string) {
+  onSubmit(field: string) {
     const { CBO, editCBO } = this.props;
 
     return async (newText: string) => {
@@ -70,24 +70,24 @@ export class CBOEdit extends React.Component<allProps, {}> {
         </div>
         <div className={styles.fields}>
           <h4>Name:</h4>
-          <EditableMultilineText text={CBO.name} onEnterPress={this.onEnterPress('name')} />
+          <EditableMultilineText text={CBO.name} onSubmit={this.onSubmit('name')} />
           <CBOCategorySelect
             categoryId={CBO.categoryId}
             onChange={this.onSelectChange('categoryId')}
           />
           <h4>Address:</h4>
-          <EditableMultilineText text={CBO.address} onEnterPress={this.onEnterPress('address')} />
+          <EditableMultilineText text={CBO.address} onSubmit={this.onSubmit('address')} />
           <h4>City:</h4>
-          <EditableMultilineText text={CBO.city} onEnterPress={this.onEnterPress('city')} />
+          <EditableMultilineText text={CBO.city} onSubmit={this.onSubmit('city')} />
           <StateSelect value={CBO.state} onChange={this.onSelectChange('state')} />
           <h4>Zip code:</h4>
-          <EditableMultilineText text={CBO.zip} onEnterPress={this.onEnterPress('zip')} />
+          <EditableMultilineText text={CBO.zip} onSubmit={this.onSubmit('zip')} />
           <h4>Phone number:</h4>
-          <EditableMultilineText text={CBO.phone} onEnterPress={this.onEnterPress('phone')} />
+          <EditableMultilineText text={CBO.phone} onSubmit={this.onSubmit('phone')} />
           <h4>Fax number:</h4>
-          <EditableMultilineText text={CBO.fax || ''} onEnterPress={this.onEnterPress('fax')} />
+          <EditableMultilineText text={CBO.fax || ''} onSubmit={this.onSubmit('fax')} />
           <h4>URL:</h4>
-          <EditableMultilineText text={CBO.url || ''} onEnterPress={this.onEnterPress('url')} />
+          <EditableMultilineText text={CBO.url || ''} onSubmit={this.onSubmit('url')} />
         </div>
       </div>
     );

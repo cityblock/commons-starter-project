@@ -13,7 +13,7 @@ interface IProps {
 }
 
 class TaskInfo extends React.Component<IProps, {}> {
-  onEnterPress(field: string) {
+  handleSubmit(field: string) {
     const { editTask, taskId } = this.props;
 
     return async (newText: string) => {
@@ -37,12 +37,12 @@ class TaskInfo extends React.Component<IProps, {}> {
       <div>
         <EditableMultilineText
           text={title}
-          onEnterPress={this.onEnterPress('title')}
+          onSubmit={this.handleSubmit('title')}
           disabled={isEditingDisabled}
         />
         <EditableMultilineText
           text={description}
-          onEnterPress={this.onEnterPress('description')}
+          onSubmit={this.handleSubmit('description')}
           descriptionField={true}
           placeholderMessageId={descriptionPlaceholder}
           disabled={isEditingDisabled}

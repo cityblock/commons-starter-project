@@ -115,7 +115,7 @@ export default class PatientInfo extends Model {
     properties: {
       id: { type: 'string', format: 'uuid' },
       patientId: { type: 'string', format: 'uuid' },
-      preferredName: { type: 'string', minLength: 1 },
+      preferredName: { type: 'string' },
       language: { type: 'string' },
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
       sexAtBirth: { type: 'string', enum: ['female', 'male'] },

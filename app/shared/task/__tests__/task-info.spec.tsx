@@ -48,6 +48,9 @@ describe('Task Info Component', () => {
         .at(0)
         .props().disabled,
     ).toBeFalsy();
+    expect(
+      wrapper.find(EditableMultilineText).at(0).props().showSaveWarning,
+    ).toBeTruthy();
   });
 
   it('renders editable text for description', () => {
@@ -75,6 +78,9 @@ describe('Task Info Component', () => {
         .at(1)
         .props().disabled,
     ).toBeFalsy();
+    expect(
+      wrapper.find(EditableMultilineText).at(1).props().showSaveWarning,
+    ).toBeTruthy();
   });
 
   it('changes description placeholder if viewing CBO Referral', () => {

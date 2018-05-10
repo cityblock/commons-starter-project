@@ -1,5 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Prompt } from 'react-router';
 import SmallText from '../small-text/small-text';
 import TextAreaWithButton from '../textarea-with-button/textarea-with-button';
 import * as styles from './css/editable-multiline-text.css';
@@ -10,6 +12,7 @@ interface IProps {
   placeholderMessageId?: string; // optional translate message id for when field is empty
   disabled?: boolean; // if true, cannot click to edit
   descriptionField?: boolean; // if true, applies description field styles
+  showSaveWarning?: boolean; // if true, shows warning modal when navigating away
 }
 
 interface IState {
@@ -51,11 +54,15 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { text, placeholderMessageId, descriptionField } = this.props;
+    const { text, placeholderMessageId, descriptionField, showSaveWarning } = this.props;
     const { editedText, editMode } = this.state;
 
     if (editMode) {
       return (
+        <React.Fragment>
+        <FormattedMessage id="patientInfo.unsavedChanges">
+          {(message: string) => <Prompt when={!!showSaveWarning} message={message} />}
+        </FormattedMessage>
         <TextAreaWithButton
           value={editedText}
           onChange={this.handleChange}
@@ -65,6 +72,7 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
           placeholderMessageId={placeholderMessageId}
           titleStyles={!descriptionField}
         />
+        </React.Fragment>
       );
     }
 

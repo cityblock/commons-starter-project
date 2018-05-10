@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import SmallText from '../../small-text/small-text';
 import TextAreaWithButton from '../../textarea-with-button/textarea-with-button';
 import { EditableMultilineText } from '../editable-multiline-text';
@@ -15,6 +16,7 @@ describe('Library Editable Text Component', () => {
 
     expect(wrapper.find(TextAreaWithButton).length).toBe(0);
     expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(FormattedMessage).length).toBe(0);
   });
 
   it('renders text area with button if in edit mode', () => {
@@ -27,6 +29,10 @@ describe('Library Editable Text Component', () => {
     expect(wrapper.find(TextAreaWithButton).props().titleStyles).toBeTruthy();
 
     expect(wrapper.find('p').length).toBe(0);
+  });
+
+  it('renders placeholder for warning modal when navigating away', () => {
+    expect(wrapper.find(FormattedMessage).props().id).toBe('patientInfo.unsavedChanges');
   });
 
   it('edits text in the text area', () => {

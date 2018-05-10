@@ -39,6 +39,7 @@ class TaskInfo extends React.Component<IProps, {}> {
           text={title}
           onSubmit={this.handleSubmit('title')}
           disabled={isEditingDisabled}
+          showSaveWarning={true}
         />
         <EditableMultilineText
           text={description}
@@ -46,6 +47,7 @@ class TaskInfo extends React.Component<IProps, {}> {
           descriptionField={true}
           placeholderMessageId={descriptionPlaceholder}
           disabled={isEditingDisabled}
+          showSaveWarning={true}
         />
       </div>
     );

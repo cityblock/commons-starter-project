@@ -38,13 +38,9 @@ const queue = kue.createQueue({ redis: createRedisClient() });
 
 queue.process('processVoicemail', async (job, done) => {
   try {
-    await Db.get();
     await processVoicemails(job.data);
-
-    await Db.release();
     return done();
   } catch (err) {
-    await Db.release();
     return done(err);
   }
 });
@@ -70,6 +66,8 @@ export async function processVoicemail(
   jobId: string,
   existingTxn?: Transaction,
 ) {
+  await Db.get();
+
   const { uri, status, sid } = recording;
   // only process completed voicemails
   if (status !== 'completed') return;
@@ -85,8 +83,12 @@ export async function processVoicemail(
     await notifyUserOfVoicemail(voicemail);
     // delete voicemail from Twilio
     await deleteVoicemail(sid);
+
+    await Db.release();
   } catch (err) {
     reportError(err, 'Error transferring voicemail', recording);
+
+    await Db.release();
   }
 }
 

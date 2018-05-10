@@ -29,5 +29,6 @@ export default {
   MATTERMOST_URL: 'https://mattermost-test.cityblock.com',
   PINGDOM_CHECK_PASSWORD: 'secret',
   KUE_UI_PASSWORD: 'fake',
+  CITYBLOCK_VOICEMAIL: '+16469417791',
   ...process.env,
 };

@@ -23,7 +23,6 @@ import {
   deleteVoicemail,
   notifyUserOfVoicemail,
   uploadVoicemail,
-  CITYBLOCK_VOICEMAIL,
   VOICEMAIL_DATE_FORMAT,
 } from '../voicemail-consumer';
 
@@ -223,7 +222,7 @@ describe('Voicemail Consumer', () => {
 
       expect(createMessage).toHaveBeenCalledTimes(2);
       expect(args[0][0]).toMatchObject({
-        from: CITYBLOCK_VOICEMAIL,
+        from: '+16469417791',
         to: '+11234567777',
         body: `+11234561111 left you a voicemail at ${format(
           voicemail.twilioCreatedAt,
@@ -231,7 +230,7 @@ describe('Voicemail Consumer', () => {
         )}. Click the following link to listen to the message.`,
       });
       expect(args[1][0]).toMatchObject({
-        from: CITYBLOCK_VOICEMAIL,
+        from: '+16469417791',
         to: '+11234567777',
         body: `http://localhost:3000/voicemails/${voicemail.id}`,
       });
@@ -273,7 +272,7 @@ describe('Voicemail Consumer', () => {
 
       expect(createMessage).toHaveBeenCalledTimes(2);
       expect(args[0][0]).toMatchObject({
-        from: CITYBLOCK_VOICEMAIL,
+        from: '+16469417791',
         to: '+11234567777',
         body: `Dan P. at +11234567890 left you a voicemail at ${format(
           voicemail.twilioCreatedAt,
@@ -281,7 +280,7 @@ describe('Voicemail Consumer', () => {
         )}. Click the following link to listen to the message.`,
       });
       expect(args[1][0]).toMatchObject({
-        from: CITYBLOCK_VOICEMAIL,
+        from: '+16469417791',
         to: '+11234567777',
         body: `http://localhost:3000/voicemails/${voicemail.id}`,
       });

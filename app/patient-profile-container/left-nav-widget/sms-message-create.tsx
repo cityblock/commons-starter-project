@@ -41,6 +41,8 @@ export class SmsMessageCreate extends React.Component<allProps, IState> {
         body: this.state.body,
       },
     });
+
+    this.setState({ body: '' });
   };
 
   render(): JSX.Element {

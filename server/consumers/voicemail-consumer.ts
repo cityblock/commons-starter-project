@@ -17,7 +17,6 @@ import TwilioClient from '../twilio-client';
 
 const TWILIO_ROOT = 'https://api.twilio.com';
 export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
-export const CITYBLOCK_VOICEMAIL = '+16469417791';
 
 interface IProcessVoicemailData {
   title: string;
@@ -161,12 +160,12 @@ export async function notifyUserOfVoicemail(voicemail: Voicemail) {
   const voicemailUrl = `${config.GOOGLE_OAUTH_REDIRECT_URI}/voicemails/${voicemail.id}`;
 
   await twilioClient.messages.create({
-    from: CITYBLOCK_VOICEMAIL,
+    from: config.CITYBLOCK_VOICEMAIL,
     to: phone,
     body,
   });
   await twilioClient.messages.create({
-    from: CITYBLOCK_VOICEMAIL,
+    from: config.CITYBLOCK_VOICEMAIL,
     to: phone,
     body: voicemailUrl,
   });

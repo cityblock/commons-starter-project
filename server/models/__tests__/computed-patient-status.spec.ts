@@ -157,6 +157,69 @@ describe('computed patient status model', () => {
     expect(refetchedPatientStatus2!.isCoreIdentityVerified).toEqual(true);
   });
 
+  it('ensures status is not consented without verifying core identity', async () => {
+    const { patient, user, clinic, progressNoteTemplate } = await setup(txn);
+    const patientState = await PatientState.getForPatient(patient.id, txn);
+
+    expect(patientState!.currentState).toEqual('attributed');
+
+    const outreachSpecialist = await User.create(
+      {
+        homeClinicId: clinic.id,
+        firstName: 'First',
+        lastName: 'Last',
+        email: 'outreach@cityblock.com',
+        userRole: 'outreachSpecialist' as UserRole,
+      },
+      txn,
+    );
+    await CareTeam.create({ userId: outreachSpecialist.id, patientId: patient.id }, txn);
+    await ProgressNote.create(
+      {
+        userId: user.id,
+        patientId: patient.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      },
+      txn,
+    );
+
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        description: 'some file for consent',
+        documentType: 'hipaaConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        description: 'some file for consent',
+        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test.txt',
+        description: 'some file for consent',
+        documentType: 'cityblockConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+    const refetchedPatientState = await PatientState.getForPatient(patient.id, txn);
+
+    expect(refetchedPatientState!.currentState).toEqual('outreach');
+  });
+
   it('updates patient state when updating status', async () => {
     const { patient, user, clinic, progressNoteTemplate } = await setup(txn);
     const patientState = await PatientState.getForPatient(patient.id, txn);
@@ -213,6 +276,10 @@ describe('computed patient status model', () => {
       },
       txn,
     );
+    await Patient.query(txn).patchAndFetchById(patient.id, {
+      coreIdentityVerifiedAt: new Date().toISOString(),
+      coreIdentityVerifiedById: user.id,
+    });
     await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
     const refetchedPatientState = await PatientState.getForPatient(patient.id, txn);
 

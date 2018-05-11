@@ -2,7 +2,6 @@ import * as express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
-
 import { reportError } from '../../helpers/error-helpers';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';

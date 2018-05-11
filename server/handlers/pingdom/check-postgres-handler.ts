@@ -2,7 +2,6 @@ import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as express from 'express';
 import { transaction } from 'objection';
 import config from '../../config';
-
 import User from '../../models/user';
 
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {

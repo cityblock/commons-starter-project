@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-
 import * as Knex from 'knex';
 import * as kue from 'kue';
 import { transaction, Model, Transaction } from 'objection';

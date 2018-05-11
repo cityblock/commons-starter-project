@@ -98,8 +98,6 @@ enum AnswerFilterType {
   progressNote
   riskArea
   screeningTool
-  patientScreeningToolSubmission
-  riskAreaAssessmentSubmission
 }
 
 enum TaskEventTypes {

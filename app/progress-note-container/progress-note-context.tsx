@@ -20,9 +20,8 @@ import Select from '../shared/library/select/select';
 import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
+  getQuestionAnswerHash,
   getQuestionVisibility,
-  setupQuestionAnswerHash,
-  updateQuestionAnswerHash,
   IQuestionAnswerHash,
 } from '../shared/question/question-helpers';
 import * as styles from './css/progress-note-context.css';
@@ -167,8 +166,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   renderQuestions(editable: boolean) {
     const { questions, patientAnswers } = this.props;
 
-    const answerData = setupQuestionAnswerHash({}, questions);
-    updateQuestionAnswerHash(answerData, patientAnswers || []);
+    const answerData = getQuestionAnswerHash(patientAnswers);
 
     return (questions || []).map((question, index) =>
       this.renderQuestion(question, index, answerData, editable),

@@ -14,9 +14,8 @@ import {
 import Spinner from '../../shared/library/spinner/spinner';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
+  getQuestionAnswerHash,
   getQuestionVisibility,
-  setupQuestionAnswerHash,
-  updateQuestionAnswerHash,
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
 import RiskAreaAssessmentHeader from './risk-area-assessment-header';
@@ -98,8 +97,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   renderQuestions = () => {
     const { riskAreaQuestions, patientAnswers } = this.props;
 
-    const answerData = setupQuestionAnswerHash({}, riskAreaQuestions);
-    updateQuestionAnswerHash(answerData, patientAnswers || []);
+    const answerData = getQuestionAnswerHash(patientAnswers);
 
     return (riskAreaQuestions || []).map((question, index) => {
       const filteredPatientAnswers = patientAnswers

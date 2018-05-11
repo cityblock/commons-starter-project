@@ -2352,9 +2352,7 @@ declare module 'schema' {
     question = 'question',
     progressNote = 'progressNote',
     riskArea = 'riskArea',
-    screeningTool = 'screeningTool',
-    patientScreeningToolSubmission = 'patientScreeningToolSubmission',
-    riskAreaAssessmentSubmission = 'riskAreaAssessmentSubmission'
+    screeningTool = 'screeningTool'
   }
 
   interface IRiskAreaSummary {

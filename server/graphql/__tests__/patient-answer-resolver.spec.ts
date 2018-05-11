@@ -1,4 +1,4 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import {
@@ -9,7 +9,7 @@ import {
   UserRole,
 } from 'schema';
 import * as uuid from 'uuid/v4';
-
+import * as getPatientAnswers from '../../../app/graphql/queries/get-patient-answers.graphql';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -111,6 +111,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
 
 describe('patient answer tests', () => {
   let txn = null as any;
+  const getPatientAnswersQuery = print(getPatientAnswers);
 
   beforeEach(async () => {
     txn = await transaction.start(Patient.knex());
@@ -200,18 +201,23 @@ describe('patient answer tests', () => {
         },
         txn,
       );
-      const query = `{
-          patientAnswers(
-            filterType: question, filterId: "${question.id}", patientId: "${patient.id}"
-          ) {
-            id, answerValue
-          }
-        }`;
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+
+      const result = await graphql(
+        schema,
+        getPatientAnswersQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          filterType: 'question',
+          filterId: question.id,
+          patientId: patient.id,
+        },
+      );
+
       expect(cloneDeep(result.data!.patientAnswers)).toMatchObject([
         {
           id: patientAnswers[0].id,
@@ -357,22 +363,22 @@ describe('patient answer tests', () => {
         txn,
       );
 
-      const query = `{
-          patientAnswers(
-            filterType: riskArea, filterId: "${riskArea.id}", patientId: "${patient.id}"
-          ) {
-            id
-            answerValue
-            question {
-              id
-            }
-          }
-        }`;
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getPatientAnswersQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          filterType: 'riskArea',
+          filterId: riskArea.id,
+          patientId: patient.id,
+        },
+      );
+
       const answers = cloneDeep(result.data!.patientAnswers);
 
       expect(answers).toMatchObject([
@@ -389,7 +395,7 @@ describe('patient answer tests', () => {
   });
 
   describe('resolve patient answers for screening tool', () => {
-    it('resolves patient answers for a screening tool', async () => {
+    it('resolves patient answers for a screening tool submission', async () => {
       const { riskArea, patient, user } = await setup(txn);
       const screeningTool = await ScreeningTool.create(
         {
@@ -448,22 +454,21 @@ describe('patient answer tests', () => {
         txn,
       );
 
-      const query = `{
-          patientAnswers(
-            filterType: screeningTool, filterId: "${screeningTool.id}", patientId: "${patient.id}"
-          ) {
-            id
-            answerValue
-            question {
-              id
-            }
-          }
-        }`;
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        getPatientAnswersQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        {
+          filterType: 'screeningTool',
+          filterId: patientScreeningToolSubmission.id,
+          patientId: patient.id,
+        },
+      );
       const answers = cloneDeep(result.data!.patientAnswers);
 
       expect(answers).toMatchObject([

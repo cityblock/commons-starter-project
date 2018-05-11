@@ -23,55 +23,28 @@ interface IConditionState {
   satisfied: number;
 }
 
-export function setupQuestionAnswerHash(
-  questionAnswerHash: IQuestionAnswerHash,
-  currentQuestions?: FullQuestionFragment[] | null,
-  nextQuestions?: FullQuestionFragment[] | null,
-) {
-  // Questions just loaded
-  if (nextQuestions && !currentQuestions) {
-    nextQuestions.forEach(question => {
-      if (!questionAnswerHash[question.id]) {
-        questionAnswerHash[question.id] = [];
-      }
-    });
-    // Questions have changed
-  } else if (
-    nextQuestions &&
-    currentQuestions &&
-    (nextQuestions[0] || {}).id !== (currentQuestions[0] || {}).id
-  ) {
-    nextQuestions.forEach(question => {
-      if (!questionAnswerHash[question.id]) {
-        questionAnswerHash[question.id] = [];
-      }
-    });
+export function getQuestionAnswerHash(nextPatientAnswers?: FullPatientAnswerFragment[] | null) {
+  const questionAnswerHash: IQuestionAnswerHash = {};
+  if (!nextPatientAnswers) {
+    return questionAnswerHash;
   }
-  return questionAnswerHash;
-}
 
-export function updateQuestionAnswerHash(
-  questionAnswerHash: IQuestionAnswerHash,
-  nextPatientAnswers: FullPatientAnswerFragment[] | null,
-  currentPatientAnswers?: FullPatientAnswerFragment[] | null,
-) {
   // Existing PatientAnswers have loaded, update to include those answers
-  if (nextPatientAnswers && !currentPatientAnswers) {
-    nextPatientAnswers.forEach(patientAnswer => {
-      const { question, answerId, answerValue } = patientAnswer;
+  nextPatientAnswers.forEach(patientAnswer => {
+    const { question, answerId, answerValue } = patientAnswer;
 
-      if (question) {
-        const existingQuestionState = questionAnswerHash[question.id] || [];
-        questionAnswerHash[question.id] = [
-          ...existingQuestionState,
-          {
-            id: answerId,
-            value: answerValue,
-          },
-        ];
-      }
-    });
-  }
+    if (question) {
+      const existingQuestionState = questionAnswerHash[question.id] || [];
+      questionAnswerHash[question.id] = [
+        ...existingQuestionState,
+        {
+          id: answerId,
+          value: answerValue,
+        },
+      ];
+    }
+  });
+
   return questionAnswerHash;
 }
 

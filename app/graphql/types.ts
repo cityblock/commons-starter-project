@@ -281,11 +281,9 @@ export enum GoalSuggestionOrderOptions {
 
 
 export enum AnswerFilterType {
-  patientScreeningToolSubmission = "patientScreeningToolSubmission",
   progressNote = "progressNote",
   question = "question",
   riskArea = "riskArea",
-  riskAreaAssessmentSubmission = "riskAreaAssessmentSubmission",
   screeningTool = "screeningTool",
 }
 

@@ -250,22 +250,6 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
-  static async getForScreeningTool(
-    screeningToolId: string,
-    patientId: string,
-    txn: Transaction,
-  ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query(txn)
-      .joinRelation('answer.question')
-      .eager(EAGER_QUERY)
-      .where('patient_answer.deletedAt', null)
-      .andWhere('patientId', patientId)
-      .andWhere('answer:question.screeningToolId', screeningToolId)
-      .orderBy('patient_answer.updatedAt', 'asc');
-
-    return patientAnswers as PatientAnswer[];
-  }
-
   static async getForScreeningToolSubmission(
     patientScreeningToolSubmissionId: string,
     txn: Transaction,
@@ -275,20 +259,6 @@ export default class PatientAnswer extends BaseModel {
       .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
-      .orderBy('patient_answer.updatedAt', 'asc');
-
-    return patientAnswers as PatientAnswer[];
-  }
-
-  static async getForRiskAreaAssessmentSubmission(
-    riskAreaAssessmentSubmissionId: string,
-    txn: Transaction,
-  ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query(txn)
-      .joinRelation('answer.question')
-      .eager(EAGER_QUERY)
-      .where('patient_answer.deletedAt', null)
-      .andWhere('riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
       .orderBy('patient_answer.updatedAt', 'asc');
 
     return patientAnswers as PatientAnswer[];

@@ -104,8 +104,6 @@ export async function resolvePatientAnswers(
   } else if (args.filterType === 'riskArea') {
     return PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'screeningTool') {
-    return PatientAnswer.getForScreeningTool(args.filterId, args.patientId, txn);
-  } else if (args.filterType === 'patientScreeningToolSubmission') {
     return PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
   } else if (args.filterType === 'progressNote') {
     return PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);

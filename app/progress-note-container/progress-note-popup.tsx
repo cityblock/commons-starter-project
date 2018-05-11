@@ -25,11 +25,7 @@ import PatientPhoto from '../shared/library/patient-photo/patient-photo';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
-import {
-  allQuestionsAnswered,
-  setupQuestionAnswerHash,
-  updateQuestionAnswerHash,
-} from '../shared/question/question-helpers';
+import { allQuestionsAnswered, getQuestionAnswerHash } from '../shared/question/question-helpers';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
@@ -182,8 +178,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       this.setState({ isReadyToSubmit: !!progressNote.supervisorNotes });
     } else {
       if (patientAnswers) {
-        const answerData = setupQuestionAnswerHash({}, questions);
-        updateQuestionAnswerHash(answerData, patientAnswers || []);
+        const answerData = getQuestionAnswerHash(patientAnswers);
 
         // update ready to submit
         const hasProgressNoteTemplate = progressNote.progressNoteTemplate ? true : false;

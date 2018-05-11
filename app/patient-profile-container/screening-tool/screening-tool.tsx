@@ -1,42 +1,13 @@
-import * as classNames from 'classnames';
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
-import { FormattedDate } from 'react-intl';
-import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
-import * as screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
+import { graphql } from 'react-apollo';
 import * as screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
-import * as patientAnswersCreate from '../../graphql/queries/patient-answers-create-mutation.graphql';
-import * as patientScreeningToolSubmissionCreate from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
-import * as patientScreeningToolSubmissionScore from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
-import {
-  getPatientAnswersQuery,
-  patientAnswersCreateMutation,
-  patientAnswersCreateMutationVariables,
-  patientScreeningToolSubmissionCreateMutation,
-  patientScreeningToolSubmissionCreateMutationVariables,
-  patientScreeningToolSubmissionScoreMutation,
-  patientScreeningToolSubmissionScoreMutationVariables,
-  FullCarePlanSuggestionFragment,
-  FullPatientScreeningToolSubmissionFragment,
-  FullQuestionFragment,
-  FullScreeningToolFragment,
-} from '../../graphql/types';
+import { FullCarePlanSuggestionFragment, FullScreeningToolFragment } from '../../graphql/types';
 import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
-import * as sortSearchStyles from '../../shared/css/sort-search.css';
-import Button from '../../shared/library/button/button';
-import Icon from '../../shared/library/icon/icon';
+import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
 import { Popup } from '../../shared/popup/popup';
-import PatientQuestion from '../../shared/question/patient-question';
-import {
-  allQuestionsAnswered,
-  getQuestionVisibility,
-  setupQuestionAnswerHash,
-  updateQuestionAnswerHash,
-  IQuestionAnswerHash,
-} from '../../shared/question/question-helpers';
-import * as styles from './css/screening-tool.css';
+import ScreeningToolSubmission from './screening-tool-submission';
 
 interface IProps {
   match: {
@@ -49,35 +20,11 @@ interface IProps {
 
 interface IGraphqlProps {
   screeningTool?: FullScreeningToolFragment;
-  loading?: boolean;
-  error: string | null;
-  screeningToolQuestions?: FullQuestionFragment[];
-  screeningToolQuestionsLoading?: boolean;
-  screeningToolQuestionsError: string | null;
-  createPatientAnswers?: (
-    options: { variables: patientAnswersCreateMutationVariables },
-  ) => { data: patientAnswersCreateMutation };
-  createScreeningToolSubmission?: (
-    options: { variables: patientScreeningToolSubmissionCreateMutationVariables },
-  ) => { data: patientScreeningToolSubmissionCreateMutation };
-  scoreScreeningToolSubmission?: (
-    options: { variables: patientScreeningToolSubmissionScoreMutationVariables },
-  ) => { data: patientScreeningToolSubmissionScoreMutation };
-  patientScreeningToolSubmissionLoading?: boolean;
-  patientScreeningToolSubmissionError: string | null;
-  patientScreeningToolSubmission?: FullPatientScreeningToolSubmissionFragment;
-  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
-  patientAnswersLoading?: boolean;
-  patientAnswersError: string | null;
+  screeningToolLoading?: boolean;
+  screeningToolError: ApolloError | undefined | null;
 }
 
 type allProps = IGraphqlProps & IProps;
-
-export interface IQuestionCondition {
-  id: string;
-  questionId: string;
-  answerId: string;
-}
 
 interface IState {
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
@@ -86,216 +33,44 @@ interface IState {
 export class ScreeningTool extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = this.getInitialState();
-  }
-
-  getInitialState(): IState {
-    return { carePlanSuggestions: [] };
-  }
-
-  async componentWillReceiveProps(newProps: allProps) {
-    if (
-      newProps.createScreeningToolSubmission &&
-      !newProps.patientScreeningToolSubmission &&
-      !newProps.patientScreeningToolSubmissionLoading
-    ) {
-      await newProps.createScreeningToolSubmission({
-        variables: {
-          screeningToolId: newProps.match.params.screeningToolId,
-          patientId: newProps.match.params.patientId,
-        },
-      });
-    }
-  }
-
-  componentWillMount() {
-    const { createScreeningToolSubmission, patientScreeningToolSubmission } = this.props;
-    // Handle completing a submission and then returning to the same submission
-    // We create and refetch the submission to get one that has not been completed/created
-    if (
-      createScreeningToolSubmission &&
-      patientScreeningToolSubmission &&
-      patientScreeningToolSubmission.createdAt
-    ) {
-      createScreeningToolSubmission({
-        variables: {
-          screeningToolId: this.props.match.params.screeningToolId,
-          patientId: this.props.match.params.patientId,
-        },
-      });
-    }
+    this.state = { carePlanSuggestions: [] };
   }
 
   componentWillUnmount() {
-    this.setState(this.getInitialState());
+    this.setState({ carePlanSuggestions: [] });
   }
 
-  isLoading = () => {
-    const { loading, screeningToolQuestionsLoading } = this.props;
-
-    return loading || screeningToolQuestionsLoading;
+  handleSubmissionScored = (suggestions: FullCarePlanSuggestionFragment[]) => {
+    this.setState({ carePlanSuggestions: suggestions });
   };
-
-  isError = () => {
-    const { error, screeningToolQuestionsError } = this.props;
-
-    return !!error || !!screeningToolQuestionsError;
-  };
-
-  isLoadingOrError = () => {
-    return this.isError() || this.isLoading();
-  };
-
-  onSubmit = async () => {
-    const { scoreScreeningToolSubmission, patientScreeningToolSubmission } = this.props;
-
-    const questionsAnswered = this.allQuestionsAnswered();
-
-    if (patientScreeningToolSubmission && scoreScreeningToolSubmission && questionsAnswered) {
-      const result = await scoreScreeningToolSubmission({
-        variables: {
-          patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
-        },
-      });
-      if (result.data && result.data.patientScreeningToolSubmissionScore) {
-        this.setState({
-          carePlanSuggestions: result.data.patientScreeningToolSubmissionScore.carePlanSuggestions,
-        });
-      } else {
-        this.setState(this.getInitialState());
-      }
-    }
-  };
-
-  onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
-    const { patientScreeningToolSubmission, createPatientAnswers } = this.props;
-    if (patientScreeningToolSubmission && createPatientAnswers) {
-      const patientId = this.props.match.params.patientId;
-      const patientAnswers = answers.map(answer => ({
-        questionId,
-        answerId: answer.answerId,
-        answerValue: String(answer.value),
-        patientId,
-        applicable: true,
-      }));
-
-      createPatientAnswers({
-        variables: {
-          patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
-          patientId: this.props.match.params.patientId,
-          patientAnswers,
-          questionIds: [questionId],
-        },
-      });
-    }
-  };
-
-  renderScreeningToolQuestion = (
-    question: FullQuestionFragment,
-    index: number,
-    answerData: IQuestionAnswerHash,
-  ) => {
-    const visible = getQuestionVisibility(question, answerData);
-    const dataForQuestion = answerData[question.id] || [];
-    return (
-      <PatientQuestion
-        editable={true}
-        visible={visible}
-        displayHamburger={false}
-        answerData={dataForQuestion}
-        onChange={this.onChange}
-        key={`${question.id}-${index}`}
-        question={question}
-      />
-    );
-  };
-
-  renderScreeningToolQuestions = () => {
-    const { screeningToolQuestions, patientAnswers } = this.props;
-
-    const answerData = setupQuestionAnswerHash({}, screeningToolQuestions);
-    updateQuestionAnswerHash(answerData, patientAnswers || []);
-
-    return (screeningToolQuestions || []).map((question, index) =>
-      this.renderScreeningToolQuestion(question, index, answerData),
-    );
-  };
-
-  getAssessmentHtml() {
-    const { screeningTool } = this.props;
-    const title = screeningTool ? screeningTool.title : 'Loading...';
-    const lastUpdated = screeningTool ? (
-      <FormattedDate value={screeningTool.updatedAt} year="numeric" month="short" day="numeric">
-        {(date: string) => <div className={styles.lastUpdatedValue}>{date}</div>}
-      </FormattedDate>
-    ) : null;
-    const titleStyles = classNames(styles.assessmentTitle, {
-      [styles.lowRisk]: false,
-      [styles.mediumRisk]: true,
-      [styles.highRisk]: false,
-    });
-
-    return this.isError() ? (
-      <div className={styles.error}>
-        <div className={styles.errorMessage}>
-          <Icon name="addAlert" />
-          <div className={styles.errorMessageText}>
-            <div className={styles.errorMessageLabel}>Error loading tool.</div>
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div className={styles.assessment}>
-        <div className={titleStyles}>
-          <div className={styles.title}>
-            <Icon name="event" />
-            <div className={styles.titleText}>{title}</div>
-          </div>
-          <div className={styles.meta}>
-            <div className={styles.lastUpdatedLabel}>Last updated:</div>
-            {lastUpdated}
-          </div>
-        </div>
-        {this.renderScreeningToolQuestions()}
-      </div>
-    );
-  }
-
-  allQuestionsAnswered() {
-    const { screeningToolQuestions, patientAnswers } = this.props;
-
-    const answerData = setupQuestionAnswerHash({}, screeningToolQuestions);
-    updateQuestionAnswerHash(answerData, patientAnswers || []);
-    return allQuestionsAnswered(screeningToolQuestions || [], answerData);
-  }
 
   render() {
-    const { match, loading, patientAnswersLoading } = this.props;
+    const { screeningTool, screeningToolLoading, screeningToolError, match } = this.props;
     const { carePlanSuggestions } = this.state;
     const patientRoute = `/patients/${match.params.patientId}`;
 
-    const submitButtonStyles = classNames({
-      [styles.disabled]: !this.allQuestionsAnswered(),
-    });
-
-    const assessmentHtml = this.getAssessmentHtml();
-    const popupVisible = carePlanSuggestions.length > 0 ? true : false;
-
-    // Dont show loading if we have care plan suggestions - it shows a weird flash
-    if (carePlanSuggestions.length < 1 && (loading || patientAnswersLoading)) {
+    if (screeningToolLoading !== false) {
       return <Spinner />;
     }
+
+    if (screeningToolError) {
+      return <ErrorComponent error={screeningToolError} />;
+    }
+
+    if (!screeningTool) {
+      return (
+        <ErrorComponent errorMessage="There was an error loading the screening tool. Try again." />
+      );
+    }
+
     return (
       <React.Fragment>
-        <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <Button
-            messageId="screeningTool.submit"
-            className={submitButtonStyles}
-            onClick={this.onSubmit}
-          />
-        </div>
-        <div className={styles.panel}>{assessmentHtml}</div>
-        <Popup visible={popupVisible} style={'small-padding'}>
+        <ScreeningToolSubmission
+          patientId={match.params.patientId}
+          screeningTool={screeningTool}
+          onSubmissionScored={this.handleSubmissionScored}
+        />
+        <Popup visible={!!carePlanSuggestions.length} style={'small-padding'}>
           <CarePlanSuggestions
             carePlanSuggestions={carePlanSuggestions || []}
             patientRoute={patientRoute}
@@ -308,89 +83,15 @@ export class ScreeningTool extends React.Component<allProps, IState> {
   }
 }
 
-const getPatientScreeningToolSubmissionId = (props: allProps) => {
-  const { patientScreeningToolSubmission } = props;
-  return patientScreeningToolSubmission ? patientScreeningToolSubmission.id : null;
-};
-
-export default compose(
-  graphql(patientAnswersCreate as any, {
-    name: 'createPatientAnswers',
-    options: { refetchQueries: ['getPatientAnswers'] },
-  }),
-  graphql(patientScreeningToolSubmissionCreate as any, {
-    name: 'createScreeningToolSubmission',
-    options: {
-      refetchQueries: [
-        'getPatientScreeningToolSubmissionForPatientAndScreeningTool',
-        'getPatientScreeningToolSubmissionsFor360',
-      ],
+export default graphql(screeningToolQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      screeningToolId: props.match.params.screeningToolId,
     },
   }),
-  graphql(patientScreeningToolSubmissionScore as any, {
-    name: 'scoreScreeningToolSubmission',
-    options: {
-      refetchQueries: [
-        'getPatientScreeningToolSubmissionForPatientAndScreeningTool',
-        'getProgressNotesForCurrentUser',
-      ],
-    },
+  props: ({ data }): IGraphqlProps => ({
+    screeningToolLoading: data ? data.loading : false,
+    screeningToolError: data ? data.error : null,
+    screeningTool: data ? (data as any).screeningTool : null,
   }),
-  graphql(screeningToolQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        screeningToolId: props.match.params.screeningToolId,
-      },
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      screeningTool: data ? (data as any).screeningTool : null,
-    }),
-  }),
-  graphql(screeningToolQuestionsQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        filterType: 'screeningTool',
-        filterId: props.match.params.screeningToolId,
-      },
-    }),
-    props: ({ data }) => ({
-      screeningToolQuestionsLoading: data ? data.loading : false,
-      screeningToolQuestionsError: data ? data.error : null,
-      screeningToolQuestions: data ? (data as any).questions : null,
-    }),
-  }),
-  graphql(patientScreeningToolSubmissionQuery as any, {
-    skip: (props: IProps) => !props.match.params.screeningToolId,
-    options: (props: IProps) => ({
-      variables: {
-        screeningToolId: props.match.params.screeningToolId,
-        patientId: props.match.params.patientId,
-        scored: false,
-      },
-    }),
-    props: ({ data }) => ({
-      patientScreeningToolSubmissionLoading: data ? data.loading : false,
-      patientScreeningToolSubmissionError: data ? data.error : null,
-      patientScreeningToolSubmission: data
-        ? (data as any).patientScreeningToolSubmissionForPatientAndScreeningTool
-        : null,
-    }),
-  }),
-  graphql(patientAnswersQuery as any, {
-    skip: (props: allProps) => !getPatientScreeningToolSubmissionId(props),
-    options: (props: IProps) => ({
-      variables: {
-        filterType: 'patientScreeningToolSubmission',
-        filterId: getPatientScreeningToolSubmissionId(props as allProps),
-        patientId: props.match.params.patientId,
-      },
-    }),
-    props: ({ data }) => ({
-      patientAnswersLoading: data ? data.loading : false,
-      patientAnswersError: data ? data.error : null,
-      patientAnswers: data ? (data as any).patientAnswers : null,
-    }),
-  }),
-)(ScreeningTool) as React.ComponentClass<IProps>;
+})(ScreeningTool);

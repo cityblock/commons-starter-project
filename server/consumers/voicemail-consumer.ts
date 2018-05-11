@@ -3,11 +3,11 @@ dotenv.config();
 
 import axios from 'axios';
 import { format } from 'date-fns';
+import * as Knex from 'knex';
 import * as kue from 'kue';
-import { transaction, Transaction } from 'objection';
+import { transaction, Model, Transaction } from 'objection';
 import { UserSignedUrlAction } from 'schema';
 import config from '../config';
-import Db from '../db';
 import { loadUserVoicemailUrl } from '../graphql/shared/gcs/helpers';
 import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
@@ -17,6 +17,13 @@ import TwilioClient from '../twilio-client';
 
 const TWILIO_ROOT = 'https://api.twilio.com';
 export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
 
 interface IProcessVoicemailData {
   title: string;
@@ -65,8 +72,6 @@ export async function processVoicemail(
   jobId: string,
   existingTxn?: Transaction,
 ) {
-  await Db.get();
-
   const { uri, status, sid } = recording;
   // only process completed voicemails
   if (status !== 'completed') return;
@@ -82,12 +87,8 @@ export async function processVoicemail(
     await notifyUserOfVoicemail(voicemail);
     // delete voicemail from Twilio
     await deleteVoicemail(sid);
-
-    await Db.release();
   } catch (err) {
     reportError(err, 'Error transferring voicemail', recording);
-
-    await Db.release();
   }
 }
 

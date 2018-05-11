@@ -7,7 +7,7 @@ import * as getPatientDocuments from '../../../app/graphql/queries/get-patient-d
 import * as patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
 import * as patientDocumentDelete from '../../../app/graphql/queries/patient-document-delete-mutation.graphql';
 import * as patientDocumentSignedUrlCreate from '../../../app/graphql/queries/patient-document-signed-url-create.graphql';
-import Db from '../../db';
+
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientDocument from '../../models/patient-document';
@@ -47,7 +47,6 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('patient document resolver', () => {
-  let db: Db;
   let txn = null as any;
   const log = jest.fn();
   const logger = { log };
@@ -57,16 +56,11 @@ describe('patient document resolver', () => {
   const patientDocumentSignedUrlCreateMutation = print(patientDocumentSignedUrlCreate);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('create patient document', async () => {
@@ -85,7 +79,6 @@ describe('patient document resolver', () => {
         patientDocumentCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -120,7 +113,6 @@ describe('patient document resolver', () => {
         patientDocumentCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -155,7 +147,6 @@ describe('patient document resolver', () => {
         patientDocumentCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -185,7 +176,6 @@ describe('patient document resolver', () => {
         patientDocumentSignedUrlCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -216,7 +206,6 @@ describe('patient document resolver', () => {
         patientDocumentSignedUrlCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -252,7 +241,6 @@ describe('patient document resolver', () => {
         patientDocumentDeleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -296,7 +284,6 @@ describe('patient document resolver', () => {
         getPatientDocumentsQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

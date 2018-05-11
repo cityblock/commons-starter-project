@@ -3,7 +3,7 @@ import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { Gender, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -41,7 +41,6 @@ describe('processing memberAttribution jobs', () => {
   beforeEach(async () => {
     queue.testMode.clear();
 
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
@@ -52,8 +51,6 @@ describe('processing memberAttribution jobs', () => {
   afterAll(async () => {
     queue.testMode.exit();
     queue.shutdown(0, () => true); // There must be a better way to do this...
-
-    await Db.release();
   });
 
   it('throws an error if data is missing', async () => {

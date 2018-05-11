@@ -7,7 +7,7 @@ import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-ma
 import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
 import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
 import * as careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
-import Db from '../../db';
+
 import Mattermost from '../../mattermost';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
@@ -43,28 +43,18 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('care team', () => {
-  let db: Db;
   let txn = null as any;
   const careTeamMakeTeamLeadMutation = print(careTeamMakeTeamLead);
   const patientCareTeamQuery = print(patientCareTeam);
   const careTeamAddUserMutation = print(careTeamAddUser);
   const careTeamReassignUserMutation = print(careTeamReassignUser);
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(Patient.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('patient care team', () => {
@@ -83,7 +73,6 @@ describe('care team', () => {
         careTeamAddUserMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -124,7 +113,6 @@ describe('care team', () => {
         careTeamAddUserMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -149,7 +137,6 @@ describe('care team', () => {
         patientCareTeamQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -172,7 +159,6 @@ describe('care team', () => {
         patientCareTeamQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -230,7 +216,6 @@ describe('care team', () => {
         }`;
 
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         txn,
         userId: user2.id,
@@ -279,7 +264,6 @@ describe('care team', () => {
         }
       }`;
       await graphql(schema, mutation, null, {
-        db,
         permissions,
         txn,
         userId: user.id,
@@ -321,7 +305,6 @@ describe('care team', () => {
         careTeamReassignUserMutation,
         null,
         {
-          db,
           permissions,
           txn,
           userId: user2.id,
@@ -370,7 +353,6 @@ describe('care team', () => {
         careTeamReassignUserMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -409,7 +391,6 @@ describe('care team', () => {
         careTeamMakeTeamLeadMutation,
         null,
         {
-          db,
           permissions,
           txn,
           userId: user.id,

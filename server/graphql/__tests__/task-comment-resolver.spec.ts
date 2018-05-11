@@ -2,7 +2,6 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import PatientConcern from '../../models/patient-concern';
@@ -65,19 +64,14 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('task comments', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
+    txn = null;
   });
 
   describe('task comments', () => {
@@ -92,7 +86,6 @@ describe('task comments', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -116,7 +109,6 @@ describe('task comments', () => {
           }
         }`;
       await graphql(schema, deleteMutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -142,7 +134,6 @@ describe('task comments', () => {
           }
         }`;
       const taskComments = await graphql(schema, getComments, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -161,7 +152,6 @@ describe('task comments', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -178,7 +168,6 @@ describe('task comments', () => {
           }
         }`;
       const editedComment = await graphql(schema, editMutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -207,7 +196,7 @@ describe('task comments', () => {
             id, body
           }
         }`;
-      await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
 
       const query = `{
           taskComments(taskId: "${task.id}",pageNumber: 0, pageSize: 1) {
@@ -223,7 +212,6 @@ describe('task comments', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -263,7 +251,6 @@ describe('task comments', () => {
       }`;
 
     const result = await graphql(schema, query, null, {
-      db,
       permissions,
       userId: user.id,
       txn,

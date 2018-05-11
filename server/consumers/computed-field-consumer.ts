@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import * as Knex from 'knex';
 import * as kue from 'kue';
-import { transaction, Transaction } from 'objection';
-import Db from '../db';
+import { transaction, Model, Transaction } from 'objection';
+import config from '../config';
 import { IComputedFieldMessageData } from '../handlers/pubsub/push-handler';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
@@ -13,6 +14,13 @@ import Patient from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
 
 queue.process('computedField', async (job, done) => {
   try {
@@ -37,8 +45,6 @@ export async function processNewComputedFieldValue(
   if (!patientId || !slug || !value || !jobId) {
     return Promise.reject('Missing either patientId, slug, value, or jobId');
   }
-
-  await Db.get();
 
   await transaction(existingTxn || PatientAnswer.knex(), async txn => {
     try {

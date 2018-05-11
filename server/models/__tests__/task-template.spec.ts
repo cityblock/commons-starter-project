@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createCBOCategory } from '../../spec-helpers';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import TaskTemplate from '../task-template';
@@ -24,16 +24,11 @@ describe('task template model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(TaskTemplate.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('task template methods', () => {

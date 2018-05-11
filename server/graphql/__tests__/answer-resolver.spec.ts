@@ -13,7 +13,7 @@ import * as answerDelete from '../../../app/graphql/queries/answer-delete-mutati
 import * as answerEdit from '../../../app/graphql/queries/answer-edit-mutation.graphql';
 import * as getAnswer from '../../../app/graphql/queries/get-answer.graphql';
 import * as getAnswersForQuestion from '../../../app/graphql/queries/get-question-answers.graphql';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Question from '../../models/question';
@@ -71,7 +71,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
 
 describe('answer tests', () => {
   let txn = null as any;
-  let db: Db;
+
   const answerCreateMutation = print(answerCreate);
   const answerEditMutation = print(answerEdit);
   const answerDeleteMutation = print(answerDelete);
@@ -79,16 +79,11 @@ describe('answer tests', () => {
   const getAnswersForQuestionQuery = print(getAnswersForQuestion);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve answer', () => {
@@ -100,7 +95,6 @@ describe('answer tests', () => {
         getAnswerQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -127,7 +121,6 @@ describe('answer tests', () => {
         getAnswerQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -146,7 +139,6 @@ describe('answer tests', () => {
         getAnswersForQuestionQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -171,7 +163,6 @@ describe('answer tests', () => {
         answerEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -192,7 +183,6 @@ describe('answer tests', () => {
         answerCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -221,7 +211,6 @@ describe('answer tests', () => {
         answerDeleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,

@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
+
 import { createMockClinic, createMockEmail, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Email from '../email';
@@ -25,16 +25,11 @@ describe('email', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Email.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('get', async () => {

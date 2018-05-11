@@ -2,7 +2,6 @@ import request from 'axios';
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
 import config from '../config';
-import Db from '../db';
 import { signJwt } from '../graphql/shared/utils';
 import { main } from '../index';
 import Clinic from '../models/clinic';
@@ -16,7 +15,6 @@ describe('main', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
@@ -34,10 +32,6 @@ describe('main', () => {
       .map(async (row: any) => {
         await destroyTransaction.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`);
       });
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   xit('should be able to Initialize a server (production)', async () => {

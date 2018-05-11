@@ -2,7 +2,7 @@ import * as express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
-import Db from '../../db';
+
 import { reportError } from '../../helpers/error-helpers';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
@@ -16,7 +16,7 @@ const MessagingResponse = (twilio as any).twiml.MessagingResponse;
 // TODO: Handle async in queue and twilio validation middleware
 export async function twilioIncomingSmsHandler(req: express.Request, res: express.Response) {
   const twiml = new MessagingResponse();
-  await Db.get();
+
   const twilioPayload = req.body;
   const { Body, From, To } = twilioPayload;
 
@@ -69,7 +69,7 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
 
 export async function twilioOutgoingSmsHandler(req: express.Request, res: express.Response) {
   const twiml = new MessagingResponse();
-  await Db.get();
+
   const twilioPayload = req.body;
   const { Body, From, To } = twilioPayload;
 

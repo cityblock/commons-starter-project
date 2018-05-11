@@ -3,7 +3,7 @@ import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as mattermostUrlForPatientCreate from '../../../app/graphql/queries/mattermost-url-for-patient-create.graphql';
 import * as mattermostUrlForUserCreate from '../../../app/graphql/queries/mattermost-url-for-user-create.graphql';
-import Db from '../../db';
+
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -36,21 +36,12 @@ describe('Mattermost Resolver', () => {
   const mattermostUrlForUserCreateMutation = print(mattermostUrlForUserCreate);
   const mattermostUrlForPatientCreateMutation = print(mattermostUrlForPatientCreate);
 
-  beforeAll(async () => {
-    await Db.get();
-  });
-
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('gets a link to DM a given user by their e-mail', async () => {

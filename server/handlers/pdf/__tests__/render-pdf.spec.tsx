@@ -4,7 +4,7 @@ import * as React from 'react';
 import 'regenerator-runtime/runtime';
 import { Priority, UserRole } from 'schema';
 import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';
-import Db from '../../../db';
+
 import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
 import Concern from '../../../models/concern';
@@ -96,16 +96,11 @@ describe('handling PDF requests', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   const filename = 'aryaStark';

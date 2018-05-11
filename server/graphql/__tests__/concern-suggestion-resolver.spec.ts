@@ -10,7 +10,7 @@ import {
 import * as concernSuggestionCreate from '../../../app/graphql/queries/concern-suggestion-create-mutation.graphql';
 import * as concernSuggestionDelete from '../../../app/graphql/queries/concern-suggestion-delete-mutation.graphql';
 import * as getConcernSuggestionsForAnswer from '../../../app/graphql/queries/get-concern-suggestions-for-answer.graphql';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
@@ -67,16 +67,11 @@ describe('concern suggestion resolver', () => {
   const getConcernSuggestionsForAnswerQuery = print(getConcernSuggestionsForAnswer);
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve concern suggestion for answer', () => {

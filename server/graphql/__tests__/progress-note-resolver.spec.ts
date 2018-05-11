@@ -6,7 +6,7 @@ import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import * as progressNoteIdsForPatient from '../../../app/graphql/queries/get-progress-note-ids-for-patient.graphql';
 import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';
 import Patient from '../../models/patient';
@@ -49,21 +49,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('progress note resolver', () => {
   let txn = null as any;
-  let db: Db;
+
   const progressNoteLatestForPatientQuery = print(progressNoteLatestForPatient);
   const progressNoteIdsForPatientQuery = print(progressNoteIdsForPatient);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('fetches a progress note', async () => {
@@ -448,7 +443,6 @@ describe('progress note resolver', () => {
         progressNoteIdsForPatientQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -477,7 +471,6 @@ describe('progress note resolver', () => {
         progressNoteIdsForPatientQuery,
         null,
         {
-          db,
           permissions: 'blue',
           userId: user.id,
           txn,
@@ -519,7 +512,6 @@ describe('progress note resolver', () => {
         progressNoteIdsForPatientQuery,
         null,
         {
-          db,
           permissions: 'blue',
           userId: user.id,
           txn,
@@ -557,7 +549,6 @@ describe('progress note resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -591,7 +582,6 @@ describe('progress note resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user2.id,
         txn,
@@ -622,7 +612,6 @@ describe('progress note resolver', () => {
         progressNoteLatestForPatientQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,

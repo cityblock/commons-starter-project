@@ -1,13 +1,18 @@
-import { transaction } from 'objection';
-import Db from '../server/db';
+import * as Knex from 'knex';
+import { transaction, Model } from 'objection';
 import Patient from '../server/models/patient';
 import User from '../server/models/user';
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('../server/models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[process.env.NODE_ENV || 'development']);
+Model.knex(knex);
 
 const email = process.env.EMAIL || 'cristina@cityblock.com';
 
 export async function createInfo() {
-  await Db.get();
-
   await transaction(Patient.knex(), async txn => {
     const user = await User.getBy(
       {

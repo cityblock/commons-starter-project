@@ -2,7 +2,6 @@ import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import { PhoneTypeOptions, UserRole } from 'schema';
 import * as vCard from 'vcards-js';
-import Db from '../../../db';
 import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
@@ -54,16 +53,11 @@ describe('vCard Handler', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Patient.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('validateJwtForVcf', () => {

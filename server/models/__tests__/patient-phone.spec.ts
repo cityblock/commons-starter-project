@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { PhoneTypeOptions, UserRole } from 'schema';
-import Db from '../../db';
+
 import {
   createMockClinic,
   createMockPhone,
@@ -35,16 +35,11 @@ describe('patient phone model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientPhone.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('create', async () => {

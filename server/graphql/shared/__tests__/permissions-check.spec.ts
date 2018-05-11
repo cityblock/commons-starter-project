@@ -2,7 +2,7 @@ import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
 import { permissionsMappings } from '../../../../shared/permissions/permissions-mapping';
-import Db from '../../../db';
+
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
 import PatientGlassBreak from '../../../models/patient-glass-break';
@@ -60,21 +60,12 @@ describe('User Permissions Check', () => {
   const userId = 'sansaStark';
   let txn = null as any;
 
-  beforeAll(async () => {
-    await Db.get();
-  });
-
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('checkUserPermissions', () => {

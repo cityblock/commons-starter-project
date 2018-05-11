@@ -9,7 +9,7 @@ import {
   UserRole,
 } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -110,24 +110,14 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('patient answer tests', () => {
-  let db: Db;
   let txn = null as any;
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(Patient.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve patient answer', () => {
@@ -162,7 +152,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -181,7 +170,6 @@ describe('patient answer tests', () => {
       const fakeId = uuid();
       const query = `{ patientAnswer(patientAnswerId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -220,7 +208,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -284,7 +271,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -383,7 +369,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -475,7 +460,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -525,7 +509,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -560,7 +543,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -601,7 +583,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -671,7 +652,7 @@ describe('patient answer tests', () => {
             applicable,
           }
         }`;
-      await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
 
       const fetchedAnswers2 = await PatientAnswer.getForQuestion(
         answer.questionId,
@@ -725,7 +706,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -843,7 +823,6 @@ describe('patient answer tests', () => {
         }`;
 
       await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -901,7 +880,6 @@ describe('patient answer tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

@@ -14,7 +14,7 @@ import * as userCreate from '../../../app/graphql/queries/user-create-mutation.g
 import * as userDelete from '../../../app/graphql/queries/user-delete-mutation.graphql';
 import * as userEditPermissions from '../../../app/graphql/queries/user-edit-permissions-mutation.graphql';
 import * as userEditRole from '../../../app/graphql/queries/user-edit-role-mutation.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import User from '../../models/user';
@@ -52,24 +52,15 @@ describe('user tests', () => {
   const userLoginMutation = print(userLogin);
   const log = jest.fn();
   const logger = { log };
-  let db: Db;
+
   let txn = null as any;
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolves a limited set of shortened user objects given some user role filters', () => {
@@ -88,7 +79,6 @@ describe('user tests', () => {
         userSummaryListQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -121,7 +111,6 @@ describe('user tests', () => {
         userSummaryListQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -143,7 +132,6 @@ describe('user tests', () => {
         userSummaryListQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'red',
           txn,
@@ -161,7 +149,6 @@ describe('user tests', () => {
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
       const result = await graphql(schema, usersQuery, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -184,7 +171,6 @@ describe('user tests', () => {
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
       const result = await graphql(schema, usersQuery, null, {
-        db,
         permissions: 'red',
         userId: user.id,
         txn,
@@ -206,7 +192,6 @@ describe('user tests', () => {
         usersQuery,
         null,
         {
-          db,
           userId: user1.id,
           permissions,
           txn,
@@ -254,7 +239,6 @@ describe('user tests', () => {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
       const result = await graphql(schema, currentUserQuery, null, {
-        db,
         userId: user.id,
         permissions: 'blue',
         txn,
@@ -268,7 +252,6 @@ describe('user tests', () => {
 
     it('errors if there is no logged in user', async () => {
       const result = await graphql(schema, currentUserQuery, null, {
-        db,
         userId: '',
         permissions,
         txn,
@@ -280,7 +263,6 @@ describe('user tests', () => {
     it('errors if the logged in user does not exist', async () => {
       const fakeId = uuid();
       const result = await graphql(schema, currentUserQuery, null, {
-        db,
         userId: fakeId,
         permissions,
         txn,
@@ -299,7 +281,6 @@ describe('user tests', () => {
         currentUserEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -336,7 +317,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { db, userRole, logger, txn },
+        { userRole, logger, txn },
         { googleAuthCode: 'google-auth-code' },
       );
       // update user name from google response
@@ -368,7 +349,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         { googleAuthCode: 'google-auth-code' },
       );
 
@@ -383,7 +364,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { db, userRole, txn },
+        { userRole, txn },
         { googleAuthCode: 'google-auth-code' },
       );
       expect(result.errors![0].message).toMatch('User not found for logan@cityblock.com');
@@ -396,7 +377,6 @@ describe('user tests', () => {
         userLoginMutation,
         null,
         {
-          db,
           userId: 'sansaStark',
           permissions,
           txn,
@@ -413,7 +393,6 @@ describe('user tests', () => {
         userLoginMutation,
         null,
         {
-          db,
           permissions,
           userId: 'aryaStark',
           txn,
@@ -434,7 +413,6 @@ describe('user tests', () => {
         userCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -456,7 +434,6 @@ describe('user tests', () => {
         userCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -478,7 +455,6 @@ describe('user tests', () => {
         userEditRoleMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -499,7 +475,6 @@ describe('user tests', () => {
         userEditRoleMutation,
         null,
         {
-          db,
           permissions: 'blue',
           userId: user.id,
           txn,
@@ -519,7 +494,6 @@ describe('user tests', () => {
         userEditPermissionsMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -541,7 +515,6 @@ describe('user tests', () => {
         userEditPermissionsMutation,
         null,
         {
-          db,
           permissions: 'blue',
           userId: user.id,
           txn,
@@ -562,7 +535,6 @@ describe('user tests', () => {
         userDeleteMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -584,7 +556,6 @@ describe('user tests', () => {
       userDeleteMutation,
       null,
       {
-        db,
         permissions: 'blue',
         userId: user.id,
         txn,
@@ -608,7 +579,6 @@ describe('user tests', () => {
         jwtForPdfCreateMutation,
         null,
         {
-          db,
           permissions: 'blue',
           txn,
           userId: user.id,
@@ -628,7 +598,6 @@ describe('user tests', () => {
         jwtForPdfCreateMutation,
         null,
         {
-          db,
           permissions: 'red',
           txn,
           userId: user.id,
@@ -657,7 +626,6 @@ describe('user tests', () => {
         jwtForPdfCreateMutation,
         null,
         {
-          db,
           permissions: 'blue',
           txn,
           userId: user.id,
@@ -678,7 +646,6 @@ describe('user tests', () => {
         jwtForPdfCreateMutation,
         null,
         {
-          db,
           permissions: 'blue',
           txn,
           userId: user.id,
@@ -700,7 +667,6 @@ describe('user tests', () => {
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
       const result = await graphql(schema, jwtForVcfCreateMutation, null, {
-        db,
         permissions: 'blue',
         txn,
         userId: user.id,
@@ -714,7 +680,6 @@ describe('user tests', () => {
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
       const result = await graphql(schema, jwtForVcfCreateMutation, null, {
-        db,
         permissions: 'black',
         txn,
         userId: user.id,

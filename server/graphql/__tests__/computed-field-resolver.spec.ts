@@ -6,7 +6,7 @@ import * as computedFieldCreate from '../../../app/graphql/queries/computed-fiel
 import * as computedFieldDelete from '../../../app/graphql/queries/computed-field-delete-mutation.graphql';
 import * as getComputedField from '../../../app/graphql/queries/get-computed-field.graphql';
 import * as getComputedFields from '../../../app/graphql/queries/get-computed-fields.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import ComputedField from '../../models/computed-field';
 import User from '../../models/user';
@@ -28,23 +28,18 @@ async function setup(trx: Transaction): Promise<ISetup> {
 
 describe('computed field resolver', () => {
   let txn = null as any;
-  let db: Db;
+
   const computedFieldQuery = print(getComputedField);
   const computedFieldsQuery = print(getComputedFields);
   const computedFieldCreateMutation = print(computedFieldCreate);
   const computedFieldDeleteMutation = print(computedFieldDelete);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve computed field', () => {
@@ -92,7 +87,6 @@ describe('computed field resolver', () => {
       );
 
       const result = await graphql(schema, computedFieldsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -129,7 +123,6 @@ describe('computed field resolver', () => {
         computedFieldsQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,

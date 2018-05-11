@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Patient from '../patient';
@@ -30,16 +30,11 @@ describe('patient scratch pad model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Patient.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('should create and get a patient scratch pad', async () => {

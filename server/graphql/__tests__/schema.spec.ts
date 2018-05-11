@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
@@ -19,16 +19,11 @@ describe('util tests', () => {
   } as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('returns graphql context', async () => {

@@ -8,7 +8,7 @@ import {
   UserRole,
 } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import ProgressNoteTemplate from '../../models/progress-note-template';
@@ -61,19 +61,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('question tests', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve question', () => {
@@ -86,7 +80,6 @@ describe('question tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -102,7 +95,6 @@ describe('question tests', () => {
       const fakeId = uuid();
       const query = `{ question(questionId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -125,7 +117,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -160,7 +151,6 @@ describe('question tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -193,7 +183,6 @@ describe('question tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -212,7 +201,6 @@ describe('question tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -254,7 +242,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -290,7 +277,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -322,7 +308,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -369,7 +354,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -411,7 +395,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -441,7 +424,6 @@ describe('question tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -468,7 +450,6 @@ describe('question tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

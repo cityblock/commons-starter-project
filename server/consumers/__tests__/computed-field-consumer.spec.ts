@@ -7,7 +7,7 @@ import {
   UserRole,
 } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -59,7 +59,6 @@ describe('processing computedField jobs', () => {
   beforeEach(async () => {
     queue.testMode.clear();
 
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
@@ -70,8 +69,6 @@ describe('processing computedField jobs', () => {
   afterAll(async () => {
     queue.testMode.exit();
     queue.shutdown(0, () => true); // There must be a better way to do this...
-
-    await Db.release();
   });
 
   it('throws an error if data is missing', async () => {

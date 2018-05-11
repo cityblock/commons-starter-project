@@ -6,7 +6,7 @@ import * as addressCreateForPatient from '../../../app/graphql/queries/address-c
 import * as addressCreate from '../../../app/graphql/queries/address-create-mutation.graphql';
 import * as addressDeleteForPatient from '../../../app/graphql/queries/address-delete-for-patient-mutation.graphql';
 import * as addressEditForPatient from '../../../app/graphql/queries/address-edit-mutation.graphql';
-import Db from '../../db';
+
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -48,7 +48,6 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('address resolver', () => {
-  let db: Db;
   let txn = null as any;
   const log = jest.fn();
   const logger = { log };
@@ -58,16 +57,11 @@ describe('address resolver', () => {
   const addressEditForPatientMutation = print(addressEditForPatient);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('create address', async () => {
@@ -79,7 +73,6 @@ describe('address resolver', () => {
         addressCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -113,7 +106,6 @@ describe('address resolver', () => {
         addressCreateForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -150,7 +142,6 @@ describe('address resolver', () => {
         addressCreateForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -192,7 +183,6 @@ describe('address resolver', () => {
         addressCreateForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -211,7 +201,6 @@ describe('address resolver', () => {
         addressDeleteForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -238,7 +227,6 @@ describe('address resolver', () => {
         addressCreateForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -261,7 +249,6 @@ describe('address resolver', () => {
         addressDeleteForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -296,7 +283,6 @@ describe('address resolver', () => {
         addressEditForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

@@ -1,6 +1,6 @@
 import { camelCase } from 'lodash';
 import { transaction } from 'objection';
-import Db from '../../../db';
+
 import User from '../../../models/user';
 import resourceToModelMappings, {
   glassBreakResources,
@@ -11,16 +11,11 @@ describe('Resource to Model Mappings', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('ensures that all tables are represented in model list', async () => {

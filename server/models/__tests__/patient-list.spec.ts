@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createAnswerAssociations } from '../../spec-helpers';
 import PatientList from '../patient-list';
 
@@ -8,16 +8,11 @@ describe('patient list model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientList.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates and gets a patient list', async () => {

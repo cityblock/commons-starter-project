@@ -2,7 +2,7 @@ import { graphql } from 'graphql';
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import PatientList from '../../models/patient-list';
@@ -23,7 +23,6 @@ describe('patient list resolver', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
 
     clinic = await Clinic.create(createMockClinic(), txn);
@@ -35,10 +34,6 @@ describe('patient list resolver', () => {
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve patient list', () => {

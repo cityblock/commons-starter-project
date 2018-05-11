@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as getClinics from '../../../app/graphql/queries/get-clinics.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
 import { createMockUser } from '../../spec-helpers';
@@ -13,20 +13,15 @@ describe('clinic resolver', () => {
   const userRole = 'admin' as UserRole;
   const permissions = 'green';
   let txn = null as any;
-  let db: Db;
+
   const getClinicsQuery = print(getClinics);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve clinic', () => {
@@ -87,7 +82,6 @@ describe('clinic resolver', () => {
         getClinicsQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,

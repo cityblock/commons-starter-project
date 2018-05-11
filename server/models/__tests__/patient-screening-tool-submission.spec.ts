@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import {
   createMockClinic,
   createMockUser,
@@ -72,16 +72,11 @@ describe('patient screening tool submission model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Question.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates and gets a patient screening tool submission with associations', async () => {

@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
+
 import {
   createMockClinic,
   createMockEmail,
@@ -35,16 +35,11 @@ describe('patient email model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientEmail.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('create', async () => {

@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { ExternalProviderOptions, UserRole } from 'schema';
-import Db from '../../db';
+
 import {
   createMockClinic,
   createMockEmail,
@@ -52,16 +52,11 @@ describe('patient external provider model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientExternalProvider.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('get', async () => {

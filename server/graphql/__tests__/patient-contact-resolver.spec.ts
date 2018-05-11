@@ -2,7 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { PatientRelationOptions, UserRole } from 'schema';
-import Db from '../../db';
+
 import Address from '../../models/address';
 import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';
@@ -74,19 +74,13 @@ describe('patient info model', () => {
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('patient contact resolvers', async () => {
@@ -106,7 +100,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -152,7 +145,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -207,7 +199,6 @@ describe('patient info model', () => {
           }
         }`;
       await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -260,7 +251,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -341,7 +331,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -397,7 +386,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -473,7 +461,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -541,7 +528,6 @@ describe('patient info model', () => {
           }
         }`;
       await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -596,7 +582,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -671,7 +656,6 @@ describe('patient info model', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,

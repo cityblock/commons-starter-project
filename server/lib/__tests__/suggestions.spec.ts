@@ -5,7 +5,7 @@ import {
   ComputedFieldDataTypes,
   UserRole,
 } from 'schema';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -51,16 +51,11 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates the correct suggestions for a computed field answer', async () => {

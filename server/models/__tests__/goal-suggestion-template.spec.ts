@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 
 const order = 'asc';
@@ -10,16 +10,11 @@ describe('goal suggestion template model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(GoalSuggestionTemplate.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('goal suggestion template methods', () => {

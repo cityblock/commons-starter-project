@@ -2,7 +2,7 @@ import * as express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
-import Db from '../../db';
+
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
 import { reportError } from '../../helpers/error-helpers';
 import PhoneCall from '../../models/phone-call';
@@ -16,7 +16,7 @@ const VoiceResponse = (twilio as any).twiml.VoiceResponse;
 
 export async function twilioIncomingCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
-  await Db.get();
+
   const twilioPayload = req.body;
   const { To } = twilioPayload;
 
@@ -60,7 +60,7 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
 
 export async function twilioOutgoingCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
-  await Db.get();
+
   const twilioPayload = req.body;
   const { From, To } = twilioPayload;
   // grab Twilio SIM id without "sim:" prefix
@@ -100,7 +100,7 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
 
 export async function twilioCompleteCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
-  await Db.get();
+
   const twilioPayload = req.body;
   const isInbound = !req.query.outbound;
   const { To, From, DialCallStatus, DialCallDuration, CallSid } = twilioPayload;

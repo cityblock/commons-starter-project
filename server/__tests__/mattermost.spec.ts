@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../db';
 import * as queueHelpersRaw from '../helpers/queue-helpers';
 import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
 import Clinic from '../models/clinic';
@@ -45,7 +44,6 @@ describe('Mattermost', () => {
   const mattermost = Mattermost.get();
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Patient.knex());
     axios.post = jest.fn();
     axios.put = jest.fn();
@@ -55,10 +53,6 @@ describe('Mattermost', () => {
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('create channel for patient', () => {

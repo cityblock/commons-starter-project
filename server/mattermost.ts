@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import config from './config';
-import Db from './db';
 import { reportError } from './helpers/error-helpers';
 import { formatChannelDisplayName, formatChannelName } from './helpers/format-helpers';
 import { addJobToQueue } from './helpers/queue-helpers';
@@ -75,8 +74,6 @@ class Mattermost {
     userId: string,
     existingTxn?: Transaction,
   ): Promise<void> {
-    await Db.get();
-
     await transaction(existingTxn || Patient.knex(), async txn => {
       try {
         const channelId = await this.getChannelIdForPatient(patientId, txn);

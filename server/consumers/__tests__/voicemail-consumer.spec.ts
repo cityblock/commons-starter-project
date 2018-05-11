@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import * as gcsHelpersRaw from '../../graphql/shared/gcs/helpers';
 import Clinic from '../../models/clinic';
 import PatientPhone from '../../models/patient-phone';
@@ -81,7 +81,6 @@ describe('Voicemail Consumer', () => {
   const jobId = uuid();
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Voicemail.knex());
 
     gcsHelpers.loadUserVoicemailUrl = jest.fn().mockReturnValue(uploadUrl);
@@ -103,10 +102,6 @@ describe('Voicemail Consumer', () => {
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('createVoicemail', () => {

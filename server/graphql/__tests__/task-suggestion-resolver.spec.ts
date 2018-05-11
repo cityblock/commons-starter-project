@@ -8,7 +8,6 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import Db from '../../db';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Question from '../../models/question';
@@ -71,16 +70,12 @@ describe('task suggestion resolver', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
+    txn = null;
   });
 
   describe('resolve tasks for answer', () => {

@@ -1,7 +1,7 @@
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { IEventNotificationNode, Priority, TaskEventTypes, UserRole } from 'schema';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import EventNotification from '../../models/event-notification';
@@ -100,19 +100,13 @@ describe('event notification tests', () => {
   const userRole = 'physician' as UserRole;
   const permissions = 'green';
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve event notifications for current user', () => {
@@ -150,7 +144,6 @@ describe('event notification tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -202,7 +195,6 @@ describe('event notification tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -263,13 +255,11 @@ describe('event notification tests', () => {
           }
         }`;
       const taskNotifsResult = await graphql(schema, taskNotifsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
       });
       const allNotifsResult = await graphql(schema, allNotifsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -322,7 +312,6 @@ describe('event notification tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -366,7 +355,6 @@ describe('event notification tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -394,7 +382,6 @@ describe('event notification tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -423,7 +410,6 @@ describe('event notification tests', () => {
         }`;
 
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -469,7 +455,6 @@ describe('event notification tests', () => {
         }`;
 
       await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -487,13 +472,11 @@ describe('event notification tests', () => {
           }
         }`;
       const userNotifsResult = await graphql(schema, userNotifsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
       });
       const user2NotifsResult = await graphql(schema, userNotifsQuery, null, {
-        db,
         permissions,
         userId: user2.id,
         txn,
@@ -557,7 +540,6 @@ describe('event notification tests', () => {
         }`;
 
       await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -573,7 +555,6 @@ describe('event notification tests', () => {
           }
         }`;
       const taskNotifsResult = await graphql(schema, taskNotifsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -589,7 +570,6 @@ describe('event notification tests', () => {
           }
         }`;
       const task2NotifsResult = await graphql(schema, task2NotifsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

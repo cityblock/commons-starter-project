@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { CurrentPatientState, UserRole } from 'schema';
-import Db from '../../db';
+
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Patient from '../patient';
@@ -34,16 +34,11 @@ describe('patient state model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientState.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('gets a patient state model for a patient', async () => {

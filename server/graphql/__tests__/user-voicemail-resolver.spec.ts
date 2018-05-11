@@ -2,7 +2,7 @@ import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as userVoicemailSignedUrlCreate from '../../../app/graphql/queries/user-voicemail-signed-url-create.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
@@ -22,27 +22,17 @@ async function setup(txn: Transaction): Promise<ISetup> {
 const permissions = 'blue';
 
 describe('User Voicemail Resolver', () => {
-  let db: Db;
   let txn = null as any;
   const log = jest.fn();
   const logger = { log };
   const userVoicemailSignedUrlCreateMutation = print(userVoicemailSignedUrlCreate);
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('userVoicemailSignedUrlCreate', () => {
@@ -61,7 +51,6 @@ describe('User Voicemail Resolver', () => {
         userVoicemailSignedUrlCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -85,7 +74,6 @@ describe('User Voicemail Resolver', () => {
         userVoicemailSignedUrlCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,

@@ -1,7 +1,7 @@
 import { transaction } from 'objection';
 import { AnswerValueTypeOptions, ComputedFieldDataTypes } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
 import ComputedField from '../computed-field';
@@ -14,16 +14,11 @@ describe('computed field model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Question.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('computed field methods', () => {

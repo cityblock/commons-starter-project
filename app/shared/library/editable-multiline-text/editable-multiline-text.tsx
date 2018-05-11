@@ -60,18 +60,18 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
     if (editMode) {
       return (
         <React.Fragment>
-        <FormattedMessage id="patientInfo.unsavedChanges">
-          {(message: string) => <Prompt when={!!showSaveWarning} message={message} />}
-        </FormattedMessage>
-        <TextAreaWithButton
-          value={editedText}
-          onChange={this.handleChange}
-          onSubmit={this.handleSubmit}
-          submitMessageId="editableText.save"
-          loadingMessageId="editableText.saving"
-          placeholderMessageId={placeholderMessageId}
-          titleStyles={!descriptionField}
-        />
+          <FormattedMessage id="patientInfo.unsavedChanges">
+            {(message: string) => <Prompt when={!!showSaveWarning} message={message} />}
+          </FormattedMessage>
+          <TextAreaWithButton
+            value={editedText}
+            onChange={this.handleChange}
+            onSubmit={this.handleSubmit}
+            submitMessageId="editableText.save"
+            loadingMessageId="editableText.saving"
+            placeholderMessageId={placeholderMessageId}
+            titleStyles={!descriptionField}
+          />
         </React.Fragment>
       );
     }

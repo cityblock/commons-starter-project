@@ -9,7 +9,7 @@ import * as concernEdit from '../../../app/graphql/queries/concern-edit-mutation
 import * as concernRemoveDiagnosisCode from '../../../app/graphql/queries/concern-remove-diagnosis-code-mutation.graphql';
 import * as getConcern from '../../../app/graphql/queries/get-concern.graphql';
 import * as getConcerns from '../../../app/graphql/queries/get-concerns.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import DiagnosisCode from '../../models/diagnosis-code';
@@ -32,7 +32,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
 
 describe('concern resolver', () => {
   let txn = null as any;
-  let db: Db;
+
   const concernCreateMutation = print(concernCreate);
   const concernDeleteMutation = print(concernDelete);
   const concernEditMutation = print(concernEdit);
@@ -42,16 +42,11 @@ describe('concern resolver', () => {
   const concernRemoveDiagnosisCodeMutation = print(concernRemoveDiagnosisCode);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve concern', () => {
@@ -133,7 +128,6 @@ describe('concern resolver', () => {
       const concern2 = await Concern.create({ title: 'medical' }, txn);
 
       const result = await graphql(schema, getConcernsQuery, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -153,7 +147,6 @@ describe('concern resolver', () => {
         getConcernsQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,

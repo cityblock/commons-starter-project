@@ -10,7 +10,7 @@ import {
 import * as goalSuggestionTemplateForAnswer from '../../../app/graphql/queries/get-goal-suggestions-for-answer.graphql';
 import * as goalSuggestionCreate from '../../../app/graphql/queries/goal-suggestion-create-mutation.graphql';
 import * as goalSuggestionDelete from '../../../app/graphql/queries/goal-suggestion-delete-mutation.graphql';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import GoalSuggestion from '../../models/goal-suggestion';
@@ -74,16 +74,11 @@ describe('goal suggestion resolver', () => {
   const goalSuggestionDeleteMutation = print(goalSuggestionDelete);
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve goals for answer', () => {

@@ -2,7 +2,7 @@ import { subHours } from 'date-fns';
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import ProgressNote from '../../models/progress-note';
@@ -56,19 +56,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('Progress Note Glass Break Resolver', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates a progress note glass break', async () => {
@@ -89,7 +83,6 @@ describe('Progress Note Glass Break Resolver', () => {
       }`;
 
     const result = await graphql(schema, mutation, null, {
-      db,
       permissions,
       userId: user.id,
       txn,
@@ -153,7 +146,6 @@ describe('Progress Note Glass Break Resolver', () => {
       }`;
 
     const result = await graphql(schema, query, null, {
-      db,
       permissions,
       userId: user.id,
       txn,
@@ -208,7 +200,6 @@ describe('Progress Note Glass Break Resolver', () => {
       }`;
 
     const result = await graphql(schema, query, null, {
-      db,
       permissions: 'blue',
       userId: user2.id,
       txn,
@@ -231,7 +222,6 @@ describe('Progress Note Glass Break Resolver', () => {
       }`;
 
     const result = await graphql(schema, query, null, {
-      db,
       permissions: 'blue',
       userId: user.id,
       txn,
@@ -255,7 +245,6 @@ describe('Progress Note Glass Break Resolver', () => {
       }`;
 
     const result = await graphql(schema, query, null, {
-      db,
       permissions: 'blue',
       userId: user2.id,
       txn,

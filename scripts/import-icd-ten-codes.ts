@@ -13,16 +13,22 @@
 
 /* tslint:disable no-console */
 import * as fs from 'fs';
-import { transaction } from 'objection';
-import Db from '../server/db';
+import * as Knex from 'knex';
+import { transaction, Model } from 'objection';
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('../server/models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[process.env.NODE_ENV || 'development']);
+Model.knex(knex);
+
 import DiagnosisCode from '../server/models/diagnosis-code';
 
 const filePath = process.env.CODESET_FILE_PATH;
 const version = process.env.CODESET_VERSION;
 
 export async function importCodeset() {
-  await Db.get();
-
   if (!filePath || !version) {
     console.log(
       'Must provide the following environment variables: CODESET_FILE_PATH, CODESET_VERSION',

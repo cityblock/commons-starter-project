@@ -10,7 +10,7 @@ import {
   UserRole,
 } from 'schema';
 import * as progressNoteActivity from '../../../app/graphql/queries/get-progress-note-activity-for-progress-note.graphql';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import CarePlanUpdateEvent from '../../models/care-plan-update-event';
 import Clinic from '../../models/clinic';
@@ -78,16 +78,11 @@ describe('progress note resolver', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('gets activity for a progress note', async () => {

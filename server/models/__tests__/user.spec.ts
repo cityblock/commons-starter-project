@@ -1,7 +1,6 @@
 import { transaction } from 'objection';
 import { Permissions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
 import { attributionUserEmail } from '../../lib/consts';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
@@ -15,16 +14,11 @@ describe('user model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('should create and retrieve a user', async () => {

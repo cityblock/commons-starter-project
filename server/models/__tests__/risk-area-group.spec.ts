@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
@@ -16,16 +16,11 @@ describe('risk area group model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(RiskAreaGroup.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates and gets a risk area group', async () => {

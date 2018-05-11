@@ -15,7 +15,6 @@ import * as carePlanSuggestionAccept from '../../../app/graphql/queries/care-pla
 import * as carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import * as getCarePlanSuggestionsForPatient from '../../../app/graphql/queries/get-patient-care-plan-suggestions.graphql';
 import * as getCarePlanForPatient from '../../../app/graphql/queries/get-patient-care-plan.graphql';
-import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -148,24 +147,15 @@ describe('care plan resolver tests', () => {
   const carePlanSuggestionsForPatientQuery = print(getCarePlanSuggestionsForPatient);
   const carePlanSuggestionAcceptMutation = print(carePlanSuggestionAccept);
   const carePlanSuggestionDismissMutation = print(carePlanSuggestionDismiss);
-  let db: Db;
+
   let txn = null as any;
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve care plan', () => {
@@ -196,7 +186,6 @@ describe('care plan resolver tests', () => {
         carePlanForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -245,7 +234,6 @@ describe('care plan resolver tests', () => {
         carePlanForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           txn,
@@ -270,7 +258,6 @@ describe('care plan resolver tests', () => {
         carePlanForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           txn,
@@ -305,7 +292,6 @@ describe('care plan resolver tests', () => {
         carePlanForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           txn,
@@ -327,7 +313,6 @@ describe('care plan resolver tests', () => {
         carePlanForPatientQuery,
         null,
         {
-          db,
           userId: user2.id,
           permissions: 'blue',
           txn,
@@ -379,7 +364,6 @@ describe('care plan resolver tests', () => {
         carePlanSuggestionsForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -446,7 +430,6 @@ describe('care plan resolver tests', () => {
         carePlanSuggestionsForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           txn,
@@ -481,7 +464,6 @@ describe('care plan resolver tests', () => {
         carePlanSuggestionsForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           txn,
@@ -515,7 +497,6 @@ describe('care plan resolver tests', () => {
         carePlanSuggestionDismissMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -562,7 +543,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion1.id,
         },
@@ -572,7 +553,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion2.id,
           startedAt: new Date().toISOString(),
@@ -613,7 +594,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion.id,
           concernId: concern2.id,
@@ -667,7 +648,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: goalSuggestion.id,
           concernId: concern.id,
@@ -730,7 +711,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion.id,
           patientConcernId: patientConcern.id,
@@ -742,7 +723,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion.id,
           patientConcernId: patientConcern.id,
@@ -799,7 +780,7 @@ describe('care plan resolver tests', () => {
         schema,
         carePlanSuggestionAcceptMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         {
           carePlanSuggestionId: suggestion.id,
           patientConcernId: patientConcern.id,

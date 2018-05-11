@@ -1,7 +1,7 @@
 import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
@@ -48,19 +48,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('patient photo signed URL resolver', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('returns a signed URL for patient photo upload', async () => {
@@ -79,7 +73,6 @@ describe('patient photo signed URL resolver', () => {
     };
 
     const result = await graphql(schema, mutation, null, {
-      db,
       userId: user.id,
       permissions,
       txn,
@@ -98,7 +91,6 @@ describe('patient photo signed URL resolver', () => {
       }`;
 
     const result = await graphql(schema, mutation, null, {
-      db,
       userId: user.id,
       permissions,
       txn,

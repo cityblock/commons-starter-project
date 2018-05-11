@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { Permissions, UserRole } from 'schema';
 import * as getPatientMedications from '../../../app/graphql/queries/get-patient-medications.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
@@ -48,22 +48,17 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('patient problem list tests', () => {
   let txn = null as any;
-  let db: Db;
+
   const log = jest.fn();
   const logger = { log };
   const patientMedicationsQuery = print(getPatientMedications);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('medications for patient', () => {
@@ -85,7 +80,6 @@ describe('patient problem list tests', () => {
         patientMedicationsQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

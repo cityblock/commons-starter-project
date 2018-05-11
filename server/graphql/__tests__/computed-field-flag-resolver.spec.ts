@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as computedFieldFlagCreate from '../../../app/graphql/queries/computed-field-flag-create-mutation.graphql';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import ComputedFieldFlag from '../../models/computed-field-flag';
@@ -86,21 +86,15 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('computed field flag resolver', () => {
-  let db: Db;
   let txn = null as any;
   const computedFieldFlagCreateMutation = print(computedFieldFlagCreate);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates a computed field flag', async () => {
@@ -110,7 +104,6 @@ describe('computed field flag resolver', () => {
       computedFieldFlagCreateMutation,
       null,
       {
-        db,
         permissions,
         userId: user.id,
         txn,

@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -48,19 +48,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 describe('risk area assessment resolver tests', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve riskAreaAssessmentSubmission', () => {
@@ -74,7 +68,6 @@ describe('risk area assessment resolver tests', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -94,7 +87,6 @@ describe('risk area assessment resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -134,7 +126,6 @@ describe('risk area assessment resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -158,7 +149,6 @@ describe('risk area assessment resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -251,7 +241,6 @@ describe('risk area assessment resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -279,7 +268,6 @@ describe('risk area assessment resolver tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

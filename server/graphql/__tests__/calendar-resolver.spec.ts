@@ -14,7 +14,7 @@ import * as calendarCreateForPatient from '../../../app/graphql/queries/calendar
 import * as getCalendarEventsForCurrentUser from '../../../app/graphql/queries/get-calendar-events-for-current-user.graphql';
 import * as getCalendarEventsForPatient from '../../../app/graphql/queries/get-calendar-events-for-patient.graphql';
 import * as getCalendarForPatient from '../../../app/graphql/queries/get-calendar-for-patient.graphql';
-import Db from '../../db';
+
 import { createGoogleCalendarEventUrl } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';
 import GoogleAuth from '../../models/google-auth';
@@ -57,7 +57,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('calendar tests', () => {
   let txn = null as any;
-  let db: Db;
+
   const log = jest.fn();
   const logger = { log };
   const calendarCreateEventForCurrentUserMutation = print(calendarCreateEventForCurrentUser);
@@ -68,16 +68,11 @@ describe('calendar tests', () => {
   const getCalendarForPatientQuery = print(getCalendarForPatient);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('calendar for patient', () => {
@@ -102,7 +97,6 @@ describe('calendar tests', () => {
         calendarCreateEventForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -159,7 +153,6 @@ describe('calendar tests', () => {
         calendarCreateForPatientMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -191,7 +184,6 @@ describe('calendar tests', () => {
         getCalendarForPatientQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -267,7 +259,6 @@ describe('calendar tests', () => {
         getCalendarEventsForPatientQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -319,7 +310,6 @@ describe('calendar tests', () => {
         calendarCreateEventForCurrentUserMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -414,7 +404,6 @@ describe('calendar tests', () => {
         getCalendarEventsForCurrentUserQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

@@ -8,7 +8,7 @@ import * as cboEdit from '../../../app/graphql/queries/cbo-edit-mutation.graphql
 import * as getCbo from '../../../app/graphql/queries/get-cbo.graphql';
 import * as getCbosForCategory from '../../../app/graphql/queries/get-cbos-for-category.graphql';
 import * as getCbos from '../../../app/graphql/queries/get-cbos.graphql';
-import Db from '../../db';
+
 import CBO from '../../models/cbo';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
@@ -49,16 +49,11 @@ describe('CBO resolver', () => {
   const cboDeleteMutation = print(cboDelete);
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve CBO', () => {

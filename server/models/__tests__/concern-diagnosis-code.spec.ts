@@ -1,5 +1,5 @@
 import { transaction, Transaction } from 'objection';
-import Db from '../../db';
+
 import Concern from '../concern';
 import ConcernDiagnosisCode from '../concern-diagnosis-code';
 import DiagnosisCode from '../diagnosis-code';
@@ -28,16 +28,11 @@ describe('concern diagnosis code model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(ConcernDiagnosisCode.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('creating a concern diagnosis code', () => {

@@ -2,7 +2,6 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
@@ -70,19 +69,14 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('task follower', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
+    txn = null;
   });
 
   describe('task followers', () => {
@@ -95,7 +89,6 @@ describe('task follower', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -121,7 +114,6 @@ describe('task follower', () => {
           }
         }`;
       const unfollowResult = await graphql(schema, unfollowMutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

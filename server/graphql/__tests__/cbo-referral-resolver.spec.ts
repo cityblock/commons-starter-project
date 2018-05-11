@@ -3,7 +3,7 @@ import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
 import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -35,16 +35,11 @@ describe('CBO Referral resolver', () => {
   const cboReferralEditMutation = print(cboReferralEdit);
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('CBO Referral create', () => {

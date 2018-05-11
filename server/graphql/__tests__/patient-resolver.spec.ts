@@ -17,7 +17,7 @@ import * as patientsWithOutOfDateMAP from '../../../app/graphql/queries/get-pati
 import * as patientsWithPendingSuggestions from '../../../app/graphql/queries/get-patients-with-pending-suggestions.graphql';
 import * as patientsWithRecentConversations from '../../../app/graphql/queries/get-patients-with-recent-conversations.graphql';
 import * as patientsWithUrgentTasks from '../../../app/graphql/queries/get-patients-with-urgent-tasks.graphql';
-import Db from '../../db';
+
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientGlassBreak from '../../models/patient-glass-break';
@@ -136,7 +136,6 @@ async function additionalSetup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('patient', () => {
-  let db: Db;
   let txn = null as any;
   const log = jest.fn();
   const logger = { log };
@@ -156,21 +155,12 @@ describe('patient', () => {
   const patientsWithAssignedStateQuery = print(patientsWithAssignedState);
   const patientsWithIntakeInProgressQuery = print(patientsWithIntakeInProgress);
 
-  beforeAll(async () => {
-    db = await Db.get();
-  });
-
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(Patient.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolvePatient', () => {
@@ -182,7 +172,6 @@ describe('patient', () => {
         getPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           logger,
@@ -213,7 +202,6 @@ describe('patient', () => {
         query,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           logger,
@@ -234,7 +222,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -264,7 +251,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -305,7 +291,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -334,7 +319,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -356,7 +340,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: '',
           txn,
@@ -374,7 +357,6 @@ describe('patient', () => {
         getPatientSearchQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -395,7 +377,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: '',
           txn,
@@ -431,7 +412,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -467,7 +447,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -489,7 +468,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -507,7 +485,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -538,7 +515,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -556,7 +532,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -588,7 +563,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -606,7 +580,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -631,7 +604,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user2.id,
           txn,
@@ -656,7 +628,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -674,7 +645,6 @@ describe('patient', () => {
         getPatientPanelQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -698,7 +668,6 @@ describe('patient', () => {
           getPatientPanelQuery,
           null,
           {
-            db,
             permissions: user.permissions,
             userId: user.id,
             txn,
@@ -718,7 +687,6 @@ describe('patient', () => {
           getPatientPanelQuery,
           null,
           {
-            db,
             permissions,
             userId: user.id,
             txn,
@@ -736,7 +704,6 @@ describe('patient', () => {
           getPatientPanelQuery,
           null,
           {
-            db,
             permissions,
             userId: user.id,
             txn,
@@ -1034,7 +1001,6 @@ describe('patient', () => {
         getPatientSocialSecurityQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -1067,7 +1033,6 @@ describe('patient', () => {
         getPatientSocialSecurityQuery,
         null,
         {
-          db,
           userId: user2.id,
           permissions: 'green',
           logger,
@@ -1100,7 +1065,6 @@ describe('patient', () => {
         getPatientSocialSecurityQuery,
         null,
         {
-          db,
           userId: user2.id,
           permissions: 'blue',
           logger,
@@ -1143,7 +1107,6 @@ describe('patient', () => {
         getPatientSocialSecurityQuery,
         null,
         {
-          db,
           userId: user2.id,
           permissions: 'blue',
           logger,

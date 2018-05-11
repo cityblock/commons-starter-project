@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
@@ -43,19 +43,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('screening tool resolver tests', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve screeningTool', () => {
@@ -68,7 +62,6 @@ describe('screening tool resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -84,7 +77,6 @@ describe('screening tool resolver tests', () => {
       const fakeId = uuid();
       const query = `{ screeningTool(screeningToolId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -109,7 +101,6 @@ describe('screening tool resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -135,7 +126,6 @@ describe('screening tool resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -158,7 +148,6 @@ describe('screening tool resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -179,7 +168,6 @@ describe('screening tool resolver tests', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

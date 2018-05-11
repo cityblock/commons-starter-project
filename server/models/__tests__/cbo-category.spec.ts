@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import Db from '../../db';
+
 import CBOCategory from '../cbo-category';
 
 const title = 'Food Services';
@@ -8,16 +8,11 @@ describe('CBO category model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(CBOCategory.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('gets all CBO categories', async () => {

@@ -1,10 +1,11 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import * as Knex from 'knex';
 import * as kue from 'kue';
 import { pickBy, toNumber } from 'lodash';
-import { transaction, Transaction } from 'objection';
-import Db from '../db';
+import { transaction, Model, Transaction } from 'objection';
+import config from '../config';
 import { IMemberAttributionMessageData } from '../handlers/pubsub/push-handler';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
@@ -13,6 +14,13 @@ import Patient, { IPatientCreateFields, IPatientUpdateFields } from '../models/p
 import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
 
 queue.process('memberAttribution', async (job, done) => {
   try {
@@ -48,8 +56,6 @@ export async function processNewMemberAttributionMessage(
       'Missing either patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, or jobId',
     );
   }
-
-  await Db.get();
 
   await transaction(existingTxn || PatientAnswer.knex(), async txn => {
     const patient = await Patient.getById(patientId, txn);

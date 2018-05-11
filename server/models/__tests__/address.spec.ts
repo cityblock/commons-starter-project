@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import Db from '../../db';
+
 import { createMockAddress, createMockClinic, createMockUser } from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
@@ -25,16 +25,11 @@ describe('address', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Address.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('get', async () => {

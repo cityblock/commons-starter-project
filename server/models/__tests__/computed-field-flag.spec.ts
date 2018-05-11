@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import {
   createMockAnswer,
   createMockClinic,
@@ -85,16 +85,11 @@ describe('computed field flag model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(Question.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('should create and get a computed field flag', async () => {

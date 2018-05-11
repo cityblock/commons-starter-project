@@ -1,7 +1,7 @@
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
-import Db from '../../../db';
+
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
 import PatientPhone from '../../../models/patient-phone';
@@ -44,16 +44,11 @@ describe('SMS Message Handler', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientPhone.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('handles an incoming SMS', async () => {

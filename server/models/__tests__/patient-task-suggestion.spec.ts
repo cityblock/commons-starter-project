@@ -1,7 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Patient from '../patient';
@@ -38,16 +38,11 @@ describe('patient task suggestion', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(PatientTaskSuggestion.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('patient task suggestion methods', () => {

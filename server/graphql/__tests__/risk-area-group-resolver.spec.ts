@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import PatientGlassBreak from '../../models/patient-glass-break';
 import RiskAreaGroup from '../../models/risk-area-group';
@@ -43,19 +43,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('risk area group resolver', () => {
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve risk area group', () => {
@@ -71,7 +65,6 @@ describe('risk area group resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -96,7 +89,6 @@ describe('risk area group resolver', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -112,7 +104,6 @@ describe('risk area group resolver', () => {
       const fakeId = uuid();
       const query = `{ riskAreaGroup(riskAreaGroupId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -289,7 +280,6 @@ describe('risk area group resolver', () => {
         }`;
 
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -323,7 +313,6 @@ describe('risk area group resolver', () => {
         }`;
 
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,
@@ -347,7 +336,6 @@ describe('risk area group resolver', () => {
         }`;
 
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

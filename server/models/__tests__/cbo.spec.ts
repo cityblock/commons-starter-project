@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { createCBO, createCBOCategory } from '../../spec-helpers';
 import CBO from '../cbo';
 import CBOCategory from '../cbo-category';
@@ -33,16 +33,11 @@ describe('CBO model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(CBO.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('creates and gets a CBO', async () => {

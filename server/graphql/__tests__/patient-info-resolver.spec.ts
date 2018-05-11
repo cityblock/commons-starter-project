@@ -4,7 +4,7 @@ import { transaction, Transaction } from 'objection';
 import { Gender, UserRole } from 'schema';
 import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
 import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
-import Db from '../../db';
+
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -53,12 +53,11 @@ describe('patient info resolver', () => {
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
-  let db: Db;
+
   const getPatientNeedToKnowQuery = print(getPatientNeedToKnow);
   const patientNeedToKnowEditMutation = print(patientNeedToKnowEdit);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
@@ -66,9 +65,6 @@ describe('patient info resolver', () => {
     await txn.rollback();
   });
 
-  afterAll(async () => {
-    await Db.release();
-  });
   describe('patient info edit', () => {
     it('edits patient', async () => {
       const { patient, address, user } = await setup(txn);
@@ -86,7 +82,6 @@ describe('patient info resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,
@@ -104,7 +99,6 @@ describe('patient info resolver', () => {
       expect(log).toBeCalled();
 
       const result2 = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions: 'red',
         logger,
@@ -128,7 +122,6 @@ describe('patient info resolver', () => {
         getPatientNeedToKnowQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -153,7 +146,6 @@ describe('patient info resolver', () => {
         patientNeedToKnowEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

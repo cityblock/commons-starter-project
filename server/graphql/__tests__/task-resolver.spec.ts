@@ -15,7 +15,6 @@ import * as taskDelete from '../../../app/graphql/queries/task-delete-mutation.g
 import * as taskEdit from '../../../app/graphql/queries/task-edit-mutation.graphql';
 import * as taskUncomplete from '../../../app/graphql/queries/task-uncomplete-mutation.graphql';
 import * as tasksForCurrentUser from '../../../app/graphql/queries/tasks-for-current-user.graphql';
-import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
@@ -112,7 +111,6 @@ async function setup(txn: Transaction): Promise<ISetup> {
 }
 
 describe('task tests', () => {
-  let db: Db;
   let txn = null as any;
   const tasksWithNotificationsForPatientQuery = print(tasksWithNotificationsForPatient);
   const tasksDueSoonForPatientQuery = print(tasksDueSoonForPatient);
@@ -128,16 +126,12 @@ describe('task tests', () => {
   const taskUncompleteMutation = print(taskUncomplete);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
+    txn = null;
   });
 
   describe('resolve task', () => {
@@ -148,7 +142,6 @@ describe('task tests', () => {
         getTaskQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -173,7 +166,6 @@ describe('task tests', () => {
         getTaskQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -192,7 +184,6 @@ describe('task tests', () => {
         getTasksForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -219,7 +210,6 @@ describe('task tests', () => {
         getTasksForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -250,7 +240,6 @@ describe('task tests', () => {
         getTasksForPatientQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions,
           txn,
@@ -282,7 +271,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -302,7 +290,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -326,7 +313,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -351,7 +337,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -375,7 +360,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -399,7 +383,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -426,7 +409,6 @@ describe('task tests', () => {
         taskEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -462,7 +444,6 @@ describe('task tests', () => {
         taskCompleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -478,7 +459,7 @@ describe('task tests', () => {
         schema,
         taskCompleteMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         { taskId: task1.id },
       );
       const taskEvents = await TaskEvent.getTaskEvents(
@@ -503,7 +484,6 @@ describe('task tests', () => {
         taskUncompleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -519,7 +499,7 @@ describe('task tests', () => {
         schema,
         taskUncompleteMutation,
         null,
-        { db, permissions, userId: user.id, txn },
+        { permissions, userId: user.id, txn },
         { taskId: task1.id },
       );
       const taskEvents = await TaskEvent.getTaskEvents(
@@ -544,7 +524,6 @@ describe('task tests', () => {
         taskCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -565,7 +544,6 @@ describe('task tests', () => {
         taskCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -588,7 +566,6 @@ describe('task tests', () => {
         taskCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -641,7 +618,6 @@ describe('task tests', () => {
         taskDeleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -673,7 +649,6 @@ describe('task tests', () => {
         taskDeleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -811,7 +786,6 @@ describe('task tests', () => {
         tasksForCurrentUserQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -834,7 +808,6 @@ describe('task tests', () => {
         tasksForCurrentUserQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,
@@ -856,7 +829,6 @@ describe('task tests', () => {
         tasksForCurrentUserQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,

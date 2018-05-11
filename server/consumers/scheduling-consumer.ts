@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import * as Knex from 'knex';
 import * as kue from 'kue';
-import { transaction, Transaction } from 'objection';
-import Db from '../db';
+import { transaction, Model, Transaction } from 'objection';
+import config from '../config';
 import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
 import {
   createGoogleCalendarAuth,
@@ -22,6 +23,13 @@ import PatientSiuEvent from '../models/patient-siu-event';
 import User from '../models/user';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
 
 queue.process('scheduling', async (job, done) => {
   try {
@@ -52,8 +60,6 @@ export async function processNewSchedulingMessage(
       'Missing either patientId, eventType, transmissionId, visitId, dateTime, or duration',
     );
   }
-
-  await Db.get();
 
   await transaction(existingTxn || PatientSiuEvent.knex(), async txn => {
     const siuEvent = await PatientSiuEvent.getByVisitId(visitId, txn);

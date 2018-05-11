@@ -2,7 +2,7 @@ import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientGlassBreak from '../../models/patient-glass-break';
@@ -30,19 +30,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('patient scratch pad resolver', () => {
   const permissions = 'green';
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve patient scratch pad', () => {
@@ -68,7 +62,6 @@ describe('patient scratch pad resolver', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -94,7 +87,6 @@ describe('patient scratch pad resolver', () => {
           }
         }`;
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions,
         txn,
@@ -135,7 +127,6 @@ describe('patient scratch pad resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions: 'blue',
         txn,
@@ -172,7 +163,6 @@ describe('patient scratch pad resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         userId: user.id,
         permissions: 'blue',
         txn,
@@ -207,7 +197,6 @@ describe('patient scratch pad resolver', () => {
           }
         }`;
       const result = await graphql(schema, mutation, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

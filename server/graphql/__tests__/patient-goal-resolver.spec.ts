@@ -4,7 +4,7 @@ import { transaction, Transaction } from 'objection';
 import { CompletedWithinInterval, Priority, UserRole } from 'schema';
 import * as patientGoalCreate from '../../../app/graphql/queries/patient-goal-create-mutation.graphql';
 import * as patientGoalDelete from '../../../app/graphql/queries/patient-goal-delete-mutation.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
@@ -43,21 +43,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('patient goal resolver', () => {
   let txn = null as any;
-  let db: Db;
+
   const patientGoalCreateMutation = print(patientGoalCreate);
   const patientGoalDeleteMutation = print(patientGoalDelete);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve patient goal', () => {
@@ -202,7 +197,6 @@ describe('patient goal resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         txn,

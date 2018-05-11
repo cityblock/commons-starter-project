@@ -7,7 +7,7 @@ import * as nock from 'nock';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-import Db from '../../db';
+
 import { getGoogleCalendarFieldsFromSIU } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -57,7 +57,6 @@ describe('processing SIU scheduling jobs', () => {
   beforeEach(async () => {
     queue.testMode.clear();
 
-    await Db.get();
     txn = await transaction.start(PatientSiuEvent.knex());
   });
 
@@ -68,8 +67,6 @@ describe('processing SIU scheduling jobs', () => {
   afterAll(async () => {
     queue.testMode.exit();
     queue.shutdown(0, () => true); // There must be a better way to do this...
-
-    await Db.release();
   });
 
   it('throws an error if data is missing', async () => {

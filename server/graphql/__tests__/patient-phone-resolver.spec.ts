@@ -2,7 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { PhoneTypeOptions, UserRole } from 'schema';
-import Db from '../../db';
+
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
@@ -62,19 +62,13 @@ describe('phone resolver', () => {
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('get all patient phones', async () => {
@@ -87,7 +81,6 @@ describe('phone resolver', () => {
         }`;
 
       const result = await graphql(schema, query, null, {
-        db,
         permissions,
         userId: user.id,
         logger,

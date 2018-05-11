@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as getComputedPatientStatus from '../../../app/graphql/queries/get-patient-computed-patient-status.graphql';
-import Db from '../../db';
+
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
@@ -42,21 +42,15 @@ async function setup(trx: Transaction): Promise<ISetup> {
 }
 
 describe('computed patient status resolver', () => {
-  let db: Db;
   let txn = null as any;
   const getComputedPatientStatusQuery = print(getComputedPatientStatus);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolve patient computed patient status', () => {
@@ -69,7 +63,6 @@ describe('computed patient status resolver', () => {
         getComputedPatientStatusQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           txn,

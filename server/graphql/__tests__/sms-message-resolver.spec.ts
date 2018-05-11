@@ -4,7 +4,7 @@ import { PhoneTypeOptions, SmsMessageDirection, UserRole } from 'schema';
 import * as getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
 import * as getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
 import * as smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
@@ -55,13 +55,12 @@ describe('SMS Message Resolver', () => {
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
-  let db: Db;
+
   const getSmsMessagesQuery = print(getSmsMessages);
   const getSmsMessageLatestQuery = print(getSmsMessageLatest);
   const smsMessageCreateMutation = print(smsMessageCreate);
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
 
     TwilioClient.get = jest.fn().mockReturnValue({
@@ -73,10 +72,6 @@ describe('SMS Message Resolver', () => {
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('resolveSmsMessages', () => {
@@ -121,7 +116,6 @@ describe('SMS Message Resolver', () => {
         getSmsMessagesQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -176,7 +170,6 @@ describe('SMS Message Resolver', () => {
         getSmsMessageLatestQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -213,7 +206,6 @@ describe('SMS Message Resolver', () => {
         getSmsMessageLatestQuery,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -235,7 +227,6 @@ describe('SMS Message Resolver', () => {
         smsMessageCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -258,7 +249,6 @@ describe('SMS Message Resolver', () => {
         smsMessageCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -286,7 +276,6 @@ describe('SMS Message Resolver', () => {
         smsMessageCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -324,7 +313,6 @@ describe('SMS Message Resolver', () => {
         smsMessageCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,
@@ -372,7 +360,6 @@ describe('SMS Message Resolver', () => {
         smsMessageCreateMutation,
         null,
         {
-          db,
           userId: user.id,
           permissions: 'blue',
           logger,

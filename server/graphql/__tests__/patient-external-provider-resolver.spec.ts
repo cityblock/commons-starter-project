@@ -6,7 +6,7 @@ import * as getPatientExternalProviders from '../../../app/graphql/queries/get-p
 import * as patientExternalProviderCreate from '../../../app/graphql/queries/patient-external-provider-create-mutation.graphql';
 import * as patientExternalProviderDelete from '../../../app/graphql/queries/patient-external-provider-delete-mutation.graphql';
 import * as patientExternalProviderEdit from '../../../app/graphql/queries/patient-external-provider-edit-mutation.graphql';
-import Db from '../../db';
+
 import Clinic from '../../models/clinic';
 import Email from '../../models/email';
 import Patient from '../../models/patient';
@@ -80,19 +80,13 @@ describe('patient info model', () => {
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
-  let db: Db;
 
   beforeEach(async () => {
-    db = await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   describe('patient external providers resolvers', async () => {
@@ -109,7 +103,6 @@ describe('patient info model', () => {
         patientExternalProvidersQuery,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -158,7 +151,6 @@ describe('patient info model', () => {
         patientExternalProviderCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -201,7 +193,6 @@ describe('patient info model', () => {
         patientExternalProviderCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -251,7 +242,6 @@ describe('patient info model', () => {
         patientExternalProviderCreateMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -303,7 +293,6 @@ describe('patient info model', () => {
         patientExternalProviderDeleteMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -353,7 +342,6 @@ describe('patient info model', () => {
         patientExternalProviderEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -404,7 +392,6 @@ describe('patient info model', () => {
         patientExternalProviderEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,
@@ -454,7 +441,6 @@ describe('patient info model', () => {
         patientExternalProviderEditMutation,
         null,
         {
-          db,
           permissions,
           userId: user.id,
           logger,

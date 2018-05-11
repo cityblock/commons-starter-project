@@ -2,7 +2,7 @@ import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as cboCategories from '../../../app/graphql/queries/get-cbo-categories.graphql';
-import Db from '../../db';
+
 import CBOCategory from '../../models/cbo-category';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
@@ -24,16 +24,11 @@ describe('CBO Category resolver', () => {
   const cboCategoriesQuery = print(cboCategories);
 
   beforeEach(async () => {
-    await Db.get();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  afterAll(async () => {
-    await Db.release();
   });
 
   it('gets all CBO categories', async () => {

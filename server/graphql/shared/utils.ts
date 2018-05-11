@@ -205,7 +205,7 @@ export function formatError(error: IGraphQLResponseError): IGraphQLResponseError
   return {
     ...error.extensions,
     message: error.message || 'An unknown error occurred.',
-    locations: error.locations,
+    locations: error.locations && config.NODE_ENV === 'development' ? error.locations : [],
     stack: error.stack && config.NODE_ENV === 'development' ? error.stack.split('\n') : [],
     path: error.path,
   };

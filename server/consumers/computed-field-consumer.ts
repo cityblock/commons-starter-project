@@ -16,7 +16,7 @@ import PatientAnswer from '../models/patient-answer';
 const queue = kue.createQueue({ redis: createRedisClient() });
 
 /* tslint:disable no-var-requires */
-const knexConfig = require('./models/knexfile');
+const knexConfig = require('../models/knexfile');
 /* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);

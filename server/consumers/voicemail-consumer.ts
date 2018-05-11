@@ -19,7 +19,7 @@ const TWILIO_ROOT = 'https://api.twilio.com';
 export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
 
 /* tslint:disable no-var-requires */
-const knexConfig = require('./models/knexfile');
+const knexConfig = require('../models/knexfile');
 /* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);

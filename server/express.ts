@@ -78,6 +78,7 @@ export const addHeadersMiddleware = (
   res: express.Response,
   next: express.NextFunction,
 ) => {
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Cache-Control', 'no-cache, no-store');
   res.setHeader(
     'Content-Security-Policy',
@@ -85,6 +86,17 @@ export const addHeadersMiddleware = (
   );
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   next();
+};
+
+export const ensurePostMiddleware = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  if (req.method === 'POST') {
+    return next();
+  }
+  return res.sendStatus(405);
 };
 
 export default async (
@@ -151,6 +163,7 @@ export default async (
   app.use(
     '/graphql',
     addHeadersMiddleware,
+    ensurePostMiddleware,
     bodyParser.json(),
     graphqlExpress(
       async (request: express.Request | undefined, response: express.Response | undefined) => {

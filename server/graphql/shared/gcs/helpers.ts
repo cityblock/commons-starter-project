@@ -112,7 +112,9 @@ export const parsePatientAggregatedDataFile = async (
 ): Promise<any[]> => {
   if (dataFileContents) {
     try {
-      return JSON.parse(dataFileContents);
+      // TODO: Rip this out once gcs storage bug is fixed
+      const cleanedFileContents = dataFileContents.split('\n')[0];
+      return JSON.parse(cleanedFileContents);
     } catch (err) {
       // TODO: Maybe report an error to Stackdriver?
       return [];
@@ -173,28 +175,26 @@ export const loadPatientEncounters = async (patientId: string): Promise<IPatient
   const rawPatientEncounters = await loadPatientAggregatedDataFile(patientId, 'encounters');
   const patientEncounters = await parsePatientAggregatedDataFile(rawPatientEncounters);
 
-  // TODO: Remove this once we no longer need to stub out front end for demo purposes
-  if (!patientEncounters.length) {
-    return [
-      {
-        id: 'patient-encounter-id',
-        location: 'ACPNY - Radiology',
-        source: 'Claims',
-        date: '2018-04-05T15:45:20.256Z',
-        title: 'Ultrasound Kidney Stones',
-        notes: 'This is a note about this encounter.',
-        progressNoteId: null,
-      },
-    ];
-  }
-
-  return (patientEncounters as IPatientEncounter[]).map(patientEncounter => {
+  return patientEncounters.map(patientEncounter => {
     const id = crypto
       .createHash('md5')
       .update(JSON.stringify(patientEncounter))
       .digest('hex');
 
-    return { ...patientEncounter, id, progressNoteId: null };
+    const encounterData = patientEncounter.encounter;
+    const patientData = patientEncounter.patient;
+    const location = encounterData.Locations.length ? encounterData.Locations[0].Name : null;
+    const notes = encounterData.ReasonForVisit.length ? encounterData.ReasonForVisit[0].Name : null;
+
+    return {
+      id,
+      location,
+      source: patientData.source.name,
+      date: encounterData.DateTime,
+      title: encounterData.Type.Name,
+      notes,
+      progressNoteId: null,
+    };
   });
 };
 

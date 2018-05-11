@@ -74,10 +74,11 @@ export const ScreeningToolSubmission: React.StatelessComponent<allProps> = props
   return screeningToolSubmission && screeningToolQuestions ? (
     <ScreeningToolAssessment
       patientId={patientId}
-      screeningToolSubmission={screeningToolSubmission}
+      screeningToolSubmissionId={screeningToolSubmission.id}
       screeningTool={screeningTool}
       screeningToolQuestions={screeningToolQuestions}
       onSubmissionScored={onSubmissionScored}
+      isEditable={true}
     />
   ) : null;
 };

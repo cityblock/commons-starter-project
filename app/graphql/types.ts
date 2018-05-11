@@ -3010,6 +3010,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
     id: string,
     screeningToolId: string,
     screeningTool:  {
+      id: string,
       title: string,
       riskAreaId: string,
     },
@@ -3178,6 +3179,7 @@ export interface getPatientScreeningToolSubmissionQuery {
     id: string,
     screeningToolId: string,
     screeningTool:  {
+      id: string,
       title: string,
       riskAreaId: string,
     },
@@ -4495,6 +4497,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       id: string,
       screeningToolId: string,
       screeningTool:  {
+        id: string,
         title: string,
         riskAreaId: string,
       },
@@ -7277,6 +7280,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
     id: string,
     screeningToolId: string,
     screeningTool:  {
+      id: string,
       title: string,
       riskAreaId: string,
     },
@@ -7416,6 +7420,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
     id: string,
     screeningToolId: string,
     screeningTool:  {
+      id: string,
       title: string,
       riskAreaId: string,
     },
@@ -11507,6 +11512,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
   id: string,
   screeningToolId: string,
   screeningTool:  {
+    id: string,
     title: string,
     riskAreaId: string,
   },
@@ -12170,6 +12176,7 @@ export interface FullProgressNoteActivityFragment {
     id: string,
     screeningToolId: string,
     screeningTool:  {
+      id: string,
       title: string,
       riskAreaId: string,
     },

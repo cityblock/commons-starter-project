@@ -15,6 +15,7 @@ interface IProps {
   screeningToolSubmissionId: string;
   screeningToolQuestions: FullQuestionFragment[];
   answerHash: IQuestionAnswerHash;
+  isEditable: boolean;
 }
 
 interface IGraphqlProps {
@@ -54,13 +55,13 @@ export class ScreeningTool extends React.Component<allProps> {
   };
 
   renderScreeningToolQuestion = (question: FullQuestionFragment, index: number) => {
-    const { answerHash } = this.props;
+    const { answerHash, isEditable } = this.props;
     const visible = getQuestionVisibility(question, answerHash);
     const dataForQuestion = answerHash[question.id] || [];
 
     return (
       <PatientQuestion
-        editable={true}
+        editable={isEditable}
         visible={visible}
         displayHamburger={false}
         answerData={dataForQuestion}

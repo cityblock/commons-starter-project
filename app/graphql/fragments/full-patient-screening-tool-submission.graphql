@@ -6,6 +6,7 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   id
   screeningToolId
   screeningTool {
+    id
     title
     riskAreaId
   }

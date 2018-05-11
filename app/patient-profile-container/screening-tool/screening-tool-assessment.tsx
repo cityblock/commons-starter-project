@@ -10,7 +10,6 @@ import {
   patientScreeningToolSubmissionScoreMutation,
   patientScreeningToolSubmissionScoreMutationVariables,
   FullCarePlanSuggestionFragment,
-  FullPatientScreeningToolSubmissionFragment,
   FullQuestionFragment,
   FullScreeningToolFragment,
 } from '../../graphql/types';
@@ -29,9 +28,10 @@ import ScreeningToolQuestions from './screening-tool-questions';
 interface IProps {
   patientId: string;
   screeningTool: FullScreeningToolFragment;
-  screeningToolSubmission: FullPatientScreeningToolSubmissionFragment;
+  screeningToolSubmissionId: string;
   screeningToolQuestions: FullQuestionFragment[];
-  onSubmissionScored: (suggestions: FullCarePlanSuggestionFragment[]) => void;
+  onSubmissionScored?: (suggestions: FullCarePlanSuggestionFragment[]) => void;
+  isEditable: boolean;
 }
 
 interface IGraphqlProps {
@@ -50,7 +50,7 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
     const {
       scoreScreeningToolSubmission,
       screeningToolQuestions,
-      screeningToolSubmission,
+      screeningToolSubmissionId,
       onSubmissionScored,
       patientAnswers,
     } = this.props;
@@ -66,7 +66,7 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
 
     const result = await scoreScreeningToolSubmission({
       variables: {
-        patientScreeningToolSubmissionId: screeningToolSubmission.id,
+        patientScreeningToolSubmissionId: screeningToolSubmissionId,
       },
     });
 
@@ -74,15 +74,19 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
       result.data && result.data.patientScreeningToolSubmissionScore
         ? result.data.patientScreeningToolSubmissionScore.carePlanSuggestions
         : [];
-    onSubmissionScored(carePlanSuggestions);
+
+    if (onSubmissionScored) {
+      onSubmissionScored(carePlanSuggestions);
+    }
   };
 
   renderAssessment(updatedAnswerHash: IQuestionAnswerHash) {
     const {
       screeningTool,
       screeningToolQuestions,
-      screeningToolSubmission,
+      screeningToolSubmissionId,
       patientId,
+      isEditable,
     } = this.props;
     const title = screeningTool ? screeningTool.title : 'Loading...';
 
@@ -114,8 +118,9 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
         <ScreeningToolQuestions
           patientId={patientId}
           screeningToolQuestions={screeningToolQuestions}
-          screeningToolSubmissionId={screeningToolSubmission.id}
+          screeningToolSubmissionId={screeningToolSubmissionId}
           answerHash={updatedAnswerHash}
+          isEditable={isEditable}
         />
       </div>
     );
@@ -137,7 +142,12 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
   }
 
   render() {
-    const { screeningToolQuestions, patientAnswersLoading, patientAnswers } = this.props;
+    const {
+      screeningToolQuestions,
+      patientAnswersLoading,
+      patientAnswers,
+      isEditable,
+    } = this.props;
 
     if (patientAnswersLoading) {
       return <Spinner />;
@@ -151,7 +161,7 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
     const panelHtml = this.renderError() || this.renderAssessment(questionAnswerHash);
 
     const submitButtonStyles = classNames({
-      [styles.disabled]: !isAssessmentComplete,
+      [styles.disabled]: !isAssessmentComplete || !isEditable,
     });
 
     return (
@@ -183,7 +193,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
-        filterId: props.screeningToolSubmission.id,
+        filterId: props.screeningToolSubmissionId,
         patientId: props.patientId,
       },
     }),

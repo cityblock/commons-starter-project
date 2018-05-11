@@ -7,6 +7,7 @@ import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-su
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
 import { Popup } from '../../shared/popup/popup';
+import ScreeningToolHistoricalSubmission from './screening-tool-historical-submission';
 import ScreeningToolSubmission from './screening-tool-submission';
 
 interface IProps {
@@ -14,6 +15,7 @@ interface IProps {
     params: {
       patientId: string;
       screeningToolId: string;
+      submissionId?: string;
     };
   };
 }
@@ -46,8 +48,9 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
   render() {
     const { screeningTool, screeningToolLoading, screeningToolError, match } = this.props;
+    const { patientId, submissionId } = match.params;
     const { carePlanSuggestions } = this.state;
-    const patientRoute = `/patients/${match.params.patientId}`;
+    const patientRoute = `/patients/${patientId}`;
 
     if (screeningToolLoading !== false) {
       return <Spinner />;
@@ -63,10 +66,16 @@ export class ScreeningTool extends React.Component<allProps, IState> {
       );
     }
 
-    return (
+    return submissionId ? (
+      <ScreeningToolHistoricalSubmission
+        patientId={patientId}
+        submissionId={submissionId}
+        screeningTool={screeningTool}
+      />
+    ) : (
       <React.Fragment>
         <ScreeningToolSubmission
-          patientId={match.params.patientId}
+          patientId={patientId}
           screeningTool={screeningTool}
           onSubmissionScored={this.handleSubmissionScored}
         />

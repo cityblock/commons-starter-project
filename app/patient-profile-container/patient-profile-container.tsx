@@ -136,6 +136,11 @@ export class PatientProfileContainer extends React.Component<allProps> {
               />
               <Route
                 exact
+                path="/patients/:patientId/tools/:screeningToolId/submission/:submissionId"
+                component={ScreeningTool}
+              />
+              <Route
+                exact
                 path="/patients/:patientId/timeline"
                 render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
               />

@@ -73,6 +73,11 @@ exports[`patient profile container renders patient profile container 1`] = `
           path="/patients/:patientId/tools/:screeningToolId?"
         />
         <Route
+          component={[Function]}
+          exact={true}
+          path="/patients/:patientId/tools/:screeningToolId/submission/:submissionId"
+        />
+        <Route
           exact={true}
           path="/patients/:patientId/timeline"
           render={[Function]}

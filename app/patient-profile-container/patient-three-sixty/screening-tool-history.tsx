@@ -57,7 +57,10 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
 
   return (
     <div className={styles.container}>
-      <Link to={`${routeBase}/tools/${submission.screeningTool.id}`} className={styles.link}>
+      <Link
+        to={`${routeBase}/tools/${submission.screeningTool.id}/submission/${submission.id}`}
+        className={styles.link}
+      >
         <div className={styles.header}>
           <div className={styles.textGroup}>
             <h2>{submission.screeningTool.title}</h2>

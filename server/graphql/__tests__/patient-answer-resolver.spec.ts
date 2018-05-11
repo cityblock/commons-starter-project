@@ -217,7 +217,6 @@ describe('patient answer tests', () => {
           patientId: patient.id,
         },
       );
-
       expect(cloneDeep(result.data!.patientAnswers)).toMatchObject([
         {
           id: patientAnswers[0].id,

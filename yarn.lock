@@ -11049,36 +11049,9 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@2, request@^2.79.0, request@^2.81.0, request@^2.83.0:
+request@2, request@2.85.x, request@^2.79.0, request@^2.81.0, request@^2.83.0:
   version "2.85.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.85.0.tgz#5a03615a47c61420b3eb99b7dba204f83603e1fa"
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    hawk "~6.0.2"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    stringstream "~0.0.5"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-
-request@2.83.x:
-  version "2.83.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
   dependencies:
     aws-sign2 "~0.7.0"
     aws4 "^1.6.0"
@@ -12702,16 +12675,16 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-twilio@3.16.0:
-  version "3.16.0"
-  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.16.0.tgz#1031233e49f64fad2b404d215a7ce88b5d5785d2"
+twilio@3.17.0:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.17.0.tgz#9fafde5657c52bd28ddb133a56c55df5c42fd227"
   dependencies:
     deprecate "1.0.0"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.10"
     moment "2.19.3"
     q "2.0.x"
-    request "2.83.x"
+    request "2.85.x"
     rootpath "0.1.2"
     scmp "0.0.3"
     xmlbuilder "9.0.1"

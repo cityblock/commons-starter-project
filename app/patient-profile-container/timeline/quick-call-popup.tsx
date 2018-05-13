@@ -167,7 +167,6 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       const fullName = teamMember ? formatFullName(teamMember.firstName, teamMember.lastName) : '';
       return <Option key={fullName} value={fullName} />;
     });
-    careTeamOptions.push(<Option key={'other'} value={'other'} label="Other" />);
     const recipientOtherInput =
       quickCall.callRecipient === 'other' ? (
         <div className={styles.formBarField}>
@@ -249,7 +248,9 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
                   onChange={this.onChange}
                   value={quickCall.callRecipient || ''}
                 >
+                  <Option messageId="quickCallForm.callRecipient" value="" />
                   {careTeamOptions}
+                  <Option key="other" value="other" label="Other" />
                 </Select>
               </div>
               {recipientOtherInput}

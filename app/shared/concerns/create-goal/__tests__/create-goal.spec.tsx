@@ -6,7 +6,7 @@ import DefineGoal from '../define-goal';
 import SuggestedTasks from '../suggested-tasks';
 
 describe('Create Goal Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'janeIves';
   const patientConcernId = '011';
   const id1 = 'janeIves';
@@ -26,6 +26,8 @@ describe('Create Goal Modal', () => {
     },
   ] as any;
 
+  const refetchCarePlan = jest.fn();
+
   const wrapper = shallow(
     <CreateGoalModal
       visible={false}
@@ -35,6 +37,7 @@ describe('Create Goal Modal', () => {
       goalSuggestionTemplates={goalSuggestionTemplates}
       loading={false}
       goalSuggestionTemplateIds={goalSuggestionTemplateIds}
+      refetchCarePlan={refetchCarePlan}
       closePopup={placeholderFn}
       error={null}
     />,

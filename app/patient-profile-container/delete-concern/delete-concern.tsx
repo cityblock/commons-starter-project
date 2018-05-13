@@ -11,6 +11,10 @@ import { IPatientConcernDeletePopupOptions } from '../../reducers/popup-reducer'
 import DeleteModal from '../../shared/library/delete-modal/delete-modal';
 import { IState as IAppState } from '../../store';
 
+interface IProps {
+  refetchCarePlan: () => Promise<any>;
+}
+
 interface IStateProps {
   visible: boolean;
   patientConcernTitle: string;
@@ -102,8 +106,5 @@ export default compose(
   ),
   graphql<IGraphqlProps, {}, allProps>(patientConcernDeleteMutationGraphql as any, {
     name: 'deletePatientConcern',
-    options: {
-      refetchQueries: ['getPatientCarePlan'],
-    },
   }),
-)(DeleteConcernModal);
+)(DeleteConcernModal) as React.ComponentClass<IProps>;

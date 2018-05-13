@@ -7,7 +7,6 @@ import {
   patientConcernCreateMutation,
   patientConcernCreateMutationVariables,
 } from '../../graphql/types';
-import { ICreatePatientConcernPopupOptions } from '../../reducers/popup-reducer';
 import Modal from '../../shared/library/modal/modal';
 import { IState as IAppState } from '../../store';
 import ConcernSearch from './concern-search';
@@ -17,9 +16,13 @@ interface IPatientConcernCreateOptions {
   variables: patientConcernCreateMutationVariables;
 }
 
+interface IProps {
+  refetchCarePlan: () => Promise<any>;
+  patientId: string;
+}
+
 interface IStateProps {
   visible: boolean;
-  patientId: string;
 }
 
 interface IDispatchProps {
@@ -43,7 +46,7 @@ interface IState {
   concernCreateError: string | null;
 }
 
-type allProps = IStateProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 export class CreateConcernModal extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -69,7 +72,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
   };
 
   onSubmit = async (): Promise<void> => {
-    const { createPatientConcern, patientId } = this.props;
+    const { createPatientConcern, patientId, refetchCarePlan } = this.props;
     const { concernId, concernType } = this.state;
 
     if (createPatientConcern && concernId) {
@@ -77,6 +80,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
         this.setState({ concernCreateError: null });
         const startedAt = concernType === 'active' ? new Date().toISOString() : null;
         await createPatientConcern({ variables: { patientId, concernId, startedAt } });
+        await refetchCarePlan();
         this.onClose();
       } catch (err) {
         this.setState({ concernCreateError: err.message });
@@ -153,11 +157,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
 
 const mapStateToProps = (state: IAppState): IStateProps => {
   const visible = state.popup.name === 'CREATE_PATIENT_CONCERN';
-  const patientId = visible
-    ? (state.popup.options as ICreatePatientConcernPopupOptions).patientId
-    : '';
-
-  return { visible, patientId };
+  return { visible };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => ({
@@ -171,8 +171,5 @@ export default compose(
   ),
   graphql<IGraphqlProps, {}, allProps>(patientConcernCreateMutationGraphql as any, {
     name: 'createPatientConcern',
-    options: {
-      refetchQueries: ['getPatientCarePlan'],
-    },
   }),
-)(CreateConcernModal);
+)(CreateConcernModal) as React.ComponentClass<IProps>;

@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import * as taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
-import { getPatientCarePlanQuery, getTaskIdsWithNotificationsQuery } from '../graphql/types';
+import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
@@ -14,20 +14,19 @@ import * as sharedStyles from './patient-three-sixty/css/shared.css';
 
 export interface IProps {
   patientId: string;
-  loading?: boolean;
   routeBase: string;
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  taskIdsWithNotifications?: string[];
   taskId: string | null;
   glassBreakId: string | null;
 }
+
 interface IRouterProps {
   history: History;
 }
 
 interface IGraphqlProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  taskIdsWithNotifications?: getTaskIdsWithNotificationsQuery['taskIdsWithNotifications'];
+  taskIdsWithNotifications?: string[];
+  refetch: () => Promise<any>;
   loading?: boolean;
   error?: string | null;
 }
@@ -50,6 +49,7 @@ export class PatientMap extends React.Component<allProps, {}> {
       carePlan,
       taskIdsWithNotifications,
       taskId,
+      refetch,
     } = this.props;
     const mainStyles = classNames(sharedStyles.scroll, {
       [styles.full]: !taskId,
@@ -64,7 +64,7 @@ export class PatientMap extends React.Component<allProps, {}> {
 
     return (
       <React.Fragment>
-        <MapModals />
+        <MapModals refetchCarePlan={refetch} patientId={patientId} />
         <div className={sharedStyles.bodyFlex} onClick={this.closeTask}>
           <div className={mainStyles}>
             <DnDPatientCarePlan
@@ -96,6 +96,7 @@ export default compose(
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
+      refetch: data ? data.refetch : null,
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),

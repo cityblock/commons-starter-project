@@ -322,6 +322,9 @@ export default compose(
   ),
   graphql(quickCallCreateMutationGraphql as any, {
     name: 'createQuickCall',
+    options: {
+      refetchQueries: ['getProgressNotesForCurrentUser'],
+    },
   }),
   graphql(patientCareTeamQuery as any, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,

@@ -8,6 +8,10 @@ import { IPatientGoalDeletePopupOptions } from '../../reducers/popup-reducer';
 import DeleteModal from '../../shared/library/delete-modal/delete-modal';
 import { IState as IAppState } from '../../store';
 
+interface IProps {
+  refetchCarePlan: () => Promise<any>;
+}
+
 interface IStateProps {
   visible: boolean;
   patientGoalTitle: string;
@@ -24,7 +28,7 @@ interface IGraphqlProps {
   ) => { data: patientGoalDeleteMutation };
 }
 
-type allProps = IStateProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 interface IState {
   loading: boolean;
@@ -38,13 +42,14 @@ export class DeleteGoalModal extends React.Component<allProps, IState> {
   }
 
   onDelete = async () => {
-    const { patientGoalId, deletePatientGoal, closePopup } = this.props;
+    const { patientGoalId, deletePatientGoal, closePopup, refetchCarePlan } = this.props;
 
     if (!this.state.loading) {
       this.setState({ loading: true, error: null });
 
       try {
         await deletePatientGoal({ variables: { patientGoalId } });
+        await refetchCarePlan();
         closePopup();
       } catch (err) {
         this.setState({ error: err.message });
@@ -94,8 +99,5 @@ export default compose(
   ),
   graphql<IGraphqlProps, {}, allProps>(patientGoalDeleteMutationGraphql as any, {
     name: 'deletePatientGoal',
-    options: {
-      refetchQueries: ['getPatientCarePlan'],
-    },
   }),
-)(DeleteGoalModal);
+)(DeleteGoalModal) as React.ComponentClass<IProps>;

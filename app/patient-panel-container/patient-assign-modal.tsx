@@ -2,9 +2,11 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as careTeamAssignPatientsMutationGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
+import * as getPatientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import {
   careTeamAssignPatientsMutation,
   careTeamAssignPatientsMutationVariables,
+  PatientFilterOptions,
 } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import FormLabel from '../shared/library/form-label/form-label';
@@ -20,6 +22,10 @@ interface IProps {
   isVisible: boolean;
   closePopup: () => void; // for use when clicking cancel and X icon
   patientSelectState: IPatientState;
+  filters: PatientFilterOptions;
+  showAllPatients: boolean;
+  pageNumber: number;
+  pageSize: number;
 }
 
 interface IGraphqlProps {
@@ -166,7 +172,17 @@ export function filterPatientState(patientSelectState: object): string[] {
 
 export default graphql<any>(careTeamAssignPatientsMutationGraphql as any, {
   name: 'careTeamAssignPatients',
-  options: {
-    refetchQueries: ['getPatientPanel'],
-  },
+  options: (props: IProps) => ({
+    refetchQueries: [
+      {
+        query: getPatientPanelQuery as any,
+        variables: {
+          pageNumber: props.pageNumber,
+          pageSize: props.pageSize,
+          filters: props.filters,
+          showAllPatients: props.showAllPatients,
+        },
+      },
+    ],
+  }),
 })(PatientAssignModal) as React.ComponentClass<IProps>;

@@ -4,7 +4,7 @@ import DeleteModal from '../../../shared/library/delete-modal/delete-modal';
 import { DeleteGoalModal } from '../delete-goal';
 
 describe('Delete Goal Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientGoalTitle = 'Defeat the Night King';
   const patientGoalId = 'jonSnow';
 
@@ -15,6 +15,7 @@ describe('Delete Goal Modal', () => {
       patientGoalTitle={patientGoalTitle}
       deletePatientGoal={placeholderFn}
       patientGoalId={patientGoalId}
+      refetchCarePlan={placeholderFn}
     />,
   );
 

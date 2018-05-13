@@ -11,6 +11,7 @@ describe('Patient Map Component', () => {
   const taskId = 'sansaStark';
   const glassBreakId = 'lady';
   const history = { push: jest.fn() } as any;
+  const refetch = jest.fn();
 
   const wrapper = shallow(
     <PatientMap
@@ -19,6 +20,7 @@ describe('Patient Map Component', () => {
       routeBase={routeBase}
       taskId=""
       glassBreakId={glassBreakId}
+      refetch={refetch}
     />,
   );
 
@@ -43,6 +45,7 @@ describe('Patient Map Component', () => {
         routeBase={routeBase}
         taskId={taskId}
         glassBreakId={glassBreakId}
+        refetch={refetch}
       />,
     );
 

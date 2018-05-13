@@ -7,10 +7,12 @@ import { TaskDelete } from '../task-delete';
 describe('Task Delete Component', () => {
   const placeholderFn = () => true as any;
   const taskId = 'eevee';
+  const patientId = 'ash';
 
   const wrapper = shallow(
     <TaskDelete
       taskId={taskId}
+      patientId={patientId}
       cancelDelete={placeholderFn}
       deleteTask={placeholderFn}
       redirectToMap={placeholderFn}

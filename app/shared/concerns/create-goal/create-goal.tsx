@@ -18,9 +18,13 @@ import * as styles from './css/create-goal.css';
 import DefineGoal from './define-goal';
 import SuggestedTasks from './suggested-tasks';
 
+interface IProps {
+  refetchCarePlan: () => Promise<any>;
+  patientId: string;
+}
+
 interface IStateProps {
   visible: boolean;
-  patientId: string;
   patientConcernId: string;
   goalSuggestionTemplateIds: string[];
 }
@@ -38,7 +42,7 @@ interface IGraphqlProps {
   error: ApolloError | null | undefined;
 }
 
-type allProps = IStateProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 interface IState {
   title: string;
@@ -87,7 +91,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
 
   onSubmit = async (custom: boolean) => {
     const { title, loading, rejectedTaskTemplateIds, goalSuggestionTemplateId } = this.state;
-    const { patientId, patientConcernId, createPatientGoal } = this.props;
+    const { patientId, patientConcernId, createPatientGoal, refetchCarePlan } = this.props;
 
     if (!loading) {
       try {
@@ -123,6 +127,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
             });
           }
         }
+        await refetchCarePlan();
         this.onClose();
       } catch (err) {
         this.setState({ error: err.message });
@@ -258,9 +263,6 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
 
 const mapStateToProps = (state: IAppState): IStateProps => {
   const visible = state.popup.name === 'CREATE_PATIENT_GOAL';
-  const patientId = visible
-    ? (state.popup.options as ICreatePatientGoalPopupOptions).patientId
-    : '';
   const patientConcernId = visible
     ? (state.popup.options as ICreatePatientGoalPopupOptions).patientConcernId
     : '';
@@ -270,7 +272,6 @@ const mapStateToProps = (state: IAppState): IStateProps => {
 
   return {
     visible,
-    patientId,
     patientConcernId,
     goalSuggestionTemplateIds,
   };
@@ -287,9 +288,6 @@ export default compose(
   ),
   graphql(patientGoalCreateMutationGraphql as any, {
     name: 'createPatientGoal',
-    options: {
-      refetchQueries: ['getPatientCarePlan'],
-    },
   }),
   graphql(goalSuggestionTemplatesQuery as any, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
@@ -299,4 +297,4 @@ export default compose(
       goalSuggestionTemplates: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-)(CreateGoalModal) as React.ComponentClass<{}>;
+)(CreateGoalModal) as React.ComponentClass<IProps>;

@@ -5,10 +5,15 @@ import ConcernSearch, { IProps } from '../concern-search';
 import { CreateConcernModal } from '../create-concern';
 
 describe('Create Concern Modal Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'willByers';
   const wrapper = shallow(
-    <CreateConcernModal visible={false} closePopup={placeholderFn} patientId={patientId} />,
+    <CreateConcernModal
+      visible={false}
+      closePopup={placeholderFn}
+      patientId={patientId}
+      refetchCarePlan={placeholderFn}
+    />,
   );
 
   it('renders a modal', () => {

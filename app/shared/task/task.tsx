@@ -4,6 +4,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
+import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
@@ -108,6 +109,7 @@ export class Task extends React.Component<allProps, IState> {
       <div className={classNames(styles.container, styles.center)}>
         <TaskDelete
           taskId={taskId}
+          patientId={task.patientId}
           cancelDelete={this.cancelDelete}
           redirectToMap={this.redirectToMap}
         />
@@ -205,7 +207,7 @@ export default compose(
   graphql(eventNotificationsForTaskDismissMutation as any, {
     name: 'dismissTaskNotifications',
     options: {
-      refetchQueries: ['getTaskIdsWithNotifications'],
+      refetchQueries: [{ query: taskIdsWithNotificationsQuery as any }],
     },
   }),
 )(Task) as React.ComponentClass<IProps>;

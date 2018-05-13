@@ -291,6 +291,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
       pageNumber,
       error,
       featureFlags,
+      showAllPatients,
     } = this.props;
     const {
       isPanelOpen,
@@ -342,6 +343,10 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
           isVisible={isPopupVisible}
           closePopup={this.handleModalClose}
           patientSelectState={patientSelectState}
+          showAllPatients={showAllPatients}
+          filters={filters}
+          pageNumber={pageNumber}
+          pageSize={pageSize}
         />
       </div>
     );

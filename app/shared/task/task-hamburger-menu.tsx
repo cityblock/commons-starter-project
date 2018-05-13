@@ -8,12 +8,11 @@ interface IProps {
   patientId: string;
   visible: boolean;
   onCopy: () => any;
-  onClickAddAttachment: () => any;
   onClickDelete: () => any;
 }
 
 export const TaskHamburgerMenu: React.StatelessComponent<IProps> = props => {
-  const { visible, onClickAddAttachment, onClickDelete, taskId, patientId, onCopy } = props;
+  const { visible, onClickDelete, taskId, patientId, onCopy } = props;
 
   const menuStyles = classNames(styles.hamburgerMenu, {
     [styles.visible]: visible,
@@ -29,10 +28,6 @@ export const TaskHamburgerMenu: React.StatelessComponent<IProps> = props => {
           <div className={styles.menuLabel}>Share task URL</div>
         </div>
       </CopyToClipboard>
-      <div className={styles.menuRow} onClick={onClickAddAttachment}>
-        <div className={styles.paperclipIcon} />
-        <div className={styles.menuLabel}>Add attachment</div>
-      </div>
       <div className={styles.menuRow} onClick={onClickDelete}>
         <div className={styles.trashIcon} />
         <div className={styles.menuLabel}>Delete task</div>

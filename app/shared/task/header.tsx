@@ -70,7 +70,6 @@ export class TaskHeader extends React.Component<IProps, IState> {
             taskId={taskId}
             patientId={patientId}
             visible={hamburgerMenuVisible}
-            onClickAddAttachment={() => false}
             onClickDelete={this.onClickDelete}
             onCopy={this.onCopyShareLink}
           />

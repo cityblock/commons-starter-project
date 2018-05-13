@@ -72,6 +72,7 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
 export default graphql(careTeamQuery as any, {
   options: (props: IProps) => ({
     variables: { patientId: props.patientId },
+    fetchPolicy: 'cache-and-network',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

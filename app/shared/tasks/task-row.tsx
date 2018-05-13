@@ -1,7 +1,8 @@
 import * as classNames from 'classnames';
+import { format } from 'date-fns';
 import { get } from 'lodash';
 import * as React from 'react';
-import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Gender, ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
@@ -96,9 +97,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     </FormattedRelative>
   ) : null;
   const formattedDueAt = task.dueAt ? (
-    <FormattedDate value={task.dueAt} year="numeric" month="short" day="numeric">
-      {(date: string) => <span className={dueDateStyles}>{date}</span>}
-    </FormattedDate>
+    <span className={dueDateStyles}>{format(task.dueAt, 'MMM D, YYYY')}</span>
   ) : (
     <FormattedMessage id="task.noDueDate">
       {(message: string) => <span className={styles.dateValue}>{message}</span>}

@@ -29,7 +29,7 @@ describe('Printable MAP Concern Component', () => {
   });
 
   it('renders text with assignee and due date of task', () => {
-    const expected = `${copy.assignedTo} first last    ${copy.due} Thu, Sep 7, 2017`;
+    const expected = `${copy.assignedTo} first last    ${copy.due} Tue, May 16, 2017`;
     expect(
       wrapper
         .find(Text)

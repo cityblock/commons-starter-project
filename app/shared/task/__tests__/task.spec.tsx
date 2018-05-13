@@ -58,7 +58,7 @@ describe('Task Component', () => {
 
     expect(progress.length).toBe(1);
     expect(progress.props().taskId).toBe(taskId);
-    expect(progress.props().dueAt).toBe('2017-09-07T13:45:14.532Z');
+    expect(progress.props().dueAt).toBe('2017-05-16');
     expect(progress.props().completedAt).toBeFalsy();
   });
 

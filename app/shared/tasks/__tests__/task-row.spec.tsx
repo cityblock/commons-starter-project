@@ -92,6 +92,8 @@ describe('Task Row Component', () => {
 
     expect(wrapper.find('.inactive').length).toBe(1);
     expect(wrapper.find('.selected').length).toBe(0);
+    expect(wrapper.find('.dateValue').length).toBe(1);
+    expect(wrapper.find('.dateValue').text()).toBe('May 16, 2017');
   });
 
   it('applies selected styles if task row selected', () => {

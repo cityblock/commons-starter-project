@@ -2,7 +2,7 @@
 
 exports[`task row renders task row 1`] = `
 <a
-  className="container selected highPriority compressed"
+  className="container selected highPriority compressed notificationBadge"
   href="/foo/bar/task-id?"
   onClick={[Function]}
 >
@@ -56,9 +56,9 @@ exports[`task row renders task row 1`] = `
         :
       </span>
       <span
-        className="dateValue"
+        className="dateValue highlightRed"
       >
-        Sep 7, 2017
+        May 16, 2017
       </span>
     </div>
   </div>
@@ -67,7 +67,7 @@ exports[`task row renders task row 1`] = `
 
 exports[`task row renders task row with multiple followers 1`] = `
 <a
-  className="container selected highPriority compressed"
+  className="container selected highPriority compressed notificationBadge"
   href="/foo/bar/task-id?"
   onClick={[Function]}
 >
@@ -127,9 +127,9 @@ exports[`task row renders task row with multiple followers 1`] = `
         :
       </span>
       <span
-        className="dateValue"
+        className="dateValue highlightRed"
       >
-        Sep 7, 2017
+        May 16, 2017
       </span>
     </div>
   </div>

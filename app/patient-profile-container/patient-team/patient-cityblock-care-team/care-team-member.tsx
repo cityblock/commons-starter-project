@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as careTeamMakeTeamLeadMutationGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
+import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
 import {
   careTeamMakeTeamLeadMutation,
   careTeamMakeTeamLeadMutationVariables,
@@ -130,7 +131,14 @@ export class CareTeamMember extends React.Component<allProps, IState> {
 
 export default graphql<any>(careTeamMakeTeamLeadMutationGraphql as any, {
   name: 'careTeamMakeTeamLead',
-  options: {
-    refetchQueries: ['getPatientCareTeam'],
-  },
+  options: (props: IProps) => ({
+    refetchQueries: [
+      {
+        query: patientCareTeamQuery as any,
+        variables: {
+          patientId: props.patientId,
+        },
+      },
+    ],
+  }),
 })(CareTeamMember) as React.ComponentClass<IProps>;

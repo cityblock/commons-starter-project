@@ -41,21 +41,28 @@ export class PatientPhoto extends React.Component<allProps, IState> {
     this.state = { error: null, imgUrl: null };
   }
 
-  async componentDidMount(): Promise<void> {
-    const { getSignedPhotoUrl, patientId, hasUploadedPhoto } = this.props;
+  async componentWillReceiveProps(newProps: IProps): Promise<void> {
+    const isNewPatientId = newProps.patientId && newProps.patientId !== this.props.patientId;
 
-    if (hasUploadedPhoto) {
+    if (newProps.hasUploadedPhoto && (isNewPatientId || !this.state.imgUrl)) {
       try {
-        const signedUrlData = await getSignedPhotoUrl({
-          variables: { patientId, action: 'read' as PatientSignedUrlAction },
-        });
-        const imgUrl = signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl;
-
-        this.setState({ imgUrl });
+        await this.refetchSignedPhotoUrl(newProps.patientId);
       } catch (err) {
         this.setState({ error: err.message });
       }
     }
+  }
+
+  async refetchSignedPhotoUrl(patientId: string) {
+    const { getSignedPhotoUrl } = this.props;
+
+    this.setState({ imgUrl: null });
+    const signedUrlData = await getSignedPhotoUrl({
+      variables: { patientId, action: 'read' as PatientSignedUrlAction },
+    });
+    const imgUrl = signedUrlData.data.patientPhotoSignedUrlCreate.signedUrl;
+
+    this.setState({ imgUrl });
   }
 
   render(): JSX.Element | null {

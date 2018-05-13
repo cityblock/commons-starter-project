@@ -3,6 +3,7 @@
   bottom: 0;
   right: 0;
   z-index: 10;
+  pointer-events: none;
 }
 
 .topBar {
@@ -15,6 +16,7 @@
   cursor: pointer;
   max-width: 62px;
   margin-left: auto;
+  pointer-events: all;
 }
 
 .text {
@@ -35,4 +37,5 @@
   overflow: auto;
   max-height: calc(100vh - 117px);
   box-shadow: var(--login-drop-shadow);
+  pointer-events: all;
 }

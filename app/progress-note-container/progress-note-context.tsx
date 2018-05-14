@@ -17,7 +17,6 @@ import {
 import FormLabel from '../shared/library/form-label/form-label';
 import Icon from '../shared/library/icon/icon';
 import Select from '../shared/library/select/select';
-import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
   getQuestionAnswerHash,
@@ -27,6 +26,7 @@ import {
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
+import ProgressNoteTextArea from './progress-note-textarea';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 import ProgressNoteWorryScore from './progress-note-worry-score';
 
@@ -71,7 +71,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     super(props);
     const defaultDate = getCurrentTime();
     const { progressNote } = props;
-    this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS);
+    this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS, {
+      leading: true,
+      trailing: true,
+    });
+
     this.state = {
       loading: false,
       error: null,
@@ -318,10 +322,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
             />
             {linkTo360}
           </div>
-          <Textarea
+          <ProgressNoteTextArea
             disabled={disabled}
             value={progressNoteMemberConcern || ''}
             onChange={this.onProgressNoteMemberConcernChange}
+            forceSave={this.deferredSaveProgressNote}
           />
         </div>
         <div className={styles.summaryContainer}>
@@ -329,10 +334,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
             <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
             {linkToActivity}
           </div>
-          <Textarea
+          <ProgressNoteTextArea
             disabled={disabled}
             value={progressNoteSummary || ''}
             onChange={this.onProgressNoteSummaryChange}
+            forceSave={this.deferredSaveProgressNote}
           />
         </div>
         <div className={styles.summaryContainer}>

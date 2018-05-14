@@ -254,7 +254,8 @@ export default class ComputedPatientStatus extends BaseModel {
     let currentStatus = 'attributed';
     const isAssigned = computedStatus.hasOutreachSpecialist || computedStatus.hasChp;
     const isInOutreach = isAssigned && computedStatus.hasProgressNote;
-    const isConsented = isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;
+    const isConsented =
+      isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;
     const isEnrolled = isConsented && computedStatus.hasPcp;
 
     if (isEnrolled) {

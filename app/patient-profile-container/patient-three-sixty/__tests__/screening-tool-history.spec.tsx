@@ -30,7 +30,9 @@ describe('Patient 360 Screening Tool History Component', () => {
 
   it('renders link to screening tool page', () => {
     expect(wrapper.find(Link).length).toBe(1);
-    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/tools/${submission.screeningTool.id}/submission/${submission.id}`);
+    expect(wrapper.find(Link).props().to).toBe(
+      `${routeBase}/tools/${submission.screeningTool.id}/submission/${submission.id}`,
+    );
     expect(wrapper.find(Link).props().className).toBe('link');
   });
 

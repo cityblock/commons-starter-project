@@ -5,17 +5,13 @@ exports[`renders timeline 1`] = `
   className="progressNotesContainer"
 >
   <div
-    className="progressNotes"
+    className="empty"
   >
-    <div
-      className="empty"
-    >
-      <EmptyPlaceholder
-        detailMessageId="progressNote.emptyDetail"
-        headerMessageId="progressNote.emptyHeader"
-        icon="eventNote"
-      />
-    </div>
+    <EmptyPlaceholder
+      detailMessageId="progressNote.emptyDetail"
+      headerMessageId="progressNote.emptyHeader"
+      icon="eventNote"
+    />
   </div>
 </div>
 `;

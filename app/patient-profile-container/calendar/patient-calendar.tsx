@@ -135,7 +135,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     ) : null;
 
     return (
-      <div className={styles.container}>
+      <React.Fragment>
         <div className={styles.navBar}>
           {calendarButton}
           <Button
@@ -166,7 +166,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
           onRequestRefresh={this.handleRefreshRefetchAndClose}
           refreshType={refreshType}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

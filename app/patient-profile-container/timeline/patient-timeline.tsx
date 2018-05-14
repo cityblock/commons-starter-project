@@ -111,11 +111,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   render() {
-    return (
-      <div className={styles.progressNotesContainer}>
-        <div className={styles.progressNotes}>{this.renderPatientEncounters()}</div>
-      </div>
-    );
+    return <div className={styles.progressNotesContainer}>{this.renderPatientEncounters()}</div>;
   }
 }
 

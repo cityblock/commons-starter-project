@@ -1,14 +1,7 @@
 .progressNotesContainer {
   background-color: var(--gray-background-color);
   padding: 0 var(--medium-gutter);
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-.progressNotes {
-  height: calc(100vh - 160px);
+  flex: 1;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }

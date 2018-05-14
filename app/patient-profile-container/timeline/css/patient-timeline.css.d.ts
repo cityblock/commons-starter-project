@@ -1,5 +1,4 @@
 export const progressNotesContainer: string;
-export const progressNotes: string;
 export const empty: string;
 export const loading: string;
 export const error: string;

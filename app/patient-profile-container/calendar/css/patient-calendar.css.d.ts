@@ -1,4 +1,3 @@
-export const container: string;
 export const body: string;
 export const eventContainer: string;
 export const datetime: string;

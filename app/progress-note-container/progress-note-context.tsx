@@ -227,16 +227,14 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteWorryScore,
     } = this.state;
 
-    if (progressNoteTemplateId) {
-      this.props.onChange({
-        progressNoteTemplateId,
-        startedAt: progressNoteTime,
-        location: progressNoteLocation,
-        summary: progressNoteSummary,
-        memberConcern: progressNoteMemberConcern,
-        worryScore: progressNoteWorryScore,
-      });
-    }
+    this.props.onChange({
+      progressNoteTemplateId,
+      startedAt: progressNoteTime,
+      location: progressNoteLocation,
+      summary: progressNoteSummary,
+      memberConcern: progressNoteMemberConcern,
+      worryScore: progressNoteWorryScore,
+    });
   };
 
   render() {

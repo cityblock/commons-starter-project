@@ -61,7 +61,7 @@ export default class ProgressNote extends BaseModel {
       id: { type: 'string' },
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       userId: { type: 'string', minLength: 1 }, // cannot be blank
-      progressNoteTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
+      progressNoteTemplateId: { type: 'string' },
       startedAt: { type: 'string' },
       location: { type: 'string' },
       completedAt: { type: 'string' },

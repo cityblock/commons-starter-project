@@ -7,20 +7,23 @@ import { transaction, Model, Transaction } from 'objection';
 import config from '../config';
 import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
 import {
+  addUserToGoogleCalendar,
   createGoogleCalendarAuth,
   createGoogleCalendarEvent,
   deleteGoogleCalendarEvent,
   getGoogleCalendarFieldsFromSIU,
   updateGoogleCalendarEvent,
 } from '../helpers/google-calendar-helpers';
-import {
-  addCareTeamToPatientCalendar,
-  createCalendarForPatient,
-} from '../helpers/patient-calendar-helpers';
+import { createCalendarForPatient } from '../helpers/patient-calendar-helpers';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import { createRedisClient } from '../lib/redis';
+import CareTeam from '../models/care-team';
 import Patient from '../models/patient';
 import PatientSiuEvent from '../models/patient-siu-event';
 import User from '../models/user';
+
+const CALENDAR_PERMISSION_TOPIC = 'calendarPermission';
+const CALENDAR_EVENT_TOPIC = 'calendarEvent';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
@@ -34,6 +37,24 @@ Model.knex(knex);
 queue.process('scheduling', async (job, done) => {
   try {
     await processNewSchedulingMessage(job.data);
+    return done();
+  } catch (err) {
+    return done(err);
+  }
+});
+
+queue.process(CALENDAR_PERMISSION_TOPIC, 1, async (job, done) => {
+  try {
+    await processNewCalendarPermissionMessage(job.data);
+    return done();
+  } catch (err) {
+    return done(err);
+  }
+});
+
+queue.process(CALENDAR_EVENT_TOPIC, async (job, done) => {
+  try {
+    await processNewCalendarEventMessage(job.data);
     return done();
   } catch (err) {
     return done(err);
@@ -61,15 +82,16 @@ export async function processNewSchedulingMessage(
     );
   }
 
-  await transaction(existingTxn || PatientSiuEvent.knex(), async txn => {
-    const siuEvent = await PatientSiuEvent.getByVisitId(visitId, txn);
+  await transaction(existingTxn || CareTeam.knex(), async txn => {
     const patient = await Patient.get(patientId, txn);
 
     const jwtClient = createGoogleCalendarAuth(testConfig) as any;
     let { googleCalendarId } = patient.patientInfo;
+
     if (!googleCalendarId) {
       try {
         const attributionUser = await User.findOrCreateAttributionUser(txn);
+        const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
 
         googleCalendarId = await createCalendarForPatient(
           patient.id,
@@ -78,19 +100,82 @@ export async function processNewSchedulingMessage(
           txn,
           testConfig,
         );
-        await addCareTeamToPatientCalendar(
-          patient.id,
-          googleCalendarId,
-          jwtClient,
-          txn,
-          testConfig,
-        );
+
+        careTeamRecords.map(record => {
+          return addJobToQueue(CALENDAR_PERMISSION_TOPIC, {
+            userId: record.userId,
+            userEmail: record.user.email,
+            patientId,
+            googleCalendarId,
+            transmissionId: data.transmissionId,
+          });
+        });
       } catch (err) {
         return Promise.reject(
           `There was an error creating a calendar for patient: ${patientId}. ${err}`,
         );
       }
     }
+
+    try {
+      addJobToQueue(CALENDAR_EVENT_TOPIC, {
+        ...data,
+        googleCalendarId,
+      });
+    } catch (err) {
+      return Promise.reject(
+        `There was an error creating a calendar event for patient: ${patientId}. ${err}`,
+      );
+    }
+  });
+}
+
+interface ICalendarPermissionMessageData {
+  patientId: string;
+  userId: string;
+  googleCalendarId: string;
+  userEmail: string;
+  transmissionId: number;
+}
+
+export async function processNewCalendarPermissionMessage(
+  data: ICalendarPermissionMessageData,
+  existingTxn?: Transaction,
+  testConfig?: any,
+) {
+  // Note: existingTxn is only for use in tests
+  const { patientId, userId, googleCalendarId, userEmail } = data;
+
+  await transaction(existingTxn || CareTeam.knex(), async txn => {
+    const jwtClient = createGoogleCalendarAuth(testConfig) as any;
+
+    try {
+      const aclRuleId = await addUserToGoogleCalendar(jwtClient, googleCalendarId, userEmail);
+      return CareTeam.editGoogleCalendarAclRuleId(aclRuleId, userId, patientId, txn);
+    } catch (err) {
+      return Promise.reject(
+        `There was an error adding a calendar permission for patient: ${patientId}. ${err}`,
+      );
+    }
+  });
+}
+
+interface ICalendarEventMessageData extends ISchedulingMessageData {
+  googleCalendarId: string;
+}
+
+export async function processNewCalendarEventMessage(
+  data: ICalendarEventMessageData,
+  existingTxn?: Transaction,
+  testConfig?: any,
+) {
+  // Note: existingTxn is only for use in tests
+  const { patientId, eventType, transmissionId, visitId, googleCalendarId } = data;
+
+  await transaction(existingTxn || PatientSiuEvent.knex(), async txn => {
+    const siuEvent = await PatientSiuEvent.getByVisitId(visitId, txn);
+
+    const jwtClient = createGoogleCalendarAuth(testConfig) as any;
 
     if (siuEvent) {
       // If a event exists and the siu update is a later transmission than the last, update it

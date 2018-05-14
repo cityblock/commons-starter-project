@@ -44,6 +44,7 @@ interface IProps {
 
 interface IGraphqlProps {
   healthcareProxies?: getPatientContactHealthcareProxiesQuery['patientContactHealthcareProxies'];
+  refetchHealthcareProxies?: ((variables: { patientId: string }) => void) | null;
   patientContactDelete: (
     options: { variables: patientContactDeleteMutationVariables },
   ) => { data: patientContactDeleteMutation };
@@ -55,7 +56,6 @@ interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   currentProxy: FullPatientContactFragment | null;
-  updatedHealthcareProxies: FullPatientContactFragment[] | null;
 }
 
 export class AdvancedDirectives extends React.Component<allProps, IState> {
@@ -66,7 +66,6 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
       isEditModalVisible: false,
       isCreateModalVisible: false,
       currentProxy: null,
-      updatedHealthcareProxies: null,
     };
   }
 
@@ -107,27 +106,17 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   };
 
   handleCreateSuccess = (savedProxy: FullPatientContactFragment) => {
-    const { healthcareProxies, onChange } = this.props;
-    const { updatedHealthcareProxies } = this.state;
-
-    const currentProxies = updatedHealthcareProxies || healthcareProxies || [];
-    const updatedProxies = [...currentProxies, savedProxy];
-    this.setState({ updatedHealthcareProxies: updatedProxies });
-
+    const { onChange, patientId, refetchHealthcareProxies } = this.props;
+    if (refetchHealthcareProxies) {
+      refetchHealthcareProxies({ patientId });
+    }
     onChange({ hasHealthcareProxy: true });
   };
 
   handleEditSuccess = (savedProxy: FullPatientContactFragment) => {
-    const { healthcareProxies } = this.props;
-    const { updatedHealthcareProxies } = this.state;
-
-    const currentProxies = updatedHealthcareProxies || healthcareProxies || [];
-    const index = currentProxies.findIndex(proxy => proxy.id === savedProxy.id);
-
-    if (index > -1) {
-      const updatedProxies = [...currentProxies];
-      updatedProxies[index] = savedProxy;
-      this.setState({ updatedHealthcareProxies: updatedProxies });
+    const { patientId, refetchHealthcareProxies } = this.props;
+    if (refetchHealthcareProxies) {
+      refetchHealthcareProxies({ patientId });
     }
   };
 
@@ -213,11 +202,10 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   render() {
     const { patientId, patientInfoId, healthcareProxies, advancedDirectives } = this.props;
     const { hasHealthcareProxy, hasMolst } = advancedDirectives;
-    const { isCreateModalVisible, updatedHealthcareProxies } = this.state;
+    const { isCreateModalVisible } = this.state;
 
-    const currentProxies = updatedHealthcareProxies || healthcareProxies;
-    const hasProxiesSaved = !!(currentProxies && currentProxies.length);
-    const canAddProxies = hasProxiesSaved && currentProxies!.length === 1;
+    const hasProxiesSaved = !!(healthcareProxies && healthcareProxies.length);
+    const canAddProxies = hasProxiesSaved && healthcareProxies!.length === 1;
 
     const addProxyButton = canAddProxies ? (
       <Button
@@ -228,7 +216,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
       />
     ) : null;
 
-    const proxyCards = currentProxies ? currentProxies.map(this.renderHealthcareProxyCard) : null;
+    const proxyCards = healthcareProxies ? healthcareProxies.map(this.renderHealthcareProxyCard) : null;
     const proxyFormsLink = hasProxiesSaved
       ? this.renderDocumentsLink('advancedDirectives.proxyForms')
       : null;
@@ -323,6 +311,7 @@ export default compose(
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
+      refetchHealthcareProxies: data ? data.refetch : null,
       healthcareProxies: data ? (data as any).patientContactHealthcareProxies : null,
     }),
   }),

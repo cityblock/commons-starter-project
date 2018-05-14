@@ -58,7 +58,6 @@ export default graphql(patientScreeningToolSubmissionsFor360Query as any, {
     const { patientId, glassBreakId } = props;
     return {
       variables: { patientId, glassBreakId },
-      fetchPolicy: 'cache-and-network', // Always get the latest submissions
     };
   },
   props: ({ data }): IGraphqlProps => ({

@@ -91,7 +91,6 @@ export default compose(
         patientId: props.patientId,
         glassBreakId: props.glassBreakId,
       },
-      fetchPolicy: 'cache-and-network', // Always get the latest care plan
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

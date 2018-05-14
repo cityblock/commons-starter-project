@@ -220,7 +220,6 @@ export default graphql(patientCarePlanSuggestionsQuery as any, {
       patientId: props.patientId,
       glassBreakId: props.glassBreakId,
     },
-    fetchPolicy: 'cache-and-network', // Always get the latest suggestions, but return cache first
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

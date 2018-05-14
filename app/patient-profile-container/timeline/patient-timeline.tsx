@@ -125,7 +125,6 @@ export default graphql(patientEncountersQuery as any, {
       patientId: props.match.params.patientId,
       glassBreakId: props.glassBreakId,
     },
-    fetchPolicy: 'cache-and-network',
   }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

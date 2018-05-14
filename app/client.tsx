@@ -1,5 +1,5 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
+import { ApolloClient, ErrorPolicy, FetchPolicy } from 'apollo-client';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -8,9 +8,24 @@ import App from './app';
 import { getMiddlewareLink } from './middleware-link';
 import createStore from './store';
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'cache-and-network' as FetchPolicy,
+    errorPolicy: 'all' as ErrorPolicy,
+  },
+  query: {
+    fetchPolicy: 'cache-and-network' as FetchPolicy,
+    errorPolicy: 'all' as ErrorPolicy,
+  },
+  mutate: {
+    errorPolicy: 'all' as ErrorPolicy,
+  },
+};
+
 const client = new ApolloClient({
   link: getMiddlewareLink(),
   cache: new InMemoryCache().restore({}),
+  defaultOptions,
 });
 
 const history = createHistory();

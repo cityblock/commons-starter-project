@@ -216,7 +216,9 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
       />
     ) : null;
 
-    const proxyCards = healthcareProxies ? healthcareProxies.map(this.renderHealthcareProxyCard) : null;
+    const proxyCards = healthcareProxies
+      ? healthcareProxies.map(this.renderHealthcareProxyCard)
+      : null;
     const proxyFormsLink = hasProxiesSaved
       ? this.renderDocumentsLink('advancedDirectives.proxyForms')
       : null;

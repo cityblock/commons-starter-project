@@ -24,7 +24,9 @@ class SmsMessages extends React.Component<IProps> {
     // if messages came in or a new message added, scroll to bottom
     if (
       (!prevProps.smsMessages && this.props.smsMessages) ||
-      this.props.smsMessages.totalCount > prevProps.smsMessages.totalCount
+      (this.props.smsMessages &&
+        prevProps.smsMessages &&
+        this.props.smsMessages.totalCount > prevProps.smsMessages.totalCount)
     ) {
       this.scrollToBottom();
     }

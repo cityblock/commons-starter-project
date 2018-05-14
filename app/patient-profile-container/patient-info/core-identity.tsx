@@ -141,8 +141,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
     } else if (coreIdentityVerifiedAt) {
       footerState = 'verified';
     }
-
-    const birthday = dateOfBirth ? format(new Date(dateOfBirth), 'MM/DD/YYYY') : '';
+    const birthday = dateOfBirth ? format(dateOfBirth, 'MM/DD/YYYY') : '';
 
     return (
       <div className={styles.section}>

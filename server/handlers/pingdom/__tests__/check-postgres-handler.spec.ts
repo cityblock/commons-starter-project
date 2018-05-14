@@ -8,7 +8,7 @@ import { createMockClinic } from '../../../spec-helpers';
 import { checkPostgresHandler } from '../check-postgres-handler';
 
 describe('postgres pingdom test', () => {
-  let error: any;
+  let log: any;
   let txn = null as any;
   const userRole = 'physician' as UserRole;
 
@@ -25,14 +25,14 @@ describe('postgres pingdom test', () => {
   });
 
   beforeEach(async () => {
-    error = console.error;
-    console.error = jest.fn();
+    log = console.log;
+    console.log = jest.fn();
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
-    console.error = error;
+    console.error = log;
   });
 
   it('returns 200 with a patient', async () => {
@@ -53,9 +53,15 @@ describe('postgres pingdom test', () => {
       },
       txn,
     );
-
+    const numberConnections = await User.knex().raw(
+      `select count (*) from pg_stat_activity where datname = ?`,
+      'commons_test',
+      txn,
+    );
     await checkPostgresHandler(request, response);
-
+    expect(console.log).toBeCalledWith(
+      `Number of postgres connections: ${Number(numberConnections.rows[0].count) + 1}`,
+    );
     expect(response.sendStatus).toBeCalledWith(200);
   });
 

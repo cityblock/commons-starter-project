@@ -4,8 +4,6 @@ import * as React from 'react';
 import { CurrentPatientState, Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
-import RadioGroup from '../shared/library/radio-group/radio-group';
-import RadioInput from '../shared/library/radio-input/radio-input';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
@@ -21,18 +19,7 @@ interface IProps extends IInjectedProps {
   isVisible: boolean | null;
 }
 
-interface IState {
-  inNetwork: string;
-}
-
-export class PatientFilterPanel extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      inNetwork: 'false',
-    };
-  }
-
+export class PatientFilterPanel extends React.Component<IProps> {
   handleAgeRangeChange = (options: PatientFilterOptions) => {
     this.props.onChange(options);
   };
@@ -50,17 +37,6 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
     }
 
     this.props.onChange({ [target.name as any]: value });
-  };
-
-  handleNetworkToggleChange = (event: React.MouseEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement;
-    let fieldValue: any = target.value;
-
-    if (this.state.inNetwork === fieldValue) {
-      fieldValue = null;
-    }
-
-    this.setState({ inNetwork: fieldValue });
   };
 
   handleApplyClick = () => {
@@ -82,7 +58,6 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
   render() {
     const { isVisible, filters, onClickCancel } = this.props;
     const { gender, zip, careWorkerId, ageMin, ageMax, patientState } = filters;
-    const { inNetwork } = this.state;
 
     return (
       <div
@@ -171,31 +146,6 @@ export class PatientFilterPanel extends React.Component<IProps, IState> {
               options={values(CurrentPatientState)}
               hasPlaceholder={true}
             />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <FormLabel messageId="patientFilter.insurance" />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <FormLabel messageId="patientFilter.inNetwork" />
-            <RadioGroup>
-              <RadioInput
-                name="inNetwork"
-                value="false"
-                checked={inNetwork === 'false'}
-                label="No"
-                onClick={this.handleNetworkToggleChange}
-                readOnly={true}
-              />
-              <RadioInput
-                name="inNetwork"
-                value="true"
-                checked={inNetwork === 'true'}
-                label="Yes"
-                onClick={this.handleNetworkToggleChange}
-              />
-            </RadioGroup>
           </div>
         </div>
       </div>

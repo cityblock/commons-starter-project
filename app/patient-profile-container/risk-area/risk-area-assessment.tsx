@@ -153,7 +153,11 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   };
 
   onEditableChangeRequest = () => {
-    this.setState({ editPopupVisible: true });
+    const { riskArea } = this.props;
+
+    if (riskArea && riskArea.assessmentType === "manual") {
+      this.setState({ editPopupVisible: true });
+    }
   };
 
   onEditableChangeConfirm = async () => {

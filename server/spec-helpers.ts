@@ -520,6 +520,9 @@ export async function setupPatientsNewToCareTeam(txn: Transaction) {
     txn,
   );
 
+  await CareTeam.delete({ userId: user.id, patientId: patient1.id }, txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+
   await CareTeam.query(txn)
     .where({ userId: user.id, patientId: patient3.id })
     .patch({ createdAt: new Date('2017-01-01').toISOString() });

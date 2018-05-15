@@ -550,7 +550,7 @@ export default class Patient extends Model {
         userId,
       )
       .joinRaw(
-        'INNER JOIN care_team ON care_team."patientId" = patient.id AND care_team."userId" = ?',
+        'INNER JOIN care_team ON care_team."patientId" = patient.id AND care_team."userId" = ? AND care_team."deletedAt" IS NULL',
         userId,
       )
       .orderBy('care_team.createdAt', 'DESC')

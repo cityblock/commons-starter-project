@@ -11,6 +11,7 @@ import {
   riskAreaAssessmentSubmissionCompleteMutationVariables,
   riskAreaAssessmentSubmissionCreateMutation,
   riskAreaAssessmentSubmissionCreateMutationVariables,
+  AssessmentType,
   FullCarePlanSuggestionFragment,
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
@@ -155,7 +156,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   onEditableChangeRequest = () => {
     const { riskArea } = this.props;
 
-    if (riskArea && riskArea.assessmentType === "manual") {
+    if (riskArea && riskArea.assessmentType === AssessmentType.manual) {
       this.setState({ editPopupVisible: true });
     }
   };

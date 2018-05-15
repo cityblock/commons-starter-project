@@ -87,13 +87,11 @@ describe('Render Basic Information Component', () => {
   it('renders patient info text inputs', () => {
     const wrapper2 = shallow(
       <BasicInfo
-        patientInformation={
-          {
-           ...basicInfo,
-           gender: Gender.selfDescribed,
-           genderFreeText: 'other',
-          }
-        }
+        patientInformation={{
+          ...basicInfo,
+          gender: Gender.selfDescribed,
+          genderFreeText: 'other',
+        }}
         patientId={patient.id}
         patientInfoId={patient.patientInfo.id}
         onChange={onChange}
@@ -103,7 +101,17 @@ describe('Render Basic Information Component', () => {
       />,
     );
     expect(wrapper2.find(TextInput)).toHaveLength(2);
-    expect(wrapper2.find(TextInput).at(1).props().name).toBe('genderFreeText');
-    expect(wrapper2.find(TextInput).at(1).props().value).toBe('other');
+    expect(
+      wrapper2
+        .find(TextInput)
+        .at(1)
+        .props().name,
+    ).toBe('genderFreeText');
+    expect(
+      wrapper2
+        .find(TextInput)
+        .at(1)
+        .props().value,
+    ).toBe('other');
   });
 });

@@ -150,11 +150,11 @@ svg.zendeskIcon {
   top: 60px;
   right: 40px;
   width: 175px;
+  z-index: var(--sidebar-z-index);
   background-color: var(--highlight-background-color);
   box-shadow: var(--login-drop-shadow);
   padding: 20px;
   text-align: left;
-  z-index: 3;
 }
 
 .dropdown a {

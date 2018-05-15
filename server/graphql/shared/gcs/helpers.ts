@@ -171,7 +171,9 @@ export const loadPatientMedications = async (patientId: string): Promise<IPatien
   });
 };
 
-export const loadPatientClaimsEncounters = async (patientId: string): Promise<IPatientEncounter[]> => {
+export const loadPatientClaimsEncounters = async (
+  patientId: string,
+): Promise<IPatientEncounter[]> => {
   const rawPatientEncounters = await loadPatientAggregatedDataFile(patientId, 'claims-encounters');
   const patientEncounters = await parsePatientAggregatedDataFile(rawPatientEncounters);
 

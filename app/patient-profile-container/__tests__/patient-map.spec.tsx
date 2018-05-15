@@ -9,6 +9,7 @@ describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/map';
   const taskId = 'sansaStark';
+  const goalId = 'stark';
   const glassBreakId = 'lady';
   const history = { push: jest.fn() } as any;
   const refetch = jest.fn();
@@ -19,6 +20,7 @@ describe('Patient Map Component', () => {
       patientId={patientId}
       routeBase={routeBase}
       taskId=""
+      goalId=""
       glassBreakId={glassBreakId}
       refetch={refetch}
     />,
@@ -44,6 +46,7 @@ describe('Patient Map Component', () => {
         patientId={patientId}
         routeBase={routeBase}
         taskId={taskId}
+        goalId={goalId}
         glassBreakId={glassBreakId}
         refetch={refetch}
       />,

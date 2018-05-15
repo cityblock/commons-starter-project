@@ -11,6 +11,7 @@ interface IProps {
   routeBase: string;
   patientId: string;
   selectedTaskId: string;
+  selectedGoalId: string;
   activeConcerns: FullPatientConcernFragment[];
   inactiveConcerns: FullPatientConcernFragment[];
   taskIdsWithNotifications?: string[];
@@ -53,6 +54,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     const {
       loading,
       selectedTaskId,
+      selectedGoalId,
       activeConcerns,
       inactiveConcerns,
       error,
@@ -74,6 +76,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selectedPatientConcernId={selectedPatientConcernId}
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}
+          selectedGoalId={selectedGoalId}
           taskIdsWithNotifications={taskIdsWithNotifications}
         />
         <TextDivider messageId="patientMap.nextUp" hasPadding={true} />
@@ -83,6 +86,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selectedPatientConcernId={selectedPatientConcernId}
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}
+          selectedGoalId={selectedGoalId}
           taskIdsWithNotifications={taskIdsWithNotifications}
         />
       </div>

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FullTaskEventFragment } from '../../graphql/types';
+import { getMapTaskRoute } from '../../shared/helpers/route-helpers';
 import * as styles from './css/progress-note-activity.css';
 
 interface IProps {
@@ -46,7 +47,10 @@ class ProgressNoteActivityTask extends React.Component<IProps> {
     const { expanded, taskEvents } = this.props;
 
     const priority = taskEvents[0] ? taskEvents[0].task.priority : null;
-    const taskId = taskEvents[0] ? taskEvents[0].task.id : null;
+    const taskId = taskEvents[0] ? taskEvents[0].task.id : '';
+    const patientId = taskEvents[0] ? taskEvents[0].task.patientId : '';
+    const goalId = taskEvents[0] ? taskEvents[0].task.patientGoalId : '';
+    const taskLink = getMapTaskRoute(patientId, taskId, goalId);
     const taskActivityRowStyles = classNames(styles.taskActivityRow, {
       [styles.expanded]: expanded,
       [styles.highPriority]: priority === 'high',
@@ -58,7 +62,7 @@ class ProgressNoteActivityTask extends React.Component<IProps> {
       return <div className={taskActivityRowStyles}>{taskBody}</div>;
     } else {
       return (
-        <Link className={taskActivityRowStyles} to={`/tasks/${taskId}`}>
+        <Link className={taskActivityRowStyles} to={taskLink}>
           {taskBody}
         </Link>
       );

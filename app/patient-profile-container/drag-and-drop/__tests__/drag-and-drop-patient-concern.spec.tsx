@@ -17,6 +17,7 @@ describe('Drag and Drop Patient Concern', () => {
       onClick={placeholderFn}
       inactive={false}
       selectedTaskId=""
+      selectedGoalId=""
       currentUserId={userId}
     />,
   );
@@ -37,6 +38,7 @@ describe('Drag and Drop Patient Concern', () => {
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId="ninetales"
+        selectedGoalId=""
         currentUserId={userId}
       />,
     );
@@ -53,6 +55,7 @@ describe('Drag and Drop Patient Concern', () => {
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId=""
+        selectedGoalId=""
         currentUserId={userId}
       />,
     );

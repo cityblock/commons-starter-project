@@ -16,6 +16,7 @@ describe('Patient Care Plan Component', () => {
         loading={true}
         routeBase={routeBase}
         selectedTaskId=""
+        selectedGoalId=""
         activeConcerns={[]}
         inactiveConcerns={[]}
       />,
@@ -26,6 +27,7 @@ describe('Patient Care Plan Component', () => {
   });
 
   const selectedTaskId = 'growlithe';
+  const selectedGoalId = 'something';
   const activeConcerns = ['activeConcern1', 'activeConcern2'] as any;
   const inactiveConcerns = ['inactiveConcern1', 'inactiveConcern2'] as any;
 
@@ -34,6 +36,7 @@ describe('Patient Care Plan Component', () => {
       patientId={patientId}
       routeBase={routeBase}
       selectedTaskId={selectedTaskId}
+      selectedGoalId={selectedGoalId}
       activeConcerns={activeConcerns}
       inactiveConcerns={inactiveConcerns}
     />,

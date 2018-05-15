@@ -20,6 +20,7 @@ interface IProps {
       patientId: string;
       subTab?: SelectableTabs;
       taskId?: string;
+      goalId?: string;
     };
   };
   glassBreakId: string | null;
@@ -48,6 +49,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/map`;
     const taskId = match.params.taskId;
+    const goalId = match.params.goalId;
     const isSuggestions = subTab === 'suggestions';
 
     const carePlanSuggestions = isSuggestions ? (
@@ -67,6 +69,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
         routeBase={`${routeBase}/active`}
         patientId={patientId}
         taskId={taskId || null}
+        goalId={goalId || null}
         glassBreakId={glassBreakId}
       />
     ) : null;

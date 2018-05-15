@@ -15,6 +15,7 @@ interface IProps {
   onClick: (e?: React.MouseEvent<HTMLDivElement>) => void;
   inactive?: boolean;
   selectedTaskId: string;
+  selectedGoalId: string;
   isDragging?: boolean;
   taskIdsWithNotifications?: string[];
   currentUserId: string;
@@ -25,11 +26,12 @@ export interface IPatientConcernStats {
   taskCount: number;
   lastUpdated: string;
   hasBadge: boolean;
+  isConcernSelected: boolean;
 }
 
 export class PatientConcern extends React.Component<IProps, {}> {
   getStats() {
-    const { patientConcern, taskIdsWithNotifications, currentUserId } = this.props;
+    const { patientConcern, taskIdsWithNotifications, currentUserId, selectedGoalId } = this.props;
     const { patientGoals } = patientConcern;
 
     const stats: IPatientConcernStats = {
@@ -37,6 +39,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
       taskCount: 0,
       lastUpdated: patientConcern.updatedAt,
       hasBadge: false,
+      isConcernSelected: false,
     };
 
     if (patientGoals && patientGoals.length) {
@@ -44,6 +47,10 @@ export class PatientConcern extends React.Component<IProps, {}> {
 
       patientGoals.forEach(patientGoal => {
         const { tasks } = patientGoal;
+
+        if (patientGoal.id === selectedGoalId) {
+          stats.isConcernSelected = true;
+        }
 
         const goalLastUpdated = new Date(patientGoal.updatedAt);
         const goalMoreRecentlyUpdated =
@@ -118,15 +125,16 @@ export class PatientConcern extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { onClick, patientConcern, selected, inactive, selectedTaskId, isDragging } = this.props;
+    const { onClick, patientConcern, inactive, selectedTaskId, isDragging } = this.props;
     if (patientConcern.deletedAt) return null;
 
     const { patientGoals, concern } = patientConcern;
+    const { goalCount, taskCount, lastUpdated, hasBadge, isConcernSelected } = this.getStats();
+    const selected = this.props.selected || isConcernSelected;
 
     const goalsStyles = classNames(styles.goals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
     });
-    const { goalCount, taskCount, lastUpdated, hasBadge } = this.getStats();
 
     const isInactive = inactive || !!selectedTaskId;
     const isSelected = isDragging || (!selectedTaskId && selected);

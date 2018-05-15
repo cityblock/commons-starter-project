@@ -12,6 +12,7 @@ interface IProps {
   inactive?: boolean;
   onClick: (id: string) => void;
   selectedTaskId: string;
+  selectedGoalId: string;
   taskIdsWithNotifications?: string[];
 }
 
@@ -30,6 +31,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
     inactive,
     onClick,
     selectedTaskId,
+    selectedGoalId,
     taskIdsWithNotifications,
     currentUser,
   } = props;
@@ -55,6 +57,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
         onClick={() => onClick(concern.id)}
         inactive={inactive || false}
         selectedTaskId={selectedTaskId}
+        selectedGoalId={selectedGoalId}
         taskIdsWithNotifications={taskIdsWithNotifications}
         currentUserId={currentUser.id}
       />

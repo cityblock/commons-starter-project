@@ -14,6 +14,7 @@ describe('Drag and Drop Patient Concerns Component', () => {
         inactive={true}
         onClick={placeholderFn}
         selectedTaskId=""
+        selectedGoalId=""
       />,
     );
 
@@ -30,6 +31,7 @@ describe('Drag and Drop Patient Concerns Component', () => {
         inactive={false}
         onClick={placeholderFn}
         selectedTaskId=""
+        selectedGoalId=""
       />,
     );
 

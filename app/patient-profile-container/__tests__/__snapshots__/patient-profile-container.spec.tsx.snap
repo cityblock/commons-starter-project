@@ -59,7 +59,7 @@ exports[`patient profile container renders patient profile container 1`] = `
       <Switch>
         <Route
           exact={true}
-          path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
+          path="/patients/:patientId/map/:subTab?(/goals/:goalId)?(/tasks/:taskId)?"
           render={[Function]}
         />
         <Route

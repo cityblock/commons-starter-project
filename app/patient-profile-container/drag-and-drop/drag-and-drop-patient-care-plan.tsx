@@ -24,6 +24,7 @@ interface IProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   taskIdsWithNotifications?: string[];
   selectedTaskId: string;
+  selectedGoalId: string;
 }
 
 interface IGraphqlProps {
@@ -184,7 +185,14 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 
   render(): JSX.Element {
-    const { loading, routeBase, patientId, selectedTaskId, taskIdsWithNotifications } = this.props;
+    const {
+      loading,
+      routeBase,
+      patientId,
+      selectedTaskId,
+      selectedGoalId,
+      taskIdsWithNotifications,
+    } = this.props;
     const { activeConcerns, inactiveConcerns, isDragging, reorderError } = this.state;
 
     return (
@@ -195,6 +203,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
             routeBase={routeBase}
             patientId={patientId}
             selectedTaskId={selectedTaskId}
+            selectedGoalId={selectedGoalId}
             activeConcerns={activeConcerns}
             inactiveConcerns={inactiveConcerns}
             taskIdsWithNotifications={taskIdsWithNotifications}

@@ -16,6 +16,7 @@ export interface IProps {
   patientId: string;
   routeBase: string;
   taskId: string | null;
+  goalId: string | null;
   glassBreakId: string | null;
 }
 
@@ -49,6 +50,7 @@ export class PatientMap extends React.Component<allProps, {}> {
       carePlan,
       taskIdsWithNotifications,
       taskId,
+      goalId,
       refetch,
     } = this.props;
     const mainStyles = classNames(sharedStyles.scroll, {
@@ -74,6 +76,7 @@ export class PatientMap extends React.Component<allProps, {}> {
               routeBase={routeBase}
               patientId={patientId}
               selectedTaskId={taskId || ''}
+              selectedGoalId={goalId || ''}
             />
           </div>
           {sideBarHtml}

@@ -117,7 +117,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
             <Switch>
               <Route
                 exact
-                path="/patients/:patientId/map/:subTab?(/tasks/:taskId)?"
+                path="/patients/:patientId/map/:subTab?(/goals/:goalId)?(/tasks/:taskId)?"
                 render={(props: any) => (
                   <PatientCarePlanView {...props} glassBreakId={glassBreakId} />
                 )}

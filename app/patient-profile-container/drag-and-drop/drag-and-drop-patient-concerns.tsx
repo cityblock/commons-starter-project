@@ -9,6 +9,7 @@ interface IProps {
   inactive: boolean;
   onClick: (id: string) => void;
   selectedTaskId: string;
+  selectedGoalId: string;
   taskIdsWithNotifications?: string[];
 }
 
@@ -19,6 +20,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
     inactive,
     onClick,
     selectedTaskId,
+    selectedGoalId,
     taskIdsWithNotifications,
   } = props;
 
@@ -33,6 +35,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
             selectedPatientConcernId={selectedPatientConcernId}
             onClick={onClick}
             selectedTaskId={selectedTaskId}
+            selectedGoalId={selectedGoalId}
             inactive={inactive}
             taskIdsWithNotifications={taskIdsWithNotifications}
           />

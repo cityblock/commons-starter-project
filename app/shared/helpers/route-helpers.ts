@@ -6,7 +6,10 @@ export const getActiveMapRoute = (patientId: string): string => {
   return `/patients/${patientId}/map/active`;
 };
 
-export const getMapTaskRoute = (patientId: string, taskId: string): string => {
+export const getMapTaskRoute = (patientId: string, taskId: string, goalId?: string): string => {
+  if (goalId) {
+    return `/patients/${patientId}/map/active/goals/${goalId}/tasks/${taskId}`;
+  }
   return `/patients/${patientId}/map/active/tasks/${taskId}`;
 };
 

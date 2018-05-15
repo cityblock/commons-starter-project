@@ -8,6 +8,8 @@ fragment FullTaskEvent on TaskEvent {
     id
     title
     priority
+    patientId
+    patientGoalId
   }
   userId
   user {

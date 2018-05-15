@@ -20,6 +20,7 @@ describe('Patient Concern Component', () => {
       selected={true}
       onClick={onClick}
       selectedTaskId={selectedTaskId}
+      selectedGoalId=""
       isDragging={true}
       currentUserId={userId}
     />,

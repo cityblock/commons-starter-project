@@ -9,6 +9,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   const routeBase = '/charmander';
   const patientId = 'bulbasaur';
   const selectedTaskId = '';
+  const selectedGoalId = '';
   const patientConcernBulkEdit = () => true as any;
 
   const activeConcern1 = {
@@ -54,6 +55,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
       routeBase={routeBase}
       patientId={patientId}
       selectedTaskId={selectedTaskId}
+      selectedGoalId={selectedGoalId}
       carePlan={carePlan}
       patientConcernBulkEdit={patientConcernBulkEdit}
     />,

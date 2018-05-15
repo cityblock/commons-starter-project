@@ -1482,6 +1482,8 @@ export interface eventNotificationDismissMutation {
         id: string,
         title: string,
         priority: Priority | null,
+        patientId: string,
+        patientGoalId: string,
       },
       userId: string,
       user:  {
@@ -1580,6 +1582,8 @@ export interface eventNotificationsForTaskDismissMutation {
         id: string,
         title: string,
         priority: Priority | null,
+        patientId: string,
+        patientGoalId: string,
       },
       userId: string,
       user:  {
@@ -2040,6 +2044,8 @@ export interface getEventNotificationsForCurrentUserQuery {
             id: string,
             title: string,
             priority: Priority | null,
+            patientId: string,
+            patientGoalId: string,
           },
           userId: string,
           user:  {
@@ -4002,6 +4008,8 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         id: string,
         title: string,
         priority: Priority | null,
+        patientId: string,
+        patientGoalId: string,
       },
       userId: string,
       user:  {
@@ -10706,6 +10714,8 @@ export interface FullEventNotificationFragment {
       id: string,
       title: string,
       priority: Priority | null,
+      patientId: string,
+      patientGoalId: string,
     },
     userId: string,
     user:  {
@@ -11681,6 +11691,8 @@ export interface FullProgressNoteActivityFragment {
       id: string,
       title: string,
       priority: Priority | null,
+      patientId: string,
+      patientGoalId: string,
     },
     userId: string,
     user:  {
@@ -12824,6 +12836,8 @@ export interface FullTaskEventFragment {
     id: string,
     title: string,
     priority: Priority | null,
+    patientId: string,
+    patientGoalId: string,
   },
   userId: string,
   user:  {

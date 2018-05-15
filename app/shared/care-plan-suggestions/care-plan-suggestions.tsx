@@ -1,65 +1,107 @@
-import * as classNames from 'classnames';
-import { History } from 'history';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { withRouter } from 'react-router';
+import { compose } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router';
+import { closePopup as closePopupAction } from '../../actions/popup-action';
 import { FullCarePlanSuggestionFragment } from '../../graphql/types';
-import Button from '../library/button/button';
+import { ICarePlanSuggestionsPopupOptions } from '../../reducers/popup-reducer';
+import { IState as IAppState } from '../../store';
+import Modal from '../library/modal/modal';
+import SmallText from '../library/small-text/small-text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
-import * as styles from './care-plan-suggestions.css';
+import * as styles from './css/care-plan-suggestions.css';
 
-interface IProps {
-  patientRoute: string;
+interface IStateProps {
+  isVisible: boolean;
+  patientId: string;
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
-  titleMessageId: string;
-  bodyMessageId: string;
-  history: History;
-  match: any;
-  location: History.LocationState;
 }
 
-type allProps = IProps;
+interface IDispatchProps {
+  closePopup: () => void;
+}
 
-export class CarePlanSuggestions extends React.Component<allProps, {}> {
-  onClick = () => {
-    const { history, patientRoute } = this.props;
-    history.push(`${patientRoute}/map/suggestions`);
+type allProps = IStateProps & IDispatchProps & RouteComponentProps<IStateProps & IDispatchProps>;
+
+export class CarePlanSuggestions extends React.Component<allProps> {
+  handleClick = (): void => {
+    const { history, patientId, closePopup } = this.props;
+    history.push(`/patients/${patientId}/map/suggestions`);
+    closePopup();
   };
 
   render() {
-    const { titleMessageId, bodyMessageId, carePlanSuggestions } = this.props;
+    const { carePlanSuggestions, closePopup, isVisible } = this.props;
+
     return (
-      <div className={styles.content}>
-        <div className={styles.body}>
-          <FormattedMessage id={titleMessageId}>
-            {(message: string) => <div className={styles.title}>{message}</div>}
-          </FormattedMessage>
-          <FormattedMessage id={bodyMessageId}>
-            {(message: string) => (
-              <div className={classNames(styles.subtitle, styles.noMargin)}>{message}</div>
-            )}
-          </FormattedMessage>
-          <div className={styles.results}>
-            <div className={styles.resultRow}>
-              <div className={styles.resultLabel}>New Concerns</div>
-              <div className={styles.resultCount}>{getConcernCount(carePlanSuggestions)}</div>
-            </div>
-            <div className={styles.resultRow}>
-              <div className={styles.resultLabel}>New Goals</div>
-              <div className={styles.resultCount}>{getGoalCount(carePlanSuggestions)}</div>
-            </div>
-            <div className={styles.resultRow}>
-              <div className={styles.resultLabel}>New Tasks</div>
-              <div className={styles.resultCount}>{getTaskCount(carePlanSuggestions)}</div>
-            </div>
+      <Modal
+        isVisible={isVisible}
+        titleMessageId="suggestionsModal.title"
+        subTitleMessageId="suggestionsModal.body"
+        onSubmit={closePopup}
+        onClose={closePopup}
+        onCancel={this.handleClick}
+        submitMessageId="suggestionsModal.done"
+        cancelMessageId="suggestionsModal.seeSuggestions"
+      >
+        <div className={styles.container}>
+          <div className={styles.count}>
+            <SmallText messageId="suggestionsModal.concerns" color="darkGray" size="large" />
+            <SmallText
+              text={`${getConcernCount(carePlanSuggestions)}`}
+              isBold
+              color="black"
+              size="large"
+            />
           </div>
-          <div className={styles.buttons}>
-            <Button messageId="carePlanSuggestions.seeSuggestions" onClick={this.onClick} />
+          <div className={styles.count}>
+            <SmallText messageId="suggestionsModal.goals" color="darkGray" size="large" />
+            <SmallText
+              text={`${getGoalCount(carePlanSuggestions)}`}
+              isBold
+              color="black"
+              size="large"
+            />
+          </div>
+          <div className={styles.count}>
+            <SmallText messageId="suggestionsModal.tasks" color="darkGray" size="large" />
+            <SmallText
+              text={`${getTaskCount(carePlanSuggestions)}`}
+              isBold
+              color="black"
+              size="large"
+            />
           </div>
         </div>
-      </div>
+      </Modal>
     );
   }
 }
 
-export default withRouter<IProps>(CarePlanSuggestions);
+const mapStateToProps = (state: IAppState): IStateProps => {
+  const isVisible = state.popup.name === 'CARE_PLAN_SUGGESTIONS';
+  const patientId = isVisible
+    ? (state.popup.options as ICarePlanSuggestionsPopupOptions).patientId
+    : '';
+  const carePlanSuggestions = isVisible
+    ? (state.popup.options as ICarePlanSuggestionsPopupOptions).carePlanSuggestions
+    : [];
+
+  return {
+    isVisible,
+    patientId,
+    carePlanSuggestions,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => ({
+  closePopup: () => dispatch(closePopupAction()),
+});
+
+export default compose(
+  withRouter,
+  connect<IStateProps, IDispatchProps, {}>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
+)(CarePlanSuggestions);

@@ -4,7 +4,7 @@
   position: relative;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  padding: var(--small-gutter) 0 var(--medium-gutter);
+  padding: var(--small-gutter) var(--extra-small-gutter) var(--medium-gutter);
 }
 
 .navyContainer {

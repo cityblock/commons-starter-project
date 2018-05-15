@@ -524,9 +524,6 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.administer': 'Administer tools',
     'riskAreaAssessment.save': 'Terminado',
     'riskAreaAssessment.start': 'Start assessment',
-    'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
-    'riskAreaAssessment.resultsBody':
-      "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
     'riskAreaAssessment.cancel': 'Cancelar',
     'riskAreaAssessment.editAnswer': 'Modificar respuesta',
     'riskAreaAssessment.editModalTitle': '¿Intentando modificar esta respuesta?',
@@ -983,5 +980,13 @@ export const SPANISH_TRANSLATION = {
     'editableText.clickToEdit': 'Click to edit...',
     'editableText.save': 'Save',
     'editableText.saving': 'Saving',
+    'suggestionsModal.title': 'New MAP Suggestions',
+    'suggestionsModal.body':
+      "Based on the answers submitted, the following suggestions have been recommended to this patient's MAP. Please visit the MAP section in their profile to accept or dismiss these suggestions.",
+    'suggestionsModal.concerns': 'New Concerns',
+    'suggestionsModal.goals': 'New Goals',
+    'suggestionsModal.tasks': 'New Tasks',
+    'suggestionsModal.done': 'Done',
+    'suggestionsModal.seeSuggestions': 'Go to suggestions',
   },
 };

@@ -1,4 +1,5 @@
 import { Action } from '../actions';
+import { FullCarePlanSuggestionFragment } from '../graphql/types';
 
 export interface IProgressNotePopupOptions {
   progressNoteId: string;
@@ -128,6 +129,16 @@ export interface IGlobalErrorPopupOptions {
   message: string;
 }
 
+export interface ICarePlanSuggestionsPopup {
+  name: 'CARE_PLAN_SUGGESTIONS';
+  options: ICarePlanSuggestionsPopupOptions;
+}
+
+export interface ICarePlanSuggestionsPopupOptions {
+  patientId: string;
+  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -148,6 +159,7 @@ export type IState =
   | IScreeningToolPopup
   | IPatientPhotoPopup
   | IGlobalErrorPopup
+  | ICarePlanSuggestionsPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

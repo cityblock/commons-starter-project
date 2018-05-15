@@ -1,12 +1,12 @@
 import { ApolloError } from 'apollo-client';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
+import { openPopup } from '../../actions/popup-action';
 import * as screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
 import { FullCarePlanSuggestionFragment, FullScreeningToolFragment } from '../../graphql/types';
-import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
-import { Popup } from '../../shared/popup/popup';
 import ScreeningToolHistoricalSubmission from './screening-tool-historical-submission';
 import ScreeningToolSubmission from './screening-tool-submission';
 
@@ -26,7 +26,11 @@ interface IGraphqlProps {
   screeningToolError: ApolloError | undefined | null;
 }
 
-type allProps = IGraphqlProps & IProps;
+interface IDispatchProps {
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) => void;
+}
+
+type allProps = IGraphqlProps & IProps & IDispatchProps;
 
 interface IState {
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
@@ -44,13 +48,15 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
   handleSubmissionScored = (suggestions: FullCarePlanSuggestionFragment[]) => {
     this.setState({ carePlanSuggestions: suggestions });
+
+    if (suggestions.length > 0) {
+      this.props.openSuggestionsPopup(suggestions);
+    }
   };
 
   render() {
     const { screeningTool, screeningToolLoading, screeningToolError, match } = this.props;
     const { patientId, submissionId } = match.params;
-    const { carePlanSuggestions } = this.state;
-    const patientRoute = `/patients/${patientId}`;
 
     if (screeningToolLoading !== false) {
       return <Spinner />;
@@ -73,34 +79,40 @@ export class ScreeningTool extends React.Component<allProps, IState> {
         screeningTool={screeningTool}
       />
     ) : (
-      <React.Fragment>
-        <ScreeningToolSubmission
-          patientId={patientId}
-          screeningTool={screeningTool}
-          onSubmissionScored={this.handleSubmissionScored}
-        />
-        <Popup visible={!!carePlanSuggestions.length} style={'small-padding'}>
-          <CarePlanSuggestions
-            carePlanSuggestions={carePlanSuggestions || []}
-            patientRoute={patientRoute}
-            titleMessageId="screeningTool.resultsTitle"
-            bodyMessageId="screeningTool.resultsBody"
-          />
-        </Popup>
-      </React.Fragment>
+      <ScreeningToolSubmission
+        patientId={patientId}
+        screeningTool={screeningTool}
+        onSubmissionScored={this.handleSubmissionScored}
+      />
     );
   }
 }
 
-export default graphql(screeningToolQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      screeningToolId: props.match.params.screeningToolId,
-    },
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => ({
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) =>
+    dispatch(
+      openPopup({
+        name: 'CARE_PLAN_SUGGESTIONS',
+        options: {
+          patientId: ownProps.match.params.patientId,
+          carePlanSuggestions,
+        },
+      }),
+    ),
+});
+
+export default compose(
+  connect<{}, IDispatchProps, IProps & IDispatchProps>(null, mapDispatchToProps),
+  graphql(screeningToolQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        screeningToolId: props.match.params.screeningToolId,
+      },
+    }),
+    props: ({ data }): IGraphqlProps => ({
+      screeningToolLoading: data ? data.loading : false,
+      screeningToolError: data ? data.error : null,
+      screeningTool: data ? (data as any).screeningTool : null,
+    }),
   }),
-  props: ({ data }): IGraphqlProps => ({
-    screeningToolLoading: data ? data.loading : false,
-    screeningToolError: data ? data.error : null,
-    screeningTool: data ? (data as any).screeningTool : null,
-  }),
-})(ScreeningTool);
+)(ScreeningTool);

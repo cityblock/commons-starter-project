@@ -12,6 +12,7 @@ import * as styles from './css/modal.css';
 interface IProps {
   onClose?: () => void;
   onSubmit?: () => void;
+  onCancel?: () => void;
   isVisible: boolean;
   isButtonHidden?: boolean;
   titleMessageId?: string;
@@ -43,6 +44,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     submitMessageId,
     errorMessageId,
     error,
+    onCancel,
     onClose,
     onSubmit,
     children,
@@ -70,7 +72,7 @@ const Modal: React.StatelessComponent<IProps> = (props: IProps) => {
     <ModalButtons
       cancelMessageId={cancelMessageId}
       submitMessageId={submitMessageId}
-      cancel={onClose}
+      cancel={onCancel || onClose}
       submit={onSubmit}
       redSubmit={redSubmitButton}
       isLoading={isLoading}

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
+import { openPopup } from '../../actions/popup-action';
 import * as riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
 import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import * as riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
@@ -16,7 +18,6 @@ import {
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
-import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
 import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
@@ -53,7 +54,11 @@ interface IGraphqlProps {
   riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
 }
 
-type allProps = IGraphqlProps & IProps;
+interface IDispatchProps {
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) => void;
+}
+
+type allProps = IGraphqlProps & IProps & IDispatchProps;
 
 interface IState {
   inProgress: boolean;
@@ -135,7 +140,11 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const { riskAreaAssessmentSubmissionComplete, riskAreaAssessmentSubmission } = this.props;
+    const {
+      riskAreaAssessmentSubmissionComplete,
+      riskAreaAssessmentSubmission,
+      openSuggestionsPopup,
+    } = this.props;
 
     if (riskAreaAssessmentSubmission && riskAreaAssessmentSubmissionComplete) {
       const result = await riskAreaAssessmentSubmissionComplete({
@@ -147,6 +156,11 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         const carePlanSuggestions =
           result.data.riskAreaAssessmentSubmissionComplete.carePlanSuggestions;
         this.setState({ inProgress: false, carePlanSuggestions });
+
+        // open suggestions popup if needed
+        if (carePlanSuggestions.length > 0) {
+          openSuggestionsPopup(carePlanSuggestions);
+        }
       } else {
         this.onCancel();
       }
@@ -169,20 +183,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   onEditPopupClose = () => {
     this.setState({ editPopupVisible: false });
   };
-
-  renderSubmissionPopup() {
-    const { patientRoute } = this.props;
-    const { carePlanSuggestions } = this.state;
-
-    return (
-      <CarePlanSuggestions
-        carePlanSuggestions={carePlanSuggestions}
-        patientRoute={patientRoute}
-        titleMessageId="riskAreaAssessment.resultsTitle"
-        bodyMessageId="riskAreaAssessment.resultsBody"
-      />
-    );
-  }
 
   renderEditPopup() {
     return (
@@ -233,9 +233,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       />
     ) : null;
 
-    const submissionPopupVisible = carePlanSuggestions.length > 0 ? true : false;
-    const popupVisible = submissionPopupVisible || editPopupVisible;
-
     // Dont show loading if we have care plan suggestions - it shows a weird flash
     if (
       (carePlanSuggestions.length < 1 && (riskAreaAssessmentSubmissionLoading || loading)) ||
@@ -285,16 +282,29 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
           {navButtons}
         </UnderlineTabs>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
-        <Popup visible={popupVisible} style={'small-padding'}>
-          {submissionPopupVisible && this.renderSubmissionPopup()}
-          {editPopupVisible && this.renderEditPopup()}
+        <Popup visible={editPopupVisible} style={'small-padding'}>
+          {this.renderEditPopup()}
         </Popup>
       </React.Fragment>
     );
   }
 }
 
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => ({
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) =>
+    dispatch(
+      openPopup({
+        name: 'CARE_PLAN_SUGGESTIONS',
+        options: {
+          patientId: ownProps.patientId,
+          carePlanSuggestions,
+        },
+      }),
+    ),
+});
+
 export default compose(
+  connect<{}, IDispatchProps, IProps & IDispatchProps>(null, mapDispatchToProps),
   graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql as any, {
     name: 'riskAreaAssessmentSubmissionComplete',
     options: {

@@ -31,6 +31,7 @@ describe('risk area assessment questions component', () => {
       riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
       riskAreaAssessmentSubmissionError={null}
       glassBreakId={glassBreakId}
+      openSuggestionsPopup={jest.fn() as any}
     />,
   );
 

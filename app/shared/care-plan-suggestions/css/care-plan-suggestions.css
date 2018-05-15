@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.count {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin-bottom: var(--small-gutter);
+}
+
+.count:last-child {
+  margin-bottom: 0;
+}

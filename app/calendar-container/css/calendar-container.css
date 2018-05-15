@@ -1,11 +1,11 @@
 .container {
-  flex: 1;
-  order: 0;
   overflow: auto;
-  justify-content: flex-end;
-  height: 100%;
+  height: calc(100vh - 60px);
   max-width: var(--max-width);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .topBar {

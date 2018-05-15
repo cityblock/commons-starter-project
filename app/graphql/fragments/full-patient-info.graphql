@@ -6,7 +6,9 @@ fragment FullPatientInfo on PatientInfo {
   id
   preferredName
   gender
-  sexAtBirth
+  genderFreeText
+  transgender
+  maritalStatus
   language
   isMarginallyHoused
   primaryAddress {

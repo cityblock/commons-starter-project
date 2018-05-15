@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { Gender } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import Select from '../../../shared/library/select/select';
 import TextInput from '../../../shared/library/text-input/text-input';
@@ -34,7 +35,7 @@ describe('Render Basic Information Component', () => {
     expect(formLabels.at(1).props().messageId).toBe('patientInfo.maritalStatus');
     expect(formLabels.at(2).props().messageId).toBe('patientInfo.language');
     expect(formLabels.at(3).props().messageId).toBe('patientInfo.gender');
-    expect(formLabels.at(4).props().messageId).toBe('patientInfo.sexAtBirth');
+    expect(formLabels.at(4).props().messageId).toBe('patientInfo.transgender');
   });
 
   it('renders patient info text inputs', () => {
@@ -52,6 +53,8 @@ describe('Render Basic Information Component', () => {
       .props();
     expect(select1Props.name).toBe('maritalStatus');
     expect(select1Props.large).toBeTruthy();
+    expect(select1Props.value).toBe(basicInfo.maritalStatus);
+    expect(select1Props.hasPlaceholder).toBeTruthy();
 
     const select2Props = wrapper
       .find(Select)
@@ -75,9 +78,32 @@ describe('Render Basic Information Component', () => {
       .find(Select)
       .at(3)
       .props();
-    expect(select4Props.name).toBe('sexAtBirth');
+    expect(select4Props.name).toBe('transgender');
     expect(select4Props.large).toBeTruthy();
-    expect(select4Props.value).toBe(basicInfo.sexAtBirth);
+    expect(select4Props.value).toBe(basicInfo.transgender);
     expect(select4Props.hasPlaceholder).toBeTruthy();
+  });
+
+  it('renders patient info text inputs', () => {
+    const wrapper2 = shallow(
+      <BasicInfo
+        patientInformation={
+          {
+           ...basicInfo,
+           gender: Gender.selfDescribed,
+           genderFreeText: 'other',
+          }
+        }
+        patientId={patient.id}
+        patientInfoId={patient.patientInfo.id}
+        onChange={onChange}
+        className="infoStyles"
+        loading={false}
+        error={null}
+      />,
+    );
+    expect(wrapper2.find(TextInput)).toHaveLength(2);
+    expect(wrapper2.find(TextInput).at(1).props().name).toBe('genderFreeText');
+    expect(wrapper2.find(TextInput).at(1).props().value).toBe('other');
   });
 });

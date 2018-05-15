@@ -164,13 +164,24 @@ export enum Gender {
   female = "female",
   male = "male",
   nonbinary = "nonbinary",
-  transgender = "transgender",
+  pass = "pass",
+  selfDescribed = "selfDescribed",
 }
 
 
-export enum BirthSexOptions {
-  female = "female",
-  male = "male",
+export enum Transgender {
+  no = "no",
+  pass = "pass",
+  yes = "yes",
+}
+
+
+export enum MaritalStatus {
+  currentlyMarried = "currentlyMarried",
+  divorced = "divorced",
+  neverMarried = "neverMarried",
+  separated = "separated",
+  widowed = "widowed",
 }
 
 
@@ -3493,7 +3504,9 @@ export interface getPatientQuery {
       id: string,
       preferredName: string | null,
       gender: Gender | null,
-      sexAtBirth: BirthSexOptions | null,
+      genderFreeText: string | null,
+      transgender: Transgender | null,
+      maritalStatus: MaritalStatus | null,
       language: string | null,
       isMarginallyHoused: boolean | null,
       primaryAddress:  {
@@ -7161,7 +7174,9 @@ export interface patientInfoEditMutationVariables {
   patientInfoId: string,
   preferredName?: string | null,
   gender?: Gender | null,
-  sexAtBirth?: BirthSexOptions | null,
+  genderFreeText?: string | null,
+  transgender?: Transgender | null,
+  maritalStatus?: MaritalStatus | null,
   language?: string | null,
   isMarginallyHoused?: boolean | null,
   primaryAddressId?: string | null,
@@ -7181,10 +7196,42 @@ export interface patientInfoEditMutation {
   // Edit fields on patient info stored in the db
   patientInfoEdit:  {
     id: string,
-    gender: Gender | null,
-    language: string | null,
     preferredName: string | null,
+    gender: Gender | null,
+    genderFreeText: string | null,
+    transgender: Transgender | null,
+    maritalStatus: MaritalStatus | null,
+    language: string | null,
+    isMarginallyHoused: boolean | null,
+    primaryAddress:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    hasEmail: boolean | null,
+    primaryEmail:  {
+      id: string,
+      emailAddress: string,
+      description: string | null,
+    } | null,
+    primaryPhone:  {
+      id: string,
+      phoneNumber: string,
+      type: PhoneTypeOptions,
+      description: string | null,
+    } | null,
+    preferredContactMethod: ContactMethodOptions | null,
+    canReceiveCalls: boolean | null,
+    canReceiveTexts: boolean | null,
+    hasHealthcareProxy: boolean | null,
+    hasMolst: boolean | null,
+    hasDeclinedPhotoUpload: boolean | null,
     hasUploadedPhoto: boolean | null,
+    googleCalendarId: string | null,
   } | null,
 };
 
@@ -11343,7 +11390,9 @@ export interface FullPatientForProfileFragment {
     id: string,
     preferredName: string | null,
     gender: Gender | null,
-    sexAtBirth: BirthSexOptions | null,
+    genderFreeText: string | null,
+    transgender: Transgender | null,
+    maritalStatus: MaritalStatus | null,
     language: string | null,
     isMarginallyHoused: boolean | null,
     primaryAddress:  {
@@ -11465,7 +11514,9 @@ export interface FullPatientInfoFragment {
   id: string,
   preferredName: string | null,
   gender: Gender | null,
-  sexAtBirth: BirthSexOptions | null,
+  genderFreeText: string | null,
+  transgender: Transgender | null,
+  maritalStatus: MaritalStatus | null,
   language: string | null,
   isMarginallyHoused: boolean | null,
   primaryAddress:  {

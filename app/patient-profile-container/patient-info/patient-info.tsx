@@ -51,6 +51,9 @@ type allProps = IProps & IGraphqlProps;
 
 export interface IEditableFieldState {
   gender?: getPatientQuery['patient']['patientInfo']['gender'];
+  genderFreeText?: getPatientQuery['patient']['patientInfo']['genderFreeText'];
+  transgender?: getPatientQuery['patient']['patientInfo']['transgender'];
+  maritalStatus?: getPatientQuery['patient']['patientInfo']['maritalStatus'];
   language?: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
   hasEmail?: getPatientQuery['patient']['patientInfo']['hasEmail'];
@@ -63,7 +66,6 @@ export interface IEditableFieldState {
   preferredContactMethod?: getPatientQuery['patient']['patientInfo']['preferredContactMethod'];
   isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
   preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
-  sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
   hasMolst?: getPatientQuery['patient']['patientInfo']['hasMolst'];
   hasHealthcareProxy?: getPatientQuery['patient']['patientInfo']['hasHealthcareProxy'];
   hasDeclinedPhotoUpload?: getPatientQuery['patient']['patientInfo']['hasDeclinedPhotoUpload'];
@@ -109,6 +111,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const {
       language,
       gender,
+      genderFreeText,
+      transgender,
+      maritalStatus,
       primaryAddress,
       primaryEmail,
       primaryPhone,
@@ -120,7 +125,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
       preferredContactMethod,
       isMarginallyHoused,
       preferredName,
-      sexAtBirth,
       hasMolst,
       hasHealthcareProxy,
       hasDeclinedPhotoUpload,
@@ -143,6 +147,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
       },
       basic: {
         gender: gender || patientInfo.gender,
+        genderFreeText: genderFreeText || patientInfo.genderFreeText,
+        transgender: transgender || patientInfo.transgender,
+        maritalStatus: maritalStatus || patientInfo.maritalStatus,
         language: language || patientInfo.language,
         primaryAddress: checkDefined<ISavedAddress>(primaryAddress, patientInfo.primaryAddress),
         isMarginallyHoused: checkDefined<boolean>(
@@ -150,7 +157,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
           patientInfo.isMarginallyHoused,
         ),
         preferredName: checkDefined<string>(preferredName, patientInfo.preferredName),
-        sexAtBirth: sexAtBirth || patientInfo.sexAtBirth,
       },
       contact: {
         hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
@@ -187,13 +193,15 @@ export class PatientInfo extends React.Component<allProps, allState> {
     const {
       language,
       gender,
+      genderFreeText,
+      transgender,
+      maritalStatus,
       preferredContactMethod,
       canReceiveCalls,
       canReceiveTexts,
       hasEmail,
       isMarginallyHoused,
       preferredName,
-      sexAtBirth,
       hasMolst,
       hasHealthcareProxy,
       hasDeclinedPhotoUpload,
@@ -208,6 +216,9 @@ export class PatientInfo extends React.Component<allProps, allState> {
         variables: {
           patientInfoId: patient.patientInfo.id,
           gender,
+          genderFreeText,
+          transgender,
+          maritalStatus,
           language,
           preferredContactMethod,
           canReceiveCalls,
@@ -215,7 +226,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
           hasEmail,
           isMarginallyHoused,
           preferredName,
-          sexAtBirth,
           hasMolst,
           hasHealthcareProxy,
           hasDeclinedPhotoUpload,

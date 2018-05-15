@@ -1,6 +1,6 @@
 import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import { BirthSexOptions, ContactMethodOptions, Gender } from 'schema';
+import { ContactMethodOptions, Gender, MaritalStatus, Transgender } from 'schema';
 import * as uuid from 'uuid/v4';
 import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';
@@ -19,6 +19,7 @@ export interface IInitialPatientInfoOptions {
   updatedById: string;
   gender?: Gender;
   language?: string | null;
+  maritalStatus?: MaritalStatus;
 }
 
 export interface IPatientInfoOptions {
@@ -26,7 +27,9 @@ export interface IPatientInfoOptions {
   updatedById: string;
   preferredName?: string;
   gender?: Gender;
-  sexAtBirth?: BirthSexOptions;
+  genderFreeText?: string;
+  transgender?: Transgender;
+  maritalStatus?: MaritalStatus;
   language?: string;
   isMarginallyHoused?: boolean;
   primaryAddressId?: string;
@@ -46,7 +49,9 @@ interface IEditPatientInfo {
   updatedById: string;
   preferredName?: string;
   gender?: Gender;
-  sexAtBirth?: BirthSexOptions;
+  genderFreeText?: string;
+  transgender?: Transgender;
+  maritalStatus?: MaritalStatus;
   language?: string;
   isMarginallyHoused?: boolean;
   primaryAddressId?: string | null;
@@ -74,7 +79,9 @@ export default class PatientInfo extends Model {
   patient: Patient;
   preferredName: string;
   gender: Gender;
-  sexAtBirth: BirthSexOptions;
+  genderFreeText: string;
+  transgender: Transgender;
+  maritalStatus: MaritalStatus;
   language: string;
   isMarginallyHoused: boolean;
   primaryAddressId: string | null;
@@ -117,8 +124,13 @@ export default class PatientInfo extends Model {
       patientId: { type: 'string', format: 'uuid' },
       preferredName: { type: 'string' },
       language: { type: 'string' },
-      gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
-      sexAtBirth: { type: 'string', enum: ['female', 'male'] },
+      gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'selfDescribed', 'pass'] },
+      genderFreeText: { type: 'string' },
+      transgender: { type: 'string', enum: ['yes', 'no', 'pass'] },
+      maritalStatus: {
+        type: 'string',
+        enum: ['currentlyMarried', 'widowed', 'divorced', 'separated', 'neverMarried'],
+      },
       isMarginallyHoused: { type: 'boolean' },
       primaryAddressId: { type: ['string', 'null'], format: 'uuid' },
       hasEmail: { type: 'boolean' },

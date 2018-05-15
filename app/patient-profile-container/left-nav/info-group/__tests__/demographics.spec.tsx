@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-import { capitalize } from 'lodash';
 import * as React from 'react';
 import { patient } from '../../../../shared/util/test-data';
 import InfoGroupContainer from '../container';
@@ -53,8 +52,8 @@ describe('Patient Left Nav Demographics', () => {
       wrapper
         .find(InfoGroupItem)
         .at(1)
-        .props().value,
-    ).toBe(capitalize(patient.patientInfo.gender));
+        .props().valueMessageId,
+    ).toBe(`gender.${patient.patientInfo.gender}`);
   });
 
   it('opens info group container and header', () => {

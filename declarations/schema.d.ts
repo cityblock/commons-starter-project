@@ -1320,7 +1320,9 @@ declare module 'schema' {
     patientId: string;
     preferredName: string | null;
     gender: Gender | null;
-    sexAtBirth: BirthSexOptions | null;
+    genderFreeText: string | null;
+    transgender: Transgender | null;
+    maritalStatus: MaritalStatus | null;
     language: string | null;
     isMarginallyHoused: boolean | null;
     primaryAddress: IAddress | null;
@@ -1341,13 +1343,23 @@ declare module 'schema' {
   enum Gender {
     male = 'male',
     female = 'female',
-    transgender = 'transgender',
-    nonbinary = 'nonbinary'
+    nonbinary = 'nonbinary',
+    selfDescribed = 'selfDescribed',
+    pass = 'pass'
   }
 
-  enum BirthSexOptions {
-    male = 'male',
-    female = 'female'
+  enum Transgender {
+    yes = 'yes',
+    no = 'no',
+    pass = 'pass'
+  }
+
+  enum MaritalStatus {
+    currentlyMarried = 'currentlyMarried',
+    widowed = 'widowed',
+    divorced = 'divorced',
+    separated = 'separated',
+    neverMarried = 'neverMarried'
   }
 
   /**
@@ -4299,7 +4311,9 @@ declare module 'schema' {
     patientInfoId: string;
     preferredName?: string | null;
     gender?: Gender | null;
-    sexAtBirth?: BirthSexOptions | null;
+    genderFreeText?: string | null;
+    transgender?: Transgender | null;
+    maritalStatus?: MaritalStatus | null;
     language?: string | null;
     isMarginallyHoused?: boolean | null;
     primaryAddressId?: string | null;

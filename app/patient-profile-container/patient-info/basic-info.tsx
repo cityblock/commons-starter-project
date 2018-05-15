@@ -9,8 +9,9 @@ import * as computedPatientStatusQuery from '../../graphql/queries/get-patient-c
 import {
   getPatientComputedPatientStatusQuery,
   getPatientQuery,
-  BirthSexOptions,
   Gender,
+  MaritalStatus,
+  Transgender,
 } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
 import FormLabel from '../../shared/library/form-label/form-label';
@@ -23,12 +24,14 @@ import { IEditableFieldState } from './patient-info';
 
 export interface IBasicInfo {
   gender: getPatientQuery['patient']['patientInfo']['gender'];
+  genderFreeText: getPatientQuery['patient']['patientInfo']['genderFreeText'];
+  transgender: getPatientQuery['patient']['patientInfo']['transgender'];
+  maritalStatus: getPatientQuery['patient']['patientInfo']['maritalStatus'];
   language: getPatientQuery['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
   isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
   preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
-  sexAtBirth?: getPatientQuery['patient']['patientInfo']['sexAtBirth'];
 }
 
 interface IProps {
@@ -57,6 +60,14 @@ export class BasicInfo extends React.Component<allProps> {
     const { onChange } = this.props;
     const { name, value } = event.target;
     onChange({ [name]: value });
+  };
+
+  handleGenderChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { onChange, patientInformation } = this.props;
+    const gender = event.target.value as any;
+    const genderFreeText = gender === Gender.selfDescribed ? patientInformation.genderFreeText : '';
+
+    onChange({ gender, genderFreeText });
   };
 
   handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +100,13 @@ export class BasicInfo extends React.Component<allProps> {
 
   renderPatientInfo() {
     const { computedPatientStatus, patientInformation } = this.props;
-    const { gender, sexAtBirth, preferredName } = patientInformation;
+    const {
+      gender,
+      genderFreeText,
+      transgender,
+      maritalStatus,
+      preferredName,
+    } = patientInformation;
 
     const isUnsaved = computedPatientStatus
       ? !computedPatientStatus.isDemographicInfoUpdated
@@ -98,6 +115,18 @@ export class BasicInfo extends React.Component<allProps> {
       [styles.unsaved]: isUnsaved,
     });
     const color = isUnsaved ? 'blue' : undefined;
+
+    const genderFreeTextHtml =
+      gender === Gender.selfDescribed ? (
+        <div className={classNames(styles.field, styles.short)}>
+          <FormLabel messageId="patientInfo.genderFreeText" />
+          <TextInput
+            name="genderFreeText"
+            value={genderFreeText || ''}
+            onChange={this.handleValueChange}
+          />
+        </div>
+      ) : null;
 
     return (
       <div className={styles.subSection}>
@@ -118,7 +147,9 @@ export class BasicInfo extends React.Component<allProps> {
               name="maritalStatus"
               large={true}
               onChange={this.handleValueChange}
-              value=""
+              value={maritalStatus || ''}
+              options={values(MaritalStatus)}
+              hasPlaceholder={true}
               color={color}
             />
           </div>
@@ -135,7 +166,7 @@ export class BasicInfo extends React.Component<allProps> {
             <Select
               name="gender"
               large={true}
-              onChange={this.handleValueChange}
+              onChange={this.handleGenderChange}
               value={gender || ''}
               options={values(Gender)}
               hasPlaceholder={true}
@@ -144,16 +175,17 @@ export class BasicInfo extends React.Component<allProps> {
             />
           </div>
 
+          {genderFreeTextHtml}
+
           <div className={styles.field}>
-            <FormLabel messageId="patientInfo.sexAtBirth" />
+            <FormLabel messageId="patientInfo.transgender" />
             <Select
-              name="sexAtBirth"
+              name="transgender"
               large={true}
               onChange={this.handleValueChange}
-              value={sexAtBirth || ''}
-              options={values(BirthSexOptions)}
+              value={transgender || ''}
+              options={values(Transgender)}
               hasPlaceholder={true}
-              className={unsavedClassname}
               color={color}
             />
           </div>

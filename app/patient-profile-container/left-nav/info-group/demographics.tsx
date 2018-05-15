@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { capitalize } from 'lodash';
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
@@ -18,19 +17,23 @@ interface IProps {
 
 const Demographics: React.StatelessComponent<IProps> = (props: IProps) => {
   const { isOpen, onClick, patient } = props;
-  const { gender } = patient.patientInfo;
+  const { gender, genderFreeText } = patient.patientInfo;
 
   const formattedDateOfBirth = patient.dateOfBirth
     ? format(patient.dateOfBirth, DATE_OF_BIRTH_FORMAT)
     : null;
-  const formattedGender = gender ? capitalize(gender) : null;
+  const genderMessageId = gender && !genderFreeText ? `gender.${gender}` : undefined;
 
   return (
     <div className={styles.container}>
       <InfoGroupHeader selected="demographics" isOpen={isOpen} onClick={onClick} />
       <InfoGroupContainer isOpen={isOpen}>
         <InfoGroupItem labelMessageId="demographics.dateOfBirth" value={formattedDateOfBirth} />
-        <InfoGroupItem labelMessageId="demographics.gender" value={formattedGender} />
+        <InfoGroupItem
+          labelMessageId="demographics.gender"
+          valueMessageId={genderMessageId}
+          value={genderFreeText}
+        />
       </InfoGroupContainer>
     </div>
   );

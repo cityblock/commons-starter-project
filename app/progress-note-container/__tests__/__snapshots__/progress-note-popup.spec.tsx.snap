@@ -107,6 +107,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "canReceiveCalls": true,
               "canReceiveTexts": false,
               "gender": "male",
+              "genderFreeText": null,
               "googleCalendarId": null,
               "hasDeclinedPhotoUpload": false,
               "hasEmail": true,
@@ -116,6 +117,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -137,7 +139,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "phoneNumber": "555-555-5555",
                 "type": "mobile",
               },
-              "sexAtBirth": "male",
+              "transgender": "no",
             },
             "patientState": Object {
               "currentState": "outreach",
@@ -275,6 +277,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "canReceiveCalls": true,
               "canReceiveTexts": false,
               "gender": "male",
+              "genderFreeText": null,
               "googleCalendarId": null,
               "hasDeclinedPhotoUpload": false,
               "hasEmail": true,
@@ -284,6 +287,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -305,7 +309,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "phoneNumber": "555-555-5555",
                 "type": "mobile",
               },
-              "sexAtBirth": "male",
+              "transgender": "no",
             },
             "patientState": Object {
               "currentState": "outreach",
@@ -461,6 +465,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "canReceiveCalls": true,
               "canReceiveTexts": false,
               "gender": "male",
+              "genderFreeText": null,
               "googleCalendarId": null,
               "hasDeclinedPhotoUpload": false,
               "hasEmail": true,
@@ -470,6 +475,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -491,7 +497,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "phoneNumber": "555-555-5555",
                 "type": "mobile",
               },
-              "sexAtBirth": "male",
+              "transgender": "no",
             },
             "patientState": Object {
               "currentState": "outreach",
@@ -629,6 +635,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "canReceiveCalls": true,
               "canReceiveTexts": false,
               "gender": "male",
+              "genderFreeText": null,
               "googleCalendarId": null,
               "hasDeclinedPhotoUpload": false,
               "hasEmail": true,
@@ -638,6 +645,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "id": "patient-info-id",
               "isMarginallyHoused": false,
               "language": "en",
+              "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
               "preferredName": "Bobby",
               "primaryAddress": Object {
@@ -659,7 +667,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
                 "phoneNumber": "555-555-5555",
                 "type": "mobile",
               },
-              "sexAtBirth": "male",
+              "transgender": "no",
             },
             "patientState": Object {
               "currentState": "outreach",

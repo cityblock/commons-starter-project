@@ -1,12 +1,13 @@
 import {
-  BirthSexOptions,
   ContactMethodOptions,
   CurrentPatientState,
   ExternalProviderOptions,
   Gender,
   GoogleCalendarEventType,
+  MaritalStatus,
   PatientRelationOptions,
   PhoneTypeOptions,
+  Transgender,
 } from '../../graphql/types';
 
 export const clinic = {
@@ -208,7 +209,9 @@ export const patient = {
     id: 'patient-info-id',
     preferredName: 'Bobby',
     gender: Gender.male,
-    sexAtBirth: BirthSexOptions.male,
+    genderFreeText: null,
+    transgender: Transgender.no,
+    maritalStatus: MaritalStatus.currentlyMarried,
     language: 'en',
     isMarginallyHoused: false,
     primaryAddress: address1 as IAddress,
@@ -1159,9 +1162,11 @@ export const externalProviderEntity = {
 
 export const basicInfo = {
   gender: patient.patientInfo.gender,
+  genderFreeText: patient.patientInfo.genderFreeText,
+  transgender: patient.patientInfo.transgender,
+  maritalStatus: patient.patientInfo.maritalStatus,
   language: patient.patientInfo.language,
   primaryAddress: patient.patientInfo.primaryAddress,
-  sexAtBirth: patient.patientInfo.sexAtBirth,
   isMarginallyHoused: patient.patientInfo.isMarginallyHoused,
   preferredName: patient.patientInfo.preferredName,
 };

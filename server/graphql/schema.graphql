@@ -170,8 +170,23 @@ enum AssessmentType {
 enum Gender {
   male
   female
-  transgender
   nonbinary
+  selfDescribed
+  pass
+}
+
+enum MaritalStatus {
+  currentlyMarried
+  widowed
+  divorced
+  separated
+  neverMarried
+}
+
+enum Transgender {
+  yes
+  no
+  pass
 }
 
 enum Permissions {
@@ -196,11 +211,6 @@ enum PhoneTypeOptions {
   work
   mobile
   other
-}
-
-enum BirthSexOptions {
-  male
-  female
 }
 
 enum ContactMethodOptions {
@@ -400,7 +410,9 @@ type PatientInfo implements uniqueId {
   patientId: ID!
   preferredName: String
   gender: Gender
-  sexAtBirth: BirthSexOptions
+  genderFreeText: String
+  transgender: Transgender
+  maritalStatus: MaritalStatus
   language: String
   isMarginallyHoused: Boolean
   primaryAddress: Address
@@ -1804,7 +1816,9 @@ input PatientInfoEditInput {
   patientInfoId: ID!
   preferredName: String
   gender: Gender
-  sexAtBirth: BirthSexOptions
+  genderFreeText: String
+  transgender: Transgender
+  maritalStatus: MaritalStatus
   language: String
   isMarginallyHoused: Boolean
   primaryAddressId: ID

@@ -1,10 +1,12 @@
-#import "../fragments/short-patient-info.graphql"
+#import "../fragments/full-patient-info.graphql"
 
 mutation patientInfoEdit(
   $patientInfoId: ID!
   $preferredName: String
   $gender: Gender
-  $sexAtBirth: BirthSexOptions
+  $genderFreeText: String
+  $transgender: Transgender
+  $maritalStatus: MaritalStatus
   $language: String
   $isMarginallyHoused: Boolean
   $primaryAddressId: ID
@@ -24,7 +26,9 @@ mutation patientInfoEdit(
       patientInfoId: $patientInfoId
       preferredName: $preferredName
       gender: $gender
-      sexAtBirth: $sexAtBirth
+      genderFreeText: $genderFreeText
+      transgender: $transgender
+      maritalStatus: $maritalStatus
       language: $language
       isMarginallyHoused: $isMarginallyHoused
       primaryAddressId: $primaryAddressId
@@ -40,6 +44,6 @@ mutation patientInfoEdit(
       hasUploadedPhoto: $hasUploadedPhoto
     }
   ) {
-    ...ShortPatientInfo
+    ...FullPatientInfo
   }
 }

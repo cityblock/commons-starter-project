@@ -6,12 +6,13 @@ import * as styles from './css/item.css';
 interface IProps {
   labelMessageId?: string | null;
   label?: string; // override label translation
-  value: string | null;
+  value?: string | null;
+  valueMessageId?: string;
   emptyValueMessageId?: string;
 }
 
 const InfoGroupItem: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { labelMessageId, label, value, emptyValueMessageId } = props;
+  const { labelMessageId, label, value, valueMessageId, emptyValueMessageId } = props;
 
   let labelComponent: JSX.Element | false;
 
@@ -23,16 +24,23 @@ const InfoGroupItem: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   }
 
-  const valueComponent = value ? (
-    <SmallText text={value} size="large" color={label ? 'darkGray' : 'black'} isBold={!label} />
-  ) : (
-    <SmallText
-      messageId={emptyValueMessageId || 'patientInfo.missing'}
-      size="large"
-      color="lightGray"
-      isBold={!label}
-    />
-  );
+  const valueComponent =
+    value || valueMessageId ? (
+      <SmallText
+        messageId={valueMessageId}
+        text={value || undefined}
+        size="large"
+        color={label ? 'darkGray' : 'black'}
+        isBold={!label}
+      />
+    ) : (
+      <SmallText
+        messageId={emptyValueMessageId || 'patientInfo.missing'}
+        size="large"
+        color="lightGray"
+        isBold={!label}
+      />
+    );
 
   const containerStyles = classNames(styles.container, {
     [styles.rightAlign]: !labelMessageId && !label,

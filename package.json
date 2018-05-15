@@ -188,7 +188,7 @@
     "apollo-link-ws": "1.0.8",
     "base-64": "0.1.0",
     "basic-auth": "2.0.0",
-    "body-parser": "1.18.2",
+    "body-parser": "1.18.3",
     "caniuse-lite": "1.0.30000840",
     "chart.js": "2.7.2",
     "classnames": "2.2.5",

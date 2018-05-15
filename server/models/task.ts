@@ -265,7 +265,7 @@ export default class Task extends BaseModel {
     txn: Transaction,
   ): Promise<IPaginatedResults<Task>> {
     const queryBuilder = this.query(txn)
-      .orWhere({ assignedToId: userId, deletedAt: null })
+      .where({ assignedToId: userId, deletedAt: null, completedAt: null })
       .joinRelation('patient')
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null));

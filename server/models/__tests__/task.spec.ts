@@ -415,6 +415,21 @@ describe('task model', () => {
       },
       txn,
     );
+    const task3 = await Task.create(
+      {
+        title: 'title 3',
+        description: 'description 3',
+        dueAt,
+        patientId: patient.id,
+        createdById: user.id,
+        assignedToId: user.id,
+        priority: 'high' as Priority,
+        patientGoalId: patientGoal.id,
+      },
+      txn,
+    );
+
+    await Task.complete(task3.id, user.id, txn);
 
     // following a task should not make it included in your tasks
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id }, txn);

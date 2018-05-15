@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -40,8 +41,8 @@ export interface IProps {
 
 interface IGraphqlProps {
   riskArea?: FullRiskAreaFragment;
-  loading?: boolean;
-  error?: string | null;
+  riskAreaLoading?: boolean;
+  riskAreaError?: ApolloError | null;
   riskAreaAssessmentSubmissionCreate?: (
     options: { variables: riskAreaAssessmentSubmissionCreateMutationVariables },
   ) => { data: riskAreaAssessmentSubmissionCreateMutation };
@@ -52,6 +53,8 @@ interface IGraphqlProps {
   riskAreaAssessmentSubmissionError: string | null;
   riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
   riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
+  riskAreaGroupLoading?: boolean;
+  riskAreaGroupError?: ApolloError | null;
 }
 
 interface IDispatchProps {
@@ -210,13 +213,16 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       patientId,
       routeBase,
       patientRoute,
-      loading,
-      error,
+      riskAreaLoading,
+      riskAreaGroupLoading,
+      riskAreaError,
+      riskAreaGroupError,
       riskAreaAssessmentSubmission,
       riskAreaAssessmentSubmissionLoading,
       glassBreakId,
     } = this.props;
     const { inProgress, editPopupVisible, carePlanSuggestions } = this.state;
+    const isLoading = (riskAreaAssessmentSubmissionLoading || riskAreaGroupLoading || riskAreaLoading);
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
@@ -234,20 +240,18 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     ) : null;
 
     // Dont show loading if we have care plan suggestions - it shows a weird flash
-    if (
-      (carePlanSuggestions.length < 1 && (riskAreaAssessmentSubmissionLoading || loading)) ||
-      !riskArea
-    ) {
+    if ((carePlanSuggestions.length < 1 && isLoading) || !riskArea) {
       return <Spinner />;
     }
 
+    const loadingOrError = !!(isLoading || riskAreaError || riskAreaGroupError);
     const navButtons = !automatedAssessment ? (
       inProgress ? (
         <div>
           <Button
             messageId="riskAreaAssessment.save"
             onClick={this.onSubmit}
-            disabled={loading || !!error}
+            disabled={loadingOrError}
             className={styles.button}
           />
         </div>
@@ -256,7 +260,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
           <Button
             messageId="riskAreaAssessment.start"
             onClick={this.onStart}
-            disabled={loading || !!error}
+            disabled={loadingOrError}
             className={styles.button}
           />
         </div>
@@ -324,8 +328,8 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
+      riskAreaLoading: data ? data.loading : false,
+      riskAreaError: data ? data.error : null,
       riskArea: data ? (data as any).riskArea : null,
     }),
   }),
@@ -352,8 +356,8 @@ export default compose(
       return { variables: { riskAreaGroupId, patientId, glassBreakId } };
     },
     props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
+      riskAreaGroupLoading: data ? data.loading : false,
+      riskAreaGroupError: data ? data.error : null,
       riskAreaGroup: data ? (data as any).riskAreaGroupForPatient : null,
     }),
   }),

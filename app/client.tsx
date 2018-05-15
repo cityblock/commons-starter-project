@@ -10,11 +10,11 @@ import createStore from './store';
 
 const defaultOptions = {
   watchQuery: {
-    fetchPolicy: 'cache-and-network' as FetchPolicy,
+    fetchPolicy: 'network-only' as FetchPolicy,
     errorPolicy: 'all' as ErrorPolicy,
   },
   query: {
-    fetchPolicy: 'cache-and-network' as FetchPolicy,
+    fetchPolicy: 'network-only' as FetchPolicy,
     errorPolicy: 'all' as ErrorPolicy,
   },
   mutate: {

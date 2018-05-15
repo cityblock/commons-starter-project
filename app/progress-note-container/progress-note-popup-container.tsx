@@ -1,23 +1,28 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
+import { closePopup } from '../actions/popup-action';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
-import {
-  getCurrentUserQuery,
-  FullProgressNoteFragment,
-  FullProgressNoteTemplateFragment,
-} from '../graphql/types';
+import { FullProgressNoteFragment, FullProgressNoteTemplateFragment } from '../graphql/types';
+import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Spinner from '../shared/library/spinner/spinner';
+import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNotePopup from './progress-note-popup';
 
 interface IProps {
-  currentUser: getCurrentUserQuery['currentUser'];
-  close: () => void;
-  progressNoteId: string | null;
+  patientId: string;
+}
+
+interface IStateProps {
   visible: boolean;
-  mutate?: any;
+  progressNoteId: string | null;
+}
+
+interface IDispatchProps {
+  close: () => void;
 }
 
 interface IGraphqlProps {
@@ -29,11 +34,11 @@ interface IGraphqlProps {
   progressNote?: FullProgressNoteFragment;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
   getContent() {
-    const { progressNoteTemplates, progressNote, currentUser, visible, close } = this.props;
+    const { progressNoteTemplates, progressNote, visible, close, patientId } = this.props;
 
     if (!visible) {
       return null;
@@ -42,9 +47,13 @@ export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
     if (!progressNote || !progressNoteTemplates) {
       return <Spinner />;
     }
+
+    if (progressNote.patientId !== patientId) {
+      return null;
+    }
+
     return (
       <ProgressNotePopup
-        currentUser={currentUser}
         close={close}
         progressNote={progressNote}
         progressNoteTemplates={progressNoteTemplates}
@@ -53,18 +62,39 @@ export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
   }
 
   render() {
-    const { visible } = this.props;
+    const { visible, progressNote, patientId } = this.props;
     const containerStyles = classNames(styles.container, {
-      [styles.visible]: visible,
+      [styles.visible]: visible && !!progressNote && progressNote.patientId === patientId,
     });
     return <div className={containerStyles}>{this.getContent()}</div>;
   }
 }
 
+function mapStateToProps(state: IAppState): IStateProps {
+  const visible = state.popup.name === 'PROGRESS_NOTE';
+
+  return {
+    visible,
+    progressNoteId: visible
+      ? (state.popup.options as IProgressNotePopupOptions).progressNoteId
+      : null,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
+  return {
+    close: () => dispatch(closePopup()),
+  };
+}
+
 export default compose(
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps as any,
+  ),
   graphql(progressNoteQuery as any, {
-    skip: (props: IProps) => !props.progressNoteId,
-    options: (props: IProps) => ({
+    skip: (props: IStateProps) => !props.progressNoteId,
+    options: (props: IStateProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
         glassBreakId: null,

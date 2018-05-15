@@ -10,6 +10,9 @@ exports[`patient profile container renders patient profile container 1`] = `
     patient={null}
     patientId="patient-1"
   />
+  <Connect(Apollo(Apollo(ProgressNotePopupContainer)))
+    patientId="patient-1"
+  />
   <div
     className="mainBody"
   >

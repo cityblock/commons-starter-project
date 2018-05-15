@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { getPatientQuery } from '../graphql/types';
+import ProgressNotePopupContainer from '../progress-note-container/progress-note-popup-container';
 import ErrorComponent from '../shared/error-component/error-component';
 import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
 import { formatPatientName } from '../shared/helpers/format-helpers';
@@ -77,6 +78,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
           patient={patient || null}
           glassBreakId={glassBreakId}
         />
+        <ProgressNotePopupContainer patientId={patientId} />
         <div className={styles.mainBody}>
           <PatientIntakeChecklist patientId={patientId} />
           <div className={styles.header}>

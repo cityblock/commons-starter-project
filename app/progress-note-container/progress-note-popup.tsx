@@ -27,6 +27,9 @@ import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
 import { allQuestionsAnswered, getQuestionAnswerHash } from '../shared/question/question-helpers';
 import { getPatientFullName } from '../shared/util/patient-name';
+import withCurrentUser, {
+  IInjectedProps as ICurrentUserProps,
+} from '../shared/with-current-user/with-current-user';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
 import ProgressNoteCosignature from './progress-note-cosignature';
@@ -44,7 +47,6 @@ export interface IUpdateProgressNoteOptions {
 }
 
 interface IProps {
-  currentUser: getCurrentUserQuery['currentUser'];
   close: () => void;
   progressNote: FullProgressNoteFragment;
   progressNoteTemplates: FullProgressNoteTemplateFragment[];
@@ -77,7 +79,7 @@ interface IState {
 
 type Tab = 'context' | 'activity' | 'supervisor';
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & ICurrentUserProps;
 
 const getIsInSupervisorMode = (
   currentUser: getCurrentUserQuery['currentUser'],
@@ -316,6 +318,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 }
 
 export default compose(
+  withCurrentUser(),
   graphql(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
     options: {

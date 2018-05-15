@@ -13,8 +13,7 @@ import {
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-container.css';
-import ProgressNotesPopupContainer from './progress-note-popup-container';
-import { ProgressNoteSmallRow } from './progress-note-small-row';
+import ProgressNoteSmallRow from './progress-note-small-row';
 
 const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager', 'voicemails'];
 
@@ -38,16 +37,14 @@ interface IGraphqlProps {
 }
 
 export interface IStateProps {
-  popupIsOpen: boolean;
   drawerIsOpen: boolean;
   progressNoteId: string | null;
 }
 
 interface IDispatchProps {
-  closeProgressNote: () => any;
-  openProgressNote: (progressNoteId: string) => any;
-  closeProgressNotesDrawer: () => any;
-  openProgressNotesDrawer: () => any;
+  openProgressNote: (progressNoteId: string) => void;
+  closeProgressNotesDrawer: () => void;
+  openProgressNotesDrawer: () => void;
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps & IRouterProps;
@@ -97,10 +94,7 @@ export class ProgressNoteContainer extends React.Component<allProps> {
   render() {
     const {
       progressNotes,
-      popupIsOpen,
-      progressNoteId,
       progressNotesForSupervisorReview,
-      currentUser,
       drawerIsOpen,
       openProgressNotesDrawer,
       closeProgressNotesDrawer,
@@ -120,20 +114,12 @@ export class ProgressNoteContainer extends React.Component<allProps> {
     }
 
     return (
-      <div>
-        <div className={styles.container}>
-          <div className={styles.topBar} onClick={topBarAction}>
-            <div className={styles.count}>{progressNotesCount}</div>
-            <div className={styles.text}>{progressNotesCount > 1 ? 'notes' : 'note'}</div>
-          </div>
-          {progressNotesHtml}
+      <div className={styles.container}>
+        <div className={styles.topBar} onClick={topBarAction}>
+          <div className={styles.count}>{progressNotesCount}</div>
+          <div className={styles.text}>{progressNotesCount > 1 ? 'notes' : 'note'}</div>
         </div>
-        <ProgressNotesPopupContainer
-          progressNoteId={progressNoteId}
-          visible={popupIsOpen}
-          currentUser={currentUser}
-          close={this.props.closeProgressNote}
-        />
+        {progressNotesHtml}
       </div>
     );
   }
@@ -144,7 +130,6 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   const drawerIsOpen = state.popup.name === 'PROGRESS_NOTES_DRAWER';
 
   return {
-    popupIsOpen,
     drawerIsOpen,
     progressNoteId: popupIsOpen
       ? (state.popup.options as IProgressNotePopupOptions).progressNoteId
@@ -171,7 +156,6 @@ function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
           },
         }),
       ),
-    closeProgressNote: () => dispatch(closePopup()),
   };
 }
 

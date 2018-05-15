@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import {
   currentUser,
+  featureFlags,
   progressNote,
   progressNoteTemplate,
   question,
@@ -34,6 +35,7 @@ describe('builder concerns', () => {
           completeProgressNote={completeProgressNote}
           completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
           progressNoteTemplates={progressNoteTemplates}
+          featureFlags={featureFlags}
         />,
       );
       const instance = component.instance() as Component;
@@ -51,6 +53,7 @@ describe('builder concerns', () => {
           completeProgressNote={completeProgressNote}
           progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
+          featureFlags={featureFlags}
         />,
       );
       const instance = component.instance() as Component;

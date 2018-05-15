@@ -327,6 +327,7 @@ export const SPANISH_TRANSLATION = {
     'phone.mobile': 'Mobile',
     'phone.other': 'Other',
     'phone.home': 'Home',
+    'phone.placeholder': 'Select phone type...',
     'advancedDirectives.sectionTitle': 'Advance Directives',
     'advancedDirectives.hasMolst':
       'Does the member have a completed Medical Orders for Life-Sustaining Treatment (MOLST)?',

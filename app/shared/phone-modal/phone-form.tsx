@@ -58,6 +58,7 @@ const PhoneForm: React.StatelessComponent<IProps> = (props: IProps) => {
             prefix="phone"
             onChange={onChange}
             options={values(PhoneTypeOptions)}
+            hasPlaceholder={true}
             large={true}
           />
         </div>

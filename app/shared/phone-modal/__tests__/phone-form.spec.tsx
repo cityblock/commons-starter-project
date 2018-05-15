@@ -55,6 +55,7 @@ describe('Render Phone Form', () => {
     expect(wrapper.find(Select).props().prefix).toBe('phone');
     expect(wrapper.find(Select).props().name).toBe('type');
     expect(wrapper.find(Select).props().options).toMatchObject(values(PhoneTypeOptions));
+    expect(wrapper.find(Select).props().hasPlaceholder).toBeTruthy();
 
     expect(
       wrapper

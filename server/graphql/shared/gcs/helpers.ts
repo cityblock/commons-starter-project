@@ -78,7 +78,7 @@ export const loadPatientDocumentUrl = async (
 
 export const loadPatientAggregatedDataFile = async (
   patientId: string,
-  aggregatedDataType: 'medications' | 'diagnoses' | 'encounters',
+  aggregatedDataType: 'medications' | 'diagnoses' | 'encounters' | 'claims-encounters',
 ): Promise<string | null> => {
   let finalConfig: any = config;
   if (config.NODE_ENV === 'test') {
@@ -171,7 +171,29 @@ export const loadPatientMedications = async (patientId: string): Promise<IPatien
   });
 };
 
-export const loadPatientEncounters = async (patientId: string): Promise<IPatientEncounter[]> => {
+export const loadPatientClaimsEncounters = async (patientId: string): Promise<IPatientEncounter[]> => {
+  const rawPatientEncounters = await loadPatientAggregatedDataFile(patientId, 'claims-encounters');
+  const patientEncounters = await parsePatientAggregatedDataFile(rawPatientEncounters);
+
+  return patientEncounters.map(patientEncounter => {
+    const id = crypto
+      .createHash('md5')
+      .update(JSON.stringify(patientEncounter))
+      .digest('hex');
+
+    return {
+      id,
+      source: 'Claims',
+      date: patientEncounter.date,
+      title: patientEncounter.procName,
+      location: null,
+      notes: null,
+      progressNoteId: null,
+    };
+  });
+};
+
+export const loadPatientCcdEncounters = async (patientId: string): Promise<IPatientEncounter[]> => {
   const rawPatientEncounters = await loadPatientAggregatedDataFile(patientId, 'encounters');
   const patientEncounters = await parsePatientAggregatedDataFile(rawPatientEncounters);
 
@@ -196,6 +218,13 @@ export const loadPatientEncounters = async (patientId: string): Promise<IPatient
       progressNoteId: null,
     };
   });
+};
+
+export const loadPatientEncounters = async (patientId: string): Promise<IPatientEncounter[]> => {
+  const patientCcdEncounters = await loadPatientCcdEncounters(patientId);
+  const patientClaimsEncounters = await loadPatientClaimsEncounters(patientId);
+
+  return patientCcdEncounters.concat(patientClaimsEncounters);
 };
 
 export const loadUserVoicemailUrl = async (

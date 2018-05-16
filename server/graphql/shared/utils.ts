@@ -23,7 +23,7 @@ export interface IGraphQLContextOptions {
 export interface IContext {
   logger: Logger;
   testConfig?: any;
-  errorReporting: ErrorReporting;
+  errorReporting?: ErrorReporting;
   permissions: Permissions;
   userId?: string;
   txn: Transaction;
@@ -179,7 +179,13 @@ export async function formatResponse(
   response: IGraphQLResponseRoot,
   { context }: { context: IContext },
 ): Promise<any> {
-  const errorReporting = context.errorReporting;
+  let errorReporting = context.errorReporting;
+  if (!errorReporting) {
+    console.error('ERROR: error reporting not defined', JSON.stringify(context));
+    errorReporting = new ErrorReporting({
+      credentials: JSON.parse(String(config.GCP_CREDS)),
+    });
+  }
   try {
     await context.txn.commit();
   } catch (err) {

@@ -122,6 +122,7 @@ export const SPANISH_TRANSLATION = {
     'dashboard.emptysuggestions': 'No hay pacientes con sugerencias MAP pendientes',
     'dashboard.emptytasks': 'No hay pacientes con tareas pendientes o notificaciones',
     'dashboard.emptyupdateMAP': 'No hay pacientes con un MAP desactualizado',
+    'dashboard.emptycomputed': 'There are no patients in this computed list',
     'dashboard.engage': 'Sin compromiso reciente',
     'dashboard.lists': 'Listas de miembros',
     'dashboard.loading': 'Loading...',

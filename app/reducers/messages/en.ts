@@ -123,6 +123,7 @@ export const ENGLISH_TRANSLATION = {
     'dashboard.emptyupdateMAP': 'There are no patients with an out-of-date MAP',
     'dashboard.emptyassigned': 'There are no patients in the assigned state',
     'dashboard.emptyintake': 'There are no patients with incomplete intake steps',
+    'dashboard.emptycomputed': 'There are no patients in this computed list',
     'dashboard.engage': 'No recent engagement',
     'dashboard.lists': 'Member lists',
     'dashboard.loading': 'Loading...',

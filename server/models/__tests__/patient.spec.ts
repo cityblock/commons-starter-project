@@ -194,6 +194,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -205,6 +214,41 @@ describe('patient model', () => {
         lastName: 'last',
         dateOfBirth: birthday,
       });
+    });
+
+    it('should give the patient an initial patient info, adddress, email, and phone', async () => {
+      const { clinic } = await setup(txn);
+      const patientUuid = uuid();
+      const patient = await Patient.create(
+        {
+          patientId: patientUuid,
+          cityblockId: 123456,
+          firstName: 'first',
+          middleName: 'middle',
+          lastName: 'last',
+          dateOfBirth: '02/02/1902',
+          ssn: '123456789',
+          ssnEnd: '6789',
+          homeClinicId: clinic.id,
+          gender: 'female' as Gender,
+          language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '+19102221234',
+          email: 'patient@email.com',
+          nmi: '123123',
+          mrn: '12345',
+        },
+        txn,
+      );
+
+      expect(patient.patientInfo.gender).toEqual('female');
+      expect(patient.patientInfo.primaryAddress.street1).toEqual('1 Main St');
+      expect(patient.patientInfo.primaryEmail.emailAddress).toEqual('patient@email.com');
+      expect(patient.patientInfo.primaryPhone.phoneNumber).toEqual('+19102221234');
     });
 
     it('should give the patient an administrative tasks concern', async () => {
@@ -222,6 +266,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -246,6 +299,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'male' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -269,6 +331,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'male' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -297,6 +368,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -313,6 +393,12 @@ describe('patient model', () => {
         {
           patientId,
           firstName: 'New First Name',
+          lastName: patient.lastName,
+          dateOfBirth: '02/02/1902',
+          ssn: patient.ssn,
+          ssnEnd: patient.ssnEnd,
+          nmi: patient.nmi,
+          mrn: patient.mrn,
         },
         txn,
       );
@@ -325,7 +411,7 @@ describe('patient model', () => {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
       const patientId = uuid();
-      await Patient.create(
+      const patient = await Patient.create(
         {
           patientId,
           cityblockId: 123452,
@@ -338,6 +424,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -353,6 +448,12 @@ describe('patient model', () => {
         {
           patientId,
           firstName: 'A Change That Does Not Matter',
+          lastName: patient.lastName,
+          dateOfBirth: '02/02/1902',
+          ssn: patient.ssn,
+          ssnEnd: patient.ssnEnd,
+          nmi: patient.nmi,
+          mrn: patient.mrn,
         },
         txn,
       );
@@ -378,6 +479,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -391,6 +501,12 @@ describe('patient model', () => {
         {
           patientId,
           firstName: 'A Change That Does Not Matter',
+          lastName: patient.lastName,
+          dateOfBirth: '02/02/1902',
+          ssn: patient.ssn,
+          ssnEnd: patient.ssnEnd,
+          nmi: patient.nmi,
+          mrn: patient.mrn,
         },
         txn,
       );
@@ -404,7 +520,7 @@ describe('patient model', () => {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
       const patientId = uuid();
-      await Patient.create(
+      const patient = await Patient.create(
         {
           patientId,
           cityblockId: 123411,
@@ -417,6 +533,15 @@ describe('patient model', () => {
           homeClinicId: clinic.id,
           gender: 'female' as Gender,
           language: 'english',
+          addressLine1: '1 Main St',
+          addressLine2: '',
+          city: 'New York',
+          state: 'NY',
+          zip: '11211',
+          phone: '',
+          email: '',
+          nmi: '123123',
+          mrn: '12345',
         },
         txn,
       );
@@ -430,6 +555,12 @@ describe('patient model', () => {
         {
           patientId,
           firstName: 'A Change That Does Not Matter',
+          lastName: patient.lastName,
+          dateOfBirth: '02/02/1902',
+          ssn: patient.ssn,
+          ssnEnd: patient.ssnEnd,
+          nmi: patient.nmi,
+          mrn: patient.mrn,
         },
         txn,
       );
@@ -479,24 +610,17 @@ describe('patient model', () => {
     });
 
     it('should fetch a limited set of patients', async () => {
-      const { patient1, patient2 } = await patientsSetup(txn);
+      await patientsSetup(txn);
 
-      expect(await Patient.getAll({ pageNumber: 0, pageSize: 1 }, txn)).toMatchObject({
-        results: [
-          {
-            id: patient1.id,
-          },
-        ],
-        total: 2,
-      });
-      expect(await Patient.getAll({ pageNumber: 1, pageSize: 1 }, txn)).toMatchObject({
-        results: [
-          {
-            id: patient2.id,
-          },
-        ],
-        total: 2,
-      });
+      const page0 = await Patient.getAll({ pageNumber: 0, pageSize: 1 }, txn);
+      const page1 = await Patient.getAll({ pageNumber: 1, pageSize: 1 }, txn);
+
+      expect(page0.results.length).toEqual(1);
+      expect(page0.total).toEqual(2);
+      expect(page1.results.length).toEqual(1);
+      expect(page1.total).toEqual(2);
+
+      expect(page0.results[0].id).not.toEqual(page1.results[0].id);
     });
   });
 

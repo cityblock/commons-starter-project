@@ -102,6 +102,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "id": "patient-id",
             "lastName": "Smith",
             "middleName": null,
+            "mrn": "12345",
+            "nmi": "12345",
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
@@ -272,6 +274,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "id": "patient-id",
             "lastName": "Smith",
             "middleName": null,
+            "mrn": "12345",
+            "nmi": "12345",
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
@@ -460,6 +464,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "id": "patient-id",
             "lastName": "Smith",
             "middleName": null,
+            "mrn": "12345",
+            "nmi": "12345",
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
@@ -630,6 +636,8 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "id": "patient-id",
             "lastName": "Smith",
             "middleName": null,
+            "mrn": "12345",
+            "nmi": "12345",
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,

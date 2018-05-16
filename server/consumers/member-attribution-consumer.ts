@@ -3,14 +3,16 @@ dotenv.config();
 
 import * as Knex from 'knex';
 import * as kue from 'kue';
-import { pickBy, toNumber } from 'lodash';
+import { toNumber } from 'lodash';
 import { transaction, Model, Transaction } from 'objection';
+import { Gender } from 'schema';
 import config from '../config';
 import { IMemberAttributionMessageData } from '../handlers/pubsub/push-handler';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import Mattermost from '../mattermost';
-import Patient, { IPatientCreateFields, IPatientUpdateFields } from '../models/patient';
+import Clinic from '../models/clinic';
+import Patient from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
@@ -40,46 +42,89 @@ export async function processNewMemberAttributionMessage(
   existingTxn?: Transaction,
 ) {
   // Note: existingTxn is only for use in tests
-  const { patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, jobId } = data;
+  const {
+    patientId,
+    cityblockId,
+    gender,
+    firstName,
+    middleName,
+    lastName,
+    ssn,
+    dob,
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    zip,
+    email,
+    phone,
+    language,
+    nmi,
+    externalIds,
+  } = data;
 
-  // TODO: Make this less strict
-  if (
-    !patientId ||
-    !homeClinicId ||
-    !cityblockId ||
-    !firstName ||
-    !lastName ||
-    !dateOfBirth ||
-    !jobId
-  ) {
-    return Promise.reject(
-      'Missing either patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, or jobId',
-    );
+  if (!patientId || !cityblockId || !firstName || !lastName || !dob) {
+    return Promise.reject('Missing either patientId, cityblockId, firstName, lastName, or dob');
   }
 
   await transaction(existingTxn || PatientAnswer.knex(), async txn => {
     const patient = await Patient.getById(patientId, txn);
+    const homeClinic = await Clinic.findOrCreateAttributionClinic(txn);
+    const ssnEnd = ssn.slice(5, 9);
+    const mrn =
+      externalIds && externalIds.acpny && externalIds.acpny.length
+        ? externalIds.acpny[0].externalId
+        : null;
 
     // If a patient exists, update it
     if (patient) {
-      const dataForUpdate = pickBy<IPatientUpdateFields>(data);
       await Patient.updateFromAttribution(
         {
-          ...dataForUpdate,
           patientId,
-          cityblockId: toNumber(cityblockId), // Everything is a string in Redis land
+          firstName,
+          middleName,
+          lastName,
+          dateOfBirth: dob,
+          ssn,
+          ssnEnd,
+          nmi,
+          mrn,
         },
         txn,
       );
       // else, create a new one
     } else {
-      const dataForCreate = pickBy<IPatientCreateFields>(data);
+      let formattedGender: Gender | null = null;
+
+      if (gender === 'M') {
+        formattedGender = 'male' as Gender;
+      } else if (gender === 'F') {
+        formattedGender = 'female' as Gender;
+      }
+
       const newPatient = await Patient.create(
         {
-          ...dataForCreate,
           patientId,
           cityblockId: toNumber(cityblockId), // Everything is a string in Redis land
-        } as any, // TODO: Fix type
+          firstName,
+          middleName,
+          lastName,
+          homeClinicId: homeClinic.id,
+          dateOfBirth: dob,
+          ssn,
+          ssnEnd,
+          gender: formattedGender,
+          language,
+          addressLine1,
+          addressLine2,
+          city,
+          state,
+          zip,
+          email,
+          phone,
+          nmi,
+          mrn,
+        },
         txn,
       );
       // and create associated patient channel in mattermost

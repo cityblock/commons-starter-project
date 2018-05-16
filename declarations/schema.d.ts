@@ -1301,6 +1301,8 @@ declare module 'schema' {
     lastName: string;
     dateOfBirth: string | null;
     ssnEnd: string | null;
+    nmi: string | null;
+    mrn: string | null;
     cityblockId: number;
     homeClinicId: string | null;
     createdAt: string;

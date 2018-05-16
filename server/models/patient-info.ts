@@ -1,11 +1,15 @@
 import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { ContactMethodOptions, Gender, MaritalStatus, Transgender } from 'schema';
+import { PhoneTypeOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';
 import Email from './email';
 import Patient from './patient';
+import PatientAddress from './patient-address';
+import PatientEmail from './patient-email';
+import PatientPhone from './patient-phone';
 import Phone from './phone';
 
 const EAGER_QUERY = `[
@@ -20,6 +24,13 @@ export interface IInitialPatientInfoOptions {
   gender?: Gender;
   language?: string | null;
   maritalStatus?: MaritalStatus;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  zip: string;
+  email: string;
+  phone: string;
 }
 
 export interface IPatientInfoOptions {
@@ -204,14 +215,75 @@ export default class PatientInfo extends Model {
   }
 
   static async createInitialPatientInfo(input: IInitialPatientInfoOptions, txn: Transaction) {
-    const filteredInput = omitBy<IInitialPatientInfoOptions>(input, isNil);
-    const existingPatientInfo = await this.query(txn).findOne({ patientId: input.patientId });
+    let primaryAddressId: string | null = null;
+    let primaryPhoneId: string | null = null;
+    let primaryEmailId: string | null = null;
 
-    if (!existingPatientInfo) {
-      return this.query(txn).insertAndFetch(filteredInput as any); // TODO: Fix type
+    if (!primaryAddressId) {
+      const address = await Address.create(
+        {
+          updatedById: input.updatedById,
+          zip: input.zip,
+          street1: input.addressLine1,
+          street2: input.addressLine2,
+          city: input.city,
+          state: input.state,
+        },
+        txn,
+      );
+      primaryAddressId = address.id;
+
+      await PatientAddress.create({ addressId: primaryAddressId, patientId: input.patientId }, txn);
     }
 
-    return existingPatientInfo;
+    if (!primaryPhoneId && input.phone.length === 12) {
+      const existingPatientIdWithPhone = await PatientPhone.getPatientIdForPhoneNumber(
+        input.phone,
+        txn,
+      );
+
+      if (!existingPatientIdWithPhone) {
+        const phone = await Phone.create(
+          {
+            phoneNumber: input.phone,
+            type: 'other' as PhoneTypeOptions,
+          },
+          txn,
+        );
+        primaryPhoneId = phone.id;
+
+        await PatientPhone.create({ phoneId: primaryPhoneId, patientId: input.patientId }, txn);
+      }
+    }
+
+    if (!primaryEmailId && input.email.length > 1) {
+      const email = await Email.create(
+        {
+          updatedById: input.updatedById,
+          emailAddress: input.email,
+        },
+        txn,
+      );
+      primaryEmailId = email.id;
+
+      await PatientEmail.create({ emailId: primaryEmailId, patientId: input.patientId }, txn);
+    }
+
+    const filteredInput = omitBy(
+      {
+        patientId: input.patientId,
+        updatedById: input.updatedById,
+        gender: input.gender,
+        language: input.language,
+        maritalStatus: input.maritalStatus,
+        primaryAddressId,
+        primaryPhoneId,
+        primaryEmailId,
+      },
+      isNil,
+    );
+
+    return this.query(txn).insertAndFetch(filteredInput as any);
   }
 
   static async edit(

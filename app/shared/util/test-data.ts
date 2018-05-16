@@ -201,6 +201,8 @@ export const patient = {
   homeClinicId: clinic.id,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
+  nmi: '12345',
+  mrn: '12345',
   deletedAt: null,
   scratchPad: 'Note',
   coreIdentityVerifiedAt: '2017-09-07T13:45:14.532Z',
@@ -1183,6 +1185,8 @@ export const coreIdentity = {
   patientDataFlags: patient.patientDataFlags,
   cityblockId: patient.cityblockId,
   ssnEnd: patient.ssnEnd,
+  nmi: patient.nmi,
+  mrn: patient.mrn,
 };
 
 export const contactInfo = {

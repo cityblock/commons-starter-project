@@ -53,8 +53,8 @@ describe('patient address model', () => {
         txn,
       );
 
-      expect(patientAddress.length).toBe(1);
-      expect(patientAddress[0]).toMatchObject({
+      expect(patientAddress.length).toBe(2); // One from Patient#create
+      expect(patientAddress[1]).toMatchObject({
         street1: '55 Washington St',
         zip: '11201',
         state: 'NY',
@@ -75,8 +75,8 @@ describe('patient address model', () => {
         txn,
       );
 
-      expect(patientAddress.length).toBe(1);
-      expect(patientAddress[0]).toMatchObject({
+      expect(patientAddress.length).toBe(2); // One from Patient#create
+      expect(patientAddress[1]).toMatchObject({
         street1: '55 Washington St',
         zip: '11201',
         state: 'NY',
@@ -91,7 +91,7 @@ describe('patient address model', () => {
         },
         txn,
       );
-      expect(remainingAddresses.length).toBe(0);
+      expect(remainingAddresses.length).toBe(1); // One from Patient#create
     });
   });
 
@@ -124,15 +124,15 @@ describe('patient address model', () => {
       await PatientAddress.create({ patientId: patient2.id, addressId: address4.id }, txn);
 
       const addresses = await PatientAddress.getAll(patient.id, txn);
-      expect(addresses.length).toBe(2);
-      expect(addresses[0]).toMatchObject({
+      expect(addresses.length).toBe(3); // One from Patient#create
+      expect(addresses[1]).toMatchObject({
         street1: '55 Washington St',
         zip: '11201',
         state: 'NY',
         city: 'Brooklyn',
         description: 'Office',
       });
-      expect(addresses[1]).toMatchObject({ zip: '11201', street1: '50 Main St' });
+      expect(addresses[2]).toMatchObject({ zip: '11201', street1: '50 Main St' });
     });
   });
 });

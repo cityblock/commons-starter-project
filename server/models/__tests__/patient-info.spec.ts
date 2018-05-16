@@ -45,21 +45,7 @@ describe('patient info model', () => {
     it('should create an initial patient info', async () => {
       const { patient } = await setup(txn);
       expect(patient.patientInfo).not.toBeNull();
-    });
-
-    it('does not create a second patient info', async () => {
-      const { user, patient } = await setup(txn);
-      const { patientInfo } = patient;
-
-      const newPatientInfo = await PatientInfo.createInitialPatientInfo(
-        {
-          patientId: patient.id,
-          updatedById: user.id,
-        },
-        txn,
-      );
-
-      expect(newPatientInfo.id).toEqual(patientInfo.id);
+      expect(patient.patientInfo.primaryAddressId).not.toBeNull();
     });
   });
 
@@ -81,7 +67,6 @@ describe('patient info model', () => {
         id: patient.patientInfo.id,
         gender: 'female' as Gender,
         language: 'ch',
-        primaryAddress: null,
       });
     });
 

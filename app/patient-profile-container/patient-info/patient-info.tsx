@@ -107,6 +107,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
       patientInfo,
       coreIdentityVerifiedAt,
       cityblockId,
+      nmi,
+      mrn,
     } = patient;
     const {
       language,
@@ -144,6 +146,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
         patientDataFlags: flags || patientDataFlags,
         coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
         glassBreakId,
+        nmi,
+        mrn,
       },
       basic: {
         gender: gender || patientInfo.gender,

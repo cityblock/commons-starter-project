@@ -84,7 +84,7 @@ describe('address resolver', () => {
         txn,
       });
 
-      expect(cloneDeep(result.data!.patientAddresses)).toHaveLength(2);
+      expect(cloneDeep(result.data!.patientAddresses)).toHaveLength(3); // 1 address from Patient#create
       expect(cloneDeep(result.data!.patientAddresses)).toContainEqual(
         expect.objectContaining({
           id: primaryAddress.id,

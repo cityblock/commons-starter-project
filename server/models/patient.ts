@@ -1,4 +1,4 @@
-import { isEmpty, omit } from 'lodash';
+import { isEmpty, isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { Gender, IPatientFilterOptions } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -35,14 +35,35 @@ export interface IPatientCreateFields {
   patientId: string;
   cityblockId: number;
   firstName: string;
-  middleName?: string;
+  middleName?: string | null;
   lastName: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
   ssn: string;
   ssnEnd: string;
-  gender: Gender;
+  gender: Gender | null;
   language: string | null;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  zip: string;
+  email: string;
+  phone: string;
+  nmi: string;
+  mrn: string | null;
+}
+
+export interface IPatientUpdateFromAttributionFields {
+  patientId: string;
+  firstName: string;
+  middleName?: string | null;
+  lastName: string;
+  dateOfBirth: string;
+  ssn: string;
+  ssnEnd: string;
+  nmi: string;
+  mrn: string | null;
 }
 
 export interface IPatientUpdateFields {
@@ -83,6 +104,8 @@ export default class Patient extends Model {
   ssn: string;
   homeClinicId: string;
   homeClinic: Clinic;
+  nmi: string;
+  mrn: string | null;
   tasks: Task[];
   patientInfo: PatientInfo;
   careTeam: User[];
@@ -118,6 +141,8 @@ export default class Patient extends Model {
       dateOfBirth: { type: 'string' },
       ssn: { type: 'string', minLength: 1 },
       ssnEnd: { type: 'string', minLength: 1 },
+      nmi: { type: 'string' }, // can probably add a constraint later...just not sure what data will look like
+      mrn: { type: 'string' }, // can probably add a constraint later...just not sure what data will look like
       coreIdentityVerifiedAt: { type: ['string', 'null'] },
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
@@ -284,26 +309,49 @@ export default class Patient extends Model {
       language,
       ssn,
       ssnEnd,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      zip,
+      email,
+      phone,
+      nmi,
+      mrn,
     } = input;
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
     const attributionUser = await User.findOrCreateAttributionUser(txn);
-    const patient = await this.query(txn).insertAndFetch({
-      id: patientId,
-      cityblockId,
-      firstName,
-      middleName,
-      lastName,
-      homeClinicId,
-      dateOfBirth,
-      ssn,
-      ssnEnd,
-    });
+    const filteredInput = omitBy(
+      {
+        id: patientId,
+        cityblockId,
+        firstName,
+        middleName,
+        lastName,
+        homeClinicId,
+        dateOfBirth,
+        ssn,
+        ssnEnd,
+        nmi,
+        mrn,
+      },
+      isNil,
+    );
+    const patient = await this.query(txn).insertAndFetch(filteredInput);
+
     await PatientInfo.createInitialPatientInfo(
       {
         patientId,
-        gender,
+        gender: gender ? gender : undefined,
         language,
         updatedById: attributionUser.id,
+        addressLine1,
+        addressLine2,
+        city,
+        state,
+        zip,
+        email,
+        phone,
       },
       txn,
     );
@@ -322,17 +370,28 @@ export default class Patient extends Model {
     return this.get(patient.id, txn);
   }
 
-  static async updateFromAttribution(input: IPatientUpdateFields, txn: Transaction) {
+  static async updateFromAttribution(input: IPatientUpdateFromAttributionFields, txn: Transaction) {
     const { patientId } = input;
 
-    // TODO: Figure out what should *actually* happen here
     await PatientDataFlag.deleteAllForPatient(patientId, txn);
-    const updateInput = {
-      ...omit<IPatientUpdateFields>(input, 'patientId'),
+    const updateInput = omitBy(
+      {
+        firstName: input.firstName,
+        middleName: input.middleName,
+        lastName: input.lastName,
+        dateOfBirth: input.dateOfBirth,
+        ssn: input.ssn,
+        ssnEnd: input.ssnEnd,
+        nmi: input.nmi,
+        mrn: input.mrn,
+      },
+      isNil,
+    );
+    const updatedPatient = await this.query(txn).patchAndFetchById(patientId, {
+      ...updateInput,
       coreIdentityVerifiedById: null,
       coreIdentityVerifiedAt: null,
-    };
-    const updatedPatient = await this.query(txn).patchAndFetchById(patientId, updateInput as any);
+    });
     const attributionUser = await User.findOrCreateAttributionUser(txn);
     await ComputedPatientStatus.updateForPatient(patientId, attributionUser.id, txn);
 

@@ -393,6 +393,8 @@ type Patient implements uniqueId {
   lastName: String!
   dateOfBirth: String
   ssnEnd: String
+  nmi: String
+  mrn: String
   cityblockId: Int!
   homeClinicId: ID
   createdAt: String!

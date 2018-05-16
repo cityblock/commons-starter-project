@@ -285,7 +285,7 @@ export const ENGLISH_TRANSLATION = {
     'coreIdentity.socialSecurity': 'Social security number',
     'coreIdentity.cityblockId': 'Cityblock ID',
     'coreIdentity.nmiNumber': 'NMI number',
-    'coreIdentity.ehrNumber': 'EHR number',
+    'coreIdentity.ehrNumber': 'MRN',
     'coreIdentity.placeholder': 'Select a field name...',
     'planInfo.sectionTitle': 'Plan Information',
     'planInfo.title': 'Insurance and Plan Information',

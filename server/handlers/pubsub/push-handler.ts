@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as kue from 'kue';
 import { createRedisClient } from '../../lib/redis';
-import { IPatientCreateFields } from '../../models/patient';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
@@ -13,8 +12,38 @@ export interface IComputedFieldMessageData {
   jobId: string;
 }
 
-export interface IMemberAttributionMessageData extends IPatientCreateFields {
+export interface IMemberAttributionMessageDataExternalIds {
+  [key: string]: Array<{
+    externalId: string;
+  }>;
+}
+
+export interface IMemberAttributionMessageData {
+  patientId: string;
+  cityblockId: string;
+  memberId: string;
+  gender: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  ssn: string;
+  dob: string;
+  medicareId: string | null;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  county: string;
+  state: string;
+  zip: string;
+  email: string;
+  phone: string;
+  race: string;
+  ethnicity: string;
+  language: string;
+  nmi: string;
+  maritalStatus: string;
   jobId: string;
+  externalIds: IMemberAttributionMessageDataExternalIds;
 }
 
 export type SchedulingEventType =

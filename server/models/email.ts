@@ -27,7 +27,7 @@ export default class Email extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      emailAddress: { type: 'string', minLength: 1 },
+      emailAddress: { type: 'string' }, // due to attribution data inconsistencies, can't set a minLength
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },

@@ -131,7 +131,7 @@ describe('address resolver', () => {
 
       const patientAddress = await PatientAddress.getAll(patient.id, txn);
       expect(patientAddress).not.toBeNull();
-      expect(patientAddress.length).toBe(1);
+      expect(patientAddress.length).toBe(2); // 1 address already from Patient#create
     });
 
     it('should create address with patient and make it primary for patient', async () => {
@@ -168,7 +168,7 @@ describe('address resolver', () => {
 
       const patientAddress = await PatientAddress.getAll(patient.id, txn);
       expect(patientAddress).not.toBeNull();
-      expect(patientAddress.length).toBe(1);
+      expect(patientAddress.length).toBe(2); // 1 address from Patient#create
 
       const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
       expect(editedInfo.primaryAddressId).toBe(result.data!.addressCreateForPatient.id);

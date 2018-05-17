@@ -9921,6 +9921,97 @@ export interface taskUserFollowMutation {
   } | null,
 };
 
+export interface taskUserUnfollowMutationVariables {
+  taskId: string,
+  userId: string,
+};
+
+export interface taskUserUnfollowMutation {
+  // Remove user from task followers
+  taskUserUnfollow:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string,
+    updatedAt: string,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: Priority | null,
+    patient:  {
+      id: string,
+      firstName: string,
+      middleName: string | null,
+      lastName: string,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        hasUploadedPhoto: boolean | null,
+      },
+    },
+    assignedToId: string | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } >,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    },
+    patientGoal:  {
+      id: string,
+      title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
+    },
+    CBOReferralId: string | null,
+    CBOReferral:  {
+      id: string,
+      categoryId: string,
+      category:  {
+        id: string,
+        title: string,
+      },
+      CBOId: string | null,
+      CBO:  {
+        id: string,
+        name: string,
+        categoryId: string,
+        address: string,
+        city: string,
+        state: string,
+        zip: string,
+        fax: string | null,
+        phone: string,
+        url: string | null,
+      } | null,
+      name: string | null,
+      url: string | null,
+      diagnosis: string | null,
+      sentAt: string | null,
+      acknowledgedAt: string | null,
+    } | null,
+  } | null,
+};
+
 export interface getTasksForCurrentUserQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,

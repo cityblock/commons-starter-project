@@ -139,6 +139,16 @@ export interface ICarePlanSuggestionsPopupOptions {
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
 }
 
+export interface ITaskUnfollowPopup {
+  name: 'TASK_UNFOLLOW';
+  options: ITaskUnfollowPopupOptions;
+}
+
+export interface ITaskUnfollowPopupOptions {
+  taskId: string;
+  userId: string;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -160,6 +170,7 @@ export type IState =
   | IPatientPhotoPopup
   | IGlobalErrorPopup
   | ICarePlanSuggestionsPopup
+  | ITaskUnfollowPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

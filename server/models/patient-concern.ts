@@ -91,6 +91,9 @@ export default class PatientConcern extends BaseModel {
       .modifyEager('patientGoals.tasks', builder => {
         builder.where('task.completedAt', null);
       })
+      .modifyEager('patientGoals.tasks.followers', builder => {
+        builder.where('task_follower.deletedAt', null);
+      })
       .findOne({ id: patientConcernId, deletedAt: null });
 
     if (!patientConcern) {
@@ -176,6 +179,9 @@ export default class PatientConcern extends BaseModel {
       })
       .modifyEager('patientGoals.tasks', builder => {
         builder.where({ 'task.completedAt': null, 'task.deletedAt': null });
+      })
+      .modifyEager('patientGoals.tasks.followers', builder => {
+        builder.where('task_follower.deletedAt', null);
       })
       .where({ patientId, deletedAt: null })
       .orderBy('order');

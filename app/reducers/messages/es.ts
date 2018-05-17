@@ -993,5 +993,10 @@ export const SPANISH_TRANSLATION = {
     'suggestionsModal.tasks': 'New Tasks',
     'suggestionsModal.done': 'Done',
     'suggestionsModal.seeSuggestions': 'Go to suggestions',
+    'unfollowPopup.title': 'Remove this Care Team member as a follower?',
+    'unfollowPopup.subtitle':
+      'Please confirm that you want to remove this Care Team member from following this task. They will no longer receive any updates related to this task.',
+    'unfollowPopup.cancel': 'Cancel',
+    'unfollowPopup.remove': 'Yes, remove',
   },
 };

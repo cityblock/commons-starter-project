@@ -1,7 +1,9 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
+import * as taskFollow from '../../../app/graphql/queries/task-user-follow-mutation.graphql';
+import * as taskUnfollow from '../../../app/graphql/queries/task-user-unfollow-mutation.graphql';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
@@ -69,6 +71,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('task follower', () => {
   let txn = null as any;
+  const taskFollowMutation = print(taskFollow);
+  const taskUnfollowMutation = print(taskUnfollow);
 
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
@@ -82,17 +86,17 @@ describe('task follower', () => {
   describe('task followers', () => {
     it('adds and removes user to from task followers and creates TaskEvent models', async () => {
       const { user, task } = await setup(txn);
-      const mutation = `mutation {
-          taskUserFollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
-            id
-            followers { id }
-          }
-        }`;
-      const result = await graphql(schema, mutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const result = await graphql(
+        schema,
+        taskFollowMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { userId: user.id, taskId: task.id },
+      );
       const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map((u: any) => u.id);
       expect(taskFollowers).toContain(user.id);
       const taskEvents1 = await TaskEvent.getTaskEvents(
@@ -107,17 +111,17 @@ describe('task follower', () => {
       expect(taskEvents1.results[0].eventType).toEqual('add_follower');
 
       // unfollow
-      const unfollowMutation = `mutation {
-          taskUserUnfollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
-            id
-            followers { id }
-          }
-        }`;
-      const unfollowResult = await graphql(schema, unfollowMutation, null, {
-        permissions,
-        userId: user.id,
-        txn,
-      });
+      const unfollowResult = await graphql(
+        schema,
+        taskUnfollowMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          txn,
+        },
+        { taskId: task.id, userId: user.id },
+      );
       const taskFollowersUnfollowed = cloneDeep(
         unfollowResult.data!.taskUserUnfollow.followers,
       ).map((u: any) => u.id);

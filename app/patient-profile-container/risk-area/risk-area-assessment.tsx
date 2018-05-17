@@ -222,7 +222,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       glassBreakId,
     } = this.props;
     const { inProgress, editPopupVisible, carePlanSuggestions } = this.state;
-    const isLoading = (riskAreaAssessmentSubmissionLoading || riskAreaGroupLoading || riskAreaLoading);
+    const isLoading =
+      riskAreaAssessmentSubmissionLoading || riskAreaGroupLoading || riskAreaLoading;
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 

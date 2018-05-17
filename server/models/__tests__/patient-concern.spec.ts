@@ -9,6 +9,7 @@ import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import Task from '../task';
+import TaskFollower from '../task-follower';
 import User from '../user';
 
 interface ISetup {
@@ -177,7 +178,7 @@ describe('patient concern model', () => {
   });
 
   it('gets concerns associated with a patient and loads correct goals/tasks', async () => {
-    const { concern, patient, user } = await setup(txn);
+    const { concern, patient, user, clinic } = await setup(txn);
     const patientConcern = await PatientConcern.create(
       {
         concernId: concern.id,
@@ -204,6 +205,13 @@ describe('patient concern model', () => {
       },
       txn,
     );
+
+    // add and remove some followers
+    const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+    await TaskFollower.followTask({ userId: user.id, taskId: incompleteTask.id }, txn);
+    await TaskFollower.followTask({ userId: user2.id, taskId: incompleteTask.id }, txn);
+    await TaskFollower.unfollowTask({ userId: user2.id, taskId: incompleteTask.id }, txn);
+
     const completeTask = await Task.create(
       {
         title: 'Complete Task',
@@ -230,9 +238,15 @@ describe('patient concern model', () => {
     const fetchedPatientGoal = fetchedConcerns[1].patientGoals[0];
     const { tasks } = fetchedPatientGoal;
     const taskIds = tasks.map(task => task.id);
+
     expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
     expect(taskIds).toContain(incompleteTask.id);
     expect(taskIds).not.toContain(completeTask.id);
+    expect(taskIds).not.toContain(deletedTask.id);
+
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].followers).toHaveLength(1);
+    expect(tasks[0].followers[0]).toMatchObject(user);
   });
 
   it('auto increments "order" on create', async () => {

@@ -2,7 +2,8 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { taskWithComment } from '../../util/test-data';
 import AddTaskFollower from '../add-task-follower';
-import TaskFollowers, { Follower, IProps } from '../followers';
+import Follower from '../follower';
+import TaskFollowers, { IProps } from '../followers';
 
 describe('Task Followers Component', () => {
   const patientId = 'moana';

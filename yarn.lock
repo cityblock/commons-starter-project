@@ -248,9 +248,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@octokit/rest@^15.2.6":
-  version "15.2.7"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.2.7.tgz#4fe02562dae0a205348aa0d2b3b2da065cf4a8ab"
+"@octokit/rest@^15.5.0":
+  version "15.6.0"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.6.0.tgz#2d4a9f9efd38513b606f3192d91bac216c1c6d94"
   dependencies:
     before-after-hook "^1.1.0"
     btoa-lite "^1.0.0"
@@ -3579,11 +3579,11 @@ d@1:
   dependencies:
     es5-ext "^0.10.9"
 
-danger@3.6.6:
-  version "3.6.6"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.6.tgz#683ecd1644f9444a15644d698c6ac4f6e1499c92"
+danger@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.7.0.tgz#f943e12a28c29bb8ce6194f15bf02cdc0832d7a4"
   dependencies:
-    "@octokit/rest" "^15.2.6"
+    "@octokit/rest" "^15.5.0"
     babel-polyfill "^6.23.0"
     chalk "^2.3.0"
     commander "^2.13.0"
@@ -3593,6 +3593,7 @@ danger@3.6.6:
     jsome "^2.3.25"
     json5 "^1.0.0"
     jsonpointer "^4.0.1"
+    jsonwebtoken "^8.2.1"
     lodash.find "^4.6.0"
     lodash.includes "^4.3.0"
     lodash.isobject "^3.0.2"
@@ -3605,8 +3606,8 @@ danger@3.6.6:
     parse-github-url "^1.0.2"
     parse-link-header "^1.0.1"
     pinpoint "^1.1.0"
-    readline-sync "^1.4.7"
-    require-from-string "^2.0.1"
+    readline-sync "^1.4.9"
+    require-from-string "^2.0.2"
     rfc6902 "^2.2.2"
     supports-hyperlinks "^1.0.1"
     vm2 "^3.6.0"
@@ -7035,7 +7036,7 @@ jsonpointer@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"
 
-jsonwebtoken@8.2.1, jsonwebtoken@^8.1.0:
+jsonwebtoken@8.2.1, jsonwebtoken@^8.1.0, jsonwebtoken@^8.2.1:
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.2.1.tgz#333ee39aa8f238f32fa41693e7a2fb7e42f82b31"
   dependencies:
@@ -10663,7 +10664,7 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-readline-sync@^1.4.7:
+readline-sync@^1.4.9:
   version "1.4.9"
   resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-1.4.9.tgz#3eda8e65f23cd2a17e61301b1f0003396af5ecda"
 
@@ -11020,7 +11021,7 @@ require-from-string@^1.1.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-1.2.1.tgz#529c9ccef27380adfec9a2f965b649bbee636418"
 
-require-from-string@^2.0.1:
+require-from-string@^2.0.1, require-from-string@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
 

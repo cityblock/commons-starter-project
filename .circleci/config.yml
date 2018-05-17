@@ -47,7 +47,7 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: node:8.11.2@sha256:ceb6e9e47ec034664e795d7b7e45f288e2b47a5a51cc6015dc7d672252900788
-      - image: postgres:10.3@sha256:4bee009f05db292e794d4c288b587be60c3a526cc3bf669100be981ef0551284
+      - image: postgres:10.4@sha256:a1301bdf8b6b578e024a367df2e4ff93298f5eaa346413351bde9fee32c7d9e5
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root
@@ -83,7 +83,7 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: node:8.11.2@sha256:ceb6e9e47ec034664e795d7b7e45f288e2b47a5a51cc6015dc7d672252900788
-      - image: postgres:10.3@sha256:4bee009f05db292e794d4c288b587be60c3a526cc3bf669100be981ef0551284
+      - image: postgres:10.4@sha256:a1301bdf8b6b578e024a367df2e4ff93298f5eaa346413351bde9fee32c7d9e5
         environment:
           POSTGRES_DB: commons_test
           POSTGRES_USER: root

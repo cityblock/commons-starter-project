@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as trace from '@google-cloud/trace-agent';
+import * as kue from 'kue';
 import config from './config';
 import Logging from './logging';
 if (config.NODE_ENV !== 'test') {
@@ -20,12 +21,15 @@ import * as compression from 'compression';
 import * as express from 'express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
+import * as Knex from 'knex';
 import { Transaction } from 'objection';
+import { Model } from 'objection';
 import * as pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
+import { createRedisClient } from './lib/redis';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
@@ -41,6 +45,15 @@ const DATE_OID = 1082;
 pg.types.setTypeParser(DATE_OID, val => {
   return val;
 });
+
+/* tslint:disable no-var-requires */
+const knexConfig = require('./models/knexfile');
+/* tslint:enable no-var-requires */
+
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
+Model.knex(knex);
+
+kue.createQueue({ redis: createRedisClient() });
 
 export type Env = 'production' | 'development' | 'test';
 

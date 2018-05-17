@@ -12,18 +12,17 @@ const knexConfig = require('../../models/knexfile');
 /* tslint:enable no-var-requires */
 
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {
-  const existingTxn = res.locals.existingTxn;
   const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
 
   try {
     await transaction(User.knex(), async txn => {
       const db = knexConfig[config.NODE_ENV].connection.database;
-      const numberConnections = await User.knex().raw(
+      const numberConnections = await txn.raw(
         `select count (*) from pg_stat_activity where datname = ?`,
         db,
-        existingTxn || txn,
       );
       logger.log(`Number of postgres connections: ${numberConnections.rows[0].count}`);
+      return numberConnections;
     });
     res.sendStatus(200);
   } catch (error) {

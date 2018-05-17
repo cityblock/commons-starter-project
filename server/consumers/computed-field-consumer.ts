@@ -31,7 +31,7 @@ queue.process('computedField', async (job, done) => {
 });
 
 queue.on('error', err => {
-  reportError(err, 'Kue error');
+  reportError(err, 'Kue uncaught error');
 });
 
 export async function processNewComputedFieldValue(
@@ -45,7 +45,7 @@ export async function processNewComputedFieldValue(
     return Promise.reject('Missing either patientId, slug, value, or jobId');
   }
 
-  await transaction(existingTxn || PatientAnswer.knex(), async txn => {
+  return transaction(existingTxn || PatientAnswer.knex(), async txn => {
     try {
       await Patient.get(patientId, txn);
     } catch (err) {
@@ -86,7 +86,7 @@ export async function processNewComputedFieldValue(
       txn,
     ))[0];
 
-    await createSuggestionsForComputedFieldAnswer(
+    return createSuggestionsForComputedFieldAnswer(
       patientId,
       patientAnswer.id,
       computedField.id,

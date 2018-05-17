@@ -60,7 +60,7 @@ describe('postgres pingdom test', () => {
     );
     await checkPostgresHandler(request, response);
     expect(console.log).toBeCalledWith(
-      `Number of postgres connections: ${Number(numberConnections.rows[0].count) + 1}`,
+      `Number of postgres connections: ${Number(numberConnections.rows[0].count)}`,
     );
     expect(response.sendStatus).toBeCalledWith(200);
   });

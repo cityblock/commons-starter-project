@@ -13,7 +13,7 @@ Model.knex(knex);
 const email = process.env.EMAIL || 'cristina@cityblock.com';
 
 export async function createInfo() {
-  await transaction(Patient.knex(), async txn => {
+  return transaction(User.knex(), async txn => {
     const user = await User.getBy(
       {
         fieldName: 'email',
@@ -30,7 +30,7 @@ export async function createInfo() {
       return;
     }
 
-    await Patient.createAllPatientInfo(user.id, txn);
+    return Patient.createAllPatientInfo(user.id, txn);
   });
 }
 

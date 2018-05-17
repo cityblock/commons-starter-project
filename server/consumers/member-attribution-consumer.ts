@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-
 import * as Knex from 'knex';
 import * as kue from 'kue';
 import { toNumber } from 'lodash';
@@ -13,7 +12,6 @@ import { createRedisClient } from '../lib/redis';
 import Mattermost from '../mattermost';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
-import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
@@ -34,7 +32,7 @@ queue.process('memberAttribution', async (job, done) => {
 });
 
 queue.on('error', err => {
-  reportError(err, 'Kue error');
+  reportError(err, 'Kue uncaught error');
 });
 
 export async function processNewMemberAttributionMessage(
@@ -67,7 +65,7 @@ export async function processNewMemberAttributionMessage(
     return Promise.reject('Missing either patientId, cityblockId, firstName, lastName, or dob');
   }
 
-  await transaction(existingTxn || PatientAnswer.knex(), async txn => {
+  await transaction(existingTxn || Patient.knex(), async txn => {
     const patient = await Patient.getById(patientId, txn);
     const homeClinic = await Clinic.findOrCreateAttributionClinic(txn);
     const ssnEnd = ssn.slice(5, 9);
@@ -78,7 +76,7 @@ export async function processNewMemberAttributionMessage(
 
     // If a patient exists, update it
     if (patient) {
-      await Patient.updateFromAttribution(
+      return Patient.updateFromAttribution(
         {
           patientId,
           firstName,
@@ -129,7 +127,7 @@ export async function processNewMemberAttributionMessage(
       );
       // and create associated patient channel in mattermost
       const mattermost = Mattermost.get();
-      await mattermost.createChannelForPatient(newPatient);
+      return mattermost.createChannelForPatient(newPatient);
     }
   });
 }

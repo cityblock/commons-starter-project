@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-
 import axios from 'axios';
 import { format } from 'date-fns';
 import * as Knex from 'knex';
@@ -12,6 +11,7 @@ import { loadUserVoicemailUrl } from '../graphql/shared/gcs/helpers';
 import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
 import { createRedisClient } from '../lib/redis';
+import Logging from '../logging';
 import Voicemail from '../models/voicemail';
 import TwilioClient from '../twilio-client';
 
@@ -42,17 +42,23 @@ interface ITwilioRecording {
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
+const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
+
 queue.process('processVoicemail', async (job, done) => {
   try {
+    logger.log('[Consumer][processVoicemail] Started processing');
     await processVoicemails(job.data);
+    logger.log('[Consumer][processVoicemail] Completed processing');
     return done();
   } catch (err) {
+    logger.log('[Consumer][processVoicemail] Error processing');
+    reportError(err, `Kue error processVoicemail`);
     return done(err);
   }
 });
 
 queue.on('error', err => {
-  reportError(err, 'Kue error');
+  reportError(err, 'Kue uncaught error');
 });
 
 export async function processVoicemails(data: IProcessVoicemailData, existingTxn?: Transaction) {
@@ -99,21 +105,22 @@ export async function createVoicemail(
 ): Promise<Voicemail> {
   const { callSid, duration, dateCreated, dateUpdated } = recording;
 
-  let voicemail: Voicemail | null = null;
-
-  await transaction(existingTxn || Voicemail.knex(), async txn => {
-    voicemail = await Voicemail.create(
-      {
-        phoneCallSid: callSid,
-        duration: parseInt(duration, 10),
-        twilioCreatedAt: dateCreated.toISOString(),
-        twilioUpdatedAt: dateUpdated.toISOString(),
-        twilioPayload: recording,
-        jobId,
-      },
-      txn,
-    );
-  });
+  const voicemail: Voicemail | null = await transaction(
+    existingTxn || Voicemail.knex(),
+    async txn => {
+      return Voicemail.create(
+        {
+          phoneCallSid: callSid,
+          duration: parseInt(duration, 10),
+          twilioCreatedAt: dateCreated.toISOString(),
+          twilioUpdatedAt: dateUpdated.toISOString(),
+          twilioPayload: recording,
+          jobId,
+        },
+        txn,
+      );
+    },
+  );
 
   if (!voicemail) {
     throw new Error('Error storing record of voicemail in database');
@@ -132,7 +139,7 @@ export async function uploadVoicemail(twilioUrl: string, userId: string, voicema
   });
 
   if (signedUrl && audioFile) {
-    await axios.put(signedUrl, audioFile.data, {
+    return axios.put(signedUrl, audioFile.data, {
       headers: {
         'Content-Type': 'audio/mpeg',
       },
@@ -165,7 +172,7 @@ export async function notifyUserOfVoicemail(voicemail: Voicemail) {
     to: phone,
     body,
   });
-  await twilioClient.messages.create({
+  return twilioClient.messages.create({
     from: config.CITYBLOCK_VOICEMAIL,
     to: phone,
     body: voicemailUrl,
@@ -175,5 +182,5 @@ export async function notifyUserOfVoicemail(voicemail: Voicemail) {
 export async function deleteVoicemail(sid: string) {
   const twilioClient = TwilioClient.get();
 
-  await twilioClient.recordings(sid).remove();
+  return twilioClient.recordings(sid).remove();
 }

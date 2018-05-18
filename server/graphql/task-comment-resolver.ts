@@ -8,8 +8,8 @@ import {
   TaskEventTypes,
 } from 'schema';
 import { IPaginationOptions } from '../db';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import TaskComment from '../models/task-comment';
-import TaskEvent from '../models/task-event';
 import checkUserPermissions from './shared/permissions-check';
 import { formatRelayEdge, IContext } from './shared/utils';
 
@@ -32,15 +32,12 @@ export async function taskCommentCreate(
 
   const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
-  await TaskEvent.create(
-    {
-      taskId,
-      userId: userId!,
-      eventType: 'add_comment' as TaskEventTypes,
-      eventCommentId: taskComment.id,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId,
+    userId: userId!,
+    eventType: 'add_comment' as TaskEventTypes,
+    eventCommentId: taskComment.id,
+  });
 
   return taskComment;
 }
@@ -60,15 +57,12 @@ export async function taskCommentEdit(
 
   const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: taskComment.taskId,
-      userId: userId!,
-      eventType: 'edit_comment' as TaskEventTypes,
-      eventCommentId: taskComment.id,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: taskComment.taskId,
+    userId: userId!,
+    eventType: 'edit_comment' as TaskEventTypes,
+    eventCommentId: taskComment.id,
+  });
 
   return taskComment;
 }
@@ -87,15 +81,12 @@ export async function taskCommentDelete(
 
   const taskComment = await TaskComment.delete(taskCommentId, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: taskComment.taskId,
-      userId: userId!,
-      eventType: 'delete_comment' as TaskEventTypes,
-      eventCommentId: taskComment.id,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: taskComment.taskId,
+    userId: userId!,
+    eventType: 'delete_comment' as TaskEventTypes,
+    eventCommentId: taskComment.id,
+  });
 
   return taskComment;
 }

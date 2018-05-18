@@ -7,8 +7,8 @@ import {
   TaskEventTypes,
 } from 'schema';
 import { IPaginationOptions } from '../db';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import Task, { TaskOrderOptions, UserTaskOrderOptions } from '../models/task';
-import TaskEvent from '../models/task-event';
 import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
 import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
@@ -84,25 +84,19 @@ export async function taskCreate(
     txn,
   );
 
-  await TaskEvent.create(
-    {
-      taskId: task.id,
-      userId: userId!,
-      eventType: 'create_task' as TaskEventTypes,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: task.id,
+    userId: userId!,
+    eventType: 'create_task' as TaskEventTypes,
+  });
 
   if (assignedToId) {
-    await TaskEvent.create(
-      {
-        taskId: task.id,
-        userId: userId!,
-        eventType: 'edit_assignee' as TaskEventTypes,
-        eventUserId: assignedToId,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: task.id,
+      userId: userId!,
+      eventType: 'edit_assignee' as TaskEventTypes,
+      eventUserId: assignedToId,
+    });
   }
 
   return task;
@@ -131,59 +125,44 @@ export async function taskEdit(
   const updatedTask = await Task.update(args.input.taskId, args.input as any, txn);
 
   if (args.input.priority && args.input.priority !== priority) {
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'edit_priority' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'edit_priority' as TaskEventTypes,
+    });
   }
 
   if (args.input.dueAt && args.input.dueAt !== dueAt) {
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'edit_due_date' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'edit_due_date' as TaskEventTypes,
+    });
   }
 
   if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'edit_assignee' as TaskEventTypes,
-        eventUserId: args.input.assignedToId,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'edit_assignee' as TaskEventTypes,
+      eventUserId: args.input.assignedToId,
+    });
   }
 
   if (args.input.title && args.input.title !== title) {
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'edit_title' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'edit_title' as TaskEventTypes,
+    });
   }
 
   if (args.input.description && args.input.description !== description) {
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'edit_description' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'edit_description' as TaskEventTypes,
+    });
   }
 
   return updatedTask;
@@ -198,14 +177,11 @@ export async function taskDelete(
 
   const task = await Task.delete(args.input.taskId, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'delete_task' as TaskEventTypes,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: args.input.taskId,
+    userId: userId!,
+    eventType: 'delete_task' as TaskEventTypes,
+  });
 
   return task || null;
 }
@@ -219,14 +195,11 @@ export async function taskComplete(
 
   const task = Task.complete(args.input.taskId, userId!, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'complete_task' as TaskEventTypes,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: args.input.taskId,
+    userId: userId!,
+    eventType: 'complete_task' as TaskEventTypes,
+  });
 
   return task;
 }
@@ -240,14 +213,11 @@ export async function taskUncomplete(
 
   const task = Task.uncomplete(args.input.taskId, userId!, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'uncomplete_task' as TaskEventTypes,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: args.input.taskId,
+    userId: userId!,
+    eventType: 'uncomplete_task' as TaskEventTypes,
+  });
 
   return task;
 }

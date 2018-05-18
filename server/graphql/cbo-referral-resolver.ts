@@ -4,8 +4,8 @@ import {
   IRootMutationType,
   TaskEventTypes,
 } from 'schema';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import CBOReferral from '../models/cbo-referral';
-import TaskEvent from '../models/task-event';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -37,25 +37,19 @@ export async function CBOReferralEdit(
   const referral = await CBOReferral.edit(input as any, input.CBOReferralId, txn);
 
   if (input.sentAt) {
-    await TaskEvent.create(
-      {
-        taskId: input.taskId,
-        userId: userId!,
-        eventType: 'cbo_referral_edit_sent_at' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: input.taskId,
+      userId: userId!,
+      eventType: 'cbo_referral_edit_sent_at' as TaskEventTypes,
+    });
   }
 
   if (input.acknowledgedAt) {
-    await TaskEvent.create(
-      {
-        taskId: input.taskId,
-        userId: userId!,
-        eventType: 'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: input.taskId,
+      userId: userId!,
+      eventType: 'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
+    });
   }
 
   return referral;

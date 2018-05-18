@@ -1,11 +1,11 @@
 import { Transaction } from 'objection';
 import { TaskEventTypes } from 'schema';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../shared/constants';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import { dateAdd } from '../lib/date';
 import CareTeam from '../models/care-team';
 import CBOReferral from '../models/cbo-referral';
 import Task, { ITaskEditableFields } from '../models/task';
-import TaskEvent from '../models/task-event';
 import TaskTemplate from '../models/task-template';
 
 export async function createTaskForTaskTemplate(
@@ -68,24 +68,17 @@ export async function createTaskForTaskTemplate(
 
   const task = await Task.create(taskVariables, txn);
 
-  await TaskEvent.create(
-    {
-      taskId: task.id,
-      userId,
-      eventType: 'create_task' as TaskEventTypes,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId: task.id,
+    userId,
+    eventType: 'create_task' as TaskEventTypes,
+  });
 
   if (assignedToId) {
-    await TaskEvent.create(
-      {
-        taskId: task.id,
-        userId,
-        eventType: 'edit_assignee' as TaskEventTypes,
-        eventUserId: assignedToId,
-      },
-      txn,
-    );
+    addJobToQueue('taskEvent', {
+      taskId: task.id,
+      userId,
+      eventType: 'edit_assignee' as TaskEventTypes,
+    });
   }
 }

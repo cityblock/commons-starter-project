@@ -1,4 +1,5 @@
 import { graphql, print } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
@@ -10,10 +11,11 @@ import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
-import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 interface ISetup {
   task: Task;
@@ -74,8 +76,13 @@ describe('task follower', () => {
   const taskFollowMutation = print(taskFollow);
   const taskUnfollowMutation = print(taskUnfollow);
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -99,16 +106,14 @@ describe('task follower', () => {
       );
       const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map((u: any) => u.id);
       expect(taskFollowers).toContain(user.id);
-      const taskEvents1 = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents1.total).toEqual(1);
-      expect(taskEvents1.results[0].eventType).toEqual('add_follower');
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        userId: user.id,
+        taskId: task.id,
+        eventType: 'add_follower',
+        eventUserId: user.id,
+      });
 
       // unfollow
       const unfollowResult = await graphql(
@@ -126,18 +131,14 @@ describe('task follower', () => {
         unfollowResult.data!.taskUserUnfollow.followers,
       ).map((u: any) => u.id);
       expect(taskFollowersUnfollowed).not.toContain(user.id);
-      const taskEvents2 = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents2.total).toEqual(2);
-      const eventTypes = taskEvents2.results.map(event => event.eventType);
-      expect(eventTypes).toContain('add_follower');
-      expect(eventTypes).toContain('remove_follower');
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        userId: user.id,
+        taskId: task.id,
+        eventType: 'remove_follower',
+        eventUserId: user.id,
+      });
     });
   });
 });

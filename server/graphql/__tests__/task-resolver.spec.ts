@@ -1,4 +1,5 @@
 import { graphql, print } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { Priority, UserRole } from 'schema';
@@ -21,7 +22,6 @@ import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
-import TaskEvent from '../../models/task-event';
 import TaskFollower from '../../models/task-follower';
 import User from '../../models/user';
 import {
@@ -32,6 +32,8 @@ import {
   setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 interface ISetup {
   task1: Task;
@@ -125,8 +127,13 @@ describe('task tests', () => {
   const taskCompleteMutation = print(taskComplete);
   const taskUncompleteMutation = print(taskUncomplete);
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -297,18 +304,15 @@ describe('task tests', () => {
         { priority: 'high' as Priority, taskId: task1.id },
       );
       const task = cloneDeep(result.data!.taskEdit);
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(1);
-      expect(taskEvents.results[0].eventType).toEqual('edit_priority');
 
-      const result2 = await graphql(
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_priority',
+      });
+
+      await graphql(
         schema,
         taskEditMutation,
         null,
@@ -319,20 +323,16 @@ describe('task tests', () => {
         },
         { assignedToId: user2.id, taskId: task1.id },
       );
-      const secondTask = cloneDeep(result2.data!.taskEdit);
-      const taskEvents2 = await TaskEvent.getTaskEvents(
-        secondTask.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents2.total).toEqual(2);
-      expect(taskEvents2.results.map(taskEvent => taskEvent.eventType)).toContain('edit_assignee');
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_assignee',
+      });
 
       const newDueAt = new Date().toISOString();
-      const result3 = await graphql(
+      await graphql(
         schema,
         taskEditMutation,
         null,
@@ -343,19 +343,15 @@ describe('task tests', () => {
         },
         { dueAt: newDueAt, taskId: task1.id },
       );
-      const thirdTask = cloneDeep(result3.data!.taskEdit);
-      const taskEvents3 = await TaskEvent.getTaskEvents(
-        thirdTask.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents3.total).toEqual(3);
-      expect(taskEvents3.results.map(taskEvent => taskEvent.eventType)).toContain('edit_due_date');
 
-      const result4 = await graphql(
+      expect(queue.testMode.jobs.length).toBe(3);
+      expect(queue.testMode.jobs[2].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_due_date',
+      });
+
+      await graphql(
         schema,
         taskEditMutation,
         null,
@@ -366,19 +362,15 @@ describe('task tests', () => {
         },
         { title: 'edited title', taskId: task1.id },
       );
-      const fourthTask = cloneDeep(result4.data!.taskEdit);
-      const taskEvents4 = await TaskEvent.getTaskEvents(
-        fourthTask.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents4.total).toEqual(4);
-      expect(taskEvents4.results.map(taskEvent => taskEvent.eventType)).toContain('edit_title');
 
-      const result5 = await graphql(
+      expect(queue.testMode.jobs.length).toBe(4);
+      expect(queue.testMode.jobs[3].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_title',
+      });
+
+      await graphql(
         schema,
         taskEditMutation,
         null,
@@ -389,22 +381,16 @@ describe('task tests', () => {
         },
         { description: 'edited description', taskId: task1.id },
       );
-      const fifthTask = cloneDeep(result5.data!.taskEdit);
-      const taskEvents5 = await TaskEvent.getTaskEvents(
-        fifthTask.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents5.total).toEqual(5);
-      expect(taskEvents5.results.map(taskEvent => taskEvent.eventType)).toContain(
-        'edit_description',
-      );
+
+      expect(queue.testMode.jobs.length).toBe(5);
+      expect(queue.testMode.jobs[4].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_description',
+      });
 
       // Editing multiple fields at the same time
-      const result6 = await graphql(
+      await graphql(
         schema,
         taskEditMutation,
         null,
@@ -422,16 +408,8 @@ describe('task tests', () => {
           description: 'fancy new description',
         },
       );
-      const sixthTask = cloneDeep(result6.data!.taskEdit);
-      const taskEvents6 = await TaskEvent.getTaskEvents(
-        sixthTask.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents6.total).toEqual(10);
+
+      expect(queue.testMode.jobs.length).toBe(10);
     });
   });
 
@@ -462,16 +440,13 @@ describe('task tests', () => {
         { permissions, userId: user.id, txn },
         { taskId: task1.id },
       );
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task1.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(1);
-      expect(taskEvents.results[0].eventType).toEqual('complete_task');
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        taskId: task1.id,
+        userId: user.id,
+        eventType: 'complete_task',
+      });
     });
   });
 
@@ -502,16 +477,13 @@ describe('task tests', () => {
         { permissions, userId: user.id, txn },
         { taskId: task1.id },
       );
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task1.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(1);
-      expect(taskEvents.results[0].eventType).toEqual('uncomplete_task');
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        taskId: task1.id,
+        userId: user.id,
+        eventType: 'uncomplete_task',
+      });
     });
   });
 
@@ -583,17 +555,17 @@ describe('task tests', () => {
         title: 'title',
       });
 
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(2);
-      const expectedEventTypes = taskEvents.results.map(taskEvent => taskEvent.eventType);
-      expect(expectedEventTypes).toEqual(expect.arrayContaining(['edit_assignee', 'create_task']));
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'create_task',
+      });
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'edit_assignee',
+      });
     });
   });
 
@@ -658,16 +630,12 @@ describe('task tests', () => {
       const task = cloneDeep(result.data!.taskDelete);
       expect(task).toMatchObject({ id: task1.id });
 
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(1);
-      expect(taskEvents.results[0].eventType).toEqual('delete_task');
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        taskId: task.id,
+        userId: user.id,
+        eventType: 'delete_task',
+      });
     });
   });
 

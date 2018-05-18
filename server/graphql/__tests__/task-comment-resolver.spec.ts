@@ -1,4 +1,5 @@
 import { graphql } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
@@ -8,10 +9,11 @@ import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
-import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 interface ISetup {
   task: Task;
@@ -65,8 +67,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('task comments', () => {
   let txn = null as any;
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -91,16 +98,14 @@ describe('task comments', () => {
         txn,
       });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
-      const taskEvents1 = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents1.total).toEqual(1);
-      expect(taskEvents1.results[0].eventType).toEqual('add_comment');
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        userId: user.id,
+        taskId: task.id,
+        eventType: 'add_comment',
+        eventCommentId: result.data!.taskCommentCreate.id,
+      });
 
       // delete comment
       const deleteMutation = `mutation {
@@ -113,16 +118,14 @@ describe('task comments', () => {
         userId: user.id,
         txn,
       });
-      const taskEvents2 = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents2.total).toEqual(2);
-      expect(taskEvents2.results.find(event => event.eventType === 'delete_comment')).toBeTruthy();
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        userId: user.id,
+        taskId: task.id,
+        eventType: 'delete_comment',
+        eventCommentId: result.data!.taskCommentCreate.id,
+      });
 
       // get comments
       const getComments = `{ taskComments(taskId: "${task.id}") {
@@ -174,16 +177,14 @@ describe('task comments', () => {
       });
 
       expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-      expect(taskEvents.total).toEqual(2);
-      expect(taskEvents.results.find(event => event.eventType === 'edit_comment')).toBeTruthy();
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        userId: user.id,
+        taskId: task.id,
+        eventType: 'edit_comment',
+        eventCommentId: result.data!.taskCommentCreate.id,
+      });
     });
 
     it('resolves task comments', async () => {

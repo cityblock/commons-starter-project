@@ -1,6 +1,6 @@
 import { IRootMutationType, ITaskFollowInput, TaskEventTypes } from 'schema';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import Task from '../models/task';
-import TaskEvent from '../models/task-event';
 import TaskFollower from '../models/task-follower';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -29,15 +29,12 @@ export async function taskUserFollow(
     txn,
   );
 
-  await TaskEvent.create(
-    {
-      taskId,
-      userId: userId!,
-      eventType: 'add_follower' as TaskEventTypes,
-      eventUserId: input.userId,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId,
+    userId: userId!,
+    eventType: 'add_follower' as TaskEventTypes,
+    eventUserId: input.userId,
+  });
 
   return Task.get(taskId, txn);
 }
@@ -58,15 +55,12 @@ export async function taskUserUnfollow(
     txn,
   );
 
-  await TaskEvent.create(
-    {
-      taskId,
-      userId: userId!,
-      eventType: 'remove_follower' as TaskEventTypes,
-      eventUserId: input.userId,
-    },
-    txn,
-  );
+  addJobToQueue('taskEvent', {
+    taskId,
+    userId: userId!,
+    eventType: 'remove_follower' as TaskEventTypes,
+    eventUserId: input.userId,
+  });
 
   return Task.get(taskId, txn);
 }

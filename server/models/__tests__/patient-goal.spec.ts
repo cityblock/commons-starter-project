@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { CompletedWithinInterval, Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
@@ -16,6 +17,8 @@ import TaskEvent from '../task-event';
 import TaskFollower from '../task-follower';
 import TaskTemplate from '../task-template';
 import User from '../user';
+
+const queue = kue.createQueue();
 
 const userRole = 'physician' as UserRole;
 
@@ -52,8 +55,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('patient goal model', () => {
   let txn = null as any;
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -168,20 +176,18 @@ describe('patient goal model', () => {
       },
       txn,
     );
-    const fetchedTaskEvents = await TaskEvent.getUserTaskEvents(
-      user.id,
-      {
-        pageNumber: 0,
-        pageSize: 10,
-      },
-      txn,
-    );
+
     expect(fetchedTasks.total).toEqual(1);
     expect(fetchedTasks.results[0].title).toEqual(taskTemplate.title);
     expect(fetchedTasks.results[0].patientGoalId).toEqual(createdPatientGoal.id);
-    expect(fetchedTaskEvents.total).toEqual(2);
-    const expectedEventTypes = fetchedTaskEvents.results.map(taskEvent => taskEvent.eventType);
-    expect(expectedEventTypes).toEqual(expect.arrayContaining(['edit_assignee', 'create_task']));
+    expect(queue.testMode.jobs.length).toBe(2);
+
+    expect(queue.testMode.jobs[0].data).toMatchObject({
+      eventType: 'create_task',
+    });
+    expect(queue.testMode.jobs[1].data).toMatchObject({
+      eventType: 'edit_assignee',
+    });
   });
 
   it('correctly assigns tasks when taskTemplates have an default assignee role', async () => {

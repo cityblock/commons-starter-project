@@ -4,7 +4,7 @@ import { enqueueProcessVoicemail } from '../process-voicemail';
 const queue = kue.createQueue();
 
 describe('Process Voicemail Job', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     queue.testMode.enter();
   });
 

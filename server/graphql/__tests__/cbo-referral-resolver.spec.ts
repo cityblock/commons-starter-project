@@ -1,11 +1,10 @@
 import { graphql, print } from 'graphql';
+import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
 import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
-
 import Clinic from '../../models/clinic';
-import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import {
   createCBO,
@@ -16,6 +15,8 @@ import {
   createTask,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 const userRole = 'admin' as UserRole;
 const permissions = 'green';
@@ -34,8 +35,13 @@ describe('CBO Referral resolver', () => {
   const cboReferralCreateMutation = print(cboReferralCreate);
   const cboReferralEditMutation = print(cboReferralEdit);
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -108,17 +114,8 @@ describe('CBO Referral resolver', () => {
       });
       expect(result.data!.CBOReferralEdit.sentAt).toBeTruthy();
 
-      const taskEvents = await TaskEvent.getTaskEvents(
-        task.id,
-        {
-          pageNumber: 0,
-          pageSize: 10,
-        },
-        txn,
-      );
-
-      expect(taskEvents.results.length).toBe(1);
-      expect(taskEvents.results[0]).toMatchObject({
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
         taskId: task.id,
         userId: user.id,
         eventType: 'cbo_referral_edit_sent_at',

@@ -69,7 +69,7 @@ export class Header extends React.Component<allProps> {
     if (featureFlags.canViewAllMembers || featureFlags.canViewMembersOnPanel) {
       taskLink = (
         <Link
-          to={'/tasks'}
+          to={'/tasks/assigned'}
           className={classNames(this.getNavItemClassnames('/tasks'), styles.relativeNavItem)}
         >
           <div className={classNames(styles.defaultIcon, styles.tasksIcon)} />

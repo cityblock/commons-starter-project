@@ -15,12 +15,15 @@ import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
 import * as styles from './css/tasks-container.css';
 
+export type TasksTab = 'assigned' | 'following';
+
 interface IProps {
   mutate?: any;
   location: History.LocationState;
   match: {
     isExact: boolean;
     params: {
+      tab: TasksTab;
       taskId: string;
     };
     path: string;
@@ -48,6 +51,7 @@ export class TasksContainer extends React.Component<allProps> {
   render() {
     const { tasksResponse, match, history } = this.props;
     const taskId = match && match.params.taskId;
+    const tab = match ? match.params.tab : 'assigned';
 
     const tasks =
       tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
@@ -68,9 +72,10 @@ export class TasksContainer extends React.Component<allProps> {
           error={this.props.tasksError}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          routeBase={`/tasks`}
+          routeBase={`/tasks/${tab}`}
           tasks={tasks}
           taskId={taskId || ''}
+          tab={tab}
         />
       </div>
     );
@@ -83,6 +88,7 @@ const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
     pageNumber: 0,
     pageSize: 10,
     orderBy: pageParams.orderBy || ('priorityDesc' as any),
+    isFollowingTasks: props.match ? props.match.params.tab === 'following' : false,
   };
 };
 

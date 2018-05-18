@@ -10,6 +10,7 @@ describe('tasks container', () => {
     isExact: false,
     params: {
       taskId: taskWithComment.id,
+      tab: 'assigned' as any,
     },
     path: '/tasks',
     url: 'localhost:3000',

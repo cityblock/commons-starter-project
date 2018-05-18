@@ -30,7 +30,7 @@ export default (
       <Route exact path="/" component={LogIn} />
       <Authentication>
         <Route path="/dashboard/:list/:answerId?" component={Dashboard} />
-        <Route path="/tasks/:taskId?" component={Tasks} />
+        <Route path="/tasks/:tab/:taskId?" component={Tasks} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
         <Route path="/search" component={PatientSearch} />

@@ -998,5 +998,11 @@ export const SPANISH_TRANSLATION = {
       'Please confirm that you want to remove this Care Team member from following this task. They will no longer receive any updates related to this task.',
     'unfollowPopup.cancel': 'Cancel',
     'unfollowPopup.remove': 'Yes, remove',
+    'myTasks.priority': 'Priority',
+    'myTasks.dueAt': 'Due date',
+    'myTasks.patient': 'Patient',
+    'myTasks.sortBy': 'Sort by:',
+    'myTasks.assigned': 'Assigned',
+    'myTasks.following': 'Following',
   },
 };

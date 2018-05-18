@@ -8,7 +8,7 @@
   border-radius: 5px;
   border: 1px solid var(--border-color);
   color: var(--black-color);
-  margin: 0 0 10px var(--small-gutter);
+  margin: 0 0 var(--extra-small-gutter) var(--small-gutter);
   position: relative;
 }
 

@@ -17,8 +17,14 @@ import {
   FullTaskFragment,
   FullUserFragment,
 } from '../../graphql/types';
+import { TasksTab } from '../../tasks-container/tasks-container';
 import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
+import Option from '../library/option/option';
+import Select from '../library/select/select';
+import SmallText from '../library/small-text/small-text';
+import UnderlineTab from '../library/underline-tab/underline-tab';
+import UnderlineTabs from '../library/underline-tabs/underline-tabs';
 import Task from '../task/task';
 import * as styles from './css/tasks.css';
 import TaskRow from './task-row';
@@ -42,6 +48,7 @@ export interface IProps {
   hasPreviousPage?: boolean;
   taskId: string;
   taskIdsWithNotifications?: string[];
+  tab: TasksTab;
 }
 
 interface IRouterProps {
@@ -152,6 +159,7 @@ export class Tasks extends React.Component<allProps, IState> {
       loading,
       hasNextPage,
       fetchMoreTasks,
+      tab,
     } = this.props;
 
     const { orderBy } = this.state;
@@ -169,18 +177,37 @@ export class Tasks extends React.Component<allProps, IState> {
     const taskHtml = <Route path={`${routeBase}/:taskId`} render={RenderedTask} />;
     return (
       <div className={styles.container}>
-        <div className={sortSearchStyles.sortSearchBar}>
-          <div className={sortSearchStyles.sort}>
-            <div className={sortSearchStyles.sortLabel}>Sort by:</div>
-            <div className={sortSearchStyles.sortDropdown}>
-              <select value={orderBy} onChange={this.onSortChange}>
-                <option value="priorityDesc">Priority</option>
-                <option value="dueAtAsc">Due date</option>
-                <option value="patientAsc">Patient</option>
-              </select>
-            </div>
+        <UnderlineTabs>
+          <div>
+            <UnderlineTab
+              messageId="myTasks.assigned"
+              selected={tab === 'assigned'}
+              href={`/tasks/assigned/${window.location.search}`}
+            />
+            <UnderlineTab
+              messageId="myTasks.following"
+              selected={tab === 'following'}
+              href={`/tasks/following/${window.location.search}`}
+            />
           </div>
-        </div>
+          <div className={sortSearchStyles.sort}>
+            <SmallText
+              messageId="myTasks.sortBy"
+              color="darkGray"
+              size="large"
+              className={sortSearchStyles.label}
+            />
+            <Select
+              value={orderBy}
+              onChange={this.onSortChange}
+              className={sortSearchStyles.dropdown}
+            >
+              <Option value="priorityDesc" messageId="myTasks.priority" />
+              <Option value="dueAtAsc" messageId="myTasks.dueAt" />
+              <Option value="patientAsc" messageId="myTasks.patient" />
+            </Select>
+          </div>
+        </UnderlineTabs>
         <div className={styles.bottomContainer}>
           <InfiniteScroll
             loading={loading}

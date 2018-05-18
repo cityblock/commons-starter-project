@@ -10016,6 +10016,7 @@ export interface getTasksForCurrentUserQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: UserTaskOrderOptions | null,
+  isFollowingTasks?: boolean | null,
 };
 
 export interface getTasksForCurrentUserQuery {

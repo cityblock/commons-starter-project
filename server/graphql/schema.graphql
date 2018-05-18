@@ -2939,6 +2939,7 @@ type RootQueryType {
     pageNumber: Int
     pageSize: Int
     orderBy: UserTaskOrderOptions
+    isFollowingTasks: Boolean
   ): TaskWithImageEdges!
   # Tasks due soon for patient - in dashboard
   tasksDueSoonForPatient(patientId: ID!): [Task!]!

@@ -263,9 +263,20 @@ export default class Task extends BaseModel {
     userId: string,
     { pageNumber, pageSize, orderBy, order }: IUserTaskPaginationOptions,
     txn: Transaction,
+    isFollowingTasks?: boolean,
   ): Promise<IPaginatedResults<Task>> {
-    const queryBuilder = this.query(txn)
-      .where({ assignedToId: userId, deletedAt: null, completedAt: null })
+    const tasksQuery = isFollowingTasks
+      ? this.query(txn)
+          .whereIn(
+            'task.id',
+            TaskFollower.query(txn)
+              .where({ userId, deletedAt: null })
+              .select('taskId'),
+          )
+          .andWhere({ deletedAt: null, completedAt: null })
+      : this.query(txn).where({ assignedToId: userId, deletedAt: null, completedAt: null });
+
+    const queryBuilder = tasksQuery
       .joinRelation('patient')
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null));

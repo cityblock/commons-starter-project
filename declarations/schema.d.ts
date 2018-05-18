@@ -768,6 +768,7 @@ declare module 'schema' {
     pageNumber?: number | null;
     pageSize?: number | null;
     orderBy?: UserTaskOrderOptions | null;
+    isFollowingTasks?: boolean | null;
   }
 
   interface ITasksDueSoonForPatientOnRootQueryTypeArguments {

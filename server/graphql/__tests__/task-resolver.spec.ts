@@ -818,5 +818,43 @@ describe('task tests', () => {
         },
       });
     });
+
+    it('resolves tasks that current user is following', async () => {
+      const { user, user2, patient, task1, task2, patientGoal } = await setup(txn);
+      await Task.create(
+        {
+          title: 'Task 3 Title',
+          description: 'description',
+          dueAt: new Date().toISOString(),
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user.id,
+          patientGoalId: patientGoal.id,
+        },
+        txn,
+      );
+
+      await TaskFollower.followTask({ userId: user2.id, taskId: task1.id }, txn);
+      await TaskFollower.followTask({ userId: user2.id, taskId: task2.id }, txn);
+      await TaskFollower.unfollowTask({ userId: user2.id, taskId: task2.id }, txn);
+
+      const result = await graphql(
+        schema,
+        tasksForCurrentUserQuery,
+        null,
+        {
+          permissions,
+          userId: user2.id,
+          txn,
+        },
+        { pageNumber: 0, pageSize: 10, isFollowingTasks: true },
+      );
+
+      expect(cloneDeep(result.data!.tasksForCurrentUser.edges)).toHaveLength(1);
+      expect(cloneDeep(result.data!.tasksForCurrentUser.edges[0].node)).toMatchObject({
+        id: task1.id,
+        title: task1.title,
+      });
+    });
   });
 });

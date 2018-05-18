@@ -447,6 +447,86 @@ describe('task model', () => {
     });
   });
 
+  it('fetches tasks that user is following', async () => {
+    const { patient, user, patientGoal, clinic } = await setup(txn);
+
+    const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
+    const dueAt = new Date().toISOString();
+    await Task.create(
+      {
+        title: 'title',
+        description: 'description',
+        dueAt,
+        patientId: patient.id,
+        createdById: user.id,
+        assignedToId: user.id,
+        priority: 'low' as Priority,
+        patientGoalId: patientGoal.id,
+      },
+      txn,
+    );
+    const task2 = await Task.create(
+      {
+        title: 'title 2',
+        description: 'description 2',
+        dueAt,
+        patientId: patient.id,
+        createdById: user2.id,
+        assignedToId: user2.id,
+        priority: 'high' as Priority,
+        patientGoalId: patientGoal.id,
+      },
+      txn,
+    );
+    const task3 = await Task.create(
+      {
+        title: 'title 3',
+        description: 'description 3',
+        dueAt,
+        patientId: patient.id,
+        createdById: user2.id,
+        assignedToId: user2.id,
+        priority: 'high' as Priority,
+        patientGoalId: patientGoal.id,
+      },
+      txn,
+    );
+    const task4 = await Task.create(
+      {
+        title: 'title 4',
+        description: 'description 4',
+        dueAt,
+        patientId: patient.id,
+        createdById: user2.id,
+        assignedToId: user2.id,
+        priority: 'high' as Priority,
+        patientGoalId: patientGoal.id,
+      },
+      txn,
+    );
+
+    await TaskFollower.followTask({ userId: user.id, taskId: task2.id }, txn);
+    await TaskFollower.followTask({ userId: user.id, taskId: task3.id }, txn);
+    await TaskFollower.followTask({ userId: user.id, taskId: task4.id }, txn);
+
+    await Task.complete(task3.id, user.id, txn);
+    await TaskFollower.unfollowTask({ userId: user.id, taskId: task4.id }, txn);
+
+    expect(
+      await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2, order, orderBy }, txn, true),
+    ).toMatchObject({
+      results: [
+        {
+          id: task2.id,
+          title: 'title 2',
+          description: 'description 2',
+          priority: 'high' as Priority,
+        },
+      ],
+      total: 1,
+    });
+  });
+
   it('completes a task', async () => {
     const { patient, user, patientGoal } = await setup(txn);
 

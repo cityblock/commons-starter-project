@@ -305,6 +305,7 @@ export async function resolveTaskIdsWithNotifications(
 export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
   userId: string;
   orderBy: string;
+  isFollowingTasks?: boolean;
 }
 
 /* tslint:disable:check-is-allowed */
@@ -331,6 +332,7 @@ export async function resolveCurrentUserTasks(
       orderBy,
     },
     txn,
+    args.isFollowingTasks || false,
   );
 
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);

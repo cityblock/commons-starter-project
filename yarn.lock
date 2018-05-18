@@ -540,9 +540,9 @@
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.0.3.tgz#1f89840c7aac2406cc43a2ecad98fc02a8e130e4"
 
-"@types/node@8.10.15":
-  version "8.10.15"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.15.tgz#3ce3cdf6ee1846a9db0c0f52275c14bf0cd67f67"
+"@types/node@8.10.16":
+  version "8.10.16"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.16.tgz#96fadb371748845a0c8ea970a565330efb0a67d5"
 
 "@types/node@^8.9.4":
   version "8.10.12"

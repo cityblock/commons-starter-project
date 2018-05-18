@@ -12,6 +12,7 @@
     "./server/consumers/scheduling-consumer",
     "./server/consumers/voicemail-consumer",
     "./server/consumers/mattermost-consumer",
+    "./server/consumers/task-event-consumer",
     "./server/jobs/process-voicemail"
   ],
   "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]

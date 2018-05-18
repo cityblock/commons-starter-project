@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-
 import * as gcsHelpersRaw from '../../graphql/shared/gcs/helpers';
 import Clinic from '../../models/clinic';
 import PatientPhone from '../../models/patient-phone';

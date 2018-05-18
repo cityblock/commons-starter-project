@@ -52,7 +52,7 @@ queue.process('processVoicemail', async (job, done) => {
     return done();
   } catch (err) {
     logger.log('[Consumer][processVoicemail] Error processing');
-    reportError(err, `Kue error processVoicemail`);
+    reportError(err, 'Kue error processVoicemail');
     return done(err);
   }
 });

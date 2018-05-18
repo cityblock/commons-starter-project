@@ -8,7 +8,7 @@ import Task from './task';
 import TaskComment from './task-comment';
 import User from './user';
 
-interface ITaskEventOptions {
+export interface ITaskEventOptions {
   taskId: string;
   userId: string;
   eventType: TaskEventTypes;

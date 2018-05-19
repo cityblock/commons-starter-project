@@ -165,7 +165,7 @@
     "@types/morgan": "1.7.35",
     "@types/node": "8.10.17",
     "@types/pg": "7.4.9",
-    "@types/prop-types": "15.5.2",
+    "@types/prop-types": "15.5.3",
     "@types/qs": "6.5.1",
     "@types/react-beautiful-dnd": "6.0.1",
     "@types/react-copy-to-clipboard": "4.2.5",

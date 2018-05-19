@@ -118,7 +118,7 @@
     "jest-transform-graphql": "2.1.0",
     "knex-migrate": "1.5.5",
     "nock": "9.2.5",
-    "node-mocks-http": "1.6.7",
+    "node-mocks-http": "1.7.0",
     "postcss": "6.0.22",
     "prettier": "1.12.1",
     "pretty-quick": "1.4.1",

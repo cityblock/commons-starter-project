@@ -7,6 +7,9 @@ node_modules/
 # compiled ts
 server-compiled
 
+# type generation - should be removed if type generation succeeds
+schema.json
+
 # logs
 *.log
 npm-debug.log*
@@ -22,3 +25,4 @@ stats.json
 
 # redis
 dump.rdb
+

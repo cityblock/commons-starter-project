@@ -4,7 +4,7 @@ import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
-import { transaction, Transaction } from 'objection';
+import { Transaction } from 'objection';
 import { IGraphQLResponseError, IGraphQLResponseRoot } from 'schema';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
@@ -16,7 +16,7 @@ export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 export interface IGraphQLContextOptions {
   request?: express.Request;
   response?: express.Response;
-  existingTxn?: Transaction;
+  txn: Transaction;
   errorReporting: ErrorReporting;
 }
 
@@ -132,12 +132,11 @@ export async function getGraphQLContext(
   logger: Logger,
   options: IGraphQLContextOptions,
 ): Promise<IContext> {
-  const { existingTxn, request, response, errorReporting } = options;
+  const { txn, request, response, errorReporting } = options;
 
   const traceAgent = trace.get();
   const childSpan = traceAgent.createChildSpan({ name: 'authentication' });
 
-  const txn = existingTxn || (await transaction.start(User.knex()));
   let permissions: Permissions = 'black';
   let userId;
 
@@ -175,6 +174,9 @@ export async function getGraphQLContext(
   };
 }
 
+/**
+ * Strictly here to commit the transaction before sending a success response
+ */
 export async function formatResponse(
   response: IGraphQLResponseRoot,
   { context }: { context: IContext },
@@ -198,7 +200,6 @@ export async function formatResponse(
   }
   return response;
 }
-
 export function formatError(error: IGraphQLResponseError): IGraphQLResponseError {
   const errorReporting = new ErrorReporting({
     credentials: JSON.parse(String(config.GCP_CREDS)),

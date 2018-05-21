@@ -5,14 +5,14 @@ import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
-import { formatError, formatResponse, getGraphQLContext, IContext } from './graphql/shared/utils';
+import { formatError, formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRedisHandler } from './handlers/pingdom/check-redis-handler';
@@ -29,6 +29,7 @@ import {
 } from './handlers/twilio/sms-message-handler';
 import { contactsVcfHandler } from './handlers/vcf/vcard-handler';
 import Logging from './logging';
+import User from './models/user';
 
 const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
 export const TWILIO_COMPLETE_ENDPOINT = '/twilio-complete-phone-call';
@@ -87,11 +88,41 @@ export const ensurePostMiddleware = (
   return res.sendStatus(405);
 };
 
+export const graphqlMiddleware = async (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction,
+  logger: Logging,
+  errorReporting: ErrorReporting,
+  existingTxn?: Transaction,
+) => {
+  const txn = existingTxn || (await transaction.start(User.knex()));
+  try {
+    const context = await getGraphQLContext((request.headers.auth_token as string) || '', logger, {
+      txn,
+      request,
+      response,
+      errorReporting,
+    });
+    return graphqlExpress({
+      schema: schema as any,
+      context,
+      formatResponse,
+      formatError,
+      debug: false,
+    })(request, response, next);
+  } catch (e) {
+    errorReporting.report(e);
+    txn.rollback();
+    return response.sendStatus(500);
+  }
+};
+
 export default async (
   app: express.Application,
   logger: Logging,
   errorReporting: ErrorReporting,
-  txn?: Transaction,
+  existingTxn?: Transaction,
   allowCrossDomainRequests?: boolean,
 ) => {
   process.on('uncaughtException', e => {
@@ -153,30 +184,8 @@ export default async (
     addHeadersMiddleware,
     ensurePostMiddleware,
     bodyParser.json(),
-    graphqlExpress(
-      async (request: express.Request | undefined, response: express.Response | undefined) => {
-        let context: null | IContext = null;
-        try {
-          context = await getGraphQLContext((request!.headers.auth_token as string) || '', logger, {
-            existingTxn: txn,
-            request,
-            response,
-            errorReporting,
-          });
-        } catch (e) {
-          errorReporting.report(e);
-          console.error(e);
-        }
-
-        return {
-          schema: schema as any,
-          context,
-          formatResponse,
-          formatError,
-          debug: false,
-        };
-      },
-    ),
+    async (req: express.Request, res: express.Response, next: express.NextFunction) =>
+      graphqlMiddleware(req, res, next, logger, errorReporting, existingTxn),
   );
 
   // Pingdom check endpoints

@@ -22,14 +22,14 @@ import * as express from 'express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import * as Knex from 'knex';
-import { Transaction } from 'objection';
-import { Model } from 'objection';
+import { transaction, Model, Transaction } from 'objection';
 import * as pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { createRedisClient } from './lib/redis';
+import User from './models/user';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
@@ -86,9 +86,16 @@ export async function main(options: IMainOptions) {
         subscribe,
         schema,
         onConnect: async (connectionParams: { authToken: string }) => {
-          return getGraphQLContext(connectionParams.authToken, logger, {
-            errorReporting,
-          });
+          const txn = await transaction.start(User.knex());
+          try {
+            return getGraphQLContext(connectionParams.authToken, logger, {
+              errorReporting,
+              txn,
+            });
+          } catch (e) {
+            errorReporting.report(e);
+            txn.rollback();
+          }
         },
       } as any,
       {

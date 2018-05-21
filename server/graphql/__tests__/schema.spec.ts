@@ -48,7 +48,7 @@ describe('util tests', () => {
       response: {
         status: 200,
       } as any,
-      existingTxn: txn,
+      txn,
       errorReporting,
     });
     expect(context).toMatchObject({
@@ -80,7 +80,7 @@ describe('util tests', () => {
         status: 200,
       } as any,
       errorReporting,
-      existingTxn: txn,
+      txn,
     });
     expect(context).toMatchObject({
       permissions: 'black',

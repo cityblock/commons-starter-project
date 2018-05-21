@@ -43,12 +43,11 @@ export async function patientAnswersCreate(
   } = input;
 
   if (progressNoteId) {
-    return PatientAnswer.create(
+    return PatientAnswer.createForProgressNote(
       {
         patientId,
         questionIds,
         progressNoteId,
-        type: 'progressNote',
         answers: patientAnswers.map(patientAnswer => ({
           ...patientAnswer,
           userId: userId!,
@@ -57,11 +56,10 @@ export async function patientAnswersCreate(
       txn,
     );
   } else if (patientScreeningToolSubmissionId) {
-    return PatientAnswer.create(
+    return PatientAnswer.createForScreeningTool(
       {
         patientId,
         questionIds,
-        type: 'patientScreeningToolSubmission',
         patientScreeningToolSubmissionId,
         answers: patientAnswers.map(patientAnswer => ({
           ...patientAnswer,
@@ -71,11 +69,10 @@ export async function patientAnswersCreate(
       txn,
     );
   } else if (riskAreaAssessmentSubmissionId) {
-    return PatientAnswer.create(
+    return PatientAnswer.createForRiskArea(
       {
         patientId,
         questionIds,
-        type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId,
         answers: patientAnswers.map(patientAnswer => ({
           ...patientAnswer,

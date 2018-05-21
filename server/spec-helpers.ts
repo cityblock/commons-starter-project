@@ -1735,10 +1735,9 @@ export async function setupComputedPatientList(txn: Transaction) {
     txn,
   );
 
-  const screeningToolPatientAnswers1 = await PatientAnswer.create(
+  const screeningToolPatientAnswers1 = await PatientAnswer.createForScreeningTool(
     {
       patientId: patient1.id,
-      type: 'patientScreeningToolSubmission',
       patientScreeningToolSubmissionId: patientScreeningToolSubmission1.id,
       questionIds: [question.id],
       answers: [
@@ -1770,10 +1769,9 @@ export async function setupComputedPatientList(txn: Transaction) {
     txn,
   );
 
-  const screeningToolPatientAnswers2 = await PatientAnswer.create(
+  const screeningToolPatientAnswers2 = await PatientAnswer.createForScreeningTool(
     {
       patientId: patient2.id,
-      type: 'patientScreeningToolSubmission',
       patientScreeningToolSubmissionId: patientScreeningToolSubmission2.id,
       questionIds: [question.id],
       answers: [
@@ -1805,10 +1803,9 @@ export async function setupComputedPatientList(txn: Transaction) {
     txn,
   );
 
-  const screeningToolPatientAnswers3 = await PatientAnswer.create(
+  const screeningToolPatientAnswers3 = await PatientAnswer.createForScreeningTool(
     {
       patientId: patient3.id,
-      type: 'patientScreeningToolSubmission',
       patientScreeningToolSubmissionId: patientScreeningToolSubmission3.id,
       questionIds: [question.id],
       answers: [
@@ -2000,10 +1997,9 @@ export async function createFullRiskAreaGroupAssociations(
     },
     txn,
   );
-  const screeningToolPatientAnswers = await PatientAnswer.create(
+  const screeningToolPatientAnswers = await PatientAnswer.createForScreeningTool(
     {
       patientId,
-      type: 'patientScreeningToolSubmission',
       patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
       questionIds: [screeningToolAnswer2.questionId],
       answers: [
@@ -2025,10 +2021,9 @@ export async function createFullRiskAreaGroupAssociations(
     txn,
   );
 
-  await PatientAnswer.create(
+  await PatientAnswer.createForRiskArea(
     {
       patientId,
-      type: 'riskAreaAssessmentSubmission',
       riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       questionIds: [answer1.questionId, answer2.id, answer3.id],
       answers: [

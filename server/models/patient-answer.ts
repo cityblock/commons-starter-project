@@ -1,5 +1,5 @@
 import { isEmpty, uniqBy } from 'lodash';
-import { Model, RelationMappings, Transaction } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import { PatientAnswerEventTypes } from 'schema';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
@@ -30,7 +30,6 @@ interface IPatientAnswerCreateForRiskAreaAssessmentSubmission {
   questionIds: string[];
   riskAreaAssessmentSubmissionId: string;
   answers: IAnswers;
-  type: 'riskAreaAssessmentSubmission';
 }
 
 interface IPatientAnswerCreateForProgressNote {
@@ -38,7 +37,6 @@ interface IPatientAnswerCreateForProgressNote {
   questionIds: string[];
   progressNoteId: string;
   answers: IAnswers;
-  type: 'progressNote';
 }
 
 interface IPatientAnswerCreateForScreeningToolSubmission {
@@ -46,7 +44,6 @@ interface IPatientAnswerCreateForScreeningToolSubmission {
   questionIds: string[];
   patientScreeningToolSubmissionId: string;
   answers: IAnswers;
-  type: 'patientScreeningToolSubmission';
 }
 
 interface IPatientAnswerCreateForComputedField {
@@ -54,14 +51,7 @@ interface IPatientAnswerCreateForComputedField {
   questionIds: string[];
   mixerJobId: string;
   answers: IAnswers;
-  type: 'computedFieldAnswer';
 }
-
-type IPatientAnswerCreateFields =
-  | IPatientAnswerCreateForProgressNote
-  | IPatientAnswerCreateForRiskAreaAssessmentSubmission
-  | IPatientAnswerCreateForScreeningToolSubmission
-  | IPatientAnswerCreateForComputedField;
 
 export const EAGER_QUERY = '[answer, question]';
 
@@ -326,46 +316,11 @@ export default class PatientAnswer extends BaseModel {
     }
   }
 
-  static getAnswersForInput(input: IPatientAnswerCreateFields): IAnswers {
-    switch (input.type) {
-      case 'progressNote':
-        return input.answers.map(answer => {
-          answer.progressNoteId = input.progressNoteId;
-          return answer;
-        });
-      case 'patientScreeningToolSubmission':
-        return input.answers.map(answer => {
-          answer.patientScreeningToolSubmissionId = input.patientScreeningToolSubmissionId;
-          return answer;
-        });
-      case 'riskAreaAssessmentSubmission':
-        return input.answers.map(answer => {
-          answer.riskAreaAssessmentSubmissionId = input.riskAreaAssessmentSubmissionId;
-          return answer;
-        });
-      case 'computedFieldAnswer':
-        return input.answers.map(answer => {
-          answer.mixerJobId = input.mixerJobId;
-          return answer;
-        });
-    }
-  }
-
   static async create(
-    input: IPatientAnswerCreateFields,
+    patientAnswerIdsToDeleteQuery: QueryBuilder<Model, Model[], Model[]>,
+    answers: IAnswers,
     txn: Transaction,
   ): Promise<PatientAnswer[]> {
-    const { patientId } = input;
-    const questionIds = input.questionIds;
-    const answers = this.getAnswersForInput(input);
-    // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
-    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
-      .joinRelation('answer')
-      .where('patient_answer.deletedAt', null)
-      .andWhere('patientId', patientId)
-      .where('answer.questionId', 'in', questionIds)
-      .select('patient_answer.id');
-
     const deletedPatientAnswers: PatientAnswer[] = (await PatientAnswer.query(txn)
       .eager('answer')
       .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
@@ -387,6 +342,88 @@ export default class PatientAnswer extends BaseModel {
     await PatientAnswer.createPatientAnswerEvents(results, uniqueDeletedPatientAnswers, txn);
 
     return results;
+  }
+
+  static async createForRiskArea(
+    input: IPatientAnswerCreateForRiskAreaAssessmentSubmission,
+    txn: Transaction,
+  ): Promise<PatientAnswer[]> {
+    const { patientId, questionIds, riskAreaAssessmentSubmissionId, answers } = input;
+    const updatedAnswers = answers.map(answer => {
+      answer.riskAreaAssessmentSubmissionId = riskAreaAssessmentSubmissionId;
+      return answer;
+    });
+
+    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
+      .joinRelation('answer')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .where('answer.questionId', 'in', questionIds)
+      .select('patient_answer.id');
+
+    return this.create(patientAnswerIdsToDeleteQuery, updatedAnswers, txn);
+  }
+
+  static async createForProgressNote(
+    input: IPatientAnswerCreateForProgressNote,
+    txn: Transaction,
+  ): Promise<PatientAnswer[]> {
+    const { patientId, questionIds, progressNoteId, answers } = input;
+    const updatedAnswers = answers.map(answer => {
+      answer.progressNoteId = progressNoteId;
+      return answer;
+    });
+
+    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
+      .joinRelation('answer')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .where('answer.questionId', 'in', questionIds)
+      .select('patient_answer.id');
+
+    return this.create(patientAnswerIdsToDeleteQuery, updatedAnswers, txn);
+  }
+
+  static async createForScreeningTool(
+    input: IPatientAnswerCreateForScreeningToolSubmission,
+    txn: Transaction,
+  ): Promise<PatientAnswer[]> {
+    const { patientId, questionIds, patientScreeningToolSubmissionId, answers } = input;
+    const updatedAnswers = answers.map(answer => {
+      answer.patientScreeningToolSubmissionId = patientScreeningToolSubmissionId;
+      return answer;
+    });
+
+    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
+      .joinRelation('answer')
+      .where('patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .where('answer.questionId', 'in', questionIds)
+      .select('patient_answer.id');
+
+    return this.create(patientAnswerIdsToDeleteQuery, updatedAnswers, txn);
+  }
+
+  static async createForComputedField(
+    input: IPatientAnswerCreateForComputedField,
+    txn: Transaction,
+  ): Promise<PatientAnswer[]> {
+    const { patientId, questionIds, mixerJobId, answers } = input;
+    const updatedAnswers = answers.map(answer => {
+      answer.mixerJobId = mixerJobId;
+      return answer;
+    });
+
+    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
+      .joinRelation('answer')
+      .where('mixerJobId', mixerJobId)
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .where('answer.questionId', 'in', questionIds)
+      .select('patient_answer.id');
+
+    return this.create(patientAnswerIdsToDeleteQuery, updatedAnswers, txn);
   }
 
   static async editApplicable(

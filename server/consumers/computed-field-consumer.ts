@@ -66,7 +66,7 @@ export async function processNewComputedFieldValue(
 
     const { computedField } = answer.question;
 
-    const patientAnswer = (await PatientAnswer.create(
+    const patientAnswer = (await PatientAnswer.createForComputedField(
       {
         patientId,
         questionIds: [answer.questionId],
@@ -81,7 +81,6 @@ export async function processNewComputedFieldValue(
             mixerJobId: jobId,
           },
         ],
-        type: 'computedFieldAnswer',
       },
       txn,
     ))[0];

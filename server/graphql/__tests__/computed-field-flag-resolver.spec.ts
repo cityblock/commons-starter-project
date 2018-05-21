@@ -54,7 +54,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
     trx,
   );
 
-  const patientAnswers = await PatientAnswer.create(
+  const patientAnswers = await PatientAnswer.createForRiskArea(
     {
       patientId: patient.id,
       questionIds: [question.id],
@@ -69,7 +69,6 @@ async function setup(trx: Transaction): Promise<ISetup> {
           applicable: true,
         },
       ],
-      type: 'riskAreaAssessmentSubmission',
     },
     trx,
   );

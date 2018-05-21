@@ -111,11 +111,10 @@ describe('patient screening tool submission model', () => {
       },
       txn,
     );
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForScreeningTool(
       {
         patientId: patient1.id,
         patientScreeningToolSubmissionId: submission.id,
-        type: 'patientScreeningToolSubmission',
         questionIds: [question.id],
         answers: [
           {
@@ -220,11 +219,10 @@ describe('patient screening tool submission model', () => {
     // expect it not to have a progress note yet
     expect(submission.progressNoteId).toBeNull();
 
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForScreeningTool(
       {
         patientId: patient1.id,
         patientScreeningToolSubmissionId: submission.id,
-        type: 'patientScreeningToolSubmission',
         questionIds: [question.id, question2.id],
         answers: [
           {
@@ -369,11 +367,10 @@ describe('patient screening tool submission model', () => {
       },
       txn,
     );
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForScreeningTool(
       {
         patientId: patient1.id,
         patientScreeningToolSubmissionId: submission.id,
-        type: 'patientScreeningToolSubmission',
         questionIds: [question.id],
         answers: [
           {
@@ -528,11 +525,10 @@ describe('patient screening tool submission model', () => {
       },
       txn,
     );
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForScreeningTool(
       {
         patientId: patient1.id,
         patientScreeningToolSubmissionId: firstSubmission.id,
-        type: 'patientScreeningToolSubmission',
         questionIds: [question.id],
         answers: [
           {
@@ -720,11 +716,10 @@ describe('patient screening tool submission model', () => {
       },
       txn,
     );
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForScreeningTool(
       {
         patientId: patient1.id,
         patientScreeningToolSubmissionId: submission.id,
-        type: 'patientScreeningToolSubmission',
         questionIds: [question.id],
         answers: [
           {

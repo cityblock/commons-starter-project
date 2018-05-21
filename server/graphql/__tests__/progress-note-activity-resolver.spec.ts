@@ -167,10 +167,9 @@ describe('progress note resolver', () => {
       },
       txn,
     );
-    const patientAnswer = (await PatientAnswer.create(
+    const patientAnswer = (await PatientAnswer.createForRiskArea(
       {
         patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         questionIds: [answer.questionId],
         answers: [

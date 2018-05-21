@@ -245,10 +245,9 @@ describe('risk area model', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -313,10 +312,9 @@ describe('risk area model', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -332,10 +330,9 @@ describe('risk area model', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [highRiskAnswer.questionId],
           answers: [
@@ -434,10 +431,9 @@ describe('risk area model', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer1.questionId, answer2.id, answer3.id],
           answers: [

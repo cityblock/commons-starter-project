@@ -71,10 +71,9 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patientAnswer = (await PatientAnswer.create(
+  const patientAnswer = (await PatientAnswer.createForRiskArea(
     {
       patientId: patient.id,
-      type: 'riskAreaAssessmentSubmission',
       riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       questionIds: [answer.questionId],
       answers: [
@@ -165,10 +164,9 @@ describe('patient answer event model', () => {
       user,
       patientAnswer,
     } = await setup(txn);
-    const patientAnswer2 = (await PatientAnswer.create(
+    const patientAnswer2 = (await PatientAnswer.createForRiskArea(
       {
         patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         questionIds: [answer.questionId],
         answers: [
@@ -238,10 +236,9 @@ describe('patient answer event model', () => {
       patientAnswer,
       user,
     } = await setup(txn);
-    const patientAnswer2 = (await PatientAnswer.create(
+    const patientAnswer2 = (await PatientAnswer.createForRiskArea(
       {
         patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         questionIds: [question.id],
         answers: [
@@ -547,10 +544,9 @@ describe('patient answer event model', () => {
       txn,
     );
 
-    const secondPatientAnswer = (await PatientAnswer.create(
+    const secondPatientAnswer = (await PatientAnswer.createForRiskArea(
       {
         patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         questionIds: [answer.questionId],
         answers: [

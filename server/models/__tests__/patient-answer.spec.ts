@@ -137,11 +137,10 @@ describe('answer model', () => {
         },
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForProgressNote(
         {
           patientId: patient.id,
           progressNoteId: progressNote.id,
-          type: 'progressNote',
           questionIds: [progressNoteTemplateAnswer.questionId],
           answers: [
             {
@@ -168,10 +167,9 @@ describe('answer model', () => {
   describe('risk assessment answers', async () => {
     it('should create and get an answer', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user, question } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -196,10 +194,9 @@ describe('answer model', () => {
 
     it('should create and get a long answer', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user, question } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -224,10 +221,9 @@ describe('answer model', () => {
 
     it('should mark appropriate previous answers as deleted', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user, question } = await setup(txn);
-      const previousAnswers = await PatientAnswer.create(
+      const previousAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -263,10 +259,9 @@ describe('answer model', () => {
         txn,
       );
 
-      const newAnswers = await PatientAnswer.create(
+      const newAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -324,10 +319,9 @@ describe('answer model', () => {
 
     it('getForQuestion returns most recent answer for non-multiselect question', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user, question } = await setup(txn);
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -343,10 +337,9 @@ describe('answer model', () => {
         },
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -393,10 +386,9 @@ describe('answer model', () => {
         },
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -412,10 +404,9 @@ describe('answer model', () => {
         },
         txn,
       );
-      const patientAnswers2 = await PatientAnswer.create(
+      const patientAnswers2 = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -452,10 +443,9 @@ describe('answer model', () => {
 
     it('gets all patient answers for a given patient', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -481,10 +471,9 @@ describe('answer model', () => {
       const { patient, riskAreaAssessmentSubmission, answer, user, clinic, question } = await setup(
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -501,10 +490,9 @@ describe('answer model', () => {
         txn,
       );
       expect(patientAnswers[0].answerValue).toEqual('3');
-      const patientAnswers2 = await PatientAnswer.create(
+      const patientAnswers2 = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -524,10 +512,9 @@ describe('answer model', () => {
 
       // should not include answers for another patient
       const otherPatient = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: otherPatient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -555,10 +542,9 @@ describe('answer model', () => {
 
     it('edits patient answer applicable', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -584,10 +570,9 @@ describe('answer model', () => {
 
     it('deletes patient answer', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -609,9 +594,8 @@ describe('answer model', () => {
 
     it('gets all for risk area', async () => {
       const { riskAreaAssessmentSubmission, answer, patient, user, riskArea } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           patientId: patient.id,
@@ -681,13 +665,12 @@ describe('answer model', () => {
         },
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
-          patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
           answers: [answerParams],
-          type: 'patientScreeningToolSubmission',
           questionIds: [screeningToolAnswer.questionId],
+          patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
         },
         txn,
       );
@@ -760,10 +743,9 @@ describe('answer model', () => {
         },
         txn,
       );
-      const oldPatientAnswers = await PatientAnswer.create(
+      const oldPatientAnswers = await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
-          type: 'patientScreeningToolSubmission',
           patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
           questionIds: [screeningToolAnswer1.questionId, screeningToolAnswer2.questionId],
           answers: [
@@ -787,10 +769,9 @@ describe('answer model', () => {
         },
         txn,
       );
-      const newPatientAnswers = await PatientAnswer.create(
+      const newPatientAnswers = await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
-          type: 'patientScreeningToolSubmission',
           patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
           questionIds: [screeningToolAnswer1.questionId, screeningToolAnswer2.questionId],
           answers: [
@@ -850,10 +831,9 @@ describe('answer model', () => {
   describe('getPatientIdForResource', () => {
     it('gets patient id for a given patient answer', async () => {
       const { patient, riskAreaAssessmentSubmission, answer, user } = await setup(txn);
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [

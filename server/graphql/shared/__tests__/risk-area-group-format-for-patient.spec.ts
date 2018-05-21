@@ -190,10 +190,9 @@ describe('risk area group format', () => {
         txn,
       );
 
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -290,10 +289,9 @@ describe('risk area group format', () => {
         },
         txn,
       );
-      const patientAnswers = await PatientAnswer.create(
+      const patientAnswers = await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
-          type: 'patientScreeningToolSubmission',
           patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
           questionIds: [screeningToolAnswer.questionId],
           answers: [
@@ -380,10 +378,9 @@ describe('risk area group format', () => {
         riskArea,
       } = await setup(txn);
 
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [answer.questionId],
           answers: [
@@ -437,10 +434,9 @@ describe('risk area group format', () => {
         },
         txn,
       );
-      const patientAnswersForScreeningTool = await PatientAnswer.create(
+      const patientAnswersForScreeningTool = await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
-          type: 'patientScreeningToolSubmission',
           patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
           questionIds: [screeningToolAnswer.questionId],
           answers: [

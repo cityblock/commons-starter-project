@@ -508,11 +508,10 @@ describe('patient screening tool submission resolver tests', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForScreeningTool(
         {
           patientId: patient.id,
           patientScreeningToolSubmissionId: submission.id,
-          type: 'patientScreeningToolSubmission',
           questionIds: [question.id, question2.id],
           answers: [
             {

@@ -140,7 +140,7 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
       },
       txn,
     );
-    const patientAnswers = await PatientAnswer.create(
+    const patientAnswers = await PatientAnswer.createForComputedField(
       {
         patientId: patient.id,
         questionIds: [question.id],
@@ -155,7 +155,6 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
             mixerJobId: 'mixerJobId',
           },
         ],
-        type: 'computedFieldAnswer',
       },
       txn,
     );

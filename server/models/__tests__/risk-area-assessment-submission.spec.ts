@@ -180,11 +180,10 @@ describe('patient risk area assessment submission model', () => {
       txn,
     );
 
-    await PatientAnswer.create(
+    await PatientAnswer.createForRiskArea(
       {
         patientId: patient.id,
         riskAreaAssessmentSubmissionId: submission.id,
-        type: 'riskAreaAssessmentSubmission',
         questionIds: [question.id, question2.id],
         answers: [
           {

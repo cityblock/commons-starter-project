@@ -241,10 +241,9 @@ describe('goal suggestion model', () => {
         },
         txn,
       );
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [question.id],
           answers: [
@@ -269,10 +268,9 @@ describe('goal suggestion model', () => {
       );
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
       expect(goalSuggestions.length).toEqual(1);
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [question2.id],
           answers: [
@@ -359,10 +357,9 @@ describe('goal suggestion model', () => {
         txn,
       );
 
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [question.id, question2.id],
           answers: [
@@ -464,10 +461,9 @@ describe('goal suggestion model', () => {
         txn,
       );
 
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [question.id, question2.id],
           answers: [
@@ -558,10 +554,9 @@ describe('goal suggestion model', () => {
         txn,
       );
 
-      await PatientAnswer.create(
+      await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
-          type: 'riskAreaAssessmentSubmission',
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
           questionIds: [question.id],
           answers: [

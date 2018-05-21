@@ -1,5 +1,7 @@
 const PHONE_REGEX = /^\+1\d{10}$/;
 
+export const VALID_PHONE_NUMBER_LENGTH = 12;
+
 // formats phone numbers in Twilio format for easy lookup
 export const formatPhoneNumberForTwilio = (phoneNumber: string): string => {
   if (!phoneNumber) return '';

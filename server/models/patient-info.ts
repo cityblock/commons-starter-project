@@ -3,6 +3,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { ContactMethodOptions, Gender, MaritalStatus, Transgender } from 'schema';
 import { PhoneTypeOptions } from 'schema';
 import * as uuid from 'uuid/v4';
+import { formatPhoneNumberForTwilio, VALID_PHONE_NUMBER_LENGTH } from '../helpers/twilio-helpers';
 import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';
 import Email from './email';
@@ -218,6 +219,7 @@ export default class PatientInfo extends Model {
     let primaryAddressId: string | null = null;
     let primaryPhoneId: string | null = null;
     let primaryEmailId: string | null = null;
+    const formattedPhoneNumber = formatPhoneNumberForTwilio(input.phone);
 
     if (!primaryAddressId) {
       const address = await Address.create(
@@ -236,16 +238,16 @@ export default class PatientInfo extends Model {
       await PatientAddress.create({ addressId: primaryAddressId, patientId: input.patientId }, txn);
     }
 
-    if (!primaryPhoneId && input.phone.length === 12) {
+    if (!primaryPhoneId && formattedPhoneNumber.length === VALID_PHONE_NUMBER_LENGTH) {
       const existingPatientIdWithPhone = await PatientPhone.getPatientIdForPhoneNumber(
-        input.phone,
+        formattedPhoneNumber,
         txn,
       );
 
       if (!existingPatientIdWithPhone) {
         const phone = await Phone.create(
           {
-            phoneNumber: input.phone,
+            phoneNumber: formattedPhoneNumber,
             type: 'other' as PhoneTypeOptions,
           },
           txn,

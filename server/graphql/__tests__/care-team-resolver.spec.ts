@@ -1,13 +1,13 @@
 import { graphql, print } from 'graphql';
-import { cloneDeep } from 'lodash';
+import * as kue from 'kue';
 import { find } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
 import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
 import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
 import * as careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
-
 import Mattermost from '../../mattermost';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
@@ -29,6 +29,8 @@ interface ISetup {
   testConfig: any;
 }
 
+const queue = kue.createQueue();
+
 const userRole = 'physician' as UserRole;
 const permissions = 'green';
 
@@ -49,8 +51,13 @@ describe('care team', () => {
   const careTeamAddUserMutation = print(careTeamAddUser);
   const careTeamReassignUserMutation = print(careTeamReassignUser);
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(Patient.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -90,6 +97,13 @@ describe('care team', () => {
       expect(patientCareTeamIds).toContain(user.id);
       expect(patientCareTeamIds).toContain(user2.id);
       expect(addUserToChannel).toBeCalledWith(patient.id, user2.id);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addCareTeamMember',
+        userId: user2.id,
+      });
     });
 
     it('updates computed patient status when adding a user to a care team', async () => {
@@ -229,6 +243,13 @@ describe('care team', () => {
       expect(addUserToChannel).toHaveBeenCalledTimes(2);
       expect(addUserToChannel).toBeCalledWith(patient.id, user.id);
       expect(addUserToChannel).toBeCalledWith(patient2.id, user.id);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientIds: [patient.id, patient2.id],
+        type: 'addCareTeamMember',
+        userId: user.id,
+      });
     });
 
     it('updates computed patient status when bulk assigning patients', async () => {
@@ -326,6 +347,13 @@ describe('care team', () => {
       expect(refetchedCareTeamUserIds).toContain(user2.id);
 
       expect(removeUserFromChannel).toBeCalledWith(patient.id, user.id, txn);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addCareTeamMember',
+        userId: user2.id,
+      });
     });
 
     it('updates computed patient status when reassigning a care team member', async () => {

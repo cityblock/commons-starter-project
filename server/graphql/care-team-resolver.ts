@@ -8,6 +8,7 @@ import {
 } from 'schema';
 import { IPaginationOptions } from '../db';
 import { convertCareTeamUser } from '../graphql/shared/converter';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import Mattermost from '../mattermost';
 import CareTeam from '../models/care-team';
 import ComputedPatientStatus from '../models/computed-patient-status';
@@ -53,6 +54,13 @@ export async function careTeamAddUser(
   const mattermost = Mattermost.get();
   mattermost.queueAddUserToPatientChannel(input.patientId, input.userId);
 
+  // notify user of new contact
+  addJobToQueue('patientContactEdit', {
+    patientId: input.patientId,
+    type: 'addCareTeamMember',
+    userId: input.userId,
+  });
+
   return careTeam;
 }
 
@@ -78,6 +86,13 @@ export async function careTeamReassignUser(
   // remove user from patient channel in Mattermost
   const mattermost = Mattermost.get();
   await mattermost.removeUserFromPatientChannel(input.patientId, input.userId, txn);
+
+  // notify reassigned user of new contact
+  addJobToQueue('patientContactEdit', {
+    patientId: input.patientId,
+    type: 'addCareTeamMember',
+    userId: input.reassignedToId,
+  });
 
   return careTeam;
 }
@@ -112,6 +127,13 @@ export async function careTeamAssignPatients(
 
   patientIds.forEach(patientId => {
     mattermost.queueAddUserToPatientChannel(patientId, input.userId);
+  });
+
+  // notify user of new contacts
+  addJobToQueue('patientContactEdit', {
+    patientIds,
+    type: 'addCareTeamMember',
+    userId: input.userId,
   });
 
   return careTeam;

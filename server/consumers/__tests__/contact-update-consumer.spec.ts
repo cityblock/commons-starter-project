@@ -2,8 +2,16 @@ import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
+import PatientInfo from '../../models/patient-info';
+import PatientPhone from '../../models/patient-phone';
+import Phone from '../../models/phone';
 import User from '../../models/user';
-import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPhone,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import TwilioClient from '../../twilio-client';
 import {
   getActionCopy,
@@ -13,8 +21,10 @@ import {
 } from '../contact-update-consumer';
 
 interface ISetup {
+  clinic: Clinic;
   user: User;
   patient: Patient;
+  phone: Phone;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -30,14 +40,15 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
+  const phone = await Phone.create(createMockPhone(), txn);
 
-  return { user, patient };
+  return { clinic, user, patient, phone };
 }
 
 describe('Contact Update Consumer', () => {
   let txn = null as any;
   let createMessage = null as any;
-  const phone = '+17273334444';
+  const phoneNumber = '+17273334444';
 
   beforeEach(async () => {
     txn = await transaction.start(Patient.knex());
@@ -57,7 +68,7 @@ describe('Contact Update Consumer', () => {
   describe('processPatientContactEdit', () => {
     it('notifies care team of contact updates', async () => {
       const { user, patient } = await setup(txn);
-      await User.update(user.id, { phone }, txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
 
       await processPatientContactEdit(
         {
@@ -73,15 +84,167 @@ describe('Contact Update Consumer', () => {
 
       expect(args[0][0]).toMatchObject({
         from: '+17273415787',
-        to: phone,
+        to: phoneNumber,
         body: 'An existing contact for Jon S. has been updated in Commons.',
       });
       expect(args[1][0]).toMatchObject({
         from: '+17273415787',
-        to: phone,
+        to: phoneNumber,
         body:
           'Please delete the Jon S. contact and download updated contacts here: http://localhost:3000/contacts',
       });
+    });
+
+    it('notifies care team of preferred name changes', async () => {
+      const { user, patient } = await setup(txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
+
+      await processPatientContactEdit(
+        {
+          patientId: patient.id,
+          type: 'editPreferredName',
+          prevPreferredName: 'King',
+        },
+        txn,
+      );
+
+      expect(createMessage).toHaveBeenCalledTimes(2);
+
+      const args = createMessage.mock.calls;
+
+      expect(args[0][0]).toMatchObject({
+        from: '+17273415787',
+        to: phoneNumber,
+        body: 'The preferred name of Jon (King) S. has been updated in Commons.',
+      });
+      expect(args[1][0]).toMatchObject({
+        from: '+17273415787',
+        to: phoneNumber,
+        body:
+          'Please delete the Jon (King) S. contact and download updated contacts here: http://localhost:3000/contacts',
+      });
+    });
+
+    it('notifies single user of new care team member', async () => {
+      const { user, patient, phone } = await setup(txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+      await PatientInfo.edit(
+        { primaryPhoneId: phone.id, updatedById: user.id },
+        patient.patientInfo.id,
+        txn,
+      );
+
+      await processPatientContactEdit(
+        {
+          patientId: patient.id,
+          type: 'addCareTeamMember',
+          userId: user.id,
+        },
+        txn,
+      );
+
+      expect(createMessage).toHaveBeenCalledTimes(1);
+
+      const args = createMessage.mock.calls;
+
+      expect(args[0][0]).toMatchObject({
+        from: '+17273415787',
+        to: phoneNumber,
+        body:
+          'A member has been added to your care team. Please download updated contacts here: http://localhost:3000/contacts',
+      });
+    });
+
+    it('does not notify user of new care team member if no phones stored', async () => {
+      const { user, patient } = await setup(txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
+
+      await processPatientContactEdit(
+        {
+          patientId: patient.id,
+          type: 'addCareTeamMember',
+          userId: user.id,
+        },
+        txn,
+      );
+
+      expect(createMessage).not.toBeCalled();
+    });
+
+    it('notifies if bulk assign occurred', async () => {
+      const { user, patient, clinic, phone } = await setup(txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
+
+      const patient2 = await createPatient(
+        {
+          cityblockId: 234,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          firstName: 'Daenerys',
+          lastName: 'Targaryen',
+        },
+        txn,
+      );
+
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+      await PatientInfo.edit(
+        { primaryPhoneId: phone.id, updatedById: user.id },
+        patient.patientInfo.id,
+        txn,
+      );
+      await PatientInfo.edit(
+        { primaryPhoneId: phone.id, updatedById: user.id },
+        patient2.patientInfo.id,
+        txn,
+      );
+
+      await processPatientContactEdit(
+        {
+          patientIds: [patient.id, patient2.id],
+          type: 'addCareTeamMember',
+          userId: user.id,
+        },
+        txn,
+      );
+
+      expect(createMessage).toHaveBeenCalledTimes(1);
+
+      const args = createMessage.mock.calls;
+
+      expect(args[0][0]).toMatchObject({
+        from: '+17273415787',
+        to: phoneNumber,
+        body:
+          'A member has been added to your care team. Please download updated contacts here: http://localhost:3000/contacts',
+      });
+    });
+
+    it('does not notify in bulk assign if no patients has phone numbers', async () => {
+      const { user, patient, clinic } = await setup(txn);
+      await User.update(user.id, { phone: phoneNumber }, txn);
+
+      const patient2 = await createPatient(
+        {
+          cityblockId: 234,
+          homeClinicId: clinic.id,
+          userId: user.id,
+          firstName: 'Daenerys',
+          lastName: 'Targaryen',
+        },
+        txn,
+      );
+
+      await processPatientContactEdit(
+        {
+          patientIds: [patient.id, patient2.id],
+          type: 'addCareTeamMember',
+          userId: user.id,
+        },
+        txn,
+      );
+
+      expect(createMessage).not.toBeCalled();
     });
   });
 
@@ -91,7 +254,7 @@ describe('Contact Update Consumer', () => {
 
     it('sends messages notifying user of contact change', async () => {
       const { user } = await setup(txn);
-      const updatedUser = await User.update(user.id, { phone }, txn);
+      const updatedUser = await User.update(user.id, { phone: phoneNumber }, txn);
 
       await notifyUserOfContactEdit(updatedUser, noticeCopy, actionCopy);
 
@@ -101,13 +264,30 @@ describe('Contact Update Consumer', () => {
 
       expect(args[0][0]).toMatchObject({
         from: '+17273415787',
-        to: phone,
+        to: phoneNumber,
         body: noticeCopy,
       });
       expect(args[1][0]).toMatchObject({
         from: '+17273415787',
-        to: phone,
+        to: phoneNumber,
         body: actionCopy,
+      });
+    });
+
+    it('only sends one message if specified', async () => {
+      const { user } = await setup(txn);
+      const updatedUser = await User.update(user.id, { phone: phoneNumber }, txn);
+
+      await notifyUserOfContactEdit(updatedUser, noticeCopy, null);
+
+      expect(createMessage).toHaveBeenCalledTimes(1);
+
+      const args = createMessage.mock.calls;
+
+      expect(args[0][0]).toMatchObject({
+        from: '+17273415787',
+        to: phoneNumber,
+        body: noticeCopy,
       });
     });
 
@@ -148,6 +328,22 @@ describe('Contact Update Consumer', () => {
 
       expect(noticeCopy).toBe('An existing contact for Jon S. has been deleted in Commons.');
     });
+
+    it('gets notice copy for new to care team message', async () => {
+      const { patient } = await setup(txn);
+      const noticeCopy = getNoticeCopy(patient, 'addCareTeamMember');
+
+      expect(noticeCopy).toBe(
+        'A member has been added to your care team. Please download updated contacts here: http://localhost:3000/contacts',
+      );
+    });
+
+    it('handles case where previous preferred name provided', async () => {
+      const { patient } = await setup(txn);
+      const noticeCopy = getNoticeCopy(patient, 'editPreferredName', 'King');
+
+      expect(noticeCopy).toBe('The preferred name of Jon (King) S. has been updated in Commons.');
+    });
   });
 
   describe('getActionCopy', () => {
@@ -173,6 +369,22 @@ describe('Contact Update Consumer', () => {
 
       expect(actionCopy).toBe(
         'Please delete the Jon S. contact and download updated contacts here: http://localhost:3000/contacts',
+      );
+    });
+
+    it('gets action copy for new to care team message', async () => {
+      const { patient } = await setup(txn);
+      const actionCopy = getActionCopy(patient, 'addCareTeamMember');
+
+      expect(actionCopy).toBeNull();
+    });
+
+    it('handles case where previous preferred name provided', async () => {
+      const { patient } = await setup(txn);
+      const actionCopy = getActionCopy(patient, 'editPreferredName', 'King');
+
+      expect(actionCopy).toBe(
+        'Please delete the Jon (King) S. contact and download updated contacts here: http://localhost:3000/contacts',
       );
     });
   });

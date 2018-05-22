@@ -5,6 +5,7 @@ import {
   IRootMutationType,
   IRootQueryType,
 } from 'schema';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import PatientInfo from '../models/patient-info';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -65,6 +66,15 @@ export async function patientInfoEdit(
 
   const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
   logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`);
+
+  // if changing patient preferred name, enqueue job to notify care team worker
+  if (filtered.preferredName) {
+    addJobToQueue('patientContactEdit', {
+      patientId: patientInfo.patientId,
+      type: 'editPreferredName',
+      prevPreferredName: patientInfo.preferredName,
+    });
+  }
 
   return PatientInfo.edit({ ...(filtered as any), updatedById: userId }, input.patientInfoId, txn);
 }

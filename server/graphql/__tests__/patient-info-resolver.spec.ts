@@ -1,10 +1,10 @@
 import { graphql, print } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { Gender, UserRole } from 'schema';
 import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
 import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
-
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -20,6 +20,8 @@ interface ISetup {
   user: User;
   homeClinicId: string;
 }
+
+const queue = kue.createQueue();
 
 const userRole = 'physician' as UserRole;
 const permissions = 'green';
@@ -57,8 +59,13 @@ describe('patient info resolver', () => {
   const getPatientNeedToKnowQuery = print(getPatientNeedToKnow);
   const patientNeedToKnowEditMutation = print(patientNeedToKnowEdit);
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -105,6 +112,41 @@ describe('patient info resolver', () => {
         txn,
       });
       expect(result2.errors![0].message).toBe('red not able to edit patient');
+
+      expect(queue.testMode.jobs.length).toBe(0);
+    });
+
+    it('edits patient preferred name', async () => {
+      const { patient, user } = await setup(txn);
+
+      const query = `mutation {
+        patientInfoEdit(input: {
+          patientInfoId: "${patient.patientInfo.id}",
+          preferredName: "Queen",
+        }) {
+          id, preferredName
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        logger,
+        txn,
+      });
+
+      expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
+        id: patient.patientInfo.id,
+        preferredName: 'Queen',
+      });
+      expect(log).toBeCalled();
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        prevPreferredName: null,
+        type: 'editPreferredName',
+      });
     });
   });
 

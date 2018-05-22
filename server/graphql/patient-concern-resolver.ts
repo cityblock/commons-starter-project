@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IPatientConcernBulkEditInput,
   IPatientConcernCreateInput,
@@ -33,81 +34,93 @@ export interface IDeletePatientConcernOptions {
 export async function patientConcernCreate(
   root: any,
   { input }: IPatientConcernCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientConcernCreate']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  return PatientConcern.create({ userId, ...input } as any, txn);
+    return PatientConcern.create({ userId, ...input } as any, txn);
+  });
 }
 
 export async function resolvePatientConcern(
   root: any,
   args: { patientConcernId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientConcern']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'patientConcern',
-    txn,
-    args.patientConcernId,
-  );
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'view',
+      'patientConcern',
+      txn,
+      args.patientConcernId,
+    );
 
-  return PatientConcern.get(args.patientConcernId, txn);
+    return PatientConcern.get(args.patientConcernId, txn);
+  });
 }
 
 export async function resolvePatientConcernsForPatient(
   root: any,
   args: { patientId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientConcerns']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  return PatientConcern.getForPatient(args.patientId, txn);
+    return PatientConcern.getForPatient(args.patientId, txn);
+  });
 }
 
 export async function patientConcernEdit(
   root: any,
   args: IEditPatientConcernOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientConcernEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patientConcern',
-    txn,
-    args.input.patientConcernId,
-  );
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patientConcern',
+      txn,
+      args.input.patientConcernId,
+    );
 
-  // TODO: fix typings here
-  return PatientConcern.update(args.input.patientConcernId, args.input as any, userId!, txn);
+    // TODO: fix typings here
+    return PatientConcern.update(args.input.patientConcernId, args.input as any, userId!, txn);
+  });
 }
 
 export async function patientConcernBulkEdit(
   root: any,
   args: IBulkEditPatientConcernOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientConcernBulkEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, args.input.patientId);
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, args.input.patientId);
 
-  return PatientConcern.bulkUpdate(args.input.patientConcerns as any, args.input.patientId, txn);
+    return PatientConcern.bulkUpdate(args.input.patientConcerns as any, args.input.patientId, txn);
+  });
 }
 
 export async function patientConcernDelete(
   root: any,
   args: IDeletePatientConcernOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientConcernDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patientConcern',
-    txn,
-    args.input.patientConcernId,
-  );
+  return transaction(testTransaction || PatientConcern.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patientConcern',
+      txn,
+      args.input.patientConcernId,
+    );
 
-  return PatientConcern.delete(args.input.patientConcernId, userId!, txn);
+    return PatientConcern.delete(args.input.patientConcernId, userId!, txn);
+  });
 }

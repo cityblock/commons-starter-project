@@ -1,4 +1,5 @@
 import { withFilter } from 'graphql-subscriptions';
+import { transaction } from 'objection';
 import { Transaction } from 'objection';
 import {
   IRootMutationType,
@@ -31,117 +32,123 @@ interface ISmsMessageCreateOptions {
 export async function resolveSmsMessages(
   root: any,
   { patientId, pageNumber, pageSize }: IQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['smsMessages']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || SmsMessage.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET SMS messages between patient ${patientId} and user ${userId}`);
+    logger.log(`GET SMS messages between patient ${patientId} and user ${userId}`);
 
-  const smsMessages = await SmsMessage.getForUserPatient(
-    { patientId, userId: userId! },
-    { pageNumber, pageSize },
-    txn,
-  );
+    const smsMessages = await SmsMessage.getForUserPatient(
+      { patientId, userId: userId! },
+      { pageNumber, pageSize },
+      txn,
+    );
 
-  const smsMessageEdges = smsMessages.results.map((message: SmsMessage) =>
-    formatRelayEdge(message, message.id),
-  );
+    const smsMessageEdges = smsMessages.results.map((message: SmsMessage) =>
+      formatRelayEdge(message, message.id),
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < smsMessages.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < smsMessages.total;
 
-  return {
-    edges: smsMessageEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: smsMessages.total,
-  };
+    return {
+      edges: smsMessageEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+      totalCount: smsMessages.total,
+    };
+  });
 }
 
 export async function resolveSmsMessageLatest(
   root: any,
   { patientId }: ILatestQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['smsMessageLatest']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || SmsMessage.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET latest SMS message between patient ${patientId} and user ${userId}`);
+    logger.log(`GET latest SMS message between patient ${patientId} and user ${userId}`);
 
-  return SmsMessage.getLatestForUserPatient({ userId: userId!, patientId }, txn);
+    return SmsMessage.getLatestForUserPatient({ userId: userId!, patientId }, txn);
+  });
 }
 
 export async function smsMessageCreate(
   root: any,
   { input }: ISmsMessageCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['smsMessageCreate']> {
   const { patientId, body } = input;
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
+  return transaction(testTransaction || SmsMessage.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  logger.log(`CREATE SMS messages between patient ${patientId} and user ${userId}`);
+    logger.log(`CREATE SMS messages between patient ${patientId} and user ${userId}`);
 
-  const user = await User.get(userId!, txn);
-  if (!user.phone) {
-    return Promise.reject(
-      'You do not have a phone number registered with Cityblock. Please contact us for help.',
-    );
-  }
-
-  const patient = await Patient.get(patientId, txn);
-  if (!patient.patientInfo.canReceiveTexts) {
-    return Promise.reject('This patient has not consented to receive text messages.');
-  }
-
-  const patientPhoneNumber = await getPatientPhoneNumber(
-    patientId,
-    patient.patientInfo.primaryPhoneId,
-    userId!,
-    txn,
-  );
-
-  if (patientPhoneNumber) {
-    const twilioClient = TwilioClient.get();
-
-    try {
-      // send message from user to patient
-      const twilioPayload = await twilioClient.messages.create({
-        from: user.phone,
-        to: patientPhoneNumber,
-        body,
-      });
-
-      // store a record of it in the database
-      const smsMessage = await SmsMessage.create(
-        {
-          userId: userId!,
-          contactNumber: patientPhoneNumber,
-          direction: 'fromUser' as SmsMessageDirection,
-          body,
-          twilioPayload,
-        },
-        txn,
+    const user = await User.get(userId!, txn);
+    if (!user.phone) {
+      return Promise.reject(
+        'You do not have a phone number registered with Cityblock. Please contact us for help.',
       );
-
-      // update the UI via subscription
-      // TODO: in future update cache
-      pubsub.publish('smsMessageCreated', {
-        smsMessageCreated: { node: smsMessage },
-        userId,
-        patientId,
-      });
-
-      return { node: smsMessage } as any;
-    } catch (err) {
-      // TODO: Better handle failure state
-      return Promise.reject(`An error occured: ${err}`);
     }
-  }
 
-  return Promise.reject(
-    'This patient does not have a phone number set up to receive texts. Please edit their contact information if that is not correct.',
-  );
+    const patient = await Patient.get(patientId, txn);
+    if (!patient.patientInfo.canReceiveTexts) {
+      return Promise.reject('This patient has not consented to receive text messages.');
+    }
+
+    const patientPhoneNumber = await getPatientPhoneNumber(
+      patientId,
+      patient.patientInfo.primaryPhoneId,
+      userId!,
+      txn,
+    );
+
+    if (patientPhoneNumber) {
+      const twilioClient = TwilioClient.get();
+
+      try {
+        // send message from user to patient
+        const twilioPayload = await twilioClient.messages.create({
+          from: user.phone,
+          to: patientPhoneNumber,
+          body,
+        });
+
+        // store a record of it in the database
+        const smsMessage = await SmsMessage.create(
+          {
+            userId: userId!,
+            contactNumber: patientPhoneNumber,
+            direction: 'fromUser' as SmsMessageDirection,
+            body,
+            twilioPayload,
+          },
+          txn,
+        );
+
+        // update the UI via subscription
+        // TODO: in future update cache
+        pubsub.publish('smsMessageCreated', {
+          smsMessageCreated: { node: smsMessage },
+          userId,
+          patientId,
+        });
+
+        return { node: smsMessage } as any;
+      } catch (err) {
+        // TODO: Better handle failure state
+        return Promise.reject(`An error occured: ${err}`);
+      }
+    }
+
+    return Promise.reject(
+      'This patient does not have a phone number set up to receive texts. Please edit their contact information if that is not correct.',
+    );
+  });
 }
 
 export async function smsMessageSubscribe(
@@ -149,18 +156,20 @@ export async function smsMessageSubscribe(
   query: { patientId: string },
   context: IContext,
 ) {
-  const { permissions, userId, txn, logger } = context;
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, query.patientId);
+  const { permissions, userId, testTransaction, logger } = context;
+  return transaction(testTransaction || SmsMessage.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, query.patientId);
 
-  // only listen to messages between given patient and user
-  logger.log(`SUBSCRIBE SMS messages between patient ${query.patientId} and user ${userId}`);
+    // only listen to messages between given patient and user
+    logger.log(`SUBSCRIBE SMS messages between patient ${query.patientId} and user ${userId}`);
 
-  return withFilter(
-    () => pubsub.asyncIterator('smsMessageCreated'),
-    payload => {
-      return payload.patientId === query.patientId && payload.userId === userId;
-    },
-  )(root, query, context);
+    return withFilter(
+      () => pubsub.asyncIterator('smsMessageCreated'),
+      payload => {
+        return payload.patientId === query.patientId && payload.userId === userId;
+      },
+    )(root, query, context);
+  });
 }
 
 const getPatientPhoneNumber = async (

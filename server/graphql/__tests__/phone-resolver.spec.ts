@@ -80,7 +80,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.phoneCreate)).toMatchObject({
@@ -110,7 +110,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
@@ -149,7 +149,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.phoneCreateForPatient)).toMatchObject({
@@ -192,7 +192,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const phone = createResult.data!.phoneCreateForPatient;
 
@@ -209,7 +209,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
@@ -248,7 +248,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const phone = createResult.data!.phoneCreateForPatient;
 
@@ -269,7 +269,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.phoneDeleteForPatient)).toMatchObject({
@@ -313,7 +313,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
         phoneNumber: '+12222222222',

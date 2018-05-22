@@ -151,7 +151,7 @@ describe('task tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task1.id },
       );
@@ -175,7 +175,7 @@ describe('task tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { taskId: fakeId },
       );
@@ -193,7 +193,7 @@ describe('task tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, pageNumber: 0, pageSize: 1 },
       );
@@ -219,7 +219,7 @@ describe('task tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, pageNumber: 0, pageSize: 1, orderBy: 'titleAsc' },
       );
@@ -249,7 +249,7 @@ describe('task tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, pageNumber: 0, pageSize: 1, orderBy: 'createdAtDesc' },
       );
@@ -280,7 +280,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { title: 'new title', taskId: task1.id },
       );
@@ -299,7 +299,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { priority: 'high' as Priority, taskId: task1.id },
       );
@@ -319,7 +319,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { assignedToId: user2.id, taskId: task1.id },
       );
@@ -339,7 +339,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { dueAt: newDueAt, taskId: task1.id },
       );
@@ -358,7 +358,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { title: 'edited title', taskId: task1.id },
       );
@@ -377,7 +377,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { description: 'edited description', taskId: task1.id },
       );
@@ -397,7 +397,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           dueAt: newDueAt,
@@ -424,7 +424,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task1.id },
       );
@@ -437,7 +437,7 @@ describe('task tests', () => {
         schema,
         taskCompleteMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         { taskId: task1.id },
       );
 
@@ -461,7 +461,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task1.id },
       );
@@ -474,7 +474,7 @@ describe('task tests', () => {
         schema,
         taskUncompleteMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         { taskId: task1.id },
       );
 
@@ -498,7 +498,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, title, description: 'description', patientGoalId: patientGoal.id },
       );
@@ -518,7 +518,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -540,7 +540,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -592,7 +592,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task1.id },
       );
@@ -623,7 +623,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task1.id },
       );
@@ -650,7 +650,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient1.id },
       );
@@ -671,7 +671,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient5.id },
       );
@@ -688,7 +688,7 @@ describe('task tests', () => {
       const result = await graphql(schema, taskIdsWithNotificationsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.taskIdsWithNotifications.length).toBe(1);
@@ -721,7 +721,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user2.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, userId: user.id },
       );
@@ -756,7 +756,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10 },
       );
@@ -778,7 +778,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 1 },
       );
@@ -799,7 +799,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 1, orderBy: 'dueAtAsc' },
       );
@@ -845,7 +845,7 @@ describe('task tests', () => {
         {
           permissions,
           userId: user2.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, isFollowingTasks: true },
       );

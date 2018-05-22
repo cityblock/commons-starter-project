@@ -105,7 +105,7 @@ describe('computed field flag resolver', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       {
         patientAnswerId: patientAnswers[0].id,

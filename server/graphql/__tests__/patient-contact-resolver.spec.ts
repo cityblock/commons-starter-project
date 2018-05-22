@@ -103,7 +103,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactHealthcareProxies[0])).toMatchObject({
@@ -148,7 +148,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
@@ -202,7 +202,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
         patient.id,
@@ -254,7 +254,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
@@ -334,7 +334,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
@@ -389,7 +389,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactDelete).deletedAt).not.toBeFalsy();
@@ -464,7 +464,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
@@ -531,7 +531,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
         patient.id,
@@ -585,7 +585,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
@@ -659,7 +659,7 @@ describe('patient info model', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({

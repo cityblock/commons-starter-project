@@ -69,7 +69,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientLists[0]).toMatchObject({
@@ -106,7 +106,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientList).toMatchObject({
@@ -124,7 +124,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toMatch(`No such patient list: ${fakeId}`);
@@ -148,7 +148,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientListCreate).toMatchObject({
@@ -189,7 +189,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientListEdit).toMatchObject({
@@ -221,7 +221,7 @@ describe('patient list resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientListDelete).toMatchObject({

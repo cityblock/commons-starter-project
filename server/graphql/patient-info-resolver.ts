@@ -1,4 +1,5 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import {
   IPatientInfoEditInput,
   IPatientNeedToKnow,
@@ -21,13 +22,15 @@ export interface IQuery {
 export async function resolvePatientNeedToKnow(
   root: any,
   { patientInfoId }: IQuery,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IPatientNeedToKnow> {
-  const patientInfo = await PatientInfo.get(patientInfoId, txn);
+  return transaction(testTransaction || PatientInfo.knex(), async txn => {
+    const patientInfo = await PatientInfo.get(patientInfoId, txn);
 
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientInfo.patientId);
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientInfo.patientId);
 
-  return { text: patientInfo.needToKnow };
+    return { text: patientInfo.needToKnow };
+  });
 }
 
 export interface IPatientNeedToKnowEditOptions {
@@ -40,42 +43,49 @@ export interface IPatientNeedToKnowEditOptions {
 export async function patientNeedToKnowEdit(
   root: any,
   { input }: IPatientNeedToKnowEditOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientNeedToKnow']> {
   const { patientInfoId, text } = input;
-  const patientInfo = await PatientInfo.get(patientInfoId, txn);
+  return transaction(testTransaction || PatientInfo.knex(), async txn => {
+    const patientInfo = await PatientInfo.get(patientInfoId, txn);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
-  const updatedPatientInfo = await PatientInfo.edit(
-    { needToKnow: text, updatedById: userId! },
-    patientInfoId,
-    txn,
-  );
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
+    const updatedPatientInfo = await PatientInfo.edit(
+      { needToKnow: text, updatedById: userId! },
+      patientInfoId,
+      txn,
+    );
 
-  return { text: updatedPatientInfo.needToKnow };
+    return { text: updatedPatientInfo.needToKnow };
+  });
 }
 
 export async function patientInfoEdit(
   source: any,
   { input }: IPatientInfoEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientInfoEdit']> {
-  const patientInfo = await PatientInfo.get(input.patientInfoId, txn);
+  return transaction(testTransaction || PatientInfo.knex(), async txn => {
+    const patientInfo = await PatientInfo.get(input.patientInfoId, txn);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientInfo.patientId);
 
-  const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
-  logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`);
+    const filtered = omitBy<IPatientInfoEditInput>(input, isNil);
+    logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`);
 
-  // if changing patient preferred name, enqueue job to notify care team worker
-  if (filtered.preferredName) {
-    addJobToQueue('patientContactEdit', {
-      patientId: patientInfo.patientId,
-      type: 'editPreferredName',
-      prevPreferredName: patientInfo.preferredName,
-    });
-  }
+    // if changing patient preferred name, enqueue job to notify care team worker
+    if (filtered.preferredName) {
+      addJobToQueue('patientContactEdit', {
+        patientId: patientInfo.patientId,
+        type: 'editPreferredName',
+        prevPreferredName: patientInfo.preferredName,
+      });
+    }
 
-  return PatientInfo.edit({ ...(filtered as any), updatedById: userId }, input.patientInfoId, txn);
+    return PatientInfo.edit(
+      { ...(filtered as any), updatedById: userId },
+      input.patientInfoId,
+      txn,
+    );
+  });
 }
-/* tslint:enable check-is-allowed */

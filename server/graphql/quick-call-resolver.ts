@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IQuickCallCreateInput, IRootMutationType, IRootQueryType } from 'schema';
 import QuickCall from '../models/quick-call';
 import checkUserPermissions from './shared/permissions-check';
@@ -18,29 +19,42 @@ interface IResolveQuickCallsForProgressNoteOptions {
 export async function quickCallCreate(
   root: any,
   { input }: IQuickCallCreateOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['quickCallCreate']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || QuickCall.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  return QuickCall.create({ ...input, userId: userId! }, txn);
+    return QuickCall.create({ ...input, userId: userId! }, txn);
+  });
 }
 
 export async function resolveQuickCall(
   root: any,
   args: IResolveQuickCallArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['quickCall']> {
-  await checkUserPermissions(userId, permissions, 'view', 'quickCall', txn, args.quickCallId);
+  return transaction(testTransaction || QuickCall.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'quickCall', txn, args.quickCallId);
 
-  return QuickCall.get(args.quickCallId, txn);
+    return QuickCall.get(args.quickCallId, txn);
+  });
 }
 
 export async function resolveQuickCallsForProgressNote(
   root: any,
   args: IResolveQuickCallsForProgressNoteOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['quickCallsForProgressNote']> {
-  await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, args.progressNoteId);
+  return transaction(testTransaction || QuickCall.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'view',
+      'progressNote',
+      txn,
+      args.progressNoteId,
+    );
 
-  return QuickCall.getQuickCallsForProgressNote(args.progressNoteId, txn);
+    return QuickCall.getQuickCallsForProgressNote(args.progressNoteId, txn);
+  });
 }

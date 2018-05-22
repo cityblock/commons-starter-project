@@ -75,7 +75,7 @@ describe('patient photo signed URL resolver', () => {
     const result = await graphql(schema, mutation, null, {
       userId: user.id,
       permissions,
-      txn,
+      testTransaction: txn,
       testConfig,
     });
 
@@ -93,7 +93,7 @@ describe('patient photo signed URL resolver', () => {
     const result = await graphql(schema, mutation, null, {
       userId: user.id,
       permissions,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.errors![0].message).toBe('Must provide patient id');

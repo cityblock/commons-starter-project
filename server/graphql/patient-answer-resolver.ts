@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   AnswerFilterType,
   IPatientAnswersCreateInput,
@@ -29,143 +30,155 @@ export interface IDeletePatientAnswerOptions {
 export async function patientAnswersCreate(
   root: any,
   { input }: IPatientAnswersCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientAnswersCreate']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const {
-    patientAnswers,
-    patientId,
-    questionIds,
-    patientScreeningToolSubmissionId,
-    riskAreaAssessmentSubmissionId,
-    progressNoteId,
-  } = input;
+    const {
+      patientAnswers,
+      patientId,
+      questionIds,
+      patientScreeningToolSubmissionId,
+      riskAreaAssessmentSubmissionId,
+      progressNoteId,
+    } = input;
 
-  if (progressNoteId) {
-    return PatientAnswer.createForProgressNote(
-      {
-        patientId,
-        questionIds,
-        progressNoteId,
-        answers: patientAnswers.map(patientAnswer => ({
-          ...patientAnswer,
-          userId: userId!,
-        })),
-      },
-      txn,
-    );
-  } else if (patientScreeningToolSubmissionId) {
-    return PatientAnswer.createForScreeningTool(
-      {
-        patientId,
-        questionIds,
-        patientScreeningToolSubmissionId,
-        answers: patientAnswers.map(patientAnswer => ({
-          ...patientAnswer,
-          userId: userId!,
-        })),
-      },
-      txn,
-    );
-  } else if (riskAreaAssessmentSubmissionId) {
-    return PatientAnswer.createForRiskArea(
-      {
-        patientId,
-        questionIds,
-        riskAreaAssessmentSubmissionId,
-        answers: patientAnswers.map(patientAnswer => ({
-          ...patientAnswer,
-          userId: userId!,
-        })),
-      },
-      txn,
-    );
-  } else {
-    throw new Error(
-      'either riskAreaAssessmentSubmissionId, patientScreeningToolSubmissionId or' +
-        ' progressNoteId are required',
-    );
-  }
+    if (progressNoteId) {
+      return PatientAnswer.createForProgressNote(
+        {
+          patientId,
+          questionIds,
+          progressNoteId,
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else if (patientScreeningToolSubmissionId) {
+      return PatientAnswer.createForScreeningTool(
+        {
+          patientId,
+          questionIds,
+          patientScreeningToolSubmissionId,
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else if (riskAreaAssessmentSubmissionId) {
+      return PatientAnswer.createForRiskArea(
+        {
+          patientId,
+          questionIds,
+          riskAreaAssessmentSubmissionId,
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else {
+      throw new Error(
+        'either riskAreaAssessmentSubmissionId, patientScreeningToolSubmissionId or' +
+          ' progressNoteId are required',
+      );
+    }
+  });
 }
 
 export async function resolvePatientAnswers(
   root: any,
   args: { filterId: string; filterType: AnswerFilterType; patientId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientAnswers']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  if (args.filterType === 'question') {
-    return PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
-  } else if (args.filterType === 'riskArea') {
-    return PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
-  } else if (args.filterType === 'screeningTool') {
-    return PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
-  } else if (args.filterType === 'progressNote') {
-    return PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);
-  } else {
-    throw new Error('wrong filter type');
-  }
+    if (args.filterType === 'question') {
+      return PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
+    } else if (args.filterType === 'riskArea') {
+      return PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
+    } else if (args.filterType === 'screeningTool') {
+      return PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
+    } else if (args.filterType === 'progressNote') {
+      return PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);
+    } else {
+      throw new Error('wrong filter type');
+    }
+  });
 }
 
 export async function resolvePreviousPatientAnswersForQuestion(
   root: any,
   args: { questionId: string; patientId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientPreviousAnswersForQuestion']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  return PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
+    return PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
+  });
 }
 
 export async function resolvePatientAnswer(
   root: any,
   args: { patientAnswerId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientAnswer']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'patientAnswer',
-    txn,
-    args.patientAnswerId,
-  );
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'view',
+      'patientAnswer',
+      txn,
+      args.patientAnswerId,
+    );
 
-  return PatientAnswer.get(args.patientAnswerId, txn);
+    return PatientAnswer.get(args.patientAnswerId, txn);
+  });
 }
 
 export async function patientAnswerEdit(
   root: any,
   args: IEditPatientAnswerOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientAnswerEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patientAnswer',
-    txn,
-    args.input.patientAnswerId,
-  );
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patientAnswer',
+      txn,
+      args.input.patientAnswerId,
+    );
 
-  return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId, txn);
+    return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId, txn);
+  });
 }
 
 export async function patientAnswerDelete(
   root: any,
   args: IDeletePatientAnswerOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientAnswerDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'patientAnswer',
-    txn,
-    args.input.patientAnswerId,
-  );
+  return transaction(testTransaction || PatientAnswer.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'delete',
+      'patientAnswer',
+      txn,
+      args.input.patientAnswerId,
+    );
 
-  return PatientAnswer.delete(args.input.patientAnswerId, txn);
+    return PatientAnswer.delete(args.input.patientAnswerId, txn);
+  });
 }

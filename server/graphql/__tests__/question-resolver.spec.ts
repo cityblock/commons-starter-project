@@ -82,7 +82,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.question)).toMatchObject({
         id: question.id,
@@ -97,7 +97,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(`No such question: ${fakeId}`);
     });
@@ -119,7 +119,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionEdit)).toMatchObject({
         title: 'new title',
@@ -153,7 +153,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionEdit).otherTextAnswerId).not.toBeNull();
     });
@@ -185,7 +185,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionEdit).otherTextAnswerId).toBeNull();
     });
@@ -203,7 +203,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
@@ -244,7 +244,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
@@ -279,7 +279,7 @@ describe('question tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
@@ -310,7 +310,7 @@ describe('question tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
         title: 'new title',
@@ -356,7 +356,7 @@ describe('question tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
         title: 'new title',
@@ -397,7 +397,7 @@ describe('question tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
         title: 'new title',
@@ -426,7 +426,7 @@ describe('question tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const clonedResult = cloneDeep(result.data!.questionCreate);
       expect(clonedResult).toMatchObject({
@@ -452,7 +452,7 @@ describe('question tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionDelete)).toMatchObject({
         id: question.id,

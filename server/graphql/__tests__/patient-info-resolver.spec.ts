@@ -92,7 +92,7 @@ describe('patient info resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
         id: patient.patientInfo.id,
@@ -109,7 +109,7 @@ describe('patient info resolver', () => {
         userId: user.id,
         permissions: 'red',
         logger,
-        txn,
+        testTransaction: txn,
       });
       expect(result2.errors![0].message).toBe('red not able to edit patient');
 
@@ -132,7 +132,7 @@ describe('patient info resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientInfoEdit)).toMatchObject({
@@ -166,7 +166,7 @@ describe('patient info resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientInfoId: patient.patientInfo.id },
       );
@@ -191,7 +191,7 @@ describe('patient info resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientInfoId: patient.patientInfo.id, text: 'Edited Scratch Pad' },
       );

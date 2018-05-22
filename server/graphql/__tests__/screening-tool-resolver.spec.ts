@@ -64,7 +64,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningTool)).toMatchObject({
         id: screeningTool.id,
@@ -79,7 +79,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(`No such screening tool: ${fakeId}`);
     });
@@ -103,7 +103,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const screeningTools = cloneDeep(result.data!.screeningTools);
       const ids = screeningTools.map((tool: ScreeningTool) => tool.id);
@@ -128,7 +128,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolEdit)).toMatchObject({
         title: 'New Title',
@@ -150,7 +150,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolCreate)).toMatchObject({
         title: 'New Screening Tool',
@@ -170,7 +170,7 @@ describe('screening tool resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const deletedScreeningTool = cloneDeep(result.data!.screeningToolDelete);
       expect(deletedScreeningTool).toMatchObject({

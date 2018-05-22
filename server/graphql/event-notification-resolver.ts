@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { capitalize } from 'lodash';
+import { transaction } from 'objection';
 import { IEventNotificationEdges, IEventNotificationNode } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import EventNotification from '../models/event-notification';
@@ -193,128 +194,138 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 export async function resolveEventNotificationsForCurrentUser(
   root: any,
   args: IUserEventNotificationOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IEventNotificationEdges> {
-  const { taskEventNotificationsOnly } = args;
-  checkLoggedInWithPermissions(userId, permissions);
+  return transaction(testTransaction || EventNotification.knex(), async txn => {
+    const { taskEventNotificationsOnly } = args;
+    checkLoggedInWithPermissions(userId, permissions);
 
-  const pageNumber = args.pageNumber || 0;
-  const pageSize = args.pageSize || 0;
+    const pageNumber = args.pageNumber || 0;
+    const pageSize = args.pageSize || 0;
 
-  let notifications: IPaginatedResults<EventNotification>;
+    let notifications: IPaginatedResults<EventNotification>;
 
-  if (taskEventNotificationsOnly) {
-    notifications = await EventNotification.getUserTaskEventNotifications(
-      userId!,
-      {
-        pageNumber,
-        pageSize,
-      },
-      txn,
+    if (taskEventNotificationsOnly) {
+      notifications = await EventNotification.getUserTaskEventNotifications(
+        userId!,
+        {
+          pageNumber,
+          pageSize,
+        },
+        txn,
+      );
+    } else {
+      notifications = await EventNotification.getUserEventNotifications(
+        userId!,
+        {
+          pageNumber,
+          pageSize,
+        },
+        txn,
+      );
+    }
+    const notificationEdges = notifications.results.map(
+      (notification: EventNotification) =>
+        formatRelayEdge(
+          { title: getEventNotificationTitle(notification), ...notification },
+          notification.id,
+        ) as IEventNotificationNode,
     );
-  } else {
-    notifications = await EventNotification.getUserEventNotifications(
-      userId!,
-      {
-        pageNumber,
-        pageSize,
+
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
+
+    return {
+      edges: notificationEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
       },
-      txn,
-    );
-  }
-  const notificationEdges = notifications.results.map(
-    (notification: EventNotification) =>
-      formatRelayEdge(
-        { title: getEventNotificationTitle(notification), ...notification },
-        notification.id,
-      ) as IEventNotificationNode,
-  );
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
-
-  return {
-    edges: notificationEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
+    };
+  });
 }
 /* tslint:enable check-is-allowed */
 
 export async function resolveEventNotificationsForTask(
   root: any,
   args: ITaskEventNotificationOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IEventNotificationEdges> {
-  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
+  return transaction(testTransaction || EventNotification.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
 
-  const pageNumber = args.pageNumber || 0;
-  const pageSize = args.pageSize || 10;
+    const pageNumber = args.pageNumber || 0;
+    const pageSize = args.pageSize || 10;
 
-  const notifications = await EventNotification.getTaskEventNotifications(
-    args.taskId,
-    {
-      pageNumber,
-      pageSize,
-    },
-    txn,
-  );
+    const notifications = await EventNotification.getTaskEventNotifications(
+      args.taskId,
+      {
+        pageNumber,
+        pageSize,
+      },
+      txn,
+    );
 
-  const notificationEdges = notifications.results.map(
-    (notification: EventNotification) =>
-      formatRelayEdge(
-        { title: getEventNotificationTitle(notification), ...notification },
-        notification.id,
-      ) as IEventNotificationNode,
-  );
+    const notificationEdges = notifications.results.map(
+      (notification: EventNotification) =>
+        formatRelayEdge(
+          { title: getEventNotificationTitle(notification), ...notification },
+          notification.id,
+        ) as IEventNotificationNode,
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
 
-  return {
-    edges: notificationEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
+    return {
+      edges: notificationEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+    };
+  });
 }
 
 export async function eventNotificationDismiss(
   root: any,
   { input }: IDismissEventNotificationOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ) {
-  await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
+  return transaction(testTransaction || EventNotification.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
 
-  return EventNotification.dismiss(input.eventNotificationId, txn);
+    return EventNotification.dismiss(input.eventNotificationId, txn);
+  });
 }
 
 export async function resolveEventNotificationsForUserTask(
   root: any,
   { taskId }: IEventNotificationsForUserTaskOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ) {
-  await checkUserPermissions(userId, permissions, 'view', 'task', txn, taskId);
+  return transaction(testTransaction || EventNotification.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'task', txn, taskId);
 
-  const notifications = await EventNotification.getForUserTask(taskId, userId!, txn);
+    const notifications = await EventNotification.getForUserTask(taskId, userId!, txn);
 
-  const formattedNotifications = notifications.map(notification => ({
-    ...notification,
-    title: getEventNotificationTitle(notification),
-  }));
+    const formattedNotifications = notifications.map(notification => ({
+      ...notification,
+      title: getEventNotificationTitle(notification),
+    }));
 
-  return formattedNotifications;
+    return formattedNotifications;
+  });
 }
 
 export async function eventNotificationsForTaskDismiss(
   root: any,
   { input }: IDismissTaskNotificationsOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ) {
-  await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
+  return transaction(testTransaction || EventNotification.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'eventNotification', txn);
 
-  return EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
+    return EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
+  });
 }

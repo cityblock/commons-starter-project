@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   ICBOReferralCreateInput,
   ICBOReferralEditInput,
@@ -20,37 +21,41 @@ export interface IEditCBOReferralOptions {
 export async function CBOReferralCreate(
   root: any,
   { input }: ICBOReferralCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['CBOReferralCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'CBOReferral', txn);
+  return transaction(testTransaction || CBOReferral.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'CBOReferral', txn);
 
-  return CBOReferral.create(input, txn);
+    return CBOReferral.create(input, txn);
+  });
 }
 
 export async function CBOReferralEdit(
   root: any,
   { input }: IEditCBOReferralOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['CBOReferralEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, input.taskId);
+  return transaction(testTransaction || CBOReferral.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'task', txn, input.taskId);
 
-  const referral = await CBOReferral.edit(input as any, input.CBOReferralId, txn);
+    const referral = await CBOReferral.edit(input as any, input.CBOReferralId, txn);
 
-  if (input.sentAt) {
-    addJobToQueue('taskEvent', {
-      taskId: input.taskId,
-      userId: userId!,
-      eventType: 'cbo_referral_edit_sent_at' as TaskEventTypes,
-    });
-  }
+    if (input.sentAt) {
+      addJobToQueue('taskEvent', {
+        taskId: input.taskId,
+        userId: userId!,
+        eventType: 'cbo_referral_edit_sent_at' as TaskEventTypes,
+      });
+    }
 
-  if (input.acknowledgedAt) {
-    addJobToQueue('taskEvent', {
-      taskId: input.taskId,
-      userId: userId!,
-      eventType: 'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
-    });
-  }
+    if (input.acknowledgedAt) {
+      addJobToQueue('taskEvent', {
+        taskId: input.taskId,
+        userId: userId!,
+        eventType: 'cbo_referral_edit_acknowledged_at' as TaskEventTypes,
+      });
+    }
 
-  return referral;
+    return referral;
+  });
 }

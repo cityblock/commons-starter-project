@@ -119,7 +119,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, pageNumber: 0, pageSize: 5 },
       );
@@ -173,7 +173,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -209,7 +209,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -230,7 +230,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, body: body1 },
       );
@@ -252,7 +252,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, body: body1 },
       );
@@ -279,7 +279,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, body: body1 },
       );
@@ -316,7 +316,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, body: body1 },
       );
@@ -363,7 +363,7 @@ describe('SMS Message Resolver', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, body: body1 },
       );

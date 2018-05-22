@@ -1,5 +1,5 @@
 import { isNil, isNull, omitBy } from 'lodash';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import {
   IAddressCreateInput,
   IAddressInput,
@@ -43,115 +43,139 @@ export interface IQuery {
 export async function resolveHealthcareProxiesForPatient(
   source: any,
   { patientId }: IQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientContactHealthcareProxies']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientContact.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient contact healthcare proxies for ${patientId} by ${userId}`);
-  return PatientContact.getHealthcareProxiesForPatient(patientId, txn);
+    logger.log(`GET patient contact healthcare proxies for ${patientId} by ${userId}`);
+    return PatientContact.getHealthcareProxiesForPatient(patientId, txn);
+  });
 }
 
 export async function resolvePatientContactsForPatient(
   source: any,
   { patientId }: IQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientContacts']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientContact.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient contacts for ${patientId} by ${userId}`);
-  return PatientContact.getAllForPatient(patientId, txn);
+    logger.log(`GET patient contacts for ${patientId} by ${userId}`);
+    return PatientContact.getAllForPatient(patientId, txn);
+  });
 }
 
 export async function patientContactDelete(
   source: any,
   { input }: IPatientContactDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientContactDelete']> {
-  const patientContact = await PatientContact.get(input.patientContactId, txn);
+  return transaction(testTransaction || PatientContact.knex(), async txn => {
+    const patientContact = await PatientContact.get(input.patientContactId, txn);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientContact.patientId);
-  logger.log(`DELETE patient contact ${input.patientContactId} by ${userId}`);
-  const { id, address, email, phone } = patientContact;
-  const promises: Array<Promise<any>> = [];
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patient',
+      txn,
+      patientContact.patientId,
+    );
+    logger.log(`DELETE patient contact ${input.patientContactId} by ${userId}`);
+    const { id, address, email, phone } = patientContact;
+    const promises: Array<Promise<any>> = [];
 
-  if (address) {
-    await PatientContactAddress.delete({ addressId: address.id, patientContactId: id }, txn);
-    promises.push(Address.delete(address.id, txn));
-  }
-  if (email) {
-    await PatientContactEmail.delete({ emailId: email.id, patientContactId: id }, txn);
-    promises.push(Email.delete(email.id, txn));
-  }
-  if (phone) {
-    await PatientContactPhone.delete({ phoneId: phone.id, patientContactId: id }, txn);
-    promises.push(Phone.delete(phone.id, txn));
-  }
+    if (address) {
+      await PatientContactAddress.delete({ addressId: address.id, patientContactId: id }, txn);
+      promises.push(Address.delete(address.id, txn));
+    }
+    if (email) {
+      await PatientContactEmail.delete({ emailId: email.id, patientContactId: id }, txn);
+      promises.push(Email.delete(email.id, txn));
+    }
+    if (phone) {
+      await PatientContactPhone.delete({ phoneId: phone.id, patientContactId: id }, txn);
+      promises.push(Phone.delete(phone.id, txn));
+    }
 
-  await Promise.all(promises);
-  const deletedPatientContact = await PatientContact.delete(id, userId!, txn);
-  await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
-  return deletedPatientContact;
+    await Promise.all(promises);
+    const deletedPatientContact = await PatientContact.delete(id, userId!, txn);
+    await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
+    return deletedPatientContact;
+  });
 }
 
 export async function patientContactCreate(
   source: any,
   { input }: IPatientContactCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientContactCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientContact.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPatientContactCreateInput>(input, isNil) as any;
-  filtered.relationFreeText = input.relationFreeText;
-  delete filtered.phone;
-  delete filtered.address;
-  delete filtered.email;
+    const filtered = omitBy<IPatientContactCreateInput>(input, isNil) as any;
+    filtered.relationFreeText = input.relationFreeText;
+    delete filtered.phone;
+    delete filtered.address;
+    delete filtered.email;
 
-  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
-  const patientContact = await PatientContact.create({ ...filtered, updatedById: userId! }, txn);
+    logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
+    const patientContact = await PatientContact.create({ ...filtered, updatedById: userId! }, txn);
 
-  const promises = [
-    createAddress(patientContact.id, userId!, input.address, txn),
-    createEmail(patientContact.id, userId!, input.email, txn),
-    createPhone(patientContact.id, userId!, input.phone, txn),
-  ];
+    const promises = [
+      createAddress(patientContact.id, userId!, input.address, txn),
+      createEmail(patientContact.id, userId!, input.email, txn),
+      createPhone(patientContact.id, userId!, input.phone, txn),
+    ];
 
-  await Promise.all(promises);
-  await ComputedPatientStatus.updateForPatient(input.patientId, userId!, txn);
-  return PatientContact.get(patientContact.id, txn);
+    await Promise.all(promises);
+    await ComputedPatientStatus.updateForPatient(input.patientId, userId!, txn);
+    return PatientContact.get(patientContact.id, txn);
+  });
 }
 
 export async function patientContactEdit(
   source: any,
   { input }: IPatientContactEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientContactEdit']> {
-  const patientContact = await PatientContact.get(input.patientContactId, txn);
+  return transaction(testTransaction || PatientContact.knex(), async txn => {
+    const patientContact = await PatientContact.get(input.patientContactId, txn);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientContact.patientId);
-  logger.log(`EDIT patient contact ${input.patientContactId} by ${userId}`);
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patient',
+      txn,
+      patientContact.patientId,
+    );
+    logger.log(`EDIT patient contact ${input.patientContactId} by ${userId}`);
 
-  const promises = [
-    updateAddress(patientContact.id, userId!, input.address, txn),
-    updateEmail(patientContact.id, userId!, input.email, txn),
-    updatePhone(patientContact.id, userId!, input.phone, txn),
-  ] as Array<Promise<any>>;
+    const promises = [
+      updateAddress(patientContact.id, userId!, input.address, txn),
+      updateEmail(patientContact.id, userId!, input.email, txn),
+      updatePhone(patientContact.id, userId!, input.phone, txn),
+    ] as Array<Promise<any>>;
 
-  await Promise.all(promises);
-  const filtered = omitBy(input, isNil);
-  filtered.relationFreeText = input.relationFreeText;
-  delete filtered.phone;
-  delete filtered.address;
-  delete filtered.email;
+    await Promise.all(promises);
+    const filtered = omitBy(input, isNil);
+    filtered.relationFreeText = input.relationFreeText;
+    delete filtered.phone;
+    delete filtered.address;
+    delete filtered.email;
 
-  const updatedPatientContact = await PatientContact.edit(
-    { ...(filtered as any), updatedById: userId },
-    input.patientContactId,
-    txn,
-  );
+    const updatedPatientContact = await PatientContact.edit(
+      { ...(filtered as any), updatedById: userId },
+      input.patientContactId,
+      txn,
+    );
 
-  await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
+    await ComputedPatientStatus.updateForPatient(patientContact.patientId, userId!, txn);
 
-  return updatedPatientContact;
+    return updatedPatientContact;
+  });
 }
 
 async function createAddress(

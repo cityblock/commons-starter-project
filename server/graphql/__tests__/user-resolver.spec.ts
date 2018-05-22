@@ -81,7 +81,7 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { userRoleFilters: [user.userRole] },
       );
@@ -113,7 +113,7 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { userRoleFilters: [userRole] },
       );
@@ -134,7 +134,7 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions: 'red',
-          txn,
+          testTransaction: txn,
         },
         { userRoleFilters: [user.userRole] },
       );
@@ -151,7 +151,7 @@ describe('user tests', () => {
       const result = await graphql(schema, usersQuery, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.users)).toMatchObject({
@@ -173,7 +173,7 @@ describe('user tests', () => {
       const result = await graphql(schema, usersQuery, null, {
         permissions: 'red',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.errors![0].message)).toMatch('red not able to view allUsers');
@@ -194,7 +194,7 @@ describe('user tests', () => {
         {
           userId: user1.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 4, orderBy: 'emailAsc' },
       );
@@ -241,7 +241,7 @@ describe('user tests', () => {
       const result = await graphql(schema, currentUserQuery, null, {
         userId: user.id,
         permissions: 'blue',
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.currentUser)).toMatchObject({
         email: 'dan@plant.com',
@@ -254,7 +254,7 @@ describe('user tests', () => {
       const result = await graphql(schema, currentUserQuery, null, {
         userId: '',
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.errors![0].message)).toMatch('not logged in');
@@ -265,7 +265,7 @@ describe('user tests', () => {
       const result = await graphql(schema, currentUserQuery, null, {
         userId: fakeId,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.errors![0].message)).toMatch(`No such user: ${fakeId}`);
@@ -283,7 +283,7 @@ describe('user tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { locale: 'es', firstName: 'first' },
       );
@@ -317,7 +317,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { userRole, logger, txn },
+        { userRole, logger, testTransaction: txn },
         { googleAuthCode: 'google-auth-code' },
       );
       // update user name from google response
@@ -349,7 +349,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn, logger: { log: jest.fn() } },
         { googleAuthCode: 'google-auth-code' },
       );
 
@@ -364,7 +364,7 @@ describe('user tests', () => {
         schema,
         userLoginMutation,
         null,
-        { userRole, txn },
+        { userRole, testTransaction: txn },
         { googleAuthCode: 'google-auth-code' },
       );
       expect(result.errors![0].message).toMatch('User not found for logan@cityblock.com');
@@ -379,7 +379,7 @@ describe('user tests', () => {
         {
           userId: 'sansaStark',
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { googleAuthCode: 'google-auth-code' },
       );
@@ -395,7 +395,7 @@ describe('user tests', () => {
         {
           permissions,
           userId: 'aryaStark',
-          txn,
+          testTransaction: txn,
         },
         { googleAuthCode: 'google-auth-code' },
       );
@@ -415,7 +415,7 @@ describe('user tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', homeClinicId: clinic.id },
       );
@@ -436,7 +436,7 @@ describe('user tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', homeClinicId: clinic.id },
       );
@@ -457,7 +457,7 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', userRole: 'nurseCareManager' },
       );
@@ -477,7 +477,7 @@ describe('user tests', () => {
         {
           permissions: 'blue',
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', userRole: 'nurseCareManager' },
       );
@@ -496,11 +496,10 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', permissions: 'blue' },
       );
-
       expect(cloneDeep(result.data!.userEditPermissions)).toMatchObject({
         email: 'a@b.com',
         permissions: 'blue',
@@ -517,7 +516,7 @@ describe('user tests', () => {
         {
           permissions: 'blue',
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com', permissions: 'green' },
       );
@@ -537,7 +536,7 @@ describe('user tests', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         { email: 'a@b.com' },
       );
@@ -558,7 +557,7 @@ describe('user tests', () => {
       {
         permissions: 'blue',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { email: 'a@b.com' },
     );
@@ -580,7 +579,7 @@ describe('user tests', () => {
         null,
         {
           permissions: 'blue',
-          txn,
+          testTransaction: txn,
           userId: user.id,
         },
         { patientId: patient.id },
@@ -599,7 +598,7 @@ describe('user tests', () => {
         null,
         {
           permissions: 'red',
-          txn,
+          testTransaction: txn,
           userId: user.id,
         },
         { patientId: patient.id },
@@ -627,7 +626,7 @@ describe('user tests', () => {
         null,
         {
           permissions: 'blue',
-          txn,
+          testTransaction: txn,
           userId: user.id,
         },
         { patientId: patient.id },
@@ -647,7 +646,7 @@ describe('user tests', () => {
         null,
         {
           permissions: 'blue',
-          txn,
+          testTransaction: txn,
           userId: user.id,
         },
         { patientId: patient.id },
@@ -668,7 +667,7 @@ describe('user tests', () => {
 
       const result = await graphql(schema, jwtForVcfCreateMutation, null, {
         permissions: 'blue',
-        txn,
+        testTransaction: txn,
         userId: user.id,
       });
 
@@ -681,7 +680,7 @@ describe('user tests', () => {
 
       const result = await graphql(schema, jwtForVcfCreateMutation, null, {
         permissions: 'black',
-        txn,
+        testTransaction: txn,
         userId: user.id,
       });
 

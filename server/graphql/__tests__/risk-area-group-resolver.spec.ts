@@ -67,7 +67,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const riskAreaGroups = cloneDeep(result.data!.riskAreaGroups);
       const ids = riskAreaGroups.map((group: RiskAreaGroup) => group.id);
@@ -91,7 +91,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.riskAreaGroup)).toMatchObject({
         id: riskAreaGroup.id,
@@ -106,7 +106,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(`No such risk area group: ${fakeId}`);
     });
@@ -143,7 +143,11 @@ describe('risk area group resolver', () => {
             }
           }
         }`;
-      const result = await graphql(schema, query, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        userId: user.id,
+        testTransaction: txn,
+      });
       const clonedResult = cloneDeep(result.data!.riskAreaGroupForPatient);
 
       expect(clonedResult).toMatchObject({
@@ -193,7 +197,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions: 'blue',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toBe(
@@ -251,7 +255,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions: 'blue',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toBe(
@@ -282,7 +286,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.riskAreaGroupCreate)).toMatchObject({
@@ -315,7 +319,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.riskAreaGroupEdit)).toMatchObject({
@@ -338,7 +342,7 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.riskAreaGroupDelete)).toMatchObject({

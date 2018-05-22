@@ -146,7 +146,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const fetchedNotifResults = result.data!.eventNotificationsForCurrentUser;
       const fetchedNotifs = fetchedNotifResults.edges.map(
@@ -197,7 +197,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const fetchedNotifResults = result.data!.eventNotificationsForCurrentUser;
       const fetchedNotifs = fetchedNotifResults.edges.map(
@@ -257,12 +257,12 @@ describe('event notification tests', () => {
       const taskNotifsResult = await graphql(schema, taskNotifsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const allNotifsResult = await graphql(schema, allNotifsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const fetchedTaskNotifResults = taskNotifsResult.data!.eventNotificationsForCurrentUser;
@@ -314,7 +314,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const fetchedNotifResults = result.data!.eventNotificationsForTask;
       const fetchedNotifs = fetchedNotifResults.edges.map(
@@ -357,7 +357,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const fetchedNotifResults = result.data!.eventNotificationsForTask;
       const fetchedNotifs = fetchedNotifResults.edges.map(
@@ -384,7 +384,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
@@ -412,7 +412,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const updatedNotifResults = result.data!.eventNotificationsForTaskDismiss;
@@ -457,7 +457,7 @@ describe('event notification tests', () => {
       await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const userNotifsQuery = `{
@@ -474,14 +474,13 @@ describe('event notification tests', () => {
       const userNotifsResult = await graphql(schema, userNotifsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const user2NotifsResult = await graphql(schema, userNotifsQuery, null, {
         permissions,
         userId: user2.id,
-        txn,
+        testTransaction: txn,
       });
-
       const fetchedUserNotifsResults = userNotifsResult.data!.eventNotificationsForCurrentUser;
       const fetchedUser2NotifsResults = user2NotifsResult.data!.eventNotificationsForCurrentUser;
       const fetchedUser2Notifs = fetchedUser2NotifsResults.edges.map(
@@ -542,7 +541,7 @@ describe('event notification tests', () => {
       await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const taskNotifsQuery = `{
@@ -557,7 +556,7 @@ describe('event notification tests', () => {
       const taskNotifsResult = await graphql(schema, taskNotifsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const task2NotifsQuery = `{
@@ -572,7 +571,7 @@ describe('event notification tests', () => {
       const task2NotifsResult = await graphql(schema, task2NotifsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       const fetchedTaskNotifsResults = taskNotifsResult.data!.eventNotificationsForTask;
@@ -601,7 +600,7 @@ describe('event notification tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: taskSetup.user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.eventNotificationsForUserTask[0].id).toBe(taskSetup.eventNotification.id);

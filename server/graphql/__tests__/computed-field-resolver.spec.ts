@@ -57,7 +57,7 @@ describe('computed field resolver', () => {
         schema,
         computedFieldQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         { computedFieldId: computedField.id },
       );
       expect(cloneDeep(result.data!.computedField)).toMatchObject({
@@ -89,7 +89,7 @@ describe('computed field resolver', () => {
       const result = await graphql(schema, computedFieldsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const computedFields = cloneDeep(result.data!.computedFields);
       const labels = computedFields.map((computedField: ComputedField) => computedField.label);
@@ -125,7 +125,7 @@ describe('computed field resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         {
           orderBy: 'labelDesc',
@@ -149,7 +149,7 @@ describe('computed field resolver', () => {
         schema,
         computedFieldCreateMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           label: 'Computed Field',
           dataType: 'boolean' as ComputedFieldDataTypes,
@@ -178,7 +178,7 @@ describe('computed field resolver', () => {
         schema,
         computedFieldDeleteMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           computedFieldId: computedField.id,
         },

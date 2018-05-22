@@ -97,7 +97,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { answerId: answer.id },
       );
@@ -123,7 +123,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { answerId: fakeId },
       );
@@ -141,7 +141,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { questionId: question.id },
       );
@@ -165,7 +165,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { displayValue: 'new display value', answerId: answer.id },
       );
@@ -185,7 +185,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           displayValue: 'loves writing tests too!',
@@ -213,7 +213,7 @@ describe('answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { answerId: answer.id },
       );

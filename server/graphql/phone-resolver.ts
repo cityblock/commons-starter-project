@@ -1,4 +1,5 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import {
   IPhoneCreateForPatientInput,
   IPhoneCreateInput,
@@ -21,32 +22,34 @@ export interface IPhoneCreateForPatientOptions {
 export async function phoneCreateForPatient(
   source: any,
   { input }: IPhoneCreateForPatientOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['phoneCreateForPatient']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Phone.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPhoneCreateForPatientInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IPhoneCreateForPatientInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
 
-  const phone = await Phone.create(filtered, txn);
-  await PatientPhone.create({ patientId: input.patientId, phoneId: phone.id }, txn);
+    const phone = await Phone.create(filtered, txn);
+    await PatientPhone.create({ patientId: input.patientId, phoneId: phone.id }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryPhoneId: phone.id, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryPhoneId: phone.id, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  addJobToQueue('patientContactEdit', {
-    patientId: input.patientId,
-    type: 'addPhoneNumber',
+    addJobToQueue('patientContactEdit', {
+      patientId: input.patientId,
+      type: 'addPhoneNumber',
+    });
+
+    return phone;
   });
-
-  return phone;
 }
 
 export interface IPhoneCreateOptions {
@@ -56,15 +59,17 @@ export interface IPhoneCreateOptions {
 export async function phoneCreate(
   source: any,
   { input }: IPhoneCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['phoneCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'phone', txn);
+  return transaction(testTransaction || Phone.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'phone', txn);
 
-  const filtered = omitBy<IPhoneCreateInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE phone by ${userId}`);
+    const filtered = omitBy<IPhoneCreateInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE phone by ${userId}`);
 
-  return Phone.create(filtered, txn);
+    return Phone.create(filtered, txn);
+  });
 }
 
 export interface IPhoneDeleteOptions {
@@ -74,29 +79,31 @@ export interface IPhoneDeleteOptions {
 export async function phoneDeleteForPatient(
   root: any,
   { input }: IPhoneDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<Phone> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Phone.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE phone for patient ${input.patientId} by ${userId}`);
+    logger.log(`DELETE phone for patient ${input.patientId} by ${userId}`);
 
-  await PatientPhone.delete({ patientId: input.patientId, phoneId: input.phoneId }, txn);
+    await PatientPhone.delete({ patientId: input.patientId, phoneId: input.phoneId }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryPhoneId: null, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryPhoneId: null, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  addJobToQueue('patientContactEdit', {
-    patientId: input.patientId,
-    type: 'deletePhoneNumber',
+    addJobToQueue('patientContactEdit', {
+      patientId: input.patientId,
+      type: 'deletePhoneNumber',
+    });
+
+    return Phone.delete(input.phoneId, txn);
   });
-
-  return Phone.delete(input.phoneId, txn);
 }
 
 export interface IPhoneEditOptions {
@@ -106,17 +113,19 @@ export interface IPhoneEditOptions {
 export async function phoneEdit(
   source: any,
   { input }: IPhoneEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['phoneEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Phone.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPhoneEditInput>(input, isNil);
-  logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IPhoneEditInput>(input, isNil);
+    logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
 
-  addJobToQueue('patientContactEdit', {
-    patientId: input.patientId,
-    type: 'editPhoneNumber',
+    addJobToQueue('patientContactEdit', {
+      patientId: input.patientId,
+      type: 'editPhoneNumber',
+    });
+
+    return Phone.edit(filtered as any, input.phoneId, txn);
   });
-
-  return Phone.edit(filtered as any, input.phoneId, txn);
 }

@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IComputedFieldFlagCreateInput, IRootMutationType } from 'schema';
 import ComputedFieldFlag from '../models/computed-field-flag';
 import checkUserPermissions from './shared/permissions-check';
@@ -10,23 +11,25 @@ export interface IComputedFieldFlagCreateArgs {
 export async function computedFieldFlagCreate(
   root: any,
   { input }: IComputedFieldFlagCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['computedFieldFlagCreate']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'view',
-    'patientAnswer',
-    txn,
-    input.patientAnswerId,
-  );
+  return transaction(testTransaction || ComputedFieldFlag.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'view',
+      'patientAnswer',
+      txn,
+      input.patientAnswerId,
+    );
 
-  return ComputedFieldFlag.create(
-    {
-      patientAnswerId: input.patientAnswerId,
-      reason: input.reason || null,
-      userId: userId!,
-    },
-    txn,
-  );
+    return ComputedFieldFlag.create(
+      {
+        patientAnswerId: input.patientAnswerId,
+        reason: input.reason || null,
+        userId: userId!,
+      },
+      txn,
+    );
+  });
 }

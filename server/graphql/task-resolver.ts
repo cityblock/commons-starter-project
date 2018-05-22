@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRootMutationType,
   IRootQueryType,
@@ -53,7 +54,7 @@ export interface IResolveTasksForUserForPatientOptions {
 export async function taskCreate(
   root: any,
   { input }: ITaskCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskCreate']> {
   const {
     title,
@@ -66,239 +67,263 @@ export async function taskCreate(
     CBOReferralId,
   } = input;
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  // TODO: once we allow adding followers on create, create the associated TaskEvent records
-  const task = await Task.create(
-    {
-      createdById: userId!,
-      title,
-      description: description || undefined,
-      dueAt: dueAt || undefined,
-      patientId,
-      priority: priority || undefined,
-      assignedToId: assignedToId || undefined,
-      patientGoalId,
-      CBOReferralId,
-    },
-    txn,
-  );
+    // TODO: once we allow adding followers on create, create the associated TaskEvent records
+    const task = await Task.create(
+      {
+        createdById: userId!,
+        title,
+        description: description || undefined,
+        dueAt: dueAt || undefined,
+        patientId,
+        priority: priority || undefined,
+        assignedToId: assignedToId || undefined,
+        patientGoalId,
+        CBOReferralId,
+      },
+      txn,
+    );
 
-  addJobToQueue('taskEvent', {
-    taskId: task.id,
-    userId: userId!,
-    eventType: 'create_task' as TaskEventTypes,
-  });
-
-  if (assignedToId) {
     addJobToQueue('taskEvent', {
       taskId: task.id,
       userId: userId!,
-      eventType: 'edit_assignee' as TaskEventTypes,
-      eventUserId: assignedToId,
+      eventType: 'create_task' as TaskEventTypes,
     });
-  }
 
-  return task;
+    if (assignedToId) {
+      addJobToQueue('taskEvent', {
+        taskId: task.id,
+        userId: userId!,
+        eventType: 'edit_assignee' as TaskEventTypes,
+        eventUserId: assignedToId,
+      });
+    }
+
+    return task;
+  });
 }
 
 export async function resolveTask(
   root: any,
   args: IResolveTaskOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['task']> {
-  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
 
-  return Task.get(args.taskId, txn);
+    return Task.get(args.taskId, txn);
+  });
 }
 
 export async function taskEdit(
   root: any,
   args: IEditTaskOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
-  const task = await Task.get(args.input.taskId, txn);
-  const { priority, dueAt, assignedToId, title, description } = task;
-  // TODO: fix typings here
-  const updatedTask = await Task.update(args.input.taskId, args.input as any, txn);
+    const task = await Task.get(args.input.taskId, txn);
+    const { priority, dueAt, assignedToId, title, description } = task;
+    // TODO: fix typings here
+    const updatedTask = await Task.update(args.input.taskId, args.input as any, txn);
 
-  if (args.input.priority && args.input.priority !== priority) {
-    addJobToQueue('taskEvent', {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'edit_priority' as TaskEventTypes,
-    });
-  }
+    if (args.input.priority && args.input.priority !== priority) {
+      addJobToQueue('taskEvent', {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_priority' as TaskEventTypes,
+      });
+    }
 
-  if (args.input.dueAt && args.input.dueAt !== dueAt) {
-    addJobToQueue('taskEvent', {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'edit_due_date' as TaskEventTypes,
-    });
-  }
+    if (args.input.dueAt && args.input.dueAt !== dueAt) {
+      addJobToQueue('taskEvent', {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_due_date' as TaskEventTypes,
+      });
+    }
 
-  if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
-    addJobToQueue('taskEvent', {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'edit_assignee' as TaskEventTypes,
-      eventUserId: args.input.assignedToId,
-    });
-  }
+    if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
+      addJobToQueue('taskEvent', {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_assignee' as TaskEventTypes,
+        eventUserId: args.input.assignedToId,
+      });
+    }
 
-  if (args.input.title && args.input.title !== title) {
-    addJobToQueue('taskEvent', {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'edit_title' as TaskEventTypes,
-    });
-  }
+    if (args.input.title && args.input.title !== title) {
+      addJobToQueue('taskEvent', {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_title' as TaskEventTypes,
+      });
+    }
 
-  if (args.input.description && args.input.description !== description) {
-    addJobToQueue('taskEvent', {
-      taskId: args.input.taskId,
-      userId: userId!,
-      eventType: 'edit_description' as TaskEventTypes,
-    });
-  }
+    if (args.input.description && args.input.description !== description) {
+      addJobToQueue('taskEvent', {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_description' as TaskEventTypes,
+      });
+    }
 
-  return updatedTask;
+    return updatedTask;
+  });
 }
 
 export async function taskDelete(
   root: any,
   args: IDeleteTaskOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'task', txn, args.input.taskId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'task', txn, args.input.taskId);
 
-  const task = await Task.delete(args.input.taskId, txn);
+    const task = await Task.delete(args.input.taskId, txn);
 
-  addJobToQueue('taskEvent', {
-    taskId: args.input.taskId,
-    userId: userId!,
-    eventType: 'delete_task' as TaskEventTypes,
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'delete_task' as TaskEventTypes,
+    });
+
+    return task || null;
   });
-
-  return task || null;
 }
 
 export async function taskComplete(
   root: any,
   args: IEditTaskOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskComplete']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
-  const task = Task.complete(args.input.taskId, userId!, txn);
+    const task = Task.complete(args.input.taskId, userId!, txn);
 
-  addJobToQueue('taskEvent', {
-    taskId: args.input.taskId,
-    userId: userId!,
-    eventType: 'complete_task' as TaskEventTypes,
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'complete_task' as TaskEventTypes,
+    });
+
+    return task;
   });
-
-  return task;
 }
 
 export async function taskUncomplete(
   root: any,
   args: IEditTaskOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskUncomplete']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'task', txn, args.input.taskId);
 
-  const task = Task.uncomplete(args.input.taskId, userId!, txn);
+    const task = Task.uncomplete(args.input.taskId, userId!, txn);
 
-  addJobToQueue('taskEvent', {
-    taskId: args.input.taskId,
-    userId: userId!,
-    eventType: 'uncomplete_task' as TaskEventTypes,
+    addJobToQueue('taskEvent', {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'uncomplete_task' as TaskEventTypes,
+    });
+
+    return task;
   });
-
-  return task;
 }
 
 export async function resolvePatientTasks(
   root: any,
   args: IPatientTasksFilterOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['tasksForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  const pageNumber = args.pageNumber || 0;
-  const pageSize = args.pageSize || 10;
-  const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(args.orderBy, {
-    order: 'asc',
-    orderBy: 'dueAt',
+    const pageNumber = args.pageNumber || 0;
+    const pageSize = args.pageSize || 10;
+    const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(args.orderBy, {
+      order: 'asc',
+      orderBy: 'dueAt',
+    });
+
+    const tasks = await Task.getPatientTasks(
+      args.patientId,
+      {
+        pageNumber,
+        pageSize,
+        order,
+        orderBy,
+      },
+      txn,
+    );
+    const taskEdges = tasks.results.map(
+      (task: Task) => formatRelayEdge(task, task.id) as ITaskNode,
+    );
+
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
+
+    return {
+      edges: taskEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+    };
   });
-
-  const tasks = await Task.getPatientTasks(
-    args.patientId,
-    {
-      pageNumber,
-      pageSize,
-      order,
-      orderBy,
-    },
-    txn,
-  );
-  const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
-
-  return {
-    edges: taskEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
 }
 
 export async function resolveTasksForUserForPatient(
   root: any,
   args: IResolveTasksForUserForPatientOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['tasksForUserForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  return Task.getAllUserPatientTasks({ userId: args.userId, patientId: args.patientId }, txn);
+    return Task.getAllUserPatientTasks({ userId: args.userId, patientId: args.patientId }, txn);
+  });
 }
 
 export async function resolveTasksDueSoonForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['tasksDueSoonForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  return Task.getTasksDueSoonForPatient(patientId, userId!, txn);
+    return Task.getTasksDueSoonForPatient(patientId, userId!, txn);
+  });
 }
 
 export async function resolveTasksWithNotificationsForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['tasksWithNotificationsForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  return Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
+    return Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
+  });
 }
 
 /* tslint:disable:check-is-allowed */
 export async function resolveTaskIdsWithNotifications(
   root: any,
   args: {},
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['taskIdsWithNotifications']> {
-  checkLoggedInWithPermissions(userId, permissions);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    checkLoggedInWithPermissions(userId, permissions);
 
-  return Task.getTaskIdsWithNotifications(userId!, txn);
+    return Task.getTaskIdsWithNotifications(userId!, txn);
+  });
 }
 /* tslint:enable:check-is-allowed */
 
@@ -312,40 +337,44 @@ export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
 export async function resolveCurrentUserTasks(
   root: any,
   args: ICurrentUserTasksFilterOptions,
-  { permissions, userId, txn, testConfig }: IContext,
+  { permissions, userId, testTransaction, testConfig }: IContext,
 ): Promise<IRootQueryType['tasksForCurrentUser']> {
-  checkLoggedInWithPermissions(userId, permissions);
+  return transaction(testTransaction || Task.knex(), async txn => {
+    checkLoggedInWithPermissions(userId, permissions);
 
-  const pageNumber = args.pageNumber || 0;
-  const pageSize = args.pageSize || 10;
-  const { order, orderBy } = formatOrderOptions<UserTaskOrderOptions>(args.orderBy, {
-    order: 'asc',
-    orderBy: 'dueAt',
+    const pageNumber = args.pageNumber || 0;
+    const pageSize = args.pageSize || 10;
+    const { order, orderBy } = formatOrderOptions<UserTaskOrderOptions>(args.orderBy, {
+      order: 'asc',
+      orderBy: 'dueAt',
+    });
+
+    const tasks = await Task.getUserTasks(
+      userId!,
+      {
+        pageNumber,
+        pageSize,
+        order,
+        orderBy,
+      },
+      txn,
+      args.isFollowingTasks || false,
+    );
+
+    const taskEdges = tasks.results.map(
+      (task: Task) => formatRelayEdge(task, task.id) as ITaskNode,
+    );
+
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
+
+    return {
+      edges: taskEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+    };
   });
-
-  const tasks = await Task.getUserTasks(
-    userId!,
-    {
-      pageNumber,
-      pageSize,
-      order,
-      orderBy,
-    },
-    txn,
-    args.isFollowingTasks || false,
-  );
-
-  const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
-
-  return {
-    edges: taskEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
 }
 /* tslint:enable:check-is-allowed */

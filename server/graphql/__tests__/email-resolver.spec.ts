@@ -72,7 +72,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.emailCreate)).toMatchObject({
@@ -100,7 +100,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
@@ -131,7 +131,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.emailCreateForPatient)).toMatchObject({
@@ -166,7 +166,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const email = createResult.data!.emailCreateForPatient;
 
@@ -183,7 +183,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
@@ -211,7 +211,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       const email = createResult.data!.emailCreateForPatient;
 
@@ -232,7 +232,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.emailDeleteForPatient)).toMatchObject({
@@ -266,7 +266,7 @@ describe('email resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.emailEdit)).toMatchObject({
         emailAddress: 'patient@email.com',

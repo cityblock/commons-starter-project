@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IRootQueryType } from 'schema';
 import PatientEmail from '../models/patient-email';
 import checkUserPermissions from './shared/permissions-check';
@@ -10,11 +11,13 @@ export interface IResolveEmailsOptions {
 export async function resolveEmails(
   source: any,
   { patientId }: IResolveEmailsOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientEmails']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientEmail.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all emails for patient ${patientId} by ${userId}`);
+    logger.log(`GET all emails for patient ${patientId} by ${userId}`);
 
-  return PatientEmail.getAll(patientId, txn);
+    return PatientEmail.getAll(patientId, txn);
+  });
 }

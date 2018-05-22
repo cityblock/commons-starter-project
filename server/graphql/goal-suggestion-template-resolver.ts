@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IGoalSuggestionTemplateCreateInput,
   IGoalSuggestionTemplateDeleteInput,
@@ -30,54 +31,67 @@ export interface IDeleteGoalSuggestionTemplateOptions {
 export async function goalSuggestionTemplateCreate(
   root: any,
   { input }: IGoalSuggestionTemplatesCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'goalSuggestionTemplate', txn);
+  return transaction(testTransaction || GoalSuggestionTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'goalSuggestionTemplate', txn);
 
-  return GoalSuggestionTemplate.create(input, txn);
+    return GoalSuggestionTemplate.create(input, txn);
+  });
 }
 
 export async function resolveGoalSuggestionTemplates(
   root: any,
   args: any,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplates']> {
-  await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
+  return transaction(testTransaction || GoalSuggestionTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 
-  const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(args.orderBy, {
-    orderBy: 'title',
-    order: 'asc',
+    const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(
+      args.orderBy,
+      {
+        orderBy: 'title',
+        order: 'asc',
+      },
+    );
+
+    return GoalSuggestionTemplate.getAll({ orderBy, order }, txn);
   });
-
-  return GoalSuggestionTemplate.getAll({ orderBy, order }, txn);
 }
 
 export async function resolveGoalSuggestionTemplate(
   root: any,
   args: { goalSuggestionTemplateId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['goalSuggestionTemplate']> {
-  await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
+  return transaction(testTransaction || GoalSuggestionTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'goalSuggestionTemplate', txn);
 
-  return GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
+    return GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
+  });
 }
 
 export async function goalSuggestionTemplateEdit(
   root: any,
   args: IEditGoalSuggestionTemplateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'goalSuggestionTemplate', txn);
+  return transaction(testTransaction || GoalSuggestionTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'goalSuggestionTemplate', txn);
 
-  return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input, txn);
+    return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input, txn);
+  });
 }
 
 export async function goalSuggestionTemplateDelete(
   root: any,
   args: IDeleteGoalSuggestionTemplateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['goalSuggestionTemplateDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'goalSuggestionTemplate', txn);
+  return transaction(testTransaction || GoalSuggestionTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'goalSuggestionTemplate', txn);
 
-  return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId, txn);
+    return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId, txn);
+  });
 }

@@ -52,7 +52,7 @@ describe('CBO Category resolver', () => {
     const result = await graphql(schema, cboCategoriesQuery, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.CBOCategories[0]).toMatchObject({

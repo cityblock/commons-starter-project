@@ -1,4 +1,4 @@
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import {
   IPatientCoreIdentityVerifyInput,
   IPatientFilterOptions,
@@ -39,13 +39,15 @@ export interface IPatientSocialSecurityOptions {
 export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient ${patientId} by ${userId}`);
+    logger.log(`GET patient ${patientId} by ${userId}`);
 
-  return Patient.get(patientId, txn);
+    return Patient.get(patientId, txn);
+  });
 }
 
 export interface IPatientCoreIdentityVerifyOptions {
@@ -55,12 +57,14 @@ export interface IPatientCoreIdentityVerifyOptions {
 export async function patientCoreIdentityVerify(
   source: any,
   { input }: IPatientCoreIdentityVerifyOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientCoreIdentityVerify']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`VERIFY patient ${input.patientId} by ${userId}`);
-  return Patient.coreIdentityVerify(input.patientId, userId!, txn);
+    logger.log(`VERIFY patient ${input.patientId} by ${userId}`);
+    return Patient.coreIdentityVerify(input.patientId, userId!, txn);
+  });
 }
 
 export interface IEditPatientRequiredFields {
@@ -70,29 +74,31 @@ export interface IEditPatientRequiredFields {
 export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientSearch']> {
-  let patients: IPaginatedResults<IPatientTableRow>;
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    let patients: IPaginatedResults<IPatientTableRow>;
 
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
-  patients = await Patient.search(query, { pageNumber, pageSize }, userId!, txn);
+    patients = await Patient.search(query, { pageNumber, pageSize }, userId!, txn);
 
-  const patientEdges = patients.results.map(
-    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
-  );
+    const patientEdges = patients.results.map(
+      (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
 
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+    return {
+      edges: patientEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+      totalCount: patients.total,
+    };
+  });
 }
 
 interface IPatientFilterInput extends IPaginationOptions {
@@ -103,66 +109,70 @@ interface IPatientFilterInput extends IPaginationOptions {
 export async function resolvePatientPanel(
   root: any,
   { pageNumber, pageSize, filters, showAllPatients }: IPatientFilterInput,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IPatientTableRowEdges> {
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
-  const allowAllPatients = getBusinessToggles(permissions).canShowAllMembersInPatientPanel;
-  const verifiedShowAllPatients = allowAllPatients && showAllPatients;
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+    const allowAllPatients = getBusinessToggles(permissions).canShowAllMembersInPatientPanel;
+    const verifiedShowAllPatients = allowAllPatients && showAllPatients;
 
-  const patients = await Patient.filter(
-    userId!,
-    { pageNumber, pageSize },
-    filters,
-    verifiedShowAllPatients,
-    txn,
-  );
+    const patients = await Patient.filter(
+      userId!,
+      { pageNumber, pageSize },
+      filters,
+      verifiedShowAllPatients,
+      txn,
+    );
 
-  const patientEdges = patients.results.map(
-    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
-  );
+    const patientEdges = patients.results.map(
+      (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
 
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+    return {
+      edges: patientEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+      totalCount: patients.total,
+    };
+  });
 }
 
 export async function resolvePatientDashboardBuilder(
   root: any,
   { pageNumber, pageSize }: IPaginationOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
   patientEndpoint: (
     pageOptions: IPaginationOptions,
     userId: string,
     txn: Transaction,
   ) => Promise<IPaginatedResults<Patient>>,
 ): Promise<IPatientForDashboardEdges> {
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
-  const patients = await patientEndpoint.bind(Patient)({ pageNumber, pageSize }, userId!, txn);
+    const patients = await patientEndpoint.bind(Patient)({ pageNumber, pageSize }, userId!, txn);
 
-  const patientEdges = patients.results.map((patient: Patient) =>
-    formatRelayEdge(patient, patient.id),
-  );
+    const patientEdges = patients.results.map((patient: Patient) =>
+      formatRelayEdge(patient, patient.id),
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
 
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+    return {
+      edges: patientEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+      totalCount: patients.total,
+    };
+  });
 }
 
 /* tslint:disable check-is-allowed */
@@ -299,59 +309,63 @@ export async function resolvePatientsWithIntakeInProgress(
 export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientsForComputedList']> {
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
-  const patients = await Patient.getPatientsForComputedList(
-    { pageNumber, pageSize },
-    userId!,
-    answerId,
-    txn,
-  );
+    const patients = await Patient.getPatientsForComputedList(
+      { pageNumber, pageSize },
+      userId!,
+      answerId,
+      txn,
+    );
 
-  const patientEdges = patients.results.map((patient: Patient) =>
-    formatRelayEdge(patient, patient.id),
-  );
+    const patientEdges = patients.results.map((patient: Patient) =>
+      formatRelayEdge(patient, patient.id),
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
 
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+    return {
+      edges: patientEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+      totalCount: patients.total,
+    };
+  });
 }
 
 export async function resolvePatientSocialSecurity(
   root: any,
   args: IPatientSocialSecurityOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientSocialSecurity'] | null> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  let glassBreakId = args.glassBreakId;
+    let glassBreakId = args.glassBreakId;
 
-  if (!glassBreakId) {
-    // load the current glass break for user and patient if none provided (refetch query)
-    const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
-      userId!,
-      args.patientId,
+    if (!glassBreakId) {
+      // load the current glass break for user and patient if none provided (refetch query)
+      const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+        userId!,
+        args.patientId,
+        txn,
+      );
+      glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
+    }
+
+    await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
+
+    await PatientSocialSecurityView.create(
+      { patientId: args.patientId, userId: userId!, glassBreakId: args.glassBreakId },
       txn,
     );
-    glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
-  }
-
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
-
-  await PatientSocialSecurityView.create(
-    { patientId: args.patientId, userId: userId!, glassBreakId: args.glassBreakId },
-    txn,
-  );
-  return Patient.getSocialSecurityNumber(args.patientId, txn);
+    return Patient.getSocialSecurityNumber(args.patientId, txn);
+  });
 }
 /* tslint:enable check-is-allowed */

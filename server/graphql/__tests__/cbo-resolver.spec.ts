@@ -72,7 +72,7 @@ describe('CBO resolver', () => {
       const result = await graphql(schema, getCbosQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.CBOs[0]).toMatchObject({
@@ -125,7 +125,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { categoryId: cboCategory.id },
       );
@@ -162,7 +162,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           CBOId: cbo.id,
@@ -188,7 +188,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { CBOId: fakeId },
       );
@@ -208,7 +208,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           name: input.name,
@@ -253,7 +253,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           name: newName,
@@ -285,7 +285,7 @@ describe('CBO resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           CBOId: cbo.id,

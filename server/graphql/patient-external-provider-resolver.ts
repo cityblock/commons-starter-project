@@ -1,5 +1,5 @@
 import { isNil, isNull, omitBy } from 'lodash';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import {
   IEmailCreateInput,
   IEmailInput,
@@ -39,125 +39,133 @@ export interface IQuery {
 export async function resolvePatientExternalProvidersForPatient(
   source: any,
   { patientId }: IQuery,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientExternalProviders']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientExternalProvider.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET patient external providers for ${patientId} by ${userId}`);
-  return PatientExternalProvider.getAllForPatient(patientId, txn);
+    logger.log(`GET patient external providers for ${patientId} by ${userId}`);
+    return PatientExternalProvider.getAllForPatient(patientId, txn);
+  });
 }
 
 export async function patientExternalProviderDelete(
   source: any,
   { input }: IPatientExternalProviderDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientExternalProviderDelete']> {
-  const patientExternalProvider = await PatientExternalProvider.get(
-    input.patientExternalProviderId,
-    txn,
-  );
-
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patient',
-    txn,
-    patientExternalProvider.patientId,
-  );
-  logger.log(`DELETE patient contact ${input.patientExternalProviderId} by ${userId}`);
-  const { id, email, phone } = patientExternalProvider;
-  const promises: Array<Promise<any>> = [];
-
-  if (email) {
-    await PatientExternalProviderEmail.delete(
-      { emailId: email.id, patientExternalProviderId: id },
+  return transaction(testTransaction || PatientExternalProvider.knex(), async txn => {
+    const patientExternalProvider = await PatientExternalProvider.get(
+      input.patientExternalProviderId,
       txn,
     );
-    promises.push(Email.delete(email.id, txn));
-  }
-  if (phone) {
-    await PatientExternalProviderPhone.delete(
-      { phoneId: phone.id, patientExternalProviderId: id },
-      txn,
-    );
-    promises.push(Phone.delete(phone.id, txn));
-  }
 
-  await Promise.all(promises);
-  const deletedPatientExternalProvider = await PatientExternalProvider.delete(id, userId!, txn);
-  await ComputedPatientStatus.updateForPatient(patientExternalProvider.patientId, userId!, txn);
-  return deletedPatientExternalProvider;
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patient',
+      txn,
+      patientExternalProvider.patientId,
+    );
+    logger.log(`DELETE patient contact ${input.patientExternalProviderId} by ${userId}`);
+    const { id, email, phone } = patientExternalProvider;
+    const promises: Array<Promise<any>> = [];
+
+    if (email) {
+      await PatientExternalProviderEmail.delete(
+        { emailId: email.id, patientExternalProviderId: id },
+        txn,
+      );
+      promises.push(Email.delete(email.id, txn));
+    }
+    if (phone) {
+      await PatientExternalProviderPhone.delete(
+        { phoneId: phone.id, patientExternalProviderId: id },
+        txn,
+      );
+      promises.push(Phone.delete(phone.id, txn));
+    }
+
+    await Promise.all(promises);
+    const deletedPatientExternalProvider = await PatientExternalProvider.delete(id, userId!, txn);
+    await ComputedPatientStatus.updateForPatient(patientExternalProvider.patientId, userId!, txn);
+    return deletedPatientExternalProvider;
+  });
 }
 
 export async function patientExternalProviderCreate(
   source: any,
   { input }: IPatientExternalProviderCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientExternalProviderCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientExternalProvider.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPatientExternalProviderCreateInput>(input, isNil) as any;
-  filtered.roleFreeText = input.roleFreeText;
-  delete filtered.phone;
-  delete filtered.email;
+    const filtered = omitBy<IPatientExternalProviderCreateInput>(input, isNil) as any;
+    filtered.roleFreeText = input.roleFreeText;
+    delete filtered.phone;
+    delete filtered.email;
 
-  logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
-  const patientExternalProvider = await PatientExternalProvider.create(
-    { ...filtered, updatedById: userId! },
-    txn,
-  );
+    logger.log(`CREATE patient contact for patient ${input.patientId} by ${userId}`);
+    const patientExternalProvider = await PatientExternalProvider.create(
+      { ...filtered, updatedById: userId! },
+      txn,
+    );
 
-  const promises = [
-    createEmail(patientExternalProvider.id, userId!, input.email, txn),
-    createPhone(patientExternalProvider.id, userId!, input.phone, txn),
-  ];
+    const promises = [
+      createEmail(patientExternalProvider.id, userId!, input.email, txn),
+      createPhone(patientExternalProvider.id, userId!, input.phone, txn),
+    ];
 
-  await Promise.all(promises);
-  await ComputedPatientStatus.updateForPatient(input.patientId, userId!, txn);
-  return PatientExternalProvider.get(patientExternalProvider.id, txn);
+    await Promise.all(promises);
+    await ComputedPatientStatus.updateForPatient(input.patientId, userId!, txn);
+    return PatientExternalProvider.get(patientExternalProvider.id, txn);
+  });
 }
 
 export async function patientExternalProviderEdit(
   source: any,
   { input }: IPatientExternalProviderEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientExternalProviderEdit']> {
-  const patientExternalProvider = await PatientExternalProvider.get(
-    input.patientExternalProviderId,
-    txn,
-  );
+  return transaction(testTransaction || PatientExternalProvider.knex(), async txn => {
+    const patientExternalProvider = await PatientExternalProvider.get(
+      input.patientExternalProviderId,
+      txn,
+    );
 
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patient',
-    txn,
-    patientExternalProvider.patientId,
-  );
-  logger.log(`EDIT patient contact ${input.patientExternalProviderId} by ${userId}`);
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patient',
+      txn,
+      patientExternalProvider.patientId,
+    );
+    logger.log(`EDIT patient contact ${input.patientExternalProviderId} by ${userId}`);
 
-  const promises = [
-    updateEmail(patientExternalProvider.id, userId!, input.email, txn),
-    updatePhone(patientExternalProvider.id, userId!, input.phone, txn),
-  ] as Array<Promise<any>>;
+    const promises = [
+      updateEmail(patientExternalProvider.id, userId!, input.email, txn),
+      updatePhone(patientExternalProvider.id, userId!, input.phone, txn),
+    ] as Array<Promise<any>>;
 
-  await Promise.all(promises);
-  const filtered = omitBy(input, isNil);
-  filtered.roleFreeText = input.roleFreeText;
-  delete filtered.phone;
-  delete filtered.email;
+    await Promise.all(promises);
+    const filtered = omitBy(input, isNil);
+    filtered.roleFreeText = input.roleFreeText;
+    delete filtered.phone;
+    delete filtered.email;
 
-  const updatedPatientExternalProvider = await PatientExternalProvider.edit(
-    { ...(filtered as any), updatedById: userId },
-    input.patientExternalProviderId,
-    txn,
-  );
+    const updatedPatientExternalProvider = await PatientExternalProvider.edit(
+      { ...(filtered as any), updatedById: userId },
+      input.patientExternalProviderId,
+      txn,
+    );
 
-  await ComputedPatientStatus.updateForPatient(patientExternalProvider.patientId, userId!, txn);
+    await ComputedPatientStatus.updateForPatient(patientExternalProvider.patientId, userId!, txn);
 
-  return updatedPatientExternalProvider;
+    return updatedPatientExternalProvider;
+  });
 }
 
 async function createEmail(

@@ -87,7 +87,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolScoreRange)).toMatchObject({
         id: screeningToolScoreRange.id,
@@ -104,7 +104,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(`No such screening tool score range: ${fakeId}`);
     });
@@ -132,7 +132,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolScoreRanges)).toMatchObject([
         {
@@ -181,7 +181,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const screeningToolScoreRanges = cloneDeep(
         result.data!.screeningToolScoreRangesForScreeningTool,
@@ -229,7 +229,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const resultScoreRange = cloneDeep(
         result.data!.screeningToolScoreRangeForScoreAndScreeningTool,
@@ -256,7 +256,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolScoreRangeEdit)).toMatchObject({
         description: 'Changed Description',
@@ -284,7 +284,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.screeningToolScoreRangeCreate)).toMatchObject({
         description: 'A Description',
@@ -311,7 +311,7 @@ describe('screening tool score range resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const deletedScoreRange = cloneDeep(result.data!.screeningToolScoreRangeDelete);
       expect(deletedScoreRange).toMatchObject({

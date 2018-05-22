@@ -70,7 +70,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.riskAreaAssessmentSubmission)).toMatchObject({
@@ -89,7 +89,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(
         `No such risk area assessment submission: ${fakeId}`,
@@ -128,7 +128,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
       expect([submission.id, submission1.id, submission2.id]).toContain(resultSubmission.id);
@@ -151,7 +151,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const resultSubmission = cloneDeep(result.data!.riskAreaAssessmentSubmissionForPatient);
       expect(resultSubmission).toBeFalsy();
@@ -242,7 +242,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionComplete)).toMatchObject({
         id: submission.id,
@@ -269,7 +269,7 @@ describe('risk area assessment resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.riskAreaAssessmentSubmissionCreate)).toMatchObject({
         userId: user.id,

@@ -6,7 +6,6 @@ import * as kue from 'kue';
 import config from './config';
 import Logging from './logging';
 if (config.NODE_ENV !== 'test') {
-  /* tslint:disable no-var-requires */
   const credentials = JSON.parse(String(config.GCP_CREDS));
   trace.start({
     credentials: {
@@ -16,20 +15,18 @@ if (config.NODE_ENV !== 'test') {
     projectId: credentials.project_id,
   });
 }
-/* tslint:enable no-var-requires */
 import * as compression from 'compression';
 import * as express from 'express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import * as Knex from 'knex';
-import { transaction, Model, Transaction } from 'objection';
+import { Model, Transaction } from 'objection';
 import * as pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { createRedisClient } from './lib/redis';
-import User from './models/user';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
@@ -40,7 +37,8 @@ if (config.NODE_ENV === 'production') {
   app.use(compression());
 }
 
-// Adjust how postgres deserializes date columns from postgres so that date strings are returned instead of timestamps
+// Adjust how postgres deserializes date columns from PostgreSQL
+// Ensures date strings are returned instead of timestamps
 const DATE_OID = 1082;
 pg.types.setTypeParser(DATE_OID, val => {
   return val;
@@ -86,16 +84,9 @@ export async function main(options: IMainOptions) {
         subscribe,
         schema,
         onConnect: async (connectionParams: { authToken: string }) => {
-          const txn = await transaction.start(User.knex());
-          try {
-            return getGraphQLContext(connectionParams.authToken, logger, {
-              errorReporting,
-              txn,
-            });
-          } catch (e) {
-            errorReporting.report(e);
-            txn.rollback();
-          }
+          return getGraphQLContext(connectionParams.authToken, logger, {
+            errorReporting,
+          });
         },
       } as any,
       {

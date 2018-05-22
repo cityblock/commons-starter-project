@@ -168,7 +168,8 @@ export default class User extends BaseModel {
     };
   }
 
-  static async getLastLoggedIn(userId: string, txn: Transaction): Promise<string | undefined> {
+  // NOTE: Transaction is optional here because it is called in isolation
+  static async getLastLoggedIn(userId: string, txn?: Transaction): Promise<string | undefined> {
     // TODO: Figure out how to return select fields via knex
     const user = await this.query(txn).findById(userId);
     return user ? user.lastLoginAt : undefined;

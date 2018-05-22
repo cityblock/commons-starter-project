@@ -57,7 +57,7 @@ describe('concern resolver', () => {
         schema,
         getConcernQuery,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         {
           concernId: concern.id,
         },
@@ -75,7 +75,7 @@ describe('concern resolver', () => {
         schema,
         concernCreateMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         { title: 'Housing' },
       );
       expect(cloneDeep(result.data!.concernCreate)).toMatchObject({
@@ -92,7 +92,7 @@ describe('concern resolver', () => {
         schema,
         concernEditMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         {
           title: 'Medical',
           concernId: concern.id,
@@ -112,7 +112,7 @@ describe('concern resolver', () => {
         schema,
         concernDeleteMutation,
         null,
-        { permissions, userId: user.id, txn },
+        { permissions, userId: user.id, testTransaction: txn },
         {
           concernId: concern.id,
         },
@@ -130,7 +130,7 @@ describe('concern resolver', () => {
       const result = await graphql(schema, getConcernsQuery, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const concernTitles = cloneDeep(result.data!.concerns).map((c: Concern) => c.title);
       expect(concernTitles).toContain(concern2.title);
@@ -149,7 +149,7 @@ describe('concern resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
         },
         {
           orderBy: 'titleAsc',
@@ -185,7 +185,7 @@ describe('concern resolver', () => {
         schema,
         concernAddDiagnosisCodeMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           codesetName: 'ICD-10',
           code: 'A00',
@@ -236,7 +236,7 @@ describe('concern resolver', () => {
         schema,
         concernRemoveDiagnosisCodeMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           concernId: concern.id,
           diagnosisCodeId: diagnosisCode.id,

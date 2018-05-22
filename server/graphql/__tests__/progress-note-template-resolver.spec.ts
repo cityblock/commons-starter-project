@@ -40,7 +40,11 @@ describe('progressNoteTemplate resolver', () => {
           progressNoteTemplate(
             progressNoteTemplateId: "${progressNoteTemplate.id}"
           ) { title } }`;
-    const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+    const result = await graphql(schema, query, null, {
+      userId: user.id,
+      permissions,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteTemplate)).toMatchObject({
       title: 'title',
     });
@@ -53,7 +57,11 @@ describe('progressNoteTemplate resolver', () => {
             title
           }
         }`;
-    const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+    const result = await graphql(schema, mutation, null, {
+      userId: user.id,
+      permissions,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteTemplateCreate)).toMatchObject({
       title: 'title',
     });
@@ -69,7 +77,11 @@ describe('progressNoteTemplate resolver', () => {
             title
           }
         }`;
-    const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+    const result = await graphql(schema, mutation, null, {
+      userId: user.id,
+      permissions,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteTemplateEdit)).toMatchObject({
       title: 'new title',
     });
@@ -85,7 +97,11 @@ describe('progressNoteTemplate resolver', () => {
             title, deletedAt
           }
         }`;
-    const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+    const result = await graphql(schema, mutation, null, {
+      userId: user.id,
+      permissions,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteTemplateDelete).deletedAt).not.toBeFalsy();
   });
 
@@ -102,7 +118,7 @@ describe('progressNoteTemplate resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const progressNoteTemplates = cloneDeep(result.data!.progressNoteTemplates);
       const titles = progressNoteTemplates.map(

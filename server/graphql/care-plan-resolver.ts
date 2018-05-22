@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   ICarePlanSuggestionAcceptInput,
   ICarePlanSuggestionDismissInput,
@@ -40,152 +41,166 @@ export interface ICarePlanSuggestionDismissArgs {
 export async function resolveCarePlanSuggestionsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
 
-  return CarePlanSuggestion.getForPatient(args.patientId, txn);
+    return CarePlanSuggestion.getForPatient(args.patientId, txn);
+  });
 }
 
 export async function resolveCarePlanForPatient(
   root: any,
   args: IResolveCarePlanOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['carePlanForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  let glassBreakId = args.glassBreakId;
+    let glassBreakId = args.glassBreakId;
 
-  if (!glassBreakId) {
-    // load the current glass break for user and patient if none provided (refetch query)
-    const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
-      userId!,
-      args.patientId,
-      txn,
-    );
-    glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
-  }
+    if (!glassBreakId) {
+      // load the current glass break for user and patient if none provided (refetch query)
+      const glassBreaks = await PatientGlassBreak.getForCurrentUserPatientSession(
+        userId!,
+        args.patientId,
+        txn,
+      );
+      glassBreakId = glassBreaks && glassBreaks.length ? glassBreaks[0].id : null;
+    }
 
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
+    await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, glassBreakId);
 
-  const concerns = await PatientConcern.getForPatient(args.patientId, txn);
-  const goals = await PatientGoal.getForPatient(args.patientId, txn);
+    const concerns = await PatientConcern.getForPatient(args.patientId, txn);
+    const goals = await PatientGoal.getForPatient(args.patientId, txn);
 
-  return {
-    concerns,
-    goals,
-  };
+    return {
+      concerns,
+      goals,
+    };
+  });
 }
 
 export async function carePlanSuggestionDismiss(
   root: any,
   { input }: ICarePlanSuggestionDismissArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['carePlanSuggestionDismiss']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'carePlanSuggestion',
-    txn,
-    input.carePlanSuggestionId,
-  );
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'carePlanSuggestion',
+      txn,
+      input.carePlanSuggestionId,
+    );
 
-  return CarePlanSuggestion.dismiss(
-    {
-      carePlanSuggestionId: input.carePlanSuggestionId,
-      dismissedById: userId!,
-      dismissedReason: input.dismissedReason,
-    },
-    txn,
-  );
+    return CarePlanSuggestion.dismiss(
+      {
+        carePlanSuggestionId: input.carePlanSuggestionId,
+        dismissedById: userId!,
+        dismissedReason: input.dismissedReason,
+      },
+      txn,
+    );
+  });
 }
 
 export async function carePlanSuggestionAccept(
   root: any,
   { input }: ICarePlanSuggestionAcceptArgs,
-  context: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['carePlanSuggestionAccept']> {
-  const { permissions, userId, txn } = context;
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patient',
-    txn,
-    input.carePlanSuggestionId,
-  );
-
-  const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
-  let secondaryCarePlanSuggestions: CarePlanSuggestion[] = [];
-
-  if (!carePlanSuggestion) {
-    throw new Error('Suggestion does not exist');
-  } else if (carePlanSuggestion.acceptedAt) {
-    throw new Error('Suggestion was already accepted');
-  }
-
-  const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-  const { startedAt, concernId, taskTemplateIds } = input;
-  let { patientConcernId } = input;
-
-  if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
-    await PatientConcern.create(
-      {
-        concernId: carePlanSuggestion.concernId,
-        patientId,
-        startedAt: startedAt || undefined,
-        userId: userId!,
-      },
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patient',
       txn,
+      input.carePlanSuggestionId,
     );
-  } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
-    if (concernId) {
-      const patientConcern = await PatientConcern.create(
+
+    const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
+    let secondaryCarePlanSuggestions: CarePlanSuggestion[] = [];
+
+    if (!carePlanSuggestion) {
+      throw new Error('Suggestion does not exist');
+    } else if (carePlanSuggestion.acceptedAt) {
+      throw new Error('Suggestion was already accepted');
+    }
+
+    const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
+    const { startedAt, concernId, taskTemplateIds } = input;
+    let { patientConcernId } = input;
+
+    if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
+      await PatientConcern.create(
         {
-          concernId,
+          concernId: carePlanSuggestion.concernId,
           patientId,
           startedAt: startedAt || undefined,
           userId: userId!,
         },
         txn,
       );
+    } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
+      if (concernId) {
+        const patientConcern = await PatientConcern.create(
+          {
+            concernId,
+            patientId,
+            startedAt: startedAt || undefined,
+            userId: userId!,
+          },
+          txn,
+        );
 
-      patientConcernId = patientConcern.id;
+        patientConcernId = patientConcern.id;
 
-      secondaryCarePlanSuggestions = await CarePlanSuggestion.findForPatientAndConcern(
-        patientId,
-        concernId,
+        secondaryCarePlanSuggestions = await CarePlanSuggestion.findForPatientAndConcern(
+          patientId,
+          concernId,
+          txn,
+        );
+      }
+      if (!patientConcernId) {
+        throw new Error('patientConcernId is required');
+      }
+
+      await PatientGoal.create(
+        {
+          userId: userId!,
+          goalSuggestionTemplateId: goalSuggestionTemplateId || null,
+          patientId: carePlanSuggestion.patientId,
+          title: carePlanSuggestion.goalSuggestionTemplate.title,
+          patientConcernId,
+          taskTemplateIds: taskTemplateIds || [],
+        },
         txn,
       );
     }
-    if (!patientConcernId) {
-      throw new Error('patientConcernId is required');
+
+    await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
+
+    if (secondaryCarePlanSuggestions) {
+      await Promise.all([
+        secondaryCarePlanSuggestions.forEach(async suggestion =>
+          CarePlanSuggestion.accept(suggestion, userId!, txn),
+        ),
+      ]);
     }
 
-    await PatientGoal.create(
-      {
-        userId: userId!,
-        goalSuggestionTemplateId: goalSuggestionTemplateId || null,
-        patientId: carePlanSuggestion.patientId,
-        title: carePlanSuggestion.goalSuggestionTemplate.title,
-        patientConcernId,
-        taskTemplateIds: taskTemplateIds || [],
-      },
-      txn,
-    );
-  }
-
-  await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
-
-  if (secondaryCarePlanSuggestions) {
-    await Promise.all([
-      secondaryCarePlanSuggestions.forEach(async suggestion =>
-        CarePlanSuggestion.accept(suggestion, userId!, txn),
-      ),
-    ]);
-  }
-
-  return carePlanSuggestion || null;
+    return carePlanSuggestion || null;
+  });
 }

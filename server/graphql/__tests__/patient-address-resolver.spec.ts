@@ -81,7 +81,7 @@ describe('address resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientAddresses)).toHaveLength(3); // 1 address from Patient#create

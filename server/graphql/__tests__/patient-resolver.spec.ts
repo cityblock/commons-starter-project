@@ -175,7 +175,7 @@ describe('patient', () => {
           userId: user.id,
           permissions,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -205,7 +205,7 @@ describe('patient', () => {
           userId: user.id,
           permissions,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -224,7 +224,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { query: 'jon', pageNumber: 0, pageSize: 10 },
       );
@@ -253,7 +253,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { query: 'stark', pageNumber: 0, pageSize: 10 },
       );
@@ -293,7 +293,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { query: 'john snow', pageNumber: 0, pageSize: 10 },
       );
@@ -321,7 +321,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { query: 'daenerys', pageNumber: 0, pageSize: 10 },
       );
@@ -342,7 +342,7 @@ describe('patient', () => {
         {
           permissions,
           userId: '',
-          txn,
+          testTransaction: txn,
         },
         { query: 'daenerys', pageNumber: 0, pageSize: 10 },
       );
@@ -359,7 +359,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { query: '', pageNumber: 0, pageSize: 10 },
       );
@@ -379,7 +379,7 @@ describe('patient', () => {
         {
           permissions,
           userId: '',
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: {} },
       );
@@ -414,7 +414,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: {} },
       );
@@ -449,7 +449,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: {} },
       );
@@ -470,7 +470,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: {} },
       );
@@ -487,7 +487,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { zip: '10001' } },
       );
@@ -517,7 +517,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { zip: '11211' } },
       );
@@ -534,7 +534,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { ageMax: 19 } },
       );
@@ -565,7 +565,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { ageMin: 20, ageMax: 24 } },
       );
@@ -582,7 +582,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { ageMin: 80 } },
       );
@@ -606,7 +606,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user2.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: {} },
       );
@@ -630,7 +630,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { gender: 'female' } },
       );
@@ -647,7 +647,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10, filters: { gender: 'female' as Gender, zip: '11211' } },
       );
@@ -670,7 +670,7 @@ describe('patient', () => {
           {
             permissions: user.permissions,
             userId: user.id,
-            txn,
+            testTransaction: txn,
           },
           { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: true },
         );
@@ -689,7 +689,7 @@ describe('patient', () => {
           {
             permissions,
             userId: user.id,
-            txn,
+            testTransaction: txn,
           },
           { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: true },
         );
@@ -706,7 +706,7 @@ describe('patient', () => {
           {
             permissions,
             userId: user.id,
-            txn,
+            testTransaction: txn,
           },
           { pageNumber: 0, pageSize: 10, filters: { gender: 'female' }, showAllPatients: false },
         );
@@ -726,7 +726,7 @@ describe('patient', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { pageNumber: 0, pageSize: 10 },
       );
@@ -749,7 +749,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -780,7 +780,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -801,7 +801,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -822,7 +822,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -868,7 +868,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -890,7 +890,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -915,7 +915,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -936,7 +936,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -958,7 +958,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { pageNumber: 0, pageSize: 10 },
     );
@@ -980,7 +980,7 @@ describe('patient', () => {
       {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       },
       { answerId: answer.id, pageNumber: 0, pageSize: 10 },
     );
@@ -1004,7 +1004,7 @@ describe('patient', () => {
           userId: user.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -1036,7 +1036,7 @@ describe('patient', () => {
           userId: user2.id,
           permissions: 'green',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -1068,7 +1068,7 @@ describe('patient', () => {
           userId: user2.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -1110,7 +1110,7 @@ describe('patient', () => {
           userId: user2.id,
           permissions: 'blue',
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, glassBreakId: patientGlassBreak.id },
       );

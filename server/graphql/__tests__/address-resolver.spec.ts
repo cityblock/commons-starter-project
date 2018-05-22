@@ -76,7 +76,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           zip: '11238',
@@ -109,7 +109,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -145,7 +145,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -186,7 +186,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -204,7 +204,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           addressId: address.id,
@@ -230,7 +230,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -252,7 +252,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           addressId: address.id,
@@ -286,7 +286,7 @@ describe('address resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           addressId: address.id,

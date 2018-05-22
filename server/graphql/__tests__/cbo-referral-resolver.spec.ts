@@ -60,7 +60,7 @@ describe('CBO Referral resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           categoryId: cbo.categoryId,
@@ -101,7 +101,7 @@ describe('CBO Referral resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           CBOReferralId: cboReferral.id,

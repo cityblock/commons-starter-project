@@ -90,7 +90,7 @@ describe('Mattermost Resolver', () => {
         userId: user.id,
         logger,
         permissions,
-        txn,
+        testTransaction: txn,
       },
       {
         patientId: patient.id,

@@ -12,7 +12,7 @@ export interface IUserVoicemailSignedUrlCreateOptions {
 export async function userVoicemailSignedUrlCreate(
   root: {},
   { input }: IUserVoicemailSignedUrlCreateOptions,
-  { permissions, userId, testConfig, txn, logger }: IContext,
+  { permissions, userId, testConfig, logger }: IContext,
 ): Promise<IRootMutationType['userVoicemailSignedUrlCreate']> {
   await checkLoggedInWithPermissions(userId, permissions);
   const { voicemailId } = input;

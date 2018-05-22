@@ -84,7 +84,7 @@ describe('phone resolver', () => {
         permissions,
         userId: user.id,
         logger,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientPhones)).toHaveLength(2);
       expect(cloneDeep(result.data!.patientPhones)).toContainEqual(

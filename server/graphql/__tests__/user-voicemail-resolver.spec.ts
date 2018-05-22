@@ -53,7 +53,7 @@ describe('User Voicemail Resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
           testConfig,
           logger,
         },
@@ -76,7 +76,7 @@ describe('User Voicemail Resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
           logger,
         },
         {

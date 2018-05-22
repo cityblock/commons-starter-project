@@ -106,7 +106,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -154,7 +154,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         providerFields,
       );
@@ -196,7 +196,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         providerFields,
       );
@@ -245,7 +245,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         providerFields,
       );
@@ -296,7 +296,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientExternalProviderId: patientExternalProvider.id },
       );
@@ -345,7 +345,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientExternalProviderId: patientExternalProvider.id,
@@ -395,7 +395,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientExternalProviderId: patientExternalProvider.id,
@@ -444,7 +444,7 @@ describe('patient info model', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientExternalProviderId: patientExternalProvider.id,

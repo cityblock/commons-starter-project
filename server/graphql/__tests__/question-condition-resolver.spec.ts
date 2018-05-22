@@ -104,7 +104,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionCondition)).toMatchObject({
         id: questionCondition.id,
@@ -120,7 +120,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(`No such questionCondition: ${fakeId}`);
     });
@@ -151,7 +151,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.errors![0])).toMatchObject(
         new Error(`Error: Answer ${answer.id} is an answer to question ${question.id}`),
@@ -193,7 +193,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionConditionEdit)).toMatchObject({
         id: questionCondition.id,
@@ -219,7 +219,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionConditionCreate)).toMatchObject({
         questionId: question2.id,
@@ -246,7 +246,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.questionConditionDelete)).toMatchObject({
         id: questionCondition.id,

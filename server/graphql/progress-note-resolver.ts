@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IProgressNoteAddSupervisorNotesInput,
   IProgressNoteCompleteInput,
@@ -54,170 +55,204 @@ interface IProgressNoteCompleteSupervisorReviewOptions {
 export async function progressNoteCreate(
   root: any,
   { input }: IProgressNoteCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteCreate']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  return ProgressNote.autoOpenIfRequired({ ...input, userId: userId! }, txn);
+    return ProgressNote.autoOpenIfRequired({ ...input, userId: userId! }, txn);
+  });
 }
 
 export async function progressNoteComplete(
   root: any,
   { input }: ICompleteProgressNoteOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteComplete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'progressNote',
-    txn,
-    input.progressNoteId,
-  );
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'progressNote',
+      txn,
+      input.progressNoteId,
+    );
 
-  const progressNote = await ProgressNote.complete(input.progressNoteId, txn);
+    const progressNote = await ProgressNote.complete(input.progressNoteId, txn);
 
-  await ComputedPatientStatus.updateForPatient(progressNote.patientId, userId!, txn);
+    await ComputedPatientStatus.updateForPatient(progressNote.patientId, userId!, txn);
 
-  return progressNote;
+    return progressNote;
+  });
 }
 
 export async function progressNoteEdit(
   root: any,
   { input }: IEditProgressNoteOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'progressNote',
-    txn,
-    input.progressNoteId,
-  );
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'progressNote',
+      txn,
+      input.progressNoteId,
+    );
 
-  return ProgressNote.update(
-    input.progressNoteId,
-    {
-      progressNoteTemplateId: input.progressNoteTemplateId || undefined,
-      startedAt: input.startedAt || undefined,
-      location: input.location || undefined,
-      summary: input.summary || undefined,
-      memberConcern: input.memberConcern || undefined,
-      supervisorId: input.supervisorId || undefined,
-      needsSupervisorReview:
-        input.needsSupervisorReview === null ? undefined : input.needsSupervisorReview,
-      worryScore: input.worryScore || undefined,
-    },
-    txn,
-  );
+    return ProgressNote.update(
+      input.progressNoteId,
+      {
+        progressNoteTemplateId: input.progressNoteTemplateId || undefined,
+        startedAt: input.startedAt || undefined,
+        location: input.location || undefined,
+        summary: input.summary || undefined,
+        memberConcern: input.memberConcern || undefined,
+        supervisorId: input.supervisorId || undefined,
+        needsSupervisorReview:
+          input.needsSupervisorReview === null ? undefined : input.needsSupervisorReview,
+        worryScore: input.worryScore || undefined,
+      },
+      txn,
+    );
+  });
 }
 
 export async function progressNoteAddSupervisorNotes(
   root: any,
   { input }: IAddSupervisorNotesOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteAddSupervisorNotes']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'progressNote',
-    txn,
-    input.progressNoteId,
-  );
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'progressNote',
+      txn,
+      input.progressNoteId,
+    );
 
-  const progressNote = await ProgressNote.get(input.progressNoteId, txn);
-  if (!progressNote) {
-    throw new Error('progress note not found');
-  }
-  if (progressNote.supervisorId !== userId) {
-    throw new Error('you are not the supervisor permitted to review this progress note');
-  }
+    const progressNote = await ProgressNote.get(input.progressNoteId, txn);
+    if (!progressNote) {
+      throw new Error('progress note not found');
+    }
+    if (progressNote.supervisorId !== userId) {
+      throw new Error('you are not the supervisor permitted to review this progress note');
+    }
 
-  return ProgressNote.addSupervisorNotes(input.progressNoteId, input.supervisorNotes, txn);
+    return ProgressNote.addSupervisorNotes(input.progressNoteId, input.supervisorNotes, txn);
+  });
 }
 
 export async function progressNoteCompleteSupervisorReview(
   root: any,
   { input }: IProgressNoteCompleteSupervisorReviewOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteCompleteSupervisorReview']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'progressNote',
-    txn,
-    input.progressNoteId,
-  );
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'progressNote',
+      txn,
+      input.progressNoteId,
+    );
 
-  const progressNote = await ProgressNote.get(input.progressNoteId, txn);
-  if (!progressNote) {
-    throw new Error('progress note not found');
-  }
-  if (progressNote.supervisorId !== userId) {
-    throw new Error('you are not the supervisor permitted to review this progress note');
-  }
+    const progressNote = await ProgressNote.get(input.progressNoteId, txn);
+    if (!progressNote) {
+      throw new Error('progress note not found');
+    }
+    if (progressNote.supervisorId !== userId) {
+      throw new Error('you are not the supervisor permitted to review this progress note');
+    }
 
-  return ProgressNote.completeSupervisorReview(input.progressNoteId, txn);
+    return ProgressNote.completeSupervisorReview(input.progressNoteId, txn);
+  });
 }
 
 export async function resolveProgressNote(
   root: any,
   args: IResolveProgressNoteOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNote']> {
-  await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, args.progressNoteId);
-  await validateGlassBreak(
-    userId!,
-    permissions,
-    'progressNote',
-    args.progressNoteId,
-    txn,
-    args.glassBreakId,
-  );
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'view',
+      'progressNote',
+      txn,
+      args.progressNoteId,
+    );
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'progressNote',
+      args.progressNoteId,
+      txn,
+      args.glassBreakId,
+    );
 
-  return ProgressNote.get(args.progressNoteId, txn);
+    return ProgressNote.get(args.progressNoteId, txn);
+  });
 }
 
 export async function resolveProgressNoteIdsForPatient(
   root: any,
   args: IResolveProgressNotesForPatientOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNoteIdsForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
 
-  return ProgressNote.getAllIdsForPatient(args.patientId, args.completed, txn);
+    return ProgressNote.getAllIdsForPatient(args.patientId, args.completed, txn);
+  });
 }
 
 export async function resolveProgressNotesForCurrentUser(
   root: any,
   args: IResolveProgressNotesForCurrentUserOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNotesForCurrentUser']> {
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
-  return ProgressNote.getAllForUser(userId!, args.completed, txn);
+    return ProgressNote.getAllForUser(userId!, args.completed, txn);
+  });
 }
 
 export async function resolveProgressNotesForSupervisorReview(
   root: any,
   args: any,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNotesForSupervisorReview']> {
-  await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
 
-  return ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
+    return ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
+  });
 }
 
 export async function resolveProgressNoteLatestForPatient(
   root: any,
   { patientId }: IResolveProgressNoteLatestForPatientOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNoteLatestForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  return ProgressNote.getLatestForPatient(patientId, txn);
+    return ProgressNote.getLatestForPatient(patientId, txn);
+  });
 }

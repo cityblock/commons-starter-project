@@ -1,18 +1,15 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
+import { graphiqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
-import { transaction, Transaction } from 'objection';
+import { Transaction } from 'objection';
 import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
-import schema from './graphql/make-executable-schema';
-import { formatError, formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRedisHandler } from './handlers/pingdom/check-redis-handler';
@@ -29,94 +26,13 @@ import {
 } from './handlers/twilio/sms-message-handler';
 import { contactsVcfHandler } from './handlers/vcf/vcard-handler';
 import Logging from './logging';
-import User from './models/user';
+import { addSecurityHeadersMiddleware } from './middleware/add-security-headers-middleware';
+import { allowCrossDomainMiddleware } from './middleware/allow-cross-domain-middleware';
+import { checkAuthMiddleware } from './middleware/check-auth-middleware';
+import { ensurePostMiddleware } from './middleware/ensure-post-middleware';
+import { graphqlMiddleware } from './middleware/graphql-middleware';
 
-const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
 export const TWILIO_COMPLETE_ENDPOINT = '/twilio-complete-phone-call';
-
-export const checkAuth = (username: string, password: string) => (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  const user = basicAuth(req);
-
-  if (!user || user.name !== username || user.pass !== password) {
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.sendStatus(401);
-  }
-
-  next();
-};
-
-export const allowCrossDomainMiddleware = (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, auth_token');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else next();
-};
-
-export const addHeadersMiddleware = (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Cache-Control', 'no-cache, no-store');
-  res.setHeader(
-    'Content-Security-Policy',
-    `default-src 'self' https://accounts.google.com blob:; script-src 'self' *.google.com unpkg.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline' blob:; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' *.googleusercontent.com https://storage.googleapis.com data: blob:; connect-src 'self' https://storage.googleapis.com ${subscriptionsEndpoint}; frame-ancestors 'none'`,
-  );
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  next();
-};
-
-export const ensurePostMiddleware = (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  if (req.method === 'POST') {
-    return next();
-  }
-  return res.sendStatus(405);
-};
-
-export const graphqlMiddleware = async (
-  request: express.Request,
-  response: express.Response,
-  next: express.NextFunction,
-  logger: Logging,
-  errorReporting: ErrorReporting,
-  existingTxn?: Transaction,
-) => {
-  const txn = existingTxn || (await transaction.start(User.knex()));
-  try {
-    const context = await getGraphQLContext((request.headers.auth_token as string) || '', logger, {
-      txn,
-      request,
-      response,
-      errorReporting,
-    });
-    return graphqlExpress({
-      schema: schema as any,
-      context,
-      formatResponse,
-      formatError,
-      debug: false,
-    })(request, response, next);
-  } catch (e) {
-    errorReporting.report(e);
-    txn.rollback();
-    return response.sendStatus(500);
-  }
-};
 
 export default async (
   app: express.Application,
@@ -134,7 +50,7 @@ export default async (
   });
 
   if (config.NODE_ENV === 'development') {
-    // enable webpack dev middleware
+    // Enable webpack dev middleware
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const webpackConfig = require('../webpack/webpack.config');
     const devConfig = webpackConfig()[0];
@@ -158,13 +74,16 @@ export default async (
   app.disable('x-powered-by');
 
   if (config.NODE_ENV === 'development') {
+    // Development templates
     app.set('views', path.join(__dirname, '..', 'views'));
     app.set('view cache', false);
   }
 
+  // Static assets
   app.use('/assets', express.static(path.join(__dirname, '..', '..', 'public')));
 
   if (config.NODE_ENV === 'development') {
+    // GraphiQL
     app.get(
       '/graphiql',
       graphiqlExpress({
@@ -179,9 +98,10 @@ export default async (
     app.use(allowCrossDomainMiddleware);
   }
 
+  // Graphql API
   app.use(
     '/graphql',
-    addHeadersMiddleware,
+    addSecurityHeadersMiddleware,
     ensurePostMiddleware,
     bodyParser.json(),
     async (req: express.Request, res: express.Response, next: express.NextFunction) =>
@@ -191,16 +111,20 @@ export default async (
   // Pingdom check endpoints
   app.get(
     '/ping/postgres',
-    checkAuth('pingdom', config.PINGDOM_CHECK_PASSWORD),
+    checkAuthMiddleware('pingdom', config.PINGDOM_CHECK_PASSWORD),
     checkPostgresHandler,
   );
-  app.get('/ping/redis', checkAuth('pingdom', config.PINGDOM_CHECK_PASSWORD), checkRedisHandler);
+  app.get(
+    '/ping/redis',
+    checkAuthMiddleware('pingdom', config.PINGDOM_CHECK_PASSWORD),
+    checkRedisHandler,
+  );
 
   // Google PubSub
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
 
   // Kue UI
-  app.use('/kue', checkAuth('jobManager', config.KUE_UI_PASSWORD), kue.app);
+  app.use('/kue', checkAuthMiddleware('jobManager', config.KUE_UI_PASSWORD), kue.app);
 
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPdf);
@@ -236,16 +160,16 @@ export default async (
   // vCard Generation
   app.get('/vcf-contacts', contactsVcfHandler);
 
-  app.get('*', addHeadersMiddleware, renderApp);
+  // Render a blank HTML page for the react app
+  app.get('*', addSecurityHeadersMiddleware, renderApp);
+
+  // Error handling middleware should be attached after all other routes and use() calls.
+  app.use(errorReporting.express);
 
   if (config.NODE_ENV !== 'test') {
     logger.log('--------------------------');
     logger.log(`  Starting server on port: ${app.get('port')}`);
     logger.log(`  Environment: ${config.NODE_ENV}`);
     logger.log('--------------------------');
-    /* tslint:enable no-console */
   }
-
-  // Note that express error handling middleware should be attached after all other routes and use() calls.
-  app.use(errorReporting.express);
 };

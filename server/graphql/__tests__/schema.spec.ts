@@ -32,7 +32,7 @@ describe('util tests', () => {
       permissions: 'green',
       lastLoginAt: new Date().toISOString(),
     });
-    const { userId, permissions } = await parseAndVerifyJwt(authToken, txn);
+    const { userId, permissions } = await parseAndVerifyJwt(authToken);
     const context = await getGraphQLContext(authToken, { log: jest.fn() } as any, {
       request: {
         headers: {
@@ -48,13 +48,11 @@ describe('util tests', () => {
       response: {
         status: 200,
       } as any,
-      txn,
       errorReporting,
     });
     expect(context).toMatchObject({
       userId,
       permissions,
-      txn,
     });
   });
 
@@ -80,19 +78,15 @@ describe('util tests', () => {
         status: 200,
       } as any,
       errorReporting,
-      txn,
     });
     expect(context).toMatchObject({
       permissions: 'black',
-      txn,
     });
   });
 
   it('errors with invalid token', async () => {
     const authToken = 'fake';
-    await expect(parseAndVerifyJwt(authToken, txn)).rejects.toMatchObject(
-      new Error('jwt malformed'),
-    );
+    await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(new Error('jwt malformed'));
   });
 
   describe('old tokens', () => {
@@ -103,14 +97,21 @@ describe('util tests', () => {
       const user = await User.create(createMockUser(11, clinic.id), txn);
       await User.update(user.id, { lastLoginAt: now.toISOString() }, txn);
 
+      // Need to commit the transaction since parseAndVerifyJwt doesn't use a transaction.
+      await txn.commit();
+
       const authToken = signJwt({
         userId: user.id,
         permissions: 'green',
         lastLoginAt: new Date(now.valueOf() - 10000).toISOString(),
       });
-      await expect(parseAndVerifyJwt(authToken, txn)).rejects.toMatchObject(
+      await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
         new Error('token invalid: login too old'),
       );
+
+      // clean up committed data
+      await User.knex().raw('TRUNCATE TABLE public.user CASCADE');
+      await User.knex().raw('TRUNCATE TABLE public.clinic CASCADE');
     });
 
     it('errors for token when the token is more than 24 hours old', async () => {
@@ -122,7 +123,7 @@ describe('util tests', () => {
           now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),
         ).toISOString(),
       });
-      await expect(parseAndVerifyJwt(authToken, txn)).rejects.toMatchObject(
+      await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
         new Error('token invalid: login too old'),
       );
     });

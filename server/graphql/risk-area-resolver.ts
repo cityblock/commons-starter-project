@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRiskAreaCreateInput,
   IRiskAreaDeleteInput,
@@ -28,76 +29,90 @@ export interface IDeleteRiskAreaOptions {
 export async function riskAreaCreate(
   root: any,
   { input }: IRiskAreaCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'riskArea', txn);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'riskArea', txn);
 
-  return RiskArea.create(input, txn);
+    return RiskArea.create(input, txn);
+  });
 }
 
 export async function resolveRiskAreas(
   root: any,
   args: any,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskAreas']> {
-  await checkUserPermissions(userId, permissions, 'view', 'riskArea', txn);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'riskArea', txn);
 
-  return RiskArea.getAll(txn);
+    return RiskArea.getAll(txn);
+  });
 }
 
 export async function resolveRiskArea(
   root: any,
   args: { riskAreaId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskArea']> {
-  await checkUserPermissions(userId, permissions, 'view', 'riskArea', txn);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'riskArea', txn);
 
-  return RiskArea.get(args.riskAreaId, txn);
+    return RiskArea.get(args.riskAreaId, txn);
+  });
 }
 
 export async function riskAreaEdit(
   root: any,
   args: IEditRiskAreaOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'riskArea', txn);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'riskArea', txn);
 
-  // TODO: fix typings here
-  return RiskArea.edit(args.input as any, args.input.riskAreaId, txn);
+    // TODO: fix typings here
+    return RiskArea.edit(args.input as any, args.input.riskAreaId, txn);
+  });
 }
 
 export async function riskAreaDelete(
   root: any,
   args: IDeleteRiskAreaOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'riskArea', txn);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'riskArea', txn);
 
-  return RiskArea.delete(args.input.riskAreaId, txn);
+    return RiskArea.delete(args.input.riskAreaId, txn);
+  });
 }
 
 export async function resolvePatientRiskAreaSummary(
   root: any,
   args: { riskAreaId: string; patientId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientRiskAreaSummary']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  const { summary, started, lastUpdated } = await RiskArea.getSummaryForPatient(
-    args.riskAreaId,
-    args.patientId,
-    txn,
-  );
+    const { summary, started, lastUpdated } = await RiskArea.getSummaryForPatient(
+      args.riskAreaId,
+      args.patientId,
+      txn,
+    );
 
-  return { summary, started, lastUpdated };
+    return { summary, started, lastUpdated };
+  });
 }
 
 export async function resolvePatientRiskAreaRiskScore(
   root: any,
   args: { riskAreaId: string; patientId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientRiskAreaRiskScore']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || RiskArea.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  return RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId, txn);
+    return RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId, txn);
+  });
 }

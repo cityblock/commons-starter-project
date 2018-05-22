@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import { transaction } from 'objection';
 import {
   IPatientGoalCreateInput,
   IPatientGoalDeleteInput,
@@ -31,104 +32,113 @@ export interface IDeletePatientGoalOptions {
 export async function patientGoalCreate(
   root: any,
   { input }: IPatientGoalCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientGoalCreate']> {
   const { concernTitle, concernId, patientId, startedAt } = input;
+  return transaction(testTransaction || PatientGoal.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, patientId);
+    const validInput: any = omit(input, ['concernTitle, concernId, startedAt']);
 
-  const validInput: any = omit(input, ['concernTitle, concernId, startedAt']);
+    // A new concern is getting created
+    if (concernTitle) {
+      const concern = await Concern.create({ title: concernTitle }, txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId,
+          userId: userId!,
+          startedAt: startedAt || undefined,
+        },
+        txn,
+      );
+      validInput.patientConcernId = patientConcern.id;
+      // This goal is getting associated with an existing concern
+    } else if (concernId) {
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId,
+          patientId,
+          userId: userId!,
+          startedAt: startedAt || undefined,
+        },
+        txn,
+      );
+      validInput.patientConcernId = patientConcern.id;
+    }
 
-  // A new concern is getting created
-  if (concernTitle) {
-    const concern = await Concern.create({ title: concernTitle }, txn);
-    const patientConcern = await PatientConcern.create(
-      {
-        concernId: concern.id,
-        patientId,
-        userId: userId!,
-        startedAt: startedAt || undefined,
-      },
-      txn,
-    );
-    validInput.patientConcernId = patientConcern.id;
-    // This goal is getting associated with an existing concern
-  } else if (concernId) {
-    const patientConcern = await PatientConcern.create(
-      {
-        concernId,
-        patientId,
-        userId: userId!,
-        startedAt: startedAt || undefined,
-      },
-      txn,
-    );
-    validInput.patientConcernId = patientConcern.id;
-  }
+    validInput.userId = userId;
 
-  validInput.userId = userId;
-
-  return PatientGoal.create(validInput, txn);
+    return PatientGoal.create(validInput, txn);
+  });
 }
 
 export async function resolvePatientGoal(
   root: any,
   args: { patientGoalId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientGoal']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patientGoal', txn, args.patientGoalId);
+  return transaction(testTransaction || PatientGoal.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patientGoal', txn, args.patientGoalId);
 
-  return PatientGoal.get(args.patientGoalId, txn);
+    return PatientGoal.get(args.patientGoalId, txn);
+  });
 }
 
 export async function resolvePatientGoalsForPatient(
   root: any,
   args: { patientId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientGoals']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+  return transaction(testTransaction || PatientGoal.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
-  return PatientGoal.getForPatient(args.patientId, txn);
+    return PatientGoal.getForPatient(args.patientId, txn);
+  });
 }
 
 export async function patientGoalEdit(
   root: any,
   args: IEditPatientGoalOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientGoalEdit']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'edit',
-    'patientGoal',
-    txn,
-    args.input.patientGoalId,
-  );
+  return transaction(testTransaction || PatientGoal.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'edit',
+      'patientGoal',
+      txn,
+      args.input.patientGoalId,
+    );
 
-  return PatientGoal.update(
-    args.input.patientGoalId,
-    {
-      title: args.input.title,
-      patientConcernId: args.input.patientConcernId,
-    },
-    userId!,
-    txn,
-  );
+    return PatientGoal.update(
+      args.input.patientGoalId,
+      {
+        title: args.input.title,
+        patientConcernId: args.input.patientConcernId,
+      },
+      userId!,
+      txn,
+    );
+  });
 }
 
 export async function patientGoalDelete(
   root: any,
   args: IDeletePatientGoalOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientGoalDelete']> {
-  await checkUserPermissions(
-    userId,
-    permissions,
-    'delete',
-    'patientGoal',
-    txn,
-    args.input.patientGoalId,
-  );
+  return transaction(testTransaction || PatientGoal.knex(), async txn => {
+    await checkUserPermissions(
+      userId,
+      permissions,
+      'delete',
+      'patientGoal',
+      txn,
+      args.input.patientGoalId,
+    );
 
-  return PatientGoal.delete(args.input.patientGoalId, userId!, txn);
+    return PatientGoal.delete(args.input.patientGoalId, userId!, txn);
+  });
 }

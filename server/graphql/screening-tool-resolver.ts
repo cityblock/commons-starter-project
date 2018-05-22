@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRootMutationType,
   IRootQueryType,
@@ -28,63 +29,73 @@ export interface IDeleteScreeningToolOptions {
 export async function screeningToolCreate(
   root: any,
   { input }: IScreeningToolCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'screeningTool', txn);
+  return transaction(testTransaction || ScreeningTool.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'screeningTool', txn);
 
-  return ScreeningTool.create(input as any, txn);
+    return ScreeningTool.create(input as any, txn);
+  });
 }
 
 export async function resolveScreeningTools(
   root: any,
   args: any,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningTools']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
-  const screeningTools = await ScreeningTool.getAll(txn);
+  return transaction(testTransaction || ScreeningTool.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
+    const screeningTools = await ScreeningTool.getAll(txn);
 
-  return screeningTools.map(screeningTool =>
-    ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
-  );
+    return screeningTools.map(screeningTool =>
+      ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
+    );
+  });
 }
 
 export async function resolveScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningTool']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
+  return transaction(testTransaction || ScreeningTool.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'screeningTool', txn);
 
-  const screeningTool = await ScreeningTool.get(args.screeningToolId, txn);
+    const screeningTool = await ScreeningTool.get(args.screeningToolId, txn);
 
-  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+    return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+  });
 }
 
 export async function screeningToolEdit(
   rot: any,
   args: IEditScreeningToolOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'screeningTool', txn);
+  return transaction(testTransaction || ScreeningTool.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'screeningTool', txn);
 
-  // TODO: fix typings here
-  const screeningTool = await ScreeningTool.edit(
-    args.input.screeningToolId,
-    args.input as any,
-    txn,
-  );
+    // TODO: fix typings here
+    const screeningTool = await ScreeningTool.edit(
+      args.input.screeningToolId,
+      args.input as any,
+      txn,
+    );
 
-  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+    return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+  });
 }
 
 export async function screeningToolDelete(
   root: any,
   args: IDeleteScreeningToolOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'screeningTool', txn);
+  return transaction(testTransaction || ScreeningTool.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'screeningTool', txn);
 
-  const screeningTool = await ScreeningTool.delete(args.input.screeningToolId, txn);
+    const screeningTool = await ScreeningTool.delete(args.input.screeningToolId, txn);
 
-  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+    return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
+  });
 }

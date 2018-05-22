@@ -95,7 +95,7 @@ describe('task comments', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
 
@@ -116,7 +116,7 @@ describe('task comments', () => {
       await graphql(schema, deleteMutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(queue.testMode.jobs.length).toBe(2);
@@ -139,7 +139,7 @@ describe('task comments', () => {
       const taskComments = await graphql(schema, getComments, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(taskComments.data!.taskComments.edges)).toHaveLength(0);
     });
@@ -157,7 +157,7 @@ describe('task comments', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
 
@@ -173,7 +173,7 @@ describe('task comments', () => {
       const editedComment = await graphql(schema, editMutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
@@ -197,7 +197,7 @@ describe('task comments', () => {
             id, body
           }
         }`;
-      await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { permissions, userId: user.id, testTransaction: txn });
 
       const query = `{
           taskComments(taskId: "${task.id}",pageNumber: 0, pageSize: 1) {
@@ -215,7 +215,7 @@ describe('task comments', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.taskComments)).toMatchObject({
@@ -254,7 +254,7 @@ describe('task comments', () => {
     const result = await graphql(schema, query, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(cloneDeep(result.data!.taskComment)).toMatchObject({

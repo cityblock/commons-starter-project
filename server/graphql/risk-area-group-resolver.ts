@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRiskAreaGroupCreateInput,
   IRiskAreaGroupDeleteInput,
@@ -29,78 +30,106 @@ export interface IDeleteRiskAreaGroupOptions {
 export async function resolveRiskAreaGroups(
   root: any,
   args: any,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskAreaGroups']> {
-  await checkUserPermissions(userId, permissions, 'view', 'riskAreaGroup', txn);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'riskAreaGroup', txn);
 
-  return RiskAreaGroup.getAll(txn);
+    return RiskAreaGroup.getAll(txn);
+  });
 }
 
 export async function resolveRiskAreaGroup(
   root: any,
   args: { riskAreaGroupId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskAreaGroup']> {
-  await checkUserPermissions(userId, permissions, 'view', 'riskAreaGroup', txn);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'riskAreaGroup', txn);
 
-  return RiskAreaGroup.get(args.riskAreaGroupId, txn);
+    return RiskAreaGroup.get(args.riskAreaGroupId, txn);
+  });
 }
 
 export async function resolveRiskAreaGroupForPatient(
   root: any,
   args: { riskAreaGroupId: string; patientId: string; glassBreakId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskAreaGroupForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
 
-  const riskAreaGroupForPatient = await RiskAreaGroup.getForPatient(
-    args.riskAreaGroupId,
-    args.patientId,
-    txn,
-  );
-  return formatRiskAreaGroupForPatient(riskAreaGroupForPatient);
+    const riskAreaGroupForPatient = await RiskAreaGroup.getForPatient(
+      args.riskAreaGroupId,
+      args.patientId,
+      txn,
+    );
+    return formatRiskAreaGroupForPatient(riskAreaGroupForPatient);
+  });
 }
 
 export async function resolveRiskAreaGroupsForPatient(
   root: any,
   args: { patientId: string; glassBreakId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['riskAreaGroupsForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
-  await validateGlassBreak(userId!, permissions, 'patient', args.patientId, txn, args.glassBreakId);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
 
-  const riskAreaGroups = await RiskAreaGroup.getAllForPatient(args.patientId, txn);
-  return riskAreaGroups.map(formatRiskAreaGroupForPatient);
+    const riskAreaGroups = await RiskAreaGroup.getAllForPatient(args.patientId, txn);
+    return riskAreaGroups.map(formatRiskAreaGroupForPatient);
+  });
 }
 
 export async function riskAreaGroupCreate(
   root: any,
   { input }: IRiskAreaGroupCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaGroupCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'riskAreaGroup', txn);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'riskAreaGroup', txn);
 
-  return RiskAreaGroup.create(input, txn);
+    return RiskAreaGroup.create(input, txn);
+  });
 }
 
 export async function riskAreaGroupEdit(
   root: any,
   args: IEditRiskAreaGroupOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaGroupEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'riskAreaGroup', txn);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'riskAreaGroup', txn);
 
-  // TODO: fix typings here
-  return RiskAreaGroup.edit(args.input as any, args.input.riskAreaGroupId, txn);
+    // TODO: fix typings here
+    return RiskAreaGroup.edit(args.input as any, args.input.riskAreaGroupId, txn);
+  });
 }
 
 export async function riskAreaGroupDelete(
   root: any,
   args: IDeleteRiskAreaGroupOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['riskAreaGroupDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'riskAreaGroup', txn);
+  return transaction(testTransaction || RiskAreaGroup.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'riskAreaGroup', txn);
 
-  return RiskAreaGroup.delete(args.input.riskAreaGroupId, txn);
+    return RiskAreaGroup.delete(args.input.riskAreaGroupId, txn);
+  });
 }

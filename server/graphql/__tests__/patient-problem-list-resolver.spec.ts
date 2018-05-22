@@ -83,7 +83,7 @@ describe('patient problem list tests', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );

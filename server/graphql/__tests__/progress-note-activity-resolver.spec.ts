@@ -201,7 +201,7 @@ describe('progress note resolver', () => {
       schema,
       progressNoteActivityQuery,
       null,
-      { permissions, userId: user.id, txn },
+      { permissions, userId: user.id, testTransaction: txn },
       { progressNoteId: progressNote.id },
     );
     const clonedResults = cloneDeep(result.data!.progressNoteActivityForProgressNote);

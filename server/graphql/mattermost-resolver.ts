@@ -1,9 +1,11 @@
+import { transaction } from 'objection';
 import {
   IMattermostUrlForPatientInput,
   IMattermostUrlForUserInput,
   IRootMutationType,
 } from 'schema';
 import Mattermost from '../mattermost';
+import Patient from '../models/patient';
 import checkUserPermissions, { checkLoggedInWithPermissions } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -36,16 +38,18 @@ export async function mattermostUrlForUserCreate(
 export async function mattermostUrlForPatientCreate(
   root: {},
   { input }: IMattermostUrlForPatientCreate,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['mattermostUrlForPatientCreate']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, input.patientId);
 
-  logger.log(
-    `GET Mattermost link to chat with care team for patient ${input.patientId} by ${userId}`,
-  );
+    logger.log(
+      `GET Mattermost link to chat with care team for patient ${input.patientId} by ${userId}`,
+    );
 
-  const mattermost = Mattermost.get();
-  const url = await mattermost.getLinkToMessageCareTeam(input.patientId, txn);
+    const mattermost = Mattermost.get();
+    const url = await mattermost.getLinkToMessageCareTeam(input.patientId, txn);
 
-  return { url };
+    return { url };
+  });
 }

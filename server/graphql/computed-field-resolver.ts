@@ -1,4 +1,5 @@
 import { kebabCase } from 'lodash';
+import { transaction } from 'objection';
 import {
   IComputedFieldCreateInput,
   IComputedFieldDeleteInput,
@@ -29,46 +30,54 @@ export interface IDeleteComputedFieldOptions {
 export async function computedFieldCreate(
   root: any,
   { input }: IComputedFieldCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['computedFieldCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'computedField', txn);
+  return transaction(testTransaction || ComputedField.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'computedField', txn);
 
-  const slug = kebabCase(input.label);
+    const slug = kebabCase(input.label);
 
-  return ComputedField.create({ slug, ...input }, txn);
+    return ComputedField.create({ slug, ...input }, txn);
+  });
 }
 
 export async function resolveComputedField(
   root: any,
   args: IResolveComputedFieldOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['computedField']> {
-  await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
+  return transaction(testTransaction || ComputedField.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
-  return ComputedField.get(args.computedFieldId, txn);
+    return ComputedField.get(args.computedFieldId, txn);
+  });
 }
 
 export async function resolveComputedFields(
   root: any,
   args: IResolveComputedFieldsOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['computedFields']> {
-  await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
+  return transaction(testTransaction || ComputedField.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'computedField', txn);
 
-  const { order, orderBy } = formatOrderOptions<ComputedFieldOrderOptions>(args.orderBy, {
-    orderBy: 'label',
-    order: 'asc',
+    const { order, orderBy } = formatOrderOptions<ComputedFieldOrderOptions>(args.orderBy, {
+      orderBy: 'label',
+      order: 'asc',
+    });
+
+    return ComputedField.getAll({ orderBy, order }, txn);
   });
-
-  return ComputedField.getAll({ orderBy, order }, txn);
 }
 
 export async function computedFieldDelete(
   root: any,
   args: IDeleteComputedFieldOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['computedFieldDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'computedField', txn);
+  return transaction(testTransaction || ComputedField.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'computedField', txn);
 
-  return ComputedField.delete(args.input.computedFieldId, txn);
+    return ComputedField.delete(args.input.computedFieldId, txn);
+  });
 }

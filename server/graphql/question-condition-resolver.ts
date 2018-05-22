@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IQuestionConditionCreateInput,
   IQuestionConditionDeleteInput,
@@ -28,39 +29,47 @@ export interface IDeleteQuestionConditionOptions {
 export async function questionConditionCreate(
   root: any,
   { input }: IQuestionConditionCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['questionConditionCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'questionCondition', txn);
+  return transaction(testTransaction || QuestionCondition.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'questionCondition', txn);
 
-  return QuestionCondition.create(input, txn);
+    return QuestionCondition.create(input, txn);
+  });
 }
 
 export async function resolveQuestionCondition(
   root: any,
   args: { questionConditionId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['questionCondition']> {
-  await checkUserPermissions(userId, permissions, 'view', 'questionCondition', txn);
+  return transaction(testTransaction || QuestionCondition.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'questionCondition', txn);
 
-  return QuestionCondition.get(args.questionConditionId, txn);
+    return QuestionCondition.get(args.questionConditionId, txn);
+  });
 }
 
 export async function questionConditionEdit(
   root: any,
   args: IEditQuestionConditionOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['questionConditionEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'questionCondition', txn);
+  return transaction(testTransaction || QuestionCondition.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'questionCondition', txn);
 
-  return QuestionCondition.edit(args.input, args.input.questionConditionId, txn);
+    return QuestionCondition.edit(args.input, args.input.questionConditionId, txn);
+  });
 }
 
 export async function questionConditionDelete(
   root: any,
   args: IDeleteQuestionConditionOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['questionConditionDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'questionCondition', txn);
+  return transaction(testTransaction || QuestionCondition.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'questionCondition', txn);
 
-  return QuestionCondition.delete(args.input.questionConditionId, txn);
+    return QuestionCondition.delete(args.input.questionConditionId, txn);
+  });
 }

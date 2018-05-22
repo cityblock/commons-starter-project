@@ -89,7 +89,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientScreeningToolSubmission)).toMatchObject({
         id: submission.id,
@@ -108,7 +108,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(result.errors![0].message).toMatch(
         `No such patient screening tool submission: ${fakeId}`,
@@ -142,7 +142,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const clonedResult = cloneDeep(result.data!.patientScreeningToolSubmissions);
       const mappedResults = clonedResult.map((sub: any) => ({ id: sub.id, score: sub.score }));
@@ -194,7 +194,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsForPatient);
       const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
@@ -249,7 +249,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsFor360);
       const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
@@ -282,7 +282,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions: 'blue',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toBe(
@@ -318,7 +318,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions: 'blue',
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toBe(
@@ -365,7 +365,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsForPatient);
       const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
@@ -414,7 +414,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const resultSubmission = cloneDeep(
         result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
@@ -454,7 +454,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const resultSubmission = cloneDeep(
         result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
@@ -545,7 +545,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientScreeningToolSubmissionScore)).toMatchObject({
         score: 5,
@@ -568,7 +568,7 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientScreeningToolSubmissionCreate)).toMatchObject({
         userId: user.id,

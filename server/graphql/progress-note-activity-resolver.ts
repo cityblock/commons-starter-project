@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IRootQueryType } from 'schema';
 import CarePlanUpdateEvent from '../models/care-plan-update-event';
 import PatientAnswerEvent from '../models/patient-answer-event';
@@ -14,26 +15,31 @@ interface IResolveProgressNoteActivityOptions {
 export async function resolveProgressNoteActivityForProgressNote(
   root: any,
   args: IResolveProgressNoteActivityOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNoteActivityForProgressNote']> {
-  const { progressNoteId } = args;
+  return transaction(testTransaction || PatientAnswerEvent.knex(), async txn => {
+    const { progressNoteId } = args;
 
-  await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, progressNoteId);
+    await checkUserPermissions(userId, permissions, 'view', 'progressNote', txn, progressNoteId);
 
-  const taskEvents = await TaskEvent.getAllForProgressNote(progressNoteId, txn);
-  const patientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(progressNoteId, txn);
-  const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(progressNoteId, txn);
-  const quickCallEvents = await QuickCall.getQuickCallsForProgressNote(progressNoteId, txn);
-  const patientScreeningToolSubmissions = await PatientScreeningToolSubmission.getForProgressNote(
-    progressNoteId,
-    txn,
-  );
+    const taskEvents = await TaskEvent.getAllForProgressNote(progressNoteId, txn);
+    const patientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(progressNoteId, txn);
+    const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
+      progressNoteId,
+      txn,
+    );
+    const quickCallEvents = await QuickCall.getQuickCallsForProgressNote(progressNoteId, txn);
+    const patientScreeningToolSubmissions = await PatientScreeningToolSubmission.getForProgressNote(
+      progressNoteId,
+      txn,
+    );
 
-  return {
-    taskEvents,
-    patientAnswerEvents,
-    carePlanUpdateEvents,
-    quickCallEvents,
-    patientScreeningToolSubmissions,
-  };
+    return {
+      taskEvents,
+      patientAnswerEvents,
+      carePlanUpdateEvents,
+      quickCallEvents,
+      patientScreeningToolSubmissions,
+    };
+  });
 }

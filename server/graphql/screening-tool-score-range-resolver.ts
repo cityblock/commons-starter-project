@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRootMutationType,
   IRootQueryType,
@@ -28,109 +29,123 @@ export interface IDeleteScreeningToolScoreRangeOptions {
 export async function screeningToolScoreRangeCreate(
   root: any,
   { input }: IScreeningToolScoreRangeCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any, txn);
+    const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any, txn);
 
-  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+    return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+  });
 }
 
 export async function resolveScreeningToolScoreRanges(
   root: any,
   args: any,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRanges']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll(txn);
+    const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll(txn);
 
-  return screeningToolScoreRanges.map(screeningToolScoreRange =>
-    ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
-  );
+    return screeningToolScoreRanges.map(screeningToolScoreRange =>
+      ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
+    );
+  });
 }
 
 export async function resolveScreeningToolScoreRangesForScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRangesForScreeningTool']> {
-  await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRanges = await ScreeningToolScoreRange.getForScreeningTool(
-    args.screeningToolId,
-    txn,
-  );
+    const screeningToolScoreRanges = await ScreeningToolScoreRange.getForScreeningTool(
+      args.screeningToolId,
+      txn,
+    );
 
-  return screeningToolScoreRanges.map(screeningToolScoreRange =>
-    ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
-  );
+    return screeningToolScoreRanges.map(screeningToolScoreRange =>
+      ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
+    );
+  });
 }
 
 export async function resolveScreeningToolScoreRange(
   root: any,
   args: { screeningToolScoreRangeId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRange']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.get(
-    args.screeningToolScoreRangeId,
-    txn,
-  );
+    const screeningToolScoreRange = await ScreeningToolScoreRange.get(
+      args.screeningToolScoreRangeId,
+      txn,
+    );
 
-  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+    return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+  });
 }
 
 export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
   root: any,
   args: { screeningToolId: string; score: number },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['screeningToolScoreRangeForScoreAndScreeningTool']> {
-  await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
-    args.score,
-    args.screeningToolId,
-    txn,
-  );
+    const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
+      args.score,
+      args.screeningToolId,
+      txn,
+    );
 
-  if (!screeningToolScoreRange) {
-    return null;
-  }
+    if (!screeningToolScoreRange) {
+      return null;
+    }
 
-  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+    return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+  });
 }
 
 export async function screeningToolScoreRangeEdit(
   rot: any,
   args: IEditScreeningToolScoreRangeOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'screeningToolScoreRange', txn);
 
-  // TODO: fix typings here
-  const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
-    args.input.screeningToolScoreRangeId,
-    args.input as any,
-    txn,
-  );
+    // TODO: fix typings here
+    const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
+      args.input.screeningToolScoreRangeId,
+      args.input as any,
+      txn,
+    );
 
-  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+    return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+  });
 }
 
 export async function screeningToolScoreRangeDelete(
   root: any,
   args: IDeleteScreeningToolScoreRangeOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['screeningToolScoreRangeDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'screeningToolScoreRange', txn);
+  return transaction(testTransaction || ScreeningToolScoreRange.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'screeningToolScoreRange', txn);
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.delete(
-    args.input.screeningToolScoreRangeId,
-    txn,
-  );
+    const screeningToolScoreRange = await ScreeningToolScoreRange.delete(
+      args.input.screeningToolScoreRangeId,
+      txn,
+    );
 
-  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+    return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
+  });
 }

@@ -2,7 +2,6 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
@@ -59,7 +58,11 @@ describe('patient concern resolver', () => {
       const query = `{ patientConcern(patientConcernId: "${patientConcern.id}") {
           concernId, patientId, order
         } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.patientConcern)).toMatchObject({
         patientId: patient.id,
         concernId: concern.id,
@@ -78,7 +81,11 @@ describe('patient concern resolver', () => {
             patientId, concernId, order
           }
         }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.patientConcernCreate)).toMatchObject({
         patientId: patient.id,
         concernId: concern.id,
@@ -104,7 +111,11 @@ describe('patient concern resolver', () => {
             order
           }
         }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.patientConcernEdit)).toMatchObject({
         order: 3,
       });
@@ -158,7 +169,11 @@ describe('patient concern resolver', () => {
           }
         }`;
 
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        testTransaction: txn,
+      });
 
       expect(result.data!.patientConcernBulkEdit.length).toBe(4);
       expect(result.data!.patientConcernBulkEdit[1]).toMatchObject({
@@ -196,7 +211,11 @@ describe('patient concern resolver', () => {
             deletedAt
           }
         }`;
-      const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        userId: user.id,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.patientConcernDelete).deletedAt).not.toBeFalsy();
     });
   });
@@ -220,7 +239,7 @@ describe('patient concern resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientConcerns)).toMatchObject([
         {

@@ -88,7 +88,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionTemplateForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         { answerId: answer.id },
       );
       // null if no suggested goals
@@ -106,7 +106,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionTemplateForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         { answerId: answer.id },
       );
       expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([
@@ -122,7 +122,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionCreateMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -158,7 +158,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionCreateMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           screeningToolScoreRangeId: screeningToolScoreRange.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -186,7 +186,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionDeleteMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -199,7 +199,7 @@ describe('goal suggestion resolver', () => {
         schema,
         goalSuggestionTemplateForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         { answerId: answer.id },
       );
       expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);

@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IConcernAddDiagnosisCodeInput,
   IConcernCreateInput,
@@ -38,76 +39,90 @@ export interface IRemoveDiagnosisCodeArgs {
 export async function concernCreate(
   root: any,
   { input }: IConcernCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['concernCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'concern', txn);
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'concern', txn);
 
-  return Concern.create(input, txn);
+    return Concern.create(input, txn);
+  });
 }
 
 export async function resolveConcern(
   root: any,
   args: { concernId: string },
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['concern']> {
-  await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
 
-  return Concern.get(args.concernId, txn);
+    return Concern.get(args.concernId, txn);
+  });
 }
 
 export async function resolveConcerns(
   root: any,
   args: any,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['concerns']> {
-  await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'concern', txn);
 
-  const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
-    orderBy: 'title',
-    order: 'asc',
+    const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
+      orderBy: 'title',
+      order: 'asc',
+    });
+
+    return Concern.getAll({ orderBy, order }, txn);
   });
-
-  return Concern.getAll({ orderBy, order }, txn);
 }
 
 export async function concernEdit(
   root: any,
   args: IEditConcernOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['concernEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
 
-  return Concern.edit(args.input.concernId, args.input, txn);
+    return Concern.edit(args.input.concernId, args.input, txn);
+  });
 }
 
 export async function concernDelete(
   root: any,
   args: IDeleteConcernOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['concernDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'concern', txn);
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'concern', txn);
 
-  return Concern.delete(args.input.concernId, txn);
+    return Concern.delete(args.input.concernId, txn);
+  });
 }
 
 export async function concernAddDiagnosisCode(
   root: any,
   { input }: IAddDiagnosisCodeArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['concernAddDiagnosisCode']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
-  const { concernId, codesetName, code, version } = input;
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
+    const { concernId, codesetName, code, version } = input;
 
-  return Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
+    return Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
+  });
 }
 
 export async function concernRemoveDiagnosisCode(
   root: any,
   { input }: IRemoveDiagnosisCodeArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['concernRemoveDiagnosisCode']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
-  const { concernId, diagnosisCodeId } = input;
+  return transaction(testTransaction || Concern.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'concern', txn);
+    const { concernId, diagnosisCodeId } = input;
 
-  return Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);
+    return Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);
+  });
 }

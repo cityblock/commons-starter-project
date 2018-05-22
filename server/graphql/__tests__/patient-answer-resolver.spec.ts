@@ -154,7 +154,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientAnswer)).toMatchObject({
         id: patientAnswers[0].id,
@@ -207,7 +207,7 @@ describe('patient answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           filterType: 'question',
@@ -274,7 +274,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientPreviousAnswersForQuestion)).toMatchObject([
@@ -363,7 +363,7 @@ describe('patient answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           filterType: 'riskArea',
@@ -453,7 +453,7 @@ describe('patient answer tests', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           filterType: 'screeningTool',
@@ -507,7 +507,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.patientAnswerEdit)).toMatchObject({
@@ -541,7 +541,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientAnswersCreate[0])).toMatchObject({
         answerValue: 'loves writing tests too!',
@@ -581,7 +581,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
 
@@ -647,7 +647,7 @@ describe('patient answer tests', () => {
             applicable,
           }
         }`;
-      await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+      await graphql(schema, mutation, null, { permissions, userId: user.id, testTransaction: txn });
 
       const fetchedAnswers2 = await PatientAnswer.getForQuestion(
         answer.questionId,
@@ -703,7 +703,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
       const patientAnswer = clonedResult.find((r: any) => r.answerValue === '3');
@@ -820,7 +820,7 @@ describe('patient answer tests', () => {
       await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
 
       // submit score
@@ -876,7 +876,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.patientAnswerDelete)).toMatchObject({
         id: patientAnswers[0].id,

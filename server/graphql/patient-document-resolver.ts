@@ -1,4 +1,5 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import {
   IPatientDocumentCreateInput,
   IPatientDocumentDeleteInput,
@@ -18,13 +19,13 @@ export interface IResolvePatientDocumentsOptions {
 export async function resolvePatientDocuments(
   source: any,
   { patientId }: IResolvePatientDocumentsOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientDocuments']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
-
-  logger.log(`GET all documents for patient ${patientId} by ${userId}`);
-
-  return PatientDocument.getAllForPatient(patientId, txn);
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+    logger.log(`GET all documents for patient ${patientId} by ${userId}`);
+    return PatientDocument.getAllForPatient(patientId, txn);
+  });
 }
 
 export interface IPatientDocumentCreateOptions {
@@ -34,15 +35,17 @@ export interface IPatientDocumentCreateOptions {
 export async function patientDocumentCreate(
   root: any,
   { input }: IPatientDocumentCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<PatientDocument> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IPatientDocumentCreateInput>(input, isNil) as any;
-  filtered.uploadedById = userId;
-  logger.log(`CREATE document for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IPatientDocumentCreateInput>(input, isNil) as any;
+    filtered.uploadedById = userId;
+    logger.log(`CREATE document for patient ${input.patientId} by ${userId}`);
 
-  return PatientDocument.create(filtered, txn);
+    return PatientDocument.create(filtered, txn);
+  });
 }
 
 export interface IPatientDocumentDeleteOptions {
@@ -52,14 +55,16 @@ export interface IPatientDocumentDeleteOptions {
 export async function patientDocumentDelete(
   root: any,
   { input }: IPatientDocumentDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<PatientDocument> {
-  const document = await PatientDocument.get(input.patientDocumentId, txn);
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, document.patientId);
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    const document = await PatientDocument.get(input.patientDocumentId, txn);
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, document.patientId);
 
-  logger.log(`DELETE document ${input.patientDocumentId} by ${userId}`);
+    logger.log(`DELETE document ${input.patientDocumentId} by ${userId}`);
 
-  return PatientDocument.delete(input.patientDocumentId, userId!, txn);
+    return PatientDocument.delete(input.patientDocumentId, userId!, txn);
+  });
 }
 
 export interface IPatientDocumentSignedUrlCreateOptions {
@@ -69,26 +74,28 @@ export interface IPatientDocumentSignedUrlCreateOptions {
 export async function patientDocumentSignedUrlCreate(
   root: any,
   { input }: IPatientDocumentSignedUrlCreateOptions,
-  { permissions, userId, txn, testConfig }: IContext,
+  { permissions, userId, testTransaction, testConfig }: IContext,
 ): Promise<IRootMutationType['patientDocumentSignedUrlCreate']> {
   const { patientId, action, documentId, contentType } = input;
   if (!patientId) {
     throw new Error('Must provide patient id');
   }
   const permissionAction = action === 'read' ? 'view' : 'edit';
-  await checkUserPermissions(userId, permissions, permissionAction, 'patient', txn, patientId);
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, permissionAction, 'patient', txn, patientId);
 
-  const signedUrl = await loadPatientDocumentUrl(
-    patientId,
-    action,
-    documentId,
-    contentType,
-    testConfig,
-  );
+    const signedUrl = await loadPatientDocumentUrl(
+      patientId,
+      action,
+      documentId,
+      contentType,
+      testConfig,
+    );
 
-  if (!signedUrl) {
-    throw new Error('Something went wrong, please try again.');
-  }
+    if (!signedUrl) {
+      throw new Error('Something went wrong, please try again.');
+    }
 
-  return { signedUrl };
+    return { signedUrl };
+  });
 }

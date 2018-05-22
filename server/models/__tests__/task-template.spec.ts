@@ -1,7 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { Priority, UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
-
 import { createCBOCategory } from '../../spec-helpers';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import TaskTemplate from '../task-template';

@@ -42,7 +42,11 @@ describe('computed field resolver', () => {
     it('returns an empty set when a patient has no patient data flags', async () => {
       const { user, patient } = await setup(txn);
       const query = `{ patientDataFlagsForPatient(patientId: "${patient.id}") { id } }`;
-      const result = await graphql(schema, query, null, { permissions, txn, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        testTransaction: txn,
+        userId: user.id,
+      });
 
       expect(cloneDeep(result.data!.patientDataFlagsForPatient)).toMatchObject([]);
     });
@@ -68,7 +72,11 @@ describe('computed field resolver', () => {
         txn,
       );
       const query = `{ patientDataFlagsForPatient(patientId: "${patient.id}") { id } }`;
-      const result = await graphql(schema, query, null, { permissions, txn, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        permissions,
+        testTransaction: txn,
+        userId: user.id,
+      });
       const patientDataFlagsForPatientIds = cloneDeep(result.data!.patientDataFlagsForPatient).map(
         (patientDataFlag: IPatientDataFlag) => patientDataFlag.id,
       );
@@ -94,7 +102,11 @@ describe('computed field resolver', () => {
             suggestedValue
           }
         }`;
-      const result = await graphql(schema, mutation, null, { permissions, txn, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        testTransaction: txn,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.patientDataFlagCreate)).toMatchObject({ suggestedValue });
 
       const refetchedPatientDataFlags = await PatientDataFlag.getAllForPatient(patient.id, txn);
@@ -116,7 +128,11 @@ describe('computed field resolver', () => {
             suggestedValue
           }
         }`;
-      const result = await graphql(schema, mutation, null, { permissions, txn, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        permissions,
+        testTransaction: txn,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.patientDataFlagCreate)).toMatchObject({
         fieldName,
         suggestedValue: null,

@@ -82,7 +82,7 @@ describe('concern suggestion resolver', () => {
         schema,
         getConcernSuggestionsForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           concernId: concern.id,
@@ -103,7 +103,7 @@ describe('concern suggestion resolver', () => {
         schema,
         getConcernSuggestionsForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           concernId: concern.id,
@@ -121,7 +121,7 @@ describe('concern suggestion resolver', () => {
         schema,
         concernSuggestionCreateMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           concernId: concern.id,
@@ -158,7 +158,7 @@ describe('concern suggestion resolver', () => {
         schema,
         concernSuggestionCreateMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           screeningToolScoreRangeId: screeningToolScoreRange.id,
           concernId: concern.id,
@@ -187,7 +187,7 @@ describe('concern suggestion resolver', () => {
         schema,
         concernSuggestionDeleteMutation,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
           concernId: concern.id,
@@ -199,7 +199,7 @@ describe('concern suggestion resolver', () => {
         schema,
         getConcernSuggestionsForAnswerQuery,
         null,
-        { userId: user.id, permissions, txn },
+        { userId: user.id, permissions, testTransaction: txn },
         {
           answerId: answer.id,
         },

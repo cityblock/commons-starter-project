@@ -65,7 +65,7 @@ describe('computed patient status resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,

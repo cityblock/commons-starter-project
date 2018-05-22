@@ -14,7 +14,6 @@ import * as calendarCreateForPatient from '../../../app/graphql/queries/calendar
 import * as getCalendarEventsForCurrentUser from '../../../app/graphql/queries/get-calendar-events-for-current-user.graphql';
 import * as getCalendarEventsForPatient from '../../../app/graphql/queries/get-calendar-events-for-patient.graphql';
 import * as getCalendarForPatient from '../../../app/graphql/queries/get-calendar-for-patient.graphql';
-
 import { createGoogleCalendarEventUrl } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';
 import GoogleAuth from '../../models/google-auth';
@@ -100,7 +99,7 @@ describe('calendar tests', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -157,7 +156,7 @@ describe('calendar tests', () => {
           userId: user.id,
           logger,
           testConfig,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -187,7 +186,7 @@ describe('calendar tests', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,
@@ -263,7 +262,7 @@ describe('calendar tests', () => {
           userId: user.id,
           logger,
           testConfig,
-          txn,
+          testTransaction: txn,
         },
         {
           timeMin: now,
@@ -313,7 +312,7 @@ describe('calendar tests', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           startDatetime,
@@ -408,7 +407,7 @@ describe('calendar tests', () => {
           userId: user.id,
           logger,
           testConfig,
-          txn,
+          testTransaction: txn,
         },
         {
           timeMin: now,

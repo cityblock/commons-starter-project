@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IPatientDataFlagCreateInput, IRootMutationType, IRootQueryType } from 'schema';
 import PatientDataFlag from '../models/patient-data-flag';
 import checkUserPermissions from './shared/permissions-check';
@@ -14,27 +15,31 @@ export interface IResolvePatientDataFlagsForPatientOptions {
 export async function patientDataFlagCreate(
   root: any,
   { input }: IPatientDataFlagCreateArgs,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['patientDataFlagCreate']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || PatientDataFlag.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  return PatientDataFlag.create(
-    {
-      ...input,
-      userId: userId!,
-      suggestedValue: input.suggestedValue || undefined,
-      notes: input.notes || undefined,
-    },
-    txn,
-  );
+    return PatientDataFlag.create(
+      {
+        ...input,
+        userId: userId!,
+        suggestedValue: input.suggestedValue || undefined,
+        notes: input.notes || undefined,
+      },
+      txn,
+    );
+  });
 }
 
 export async function resolvePatientDataFlagsForPatient(
   root: any,
   { patientId }: IResolvePatientDataFlagsForPatientOptions,
-  { permissions, txn, userId }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientDataFlagsForPatient']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientDataFlag.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  return PatientDataFlag.getAllForPatient(patientId, txn);
+    return PatientDataFlag.getAllForPatient(patientId, txn);
+  });
 }

@@ -85,7 +85,7 @@ describe('Progress Note Glass Break Resolver', () => {
     const result = await graphql(schema, mutation, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.progressNoteGlassBreakCreate.id).toBeTruthy();
@@ -148,7 +148,7 @@ describe('Progress Note Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.progressNoteGlassBreaksForUser.length).toBe(2);
@@ -202,7 +202,7 @@ describe('Progress Note Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user2.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
@@ -224,7 +224,7 @@ describe('Progress Note Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({
@@ -247,7 +247,7 @@ describe('Progress Note Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user2.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.progressNoteGlassBreakCheck).toMatchObject({

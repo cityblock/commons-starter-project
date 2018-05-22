@@ -64,7 +64,7 @@ describe('patient scratch pad resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientScratchPad).toMatchObject({
@@ -89,7 +89,7 @@ describe('patient scratch pad resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientScratchPad).toMatchObject({
@@ -129,7 +129,7 @@ describe('patient scratch pad resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions: 'blue',
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.data!.patientScratchPad).toMatchObject({
@@ -165,7 +165,7 @@ describe('patient scratch pad resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions: 'blue',
-        txn,
+        testTransaction: txn,
       });
 
       expect(result.errors![0].message).toBe(
@@ -199,7 +199,7 @@ describe('patient scratch pad resolver', () => {
       const result = await graphql(schema, mutation, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       expect(result.data!.patientScratchPadEdit).toMatchObject({
         id: patientScratchPad.id,

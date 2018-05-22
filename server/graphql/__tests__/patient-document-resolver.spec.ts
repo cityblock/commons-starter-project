@@ -82,7 +82,7 @@ describe('patient document resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         patientDocument,
       );
@@ -116,7 +116,7 @@ describe('patient document resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         patientDocument,
       );
@@ -150,7 +150,7 @@ describe('patient document resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         patientDocument,
       );
@@ -178,7 +178,7 @@ describe('patient document resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
           testConfig,
         },
         {
@@ -208,7 +208,7 @@ describe('patient document resolver', () => {
         {
           userId: user.id,
           permissions,
-          txn,
+          testTransaction: txn,
           testConfig,
         },
         {
@@ -244,7 +244,7 @@ describe('patient document resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientDocumentId: document.id,
@@ -287,7 +287,7 @@ describe('patient document resolver', () => {
           permissions,
           userId: user.id,
           logger,
-          txn,
+          testTransaction: txn,
         },
         {
           patientId: patient.id,

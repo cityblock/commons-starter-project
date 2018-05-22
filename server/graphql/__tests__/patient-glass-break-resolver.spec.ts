@@ -63,7 +63,7 @@ describe('Patient Glass Break Resolver', () => {
     const result = await graphql(schema, mutation, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.patientGlassBreakCreate.id).toBeTruthy();
@@ -119,7 +119,7 @@ describe('Patient Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.patientGlassBreaksForUser.length).toBe(2);
@@ -157,7 +157,7 @@ describe('Patient Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.patientGlassBreakCheck).toMatchObject({
@@ -180,7 +180,7 @@ describe('Patient Glass Break Resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.data!.patientGlassBreakCheck).toMatchObject({

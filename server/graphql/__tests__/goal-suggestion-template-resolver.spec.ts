@@ -45,7 +45,11 @@ describe('goal suggestion template resolver', () => {
       const query = `{ goalSuggestionTemplate(
           goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
         ) { title } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.goalSuggestionTemplate)).toMatchObject({
         title: 'Fix housing',
       });
@@ -60,7 +64,11 @@ describe('goal suggestion template resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.goalSuggestionTemplateCreate)).toMatchObject({
         title: 'Fix housing',
       });
@@ -83,7 +91,11 @@ describe('goal suggestion template resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.goalSuggestionTemplateEdit)).toMatchObject({
         title: 'Medical',
       });
@@ -106,7 +118,11 @@ describe('goal suggestion template resolver', () => {
             title, deletedAt
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.goalSuggestionTemplateDelete).deletedAt).not.toBeFalsy();
     });
   });
@@ -134,7 +150,7 @@ describe('goal suggestion template resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const goalSuggestionTemplates = cloneDeep(result.data!.goalSuggestionTemplates);
       const titles = goalSuggestionTemplates.map(
@@ -169,7 +185,7 @@ describe('goal suggestion template resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
 
       expect(cloneDeep(result.data!.goalSuggestionTemplates)).toMatchObject([

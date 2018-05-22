@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRootMutationType,
   IRootQueryType,
@@ -24,22 +25,23 @@ export interface ITaskCommentCreateOptions {
 export async function taskCommentCreate(
   source: any,
   { input }: ITaskCommentCreateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskCommentCreate']> {
   const { taskId, body } = input;
+  return transaction(testTransaction || TaskComment.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'task', txn, taskId);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'task', txn, taskId);
+    const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
-  const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
+    addJobToQueue('taskEvent', {
+      taskId,
+      userId: userId!,
+      eventType: 'add_comment' as TaskEventTypes,
+      eventCommentId: taskComment.id,
+    });
 
-  addJobToQueue('taskEvent', {
-    taskId,
-    userId: userId!,
-    eventType: 'add_comment' as TaskEventTypes,
-    eventCommentId: taskComment.id,
+    return taskComment;
   });
-
-  return taskComment;
 }
 
 export interface ITaskCommentEditOptions {
@@ -49,22 +51,23 @@ export interface ITaskCommentEditOptions {
 export async function taskCommentEdit(
   source: any,
   { input }: ITaskCommentEditOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskCommentEdit']> {
   const { taskCommentId, body } = input;
+  return transaction(testTransaction || TaskComment.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'taskComment', txn, taskCommentId);
 
-  await checkUserPermissions(userId, permissions, 'edit', 'taskComment', txn, taskCommentId);
+    const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
-  const taskComment = await TaskComment.update(taskCommentId, body, txn);
+    addJobToQueue('taskEvent', {
+      taskId: taskComment.taskId,
+      userId: userId!,
+      eventType: 'edit_comment' as TaskEventTypes,
+      eventCommentId: taskComment.id,
+    });
 
-  addJobToQueue('taskEvent', {
-    taskId: taskComment.taskId,
-    userId: userId!,
-    eventType: 'edit_comment' as TaskEventTypes,
-    eventCommentId: taskComment.id,
+    return taskComment;
   });
-
-  return taskComment;
 }
 
 export interface ITaskCommentDeleteOptions {
@@ -74,63 +77,70 @@ export interface ITaskCommentDeleteOptions {
 export async function taskCommentDelete(
   source: any,
   { input }: ITaskCommentDeleteOptions,
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootMutationType['taskCommentDelete']> {
   const { taskCommentId } = input;
-  await checkUserPermissions(userId, permissions, 'delete', 'taskComment', txn, taskCommentId);
+  return transaction(testTransaction || TaskComment.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'taskComment', txn, taskCommentId);
 
-  const taskComment = await TaskComment.delete(taskCommentId, txn);
+    const taskComment = await TaskComment.delete(taskCommentId, txn);
 
-  addJobToQueue('taskEvent', {
-    taskId: taskComment.taskId,
-    userId: userId!,
-    eventType: 'delete_comment' as TaskEventTypes,
-    eventCommentId: taskComment.id,
+    addJobToQueue('taskEvent', {
+      taskId: taskComment.taskId,
+      userId: userId!,
+      eventType: 'delete_comment' as TaskEventTypes,
+      eventCommentId: taskComment.id,
+    });
+
+    return taskComment;
   });
-
-  return taskComment;
 }
 
 export async function resolveTaskComments(
   root: any,
   args: IPaginationOptions & { taskId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['taskComments']> {
-  await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
+  return transaction(testTransaction || TaskComment.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'task', txn, args.taskId);
 
-  const pageNumber = args.pageNumber || 0;
-  const pageSize = args.pageSize || 10;
+    const pageNumber = args.pageNumber || 0;
+    const pageSize = args.pageSize || 10;
 
-  const taskComments = await TaskComment.getTaskComments(
-    args.taskId,
-    {
-      pageNumber,
-      pageSize,
-    },
-    txn,
-  );
-  const taskCommentEdges = taskComments.results.map(
-    (taskComment: TaskComment) => formatRelayEdge(taskComment, taskComment.id) as ITaskCommentNode,
-  );
+    const taskComments = await TaskComment.getTaskComments(
+      args.taskId,
+      {
+        pageNumber,
+        pageSize,
+      },
+      txn,
+    );
+    const taskCommentEdges = taskComments.results.map(
+      (taskComment: TaskComment) =>
+        formatRelayEdge(taskComment, taskComment.id) as ITaskCommentNode,
+    );
 
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < taskComments.total;
+    const hasPreviousPage = pageNumber !== 0;
+    const hasNextPage = (pageNumber + 1) * pageSize < taskComments.total;
 
-  return {
-    edges: taskCommentEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
+    return {
+      edges: taskCommentEdges,
+      pageInfo: {
+        hasPreviousPage,
+        hasNextPage,
+      },
+    };
+  });
 }
 
 export async function resolveTaskComment(
   rot: any,
   args: { taskCommentId: string },
-  { permissions, userId, txn }: IContext,
+  { permissions, userId, testTransaction }: IContext,
 ): Promise<IRootQueryType['taskComment']> {
-  await checkUserPermissions(userId, permissions, 'view', 'taskComment', txn, args.taskCommentId);
+  return transaction(testTransaction || TaskComment.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'taskComment', txn, args.taskCommentId);
 
-  return TaskComment.get(args.taskCommentId, txn);
+    return TaskComment.get(args.taskCommentId, txn);
+  });
 }

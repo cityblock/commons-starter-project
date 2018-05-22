@@ -35,7 +35,11 @@ describe('clinic resolver', () => {
       );
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
       const query = `{ clinic(clinicId: "${clinic.id}") { name, departmentId } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
 
       expect(cloneDeep(result.data!.clinic)).toMatchObject({
         name: 'Center Zero',
@@ -84,7 +88,7 @@ describe('clinic resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           pageNumber: 0,

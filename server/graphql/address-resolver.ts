@@ -1,4 +1,5 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import {
   IAddressCreateForPatientInput,
   IAddressCreateInput,
@@ -20,27 +21,29 @@ export interface IAddressCreateForPatientOptions {
 export async function addressCreateForPatient(
   source: any,
   { input }: IAddressCreateForPatientOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['addressCreateForPatient']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Address.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
 
-  const address = await Address.create(filtered, txn);
-  await PatientAddress.create({ patientId: input.patientId, addressId: address.id }, txn);
+    const address = await Address.create(filtered, txn);
+    await PatientAddress.create({ patientId: input.patientId, addressId: address.id }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryAddressId: address.id, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryAddressId: address.id, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  return address;
+    return address;
+  });
 }
 
 export interface IAddressCreateOptions {
@@ -50,15 +53,17 @@ export interface IAddressCreateOptions {
 export async function addressCreate(
   source: any,
   { input }: IAddressCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['addressCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'address', txn);
+  return transaction(testTransaction || Address.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'address', txn);
 
-  const filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE address by ${userId}`);
+    const filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE address by ${userId}`);
 
-  return Address.create(filtered, txn);
+    return Address.create(filtered, txn);
+  });
 }
 
 export interface IAddressDeleteOptions {
@@ -68,24 +73,26 @@ export interface IAddressDeleteOptions {
 export async function addressDeleteForPatient(
   root: any,
   { input }: IAddressDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<Address> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Address.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE address for patient ${input.patientId} by ${userId}`);
+    logger.log(`DELETE address for patient ${input.patientId} by ${userId}`);
 
-  await PatientAddress.delete({ patientId: input.patientId, addressId: input.addressId }, txn);
+    await PatientAddress.delete({ patientId: input.patientId, addressId: input.addressId }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryAddressId: null, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryAddressId: null, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  return Address.delete(input.addressId, txn);
+    return Address.delete(input.addressId, txn);
+  });
 }
 
 export interface IAddressEditOptions {
@@ -95,12 +102,14 @@ export interface IAddressEditOptions {
 export async function addressEdit(
   source: any,
   { input }: IAddressEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['addressEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Address.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IAddressEditInput>(input, isNil);
-  logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IAddressEditInput>(input, isNil);
+    logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
 
-  return Address.edit(filtered as any, input.addressId, txn);
+    return Address.edit(filtered as any, input.addressId, txn);
+  });
 }

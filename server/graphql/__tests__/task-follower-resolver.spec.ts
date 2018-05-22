@@ -100,7 +100,7 @@ describe('task follower', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { userId: user.id, taskId: task.id },
       );
@@ -123,7 +123,7 @@ describe('task follower', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { taskId: task.id, userId: user.id },
       );

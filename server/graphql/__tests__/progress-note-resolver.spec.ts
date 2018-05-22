@@ -79,7 +79,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
     expect(cloneDeep(result.data!.progressNote)).toMatchObject({
       id: progressNote.id,
@@ -105,7 +105,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.errors![0].message).toBe(
@@ -147,7 +147,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(result.errors![0].message).toBe(
@@ -183,7 +183,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, query, null, {
       permissions: 'blue',
       userId: user2.id,
-      txn,
+      testTransaction: txn,
     });
     const error = `User ${user2.id} cannot automatically break the glass for progressNote ${
       progressNote.id
@@ -202,7 +202,11 @@ describe('progress note resolver', () => {
           userId, patientId
         }
       }`;
-    const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    const result = await graphql(schema, mutation, null, {
+      permissions,
+      userId: user.id,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteCreate)).toMatchObject({
       userId: user.id,
       patientId: patient.id,
@@ -227,7 +231,11 @@ describe('progress note resolver', () => {
           id
         }
       }`;
-    const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    const result = await graphql(schema, mutation, null, {
+      permissions,
+      userId: user.id,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteComplete)).toMatchObject({
       id: progressNote.id,
     });
@@ -255,7 +263,7 @@ describe('progress note resolver', () => {
         id
       }
     }`;
-    await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    await graphql(schema, mutation, null, { permissions, userId: user.id, testTransaction: txn });
     const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
       patient.id,
       txn,
@@ -296,7 +304,11 @@ describe('progress note resolver', () => {
           worryScore
         }
       }`;
-    const result = await graphql(schema, mutation, null, { permissions, userId: user.id, txn });
+    const result = await graphql(schema, mutation, null, {
+      permissions,
+      userId: user.id,
+      testTransaction: txn,
+    });
     expect(cloneDeep(result.data!.progressNoteEdit.progressNoteTemplate.id)).toEqual(
       progressNoteTemplate2.id,
     );
@@ -338,7 +350,7 @@ describe('progress note resolver', () => {
     const resultWithError = await graphql(schema, mutation, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
     expect(cloneDeep(resultWithError.errors![0].message)).toEqual(
       'you are not the supervisor permitted to review this progress note',
@@ -347,7 +359,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, mutation, null, {
       permissions,
       userId: supervisor.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(cloneDeep(result.data!.progressNoteAddSupervisorNotes.supervisorNotes)).toEqual(
@@ -394,7 +406,7 @@ describe('progress note resolver', () => {
     const resultWithError = await graphql(schema, mutation, null, {
       permissions,
       userId: user.id,
-      txn,
+      testTransaction: txn,
     });
     expect(cloneDeep(resultWithError.errors![0].message)).toEqual(
       'you are not the supervisor permitted to review this progress note',
@@ -403,7 +415,7 @@ describe('progress note resolver', () => {
     const result = await graphql(schema, mutation, null, {
       permissions,
       userId: supervisor.id,
-      txn,
+      testTransaction: txn,
     });
 
     expect(cloneDeep(result.data!.progressNoteCompleteSupervisorReview.supervisorNotes)).toEqual(
@@ -445,7 +457,7 @@ describe('progress note resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id, completed: false },
       );
@@ -473,7 +485,7 @@ describe('progress note resolver', () => {
         {
           permissions: 'blue',
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient2.id, completed: false, glassBreakId: uuid() },
       );
@@ -514,7 +526,7 @@ describe('progress note resolver', () => {
         {
           permissions: 'blue',
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient2.id, completed: false, glassBreakId: patientGlassBreak.id },
       );
@@ -551,7 +563,7 @@ describe('progress note resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user.id,
-        txn,
+        testTransaction: txn,
       });
       const progressNotes = cloneDeep(result.data!.progressNotesForCurrentUser);
       const progressNoteIds = progressNotes.map((progressNote: ProgressNote) => progressNote.id);
@@ -584,7 +596,7 @@ describe('progress note resolver', () => {
       const result = await graphql(schema, query, null, {
         permissions,
         userId: user2.id,
-        txn,
+        testTransaction: txn,
       });
       expect(cloneDeep(result.data!.progressNotesForSupervisorReview)).toMatchObject([
         {
@@ -614,7 +626,7 @@ describe('progress note resolver', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );

@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import { IRootQueryType } from 'schema';
 import PatientPhone from '../models/patient-phone';
 import checkUserPermissions from './shared/permissions-check';
@@ -10,11 +11,13 @@ export interface IResolvePhonesOptions {
 export async function resolvePhones(
   source: any,
   { patientId }: IResolvePhonesOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootQueryType['patientPhones']> {
-  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+  return transaction(testTransaction || PatientPhone.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
-  logger.log(`GET all phones for patient ${patientId} by ${userId}`);
+    logger.log(`GET all phones for patient ${patientId} by ${userId}`);
 
-  return PatientPhone.getAll(patientId, txn);
+    return PatientPhone.getAll(patientId, txn);
+  });
 }

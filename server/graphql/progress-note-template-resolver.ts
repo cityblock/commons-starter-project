@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IProgressNoteTemplateCreateInput,
   IProgressNoteTemplateDeleteInput,
@@ -28,49 +29,59 @@ interface IDeleteProgressNoteTemplateOptions {
 export async function progressNoteTemplateCreate(
   root: any,
   { input }: IProgressNoteTemplateCreateArgs,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteTemplateCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'progressNoteTemplate', txn);
+  return transaction(testTransaction || ProgressNoteTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'progressNoteTemplate', txn);
 
-  return ProgressNoteTemplate.create(input, txn);
+    return ProgressNoteTemplate.create(input, txn);
+  });
 }
 
 export async function resolveProgressNoteTemplate(
   root: any,
   args: IResolveProgressNoteTemplateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNoteTemplate']> {
-  await checkUserPermissions(userId, permissions, 'view', 'progressNoteTemplate', txn);
+  return transaction(testTransaction || ProgressNoteTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'progressNoteTemplate', txn);
 
-  return ProgressNoteTemplate.get(args.progressNoteTemplateId, txn);
+    return ProgressNoteTemplate.get(args.progressNoteTemplateId, txn);
+  });
 }
 
 export async function resolveProgressNoteTemplates(
   root: any,
   args: any,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootQueryType['progressNoteTemplates']> {
-  await checkUserPermissions(userId, permissions, 'view', 'progressNoteTemplate', txn);
+  return transaction(testTransaction || ProgressNoteTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'progressNoteTemplate', txn);
 
-  return ProgressNoteTemplate.getAll(txn);
+    return ProgressNoteTemplate.getAll(txn);
+  });
 }
 
 export async function progressNoteTemplateEdit(
   root: any,
   args: IEditProgressNoteTemplateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteTemplateEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'progressNoteTemplate', txn);
+  return transaction(testTransaction || ProgressNoteTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'progressNoteTemplate', txn);
 
-  return ProgressNoteTemplate.edit(args.input, args.input.progressNoteTemplateId, txn);
+    return ProgressNoteTemplate.edit(args.input, args.input.progressNoteTemplateId, txn);
+  });
 }
 
 export async function progressNoteTemplateDelete(
   root: any,
   args: IDeleteProgressNoteTemplateOptions,
-  { userId, permissions, txn }: IContext,
+  { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['progressNoteTemplateDelete']> {
-  await checkUserPermissions(userId, permissions, 'delete', 'progressNoteTemplate', txn);
+  return transaction(testTransaction || ProgressNoteTemplate.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'delete', 'progressNoteTemplate', txn);
 
-  return ProgressNoteTemplate.delete(args.input.progressNoteTemplateId, txn);
+    return ProgressNoteTemplate.delete(args.input.progressNoteTemplateId, txn);
+  });
 }

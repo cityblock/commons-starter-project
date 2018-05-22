@@ -82,7 +82,11 @@ describe('task suggestion resolver', () => {
     it('fetches a task', async () => {
       const { answer, taskTemplate, user } = await setup(txn);
       const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       // null if no suggested tasks
       expect(cloneDeep(result.data!.taskTemplatesForAnswer)).toMatchObject([]);
 
@@ -94,7 +98,11 @@ describe('task suggestion resolver', () => {
         txn,
       );
       // one if suggested task
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result2 = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([{ title: 'Housing' }]);
     });
   });
@@ -111,7 +119,11 @@ describe('task suggestion resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.taskSuggestionCreate)).toMatchObject([
         {
           title: 'Housing',
@@ -137,12 +149,20 @@ describe('task suggestion resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.taskSuggestionDelete)).toMatchObject([]);
 
       // empty with no suggested tasks
       const query = `{ taskTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result2 = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result2 = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([]);
     });
   });

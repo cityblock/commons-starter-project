@@ -82,7 +82,7 @@ describe('care team', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         {
           userId: user2.id,
@@ -129,7 +129,7 @@ describe('care team', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { userId: user2.id, patientId: patient.id },
       );
@@ -153,7 +153,7 @@ describe('care team', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -175,7 +175,7 @@ describe('care team', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
         },
         { patientId: patient.id },
       );
@@ -231,7 +231,7 @@ describe('care team', () => {
 
       const result = await graphql(schema, mutation, null, {
         permissions,
-        txn,
+        testTransaction: txn,
         userId: user2.id,
       });
       expect(cloneDeep(result.data!.careTeamAssignPatients)).toMatchObject({
@@ -286,7 +286,7 @@ describe('care team', () => {
       }`;
       await graphql(schema, mutation, null, {
         permissions,
-        txn,
+        testTransaction: txn,
         userId: user.id,
       });
       const refetchedComputedPatientStatus1 = await ComputedPatientStatus.getForPatient(
@@ -327,7 +327,7 @@ describe('care team', () => {
         null,
         {
           permissions,
-          txn,
+          testTransaction: txn,
           userId: user2.id,
           testConfig,
         },
@@ -345,8 +345,6 @@ describe('care team', () => {
       const refetchedCareTeamUserIds = refetchedCareTeam.map(careTeamUser => careTeamUser.id);
       expect(refetchedCareTeam).toHaveLength(1);
       expect(refetchedCareTeamUserIds).toContain(user2.id);
-
-      expect(removeUserFromChannel).toBeCalledWith(patient.id, user.id, txn);
 
       expect(queue.testMode.jobs.length).toBe(1);
       expect(queue.testMode.jobs[0].data).toMatchObject({
@@ -383,7 +381,7 @@ describe('care team', () => {
         {
           permissions,
           userId: user.id,
-          txn,
+          testTransaction: txn,
           testConfig,
         },
         {
@@ -420,7 +418,7 @@ describe('care team', () => {
         null,
         {
           permissions,
-          txn,
+          testTransaction: txn,
           userId: user.id,
         },
         { userId: user2.id, patientId: patient.id },

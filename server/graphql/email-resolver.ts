@@ -1,4 +1,5 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import {
   IEmailCreateForPatientInput,
   IEmailCreateInput,
@@ -20,27 +21,29 @@ export interface IEmailCreateForPatientOptions {
 export async function emailCreateForPatient(
   source: any,
   { input }: IEmailCreateForPatientOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['emailCreateForPatient']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Email.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IEmailCreateForPatientInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IEmailCreateForPatientInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
 
-  const email = await Email.create(filtered, txn);
-  await PatientEmail.create({ patientId: input.patientId, emailId: email.id }, txn);
+    const email = await Email.create(filtered, txn);
+    await PatientEmail.create({ patientId: input.patientId, emailId: email.id }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryEmailId: email.id, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryEmailId: email.id, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  return email;
+    return email;
+  });
 }
 
 export interface IEmailCreateOptions {
@@ -50,15 +53,17 @@ export interface IEmailCreateOptions {
 export async function emailCreate(
   source: any,
   { input }: IEmailCreateOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['emailCreate']> {
-  await checkUserPermissions(userId, permissions, 'create', 'email', txn);
+  return transaction(testTransaction || Email.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'create', 'email', txn);
 
-  const filtered = omitBy<IEmailCreateInput>(input, isNil) as any;
-  filtered.updatedById = userId;
-  logger.log(`CREATE email by ${userId}`);
+    const filtered = omitBy<IEmailCreateInput>(input, isNil) as any;
+    filtered.updatedById = userId;
+    logger.log(`CREATE email by ${userId}`);
 
-  return Email.create(filtered, txn);
+    return Email.create(filtered, txn);
+  });
 }
 
 export interface IEmailDeleteOptions {
@@ -68,24 +73,26 @@ export interface IEmailDeleteOptions {
 export async function emailDeleteForPatient(
   root: any,
   { input }: IEmailDeleteOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<Email> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Email.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  logger.log(`DELETE email for patient ${input.patientId} by ${userId}`);
+    logger.log(`DELETE email for patient ${input.patientId} by ${userId}`);
 
-  await PatientEmail.delete({ patientId: input.patientId, emailId: input.emailId }, txn);
+    await PatientEmail.delete({ patientId: input.patientId, emailId: input.emailId }, txn);
 
-  if (input.isPrimary) {
-    const patient = await Patient.get(input.patientId, txn);
-    await PatientInfo.edit(
-      { primaryEmailId: null, updatedById: userId! },
-      patient.patientInfo.id,
-      txn,
-    );
-  }
+    if (input.isPrimary) {
+      const patient = await Patient.get(input.patientId, txn);
+      await PatientInfo.edit(
+        { primaryEmailId: null, updatedById: userId! },
+        patient.patientInfo.id,
+        txn,
+      );
+    }
 
-  return Email.delete(input.emailId, txn);
+    return Email.delete(input.emailId, txn);
+  });
 }
 
 export interface IEmailEditOptions {
@@ -95,12 +102,14 @@ export interface IEmailEditOptions {
 export async function emailEdit(
   source: any,
   { input }: IEmailEditOptions,
-  { permissions, userId, logger, txn }: IContext,
+  { permissions, userId, logger, testTransaction }: IContext,
 ): Promise<IRootMutationType['emailEdit']> {
-  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+  return transaction(testTransaction || Email.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-  const filtered = omitBy<IEmailEditInput>(input, isNil);
-  logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
+    const filtered = omitBy<IEmailEditInput>(input, isNil);
+    logger.log(`CREATE email for patient ${input.patientId} by ${userId}`);
 
-  return Email.edit(filtered as any, input.emailId, txn);
+    return Email.edit(filtered as any, input.emailId, txn);
+  });
 }

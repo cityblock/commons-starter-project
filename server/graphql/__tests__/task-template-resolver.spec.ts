@@ -56,7 +56,11 @@ describe('task template resolver', () => {
         txn,
       );
       const query = `{ taskTemplate(taskTemplateId: "${taskTemplate.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, query, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.taskTemplate)).toMatchObject({
         title: 'Housing',
       });
@@ -77,7 +81,11 @@ describe('task template resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
 
       expect(cloneDeep(result.data!.taskTemplateCreate)).toMatchObject({
         title: 'Housing',
@@ -103,7 +111,11 @@ describe('task template resolver', () => {
             title
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.taskTemplateEdit)).toMatchObject({
         title: 'Medical',
       });
@@ -128,7 +140,11 @@ describe('task template resolver', () => {
             title, deletedAt
           }
         }`;
-      const result = await graphql(schema, mutation, null, { userId: user.id, permissions, txn });
+      const result = await graphql(schema, mutation, null, {
+        userId: user.id,
+        permissions,
+        testTransaction: txn,
+      });
       expect(cloneDeep(result.data!.taskTemplateDelete).deletedAt).not.toBeFalsy();
     });
   });
@@ -163,7 +179,7 @@ describe('task template resolver', () => {
       const result = await graphql(schema, query, null, {
         userId: user.id,
         permissions,
-        txn,
+        testTransaction: txn,
       });
       const taskTemplates = cloneDeep(result.data!.taskTemplates);
       const titles = taskTemplates.map((taskTemplate: TaskTemplate) => taskTemplate.title);

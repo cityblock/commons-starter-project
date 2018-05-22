@@ -5,7 +5,6 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { Transaction } from 'objection';
-import { IGraphQLResponseError, IGraphQLResponseRoot } from 'schema';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
 import Logger from '../../logging';
@@ -16,7 +15,6 @@ export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 export interface IGraphQLContextOptions {
   request?: express.Request;
   response?: express.Response;
-  txn: Transaction;
   errorReporting: ErrorReporting;
 }
 
@@ -26,7 +24,7 @@ export interface IContext {
   errorReporting?: ErrorReporting;
   permissions: Permissions;
   userId?: string;
-  txn: Transaction;
+  testTransaction?: Transaction;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -66,12 +64,12 @@ export async function decodeJwt(jwt: string): Promise<IJWTData | IJWTForPDFData 
 }
 
 // only use with non-PDF related tokens
-export async function parseAndVerifyJwt(jwt: string, txn: Transaction) {
+export async function parseAndVerifyJwt(jwt: string) {
   const decoded = (await decodeJwt(jwt)) as IJWTData;
 
   // goal: allow user to be logged into exactly 1 device at a time
   // solution: invalidate token if user has logged in on a different device since token was issued
-  const lastLoginAt = await User.getLastLoggedIn(decoded.userId, txn);
+  const lastLoginAt = await User.getLastLoggedIn(decoded.userId);
   if (isInvalidLogin(decoded.lastLoginAt, lastLoginAt)) {
     throw new Error('token invalid: login too old');
   }
@@ -99,7 +97,8 @@ export const logGraphQLContext = (
 
   const traceAgent = trace.get();
   const childSpan = traceAgent.createChildSpan({ name: req.body.operationName });
-  const formattedQuery = req.body.query.replace(/\s*\n\s*/g, ' ');
+  const formattedQuery =
+    req.body && req.body.query ? req.body.query.replace(/\s*\n\s*/g, ' ') : 'no query';
 
   logger.log(
     `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
@@ -107,24 +106,27 @@ export const logGraphQLContext = (
     )}, operation: ${req.body.operationName}, query: ${formattedQuery}`,
   );
 
-  // Monkey patch res.write
-  const originalWrite = res.write;
-  res.write = (data: string) => {
-    childSpan.endSpan();
-    switch (res.statusCode) {
-      case 200:
-        logger.log(
-          `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, operation: ${
-            req.body.operationName
-          }, data: ${data}`,
-        );
-        break;
-      default:
-        console.error(data);
-    }
+  // Overwrites stubbed response in tests so cannot run in tests
+  if (config.NODE_ENV !== 'test') {
+    // Monkey patch res.write
+    const originalWrite = res.write;
+    res.write = (data: string) => {
+      childSpan.endSpan();
+      switch (res.statusCode) {
+        case 200:
+          logger.log(
+            `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, operation: ${
+              req.body.operationName
+            }, data: ${data}`,
+          );
+          break;
+        default:
+          console.error(data);
+      }
 
-    return originalWrite.call(res, data);
-  };
+      return originalWrite.call(res, data);
+    };
+  }
 };
 
 export async function getGraphQLContext(
@@ -132,7 +134,7 @@ export async function getGraphQLContext(
   logger: Logger,
   options: IGraphQLContextOptions,
 ): Promise<IContext> {
-  const { txn, request, response, errorReporting } = options;
+  const { request, response, errorReporting } = options;
 
   const traceAgent = trace.get();
   const childSpan = traceAgent.createChildSpan({ name: 'authentication' });
@@ -142,7 +144,7 @@ export async function getGraphQLContext(
 
   if (authToken) {
     try {
-      const parsedToken = await parseAndVerifyJwt(authToken, txn);
+      const parsedToken = await parseAndVerifyJwt(authToken);
       userId = parsedToken.userId;
       permissions = parsedToken.permissions;
     } catch (e) {
@@ -153,7 +155,6 @@ export async function getGraphQLContext(
       return {
         permissions: 'black' as Permissions,
         logger,
-        txn,
         errorReporting,
       };
     }
@@ -169,52 +170,7 @@ export async function getGraphQLContext(
     userId,
     permissions,
     logger,
-    txn,
     errorReporting,
-  };
-}
-
-/**
- * Strictly here to commit the transaction before sending a success response
- */
-export async function formatResponse(
-  response: IGraphQLResponseRoot,
-  { context }: { context: IContext },
-): Promise<any> {
-  let errorReporting = context.errorReporting;
-  if (!errorReporting) {
-    console.error('ERROR: error reporting not defined', JSON.stringify(context));
-    errorReporting = new ErrorReporting({
-      credentials: JSON.parse(String(config.GCP_CREDS)),
-    });
-  }
-  try {
-    await context.txn.commit();
-  } catch (err) {
-    /* tslint:disable no-console */
-    console.error('Transaction failed with error: ', err);
-    /* tslint:enable no-console */
-    errorReporting.report(err);
-
-    await context.txn.rollback();
-  }
-  return response;
-}
-export function formatError(error: IGraphQLResponseError): IGraphQLResponseError {
-  const errorReporting = new ErrorReporting({
-    credentials: JSON.parse(String(config.GCP_CREDS)),
-  });
-  if (error.path || error.name !== 'GraphQLError') {
-    errorReporting.report(error.message);
-  } else {
-    errorReporting.report(`GraphQLWrongQuery: ${error.message}`);
-  }
-  return {
-    ...error.extensions,
-    message: error.message || 'An unknown error occurred.',
-    locations: error.locations && config.NODE_ENV === 'development' ? error.locations : [],
-    stack: error.stack && config.NODE_ENV === 'development' ? error.stack.split('\n') : [],
-    path: error.path,
   };
 }
 

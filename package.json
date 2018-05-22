@@ -109,7 +109,7 @@
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "expect": "22.4.3",
-    "foreman": "2.0.0",
+    "foreman": "3.0.0",
     "gql2ts": "1.8.0",
     "graphql-document-collector": "0.2.1",
     "husky": "0.14.3",

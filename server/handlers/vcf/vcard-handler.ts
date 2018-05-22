@@ -124,17 +124,26 @@ export const formatvCardNameForPatient = (card: ICard, patient: Patient): void =
   }
   // add preferred name if available
   if (patient.patientInfo.preferredName) {
-    card.nickname = patient.patientInfo.preferredName;
+    card.firstName = `${patient.firstName} (${patient.patientInfo.preferredName})`;
   }
 };
 
 export const isDuplicateName = (patient: Patient, previousPatient: Patient | null): boolean => {
   // if no previous patient, it cannot be a duplicate name
   if (!previousPatient) return false;
-  // if middle names do not match, not a duplicate
-  if (patient.middleName !== previousPatient.middleName) {
+  // if one has middle name and another doesn't, not a duplicate
+  if (!!patient.middleName === !previousPatient.middleName) {
     return false;
   }
+  // if middle initials don't match, not a duplicate
+  if (
+    patient.middleName &&
+    previousPatient.middleName &&
+    patient.middleName[0] !== previousPatient.middleName[0]
+  ) {
+    return false;
+  }
+
   // if preferred names do not match, not a duplicate
   if (patient.patientInfo.preferredName !== previousPatient.patientInfo.preferredName) {
     return false;

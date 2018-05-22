@@ -11,6 +11,12 @@ describe('Server Format Helpers', () => {
 
       expect(formatted).toBe('Sansa S.');
     });
+
+    it('includes preferred name if specified', () => {
+      const formatted = formatAbbreviatedName('sansa', 'stark', 'lady');
+
+      expect(formatted).toBe('Sansa (Lady) S.');
+    });
   });
 
   describe('formatChannelDisplayName', () => {

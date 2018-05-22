@@ -161,7 +161,11 @@ export async function notifyUserOfVoicemail(voicemail: Voicemail) {
   } = voicemail;
 
   const voicemailIdentity = patient
-    ? `${formatAbbreviatedName(patient.firstName, patient.lastName)} at `
+    ? `${formatAbbreviatedName(
+        patient.firstName,
+        patient.lastName,
+        patient.patientInfo.preferredName,
+      )} at `
     : '';
   const formattedDate = format(twilioCreatedAt, VOICEMAIL_DATE_FORMAT);
   const body = `${voicemailIdentity}${contactNumber} left you a voicemail at ${formattedDate}. Click the following link to listen to the message.`;

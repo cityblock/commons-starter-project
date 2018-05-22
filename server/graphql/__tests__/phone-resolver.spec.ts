@@ -1,8 +1,8 @@
 import { graphql } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
@@ -11,6 +11,8 @@ import Phone from '../../models/phone';
 import User from '../../models/user';
 import { createMockPhone, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 interface ISetup {
   patient: Patient;
@@ -48,8 +50,13 @@ describe('phone resolver', () => {
   const logger = { log };
   let txn = null as any;
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -116,6 +123,12 @@ describe('phone resolver', () => {
       const patientPhone = await PatientPhone.getAll(patient.id, txn);
       expect(patientPhone).not.toBeNull();
       expect(patientPhone.length).toBe(1);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addPhoneNumber',
+      });
     });
 
     it('should create phone with patient and make it primary for patient', async () => {
@@ -152,6 +165,12 @@ describe('phone resolver', () => {
 
       const editedInfo = await PatientInfo.get(patient.patientInfo.id, txn);
       expect(editedInfo.primaryPhoneId).toBe(result.data!.phoneCreateForPatient.id);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addPhoneNumber',
+      });
     });
   });
 
@@ -199,6 +218,16 @@ describe('phone resolver', () => {
         description: phone.description,
       });
       expect(log).toBeCalled();
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addPhoneNumber',
+      });
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        patientId: patient.id,
+        type: 'deletePhoneNumber',
+      });
     });
 
     it('should delete primary phone', async () => {
@@ -252,6 +281,16 @@ describe('phone resolver', () => {
 
       const patientInfo = await PatientInfo.get(patient.patientInfo.id, txn);
       expect(patientInfo.primaryPhoneId).toBeFalsy();
+
+      expect(queue.testMode.jobs.length).toBe(2);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'addPhoneNumber',
+      });
+      expect(queue.testMode.jobs[1].data).toMatchObject({
+        patientId: patient.id,
+        type: 'deletePhoneNumber',
+      });
     });
   });
 
@@ -281,6 +320,12 @@ describe('phone resolver', () => {
         description: 'Some phone',
       });
       expect(log).toBeCalled();
+
+      expect(queue.testMode.jobs.length).toBe(1);
+      expect(queue.testMode.jobs[0].data).toMatchObject({
+        patientId: patient.id,
+        type: 'editPhoneNumber',
+      });
     });
   });
 });

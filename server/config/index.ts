@@ -30,5 +30,6 @@ export default {
   PINGDOM_CHECK_PASSWORD: 'secret',
   KUE_UI_PASSWORD: 'fake',
   CITYBLOCK_VOICEMAIL: '+16469417791',
+  CITYBLOCK_ADMIN: '+17273415787',
   ...process.env,
 };

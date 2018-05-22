@@ -1,6 +1,14 @@
 import { capitalize, lowerCase } from 'lodash';
 
-export const formatAbbreviatedName = (firstName: string, lastName: string): string => {
+export const formatAbbreviatedName = (
+  firstName: string,
+  lastName: string,
+  preferredName?: string | null,
+): string => {
+  if (preferredName) {
+    return `${capitalize(firstName)} (${capitalize(preferredName)}) ${capitalize(lastName)[0]}.`;
+  }
+
   return `${capitalize(firstName)} ${capitalize(lastName)[0]}.`;
 };
 

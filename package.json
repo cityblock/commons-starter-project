@@ -56,6 +56,8 @@
     "consume:mattermost:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/mattermost-consumer.js",
     "consume:task-event:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/task-event-consumer.js",
     "consume:task-event:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/task-event-consumer.js",
+    "consume:contact-update:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/contact-update-consumer.js",
+    "consume:contact-update:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/contact-update-consumer.js",
     "computed-patient-status:update-all:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",
     "computed-patient-status:update-all:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",
     "jobs:process-voicemail:dev": "NODE_ENV=development node ./server-compiled/server/jobs/process-voicemail.js",

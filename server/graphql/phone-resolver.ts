@@ -6,6 +6,7 @@ import {
   IPhoneEditInput,
   IRootMutationType,
 } from 'schema';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
 import PatientPhone from '../models/patient-phone';
@@ -39,6 +40,11 @@ export async function phoneCreateForPatient(
       txn,
     );
   }
+
+  addJobToQueue('patientContactEdit', {
+    patientId: input.patientId,
+    type: 'addPhoneNumber',
+  });
 
   return phone;
 }
@@ -85,6 +91,11 @@ export async function phoneDeleteForPatient(
     );
   }
 
+  addJobToQueue('patientContactEdit', {
+    patientId: input.patientId,
+    type: 'deletePhoneNumber',
+  });
+
   return Phone.delete(input.phoneId, txn);
 }
 
@@ -101,6 +112,11 @@ export async function phoneEdit(
 
   const filtered = omitBy<IPhoneEditInput>(input, isNil);
   logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
+
+  addJobToQueue('patientContactEdit', {
+    patientId: input.patientId,
+    type: 'editPhoneNumber',
+  });
 
   return Phone.edit(filtered as any, input.phoneId, txn);
 }

@@ -413,10 +413,9 @@ describe('vCard Handler', () => {
       formatvCardNameForPatient(card, fetchedPatient);
 
       expect(card.uid).toBe(patient.cityblockId);
-      expect(card.firstName).toBe('Khal');
+      expect(card.firstName).toBe('Khal (My Sun and Stars)');
       expect(card.lastName).toBe('Drogo');
       expect(card.middleName).toBe('D');
-      expect(card.nickname).toBe('My Sun and Stars');
       expect(card.note).toBe('CBH-234');
     });
   });
@@ -482,6 +481,32 @@ describe('vCard Handler', () => {
       );
 
       expect(isDuplicateName(patient, previousPatient)).toBeFalsy();
+    });
+
+    it('returns true is same first and last names and same middle initials', async () => {
+      const { clinic } = await setup(txn);
+      const patient = await createPatient(
+        {
+          cityblockId: 234,
+          homeClinicId: clinic.id,
+          lastName: 'Stark',
+          firstName: 'Arya',
+          middleName: 'Needle',
+        },
+        txn,
+      );
+      const previousPatient = await createPatient(
+        {
+          cityblockId: 345,
+          homeClinicId: clinic.id,
+          lastName: 'Stark',
+          firstName: 'Arya',
+          middleName: 'Nymeria',
+        },
+        txn,
+      );
+
+      expect(isDuplicateName(patient, previousPatient)).toBeTruthy();
     });
 
     it('returns false if same first and last name but different prefered names', async () => {

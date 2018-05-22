@@ -74,7 +74,7 @@ export async function patientInfoEdit(
     logger.log(`EDIT patient info ${input.patientInfoId} by ${userId}`);
 
     // if changing patient preferred name, enqueue job to notify care team worker
-    if (filtered.preferredName) {
+    if (filtered.preferredName !== undefined) {
       addJobToQueue('patientContactEdit', {
         patientId: patientInfo.patientId,
         type: 'editPreferredName',

@@ -2926,11 +2926,6 @@ declare module 'schema' {
     phoneDeleteForPatient: IPhone | null;
 
     /**
-     * Edit a phone number
-     */
-    phoneEdit: IPhone | null;
-
-    /**
      * Create an email for a Patient
      */
     emailCreateForPatient: IEmail | null;
@@ -3599,10 +3594,6 @@ declare module 'schema' {
     input?: IPhoneDeleteForPatientInput | null;
   }
 
-  interface IPhoneEditOnRootMutationTypeArguments {
-    input?: IPhoneEditInput | null;
-  }
-
   interface IEmailCreateForPatientOnRootMutationTypeArguments {
     input?: IEmailCreateForPatientInput | null;
   }
@@ -4250,17 +4241,6 @@ declare module 'schema' {
     patientId: string;
     phoneId: string;
     isPrimary?: boolean | null;
-  }
-
-  /**
-   * Editable fields on a phone
-   */
-  interface IPhoneEditInput {
-    phoneId: string;
-    patientId: string;
-    phoneNumber: string;
-    type?: PhoneTypeOptions | null;
-    description?: string | null;
   }
 
   /**

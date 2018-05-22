@@ -73,7 +73,7 @@ describe('Contact Update Consumer', () => {
       await processPatientContactEdit(
         {
           patientId: patient.id,
-          type: 'editPhoneNumber',
+          type: 'deletePhoneNumber',
         },
         txn,
       );
@@ -85,7 +85,7 @@ describe('Contact Update Consumer', () => {
       expect(args[0][0]).toMatchObject({
         from: '+17273415787',
         to: phoneNumber,
-        body: 'An existing contact for Jon S. has been updated in Commons.',
+        body: 'An existing contact for Jon S. has been deleted in Commons.',
       });
       expect(args[1][0]).toMatchObject({
         from: '+17273415787',
@@ -315,13 +315,6 @@ describe('Contact Update Consumer', () => {
       expect(noticeCopy).toBe('A new contact for Jon S. has been added to Commons.');
     });
 
-    it('gets notice copy for edited phone number', async () => {
-      const { patient } = await setup(txn);
-      const noticeCopy = getNoticeCopy(patient, 'editPhoneNumber');
-
-      expect(noticeCopy).toBe('An existing contact for Jon S. has been updated in Commons.');
-    });
-
     it('gets notice copy for deleted phone number', async () => {
       const { patient } = await setup(txn);
       const noticeCopy = getNoticeCopy(patient, 'deletePhoneNumber');
@@ -352,15 +345,6 @@ describe('Contact Update Consumer', () => {
       const actionCopy = getActionCopy(patient, 'addPhoneNumber');
 
       expect(actionCopy).toBe('Please download it here: http://localhost:3000/contacts');
-    });
-
-    it('gets action copy for edited phone number', async () => {
-      const { patient } = await setup(txn);
-      const actionCopy = getActionCopy(patient, 'editPhoneNumber');
-
-      expect(actionCopy).toBe(
-        'Please delete the Jon S. contact and download updated contacts here: http://localhost:3000/contacts',
-      );
     });
 
     it('gets action copy for deleted phone number', async () => {

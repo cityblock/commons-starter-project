@@ -20,7 +20,6 @@ import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
 import CreatePhoneModal from './create-phone-modal';
 import * as styles from './css/phone-info.css';
-import EditPhoneModal from './edit-phone-modal';
 
 interface IProps {
   onChange: (field: IEditableFieldState) => void;
@@ -42,7 +41,6 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 interface IState {
-  isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
   isPrimary: boolean;
   currentPhone?: ISavedPhone | null;
@@ -54,7 +52,6 @@ export class PhoneInfo extends React.Component<allProps, IState> {
     super(props);
 
     this.state = {
-      isEditModalVisible: false,
       isCreateModalVisible: false,
       isPrimary: false,
       updatedPhones: null,
@@ -94,20 +91,8 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
   handleCloseModal = () => {
     this.setState({
-      isEditModalVisible: false,
       isCreateModalVisible: false,
       isPrimary: false,
-    });
-  };
-
-  handleOpenEditModal = (phone: ISavedPhone) => {
-    const { primaryPhone } = this.props;
-    const isPrimary = !!(primaryPhone && primaryPhone.id === phone.id);
-
-    this.setState({
-      currentPhone: phone,
-      isEditModalVisible: true,
-      isPrimary,
     });
   };
 
@@ -171,7 +156,6 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
     return (
       <DisplayCard
-        onEditClick={() => this.handleOpenEditModal(phone)}
         onDeleteClick={async () => this.handlePhoneDelete(phone.id, isStarred)}
         key={`card-${phone.id}`}
         className={styles.fieldMargin}
@@ -209,12 +193,10 @@ export class PhoneInfo extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { phones, patientId, patientInfoId, primaryPhone, className } = this.props;
+    const { phones, patientId, primaryPhone, className } = this.props;
     const {
-      isEditModalVisible,
       isCreateModalVisible,
       isPrimary,
-      currentPhone,
       updatedPhones,
     } = this.state;
 
@@ -247,15 +229,6 @@ export class PhoneInfo extends React.Component<allProps, IState> {
           closePopup={this.handleCloseModal}
           patientId={patientId}
           onSaved={onSavedFn}
-        />
-        <EditPhoneModal
-          isVisible={isEditModalVisible}
-          isPrimary={isPrimary}
-          closePopup={this.handleCloseModal}
-          patientId={patientId}
-          patientInfoId={patientInfoId}
-          onSaved={this.handleEditSuccess}
-          phone={currentPhone}
         />
         <FormattedMessage id="phone.phoneNumbers">
           {(message: string) => <h3 className={styles.phoneTitle}>{message}</h3>}

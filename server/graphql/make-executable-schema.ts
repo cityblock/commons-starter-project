@@ -199,7 +199,6 @@ import {
   phoneCreate,
   phoneCreateForPatient,
   phoneDeleteForPatient,
-  phoneEdit,
 } from './phone-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
@@ -494,7 +493,6 @@ const resolveFunctions = {
     phoneCreate,
     phoneCreateForPatient,
     phoneDeleteForPatient,
-    phoneEdit,
     currentUserEdit,
     userCreate,
     userLogin,

@@ -8,7 +8,6 @@ import DisplayCard from '../../display-card';
 import FlaggableDisplayField from '../../flaggable-display-field';
 import { IEditableFieldState } from '../../patient-info';
 import CreatePhoneModal from '../create-phone-modal';
-import EditPhoneModal from '../edit-phone-modal';
 import { PhoneInfo } from '../phone-info';
 
 describe('Render Phone Info Component', () => {
@@ -123,9 +122,8 @@ describe('Render Phone Info Component', () => {
     ).toBeFalsy();
   });
 
-  it('creates the two modals', () => {
+  it('creates the one modal', () => {
     expect(wrapper.find(CreatePhoneModal)).toHaveLength(1);
-    expect(wrapper.find(EditPhoneModal)).toHaveLength(1);
 
     const createModal = wrapper.find(CreatePhoneModal).props();
     expect(createModal.isVisible).toBeFalsy();

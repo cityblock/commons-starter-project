@@ -7,9 +7,8 @@ import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
 import PatientPhone from '../../models/patient-phone';
-import Phone from '../../models/phone';
 import User from '../../models/user';
-import { createMockPhone, createPatient } from '../../spec-helpers';
+import { createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const queue = kue.createQueue();
@@ -290,41 +289,6 @@ describe('phone resolver', () => {
       expect(queue.testMode.jobs[1].data).toMatchObject({
         patientId: patient.id,
         type: 'deletePhoneNumber',
-      });
-    });
-  });
-
-  describe('edit phone', async () => {
-    it('should edit fields on phone', async () => {
-      const { patient, user } = await setup(txn);
-      const phone = await Phone.create(createMockPhone(), txn);
-      const query = `mutation {
-          phoneEdit(input: {
-            phoneId: "${phone.id}",
-            patientId: "${patient.id}",
-            phoneNumber: "222-222-2222",
-            description: "Some phone",
-          }) {
-            id, phoneNumber, type, description
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
-      expect(cloneDeep(result.data!.phoneEdit)).toMatchObject({
-        phoneNumber: '+12222222222',
-        description: 'Some phone',
-      });
-      expect(log).toBeCalled();
-
-      expect(queue.testMode.jobs.length).toBe(1);
-      expect(queue.testMode.jobs[0].data).toMatchObject({
-        patientId: patient.id,
-        type: 'editPhoneNumber',
       });
     });
   });

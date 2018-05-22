@@ -7657,24 +7657,6 @@ export interface phoneDeleteForPatientMutation {
   } | null,
 };
 
-export interface phoneEditMutationVariables {
-  phoneId: string,
-  patientId: string,
-  phoneNumber: string,
-  type?: PhoneTypeOptions | null,
-  description?: string | null,
-};
-
-export interface phoneEditMutation {
-  // Edit a phone number
-  phoneEdit:  {
-    id: string,
-    phoneNumber: string,
-    type: PhoneTypeOptions,
-    description: string | null,
-  } | null,
-};
-
 export interface progressNoteAddSupervisorNotesMutationVariables {
   progressNoteId: string,
   supervisorNotes: string,

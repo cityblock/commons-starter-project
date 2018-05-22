@@ -597,15 +597,6 @@ input PhoneInput {
   description: String
 }
 
-# Editable fields on a phone
-input PhoneEditInput {
-  phoneId: ID!
-  patientId: ID!
-  phoneNumber: String!
-  type: PhoneTypeOptions
-  description: String
-}
-
 # params for creating a phone
 input PhoneCreateInput {
   phoneNumber: String!
@@ -2608,8 +2599,6 @@ type RootMutationType {
   phoneCreate(input: PhoneCreateInput): Phone
   # Delete a phone number for a Patient
   phoneDeleteForPatient(input: PhoneDeleteForPatientInput): Phone
-  # Edit a phone number
-  phoneEdit(input: PhoneEditInput): Phone
   # Create an email for a Patient
   emailCreateForPatient(input: EmailCreateForPatientInput): Email
   # Create an email

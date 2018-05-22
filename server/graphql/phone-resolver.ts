@@ -4,7 +4,6 @@ import {
   IPhoneCreateForPatientInput,
   IPhoneCreateInput,
   IPhoneDeleteForPatientInput,
-  IPhoneEditInput,
   IRootMutationType,
 } from 'schema';
 import { addJobToQueue } from '../helpers/queue-helpers';
@@ -103,29 +102,5 @@ export async function phoneDeleteForPatient(
     });
 
     return Phone.delete(input.phoneId, txn);
-  });
-}
-
-export interface IPhoneEditOptions {
-  input: IPhoneEditInput;
-}
-
-export async function phoneEdit(
-  source: any,
-  { input }: IPhoneEditOptions,
-  { permissions, userId, logger, testTransaction }: IContext,
-): Promise<IRootMutationType['phoneEdit']> {
-  return transaction(testTransaction || Phone.knex(), async txn => {
-    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
-
-    const filtered = omitBy<IPhoneEditInput>(input, isNil);
-    logger.log(`CREATE phone for patient ${input.patientId} by ${userId}`);
-
-    addJobToQueue('patientContactEdit', {
-      patientId: input.patientId,
-      type: 'editPhoneNumber',
-    });
-
-    return Phone.edit(filtered as any, input.phoneId, txn);
   });
 }

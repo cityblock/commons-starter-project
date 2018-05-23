@@ -236,7 +236,7 @@ async function getGoogleCalendarEvents(
     pageToken,
   });
 
-  const events = response.data.items.map(item => {
+  const events = response.data.items.map((item: any) => {
     return {
       id: item.id,
       title: item.summary,
@@ -247,7 +247,7 @@ async function getGoogleCalendarEvents(
       status: item.status,
       htmlLink: item.htmlLink,
       description: item.description,
-      guests: (item.attendees || []).map(attendee => attendee.displayName || attendee.email),
+      guests: (item.attendees || []).map((attendee: any) => attendee.displayName || attendee.email),
       eventType: get(item, 'extendedProperties.shared.generatedBy') || 'cityblock',
       providerName: get(item, 'extendedProperties.shared.providerName'),
       providerCredentials: get(item, 'extendedProperties.shared.providerCredentials'),

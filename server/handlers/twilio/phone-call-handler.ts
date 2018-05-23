@@ -4,6 +4,7 @@ import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
 import { reportError } from '../../helpers/error-helpers';
+import { addJobToQueue } from '../../helpers/queue-helpers';
 import PhoneCall from '../../models/phone-call';
 import User from '../../models/user';
 
@@ -119,7 +120,7 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         recordVoicemail(twiml);
       }
 
-      await PhoneCall.create(
+      const phoneCall = await PhoneCall.create(
         {
           userId: user.id,
           contactNumber: isInbound ? From : To,
@@ -133,6 +134,14 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         },
         txn,
       );
+
+      // if outbound call not associated with patient, ensure not old number
+      if (!isInbound && !phoneCall.patientId) {
+        addJobToQueue('checkPreviousContact', {
+          userId: user.id,
+          contactNumber: phoneCall.contactNumber,
+        });
+      }
     } catch (err) {
       reportError(err, 'Error processing completed phone call', twilioPayload);
     }

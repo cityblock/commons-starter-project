@@ -14,6 +14,7 @@
     "./server/consumers/mattermost-consumer",
     "./server/consumers/task-event-consumer",
     "./server/consumers/contact-update-consumer",
+    "./server/consumers/previous-contact-consumer",
     "./server/jobs/process-voicemail"
   ],
   "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]

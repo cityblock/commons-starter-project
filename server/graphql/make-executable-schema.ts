@@ -195,11 +195,7 @@ import {
   resolvePatientScreeningToolSubmissionsForPatient,
   resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
 } from './patient-screening-tool-submission-resolver';
-import {
-  phoneCreate,
-  phoneCreateForPatient,
-  phoneDeleteForPatient,
-} from './phone-resolver';
+import { phoneCreate, phoneCreateForPatient, phoneDeleteForPatient } from './phone-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteGlassBreakCreate,

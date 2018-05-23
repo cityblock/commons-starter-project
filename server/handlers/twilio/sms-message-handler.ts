@@ -3,6 +3,7 @@ import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
 import { reportError } from '../../helpers/error-helpers';
+import { addJobToQueue } from '../../helpers/queue-helpers';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
 import pubsub from '../../subscriptions';
@@ -107,6 +108,13 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
       );
       // publish notification that message created
       publishMessage(smsMessage);
+      // if message not associated with patient, background job to ensure not old number
+      if (!smsMessage.patientId) {
+        addJobToQueue('checkPreviousContact', {
+          userId: user.id,
+          contactNumber: smsMessage.contactNumber,
+        });
+      }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);
     }

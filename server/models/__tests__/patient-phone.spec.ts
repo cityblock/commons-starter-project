@@ -236,5 +236,15 @@ describe('patient phone model', () => {
 
       expect(patientId).toBeNull();
     });
+
+    it('should return patient id if searching deleted numbers', async () => {
+      const { patient, phone } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+      await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const patientId = await PatientPhone.getPatientIdForPhoneNumber('+11234567890', txn, true);
+
+      expect(patientId).toBe(patient.id);
+    });
   });
 });

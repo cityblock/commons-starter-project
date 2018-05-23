@@ -159,13 +159,10 @@ export function getNoticeCopy(
     return `A member has been added to your care team. Please download updated contacts here: ${url}`;
   }
 
-  const preferredName = prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
+  const preferredName =
+    prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
 
-  const patientName = formatAbbreviatedName(
-    patient.firstName,
-    patient.lastName,
-    preferredName,
-  );
+  const patientName = formatAbbreviatedName(patient.firstName, patient.lastName, preferredName);
 
   if (type === 'editPreferredName') {
     return `The preferred name of ${patientName} has been updated in Commons.`;
@@ -195,13 +192,10 @@ export function getActionCopy(
     return `Please download it here: ${url}`;
   }
 
-  const preferredName = prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
+  const preferredName =
+    prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
 
-  const patientName = formatAbbreviatedName(
-    patient.firstName,
-    patient.lastName,
-    preferredName,
-  );
+  const patientName = formatAbbreviatedName(patient.firstName, patient.lastName, preferredName);
 
   return `Please delete the ${patientName} contact and download updated contacts here: ${url}`;
 }

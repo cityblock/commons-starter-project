@@ -74,16 +74,24 @@ export default class PatientPhone extends BaseModel {
   static async getPatientIdForPhoneNumber(
     phoneNumber: string,
     txn: Transaction,
+    isDeleted?: boolean,
   ): Promise<string | null> {
-    const patientId = (await PatientPhone.query(txn)
-      .innerJoinRelation('phone')
-      .where({
-        'phone.phoneNumber': phoneNumber,
-        'phone.deletedAt': null,
-        'patient_phone.deletedAt': null,
-      })
-      .pluck('patientId')
-      .first()) as any;
+    const query = isDeleted
+      ? PatientPhone.query(txn)
+          .innerJoinRelation('phone')
+          .where({
+            'phone.phoneNumber': phoneNumber,
+          })
+          .whereNotNull('patient_phone.deletedAt')
+      : PatientPhone.query(txn)
+          .innerJoinRelation('phone')
+          .where({
+            'phone.phoneNumber': phoneNumber,
+            'phone.deletedAt': null,
+            'patient_phone.deletedAt': null,
+          });
+
+    const patientId = (await query.pluck('patientId').first()) as any;
 
     return patientId || null;
   }

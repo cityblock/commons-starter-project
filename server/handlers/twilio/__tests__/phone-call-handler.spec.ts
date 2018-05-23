@@ -1,3 +1,4 @@
+import * as kue from 'kue';
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
@@ -18,6 +19,8 @@ import {
   twilioIncomingCallHandler,
   twilioOutgoingCallHandler,
 } from '../phone-call-handler';
+
+const queue = kue.createQueue();
 
 const expectedIncomingTwiml =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" timeout="20"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
@@ -48,8 +51,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('Phone Call Handler', () => {
   let txn = null as any;
 
+  beforeAll(() => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
     txn = await transaction.start(PhoneCall.knex());
+    queue.testMode.clear();
   });
 
   afterEach(async () => {
@@ -197,6 +205,41 @@ describe('Phone Call Handler', () => {
 
       expect(res.end).toHaveBeenCalledTimes(1);
       expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+      expect(queue.testMode.jobs.length).toBe(0);
+    });
+  });
+
+  it('handles a complete outbound phone call', async () => {
+    const { user } = await setup(txn);
+    await User.update(
+      user.id,
+      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+      txn,
+    );
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234522222',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        DialCallStatus: 'completed',
+        DialCallDuration: '11',
+        Direction: 'inbound',
+        CallSid: callSid,
+      },
+      query: { outbound: true },
+    });
+
+    await twilioCompleteCallHandler(req, res);
+
+    expect(res.end).toHaveBeenCalledTimes(1);
+    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+
+    expect(queue.testMode.jobs.length).toBe(1);
+    expect(queue.testMode.jobs[0].data).toMatchObject({
+      userId: user.id,
+      contactNumber: '+11234522222',
     });
   });
 });

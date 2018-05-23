@@ -194,11 +194,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
   render() {
     const { phones, patientId, primaryPhone, className } = this.props;
-    const {
-      isCreateModalVisible,
-      isPrimary,
-      updatedPhones,
-    } = this.state;
+    const { isCreateModalVisible, isPrimary, updatedPhones } = this.state;
 
     const currentPhones = updatedPhones || phones;
     const nonPrimaryPhones = primaryPhone

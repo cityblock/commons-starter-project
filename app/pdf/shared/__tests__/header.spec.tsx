@@ -8,9 +8,10 @@ import Header, { LOGO_PATH } from '../header';
 
 describe('Printable MAP Header', () => {
   const oldDate = Date.now;
+  const title = 'Test Title';
   Date.now = () => 1519836435207;
 
-  const wrapper = shallow(<Header />);
+  const wrapper = shallow(<Header title={title} />);
 
   it('renders view containers', () => {
     expect(wrapper.find(View).length).toBe(4);
@@ -23,7 +24,7 @@ describe('Printable MAP Header', () => {
 
   it('renders text for page title', () => {
     expect(wrapper.find(Text).length).toBe(1);
-    expect(wrapper.find(Text).text()).toBe(copy.map);
+    expect(wrapper.find(Text).text()).toBe(title);
   });
 
   it('renders printed on header', () => {

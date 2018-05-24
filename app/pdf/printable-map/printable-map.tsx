@@ -6,13 +6,13 @@ import {
   FullPatientForProfileFragment,
 } from '../../graphql/types';
 import Divider from '../shared/divider';
+import Empty from '../shared/empty';
+import Footer from '../shared/footer';
+import Header from '../shared/header';
 import variables from '../shared/variables/variables';
 import Concern from './concern';
 import copy from './copy/copy';
-import Empty from './empty';
-import Footer from './footer';
 import Goal from './goal';
-import Header from './header';
 import Info from './info';
 import Task from './task';
 
@@ -46,7 +46,9 @@ const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
   // only get active concerns (have been started but not completed)
   const activeConcerns = carePlan.filter(concern => !!concern.startedAt && !concern.completedAt);
 
-  const renderedCarePlan: JSX.Element[] = activeConcerns.length ? [] : [<Empty />];
+  const renderedCarePlan: JSX.Element[] = activeConcerns.length
+    ? []
+    : [<Empty label={copy.noCarePlan} />];
 
   // get each item in care plan in list to avoid deep nesting
   activeConcerns.forEach((patientConcern, i) => {
@@ -73,7 +75,7 @@ const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <Document title={copy.documentTitle}>
       <Page size="A4" style={styles.page} wrap>
-        <Header />
+        <Header title={copy.map} />
         <View style={styles.container}>
           <Divider color="darkGray" />
           <Info
@@ -84,7 +86,7 @@ const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
           />
           {renderedCarePlan}
         </View>
-        <Footer patient={patient} />
+        <Footer patient={patient} title={copy.mapAbbrev} />
       </Page>
     </Document>
   );

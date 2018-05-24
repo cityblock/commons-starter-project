@@ -21,3 +21,13 @@ export const formatPrintableMapPdfFileName = (patient: Patient): string => {
 
   return `${firstName || ''}_${formattedMiddle}${lastName || ''}_${formattedDate}_MAP`;
 };
+
+export const formatPrintableCalendarPdfFileName = (patient: Patient, startDate: Date): string => {
+  const { firstName, middleName, lastName } = patient;
+  const formattedMiddle = middleName ? `${middleName}_` : '';
+  const formattedDate = format(Date.now(), 'MMM_D_YYYY');
+  const calendarMonth = format(startDate, 'MMM_YYYY');
+
+  return `${firstName || ''}_${formattedMiddle}${lastName ||
+    ''}_${formattedDate}_Calendar_${calendarMonth}`;
+};

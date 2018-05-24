@@ -3,9 +3,9 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patientConcern } from '../../../shared/util/test-data';
 import HeaderText from '../../shared/header-text';
+import TextGroup from '../../shared/text-group';
 import copy from '../copy/copy';
 import MapSummary from '../map-summary';
-import TextGroup from '../text-group';
 
 describe('Printable MAP care plan summary component', () => {
   const wrapper = shallow(<MapSummary carePlan={[patientConcern]} />);

@@ -8,6 +8,7 @@ import copy from './copy/copy';
 
 interface IProps {
   patient: FullPatientForProfileFragment;
+  title: string;
 }
 
 const styles = StyleSheet.create({
@@ -23,11 +24,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Footer: React.StatelessComponent<IProps> = ({ patient }) => {
+const Footer: React.StatelessComponent<IProps> = ({ patient, title }) => {
   const patientName = formatPatientName(patient);
   const formattedDate = format(Date.now(), 'MMM D, YYYY');
 
-  const footerText = `${copy.mapAbbrev} ${patientName}  |  ${copy.printedOn} ${formattedDate}`;
+  const footerText = `${title} ${patientName}  |  ${copy.printedOn} ${formattedDate}`;
 
   return (
     <View style={styles.container} fixed>

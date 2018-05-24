@@ -17,6 +17,15 @@ export const getCBOReferralPdfRoute = (taskId: string, authToken: string): strin
   return `/pdf/${taskId}/referral-form.pdf?token=${authToken}`;
 };
 
+export const getPrintableCalendarPdfRoute = (
+  patientId: string,
+  month: number,
+  year: number,
+  authToken: string,
+): string => {
+  return `/pdf/${patientId}/${year}/${month}/printable-calendar.pdf?token=${authToken}`;
+};
+
 export const getPrintableMapPdfRoute = (patientId: string, authToken: string): string => {
   return `/pdf/${patientId}/printable-map.pdf?token=${authToken}`;
 };

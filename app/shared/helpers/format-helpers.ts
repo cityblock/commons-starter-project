@@ -15,6 +15,20 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 export const formatFullName = (firstName?: string | null, lastName?: string | null): string =>
   `${firstName || 'Unknown'} ${lastName || 'Unknown'}`;
 
+export const formatPhoneNumber = (phoneNumber?: string | null): string => {
+  if (!phoneNumber) {
+    return '';
+  }
+  const phoneNumberDupe = phoneNumber.slice(0).replace('+1', '');
+  if (phoneNumberDupe.length === 10) {
+    const areaCode = phoneNumberDupe.substring(0, 3);
+    const first = phoneNumberDupe.substring(3, 6);
+    const second = phoneNumberDupe.substring(6);
+    return `(${areaCode}) ${first}-${second}`;
+  }
+  return phoneNumberDupe;
+};
+
 export const formatPatientName = (patient: ShortPatientFragment) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 

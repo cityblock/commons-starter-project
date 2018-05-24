@@ -86,8 +86,7 @@ export async function resolveCalendarEventsForPatient(
     }
 
     const results = await getGoogleCalendarEventsForPatient(
-      patient.patientInfo.googleCalendarId,
-      timeMin,
+      { calendarId: patient.patientInfo.googleCalendarId, timeMin },
       { pageToken, pageSize },
       testConfig,
     );
@@ -123,8 +122,7 @@ export async function resolveCalendarEventsForCurrentUser(
 
     try {
       const results = await getGoogleCalendarEventsForCurrentUser(
-        user.email,
-        timeMin,
+        { calendarId: user.email, timeMin },
         googleAuth,
         {
           pageToken,

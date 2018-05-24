@@ -8,10 +8,10 @@ import {
   userForCareTeam,
 } from '../../../shared/util/test-data';
 import Divider from '../../shared/divider';
+import Footer from '../../shared/footer';
+import Header from '../../shared/header';
 import Concern from '../concern';
-import Footer from '../footer';
 import Goal from '../goal';
-import Header from '../header';
 import Info from '../info';
 import PrintableMap from '../printable-map';
 import Task from '../task';

@@ -2779,7 +2779,8 @@ declare module 'schema' {
     title: string;
     htmlLink: string;
     description: string | null;
-    guests: Array<string> | null;
+    location: string | null;
+    guests: Array<string>;
     eventType: GoogleCalendarEventType | null;
     providerName: string | null;
     providerCredentials: string | null;

@@ -6,6 +6,7 @@ import copy from '../copy/copy';
 import Footer from '../footer';
 
 const oldDate = Date.now;
+const title = 'test title';
 
 describe('Printable MAP footer component', () => {
   beforeAll(() => {
@@ -16,13 +17,13 @@ describe('Printable MAP footer component', () => {
   });
 
   it('renders view container', () => {
-    const wrapper = shallow(<Footer patient={patient} />);
+    const wrapper = shallow(<Footer patient={patient} title={title} />);
     expect(wrapper.find(View).length).toBe(1);
   });
 
   it('renders text with correct copy', () => {
-    const wrapper = shallow(<Footer patient={patient} />);
-    const expected = `${copy.mapAbbrev} Bob Smith  |  ${copy.printedOn} Jul 19, 2017`;
+    const wrapper = shallow(<Footer patient={patient} title={title} />);
+    const expected = `${title} Bob Smith  |  ${copy.printedOn} Jul 19, 2017`;
     expect(wrapper.find(Text).text()).toBe(expected);
   });
 });

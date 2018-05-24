@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { AxiosResponse } from 'axios';
 import { addMinutes } from 'date-fns';
 import { OAuth2Client } from 'google-auth-library';
@@ -116,19 +119,23 @@ export interface IGooglePaginationOptions {
   pageSize: number;
 }
 
+export interface IGoogleEventListOptions {
+  calendarId: string;
+  timeMin: string;
+  timeMax?: string;
+}
+
 export async function getGoogleCalendarEventsForPatient(
-  calendarId: string,
-  timeMin: string,
+  options: IGoogleEventListOptions,
   pageOptions: IGooglePaginationOptions,
   testConfig?: any,
 ) {
   const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-  return getGoogleCalendarEvents(calendarId, timeMin, jwtClient, pageOptions, testConfig);
+  return getGoogleCalendarEvents(options, jwtClient, pageOptions, testConfig);
 }
 
 export async function getGoogleCalendarEventsForCurrentUser(
-  calendarId: string,
-  timeMin: string,
+  options: IGoogleEventListOptions,
   googleAuth: GoogleAuth,
   pageOptions: IGooglePaginationOptions,
   testConfig?: any,
@@ -145,7 +152,7 @@ export async function getGoogleCalendarEventsForCurrentUser(
     expiry_date: new Date(googleAuth.expiresAt).valueOf(),
   });
 
-  return getGoogleCalendarEvents(calendarId, timeMin, oauth2Client, pageOptions, testConfig);
+  return getGoogleCalendarEvents(options, oauth2Client, pageOptions, testConfig);
 }
 
 export async function createGoogleCalendarEvent(
@@ -219,20 +226,18 @@ export function getGoogleCalendarFieldsFromSIU(data: ISchedulingMessageData) {
 }
 
 async function getGoogleCalendarEvents(
-  calendarId: string,
-  timeMin: string,
+  options: IGoogleEventListOptions,
   auth: any,
   { pageToken, pageSize }: IGooglePaginationOptions,
   testConfig?: any,
 ) {
   const calendar = google.calendar({ version: 'v3' });
   const response = await calendar.events.list({
+    ...options,
     auth,
-    calendarId,
     maxResults: pageSize,
     singleEvents: true,
     orderBy: 'startTime',
-    timeMin,
     pageToken,
   });
 
@@ -247,6 +252,7 @@ async function getGoogleCalendarEvents(
       status: item.status,
       htmlLink: item.htmlLink,
       description: item.description,
+      location: item.location,
       guests: (item.attendees || []).map((attendee: any) => attendee.displayName || attendee.email),
       eventType: get(item, 'extendedProperties.shared.generatedBy') || 'cityblock',
       providerName: get(item, 'extendedProperties.shared.providerName'),

@@ -8,6 +8,10 @@ import copy from './copy/copy';
 
 export const LOGO_PATH = `https://www.cityblock.com/static/images/cityblock_logo_blue.png`;
 
+interface IProps {
+  title: string;
+}
+
 const styles = StyleSheet.create({
   border: {
     backgroundColor: variables.blueColor,
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header: React.StatelessComponent = () => {
+const Header: React.StatelessComponent<IProps> = (props: IProps) => {
   const printDate = format(Date.now(), 'MMM D, YYYY');
 
   return (
@@ -47,7 +51,7 @@ const Header: React.StatelessComponent = () => {
       <View style={styles.main} fixed>
         <Image src={LOGO_PATH} style={styles.image} fixed />
         <Text style={styles.title} fixed>
-          {copy.map}
+          {props.title}
         </Text>
         <View style={styles.printedOn} fixed>
           <HeaderText label={copy.printedOn} />

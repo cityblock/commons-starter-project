@@ -2,9 +2,9 @@ import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import HeaderText from '../shared/header-text';
+import TextGroup from '../shared/text-group';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
-import TextGroup from './text-group';
 
 interface IProps {
   carePlan: FullPatientConcernFragment[];

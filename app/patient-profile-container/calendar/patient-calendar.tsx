@@ -15,6 +15,7 @@ import {
 import AppointmentModal from '../../shared/appointment-modal/appointment-modal';
 import RequestRefreshModal from '../../shared/appointment-modal/request-refresh-modal';
 import Calendar from '../../shared/calendar/calendar';
+import PrintCalendarModal from '../../shared/calendar/print-calendar-modal';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/patient-calendar.css';
 
@@ -45,6 +46,7 @@ type allProps = IProps & IGraphqlProps;
 interface IState {
   isAppointmentModalVisible: boolean;
   createCalendarError?: ApolloError | null;
+  isPrintModalVisible: boolean;
   isRefreshModalVisible: boolean;
   refreshType: 'create' | 'edit';
 }
@@ -54,6 +56,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     super(props);
     this.state = {
       isAppointmentModalVisible: false,
+      isPrintModalVisible: false,
       isRefreshModalVisible: false,
       refreshType: 'create',
     };
@@ -105,6 +108,14 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     }
   };
 
+  handlePrintCalendarClick = () => {
+    this.setState({ isPrintModalVisible: true });
+  };
+
+  handlePrintModalClose = () => {
+    this.setState({ isPrintModalVisible: false });
+  };
+
   render() {
     const {
       isLoading,
@@ -117,6 +128,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     const {
       isAppointmentModalVisible,
       createCalendarError,
+      isPrintModalVisible,
       isRefreshModalVisible,
       refreshType,
     } = this.state;
@@ -134,9 +146,18 @@ export class PatientCalendar extends React.Component<allProps, IState> {
       />
     ) : null;
 
+    const printButton = googleCalendarId ? (
+      <Button
+        messageId="calendar.print"
+        onClick={this.handlePrintCalendarClick}
+        className={styles.button}
+      />
+    ) : null;
+
     return (
       <React.Fragment>
         <div className={styles.navBar}>
+          {printButton}
           {calendarButton}
           <Button
             messageId="calendar.addAppointment"
@@ -165,6 +186,11 @@ export class PatientCalendar extends React.Component<allProps, IState> {
           onClose={this.handleRefreshClose}
           onRequestRefresh={this.handleRefreshRefetchAndClose}
           refreshType={refreshType}
+        />
+        <PrintCalendarModal
+          isVisible={isPrintModalVisible}
+          patientId={match.params.patientId}
+          onClose={this.handlePrintModalClose}
         />
       </React.Fragment>
     );

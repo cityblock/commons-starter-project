@@ -435,6 +435,7 @@ export const ENGLISH_TRANSLATION = {
     'calendar.openCalendar': 'Open Google cal',
     'calendar.addAppointment': 'Add appointment',
     'calendar.edit': 'Edit appointment',
+    'calendar.print': 'Print',
     'appointmentModal.title': 'Add an appointment',
     'appointmentModal.submit': 'Create appointment',
     'appointmentModal.cancel': 'Cancel',
@@ -455,6 +456,10 @@ export const ENGLISH_TRANSLATION = {
     'appointmentModal.locationPlaceholder': 'Select location of appointment...',
     'appointmentModal.externalLocation': 'External location',
     'appointmentModal.externalLocationPlaceholder': 'Enter where the appointment is...',
+    'printCalendarModal.title': 'Print member calendar',
+    'printCalendarModal.cancel': 'Cancel',
+    'printCalendarModal.print': 'Print',
+    'printCalendarModal.printError': 'There was an error generating your PDF. Try Again',
     'refreshModal.editTitle': 'Editing the appointment...',
     'refreshModal.editSubTitle':
       'The appointment is being edited on the Google calendar in a new tab.\n Once the changes have been saved in the Google calendar, click "refesh" to update the appointments in Commons.',
@@ -1034,5 +1039,6 @@ export const ENGLISH_TRANSLATION = {
     'myTasks.sortBy': 'Sort by:',
     'myTasks.assigned': 'Assigned',
     'myTasks.following': 'Following',
+    'monthSelect.placeholder': 'Select a month...',
   },
 };

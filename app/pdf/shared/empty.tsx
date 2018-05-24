@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import variables from '../shared/variables/variables';
-import copy from './copy/copy';
+
+interface IProps {
+  label: string;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -21,10 +24,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const Empty: React.StatelessComponent = () => {
+const Empty: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{copy.noCarePlan}</Text>
+      <Text style={styles.text}>{props.label}</Text>
     </View>
   );
 };

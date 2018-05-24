@@ -10,7 +10,11 @@ import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
-import { renderCBOReferralFormPdf, renderPrintableMapPdf } from './handlers/pdf/render-pdf';
+import {
+  renderCBOReferralFormPdf,
+  renderPrintableCalendarPdf,
+  renderPrintableMapPdf,
+} from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRedisHandler } from './handlers/pingdom/check-redis-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
@@ -129,6 +133,7 @@ export default async (
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPdf);
   app.get('/pdf/:patientId/printable-map.pdf', renderPrintableMapPdf);
+  app.get('/pdf/:patientId/:year/:month/printable-calendar.pdf', renderPrintableCalendarPdf);
 
   // Twilio SMS Messages and Calls
   app.post(

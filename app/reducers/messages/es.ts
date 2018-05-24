@@ -1004,5 +1004,6 @@ export const SPANISH_TRANSLATION = {
     'myTasks.sortBy': 'Sort by:',
     'myTasks.assigned': 'Assigned',
     'myTasks.following': 'Following',
+    'monthSelect.placeholder': 'Select a month...',
   },
 };

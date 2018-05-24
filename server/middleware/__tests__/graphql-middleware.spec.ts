@@ -4,7 +4,7 @@ import User from '../../models/user';
 import { graphqlMiddleware } from '../graphql-middleware';
 
 describe('graphqlMiddleware', () => {
-  it.only('does not error on setup', async () => {
+  it('does not error on setup', async () => {
     const request = httpMocks.createRequest({
       headers: {
         auth_token: 'foo',

@@ -468,19 +468,24 @@ describe('risk area model', () => {
 
       const fullThreeSixtySummary = await RiskArea.getThreeSixtySummaryForPatient(patient.id, txn);
       expect(fullThreeSixtySummary.riskAreas.length).toEqual(2);
-      expect(fullThreeSixtySummary.riskAreas[0].riskArea.id).toEqual(riskArea.id);
-      expect(fullThreeSixtySummary.riskAreas[1].riskArea.id).toEqual(riskArea2.id);
-      expect(fullThreeSixtySummary.riskAreas[0].scoreData.forceHighRisk).toEqual(false);
-      expect(fullThreeSixtySummary.riskAreas[0].scoreData.score).toEqual(1);
-      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).toContain(
-        'loves writing tests summary text!',
+
+      expect(fullThreeSixtySummary.riskAreas).toContainEqual(
+        expect.objectContaining({
+          riskArea: expect.objectContaining({ id: riskArea2.id }),
+          scoreData: expect.objectContaining({ forceHighRisk: true, score: 0 }),
+          summaryData: expect.objectContaining({
+            summary: expect.arrayContaining(['really hates writing tests summary text!']),
+          }),
+        }),
       );
-      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).not.toContain(
-        'hates writing tests summary text!',
-      );
-      expect(fullThreeSixtySummary.riskAreas[1].scoreData.forceHighRisk).toEqual(true);
-      expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary).toContain(
-        'really hates writing tests summary text!',
+      expect(fullThreeSixtySummary.riskAreas).toContainEqual(
+        expect.objectContaining({
+          riskArea: expect.objectContaining({ id: riskArea.id }),
+          scoreData: expect.objectContaining({ forceHighRisk: false, score: 1 }),
+          summaryData: expect.objectContaining({
+            summary: expect.arrayContaining(['loves writing tests summary text!']),
+          }),
+        }),
       );
     });
   });

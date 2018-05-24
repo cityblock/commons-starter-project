@@ -173,7 +173,7 @@ describe('patient risk area assessment submission model', () => {
         valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
-        summaryText: 'summary text!',
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       },
       txn,
     );
@@ -239,7 +239,7 @@ describe('patient risk area assessment submission model', () => {
     expect(completedSubmission.carePlanSuggestions).toHaveLength(2);
 
     // Ensure scores are saved
-    expect(completedSubmission.forceHighRisk).toBeFalsy();
+    expect(completedSubmission.forceHighRisk).toBeTruthy();
     expect(completedSubmission.score).toBe(1);
 
     const suggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);

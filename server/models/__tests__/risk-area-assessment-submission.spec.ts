@@ -1,5 +1,10 @@
 import { transaction, Transaction } from 'objection';
-import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
+import {
+  AnswerTypeOptions,
+  AnswerValueTypeOptions,
+  RiskAdjustmentTypeOptions,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
 
 import {
@@ -156,6 +161,7 @@ describe('patient risk area assessment submission model', () => {
         valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
+        riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
       },
       txn,
     );
@@ -167,6 +173,7 @@ describe('patient risk area assessment submission model', () => {
         valueType: 'number' as AnswerValueTypeOptions,
         order: 1,
         inSummary: false,
+        summaryText: 'summary text!',
       },
       txn,
     );
@@ -230,6 +237,10 @@ describe('patient risk area assessment submission model', () => {
     // score the submission
     const completedSubmission = await RiskAreaAssessmentSubmission.complete(submission.id, txn);
     expect(completedSubmission.carePlanSuggestions).toHaveLength(2);
+
+    // Ensure scores are saved
+    expect(completedSubmission.forceHighRisk).toBeFalsy();
+    expect(completedSubmission.score).toBe(1);
 
     const suggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
     expect(suggestions).toHaveLength(2);

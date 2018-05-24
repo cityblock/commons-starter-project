@@ -26,7 +26,10 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
   user: User;
   patientAnswers: PatientAnswer[];
   completedAt: string;
+  score: number;
+  forceHighRisk: boolean;
   carePlanSuggestions: CarePlanSuggestion[];
+  summaryTextAtCompletion: string[];
 
   static tableName = 'risk_area_assessment_submission';
 
@@ -43,6 +46,8 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       updatedAt: { type: 'string' },
       completedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      score: { type: 'number' },
+      forceHighRisk: { type: 'boolean' },
     },
     required: ['riskAreaId', 'patientId', 'userId'],
   };
@@ -146,18 +151,25 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       );
     }
 
-    const submission = await this.query(txn)
+    const riskScore = await RiskArea.getRiskScoreForPatient(
+      riskAreaAssessmentSubmission.riskAreaId,
+      riskAreaAssessmentSubmission.patientId,
+      txn,
+    );
+
+    await createSuggestionsForRiskAreaAssessmentSubmission(
+      riskAreaAssessmentSubmission.patientId,
+      riskAreaAssessmentSubmission.id,
+      txn,
+    );
+
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(riskAreaAssessmentSubmissionId, {
         completedAt: new Date().toISOString(),
+        score: riskScore.score || 0,
+        forceHighRisk: riskScore.forceHighRisk,
       });
-
-    await createSuggestionsForRiskAreaAssessmentSubmission(
-      submission.patientId,
-      submission.id,
-      txn,
-    );
-    return this.get(riskAreaAssessmentSubmissionId, txn);
   }
 
   static async get(

@@ -4,6 +4,7 @@ import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
+import { isArray } from 'lodash';
 import { Transaction } from 'objection';
 import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
@@ -95,29 +96,27 @@ export const logGraphQLContext = (
 ) => {
   const { variables } = req.body;
 
-  const traceAgent = trace.get();
-  const childSpan = traceAgent.createChildSpan({ name: req.body.operationName });
-  const formattedQuery =
-    req.body && req.body.query ? req.body.query.replace(/\s*\n\s*/g, ' ') : 'no query';
+  const requests = isArray(req.body) ? req.body : [req.body];
+  requests.forEach(request => {
+    const formattedQuery =
+      request && request.query ? request.query.replace(/\s*\n\s*/g, ' ') : 'no query';
 
-  logger.log(
-    `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
-      variables,
-    )}, operation: ${req.body.operationName}, query: ${formattedQuery}`,
-  );
+    logger.log(
+      `### REQUEST ### userId: ${userId}, permissions: ${permissions}, variables: ${JSON.stringify(
+        variables,
+      )}, operation: ${request.operationName}, query: ${formattedQuery}`,
+    );
+  });
 
   // Overwrites stubbed response in tests so cannot run in tests
   if (config.NODE_ENV !== 'test') {
     // Monkey patch res.write
     const originalWrite = res.write;
     res.write = (data: string) => {
-      childSpan.endSpan();
       switch (res.statusCode) {
         case 200:
           logger.log(
-            `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, operation: ${
-              req.body.operationName
-            }, data: ${data}`,
+            `### RESPONSE ### userId: ${userId}, permissions: ${permissions}, data: ${data}`,
           );
           break;
         default:

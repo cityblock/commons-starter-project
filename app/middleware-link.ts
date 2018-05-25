@@ -1,7 +1,7 @@
 import { ApolloLink } from 'apollo-link';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { setContext } from 'apollo-link-context';
 import { ErrorLink } from 'apollo-link-error';
-import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
@@ -21,7 +21,7 @@ export const debouncedSetLastAction = throttle(setLastAction, 500, {
 });
 
 export const getMiddlewareLink = () => {
-  const httpLink = new HttpLink({ uri: '/graphql' });
+  const httpLink = new BatchHttpLink({ uri: '/graphql' });
 
   const subscriptionClient = new SubscriptionClient(SUBSCRIPTIONS_ENDPOINT, {
     reconnect: true,

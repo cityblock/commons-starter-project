@@ -72,7 +72,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
       close={[MockFunction]}
       disabled={false}
       onChange={[Function]}
-      patientAnswers={undefined}
       progressNote={
         Object {
           "completedAt": null,
@@ -434,7 +433,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
       close={[MockFunction]}
       disabled={false}
       onChange={[Function]}
-      patientAnswers={undefined}
       progressNote={
         Object {
           "completedAt": null,

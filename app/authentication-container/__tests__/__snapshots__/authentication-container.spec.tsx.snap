@@ -28,6 +28,12 @@ ShallowWrapper {
         "calls": Array [
           Array [],
         ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
       }
     }
     isAuthenticated={true}
@@ -39,6 +45,12 @@ ShallowWrapper {
           Array [
             "es",
           ],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
         ],
       }
     }
@@ -64,6 +76,16 @@ ShallowWrapper {
           Array [
             null,
           ],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
         ],
       }
     }

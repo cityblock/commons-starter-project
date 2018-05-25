@@ -37,6 +37,7 @@ describe('Render Patient Demographics Component', () => {
       }}
       routeBase={'/foo/bar'}
       onChange={onChange}
+      staticContext={{} as any}
       location={location}
       match={match}
       history={history}

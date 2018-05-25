@@ -33,11 +33,7 @@ exports[`renders question 1`] = `
         className="input"
         id=""
         name="title"
-        onBlur={undefined}
         onChange={[Function]}
-        onFocus={undefined}
-        onKeyDown={undefined}
-        pattern={undefined}
         placeholder="Enter question title"
         required={false}
         type="text"
@@ -47,11 +43,7 @@ exports[`renders question 1`] = `
         className="input"
         id=""
         name="order"
-        onBlur={undefined}
         onChange={[Function]}
-        onFocus={undefined}
-        onKeyDown={undefined}
-        pattern={undefined}
         placeholder="Enter question order"
         required={false}
         type="text"
@@ -59,7 +51,6 @@ exports[`renders question 1`] = `
       />
       <select
         className="select noValue"
-        disabled={undefined}
         name="applicableIfType"
         onChange={[Function]}
         required={true}
@@ -72,13 +63,11 @@ exports[`renders question 1`] = `
           Select an applicable if type (required!)
         </option>
         <option
-          disabled={undefined}
           value="oneTrue"
         >
           One true
         </option>
         <option
-          disabled={undefined}
           value="allTrue"
         >
           All true
@@ -86,7 +75,6 @@ exports[`renders question 1`] = `
       </select>
       <select
         className="select"
-        disabled={undefined}
         name="answerType"
         onChange={[Function]}
         required={true}
@@ -99,25 +87,21 @@ exports[`renders question 1`] = `
           Select an answer type (required!)
         </option>
         <option
-          disabled={undefined}
           value="dropdown"
         >
           Dropdown
         </option>
         <option
-          disabled={undefined}
           value="radio"
         >
           Radio
         </option>
         <option
-          disabled={undefined}
           value="freetext"
         >
           Free Text
         </option>
         <option
-          disabled={undefined}
           value="multiselect"
         >
           Multiselect
@@ -125,10 +109,8 @@ exports[`renders question 1`] = `
       </select>
       <select
         className="select noValue"
-        disabled={undefined}
         name="hasOtherTextAnswer"
         onChange={[Function]}
-        required={undefined}
         value=""
       >
         <option
@@ -138,13 +120,11 @@ exports[`renders question 1`] = `
           Should this question have an "other" answer?
         </option>
         <option
-          disabled={undefined}
           value="true"
         >
           Yes
         </option>
         <option
-          disabled={undefined}
           value="false"
         >
           No

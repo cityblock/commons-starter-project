@@ -72,9 +72,7 @@ exports[`renders header 1`] = `
         <svg
           aria-hidden="true"
           className="MuiSvgIcon-root-1 icon white calendarIcon"
-          color={undefined}
           focusable="false"
-          onClick={undefined}
           viewBox="0 0 24 24"
         >
           <g>
@@ -102,9 +100,7 @@ exports[`renders header 1`] = `
         <svg
           aria-hidden="true"
           className="MuiSvgIcon-root-1 icon white zendeskIcon"
-          color={undefined}
           focusable="false"
-          onClick={undefined}
           viewBox="0 0 24 24"
         >
           <g>

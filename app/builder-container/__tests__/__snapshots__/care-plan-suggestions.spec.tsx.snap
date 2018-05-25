@@ -28,7 +28,6 @@ exports[`renders care plan suggestions 1`] = `
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root-1 icon hover"
-              color={undefined}
               focusable="false"
               onClick={[Function]}
               viewBox="0 0 24 24"
@@ -65,7 +64,6 @@ exports[`renders care plan suggestions 1`] = `
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root-1 icon hover"
-              color={undefined}
               focusable="false"
               onClick={[Function]}
               viewBox="0 0 24 24"
@@ -116,10 +114,8 @@ exports[`renders care plan suggestions 1`] = `
     >
       <select
         className="select noValue"
-        disabled={undefined}
         name="suggestionType"
         onChange={[Function]}
-        required={undefined}
         value=""
       >
         <option
@@ -129,13 +125,11 @@ exports[`renders care plan suggestions 1`] = `
           Select a type
         </option>
         <option
-          disabled={undefined}
           value="concern"
         >
           Concern
         </option>
         <option
-          disabled={undefined}
           value="goal"
         >
           Goal/Tasks

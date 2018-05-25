@@ -43,7 +43,6 @@ exports[`renders patient panel container correctly 1`] = `
             id="showAllPatients-true"
             name="showAllPatients"
             onChange={[Function]}
-            onClick={undefined}
             readOnly={false}
             type="radio"
             value="true"
@@ -64,7 +63,6 @@ exports[`renders patient panel container correctly 1`] = `
             id="showAllPatients-false"
             name="showAllPatients"
             onChange={[Function]}
-            onClick={undefined}
             readOnly={false}
             type="radio"
             value="false"
@@ -119,7 +117,6 @@ exports[`renders patient panel container correctly 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Filter Panel
       </label>
@@ -179,13 +176,11 @@ exports[`renders patient panel container correctly 1`] = `
       >
         <label
           className="label"
-          htmlFor={undefined}
         >
           Age
         </label>
         <select
           className="select large"
-          disabled={undefined}
           name="ageRange"
           onChange={[Function]}
           required={true}
@@ -198,61 +193,51 @@ exports[`renders patient panel container correctly 1`] = `
             Select age range
           </option>
           <option
-            disabled={undefined}
             value="endTo19"
           >
             19 and under
           </option>
           <option
-            disabled={undefined}
             value="20To24"
           >
             20 - 24 years old
           </option>
           <option
-            disabled={undefined}
             value="25To29"
           >
             25 - 29 years old
           </option>
           <option
-            disabled={undefined}
             value="30To34"
           >
             30 - 34 years old
           </option>
           <option
-            disabled={undefined}
             value="35To39"
           >
             35 - 39 years old
           </option>
           <option
-            disabled={undefined}
             value="40To49"
           >
             40 - 49 years old
           </option>
           <option
-            disabled={undefined}
             value="50To59"
           >
             50 - 59 years old
           </option>
           <option
-            disabled={undefined}
             value="60To69"
           >
             60 - 69 years old
           </option>
           <option
-            disabled={undefined}
             value="70To79"
           >
             70 - 79 years old
           </option>
           <option
-            disabled={undefined}
             value="80ToEnd"
           >
             80 and older
@@ -264,16 +249,13 @@ exports[`renders patient panel container correctly 1`] = `
       >
         <label
           className="label"
-          htmlFor={undefined}
         >
           Gender
         </label>
         <select
           className="select large noValue"
-          disabled={undefined}
           name="gender"
           onChange={[Function]}
-          required={undefined}
           value=""
         >
           <option
@@ -283,31 +265,26 @@ exports[`renders patient panel container correctly 1`] = `
             Select gender
           </option>
           <option
-            disabled={undefined}
             value="female"
           >
             Female
           </option>
           <option
-            disabled={undefined}
             value="male"
           >
             Male
           </option>
           <option
-            disabled={undefined}
             value="nonbinary"
           >
             Non-binary
           </option>
           <option
-            disabled={undefined}
             value="pass"
           >
             Prefer to not say
           </option>
           <option
-            disabled={undefined}
             value="selfDescribed"
           >
             Prefer to self describe
@@ -319,7 +296,6 @@ exports[`renders patient panel container correctly 1`] = `
       >
         <label
           className="label"
-          htmlFor={undefined}
         >
           Location
         </label>
@@ -327,11 +303,7 @@ exports[`renders patient panel container correctly 1`] = `
           className="input"
           id=""
           name="zip"
-          onBlur={undefined}
           onChange={[Function]}
-          onFocus={undefined}
-          onKeyDown={undefined}
-          pattern={undefined}
           placeholder="Search by zip code"
           required={false}
           type="text"
@@ -343,13 +315,11 @@ exports[`renders patient panel container correctly 1`] = `
       >
         <label
           className="label"
-          htmlFor={undefined}
         >
           Assigned to a care worker
         </label>
         <select
           className="select large noValue"
-          disabled={undefined}
           name="careWorkerId"
           onChange={[Function]}
           required={true}
@@ -368,16 +338,13 @@ exports[`renders patient panel container correctly 1`] = `
       >
         <label
           className="label"
-          htmlFor={undefined}
         >
           Patient status
         </label>
         <select
           className="select large noValue"
-          disabled={undefined}
           name="patientState"
           onChange={[Function]}
-          required={undefined}
           value=""
         >
           <option
@@ -387,43 +354,36 @@ exports[`renders patient panel container correctly 1`] = `
             Select a patient status
           </option>
           <option
-            disabled={undefined}
             value="assigned"
           >
             Assigned
           </option>
           <option
-            disabled={undefined}
             value="attributed"
           >
             Attributed
           </option>
           <option
-            disabled={undefined}
             value="consented"
           >
             Consented
           </option>
           <option
-            disabled={undefined}
             value="disenrolled"
           >
             Disenrolled
           </option>
           <option
-            disabled={undefined}
             value="enrolled"
           >
             Enrolled
           </option>
           <option
-            disabled={undefined}
             value="ineligible"
           >
             Ineligible
           </option>
           <option
-            disabled={undefined}
             value="outreach"
           >
             Outreach

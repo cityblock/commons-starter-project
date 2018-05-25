@@ -30,6 +30,7 @@ describe('Patient Table Pagination', () => {
       getQuery={createQueryString}
       pageNumber={pageNumber}
       pageSize={pageSize}
+      staticContext={{} as any}
       pageInfo={pageInfo}
       totalCount={totalCount}
     />,

@@ -33,16 +33,13 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Order:
       </label>
       <select
         className="select"
-        disabled={undefined}
         name="order"
         onChange={[Function]}
-        required={undefined}
         value="1"
       >
         <option
@@ -52,175 +49,146 @@ exports[`renders answer create-edit 1`] = `
           Select Answer order
         </option>
         <option
-          disabled={undefined}
           value="1"
         >
           1
         </option>
         <option
-          disabled={undefined}
           value="2"
         >
           2
         </option>
         <option
-          disabled={undefined}
           value="3"
         >
           3
         </option>
         <option
-          disabled={undefined}
           value="4"
         >
           4
         </option>
         <option
-          disabled={undefined}
           value="5"
         >
           5
         </option>
         <option
-          disabled={undefined}
           value="6"
         >
           6
         </option>
         <option
-          disabled={undefined}
           value="7"
         >
           7
         </option>
         <option
-          disabled={undefined}
           value="8"
         >
           8
         </option>
         <option
-          disabled={undefined}
           value="9"
         >
           9
         </option>
         <option
-          disabled={undefined}
           value="10"
         >
           10
         </option>
         <option
-          disabled={undefined}
           value="11"
         >
           11
         </option>
         <option
-          disabled={undefined}
           value="12"
         >
           12
         </option>
         <option
-          disabled={undefined}
           value="13"
         >
           13
         </option>
         <option
-          disabled={undefined}
           value="14"
         >
           14
         </option>
         <option
-          disabled={undefined}
           value="15"
         >
           15
         </option>
         <option
-          disabled={undefined}
           value="16"
         >
           16
         </option>
         <option
-          disabled={undefined}
           value="17"
         >
           17
         </option>
         <option
-          disabled={undefined}
           value="18"
         >
           18
         </option>
         <option
-          disabled={undefined}
           value="19"
         >
           19
         </option>
         <option
-          disabled={undefined}
           value="20"
         >
           20
         </option>
         <option
-          disabled={undefined}
           value="21"
         >
           21
         </option>
         <option
-          disabled={undefined}
           value="22"
         >
           22
         </option>
         <option
-          disabled={undefined}
           value="23"
         >
           23
         </option>
         <option
-          disabled={undefined}
           value="24"
         >
           24
         </option>
         <option
-          disabled={undefined}
           value="25"
         >
           25
         </option>
         <option
-          disabled={undefined}
           value="26"
         >
           26
         </option>
         <option
-          disabled={undefined}
           value="27"
         >
           27
         </option>
         <option
-          disabled={undefined}
           value="28"
         >
           28
         </option>
         <option
-          disabled={undefined}
           value="29"
         >
           29
@@ -232,7 +200,6 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Display value
       </label>
@@ -240,11 +207,7 @@ exports[`renders answer create-edit 1`] = `
         className="input"
         id=""
         name="displayValue"
-        onBlur={undefined}
         onChange={[Function]}
-        onFocus={undefined}
-        onKeyDown={undefined}
-        pattern={undefined}
         placeholder="Enter answer display value"
         required={false}
         type="text"
@@ -256,7 +219,6 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Backend value
       </label>
@@ -271,20 +233,16 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Backend value type:
       </label>
       <select
         className="select"
-        disabled={undefined}
         name="valueType"
         onChange={[Function]}
-        required={undefined}
         value="boolean"
       >
         <option
-          disabled={undefined}
           value="boolean"
         >
           true / false
@@ -296,13 +254,11 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Risk adjustment type:
       </label>
       <select
         className="select"
-        disabled={undefined}
         name="riskAdjustmentType"
         onChange={[Function]}
         required={true}
@@ -315,19 +271,16 @@ exports[`renders answer create-edit 1`] = `
           Select risk adjustment type
         </option>
         <option
-          disabled={undefined}
           value="inactive"
         >
           inactive
         </option>
         <option
-          disabled={undefined}
           value="increment"
         >
           increment
         </option>
         <option
-          disabled={undefined}
           value="forceHighRisk"
         >
           force high risk
@@ -339,7 +292,6 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Summary text
       </label>
@@ -347,11 +299,7 @@ exports[`renders answer create-edit 1`] = `
         className="input"
         id=""
         name="summaryText"
-        onBlur={undefined}
         onChange={[Function]}
-        onFocus={undefined}
-        onKeyDown={undefined}
-        pattern={undefined}
         placeholder="Enter summary text"
         required={false}
         type="text"
@@ -363,7 +311,6 @@ exports[`renders answer create-edit 1`] = `
     >
       <label
         className="label"
-        htmlFor={undefined}
       >
         Display in summary?
       </label>
@@ -379,7 +326,6 @@ exports[`renders answer create-edit 1`] = `
             id="inSummary-true"
             name="inSummary"
             onChange={[Function]}
-            onClick={undefined}
             readOnly={false}
             type="radio"
             value="true"
@@ -400,7 +346,6 @@ exports[`renders answer create-edit 1`] = `
             id="inSummary-false"
             name="inSummary"
             onChange={[Function]}
-            onClick={undefined}
             readOnly={false}
             type="radio"
             value="false"
@@ -471,10 +416,8 @@ exports[`renders answer create-edit 1`] = `
       >
         <select
           className="select noValue"
-          disabled={undefined}
           name="suggestionType"
           onChange={[Function]}
-          required={undefined}
           value=""
         >
           <option
@@ -484,13 +427,11 @@ exports[`renders answer create-edit 1`] = `
             Select a type
           </option>
           <option
-            disabled={undefined}
             value="concern"
           >
             Concern
           </option>
           <option
-            disabled={undefined}
             value="goal"
           >
             Goal/Tasks

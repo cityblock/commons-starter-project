@@ -58,7 +58,7 @@ exports[`patient profile container renders patient profile container 1`] = `
         />
       </UnderlineTabs>
     </div>
-    <UNDEFINED>
+    <React.Fragment>
       <Switch>
         <Route
           exact={true}
@@ -101,7 +101,7 @@ exports[`patient profile container renders patient profile container 1`] = `
           render={[Function]}
         />
       </Switch>
-    </UNDEFINED>
+    </React.Fragment>
   </div>
 </div>
 `;

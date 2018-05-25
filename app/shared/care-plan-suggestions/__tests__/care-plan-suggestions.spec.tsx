@@ -13,6 +13,7 @@ describe('Care Plan Suggestions Modal', () => {
       closePopup={() => true as any}
       carePlanSuggestions={[carePlanSuggestionWithConcern, carePlanSuggestionWithGoal]}
       match={{} as any}
+      staticContext={{} as any}
       history={{} as any}
       location={{} as any}
     />,

@@ -383,6 +383,15 @@ Alternatively, you can install following the instructions on the [Redis download
 
 [Kue][] comes with a barebones UI that can be used to see the status of all jobs. To see it visit localhost:3000/kue (substitute correct host depending on environment). It lives behind basic auth, and the username and password can be found either in code or in env variables.
 
+### Run PgHero (a performance dashboard for postgres)
+
+[PgHero][] is easy to run using docker if you create an endpoint for the staging postgres database.
+
+First log into Aptible and create an endpoint for the staging postgres database. Then run,
+`docker run -ti -e DATABASE_URL=GET_FROM_APTIBLE -p 8080:8080 ankane/pghero`. Then go to `localhost:8080`.
+
+You can also run this against your local commons database using `docker run -ti -e DATABASE_URL=postgresql://YOUR_NAME@docker.for.mac.host.internal:5432/commons -p 8080:8080 ankane/pghero`
+
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/
@@ -414,3 +423,4 @@ Alternatively, you can install following the instructions on the [Redis download
 [fdw]: https://www.postgresql.org/docs/10/static/sql-createforeigndatawrapper.html
 [builder stability in production]: https://docs.google.com/document/d/1BYb66YeQlRTFkdXBtPowrVvR-wyhoaNUM9Hog-7MzkI/edit#heading=h.8jov09o8e1fb
 [markdowntablemaker]: https://chrome.google.com/webstore/detail/markdowntablemaker/cofkbgfmijanlcdooemafafokhhaeold?hl=en
+[pghero]: https://github.com/ankane/pghero

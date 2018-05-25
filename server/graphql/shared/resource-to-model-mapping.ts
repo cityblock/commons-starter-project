@@ -45,7 +45,6 @@ import PatientScreeningToolSubmission from '../../models/patient-screening-tool-
 import PatientSiuEvent from '../../models/patient-siu-event';
 import PatientSocialSecurityView from '../../models/patient-social-security-view';
 import PatientState from '../../models/patient-state';
-import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import Phone from '../../models/phone';
 import PhoneCall from '../../models/phone-call';
 import ProgressNote from '../../models/progress-note';
@@ -116,7 +115,6 @@ export type ModelResource =
   | 'patientSiuEvent'
   | 'patientSocialSecurityView'
   | 'patientState'
-  | 'patientTaskSuggestion'
   | 'phone'
   | 'phoneCall'
   | 'progressNote'
@@ -191,7 +189,6 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientSiuEvent: PatientSiuEvent,
   patientSocialSecurityView: PatientSocialSecurityView,
   patientState: PatientState,
-  patientTaskSuggestion: PatientTaskSuggestion,
   phone: Phone,
   phoneCall: PhoneCall,
   progressNote: ProgressNote,

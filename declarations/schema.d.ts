@@ -1236,8 +1236,7 @@ declare module 'schema' {
     | IPatientSocialSecurity
     | ISmsMessage
     | IComputedFieldFlag
-    | IConcernDiagnosisCode
-    | IPatientTaskSuggestion;
+    | IConcernDiagnosisCode;
 
   /**
    * An object with a Globally Unique ID
@@ -5289,23 +5288,6 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-  }
-
-  interface IPatientTaskSuggestion {
-    id: string;
-    patientId: string;
-    patient: IPatient;
-    taskTemplateId: string | null;
-    taskTemplate: ITaskTemplate | null;
-    acceptedById: string | null;
-    acceptedBy: IUser | null;
-    dismissedById: string | null;
-    dismissedBy: IUser | null;
-    dismissedReason: string | null;
-    createdAt: string;
-    updatedAt: string;
-    dismissedAt: string | null;
-    acceptedAt: string | null;
   }
 }
 

@@ -67,10 +67,7 @@ export const patientCreatableAndDeletableOnlyResoruces: Resource[] = [
 
 export const patientCreatableOnlyResources: Resource[] = ['computedFieldFlag', 'quickCall'];
 
-export const patientEditableOnlyResources: Resource[] = [
-  'patientTaskSuggestion',
-  'riskAreaAssessmentSubmission',
-];
+export const patientEditableOnlyResources: Resource[] = ['riskAreaAssessmentSubmission'];
 
 export const patientNotDeletableResources: Resource[] = ['patient'];
 

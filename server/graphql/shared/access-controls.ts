@@ -34,7 +34,6 @@ export type Resource =
   | 'careTeam'
   | 'careTeamBulk'
   | 'goalSuggestion'
-  | 'patientTaskSuggestion'
   | 'taskSuggestion'
   | 'patientScreeningToolSubmission'
   | 'riskAreaAssessmentSubmission'

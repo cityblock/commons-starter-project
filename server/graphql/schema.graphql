@@ -1292,23 +1292,6 @@ type TaskTemplate implements uniqueId {
   CBOCategoryId: ID
 }
 
-type PatientTaskSuggestion implements uniqueId {
-  id: ID!
-  patientId: ID!
-  patient: Patient!
-  taskTemplateId: ID
-  taskTemplate: TaskTemplate
-  acceptedById: ID
-  acceptedBy: User
-  dismissedById: ID
-  dismissedBy: User
-  dismissedReason: String
-  createdAt: String!
-  updatedAt: String!
-  dismissedAt: String
-  acceptedAt: String
-}
-
 type CarePlanSuggestion implements uniqueId {
   id: ID!
   patientId: ID!

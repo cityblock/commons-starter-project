@@ -113,8 +113,14 @@ describe('risk area group model', () => {
     const response = await RiskAreaGroup.getForPatient(riskAreaGroup.id, patient.id, txn);
 
     expect(response.riskAreas.length).toBe(2);
-    expect(response.riskAreas[0].title).toBe(riskAreaTitle);
-    expect(response.riskAreas[0].assessmentType).toBe('manual');
+
+    expect(response.riskAreas).toContainEqual(
+      expect.objectContaining({
+        title: riskAreaTitle,
+        assessmentType: 'manual',
+      }),
+    );
+
     expect(response.riskAreas[0].questions.length).toBe(3);
     expect(response.riskAreas[0].riskAreaAssessmentSubmissions.length).toBe(1);
     expect(response.riskAreas[0].riskAreaAssessmentSubmissions[0].patientId).toBe(patient.id);
@@ -123,7 +129,7 @@ describe('risk area group model', () => {
 
     const submission = response.riskAreas[0].screeningTools[0].patientScreeningToolSubmissions[0];
 
-    // Dig into createFullRiskAreaGroupAssociations to see why this should be 1
+    // TODO: Dig into createFullRiskAreaGroupAssociations to see why this should be 1
     expect(submission.patientAnswers.length).toBe(1);
   });
 });

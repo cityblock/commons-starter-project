@@ -143,7 +143,7 @@
     "@google-cloud/logging": "1.2.0",
     "@google-cloud/storage": "1.7.0",
     "@google-cloud/trace-agent": "2.9.0",
-    "@material-ui/core": "1.0.0",
+    "@material-ui/core": "1.1.0",
     "@material-ui/icons": "1.1.0",
     "@react-pdf/core": "0.7.6",
     "@react-pdf/node": "0.7.6",

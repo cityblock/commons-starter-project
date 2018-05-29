@@ -15,7 +15,9 @@
     "./server/consumers/task-event-consumer",
     "./server/consumers/contact-update-consumer",
     "./server/consumers/previous-contact-consumer",
-    "./server/jobs/process-voicemail"
+    "./server/jobs/process-voicemail",
+    "./server/jobs/process-phone-call",
+    "./server/jobs/process-sms-message"
   ],
   "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
 }

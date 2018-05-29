@@ -88,9 +88,11 @@ describe('Mattermost', () => {
           userId: user.id,
           patientId: patient.id,
         },
-        `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${patient.id} and user: ${
-          user.id
-        }`,
+        {
+          message: `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${
+            patient.id
+          } and user: ${user.id}`,
+        },
       );
     });
   });

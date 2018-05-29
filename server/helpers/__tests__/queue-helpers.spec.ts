@@ -1,6 +1,6 @@
 import * as kue from 'kue';
 const queue = kue.createQueue();
-import { addJobToQueue } from '../queue-helpers';
+import { addJobToQueue, addProcessingJobToQueue } from '../queue-helpers';
 
 const topic = 'winterIsComing';
 const data = {
@@ -36,17 +36,35 @@ describe('Queue Helpers', () => {
       });
     });
 
-    it('adds a job to the Kue queue with custom title', () => {
+    it('adds a job to the Kue queue with custom message', () => {
       // Check that the queue is empty
       expect(queue.testMode.jobs.length).toBe(0);
 
-      addJobToQueue(topic, data, customTitle);
+      addJobToQueue(topic, data, {
+        message: customTitle,
+      });
 
       expect(queue.testMode.jobs.length).toBe(1);
+
       expect(queue.testMode.jobs[0].data).toMatchObject({
         title: customTitle,
         ...data,
       });
+    });
+  });
+
+  describe('addProcessingJobToQueue', () => {
+    it('adds a job to the Kue with specified topic', () => {
+      // Check that the queue is empty
+      expect(queue.testMode.jobs.length).toBe(0);
+
+      addProcessingJobToQueue('processVoicemail', true);
+
+      expect(queue.testMode.jobs.length).toBe(1);
+
+      expect(queue.testMode.jobs[0].type).toBe('processVoicemail');
+      expect(queue.testMode.jobs[0].data.title).toMatch('Handling processVoicemail at');
+      expect(queue.testMode.jobs[0].data.jobId).toBeTruthy();
     });
   });
 });

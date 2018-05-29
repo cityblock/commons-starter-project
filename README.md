@@ -13,9 +13,6 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 - **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
 - **Demo:** [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
 - **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
-- **Kue Staging:** [http://commons-staging.cityblock.com/kue](http://commons-staging.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
-- **Kue Demo:** [http://commons-demo.cityblock.com/kue](http://commons-demo.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
-- **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
 - **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
 - **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
   `cityblock/commons#master` are automatically deployed to staging
@@ -456,7 +453,12 @@ Alternatively, you can install following the instructions on the [Redis download
 
 ### View status of background jobs
 
-[Kue][] comes with a barebones UI that can be used to see the status of all jobs. To see it visit localhost:3000/kue (substitute correct host depending on environment). It lives behind basic auth, and the username and password can be found either in code or in env variables.
+[Kue][] comes with a barebones UI that can be used to see the status of all jobs. To see it, run one of the following commands, depending on environment, and visit localhost:8080:
+
+    yarn kue-dashboard-dev
+    yarn kue-dashboard-demo
+    yarn kue-dashboard-staging
+    yarn kue-dashboard-prod
 
 ### Run PgHero (a performance dashboard for postgres)
 

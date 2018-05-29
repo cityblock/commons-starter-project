@@ -67,7 +67,11 @@
     "jobs:process-phone-call:dev": "NODE_ENV=development node ./server-compiled/server/jobs/process-phone-call.js",
     "jobs:process-phone-call:production": "NODE_ENV=production node ./server-compiled/server/jobs/process-phone-call.js",
     "jobs:process-sms-message:dev": "NODE_ENV=development node ./server-compiled/server/jobs/process-sms-message.js",
-    "jobs:process-sms-message:production": "NODE_ENV=production node ./server-compiled/server/jobs/process-sms-message.js"
+    "jobs:process-sms-message:production": "NODE_ENV=production node ./server-compiled/server/jobs/process-sms-message.js",
+    "kue-dashboard-demo": "./scripts/aptible-kue-tunnel.sh commons-redis-demo",
+    "kue-dashboard-staging": "./scripts/aptible-kue-tunnel.sh commons-redis-staging",
+    "kue-dashboard-prod": "./scripts/aptible-kue-tunnel.sh commons-redis-production",
+    "kue-dashboard-dev": "NODE_ENV=development ./scripts/aptible-kue-tunnel.sh"
   },
   "author": "Brennan Moore",
   "jest": {

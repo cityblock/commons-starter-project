@@ -2,7 +2,6 @@ import { ErrorReporting } from '@google-cloud/error-reporting';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import { graphiqlExpress } from 'graphql-server-express';
-import * as kue from 'kue';
 import * as morgan from 'morgan';
 import { Transaction } from 'objection';
 import * as path from 'path';
@@ -127,9 +126,6 @@ export default async (
 
   // Google PubSub
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
-
-  // Kue UI
-  app.use('/kue', checkAuthMiddleware('jobManager', config.KUE_UI_PASSWORD), kue.app);
 
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPdf);

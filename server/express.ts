@@ -43,7 +43,6 @@ export default async (
   errorReporting: ErrorReporting,
   existingTxn?: Transaction,
   allowCrossDomainRequests?: boolean,
-  newrelic?: any,
 ) => {
   process.on('uncaughtException', e => {
     const text = `Uncaught Exception ${e.message} ${e.stack}`;
@@ -163,7 +162,7 @@ export default async (
   app.get('/vcf-contacts', contactsVcfHandler);
 
   // Render a blank HTML page for the react app
-  app.get('*', addSecurityHeadersMiddleware, (req, res) => renderApp(req, res, newrelic));
+  app.get('*', addSecurityHeadersMiddleware, renderApp);
 
   // Error handling middleware should be attached after all other routes and use() calls.
   app.use(errorReporting.express);

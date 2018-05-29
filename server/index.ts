@@ -1,12 +1,11 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import * as newrelic from 'newrelic';
-
 import { ErrorReporting } from '@google-cloud/error-reporting';
+import { ApolloEngine } from 'apollo-engine';
 import * as compression from 'compression';
 import * as express from 'express';
 import { execute, subscribe } from 'graphql';
-import { createServer } from 'http';
+import { Server as HttpServer } from 'http';
 import * as Knex from 'knex';
 import * as kue from 'kue';
 import { Model, Transaction } from 'objection';
@@ -63,12 +62,22 @@ export async function main(options: IMainOptions) {
     errorReporting,
     options.transaction,
     options.allowCrossDomainRequests,
-    newrelic,
   );
 
-  const ws = createServer(app);
+  const server = new HttpServer(app);
 
-  return ws.listen(app.get('port'), () => {
+  const engine = new ApolloEngine({
+    apiKey: config.ENGINE_API_KEY,
+    origins: [{ supportsBatch: true }],
+    reporting: {
+      privateHeaders: ['auth_token'],
+      noTraceErrors: true,
+      noTraceVariables: true,
+      disabled: config.NODE_ENV === 'test',
+    },
+  });
+
+  engine.listen({ port: app.get('port'), httpServer: server }, () => {
     /* tslint:disable no-unused-expression */
     new SubscriptionServer(
       {
@@ -82,12 +91,18 @@ export async function main(options: IMainOptions) {
         },
       } as any,
       {
-        server: ws,
+        server,
         path: '/subscriptions',
       },
     );
     /* tslint:enable no-unused-expression */
   });
+  return {
+    stop: async () => {
+      await engine.stop();
+      await server.close();
+    },
+  };
 }
 
 if (require.main === module) {

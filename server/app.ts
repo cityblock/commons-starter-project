@@ -1,7 +1,7 @@
 import * as express from 'express';
 import config from './config';
 
-export default function app(req: express.Request, res: express.Response, newrelic?: any) {
+export default function app(req: express.Request, res: express.Response) {
   /**
    * Why no stylesheet in dev?
    * Stylesheets are loaded by HMR in development so no need.
@@ -12,12 +12,10 @@ export default function app(req: express.Request, res: express.Response, newreli
     config.NODE_ENV !== 'development'
       ? `<link rel='stylesheet' href='/assets/styles/main.css'>`
       : '';
-  const timingHeaders = newrelic ? newrelic.getBrowserTimingHeader() : '';
   const html = `
     <!doctype html>
     <html>
       <head>
-        ${timingHeaders}
         <title>Commons | A Cityblock Health product</title>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>

@@ -49,6 +49,8 @@ export const graphqlMiddleware = async (
       context,
       formatError,
       debug: false,
+      tracing: true,
+      cacheControl: true,
     })(request, response, next);
   } catch (e) {
     errorReporting.report(e);

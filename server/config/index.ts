@@ -20,7 +20,7 @@ export default {
   GCS_PROJECT_ID: null,
   GCS_PATIENT_BUCKET: null,
   GCS_USER_BUCKET: null,
-  GCP_CREDS: null,
+  GCP_CREDS: '{}',
   TWILIO_SID: null,
   TWILIO_AUTH_TOKEN: null,
   SUBSCRIPTIONS_ENDPOINT: 'ws://localhost:3000/subscriptions',
@@ -31,5 +31,6 @@ export default {
   KUE_UI_PASSWORD: 'fake',
   CITYBLOCK_VOICEMAIL: '+16469417791',
   CITYBLOCK_ADMIN: '+17273415787',
+  ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
   ...process.env,
 };

@@ -13,6 +13,19 @@ const GRAPHQL_ROUTE = '/graphql';
 
 describe('main', () => {
   let txn = null as any;
+  let server = null as any;
+
+  beforeAll(async () => {
+    server = await main({
+      env: 'test',
+      allowCrossDomainRequests: true,
+      transaction: txn,
+    });
+  });
+
+  afterAll(async () => {
+    await server.close();
+  });
 
   beforeEach(async () => {
     txn = await transaction.start(User.knex());
@@ -26,18 +39,7 @@ describe('main', () => {
     await User.knex().raw('TRUNCATE TABLE public.clinic CASCADE');
   });
 
-  it('should be able to Initialize a server (production)', async () => {
-    const server = await main({ env: 'production', allowCrossDomainRequests: true });
-    return server.close();
-  });
-
   it('should error for invalid http methods', async () => {
-    const server = await main({
-      env: 'production',
-      allowCrossDomainRequests: true,
-      transaction: txn,
-    });
-
     const query = `query {
       currentUser {
         id, email
@@ -64,7 +66,6 @@ describe('main', () => {
         },
       ),
     ).rejects.toMatchObject(new Error('Request failed with status code 405'));
-    return server.close();
   });
 
   it('should be able to place graphql queries', async () => {
@@ -88,11 +89,6 @@ describe('main', () => {
       lastLoginAt: new Date().toISOString(),
     });
 
-    const server = await main({
-      env: 'test',
-      transaction: txn,
-      allowCrossDomainRequests: true,
-    });
     const query = `query {
         currentUser {
           id, email
@@ -119,7 +115,6 @@ describe('main', () => {
         email: 'a@b.com',
       },
     });
-    return server.close();
   });
 
   it('returns errors from graphql mutations that throw an error', async () => {
@@ -143,11 +138,6 @@ describe('main', () => {
       lastLoginAt: new Date().toISOString(),
     });
 
-    const server = await main({
-      env: 'test',
-      transaction: txn,
-      allowCrossDomainRequests: true,
-    });
     const mutation = `mutation userCreate($email: String!, $homeClinicId: ID!) {
         userCreate(input: {email: $email, homeClinicId: $homeClinicId}) {
           id, email
@@ -173,6 +163,5 @@ describe('main', () => {
       'Cannot create account: Email already exists for a@b.com',
     );
     expect(res.status).toBe(200);
-    return server.close();
   });
 });

@@ -11,7 +11,7 @@ interface IVoicemailCreate {
   jobId: string;
 }
 
-const EAGER_QUERY = 'phoneCall.[user, patient]';
+const EAGER_QUERY = 'phoneCall.[user, patient.[patientInfo]]';
 
 /* tslint:disable:member-ordering */
 export default class Voicemail extends BaseModel {

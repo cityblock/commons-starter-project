@@ -30,6 +30,7 @@ import {
 let gcsHelpers = gcsHelpersRaw as any;
 /* tslint:enable:prefer-const */
 
+const timestamp = new Date().toISOString();
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const twilioPayload = {
   status: 'completed',
@@ -65,6 +66,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
       callStatus: 'no-answer',
       twilioPayload,
       callSid,
+      twilioCreatedAt: timestamp,
+      twilioUpdatedAt: timestamp,
     },
     txn,
   );
@@ -247,6 +250,8 @@ describe('Voicemail Consumer', () => {
           callSid: 'CAfbe57a569adc67124a71a1BOGUSBOGUS',
           callStatus: 'no-answer',
           duration: 0,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );

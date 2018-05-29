@@ -36,6 +36,8 @@ interface IPhoneCallCreate {
   direction: SmsMessageDirection;
   callStatus: CallStatus;
   duration: number;
+  twilioCreatedAt: string;
+  twilioUpdatedAt: string;
   twilioPayload: object;
   callSid: string;
 }
@@ -58,6 +60,8 @@ export default class PhoneCall extends BaseModel {
   twilioPayload: object;
   callSid: string;
   voicemail: Voicemail | null;
+  twilioCreatedAt: string;
+  twilioUpdatedAt: string;
 
   static tableName = 'phone_call';
 
@@ -79,6 +83,8 @@ export default class PhoneCall extends BaseModel {
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      twilioCreatedAt: { type: 'string' },
+      twilioUpdatedAt: { type: 'string' },
     },
     required: [
       'userId',
@@ -88,6 +94,8 @@ export default class PhoneCall extends BaseModel {
       'duration',
       'twilioPayload',
       'callSid',
+      'twilioCreatedAt',
+      'twilioUpdatedAt',
     ],
   };
 

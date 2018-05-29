@@ -14,6 +14,8 @@ const MAX_VOICEMAIL_LENGTH = '120';
 // TODO: Fix type weirdness
 const VoiceResponse = (twilio as any).twiml.VoiceResponse;
 
+const timestamp = new Date().toISOString();
+
 export async function twilioIncomingCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
 
@@ -131,6 +133,8 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
           duration: DialCallDuration ? Number(DialCallDuration) : 0,
           twilioPayload,
           callSid: CallSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );

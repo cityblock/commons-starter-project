@@ -15,6 +15,7 @@ import PhoneCall from '../phone-call';
 import User from '../user';
 
 const userRole = 'admin' as UserRole;
+const timestamp = new Date().toISOString();
 const callStatus = 'completed';
 const twilioPayload = {
   To: '+17274221111',
@@ -64,6 +65,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );
@@ -90,6 +93,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );
@@ -117,6 +122,8 @@ describe('Phone Call Model', () => {
             callStatus,
             twilioPayload,
             callSid,
+            twilioCreatedAt: timestamp,
+            twilioUpdatedAt: timestamp,
           },
           txn,
         ),
@@ -143,6 +150,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );
@@ -156,6 +165,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid: 'CAgce57a569adc67124a71a10f965BOGUS',
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );
@@ -169,6 +180,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid: 'CAide57a569adc67124a71a10f965BOGUS',
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );
@@ -200,6 +213,8 @@ describe('Phone Call Model', () => {
           callStatus,
           twilioPayload,
           callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
         },
         txn,
       );

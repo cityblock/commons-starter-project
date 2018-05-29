@@ -8,6 +8,7 @@ import PhoneCall from '../phone-call';
 import User from '../user';
 import Voicemail from '../voicemail';
 
+const timestamp = new Date().toISOString();
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const twilioPayload = {
   status: 'completed',
@@ -33,6 +34,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
       callStatus: 'no-answer',
       twilioPayload,
       callSid,
+      twilioCreatedAt: timestamp,
+      twilioUpdatedAt: timestamp,
     },
     txn,
   );

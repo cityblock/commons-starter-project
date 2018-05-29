@@ -1,32 +1,23 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import * as newrelic from 'newrelic';
+
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as trace from '@google-cloud/trace-agent';
-import * as kue from 'kue';
-import config from './config';
-import Logging from './logging';
-if (config.NODE_ENV !== 'test') {
-  const credentials = JSON.parse(String(config.GCP_CREDS));
-  trace.start({
-    credentials: {
-      client_email: credentials.client_email,
-      private_key: credentials.private_key,
-    },
-    projectId: credentials.project_id,
-  });
-}
 import * as compression from 'compression';
 import * as express from 'express';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import * as Knex from 'knex';
+import * as kue from 'kue';
 import { Model, Transaction } from 'objection';
 import * as pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
+import config from './config';
 import expressConfig from './express';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { createRedisClient } from './lib/redis';
+import Logging from './logging';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
@@ -72,6 +63,7 @@ export async function main(options: IMainOptions) {
     errorReporting,
     options.transaction,
     options.allowCrossDomainRequests,
+    newrelic,
   );
 
   const ws = createServer(app);

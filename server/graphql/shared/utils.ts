@@ -1,5 +1,4 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as trace from '@google-cloud/trace-agent';
 import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
@@ -135,9 +134,6 @@ export async function getGraphQLContext(
 ): Promise<IContext> {
   const { request, response, errorReporting } = options;
 
-  const traceAgent = trace.get();
-  const childSpan = traceAgent.createChildSpan({ name: 'authentication' });
-
   let permissions: Permissions = 'black';
   let userId;
 
@@ -158,8 +154,6 @@ export async function getGraphQLContext(
       };
     }
   }
-
-  childSpan.endSpan();
 
   if (request && response) {
     logGraphQLContext(request, response, logger, userId, permissions);

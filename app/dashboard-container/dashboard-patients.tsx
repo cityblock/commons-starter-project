@@ -106,4 +106,7 @@ export class DashboardPatients extends React.Component<allProps> {
   }
 }
 
-export default compose(fetchPatientList(), withRouter)(DashboardPatients);
+export default compose(
+  fetchPatientList(),
+  withRouter,
+)(DashboardPatients);

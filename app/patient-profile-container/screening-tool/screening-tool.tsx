@@ -102,7 +102,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
 });
 
 export default compose(
-  connect<{}, IDispatchProps, IProps & IDispatchProps>(null, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps & IDispatchProps>(
+    null,
+    mapDispatchToProps,
+  ),
   graphql(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {

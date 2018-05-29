@@ -67,7 +67,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
 };
 
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps as any),
+  connect<{}, IDispatchProps, allProps>(
+    null,
+    mapDispatchToProps as any,
+  ),
   graphql(progressNoteCreateMutationGraphql as any, {
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },

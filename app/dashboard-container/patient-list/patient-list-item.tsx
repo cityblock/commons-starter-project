@@ -97,5 +97,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
 
 export default compose(
   withRouter,
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps as any),
+  connect<{}, IDispatchProps, allProps>(
+    null,
+    mapDispatchToProps as any,
+  ),
 )(PatientListItem);

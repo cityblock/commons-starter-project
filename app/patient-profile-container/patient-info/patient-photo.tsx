@@ -101,4 +101,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
   };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps as any)(PatientPhoto);
+export default connect<{}, IDispatchProps, IProps>(
+  null,
+  mapDispatchToProps as any,
+)(PatientPhoto);

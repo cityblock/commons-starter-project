@@ -40,6 +40,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
   };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps as any)(
-  AdministerScreeningTool,
-);
+export default connect<{}, IDispatchProps, IProps>(
+  null,
+  mapDispatchToProps as any,
+)(AdministerScreeningTool);

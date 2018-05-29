@@ -309,7 +309,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
 });
 
 export default compose(
-  connect<{}, IDispatchProps, IProps & IDispatchProps>(null, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps & IDispatchProps>(
+    null,
+    mapDispatchToProps,
+  ),
   graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql as any, {
     name: 'riskAreaAssessmentSubmissionComplete',
     options: {

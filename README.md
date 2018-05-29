@@ -9,22 +9,22 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 ## Meta
 
-* **State:** development
-* **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
-* **Demo:** [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
-* **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
-* **Kue Staging:** [http://commons-staging.cityblock.com/kue](http://commons-staging.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
-* **Kue Demo:** [http://commons-demo.cityblock.com/kue](http://commons-demo.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
-* **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
-* **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
-* **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
+- **State:** development
+- **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
+- **Demo:** [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
+- **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
+- **Kue Staging:** [http://commons-staging.cityblock.com/kue](http://commons-staging.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+- **Kue Demo:** [http://commons-demo.cityblock.com/kue](http://commons-demo.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+- **Kue Production:** [http://commons.cityblock.com/kue](http://commons.cityblock.com/kue) Username: jobManager, Password: KUE_UI_PASSWORD
+- **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
+- **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
   `cityblock/commons#master` are automatically deployed to staging
-* **Point People:** @zamiang, @loganhasson
-* **Stackdriver:** [https://app.google.stackdriver.com/?project=commons-183915](https://app.google.stackdriver.com/?project=commons-183915)
-* **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
-* **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
-* **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
-* **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
+- **Point People:** See [features](#features) chart below
+- **Stackdriver:** [https://app.google.stackdriver.com/?project=commons-183915](https://app.google.stackdriver.com/?project=commons-183915)
+- **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
+- **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
+- **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
+- **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
 
 ## Features
 
@@ -56,25 +56,19 @@ The goal of this section give us high visibility of both documentation and test 
 
 NOTE: This is an auto-generated table from a subset of @rachel1392's spreadsheet. If you want to update this, first update Rachel's document, then DM Brennan or run [MarkdownTableMaker][]
 
-### Installation
+## Onboarding
 
-* Install [nvm][] and node 8.11
-* Install [yarn][]
-* Create a `.env` file in the project root (see: [.env][])
-* Install [Zenhub][]
-* [Setup your local database](#create-local-postgres-database)
-* [Install Redis](#install-redis)
-* Ask a Point Person to add you as a user in staging and change your user permissions to 'green' (user role does not affect permissions).
-* [Copy staging database to your local database](#copying-staging-database-to-local-database)
+### Setup
 
-### Create test postgres database
-
-Setup your database. First install postgres 10 from brew or postgresapp.
-
-    createdb commons_test
-    psql -d commons_test -c "create extension if not exists btree_gist"
-    psql -d commons_test -c "create extension pg_trgm"
-    psql -c "alter database commons_test owner to root"
+- Install [nvm][] and node 8.11
+- Install [yarn][]
+- Create a `.env` file in the project root (see: [.env][])
+- Install [Zenhub][]
+- [Setup your local database](#create-local-postgres-database)
+- [Install Redis](#install-redis)
+- Ask a Point Person to add you as a user in staging and change your user permissions to 'green' (user role does not affect permissions).
+- [Copy staging database to your local database](#copying-staging-database-to-local-database)
+- [Create a database for running tests][#create-test-postgres-database]
 
 ### Development
 
@@ -98,13 +92,13 @@ Important: Never commit directly to the master branch. Commit to branches and en
 
 To make a change:
 
-* clone the repo locally
-* branch from master
-* make your changes
-* write and run tests for your code
-* push your branch to the remote
-* submit a pull request
-* assign another engineer on the team as a reviewer
+- clone the repo locally
+- branch from master
+- make your changes
+- write and run tests for your code
+- push your branch to the remote
+- submit a pull request
+- assign another engineer on the team as a reviewer
 
 Before you can merge your code into master, the engineer you assigned must approve your code via the
 GitHub approval UI. As the code's author, it is your responsibility to merge your code to master
@@ -125,57 +119,131 @@ The pipeline steps are:
 1.  create a release using github releases
 1.  release on production [automatic via circleci]
 
+### Automatic coding tools
+
+- Tslint
+  - enforces code quality rules (eg no-unused-vars, no-extra-bind, no-implicit-globals, prefer-promise-reject-errors)
+  - done on commit and build
+- Typescript
+  - done on commit and build
+- Stylelint (linting for css)
+  - done on build but NOT commit
+- Prettier
+  - enforces code formatting
+  - done on build
+- code/type generation
+  - [Type Generation][]
+
+### Compiling Typescript to Javascript
+
+TSC compiles both the server and the client. It adds libs to support async/await and other newer functionality so that we do not need to use Babel. Due to Node 8 not supporting es6 modules, we set TSC to use commonjs on the server and es6 on the client.
+
+- The client uses tsc from webpack and uses es6 modules (not commonjs) with bundle splitting and tree shaking enabled
+- The server is compiled just with tsc, commonjs modules and is not minified
+- Client target: latest Chrome
+- Server target: Node 8.x
+
+### Adding a feature
+
+#### Adding a model
+
+- Create a migration `yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js`
+- Add a model in `server/models/`
+- Add tests for the model in `server/models/**tests**
+- _commit that change / send a pull request_
+
+#### Adding a resolver and/or mutation in graphql
+
+- Ensure you have created the model and any associated method already
+- Add your model as a ‘type’ to server/schema.graphql
+- Add the mutation and mutation inputs within server/schema.graphql
+- Add the resolver to the bottom of schema.graphql
+- Double check that fields or inputs are required are actually required
+- Run `yarn typegen`to generate the types for the mutation inputs and return values you just created
+- Write your resolver in`server/graphql/my-model-resolver.ts`
+- Import types from`schema`to ensure that your input and return values match what you declared in the schema (graphql will also validate this at run time...but is a helpful sanity check)
+- Add your resolver methods to`server/make-executable-schema` in a way that mirrors the query and mutations
+- Write tests for the resolver and mutations
+- commit change and send a pull request
+
+#### Adding a front end feature
+
+- Write your graphql query and associated fragment if needed to app/graphql/fragments and app/graphql/queries respectively
+- Add your react component - note that we split containers by folder rather than having a ‘containers’ and ‘components’ colder’
+- Import the query types into your react component (see progress-note-container as an example)
+- Split out your various input types (IProps for input props, IStateProps for mapStateToProps return and IDispatchProps for mapDispatchToProps and IGraphqlProps for things returned from apollo graphql)
+- Write the rest of your react component in the usual react style (ie: draw the rest of the owl)
+
+### Things we have not done yet
+
+When you are for something, you are against something else. We should document our tradeoffs well. Currently we do this through the [#debt][] tag in github issues.
+
+### Security Practices
+
+- In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
+  daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
+  Lifecycle][] through security focused ts-lint rules.
+- We prefer standard or popular libraries with institutional backing
+- Commiting directly to master is disabled via Github 'Protected Branches'
+- All commits to master must be made through a pull request that is approved by another engineer
+
 ### Performing code review
 
-This is a handy checklist for when you are performing code review for others. Modified from [Fog
-Creek code review][] docs. You should respond within ~2 business hours to requests for code review.
+This is a handy checklist for when you are performing code review for others. Modified from [Fog Creek code review][] docs. You should respond within ~2 business hours to requests for code review.
 
 #### General
 
-* Does the code work? Does it perform its intended function, the logic is correct etc.
-* Is all the code easily understood?
-* Is the coding style consistent with our existing style? (linting should solve this)
-* Is there any commented out code?
-* Is there any redundant or duplicate code?
-* Is the code as modular as possible?
-* Can any of the code be replaced with library functions?
-* Can any logging or debugging code be removed?
-* Does the code explicitly return booleans? Perhaps could be written in a better way
-* Does the code wrap in a large if statement rather than early exit?
+- Does the code work? Does it perform its intended function, the logic is correct etc.
+- Is all the code easily understood?
+- Is the coding style consistent with our existing style? (linting should solve this)
+- Is there any commented out code?
+- Is there any redundant or duplicate code?
+- Is the code as modular as possible?
+- Can any of the code be replaced with library functions?
+- Can any logging or debugging code be removed?
+- Does the code explicitly return booleans? Perhaps could be written in a better way
+- Does the code wrap in a large if statement rather than early exit?
 
 #### Security
 
-* Are all data inputs checked and encoded? (GraphQl + Objection.js handle much of this for us)
-* Are access controls for data correctly checked at the API level?
-* Are invalid parameter values handled?
+- Are all data inputs checked and encoded? (GraphQl + Objection.js handle much of this for us)
+- Are access controls for data correctly checked at the API level?
+- Are invalid parameter values handled?
 
 #### Documentation
 
-* Do comments exist and describe the intent of the code if code is not easily understood?
-* Is any unusual behavior or edge-case handling described?
-* Is the use and function of third-party libraries documented?
-* Are data structures and units of measurement explained?
-* Is there any incomplete code? If so, should it be removed or flagged with a suitable marker like
+- Do comments exist and describe the intent of the code if code is not easily understood?
+- Is any unusual behavior or edge-case handling described?
+- Is the use and function of third-party libraries documented?
+- Are data structures and units of measurement explained?
+- Is there any incomplete code? If so, should it be removed or flagged with a suitable marker like
   ‘TODO’?
 
 #### Testing
 
-* Is the code testable? i.e. don’t add too many or hide dependencies, unable to initialize objects,
+- Is the code testable? i.e. don’t add too many or hide dependencies, unable to initialize objects,
   test frameworks can use methods etc.
-* Do tests exist and are they comprehensive?
-* Do unit tests actually test that the code is performing the intended functionality?
-* Could any test code be replaced with the use of an existing API?
+- Do tests exist and are they comprehensive?
+- Do unit tests actually test that the code is performing the intended functionality?
+- Could any test code be replaced with the use of an existing API?
 
-## Security Practices
+## Production
 
-* In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
-  daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
-  Lifecycle][] through security focused ts-lint rules.
-* We prefer standard or popular libraries with institutional backing
-* Commiting directly to master is disabled via Github 'Protected Branches'
-* All commits to master must be made through a pull request that is approved by another engineer
+### How deploying a production build to Aptible works
 
-## Builder in production
+Short run through of what Aptible does when deploying our app.
+
+- Open Dockerfile
+- install node modules
+- Tsc compiles the server (into /server-compiled) `yarn build-server`
+- Webpack compiles client js files (into /public with js, css, images etc) `yarn build`
+- Runs migrations (`yarn migrate`)
+- Aptible starts the server (`yarn start`) as indicated in the procfile from our compiled javascript (/server-compiled)
+- Aptible waits for the servers to come online and respond to a health check
+- Aptible points our load balancer at the new servers
+- Server renders a blank html page pointed at client.js which renders the correct route in the browser using react
+
+### Builder in production
 
 Tables represented in Builder are not editable in production. Builder is edited in staging and then deployed to production by copying the builder associated tables from staging to production. For more info, see the [builder stability in production][] document.
 
@@ -186,6 +254,13 @@ As we add models or modify tables that are represented in builder, we will need 
 After ensuring the foreign data wrapper is up to date, we then need to copy the builder tables from staging to production. If new columns or tables were added, add them to `aptible-copy-builder-staging-to-production.sql`. Then, once the migrations have run on production, run `yarn copy-builder-staging-to-production`.
 
 ## How-to
+
+### Create a test postgres database
+
+Setup your database. First install postgres 10 from brew or postgresapp.
+
+    createdb commons_test
+    psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root
 
 ### Use GraphiQL
 
@@ -424,3 +499,5 @@ You can also run this against your local commons database using `docker run -ti 
 [builder stability in production]: https://docs.google.com/document/d/1BYb66YeQlRTFkdXBtPowrVvR-wyhoaNUM9Hog-7MzkI/edit#heading=h.8jov09o8e1fb
 [markdowntablemaker]: https://chrome.google.com/webstore/detail/markdowntablemaker/cofkbgfmijanlcdooemafafokhhaeold?hl=en
 [pghero]: https://github.com/ankane/pghero
+[#debt]: https://github.com/cityblock/commons/labels/debt
+[type generation]: https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit#heading=h.9jhyau11lgxt

@@ -105,4 +105,7 @@ const withQuery = graphql(tasksQuery as any, {
   }),
 });
 
-export default compose(withRouter, withQuery)(TasksContainer) as React.ComponentClass<IProps>;
+export default compose(
+  withRouter,
+  withQuery,
+)(TasksContainer) as React.ComponentClass<IProps>;

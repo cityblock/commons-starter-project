@@ -29,7 +29,10 @@ const withErrorHandler = () => <P extends {}>(
     };
   };
 
-  return connect(null, mapDispatchToProps as any)(WithErrorHandler);
+  return connect(
+    null,
+    mapDispatchToProps as any,
+  )(WithErrorHandler);
 };
 
 export default withErrorHandler;

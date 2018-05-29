@@ -4,6 +4,7 @@
 
 import { addMinutes } from 'date-fns';
 import { graphql, print } from 'graphql';
+import * as kue from 'kue';
 import { cloneDeep } from 'lodash';
 import * as nock from 'nock';
 import { transaction, Transaction } from 'objection';
@@ -28,6 +29,8 @@ import {
   mockGoogleOauthAuthorize,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
+
+const queue = kue.createQueue();
 
 interface ISetup {
   user: User;
@@ -66,12 +69,23 @@ describe('calendar tests', () => {
   const getCalendarEventsForPatientQuery = print(getCalendarEventsForPatient);
   const getCalendarForPatientQuery = print(getCalendarForPatient);
 
+  beforeAll(async () => {
+    queue.testMode.enter();
+  });
+
   beforeEach(async () => {
+    queue.testMode.clear();
+
     txn = await transaction.start(User.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
+  });
+
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
   });
 
   describe('calendar for patient', () => {
@@ -140,10 +154,6 @@ describe('calendar tests', () => {
         .reply(200, {
           id: googleCalendarId,
         });
-
-      nock(`https://www.googleapis.com/calendar/v3/calendars/${googleCalendarId}/acl`)
-        .post('', { role: 'writer', scope: { type: 'user', value: user.email } })
-        .reply(200, {});
 
       const testConfig = mockGoogleCredentials();
 

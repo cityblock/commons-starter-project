@@ -14,7 +14,7 @@ import {
   getGoogleCalendarFieldsFromSIU,
   updateGoogleCalendarEvent,
 } from '../helpers/google-calendar-helpers';
-import { createCalendarForPatient } from '../helpers/patient-calendar-helpers';
+import { createCalendarWithPermissions } from '../helpers/patient-calendar-helpers';
 import { addJobToQueue } from '../helpers/queue-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
@@ -23,7 +23,7 @@ import Patient from '../models/patient';
 import PatientSiuEvent from '../models/patient-siu-event';
 import User from '../models/user';
 
-const CALENDAR_PERMISSION_TOPIC = 'calendarPermission';
+export const CALENDAR_PERMISSION_TOPIC = 'calendarPermission';
 const CALENDAR_EVENT_TOPIC = 'calendarEvent';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
@@ -97,37 +97,17 @@ export async function processNewSchedulingMessage(
 
   await transaction(existingTxn || CareTeam.knex(), async txn => {
     const patient = await Patient.get(patientId, txn);
-
-    const jwtClient = createGoogleCalendarAuth(testConfig) as any;
     let { googleCalendarId } = patient.patientInfo;
 
     if (!googleCalendarId) {
-      try {
-        const attributionUser = await User.findOrCreateAttributionUser(txn);
-        const careTeamRecords = await CareTeam.getCareTeamRecordsForPatient(patientId, txn);
-
-        googleCalendarId = await createCalendarForPatient(
-          patient.id,
-          attributionUser.id,
-          jwtClient,
-          txn,
-          testConfig,
-        );
-
-        careTeamRecords.map(record => {
-          return addJobToQueue(CALENDAR_PERMISSION_TOPIC, {
-            userId: record.userId,
-            userEmail: record.user.email,
-            patientId,
-            googleCalendarId,
-            transmissionId: data.transmissionId,
-          });
-        });
-      } catch (err) {
-        return Promise.reject(
-          `There was an error creating a calendar for patient: ${patientId}. ${err}`,
-        );
-      }
+      const attributionUser = await User.findOrCreateAttributionUser(txn);
+      googleCalendarId = await createCalendarWithPermissions(
+        patient.id,
+        attributionUser.id,
+        txn,
+        data.transmissionId,
+        testConfig,
+      );
     }
 
     try {

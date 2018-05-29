@@ -8,16 +8,12 @@ import {
   IRootQueryType,
 } from 'schema';
 import {
-  createGoogleCalendarAuth,
   createGoogleCalendarEventUrl,
   getGoogleCalendarEventsForCurrentUser,
   getGoogleCalendarEventsForPatient,
   getGoogleCalendarUrl,
 } from '../helpers/google-calendar-helpers';
-import {
-  addCareTeamToPatientCalendar,
-  createCalendarForPatient,
-} from '../helpers/patient-calendar-helpers';
+import { createCalendarWithPermissions } from '../helpers/patient-calendar-helpers';
 import CareTeam from '../models/care-team';
 import GoogleAuth from '../models/google-auth';
 import Patient from '../models/patient';
@@ -208,15 +204,7 @@ export async function calendarCreateForPatient(
 
     if (!calendarId) {
       try {
-        const jwtClient = createGoogleCalendarAuth(testConfig) as any;
-        calendarId = await createCalendarForPatient(
-          patient.id,
-          userId!,
-          jwtClient,
-          txn,
-          testConfig,
-        );
-        await addCareTeamToPatientCalendar(patient.id, calendarId, jwtClient, txn, testConfig);
+        calendarId = await createCalendarWithPermissions(patient.id, userId!, txn, undefined, testConfig);
       } catch (err) {
         throw new Error(`There was an error creating a calendar for patient: ${patientId}. ${err}`);
       }

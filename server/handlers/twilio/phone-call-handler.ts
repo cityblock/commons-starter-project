@@ -1,3 +1,4 @@
+import { subSeconds } from 'date-fns';
 import * as express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
@@ -13,8 +14,6 @@ const MAX_VOICEMAIL_LENGTH = '120';
 
 // TODO: Fix type weirdness
 const VoiceResponse = (twilio as any).twiml.VoiceResponse;
-
-const timestamp = new Date().toISOString();
 
 export async function twilioIncomingCallHandler(req: express.Request, res: express.Response) {
   const twiml = new VoiceResponse();
@@ -124,6 +123,9 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
         recordVoicemail(twiml);
       }
 
+      const now = new Date();
+      const duration = DialCallDuration ? Number(DialCallDuration) : 0;
+
       const phoneCall = await PhoneCall.create(
         {
           userId: user.id,
@@ -132,11 +134,11 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
             ? ('toUser' as SmsMessageDirection)
             : ('fromUser' as SmsMessageDirection),
           callStatus: DialCallStatus,
-          duration: DialCallDuration ? Number(DialCallDuration) : 0,
+          duration,
           twilioPayload,
           callSid: CallSid,
-          twilioCreatedAt: timestamp,
-          twilioUpdatedAt: timestamp,
+          twilioCreatedAt: subSeconds(now, duration).toISOString(), // created duration seconds ago
+          twilioUpdatedAt: now.toISOString(), // ended now
         },
         txn,
       );

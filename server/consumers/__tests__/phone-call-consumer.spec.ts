@@ -22,7 +22,7 @@ const fullSimId = `sim:${twilioSimId}`;
 const userPhone = '+13452343456';
 const otherPhone = '+12343458888';
 
-const timestamp = new Date().toISOString();
+const timestamp = new Date();
 
 interface ISetup {
   user: User;

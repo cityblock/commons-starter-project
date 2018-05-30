@@ -27,8 +27,8 @@ interface IProcessPhoneCallData {
 interface ITwilioPhoneCall {
   sid: string;
   parentCallSid: string | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated: Date;
+  dateUpdated: Date;
   to: string;
   from: string;
   status: CallStatus;
@@ -55,15 +55,11 @@ queue.process('processPhoneCall', async (job, done) => {
 });
 
 export async function processPhoneCalls(data: IProcessPhoneCallData, existingTxn?: Transaction) {
-  try {
-    const twilioClient = TwilioClient.get();
+  const twilioClient = TwilioClient.get();
 
-    twilioClient.calls.each((call: ITwilioPhoneCall) => {
-      processPhoneCall(call, existingTxn);
-    });
-  } catch (err) {
-    reportError(err, 'Error processing phone calls', data);
-  }
+  twilioClient.calls.each((call: ITwilioPhoneCall) => {
+    processPhoneCall(call, existingTxn);
+  });
 }
 
 export async function processPhoneCall(call: ITwilioPhoneCall, existingTxn?: Transaction) {
@@ -115,8 +111,8 @@ export async function createPhoneCall(call: ITwilioPhoneCall, existingTxn?: Tran
         duration: duration ? Number(duration) : 0,
         twilioPayload: call,
         callSid: parentCallSid || sid,
-        twilioCreatedAt: dateCreated,
-        twilioUpdatedAt: dateUpdated,
+        twilioCreatedAt: dateCreated.toISOString(),
+        twilioUpdatedAt: dateUpdated.toISOString(),
       },
       txn,
     );

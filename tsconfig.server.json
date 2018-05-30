@@ -11,6 +11,7 @@
     "./server/consumers/member-attribution-consumer",
     "./server/consumers/scheduling-consumer",
     "./server/consumers/voicemail-consumer",
+    "./server/consumers/phone-call-consumer",
     "./server/consumers/mattermost-consumer",
     "./server/consumers/task-event-consumer",
     "./server/consumers/contact-update-consumer",

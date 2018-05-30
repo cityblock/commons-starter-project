@@ -9,7 +9,7 @@ import { DIRECTION } from './sms-message';
 import User from './user';
 import Voicemail from './voicemail';
 
-type CallStatus =
+export type CallStatus =
   | 'completed'
   | 'busy'
   | 'no-answer'

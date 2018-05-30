@@ -114,7 +114,9 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
 
     try {
       if (!user) {
-        throw new Error(`There is not user with the Twilio Phone Number: ${To}`);
+        throw new Error(
+          `There is not user with the Twilio Phone Number: ${To} or Twilio SIM: ${From}`,
+        );
       }
 
       // if patient called us and no one answered, start recording voicemail

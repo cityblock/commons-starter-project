@@ -52,6 +52,8 @@
     "consume:scheduling:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/scheduling-consumer.js",
     "consume:voicemail:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/voicemail-consumer.js",
     "consume:voicemail:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/voicemail-consumer.js",
+    "consume:phone-call:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/phone-call-consumer.js",
+    "consume:phone-call:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/phone-call-consumer.js",
     "consume:mattermost:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/mattermost-consumer.js",
     "consume:mattermost:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/mattermost-consumer.js",
     "consume:task-event:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/task-event-consumer.js",

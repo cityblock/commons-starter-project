@@ -1145,7 +1145,7 @@ apollo-engine-binary-windows@0.2018.4-86-gf35bdc892:
   version "0.2018.4-86-gf35bdc892"
   resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2018.4-86-gf35bdc892.tgz#1e02f8ceb9f75ab72551f584a4730260907ef199"
 
-apollo-engine@^1.1.1:
+apollo-engine@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-1.1.1.tgz#5e0ea8f1d6d23b5b931cee5404c472893045b201"
   dependencies:
@@ -1160,7 +1160,7 @@ apollo-engine@^1.1.1:
     apollo-engine-binary-linux "0.2018.4-86-gf35bdc892"
     apollo-engine-binary-windows "0.2018.4-86-gf35bdc892"
 
-apollo-link-batch-http@^1.2.2:
+apollo-link-batch-http@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-1.2.2.tgz#4dc98e16dca063cc66db3311cc71a855a4bac9c9"
   dependencies:

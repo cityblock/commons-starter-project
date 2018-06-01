@@ -84,5 +84,5 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): IDispatchProps => {
 
 export default connect<IStateProps, IDispatchProps, IProps>(
   mapStateToProps as (args?: any) => IStateProps,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(LeftNavWidget);

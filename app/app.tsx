@@ -50,13 +50,15 @@ export default class App extends React.Component<IProps> {
 
   render() {
     return (
-      <ApolloProvider client={this.props.client}>
-        <Provider store={this.props.store}>
-          <ReduxConnectedIntlProvider>
-            <BrowserRouter getUserConfirmation={this.getUserConfirmation}>{Routes}</BrowserRouter>
-          </ReduxConnectedIntlProvider>
-        </Provider>
-      </ApolloProvider>
+      <React.StrictMode>
+        <ApolloProvider client={this.props.client}>
+          <Provider store={this.props.store}>
+            <ReduxConnectedIntlProvider>
+              <BrowserRouter getUserConfirmation={this.getUserConfirmation}>{Routes}</BrowserRouter>
+            </ReduxConnectedIntlProvider>
+          </Provider>
+        </ApolloProvider>
+      </React.StrictMode>
     );
   }
 }

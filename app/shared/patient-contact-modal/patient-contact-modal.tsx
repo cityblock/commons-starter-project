@@ -1,10 +1,10 @@
 import { get, isNil } from 'lodash';
 import * as React from 'react';
 import {
+  patientContactCreateMutationVariables,
+  patientContactEditMutationVariables,
   AddressInput,
-  EmailInput,
-  PatientRelationOptions,
-  PhoneCreateInput,
+  FullPatientContactFragment,
   PhoneTypeOptions,
 } from '../../graphql/types';
 import Modal from '../library/modal/modal';
@@ -13,32 +13,19 @@ import PatientProxyForm from './patient-proxy-form';
 
 export type ContactType = 'healthcareProxy' | 'familyMember' | 'emergencyContact';
 
-export interface IPatientContact {
-  firstName: string;
-  lastName: string;
-  relationToPatient: PatientRelationOptions;
-  relationFreeText?: string | null;
-  phone: PhoneCreateInput;
-  email?: EmailInput | null;
-  address?: AddressInput | null;
-  description?: string | null;
-  isHealthcareProxy?: boolean | null;
-  isEmergencyContact?: boolean | null;
-  canContact?: boolean | null;
-}
-
 interface IProps {
-  saveContact: (patientContact: IPatientContact) => Promise<any>;
+  saveContact: (patientContact: any) => Promise<any>; // NOTE: Patient contact should be either the create or edit mutation variables
   closePopup: () => void;
   onSaved: (response: any) => void;
   isVisible: boolean;
   contactType?: ContactType;
-  patientContact?: IPatientContact | null;
+  patientContact?: FullPatientContactFragment | null;
   titleMessageId?: string;
   subTitleMessageId?: string;
 }
 
 interface IEditableFieldState {
+  id: string | null;
   firstName?: string | null;
   lastName?: string | null;
   relationToPatient?: string | null;
@@ -62,12 +49,41 @@ type allState = IState & IEditableFieldState;
 const REQUIRED_FIELDS = ['firstName', 'lastName', 'phoneNumber', 'phoneType', 'relationToPatient'];
 
 class PatientContactModal extends React.Component<IProps, allState> {
+  static getDerivedStateFromProps(nextProps: IProps, prevState: allState) {
+    const { patientContact, contactType } = nextProps;
+    const oldPatientContact = prevState;
+
+    if (contactType === 'emergencyContact') {
+      return { ...prevState, isEmergencyContact: true };
+    }
+
+    if (patientContact) {
+      if (!oldPatientContact || !oldPatientContact.id) {
+        return {
+          id: patientContact.id,
+          firstName: patientContact.firstName,
+          lastName: patientContact.lastName,
+          relationToPatient: patientContact.relationToPatient,
+          relationFreeText: patientContact.relationFreeText,
+          description: patientContact.description,
+          emailAddress: get(patientContact, 'email.emailAddress'),
+          phoneNumber: get(patientContact, 'phone.phoneNumber'),
+          phoneType: get(patientContact, 'phone.type'),
+          address: patientContact.address,
+          isEmergencyContact: patientContact.isEmergencyContact,
+          canContact: patientContact.canContact,
+        };
+      }
+    }
+  }
+
   constructor(props: IProps) {
     super(props);
     const { contactType } = props;
     const patientContact = props.patientContact || ({} as any);
 
     this.state = {
+      id: patientContact.id,
       firstName: patientContact.firstName,
       lastName: patientContact.lastName,
       relationToPatient: patientContact.relationToPatient,
@@ -80,31 +96,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
       isEmergencyContact: patientContact.isEmergencyContact || contactType === 'emergencyContact',
       canContact: patientContact.canContact,
     };
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
-    const { patientContact, contactType } = nextProps;
-    const oldPatientContact = this.props.patientContact;
-
-    if (contactType === 'emergencyContact') {
-      this.setState({ isEmergencyContact: true });
-    }
-
-    if (patientContact && !oldPatientContact) {
-      this.setState({
-        firstName: patientContact.firstName,
-        lastName: patientContact.lastName,
-        relationToPatient: patientContact.relationToPatient,
-        relationFreeText: patientContact.relationFreeText,
-        description: patientContact.description,
-        emailAddress: get(patientContact, 'email.emailAddress'),
-        phoneNumber: get(patientContact, 'phone.phoneNumber'),
-        phoneType: get(patientContact, 'phone.type'),
-        address: patientContact.address,
-        isEmergencyContact: patientContact.isEmergencyContact,
-        canContact: patientContact.canContact,
-      });
-    }
   }
 
   clearState() {
@@ -194,7 +185,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       email: isNil(emailAddress) ? null : { emailAddress },
       address: this.getContactAddress(),
       relationFreeText,
-    } as any;
+    } as patientContactCreateMutationVariables | patientContactEditMutationVariables;
 
     if (contactType === 'healthcareProxy') {
       updatedPatientContact.isHealthcareProxy = true;

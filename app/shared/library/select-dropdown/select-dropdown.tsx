@@ -37,7 +37,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // needed to detect if clicking away from dropdown menu
     document.addEventListener('click', this.onClickAway as any, false);
   }

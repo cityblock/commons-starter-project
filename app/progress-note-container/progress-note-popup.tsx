@@ -107,18 +107,18 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     this.updateReadyToSubmit(this.props);
   }
 
-  componentWillReceiveProps(newProps: allProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const currentProgressNote = this.props.progressNote;
-    const newProgressNote = newProps.progressNote;
+    const newProgressNote = nextProps.progressNote;
     const progressNoteChanged = currentProgressNote.id !== newProgressNote.id;
 
-    if (progressNoteChanged && newProps.currentUser) {
-      const isInSupervisorMode = getIsInSupervisorMode(newProps.currentUser, newProgressNote);
+    if (progressNoteChanged && nextProps.currentUser) {
+      const isInSupervisorMode = getIsInSupervisorMode(nextProps.currentUser, newProgressNote);
       this.setState({
         isInSupervisorMode,
       });
     }
-    this.updateReadyToSubmit(newProps);
+    this.updateReadyToSubmit(nextProps);
   }
 
   updateProgressNote = async (options: IUpdateProgressNoteOptions) => {

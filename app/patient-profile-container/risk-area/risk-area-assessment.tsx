@@ -82,7 +82,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     this.state = this.getDefaultState();
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const {
       riskAreaAssessmentSubmissionCreate,
       riskAreaId,
@@ -311,7 +311,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
 export default compose(
   connect<{}, IDispatchProps, IProps & IDispatchProps>(
     null,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
   graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql as any, {
     name: 'riskAreaAssessmentSubmissionComplete',

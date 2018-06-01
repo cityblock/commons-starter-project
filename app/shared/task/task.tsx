@@ -54,13 +54,9 @@ interface IState {
 type allProps = IProps & IGraphqlProps & IRouterProps;
 
 export class Task extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      deleteConfirmation: false,
-    };
-  }
+  state = {
+    deleteConfirmation: false,
+  };
 
   componentDidMount() {
     const { taskId, dismissTaskNotifications } = this.props;
@@ -179,10 +175,11 @@ export class Task extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { task } = this.props;
-    if (this.props.taskLoading) {
+    const { task, taskLoading } = this.props;
+    const { deleteConfirmation } = this.state;
+    if (taskLoading) {
       return this.renderLoading();
-    } else if (this.state.deleteConfirmation) {
+    } else if (deleteConfirmation) {
       return this.renderConfirmDelete();
     } else if (task) {
       return this.renderTask(task);

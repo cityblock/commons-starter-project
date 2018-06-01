@@ -35,14 +35,14 @@ describe('Render External Provider Modal Component', () => {
     const form = wrapper.find(PatientExternalProviderForm);
     expect(form).toHaveLength(1);
 
-    expect(form.props().emailAddress).toBe(undefined);
-    expect(form.props().phoneNumber).toBe(undefined);
-    expect(form.props().firstName).toBe(undefined);
-    expect(form.props().lastName).toBe(undefined);
-    expect(form.props().role).toBe(undefined);
-    expect(form.props().roleFreeText).toBe(undefined);
-    expect(form.props().agencyName).toBe(undefined);
-    expect(form.props().description).toBe(undefined);
+    expect(form.props().emailAddress).toBe(null);
+    expect(form.props().phoneNumber).toBe(null);
+    expect(form.props().firstName).toBe(null);
+    expect(form.props().lastName).toBe(null);
+    expect(form.props().role).toBe(null);
+    expect(form.props().roleFreeText).toBe(null);
+    expect(form.props().agencyName).toBe(null);
+    expect(form.props().description).toBe(null);
   });
 
   it('renders external provider modal form with a patient external provider', () => {

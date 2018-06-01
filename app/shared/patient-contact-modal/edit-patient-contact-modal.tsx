@@ -6,7 +6,7 @@ import {
   patientContactEditMutationVariables,
   FullPatientContactFragment,
 } from '../../graphql/types';
-import PatientContactModal, { ContactType, IPatientContact } from './patient-contact-modal';
+import PatientContactModal, { ContactType } from './patient-contact-modal';
 
 interface IProps {
   onSaved: (patientContact: FullPatientContactFragment) => void;
@@ -28,7 +28,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class EditPatientContactModal extends React.Component<allProps> {
-  editPatientContact = async (contact: IPatientContact) => {
+  editPatientContact = async (contact: patientContactEditMutationVariables) => {
     const { editPatientContactMutation, patientContact } = this.props;
 
     let relationFreeText = null;

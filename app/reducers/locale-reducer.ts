@@ -4,7 +4,7 @@ import { SPANISH_TRANSLATION } from './messages/es';
 
 export type Lang = 'en' | 'es';
 
-interface IState {
+export interface IState {
   lang: Lang;
   messages: any;
 }

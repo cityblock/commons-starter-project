@@ -28,12 +28,9 @@ interface IState {
 }
 
 export class PatientExternalProviderForm extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      showDescriptionForm: false,
-    };
-  }
+  state = {
+    showDescriptionForm: false,
+  };
 
   handleAddDescriptionClick = () => {
     this.setState({ showDescriptionForm: true });

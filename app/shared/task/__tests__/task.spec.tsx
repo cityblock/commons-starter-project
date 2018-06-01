@@ -112,7 +112,7 @@ describe('Task Component', () => {
         taskLoading={true}
         taskError={null}
         history={history}
-        dismissTaskNotifications={() => false as any}
+        dismissTaskNotifications={jest.fn()}
       />,
     );
 

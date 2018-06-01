@@ -51,29 +51,12 @@ type allState = IState & IEditableFieldState;
 const REQUIRED_FIELDS = ['role', 'agencyName', 'phoneNumber', 'phoneType'];
 
 class PatientExternalProviderModal extends React.Component<IProps, allState> {
-  constructor(props: IProps) {
-    super(props);
-    const patientExternalProvider = props.patientExternalProvider || ({} as any);
-
-    this.state = {
-      firstName: patientExternalProvider.firstName,
-      lastName: patientExternalProvider.lastName,
-      role: patientExternalProvider.role,
-      roleFreeText: patientExternalProvider.roleFreeText,
-      agencyName: patientExternalProvider.agencyName,
-      description: patientExternalProvider.description,
-      emailAddress: get(patientExternalProvider, 'email.emailAddress'),
-      phoneNumber: get(patientExternalProvider, 'phone.phoneNumber'),
-      phoneType: get(patientExternalProvider, 'phone.type'),
-    };
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
+  static getDerivedStateFromProps(nextProps: IProps, prevState: allState) {
     const { patientExternalProvider } = nextProps;
-    const oldPatientExternalProvider = this.props.patientExternalProvider;
+    const oldPatientExternalProvider = prevState;
 
-    if (patientExternalProvider && !oldPatientExternalProvider) {
-      this.setState({
+    if (patientExternalProvider && !oldPatientExternalProvider.firstName) {
+      return {
         firstName: patientExternalProvider.firstName,
         lastName: patientExternalProvider.lastName,
         role: patientExternalProvider.role,
@@ -83,9 +66,24 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
         emailAddress: get(patientExternalProvider, 'email.emailAddress'),
         phoneNumber: get(patientExternalProvider, 'phone.phoneNumber'),
         phoneType: get(patientExternalProvider, 'phone.type'),
-      });
+      };
     }
+    return null;
   }
+
+  state = {
+    firstName: null,
+    lastName: null,
+    role: null,
+    roleFreeText: null,
+    agencyName: null,
+    description: null,
+    emailAddress: null,
+    phoneNumber: null,
+    phoneType: null,
+    saveError: null,
+    hasFieldError: undefined,
+  };
 
   clearState() {
     const clearedFields = {} as any;

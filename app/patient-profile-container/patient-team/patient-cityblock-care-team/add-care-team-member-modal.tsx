@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import * as getPatientQuery from '../../../graphql/queries/get-patient.graphql';
 import * as userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
 import * as patientCareTeamAddUserMutationGraphql from '../../../graphql/queries/patient-care-team-add-user-mutation.graphql';
 import {
@@ -288,8 +289,27 @@ export default compose(
   }),
   graphql(patientCareTeamAddUserMutationGraphql as any, {
     name: 'addUserToPatientCareTeamMutation',
-    options: {
-      refetchQueries: ['getPatientCareTeam', 'getUserSummaryList', 'getPatient'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: userSummaryListQuery as any,
+          variables: {
+            userRoleFilters: Object.keys(UserRole),
+          },
+        },
+        {
+          query: patientCareTeamQuery as any,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+        {
+          query: getPatientQuery as any,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(AddCareTeamMemberModal) as React.ComponentClass<IProps>;

@@ -1,14 +1,14 @@
 import { Action } from '../actions';
 
-interface IState {
-  taskId?: string;
+export interface IState {
+  isIdle: boolean;
 }
 
 const initialState: IState = {
-  taskId: undefined,
+  isIdle: false,
 };
 
-export const idleReducer = (state = initialState, action: Action) => {
+export const idleReducer = (state = initialState, action: Action): IState => {
   switch (action.type) {
     case 'IDLE_START':
       return {

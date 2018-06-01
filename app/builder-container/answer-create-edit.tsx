@@ -73,6 +73,17 @@ export function getMessageIdForOption(value?: string) {
 }
 
 class AnswerCreateEdit extends React.Component<allProps, IState> {
+  static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
+    const { questionId } = nextProps;
+
+    if (nextProps.questionId !== prevState.answer.questionId) {
+      const { answer } = prevState;
+      answer.questionId = questionId;
+      return { ...prevState, answer };
+    }
+    return prevState;
+  }
+
   constructor(props: allProps) {
     super(props);
 
@@ -100,16 +111,6 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
             order: 1,
           },
     };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    const { questionId } = nextProps;
-
-    if (questionId !== this.props.questionId) {
-      const { answer } = this.state;
-      answer.questionId = questionId;
-      this.setState({ answer });
-    }
   }
 
   getInitialValueType() {

@@ -41,12 +41,12 @@ export class PatientPhoto extends React.Component<allProps, IState> {
     this.state = { error: null, imgUrl: null };
   }
 
-  async componentWillReceiveProps(newProps: IProps): Promise<void> {
-    const isNewPatientId = newProps.patientId && newProps.patientId !== this.props.patientId;
+  async componentWillReceiveProps(nextProps: allProps): Promise<void> {
+    const isNewPatientId = nextProps.patientId && nextProps.patientId !== this.props.patientId;
 
-    if (newProps.hasUploadedPhoto && (isNewPatientId || !this.state.imgUrl)) {
+    if (nextProps.hasUploadedPhoto && (isNewPatientId || !this.state.imgUrl)) {
       try {
-        await this.refetchSignedPhotoUrl(newProps.patientId);
+        await this.refetchSignedPhotoUrl(nextProps.patientId);
       } catch (err) {
         this.setState({ error: err.message });
       }

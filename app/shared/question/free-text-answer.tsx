@@ -16,11 +16,24 @@ interface IProps {
 
 interface IState {
   text: string;
+  id: string | null;
 }
 
 const SAVE_TIMEOUT_MILLISECONDS = 500;
 
 export default class FreeTextAnswer extends React.Component<IProps, IState> {
+  static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
+    const { currentAnswer } = nextProps;
+
+    if (!prevState.id && currentAnswer) {
+      return {
+        text: currentAnswer.value,
+        id: currentAnswer.id,
+      };
+    }
+    return null;
+  }
+
   save: (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => any;
 
   constructor(props: IProps) {
@@ -29,19 +42,12 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
 
     // This is rendering for 'other' text without an answer having been entered yet
     if (props.otherTextAnswer && props.currentAnswer && props.currentAnswer.value === 'other') {
-      this.state = { text: '' };
+      this.state = { text: '', id: null };
     } else {
-      this.state = { text: props.currentAnswer ? props.currentAnswer.value : '' };
-    }
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
-    const { currentAnswer } = nextProps;
-
-    if (!this.props.currentAnswer && currentAnswer) {
-      this.setState({
-        text: currentAnswer.value,
-      });
+      this.state = {
+        text: props.currentAnswer ? props.currentAnswer.value : '',
+        id: props.currentAnswer ? props.currentAnswer.id : null,
+      };
     }
   }
 

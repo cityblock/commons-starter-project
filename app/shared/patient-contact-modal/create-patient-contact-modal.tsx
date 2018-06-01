@@ -9,7 +9,7 @@ import {
   patientInfoEditMutationVariables,
   FullPatientContactFragment,
 } from '../../graphql/types';
-import PatientContactModal, { ContactType, IPatientContact } from './patient-contact-modal';
+import PatientContactModal, { ContactType } from './patient-contact-modal';
 
 interface IProps {
   onSaved: (patientContact: FullPatientContactFragment) => void;
@@ -34,7 +34,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class CreatePatientContactModal extends React.Component<allProps> {
-  createPatientContact = async (contact: IPatientContact) => {
+  createPatientContact = async (patientContact: patientContactCreateMutationVariables) => {
     const {
       createPatientContactMutation,
       editPatientInfoMutation,
@@ -44,14 +44,14 @@ export class CreatePatientContactModal extends React.Component<allProps> {
     } = this.props;
 
     let relationFreeText = null;
-    if (contact.relationToPatient === 'other') {
-      relationFreeText = contact.relationFreeText;
+    if (patientContact.relationToPatient === 'other') {
+      relationFreeText = patientContact.relationFreeText;
     }
 
     // create patient contact heathcare proxy
     const response = await createPatientContactMutation({
       variables: {
-        ...contact,
+        ...patientContact,
         patientId,
         relationFreeText,
       },

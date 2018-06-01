@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as CBODeleteMutationGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
@@ -31,23 +30,20 @@ type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 interface IState {
   deleteMode: boolean;
   loading: boolean;
+  cboId: string | null;
 }
 
 export class CBODetail extends React.Component<allProps, IState> {
+  static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
+    // reset view if clicking between patient lists
+    if (prevState.cboId && nextProps.CBO && nextProps.CBO.id !== prevState.cboId) {
+      return { deleteMode: false, loading: false, cboId: nextProps.CBO ? nextProps.CBO.id : null };
+    }
+  }
+
   constructor(props: allProps) {
     super(props);
-    this.state = this.getInitialState();
-  }
-
-  getInitialState(): IState {
-    return { deleteMode: false, loading: false };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    // reset view if clicking between patient lists
-    if (!isEqual(this.props.CBO, nextProps.CBO)) {
-      this.setState(this.getInitialState());
-    }
+    this.state = { deleteMode: false, loading: false, cboId: props.CBO ? props.CBO.id : null };
   }
 
   onDelete = async () => {

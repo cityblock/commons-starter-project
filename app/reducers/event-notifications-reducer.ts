@@ -1,6 +1,6 @@
 import { Action } from '../actions';
 
-interface IState {
+export interface IState {
   count: number;
 }
 

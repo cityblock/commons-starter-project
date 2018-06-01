@@ -50,10 +50,10 @@ export class ProgressNoteSupervisorNotes extends React.Component<allProps, IStat
     };
   }
 
-  componentWillReceiveProps(newProps: allProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     // setup default state
-    if (newProps.progressNote && !this.props.progressNote) {
-      this.setDefaultProgressNoteFields(newProps);
+    if (nextProps.progressNote && !this.props.progressNote) {
+      this.setDefaultProgressNoteFields(nextProps);
     }
   }
 

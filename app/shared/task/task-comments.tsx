@@ -51,22 +51,20 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class TaskComments extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { comments: [], commentBody: '' };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
+  static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
     const { taskCommentsResponse } = nextProps;
 
     if (taskCommentsResponse && taskCommentsResponse.edges) {
       const edges = taskCommentsResponse.edges;
-      this.setState({
+      return {
         comments: edges.map((edge: any) => edge.node),
-      });
+        commentBody: prevState.commentBody,
+      };
     }
+    return null;
   }
+
+  state = { comments: [], commentBody: '' };
 
   onCommentBodyChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const value = event.target.value;

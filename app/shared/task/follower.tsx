@@ -40,5 +40,5 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatc
 
 export default connect<{}, IDispatchProps, IProps>(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps as any,
 )(Follower) as any;

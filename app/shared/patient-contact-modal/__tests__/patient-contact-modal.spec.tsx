@@ -2,14 +2,14 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Modal from '../../../shared/library/modal/modal';
 import { healthcareProxy } from '../../../shared/util/test-data';
-import PatientContactModal, { IPatientContact } from '../patient-contact-modal';
+import PatientContactModal from '../patient-contact-modal';
 import PatientProxyForm from '../patient-proxy-form';
 
 describe('Render Proxy Modal Component', () => {
   const closePopup = () => true;
   const wrapper = shallow(
     <PatientContactModal
-      saveContact={async (patientContact: IPatientContact) => Promise.resolve()}
+      saveContact={jest.fn()}
       closePopup={closePopup}
       onSaved={(response: any) => true}
       isVisible={false}
@@ -38,7 +38,7 @@ describe('Render Proxy Modal Component', () => {
     expect(wrapper.find(PatientProxyForm).props().description).toBe(undefined);
   });
 
-  it('renders proxy modal form with a healthcare proxy patient contact', () => {
+  it.only('renders proxy modal form with a healthcare proxy patient contact', () => {
     wrapper.setProps({ patientContact: healthcareProxy });
 
     expect(wrapper.find(PatientProxyForm)).toHaveLength(1);

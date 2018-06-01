@@ -29,39 +29,37 @@ interface IGraphqlProps {
 
 export type allProps = IProps & IGraphqlProps;
 
-export class ExternalCareTeamMultiSelect extends React.Component<allProps> {
-  render() {
-    const {
-      isExternalProvidersLoading,
-      isFamilyLoading,
-      externalProvidersError,
-      familyError,
-      family,
-      externalProviders,
-      placeholderMessageId,
-      onChange,
-      selectedUsers,
-      name,
-    } = this.props;
+export const ExternalCareTeamMultiSelect = (props: allProps) => {
+  const {
+    isExternalProvidersLoading,
+    isFamilyLoading,
+    externalProvidersError,
+    familyError,
+    family,
+    externalProviders,
+    placeholderMessageId,
+    onChange,
+    selectedUsers,
+    name,
+  } = props;
 
-    const formattedProviders: IUser[] = (externalProviders || []).map(getProviderInfo);
-    const formattedFamily: IUser[] = (family || []).map(getFamilyMemberInfo);
+  const formattedProviders: IUser[] = (externalProviders || []).map(getProviderInfo);
+  const formattedFamily: IUser[] = (family || []).map(getFamilyMemberInfo);
 
-    const error = externalProvidersError || familyError;
+  const error = externalProvidersError || familyError;
 
-    return (
-      <UserMultiSelect
-        onChange={onChange}
-        selectedUsers={selectedUsers}
-        users={formattedProviders.concat(formattedFamily)}
-        placeholderMessageId={placeholderMessageId}
-        name={name}
-        isLoading={isExternalProvidersLoading || isFamilyLoading}
-        error={error ? error.message : undefined}
-      />
-    );
-  }
-}
+  return (
+    <UserMultiSelect
+      onChange={onChange}
+      selectedUsers={selectedUsers}
+      users={formattedProviders.concat(formattedFamily)}
+      placeholderMessageId={placeholderMessageId}
+      name={name}
+      isLoading={isExternalProvidersLoading || isFamilyLoading}
+      error={error ? error.message : undefined}
+    />
+  );
+};
 
 export default compose(
   graphql(externalProvidersQuery as any, {

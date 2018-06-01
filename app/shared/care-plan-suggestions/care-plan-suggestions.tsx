@@ -102,6 +102,6 @@ export default compose(
   withRouter,
   connect<IStateProps, IDispatchProps, {}>(
     mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
+    mapDispatchToProps as any,
   ),
 )(CarePlanSuggestions);

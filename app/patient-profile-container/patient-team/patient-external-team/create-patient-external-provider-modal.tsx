@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import * as getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
+import * as getPatientQuery from '../../../graphql/queries/get-patient.graphql';
 import * as createPatientExternalProviderMutationGraphql from '../../../graphql/queries/patient-external-provider-create-mutation.graphql';
 import {
   patientExternalProviderCreateMutation,
@@ -57,9 +59,22 @@ export class CreatePatientExternalProviderModal extends React.Component<allProps
   }
 }
 
-export default graphql<any>(createPatientExternalProviderMutationGraphql as any, {
+export default graphql(createPatientExternalProviderMutationGraphql as any, {
   name: 'createPatientExternalProviderMutation',
-  options: {
-    refetchQueries: ['getPatientExternalProviders', 'getPatient'],
-  },
-})(CreatePatientExternalProviderModal) as React.ComponentClass<IProps>;
+  options: (props: IProps) => ({
+    refetchQueries: [
+      {
+        query: getPatientExternalProvidersQuery as any,
+        variables: {
+          patientId: props.patientId,
+        },
+      },
+      {
+        query: getPatientQuery as any,
+        variables: {
+          patientId: props.patientId,
+        },
+      },
+    ],
+  }),
+})(CreatePatientExternalProviderModal as any);

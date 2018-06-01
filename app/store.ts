@@ -3,9 +3,12 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import { debouncedSetLastAction } from './middleware-link';
 import { currentUserReducer, IState as CurrentUserState } from './reducers/current-user-reducer';
-import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
-import { idleReducer } from './reducers/idle-reducer';
-import { localeReducer, Lang } from './reducers/locale-reducer';
+import {
+  eventNotificationsReducer,
+  IState as EventNotificationsState,
+} from './reducers/event-notifications-reducer';
+import { idleReducer, IState as IdleReducerState } from './reducers/idle-reducer';
+import { localeReducer, IState as LocaleReducerState } from './reducers/locale-reducer';
 import {
   patientLeftNavReducer,
   IState as PatientLeftNavReducerState,
@@ -13,19 +16,9 @@ import {
 import { popupReducer, IState as PopupReducerState } from './reducers/popup-reducer';
 
 export interface IState {
-  locale: {
-    lang: Lang;
-    messages: any;
-  };
-  task: {
-    taskId?: string;
-  };
-  eventNotifications: {
-    count: number;
-  };
-  idle: {
-    isIdle: boolean;
-  };
+  locale: LocaleReducerState;
+  idle: IdleReducerState;
+  eventNotifications: EventNotificationsState;
   popup: PopupReducerState;
   currentUser: CurrentUserState;
   patientLeftNav: PatientLeftNavReducerState;
@@ -44,9 +37,9 @@ export default (history: History) => {
     locale: localeReducer,
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
-    popup: popupReducer,
+    popup: popupReducer as any,
     currentUser: currentUserReducer,
-    patientLeftNav: patientLeftNavReducer,
+    patientLeftNav: patientLeftNavReducer as any,
   });
 
   const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

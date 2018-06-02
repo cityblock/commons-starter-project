@@ -541,10 +541,11 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/kue@0.11.8":
-  version "0.11.8"
-  resolved "https://registry.yarnpkg.com/@types/kue/-/kue-0.11.8.tgz#820f5e3db6025f0411e0942cd3ccab461a060c90"
+"@types/kue@0.11.9":
+  version "0.11.9"
+  resolved "https://registry.yarnpkg.com/@types/kue/-/kue-0.11.9.tgz#add31f89ffaa6a1c6bd64b1225d5fb0ed9bb3851"
   dependencies:
+    "@types/events" "*"
     "@types/express" "*"
     "@types/node" "*"
     "@types/redis" "*"

@@ -36,11 +36,11 @@ interface IState {
 }
 
 export class PatientTeam extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { isModalVisible: false };
-  }
+  state = {
+    isModalVisible: false,
+    isAddingEmergencyContact: undefined,
+    addCareTeamMemberModalFilter: undefined,
+  };
 
   getCurrentSubTab(): ICurrentSubTab {
     const { match } = this.props;

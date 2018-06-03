@@ -31,20 +31,16 @@ interface IState {
 type Field = 'title' | 'answerId' | 'order';
 
 export class PatientListCreate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      title: '',
-      answerId: '',
-      order: '',
-      loading: false,
-    };
-  }
+  state = {
+    title: '',
+    answerId: '',
+    order: '',
+    loading: false,
+  };
 
   onChange = (field: Field): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
     return (e: React.ChangeEvent<HTMLInputElement>): void => {
-      this.setState({ [field as any]: e.currentTarget.value });
+      this.setState({ [field as any]: e.currentTarget.value } as any);
     };
   };
 

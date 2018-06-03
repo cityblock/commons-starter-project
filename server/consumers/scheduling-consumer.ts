@@ -19,6 +19,7 @@ import { addJobToQueue } from '../helpers/queue-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
 import CareTeam from '../models/care-team';
+import * as knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientSiuEvent from '../models/patient-siu-event';
 import User from '../models/user';
@@ -29,10 +30,6 @@ const CALENDAR_EVENT_TOPIC = 'calendarEvent';
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
 const queue = kue.createQueue({ redis: createRedisClient() });
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

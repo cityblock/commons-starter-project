@@ -12,10 +12,10 @@ interface IProgressNoteGlassBreakCreateFields {
 
 /* tslint:disable:member-ordering */
 export default class ProgressNoteGlassBreak extends BaseModel {
-  userId: string;
-  progressNoteId: string;
-  reason: string;
-  note: string | null;
+  userId!: string;
+  progressNoteId!: string;
+  reason!: string;
+  note!: string | null;
 
   static tableName = 'progress_note_glass_break';
   static hasPHI = false;

@@ -84,19 +84,16 @@ const getPageParams = () => {
 export class Tasks extends React.Component<allProps, IState> {
   static getDerivedStateFromProps(nextProps: allProps) {
     const { loading, error } = nextProps;
-
-    return { loading, error };
-  }
-
-  constructor(props: allProps) {
-    super(props);
-
     const pageParams = getPageParams();
-    this.state = {
-      orderBy: (pageParams.orderBy as any) || 'priorityDesc',
-      error: null,
-    };
+
+    return { loading, error, orderBy: pageParams.orderBy || 'priorityDesc' };
   }
+
+  state = {
+    orderBy: 'priorityDesc' as OrderByOptions,
+    error: null,
+    pageNumber: 0,
+  };
 
   renderTasks(tasks: FullTaskFragment[]) {
     const { loading, error, currentUser } = this.props;

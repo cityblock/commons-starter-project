@@ -54,14 +54,11 @@ interface IState {
 }
 
 export class BuilderGoals extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      showCreateGoal: false,
-      loading: false,
-      error: null,
-    };
-  }
+  state = {
+    showCreateGoal: false,
+    loading: false,
+    error: null,
+  };
 
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error, goalId } = nextProps;

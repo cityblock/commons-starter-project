@@ -45,7 +45,7 @@ describe('Task CBO Referral Add Information Popup', () => {
     );
   });
 
-  it('renders fields in the popup', () => {
+  it('renders fields in the popup', async () => {
     const newState = {
       description: 'Survive Night King invasion!',
       categoryId: 'warForTheDawn',
@@ -56,7 +56,7 @@ describe('Task CBO Referral Add Information Popup', () => {
       loading: false,
       isMounted: true,
     };
-    wrapper.setState(newState);
+    await wrapper.setState(newState);
 
     expect(wrapper.find(TaskCBOAddInformationFields).length).toBe(1);
     expect(wrapper.find(TaskCBOAddInformationFields).props().taskCBOInformation).toEqual(newState);

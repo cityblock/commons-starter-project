@@ -26,18 +26,21 @@ interface IProps {
 }
 
 interface IState {
-  phoneNumber?: string | null;
-  type?: PhoneTypeOptions | null;
-  description?: string | null;
-  saveError?: string | null;
-  updatedIsPrimary?: boolean | null;
+  phoneNumber: string | null;
+  type: PhoneTypeOptions | null;
+  description: string | null;
+  saveError: string | null;
+  updatedIsPrimary: boolean | null;
 }
 
 class PhoneModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {};
-  }
+  state = {
+    phoneNumber: null,
+    type: null,
+    description: null,
+    saveError: null,
+    updatedIsPrimary: null,
+  };
 
   clearState() {
     this.setState({
@@ -51,7 +54,7 @@ class PhoneModal extends React.Component<IProps, IState> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handlePrimaryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

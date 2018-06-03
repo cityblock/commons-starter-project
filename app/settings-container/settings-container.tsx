@@ -30,13 +30,9 @@ type allProps = IProps & IGraphqlProps;
 class SettingsContainer extends React.Component<allProps, IState> {
   title = 'Settings';
 
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      error: null,
-    };
-  }
+  state = {
+    error: null,
+  };
 
   componentDidMount() {
     document.title = `${this.title} | Commons`;
@@ -64,7 +60,7 @@ class SettingsContainer extends React.Component<allProps, IState> {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
   };
 
   render() {

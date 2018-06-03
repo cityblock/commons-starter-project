@@ -23,11 +23,7 @@ interface IState {
 }
 
 export class TaskCBOAddInformation extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { isPopupVisible: false };
-  }
+  state = { isPopupVisible: false };
 
   setPopupVisibility = (isPopupVisible: boolean): (() => void) => {
     return (): void => {

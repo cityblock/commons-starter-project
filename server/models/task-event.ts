@@ -42,18 +42,18 @@ const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class TaskEvent extends BaseModel {
-  taskId: string;
-  task: Task;
-  userId: string;
-  user: User;
-  eventType: TaskEventTypes;
-  eventCommentId: string;
-  eventComment: TaskComment;
-  eventUserId: string;
-  eventUser: User;
-  progressNote: ProgressNote;
-  progressNoteId: string;
-  eventNotifications: EventNotification[];
+  taskId!: string;
+  task!: Task;
+  userId!: string;
+  user!: User;
+  eventType!: TaskEventTypes;
+  eventCommentId!: string;
+  eventComment!: TaskComment;
+  eventUserId!: string;
+  eventUser!: User;
+  progressNote!: ProgressNote;
+  progressNoteId!: string;
+  eventNotifications!: EventNotification[];
 
   static tableName = 'task_event';
 

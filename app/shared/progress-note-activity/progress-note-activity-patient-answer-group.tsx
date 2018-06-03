@@ -16,11 +16,7 @@ interface IState {
 }
 
 class ProgressNoteActivityPatientAnswerGroup extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { answersExpanded: false };
-  }
+  state = { answersExpanded: false };
 
   getDisplayTitle = () => {
     const { title } = this.props;

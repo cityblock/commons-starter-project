@@ -18,16 +18,16 @@ interface ICBOEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class CBO extends BaseModel {
-  name: string;
-  categoryId: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  fax: string | null;
-  phone: string;
-  url: string | null;
-  category: CBOCategory;
+  name!: string;
+  categoryId!: string;
+  address!: string;
+  city!: string;
+  state!: string;
+  zip!: string;
+  fax!: string | null;
+  phone!: string;
+  url!: string | null;
+  category!: CBOCategory;
 
   static tableName = 'cbo';
 

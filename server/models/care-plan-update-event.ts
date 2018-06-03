@@ -25,17 +25,17 @@ const EAGER_QUERY = `[
 
 /* tslint:disable:member-ordering */
 export default class CarePlanUpdateEvent extends BaseModel {
-  patientId: string;
-  patient: Patient;
-  userId: string;
-  user: User;
-  patientConcernId: string;
-  patientConcern: PatientConcern;
-  patientGoalId: string;
-  patientGoal: PatientGoal;
-  eventType: CarePlanUpdateEventTypes;
-  progressNoteId: string;
-  progressNote: ProgressNote;
+  patientId!: string;
+  patient!: Patient;
+  userId!: string;
+  user!: User;
+  patientConcernId!: string;
+  patientConcern!: PatientConcern;
+  patientGoalId!: string;
+  patientGoal!: PatientGoal;
+  eventType!: CarePlanUpdateEventTypes;
+  progressNoteId!: string;
+  progressNote!: ProgressNote;
 
   static tableName = 'care_plan_update_event';
 

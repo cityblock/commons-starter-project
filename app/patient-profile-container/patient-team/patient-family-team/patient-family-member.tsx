@@ -22,11 +22,7 @@ interface IState {
 }
 
 export class PatientFamilyMember extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { isMenuOpen: false };
-  }
+  state = { isMenuOpen: false };
 
   onMenuToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     const { isMenuOpen } = this.state;

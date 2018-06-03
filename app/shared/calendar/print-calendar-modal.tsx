@@ -29,11 +29,12 @@ interface IState {
 }
 
 export class PrintMapButton extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { isLoading: false, error: null };
-  }
+  state = {
+    isLoading: false,
+    error: null,
+    month: undefined,
+    year: undefined,
+  };
 
   handleSubmit = async (): Promise<void> => {
     const { generateJwtForPdf, patientId } = this.props;

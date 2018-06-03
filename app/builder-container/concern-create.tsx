@@ -65,7 +65,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState({ [fieldName as any]: fieldValue });
+    this.setState({ [fieldName as any]: fieldValue } as any);
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }

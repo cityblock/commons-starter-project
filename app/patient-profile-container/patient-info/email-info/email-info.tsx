@@ -52,16 +52,12 @@ interface IState {
 }
 
 export class EmailInfo extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      isEditModalVisible: false,
-      isCreateModalVisible: false,
-      isPrimary: false,
-      updatedEmails: null,
-    };
-  }
+  state: IState = {
+    isEditModalVisible: false,
+    isCreateModalVisible: false,
+    isPrimary: false,
+    updatedEmails: null,
+  };
 
   handleEmailDelete = async (emailId: string, isPrimary: boolean) => {
     const { emailDeleteMutation, patientId, onChange, emails, openErrorPopup } = this.props;

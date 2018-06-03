@@ -31,23 +31,23 @@ const EAGER_QUERY = '[concernSuggestions, goalSuggestions.[taskTemplates]]';
 
 /* tslint:disable:member-ordering */
 export default class Answer extends BaseModel {
-  id: string;
-  displayValue: string;
-  value: string;
-  valueType: AnswerValueTypeOptions;
-  riskAdjustmentType: RiskAdjustmentTypeOptions;
-  inSummary: boolean;
-  summaryText: string | null;
-  question: Question;
-  questionId: string;
-  riskArea: RiskArea | null;
-  riskAreaId: string | null;
-  screeningTool: ScreeningTool | null;
-  screeningToolId: string | null;
-  order: number;
-  goalSuggestions: GoalSuggestionTemplate[];
-  concernSuggestions: Concern[];
-  patientAnswers: PatientAnswer[];
+  id!: string;
+  displayValue!: string;
+  value!: string;
+  valueType!: AnswerValueTypeOptions;
+  riskAdjustmentType!: RiskAdjustmentTypeOptions;
+  inSummary!: boolean;
+  summaryText!: string | null;
+  question!: Question;
+  questionId!: string;
+  riskArea!: RiskArea | null;
+  riskAreaId!: string | null;
+  screeningTool!: ScreeningTool | null;
+  screeningToolId!: string | null;
+  order!: number;
+  goalSuggestions!: GoalSuggestionTemplate[];
+  concernSuggestions!: Concern[];
+  patientAnswers!: PatientAnswer[];
 
   static tableName = 'answer';
 

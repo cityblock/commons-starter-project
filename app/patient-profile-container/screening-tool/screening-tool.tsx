@@ -37,10 +37,7 @@ interface IState {
 }
 
 export class ScreeningTool extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { carePlanSuggestions: [] };
-  }
+  state = { carePlanSuggestions: [] };
 
   componentWillUnmount() {
     this.setState({ carePlanSuggestions: [] });

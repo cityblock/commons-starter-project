@@ -19,10 +19,10 @@ interface IComputedFieldOrderOptions {
 
 /* tslint:disable:member-ordering */
 export default class ComputedField extends BaseModel {
-  slug: string;
-  label: string;
-  dataType: ComputedFieldDataTypes;
-  question: Question;
+  slug!: string;
+  label!: string;
+  dataType!: ComputedFieldDataTypes;
+  question!: Question;
 
   static tableName = 'computed_field';
 

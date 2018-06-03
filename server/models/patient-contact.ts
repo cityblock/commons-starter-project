@@ -41,23 +41,23 @@ export default class PatientContact extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
-  id: string;
-  patientId: string;
-  updatedById: string;
-  relationToPatient: PatientRelationOptions;
-  relationFreeText: string | null;
-  firstName: string;
-  lastName: string;
-  isEmergencyContact: boolean;
-  isHealthcareProxy: boolean;
-  canContact: boolean;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  address: Address;
-  email: Email;
-  phone: Phone;
-  deletedAt: string;
+  id!: string;
+  patientId!: string;
+  updatedById!: string;
+  relationToPatient!: PatientRelationOptions;
+  relationFreeText!: string | null;
+  firstName!: string;
+  lastName!: string;
+  isEmergencyContact!: boolean;
+  isHealthcareProxy!: boolean;
+  canContact!: boolean;
+  description!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  address!: Address;
+  email!: Email;
+  phone!: Phone;
+  deletedAt!: string;
 
   $beforeInsert() {
     this.id = uuid();

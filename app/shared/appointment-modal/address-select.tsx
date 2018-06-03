@@ -27,10 +27,7 @@ interface IGraphqlProps {
 export type allProps = IProps & IGraphqlProps;
 
 export class AddressSelect extends React.Component<allProps> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {};
-  }
+  state = {};
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { onChange } = this.props;

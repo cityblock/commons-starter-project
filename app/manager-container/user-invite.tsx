@@ -16,15 +16,11 @@ interface IState {
 }
 
 class UserInvite extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      error: null,
-      localEmail: null,
-    };
-  }
+  state: IState = {
+    loading: false,
+    error: null,
+    localEmail: null,
+  };
 
   onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fieldValue = event.target.value;

@@ -40,11 +40,7 @@ interface IState {
 export type allProps = IProps & IStateProps & IGraphqlProps;
 
 export class ComputedField extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { deleteConfirmationInProgress: false, deleteError: null };
-  }
+  state = { deleteConfirmationInProgress: false, deleteError: null };
 
   reloadComputedField = () => {
     const { refetchComputedField } = this.props;

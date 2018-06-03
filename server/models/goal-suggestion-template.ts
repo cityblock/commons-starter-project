@@ -15,8 +15,8 @@ interface IGoalSuggestionTemplateOrderOptions {
 
 /* tslint:disable:member-ordering */
 export default class GoalSuggestionTemplate extends BaseModel {
-  title: string;
-  taskTemplates: TaskTemplate[];
+  title!: string;
+  taskTemplates!: TaskTemplate[];
 
   static tableName = 'goal_suggestion_template';
 

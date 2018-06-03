@@ -20,10 +20,7 @@ interface IState {
 }
 
 export class DateInput extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     if (!this.state.loading) {

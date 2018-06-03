@@ -24,13 +24,9 @@ interface IState {
 }
 
 export default class PatientCarePlan extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      selectedPatientConcernId: '',
-    };
-  }
+  state = {
+    selectedPatientConcernId: '',
+  };
 
   componentWillReceiveProps(nextProps: IProps) {
     if (nextProps.isDragging) {

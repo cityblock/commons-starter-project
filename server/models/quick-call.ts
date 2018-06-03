@@ -20,16 +20,16 @@ interface IQuickCallCreateOptions {
 
 /* tslint:disable:member-ordering */
 export default class QuickCall extends BaseModel {
-  userId: string;
-  progressNoteId: string;
-  reason: string;
-  summary: string;
-  direction: QuickCallDirection;
-  callRecipient: string;
-  wasSuccessful: boolean;
-  startTime: string;
-  user: User;
-  progressNote: ProgressNote;
+  userId!: string;
+  progressNoteId!: string;
+  reason!: string;
+  summary!: string;
+  direction!: QuickCallDirection;
+  callRecipient!: string;
+  wasSuccessful!: boolean;
+  startTime!: string;
+  user!: User;
+  progressNote!: ProgressNote;
 
   static tableName = 'quick_call';
 

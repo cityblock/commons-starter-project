@@ -44,17 +44,13 @@ interface IState {
 }
 
 export class DnDPatientCarePlan extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      activeConcerns: [],
-      inactiveConcerns: [],
-      isDragging: false,
-      loading: false,
-      reorderError: '',
-    };
-  }
+  state: IState = {
+    activeConcerns: [],
+    inactiveConcerns: [],
+    isDragging: false,
+    loading: false,
+    reorderError: '',
+  };
 
   componentWillReceiveProps(nextProps: allProps): void {
     if (!nextProps.carePlan || !nextProps.carePlan.concerns.length) return;

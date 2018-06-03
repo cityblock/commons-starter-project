@@ -24,11 +24,7 @@ interface IState {
 }
 
 export class PrintMapButton extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   handleClick = async (): Promise<void> => {
     const { generateJwtForPdf, patientId } = this.props;

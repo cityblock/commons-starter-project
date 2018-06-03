@@ -82,7 +82,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
     return (
       e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
     ): void => {
-      this.setState({ [field as any]: e.currentTarget.value });
+      this.setState({ [field as any]: e.currentTarget.value } as any);
     };
   };
 

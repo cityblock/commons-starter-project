@@ -28,15 +28,15 @@ export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
 
 /* tslint:disable:member-ordering */
 export default class ScreeningToolScoreRange extends BaseModel {
-  screeningToolId: string;
-  screeningTool: ScreeningTool;
-  description: string;
-  range: string;
-  minimumScore: number;
-  maximumScore: number;
-  riskAdjustmentType: RiskAdjustmentTypeOptions;
-  concernSuggestions: Concern[];
-  goalSuggestions: GoalSuggestionTemplate[];
+  screeningToolId!: string;
+  screeningTool!: ScreeningTool;
+  description!: string;
+  range!: string;
+  minimumScore!: number;
+  maximumScore!: number;
+  riskAdjustmentType!: RiskAdjustmentTypeOptions;
+  concernSuggestions!: Concern[];
+  goalSuggestions!: GoalSuggestionTemplate[];
 
   static tableName = 'screening_tool_score_range';
 

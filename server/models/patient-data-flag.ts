@@ -15,13 +15,13 @@ interface IPatientDataFlagCreateFields {
 
 /* tslint:disable:member-ordering */
 export default class PatientDataFlag extends BaseModel {
-  patientId: string;
-  patient: Patient;
-  userId: string;
-  user: User;
-  fieldName: CoreIdentityOptions;
-  suggestedValue: string;
-  notes: string;
+  patientId!: string;
+  patient!: Patient;
+  userId!: string;
+  user!: User;
+  fieldName!: CoreIdentityOptions;
+  suggestedValue!: string;
+  notes!: string;
 
   static tableName = 'patient_data_flag';
 

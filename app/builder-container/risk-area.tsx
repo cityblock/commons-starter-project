@@ -47,19 +47,15 @@ interface IState {
 type allProps = IProps & IStateProps & IGraphqlProps;
 
 export class RiskArea extends React.Component<allProps, IState> {
-  editTitleInput: HTMLInputElement | null;
-  editOrderInput: HTMLInputElement | null;
-  titleBody: HTMLDivElement | null;
-  orderBody: HTMLDivElement | null;
+  editTitleInput: HTMLInputElement | null = null;
+  editOrderInput: HTMLInputElement | null = null;
+  titleBody: HTMLDivElement | null = null;
+  orderBody: HTMLDivElement | null = null;
 
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      deleteConfirmationInProgress: false,
-      deleteError: null,
-    };
-  }
+  state = {
+    deleteConfirmationInProgress: false,
+    deleteError: null,
+  };
 
   reloadRiskArea = () => {
     const { refetchRiskArea } = this.props;
@@ -99,7 +95,7 @@ export class RiskArea extends React.Component<allProps, IState> {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
   };
 
   onSubmit = (field: string) => {

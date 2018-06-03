@@ -53,20 +53,15 @@ const SCOPE = 'https://www.googleapis.com/auth/calendar';
 const LOGGED_IN_TITLE = 'Commons | A Cityblock Health product';
 
 export class LoginContainer extends React.Component<allProps, { error: string | null }> {
-  constructor(props: allProps) {
-    super(props);
-    this.onSuccess = this.onSuccess.bind(this);
-    this.onError = this.onError.bind(this);
-    this.state = {
-      error: null,
-    };
-  }
+  state = {
+    error: null,
+  };
 
   componentDidMount() {
     document.title = 'Log in | Commons';
   }
 
-  async onSuccess(response: any) {
+  onSuccess = async (response: any) => {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
@@ -77,11 +72,11 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
       await localStorage.removeItem('authToken');
       this.setState({ error: err.message });
     }
-  }
+  };
 
-  async onError(error: IGoogleLoginError) {
+  onError = (error: IGoogleLoginError) => {
     this.setState({ error: error.details });
-  }
+  };
 
   render() {
     const { error } = this.state;

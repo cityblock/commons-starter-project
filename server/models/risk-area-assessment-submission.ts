@@ -18,18 +18,18 @@ export const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class RiskAreaAssessmentSubmission extends BaseModel {
-  riskAreaId: string;
-  riskArea: RiskArea;
-  patientId: string;
-  patient: Patient;
-  userId: string;
-  user: User;
-  patientAnswers: PatientAnswer[];
-  completedAt: string;
-  score: number;
-  forceHighRisk: boolean;
-  carePlanSuggestions: CarePlanSuggestion[];
-  summaryTextAtCompletion: string[];
+  riskAreaId!: string;
+  riskArea!: RiskArea;
+  patientId!: string;
+  patient!: Patient;
+  userId!: string;
+  user!: User;
+  patientAnswers!: PatientAnswer[];
+  completedAt!: string;
+  score!: number;
+  forceHighRisk!: boolean;
+  carePlanSuggestions!: CarePlanSuggestion[];
+  summaryTextAtCompletion!: string[];
 
   static tableName = 'risk_area_assessment_submission';
 

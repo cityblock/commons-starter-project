@@ -50,8 +50,15 @@ interface IState {
 type allProps = IStateProps & IProps & IGraphqlProps;
 
 export class Goal extends React.Component<allProps, IState> {
-  editTitleInput: HTMLInputElement | null;
-  titleBody: HTMLDivElement | null;
+  editTitleInput: HTMLInputElement | null = null;
+  titleBody: HTMLDivElement | null = null;
+  state = {
+    deleteConfirmationInProgress: false,
+    deleteError: null,
+    editedTitle: '',
+    editingTitle: false,
+    editTitleError: null,
+  };
 
   constructor(props: allProps) {
     super(props);
@@ -65,17 +72,6 @@ export class Goal extends React.Component<allProps, IState> {
     this.onBlur = this.onBlur.bind(this);
     this.onClickToEditTitle = this.onClickToEditTitle.bind(this);
     this.focusInput = this.focusInput.bind(this);
-
-    this.editTitleInput = null;
-    this.titleBody = null;
-
-    this.state = {
-      deleteConfirmationInProgress: false,
-      deleteError: null,
-      editedTitle: '',
-      editingTitle: false,
-      editTitleError: null,
-    };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -131,7 +127,7 @@ export class Goal extends React.Component<allProps, IState> {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {

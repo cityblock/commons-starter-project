@@ -37,15 +37,11 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      error: null,
-      newDiagnosisCode: '',
-    };
-  }
+  state = {
+    loading: false,
+    error: null,
+    newDiagnosisCode: '',
+  };
 
   onSubmit = async () => {
     const { concernId, concernAddDiagnosisCode } = this.props;

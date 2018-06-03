@@ -17,10 +17,7 @@ interface IState {
 }
 
 class DomainAssessmentsList extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {};
-  }
+  state: IState = {};
 
   // handle corner case where all automated assessments suppressed so need to show empty placholder
   markAsSuppressed = (riskAreaId: string): void => {

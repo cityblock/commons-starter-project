@@ -35,13 +35,10 @@ interface IState {
 }
 
 export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      showAddressForm: false,
-      showDescriptionForm: false,
-    };
-  }
+  state = {
+    showAddressForm: false,
+    showDescriptionForm: false,
+  };
 
   handleAddAddressClick = () => {
     this.setState({ showAddressForm: true });

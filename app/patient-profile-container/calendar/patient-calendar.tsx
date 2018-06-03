@@ -52,15 +52,12 @@ interface IState {
 }
 
 export class PatientCalendar extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      isAppointmentModalVisible: false,
-      isPrintModalVisible: false,
-      isRefreshModalVisible: false,
-      refreshType: 'create',
-    };
-  }
+  state: IState = {
+    isAppointmentModalVisible: false,
+    isPrintModalVisible: false,
+    isRefreshModalVisible: false,
+    refreshType: 'create',
+  };
 
   handleAddAppointmentClick = () => {
     const { createCalendarForPatient, match } = this.props;

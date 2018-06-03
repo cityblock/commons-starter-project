@@ -53,10 +53,7 @@ interface IState {
 }
 
 export class CoreIdentity extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { isModalVisible: false, shouldLoadSSN: false };
-  }
+  state = { isModalVisible: false, shouldLoadSSN: false };
 
   hasDataFlags() {
     const { patientDataFlags } = this.props.patientIdentity;

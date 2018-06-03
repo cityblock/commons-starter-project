@@ -32,14 +32,11 @@ const INITIAL_STATE: IState = {
 };
 
 class PhotoModal extends React.Component<IProps, IState> {
-  video: HTMLVideoElement | null;
-  canvas: HTMLCanvasElement | null;
-  imgCanvas: HTMLCanvasElement | null;
+  state = INITIAL_STATE;
 
-  constructor(props: IProps) {
-    super(props);
-    this.state = INITIAL_STATE;
-  }
+  video: HTMLVideoElement | null = null;
+  canvas: HTMLCanvasElement | null = null;
+  imgCanvas: HTMLCanvasElement | null = null;
 
   componentDidUpdate(prevProps: IProps): void {
     if (this.props.isVisible && !prevProps.isVisible) {

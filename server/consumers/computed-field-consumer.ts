@@ -9,14 +9,11 @@ import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import { createSuggestionsForComputedFieldAnswer } from '../lib/suggestions';
 import Answer from '../models/answer';
+import * as knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

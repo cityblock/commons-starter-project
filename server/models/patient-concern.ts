@@ -23,14 +23,14 @@ export const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class PatientConcern extends BaseModel {
-  order: number;
-  concernId: string;
-  concern: Concern;
-  patientId: string;
-  patientGoals: PatientGoal[];
-  patient: Patient;
-  startedAt: string | null;
-  completedAt: string | null;
+  order!: number;
+  concernId!: string;
+  concern!: Concern;
+  patientId!: string;
+  patientGoals!: PatientGoal[];
+  patient!: Patient;
+  startedAt!: string | null;
+  completedAt!: string | null;
 
   static tableName = 'patient_concern';
 

@@ -33,24 +33,19 @@ type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 interface IState {
   deleteMode: boolean;
   loading: boolean;
+  patientListId: string | null;
 }
 
 export class PatientListDetail extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = this.getInitialState();
-  }
-
-  getInitialState(): IState {
-    return { deleteMode: false, loading: false };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
+  static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
     // reset view if clicking between patient lists
-    if (!isEqual(this.props.patientList, nextProps.patientList)) {
-      this.setState(this.getInitialState());
+    if (nextProps.patientList && !isEqual(nextProps.patientList.id, prevState.patientListId)) {
+      return { deleteMode: false, loading: false, patientListId: nextProps.patientList.id };
     }
+    return null;
   }
+
+  state = { deleteMode: false, loading: false, patientListId: null };
 
   onDelete = async () => {
     const { deletePatientList, patientList, close, openErrorPopup } = this.props;

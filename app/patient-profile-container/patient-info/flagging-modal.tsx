@@ -41,14 +41,11 @@ interface IState {
 }
 
 export class FlaggingModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      fieldName: null,
-      suggestedValue: '',
-      notes: '',
-    };
-  }
+  state: IState = {
+    fieldName: null,
+    suggestedValue: '',
+    notes: '',
+  };
 
   clearState() {
     this.setState({
@@ -65,7 +62,7 @@ export class FlaggingModal extends React.Component<allProps, IState> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handleSubmit = async () => {

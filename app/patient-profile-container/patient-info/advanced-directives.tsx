@@ -59,15 +59,11 @@ interface IState {
 }
 
 export class AdvancedDirectives extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      isEditModalVisible: false,
-      isCreateModalVisible: false,
-      currentProxy: null,
-    };
-  }
+  state = {
+    isEditModalVisible: false,
+    isCreateModalVisible: false,
+    currentProxy: null,
+  };
 
   handleHasMolstChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { onChange } = this.props;

@@ -33,13 +33,10 @@ interface IState {
 }
 
 export class TaskCBOReferralDate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      loading: false,
-      error: null,
-    };
-  }
+  state = {
+    loading: false,
+    error: null,
+  };
 
   editCBOReferralDate = async (newDate: string | null): Promise<void> => {
     const { field, CBOReferralId, taskId, editCBOReferral } = this.props;

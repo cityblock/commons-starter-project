@@ -11,10 +11,10 @@ interface IPatientAddressOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientAddress extends BaseModel {
-  patient: Patient;
-  patientId: string;
-  address: Address;
-  addressId: string;
+  patient!: Patient;
+  patientId!: string;
+  address!: Address;
+  addressId!: string;
 
   static tableName = 'patient_address';
 

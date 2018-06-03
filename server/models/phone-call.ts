@@ -49,19 +49,19 @@ interface IGetForUserPatientParams {
 
 /* tslint:disable:member-ordering */
 export default class PhoneCall extends BaseModel {
-  userId: string;
-  user: User;
-  contactNumber: string;
-  patientId: string | null;
-  patient: Patient | null;
-  direction: SmsMessageDirection;
-  callStatus: CallStatus;
-  duration: number;
-  twilioPayload: object;
-  callSid: string;
-  voicemail: Voicemail | null;
-  twilioCreatedAt: string;
-  twilioUpdatedAt: string;
+  userId!: string;
+  user!: User;
+  contactNumber!: string;
+  patientId!: string | null;
+  patient!: Patient | null;
+  direction!: SmsMessageDirection;
+  callStatus!: CallStatus;
+  duration!: number;
+  twilioPayload!: object;
+  callSid!: string;
+  voicemail!: Voicemail | null;
+  twilioCreatedAt!: string;
+  twilioUpdatedAt!: string;
 
   static tableName = 'phone_call';
 

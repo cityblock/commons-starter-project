@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as careTeamReassignUserMutationGraphql from '../../../graphql/queries/care-team-reassign-user-mutation.graphql';
@@ -32,7 +33,7 @@ interface IGraphqlProps {
   tasksError?: string | null;
   careTeamReassignUser: (
     options: { variables: careTeamReassignUserMutationVariables },
-  ) => { data: careTeamReassignUserMutation };
+  ) => { data: careTeamReassignUserMutation; errors?: ApolloError[] };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -44,11 +45,7 @@ interface IState {
 }
 
 export class RemoveCareTeamMemberModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { reassignedToId: null };
-  }
+  state: IState = { reassignedToId: null };
 
   getModalTitleBodyMessageId() {
     const { careTeamMemberTasks } = this.props;
@@ -97,14 +94,19 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
         reassignUserError: null,
       });
 
-      await careTeamReassignUser({
+      const reassignResponse = await careTeamReassignUser({
         variables: {
           patientId,
           userId: careTeamMember.id,
           reassignedToId,
         },
       });
-
+      if (reassignResponse.errors) {
+        return this.setState({
+          reassignUserLoading: false,
+          reassignUserError: reassignResponse.errors[0].message,
+        });
+      }
       this.setState({ reassignUserLoading: false, reassignedToId: null });
       closePopup();
     } catch (err) {

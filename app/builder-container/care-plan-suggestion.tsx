@@ -40,10 +40,7 @@ interface IState {
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 
 class CarePlanSuggestion extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { loading: false };
-  }
+  state = { loading: false };
 
   onClickDelete = async () => {
     const {

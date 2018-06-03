@@ -11,10 +11,10 @@ interface IPatientContactPhoneOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientContactPhone extends BaseModel {
-  patientContact: PatientContact;
-  patientContactId: string;
-  phone: Phone;
-  phoneId: string;
+  patientContact!: PatientContact;
+  patientContactId!: string;
+  phone!: Phone;
+  phoneId!: string;
 
   static tableName = 'patient_contact_phone';
 

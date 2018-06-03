@@ -39,10 +39,7 @@ interface IState {
 }
 
 export class DeleteConcernModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   handleClose = () => {
     this.setState({ loading: false, error: null });

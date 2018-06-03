@@ -17,10 +17,7 @@ interface IState {
 }
 
 export default class CalendarEvent extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { isMenuVisible: false };
-  }
+  state = { isMenuVisible: false };
 
   handleMenuToggle = () => {
     this.setState({ isMenuVisible: !this.state.isMenuVisible });

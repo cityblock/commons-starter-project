@@ -29,10 +29,7 @@ interface IState {
 }
 
 class Search extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { searchResults: [] };
-  }
+  state: IState = { searchResults: [], fuse: undefined };
 
   componentWillReceiveProps(nextProps: IProps) {
     if (!this.props.searchOptions.length && nextProps.searchOptions.length) {
@@ -57,8 +54,9 @@ class Search extends React.Component<IProps, IState> {
   }
 
   search(value: string): void {
-    if (!this.state.fuse || value.length > MAX_PATTERN_LENGTH) return;
-    const searchResults = this.state.fuse.search(value);
+    const { fuse } = this.state;
+    if (!fuse || value.length > MAX_PATTERN_LENGTH) return;
+    const searchResults = fuse.search(value);
     this.setState({ searchResults: searchResults as ISearchOption[] });
   }
 

@@ -17,11 +17,11 @@ interface IPatientScratchPadEditFields {
 /* tslint:disable:member-ordering */
 // Patient scratch pad
 export default class PatientScratchPad extends BaseModel {
-  patientId: string;
-  userId: string;
-  body: string;
-  patient: Patient;
-  user: User;
+  patientId!: string;
+  userId!: string;
+  body!: string;
+  patient!: Patient;
+  user!: User;
 
   static tableName = 'patient_scratch_pad';
 

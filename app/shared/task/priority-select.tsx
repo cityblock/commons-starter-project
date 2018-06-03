@@ -16,13 +16,9 @@ interface IState {
 }
 
 class PrioritySelect extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      changePriorityError: '',
-    };
-  }
+  state = {
+    changePriorityError: '',
+  };
 
   onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { onPriorityClick } = this.props;

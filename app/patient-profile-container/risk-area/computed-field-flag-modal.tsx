@@ -42,10 +42,7 @@ interface IState {
 }
 
 export class ComputedFieldFlagModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { reason: '', complete: false, loading: false, error: null };
-  }
+  state = { reason: '', complete: false, loading: false, error: null };
 
   onReasonChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     this.setState({ reason: e.currentTarget.value });

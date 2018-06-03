@@ -3,13 +3,10 @@ import * as express from 'express';
 import { transaction } from 'objection';
 import config from '../../config';
 import Logging from '../../logging';
+import * as knexConfig from '../../models/knexfile';
 import User from '../../models/user';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../../models/knexfile');
-/* tslint:enable no-var-requires */
 
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {
   const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });

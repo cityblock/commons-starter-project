@@ -56,29 +56,36 @@ interface IState extends ITaskFields {
   error: string | null;
 }
 
+const INITIAL_STATE: IState = {
+  taskType: '',
+  categoryId: '',
+  title: '',
+  description: '',
+  assignedToId: '',
+  priority: null,
+  dueAt: null,
+  CBOId: '',
+  CBOName: '',
+  CBOUrl: '',
+  loading: false,
+  error: null,
+};
+
 export class CreateTaskModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = this.getInitialState();
-  }
-
-  getInitialState(): IState {
-    return {
-      taskType: '',
-      categoryId: '',
-      title: '',
-      description: '',
-      assignedToId: '',
-      priority: null,
-      dueAt: null,
-      CBOId: '',
-      CBOName: '',
-      CBOUrl: '',
-      loading: false,
-      error: null,
-    };
-  }
+  state: IState = {
+    taskType: '',
+    categoryId: '',
+    title: '',
+    description: '',
+    assignedToId: '',
+    priority: null,
+    dueAt: null,
+    CBOId: '',
+    CBOName: '',
+    CBOUrl: '',
+    loading: false,
+    error: null,
+  };
 
   onChange = (field: string): ((e: ChangeEvent) => void) => {
     return (e: ChangeEvent) => {
@@ -89,16 +96,16 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
         this.setState({ categoryId: newValue, CBOId: '', CBOName: '', CBOUrl: '' });
       } else if (field === 'taskType' && this.state.taskType) {
         // clear half filled out form if switching task type, makes validation easier
-        this.setState({ ...this.getInitialState(), taskType: newValue as TaskType });
+        this.setState({ ...INITIAL_STATE, taskType: newValue as TaskType });
       } else {
-        this.setState({ [field as any]: newValue });
+        this.setState({ [field as any]: newValue } as any);
       }
     };
   };
 
   onClose = (): void => {
     // ensure that partially filled out fields don't persist
-    this.setState(this.getInitialState(), () => {
+    this.setState(INITIAL_STATE, () => {
       this.props.closePopup();
     });
   };

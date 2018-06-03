@@ -31,10 +31,6 @@ module.exports = ({ production = false } = {}) => {
       new CopyWebpackPlugin([
         { from: 'assets' },
         {
-          from: '../server/models/knexfile.js',
-          to: '../server-compiled/server/models/knexfile.js',
-        },
-        {
           from: '../server/graphql/schema.graphql',
           to: '../server-compiled/server/graphql/schema.graphql',
         },

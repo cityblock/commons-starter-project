@@ -23,10 +23,7 @@ interface IState {
 }
 
 export default class PlanInfo extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { isModalVisible: false };
-  }
+  state = { isModalVisible: false };
 
   hasDataFlags() {
     // TODO: fix this once we know the field names

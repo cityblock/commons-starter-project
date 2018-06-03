@@ -17,10 +17,10 @@ export default class Form extends BaseModel {
     required: ['title'],
   };
 
-  id: string;
-  title: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  id!: string;
+  title!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string | null;
 }
 /* tslint:enable:check-model-variable */

@@ -37,10 +37,15 @@ interface IState {
 }
 
 class AddressModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {};
-  }
+  state = {
+    street1: null,
+    state: null,
+    zip: null,
+    city: null,
+    description: null,
+    saveError: null,
+    updatedIsPrimary: null,
+  };
 
   clearState() {
     this.setState({

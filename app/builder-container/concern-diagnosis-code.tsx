@@ -35,11 +35,7 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class ConcernDiagnosisCode extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   onClickDelete = async () => {
     const { diagnosisCode, concernId, concernRemoveDiagnosisCode } = this.props;

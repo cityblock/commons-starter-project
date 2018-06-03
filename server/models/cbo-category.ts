@@ -8,8 +8,8 @@ interface ICBOCategoryEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class CBOCategory extends BaseModel {
-  title: string;
-  cbos: Cbo[];
+  title!: string;
+  cbos!: Cbo[];
 
   static tableName = 'cbo_category';
 

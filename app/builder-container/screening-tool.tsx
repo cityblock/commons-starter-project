@@ -125,7 +125,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {

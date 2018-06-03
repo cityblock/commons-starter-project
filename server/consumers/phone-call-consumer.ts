@@ -8,13 +8,10 @@ import config from '../config';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
+import * as knexConfig from '../models/knexfile';
 import PhoneCall, { CallStatus } from '../models/phone-call';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

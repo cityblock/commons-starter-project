@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { get, isNil } from 'lodash';
 import * as React from 'react';
 import {
@@ -21,7 +22,9 @@ export interface IPatientExternalProvider {
 }
 
 interface IProps {
-  saveExternalProvider: (patientExternalProvider: IPatientExternalProvider) => Promise<any>;
+  saveExternalProvider: (
+    patientExternalProvider: IPatientExternalProvider,
+  ) => Promise<{ data: any; errors?: ApolloError[] }>;
   closePopup: () => void;
   isVisible: boolean;
   patientExternalProvider?: IPatientExternalProvider | null;
@@ -157,7 +160,10 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
     } as any;
 
     try {
-      await saveExternalProvider(updatedPatientExternalProvider);
+      const response = await saveExternalProvider(updatedPatientExternalProvider);
+      if (response.errors) {
+        return this.setState({ saveError: response.errors[0].message });
+      }
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error

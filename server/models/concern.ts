@@ -25,8 +25,8 @@ const EAGER_QUERY = '[diagnosisCodes]';
 
 /* tslint:disable:member-ordering */
 export default class Concern extends BaseModel {
-  title: string;
-  diagnosisCodes: DiagnosisCode[];
+  title!: string;
+  diagnosisCodes!: DiagnosisCode[];
 
   static tableName = 'concern';
 

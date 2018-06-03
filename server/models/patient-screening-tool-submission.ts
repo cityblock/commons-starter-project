@@ -26,20 +26,20 @@ export const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {
-  screeningToolId: string;
-  screeningTool: ScreeningTool;
-  progressNoteId: string;
-  patientId: string;
-  patient: Patient;
-  userId: string;
-  user: User;
-  score: number;
-  patientAnswers: PatientAnswer[];
-  patientScreeningToolId: string;
-  screeningToolScoreRangeId: string;
-  screeningToolScoreRange: ScreeningToolScoreRange;
-  carePlanSuggestions: CarePlanSuggestion[];
-  scoredAt: string;
+  screeningToolId!: string;
+  screeningTool!: ScreeningTool;
+  progressNoteId!: string;
+  patientId!: string;
+  patient!: Patient;
+  userId!: string;
+  user!: User;
+  score!: number;
+  patientAnswers!: PatientAnswer[];
+  patientScreeningToolId!: string;
+  screeningToolScoreRangeId!: string;
+  screeningToolScoreRange!: ScreeningToolScoreRange;
+  carePlanSuggestions!: CarePlanSuggestion[];
+  scoredAt!: string;
 
   static tableName = 'patient_screening_tool_submission';
 

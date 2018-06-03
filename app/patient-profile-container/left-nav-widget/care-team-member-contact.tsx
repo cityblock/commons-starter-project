@@ -31,11 +31,7 @@ interface IState {
 }
 
 export class CareTeamMemberContact extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   handleMessageClick = async (): Promise<void> => {
     const { email, getMattermostLink } = this.props;

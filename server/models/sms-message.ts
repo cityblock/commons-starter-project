@@ -27,14 +27,14 @@ interface IGetForUserPatientParams {
 
 /* tslint:disable:member-ordering */
 export default class SmsMessage extends BaseModel {
-  userId: string;
-  user: User;
-  contactNumber: string;
-  patientId: string | null;
-  patient: Patient | null;
-  direction: SmsMessageDirection;
-  body: string;
-  twilioPayload: object;
+  userId!: string;
+  user!: User;
+  contactNumber!: string;
+  patientId!: string | null;
+  patient!: Patient | null;
+  direction!: SmsMessageDirection;
+  body!: string;
+  twilioPayload!: object;
 
   static tableName = 'sms_message';
 

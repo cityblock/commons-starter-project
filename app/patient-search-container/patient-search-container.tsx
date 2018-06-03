@@ -44,12 +44,7 @@ interface IState {
 export class PatientSearchContainer extends React.Component<allProps, IState> {
   title = 'Search';
 
-  constructor(props: allProps) {
-    super(props);
-
-    this.reloadCurrentPage = this.reloadCurrentPage.bind(this);
-    this.state = { searchTerm: '' };
-  }
+  state = { searchTerm: '' };
 
   componentDidMount() {
     document.title = `${this.title} | Commons`;
@@ -62,12 +57,12 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
     }
   }
 
-  async reloadCurrentPage() {
+  reloadCurrentPage = async () => {
     await this.props.refetch!({
       pageNumber: this.props.pageNumber,
       pageSize: this.props.pageSize,
     });
-  }
+  };
 
   onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ searchTerm: e.currentTarget.value });

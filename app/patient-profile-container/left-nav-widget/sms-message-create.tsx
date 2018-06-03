@@ -24,11 +24,7 @@ interface IState {
 }
 
 export class SmsMessageCreate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { body: '' };
-  }
+  state = { body: '' };
 
   handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     this.setState({ body: e.currentTarget.value });

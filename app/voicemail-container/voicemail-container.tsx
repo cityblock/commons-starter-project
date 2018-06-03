@@ -31,11 +31,7 @@ interface IState {
 }
 
 export class VoicemailContainer extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { error: null };
-  }
+  state = { error: null };
 
   async componentDidMount(): Promise<void> {
     document.title = 'Voicemail | Commons';

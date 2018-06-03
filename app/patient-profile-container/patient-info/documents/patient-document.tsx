@@ -43,10 +43,7 @@ interface IState {
 }
 
 export class PatientDocument extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { isMenuVisible: false };
-  }
+  state = { isMenuVisible: false };
 
   handleMenuToggle = () => {
     this.setState({ isMenuVisible: !this.state.isMenuVisible });

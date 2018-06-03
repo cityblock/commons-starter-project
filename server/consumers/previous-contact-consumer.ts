@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-
 import * as Knex from 'knex';
 import * as kue from 'kue';
 import { transaction, Model, Transaction } from 'objection';
@@ -10,13 +9,10 @@ import { formatAbbreviatedName } from '../helpers/format-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
 import CareTeam from '../models/care-team';
+import * as knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientPhone from '../models/patient-phone';
 import { getActionCopy, notifyUserOfContactEdit } from './contact-update-consumer';
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

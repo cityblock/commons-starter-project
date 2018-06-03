@@ -19,11 +19,7 @@ interface IState {
 }
 
 class LeftNav extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { selected: null };
-  }
+  state = { selected: null };
 
   handleClick = (clicked: Accordion): void => {
     const { selected } = this.state;

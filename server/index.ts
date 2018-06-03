@@ -17,6 +17,7 @@ import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { createRedisClient } from './lib/redis';
 import Logging from './logging';
+import * as knexConfig from './models/knexfile';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
@@ -33,10 +34,6 @@ const DATE_OID = 1082;
 pg.types.setTypeParser(DATE_OID, val => {
   return val;
 });
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('./models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

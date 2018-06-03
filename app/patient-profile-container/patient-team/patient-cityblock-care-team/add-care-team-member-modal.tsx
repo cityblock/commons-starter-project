@@ -55,11 +55,7 @@ interface IState {
 }
 
 export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { careMemberId: null };
-  }
+  state: IState = { careMemberId: null };
 
   resetState() {
     this.setState({
@@ -96,7 +92,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
   };
 
   handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ [event.target.name as any]: event.target.value });
+    this.setState({ [event.target.name as any]: event.target.value } as any);
   };
 
   handleClose = () => {

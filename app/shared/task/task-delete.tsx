@@ -28,13 +28,9 @@ interface IState {
 }
 
 export class TaskDelete extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      deleteError: '',
-    };
-  }
+  state = {
+    deleteError: '',
+  };
 
   onConfirmDelete = async () => {
     const { taskId, deleteTask, cancelDelete, redirectToMap } = this.props;

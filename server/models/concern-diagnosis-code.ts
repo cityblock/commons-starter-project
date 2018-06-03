@@ -10,10 +10,10 @@ interface IConcernDiagnosisCodeCreateFields {
 
 /* tslint:disable:member-ordering */
 export default class ConcernDiagnosisCode extends BaseModel {
-  concernId: string;
-  concern: Concern;
-  diagnosisCodeId: string;
-  diagnosisCode: DiagnosisCode;
+  concernId!: string;
+  concern!: Concern;
+  diagnosisCodeId!: string;
+  diagnosisCode!: DiagnosisCode;
 
   static tableName = 'concern_diagnosis_code';
 

@@ -15,11 +15,11 @@ const EAGER_QUERY = '[user]';
 
 /* tslint:disable:member-ordering */
 export default class TaskComment extends BaseModel {
-  body: string;
-  task: Task;
-  taskId: string;
-  user: User;
-  userId: string;
+  body!: string;
+  task!: Task;
+  taskId!: string;
+  user!: User;
+  userId!: string;
 
   static tableName = 'task_comment';
 

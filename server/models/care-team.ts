@@ -41,12 +41,12 @@ interface IMakeTeamLeadOptions {
 
 /* tslint:disable:member-ordering */
 export default class CareTeam extends BaseModel {
-  patient: Patient;
-  patientId: string;
-  user: User;
-  userId: string;
-  isCareTeamLead: boolean;
-  googleCalendarAclRuleId: string;
+  patient!: Patient;
+  patientId!: string;
+  user!: User;
+  userId!: string;
+  isCareTeamLead!: boolean;
+  googleCalendarAclRuleId!: string;
 
   static tableName = 'care_team';
 

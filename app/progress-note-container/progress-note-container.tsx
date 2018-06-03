@@ -50,10 +50,7 @@ interface IDispatchProps {
 type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps & IRouterProps;
 
 export class ProgressNoteContainer extends React.Component<allProps> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { drawerIsOpen: false };
-  }
+  state = { drawerIsOpen: false };
 
   getProgressNotesHtml() {
     const {

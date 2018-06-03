@@ -58,6 +58,11 @@ interface IState {
 type allProps = IProps & IGraphqlProps & IStateProps & IRouterProps;
 
 class BuilderScreeningTools extends React.Component<allProps, IState> {
+  state = {
+    showCreateScreeningTool: false,
+    error: null,
+  };
+
   constructor(props: allProps) {
     super(props);
 
@@ -66,11 +71,6 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     this.showCreateScreeningTool = this.showCreateScreeningTool.bind(this);
     this.hideCreateScreeningTool = this.hideCreateScreeningTool.bind(this);
     this.onDeleteScreeningTool = this.onDeleteScreeningTool.bind(this);
-
-    this.state = {
-      showCreateScreeningTool: false,
-      error: null,
-    };
   }
 
   componentWillReceiveProps(nextProps: allProps) {

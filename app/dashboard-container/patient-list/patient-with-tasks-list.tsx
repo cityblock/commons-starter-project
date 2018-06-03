@@ -14,11 +14,7 @@ interface IState {
 }
 
 class PatientWithTasksList extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { selectedPatientId: null };
-  }
+  state = { selectedPatientId: null };
 
   componentWillReceiveProps(nextProps: IProps) {
     const { pageNumber, pageSize } = this.props;

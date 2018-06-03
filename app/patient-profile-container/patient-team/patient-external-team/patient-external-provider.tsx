@@ -18,13 +18,9 @@ interface IState {
 }
 
 export class PatientExternalProvider extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+  state = { isMenuOpen: false };
 
-    this.state = { isMenuOpen: false };
-  }
-
-  onMenuToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+  onMenuToggle = () => {
     const { isMenuOpen } = this.state;
 
     this.setState({ isMenuOpen: !isMenuOpen });

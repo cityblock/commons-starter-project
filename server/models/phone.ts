@@ -14,9 +14,9 @@ export interface IPhoneOptions {
 
 /* tslint:disable:member-ordering */
 export default class Phone extends BaseModel {
-  phoneNumber: string;
-  type: PhoneTypeOptions;
-  description: string | null;
+  phoneNumber!: string;
+  type!: PhoneTypeOptions;
+  description!: string | null;
 
   static tableName = 'phone';
 

@@ -8,11 +8,9 @@ import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
 import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
+import * as knexConfig from '../models/knexfile';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 

@@ -13,12 +13,12 @@ interface IRiskAreaGroupEditableFields {
 /* tslint:disable:member-ordering */
 // 360 Domain
 export default class RiskAreaGroup extends BaseModel {
-  title: string;
-  shortTitle: string;
-  order: number;
-  mediumRiskThreshold: number;
-  highRiskThreshold: number;
-  riskAreas: RiskArea[];
+  title!: string;
+  shortTitle!: string;
+  order!: number;
+  mediumRiskThreshold!: number;
+  highRiskThreshold!: number;
+  riskAreas!: RiskArea[];
 
   static tableName = 'risk_area_group';
 

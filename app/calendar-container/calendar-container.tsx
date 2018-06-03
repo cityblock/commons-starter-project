@@ -35,14 +35,11 @@ interface IState {
 export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
   title = 'My Calendar';
 
-  constructor(props: IGraphqlProps) {
-    super(props);
-    this.state = {
-      isAppointmentModalVisible: false,
-      isRefreshModalVisible: false,
-      refreshType: 'create',
-    };
-  }
+  state = {
+    isAppointmentModalVisible: false,
+    isRefreshModalVisible: false,
+    refreshType: 'create' as any,
+  };
 
   componentDidMount() {
     document.title = `${this.title} | Commons`;

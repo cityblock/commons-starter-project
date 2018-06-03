@@ -14,10 +14,7 @@ interface IState {
 }
 
 class CreateTaskDescription extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { complete: false };
-  }
+  state = { complete: false };
 
   render(): JSX.Element {
     const { value, onChange, taskType } = this.props;

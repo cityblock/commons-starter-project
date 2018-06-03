@@ -33,8 +33,10 @@ interface IGraphqlProps {
   ) => { data: carePlanSuggestionAcceptMutation };
 }
 
+type concernTypeType = '' | 'inactive' | 'active';
+
 interface IState {
-  concernType: '' | 'inactive' | 'active';
+  concernType: concernTypeType;
   concernId: string;
   loading: boolean;
   error: string | null;
@@ -43,11 +45,7 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { concernType: '', concernId: '', loading: false, error: null };
-  }
+  state = { concernType: '' as concernTypeType, concernId: '', loading: false, error: null };
 
   onSubmit = async (): Promise<void> => {
     const {
@@ -117,7 +115,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
   onChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
     const fieldValue = event.currentTarget.value;
     const fieldName = event.currentTarget.name;
-    this.setState({ [fieldName as any]: fieldValue });
+    this.setState({ [fieldName as any]: fieldValue } as any);
   };
 
   render() {

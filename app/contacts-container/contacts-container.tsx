@@ -24,11 +24,7 @@ interface IState {
 }
 
 export class ContactsContainer extends React.Component<IGraphqlProps, IState> {
-  constructor(props: IGraphqlProps) {
-    super(props);
-
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   componentDidMount() {
     document.title = 'Download Contacts | Commons';

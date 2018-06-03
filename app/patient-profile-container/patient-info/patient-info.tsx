@@ -86,14 +86,11 @@ function checkDefined<T>(preferred?: T | null, secondary?: T | null) {
 }
 
 export class PatientInfo extends React.Component<allProps, allState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      saveError: null,
-      hasUnsavedChanges: false,
-      isUploadModalVisible: false,
-    };
-  }
+  state: allState = {
+    saveError: null,
+    hasUnsavedChanges: false,
+    isUploadModalVisible: false,
+  };
 
   getPatientFields(patient: getPatientQuery['patient']): IDemographics {
     const {

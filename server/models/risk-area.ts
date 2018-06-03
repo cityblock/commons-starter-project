@@ -27,16 +27,16 @@ const EAGER_QUERY = '[riskAreaGroup]';
 /* tslint:disable:member-ordering */
 // 360 Domain
 export default class RiskArea extends BaseModel {
-  title: string;
-  assessmentType: AssessmentType;
-  riskAreaGroupId: string;
-  riskAreaGroup: RiskAreaGroup;
-  order: number;
-  mediumRiskThreshold: number;
-  highRiskThreshold: number;
-  questions: Question[];
-  screeningTools: ScreeningTool[];
-  riskAreaAssessmentSubmissions: RiskAreaAssessmentSubmission[];
+  title!: string;
+  assessmentType!: AssessmentType;
+  riskAreaGroupId!: string;
+  riskAreaGroup!: RiskAreaGroup;
+  order!: number;
+  mediumRiskThreshold!: number;
+  highRiskThreshold!: number;
+  questions!: Question[];
+  screeningTools!: ScreeningTool[];
+  riskAreaAssessmentSubmissions!: RiskAreaAssessmentSubmission[];
 
   static tableName = 'risk_area';
 

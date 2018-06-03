@@ -21,11 +21,7 @@ interface IState {
 }
 
 export default class PatientGoal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { createTaskModal: false };
-  }
+  state = { createTaskModal: false };
 
   setCreateTaskModal = (createTaskModal: boolean): (() => void) => (): void => {
     this.setState(() => ({ createTaskModal }));

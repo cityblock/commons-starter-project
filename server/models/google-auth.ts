@@ -11,9 +11,9 @@ interface ICreateGoogleAuth {
 
 /* tslint:disable:member-ordering */
 export default class GoogleAuth extends BaseModel {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: string;
+  accessToken!: string;
+  refreshToken!: string;
+  expiresAt!: string;
 
   static tableName = 'google_auth';
 

@@ -14,9 +14,7 @@
     "typeRoots": ["node_modules/@types"],
     "sourceMap": true,
     "lib": ["es2016", "es2017", "dom", "esnext.asynciterable"],
-    "strict": true,
-    // does not work with our objection models which have no constructor
-    "strictPropertyInitialization": false
+    "strict": true
   },
   "include": [
     "./scripts/**/*.ts",

@@ -33,23 +33,23 @@ const EAGER_QUERY = '[progressNoteTemplate, user, patient.[patientInfo, patientS
 
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {
-  patientId: string;
-  userId: string;
-  progressNoteTemplateId: string | null;
-  progressNoteTemplate: ProgressNoteTemplate | null;
-  location: string;
-  startedAt: string;
-  completedAt: string;
-  summary: string;
-  memberConcern: string;
-  user: User;
-  patient: Patient;
-  supervisorNotes: string;
-  supervisorId: string;
-  supervisor: User;
-  needsSupervisorReview: boolean;
-  reviewedBySupervisorAt: string;
-  worryScore: number;
+  patientId!: string;
+  userId!: string;
+  progressNoteTemplateId!: string | null;
+  progressNoteTemplate!: ProgressNoteTemplate | null;
+  location!: string;
+  startedAt!: string;
+  completedAt!: string;
+  summary!: string;
+  memberConcern!: string;
+  user!: User;
+  patient!: Patient;
+  supervisorNotes!: string;
+  supervisorId!: string;
+  supervisor!: User;
+  needsSupervisorReview!: boolean;
+  reviewedBySupervisorAt!: string;
+  worryScore!: number;
 
   static tableName = 'progress_note';
 

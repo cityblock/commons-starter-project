@@ -19,10 +19,10 @@ type GetByFields = 'name' | 'departmentId';
 
 /* tslint:disable:member-ordering */
 export default class Clinic extends BaseModel {
-  name: string;
-  departmentId: number;
-  users: User[];
-  patients: Patient[];
+  name!: string;
+  departmentId!: number;
+  users!: User[];
+  patients!: Patient[];
 
   static tableName = 'clinic';
 

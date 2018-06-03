@@ -21,11 +21,7 @@ interface IState {
 }
 
 class ProgressNoteActivityScreeningToolSubmission extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { summaryExpanded: false };
-  }
+  state = { summaryExpanded: false };
 
   onClick = () => {
     const { summaryExpanded } = this.state;

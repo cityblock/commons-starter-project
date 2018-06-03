@@ -52,10 +52,7 @@ interface IState {
 }
 
 export class PatientDocumentModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {};
-  }
+  state: IState = {};
 
   handleSave = async (): Promise<void> => {
     const {

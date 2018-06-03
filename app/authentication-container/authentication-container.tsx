@@ -57,7 +57,7 @@ type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
  * If no action is taken since the idle popup is displayed for IDLE_TIMEms, logout and redirect to '/'
  */
 export class AuthenticationContainer extends React.Component<allProps> {
-  idleInterval: NodeJS.Timer;
+  idleInterval: NodeJS.Timer | null = null;
 
   async componentWillReceiveProps(newProps: allProps) {
     const currentLocale = this.props.currentUser ? this.props.currentUser.locale : null;
@@ -80,7 +80,9 @@ export class AuthenticationContainer extends React.Component<allProps> {
   }
 
   componentWillUnmount() {
-    clearInterval(this.idleInterval);
+    if (this.idleInterval) {
+      clearInterval(this.idleInterval);
+    }
   }
 
   logout = async (): Promise<void> => {

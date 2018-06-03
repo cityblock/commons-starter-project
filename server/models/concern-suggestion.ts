@@ -15,14 +15,14 @@ interface IConcernSuggestionEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class ConcernSuggestion extends Model {
-  id: string;
-  createdAt: string;
-  deletedAt: string;
-  concernId: string;
-  concern: Concern;
-  answerId: string;
-  screeningToolScoreRangeId: string;
-  answer: Answer;
+  id!: string;
+  createdAt!: string;
+  deletedAt!: string;
+  concernId!: string;
+  concern!: Concern;
+  answerId!: string;
+  screeningToolScoreRangeId!: string;
+  answer!: Answer;
 
   static tableName = 'concern_suggestion';
   static hasPHI = false;

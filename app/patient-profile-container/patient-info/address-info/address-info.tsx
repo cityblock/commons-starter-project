@@ -52,16 +52,12 @@ interface IState {
 }
 
 export class AddressInfo extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      isEditModalVisible: false,
-      isCreateModalVisible: false,
-      isPrimary: false,
-      updatedAddresses: null,
-    };
-  }
+  state: IState = {
+    isEditModalVisible: false,
+    isCreateModalVisible: false,
+    isPrimary: false,
+    updatedAddresses: null,
+  };
 
   handleAddressDelete = async (addressId: string, isPrimary: boolean) => {
     const { addressDeleteMutation, patientId, onChange, addresses, openErrorPopup } = this.props;

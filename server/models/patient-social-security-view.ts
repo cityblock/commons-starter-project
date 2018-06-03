@@ -9,9 +9,9 @@ interface IPatientSocialSecurityViewCreateFields {
 
 /* tslint:disable:member-ordering */
 export default class PatientSocialSecurityView extends BaseModel {
-  userId: string;
-  patientId: string;
-  glassBreakId: string | null;
+  userId!: string;
+  patientId!: string;
+  glassBreakId!: string | null;
 
   static tableName = 'patient_social_security_view';
   static hasPHI = false;

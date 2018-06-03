@@ -45,15 +45,11 @@ interface IState {
 }
 
 class PatientAssignModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      careWorkerId: null,
-      assignError: null,
-      assignedCareWorker: { id: '', firstName: '', lastName: '', patientCount: 0 },
-    };
-  }
+  state: IState = {
+    careWorkerId: null,
+    assignError: null,
+    assignedCareWorker: { id: '', firstName: '', lastName: '', patientCount: 0 },
+  };
 
   handleAssignMembers = async () => {
     const { careTeamAssignPatients, patientSelectState } = this.props;
@@ -84,7 +80,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    this.setState({ [event.target.name as any]: event.target.value });
+    this.setState({ [event.target.name as any]: event.target.value } as any);
   };
 
   handleClose = () => {

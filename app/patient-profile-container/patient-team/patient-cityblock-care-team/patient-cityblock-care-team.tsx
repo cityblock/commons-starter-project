@@ -28,11 +28,7 @@ interface IState {
 }
 
 export class PatientCityblockCareTeam extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { isRemoveModalVisible: false };
-  }
+  state: IState = { isRemoveModalVisible: false };
 
   onShowRemoveModal = (careTeamMemberToRemove: FullCareTeamUserFragment) => {
     this.setState({ isRemoveModalVisible: true, careTeamMemberToRemove });

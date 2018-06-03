@@ -14,7 +14,7 @@ export interface IProps {
 }
 
 class SmsMessages extends React.Component<IProps> {
-  private messagesEnd: HTMLDivElement | null;
+  private messagesEnd: HTMLDivElement | null = null;
 
   componentDidMount(): void {
     this.scrollToBottom();

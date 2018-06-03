@@ -57,21 +57,21 @@ export const EAGER_QUERY = '[answer, question]';
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswer extends BaseModel {
-  answerId: string;
-  answerValue: string;
-  answer: Answer;
-  patientId: string;
-  userId: string;
-  applicable: boolean;
-  question: Question;
-  questionId: string;
-  patientScreeningToolSubmissionId: string;
-  patientScreeningToolSubmission: PatientScreeningToolSubmission;
-  riskAreaAssessmentSubmissionId: string | null;
-  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
-  screeningTool: ScreeningTool;
-  progressNoteId: string;
-  mixerJobId: string;
+  answerId!: string;
+  answerValue!: string;
+  answer!: Answer;
+  patientId!: string;
+  userId!: string;
+  applicable!: boolean;
+  question!: Question;
+  questionId!: string;
+  patientScreeningToolSubmissionId!: string;
+  patientScreeningToolSubmission!: PatientScreeningToolSubmission;
+  riskAreaAssessmentSubmissionId!: string | null;
+  riskAreaAssessmentSubmission!: RiskAreaAssessmentSubmission;
+  screeningTool!: ScreeningTool;
+  progressNoteId!: string;
+  mixerJobId!: string;
 
   static tableName = 'patient_answer';
 

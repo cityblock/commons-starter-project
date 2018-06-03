@@ -29,23 +29,23 @@ export interface IComputedStatus {
 
 /* tslint:disable:member-ordering */
 export default class ComputedPatientStatus extends BaseModel {
-  patientId: string;
-  patient: Patient;
-  updatedById: string;
-  updatedBy: User;
-  isCoreIdentityVerified: boolean;
-  isDemographicInfoUpdated: boolean;
-  isEmergencyContactAdded: boolean;
-  isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
-  isPhotoAddedOrDeclined: boolean;
-  hasProgressNote: boolean;
-  hasChp: boolean;
-  hasOutreachSpecialist: boolean;
-  hasPcp: boolean;
-  isAssessed: boolean;
-  isIneligible: boolean;
-  isDisenrolled: boolean;
+  patientId!: string;
+  patient!: Patient;
+  updatedById!: string;
+  updatedBy!: User;
+  isCoreIdentityVerified!: boolean;
+  isDemographicInfoUpdated!: boolean;
+  isEmergencyContactAdded!: boolean;
+  isAdvancedDirectivesAdded!: boolean;
+  isConsentSigned!: boolean;
+  isPhotoAddedOrDeclined!: boolean;
+  hasProgressNote!: boolean;
+  hasChp!: boolean;
+  hasOutreachSpecialist!: boolean;
+  hasPcp!: boolean;
+  isAssessed!: boolean;
+  isIneligible!: boolean;
+  isDisenrolled!: boolean;
 
   static tableName = 'computed_patient_status';
 

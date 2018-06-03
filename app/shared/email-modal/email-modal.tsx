@@ -31,10 +31,12 @@ interface IState {
 }
 
 class EmailModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {};
-  }
+  state = {
+    emailAddress: null,
+    description: null,
+    saveError: null,
+    updatedIsPrimary: null,
+  };
 
   clearState() {
     this.setState({

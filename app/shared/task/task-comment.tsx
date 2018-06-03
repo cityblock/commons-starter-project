@@ -24,7 +24,7 @@ interface IGraphqlProps {
 }
 
 interface IState {
-  editedCommentBody: string;
+  editedCommentBody?: string;
   editing: boolean;
   textHeight: string;
   editError: string | null;
@@ -35,33 +35,22 @@ type allProps = IProps & IGraphqlProps;
 const BASE_TEXT_HEIGHT = '2px';
 
 export class TaskComment extends React.Component<allProps, IState> {
-  editInput: HTMLTextAreaElement | null;
-  textBody: HTMLDivElement | null;
-
-  constructor(props: allProps) {
-    super(props);
-
-    const { comment } = props;
-
-    this.onClick = this.onClick.bind(this);
-    this.isEditable = this.isEditable.bind(this);
-    this.getCommentDate = this.getCommentDate.bind(this);
-    this.focusEditInput = this.focusEditInput.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.getTextHeight = this.getTextHeight.bind(this);
-
-    this.editInput = null;
-    this.textBody = null;
-
-    this.state = {
-      editedCommentBody: comment.body,
-      editing: false,
-      textHeight: '100%',
-      editError: null,
-    };
+  static getDerivedStateFromProps(newProps: allProps, prevState: IState) {
+    const { comment } = newProps;
+    if (!prevState.editedCommentBody && comment) {
+      return { editedCommentBody: comment.body };
+    }
+    return null;
   }
+
+  editInput: HTMLTextAreaElement | null = null;
+  textBody: HTMLDivElement | null = null;
+  state = {
+    editedCommentBody: undefined,
+    editing: false,
+    textHeight: '100%',
+    editError: null,
+  };
 
   componentDidMount() {
     const textHeight = this.getTextHeight();
@@ -84,39 +73,39 @@ export class TaskComment extends React.Component<allProps, IState> {
     }
   }
 
-  focusEditInput() {
+  focusEditInput = () => {
     if (this.editInput) {
       this.editInput.focus();
     }
-  }
+  };
 
-  onBlur() {
+  onBlur = () => {
     this.setState({ editing: false });
-  }
+  };
 
-  onClick() {
+  onClick = () => {
     if (this.isEditable()) {
       this.setState({ editing: true });
 
       setTimeout(this.focusEditInput, 100);
     }
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+  onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value;
 
     this.setState({ editedCommentBody: value || '' });
-  }
+  };
 
-  async onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+  onKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const enterPressed = event.keyCode === 13;
     const shiftPressed = event.shiftKey;
+    const { editedCommentBody } = this.state;
 
-    if (enterPressed && !shiftPressed) {
+    if (enterPressed && !shiftPressed && editedCommentBody) {
       event.preventDefault();
 
       const { comment, onEdit } = this.props;
-      const { editedCommentBody } = this.state;
 
       try {
         this.setState({ editError: null });
@@ -128,13 +117,13 @@ export class TaskComment extends React.Component<allProps, IState> {
         this.setState({ editError: err.message });
       }
     }
-  }
+  };
 
-  isEditable() {
+  isEditable = () => {
     const { comment, currentUser } = this.props;
 
     return currentUser && comment.user.id === currentUser.id;
-  }
+  };
 
   getCommentDate(comment: FullTaskCommentFragment) {
     if (comment.createdAt) {
@@ -213,4 +202,4 @@ export default graphql<any, any, any, any>(currentUserQuery as any, {
     error: data ? data.error : null,
     currentUser: data ? (data as any).currentUser : null,
   }),
-})(TaskComment) as React.ComponentClass<IProps>;
+})(TaskComment as any) as React.ComponentClass<IProps>;

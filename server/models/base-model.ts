@@ -6,10 +6,10 @@ export default class BaseModel extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  id!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string | null;
 
   $beforeInsert() {
     this.id = uuid();

@@ -10,11 +10,11 @@ interface IPatientListEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class PatientList extends BaseModel {
-  id: string;
-  title: string;
-  answerId: string;
-  order: number;
-  answer: Answer;
+  id!: string;
+  title!: string;
+  answerId!: string;
+  order!: number;
+  answer!: Answer;
 
   static tableName = 'patient_list';
 

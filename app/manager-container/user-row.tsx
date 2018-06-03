@@ -20,38 +20,30 @@ interface IState {
 }
 
 export class UserRow extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.onCloseClick = this.onCloseClick.bind(this);
-    this.onOpenClick = this.onOpenClick.bind(this);
-    this.onConfirmClick = this.onConfirmClick.bind(this);
-
-    this.state = {
-      popupVisible: false,
-    };
-  }
+  state = {
+    popupVisible: false,
+  };
 
   formatUser() {
     const { user } = this.props;
     return `${user.firstName || ''} ${user.lastName || ''} (${user.email})`;
   }
 
-  onCloseClick() {
+  onCloseClick = () => {
     this.setState({ popupVisible: false });
-  }
+  };
 
-  onOpenClick() {
+  onOpenClick = () => {
     this.setState({ popupVisible: true });
-  }
+  };
 
-  onConfirmClick() {
+  onConfirmClick = () => {
     const { user } = this.props;
     if (user.email) {
       this.props.deleteUser(user.email);
       this.setState({ popupVisible: true });
     }
-  }
+  };
 
   renderPopup() {
     const { popupVisible } = this.state;

@@ -23,14 +23,10 @@ interface IState {
 }
 
 class TextAreaWithButton extends React.Component<IProps, IState> {
-  private textarea: HTMLTextAreaElement | null;
-  private _isMounted: boolean;
+  state = { loading: false, error: null, isEditing: false };
 
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { loading: false, error: null, isEditing: false };
-  }
+  private textarea: HTMLTextAreaElement | null = null;
+  private _isMounted: boolean = false;
 
   componentDidMount(): void {
     this._isMounted = true;

@@ -37,14 +37,14 @@ export class CBODetail extends React.Component<allProps, IState> {
   static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
     // reset view if clicking between patient lists
     if (prevState.cboId && nextProps.CBO && nextProps.CBO.id !== prevState.cboId) {
-      return { deleteMode: false, loading: false, cboId: nextProps.CBO ? nextProps.CBO.id : null };
+      return { deleteMode: false, loading: false, cboId: nextProps.CBO.id };
+    } else if (nextProps.CBO && !prevState.cboId) {
+      return { cboId: nextProps.CBO.id };
     }
+    return null;
   }
 
-  constructor(props: allProps) {
-    super(props);
-    this.state = { deleteMode: false, loading: false, cboId: props.CBO ? props.CBO.id : null };
-  }
+  state = { deleteMode: false, loading: false, cboId: null };
 
   onDelete = async () => {
     const { deleteCBO, CBO, close, openErrorPopup } = this.props;

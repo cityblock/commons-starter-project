@@ -18,24 +18,23 @@ interface IProps {
 interface IState {
   editMode: boolean;
   editedText: string;
+  originalText: string;
 }
 
 // TODO: Modal when navigating away!
 export class EditableMultilineText extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      editMode: false,
-      editedText: props.text,
-    };
-  }
-
-  componentWillReceiveProps(nextProps: IProps): void {
-    if (nextProps.text !== this.props.text) {
-      this.setState({ editedText: nextProps.text });
+  static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
+    if (nextProps.text !== prevState.originalText) {
+      return { editedText: nextProps.text, originalText: nextProps.text };
     }
+    return null;
   }
+
+  state = {
+    editMode: false,
+    editedText: '',
+    originalText: '',
+  };
 
   handleClick = (): void => {
     if (!this.props.disabled) {

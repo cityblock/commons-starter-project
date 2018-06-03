@@ -11,10 +11,10 @@ interface IPatientEmailOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientEmail extends BaseModel {
-  patient: Patient;
-  patientId: string;
-  email: Email;
-  emailId: string;
+  patient!: Patient;
+  patientId!: string;
+  email!: Email;
+  emailId!: string;
 
   static tableName = 'patient_email';
 

@@ -29,14 +29,14 @@ export const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class PatientGoal extends BaseModel {
-  title: string;
-  patient: Patient;
-  patientId: string;
-  goalSuggestionTemplateId: string | null;
-  goalSuggestionTemplate: GoalSuggestionTemplate;
-  patientConcernId: string | null;
-  patientConcern: PatientConcern | null; // not eager loaded
-  tasks: Task[];
+  title!: string;
+  patient!: Patient;
+  patientId!: string;
+  goalSuggestionTemplateId!: string | null;
+  goalSuggestionTemplate!: GoalSuggestionTemplate;
+  patientConcernId!: string | null;
+  patientConcern!: PatientConcern | null; // not eager loaded
+  tasks!: Task[];
 
   static tableName = 'patient_goal';
 

@@ -51,10 +51,7 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 export class BasicInfo extends React.Component<allProps> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { isModalVisible: false };
-  }
+  state = { isModalVisible: false };
 
   handleValueChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { onChange } = this.props;

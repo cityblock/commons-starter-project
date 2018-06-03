@@ -34,11 +34,7 @@ interface IState {
 }
 
 export class PatientExternalTeam extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { isEditModalVisible: false };
-  }
+  state = { isEditModalVisible: false, patientExternalProviderToEdit: undefined };
 
   handleRemove = async (patientExternalProviderId: string) => {
     const { patientExternalProviderDelete } = this.props;

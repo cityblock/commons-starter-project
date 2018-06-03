@@ -30,11 +30,7 @@ interface IState {
 }
 
 export class PatientIntakeChecklist extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { expanded: false };
-  }
+  state = { expanded: false };
 
   onClick = () => {
     const { expanded } = this.state;

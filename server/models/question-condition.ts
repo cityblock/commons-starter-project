@@ -10,8 +10,8 @@ interface IQuestionConditionEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class QuestionCondition extends BaseModel {
-  answerId: string;
-  questionId: string;
+  answerId!: string;
+  questionId!: string;
 
   static tableName = 'question_condition';
 

@@ -18,14 +18,14 @@ interface ITaskTemplateEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class TaskTemplate extends BaseModel {
-  title: string;
-  completedWithinNumber: number | null;
-  completedWithinInterval: CompletedWithinInterval | null;
-  repeating: boolean | null;
-  goalSuggestionTemplateId: string;
-  priority: Priority | null;
-  careTeamAssigneeRole: UserRole | null;
-  CBOCategoryId: string | null;
+  title!: string;
+  completedWithinNumber!: number | null;
+  completedWithinInterval!: CompletedWithinInterval | null;
+  repeating!: boolean | null;
+  goalSuggestionTemplateId!: string;
+  priority!: Priority | null;
+  careTeamAssigneeRole!: UserRole | null;
+  CBOCategoryId!: string | null;
 
   static tableName = 'task_template';
 

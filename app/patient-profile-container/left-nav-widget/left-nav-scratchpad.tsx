@@ -40,18 +40,18 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class LeftNavScratchPad extends React.Component<allProps, IState> {
+  state = {
+    saveSuccess: false,
+    saveError: false,
+    editedScratchPad: '',
+  };
+
   private _isMounted: boolean = false;
 
   constructor(props: allProps) {
     super(props);
 
     this.saveScratchPad = debounce(this.saveScratchPad.bind(this), SAVE_TIMEOUT_MILLISECONDS);
-
-    this.state = {
-      saveSuccess: false,
-      saveError: false,
-      editedScratchPad: '',
-    };
   }
 
   componentDidMount(): void {

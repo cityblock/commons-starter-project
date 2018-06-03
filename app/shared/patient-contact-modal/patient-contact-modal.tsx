@@ -53,10 +53,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
     const { patientContact, contactType } = nextProps;
     const oldPatientContact = prevState;
 
-    if (contactType === 'emergencyContact') {
-      return { ...prevState, isEmergencyContact: true };
-    }
-
     if (patientContact) {
       if (!oldPatientContact || !oldPatientContact.id) {
         return {
@@ -70,33 +66,36 @@ class PatientContactModal extends React.Component<IProps, allState> {
           phoneNumber: get(patientContact, 'phone.phoneNumber'),
           phoneType: get(patientContact, 'phone.type'),
           address: patientContact.address,
-          isEmergencyContact: patientContact.isEmergencyContact,
+          isEmergencyContact:
+            patientContact.isEmergencyContact || contactType === 'emergencyContact',
           canContact: patientContact.canContact,
         };
       }
     }
+
+    if (contactType === 'emergencyContact') {
+      return { ...prevState, isEmergencyContact: true };
+    }
+
+    return null;
   }
 
-  constructor(props: IProps) {
-    super(props);
-    const { contactType } = props;
-    const patientContact = props.patientContact || ({} as any);
-
-    this.state = {
-      id: patientContact.id,
-      firstName: patientContact.firstName,
-      lastName: patientContact.lastName,
-      relationToPatient: patientContact.relationToPatient,
-      relationFreeText: patientContact.relationFreeText,
-      description: patientContact.description,
-      emailAddress: get(patientContact, 'email.emailAddress'),
-      phoneNumber: get(patientContact, 'phone.phoneNumber'),
-      phoneType: get(patientContact, 'phone.type'),
-      address: patientContact.address,
-      isEmergencyContact: patientContact.isEmergencyContact || contactType === 'emergencyContact',
-      canContact: patientContact.canContact,
-    };
-  }
+  state: allState = {
+    id: null,
+    firstName: null,
+    lastName: null,
+    relationToPatient: null,
+    relationFreeText: null,
+    description: null,
+    emailAddress: null,
+    phoneNumber: null,
+    phoneType: null,
+    address: null,
+    isEmergencyContact: null,
+    canContact: null,
+    saveError: null,
+    hasFieldError: undefined,
+  };
 
   clearState() {
     const clearedFields = {} as any;
@@ -128,25 +127,26 @@ class PatientContactModal extends React.Component<IProps, allState> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handleRadioChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     const booleanValue = value === 'true';
-    this.setState({ [name as any]: booleanValue });
+    this.setState({ [name as any]: booleanValue } as any);
   };
 
   handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const { address } = this.state;
-
-    this.setState({
-      address: {
-        ...address,
-        [name as any]: value,
-      },
-    });
+    if (address) {
+      this.setState({
+        address: {
+          ...address,
+          [name as any]: value,
+        },
+      });
+    }
   };
 
   handleClose = () => {

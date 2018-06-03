@@ -25,7 +25,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class LeftNavMessages extends React.Component<allProps> {
-  private unsubscribe: (() => void) | null;
+  private unsubscribe: (() => void) | null = null;
 
   componentDidMount(): void {
     if (this.props.subscribeToMore) {

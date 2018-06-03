@@ -21,9 +21,9 @@ interface IUpdatePatientState {
 
 /* tslint:disable:member-ordering */
 export default class PatientState extends BaseModel {
-  patientId: string;
-  updatedById: string;
-  currentState: CurrentPatientState;
+  patientId!: string;
+  updatedById!: string;
+  currentState!: CurrentPatientState;
 
   static tableName = 'patient_state';
 

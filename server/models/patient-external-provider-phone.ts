@@ -11,10 +11,10 @@ interface IPatientExternalProviderPhoneOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientExternalProviderPhone extends BaseModel {
-  patientExternalProvider: PatientExternalProvider;
-  patientExternalProviderId: string;
-  phone: Phone;
-  phoneId: string;
+  patientExternalProvider!: PatientExternalProvider;
+  patientExternalProviderId!: string;
+  phone!: Phone;
+  phoneId!: string;
 
   static tableName = 'patient_external_provider_phone';
 

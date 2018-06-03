@@ -36,10 +36,7 @@ interface IState {
 }
 
 export class DeleteGoalModal extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   onDelete = async () => {
     const { patientGoalId, deletePatientGoal, closePopup, refetchCarePlan } = this.props;

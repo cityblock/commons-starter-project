@@ -46,43 +46,24 @@ interface IGraphqlProps {
 
 interface IState {
   showCreateProgressNoteTemplate: boolean;
-  loading?: boolean;
-  error: string | null;
 }
 
 type allProps = IProps & IStateProps & IGraphqlProps;
 
 class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
+  state = {
+    showCreateProgressNoteTemplate: false,
+  };
 
-    this.renderProgressNoteTemplates = this.renderProgressNoteTemplates.bind(this);
-    this.renderProgressNoteTemplate = this.renderProgressNoteTemplate.bind(this);
-    this.showCreateProgressNoteTemplate = this.showCreateProgressNoteTemplate.bind(this);
-    this.hideCreateProgressNoteTemplate = this.hideCreateProgressNoteTemplate.bind(this);
-    this.onDeleteProgressNoteTemplate = this.onDeleteProgressNoteTemplate.bind(this);
-
-    this.state = {
-      showCreateProgressNoteTemplate: false,
-      loading: false,
-      error: null,
-    };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    const { loading, error } = nextProps;
-    this.setState({ loading, error });
-  }
-
-  showCreateProgressNoteTemplate() {
+  showCreateProgressNoteTemplate = () => {
     this.setState({ showCreateProgressNoteTemplate: true });
-  }
+  };
 
-  hideCreateProgressNoteTemplate() {
+  hideCreateProgressNoteTemplate = () => {
     this.setState({ showCreateProgressNoteTemplate: false });
-  }
+  };
 
-  renderProgressNoteTemplates(progressNoteTemplates: FullProgressNoteTemplateFragment[]) {
+  renderProgressNoteTemplates = (progressNoteTemplates: FullProgressNoteTemplateFragment[]) => {
     const { loading, error } = this.props;
     if (progressNoteTemplates.length > 0) {
       return progressNoteTemplates.map(this.renderProgressNoteTemplate);
@@ -94,9 +75,9 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
         </div>
       );
     }
-  }
+  };
 
-  renderProgressNoteTemplate(progressNoteTemplate: FullProgressNoteTemplateFragment) {
+  renderProgressNoteTemplate = (progressNoteTemplate: FullProgressNoteTemplateFragment) => {
     const selected = progressNoteTemplate.id === this.props.progressNoteTemplateId;
     return (
       <ProgressNoteTemplateRow
@@ -106,15 +87,15 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
         routeBase={this.props.routeBase}
       />
     );
-  }
+  };
 
-  async onDeleteProgressNoteTemplate(progressNoteTemplateId: string) {
+  onDeleteProgressNoteTemplate = async (progressNoteTemplateId: string) => {
     const { history, routeBase, deleteProgressNoteTemplate } = this.props;
 
     await deleteProgressNoteTemplate({ variables: { progressNoteTemplateId } });
 
     history.push(routeBase);
-  }
+  };
 
   render() {
     const { progressNoteTemplates, routeBase, progressNoteTemplateId } = this.props;

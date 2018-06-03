@@ -13,13 +13,13 @@ export interface IAddressOptions {
 
 /* tslint:disable:member-ordering */
 export default class Address extends BaseModel {
-  street1: string;
-  street2: string;
-  zip: string;
-  state: string;
-  city: string;
-  description: string;
-  updatedById: string;
+  street1!: string;
+  street2!: string;
+  zip!: string;
+  state!: string;
+  city!: string;
+  description!: string;
+  updatedById!: string;
 
   static tableName = 'address';
 

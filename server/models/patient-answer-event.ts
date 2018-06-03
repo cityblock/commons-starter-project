@@ -26,17 +26,17 @@ const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswerEvent extends BaseModel {
-  patientId: string;
-  patient: Patient;
-  userId: string;
-  user: User;
-  patientAnswerId: string;
-  patientAnswer: PatientAnswer;
-  previousPatientAnswerId: string;
-  previousPatientAnswer: PatientAnswer;
-  eventType: PatientAnswerEventTypes.create_patient_answer;
-  progressNoteId: string;
-  progressNote: ProgressNote;
+  patientId!: string;
+  patient!: Patient;
+  userId!: string;
+  user!: User;
+  patientAnswerId!: string;
+  patientAnswer!: PatientAnswer;
+  previousPatientAnswerId!: string;
+  previousPatientAnswer!: PatientAnswer;
+  eventType!: PatientAnswerEventTypes.create_patient_answer;
+  progressNoteId!: string;
+  progressNote!: ProgressNote;
 
   static tableName = 'patient_answer_event';
 

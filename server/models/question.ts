@@ -53,22 +53,22 @@ const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class Question extends BaseModel {
-  title: string;
-  answers: Answer[];
-  answerType: AnswerTypeOptions;
-  riskAreaId: string;
-  riskArea: RiskArea;
-  screeningToolId: string;
-  screeningTool: ScreeningTool;
-  progressNoteTemplateId: string;
-  progressNoteTemplate: ProgressNoteTemplate;
-  applicableIfQuestionConditions: QuestionCondition[];
-  applicableIfType: QuestionConditionTypeOptions;
-  validatedSource: string;
-  order: number;
-  computedFieldId: string;
-  computedField: ComputedField;
-  otherTextAnswerId: string | null;
+  title!: string;
+  answers!: Answer[];
+  answerType!: AnswerTypeOptions;
+  riskAreaId!: string;
+  riskArea!: RiskArea;
+  screeningToolId!: string;
+  screeningTool!: ScreeningTool;
+  progressNoteTemplateId!: string;
+  progressNoteTemplate!: ProgressNoteTemplate;
+  applicableIfQuestionConditions!: QuestionCondition[];
+  applicableIfType!: QuestionConditionTypeOptions;
+  validatedSource!: string;
+  order!: number;
+  computedFieldId!: string;
+  computedField!: ComputedField;
+  otherTextAnswerId!: string | null;
 
   static tableName = 'question';
 

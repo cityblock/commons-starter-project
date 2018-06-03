@@ -35,11 +35,7 @@ interface IState {
 }
 
 export class PatientPhoto extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { error: null, imgUrl: null };
-  }
+  state = { error: null, imgUrl: null };
 
   async componentWillReceiveProps(nextProps: allProps): Promise<void> {
     const isNewPatientId = nextProps.patientId && nextProps.patientId !== this.props.patientId;

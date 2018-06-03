@@ -21,13 +21,13 @@ const EAGER_QUERY = '[taskEvent.[user, eventComment, eventComment.user, eventUse
 
 /* tslint:disable:member-ordering */
 export default class EventNotification extends BaseModel {
-  userId: string;
-  user: User;
-  taskEventId?: string;
-  taskEvent?: TaskEvent;
-  seenAt: string;
-  emailSentAt: string;
-  deliveredAt: string;
+  userId!: string;
+  user!: User;
+  taskEventId!: string | null;
+  taskEvent!: TaskEvent | null;
+  seenAt!: string;
+  emailSentAt!: string;
+  deliveredAt!: string;
 
   static tableName = 'event_notification';
 

@@ -26,11 +26,7 @@ interface IState {
 }
 
 export class LeftNavCareTeam extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { selectedCareTeamMemberId: null };
-  }
+  state = { selectedCareTeamMemberId: null };
 
   handleClick = (careTeamMemberId: string): void => {
     const { selectedCareTeamMemberId } = this.state;

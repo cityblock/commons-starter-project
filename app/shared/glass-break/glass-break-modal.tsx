@@ -25,10 +25,7 @@ interface IState {
 }
 
 class GlassBreakModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { reason: '', note: '', loading: false, error: null };
-  }
+  state = { reason: '', note: '', loading: false, error: null };
 
   onSubmit = async () => {
     const { createGlassBreak } = this.props;
@@ -52,7 +49,7 @@ class GlassBreakModal extends React.Component<IProps, IState> {
     return (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
       const newValue = e.currentTarget.value;
 
-      this.setState({ [field as any]: newValue });
+      this.setState({ [field as any]: newValue } as any);
     };
   };
 

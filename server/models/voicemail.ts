@@ -15,17 +15,17 @@ const EAGER_QUERY = 'phoneCall.[user, patient.[patientInfo]]';
 
 /* tslint:disable:member-ordering */
 export default class Voicemail extends BaseModel {
-  id: string;
-  phoneCallId: string;
-  phoneCall: PhoneCall;
-  twilioCreatedAt: string;
-  twilioUpdatedAt: string;
-  duration: number;
-  twilioPayload: object;
-  jobId: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  id!: string;
+  phoneCallId!: string;
+  phoneCall!: PhoneCall;
+  twilioCreatedAt!: string;
+  twilioUpdatedAt!: string;
+  duration!: number;
+  twilioPayload!: object;
+  jobId!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string | null;
 
   static tableName = 'voicemail';
 

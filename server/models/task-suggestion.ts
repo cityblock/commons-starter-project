@@ -10,11 +10,11 @@ interface ITaskSuggestionEditableFields {
 
 /* tslint:disable:member-ordering */
 export default class TaskSuggestion extends BaseModel {
-  taskId: string;
-  taskTemplateId: string;
-  taskTemplate: TaskTemplate;
-  answerId: string;
-  answer: Answer;
+  taskId!: string;
+  taskTemplateId!: string;
+  taskTemplate!: TaskTemplate;
+  answerId!: string;
+  answer!: Answer;
 
   static tableName = 'task_suggestion';
 

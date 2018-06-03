@@ -63,26 +63,26 @@ export const SUPER_EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class CarePlanSuggestion extends BaseModel {
-  patientId: string;
-  patient: Patient;
-  suggestionType: CarePlanSuggestionType;
-  concernId: string | null;
-  concern: Concern | null;
-  goalSuggestionTemplateId: string | null;
-  goalSuggestionTemplate: GoalSuggestionTemplate | null;
-  acceptedById: string | null;
-  acceptedBy: User | null;
-  acceptedAt: string | null;
-  dismissedById: string | null;
-  dismissedBy: User | null;
-  dismissedReason: string | null;
-  dismissedAt: string | null;
-  patientScreeningToolSubmissionId: string | null;
-  patientScreeningToolSubmission: PatientScreeningToolSubmission | null;
-  riskAreaAssessmentSubmissionId: string | null;
-  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission | null;
-  computedFieldId: string | null;
-  computedField: ComputedField | null;
+  patientId!: string;
+  patient!: Patient;
+  suggestionType!: CarePlanSuggestionType;
+  concernId!: string | null;
+  concern!: Concern | null;
+  goalSuggestionTemplateId!: string | null;
+  goalSuggestionTemplate!: GoalSuggestionTemplate | null;
+  acceptedById!: string | null;
+  acceptedBy!: User | null;
+  acceptedAt!: string | null;
+  dismissedById!: string | null;
+  dismissedBy!: User | null;
+  dismissedReason!: string | null;
+  dismissedAt!: string | null;
+  patientScreeningToolSubmissionId!: string | null;
+  patientScreeningToolSubmission!: PatientScreeningToolSubmission | null;
+  riskAreaAssessmentSubmissionId!: string | null;
+  riskAreaAssessmentSubmission!: RiskAreaAssessmentSubmission | null;
+  computedFieldId!: string | null;
+  computedField!: ComputedField | null;
 
   static tableName = 'care_plan_suggestion';
 

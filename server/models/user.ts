@@ -79,25 +79,25 @@ export interface IUserFilterOptions extends IPaginationOptions {
 
 /* tslint:disable:member-ordering */
 export default class User extends BaseModel {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-  lastLoginAt: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  userRole: UserRole;
-  homeClinicId: string;
-  homeClinic: Clinic;
-  googleAuthId: string;
-  googleAuth: GoogleAuth;
-  locale: 'en' | 'es';
-  athenaProviderId: number;
-  googleProfileImageUrl: string;
-  phone: string;
-  permissions: Permissions;
-  twilioSimId: string | null;
+  id!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string;
+  lastLoginAt!: string;
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  userRole!: UserRole;
+  homeClinicId!: string;
+  homeClinic!: Clinic;
+  googleAuthId!: string;
+  googleAuth!: GoogleAuth;
+  locale!: 'en' | 'es';
+  athenaProviderId!: number;
+  googleProfileImageUrl!: string;
+  phone!: string;
+  permissions!: Permissions;
+  twilioSimId!: string | null;
 
   static tableName = 'user';
 

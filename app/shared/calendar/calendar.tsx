@@ -63,7 +63,7 @@ export default class Calendar extends React.Component<IProps> {
     );
   }
 
-  renderYear(yearOfEvents: object) {
+  renderYear(yearOfEvents: FullCalendarEventFragment[]) {
     const eventsByMonth = groupBy(yearOfEvents, event => new Date(event.startDate).getMonth());
     const months = Object.keys(eventsByMonth).sort();
 

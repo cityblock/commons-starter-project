@@ -3,17 +3,13 @@ import * as React from 'react';
 import Modal from '../../../../shared/library/modal/modal';
 import { externalProviderEntity, externalProviderPerson } from '../../../../shared/util/test-data';
 import PatientExternalProviderForm from '../patient-external-provider-form';
-import PatientExternalProviderModal, {
-  IPatientExternalProvider,
-} from '../patient-external-provider-modal';
+import PatientExternalProviderModal from '../patient-external-provider-modal';
 
 describe('Render External Provider Modal Component', () => {
   const closePopup = () => true;
   const wrapper = shallow(
     <PatientExternalProviderModal
-      saveExternalProvider={async (patientExternalProvider: IPatientExternalProvider) =>
-        Promise.resolve()
-      }
+      saveExternalProvider={jest.fn()}
       closePopup={closePopup}
       isVisible={false}
       titleMessageId="title.id"

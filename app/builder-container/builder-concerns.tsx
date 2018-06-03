@@ -48,23 +48,15 @@ interface IState {
 }
 
 class BuilderConcerns extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.renderConcerns = this.renderConcerns.bind(this);
-    this.renderConcern = this.renderConcern.bind(this);
-    this.onDeleteConcern = this.onDeleteConcern.bind(this);
-
-    this.state = {
-      showCreateConcern: false,
-    };
-  }
+  state = {
+    showCreateConcern: false,
+  };
 
   showCreateConcern = () => {
     this.setState({ showCreateConcern: true });
   };
 
-  hideCreateConcern = (riskArea?: FullConcernFragment) => {
+  hideCreateConcern = () => {
     this.setState({ showCreateConcern: false });
   };
 
@@ -88,13 +80,13 @@ class BuilderConcerns extends React.Component<allProps, IState> {
     );
   }
 
-  async onDeleteConcern(concernId: string) {
+  onDeleteConcern = async (concernId: string) => {
     const { history, routeBase, deleteConcern } = this.props;
 
     await deleteConcern({ variables: { concernId } });
 
     history.push(routeBase);
-  }
+  };
 
   render() {
     const { concerns, routeBase, concernId } = this.props;

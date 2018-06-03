@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
@@ -20,7 +21,7 @@ interface IProps {
 interface IGraphqlProps {
   createPatientExternalProviderMutation: (
     options: { variables: patientExternalProviderCreateMutationVariables },
-  ) => { data: patientExternalProviderCreateMutation };
+  ) => Promise<{ data: patientExternalProviderCreateMutation; errors: ApolloError[] }>;
 }
 
 type allProps = IProps & IGraphqlProps;

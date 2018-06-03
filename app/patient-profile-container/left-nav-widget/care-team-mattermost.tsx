@@ -27,11 +27,7 @@ interface IState {
 }
 
 export class CareTeamMattermost extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { loading: false, error: null };
-  }
+  state = { loading: false, error: null };
 
   handleClick = async (): Promise<void> => {
     const { patientId, getMattermostLink } = this.props;

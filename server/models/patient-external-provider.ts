@@ -35,20 +35,20 @@ export default class PatientExternalProvider extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
-  id: string;
-  patientId: string;
-  updatedById: string;
-  role: ExternalProviderOptions;
-  roleFreeText: string | null;
-  lastName: string;
-  agencyName: string;
-  firstName: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  email: Email;
-  phone: Phone;
-  deletedAt: string;
+  id!: string;
+  patientId!: string;
+  updatedById!: string;
+  role!: ExternalProviderOptions;
+  roleFreeText!: string | null;
+  lastName!: string;
+  agencyName!: string;
+  firstName!: string;
+  description!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  email!: Email;
+  phone!: Phone;
+  deletedAt!: string;
 
   $beforeInsert() {
     this.id = uuid();

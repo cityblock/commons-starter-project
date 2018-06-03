@@ -39,24 +39,14 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class AddTaskFollower extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
+  state = {
+    open: false,
+    loading: false,
+    addFollowerError: null,
+    lastCareTeamMemberId: null,
+  };
 
-    this.onClick = this.onClick.bind(this);
-    this.onCareTeamMemberClick = this.onCareTeamMemberClick.bind(this);
-    this.renderCareTeamMember = this.renderCareTeamMember.bind(this);
-    this.renderCareTeamMembers = this.renderCareTeamMembers.bind(this);
-    this.getValidNewFollowers = this.getValidNewFollowers.bind(this);
-
-    this.state = {
-      open: false,
-      loading: false,
-      addFollowerError: null,
-      lastCareTeamMemberId: null,
-    };
-  }
-
-  renderCareTeamMember(careTeamMember: FullUserFragment) {
+  renderCareTeamMember = (careTeamMember: FullUserFragment) => {
     const { addFollowerError, lastCareTeamMemberId } = this.state;
 
     const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
@@ -79,21 +69,21 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
         <div className={errorStyles} />
       </div>
     );
-  }
+  };
 
-  getValidNewFollowers() {
+  getValidNewFollowers = () => {
     const { careTeam, followers } = this.props;
 
     return (careTeam || []).filter(
       careTeamMember => !(followers || []).some(follower => follower.id === careTeamMember.id),
     );
-  }
+  };
 
-  renderCareTeamMembers(careTeamMembers: FullUserFragment[]) {
+  renderCareTeamMembers = (careTeamMembers: FullUserFragment[]) => {
     return careTeamMembers.map(this.renderCareTeamMember);
-  }
+  };
 
-  async onCareTeamMemberClick(careTeamMemberId: string) {
+  onCareTeamMemberClick = async (careTeamMemberId: string) => {
     const { taskId, addTaskFollower } = this.props;
     const { loading } = this.state;
 
@@ -126,12 +116,12 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
         });
       }
     }
-  }
+  };
 
-  onClick() {
+  onClick = () => {
     const { open } = this.state;
     this.setState({ open: !open });
-  }
+  };
 
   render() {
     const { open } = this.state;

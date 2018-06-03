@@ -30,10 +30,7 @@ interface IProps {
 }
 
 export default class ContactInfo extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { isModalVisible: false };
-  }
+  state = { isModalVisible: false };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { onChange } = this.props;

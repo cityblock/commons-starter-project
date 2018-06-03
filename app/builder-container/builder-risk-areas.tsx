@@ -53,6 +53,11 @@ interface IState {
 const ROUTE_BASE = '/builder/assessments';
 
 class AdminRiskAreas extends React.Component<allProps, IState> {
+  state = {
+    showCreateRiskArea: false,
+    error: null,
+  };
+
   constructor(props: allProps) {
     super(props);
 
@@ -61,11 +66,6 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
     this.showCreateRiskArea = this.showCreateRiskArea.bind(this);
     this.hideCreateRiskArea = this.hideCreateRiskArea.bind(this);
     this.onDeleteRiskArea = this.onDeleteRiskArea.bind(this);
-
-    this.state = {
-      showCreateRiskArea: false,
-      error: null,
-    };
   }
 
   componentWillReceiveProps(nextProps: allProps) {

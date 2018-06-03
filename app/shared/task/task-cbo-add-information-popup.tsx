@@ -49,25 +49,28 @@ interface IState extends ITaskCBOInformationFields {
   error: string | null;
 }
 
+const DEFAULT_STATE = {
+  categoryId: '',
+  CBOId: '',
+  CBOName: '',
+  CBOUrl: '',
+  description: '',
+  loading: false,
+  error: null,
+};
+
 export class TaskCBOAddInformationPopup extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = this.getInitialState();
+  static getDerivedStateFromProps(newProps: allProps, prevState: IState) {
+    const { task } = newProps;
+    if (task.CBOReferral && !prevState.categoryId) {
+      return {
+        categoryId: task.CBOReferral.categoryId,
+      };
+    }
+    return null;
   }
 
-  getInitialState(): IState {
-    const { task } = this.props;
-    return {
-      categoryId: task.CBOReferral ? task.CBOReferral.categoryId : '',
-      CBOId: '',
-      CBOName: '',
-      CBOUrl: '',
-      description: '',
-      loading: false,
-      error: null,
-    };
-  }
+  state = DEFAULT_STATE;
 
   onChange = (field: string): ((e: ChangeEvent) => void) => {
     return (e: ChangeEvent) => {
@@ -77,7 +80,7 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
         // unselect CBO if switching categories
         this.setState({ categoryId: newValue, CBOId: '', CBOName: '', CBOUrl: '' });
       } else {
-        this.setState({ [field as any]: newValue });
+        this.setState({ [field as any]: newValue } as any);
       }
     };
   };
@@ -137,7 +140,7 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 
   onClose = (): void => {
     // ensure that partially filled out fields don't persist
-    this.setState(this.getInitialState(), () => {
+    this.setState(DEFAULT_STATE, () => {
       this.props.closePopup();
     });
   };

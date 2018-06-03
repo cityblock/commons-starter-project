@@ -41,10 +41,7 @@ interface IState {
 }
 
 export class AdminRiskAreaGroups extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = { createMode: false };
-  }
+  state = { createMode: false };
 
   redirectToRiskAreaGroups = () => this.props.history.push(ROUTE_BASE);
 

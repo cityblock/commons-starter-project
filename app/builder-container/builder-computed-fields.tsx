@@ -49,13 +49,9 @@ interface IState {
 }
 
 export class BuilderComputedFields extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      showCreateComputedField: false,
-    };
-  }
+  state = {
+    showCreateComputedField: false,
+  };
 
   showCreateComputedField = () => {
     this.setState({ showCreateComputedField: true });

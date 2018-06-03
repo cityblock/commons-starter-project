@@ -32,17 +32,11 @@ interface IState {
 }
 
 export class TaskCompletion extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
+  state = {
+    toggleCompletionError: '',
+  };
 
-    this.state = {
-      toggleCompletionError: '',
-    };
-
-    this.toggleCompletion = this.toggleCompletion.bind(this);
-  }
-
-  async toggleCompletion() {
+  toggleCompletion = async () => {
     const { taskId, completedAt, completeTask, uncompleteTask } = this.props;
 
     try {
@@ -56,7 +50,7 @@ export class TaskCompletion extends React.Component<IProps, IState> {
     } catch (err) {
       this.setState({ toggleCompletionError: err.message });
     }
-  }
+  };
 
   render(): JSX.Element {
     const { completedAt } = this.props;

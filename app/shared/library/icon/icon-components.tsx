@@ -1,8 +1,3 @@
-import { IconName } from './icon-types';
-
-type IconComponents = { [K in IconName]: React.ComponentType<SvgIconProps> };
-
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import AccessAlarmsIcon from '@material-ui/icons/AccessAlarms';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -73,6 +68,9 @@ import TextSmsIcon from '@material-ui/icons/Textsms';
 import TodayIcon from '@material-ui/icons/Today';
 import WarningIcon from '@material-ui/icons/Warning';
 import MattermostIcon from './custom/mattermost';
+import { IconName } from './icon-types';
+
+type IconComponents = { [K in IconName]: any };
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props

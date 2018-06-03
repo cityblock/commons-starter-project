@@ -19,13 +19,9 @@ interface IState {
 }
 
 class GoalSuggestions extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      selectedGoalSuggestionId: '',
-    };
-  }
+  state = {
+    selectedGoalSuggestionId: '',
+  };
 
   componentWillReceiveProps(nextProps: IProps) {
     // if number of goal suggestions has changed because of accepting/denying them,

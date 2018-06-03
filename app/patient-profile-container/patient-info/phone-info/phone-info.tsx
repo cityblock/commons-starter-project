@@ -48,15 +48,11 @@ interface IState {
 }
 
 export class PhoneInfo extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      isCreateModalVisible: false,
-      isPrimary: false,
-      updatedPhones: null,
-    };
-  }
+  state: IState = {
+    isCreateModalVisible: false,
+    isPrimary: false,
+    updatedPhones: null,
+  };
 
   handlePhoneDelete = async (phoneId: string, isPrimary: boolean) => {
     const { phoneDeleteMutation, patientId, onChange, phones, openErrorPopup } = this.props;

@@ -17,10 +17,10 @@ export interface IPatientSiuEventEditOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientSiuEvent extends BaseModel {
-  patientId: string;
-  visitId: string;
-  transmissionId: number;
-  googleEventId: string;
+  patientId!: string;
+  visitId!: string;
+  transmissionId!: number;
+  googleEventId!: string;
 
   static tableName = 'patient_siu_event';
 

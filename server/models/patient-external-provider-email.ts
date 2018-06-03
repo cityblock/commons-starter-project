@@ -12,10 +12,10 @@ interface IPatientExternalProviderEmailOptions {
 
 /* tslint:disable:member-ordering */
 export default class PatientExternalProviderEmail extends BaseModel {
-  patientExternalProvider: PatientExternalProvider;
-  patientExternalProviderId: string;
-  email: Email;
-  emailId: string;
+  patientExternalProvider!: PatientExternalProvider;
+  patientExternalProviderId!: string;
+  email!: Email;
+  emailId!: string;
 
   static tableName = 'patient_external_provider_email';
 

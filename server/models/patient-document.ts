@@ -23,16 +23,16 @@ export default class PatientDocument extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
-  id: string;
-  patientId: string;
-  uploadedById: string;
-  filename: string;
-  description: string;
-  documentType: DocumentTypeOptions;
-  uploadedBy: User;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  id!: string;
+  patientId!: string;
+  uploadedById!: string;
+  filename!: string;
+  description!: string;
+  documentType!: DocumentTypeOptions;
+  uploadedBy!: User;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string | null;
 
   static tableName = 'patient_document';
   static hasPHI = false;

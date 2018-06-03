@@ -10,13 +10,10 @@ import { formatAbbreviatedName } from '../helpers/format-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
 import CareTeam from '../models/care-team';
+import * as knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);

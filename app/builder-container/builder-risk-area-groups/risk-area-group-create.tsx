@@ -36,22 +36,18 @@ interface IState {
 type Field = 'title' | 'shortTitle' | 'order' | 'mediumRiskThreshold' | 'highRiskThreshold';
 
 export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      title: '',
-      shortTitle: '',
-      order: '',
-      mediumRiskThreshold: '',
-      highRiskThreshold: '',
-      loading: false,
-    };
-  }
+  state = {
+    title: '',
+    shortTitle: '',
+    order: '',
+    mediumRiskThreshold: '',
+    highRiskThreshold: '',
+    loading: false,
+  };
 
   onChange = (field: Field): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
     return (e: React.ChangeEvent<HTMLInputElement>): void => {
-      this.setState({ [field as any]: e.currentTarget.value });
+      this.setState({ [field as any]: e.currentTarget.value } as any);
     };
   };
 

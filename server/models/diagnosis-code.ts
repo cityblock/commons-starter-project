@@ -23,10 +23,10 @@ function getCleanedCode(dirtyCode: string): string {
 
 /* tslint:disable:member-ordering */
 export default class DiagnosisCode extends BaseModel {
-  codesetName: string;
-  label: string;
-  code: string;
-  version: string;
+  codesetName!: string;
+  label!: string;
+  code!: string;
+  version!: string;
 
   static tableName = 'diagnosis_code';
 

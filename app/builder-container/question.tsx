@@ -153,7 +153,7 @@ export class Question extends React.Component<allProps, IState> {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
   }
 
   async onSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -168,7 +168,7 @@ export class Question extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
     const variables = { questionId, [name]: value };
 
-    this.setState({ [name as any]: value || '' });
+    this.setState({ [name as any]: value || '' } as any);
 
     await editQuestion({ variables });
   }

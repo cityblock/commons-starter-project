@@ -37,28 +37,24 @@ interface IState {
 type Field = 'name' | 'categoryId' | 'address' | 'city' | 'state' | 'zip' | 'fax' | 'phone' | 'url';
 
 export class CBOCreate extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      name: '',
-      categoryId: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
-      fax: '',
-      phone: '',
-      url: '',
-      loading: false,
-    };
-  }
+  state = {
+    name: '',
+    categoryId: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    fax: '',
+    phone: '',
+    url: '',
+    loading: false,
+  };
 
   onChange = (
     field: Field,
   ): ((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void) => {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-      this.setState({ [field as any]: e.currentTarget.value });
+      this.setState({ [field as any]: e.currentTarget.value } as any);
     };
   };
 

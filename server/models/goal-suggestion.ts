@@ -18,15 +18,15 @@ const EAGER_QUERY = 'goalSuggestionTemplate.[taskTemplates]';
 // NOTE: Does not extend base model since GoalSuggestions should never be updated
 /* tslint:disable:member-ordering */
 export default class GoalSuggestion extends Model {
-  id: string;
-  createdAt: string;
-  deletedAt: string;
-  goalSuggestionTemplateId: string;
-  goalSuggestionTemplate: GoalSuggestionTemplate;
-  answerId: string;
-  answer: Answer;
-  screeningToolScoreRangeId: string;
-  screeningToolScoreRange: ScreeningToolScoreRange;
+  id!: string;
+  createdAt!: string;
+  deletedAt!: string;
+  goalSuggestionTemplateId!: string;
+  goalSuggestionTemplate!: GoalSuggestionTemplate;
+  answerId!: string;
+  answer!: Answer;
+  screeningToolScoreRangeId!: string;
+  screeningToolScoreRange!: ScreeningToolScoreRange;
 
   static tableName = 'goal_suggestion';
   static hasPHI = false;

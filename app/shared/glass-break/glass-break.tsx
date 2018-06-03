@@ -19,11 +19,7 @@ interface IState {
 }
 
 class GlassBreak extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { isPopupVisible: false };
-  }
+  state = { isPopupVisible: false };
 
   render(): JSX.Element {
     const { resource, patientName, createGlassBreak } = this.props;

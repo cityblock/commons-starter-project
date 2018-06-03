@@ -16,10 +16,10 @@ interface ITaskUnfollowPatientTasksOptions {
 
 /* tslint:disable:member-ordering */
 export default class TaskFollower extends BaseModel {
-  task: Task;
-  taskId: string;
-  user: User;
-  userId: string;
+  task!: Task;
+  taskId!: string;
+  user!: User;
+  userId!: string;
 
   static tableName = 'task_follower';
 

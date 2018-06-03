@@ -20,10 +20,7 @@ interface IState {
 }
 
 export default class DisplayCard extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { isMenuVisible: false };
-  }
+  state = { isMenuVisible: false };
 
   handleMenuToggle = () => {
     const { isMenuVisible } = this.state;

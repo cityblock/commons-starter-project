@@ -36,10 +36,7 @@ interface IState {
 }
 
 class PatientDocuments extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {};
-  }
+  state = { modalDocumentType: null };
 
   handleClosePopup = () => {
     this.setState({ modalDocumentType: null });

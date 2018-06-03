@@ -12,10 +12,10 @@ interface IPatientGlassBreakCreateFields {
 
 /* tslint:disable:member-ordering */
 export default class PatientGlassBreak extends BaseModel {
-  userId: string;
-  patientId: string;
-  reason: string;
-  note: string | null;
+  userId!: string;
+  patientId!: string;
+  reason!: string;
+  note!: string | null;
 
   static tableName = 'patient_glass_break';
   static hasPHI = false;

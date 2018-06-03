@@ -27,15 +27,11 @@ interface IState {
 // of each option, use the plain select component because of its
 // built in funcionality optimized for mobile.
 class SelectDropdown extends React.Component<IProps, IState> {
-  private menu: HTMLDivElement | null;
+  state = {
+    open: false,
+  };
 
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      open: false,
-    };
-  }
+  private menu: HTMLDivElement | null = null;
 
   componentDidMount() {
     // needed to detect if clicking away from dropdown menu

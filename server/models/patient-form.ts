@@ -27,13 +27,13 @@ export default class PatientForm extends BaseModel {
     required: ['patientId', 'userId', 'formId'],
   };
 
-  id: string;
-  patientId: string;
-  userId: string;
-  formId: string;
-  signedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  id!: string;
+  patientId!: string;
+  userId!: string;
+  formId!: string;
+  signedAt!: string | null;
+  createdAt!: string;
+  updatedAt!: string;
+  deletedAt!: string | null;
 }
 /* tslint:enable:check-model-variable */

@@ -12,11 +12,11 @@ interface IComputedFieldFlagCreateFields {
 /* tslint:disable:member-ordering */
 // Patient computed field flag
 export default class ComputedFieldFlag extends BaseModel {
-  patientAnswerId: string;
-  userId: string;
-  reason: string | null;
-  patientAnswer: PatientAnswer;
-  user: User;
+  patientAnswerId!: string;
+  userId!: string;
+  reason!: string | null;
+  patientAnswer!: PatientAnswer;
+  user!: User;
 
   static tableName = 'computed_field_flag';
 

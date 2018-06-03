@@ -26,11 +26,7 @@ interface IState {
 }
 
 class ProgressNoteActivitySection extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = { expanded: false };
-  }
+  state = { expanded: false };
 
   getSectionTitle = () => {
     const { activityType } = this.props;

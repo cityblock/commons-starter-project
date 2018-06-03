@@ -35,12 +35,7 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class ProgressNoteRow extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-    this.state = {
-      tab: null,
-    };
-  }
+  state = { tab: null };
 
   onTabClick = (tab: Tab | null) => {
     this.setState({

@@ -31,11 +31,7 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 export class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = { dismissedReason: '', loading: false, error: null };
-  }
+  state = { dismissedReason: '', loading: false, error: null };
 
   onSubmit = async (): Promise<void> => {
     const { suggestion, dismissCarePlanSuggestion } = this.props;

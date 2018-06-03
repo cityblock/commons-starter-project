@@ -61,25 +61,25 @@ const EAGER_QUERY = `[
 
 /* tslint:disable:member-ordering */
 export default class Task extends BaseModel {
-  title: string;
-  description: string;
-  patient: Patient;
-  patientId: string;
-  createdBy: User;
-  createdById: string;
-  assignedTo: User;
-  assignedToId: string;
-  completedBy: User;
-  completedById: string | null;
-  patientGoalId: string;
-  patientGoal: PatientGoal;
-  dueAt: string | null;
-  completedAt: string | null;
-  followers: User[];
-  priority: Priority;
-  taskEvents: TaskEvent[];
-  CBOReferralId: string | null;
-  CBOReferral: CBOReferral | null;
+  title!: string;
+  description!: string;
+  patient!: Patient;
+  patientId!: string;
+  createdBy!: User;
+  createdById!: string;
+  assignedTo!: User;
+  assignedToId!: string;
+  completedBy!: User;
+  completedById!: string | null;
+  patientGoalId!: string;
+  patientGoal!: PatientGoal;
+  dueAt!: string | null;
+  completedAt!: string | null;
+  followers!: User[];
+  priority!: Priority;
+  taskEvents!: TaskEvent[];
+  CBOReferralId!: string | null;
+  CBOReferral!: CBOReferral | null;
 
   static tableName = 'task';
 

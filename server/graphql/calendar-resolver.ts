@@ -204,7 +204,13 @@ export async function calendarCreateForPatient(
 
     if (!calendarId) {
       try {
-        calendarId = await createCalendarWithPermissions(patient.id, userId!, txn, undefined, testConfig);
+        calendarId = await createCalendarWithPermissions(
+          patient.id,
+          userId!,
+          txn,
+          undefined,
+          testConfig,
+        );
       } catch (err) {
         throw new Error(`There was an error creating a calendar for patient: ${patientId}. ${err}`);
       }

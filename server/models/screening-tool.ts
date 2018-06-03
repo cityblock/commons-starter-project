@@ -20,11 +20,11 @@ export const EAGER_QUERY =
 
 /* tslint:disable:member-ordering */
 export default class ScreeningTool extends BaseModel {
-  title: string;
-  riskAreaId: string;
-  riskArea: RiskArea;
-  screeningToolScoreRanges: ScreeningToolScoreRange[];
-  patientScreeningToolSubmissions: PatientScreeningToolSubmission[];
+  title!: string;
+  riskAreaId!: string;
+  riskArea!: RiskArea;
+  screeningToolScoreRanges!: ScreeningToolScoreRange[];
+  patientScreeningToolSubmissions!: PatientScreeningToolSubmission[];
 
   static tableName = 'screening_tool';
 

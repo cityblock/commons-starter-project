@@ -20,14 +20,10 @@ interface IState {
 }
 
 export class TaskHeader extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      hamburgerMenuVisible: false,
-      copySuccessVisible: false,
-    };
-  }
+  state = {
+    hamburgerMenuVisible: false,
+    copySuccessVisible: false,
+  };
 
   onToggleHamburgerMenu = (): void => {
     this.setState({ hamburgerMenuVisible: !this.state.hamburgerMenuVisible });

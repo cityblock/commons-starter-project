@@ -15,9 +15,9 @@ export interface IEmailEdit {
 
 /* tslint:disable:member-ordering */
 export default class Email extends BaseModel {
-  emailAddress: string;
-  description: string;
-  updatedById: string;
+  emailAddress!: string;
+  description!: string;
+  updatedById!: string;
 
   static tableName = 'email';
 

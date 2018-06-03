@@ -35,14 +35,10 @@ interface IState {
 export type allProps = IProps & IGraphqlProps;
 
 export class TaskAssignee extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      changeAssigneeError: '',
-    };
-  }
+  state = {
+    loading: false,
+    changeAssigneeError: '',
+  };
 
   onNewAssigneeClick = async (careTeamMemberId: string, careTeamMemberEmail: string | null) => {
     const { onAssigneeClick } = this.props;

@@ -264,7 +264,7 @@
     "style-loader": "0.21.0",
     "subscriptions-transport-ws": "0.9.9",
     "ts-loader": "4.3.0",
-    "ts-node": "6.0.5",
+    "ts-node": "6.1.0",
     "twilio": "3.17.1",
     "typescript": "2.8.4",
     "typings-for-css-modules-loader": "1.7.0",

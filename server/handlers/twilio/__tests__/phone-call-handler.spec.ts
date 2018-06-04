@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
+import PatientInfo from '../../../models/patient-info';
 import PatientPhone from '../../../models/patient-phone';
 import Phone from '../../../models/phone';
 import PhoneCall from '../../../models/phone-call';
@@ -123,6 +124,7 @@ describe('Phone Call Handler', () => {
         { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
         txn,
       );
+
       const res = httpMocks.createResponse();
       res.locals = { existingTxn: txn };
       res.end = jest.fn();
@@ -168,6 +170,15 @@ describe('Phone Call Handler', () => {
         { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
         txn,
       );
+      await PatientInfo.edit(
+        {
+          canReceiveCalls: true,
+          updatedById: user.id,
+        },
+        patient.patientInfo.id,
+        txn,
+      );
+
       const res = httpMocks.createResponse();
       res.locals = { existingTxn: txn };
       res.end = jest.fn();
@@ -210,6 +221,60 @@ describe('Phone Call Handler', () => {
   });
 
   it('handles a complete outbound phone call', async () => {
+    const { user, patient, phone } = await setup(txn);
+    await User.update(
+      user.id,
+      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+      txn,
+    );
+
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234567890',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        DialCallStatus: 'completed',
+        DialCallDuration: '11',
+        Direction: 'inbound',
+        CallSid: callSid,
+      },
+      query: { outbound: true },
+    });
+
+    await twilioCompleteCallHandler(req, res);
+
+    const phoneCalls = await PhoneCall.getForUserPatient(
+      { userId: user.id, patientId: patient.id },
+      { pageNumber: 0, pageSize: 5 },
+      txn,
+    );
+
+    expect(phoneCalls.total).toBe(1);
+    expect(phoneCalls.results[0]).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      contactNumber: phone.phoneNumber,
+      direction: 'fromUser' as SmsMessageDirection,
+      duration: 11,
+      callStatus: 'completed',
+      twilioPayload: req.body,
+      callSid,
+    });
+
+    expect(res.end).toHaveBeenCalledTimes(1);
+    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+
+    expect(queue.testMode.jobs.length).toBe(1);
+    expect(queue.testMode.jobs[0].data).toMatchObject({
+      type: 'phoneCall',
+      userId: user.id,
+      patientId: patient.id,
+    });
+  });
+
+  it('handles a complete outbound phone call not associated with past patient number', async () => {
     const { user } = await setup(txn);
     await User.update(
       user.id,

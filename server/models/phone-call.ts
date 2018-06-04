@@ -30,6 +30,8 @@ const CALL_STATUS: CallStatus[] = [
   'in-progress',
 ];
 
+const EAGER_QUERY = 'patient.patientInfo';
+
 interface IPhoneCallCreate {
   userId: string;
   contactNumber: string;
@@ -128,7 +130,11 @@ export default class PhoneCall extends BaseModel {
     };
   }
 
-  static async create(input: IPhoneCallCreate, txn: Transaction): Promise<PhoneCall> {
+  static async create(
+    input: IPhoneCallCreate,
+    txn: Transaction,
+    isEager?: boolean,
+  ): Promise<PhoneCall> {
     await validatePhoneNumberForTwilio(input.contactNumber);
     // grab patient id currently associated with that number if it exsits
     const patientId = await PatientPhone.getPatientIdForPhoneNumber(input.contactNumber, txn);
@@ -137,6 +143,13 @@ export default class PhoneCall extends BaseModel {
       ...input,
       patientId,
     };
+
+    if (isEager) {
+      return this.query(txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(inputWithPatient);
+    }
+
     return this.query(txn).insertAndFetch(inputWithPatient);
   }
 

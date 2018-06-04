@@ -12,6 +12,8 @@ export const DIRECTION: SmsMessageDirection[] = [
   'fromUser' as SmsMessageDirection,
 ];
 
+const EAGER_QUERY = 'patient.patientInfo';
+
 interface ISmsMessageCreate {
   userId: string;
   contactNumber: string;
@@ -79,7 +81,11 @@ export default class SmsMessage extends BaseModel {
     };
   }
 
-  static async create(input: ISmsMessageCreate, txn: Transaction): Promise<SmsMessage> {
+  static async create(
+    input: ISmsMessageCreate,
+    txn: Transaction,
+    isEager?: boolean,
+  ): Promise<SmsMessage> {
     await validatePhoneNumberForTwilio(input.contactNumber);
 
     // grab patient id currently associated with that number if it exsits
@@ -89,6 +95,13 @@ export default class SmsMessage extends BaseModel {
       ...input,
       patientId,
     };
+
+    if (isEager) {
+      return this.query(txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(inputWithPatient);
+    }
+
     return this.query(txn).insertAndFetch(inputWithPatient);
   }
 

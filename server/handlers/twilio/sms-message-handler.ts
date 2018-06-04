@@ -105,14 +105,23 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
           twilioPayload,
         },
         txn,
+        true,
       );
       // publish notification that message created
       publishMessage(smsMessage);
+
       // if message not associated with patient, background job to ensure not old number
       if (!smsMessage.patientId) {
         addJobToQueue('checkPreviousContact', {
           userId: user.id,
           contactNumber: smsMessage.contactNumber,
+        });
+        // else if patient did not consent to be texted, background job to SMS user
+      } else if (smsMessage.patient && !smsMessage.patient.patientInfo.canReceiveTexts) {
+        addJobToQueue('notifyNoConsent', {
+          userId: user.id,
+          patientId: smsMessage.patientId,
+          type: 'smsMessage',
         });
       }
     } catch (err) {

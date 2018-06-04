@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
+import PatientInfo from '../../../models/patient-info';
 import PatientPhone from '../../../models/patient-phone';
 import Phone from '../../../models/phone';
 import SmsMessage from '../../../models/sms-message';
@@ -113,6 +114,15 @@ describe('SMS Message Handler', () => {
       { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
       txn,
     );
+    await PatientInfo.edit(
+      {
+        canReceiveTexts: true,
+        updatedById: user.id,
+      },
+      patient.patientInfo.id,
+      txn,
+    );
+
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
@@ -142,7 +152,11 @@ describe('SMS Message Handler', () => {
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);
-    expect(pubsub.publish).toHaveBeenCalledWith('smsMessageCreated', {
+
+    const args = (pubsub.publish as any).mock.calls;
+
+    expect(args[0][0]).toBe('smsMessageCreated');
+    expect(args[0][1]).toMatchObject({
       smsMessageCreated: { node: smsMessages.results[0] },
       userId: user.id,
       patientId: patient.id,
@@ -151,6 +165,64 @@ describe('SMS Message Handler', () => {
     expect(res.end).toHaveBeenCalledTimes(1);
     expect(res.end).toHaveBeenCalledWith(expectedOutgoingTwiml);
     expect(queue.testMode.jobs.length).toBe(0);
+  });
+
+  it('handles an outgoing SMS with no patient consent', async () => {
+    const { user, patient } = await setup(txn);
+    await User.update(
+      user.id,
+      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+      txn,
+    );
+
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    pubsub.publish = jest.fn();
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234567890',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        Body: 'Winter is here.',
+      },
+    });
+
+    await twilioOutgoingSmsHandler(req, res);
+
+    const smsMessages = await SmsMessage.getForUserPatient(
+      { userId: user.id, patientId: patient.id },
+      { pageNumber: 0, pageSize: 5 },
+      txn,
+    );
+
+    expect(smsMessages.total).toBe(1);
+    expect(smsMessages.results[0]).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      body: 'Winter is here.',
+      direction: 'fromUser' as SmsMessageDirection,
+    });
+
+    expect(pubsub.publish).toHaveBeenCalledTimes(1);
+
+    const args = (pubsub.publish as any).mock.calls;
+
+    expect(args[0][0]).toBe('smsMessageCreated');
+    expect(args[0][1]).toMatchObject({
+      smsMessageCreated: { node: smsMessages.results[0] },
+      userId: user.id,
+      patientId: patient.id,
+    });
+
+    expect(res.end).toHaveBeenCalledTimes(1);
+    expect(res.end).toHaveBeenCalledWith(expectedOutgoingTwiml);
+
+    expect(queue.testMode.jobs.length).toBe(1);
+    expect(queue.testMode.jobs[0].data).toMatchObject({
+      userId: user.id,
+      patientId: patient.id,
+      type: 'smsMessage',
+    });
   });
 
   it('handles an outgoing SMS not associated with patient', async () => {

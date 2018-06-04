@@ -81,6 +81,42 @@ describe('Phone Call Model', () => {
       });
     });
 
+    it('shoule eager load patient if specified', async () => {
+      const { phone, user, patient } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const phoneCall = await PhoneCall.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser' as SmsMessageDirection,
+          duration: 11,
+          callStatus,
+          twilioPayload,
+          callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
+        },
+        txn,
+        true,
+      );
+
+      expect(phoneCall).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: patient.id,
+        duration: 11,
+        callStatus,
+        twilioPayload,
+        patient: {
+          patientInfo: {
+            gender: patient.patientInfo.gender,
+            canReceiveTexts: patient.patientInfo.canReceiveTexts,
+          },
+        },
+      });
+    });
+
     it('should create phone call not associated with patient if applicable', async () => {
       const { phone, user } = await setup(txn);
 
@@ -106,6 +142,36 @@ describe('Phone Call Model', () => {
         duration: 11,
         callStatus,
         twilioPayload,
+      });
+    });
+
+    it('should eager load no patient if specified', async () => {
+      const { phone, user } = await setup(txn);
+
+      const phoneCall = await PhoneCall.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser' as SmsMessageDirection,
+          duration: 11,
+          callStatus,
+          twilioPayload,
+          callSid,
+          twilioCreatedAt: timestamp,
+          twilioUpdatedAt: timestamp,
+        },
+        txn,
+        true,
+      );
+
+      expect(phoneCall).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: null,
+        duration: 11,
+        callStatus,
+        twilioPayload,
+        patient: null,
       });
     });
 

@@ -76,6 +76,38 @@ describe('SMS model', () => {
       });
     });
 
+    it('should eager load patient if specified', async () => {
+      const { phone, user, patient } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const sms = await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser' as SmsMessageDirection,
+          body,
+          twilioPayload,
+        },
+        txn,
+        true,
+      );
+
+      expect(sms).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: patient.id,
+        direction: 'toUser' as SmsMessageDirection,
+        body,
+        twilioPayload,
+        patient: {
+          patientInfo: {
+            gender: patient.patientInfo.gender,
+            canReceiveTexts: patient.patientInfo.canReceiveTexts,
+          },
+        },
+      });
+    });
+
     it('should create sms not associated with patient if applicable', async () => {
       const { phone, user } = await setup(txn);
 
@@ -97,6 +129,32 @@ describe('SMS model', () => {
         direction: 'toUser' as SmsMessageDirection,
         body,
         twilioPayload,
+      });
+    });
+
+    it('should eager load no patient if specified', async () => {
+      const { phone, user } = await setup(txn);
+
+      const sms = await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser' as SmsMessageDirection,
+          body,
+          twilioPayload,
+        },
+        txn,
+        true,
+      );
+
+      expect(sms).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: null,
+        direction: 'toUser' as SmsMessageDirection,
+        body,
+        twilioPayload,
+        patient: null,
       });
     });
 

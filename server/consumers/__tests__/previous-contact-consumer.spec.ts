@@ -140,7 +140,7 @@ describe('Previous Contact Consumer', () => {
       expect(args[0][0]).toMatchObject({
         from: '+17273415787',
         to: phoneNumber,
-        body: 'The number +11234567890 is no longer associated with member Jon S.',
+        body: 'It looks like you\'re trying to reach a number no long associated with Jon S.',
       });
       expect(args[1][0]).toMatchObject({
         from: '+17273415787',
@@ -154,9 +154,9 @@ describe('Previous Contact Consumer', () => {
   describe('getNoticeCopy', () => {
     it('returns message that number not associated with member', async () => {
       const { patient } = await setup(txn);
-      const noticeCopy = getNoticeCopy(patient, phoneNumber);
+      const noticeCopy = getNoticeCopy(patient);
 
-      expect(noticeCopy).toBe('The number +17273334444 is no longer associated with member Jon S.');
+      expect(noticeCopy).toBe('It looks like you\'re trying to reach a number no long associated with Jon S.');
     });
   });
 });

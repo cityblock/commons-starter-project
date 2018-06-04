@@ -67,19 +67,19 @@ export async function processPreviousContactCheck(
 
     const patient = await Patient.get(patientId, txn);
 
-    const noticeCopy = getNoticeCopy(patient, data.contactNumber);
+    const noticeCopy = getNoticeCopy(patient);
     const actionCopy = getActionCopy(patient, 'deletePhoneNumber');
 
     await notifyUserOfContactEdit(user, noticeCopy, actionCopy);
   });
 }
 
-export function getNoticeCopy(patient: Patient, contactNumber: string): string {
+export function getNoticeCopy(patient: Patient): string {
   const patientName = formatAbbreviatedName(
     patient.firstName,
     patient.lastName,
     patient.patientInfo.preferredName,
   );
 
-  return `The number ${contactNumber} is no longer associated with member ${patientName}`;
+  return `It looks like you're trying to reach a number no long associated with ${patientName}`;
 }

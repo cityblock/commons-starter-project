@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 import * as smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
 import * as smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
-import { getSmsMessagesQuery } from '../../graphql/types';
+import { getPatientQuery, getSmsMessagesQuery } from '../../graphql/types';
 import * as styles from './css/left-nav-messages.css';
 import SmsMessageCreate from './sms-message-create';
 import SmsMessages from './sms-messages';
@@ -16,8 +17,11 @@ export interface IProps {
 }
 
 interface IGraphqlProps {
-  loading?: boolean;
-  error?: string | null;
+  messagesLoading?: boolean;
+  messagesError?: string | null;
+  patientLoading?: boolean;
+  patientError?: string | null;
+  patient: getPatientQuery['patient'];
   smsMessages: getSmsMessagesQuery['smsMessages'];
   subscribeToMore: ((args: any) => () => void) | null;
 }
@@ -52,25 +56,48 @@ export class LeftNavMessages extends React.Component<allProps> {
   };
 
   render(): JSX.Element {
-    const { loading, error, smsMessages, patientId } = this.props;
+    const {
+      patientLoading,
+      patientError,
+      messagesLoading,
+      messagesError,
+      smsMessages,
+      patient,
+    } = this.props;
 
     return (
       <div className={styles.container}>
-        <SmsMessages loading={loading} error={error} smsMessages={smsMessages} />
-        <SmsMessageCreate patientId={patientId} />
+        <SmsMessages loading={messagesLoading} error={messagesError} smsMessages={smsMessages} />
+        <SmsMessageCreate
+          patient={patient}
+          loading={patientLoading || false}
+          error={patientError || null}
+        />
       </div>
     );
   }
 }
 
-export default graphql(smsMessagesQuery as any, {
-  options: ({ patientId }: IProps) => ({
-    variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
+export default compose(
+  graphql(patientQuery as any, {
+    options: ({ patientId }: IProps) => ({
+      variables: { patientId },
+    }),
+    props: ({ data }) => ({
+      patientLoading: data ? data.loading : false,
+      patientError: data ? data.error : null,
+      patient: data ? (data as any).patient : null,
+    }),
   }),
-  props: ({ data, ownProps }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    smsMessages: data ? (data as any).smsMessages : null,
-    subscribeToMore: data ? data.subscribeToMore : null,
+  graphql(smsMessagesQuery as any, {
+    options: ({ patientId }: IProps) => ({
+      variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
+    }),
+    props: ({ data, ownProps }) => ({
+      messagesLoading: data ? data.loading : false,
+      messagesError: data ? data.error : null,
+      smsMessages: data ? (data as any).smsMessages : null,
+      subscribeToMore: data ? data.subscribeToMore : null,
+    }),
   }),
-})(LeftNavMessages as any);
+)(LeftNavMessages as any);

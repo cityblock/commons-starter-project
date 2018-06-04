@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
+import { patient, smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
 import { LeftNavMessages } from '../left-nav-messages';
 import SmsMessageCreate from '../sms-message-create';
 import SmsMessages from '../sms-messages';
@@ -26,9 +26,10 @@ describe('Left Nav Messages', () => {
   const wrapper = shallow(
     <LeftNavMessages
       patientId={patientId}
+      patient={patient}
       smsMessages={smsMessages}
-      error={null}
-      loading={false}
+      messagesError={null}
+      messagesLoading={false}
       subscribeToMore={() => true as any}
     />,
   );
@@ -40,6 +41,8 @@ describe('Left Nav Messages', () => {
   });
 
   it('renders form to send SMS', () => {
-    expect(wrapper.find(SmsMessageCreate).props().patientId).toBe(patientId);
+    expect(wrapper.find(SmsMessageCreate).props().patient).toBe(patient);
+    expect(wrapper.find(SmsMessageCreate).props().loading).toBeFalsy();
+    expect(wrapper.find(SmsMessageCreate).props().error).toBeNull();
   });
 });

@@ -1,11 +1,26 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import SmallText from '../../../shared/library/small-text/small-text';
 import TextAreaWithButton from '../../../shared/library/textarea-with-button/textarea-with-button';
+import { patient } from '../../../shared/util/test-data';
 import { SmsMessageCreate } from '../sms-message-create';
 
 describe('SMS Message Create Form', () => {
+  const patientCanReceiveTexts = {
+    ...patient,
+    patientInfo: {
+      ...patient.patientInfo,
+      canReceiveTexts: true,
+    },
+  };
+
   const wrapper = shallow(
-    <SmsMessageCreate createSmsMessage={() => true as any} patientId="aryaStark" />,
+    <SmsMessageCreate
+      createSmsMessage={() => true as any}
+      patient={patientCanReceiveTexts}
+      loading={false}
+      error={null}
+    />,
   );
 
   it('renders container', () => {
@@ -26,5 +41,19 @@ describe('SMS Message Create Form', () => {
     wrapper.setState({ body });
 
     expect(wrapper.find(TextAreaWithButton).props().value).toBe(body);
+  });
+
+  it('renders blocker if patient cannot receive texts', () => {
+    wrapper.setProps({ patient });
+
+    expect(wrapper.find('.container').length).toBe(2);
+    expect(wrapper.find(SmallText).length).toBe(1);
+  });
+
+  it('renders blocker if loading', () => {
+    wrapper.setProps({ loading: true, patient: patientCanReceiveTexts });
+
+    expect(wrapper.find('.container').length).toBe(2);
+    expect(wrapper.find(SmallText).length).toBe(1);
   });
 });

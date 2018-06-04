@@ -977,6 +977,12 @@ export const SPANISH_TRANSLATION = {
     'documentType.molst': 'MOLST',
     'messages.empty': 'No history of text messages',
     'messages.createPlaceholder': 'Text member',
+    'messages.loading': 'Loading...',
+    'messages.errorLoading': "Something went wrong loading this patient's information.",
+    'messages.noConsent':
+      'This member has not consented to receiving text messages from Cityblock.',
+    'messages.noPhone': 'Unable to text this member. ',
+    'messages.noPhoneDetail': 'There is no mobile number on file for this member.',
     'messages.send': 'Send',
     'messages.sending': 'Sending',
     'contacts.download': 'Download',

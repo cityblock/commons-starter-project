@@ -71,8 +71,7 @@ describe('Patient Left Navigation Open Component', () => {
     wrapper.setProps({ selected: 'message' });
 
     // type issues because stateless component
-    expect(wrapper.find<IProps>(LeftNavMessages as any).props().patientId).toBe(patientId);
-    expect(wrapper.find('.content').props().className).toBe('content');
+    expect(wrapper.find<IProps>(LeftNavMessages).props().patientId).toBe(patientId);
 
     expect(wrapper.find(LeftNavQuickActions).length).toBe(0);
     expect(wrapper.find(LeftNavCareTeam).length).toBe(0);

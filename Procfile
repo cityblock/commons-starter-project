@@ -4,6 +4,7 @@ consume-member-attribution: yarn run consume:member-attribution:production
 consume-scheduling: yarn run consume:scheduling:production
 consume-voicemail: yarn run consume:voicemail:production
 consume-phone-call: yarn run consume:phone-call:production
+consume-sms-message: yarn run consume:sms-message:production
 consume-mattermost: yarn run consume:mattermost:production
 consume-task-event: yarn run consume:task-event:production
 consume-contact-update: yarn run consume:contact-update:production

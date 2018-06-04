@@ -31,6 +31,7 @@ export default {
   KUE_UI_PASSWORD: 'fake',
   CITYBLOCK_VOICEMAIL: '+16469417791',
   CITYBLOCK_ADMIN: '+17273415787',
+  GA_TRACKING_ID: 'UA-105679021-5',
   ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
   ...process.env,
 };

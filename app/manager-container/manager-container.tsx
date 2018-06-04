@@ -16,50 +16,42 @@ interface IProps {
   };
 }
 
-export class ManagerContainer extends React.Component<IProps, {}> {
-  title = 'Manager';
-
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
-  }
-
-  render() {
-    const { tabId } = this.props;
-    const usersTabSelected = tabId === 'users';
-    const invitesTabSelected = tabId === 'invites';
-    return (
-      <div className={styles.container}>
-        <div className={styles.mainBody}>
-          <UnderlineTabs color="white">
-            <UnderlineTab
-              href={`/manager/users`}
-              selected={usersTabSelected}
-              messageId="manager.users"
-            />
-            <UnderlineTab
-              href={`/manager/invites`}
-              selected={invitesTabSelected}
-              messageId="manager.invites"
-            />
-          </UnderlineTabs>
-          <Switch>
-            <Route
-              exact
-              path="/manager/users"
-              component={() => <ManagerUsers hasLoggedIn={true} routeBase={`/manager/users`} />}
-            />
-            <Route
-              exact
-              path="/manager/invites"
-              component={() => <ManagerUsers hasLoggedIn={false} routeBase={`/manager/invites`} />}
-            />
-            <Redirect to="/manager/users" />
-          </Switch>
-        </div>
+export const ManagerContainer = (props: IProps) => {
+  const { tabId } = props;
+  const usersTabSelected = tabId === 'users';
+  const invitesTabSelected = tabId === 'invites';
+  return (
+    <div className={styles.container}>
+      <div className={styles.mainBody}>
+        <UnderlineTabs color="white">
+          <UnderlineTab
+            href={`/manager/users`}
+            selected={usersTabSelected}
+            messageId="manager.users"
+          />
+          <UnderlineTab
+            href={`/manager/invites`}
+            selected={invitesTabSelected}
+            messageId="manager.invites"
+          />
+        </UnderlineTabs>
+        <Switch>
+          <Route
+            exact
+            path="/manager/users"
+            component={() => <ManagerUsers hasLoggedIn={true} routeBase={`/manager/users`} />}
+          />
+          <Route
+            exact
+            path="/manager/invites"
+            component={() => <ManagerUsers hasLoggedIn={false} routeBase={`/manager/invites`} />}
+          />
+          <Redirect to="/manager/users" />
+        </Switch>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
   return {

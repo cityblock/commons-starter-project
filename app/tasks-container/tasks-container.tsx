@@ -41,46 +41,38 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-export class TasksContainer extends React.Component<allProps> {
-  title = 'My Tasks';
+export const TasksContainer = (props: allProps) => {
+  const { tasksResponse, match, history, fetchMoreTasks, tasksError, tasksLoading } = props;
+  const taskId = match && match.params.taskId;
+  const tab = match ? match.params.tab : 'assigned';
 
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
-  }
+  const tasks =
+    tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
+  const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
+  const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
 
-  render() {
-    const { tasksResponse, match, history } = this.props;
-    const taskId = match && match.params.taskId;
-    const tab = match ? match.params.tab : 'assigned';
+  const updatePageParams = (pageParams: IPageParams) => {
+    const cleanedPageParams = pickBy<IPageParams>(pageParams);
+    history.push({ search: querystring.stringify(cleanedPageParams) });
+  };
 
-    const tasks =
-      tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
-    const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
-    const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
-
-    const updatePageParams = (pageParams: IPageParams) => {
-      const cleanedPageParams = pickBy<IPageParams>(pageParams);
-      history.push({ search: querystring.stringify(cleanedPageParams) });
-    };
-
-    return (
-      <div className={styles.container}>
-        <Tasks
-          fetchMoreTasks={this.props.fetchMoreTasks}
-          updatePageParams={updatePageParams}
-          loading={this.props.tasksLoading}
-          error={this.props.tasksError}
-          hasNextPage={hasNextPage}
-          hasPreviousPage={hasPreviousPage}
-          routeBase={`/tasks/${tab}`}
-          tasks={tasks}
-          taskId={taskId || ''}
-          tab={tab}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.container}>
+      <Tasks
+        fetchMoreTasks={fetchMoreTasks}
+        updatePageParams={updatePageParams}
+        loading={tasksLoading}
+        error={tasksError}
+        hasNextPage={hasNextPage}
+        hasPreviousPage={hasPreviousPage}
+        routeBase={`/tasks/${tab}`}
+        tasks={tasks}
+        taskId={taskId || ''}
+        tab={tab}
+      />
+    </div>
+  );
+};
 
 const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
   const pageParams = querystring.parse(props.location.search.substring(1));

@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import ProgressNotePopupContainer from '../../progress-note-container/progress-note-popup-container';
 import { PatientProfileContainer as Component, SelectableTabs } from '../patient-profile-container';
 
 const oldDate = Date.now;
@@ -18,7 +19,7 @@ describe('patient profile container', () => {
     Date.now = oldDate;
   });
   it('renders patient profile container', async () => {
-    const component = shallow(
+    const wrapper = shallow(
       <Component
         match={match}
         patientId={'patient-1'}
@@ -27,8 +28,8 @@ describe('patient profile container', () => {
         glassBreakId={null}
       />,
     );
-    const instance = component.instance() as Component;
-    const result = instance.render();
-    expect(result).toMatchSnapshot();
+    const progressNotePopup = wrapper.find(ProgressNotePopupContainer);
+    expect(progressNotePopup).toHaveLength(1);
+    expect(progressNotePopup.props().patientId).toEqual('patient-1');
   });
 });

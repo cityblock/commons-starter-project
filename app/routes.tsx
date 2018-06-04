@@ -12,6 +12,7 @@ import PatientPanel from './patient-panel-container/patient-panel-container';
 import PatientProfile from './patient-profile-container/patient-profile-container';
 import PatientSearch from './patient-search-container/patient-search-container';
 import Settings from './settings-container/settings-container';
+import withTracker from './shared/with-tracker/with-tracker';
 import Tasks from './tasks-container/tasks-container';
 import Voicemail from './voicemail-container/voicemail-container';
 
@@ -27,20 +28,20 @@ const PatientRedirect = (options: any) => (
 export default (
   <Main>
     <Switch>
-      <Route exact path="/" component={LogIn} />
+      <Route exact path="/" component={withTracker(LogIn)} />
       <Authentication>
-        <Route path="/dashboard/:list/:answerId?" component={Dashboard} />
-        <Route path="/tasks/:tab/:taskId?" component={Tasks} />
-        <Route path="/calendar" component={Calendar} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/search" component={PatientSearch} />
+        <Route path="/dashboard/:list/:answerId?" component={withTracker(Dashboard)} />
+        <Route path="/tasks/:tab/:taskId?" component={withTracker(Tasks)} />
+        <Route path="/calendar" component={withTracker(Calendar)} />
+        <Route path="/settings" component={withTracker(Settings)} />
+        <Route path="/search" component={withTracker(PatientSearch)} />
         <Route exact path="/patients/:patientId" component={PatientRedirect} />
-        <Route exact path="/patients" component={PatientPanel} />
-        <Route path="/patients/:patientId/:tab" component={PatientProfile} />
+        <Route exact path="/patients" component={withTracker(PatientPanel)} />
+        <Route path="/patients/:patientId/:tab" component={withTracker(PatientProfile)} />
         <Route path="/builder/:tab?/:objectId?/:subTab?/:subTabId?" component={Builder} />
         <Route path="/manager/:tabId?/:objectId?" component={Manager} />
-        <Route path="/contacts" component={Contacts} />
-        <Route path="/voicemails/:voicemailId" component={Voicemail} />
+        <Route path="/contacts" component={withTracker(Contacts)} />
+        <Route path="/voicemails/:voicemailId" component={withTracker(Voicemail)} />
       </Authentication>
     </Switch>
   </Main>

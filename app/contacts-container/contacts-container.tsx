@@ -26,10 +26,6 @@ interface IState {
 export class ContactsContainer extends React.Component<IGraphqlProps, IState> {
   state = { loading: false, error: null };
 
-  componentDidMount() {
-    document.title = 'Download Contacts | Commons';
-  }
-
   handleClick = async (): Promise<void> => {
     if (!this.state.loading) {
       try {

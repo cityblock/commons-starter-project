@@ -11,6 +11,7 @@ module.exports = ({ production = false } = {}) => {
       'GOOGLE_OAUTH_TOKEN',
       'IS_BUILDER_ENABLED',
       'SUBSCRIPTIONS_ENDPOINT',
+      'GA_TRACKING_ID',
     ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];

@@ -42,13 +42,7 @@ interface IState {
 }
 
 export class PatientSearchContainer extends React.Component<allProps, IState> {
-  title = 'Search';
-
   state = { searchTerm: '' };
-
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
-  }
 
   componentWillReceiveProps(nextProps: allProps) {
     // reset search input field if linking back to search page

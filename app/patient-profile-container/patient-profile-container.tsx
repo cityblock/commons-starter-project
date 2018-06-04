@@ -8,7 +8,6 @@ import { getPatientQuery } from '../graphql/types';
 import ProgressNotePopupContainer from '../progress-note-container/progress-note-popup-container';
 import ErrorComponent from '../shared/error-component/error-component';
 import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
-import { formatPatientName } from '../shared/helpers/format-helpers';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
@@ -56,114 +55,102 @@ interface IGraphqlProps {
 
 type allProps = IStateProps & IProps & IGraphqlProps;
 
-export class PatientProfileContainer extends React.Component<allProps> {
-  componentWillReceiveProps(newProps: allProps) {
-    if (newProps.patient) {
-      document.title = `${formatPatientName(newProps.patient)} | Commons`;
-    }
+export const PatientProfileContainer = (props: allProps) => {
+  const { patientId, patient, tab, glassBreakId, error } = props;
+
+  if (error) {
+    return <ErrorComponent error={error} />;
   }
 
-  render() {
-    const { patientId, patient, tab, glassBreakId, error } = this.props;
-
-    if (error) {
-      return <ErrorComponent error={error} />;
-    }
-
-    return (
-      <div className={styles.container}>
-        <PatientModals />
-        <PatientProfileLeftNav
-          patientId={patientId}
-          patient={patient || null}
-          glassBreakId={glassBreakId}
-        />
-        <ProgressNotePopupContainer patientId={patientId} />
-        <div className={styles.mainBody}>
-          <PatientIntakeChecklist patientId={patientId} />
-          <div className={styles.header}>
-            <UnderlineTabs color="white" className={styles.tabs}>
-              <UnderlineTab
-                messageId="patient.threeSixty"
-                href={`/patients/${patientId}/360`}
-                selected={tab === '360'}
-              />
-              <UnderlineTab
-                messageId="patient.map"
-                selected={tab === 'map'}
-                href={`/patients/${patientId}/map/active`}
-              />
-              <UnderlineTab
-                messageId="patient.timeline"
-                selected={tab === 'timeline'}
-                href={`/patients/${patientId}/timeline`}
-              />
-              <UnderlineTab
-                messageId="patient.patientInfo"
-                href={`/patients/${patientId}/member-info`}
-                selected={tab === 'member-info'}
-              />
-              <UnderlineTab
-                messageId="patient.patientTeam"
-                href={`/patients/${patientId}/team`}
-                selected={tab === 'team'}
-              />
-              <UnderlineTab
-                messageId="patient.patientCalendar"
-                href={`/patients/${patientId}/calendar`}
-                selected={tab === 'calendar'}
-              />
-            </UnderlineTabs>
-          </div>
-          <React.Fragment>
-            <Switch>
-              <Route
-                exact
-                path="/patients/:patientId/map/:subTab?(/goals/:goalId)?(/tasks/:taskId)?"
-                render={(props: any) => (
-                  <PatientCarePlanView {...props} glassBreakId={glassBreakId} />
-                )}
-              />
-              <Route
-                exact
-                path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
-                render={(props: any) => (
-                  <PatientThreeSixtyView {...props} glassBreakId={glassBreakId} />
-                )}
-              />
-              <Route
-                exact
-                path="/patients/:patientId/tools/:screeningToolId?"
-                component={ScreeningTool}
-              />
-              <Route
-                exact
-                path="/patients/:patientId/tools/:screeningToolId/submission/:submissionId"
-                component={ScreeningTool}
-              />
-              <Route
-                exact
-                path="/patients/:patientId/timeline"
-                render={(props: any) => <PatientTimeline {...props} glassBreakId={glassBreakId} />}
-              />
-              <Route
-                exact
-                path="/patients/:patientId/member-info/:subTab?"
-                render={(props: any) => <PatientInfo {...props} glassBreakId={glassBreakId} />}
-              />
-              <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
-              <Route
-                exact
-                path="/patients/:patientId/calendar"
-                render={(props: any) => <PatientCalendar {...props} />}
-              />
-            </Switch>
-          </React.Fragment>
+  return (
+    <div className={styles.container}>
+      <PatientModals />
+      <PatientProfileLeftNav
+        patientId={patientId}
+        patient={patient || null}
+        glassBreakId={glassBreakId}
+      />
+      <ProgressNotePopupContainer patientId={patientId} />
+      <div className={styles.mainBody}>
+        <PatientIntakeChecklist patientId={patientId} />
+        <div className={styles.header}>
+          <UnderlineTabs color="white" className={styles.tabs}>
+            <UnderlineTab
+              messageId="patient.threeSixty"
+              href={`/patients/${patientId}/360`}
+              selected={tab === '360'}
+            />
+            <UnderlineTab
+              messageId="patient.map"
+              selected={tab === 'map'}
+              href={`/patients/${patientId}/map/active`}
+            />
+            <UnderlineTab
+              messageId="patient.timeline"
+              selected={tab === 'timeline'}
+              href={`/patients/${patientId}/timeline`}
+            />
+            <UnderlineTab
+              messageId="patient.patientInfo"
+              href={`/patients/${patientId}/member-info`}
+              selected={tab === 'member-info'}
+            />
+            <UnderlineTab
+              messageId="patient.patientTeam"
+              href={`/patients/${patientId}/team`}
+              selected={tab === 'team'}
+            />
+            <UnderlineTab
+              messageId="patient.patientCalendar"
+              href={`/patients/${patientId}/calendar`}
+              selected={tab === 'calendar'}
+            />
+          </UnderlineTabs>
         </div>
+        <React.Fragment>
+          <Switch>
+            <Route
+              exact
+              path="/patients/:patientId/map/:subTab?(/goals/:goalId)?(/tasks/:taskId)?"
+              render={(p: any) => <PatientCarePlanView {...p} glassBreakId={glassBreakId} />}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
+              render={(p: any) => <PatientThreeSixtyView {...p} glassBreakId={glassBreakId} />}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/tools/:screeningToolId?"
+              component={ScreeningTool}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/tools/:screeningToolId/submission/:submissionId"
+              component={ScreeningTool}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/timeline"
+              render={(p: any) => <PatientTimeline {...p} glassBreakId={glassBreakId} />}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/member-info/:subTab?"
+              render={(p: any) => <PatientInfo {...p} glassBreakId={glassBreakId} />}
+            />
+            <Route exact path="/patients/:patientId/team/:subTab?" component={PatientTeam} />
+            <Route
+              exact
+              path="/patients/:patientId/calendar"
+              render={(p: any) => <PatientCalendar {...p} />}
+            />
+          </Switch>
+        </React.Fragment>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {

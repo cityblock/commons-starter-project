@@ -50,23 +50,17 @@ interface IGoogleLoginError {
 type allProps = IGraphqlProps & IStateProps & IDispatchProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
-const LOGGED_IN_TITLE = 'Commons | A Cityblock Health product';
 
 export class LoginContainer extends React.Component<allProps, { error: string | null }> {
   state = {
     error: null,
   };
 
-  componentDidMount() {
-    document.title = 'Log in | Commons';
-  }
-
   onSuccess = async (response: any) => {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
       const result = await this.props.refetchCurrentUser();
-      document.title = LOGGED_IN_TITLE;
       this.props.setCurrentUser(result.data.currentUser);
     } catch (err) {
       await localStorage.removeItem('authToken');

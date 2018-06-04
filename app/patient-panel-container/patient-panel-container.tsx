@@ -64,8 +64,6 @@ interface IState {
 }
 
 class PatientPanelContainer extends React.Component<allProps, IState> {
-  title = 'Members';
-
   constructor(props: allProps) {
     super(props);
 
@@ -107,10 +105,6 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         })
       : [];
     return patients as IFormattedPatient[];
-  }
-
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
   }
 
   goToIntake = () => this.props.history.push('/patient-intake');

@@ -71,143 +71,131 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps & IStateProps;
 
-export class BuilderContainer extends React.Component<allProps, {}> {
-  title = 'Builder';
+export const BuilderContainer = (props: allProps) => {
+  const { subTab, tab } = props;
 
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
+  if (process.env.IS_BUILDER_ENABLED !== 'true') {
+    return null;
   }
 
-  render() {
-    const { subTab, tab } = this.props;
-
-    if (process.env.IS_BUILDER_ENABLED !== 'true') {
-      return null;
-    }
-
-    const riskAreaGroupsTabSelected = tab === 'domains';
-    const questionsTabSelected = subTab === 'questions';
-    const concernsTabSelected = tab === 'concerns';
-    const computedFieldsTabSelected = tab === 'computed-fields';
-    const goalsTabSelected = tab === 'goals';
-    const progressNoteTemplatesTabSelected =
-      tab === 'progress-note-templates' && subTab !== 'questions';
-    const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
-    const patientListsTabSelected = tab === 'patient-lists';
-    const CBOsTabSelected = tab === 'CBOs';
-    const assessmentsTabSelected =
-      !riskAreaGroupsTabSelected &&
-      !questionsTabSelected &&
-      !concernsTabSelected &&
-      !goalsTabSelected &&
-      !toolsTabSelected &&
-      !progressNoteTemplatesTabSelected &&
-      !computedFieldsTabSelected &&
-      !patientListsTabSelected &&
-      !CBOsTabSelected;
-    return (
-      <div className={styles.container}>
-        <div className={styles.mainBody}>
-          <UnderlineTabs color="white">
-            <UnderlineTab
-              href={'/builder/domains'}
-              selected={riskAreaGroupsTabSelected}
-              messageId="builder.domains"
-            />
-            <UnderlineTab
-              href={'/builder/assessments'}
-              selected={assessmentsTabSelected}
-              messageId="builder.assessments"
-            />
-            <UnderlineTab
-              href={`/builder/assessments/redirect/questions`}
-              selected={questionsTabSelected}
-              messageId="builder.questions"
-            />
-            <UnderlineTab
-              href={'/builder/concerns'}
-              messageId="builder.concerns"
-              selected={concernsTabSelected}
-            />
-            <UnderlineTab
-              href={'/builder/goals'}
-              messageId="builder.goals"
-              selected={goalsTabSelected}
-            />
-            <UnderlineTab
-              href={'/builder/tools'}
-              messageId="builder.tools"
-              selected={toolsTabSelected}
-            />
-            <UnderlineTab
-              href={'/builder/progress-note-templates'}
-              messageId="builder.progressNoteTemplates"
-              selected={progressNoteTemplatesTabSelected}
-            />
-            <UnderlineTab
-              href={'/builder/computed-fields'}
-              messageId="builder.computedFields"
-              selected={computedFieldsTabSelected}
-            />
-            <UnderlineTab
-              href="/builder/patient-lists"
-              messageId="builder.patientLists"
-              selected={patientListsTabSelected}
-            />
-            <UnderlineTab
-              href="/builder/CBOs"
-              messageId="builder.CBOs"
-              selected={CBOsTabSelected}
-            />
-          </UnderlineTabs>
-          <Switch>
-            <Route
-              exact
-              path="/builder/assessments/:riskAreaId/questions/:questionId?"
-              component={BuilderQuestions}
-            />
-            <Route
-              exact
-              path="/builder/tools/:toolId/questions/:questionId?"
-              component={BuilderQuestions}
-            />
-            <Route
-              exact
-              path="/builder/progress-note-templates/:progressNoteTemplateId/questions/:questionId?"
-              component={BuilderQuestions}
-            />
-            <Route
-              exact
-              path="/builder/domains/:riskAreaGroupId?"
-              component={BuilderRiskAreaGroups}
-            />
-            <Route exact path="/builder/assessments/:riskAreaId?" component={BuilderRiskAreas} />
-            <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools} />
-            <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns} />
-            <Route exact path="/builder/goals/:goalId?" component={BuilderGoals} />
-            <Route
-              exact
-              path="/builder/progress-note-templates/:progressNoteTemplateId?"
-              component={BuilderProgressNoteTemplates}
-            />
-            <Route
-              exact
-              path="/builder/computed-fields/:computedFieldId?"
-              component={BuilderComputedFields}
-            />
-            <Route
-              exact
-              path="/builder/patient-lists/:patientListId?"
-              component={BuilderPatientLists}
-            />
-            <Route exact path="/builder/CBOs/:CBOId?" component={BuilderCBOs} />
-            <Redirect to="/builder/domains" />
-          </Switch>
-        </div>
+  const riskAreaGroupsTabSelected = tab === 'domains';
+  const questionsTabSelected = subTab === 'questions';
+  const concernsTabSelected = tab === 'concerns';
+  const computedFieldsTabSelected = tab === 'computed-fields';
+  const goalsTabSelected = tab === 'goals';
+  const progressNoteTemplatesTabSelected =
+    tab === 'progress-note-templates' && subTab !== 'questions';
+  const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
+  const patientListsTabSelected = tab === 'patient-lists';
+  const CBOsTabSelected = tab === 'CBOs';
+  const assessmentsTabSelected =
+    !riskAreaGroupsTabSelected &&
+    !questionsTabSelected &&
+    !concernsTabSelected &&
+    !goalsTabSelected &&
+    !toolsTabSelected &&
+    !progressNoteTemplatesTabSelected &&
+    !computedFieldsTabSelected &&
+    !patientListsTabSelected &&
+    !CBOsTabSelected;
+  return (
+    <div className={styles.container}>
+      <div className={styles.mainBody}>
+        <UnderlineTabs color="white">
+          <UnderlineTab
+            href={'/builder/domains'}
+            selected={riskAreaGroupsTabSelected}
+            messageId="builder.domains"
+          />
+          <UnderlineTab
+            href={'/builder/assessments'}
+            selected={assessmentsTabSelected}
+            messageId="builder.assessments"
+          />
+          <UnderlineTab
+            href={`/builder/assessments/redirect/questions`}
+            selected={questionsTabSelected}
+            messageId="builder.questions"
+          />
+          <UnderlineTab
+            href={'/builder/concerns'}
+            messageId="builder.concerns"
+            selected={concernsTabSelected}
+          />
+          <UnderlineTab
+            href={'/builder/goals'}
+            messageId="builder.goals"
+            selected={goalsTabSelected}
+          />
+          <UnderlineTab
+            href={'/builder/tools'}
+            messageId="builder.tools"
+            selected={toolsTabSelected}
+          />
+          <UnderlineTab
+            href={'/builder/progress-note-templates'}
+            messageId="builder.progressNoteTemplates"
+            selected={progressNoteTemplatesTabSelected}
+          />
+          <UnderlineTab
+            href={'/builder/computed-fields'}
+            messageId="builder.computedFields"
+            selected={computedFieldsTabSelected}
+          />
+          <UnderlineTab
+            href="/builder/patient-lists"
+            messageId="builder.patientLists"
+            selected={patientListsTabSelected}
+          />
+          <UnderlineTab href="/builder/CBOs" messageId="builder.CBOs" selected={CBOsTabSelected} />
+        </UnderlineTabs>
+        <Switch>
+          <Route
+            exact
+            path="/builder/assessments/:riskAreaId/questions/:questionId?"
+            component={BuilderQuestions}
+          />
+          <Route
+            exact
+            path="/builder/tools/:toolId/questions/:questionId?"
+            component={BuilderQuestions}
+          />
+          <Route
+            exact
+            path="/builder/progress-note-templates/:progressNoteTemplateId/questions/:questionId?"
+            component={BuilderQuestions}
+          />
+          <Route
+            exact
+            path="/builder/domains/:riskAreaGroupId?"
+            component={BuilderRiskAreaGroups}
+          />
+          <Route exact path="/builder/assessments/:riskAreaId?" component={BuilderRiskAreas} />
+          <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools} />
+          <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns} />
+          <Route exact path="/builder/goals/:goalId?" component={BuilderGoals} />
+          <Route
+            exact
+            path="/builder/progress-note-templates/:progressNoteTemplateId?"
+            component={BuilderProgressNoteTemplates}
+          />
+          <Route
+            exact
+            path="/builder/computed-fields/:computedFieldId?"
+            component={BuilderComputedFields}
+          />
+          <Route
+            exact
+            path="/builder/patient-lists/:patientListId?"
+            component={BuilderPatientLists}
+          />
+          <Route exact path="/builder/CBOs/:CBOId?" component={BuilderCBOs} />
+          <Redirect to="/builder/domains" />
+        </Switch>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {

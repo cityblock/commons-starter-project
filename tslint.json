@@ -8,7 +8,6 @@
     "indent": [true, "spaces"],
     "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
     "check-model-variable": true, // our custom rule to check that each model has "hasPHI" boolean class variable
-    "react-proper-lifecycle-methods": true,
     "triple-equals": true,
     "max-line-length": false, // handeled by prettier
     "ordered-imports": [

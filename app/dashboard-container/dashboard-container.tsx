@@ -29,30 +29,23 @@ interface IProps extends IInjectedProps {
   history: History;
 }
 
-export class DashboardContainer extends React.Component<IProps> {
-  title = 'Dashboard';
+export const DashboardContainer = (props: IProps) => {
+  const {
+    match: {
+      params: { list, answerId },
+    },
+  } = props;
 
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
-  }
-  render(): JSX.Element {
-    const {
-      match: {
-        params: { list, answerId },
-      },
-    } = this.props;
-
-    return (
-      <div className={styles.container}>
-        <div className={styles.leftPane}>
-          <DashboardNavigation selected={list} answerId={answerId || null} />
-        </div>
-        <div className={styles.rightPane}>
-          <DashboardPatients selected={list} answerId={answerId || null} />
-        </div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.leftPane}>
+        <DashboardNavigation selected={list} answerId={answerId || null} />
       </div>
-    );
-  }
-}
+      <div className={styles.rightPane}>
+        <DashboardPatients selected={list} answerId={answerId || null} />
+      </div>
+    </div>
+  );
+};
 
 export default withCurrentUser()(DashboardContainer);

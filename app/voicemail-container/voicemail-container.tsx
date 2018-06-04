@@ -34,7 +34,6 @@ export class VoicemailContainer extends React.Component<allProps, IState> {
   state = { error: null };
 
   async componentDidMount(): Promise<void> {
-    document.title = 'Voicemail | Commons';
     const { getSignedVoicemailUrl, match } = this.props;
 
     if (match && match.params) {

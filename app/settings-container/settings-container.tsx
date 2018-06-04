@@ -28,15 +28,9 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 class SettingsContainer extends React.Component<allProps, IState> {
-  title = 'Settings';
-
   state = {
     error: null,
   };
-
-  componentDidMount() {
-    document.title = `${this.title} | Commons`;
-  }
 
   updateUserLocale = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const { currentUser } = this.props;

@@ -16,6 +16,13 @@ describe('Left Nav Messages', () => {
       {
         node: smsMessage1,
       },
+      {
+        node: {
+          ...smsMessage1,
+          body: '',
+          createdAt: new Date().toISOString(),
+        },
+      },
     ],
     pageInfo: {
       hasPreviousPage: false,
@@ -30,7 +37,7 @@ describe('Left Nav Messages', () => {
     expect(wrapper.find('.container').length).toBe(1);
   });
 
-  it('renders SMS messages', () => {
+  it('renders non-blank SMS messages', () => {
     expect(wrapper.find(SmsMessage).length).toBe(2);
 
     expect(

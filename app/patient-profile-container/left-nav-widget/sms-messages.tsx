@@ -48,12 +48,15 @@ class SmsMessages extends React.Component<IProps> {
     if (!smsMessages.totalCount) return <EmptySmsMessages />;
 
     edges.forEach((edge, i) => {
-      messages.push(<SmsMessage key={edge.node.id} smsMessage={edge.node} />);
+      // do not render blank SMS for now (MMS in browser is post MVP)
+      if (edge.node.body) {
+        messages.push(<SmsMessage key={edge.node.id} smsMessage={edge.node} />);
 
-      // display the date banner if first SMS or change from last SMS
-      // directions are backward since display newest messages at bottom
-      if (i === edges.length - 1 || (edges[i + 1] && isNewDate(edge.node, edges[i + 1].node))) {
-        messages.push(<SmsMessageDate key={i} date={edge.node.createdAt} />);
+        // display the date banner if first SMS or change from last SMS
+        // directions are backward since display newest messages at bottom
+        if (i === edges.length - 1 || (edges[i + 1] && isNewDate(edge.node, edges[i + 1].node))) {
+          messages.push(<SmsMessageDate key={i} date={edge.node.createdAt} />);
+        }
       }
     });
 

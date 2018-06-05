@@ -73,6 +73,35 @@ describe('SMS model', () => {
         direction: 'toUser' as SmsMessageDirection,
         body,
         twilioPayload,
+        mediaUrls: null,
+      });
+    });
+
+    it('should create sms with media URLs', async () => {
+      const { phone, user, patient } = await setup(txn);
+      await PatientPhone.create({ patientId: patient.id, phoneId: phone.id }, txn);
+
+      const mediaUrl = 'www.letsgopikachu.com';
+      const sms = await SmsMessage.create(
+        {
+          userId: user.id,
+          contactNumber: phone.phoneNumber,
+          direction: 'toUser' as SmsMessageDirection,
+          body,
+          twilioPayload,
+          mediaUrls: [mediaUrl],
+        },
+        txn,
+      );
+
+      expect(sms).toMatchObject({
+        userId: user.id,
+        contactNumber: phone.phoneNumber,
+        patientId: patient.id,
+        direction: 'toUser' as SmsMessageDirection,
+        body,
+        twilioPayload,
+        mediaUrls: [mediaUrl],
       });
     });
 

@@ -20,6 +20,7 @@ interface ISmsMessageCreate {
   direction: SmsMessageDirection;
   body: string;
   twilioPayload: object;
+  mediaUrls?: string[] | null;
 }
 
 interface IGetForUserPatientParams {
@@ -37,6 +38,7 @@ export default class SmsMessage extends BaseModel {
   direction!: SmsMessageDirection;
   body!: string;
   twilioPayload!: object;
+  mediaUrls?: string[] | null;
 
   static tableName = 'sms_message';
 
@@ -51,8 +53,9 @@ export default class SmsMessage extends BaseModel {
       contactNumber: { type: 'string', minLength: 12, maxLength: 12 },
       patientId: { type: ['string', 'null'], format: 'uuid' },
       direction: { type: 'string', enum: DIRECTION },
-      body: { type: 'string', minLength: 1 }, // cannot be blank
+      body: { type: 'string' },
       twilioPayload: { type: 'json' },
+      mediaUrls: { type: ['array', 'null'] },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
@@ -94,6 +97,7 @@ export default class SmsMessage extends BaseModel {
     const inputWithPatient = {
       ...input,
       patientId,
+      mediaUrls: input.mediaUrls || null,
     };
 
     if (isEager) {

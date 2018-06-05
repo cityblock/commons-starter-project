@@ -6,8 +6,8 @@ import {
   formatFullName,
   formatPhoneNumber,
 } from '../../shared/helpers/format-helpers';
+import TextGroup from '../shared/text-group';
 import variables from '../shared/variables/variables';
-import TextGroup from './text-group';
 
 interface IProps {
   user: FullCareTeamUserFragment;

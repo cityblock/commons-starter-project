@@ -12,24 +12,32 @@ interface IProps {
 const textStyles = {
   fontFamily: variables.roboto,
   fontSize: variables.smallFontSize,
+  flexShrink: 0,
 };
 
 const styles = StyleSheet.create({
   flex: {
     flexDirection: variables.flexRow,
+    width: variables.full,
+    minWidth: 170,
+    justifyContent: variables.flexStart,
+    height: 10,
   },
   text: {
     ...textStyles,
     color: variables.grayColor,
+    minWidth: 30,
   },
   textGray: {
     ...textStyles,
     color: variables.darkGrayColor,
+    minWidth: 30,
   },
   textBlue: {
     ...textStyles,
     color: variables.blueColor,
     paddingRight: variables.extraSmallGutter,
+    minWidth: 100,
   },
 });
 

@@ -20,4 +20,6 @@ export default {
   prioritylow: 'Low-priority ',
   prioritymedium: 'Medium-priority ',
   task: 'Task',
+  careTeam: 'Care Team:',
+  member: 'Member:',
 };

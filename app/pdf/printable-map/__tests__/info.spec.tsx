@@ -2,7 +2,7 @@ import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient, patientConcern, userForCareTeam } from '../../../shared/util/test-data';
-import CareTeam from '../../shared/care-team';
+import CareTeam from '../care-team';
 import Info from '../info';
 import PatientInfo from '../patient-info';
 

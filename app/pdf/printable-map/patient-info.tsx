@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullPatientConcernFragment, FullPatientForProfileFragment } from '../../graphql/types';
-import PatientHeader from '../shared/patient-header';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import MapSummary from './map-summary';
+import PatientHeader from './patient-header';
 
 interface IProps {
   patient: FullPatientForProfileFragment;

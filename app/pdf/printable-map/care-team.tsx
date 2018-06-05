@@ -1,10 +1,10 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import * as React from 'react';
 import { FullCareTeamUserFragment } from '../../graphql/types';
+import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';
 import CareTeamMember from './care-team-member';
 import copy from './copy/copy';
-import HeaderText from './header-text';
 
 interface IProps {
   careTeam: FullCareTeamUserFragment[];
@@ -15,6 +15,8 @@ const styles = StyleSheet.create({
     width: variables.half,
     paddingLeft: variables.extraSmallGutter,
     paddingBottom: variables.smallGutter,
+    flexShrink: 0,
+    flexGrow: 1,
   },
 });
 

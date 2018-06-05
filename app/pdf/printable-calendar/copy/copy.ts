@@ -7,4 +7,6 @@ export default {
   location: 'Location:',
   guests: 'Guests:',
   notes: 'Notes:',
+  careTeam: 'Care Team:',
+  member: 'Member:',
 };

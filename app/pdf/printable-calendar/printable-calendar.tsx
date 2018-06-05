@@ -11,9 +11,10 @@ import Empty from '../shared/empty';
 import Footer from '../shared/footer';
 import Header from '../shared/header';
 import variables from '../shared/variables/variables';
+import CareTeam from './care-team';
 import copy from './copy/copy';
 import Event from './event';
-import Info from './info';
+import PatientHeader from './patient-header';
 
 interface IProps {
   events: FullCalendarEventFragment[];
@@ -32,12 +33,6 @@ const styles = StyleSheet.create({
   container: {
     paddingRight: variables.smallGutter,
     paddingLeft: variables.smallGutter,
-  },
-  text: {
-    color: variables.blackColor,
-    fontFamily: variables.basetica,
-    fontSize: variables.titleFontSize,
-    textAlign: variables.flexCenter,
   },
 });
 
@@ -63,12 +58,8 @@ const PrintableCalendar: React.StatelessComponent<IProps> = (props: IProps) => {
         <Header title={formattedTitle} />
         <View style={styles.container}>
           <Divider color="darkGray" />
-          <Info
-            patient={patient}
-            careTeam={careTeam}
-            profilePhotoUrl={profilePhotoUrl}
-            events={events}
-          />
+          <PatientHeader patient={patient} profilePhotoUrl={profilePhotoUrl} />
+          <CareTeam careTeam={careTeam} />
           {renderedCalendar}
         </View>
         <Footer patient={patient} title={copy.calendar} />

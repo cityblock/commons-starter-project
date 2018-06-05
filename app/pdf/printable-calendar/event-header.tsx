@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   container: {
     minHeight: 60,
     padding: variables.extraSmallGutter,
+    width: variables.full,
   },
   title: {
     paddingTop: variables.extraSmallGutter,

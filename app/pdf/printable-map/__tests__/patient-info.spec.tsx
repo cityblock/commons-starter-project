@@ -2,9 +2,9 @@ import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patient, patientConcern } from '../../../shared/util/test-data';
-import PatientHeader from '../../shared/patient-header';
 import copy from '../copy/copy';
 import MapSummary from '../map-summary';
+import PatientHeader from '../patient-header';
 import PatientInfo from '../patient-info';
 
 describe('Printable MAP patient info (left pane)', () => {

@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderWidth: variables.smallBorder,
     borderColor: variables.grayColor,
     marginTop: variables.smallGutter,
+    width: variables.full,
   },
   event: {
     borderTopWidth: 2,

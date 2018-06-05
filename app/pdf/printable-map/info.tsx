@@ -5,8 +5,8 @@ import {
   FullPatientConcernFragment,
   FullPatientForProfileFragment,
 } from '../../graphql/types';
-import CareTeam from '../shared/care-team';
 import variables from '../shared/variables/variables';
+import CareTeam from './care-team';
 import PatientInfo from './patient-info';
 
 interface IProps {

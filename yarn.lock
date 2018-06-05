@@ -658,6 +658,13 @@
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.7.tgz#40bae586f11d19894621ed40170dd75c3e0f5708"
 
+"@types/react-loadable@5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@types/react-loadable/-/react-loadable-5.4.0.tgz#7a4f0673de07473525ab27959cf4c2601e25f37f"
+  dependencies:
+    "@types/react" "*"
+    "@types/webpack" "*"
+
 "@types/react-onclickoutside@6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.0.3.tgz#0939adbfa175d8350150c34db246ff531b266175"
@@ -772,7 +779,7 @@
   version "9.4.1"
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-9.4.1.tgz#bea5a290e61f1cbf12af3fd878706aeec2ba0087"
 
-"@types/webpack@4.4.0":
+"@types/webpack@*", "@types/webpack@4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.4.0.tgz#c0551b772be241d786c0548812dd75a932f8efb4"
   dependencies:
@@ -5549,7 +5556,7 @@ graphql-subscriptions@0.5.8:
   dependencies:
     iterall "^1.2.1"
 
-graphql-tag@^2.9.2:
+graphql-tag@2.9.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.9.2.tgz#2f60a5a981375f430bf1e6e95992427dc18af686"
 
@@ -10189,7 +10196,7 @@ prompt@0.2.14:
     utile "0.2.x"
     winston "0.8.x"
 
-prop-types@15.6.1, prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
+prop-types@15.6.1, prop-types@^15.0.0, prop-types@^15.5.0, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
@@ -10644,6 +10651,12 @@ react-jss@^8.1.0:
 react-lifecycles-compat@^3.0.2:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+
+react-loadable@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-loadable/-/react-loadable-5.4.0.tgz#3b6b7d51121a7868fd155be848a36e02084742c9"
+  dependencies:
+    prop-types "^15.5.0"
 
 react-motion@^0.5.2:
   version "0.5.2"
@@ -12789,7 +12802,7 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript-plugin-lodash@^0.1.0:
+typescript-plugin-lodash@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/typescript-plugin-lodash/-/typescript-plugin-lodash-0.1.0.tgz#c216b5312e2c49f4ba21119e5bae8c7ef0b9fce8"
   dependencies:
@@ -13335,7 +13348,7 @@ webpack-addons@^1.1.5:
   dependencies:
     jscodeshift "^0.4.0"
 
-webpack-bundle-analyzer@^2.13.1:
+webpack-bundle-analyzer@2.13.1:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-2.13.1.tgz#07d2176c6e86c3cdce4c23e56fae2a7b6b4ad526"
   dependencies:

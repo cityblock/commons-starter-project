@@ -2,12 +2,12 @@ import { ApolloError } from 'apollo-client';
 import { find } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import * as Loadable from 'react-loadable';
 import * as patientDocumentsQuery from '../../../graphql/queries/get-patient-documents.graphql';
 import { getPatientDocumentsQuery, DocumentTypeOptions } from '../../../graphql/types';
 import RequiredPlaceholder from '../../required-placeholder';
 import * as styles from './css/patient-documents.css';
 import PatientDocument from './patient-document';
-import PatientDocumentModal from './patient-document-modal';
 
 const CONSENTS = [
   DocumentTypeOptions.cityblockConsent,
@@ -30,6 +30,12 @@ interface IGraphqlProps {
 }
 
 export type allProps = IGraphqlProps & IProps;
+
+export const LoadableDocumentsModal = (Loadable as any)({
+  loader: async () =>
+    import(/* webpackChunkName: "patient-document-modal" */ './patient-document-modal'),
+  loading: () => null,
+});
 
 interface IState {
   modalDocumentType?: DocumentTypeOptions | null;
@@ -97,7 +103,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
 
     return (
       <div className={styles.container}>
-        <PatientDocumentModal
+        <LoadableDocumentsModal
           closePopup={this.handleClosePopup}
           isVisible={!!modalDocumentType || isModalVisible}
           patientId={patientId}

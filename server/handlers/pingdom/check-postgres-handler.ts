@@ -25,6 +25,7 @@ export async function checkPostgresHandler(req: express.Request, res: express.Re
   } catch (error) {
     errorReporting.report('PostgreSQL check failed!');
     errorReporting.report(error);
+    console.error(error);
     res.status(500).send(error.message);
   }
 }

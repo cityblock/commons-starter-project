@@ -21,6 +21,7 @@ export async function checkRedisHandler(req: express.Request, res: express.Respo
   } catch (error) {
     errorReporting.report('Redis check failed!');
     errorReporting.report(error);
+    console.error(error);
     res.status(500).send(error.message);
   }
 }

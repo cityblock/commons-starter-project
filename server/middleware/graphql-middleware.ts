@@ -13,8 +13,10 @@ export function formatError(error: IGraphQLResponseError): IGraphQLResponseError
     credentials: JSON.parse(String(config.GCP_CREDS)),
   });
   if (error.path || error.name !== 'GraphQLError') {
+    console.error(error.message);
     errorReporting.report(error.message);
   } else {
+    console.error(error.message);
     errorReporting.report(`GraphQLWrongQuery: ${error.message}`);
   }
   return {
@@ -53,6 +55,7 @@ export const graphqlMiddleware = async (
       cacheControl: true,
     })(request, response, next);
   } catch (e) {
+    console.error(e);
     errorReporting.report(e);
     return response.sendStatus(422);
   }

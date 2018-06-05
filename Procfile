@@ -8,5 +8,6 @@ consume-sms-message: yarn run consume:sms-message:production
 consume-mattermost: yarn run consume:mattermost:production
 consume-task-event: yarn run consume:task-event:production
 consume-contact-update: yarn run consume:contact-update:production
+consume-contact-no-consent: yarn run consume:contact-no-consent:production
 consume-previous-contact: yarn run consume:previous-contact:production
 cron: exec supercronic /app/crontab

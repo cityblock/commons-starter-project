@@ -62,6 +62,8 @@
     "consume:task-event:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/task-event-consumer.js",
     "consume:contact-update:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/contact-update-consumer.js",
     "consume:contact-update:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/contact-update-consumer.js",
+    "consume:contact-no-consent:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/contact-no-consent-consumer.js",
+    "consume:contact-no-consent:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/contact-no-consent-consumer.js",
     "consume:previous-contact:dev": "NODE_ENV=development yarn forever -a ./server-compiled/server/consumers/previous-contact-consumer.js",
     "consume:previous-contact:production": "NODE_ENV=production yarn forever -a ./server-compiled/server/consumers/previous-contact-consumer.js",
     "computed-patient-status:update-all:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",

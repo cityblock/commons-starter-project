@@ -16,6 +16,7 @@
     "./server/consumers/mattermost-consumer",
     "./server/consumers/task-event-consumer",
     "./server/consumers/contact-update-consumer",
+    "./server/consumers/contact-no-consent-consumer",
     "./server/consumers/previous-contact-consumer",
     "./server/jobs/process-voicemail",
     "./server/jobs/process-phone-call",

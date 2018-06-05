@@ -20,7 +20,7 @@ interface IEntry {
   initiatorType: string;
 }
 
-const uuidRegex = new RegExp('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+const uuidRegex = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g);
 
 ReactGA.initialize(process.env.GA_TRACKING_ID || 'UA-105679021-5', {
   gaOptions: { siteSpeedSampleRate: 100 },
@@ -54,19 +54,19 @@ const trackPageLoad = (list: IEntries) => {
 const observer = new (window as any).PerformanceObserver(debounce(trackPageLoad, 5000));
 observer.observe({ entryTypes: ['resource'] });
 
+const trackPage = (page: string) => {
+  startedAt = performance.now();
+
+  const formattedPage = page.replace(uuidRegex, 'id');
+  ReactGA.set({
+    page: formattedPage,
+  });
+  ReactGA.pageview(formattedPage);
+
+  currentUrl = formattedPage;
+};
+
 export default function withTracker(WrappedComponent: React.ComponentClass<any>) {
-  const trackPage = (page: string) => {
-    startedAt = performance.now();
-
-    const formattedPage = page.replace(uuidRegex, 'id');
-    ReactGA.set({
-      page: formattedPage,
-    });
-    ReactGA.pageview(formattedPage);
-
-    currentUrl = formattedPage;
-  };
-
   const HOC = class extends React.Component<IProps> {
     componentDidMount() {
       trackPage(this.props.location.pathname);

@@ -10,18 +10,47 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 ## Meta
 
 - **State:** development
-- **Staging:** [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
-- **Demo:** [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
-- **Production:** [https://commons.cityblock.com](https://commons.cityblock.com)
 - **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
 - **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
   `cityblock/commons#master` are automatically deployed to staging
 - **Point People:** See [features](#features) chart below
 - **Stackdriver:** [https://app.google.stackdriver.com/?project=commons-183915](https://app.google.stackdriver.com/?project=commons-183915)
-- **Datadog:** [https://app.datadoghq.com/dash/536514/aptible-app-and-db](https://app.datadoghq.com/dash/536514/aptible-app-and-db)
 - **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
 - **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
 - **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
+
+## Environments
+
+### Production
+
+- [https://commons.cityblock.com](https://commons.cityblock.com)
+- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177838485p176451408)
+- [GraphQL performance monitoring](https://engine.apollographql.com/service/commons-prod)
+- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production)
+- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-production)
+
+### Demo
+
+- [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
+- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177862006p176449007)
+- [GraphQL performance monitoring](https://engine.apollographql.com/service/cityblock-7583)
+- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-demo)
+- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-demo)
+
+### Staging
+
+- [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
+- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177915534p176499987)
+- [GraphQL performance monitoring](https://engine.apollographql.com/service/commons-staging)
+- [Error Tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-183915)
+- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-183915) (note demo also logs here - filter out by application id in log messages)
+
+### Development
+
+- [localhost:3000](localhost:3000)
+- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177838651p176454447)
+- [GraphQL performance monitoring](https://engine.apollographql.com/service/cityblock-test)
+- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=cityblock-development)
 
 ## Features
 

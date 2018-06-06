@@ -126,6 +126,7 @@ export async function smsMessageCreate(
             direction: 'fromUser' as SmsMessageDirection,
             body,
             twilioPayload,
+            messageSid: twilioPayload.sid,
           },
           txn,
         );

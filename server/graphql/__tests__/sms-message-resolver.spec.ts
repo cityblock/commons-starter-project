@@ -25,10 +25,12 @@ const userRole = 'admin' as UserRole;
 const userPhone = '+11234445555';
 const body1 = 'Winter is coming.';
 const body2 = 'Winter is here.';
+const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const mockTwilioPayload = {
   From: userPhone,
   To: '+11234567890',
   body: body1,
+  sid: messageSid,
 };
 
 interface ISetup {
@@ -85,6 +87,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body1,
           twilioPayload: {},
+          messageSid,
         },
         txn,
       );
@@ -96,6 +99,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: 'Not from patient',
           twilioPayload: {},
+          messageSid: 'DBfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -107,6 +111,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload: {},
+          messageSid: 'EFfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -151,6 +156,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body1,
           twilioPayload: {},
+          messageSid,
         },
         txn,
       );
@@ -161,6 +167,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload: {},
+          messageSid: 'DBfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -197,6 +204,7 @@ describe('SMS Message Resolver', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: 'Not from patient',
           twilioPayload: {},
+          messageSid,
         },
         txn,
       );
@@ -351,6 +359,7 @@ describe('SMS Message Resolver', () => {
           contactNumber: '+11234567777',
           direction: 'toUser' as SmsMessageDirection,
           twilioPayload: mockTwilioPayload,
+          messageSid,
         },
         txn,
       );

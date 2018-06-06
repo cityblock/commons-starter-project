@@ -22,6 +22,7 @@ const twilioPayload = {
   From: '+11234567777',
   MessageSid: 'bogusid',
 };
+const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 
 interface ISetup {
   patient: Patient;
@@ -62,6 +63,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
       );
@@ -73,6 +75,7 @@ describe('SMS model', () => {
         direction: 'toUser' as SmsMessageDirection,
         body,
         twilioPayload,
+        messageSid,
         mediaUrls: null,
       });
     });
@@ -89,6 +92,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
           mediaUrls: [mediaUrl],
         },
         txn,
@@ -116,6 +120,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
         true,
@@ -147,6 +152,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
       );
@@ -171,6 +177,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
         true,
@@ -198,6 +205,7 @@ describe('SMS model', () => {
             direction: 'toUser' as SmsMessageDirection,
             body,
             twilioPayload,
+            messageSid,
           },
           txn,
         ),
@@ -222,6 +230,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
       );
@@ -233,6 +242,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid: 'DBfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -244,6 +254,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload,
+          messageSid: 'EFfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -279,6 +290,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
       );
@@ -290,6 +302,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid: 'DEfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -301,6 +314,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body: body2,
           twilioPayload,
+          messageSid: 'EFfbe57a569adc67124a71a10f965BOGUS',
         },
         txn,
       );
@@ -325,6 +339,7 @@ describe('SMS model', () => {
           direction: 'toUser' as SmsMessageDirection,
           body,
           twilioPayload,
+          messageSid,
         },
         txn,
       );

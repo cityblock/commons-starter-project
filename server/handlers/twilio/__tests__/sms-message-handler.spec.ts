@@ -27,6 +27,7 @@ const expectedOutgoingTwiml =
 const expectedOutgoingTwiml2 =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="+11234562222" from="+11234567777">Winter is here.</Message></Response>';
 const userRole = 'admin' as UserRole;
+const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 
 interface ISetup {
   patient: Patient;
@@ -77,6 +78,7 @@ describe('SMS Message Handler', () => {
         To: '+11234567777',
         From: '+11234567890',
         Body: 'Winter is coming.',
+        MessageSid: messageSid,
       },
     });
 
@@ -94,6 +96,7 @@ describe('SMS Message Handler', () => {
       patientId: patient.id,
       body: 'Winter is coming.',
       direction: 'toUser' as SmsMessageDirection,
+      messageSid,
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);
@@ -132,6 +135,7 @@ describe('SMS Message Handler', () => {
         To: '+11234567890',
         From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
         Body: 'Winter is here.',
+        MessageSid: messageSid,
       },
     });
 
@@ -149,6 +153,7 @@ describe('SMS Message Handler', () => {
       patientId: patient.id,
       body: 'Winter is here.',
       direction: 'fromUser' as SmsMessageDirection,
+      messageSid,
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);
@@ -184,6 +189,7 @@ describe('SMS Message Handler', () => {
         To: '+11234567890',
         From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
         Body: 'Winter is here.',
+        MessageSid: messageSid,
       },
     });
 
@@ -201,6 +207,7 @@ describe('SMS Message Handler', () => {
       patientId: patient.id,
       body: 'Winter is here.',
       direction: 'fromUser' as SmsMessageDirection,
+      messageSid,
     });
 
     expect(pubsub.publish).toHaveBeenCalledTimes(1);
@@ -241,6 +248,7 @@ describe('SMS Message Handler', () => {
         To: '+11234562222',
         From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
         Body: 'Winter is here.',
+        MessageSid: messageSid,
       },
     });
 

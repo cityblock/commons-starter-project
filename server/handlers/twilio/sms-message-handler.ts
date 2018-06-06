@@ -18,7 +18,7 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
   const twiml = new MessagingResponse();
 
   const twilioPayload = req.body;
-  const { Body, From, To } = twilioPayload;
+  const { Body, From, To, MessageSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || SmsMessage.knex(), async txn => {
     // figure out which Commons user is recipient of message
@@ -53,6 +53,7 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
           direction: 'toUser' as SmsMessageDirection,
           body: Body,
           twilioPayload,
+          messageSid: MessageSid,
         },
         txn,
       );
@@ -71,7 +72,7 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
   const twiml = new MessagingResponse();
 
   const twilioPayload = req.body;
-  const { Body, From, To } = twilioPayload;
+  const { Body, From, To, MessageSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || SmsMessage.knex(), async txn => {
     // figure out which Commons user is sending message
@@ -103,6 +104,7 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
           direction: 'fromUser' as SmsMessageDirection,
           body: Body,
           twilioPayload,
+          messageSid: MessageSid,
         },
         txn,
         true,

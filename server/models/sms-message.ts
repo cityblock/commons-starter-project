@@ -20,6 +20,7 @@ interface ISmsMessageCreate {
   direction: SmsMessageDirection;
   body: string;
   twilioPayload: object;
+  messageSid: string;
   mediaUrls?: string[] | null;
 }
 
@@ -38,7 +39,8 @@ export default class SmsMessage extends BaseModel {
   direction!: SmsMessageDirection;
   body!: string;
   twilioPayload!: object;
-  mediaUrls?: string[] | null;
+  messageSid!: string;
+  mediaUrls!: string[] | null;
 
   static tableName = 'sms_message';
 
@@ -55,12 +57,13 @@ export default class SmsMessage extends BaseModel {
       direction: { type: 'string', enum: DIRECTION },
       body: { type: 'string' },
       twilioPayload: { type: 'json' },
+      messageSid: { type: 'string', minLength: 34, maxLength: 34 },
       mediaUrls: { type: ['array', 'null'] },
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
-    required: ['userId', 'contactNumber', 'direction', 'body', 'twilioPayload'],
+    required: ['userId', 'contactNumber', 'direction', 'body', 'twilioPayload', 'messageSid'],
   };
 
   static get relationMappings(): RelationMappings {

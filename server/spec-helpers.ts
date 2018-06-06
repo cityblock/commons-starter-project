@@ -1401,6 +1401,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'toUser' as SmsMessageDirection,
       body: 'Winter is coming',
       twilioPayload: {},
+      messageSid: 'ABfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1412,6 +1413,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'All men must die. But we are not men.',
       twilioPayload: {},
+      messageSid: 'BCfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1423,6 +1425,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'All men must die. But we are not men.',
       twilioPayload: {},
+      messageSid: 'CDfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1434,6 +1437,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'You know nothing Jon Snow.',
       twilioPayload: {},
+      messageSid: 'DEfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1445,6 +1449,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'Winter is here',
       twilioPayload: {},
+      messageSid: 'EFfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1456,6 +1461,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'Where are my dragons?!',
       twilioPayload: {},
+      messageSid: 'FGfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );
@@ -1467,6 +1473,7 @@ export async function setupRecentConversations(txn: Transaction) {
       direction: 'fromUser' as SmsMessageDirection,
       body: 'I drink and I know things.',
       twilioPayload: {},
+      messageSid: 'GHfbe57a569adc67124a71a10f965BOGUS',
     },
     txn,
   );

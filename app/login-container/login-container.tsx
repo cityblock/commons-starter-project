@@ -10,7 +10,7 @@ import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
-import { logInUserMutationVariables } from '../graphql/types';
+import { logInUserMutation, logInUserMutationVariables } from '../graphql/types';
 import { getCurrentUserQuery } from '../graphql/types';
 import { IState as IAppState } from '../store';
 import * as styles from './css/login.css';
@@ -27,7 +27,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  logIn: (options: { variables: logInUserMutationVariables }) => any;
+  logIn: (
+    options: { variables: logInUserMutationVariables },
+  ) => { data: logInUserMutation; errors: ApolloError[] | null };
   error: ApolloError | null | undefined;
   loading: boolean;
   currentUser?: getCurrentUserQuery['currentUser'];
@@ -59,9 +61,17 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
   onSuccess = async (response: any) => {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
-      await localStorage.setItem('authToken', res.data.userLogin.authToken);
-      const result = await this.props.refetchCurrentUser();
-      this.props.setCurrentUser(result.data.currentUser);
+      if (res.errors) {
+        await localStorage.removeItem('authToken');
+        return this.setState({ error: res.errors[0].message });
+      } else if (res.data && res.data.userLogin && res.data.userLogin.authToken) {
+        await localStorage.setItem('authToken', res.data.userLogin.authToken);
+        const result = await this.props.refetchCurrentUser();
+        this.props.setCurrentUser(result.data.currentUser);
+      } else {
+        await localStorage.removeItem('authToken');
+        return this.setState({ error: 'Unknown login error' });
+      }
     } catch (err) {
       await localStorage.removeItem('authToken');
       this.setState({ error: err.message });

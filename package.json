@@ -280,7 +280,7 @@
     "url-loader": "1.0.1",
     "uuid": "3.2.1",
     "vcards-js": "2.8.0",
-    "webpack": "4.10.2",
+    "webpack": "4.11.1",
     "webpack-cli": "2.1.5",
     "webpack-hot-middleware": "2.22.2"
   }

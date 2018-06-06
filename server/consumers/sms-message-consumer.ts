@@ -21,6 +21,10 @@ interface IProcessSmsMessageData {
   jobId: string;
 }
 
+interface ITwilioMediaInstance {
+  sid: string;
+}
+
 interface ITwilioSmsMessage {
   sid: string;
   dateCreated: Date;
@@ -29,6 +33,9 @@ interface ITwilioSmsMessage {
   from: string;
   to: string;
   body: string;
+  media: () => {
+    each: (callback: (mediaItem: ITwilioMediaInstance) => void) => void;
+  };
 }
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
@@ -59,15 +66,28 @@ export async function processSmsMessages(data: IProcessSmsMessageData, existingT
 }
 
 export async function processSmsMessage(message: ITwilioSmsMessage, existingTxn?: Transaction) {
-  const { sid, status } = message;
+  const { status, sid } = message;
 
   // do not delete messages that are in progress
   if (isInProgress(status)) {
     return;
   }
+  // delete media associated message
+  await deleteMedia(message);
 
   // delete record of message from Twilio
   await deleteSmsMessage(sid);
+}
+
+export async function deleteMedia(message: ITwilioSmsMessage) {
+  const twilioClient = TwilioClient.get();
+
+  message.media().each(async (mediaItem: ITwilioMediaInstance) => {
+    await twilioClient
+      .messages(message.sid)
+      .media(mediaItem.sid)
+      .remove();
+  });
 }
 
 export async function deleteSmsMessage(sid: string) {

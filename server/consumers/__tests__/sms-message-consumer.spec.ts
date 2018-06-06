@@ -12,7 +12,7 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import TwilioClient from '../../twilio-client';
-import { deleteSmsMessage, processSmsMessage } from '../sms-message-consumer';
+import { deleteMedia, deleteSmsMessage, processSmsMessage } from '../sms-message-consumer';
 
 const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 const twilioSimId = 'BOGUS5f14990BOGUS580c2a54713dBOGUS';
@@ -47,16 +47,30 @@ async function setup(txn: Transaction): Promise<ISetup> {
 describe('SMS Message Consumer', () => {
   let txn = null as any;
   let removeMessage = null as any;
+  let removeMedia = null as any;
+  let mediaCallback = null as any;
+  let media = null as any;
 
   beforeEach(async () => {
     txn = await transaction.start(SmsMessage.knex());
     removeMessage = jest.fn();
+    removeMedia = jest.fn();
+    mediaCallback = jest.fn();
 
     TwilioClient.get = jest.fn().mockReturnValue({
       messages: (sid: string) => ({
         remove: removeMessage,
+        media: (mediaSid: string) => ({
+          removeMedia,
+        }),
       }),
     });
+
+    media = () => {
+      return {
+        each: mediaCallback,
+      };
+    };
   });
 
   afterEach(async () => {
@@ -75,11 +89,13 @@ describe('SMS Message Consumer', () => {
         dateUpdated: timestamp,
         body,
         status: 'delivered',
+        media,
       };
 
       await processSmsMessage(message, txn);
 
       expect(removeMessage).toBeCalled();
+      expect(mediaCallback).toBeCalled();
     });
 
     it('does nothing if message not delivered', async () => {
@@ -93,11 +109,37 @@ describe('SMS Message Consumer', () => {
         dateUpdated: timestamp,
         body,
         status: 'sent',
+        media,
       };
 
       await processSmsMessage(message, txn);
 
       expect(removeMessage).not.toBeCalled();
+      expect(mediaCallback).not.toBeCalled();
+    });
+  });
+
+  describe('deleteMedia', () => {
+    it('makes a request to delete media from Twilio', async () => {
+      const { phone } = await setup(txn);
+
+      const message = {
+        sid: messageSid,
+        to: fullSimId,
+        from: phone.phoneNumber,
+        dateCreated: timestamp,
+        dateUpdated: timestamp,
+        body,
+        status: 'delivered',
+        media: () => ({
+          each: removeMedia,
+        }),
+      };
+
+      await deleteMedia(message);
+
+      expect(removeMessage).not.toBeCalled();
+      expect(removeMedia).toBeCalled();
     });
   });
 

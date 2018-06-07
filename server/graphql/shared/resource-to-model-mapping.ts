@@ -66,6 +66,7 @@ import TaskFollower from '../../models/task-follower';
 import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
+import UserHours from '../../models/user-hours';
 import Voicemail from '../../models/voicemail';
 
 export type ModelResource =
@@ -136,6 +137,7 @@ export type ModelResource =
   | 'taskSuggestion'
   | 'taskTemplate'
   | 'user'
+  | 'userHours'
   | 'voicemail';
 
 type ResourceToModelMapping = { [K in ModelResource]: ModelClass<any> };
@@ -210,6 +212,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   taskSuggestion: TaskSuggestion,
   taskTemplate: TaskTemplate,
   user: User,
+  userHours: UserHours,
   voicemail: Voicemail,
 };
 

@@ -1,0 +1,7 @@
+#import "../fragments/full-user-hours.graphql"
+
+mutation userHoursEdit($userHoursId: ID!, $startTime: Int!, $endTime: Int!) {
+  userHoursEdit(input: { userHoursId: $userHoursId, startTime: $startTime, endTime: $endTime }) {
+    ...FullUserHours
+  }
+}

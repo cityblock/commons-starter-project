@@ -1722,6 +1722,18 @@ type SmsMessageEdges {
   totalCount: Int!
 }
 
+# User Hours
+type UserHours {
+  id: ID!
+  userId: ID!
+  weekday: Int!
+  startTime: Int!
+  endTime: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -2546,6 +2558,25 @@ input MattermostUrlForPatientInput {
   patientId: ID!
 }
 
+# params for creating user hours
+input UserHoursCreateInput {
+  weekday: Int!
+  startTime: Int!
+  endTime: Int!
+}
+
+# params for editing user hours
+input UserHoursEditInput {
+  userHoursId: ID!
+  startTime: Int!
+  endTime: Int!
+}
+
+# params for deleting user hours
+input UserHoursDeleteInput {
+  userHoursId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -2836,6 +2867,12 @@ type RootMutationType {
   mattermostUrlForUserCreate(input: MattermostUrlForUserInput): MattermostUrl!
   # mattermost url for patient channel
   mattermostUrlForPatientCreate(input: MattermostUrlForPatientInput): MattermostUrl!
+  # create user hours
+  userHoursCreate(input: UserHoursCreateInput): UserHours!
+  # edit user hours
+  userHoursEdit(input: UserHoursEditInput): UserHours!
+  # delete user hours
+  userHoursDelete(input: UserHoursDeleteInput): UserHours!
 }
 
 type RootQueryType {
@@ -3143,6 +3180,8 @@ type RootQueryType {
   smsMessages(patientId: ID!, pageNumber: Int!, pageSize: Int!): SmsMessageEdges!
   # latest SMS message between given user and patient
   smsMessageLatest(patientId: ID!): SmsMessage
+  # get user hours for current user
+  currentUserHours: [UserHours!]!
 }
 
 type RootSubscriptionType {

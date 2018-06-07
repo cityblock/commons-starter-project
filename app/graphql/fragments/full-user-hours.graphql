@@ -1,0 +1,10 @@
+fragment FullUserHours on UserHours {
+  id
+  userId
+  weekday
+  startTime
+  endTime
+  createdAt
+  updatedAt
+  deletedAt
+}

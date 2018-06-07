@@ -1,0 +1,7 @@
+#import "../fragments/full-user-hours.graphql"
+
+mutation userHoursCreate($weekday: Int!, $startTime: Int!, $endTime: Int!) {
+  userHoursCreate(input: { weekday: $weekday, startTime: $startTime, endTime: $endTime }) {
+    ...FullUserHours
+  }
+}

@@ -2004,6 +2004,20 @@ export interface getConcernsQuery {
   } | null >,
 };
 
+export interface getCurrentUserHoursQuery {
+  // get user hours for current user
+  currentUserHours:  Array< {
+    id: string,
+    userId: string,
+    weekday: number,
+    startTime: number,
+    endTime: number,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } >,
+};
+
 export interface getCurrentUserQuery {
   // The current User
   currentUser:  {
@@ -10188,6 +10202,64 @@ export interface userEditRoleMutation {
   } | null,
 };
 
+export interface userHoursCreateMutationVariables {
+  weekday: number,
+  startTime: number,
+  endTime: number,
+};
+
+export interface userHoursCreateMutation {
+  // create user hours
+  userHoursCreate:  {
+    id: string,
+    userId: string,
+    weekday: number,
+    startTime: number,
+    endTime: number,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  },
+};
+
+export interface userHoursDeleteMutationVariables {
+  userHoursId: string,
+};
+
+export interface userHoursDeleteMutation {
+  // delete user hours
+  userHoursDelete:  {
+    id: string,
+    userId: string,
+    weekday: number,
+    startTime: number,
+    endTime: number,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  },
+};
+
+export interface userHoursEditMutationVariables {
+  userHoursId: string,
+  startTime: number,
+  endTime: number,
+};
+
+export interface userHoursEditMutation {
+  // edit user hours
+  userHoursEdit:  {
+    id: string,
+    userId: string,
+    weekday: number,
+    startTime: number,
+    endTime: number,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  },
+};
+
 export interface userVoicemailSignedUrlCreateMutationVariables {
   voicemailId: string,
 };
@@ -13234,6 +13306,17 @@ export interface FullTaskFragment {
     sentAt: string | null,
     acknowledgedAt: string | null,
   } | null,
+};
+
+export interface FullUserHoursFragment {
+  id: string,
+  userId: string,
+  weekday: number,
+  startTime: number,
+  endTime: number,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export interface FullUserFragment {

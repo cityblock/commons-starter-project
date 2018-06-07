@@ -634,6 +634,11 @@ declare module 'schema' {
      * latest SMS message between given user and patient
      */
     smsMessageLatest: ISmsMessage | null;
+
+    /**
+     * get user hours for current user
+     */
+    currentUserHours: Array<IUserHours>;
   }
 
   interface IUsersOnRootQueryTypeArguments {
@@ -2833,6 +2838,20 @@ declare module 'schema' {
     fromUser = 'fromUser'
   }
 
+  /**
+   * User Hours
+   */
+  interface IUserHours {
+    id: string;
+    userId: string;
+    weekday: number;
+    startTime: number;
+    endTime: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
   interface IRootMutationType {
 
     /**
@@ -3520,6 +3539,21 @@ declare module 'schema' {
      * mattermost url for patient channel
      */
     mattermostUrlForPatientCreate: IMattermostUrl;
+
+    /**
+     * create user hours
+     */
+    userHoursCreate: IUserHours;
+
+    /**
+     * edit user hours
+     */
+    userHoursEdit: IUserHours;
+
+    /**
+     * delete user hours
+     */
+    userHoursDelete: IUserHours;
   }
 
   interface IUserCreateOnRootMutationTypeArguments {
@@ -4068,6 +4102,18 @@ declare module 'schema' {
 
   interface IMattermostUrlForPatientCreateOnRootMutationTypeArguments {
     input?: IMattermostUrlForPatientInput | null;
+  }
+
+  interface IUserHoursCreateOnRootMutationTypeArguments {
+    input?: IUserHoursCreateInput | null;
+  }
+
+  interface IUserHoursEditOnRootMutationTypeArguments {
+    input?: IUserHoursEditInput | null;
+  }
+
+  interface IUserHoursDeleteOnRootMutationTypeArguments {
+    input?: IUserHoursDeleteInput | null;
   }
 
   /**
@@ -5237,6 +5283,31 @@ declare module 'schema' {
    */
   interface IMattermostUrlForPatientInput {
     patientId: string;
+  }
+
+  /**
+   * params for creating user hours
+   */
+  interface IUserHoursCreateInput {
+    weekday: number;
+    startTime: number;
+    endTime: number;
+  }
+
+  /**
+   * params for editing user hours
+   */
+  interface IUserHoursEditInput {
+    userHoursId: string;
+    startTime: number;
+    endTime: number;
+  }
+
+  /**
+   * params for deleting user hours
+   */
+  interface IUserHoursDeleteInput {
+    userHoursId: string;
   }
 
   interface IRootSubscriptionType {

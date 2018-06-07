@@ -34,9 +34,6 @@ export default class UserHours extends BaseModel {
   startTime!: number;
   endTime!: number;
   weekday!: number; // 0 - 6, corresponding to Sunday - Saturday
-  createdAt!: string;
-  updatedAt!: string;
-  deletedAt!: string | null;
 
   static tableName = 'user_hours';
 

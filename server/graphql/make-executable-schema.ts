@@ -320,6 +320,12 @@ import {
   taskTemplateEdit,
 } from './task-template-resolver';
 import {
+  resolveCurrentUserHours,
+  userHoursCreate,
+  userHoursDelete,
+  userHoursEdit,
+} from './user-hours-resolver';
+import {
   currentUserEdit,
   resolveCurrentUser,
   resolveUsers,
@@ -457,6 +463,7 @@ const resolveFunctions = {
     calendarForPatient: resolveCalendarForPatient,
     smsMessages: resolveSmsMessages,
     smsMessageLatest: resolveSmsMessageLatest,
+    currentUserHours: resolveCurrentUserHours,
   },
   RootMutationType: {
     addressCreate,
@@ -592,6 +599,9 @@ const resolveFunctions = {
     userVoicemailSignedUrlCreate,
     mattermostUrlForUserCreate,
     mattermostUrlForPatientCreate,
+    userHoursCreate,
+    userHoursEdit,
+    userHoursDelete,
   },
   RootSubscriptionType: {
     smsMessageCreated: {

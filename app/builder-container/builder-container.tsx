@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
@@ -190,7 +190,6 @@ export const BuilderContainer = (props: allProps) => {
             component={BuilderPatientLists}
           />
           <Route exact path="/builder/CBOs/:CBOId?" component={BuilderCBOs} />
-          <Redirect to="/builder/domains" />
         </Switch>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
@@ -46,7 +46,6 @@ export const ManagerContainer = (props: IProps) => {
             path="/manager/invites"
             component={() => <ManagerUsers hasLoggedIn={false} routeBase={`/manager/invites`} />}
           />
-          <Redirect to="/manager/users" />
         </Switch>
       </div>
     </div>

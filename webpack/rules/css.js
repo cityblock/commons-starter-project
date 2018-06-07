@@ -1,6 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const postcssCssnext = require('postcss-cssnext');
+const postcssPresetEnv = require('postcss-preset-env');
 const postcssReporter = require('postcss-reporter');
 const cssnano = require('cssnano');
 const PATHS = require('../paths');
@@ -23,7 +23,7 @@ module.exports = ({ production = false } = {}) => {
       loader: 'postcss-loader',
       options: {
         plugins: [
-          postcssCssnext({ browsers: ['last 2 Chrome versions'], warnForDuplicates: false }),
+          postcssPresetEnv({ browsers: ['last 2 Chrome versions'], warnForDuplicates: false }),
           // cssnano in prod and reporter (for errors) in dev
           production
             ? require('cssnano')({ discardUnused: { fontFace: false } })

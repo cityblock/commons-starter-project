@@ -82,7 +82,7 @@ export class Header extends React.Component<allProps> {
     }
     if (featureFlags.isBuilderEnabled && process.env.IS_BUILDER_ENABLED === 'true') {
       builderLink = (
-        <Link to={'/builder'} className={this.getNavItemClassnames('/builder')}>
+        <Link to={'/builder/domains'} className={this.getNavItemClassnames('/builder')}>
           <div className={styles.tasksIcon} />
           <FormattedMessage id="header.builder">
             {(message: string) => <div className={styles.navText}>{message}</div>}
@@ -92,7 +92,7 @@ export class Header extends React.Component<allProps> {
     }
     if (featureFlags.isManagerEnabled) {
       managerLink = (
-        <Link to={'/manager'} className={this.getNavItemClassnames('/manager')}>
+        <Link to={'/manager/users'} className={this.getNavItemClassnames('/manager')}>
           <div className={styles.tasksIcon} />
           <FormattedMessage id="header.manager">
             {(message: string) => <div className={styles.navText}>{message}</div>}

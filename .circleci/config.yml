@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
     steps:
       - checkout
       - restore_cache:
@@ -28,7 +28,7 @@ jobs:
   test_frontend:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
     steps:
       - checkout
       - restore_cache:
@@ -46,7 +46,7 @@ jobs:
   test_api:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
       - image: postgres:10.4@sha256:852dd8150c5ea73015cf2c9c601de07113c31b3272628f9a945d46c7d960004d
         environment:
           POSTGRES_DB: commons_test
@@ -82,7 +82,7 @@ jobs:
   test_models:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
       - image: postgres:10.4@sha256:852dd8150c5ea73015cf2c9c601de07113c31b3272628f9a945d46c7d960004d
         environment:
           POSTGRES_DB: commons_test
@@ -118,7 +118,7 @@ jobs:
   deploy_staging:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
     steps:
       - checkout
       - run:
@@ -134,7 +134,7 @@ jobs:
   deploy_production:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.2@sha256:321655aeb195b7946e9a29d28453388751389e8ced66b4dea772ae76a6985309
+      - image: node:8.11.2@sha256:f10c8218e3f92b513af9120f5eda5fed35b651343f940881d696b958cc16ab43
     steps:
       - checkout
       - run:

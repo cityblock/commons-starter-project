@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Link, LinkProps } from 'react-router-dom';
 import { FullRiskAreaForPatientFragment } from '../../graphql/types';
 import DateInfo from '../../shared/library/date-info/date-info';
-import SmallText from '../../shared/library/small-text/small-text';
 import TextInfo from '../../shared/library/text-info/text-info';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/domain-assessment.css';
 
 interface IProps {
@@ -49,7 +49,7 @@ export const DomainAssessment: React.StatelessComponent<IProps> = (props: IProps
   }
 
   const dateText = notCompleted ? (
-    <SmallText messageId="threeSixty.notCompletedShort" />
+    <Text messageId="threeSixty.notCompletedShort" />
   ) : (
     <div className={datesStyles}>
       {riskArea.assessmentType === 'manual' &&

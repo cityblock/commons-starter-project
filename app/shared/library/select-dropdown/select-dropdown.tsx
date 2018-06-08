@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import Avatar from '../avatar/avatar';
 import SelectDropdownOption from '../select-dropdown-option/select-dropdown-option';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/select-dropdown.css';
 
 interface IProps {
@@ -100,7 +100,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
         {detail && <p>{`(${detail})`}</p>}
       </React.Fragment>
     ) : (
-      <SmallText
+      <Text
         color="gray"
         messageId={placeholderMessageId}
         size={largeFont ? 'largest' : 'large'}

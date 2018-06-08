@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { getPatientQuery } from '../../graphql/types';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/sms-message-block.css';
 
 interface IProps {
@@ -26,7 +26,7 @@ const smsMessageBlock = (props: IProps): JSX.Element | null => {
   if (messageId) {
     return (
       <div className={classNames(styles.container, styles.flex)}>
-        <SmallText messageId={messageId} color="black" size="large" />
+        <Text messageId={messageId} color="black" size="large" />
       </div>
     );
   }
@@ -34,14 +34,14 @@ const smsMessageBlock = (props: IProps): JSX.Element | null => {
   if (!patient.patientInfo.primaryPhone) {
     return (
       <div className={styles.container}>
-        <SmallText
+        <Text
           messageId="messages.noPhone"
           color="black"
           size="large"
           isBold
           className={styles.inline}
         />
-        <SmallText
+        <Text
           messageId="messages.noPhoneDetail"
           color="black"
           size="large"

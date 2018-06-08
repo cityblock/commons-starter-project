@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import ProgressNoteWorryScore, { WorryScoreChoice } from '../progress-note-worry-score';
 
 describe('Progress Note Worry Score Field', () => {
@@ -64,12 +64,12 @@ describe('Progress Note Worry Score Field', () => {
     });
 
     it('renders question for worry score', () => {
-      expect(wrapper.find(SmallText).props().messageId).toBe('progressNote.worryScore');
-      expect(wrapper.find(SmallText).props().font).toBe('basetica');
-      expect(wrapper.find(SmallText).props().isBold).toBeTruthy();
-      expect(wrapper.find(SmallText).props().color).toBe('black');
-      expect(wrapper.find(SmallText).props().size).toBe('largest');
-      expect(wrapper.find(SmallText).props().className).toBe('text');
+      expect(wrapper.find(Text).props().messageId).toBe('progressNote.worryScore');
+      expect(wrapper.find(Text).props().font).toBe('basetica');
+      expect(wrapper.find(Text).props().isBold).toBeTruthy();
+      expect(wrapper.find(Text).props().color).toBe('black');
+      expect(wrapper.find(Text).props().size).toBe('largest');
+      expect(wrapper.find(Text).props().className).toBe('text');
     });
 
     it('renders worry score very worried option', () => {

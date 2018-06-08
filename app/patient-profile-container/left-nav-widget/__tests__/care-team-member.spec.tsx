@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Avatar from '../../../shared/library/avatar/avatar';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { userForCareTeam as user } from '../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
 import CareTeamMemberContact from '../care-team-member-contact';
@@ -27,23 +27,23 @@ describe('Patient Left Navigation Care Team Member', () => {
   });
 
   it('renders user name', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().isBold,
     ).toBeTruthy();
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('largest');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().text,
     ).toBe('first last');
@@ -52,19 +52,19 @@ describe('Patient Left Navigation Care Team Member', () => {
   it('renders formatted care team member role', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeFalsy();
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe('Physician');

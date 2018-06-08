@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/left-nav-scratchpad-status.css';
 import { MAX_SCRATCHPAD_LENGTH } from './left-nav-scratchpad';
 
@@ -21,9 +21,9 @@ const LeftNavScratchPadStatus: React.StatelessComponent<IProps> = (props: IProps
       <div className={styles.container}>
         <div className={styles.flex}>
           <Icon name="error" color="red" className={styles.icon} />
-          <SmallText messageId="scratchPad.maxChars" color="red" />
+          <Text messageId="scratchPad.maxChars" color="red" />
         </div>
-        <SmallText text={charCountString} color="red" />
+        <Text text={charCountString} color="red" />
       </div>
     );
   }
@@ -34,14 +34,14 @@ const LeftNavScratchPadStatus: React.StatelessComponent<IProps> = (props: IProps
     saveNote = (
       <div className={styles.flex}>
         <Icon name="checkCircle" color="blue" className={styles.icon} />
-        <SmallText messageId="scratchPad.saveSuccess" color="gray" />
+        <Text messageId="scratchPad.saveSuccess" color="gray" />
       </div>
     );
   } else if (saveError) {
     saveNote = (
       <div className={styles.flex} onClick={resaveScratchPad}>
         <Icon name="error" color="red" className={styles.icon} />
-        <SmallText messageId="scratchPad.saveError" color="red" />
+        <Text messageId="scratchPad.saveError" color="red" />
       </div>
     );
   }
@@ -49,7 +49,7 @@ const LeftNavScratchPadStatus: React.StatelessComponent<IProps> = (props: IProps
   return (
     <div className={styles.container}>
       {saveNote}
-      <SmallText text={charCountString} color="gray" />
+      <Text text={charCountString} color="gray" />
     </div>
   );
 };

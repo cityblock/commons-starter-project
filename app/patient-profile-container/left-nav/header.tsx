@@ -7,7 +7,7 @@ import {
   getProgressNoteLatestForPatientQuery,
   FullPatientForProfileFragment,
 } from '../../graphql/types';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import { IState as IAppState } from '../../store';
 import * as styles from './css/header.css';
 import LeftNavHeaderPatient from './header-patient';
@@ -49,7 +49,7 @@ export const LeftNavHeader: React.StatelessComponent<allProps> = (props: allProp
       <div className={styles.container}>
         <div className={styles.needToKnow}>
           <div className={styles.divider} />
-          <SmallText messageId="patientInfo.needToKnow" />
+          <Text messageId="patientInfo.needToKnow" />
           <div className={styles.divider} />
         </div>
         <LeftNavPreferredName patient={patient} />

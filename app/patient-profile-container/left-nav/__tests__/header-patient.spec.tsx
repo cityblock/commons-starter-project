@@ -7,7 +7,7 @@ import {
   getPatientStatusColor,
 } from '../../../shared/helpers/format-helpers';
 import PatientPhoto from '../../../shared/library/patient-photo/patient-photo';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { patient } from '../../../shared/util/test-data';
 import LeftNavHeaderPatient from '../header-patient';
 
@@ -35,25 +35,25 @@ describe('Patient Left Navigation Header: Patient Info', () => {
   it('renders text for patient state', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().text,
     ).toBe(capitalize(patient.patientState.currentState));
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe(getPatientStatusColor(patient.patientState.currentState));
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('medium');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().isBold,
     ).toBeTruthy();
@@ -67,31 +67,31 @@ describe('Patient Left Navigation Header: Patient Info', () => {
   it('renders patient age', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe('patientInfo.age');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageValues,
     ).toEqual({ age: formatAge(patient.dateOfBirth) });
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeTruthy();
@@ -100,7 +100,7 @@ describe('Patient Left Navigation Header: Patient Info', () => {
   it('does not render age or status if widget is open', () => {
     wrapper.setProps({ isWidgetOpen: true });
 
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
   });
 
   it('has smaller patient name text if widget is open', () => {

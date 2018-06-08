@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { ShortEventNotificationsForUserTaskFragment } from '../../graphql/types';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/task-notification.css';
 
 interface IProps {
@@ -15,7 +15,7 @@ const TaskNotification: React.StatelessComponent<IProps> = (props: IProps) => {
     <div className={styles.container}>
       <h5>{notification.title}</h5>
       <FormattedRelative value={notification.createdAt}>
-        {(formattedDate: string) => <SmallText text={formattedDate} />}
+        {(formattedDate: string) => <Text text={formattedDate} />}
       </FormattedRelative>
     </div>
   );

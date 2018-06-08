@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { patient } from '../../../shared/util/test-data';
 import { LeftNavHeader } from '../header';
 import LeftNavHeaderPatient from '../header-patient';
@@ -27,7 +27,7 @@ describe('Patient Left Navigation Header', () => {
 
   it('renders need to know divider', () => {
     expect(wrapper.find('.divider').length).toBe(2);
-    expect(wrapper.find(SmallText).props().messageId).toBe('patientInfo.needToKnow');
+    expect(wrapper.find(Text).props().messageId).toBe('patientInfo.needToKnow');
   });
 
   it('renders preferred name component', () => {
@@ -64,6 +64,6 @@ describe('Patient Left Navigation Header', () => {
     wrapper.setProps({ patient: null });
 
     expect(wrapper.find('.container').length).toBe(0);
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
   });
 });

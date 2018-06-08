@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/preferred-name.css';
 
 interface IProps {
@@ -16,10 +16,10 @@ const LeftNavPreferredName: React.StatelessComponent<IProps> = (props: IProps) =
 
   return (
     <div className={styles.container}>
-      <SmallText messageId="patientInfo.preferredName" color="gray" size="large" />
+      <Text messageId="patientInfo.preferredName" color="gray" size="large" />
       <div className={styles.flex}>
         <Icon name="errorOutline" color="red" className={styles.icon} />
-        <SmallText text={preferredName} isBold color="black" size="large" />
+        <Text text={preferredName} isBold color="black" size="large" />
       </div>
     </div>
   );

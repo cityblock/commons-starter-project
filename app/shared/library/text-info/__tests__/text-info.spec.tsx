@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../small-text/small-text';
+import Text from '../../text/text';
 import TextInfo from '../text-info';
 
 describe('Library Text Info Component', () => {
@@ -10,16 +10,16 @@ describe('Library Text Info Component', () => {
   const wrapper = shallow(<TextInfo messageId={messageId} text={text} />);
 
   it('renders label small text', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe(messageId);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().className,
     ).toBe('margin');
@@ -28,13 +28,13 @@ describe('Library Text Info Component', () => {
   it('renders value small text', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(text);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
@@ -53,7 +53,7 @@ describe('Library Text Info Component', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().className,
     ).toBe(textStyles);
@@ -65,7 +65,7 @@ describe('Library Text Info Component', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe(textColor);
@@ -77,13 +77,13 @@ describe('Library Text Info Component', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe(textMessageId);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBeFalsy();

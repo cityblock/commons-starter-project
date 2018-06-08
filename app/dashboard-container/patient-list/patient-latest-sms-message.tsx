@@ -6,7 +6,7 @@ import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import * as smsMessageLatestQuery from '../../graphql/queries/get-sms-message-latest.graphql';
 import { getSmsMessageLatestQuery } from '../../graphql/types';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/patient-latest-sms-message.css';
 
 export const TIMESTAMP_FORMAT = 'h:mm a';
@@ -28,7 +28,7 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
   const { loading, error, smsMessage } = props;
 
   if (loading || error) {
-    return <SmallText color="gray" messageId="dashboard.loading" size="medium" />;
+    return <Text color="gray" messageId="dashboard.loading" size="medium" />;
   }
 
   if (!smsMessage) return null;
@@ -40,18 +40,18 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
   });
 
   const dateComponent = isToday(smsMessage.createdAt) ? (
-    <SmallText color="gray" text={formattedTime} size="small" />
+    <Text color="gray" text={formattedTime} size="small" />
   ) : (
     <FormattedRelative value={smsMessage.createdAt} units="day">
       {(formattedDate: string) => (
-        <SmallText color="gray" text={capitalize(formattedDate)} size="small" />
+        <Text color="gray" text={capitalize(formattedDate)} size="small" />
       )}
     </FormattedRelative>
   );
 
   return (
     <div className={styles.container}>
-      <SmallText color="black" text={truncatedText} size="medium" />
+      <Text color="black" text={truncatedText} size="medium" />
       {dateComponent}
     </div>
   );

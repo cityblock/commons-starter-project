@@ -13,3 +13,5 @@ export const largeFontSize: string;
 export const largestFontSize: string;
 export const bold: string;
 export const basetica: string;
+export const baseticaBold: string;
+export const header: string;

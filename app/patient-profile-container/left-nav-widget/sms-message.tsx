@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import { format } from 'date-fns';
 import * as React from 'react';
 import { FullSmsMessageFragment } from '../../graphql/types';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/sms-message.css';
 
 export const TIME_FORMAT = 'h:mm a';
@@ -31,18 +31,8 @@ const SmsMessage: React.StatelessComponent<IProps> = ({ smsMessage }) => {
   return (
     <div className={containerStyles}>
       <div className={contentStyles}>
-        <SmallText
-          text={smsMessage.body}
-          color={messageColor}
-          size="large"
-          className={messageStyles}
-        />
-        <SmallText
-          text={formattedTime}
-          color="lightGray"
-          size="medium"
-          className={styles.timestamp}
-        />
+        <Text text={smsMessage.body} color={messageColor} size="large" className={messageStyles} />
+        <Text text={formattedTime} color="lightGray" size="medium" className={styles.timestamp} />
       </div>
     </div>
   );

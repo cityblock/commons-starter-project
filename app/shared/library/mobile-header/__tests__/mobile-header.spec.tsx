@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../small-text/small-text';
+import Text from '../../text/text';
 import MobileHeader from '../mobile-header';
 
 describe('Library Mobile Header', () => {
@@ -11,10 +11,10 @@ describe('Library Mobile Header', () => {
   });
 
   it('renders text to update contacts', () => {
-    expect(wrapper.find(SmallText).props().messageId).toBe('winterIsComing');
-    expect(wrapper.find(SmallText).props().color).toBe('white');
-    expect(wrapper.find(SmallText).props().font).toBe('basetica');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
-    expect(wrapper.find(SmallText).props().isBold).toBeTruthy();
+    expect(wrapper.find(Text).props().messageId).toBe('winterIsComing');
+    expect(wrapper.find(Text).props().color).toBe('white');
+    expect(wrapper.find(Text).props().font).toBe('basetica');
+    expect(wrapper.find(Text).props().size).toBe('large');
+    expect(wrapper.find(Text).props().isBold).toBeTruthy();
   });
 });

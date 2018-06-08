@@ -4,7 +4,7 @@ import * as React from 'react';
 import { formatCityblockId, getPatientStatusColor } from '../../../shared/helpers/format-helpers';
 import Icon from '../../../shared/library/icon/icon';
 import PatientAge from '../../../shared/library/patient-age/patient-age';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { patient } from '../../../shared/util/test-data';
 import PatientTaskCount from '../../tasks/patient-task-count';
 import PatientLatestSmsMessage from '../patient-latest-sms-message';
@@ -14,17 +14,17 @@ describe('Dashboard Patient List Item Body', () => {
   const wrapper = shallow(<PatientListItemBody patient={patient} onClick={() => true as any} />);
 
   it('renders formatted cityblock ID', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().text,
     ).toBe(formatCityblockId(patient.cityblockId));
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('black');
@@ -33,13 +33,13 @@ describe('Dashboard Patient List Item Body', () => {
   it('renders patient status', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(capitalize(patient.patientState.currentState));
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe(getPatientStatusColor(patient.patientState.currentState));
@@ -74,7 +74,7 @@ describe('Dashboard Patient List Item Body', () => {
     wrapper.setProps({ displayType: 'conversations' });
 
     expect(wrapper.find(PatientLatestSmsMessage).props().patientId).toBe(patient.id);
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
   });
 
   it('renders patient task count if on patient task view', () => {

@@ -12,7 +12,7 @@ import {
 import Checkbox from '../library/checkbox/checkbox';
 import PatientAge from '../library/patient-age/patient-age';
 import { formatSearchText } from '../library/search/helpers';
-import SmallText from '../library/small-text/small-text';
+import Text from '../library/text/text';
 import * as styles from './css/patient-table.css';
 
 interface IFormattedPatient extends FullPatientTableRowFragment {
@@ -59,7 +59,7 @@ const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onS
       <Link to={`/patients/${id}/map/active`} className={styles.result}>
         {query && userCareTeam && <div className={styles.userCareTeam} />}
         <h4 className={styles.name}>{formattedName}</h4>
-        <SmallText text={formattedState} color={statusColor} className={styles.status} />
+        <Text text={formattedState} color={statusColor} className={styles.status} />
         <p className={styles.memberId}>{formattedCityblockId}</p>
         <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
         <p className={styles.address}>{formattedAddress}</p>

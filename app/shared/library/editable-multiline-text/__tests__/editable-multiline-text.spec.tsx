@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import SmallText from '../../small-text/small-text';
+import Text from '../../text/text';
 import TextAreaWithButton from '../../textarea-with-button/textarea-with-button';
 import { EditableMultilineText } from '../editable-multiline-text';
 
@@ -15,7 +15,7 @@ describe('Library Editable Text Component', () => {
     expect(wrapper.find('p').text()).toBe(text);
 
     expect(wrapper.find(TextAreaWithButton).length).toBe(0);
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
     expect(wrapper.find(FormattedMessage).length).toBe(0);
   });
 
@@ -55,10 +55,10 @@ describe('Library Editable Text Component', () => {
   it('renders placeholder if no text', () => {
     wrapper.setProps({ text: '' });
 
-    expect(wrapper.find(SmallText).props().messageId).toBe('editableText.clickToEdit');
-    expect(wrapper.find(SmallText).props().font).toBe('basetica');
-    expect(wrapper.find(SmallText).props().color).toBe('lightGray');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
+    expect(wrapper.find(Text).props().messageId).toBe('editableText.clickToEdit');
+    expect(wrapper.find(Text).props().font).toBe('basetica');
+    expect(wrapper.find(Text).props().color).toBe('lightGray');
+    expect(wrapper.find(Text).props().size).toBe('large');
   });
 
   it('uses custom placeholder message id', () => {
@@ -66,7 +66,7 @@ describe('Library Editable Text Component', () => {
 
     wrapper.setProps({ placeholderMessageId });
 
-    expect(wrapper.find(SmallText).props().messageId).toBe(placeholderMessageId);
+    expect(wrapper.find(Text).props().messageId).toBe(placeholderMessageId);
 
     wrapper.setState({ editMode: true });
 

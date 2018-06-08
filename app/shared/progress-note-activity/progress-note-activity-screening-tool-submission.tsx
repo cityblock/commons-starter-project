@@ -6,8 +6,8 @@ import {
   FullPatientScreeningToolSubmissionFragment,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
 import TextInfo from '../../shared/library/text-info/text-info';
+import Text from '../../shared/library/text/text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
 import * as styles from './css/progress-note-activity.css';
 
@@ -99,7 +99,7 @@ class ProgressNoteActivityScreeningToolSubmission extends React.Component<IProps
             <FormattedDate value={screeningToolSubmission.createdAt} />
           </div>
           <div className={styles.carePlanSuggestions}>
-            <SmallText messageId="progressNote.mapSuggestions" />
+            <Text messageId="progressNote.mapSuggestions" />
             {carePlanSuggestions}
           </div>
         </div>

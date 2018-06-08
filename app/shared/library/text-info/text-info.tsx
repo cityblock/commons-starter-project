@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SmallText, { Color, IProps as ISmallTextProps, Size } from '../small-text/small-text';
+import Text, { Color, IProps as ITextProps, Size } from '../text/text';
 import * as styles from './css/text-info.css';
 
 export interface IProps {
@@ -25,7 +25,7 @@ const TextInfo: React.StatelessComponent<IProps> = (props: IProps) => {
     size,
   } = props;
 
-  const valueTextProps: ISmallTextProps = {
+  const valueTextProps: ITextProps = {
     color: textColor || 'black',
     className: textStyles,
   };
@@ -38,13 +38,13 @@ const TextInfo: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div className={className}>
-      <SmallText
+      <Text
         messageId={messageId}
         className={styles.margin}
         size={size}
         color={messageColor || 'lightGray'}
       />
-      <SmallText size={size} {...valueTextProps} />
+      <Text size={size} {...valueTextProps} />
     </div>
   );
 };

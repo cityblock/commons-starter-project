@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { patient } from '../../../shared/util/test-data';
 import LeftNavPreferredName from '../preferred-name';
 
@@ -15,19 +15,19 @@ describe('Patient Left Navigation Preferred Name', () => {
   it('renders label for preferred name', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('patientInfo.preferredName');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('gray');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('large');
@@ -41,25 +41,25 @@ describe('Patient Left Navigation Preferred Name', () => {
   it('renders preferred name text', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(patient.patientInfo.preferredName);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeTruthy();
@@ -77,6 +77,6 @@ describe('Patient Left Navigation Preferred Name', () => {
     wrapper.setProps({ patient: newPatient });
 
     expect(wrapper.find('.container').length).toBe(0);
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
   });
 });

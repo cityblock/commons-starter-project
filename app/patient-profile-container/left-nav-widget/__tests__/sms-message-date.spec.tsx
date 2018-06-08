@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import SmsMessageDate from '../sms-message-date';
 
 describe('SMS Message Date Banner', () => {
@@ -15,8 +15,8 @@ describe('SMS Message Date Banner', () => {
   });
 
   it('renders text with the date', () => {
-    expect(wrapper.find(SmallText).props().size).toBe('small');
-    expect(wrapper.find(SmallText).props().color).toBe('gray');
-    expect(wrapper.find(SmallText).props().text).toBe('Fri, Apr 13, 2018');
+    expect(wrapper.find(Text).props().size).toBe('small');
+    expect(wrapper.find(Text).props().color).toBe('gray');
+    expect(wrapper.find(Text).props().text).toBe('Fri, Apr 13, 2018');
   });
 });

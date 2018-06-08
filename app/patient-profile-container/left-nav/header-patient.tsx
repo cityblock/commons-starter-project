@@ -8,7 +8,7 @@ import {
   getPatientStatusColor,
 } from '../../shared/helpers/format-helpers';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/header-patient.css';
 
 interface IProps {
@@ -28,14 +28,14 @@ const LeftNavHeaderPatient: React.StatelessComponent<IProps> = (props: IProps) =
     <h1 className={styles.patientNameOpen}>{patientName}</h1>
   ) : (
     <div className={styles.patient}>
-      <SmallText
+      <Text
         text={capitalize(patient.patientState.currentState)}
         color={statusColor}
         size="medium"
         isBold
       />
       <h1 className={styles.patientName}>{patientName}</h1>
-      <SmallText
+      <Text
         messageId="patientInfo.age"
         messageValues={{ age: formatAge(patient.dateOfBirth) }}
         size="large"

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import HamburgerMenuOption from '../../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText from '../../../../shared/library/small-text/small-text';
+import Text from '../../../../shared/library/text/text';
 import { externalProviderEntity, externalProviderPerson } from '../../../../shared/util/test-data';
 import { PatientExternalProvider } from '../patient-external-provider';
 
@@ -19,7 +19,7 @@ describe('Render Patient External Provider', () => {
   );
 
   it('renders external provider widget with note', () => {
-    const text = wrapper.find(SmallText);
+    const text = wrapper.find(Text);
     expect(text).toHaveLength(6);
 
     expect(text.at(0).props().text).toBe('Tonya Willis');
@@ -40,7 +40,7 @@ describe('Render Patient External Provider', () => {
   it('renders external provider widget without first and last name ', () => {
     wrapper.setProps({ patientExternalProvider: externalProviderEntity });
 
-    const text = wrapper.find(SmallText);
+    const text = wrapper.find(Text);
     expect(text).toHaveLength(5);
 
     expect(text.at(0).props().text).toBe(externalProviderEntity.agencyName);

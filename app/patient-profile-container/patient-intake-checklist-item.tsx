@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../shared/library/button/button';
-import SmallText from '../shared/library/small-text/small-text';
+import Text from '../shared/library/text/text';
 import * as styles from './css/patient-intake-checklist-item.css';
 
 export interface IProps {
@@ -27,8 +27,8 @@ const PatientIntakeChecklistItem: React.StatelessComponent<IProps> = (props: IPr
   return (
     <div className={checklistItemStyles}>
       <div className={styles.checklistItemText}>
-        <SmallText messageId={labelId} color="black" size="large" isBold={true} />
-        <SmallText messageId={subtextId} color="gray" size="medium" />
+        <Text messageId={labelId} color="black" size="large" isBold={true} />
+        <Text messageId={subtextId} color="gray" size="medium" />
       </div>
       <div className={styles.checklistItemButton}>
         <Link to={buttonLink} onClick={onClick}>

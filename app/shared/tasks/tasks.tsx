@@ -22,7 +22,7 @@ import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Option from '../library/option/option';
 import Select from '../library/select/select';
-import SmallText from '../library/small-text/small-text';
+import Text from '../library/text/text';
 import UnderlineTab from '../library/underline-tab/underline-tab';
 import UnderlineTabs from '../library/underline-tabs/underline-tabs';
 import Task from '../task/task';
@@ -188,7 +188,7 @@ export class Tasks extends React.Component<allProps, IState> {
             />
           </div>
           <div className={sortSearchStyles.sort}>
-            <SmallText
+            <Text
               messageId="myTasks.sortBy"
               color="darkGray"
               size="large"

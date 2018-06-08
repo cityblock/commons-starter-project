@@ -8,7 +8,7 @@ import {
   ShortPatientScreeningToolSubmission360Fragment,
   UserRole,
 } from '../../graphql/types';
-import { Color } from '../library/small-text/small-text';
+import { Color } from '../library/text/text';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 

@@ -9,7 +9,7 @@ import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/h
 import { formatFullName, isDueSoon } from '../helpers/format-helpers';
 import Avatar from '../library/avatar/avatar';
 import PatientPhoto from '../library/patient-photo/patient-photo';
-import SmallText from '../library/small-text/small-text';
+import Text from '../library/text/text';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
@@ -117,7 +117,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     ? formatFullName(task.patient.firstName, task.patient.lastName)
     : '';
   const patientNameHtml = !condensed ? (
-    <SmallText text={patientName} color="gray" className={styles.patientName} />
+    <Text text={patientName} color="gray" className={styles.patientName} />
   ) : null;
 
   const querystring = window.location.search.substring(1);

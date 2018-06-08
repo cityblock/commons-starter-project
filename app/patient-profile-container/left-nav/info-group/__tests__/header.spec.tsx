@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../../shared/library/icon/icon';
-import SmallText from '../../../../shared/library/small-text/small-text';
+import Text from '../../../../shared/library/text/text';
 import InfoGroupHeader from '../header';
 
 describe('Patient Left Navigation Info Group Header', () => {
@@ -14,11 +14,11 @@ describe('Patient Left Navigation Info Group Header', () => {
   });
 
   it('renders info group label', () => {
-    expect(wrapper.find(SmallText).props().messageId).toBe('patientInfo.demographics');
-    expect(wrapper.find(SmallText).props().size).toBe('largest');
-    expect(wrapper.find(SmallText).props().color).toBe('black');
-    expect(wrapper.find(SmallText).props().font).toBe('basetica');
-    expect(wrapper.find(SmallText).props().isBold).toBeTruthy();
+    expect(wrapper.find(Text).props().messageId).toBe('patientInfo.demographics');
+    expect(wrapper.find(Text).props().size).toBe('largest');
+    expect(wrapper.find(Text).props().color).toBe('black');
+    expect(wrapper.find(Text).props().font).toBe('basetica');
+    expect(wrapper.find(Text).props().isBold).toBeTruthy();
   });
 
   it('renders icon to open accordion', () => {
@@ -35,35 +35,35 @@ describe('Patient Left Navigation Info Group Header', () => {
   it('renders item count if one given', () => {
     wrapper.setProps({ itemCount: 11 });
 
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe('(11)');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('largest');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('lightBlue');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().font,
     ).toBe('basetica');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeTruthy();

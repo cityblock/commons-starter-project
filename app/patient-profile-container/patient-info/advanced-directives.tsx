@@ -18,7 +18,7 @@ import FormLabel from '../../shared/library/form-label/form-label';
 import Icon from '../../shared/library/icon/icon';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
 import EditPatientContactModal from '../../shared/patient-contact-modal/edit-patient-contact-modal';
 import withErrorHandler, {
@@ -125,9 +125,9 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
     const phoneHtml = proxy.phone ? <p>{proxy.phone.phoneNumber}</p> : <p>Unknown Phone</p>;
     const relationHtml =
       proxy.relationToPatient === 'other' ? (
-        <SmallText text={proxy.relationFreeText || ''} color="gray" size="medium" />
+        <Text text={proxy.relationFreeText || ''} color="gray" size="medium" />
       ) : (
-        <SmallText
+        <Text
           messageId={`relationToPatient.${proxy.relationToPatient}`}
           color="gray"
           size="medium"

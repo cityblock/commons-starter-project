@@ -13,7 +13,7 @@ import Avatar from '../../../shared/library/avatar/avatar';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import * as styles from '../css/team-member.css';
 
 interface IProps {
@@ -92,7 +92,7 @@ export class CareTeamMember extends React.Component<allProps, IState> {
             <Avatar size="large" src={careTeamMember.googleProfileImageUrl} />
             <div className={styles.column}>
               <div className={careTeamMemberNameStyles}>
-                <SmallText
+                <Text
                   text={formatFullName(careTeamMember.firstName, careTeamMember.lastName)}
                   color="black"
                   size="largest"
@@ -100,7 +100,7 @@ export class CareTeamMember extends React.Component<allProps, IState> {
                 />
                 <Icon name="stars" color="blue" isSmall={true} />
               </div>
-              <SmallText
+              <Text
                 text={formatCareTeamMemberRole(careTeamMember.userRole)}
                 color="gray"
                 size="medium"
@@ -108,8 +108,8 @@ export class CareTeamMember extends React.Component<allProps, IState> {
             </div>
           </div>
           <div className={styles.column}>
-            <SmallText text={careTeamMember.phone || 'Unknown Phone'} color="black" size="medium" />
-            <SmallText text={careTeamMember.email || 'Unknown Email'} color="black" size="medium" />
+            <Text text={careTeamMember.phone || 'Unknown Phone'} color="black" size="medium" />
+            <Text text={careTeamMember.email || 'Unknown Email'} color="black" size="medium" />
           </div>
         </div>
         <HamburgerMenu open={isMenuOpen} onMenuToggle={this.onMenuToggle}>

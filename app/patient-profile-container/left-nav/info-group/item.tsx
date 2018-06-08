@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import * as styles from './css/item.css';
 
 interface IProps {
@@ -17,16 +17,16 @@ const InfoGroupItem: React.StatelessComponent<IProps> = (props: IProps) => {
   let labelComponent: JSX.Element | false;
 
   if (label) {
-    labelComponent = <SmallText text={label} size="large" color="black" isBold />;
+    labelComponent = <Text text={label} size="large" color="black" isBold />;
   } else {
     labelComponent = !!labelMessageId && (
-      <SmallText messageId={labelMessageId} size="large" color="darkGray" />
+      <Text messageId={labelMessageId} size="large" color="darkGray" />
     );
   }
 
   const valueComponent =
     value || valueMessageId ? (
-      <SmallText
+      <Text
         messageId={valueMessageId}
         text={value || undefined}
         size="large"
@@ -34,7 +34,7 @@ const InfoGroupItem: React.StatelessComponent<IProps> = (props: IProps) => {
         isBold={!label}
       />
     ) : (
-      <SmallText
+      <Text
         messageId={emptyValueMessageId || 'patientInfo.missing'}
         size="large"
         color="lightGray"

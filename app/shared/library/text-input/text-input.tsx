@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/text-input.css';
 
 interface IProps {
@@ -50,7 +50,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
   const type = inputType || 'text';
   const req = required || false;
 
-  const errorMessage = hasError ? <SmallText messageId={errorMessageId} color="red" /> : null;
+  const errorMessage = hasError ? <Text messageId={errorMessageId} color="red" /> : null;
 
   if (placeholderMessageId) {
     return (

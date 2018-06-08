@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { CareTeamMemberContact } from '../care-team-member-contact';
 
 describe('Patient Left Navigation Care Team Contact', () => {
@@ -40,29 +40,29 @@ describe('Patient Left Navigation Care Team Contact', () => {
   });
 
   it('renders small text to call care team member', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('careTeam.call');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageValues,
     ).toEqual({ name: firstName });
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('medium');
@@ -78,29 +78,29 @@ describe('Patient Left Navigation Care Team Contact', () => {
   });
 
   it('renders small text to mattermost care team member', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe('careTeam.mattermost');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageValues,
     ).toEqual({ name: firstName });
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('medium');

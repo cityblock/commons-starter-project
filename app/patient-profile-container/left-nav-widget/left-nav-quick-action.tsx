@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/left-nav-quick-action.css';
 import { QuickActionColorsMapping, QuickActionIconsMapping } from './helpers';
 
@@ -35,7 +35,7 @@ class LeftNavQuickAction extends React.Component<IProps> {
       <button className={styles.button} onClick={this.handleClick}>
         <div className={styles.flex}>
           <Icon name={iconName} color={iconColor} className={styles.icon} />
-          <SmallText messageId={`quickActions.${quickAction}`} size="large" color="black" isBold />
+          <Text messageId={`quickActions.${quickAction}`} size="large" color="black" isBold />
         </div>
         <div className={styles.divider} />
       </button>

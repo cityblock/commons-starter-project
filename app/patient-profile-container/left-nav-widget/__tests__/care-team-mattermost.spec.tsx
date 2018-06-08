@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { CareTeamMattermost } from '../care-team-mattermost';
 
 describe('Left Nav Care Team Mattermost', () => {
@@ -23,29 +23,29 @@ describe('Left Nav Care Team Mattermost', () => {
   });
 
   it('renders header text', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('careTeam.chat');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().isBold,
     ).toBeTruthy();
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('largest');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('black');
@@ -54,25 +54,25 @@ describe('Left Nav Care Team Mattermost', () => {
   it('renders detail text', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe('careTeam.chatDetail');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeFalsy();
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');

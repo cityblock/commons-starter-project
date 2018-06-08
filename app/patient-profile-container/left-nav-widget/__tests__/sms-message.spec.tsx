@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
 import SmsMessage, { TIME_FORMAT } from '../sms-message';
 
@@ -17,29 +17,29 @@ describe('SMS Message', () => {
   });
 
   it('renders SMS message body', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('blue');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().className,
     ).toBe('message toUser');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().text,
     ).toBe(smsMessage1.body);
@@ -48,25 +48,25 @@ describe('SMS Message', () => {
   it('renders timestamp', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('lightGray');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('medium');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().className,
     ).toBe('timestamp');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(format(smsMessage1.createdAt, TIME_FORMAT));
@@ -85,13 +85,13 @@ describe('SMS Message', () => {
   it('styles message appropriately if outbound', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().className,
     ).toBe('message fromUser');

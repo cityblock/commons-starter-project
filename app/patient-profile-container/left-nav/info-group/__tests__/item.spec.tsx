@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../../shared/library/small-text/small-text';
+import Text from '../../../../shared/library/text/text';
 import InfoGroupItem from '../item';
 
 describe('Patient Left Navigation Info Group Item', () => {
@@ -14,23 +14,23 @@ describe('Patient Left Navigation Info Group Item', () => {
   });
 
   it('renders label of item', () => {
-    expect(wrapper.find(SmallText).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(2);
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe(labelMessageId);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('darkGray');
@@ -39,25 +39,25 @@ describe('Patient Left Navigation Info Group Item', () => {
   it('renders value', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(value);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeTruthy();
@@ -68,19 +68,19 @@ describe('Patient Left Navigation Info Group Item', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe('patientInfo.missing');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('lightGray');
@@ -93,7 +93,7 @@ describe('Patient Left Navigation Info Group Item', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe(emptyValueMessageId);
@@ -102,7 +102,7 @@ describe('Patient Left Navigation Info Group Item', () => {
   it('aligns right if no label message id', () => {
     wrapper.setProps({ labelMessageId: null });
 
-    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find(Text).length).toBe(1);
     expect(wrapper.find('.container').props().className).toBe('container rightAlign');
   });
 
@@ -113,29 +113,29 @@ describe('Patient Left Navigation Info Group Item', () => {
     const wrapper2 = shallow(<InfoGroupItem label={label} value={value2} />);
 
     it('renders bold text for label', () => {
-      expect(wrapper2.find(SmallText).length).toBe(2);
+      expect(wrapper2.find(Text).length).toBe(2);
 
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(0)
           .props().text,
       ).toBe(label);
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(0)
           .props().size,
       ).toBe('large');
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(0)
           .props().color,
       ).toBe('black');
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(0)
           .props().isBold,
       ).toBeTruthy();
@@ -144,25 +144,25 @@ describe('Patient Left Navigation Info Group Item', () => {
     it('renders normal text for value', () => {
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(1)
           .props().text,
       ).toBe(value2);
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(1)
           .props().size,
       ).toBe('large');
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(1)
           .props().color,
       ).toBe('darkGray');
       expect(
         wrapper2
-          .find(SmallText)
+          .find(Text)
           .at(1)
           .props().isBold,
       ).toBeFalsy();

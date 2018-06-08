@@ -1011,6 +1011,7 @@ export const SPANISH_TRANSLATION = {
     'myTasks.assigned': 'Assigned',
     'myTasks.following': 'Following',
     'monthSelect.placeholder': 'Select a month...',
+    'settings.settings': 'Settings',
     'suggestionsSection.riskAreaAssessments': 'Manual Domain Assessments',
     'suggestionsSection.screeningTools': 'Screening Tools',
     'suggestionsSection.computedFields': 'Automated Domain Assessments',

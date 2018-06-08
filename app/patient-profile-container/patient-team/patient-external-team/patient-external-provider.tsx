@@ -4,7 +4,7 @@ import { FullPatientExternalProviderFragment } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import * as styles from '../css/team-member.css';
 
 interface IProps {
@@ -53,7 +53,7 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
 
     const noteHtml = description ? (
       <div className={styles.footer}>
-        <SmallText color="gray" text={description} size="medium" />
+        <Text color="gray" text={description} size="medium" />
       </div>
     ) : null;
 
@@ -62,9 +62,9 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
 
     const roleHtml =
       role === 'other' || role === 'otherMedicalSpecialist' ? (
-        <SmallText text={roleFreeText || ''} color="gray" size="medium" />
+        <Text text={roleFreeText || ''} color="gray" size="medium" />
       ) : (
-        <SmallText messageId={`externalProviderRole.${role}`} color="gray" size="medium" />
+        <Text messageId={`externalProviderRole.${role}`} color="gray" size="medium" />
       );
 
     return (
@@ -72,21 +72,16 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
         <div className={styles.container}>
           <div className={styles.row}>
             <div className={styles.column}>
-              <SmallText text={nameText} color="black" size="largest" isBold={true} />
+              <Text text={nameText} color="black" size="largest" isBold={true} />
               {roleHtml}
             </div>
 
             <div className={styles.column}>
-              <SmallText text={phoneNumber} color="black" size="medium" />
-              <SmallText text={emailAddress} color="black" size="medium" />
+              <Text text={phoneNumber} color="black" size="medium" />
+              <Text text={emailAddress} color="black" size="medium" />
             </div>
 
-            <SmallText
-              text={agencyText || ''}
-              color="black"
-              size="medium"
-              className={styles.column}
-            />
+            <Text text={agencyText || ''} color="black" size="medium" className={styles.column} />
           </div>
           <HamburgerMenu open={isMenuOpen} onMenuToggle={this.onMenuToggle}>
             <HamburgerMenuOption

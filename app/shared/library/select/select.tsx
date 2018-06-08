@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { Fragment } from 'react';
 import Option from '../option/option';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/select.css';
 
 export type Color = 'black' | 'blue';
@@ -43,7 +43,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     color,
   } = props;
 
-  const errorMessage = hasError ? <SmallText messageId={errorMessageId} color="red" /> : null;
+  const errorMessage = hasError ? <Text messageId={errorMessageId} color="red" /> : null;
 
   const selectStyles = classNames(
     styles.select,

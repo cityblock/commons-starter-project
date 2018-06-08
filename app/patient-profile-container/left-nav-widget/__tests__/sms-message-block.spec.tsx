@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { patient } from '../../../shared/util/test-data';
 import SmsMessageBlock from '../sms-message-block';
 
@@ -11,9 +11,9 @@ describe('SMS Message Block Component', () => {
     expect(wrapper.find('.container').length).toBe(1);
     expect(wrapper.find('.flex').length).toBe(1);
 
-    expect(wrapper.find(SmallText).props().messageId).toBe('messages.loading');
-    expect(wrapper.find(SmallText).props().color).toBe('black');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
+    expect(wrapper.find(Text).props().messageId).toBe('messages.loading');
+    expect(wrapper.find(Text).props().color).toBe('black');
+    expect(wrapper.find(Text).props().size).toBe('large');
   });
 
   it('returns error message if error', () => {
@@ -24,9 +24,9 @@ describe('SMS Message Block Component', () => {
     expect(wrapper.find('.container').length).toBe(1);
     expect(wrapper.find('.flex').length).toBe(1);
 
-    expect(wrapper.find(SmallText).props().messageId).toBe('messages.errorLoading');
-    expect(wrapper.find(SmallText).props().color).toBe('black');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
+    expect(wrapper.find(Text).props().messageId).toBe('messages.errorLoading');
+    expect(wrapper.find(Text).props().color).toBe('black');
+    expect(wrapper.find(Text).props().size).toBe('large');
   });
 
   it('returns no consent message if patient did not consent', () => {
@@ -35,9 +35,9 @@ describe('SMS Message Block Component', () => {
     expect(wrapper.find('.container').length).toBe(1);
     expect(wrapper.find('.flex').length).toBe(1);
 
-    expect(wrapper.find(SmallText).props().messageId).toBe('messages.noConsent');
-    expect(wrapper.find(SmallText).props().color).toBe('black');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
+    expect(wrapper.find(Text).props().messageId).toBe('messages.noConsent');
+    expect(wrapper.find(Text).props().color).toBe('black');
+    expect(wrapper.find(Text).props().size).toBe('large');
   });
 
   it('returns message indicating that no primary phone set', () => {
@@ -59,50 +59,50 @@ describe('SMS Message Block Component', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('messages.noPhone');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().isBold,
     ).toBeTruthy();
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().messageId,
     ).toBe('messages.noPhoneDetail');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('black');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().size,
     ).toBe('large');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().isBold,
     ).toBeFalsy();

@@ -7,7 +7,7 @@ import {
   mattermostUrlForUserCreateMutationVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/care-team-member-contact.css';
 
 interface IProps {
@@ -62,7 +62,7 @@ export class CareTeamMemberContact extends React.Component<allProps, IState> {
       <div className={containerStyles} onClick={e => e.stopPropagation()}>
         <div className={styles.flex}>
           <Icon name="phone" color="black" className={styles.icon} />
-          <SmallText
+          <Text
             messageId="careTeam.call"
             messageValues={{ name: firstName }}
             color="black"
@@ -71,7 +71,7 @@ export class CareTeamMemberContact extends React.Component<allProps, IState> {
         </div>
         <div className={styles.flex} onClick={this.handleMessageClick}>
           <Icon name="mattermost" className={styles.icon} />
-          <SmallText
+          <Text
             messageId="careTeam.mattermost"
             messageValues={{ name: firstName }}
             color="black"

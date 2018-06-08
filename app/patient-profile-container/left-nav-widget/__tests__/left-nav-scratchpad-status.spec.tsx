@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { MAX_SCRATCHPAD_LENGTH } from '../left-nav-scratchpad';
 import LeftNavScratchPadStatus from '../left-nav-scratchpad-status';
 
@@ -22,8 +22,8 @@ describe('Patient Left Navigation ScratchPad Status', () => {
   });
 
   it('renders no save note and character count', () => {
-    expect(wrapper.find(SmallText).props().text).toBe(`${charCount}/${MAX_SCRATCHPAD_LENGTH}`);
-    expect(wrapper.find(SmallText).props().color).toBe('gray');
+    expect(wrapper.find(Text).props().text).toBe(`${charCount}/${MAX_SCRATCHPAD_LENGTH}`);
+    expect(wrapper.find(Text).props().color).toBe('gray');
   });
 
   it('renders error content if max character count reached', () => {
@@ -34,26 +34,26 @@ describe('Patient Left Navigation ScratchPad Status', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('scratchPad.maxChars');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('red');
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(`${MAX_SCRATCHPAD_LENGTH}/${MAX_SCRATCHPAD_LENGTH}`);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('red');
@@ -67,26 +67,26 @@ describe('Patient Left Navigation ScratchPad Status', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('scratchPad.saveSuccess');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('gray');
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(`${charCount}/${MAX_SCRATCHPAD_LENGTH}`);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('gray');
@@ -100,26 +100,26 @@ describe('Patient Left Navigation ScratchPad Status', () => {
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('scratchPad.saveError');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().color,
     ).toBe('red');
 
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(`${charCount}/${MAX_SCRATCHPAD_LENGTH}`);
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().color,
     ).toBe('gray');

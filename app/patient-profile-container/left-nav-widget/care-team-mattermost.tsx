@@ -6,7 +6,7 @@ import {
   mattermostUrlForPatientCreateMutationVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/care-team-member.css';
 
 interface IProps {
@@ -55,14 +55,14 @@ export class CareTeamMattermost extends React.Component<allProps, IState> {
               <Icon name="people" color="blue" />
             </div>
             <div className={styles.detail}>
-              <SmallText
+              <Text
                 messageId="careTeam.chat"
                 isBold
                 size="largest"
                 color="black"
                 className={styles.bottomMargin}
               />
-              <SmallText messageId="careTeam.chatDetail" size="large" color="black" />
+              <Text messageId="careTeam.chatDetail" size="large" color="black" />
             </div>
           </div>
         </div>

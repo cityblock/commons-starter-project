@@ -65,3 +65,12 @@
 .basetica {
   font-family: var(--basetica-medium);
 }
+
+.baseticaBold {
+  font-family: var(--basetica-black);
+}
+
+.header {
+  font-size: var(--header-font-size);
+  line-height: var(--header-line-height);
+}

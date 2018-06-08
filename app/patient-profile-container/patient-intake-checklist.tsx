@@ -9,7 +9,7 @@ import * as computedPatientStatusQuery from '../graphql/queries/get-patient-comp
 import { getPatientComputedPatientStatusQuery } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
-import SmallText from '../shared/library/small-text/small-text';
+import Text from '../shared/library/text/text';
 import * as styles from './css/patient-intake-checklist.css';
 import PatientIntakeChecklistItem from './patient-intake-checklist-item';
 
@@ -197,13 +197,13 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
             <div className={styles.checklistBannerLabel}>
               <Icon name="report" color="white" isLarge={true} />
               <div className={styles.checklistBannerText}>
-                <SmallText
+                <Text
                   messageId="patientIntakeChecklist.bannerLabel"
                   color="white"
                   size="large"
                   isBold={true}
                 />
-                <SmallText text={this.getCompletionText()} color="white" />
+                <Text text={this.getCompletionText()} color="white" />
               </div>
             </div>
             <Button messageId={buttonMessageId} color="white" onClick={this.onClick} />

@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { FullProgressNoteFragment } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import ProgressNoteSupervisorBadge from '../progress-note-supervisor-badge';
 import * as styles from './css/timeline-card.css';
 
@@ -24,10 +24,10 @@ const TimelineCard: React.StatelessComponent<IProps> = (props: IProps) => {
   const formattedTime = format(date, 'h:mm a');
 
   const sourceInfo = progressNote ? (
-    <SmallText text={sourceDetail} size="medium" />
+    <Text text={sourceDetail} size="medium" />
   ) : (
     <div className={styles.pill}>
-      <SmallText text={sourceDetail} size="small" color="darkGray" />
+      <Text text={sourceDetail} size="small" color="darkGray" />
     </div>
   );
 
@@ -39,23 +39,12 @@ const TimelineCard: React.StatelessComponent<IProps> = (props: IProps) => {
     <div className={containerStyles}>
       <div className={styles.header}>
         <div className={styles.sourceInfo}>
-          <SmallText
-            text={source}
-            size="medium"
-            color="black"
-            isBold
-            className={styles.rightMargin}
-          />
+          <Text text={source} size="medium" color="black" isBold className={styles.rightMargin} />
           {sourceInfo}
         </div>
         <div className={styles.dateInfo}>
-          <SmallText
-            text={formattedTime}
-            size="medium"
-            color="black"
-            className={styles.rightMargin}
-          />
-          <SmallText text={formattedDate} size="medium" color="black" />
+          <Text text={formattedTime} size="medium" color="black" className={styles.rightMargin} />
+          <Text text={formattedDate} size="medium" color="black" />
         </div>
       </div>
       <div className={styles.title}>
@@ -65,9 +54,7 @@ const TimelineCard: React.StatelessComponent<IProps> = (props: IProps) => {
         </div>
         {!!onClose && <Button color="white" messageId="progressNote.close" onClick={onClose} />}
       </div>
-      {!!notes && (
-        <SmallText text={notes} size="large" color="black" className={styles.topMargin} />
-      )}
+      {!!notes && <Text text={notes} size="large" color="black" className={styles.topMargin} />}
       {children}
     </div>
   );

@@ -1,0 +1,11 @@
+.container {
+  width: 100%;
+  padding: var(--medium-gutter);
+}
+
+.divider {
+  height: 2px;
+  background: var(--border-color);
+  width: 100%;
+  margin: var(--small-gutter) 0;
+}

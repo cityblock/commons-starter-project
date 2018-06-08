@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import { Accordion } from '../left-nav';
 import * as styles from './css/header.css';
 
@@ -20,9 +20,9 @@ const InfoGroupHeader: React.StatelessComponent<IProps> = (props: IProps) => {
   return (
     <button className={styles.container} onClick={() => onClick(selected)}>
       <div>
-        <SmallText messageId={messageId} size="largest" color="black" font="basetica" isBold />
+        <Text messageId={messageId} size="largest" color="black" font="basetica" isBold />
         {itemCount && (
-          <SmallText
+          <Text
             text={`(${itemCount})`}
             size="largest"
             color="lightBlue"

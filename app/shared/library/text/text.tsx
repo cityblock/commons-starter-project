@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/small-text.css';
+import * as styles from './css/text.css';
 
 export type Color =
   | 'lightGray'
@@ -15,10 +15,10 @@ export type Color =
   | 'blue'
   | 'lightBlue'; // default is lightGray
 export type Size = 'small' | 'medium' | 'large' | 'largest'; // default is small
-export type Font = 'roboto' | 'basetica'; // default is Roboto
+export type Font = 'roboto' | 'basetica' | 'baseticaBold'; // default is Roboto
 
 export interface IProps {
-  messageId?: string; // provide either raw text or message id
+  messageId?: string; // provide either message id (preferred) or raw text
   messageValues?: { [key: string]: string }; // optional variable values for translation
   text?: string;
   color?: Color; // optional color flag
@@ -27,10 +27,22 @@ export interface IProps {
   isBold?: boolean;
   onClick?: (e?: any) => void;
   font?: Font;
+  isHeader?: boolean; // if true, use h1 rather than p
 }
 
-const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, text, color, className, size, onClick, isBold, messageValues, font } = props;
+const Text: React.StatelessComponent<IProps> = (props: IProps) => {
+  const {
+    messageId,
+    text,
+    color,
+    className,
+    size,
+    onClick,
+    isBold,
+    messageValues,
+    font,
+    isHeader,
+  } = props;
   const textStyles = classNames(
     styles.text,
     {
@@ -48,6 +60,8 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.lightBlue]: color && color === 'lightBlue',
       [styles.bold]: isBold,
       [styles.basetica]: font === 'basetica',
+      [styles.baseticaBold]: font === 'baseticaBold',
+      [styles.header]: isHeader,
     },
     className,
   );
@@ -55,16 +69,30 @@ const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
   if (messageId) {
     return (
       <FormattedMessage id={messageId} values={messageValues}>
-        {(message: string) => (
-          <p className={textStyles} onClick={onClick}>
-            {message}
-          </p>
-        )}
+        {(message: string) => {
+          if (isHeader) {
+            return (
+              <h1 className={textStyles} onClick={onClick}>
+                {message}
+              </h1>
+            );
+          }
+
+          return (
+            <p className={textStyles} onClick={onClick}>
+              {message}
+            </p>
+          );
+        }}
       </FormattedMessage>
     );
+  }
+
+  if (isHeader) {
+    return <h1 className={textStyles}>{text}</h1>;
   }
 
   return <p className={textStyles}>{text}</p>;
 };
 
-export default SmallText;
+export default Text;

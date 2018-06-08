@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import EmptySmsMessages from '../empty-sms-messages';
 
 describe('Empty SMS Messages', () => {
@@ -17,8 +17,8 @@ describe('Empty SMS Messages', () => {
   });
 
   it('renders text that no SMS messages present', () => {
-    expect(wrapper.find(SmallText).props().messageId).toBe('messages.empty');
-    expect(wrapper.find(SmallText).props().size).toBe('large');
-    expect(wrapper.find(SmallText).props().color).toBe('lightGray');
+    expect(wrapper.find(Text).props().messageId).toBe('messages.empty');
+    expect(wrapper.find(Text).props().size).toBe('large');
+    expect(wrapper.find(Text).props().color).toBe('lightGray');
   });
 });

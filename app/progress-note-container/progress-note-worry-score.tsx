@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Icon from '../shared/library/icon/icon';
 import { IconName } from '../shared/library/icon/icon-types';
-import SmallText from '../shared/library/small-text/small-text';
+import Text from '../shared/library/text/text';
 import * as styles from './css/progress-note-worry-score.css';
 
 interface IProps {
@@ -43,7 +43,7 @@ const ProgressNoteWorryScore: React.StatelessComponent<IProps> = (props: IProps)
 
   return (
     <div className={styles.container}>
-      <SmallText
+      <Text
         messageId="progressNote.worryScore"
         isBold
         font="basetica"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Icon from '../icon/icon';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/modal-error.css';
 
 interface IProps {
@@ -12,11 +12,11 @@ const ModalError: React.StatelessComponent<IProps> = (props: IProps) => {
   const { errorMessageId, error } = props;
 
   const errorLabel = errorMessageId ? (
-    <SmallText messageId={errorMessageId} color="white" className={styles.label} size="medium" />
+    <Text messageId={errorMessageId} color="white" className={styles.label} size="medium" />
   ) : null;
 
   const errorBody = error ? (
-    <SmallText text={error} color="white" className={styles.message} size="medium" />
+    <Text text={error} color="white" className={styles.message} size="medium" />
   ) : null;
 
   return (

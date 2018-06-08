@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../shared/library/button/button';
 import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/flaggable-display-card.css';
 
 export type FooterState = 'flagged' | 'confirm' | 'none' | 'verified';
@@ -50,7 +50,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
 
     const footer = (
       <div className={classNames(styles.footer, styles.flagged)}>
-        <SmallText messageId={flaggedMessageId} color="black" size="medium" />
+        <Text messageId={flaggedMessageId} color="black" size="medium" />
         {flaggedOnMessage}
       </div>
     );
@@ -73,7 +73,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
 
     const footer = (
       <div className={classNames(styles.footer, styles.flagged)}>
-        <SmallText messageId={verifiedMessageId} color="white" size="medium" />
+        <Text messageId={verifiedMessageId} color="white" size="medium" />
         {flaggedOnMessage}
       </div>
     );
@@ -85,7 +85,7 @@ export default class FlaggableDisplayCard extends React.Component<IProps, IState
     const { footerState, confirmMessageId, onConfirmClick } = this.props;
 
     const confirmMessage = confirmMessageId ? (
-      <SmallText
+      <Text
         messageId={confirmMessageId}
         color="white"
         size="medium"

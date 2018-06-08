@@ -4,7 +4,7 @@ import { FullPatientForDashboardFragment } from '../../graphql/types';
 import { formatCityblockId, getPatientStatusColor } from '../../shared/helpers/format-helpers';
 import Icon from '../../shared/library/icon/icon';
 import PatientAge from '../../shared/library/patient-age/patient-age';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import PatientTaskCount from '../tasks/patient-task-count';
 import * as styles from './css/patient-list-item-body.css';
 import PatientIntakeProgressBar from './patient-intake-progress-bar';
@@ -44,10 +44,8 @@ const PatientListItemBody: React.StatelessComponent<IProps> = (props: IProps) =>
 
   return (
     <div className={styles.info}>
-      {isNotConversations && (
-        <SmallText text={formatCityblockId(patient.cityblockId)} color="black" />
-      )}
-      {isNotConversations && <SmallText text={patientStatus} color={statusColor} />}
+      {isNotConversations && <Text text={formatCityblockId(patient.cityblockId)} color="black" />}
+      {isNotConversations && <Text text={patientStatus} color={statusColor} />}
       {itemBody}
       <div onClick={onClick} className={styles.profileLink}>
         <Icon name="keyboardArrowRight" className={styles.arrow} />

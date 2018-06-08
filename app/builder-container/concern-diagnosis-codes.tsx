@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FullDiagnosisCodeFragment } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
-import SmallText from '../shared/library/small-text/small-text';
+import Text from '../shared/library/text/text';
 import ConcernDiagnosisCode from './concern-diagnosis-code';
 import ConcernDiagnosisCodeCreate from './concern-diagnosis-code-create';
 
@@ -33,11 +33,11 @@ export class ConcernDiagnosisCodes extends React.Component<IProps> {
     return (
       <div>
         <br />
-        <SmallText messageId="concernDiagnosisCodes.icdTenCodes" />
+        <Text messageId="concernDiagnosisCodes.icdTenCodes" />
         <br />
         {this.renderDiagnosisCodes()}
         <br />
-        <SmallText messageId="concernDiagnosisCodes.addDiagnosisCode" />
+        <Text messageId="concernDiagnosisCodes.addDiagnosisCode" />
         <ConcernDiagnosisCodeCreate concernId={concernId} />
         <br />
       </div>

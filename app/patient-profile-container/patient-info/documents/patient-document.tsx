@@ -16,8 +16,8 @@ import { formatFullName } from '../../../shared/helpers/format-helpers';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText from '../../../shared/library/small-text/small-text';
 import TextInfo from '../../../shared/library/text-info/text-info';
+import Text from '../../../shared/library/text/text';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../../shared/with-error-handler/with-error-handler';
@@ -123,7 +123,7 @@ export class PatientDocument extends React.Component<allProps, IState> {
             />
           </div>
         </div>
-        <SmallText text={description || ''} size="medium" color="gray" className={styles.right} />
+        <Text text={description || ''} size="medium" color="gray" className={styles.right} />
         <HamburgerMenu
           open={isMenuVisible}
           onMenuToggle={this.handleMenuToggle}

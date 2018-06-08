@@ -16,8 +16,8 @@ import * as builderStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
-import SmallText from '../shared/library/small-text/small-text';
 import TextInput from '../shared/library/text-input/text-input';
+import Text from '../shared/library/text/text';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import withErrorHandler, {
   IInjectedErrorProps,
@@ -197,7 +197,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
     ));
     const answerTypeNote =
       question.answerType === 'freetext' ? (
-        <SmallText isBold={true} color="black" messageId="builder.freeTextNote" />
+        <Text isBold={true} color="black" messageId="builder.freeTextNote" />
       ) : null;
 
     return (

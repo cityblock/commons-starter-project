@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 import DefaultText from '../default-text/default-text';
 import Icon from '../icon/icon';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/file-input.css';
 
 interface IProps {
@@ -48,7 +48,7 @@ const FileInput: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   }
 
-  const error = hasMaxSizeError ? <SmallText messageId="fileInput.maxSize" color="red" /> : null;
+  const error = hasMaxSizeError ? <Text messageId="fileInput.maxSize" color="red" /> : null;
 
   return (
     <Fragment>

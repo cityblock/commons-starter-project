@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import TextAreaWithButton from '../textarea-with-button/textarea-with-button';
 import * as styles from './css/editable-multiline-text.css';
 
@@ -78,7 +78,7 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
     if (!text) {
       return (
         <div onClick={this.handleClick}>
-          <SmallText
+          <Text
             messageId={placeholderMessageId || 'editableText.clickToEdit'}
             font="basetica"
             color="lightGray"

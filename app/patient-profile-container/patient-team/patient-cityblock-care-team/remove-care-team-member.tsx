@@ -7,7 +7,7 @@ import FormLabel from '../../../shared/library/form-label/form-label';
 import OptGroup from '../../../shared/library/optgroup/optgroup';
 import Option from '../../../shared/library/option/option';
 import Select from '../../../shared/library/select/select';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import * as styles from './css/remove-care-team-member.css';
 
 interface IProps {
@@ -83,15 +83,15 @@ class RemoveCareTeamMember extends React.Component<IProps> {
       <div className={styles.removeCareTeamMember}>
         <div className={styles.careTeamMemberInfo}>
           <div className={styles.careTeamMemberName}>
-            <SmallText
+            <Text
               messageId="patientTeam.careMemberToRemoveLabel"
               color="red"
               size="medium"
               className={styles.careTeamMemberNameLabel}
             />
             <div className={styles.careTeamMemberNameAndTitle}>
-              <SmallText text={careTeamMemberName} size="large" color="black" />
-              <SmallText
+              <Text text={careTeamMemberName} size="large" color="black" />
+              <Text
                 messageId={`patientTeam.${careTeamMemberUserRole}`}
                 size="medium"
                 color="gray"
@@ -100,13 +100,13 @@ class RemoveCareTeamMember extends React.Component<IProps> {
             </div>
           </div>
           <div className={careTeamMemberStatsStyles}>
-            <SmallText
+            <Text
               messageId="patientTeam.openTasks"
               color="red"
               size="medium"
               className={styles.careTeamMemberTasksLabel}
             />
-            <SmallText
+            <Text
               text={toString(tasksCount)}
               color="black"
               size="medium"

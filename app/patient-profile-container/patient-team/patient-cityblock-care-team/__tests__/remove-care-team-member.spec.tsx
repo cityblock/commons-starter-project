@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
-import SmallText from '../../../../shared/library/small-text/small-text';
+import Text from '../../../../shared/library/text/text';
 import { clinic, userForCareTeam } from '../../../../shared/util/test-data';
 import RemoveCareTeamMember from '../remove-care-team-member';
 
@@ -37,19 +37,19 @@ describe('Render Remove Care Team Member Component', () => {
   it('renders info about the user being removed from the care team', () => {
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(0)
         .props().messageId,
     ).toBe('patientTeam.careMemberToRemoveLabel');
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(1)
         .props().text,
     ).toBe(formatFullName(userForCareTeam.firstName, userForCareTeam.lastName));
     expect(
       wrapper
-        .find(SmallText)
+        .find(Text)
         .at(2)
         .props().messageId,
     ).toBe(`patientTeam.${userForCareTeam.userRole}`);

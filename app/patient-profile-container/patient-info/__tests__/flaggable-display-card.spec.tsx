@@ -3,7 +3,7 @@ import * as React from 'react';
 import Button from '../../../shared/library/button/button';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import FlaggableDisplayCard, { FooterState } from '../flaggable-display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 
@@ -22,7 +22,7 @@ describe('Render Flaggable Display Card Component', () => {
   it('renders flaggable display card not in flagged state', () => {
     expect(wrapper.find(HamburgerMenu).length).toBe(1);
     expect(wrapper.find(HamburgerMenuOption).length).toBe(1);
-    expect(wrapper.find(SmallText).length).toBe(0);
+    expect(wrapper.find(Text).length).toBe(0);
     expect(wrapper.find(Button).length).toBe(0);
   });
 
@@ -36,9 +36,9 @@ describe('Render Flaggable Display Card Component', () => {
       flaggedMessageId: 'flagged.id',
     });
 
-    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find(Text).length).toBe(1);
 
-    const text = wrapper.find(SmallText).props();
+    const text = wrapper.find(Text).props();
     expect(text.messageId).toBe('flagged.id');
     expect(text.color).toBe('black');
     expect(text.size).toBe('medium');
@@ -52,9 +52,9 @@ describe('Render Flaggable Display Card Component', () => {
       onConfirmClick,
     });
 
-    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find(Text).length).toBe(1);
 
-    const text = wrapper.find(SmallText).props();
+    const text = wrapper.find(Text).props();
     expect(text.messageId).toBe('confirm.id');
     expect(text.color).toBe('white');
     expect(text.size).toBe('medium');

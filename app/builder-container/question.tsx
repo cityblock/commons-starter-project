@@ -15,8 +15,8 @@ import * as styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
-import SmallText from '../shared/library/small-text/small-text';
 import TextInput from '../shared/library/text-input/text-input';
+import Text from '../shared/library/text/text';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
 import QuestionConditions from './question-conditions';
@@ -315,7 +315,7 @@ export class Question extends React.Component<allProps, IState> {
     if (question) {
       const answerTypeNote =
         question.answerType === 'freetext' ? (
-          <SmallText isBold={true} color="black" messageId="builder.freeTextNote" />
+          <Text isBold={true} color="black" messageId="builder.freeTextNote" />
         ) : null;
 
       const answerDisplayHtml = question.computedField ? (
@@ -432,9 +432,9 @@ export class Question extends React.Component<allProps, IState> {
                 dataType={this.getAnswerDataType() || undefined}
               />
               <br />
-              <SmallText color="black" size="large" messageId="builder.applicableHeading" />
+              <Text color="black" size="large" messageId="builder.applicableHeading" />
               <br />
-              <SmallText color="black" size="medium" messageId="builder.applicableBody" />
+              <Text color="black" size="medium" messageId="builder.applicableBody" />
               <br />
               <QuestionConditions
                 questions={this.getQuestionsForConditions()}

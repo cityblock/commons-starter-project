@@ -17,7 +17,7 @@ import { ISavedEmail } from '../../shared/email-modal/email-modal';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
@@ -258,8 +258,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
 
     const errorComponent = saveError ? (
       <div className={styles.saveMessage}>
-        <SmallText messageId="patientInfo.saveError" color="red" size="medium" />
-        <SmallText
+        <Text messageId="patientInfo.saveError" color="red" size="medium" />
+        <Text
           color="gray"
           size="medium"
           messageId="patientInfo.tryAgain"
@@ -270,7 +270,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
 
     const successMessage = saveSuccess ? (
       <div className={styles.saveMessage}>
-        <SmallText messageId="patientInfo.saveSuccess" color="gray" size="medium" />
+        <Text messageId="patientInfo.saveSuccess" color="gray" size="medium" />
         <Icon name="checkCircle" className={styles.successIcon} />
       </div>
     ) : null;

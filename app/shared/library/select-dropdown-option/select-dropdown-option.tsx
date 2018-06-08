@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Avatar from '../avatar/avatar';
-import SmallText from '../small-text/small-text';
+import Text from '../text/text';
 import * as styles from './css/select-dropdown-option.css';
 
 interface IProps {
@@ -19,9 +19,9 @@ const SelectDropdownOption: React.StatelessComponent<IProps> = (props: IProps) =
   } else if (detailMessageId) {
     detailHtml = (
       <React.Fragment>
-        <SmallText text="(" />
-        <SmallText messageId={detailMessageId} className={styles.noMargin} />
-        <SmallText text=")" className={styles.noMargin} />
+        <Text text="(" />
+        <Text messageId={detailMessageId} className={styles.noMargin} />
+        <Text text=")" className={styles.noMargin} />
       </React.Fragment>
     );
   }

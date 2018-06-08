@@ -8,7 +8,7 @@ import {
 } from '../../../shared/helpers/format-helpers';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
-import SmallText, { Color } from '../../../shared/library/small-text/small-text';
+import Text, { Color } from '../../../shared/library/text/text';
 import * as styles from '../css/team-member.css';
 
 interface IProps {
@@ -71,7 +71,7 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
       roleMessageId && color ? (
         <Fragment>
           <span className={styles.bullet}>&bull;</span>
-          <SmallText messageId={roleMessageId} color={color} size="medium" />
+          <Text messageId={roleMessageId} color={color} size="medium" />
         </Fragment>
       ) : null;
 
@@ -81,30 +81,26 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
     const addressHtml =
       addressFirstLine || addressSecondLine ? (
         <div className={styles.column}>
-          <SmallText text={addressFirstLine || 'Unknown Street'} color="black" size="medium" />
-          <SmallText text={addressSecondLine || ''} color="black" size="medium" />
+          <Text text={addressFirstLine || 'Unknown Street'} color="black" size="medium" />
+          <Text text={addressSecondLine || ''} color="black" size="medium" />
         </div>
       ) : (
         <div className={styles.column}>
-          <SmallText text={'Unknown Address'} color="black" size="medium" />
+          <Text text={'Unknown Address'} color="black" size="medium" />
         </div>
       );
 
     const noteHtml = description ? (
       <div className={styles.footer}>
-        <SmallText color="gray" text={description} size="medium" />
+        <Text color="gray" text={description} size="medium" />
       </div>
     ) : null;
 
     const relationHtml =
       relationToPatient === 'other' ? (
-        <SmallText text={relationFreeText || ''} color="gray" size="medium" />
+        <Text text={relationFreeText || ''} color="gray" size="medium" />
       ) : (
-        <SmallText
-          messageId={`relationToPatient.${relationToPatient}`}
-          color="gray"
-          size="medium"
-        />
+        <Text messageId={`relationToPatient.${relationToPatient}`} color="gray" size="medium" />
       );
 
     return (
@@ -112,7 +108,7 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
         <div className={styles.container}>
           <div className={styles.row}>
             <div className={styles.column}>
-              <SmallText
+              <Text
                 text={formatFullName(firstName, lastName)}
                 color="black"
                 size="largest"
@@ -125,8 +121,8 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
             </div>
 
             <div className={styles.column}>
-              <SmallText text={phoneNumber} color="black" size="medium" />
-              <SmallText text={emailAddress} color="black" size="medium" />
+              <Text text={phoneNumber} color="black" size="medium" />
+              <Text text={emailAddress} color="black" size="medium" />
             </div>
 
             {addressHtml}

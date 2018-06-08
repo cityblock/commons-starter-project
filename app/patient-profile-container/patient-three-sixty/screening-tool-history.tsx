@@ -10,8 +10,8 @@ import {
 import { formatFullName, formatScreeningToolScore } from '../../shared/helpers/format-helpers';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
 import TextInfo, { IProps as ITextInfoProps } from '../../shared/library/text-info/text-info';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/screening-tool-history.css';
 
 interface IProps {
@@ -53,7 +53,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
     prevScoreProps.textMessageId = 'history360.noRecord';
   }
 
-  const riskAreaTitle = riskArea ? <SmallText text={riskArea.title} /> : null;
+  const riskAreaTitle = riskArea ? <Text text={riskArea.title} /> : null;
 
   return (
     <div className={styles.container}>

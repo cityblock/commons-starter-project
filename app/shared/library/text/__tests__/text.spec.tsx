@@ -1,13 +1,13 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import SmallText from '../small-text';
+import Text from '../text';
 
 describe('Library Date Info Component', () => {
   const messageId = 'kingOfTheNorth';
   const text = 'Jon Snow';
 
-  const wrapper = shallow(<SmallText text={text} />);
+  const wrapper = shallow(<Text text={text} />);
 
   it('renders text with default styles', () => {
     expect(wrapper.find('p').length).toBe(1);
@@ -24,11 +24,17 @@ describe('Library Date Info Component', () => {
 
   it('renders black text', () => {
     wrapper.setProps({ className: '', color: 'black' });
-    expect(wrapper.find('p').props().className).toBe(`text black`);
+    expect(wrapper.find('p').props().className).toBe('text black');
+  });
+
+  it('renders header text if specified', () => {
+    wrapper.setProps({ isHeader: true, color: '' });
+    expect(wrapper.find('h1').props().className).toBe('text header');
+    expect(wrapper.find('h1').text()).toBe(text);
   });
 
   it('renders formatted message with specified id if passed', () => {
-    wrapper.setProps({ messageId });
+    wrapper.setProps({ messageId, isHeader: false });
     expect(wrapper.find(FormattedMessage).length).toBe(1);
     expect(wrapper.find(FormattedMessage).props().id).toBe(messageId);
     expect(wrapper.find(FormattedMessage).props().values).toEqual({});

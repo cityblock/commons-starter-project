@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import SmallText from '../../../shared/library/small-text/small-text';
+import Text from '../../../shared/library/text/text';
 import TextAreaWithButton from '../../../shared/library/textarea-with-button/textarea-with-button';
 import { patient } from '../../../shared/util/test-data';
 import { SmsMessageCreate } from '../sms-message-create';
@@ -47,13 +47,13 @@ describe('SMS Message Create Form', () => {
     wrapper.setProps({ patient });
 
     expect(wrapper.find('.container').length).toBe(2);
-    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find(Text).length).toBe(1);
   });
 
   it('renders blocker if loading', () => {
     wrapper.setProps({ loading: true, patient: patientCanReceiveTexts });
 
     expect(wrapper.find('.container').length).toBe(2);
-    expect(wrapper.find(SmallText).length).toBe(1);
+    expect(wrapper.find(Text).length).toBe(1);
   });
 });

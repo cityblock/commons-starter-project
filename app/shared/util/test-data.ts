@@ -32,6 +32,29 @@ export const currentUser = {
   awayMessage: 'Winter is here',
 };
 
+export const currentUserHours = [
+  {
+    id: 'monday',
+    userId: currentUser.id,
+    weekday: 1,
+    startTime: 800,
+    endTime: 1500,
+    createdAt: '2017-09-07T13:45:14.532Z',
+    updatedAt: '2017-09-07T13:45:14.532Z',
+    deletedAt: null,
+  },
+  {
+    id: 'friday',
+    userId: currentUser.id,
+    weekday: 5,
+    startTime: 900,
+    endTime: 1630,
+    createdAt: '2017-09-07T13:45:14.532Z',
+    updatedAt: '2017-09-07T13:45:14.532Z',
+    deletedAt: null,
+  },
+];
+
 export const currentUserForCareTeam = {
   id: 'id',
   locale: 'en',

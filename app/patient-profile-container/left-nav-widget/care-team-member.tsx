@@ -3,7 +3,7 @@ import { FullCareTeamUserFragment } from '../../graphql/types';
 import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/format-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import CareTeamMemberContact from './care-team-member-contact';
 import * as styles from './css/care-team-member.css';
 
@@ -24,14 +24,14 @@ const CareTeamMember: React.StatelessComponent<IProps> = (props: IProps) => {
         <div className={styles.user}>
           <Avatar size="large" src={careTeamMember.googleProfileImageUrl} />
           <div className={styles.detail}>
-            <SmallText
+            <Text
               text={formatFullName(firstName, lastName)}
               isBold
               size="largest"
               color="black"
               className={styles.bottomMargin}
             />
-            <SmallText
+            <Text
               text={formatCareTeamMemberRole(careTeamMember.userRole)}
               size="large"
               color="black"

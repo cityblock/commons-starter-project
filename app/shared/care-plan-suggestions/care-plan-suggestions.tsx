@@ -7,7 +7,7 @@ import { FullCarePlanSuggestionFragment } from '../../graphql/types';
 import { ICarePlanSuggestionsPopupOptions } from '../../reducers/popup-reducer';
 import { IState as IAppState } from '../../store';
 import Modal from '../library/modal/modal';
-import SmallText from '../library/small-text/small-text';
+import Text from '../library/text/text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
 import * as styles from './css/care-plan-suggestions.css';
 
@@ -46,8 +46,8 @@ export class CarePlanSuggestions extends React.Component<allProps> {
       >
         <div className={styles.container}>
           <div className={styles.count}>
-            <SmallText messageId="suggestionsModal.concerns" color="darkGray" size="large" />
-            <SmallText
+            <Text messageId="suggestionsModal.concerns" color="darkGray" size="large" />
+            <Text
               text={`${getConcernCount(carePlanSuggestions)}`}
               isBold
               color="black"
@@ -55,22 +55,12 @@ export class CarePlanSuggestions extends React.Component<allProps> {
             />
           </div>
           <div className={styles.count}>
-            <SmallText messageId="suggestionsModal.goals" color="darkGray" size="large" />
-            <SmallText
-              text={`${getGoalCount(carePlanSuggestions)}`}
-              isBold
-              color="black"
-              size="large"
-            />
+            <Text messageId="suggestionsModal.goals" color="darkGray" size="large" />
+            <Text text={`${getGoalCount(carePlanSuggestions)}`} isBold color="black" size="large" />
           </div>
           <div className={styles.count}>
-            <SmallText messageId="suggestionsModal.tasks" color="darkGray" size="large" />
-            <SmallText
-              text={`${getTaskCount(carePlanSuggestions)}`}
-              isBold
-              color="black"
-              size="large"
-            />
+            <Text messageId="suggestionsModal.tasks" color="darkGray" size="large" />
+            <Text text={`${getTaskCount(carePlanSuggestions)}`} isBold color="black" size="large" />
           </div>
         </div>
       </Modal>

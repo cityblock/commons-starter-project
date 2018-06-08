@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import * as React from 'react';
-import SmallText from '../../shared/library/small-text/small-text';
+import Text from '../../shared/library/text/text';
 import * as styles from './css/sms-message-date.css';
 
 const DATE_FORMAT = 'ddd, MMM D, YYYY';
@@ -16,7 +16,7 @@ const SmsMessageDate: React.StatelessComponent<IProps> = ({ date }) => {
     <div className={styles.container}>
       <div className={styles.divider} />
       <div className={styles.date}>
-        <SmallText text={formattedDate} size="small" color="gray" />
+        <Text text={formattedDate} size="small" color="gray" />
       </div>
       <div className={styles.divider} />
     </div>

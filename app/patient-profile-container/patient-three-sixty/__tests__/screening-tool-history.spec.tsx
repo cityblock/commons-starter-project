@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { formatFullName, formatScreeningToolScore } from '../../../shared/helpers/format-helpers';
 import DateInfo from '../../../shared/library/date-info/date-info';
 import Icon from '../../../shared/library/icon/icon';
-import SmallText from '../../../shared/library/small-text/small-text';
 import TextInfo from '../../../shared/library/text-info/text-info';
+import Text from '../../../shared/library/text/text';
 import {
   riskArea,
   shortPatientScreeningToolSubmission as submission,
@@ -42,8 +42,8 @@ describe('Patient 360 Screening Tool History Component', () => {
   });
 
   it('renders risk area of screening tool', () => {
-    expect(wrapper.find(SmallText).length).toBe(1);
-    expect(wrapper.find(SmallText).props().text).toBe(riskArea.title);
+    expect(wrapper.find(Text).length).toBe(1);
+    expect(wrapper.find(Text).props().text).toBe(riskArea.title);
   });
 
   it('renders information about when screening tool was administered', () => {

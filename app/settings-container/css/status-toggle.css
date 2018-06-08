@@ -1,0 +1,7 @@
+.text {
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.marginRight {
+  margin-right: 5px;
+}

@@ -6,6 +6,7 @@ import { getCurrentUserHoursQuery, FullUserFragment } from '../graphql/types';
 import Spinner from '../shared/library/spinner/spinner';
 import Text from '../shared/library/text/text';
 import * as styles from './css/settings-container.css';
+import SettingsLeftRail from './left-rail';
 
 interface IProps {
   mutate?: any;
@@ -23,9 +24,10 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export const SettingsContainer: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { userLoading, hoursLoading, userError, hoursError } = props;
+  const { userLoading, hoursLoading, userError, hoursError, currentUser } = props;
 
-  if (userLoading || hoursLoading || userError || hoursError) {
+  // return spinner if loading
+  if (userLoading || hoursLoading || userError || hoursError || !currentUser) {
     return <Spinner />;
   }
 
@@ -33,6 +35,9 @@ export const SettingsContainer: React.StatelessComponent<allProps> = (props: all
     <div className={styles.container}>
       <Text messageId="settings.settings" color="black" font="baseticaBold" isHeader />
       <div className={styles.divider} />
+      <div>
+        <SettingsLeftRail currentUser={currentUser} />
+      </div>
     </div>
   );
 };

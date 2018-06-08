@@ -11,6 +11,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import BusinessIcon from '@material-ui/icons/Business';
 import ChatIcon from '@material-ui/icons/Chat';
 import CheckIcon from '@material-ui/icons/Check';
@@ -38,8 +39,8 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import HomeIcon from '@material-ui/icons/Home';
 import InboxIcon from '@material-ui/icons/Inbox';
 import InfoOutlineIcon from '@material-ui/icons/InfoOutline';
-import ExpandArrowIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ExpandArrowIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -67,6 +68,7 @@ import SyncProblemIcon from '@material-ui/icons/SyncProblem';
 import TextSmsIcon from '@material-ui/icons/Textsms';
 import TodayIcon from '@material-ui/icons/Today';
 import WarningIcon from '@material-ui/icons/Warning';
+import WorkIcon from '@material-ui/icons/Work';
 import MattermostIcon from './custom/mattermost';
 import { IconName } from './icon-types';
 
@@ -88,6 +90,7 @@ const components: IconComponents = {
   assignment: AssignmentIcon,
   assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
+  beachAccess: BeachAccessIcon,
   business: BusinessIcon,
   chat: ChatIcon,
   check: CheckIcon,
@@ -145,6 +148,7 @@ const components: IconComponents = {
   today: TodayIcon,
   help: HelpIcon,
   warning: WarningIcon,
+  work: WorkIcon,
 };
 
 export default components;

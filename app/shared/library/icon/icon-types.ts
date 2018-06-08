@@ -12,6 +12,7 @@ export type IconName =
   | 'assignment'
   | 'assignmentInd'
   | 'assignmentTurnedIn'
+  | 'beachAccess'
   | 'business'
   | 'chat'
   | 'check'
@@ -68,4 +69,5 @@ export type IconName =
   | 'textSms'
   | 'today'
   | 'help'
-  | 'warning';
+  | 'warning'
+  | 'work';

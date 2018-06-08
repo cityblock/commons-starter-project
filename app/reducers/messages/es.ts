@@ -1011,11 +1011,17 @@ export const SPANISH_TRANSLATION = {
     'myTasks.assigned': 'Assigned',
     'myTasks.following': 'Following',
     'monthSelect.placeholder': 'Select a month...',
-    'settings.settings': 'Settings',
     'suggestionsSection.riskAreaAssessments': 'Manual Domain Assessments',
     'suggestionsSection.screeningTools': 'Screening Tools',
     'suggestionsSection.computedFields': 'Automated Domain Assessments',
     'suggestionsGroup.concerns': 'Concerns:',
     'suggestionsGroup.goals': 'Goals:',
+    'settings.settings': 'Settings',
+    'settings.workHours': 'Work Hours',
+    'settings.workHoursDetail':
+      'Indicate your availability for each day of the week. On days that you’re off or unavailble, please click the check box for that day.',
+    'settings.status': 'Status: ',
+    'settings.available': 'Available',
+    'settings.unavailable': 'Unavailable',
   },
 };

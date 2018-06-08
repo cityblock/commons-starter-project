@@ -7,5 +7,5 @@
   height: 2px;
   background: var(--border-color);
   width: 100%;
-  margin: var(--small-gutter) 0;
+  margin: var(--small-gutter) 0 var(--medium-gutter);
 }

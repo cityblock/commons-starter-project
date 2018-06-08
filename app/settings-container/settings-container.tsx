@@ -36,15 +36,11 @@ class SettingsContainer extends React.Component<allProps, IState> {
     const { currentUser } = this.props;
 
     if (currentUser) {
-      const { phone, firstName, lastName } = currentUser;
       const locale = event.target.value;
 
       this.props.updateUser({
         variables: {
-          firstName: firstName || '',
-          lastName: lastName || '',
           locale,
-          phone,
         },
       });
     }

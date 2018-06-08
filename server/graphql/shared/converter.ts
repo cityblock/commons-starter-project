@@ -34,6 +34,8 @@ export function convertUser(user: User): IUser {
     googleProfileImageUrl: user.googleProfileImageUrl,
     permissions: user.permissions,
     twilioSimId: user.twilioSimId,
+    isAvailable: user.isAvailable,
+    awayMessage: user.awayMessage,
     ...convertGenerated(user),
   };
 }

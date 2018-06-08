@@ -285,11 +285,16 @@ describe('user tests', () => {
           userId: user.id,
           testTransaction: txn,
         },
-        { locale: 'es', firstName: 'first' },
+        {
+          locale: 'es',
+          isAvailable: false,
+          awayMessage: "Let's Go Pikachu!",
+        },
       );
       expect(cloneDeep(result.data!.currentUserEdit)).toMatchObject({
         locale: 'es',
-        firstName: 'first',
+        isAvailable: false,
+        awayMessage: "Let's Go Pikachu!",
       });
     });
   });

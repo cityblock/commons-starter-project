@@ -11,7 +11,7 @@ import {
   careTeamReassignUserMutationVariables,
   getPatientCareTeamQuery,
   getTasksForUserForPatientQuery,
-  FullUserFragment,
+  FullCareTeamUserFragment,
   UserRole,
 } from '../../../graphql/types';
 import { formatErrorMessage } from '../../../shared/helpers/format-helpers';
@@ -23,7 +23,7 @@ interface IProps {
   closePopup: () => void;
   isVisible: boolean;
   patientId: string;
-  careTeamMember?: FullUserFragment | null;
+  careTeamMember?: FullCareTeamUserFragment | null;
   careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
 

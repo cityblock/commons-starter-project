@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { FullUserFragment } from '../../../../graphql/types';
+import { FullCareTeamUserFragment } from '../../../../graphql/types';
 import {
   formatCareTeamMemberRole,
   formatFullName,
@@ -17,7 +17,7 @@ import {
 import { CareTeamMember } from '../care-team-member';
 
 describe('Render CareTeamMember component', () => {
-  const onClickToRemove = (careTeamMemberToREmove: FullUserFragment) => true;
+  const onClickToRemove = (careTeamMemberToREmove: FullCareTeamUserFragment) => true;
   const careTeamMakeTeamLead = jest.fn();
 
   const wrapper = shallow(

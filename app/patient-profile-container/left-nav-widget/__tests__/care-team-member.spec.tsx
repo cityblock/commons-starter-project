@@ -3,7 +3,7 @@ import * as React from 'react';
 import Avatar from '../../../shared/library/avatar/avatar';
 import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
-import { user } from '../../../shared/util/test-data';
+import { userForCareTeam as user } from '../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
 import CareTeamMemberContact from '../care-team-member-contact';
 

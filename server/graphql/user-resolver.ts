@@ -164,16 +164,11 @@ export async function currentUserEdit(
   return transaction(testTransaction || User.knex(), async txn => {
     checkLoggedInWithPermissions(userId, permissions);
 
-    return User.update(
-      userId!,
-      {
-        locale: (args.input.locale as Locale) || undefined,
-        phone: args.input.phone || undefined,
-        firstName: args.input.firstName || undefined,
-        lastName: args.input.lastName || undefined,
-      },
-      txn,
-    );
+    return User.update(userId!, {
+      locale: args.input.locale as Locale,
+      awayMessage: args.input.awayMessage || undefined,
+      isAvailable: typeof(args.input.isAvailable) === "boolean" ? args.input.isAvailable : undefined,
+    }, txn);
   });
 }
 /* tslint:enable:check-is-allowed */

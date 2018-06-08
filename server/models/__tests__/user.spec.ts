@@ -140,6 +140,8 @@ describe('user model', () => {
           homeClinicId: clinic2.id,
           googleAuthId: googleAuth.id,
           twilioSimId: 'BOGUS5f14990BOGUS580c2a54713dBOGUS',
+          isAvailable: false,
+          awayMessage: "Let's Go Eevee!",
         },
         txn,
       ),
@@ -151,6 +153,8 @@ describe('user model', () => {
       homeClinicId: clinic2.id,
       googleAuthId: googleAuth.id,
       twilioSimId: 'BOGUS5f14990BOGUS580c2a54713dBOGUS',
+      isAvailable: false,
+      awayMessage: "Let's Go Eevee!",
     });
   });
 

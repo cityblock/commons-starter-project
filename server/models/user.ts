@@ -53,6 +53,8 @@ interface IUpdateUser {
   lastLoginAt: string;
   phone: string;
   twilioSimId: string;
+  isAvailable?: boolean;
+  awayMessage: string;
 }
 
 interface IGetByOptions {
@@ -98,6 +100,8 @@ export default class User extends BaseModel {
   phone!: string;
   permissions!: Permissions;
   twilioSimId!: string | null;
+  isAvailable!: boolean;
+  awayMessage!: string;
 
   static tableName = 'user';
 
@@ -120,9 +124,9 @@ export default class User extends BaseModel {
         type: 'string',
         enum: USER_ROLE,
       },
-      homeClinicId: { type: 'string', minLength: 1 }, // cannot be blank
+      homeClinicId: { type: 'string', format: 'uuid' }, // cannot be blank
       athenaProviderId: { type: 'number', minLength: 1 }, // cannot be blank
-      googleAuthId: { type: 'string', minLength: 1 }, // cannot be blank
+      googleAuthId: { type: 'string', format: 'uuid' }, // cannot be blank
       googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
       twilioSimId: { type: 'string', minLength: 34, maxLength: 34 }, //
       deletedAt: { type: 'string' },
@@ -130,6 +134,8 @@ export default class User extends BaseModel {
       phone: { type: 'string', minLength: 12, maxLength: 12 },
       permissions: { type: 'string', enum: PERMISSIONS },
       createdAt: { type: 'string' },
+      isAvailable: { type: 'boolean' },
+      awayMessage: { type: 'string', minLength: 1 }, // cannot be blank
     },
     required: ['email', 'homeClinicId', 'userRole'],
   };

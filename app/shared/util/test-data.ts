@@ -28,6 +28,8 @@ export const currentUser = {
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'orange' as any,
+  isAvailable: true,
+  awayMessage: 'Winter is here',
 };
 
 export const currentUserForCareTeam = {
@@ -75,6 +77,8 @@ export const user = {
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   permissions: 'blue' as any,
+  isAvailable: true,
+  awayMessage: 'I drink and I know things',
 };
 
 export const userForCareTeam = {

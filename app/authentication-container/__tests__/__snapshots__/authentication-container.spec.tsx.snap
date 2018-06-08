@@ -7,12 +7,14 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <AuthenticationContainer
     currentUser={
       Object {
+        "awayMessage": "Winter is here",
         "createdAt": "2017-09-07T13:45:14.532Z",
         "email": "a@b.com",
         "firstName": "first",
         "googleProfileImageUrl": null,
         "homeClinicId": "clinic-id",
         "id": "id",
+        "isAvailable": true,
         "lastName": "last",
         "locale": "en",
         "permissions": "orange",
@@ -59,12 +61,14 @@ ShallowWrapper {
         "calls": Array [
           Array [
             Object {
+              "awayMessage": "Winter is here",
               "createdAt": "2017-09-07T13:45:14.532Z",
               "email": "a@b.com",
               "firstName": "first",
               "googleProfileImageUrl": null,
               "homeClinicId": "clinic-id",
               "id": "newUserId",
+              "isAvailable": true,
               "lastName": "last",
               "locale": "es",
               "permissions": "orange",
@@ -121,12 +125,14 @@ ShallowWrapper {
         <withRouter(Connect(Apollo(Apollo(ProgressNoteContainer))))
           currentUser={
             Object {
+              "awayMessage": "Winter is here",
               "createdAt": "2017-09-07T13:45:14.532Z",
               "email": "a@b.com",
               "firstName": "first",
               "googleProfileImageUrl": null,
               "homeClinicId": "clinic-id",
               "id": "id",
+              "isAvailable": true,
               "lastName": "last",
               "locale": "en",
               "permissions": "orange",
@@ -190,12 +196,14 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "currentUser": Object {
+            "awayMessage": "Winter is here",
             "createdAt": "2017-09-07T13:45:14.532Z",
             "email": "a@b.com",
             "firstName": "first",
             "googleProfileImageUrl": null,
             "homeClinicId": "clinic-id",
             "id": "id",
+            "isAvailable": true,
             "lastName": "last",
             "locale": "en",
             "permissions": "orange",
@@ -234,12 +242,14 @@ ShallowWrapper {
           <withRouter(Connect(Apollo(Apollo(ProgressNoteContainer))))
             currentUser={
               Object {
+                "awayMessage": "Winter is here",
                 "createdAt": "2017-09-07T13:45:14.532Z",
                 "email": "a@b.com",
                 "firstName": "first",
                 "googleProfileImageUrl": null,
                 "homeClinicId": "clinic-id",
                 "id": "id",
+                "isAvailable": true,
                 "lastName": "last",
                 "locale": "en",
                 "permissions": "orange",
@@ -303,12 +313,14 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "currentUser": Object {
+              "awayMessage": "Winter is here",
               "createdAt": "2017-09-07T13:45:14.532Z",
               "email": "a@b.com",
               "firstName": "first",
               "googleProfileImageUrl": null,
               "homeClinicId": "clinic-id",
               "id": "id",
+              "isAvailable": true,
               "lastName": "last",
               "locale": "en",
               "permissions": "orange",

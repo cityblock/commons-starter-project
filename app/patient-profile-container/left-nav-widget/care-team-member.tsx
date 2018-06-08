@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FullUserFragment } from '../../graphql/types';
+import { FullCareTeamUserFragment } from '../../graphql/types';
 import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/format-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
@@ -8,7 +8,7 @@ import CareTeamMemberContact from './care-team-member-contact';
 import * as styles from './css/care-team-member.css';
 
 interface IProps {
-  careTeamMember: FullUserFragment;
+  careTeamMember: FullCareTeamUserFragment;
   handleClick: (careTeamMemberId: string) => void;
   isSelected: boolean;
   isLead: boolean;

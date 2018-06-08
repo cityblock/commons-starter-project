@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import { filter, includes, toString } from 'lodash';
 import * as React from 'react';
-import { getPatientCareTeamQuery, FullUserFragment } from '../../../graphql/types';
+import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import OptGroup from '../../../shared/library/optgroup/optgroup';
@@ -14,7 +14,7 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   tasksCount: number;
   isLoading?: boolean;
-  careTeamMember?: FullUserFragment | null;
+  careTeamMember?: FullCareTeamUserFragment | null;
   reassignedToId?: string | null;
   careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }

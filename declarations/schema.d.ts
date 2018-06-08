@@ -1170,6 +1170,8 @@ declare module 'schema' {
     updatedAt: string;
     permissions: Permissions;
     twilioSimId: string | null;
+    isAvailable: boolean;
+    awayMessage: string;
   }
 
   /**
@@ -4171,9 +4173,8 @@ declare module 'schema' {
    */
   interface ICurrentUserEditInput {
     locale?: string | null;
-    phone?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
+    isAvailable?: boolean | null;
+    awayMessage?: string | null;
   }
 
   /**

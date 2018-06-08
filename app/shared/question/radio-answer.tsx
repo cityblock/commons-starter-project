@@ -8,7 +8,7 @@ interface IProps {
   currentAnswer: { id: string; value: string };
   question: FullQuestionFragment;
   onChange: (
-    questionId: string,
+    question: FullQuestionFragment,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
@@ -23,7 +23,7 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
         key={`${answer.id}-${index}`}
         value={answer.id}
         checked={!!currentAnswer && currentAnswer.id === answer.id}
-        onChange={() => onChange(question.id, [{ answerId: answer.id, value: answer.value }])}
+        onChange={() => onChange(question, [{ answerId: answer.id, value: answer.value }])}
         label={answer.displayValue}
         disabled={!editable}
       />

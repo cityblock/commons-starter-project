@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PatientQuestion from '../../shared/question/patient-question';
+import { Mutation } from 'react-apollo';
 import { clinic, progressNote, progressNoteTemplate, question } from '../../shared/util/test-data';
 import { ProgressNoteContext as Component } from '../progress-note-context';
 
@@ -35,12 +35,7 @@ describe('progress note context', () => {
       const instance = component.instance() as Component;
       const result = instance.render();
       expect(result).not.toBeFalsy();
-      expect(
-        component
-          .find(PatientQuestion)
-          .at(0)
-          .props().question,
-      ).toEqual(question);
+      expect(component.find(Mutation).length).toBe(1);
     });
   });
 });

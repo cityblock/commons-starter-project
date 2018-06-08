@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql, Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import * as clinicsQuery from '../graphql/queries/get-clinics.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
@@ -10,6 +10,7 @@ import {
   getQuestionsQuery,
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
+  AnswerFilterType,
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
@@ -17,6 +18,7 @@ import {
 import FormLabel from '../shared/library/form-label/form-label';
 import Icon from '../shared/library/icon/icon';
 import Select from '../shared/library/select/select';
+import { createPatientAnswer } from '../shared/patient-answer-create-mutation/patient-answer-create-mutation';
 import PatientQuestion from '../shared/question/patient-question';
 import {
   getQuestionAnswerHash,
@@ -27,6 +29,7 @@ import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
 import ProgressNoteTextArea from './progress-note-textarea';
+
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 import ProgressNoteWorryScore from './progress-note-worry-score';
 
@@ -69,13 +72,12 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 
   constructor(props: allProps) {
     super(props);
-    const defaultDate = getCurrentTime();
     const { progressNote } = props;
+    const defaultDate = getCurrentTime();
     this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS, {
-      leading: true,
+      leading: false,
       trailing: true,
     });
-
     this.state = {
       loading: false,
       error: null,
@@ -93,77 +95,42 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: allProps) {
-    const currentProgressNote = this.props.progressNote;
-    const newProgressNote = nextProps.progressNote;
-
-    // setup default state if new progress note
-    if (currentProgressNote.id !== newProgressNote.id) {
-      this.setDefaultProgressNoteFields(nextProps);
-    }
-  }
-
-  setDefaultProgressNoteFields(props: allProps) {
-    const defaultDate = getCurrentTime();
-    const { progressNote } = props;
-    this.setState({
-      progressNoteTime: progressNote.startedAt
-        ? new Date(progressNote.startedAt).toISOString()
-        : defaultDate.toISOString(),
-      progressNoteLocation: progressNote.location ? progressNote.location : null,
-      progressNoteTemplateId: progressNote.progressNoteTemplate
-        ? progressNote.progressNoteTemplate.id
-        : null,
-      progressNoteSummary: progressNote.summary ? progressNote.summary : '',
-      progressNoteMemberConcern:
-        progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
-      progressNoteWorryScore: progressNote.worryScore,
-    });
-  }
-
-  onChange = async (
-    questionId: string,
-    answers: Array<{ answerId: string; value: string | number }>,
-  ) => {
-    const { progressNote, createPatientAnswers } = this.props;
-    if (progressNote && createPatientAnswers) {
-      const patientAnswers = answers.map(answer => ({
-        questionId,
-        answerId: answer.answerId,
-        answerValue: String(answer.value),
-        patientId: progressNote.patientId,
-        applicable: true,
-      }));
-
-      await createPatientAnswers({
-        variables: {
-          progressNoteId: progressNote.id,
-          patientId: progressNote.patientId,
-          patientAnswers,
-          questionIds: [questionId],
-        },
-      });
-    }
-  };
-
   renderQuestion = (
     question: FullQuestionFragment,
     index: number,
     answerData: IQuestionAnswerHash,
     editable: boolean,
   ) => {
+    const { progressNote } = this.props;
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
     return (
-      <PatientQuestion
-        editable={editable}
-        displayHamburger={false}
-        visible={visible}
-        answerData={dataForQuestion}
-        onChange={this.onChange}
-        key={question.id}
-        question={question}
-      />
+      <Mutation
+        mutation={patientAnswersCreateMutationGraphql as any}
+        key={`${question.id}-${index}`}
+      >
+        {mutate => (
+          <PatientQuestion
+            editable={editable}
+            displayHamburger={false}
+            visible={visible}
+            answerData={dataForQuestion}
+            key={question.id}
+            question={question}
+            onChange={createPatientAnswer(
+              mutate,
+              {
+                filterType: 'progressNote' as AnswerFilterType,
+                filterId: progressNote.id,
+                patientId: progressNote.patientId,
+              },
+              progressNote.patientId,
+              progressNote ? progressNote.id : null,
+              'progressNote',
+            )}
+          />
+        )}
+      </Mutation>
     );
   };
 
@@ -350,22 +317,16 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 }
 
-export default compose(
-  graphql(patientAnswersCreateMutationGraphql as any, {
-    name: 'createPatientAnswers',
-    options: { refetchQueries: ['getPatientAnswers'] },
-  }),
-  graphql(clinicsQuery as any, {
-    options: {
-      variables: {
-        pageNumber: 0,
-        pageSize: 10,
-      },
+export default graphql<any, any, any, any>(clinicsQuery as any, {
+  options: {
+    variables: {
+      pageNumber: 0,
+      pageSize: 10,
     },
-    props: ({ data }) => ({
-      clinicsLoading: data ? data.loading : false,
-      clinicsError: data ? data.error : null,
-      clinics: data ? (data as any).clinics : null,
-    }),
+  },
+  props: ({ data }) => ({
+    clinicsLoading: data ? data.loading : false,
+    clinicsError: data ? data.error : null,
+    clinics: data ? (data as any).clinics : null,
   }),
-)(ProgressNoteContext) as React.ComponentClass<IProps>;
+})(ProgressNoteContext) as React.ComponentClass<IProps>;

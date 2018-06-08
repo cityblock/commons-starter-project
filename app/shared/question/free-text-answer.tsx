@@ -9,7 +9,7 @@ interface IProps {
   question: FullQuestionFragment;
   otherTextAnswer?: boolean;
   onChange: (
-    questionId: string,
+    question: FullQuestionFragment,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
@@ -34,7 +34,10 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
     return null;
   }
 
-  save: (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => any;
+  save: (
+    question: FullQuestionFragment,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => any;
 
   constructor(props: IProps) {
     super(props);
@@ -57,7 +60,7 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
     const answer = answers[0];
     const answerId = answer.id;
     this.setState({ text: event.target.value });
-    this.save(question.id, [{ answerId, value: event.target.value }]);
+    this.save(question, [{ answerId, value: event.target.value }]);
   };
 
   render() {

@@ -12,7 +12,7 @@ interface IProps {
   editable: boolean;
   question: FullQuestionFragment;
   onChange: (
-    questionId: string,
+    question: FullQuestionFragment,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
@@ -40,7 +40,7 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     const chosenAnswer = (question.answers || []).find(answer => answer.id === id);
 
     if (chosenAnswer) {
-      onChange(question.id, [{ answerId: chosenAnswer.id, value: chosenAnswer.value }]);
+      onChange(question, [{ answerId: chosenAnswer.id, value: chosenAnswer.value }]);
     }
   };
 

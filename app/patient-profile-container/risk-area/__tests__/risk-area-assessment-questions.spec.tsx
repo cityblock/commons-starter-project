@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PatientQuestion from '../../../shared/question/patient-question';
+import { Mutation } from 'react-apollo';
 import { question, riskArea, riskAreaAssessmentSubmission } from '../../../shared/util/test-data';
 import RiskAreaAssessmentHeader from '../risk-area-assessment-header';
 import { RiskAreaAssessmentQuestions } from '../risk-area-assessment-questions';
@@ -24,8 +24,8 @@ describe('risk area assessment questions component', () => {
     />,
   );
 
-  it('renders question', () => {
-    expect(wrapper.find(PatientQuestion).length).toBe(1);
+  it('renders mutation that wrapps question', () => {
+    expect(wrapper.find(Mutation).length).toBe(1);
   });
 
   it('renders risk area assessment header', () => {

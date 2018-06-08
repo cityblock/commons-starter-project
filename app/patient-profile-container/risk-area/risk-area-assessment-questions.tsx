@@ -1,17 +1,19 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, Mutation } from 'react-apollo';
 import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
 import * as riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
 import * as patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
 import {
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
+  AnswerFilterType,
   FullPatientAnswerFragment,
   FullQuestionFragment,
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
+import { createPatientAnswer } from '../../shared/patient-answer-create-mutation/patient-answer-create-mutation';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
   getQuestionAnswerHash,
@@ -46,51 +48,51 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
-  onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
-    const { riskAreaAssessmentSubmission, createPatientAnswers, patientId } = this.props;
-    if (riskAreaAssessmentSubmission && createPatientAnswers) {
-      const patientAnswers = answers.map(answer => ({
-        questionId,
-        answerId: answer.answerId,
-        answerValue: String(answer.value),
-        patientId,
-        applicable: true,
-      }));
-
-      createPatientAnswers({
-        variables: {
-          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-          patientId,
-          patientAnswers,
-          questionIds: [questionId],
-        },
-      });
-    }
-  };
-
   renderQuestion = (
     question: FullQuestionFragment,
     index: number,
     answerData: IQuestionAnswerHash,
     patientAnswerIds: string[],
   ) => {
-    const { inProgress, onEditableChange, riskArea } = this.props;
+    const {
+      inProgress,
+      onEditableChange,
+      riskArea,
+      patientId,
+      riskAreaAssessmentSubmission,
+    } = this.props;
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
 
     return (
-      <PatientQuestion
+      <Mutation
+        mutation={patientAnswersCreateMutationGraphql as any}
         key={`${question.id}-${index}`}
-        visible={visible}
-        answerData={dataForQuestion}
-        onChange={this.onChange}
-        onEditableChange={onEditableChange}
-        question={question}
-        editable={inProgress}
-        patientAnswerIds={patientAnswerIds}
-        displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
-        assessment={true}
-      />
+      >
+        {mutate => (
+          <PatientQuestion
+            visible={visible}
+            answerData={dataForQuestion}
+            onEditableChange={onEditableChange}
+            question={question}
+            editable={inProgress}
+            patientAnswerIds={patientAnswerIds}
+            displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
+            assessment={true}
+            onChange={createPatientAnswer(
+              mutate,
+              {
+                filterType: 'riskArea' as AnswerFilterType,
+                filterId: riskArea.id,
+                patientId,
+              },
+              patientId,
+              riskAreaAssessmentSubmission ? riskAreaAssessmentSubmission.id : null,
+              'riskArea',
+            )}
+          />
+        )}
+      </Mutation>
     );
   };
 
@@ -136,10 +138,6 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientAnswersCreateMutationGraphql as any, {
-    name: 'createPatientAnswers',
-    options: { refetchQueries: ['getPatientAnswers'] },
-  }),
   graphql(riskAreaQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {

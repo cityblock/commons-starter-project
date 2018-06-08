@@ -209,6 +209,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
+          key={progressNote.id}
           questions={questions}
           patientAnswers={patientAnswers}
           progressNote={progressNote}

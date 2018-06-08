@@ -68,7 +68,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <Apollo(Apollo(ProgressNoteContext))
+    <Apollo(ProgressNoteContext)
       close={[MockFunction]}
       disabled={false}
       onChange={[Function]}
@@ -433,7 +433,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <Apollo(Apollo(ProgressNoteContext))
+    <Apollo(ProgressNoteContext)
       close={[MockFunction]}
       disabled={false}
       onChange={[Function]}

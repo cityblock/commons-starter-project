@@ -8,9 +8,9 @@ import QuestionMenu from './question-menu';
 
 interface IProps {
   onChange: (
-    questionId: string,
+    question: FullQuestionFragment,
     answers: Array<{ answerId: string; value: string | number }>,
-  ) => any;
+  ) => Promise<any>;
   onEditableChange?: () => any;
   visible: boolean;
   question: FullQuestionFragment;

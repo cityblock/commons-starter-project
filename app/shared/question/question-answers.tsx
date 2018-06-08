@@ -10,7 +10,7 @@ interface IProps {
   question: FullQuestionFragment;
   editable: boolean;
   onChange: (
-    questionId: string,
+    question: FullQuestionFragment,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
   answerData: Array<{
@@ -44,7 +44,7 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
         newAnswerData = [...formattedAnswerData, { answerId, value }];
       }
 
-      onChange(question.id, newAnswerData);
+      onChange(question, newAnswerData);
     }
   }
 

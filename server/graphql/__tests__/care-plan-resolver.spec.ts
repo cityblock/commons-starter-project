@@ -6,6 +6,7 @@ import {
   AnswerTypeOptions,
   AnswerValueTypeOptions,
   CarePlanSuggestionType,
+  ComputedFieldDataTypes,
   Priority,
   RiskAdjustmentTypeOptions,
   UserRole,
@@ -13,11 +14,14 @@ import {
 import * as uuid from 'uuid/v4';
 import * as carePlanSuggestionAccept from '../../../app/graphql/queries/care-plan-suggestion-accept-mutation.graphql';
 import * as carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
-import * as getCarePlanSuggestionsForPatient from '../../../app/graphql/queries/get-patient-care-plan-suggestions.graphql';
+import * as getComputedFieldSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
+import * as getRiskAreaAssessmentSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
+import * as getScreeningToolSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
 import * as getCarePlanForPatient from '../../../app/graphql/queries/get-patient-care-plan.graphql';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
+import ComputedField from '../../models/computed-field';
 import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
@@ -27,6 +31,7 @@ import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
+import ScreeningTool from '../../models/screening-tool';
 import Task from '../../models/task';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
@@ -35,6 +40,9 @@ import {
   createMockUser,
   createPatient,
   createRiskArea,
+  setupComputedFieldAnswerWithSuggestionsForPatient,
+  setupRiskAreaSubmissionWithSuggestionsForPatient,
+  setupScreeningToolSubmissionWithSuggestionsForPatient,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -141,10 +149,63 @@ async function setup(trx: Transaction): Promise<ISetup> {
   };
 }
 
+interface ISetupForSuggestions {
+  riskArea: RiskArea;
+  computedField: ComputedField;
+  screeningTool: ScreeningTool;
+  user: User;
+  patient: Patient;
+}
+
+async function setupForSuggestions(trx: Transaction): Promise<ISetupForSuggestions> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id), trx);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, trx);
+  const riskArea = await createRiskArea({ title: 'testing' }, trx);
+  const screeningTool = await ScreeningTool.create(
+    {
+      title: 'White Walker Screening Tool',
+      riskAreaId: riskArea.id,
+    },
+    trx,
+  );
+  const computedField = await ComputedField.create(
+    {
+      slug: 'drogon',
+      label: 'Has a massive dragon',
+      dataType: 'boolean' as ComputedFieldDataTypes,
+    },
+    trx,
+  );
+
+  // Need to create questions to link computed field to risk area
+  await Question.create(
+    {
+      title: 'like writing tests?',
+      answerType: 'radio' as AnswerTypeOptions,
+      computedFieldId: computedField.id,
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    trx,
+  );
+
+  return {
+    riskArea,
+    screeningTool,
+    computedField,
+    patient,
+    user,
+  };
+}
+
 describe('care plan resolver tests', () => {
   const permissions = 'green';
   const carePlanForPatientQuery = print(getCarePlanForPatient);
-  const carePlanSuggestionsForPatientQuery = print(getCarePlanSuggestionsForPatient);
+  const computedFieldSuggestionsQuery = print(getComputedFieldSuggestionsQuery);
+  const riskAreaAssessmentSuggestionsQuery = print(getRiskAreaAssessmentSuggestionsQuery);
+  const screeningToolSuggestionsQuery = print(getScreeningToolSuggestionsQuery);
   const carePlanSuggestionAcceptMutation = print(carePlanSuggestionAccept);
   const carePlanSuggestionDismissMutation = print(carePlanSuggestionDismiss);
 
@@ -327,41 +388,47 @@ describe('care plan resolver tests', () => {
     });
   });
 
-  describe('resolve care plan suggestions', () => {
-    it('can get care plan suggestions for a patient', async () => {
-      const {
-        patient,
-        concern,
-        riskAreaAssessmentSubmission,
-        goalSuggestionTemplate,
-        user,
-        riskArea,
-      } = await setup(txn);
+  describe('resolve care plan suggestions for risk area assessments', () => {
+    it('resolves suggestions risk area assessments for a patient', async () => {
+      const { riskArea, patient, user } = await setupForSuggestions(txn);
 
-      const suggestion1 = await CarePlanSuggestion.create(
+      const {
+        concern1,
+        concernSuggestion1,
+        concern2,
+        goalSuggestionTemplate1,
+        goalSuggestion1,
+        goalSuggestion2,
+      } = await setupRiskAreaSubmissionWithSuggestionsForPatient(
         {
+          riskAreaId: riskArea.id,
           patientId: patient.id,
-          suggestionType: 'concern' as CarePlanSuggestionType,
-          concernId: concern.id,
-          type: 'riskAreaAssessmentSubmission',
-          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          userId: user.id,
         },
         txn,
       );
-      const suggestion2 = await CarePlanSuggestion.create(
+
+      await PatientConcern.create(
         {
           patientId: patient.id,
-          suggestionType: 'goal' as CarePlanSuggestionType,
-          goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          type: 'riskAreaAssessmentSubmission',
-          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          concernId: concern2.id,
+          startedAt: new Date().toISOString(),
+          userId: user.id,
+        },
+        txn,
+      );
+      await CarePlanSuggestion.dismiss(
+        {
+          carePlanSuggestionId: goalSuggestion2.id,
+          dismissedById: user.id,
+          dismissedReason: 'not good',
         },
         txn,
       );
 
       const result = await graphql(
         schema,
-        carePlanSuggestionsForPatientQuery,
+        riskAreaAssessmentSuggestionsQuery,
         null,
         {
           userId: user.id,
@@ -370,56 +437,38 @@ describe('care plan resolver tests', () => {
         },
         { patientId: patient.id },
       );
+      const suggestions = cloneDeep(
+        result.data!.carePlanSuggestionsFromRiskAreaAssessmentsForPatient,
+      );
+      expect(suggestions).toHaveLength(2);
 
-      const clonedResult = cloneDeep(result.data!.carePlanSuggestionsForPatient);
-      const suggestions = clonedResult.map((suggestion: any) => ({
-        id: suggestion.id,
-        concernId: suggestion.concern ? suggestion.concern.id : null,
-        goalSuggestionTemplateId: suggestion.goalSuggestionTemplate
-          ? suggestion.goalSuggestionTemplate.id
-          : null,
-        goalSuggestionTemplate: suggestion.goalSuggestionTemplate,
-        computedField: suggestion.computedField,
-        patientScreeningToolSubmission: suggestion.patientScreeningToolSubmission,
-        riskAreaAssessmentSubmission: suggestion.riskAreaAssessmentSubmission,
-      }));
-
-      expect(
-        suggestions.some(
-          (sug: any) =>
-            sug.id === suggestion1.id &&
-            sug.concernId === concern.id &&
-            sug.goalSuggestionTemplateId === null,
-        ),
-      ).toEqual(true);
-      expect(
-        suggestions.some(
-          (sug: any) =>
-            sug.id === suggestion2.id &&
-            sug.concernId === null &&
-            sug.goalSuggestionTemplateId === goalSuggestionTemplate.id,
-        ),
-      ).toEqual(true);
-
-      expect(suggestions[0].riskAreaAssessmentSubmission).toMatchObject({
-        id: riskAreaAssessmentSubmission.id,
-        riskArea: {
-          id: riskArea.id,
-          title: riskArea.title,
-        },
-      });
-      expect(suggestions[0].computedField).toBeNull();
-      expect(suggestions[0].patientScreeningToolSubmission).toBeNull();
-
-      expect(suggestions[1].riskAreaAssessmentSubmission).toMatchObject({
-        id: riskAreaAssessmentSubmission.id,
-        riskArea: {
-          id: riskArea.id,
-          title: riskArea.title,
-        },
-      });
-      expect(suggestions[1].computedField).toBeNull();
-      expect(suggestions[1].patientScreeningToolSubmission).toBeNull();
+      // suggestions from first risk area
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: concernSuggestion1.id,
+          concernId: concern1.id,
+          goalSuggestionTemplateId: null,
+          riskArea: {
+            id: riskArea.id,
+            title: riskArea.title,
+          },
+          screeningTool: null,
+          computedField: null,
+        }),
+      );
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: goalSuggestion1.id,
+          concernId: null,
+          goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+          riskArea: {
+            id: riskArea.id,
+            title: riskArea.title,
+          },
+          screeningTool: null,
+          computedField: null,
+        }),
+      );
     });
 
     it('blocks getting care plan suggetsions for a patient with invalid glass break', async () => {
@@ -427,7 +476,7 @@ describe('care plan resolver tests', () => {
 
       const result = await graphql(
         schema,
-        carePlanSuggestionsForPatientQuery,
+        riskAreaAssessmentSuggestionsQuery,
         null,
         {
           userId: user.id,
@@ -461,7 +510,286 @@ describe('care plan resolver tests', () => {
 
       const result = await graphql(
         schema,
-        carePlanSuggestionsForPatientQuery,
+        riskAreaAssessmentSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions: 'blue',
+          testTransaction: txn,
+        },
+        { patientId: patient.id, glassBreakId: patientGlassBreak.id },
+      );
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
+    });
+  });
+
+  describe('resolve care plan suggestions for screening tools', () => {
+    it('resolves suggestions for screening tools for a patient', async () => {
+      const { screeningTool, patient, user } = await setupForSuggestions(txn);
+
+      const {
+        concern1,
+        concernSuggestion1,
+        concern2,
+        goalSuggestionTemplate1,
+        goalSuggestion1,
+        goalSuggestion2,
+      } = await setupScreeningToolSubmissionWithSuggestionsForPatient(
+        {
+          screeningToolId: screeningTool.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      await PatientConcern.create(
+        {
+          patientId: patient.id,
+          concernId: concern2.id,
+          startedAt: new Date().toISOString(),
+          userId: user.id,
+        },
+        txn,
+      );
+      await CarePlanSuggestion.dismiss(
+        {
+          carePlanSuggestionId: goalSuggestion2.id,
+          dismissedById: user.id,
+          dismissedReason: 'not good',
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        screeningToolSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions,
+          testTransaction: txn,
+        },
+        { patientId: patient.id },
+      );
+      const suggestions = cloneDeep(result.data!.carePlanSuggestionsFromScreeningToolsForPatient);
+      expect(suggestions).toHaveLength(2);
+
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: concernSuggestion1.id,
+          concernId: concern1.id,
+          goalSuggestionTemplateId: null,
+          screeningTool: {
+            id: screeningTool.id,
+            title: screeningTool.title,
+          },
+          riskArea: null,
+          computedField: null,
+        }),
+      );
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: goalSuggestion1.id,
+          concernId: null,
+          goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+          screeningTool: {
+            id: screeningTool.id,
+            title: screeningTool.title,
+          },
+          riskArea: null,
+          computedField: null,
+        }),
+      );
+    });
+
+    it('blocks getting care plan suggetsions for a patient with invalid glass break', async () => {
+      const { patient, user } = await setup(txn);
+
+      const result = await graphql(
+        schema,
+        screeningToolSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions: 'blue',
+          testTransaction: txn,
+        },
+        { patientId: patient.id, glassBreakId: uuid() },
+      );
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
+    });
+
+    it('blocks getting care plan suggetsions for a patient with too old glass break', async () => {
+      const { patient, user } = await setup(txn);
+
+      const patientGlassBreak = await PatientGlassBreak.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason: 'Needed for routine care',
+          note: null,
+        },
+        txn,
+      );
+
+      await PatientGlassBreak.query(txn)
+        .where({ userId: user.id, patientId: patient.id })
+        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+      const result = await graphql(
+        schema,
+        screeningToolSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions: 'blue',
+          testTransaction: txn,
+        },
+        { patientId: patient.id, glassBreakId: patientGlassBreak.id },
+      );
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
+    });
+  });
+
+  describe('resolve care plan suggestions for computed field answers', () => {
+    it('resolves suggestions for computed field answers for a patient', async () => {
+      const { computedField, riskArea, patient, user } = await setupForSuggestions(txn);
+
+      const {
+        concern1,
+        concernSuggestion1,
+        concern2,
+        goalSuggestionTemplate1,
+        goalSuggestion1,
+        goalSuggestion2,
+      } = await setupComputedFieldAnswerWithSuggestionsForPatient(
+        {
+          computedFieldId: computedField.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      await PatientConcern.create(
+        {
+          patientId: patient.id,
+          concernId: concern2.id,
+          startedAt: new Date().toISOString(),
+          userId: user.id,
+        },
+        txn,
+      );
+      await CarePlanSuggestion.dismiss(
+        {
+          carePlanSuggestionId: goalSuggestion2.id,
+          dismissedById: user.id,
+          dismissedReason: 'not good',
+        },
+        txn,
+      );
+
+      const result = await graphql(
+        schema,
+        computedFieldSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions,
+          testTransaction: txn,
+        },
+        { patientId: patient.id },
+      );
+      const suggestions = cloneDeep(result.data!.carePlanSuggestionsFromComputedFieldsForPatient);
+      expect(suggestions).toHaveLength(2);
+
+      // suggestions from first risk area
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: concernSuggestion1.id,
+          concernId: concern1.id,
+          goalSuggestionTemplateId: null,
+          computedField: {
+            id: computedField.id,
+            label: computedField.label,
+            riskArea: {
+              id: riskArea.id,
+              title: riskArea.title,
+            },
+          },
+          screeningTool: null,
+          riskArea: null,
+        }),
+      );
+      expect(suggestions).toContainEqual(
+        expect.objectContaining({
+          id: goalSuggestion1.id,
+          concernId: null,
+          goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+          computedField: {
+            id: computedField.id,
+            label: computedField.label,
+            riskArea: {
+              id: riskArea.id,
+              title: riskArea.title,
+            },
+          },
+          screeningTool: null,
+          riskArea: null,
+        }),
+      );
+    });
+
+    it('blocks getting care plan suggetsions for a patient with invalid glass break', async () => {
+      const { patient, user } = await setup(txn);
+
+      const result = await graphql(
+        schema,
+        computedFieldSuggestionsQuery,
+        null,
+        {
+          userId: user.id,
+          permissions: 'blue',
+          testTransaction: txn,
+        },
+        { patientId: patient.id, glassBreakId: uuid() },
+      );
+
+      expect(result.errors![0].message).toBe(
+        'You must break the glass again to view this patient. Please refresh the page.',
+      );
+    });
+
+    it('blocks getting care plan suggetsions for a patient with too old glass break', async () => {
+      const { patient, user } = await setup(txn);
+
+      const patientGlassBreak = await PatientGlassBreak.create(
+        {
+          userId: user.id,
+          patientId: patient.id,
+          reason: 'Needed for routine care',
+          note: null,
+        },
+        txn,
+      );
+
+      await PatientGlassBreak.query(txn)
+        .where({ userId: user.id, patientId: patient.id })
+        .patch({ createdAt: subHours(new Date(), 9).toISOString() });
+
+      const result = await graphql(
+        schema,
+        computedFieldSuggestionsQuery,
         null,
         {
           userId: user.id,

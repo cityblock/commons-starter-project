@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { carePlanSuggestionWithConcern, concern, patient } from '../../shared/util/test-data';
+import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
+import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
+import { carePlanSuggestionWithConcern, concern, patient } from '../../../shared/util/test-data';
 import PatientCarePlanSuggestionOptionGroup from '../patient-care-plan-suggestion-option-group';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };

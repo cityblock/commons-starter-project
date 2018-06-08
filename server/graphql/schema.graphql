@@ -1006,7 +1006,7 @@ type RiskAreaGroup implements uniqueId {
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
-  riskAreas: [RiskArea!]
+  riskAreas: [RiskAreaShort!]
 }
 
 type RiskAreaGroupForPatient implements uniqueId {
@@ -1067,6 +1067,7 @@ type RiskArea implements uniqueId {
 type RiskAreaShort implements uniqueId {
   id: ID!
   title: String!
+  assessmentType: AssessmentType!
 }
 
 type RiskAreaForPatient implements uniqueId {
@@ -1313,11 +1314,11 @@ type CarePlanSuggestion implements uniqueId {
   dismissedAt: String
   acceptedAt: String
   patientScreeningToolSubmissionId: ID
-  patientScreeningToolSubmission: PatientScreeningToolSubmission
   riskAreaAssessmentSubmissionId: ID
-  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
   computedFieldId: ID
-  computedField: ComputedField
+  screeningTool: ScreeningToolShort
+  riskArea: RiskAreaShort
+  computedField: ComputedFieldForSuggestion
 }
 
 type CarePlan {
@@ -1489,6 +1490,12 @@ type ComputedField implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+}
+
+type ComputedFieldForSuggestion implements uniqueId {
+  id: ID!
+  label: String!
+  riskArea: RiskAreaShort!
 }
 
 type ComputedFieldSchema {
@@ -3036,8 +3043,21 @@ type RootQueryType {
   taskTemplates: [TaskTemplate]!
   # Task templates suggested for answer
   taskTemplatesForAnswer(answerId: ID!): [TaskTemplate]!
-  # Care Plan Suggestions
-  carePlanSuggestionsForPatient(patientId: ID!, glassBreakId: ID): [CarePlanSuggestion]!
+  # Care Plan Suggestions From Risk Area Assessments
+  carePlanSuggestionsFromRiskAreaAssessmentsForPatient(
+    patientId: ID!
+    glassBreakId: ID
+  ): [CarePlanSuggestion!]!
+  # Care Plan Suggestions From Screening Tools
+  carePlanSuggestionsFromScreeningToolsForPatient(
+    patientId: ID!
+    glassBreakId: ID
+  ): [CarePlanSuggestion!]!
+  # Care Plan Suggestions From Computed Fields
+  carePlanSuggestionsFromComputedFieldsForPatient(
+    patientId: ID!
+    glassBreakId: ID
+  ): [CarePlanSuggestion!]!
   # Care Plan
   carePlanForPatient(patientId: ID!, glassBreakId: ID): CarePlan!
   # screening tool

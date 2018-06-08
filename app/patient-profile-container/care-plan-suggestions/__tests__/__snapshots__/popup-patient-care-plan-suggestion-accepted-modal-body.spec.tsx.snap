@@ -49,15 +49,6 @@ exports[`renders popup modal body for goal suggestion 1`] = `
         Concern Title
       </option>
     </optgroup>
-    <optgroup
-      label="All other concerns"
-    >
-      <option
-        value="concern-id"
-      >
-        Concern Title
-      </option>
-    </optgroup>
   </select>
   <div
     className="acceptModalInput"

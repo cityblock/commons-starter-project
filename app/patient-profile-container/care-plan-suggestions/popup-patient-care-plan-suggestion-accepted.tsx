@@ -1,22 +1,21 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as carePlanSuggestionAcceptMutationGraphql from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
-import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
-import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
+import * as carePlanSuggestionAcceptMutationGraphql from '../../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import * as concernsQuery from '../../graphql/queries/get-concerns.graphql';
+import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
 import {
   carePlanSuggestionAcceptMutation,
   carePlanSuggestionAcceptMutationVariables,
   getConcernsQuery,
   getPatientCarePlanQuery,
-  getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionForPatientFragment,
-} from '../graphql/types';
-import Modal from '../shared/library/modal/modal';
+} from '../../graphql/types';
+import Modal from '../../shared/library/modal/modal';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-care-plan-suggestion-accepted-modal-body';
 
 export interface IProps {
   visible: boolean;
-  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
+  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
   suggestion: FullCarePlanSuggestionForPatientFragment | null;
   taskTemplateIds: string[] | null[];
   patientId: string;
@@ -75,7 +74,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
     if (acceptingGoalSuggestion && concernId && carePlanSuggestions && concerns) {
       const suggestedConcernIds = carePlanSuggestions
         .filter(carePlanSuggestion => carePlanSuggestion && !!carePlanSuggestion.concern)
-        .map(concernSuggestion => concernSuggestion!.concernId);
+        .map(concernSuggestion => concernSuggestion.concernId);
       const addingToSuggestedConcern = suggestedConcernIds.includes(concernId);
       const addingToNewConcern = concerns.map(concern => concern!.id).includes(concernId);
 
@@ -173,7 +172,12 @@ export default compose(
   graphql(carePlanSuggestionAcceptMutationGraphql as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
-      refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],
+      refetchQueries: [
+        'getCarePlanSuggestionsFromComputedFieldsForPatient',
+        'getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient',
+        'getCarePlanSuggestionsFromScreeningToolsForPatient',
+        'getPatientCarePlan',
+      ],
     },
   }),
 )(PopupPatientCarePlanSuggestionAccepted) as React.ComponentClass<IProps>;

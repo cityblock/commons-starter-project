@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Modal from '../../shared/library/modal/modal';
+import Modal from '../../../shared/library/modal/modal';
 import {
   fullCarePlanSuggestionWithConcern as concernSuggestion,
   fullCarePlanSuggestionWithGoal as goalSuggestion,
-} from '../../shared/util/test-data';
+} from '../../../shared/util/test-data';
 import { PopupPatientCarePlanSuggestionAccepted } from '../popup-patient-care-plan-suggestion-accepted';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from '../popup-patient-care-plan-suggestion-accepted-modal-body';
 

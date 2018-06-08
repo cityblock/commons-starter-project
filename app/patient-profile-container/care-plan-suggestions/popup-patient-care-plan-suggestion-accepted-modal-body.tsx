@@ -4,17 +4,16 @@ import * as React from 'react';
 import {
   getConcernsQuery,
   getPatientCarePlanQuery,
-  getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionForPatientFragment,
-} from '../graphql/types';
-import Option from '../shared/library/option/option';
-import Select from '../shared/library/select/select';
-import * as styles from './css/patient-care-plan.css';
+} from '../../graphql/types';
+import Option from '../../shared/library/option/option';
+import Select from '../../shared/library/select/select';
+import * as styles from '../css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
 interface IProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
+  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
   concerns?: getConcernsQuery['concerns'];
   concernId: string;
   concernType: '' | 'inactive' | 'active';
@@ -83,16 +82,8 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
             carePlan={carePlan}
             carePlanSuggestions={carePlanSuggestions}
           />
-          <PatientCarePlanSuggestionOptionGroup
-            optionType={'active'}
-            carePlan={carePlan}
-            carePlanSuggestions={carePlanSuggestions}
-          />
-          <PatientCarePlanSuggestionOptionGroup
-            optionType={'inactive'}
-            carePlan={carePlan}
-            carePlanSuggestions={carePlanSuggestions}
-          />
+          <PatientCarePlanSuggestionOptionGroup optionType={'active'} carePlan={carePlan} />
+          <PatientCarePlanSuggestionOptionGroup optionType={'inactive'} carePlan={carePlan} />
           <PatientCarePlanSuggestionOptionGroup
             optionType={'other'}
             carePlan={carePlan}

@@ -520,8 +520,8 @@ export const carePlanSuggestionWithConcern = {
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
   computedField: null,
-  riskAreaAssessmentSubmission: null,
-  patientScreeningToolSubmission: null,
+  riskArea: null,
+  screeningTool: null,
 };
 
 export const fullCarePlanSuggestionWithConcern = {
@@ -544,11 +544,11 @@ export const fullCarePlanSuggestionWithConcern = {
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
   computedField: null,
-  riskAreaAssessmentSubmission: {
-    ...riskAreaAssessmentSubmission,
-    riskArea,
+  riskArea: {
+    id: riskArea.id,
+    title: riskArea.title,
   },
-  patientScreeningToolSubmission: null,
+  screeningTool: null,
 };
 
 export const carePlanSuggestionWithGoal = {
@@ -593,8 +593,8 @@ export const carePlanSuggestionWithGoal = {
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
   computedField: null,
-  riskAreaAssessmentSubmission: null,
-  patientScreeningToolSubmission: null,
+  riskArea: null,
+  screeningTool: null,
 };
 
 export const fullCarePlanSuggestionWithGoal = {
@@ -639,11 +639,11 @@ export const fullCarePlanSuggestionWithGoal = {
   updatedAt: '2017-08-16T19:27:36.378Z',
   patientScreeningToolSubmissionId: null,
   computedField: null,
-  riskAreaAssessmentSubmission: {
-    ...riskAreaAssessmentSubmission,
-    riskArea,
+  riskArea: {
+    id: riskArea.id,
+    title: riskArea.title,
   },
-  patientScreeningToolSubmission: null,
+  screeningTool: null,
 };
 
 export const task = {

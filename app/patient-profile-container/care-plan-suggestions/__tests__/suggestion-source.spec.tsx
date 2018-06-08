@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   computedField,
   fullCarePlanSuggestionWithConcern as suggestion,
-  patientScreeningToolSubmission,
+  riskArea,
   screeningTool,
 } from '../../../shared/util/test-data';
 import SuggestionSource from '../suggestion-source';
@@ -23,9 +23,9 @@ describe('Care Plan Suggestion Source Component', () => {
   it('handles suggestions from screening tool', () => {
     const newSuggestion = {
       ...suggestion,
-      patientScreeningToolSubmission: {
-        ...patientScreeningToolSubmission,
-        screeningTool,
+      screeningTool: {
+        title: screeningTool.title,
+        id: screeningTool.id,
       },
     };
 
@@ -36,7 +36,19 @@ describe('Care Plan Suggestion Source Component', () => {
   });
 
   it('handles suggestions from computed field', () => {
-    wrapper.setProps({ suggestion: { ...suggestion, computedField } });
+    wrapper.setProps({
+      suggestion: {
+        ...suggestion,
+        computedField: {
+          id: computedField.id,
+          label: computedField.label,
+          riskArea: {
+            id: riskArea.id,
+            title: riskArea.title,
+          },
+        },
+      },
+    });
 
     expect(wrapper.find('div').props().className).toBe('container blackBorder');
     expect(wrapper.find(FormattedMessage).props().id).toBe('carePlanSuggestion.computedField');

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as carePlanSuggestionDismissMutationGraphql from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import * as carePlanSuggestionDismissMutationGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
   carePlanSuggestionDismissMutation,
   carePlanSuggestionDismissMutationVariables,
   FullCarePlanSuggestionForPatientFragment,
-} from '../graphql/types';
-import Modal from '../shared/library/modal/modal';
-import Option from '../shared/library/option/option';
-import Select from '../shared/library/select/select';
+} from '../../graphql/types';
+import Modal from '../../shared/library/modal/modal';
+import Option from '../../shared/library/option/option';
+import Select from '../../shared/library/select/select';
 
 interface IProps {
   visible: boolean;
@@ -104,6 +104,10 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
 export default graphql<any>(carePlanSuggestionDismissMutationGraphql as any, {
   name: 'dismissCarePlanSuggestion',
   options: {
-    refetchQueries: ['getPatientCarePlanSuggestions'],
+    refetchQueries: [
+      'getCarePlanSuggestionsFromComputedFieldsForPatient',
+      'getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient',
+      'getCarePlanSuggestionsFromScreeningToolsForPatient',
+    ],
   },
 })(PopupPatientCarePlanSuggestionDismissed) as React.ComponentClass<IProps>;

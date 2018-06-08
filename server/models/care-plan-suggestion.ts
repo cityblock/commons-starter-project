@@ -1,4 +1,4 @@
-import { Model, RelationMappings, Transaction } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import { CarePlanSuggestionType } from 'schema';
 import BaseModel from './base-model';
 import ComputedField from './computed-field';
@@ -7,7 +7,9 @@ import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
 import PatientConcern from './patient-concern';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
+import RiskArea from './risk-area';
 import RiskAreaAssessmentSubmission from './risk-area-assessment-submission';
+import ScreeningTool from './screening-tool';
 import User from './user';
 
 export interface ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission {
@@ -55,11 +57,20 @@ interface ICarePlanSuggestionDismissArgs {
   dismissedReason: string;
 }
 
+interface ICarePlanSuggestionAcceptGoalArgs {
+  goalSuggestionTemplateId: string;
+  patientId: string;
+  acceptedById: string;
+}
+
+interface ICarePlanSuggestionAcceptConcernArgs {
+  concernId: string;
+  patientId: string;
+  acceptedById: string;
+}
+
 export const EAGER_QUERY =
   '[patient.[patientInfo, patientState], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy]';
-
-export const SUPER_EAGER_QUERY =
-  '[patient.[patientInfo, patientState], concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy, patientScreeningToolSubmission.[screeningTool], riskAreaAssessmentSubmission.[riskArea], computedField]';
 
 /* tslint:disable:member-ordering */
 export default class CarePlanSuggestion extends BaseModel {
@@ -78,9 +89,9 @@ export default class CarePlanSuggestion extends BaseModel {
   dismissedReason!: string | null;
   dismissedAt!: string | null;
   patientScreeningToolSubmissionId!: string | null;
-  patientScreeningToolSubmission!: PatientScreeningToolSubmission | null;
+  screeningTool!: ScreeningTool | null;
   riskAreaAssessmentSubmissionId!: string | null;
-  riskAreaAssessmentSubmission!: RiskAreaAssessmentSubmission | null;
+  riskArea!: RiskArea | null;
   computedFieldId!: string | null;
   computedField!: ComputedField | null;
 
@@ -158,20 +169,30 @@ export default class CarePlanSuggestion extends BaseModel {
           to: 'user.id',
         },
       },
-      patientScreeningToolSubmission: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: PatientScreeningToolSubmission,
+      screeningTool: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: ScreeningTool,
         join: {
           from: 'care_plan_suggestion.patientScreeningToolSubmissionId',
-          to: 'patient_screening_tool_submission.id',
+          through: {
+            modelClass: PatientScreeningToolSubmission,
+            from: 'patient_screening_tool_submission.id',
+            to: 'patient_screening_tool_submission.screeningToolId',
+          },
+          to: 'screening_tool.id',
         },
       },
-      riskAreaAssessmentSubmission: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: RiskAreaAssessmentSubmission,
+      riskArea: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: RiskArea,
         join: {
           from: 'care_plan_suggestion.riskAreaAssessmentSubmissionId',
-          to: 'risk_area_assessment_submission.id',
+          through: {
+            modelClass: RiskAreaAssessmentSubmission,
+            from: 'risk_area_assessment_submission.id',
+            to: 'risk_area_assessment_submission.riskAreaId',
+          },
+          to: 'risk_area.id',
         },
       },
       computedField: {
@@ -226,65 +247,100 @@ export default class CarePlanSuggestion extends BaseModel {
     return this.query(txn).insertGraphAndFetch(suggestions);
   }
 
-  static async getForPatient(patientId: string, txn: Transaction): Promise<CarePlanSuggestion[]> {
+  static async getForPatient(
+    queryBuilder: QueryBuilder<CarePlanSuggestion, CarePlanSuggestion[], CarePlanSuggestion[]>,
+    patientId: string,
+    txn: Transaction,
+  ): Promise<CarePlanSuggestion[]> {
     // filter out patient concerns
     // unlike for goals, which come from goal suggesion templates, users can add concerns directly
     const existingPatientConcernIdsQuery = PatientConcern.query(txn)
       .where({ patientId, deletedAt: null })
       .select('concernId')
-      .orderBy('createdAt', 'asc');
+      .orderBy('createdAt', 'desc');
 
-    return this.query(txn)
-      .eager(SUPER_EAGER_QUERY)
-      .where({
-        dismissedAt: null,
-        acceptedAt: null,
-        patientId,
-        goalSuggestionTemplateId: null, // ensure goalSuggestionTemplateId is null
+    return queryBuilder
+      .where({ dismissedAt: null, acceptedAt: null, 'care_plan_suggestion.patientId': patientId })
+      .where(builder => {
+        builder
+          .where('goalSuggestionTemplateId', null)
+          .whereNotIn('concernId', existingPatientConcernIdsQuery)
+          .orWhere('concernId', null);
       })
-      .whereNotIn('concernId', existingPatientConcernIdsQuery)
-      .orWhere({
-        dismissedAt: null,
-        acceptedAt: null,
-        patientId,
-        concernId: null, // ensure concernId is null
-      })
-      .orderBy('createdAt', 'asc');
+      .orderBy('createdAt', 'desc');
+  }
+
+  static async getFromRiskAreaAssessmentsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<CarePlanSuggestion[]> {
+    const queryBuilder = this.query(txn)
+      .eager(EAGER_QUERY)
+      .mergeEager('riskArea')
+      .whereNotNull('riskAreaAssessmentSubmissionId');
+
+    return this.getForPatient(queryBuilder, patientId, txn);
+  }
+
+  static async getFromScreeningToolsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<CarePlanSuggestion[]> {
+    const queryBuilder = this.query(txn)
+      .eager(EAGER_QUERY)
+      .mergeEager('screeningTool')
+      .whereNotNull('patientScreeningToolSubmissionId');
+
+    return this.getForPatient(queryBuilder, patientId, txn);
+  }
+
+  static async getFromComputedFieldsForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<CarePlanSuggestion[]> {
+    const queryBuilder = this.query(txn)
+      .eager(EAGER_QUERY)
+      .mergeEager('computedField.[riskArea]')
+      .whereNotNull('computedFieldId');
+
+    return this.getForPatient(queryBuilder, patientId, txn);
   }
 
   // For concern suggestions, marks all not-accepted suggestions with that concern as accepted
-  // For goal suggestions, marks all non-accepted suggests for that goal suggestion template as accepted
-  static async accept(
-    carePlanSuggestion: CarePlanSuggestion,
-    acceptedById: string,
+  static async acceptForConcern(
+    { concernId, patientId, acceptedById }: ICarePlanSuggestionAcceptConcernArgs,
     txn: Transaction,
-  ): Promise<CarePlanSuggestion | undefined> {
-    if (carePlanSuggestion.concernId) {
-      await this.query(txn)
-        .where({
-          acceptedAt: null,
-          dismissedAt: null,
-          patientId: carePlanSuggestion.patientId,
-          concernId: carePlanSuggestion.concernId,
-        })
-        .patch({
-          acceptedAt: new Date().toISOString(),
-          acceptedById,
-        });
-    } else if (carePlanSuggestion.goalSuggestionTemplateId) {
-      await this.query(txn)
-        .where({
-          acceptedAt: null,
-          dismissedAt: null,
-          patientId: carePlanSuggestion.patientId,
-          goalSuggestionTemplateId: carePlanSuggestion.goalSuggestionTemplateId,
-        })
-        .patch({
-          acceptedAt: new Date().toISOString(),
-          acceptedById,
-        });
-    }
-    return this.get(carePlanSuggestion.id, txn);
+  ): Promise<number> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({
+        acceptedAt: null,
+        dismissedAt: null,
+        patientId,
+        concernId,
+      })
+      .patch({
+        acceptedAt: new Date().toISOString(),
+        acceptedById,
+      });
+  }
+
+  // For goal suggestions, marks all non-accepted suggests for that goal suggestion template as accepted
+  static async acceptForGoal(
+    { goalSuggestionTemplateId, patientId, acceptedById }: ICarePlanSuggestionAcceptGoalArgs,
+    txn: Transaction,
+  ): Promise<number> {
+    return this.query(txn)
+      .where({
+        acceptedAt: null,
+        dismissedAt: null,
+        patientId,
+        goalSuggestionTemplateId,
+      })
+      .patch({
+        acceptedAt: new Date().toISOString(),
+        acceptedById,
+      });
   }
 
   static async dismiss(

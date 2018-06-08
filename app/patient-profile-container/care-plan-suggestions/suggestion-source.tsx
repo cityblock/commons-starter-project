@@ -12,20 +12,20 @@ const SuggestionSource: React.StatelessComponent<IProps> = ({ suggestion }) => {
   let title = '';
   let messageId = '';
 
-  if (suggestion.patientScreeningToolSubmission) {
-    title = suggestion.patientScreeningToolSubmission.screeningTool.title;
+  if (suggestion.screeningTool) {
+    title = suggestion.screeningTool.title;
     messageId = 'carePlanSuggestion.tool';
   } else if (suggestion.computedField) {
-    title = suggestion.computedField.label;
+    title = suggestion.computedField.riskArea.title;
     messageId = 'carePlanSuggestion.computedField';
-  } else if (suggestion.riskAreaAssessmentSubmission) {
-    title = suggestion.riskAreaAssessmentSubmission.riskArea!.title;
+  } else if (suggestion.riskArea) {
+    title = suggestion.riskArea.title;
     messageId = 'carePlanSuggestion.domainAssessment';
   }
 
   const containerStyles = classNames(styles.container, {
     [styles.blackBorder]: !!suggestion.computedField,
-    [styles.lightBlueBorder]: !!suggestion.patientScreeningToolSubmission,
+    [styles.lightBlueBorder]: !!suggestion.screeningTool,
   });
 
   return (

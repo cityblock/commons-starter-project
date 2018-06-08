@@ -4,13 +4,13 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
+import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
 import {
   carePlanSuggestionWithConcern,
   carePlanSuggestionWithGoal,
   concern,
-} from '../../shared/util/test-data';
+} from '../../../shared/util/test-data';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from '../popup-patient-care-plan-suggestion-accepted-modal-body';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };

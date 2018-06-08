@@ -1,16 +1,16 @@
-import { includes } from 'lodash';
+import { includes, uniqBy } from 'lodash';
 import * as React from 'react';
 import {
   getConcernsQuery,
   getPatientCarePlanQuery,
-  getPatientCarePlanSuggestionsQuery,
+  FullCarePlanSuggestionForPatientFragment,
+  FullCarePlanSuggestionFragment,
   FullPatientConcernFragment,
-} from '../graphql/types';
-import { FullCarePlanSuggestionFragment } from '../graphql/types';
+} from '../../graphql/types';
 
 interface IProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
+  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
   concerns?: getConcernsQuery['concerns'];
   optionType: 'suggested' | 'active' | 'inactive' | 'other';
 }
@@ -19,7 +19,7 @@ const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
   const { carePlan, carePlanSuggestions, concerns, optionType } = props;
   let label: string = '';
   let patientConcerns: FullPatientConcernFragment[] = [];
-  let concernSuggestions: Array<FullCarePlanSuggestionFragment | null> = [];
+  let concernSuggestions: FullCarePlanSuggestionFragment[] = [];
   let otherConcernOptions: getConcernsQuery['concerns'] = [];
   let optionsHtml: Array<JSX.Element | null> = [];
 
@@ -34,15 +34,18 @@ const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
   } else if (carePlanSuggestions && optionType === 'suggested') {
     label = 'Suggested concerns';
     concernSuggestions = carePlanSuggestions.filter(
-      suggestion => (suggestion ? !!suggestion.concern : false),
+      suggestion => (suggestion ? !!suggestion.concernId : false),
     );
+    concernSuggestions = uniqBy(concernSuggestions, 'concernId');
   } else if (concerns && carePlan && carePlanSuggestions && optionType === 'other') {
     const duplicateConcernIds: string[] = carePlan.concerns.map(
       patientConcern => patientConcern.concernId,
     );
-    concernSuggestions
-      .filter(concernSuggestion => !!concernSuggestion)
-      .forEach(concernSuggestion => duplicateConcernIds.push(concernSuggestion!.id));
+    carePlanSuggestions.forEach(suggestion => {
+      if (suggestion.concernId) {
+        duplicateConcernIds.push(suggestion.concernId);
+      }
+    });
     label = 'All other concerns';
     otherConcernOptions = concerns.filter(
       concern => !!concern && !includes(duplicateConcernIds, concern.id),

@@ -589,7 +589,14 @@ describe('goal suggestion model', () => {
         { goalSuggestionTemplateId: goalSuggestionTemplate.id },
       ]);
 
-      await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+      await CarePlanSuggestion.acceptForGoal(
+        {
+          goalSuggestionTemplateId: carePlanSuggestion.goalSuggestionTemplateId!,
+          patientId: carePlanSuggestion.patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
       const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
       const patientConcern = await PatientConcern.create(
         {

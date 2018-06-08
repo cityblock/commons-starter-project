@@ -1046,5 +1046,10 @@ export const ENGLISH_TRANSLATION = {
     'myTasks.assigned': 'Assigned',
     'myTasks.following': 'Following',
     'monthSelect.placeholder': 'Select a month...',
+    'suggestionsSection.riskAreaAssessments': 'Manual Domain Assessments',
+    'suggestionsSection.screeningTools': 'Screening Tools',
+    'suggestionsSection.computedFields': 'Automated Domain Assessments',
+    'suggestionsGroup.concerns': 'Concerns:',
+    'suggestionsGroup.goals': 'Goals:',
   },
 };

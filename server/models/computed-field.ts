@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { ComputedFieldDataTypes } from 'schema';
 import BaseModel from './base-model';
 import Question from './question';
+import RiskArea from './risk-area';
 
 export type ComputedFieldOrderOptions = 'createdAt' | 'slug' | 'label';
 type GetByOptions = 'slug' | 'label';
@@ -23,6 +24,7 @@ export default class ComputedField extends BaseModel {
   label!: string;
   dataType!: ComputedFieldDataTypes;
   question!: Question;
+  riskArea!: RiskArea;
 
   static tableName = 'computed_field';
 
@@ -49,6 +51,19 @@ export default class ComputedField extends BaseModel {
         join: {
           from: 'computed_field.id',
           to: 'question.computedFieldId',
+        },
+      },
+      riskArea: {
+        relation: Model.HasOneThroughRelation,
+        modelClass: RiskArea,
+        join: {
+          from: 'computed_field.id',
+          through: {
+            modelClass: Question,
+            from: 'question.computedFieldId',
+            to: 'question.riskAreaId',
+          },
+          to: 'risk_area.id',
         },
       },
     };

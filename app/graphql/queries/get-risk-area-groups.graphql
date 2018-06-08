@@ -3,5 +3,10 @@
 query getRiskAreaGroups {
   riskAreaGroups {
     ...FullRiskAreaGroup
+    riskAreas {
+      id
+      title
+      assessmentType
+    }
   }
 }

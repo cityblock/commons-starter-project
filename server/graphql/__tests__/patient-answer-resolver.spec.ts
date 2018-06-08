@@ -836,7 +836,10 @@ describe('patient answer tests', () => {
       );
       expect(submission.score).toEqual(7);
 
-      const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+      const carePlanSuggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(
+        patient.id,
+        txn,
+      );
       expect(carePlanSuggestions.length).toEqual(2);
 
       const concernSuggestion = carePlanSuggestions.find(s => s.suggestionType === 'concern');

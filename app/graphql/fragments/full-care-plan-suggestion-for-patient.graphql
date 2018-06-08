@@ -5,19 +5,17 @@ fragment FullCarePlanSuggestionForPatient on CarePlanSuggestion {
   computedField {
     id
     label
-  }
-  riskAreaAssessmentSubmission {
-    id
     riskArea {
       id
       title
     }
   }
-  patientScreeningToolSubmission {
+  riskArea {
     id
-    screeningTool {
-      id
-      title
-    }
+    title
+  }
+  screeningTool {
+    id
+    title
   }
 }

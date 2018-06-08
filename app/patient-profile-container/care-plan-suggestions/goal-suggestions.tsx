@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {
-  getPatientCarePlanSuggestionsQuery,
-  FullCarePlanSuggestionForPatientFragment,
-} from '../../graphql/types';
+import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
 import GoalSuggestion from './goal-suggestion';
 
 interface IProps {
-  suggestions: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
+  suggestions: FullCarePlanSuggestionForPatientFragment[];
   onAccept: (
     suggestion: FullCarePlanSuggestionForPatientFragment,
     taskTemplateIds?: string[],
@@ -16,20 +13,25 @@ interface IProps {
 
 interface IState {
   selectedGoalSuggestionId: string;
+  suggestionsLength?: number;
 }
 
 class GoalSuggestions extends React.Component<IProps, IState> {
-  state = {
-    selectedGoalSuggestionId: '',
-  };
-
-  componentWillReceiveProps(nextProps: IProps) {
+  static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
     // if number of goal suggestions has changed because of accepting/denying them,
     // delect all goal suggestions
-    if (nextProps.suggestions.length !== this.props.suggestions.length) {
-      this.setState({ selectedGoalSuggestionId: '' });
+    if (nextProps.suggestions.length !== prevState.suggestionsLength) {
+      return {
+        selectedGoalSuggestionId: '',
+        suggestionsLength: nextProps.suggestions.length,
+      };
     }
+    return null;
   }
+
+  state = {
+    selectedGoalSuggestionId: '',
+  } as IState;
 
   toggleSelectedGoalSuggestionId = (goalSuggestionId: string) => {
     if (this.state.selectedGoalSuggestionId === goalSuggestionId) {
@@ -44,8 +46,6 @@ class GoalSuggestions extends React.Component<IProps, IState> {
     const { selectedGoalSuggestionId } = this.state;
 
     const goalSuggestions = suggestions.map(suggestion => {
-      if (!suggestion) return null;
-
       return (
         <GoalSuggestion
           key={suggestion.id}

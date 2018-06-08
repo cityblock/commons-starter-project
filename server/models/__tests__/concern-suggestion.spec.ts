@@ -635,7 +635,14 @@ describe('concern suggestion model', () => {
         { concernId: concern.id },
       ]);
 
-      await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+      await CarePlanSuggestion.acceptForConcern(
+        {
+          concernId: carePlanSuggestion.concernId!,
+          patientId: carePlanSuggestion.patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
       const patientConcern = await PatientConcern.create(
         {
           order: 2,

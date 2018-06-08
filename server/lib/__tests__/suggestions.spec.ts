@@ -159,7 +159,10 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
       txn,
     );
 
-    const beforeCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+    const beforeCarePlanSuggestions = await CarePlanSuggestion.getFromComputedFieldsForPatient(
+      patient.id,
+      txn,
+    );
     expect(beforeCarePlanSuggestions.length).toEqual(0);
 
     await createSuggestionsForComputedFieldAnswer(
@@ -169,7 +172,10 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
       txn,
     );
 
-    const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+    const carePlanSuggestions = await CarePlanSuggestion.getFromComputedFieldsForPatient(
+      patient.id,
+      txn,
+    );
     const sortedSuggestions = carePlanSuggestions.sort((a, b) => {
       return a.suggestionType < b.suggestionType ? -1 : 1;
     });

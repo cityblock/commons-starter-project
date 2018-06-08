@@ -1,22 +1,31 @@
 import { transaction, Transaction } from 'objection';
-import { CarePlanSuggestionType, UserRole } from 'schema';
+import {
+  AnswerTypeOptions,
+  CarePlanSuggestionType,
+  ComputedFieldDataTypes,
+  UserRole,
+} from 'schema';
 import * as uuid from 'uuid/v4';
-
 import {
   createMockClinic,
   createMockUser,
   createPatient,
   createRiskArea,
+  setupComputedFieldAnswerWithSuggestionsForPatient,
+  setupRiskAreaSubmissionWithSuggestionsForPatient,
+  setupScreeningToolSubmissionWithSuggestionsForPatient,
 } from '../../spec-helpers';
 import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
+import ComputedField from '../computed-field';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
-import PatientGoal from '../patient-goal';
+import Question from '../question';
 import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
+import ScreeningTool from '../screening-tool';
 import User from '../user';
 
 interface ISetup {
@@ -55,6 +64,93 @@ async function setup(txn: Transaction): Promise<ISetup> {
     riskArea,
     goalSuggestionTemplate,
     riskAreaAssessmentSubmission,
+  };
+}
+
+interface ISetupForSuggestions {
+  riskArea: RiskArea;
+  riskArea2: RiskArea;
+  computedField: ComputedField;
+  computedField2: ComputedField;
+  screeningTool: ScreeningTool;
+  screeningTool2: ScreeningTool;
+  user: User;
+  patient: Patient;
+  patient2: Patient;
+}
+
+async function setupForSuggestions(trx: Transaction): Promise<ISetupForSuggestions> {
+  const clinic = await Clinic.create(createMockClinic(), trx);
+  const user = await User.create(createMockUser(11, clinic.id), trx);
+  const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, trx);
+  const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, trx);
+  const riskArea = await createRiskArea({ title: 'testing' }, trx);
+  const riskArea2 = await createRiskArea({ title: 'testing second area', order: 2 }, trx);
+  const screeningTool = await ScreeningTool.create(
+    {
+      title: 'White Walker Screening Tool',
+      riskAreaId: riskArea.id,
+    },
+    trx,
+  );
+  const screeningTool2 = await ScreeningTool.create(
+    {
+      title: 'Traitor Screening Tool',
+      riskAreaId: riskArea2.id,
+    },
+    trx,
+  );
+  const computedField = await ComputedField.create(
+    {
+      slug: 'drogon',
+      label: 'Has a massive dragon',
+      dataType: 'boolean' as ComputedFieldDataTypes,
+    },
+    trx,
+  );
+  const computedField2 = await ComputedField.create(
+    {
+      slug: 'enemy',
+      label: 'Has an enemy',
+      dataType: 'boolean' as ComputedFieldDataTypes,
+    },
+    trx,
+  );
+
+  // Need to create questions to link computed field to risk area
+  await Question.create(
+    {
+      title: 'like writing tests?',
+      answerType: 'radio' as AnswerTypeOptions,
+      computedFieldId: computedField.id,
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    trx,
+  );
+  await Question.create(
+    {
+      title: 'like writing code?',
+      answerType: 'radio' as AnswerTypeOptions,
+      computedFieldId: computedField2.id,
+      riskAreaId: riskArea2.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    trx,
+  );
+
+  return {
+    riskArea,
+    riskArea2,
+    screeningTool,
+    screeningTool2,
+    computedField,
+    computedField2,
+    patient,
+    patient2,
+    user,
   };
 }
 
@@ -154,7 +250,10 @@ describe('care plan suggestion', () => {
         txn,
       );
 
-      const fetchedCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+      const fetchedCarePlanSuggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+        patient.id,
+        txn,
+      );
 
       expect(fetchedCarePlanSuggestions.length).toEqual(2);
 
@@ -167,86 +266,999 @@ describe('care plan suggestion', () => {
       expect(goalSuggestion!.goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate);
     });
 
-    it('gets carePlanSuggestions for a patient', async () => {
-      const { patient, concern, riskAreaAssessmentSubmission } = await setup(txn);
+    describe('gets suggestions from Risk Area Assessments for a patient', () => {
+      it('gets from Risk Area Assessments for a patient', async () => {
+        const {
+          riskArea,
+          riskArea2,
+          screeningTool,
+          computedField,
+          patient,
+          patient2,
+          user,
+        } = await setupForSuggestions(txn);
 
-      await CarePlanSuggestion.create(
-        {
-          type: 'riskAreaAssessmentSubmission',
-          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-          patientId: patient.id,
-          suggestionType: 'concern' as CarePlanSuggestionType,
-          concernId: concern.id,
-        },
-        txn,
-      );
+        const submission = await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const submission2 = await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea2.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
-      const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+        // create suggestions for another patient
+        await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient2.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
-      expect(patientCarePlanSuggestions.length).toEqual(1);
-      expect(patientCarePlanSuggestions[0].concern!.id).toEqual(concern.id);
+        // create suggestions for non risk area assessment
+        await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(8);
+
+        // suggestions from first risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion1.id,
+            concernId: submission.concern1.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion2.id,
+            concernId: submission.concern2.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate1.id,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate2.id,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+
+        // submissions from second risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion1.id,
+            concernId: submission2.concern1.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea2.id,
+              title: riskArea2.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion2.id,
+            concernId: submission2.concern2.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea2.id,
+              title: riskArea2.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate1.id,
+            riskArea: expect.objectContaining({
+              id: riskArea2.id,
+              title: riskArea2.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate2.id,
+            riskArea: expect.objectContaining({
+              id: riskArea2.id,
+              title: riskArea2.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
+
+      it("doesn't get accepted or dismissed suggestions for risk area assessments for a patient", async () => {
+        const { riskArea, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await CarePlanSuggestion.acceptForConcern(
+          {
+            concernId: concern2.id,
+            patientId: patient.id,
+            acceptedById: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        // suggestions from first risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
+
+      it("doesn't get concerns that exist already for risk area assessments for a patient", async () => {
+        const { riskArea, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await PatientConcern.create(
+          {
+            patientId: patient.id,
+            concernId: concern2.id,
+            startedAt: new Date().toISOString(),
+            userId: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        // suggestions from first risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            riskArea: expect.objectContaining({
+              id: riskArea.id,
+              title: riskArea.title,
+            }),
+            patientScreeningToolSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
     });
 
-    it('does not get suggestions for which a patientConcern exists', async () => {
-      const {
-        patient,
-        concern,
-        riskAreaAssessmentSubmission,
-        user,
-        goalSuggestionTemplate,
-      } = await setup(txn);
+    describe('gets suggestions from Screening Tools for a patient', () => {
+      it('can get care plan suggestions for screening tools for a patient', async () => {
+        const {
+          riskArea,
+          screeningTool,
+          screeningTool2,
+          computedField,
+          patient,
+          patient2,
+          user,
+        } = await setupForSuggestions(txn);
 
-      const concern2 = await Concern.create({ title: 'Second Concern' }, txn);
+        const submission = await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const submission2 = await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool2.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
-      await CarePlanSuggestion.createMultiple(
-        {
-          suggestions: [
-            {
-              type: 'riskAreaAssessmentSubmission',
-              riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-              patientId: patient.id,
-              suggestionType: 'concern' as CarePlanSuggestionType,
-              concernId: concern.id,
-            },
-            {
-              type: 'riskAreaAssessmentSubmission',
-              riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-              patientId: patient.id,
-              suggestionType: 'concern' as CarePlanSuggestionType,
-              concernId: concern2.id,
-            },
-          ],
-        },
-        txn,
-      );
+        // create suggestions for another patient
+        await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient2.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
-      const patientConcern = await PatientConcern.create(
-        {
-          patientId: patient.id,
-          concernId: concern.id,
-          userId: user.id,
-        },
-        txn,
-      );
-      await PatientGoal.create(
-        {
-          title: 'Patient Goal',
-          userId: user.id,
-          patientId: patient.id,
-          goalSuggestionTemplateId: goalSuggestionTemplate.id,
-          patientConcernId: patientConcern.id,
-        },
-        txn,
-      );
+        // create suggestions for non risk area assessment
+        await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
-      const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+        const suggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(8);
 
-      expect(patientCarePlanSuggestions.length).toEqual(1);
-      const concernSuggestion = patientCarePlanSuggestions.find(
-        s => s.suggestionType === 'concern',
-      );
+        // suggestions from first screening tool
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion1.id,
+            concernId: submission.concern1.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion2.id,
+            concernId: submission.concern2.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate1.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate2.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
 
-      expect(concernSuggestion!.concernId).toEqual(concern2.id);
+        // submissions from second screening tool
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion1.id,
+            concernId: submission2.concern1.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool2.id,
+              title: screeningTool2.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion2.id,
+            concernId: submission2.concern2.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool2.id,
+              title: screeningTool2.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate1.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool2.id,
+              title: screeningTool2.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate2.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool2.id,
+              title: screeningTool2.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
+
+      it("doesn't get accepted or dismissed suggestions for screening tools for a patient", async () => {
+        const { screeningTool, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await CarePlanSuggestion.acceptForConcern(
+          {
+            concernId: concern2.id,
+            patientId: patient.id,
+            acceptedById: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        // suggestions from first risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
+
+      it("doesn't get concerns that exist already for screening tools for a patient", async () => {
+        const { screeningTool, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await PatientConcern.create(
+          {
+            patientId: patient.id,
+            concernId: concern2.id,
+            startedAt: new Date().toISOString(),
+            userId: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            screeningTool: expect.objectContaining({
+              id: screeningTool.id,
+              title: screeningTool.title,
+            }),
+            riskAreaAssessmentSubmissionId: null,
+            computedFieldId: null,
+          }),
+        );
+      });
+    });
+
+    describe('gets suggestions from Computed Field Answers for a patient', () => {
+      it('can get care plan suggestions for computed field answers for a patient', async () => {
+        const {
+          riskArea,
+          riskArea2,
+          screeningTool,
+          computedField,
+          computedField2,
+          patient,
+          patient2,
+          user,
+        } = await setupForSuggestions(txn);
+
+        const submission = await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const submission2 = await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField2.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        // create suggestions for another patient
+        await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField.id,
+            patientId: patient2.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        // create suggestions for non risk area assessment
+        await setupRiskAreaSubmissionWithSuggestionsForPatient(
+          {
+            riskAreaId: riskArea.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        await setupScreeningToolSubmissionWithSuggestionsForPatient(
+          {
+            screeningToolId: screeningTool.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromComputedFieldsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(8);
+
+        // suggestions from first computed field answer
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion1.id,
+            concernId: submission.concern1.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.concernSuggestion2.id,
+            concernId: submission.concern2.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate1.id,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission.goalSuggestionTemplate2.id,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+
+        // suggestions from first computed field answer
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion1.id,
+            concernId: submission2.concern1.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.concernSuggestion2.id,
+            concernId: submission2.concern2.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate1.id,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: submission2.goalSuggestion2.id,
+            concernId: null,
+            goalSuggestionTemplateId: submission2.goalSuggestionTemplate2.id,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+      });
+
+      it("doesn't get accepted or dismissed suggestions for computed field answers for a patient", async () => {
+        const { riskArea, computedField, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await CarePlanSuggestion.acceptForConcern(
+          {
+            concernId: concern2.id,
+            patientId: patient.id,
+            acceptedById: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromComputedFieldsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            computedField: expect.objectContaining({
+              id: computedField.id,
+              label: computedField.label,
+              riskArea: expect.objectContaining({
+                id: riskArea.id,
+                title: riskArea.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+      });
+
+      it("doesn't get concerns that exist already for computed field answers for a patient", async () => {
+        const { computedField2, riskArea2, patient, user } = await setupForSuggestions(txn);
+
+        const {
+          concern1,
+          concernSuggestion1,
+          concern2,
+          goalSuggestionTemplate1,
+          goalSuggestion1,
+          goalSuggestion2,
+        } = await setupComputedFieldAnswerWithSuggestionsForPatient(
+          {
+            computedFieldId: computedField2.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        await PatientConcern.create(
+          {
+            patientId: patient.id,
+            concernId: concern2.id,
+            startedAt: new Date().toISOString(),
+            userId: user.id,
+          },
+          txn,
+        );
+        await CarePlanSuggestion.dismiss(
+          {
+            carePlanSuggestionId: goalSuggestion2.id,
+            dismissedById: user.id,
+            dismissedReason: 'not good',
+          },
+          txn,
+        );
+
+        const suggestions = await CarePlanSuggestion.getFromComputedFieldsForPatient(
+          patient.id,
+          txn,
+        );
+        expect(suggestions).toHaveLength(2);
+
+        // suggestions from first risk area
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: concernSuggestion1.id,
+            concernId: concern1.id,
+            goalSuggestionTemplateId: null,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+        expect(suggestions).toContainEqual(
+          expect.objectContaining({
+            id: goalSuggestion1.id,
+            concernId: null,
+            goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+            computedField: expect.objectContaining({
+              id: computedField2.id,
+              label: computedField2.label,
+              riskArea: expect.objectContaining({
+                id: riskArea2.id,
+                title: riskArea2.title,
+              }),
+            }),
+            patientScreeningToolSubmissionId: null,
+            riskAreaAssessmentSubmissionId: null,
+          }),
+        );
+      });
     });
 
     it('accepts a carePlanSuggestion', async () => {
@@ -263,7 +1275,14 @@ describe('care plan suggestion', () => {
         txn,
       );
 
-      await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+      await CarePlanSuggestion.acceptForConcern(
+        {
+          concernId: carePlanSuggestion.concernId!,
+          patientId: carePlanSuggestion.patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
 
       const fetchedCarePlanSuggestion = await CarePlanSuggestion.get(carePlanSuggestion.id, txn);
       expect(fetchedCarePlanSuggestion!.acceptedAt).not.toBeFalsy();
@@ -301,14 +1320,24 @@ describe('care plan suggestion', () => {
       expect(suggestions.length).toEqual(2);
 
       // getForPatient should NOT de-dupe them
-      const suggestionsForPatient = await CarePlanSuggestion.getForPatient(patient.id, txn);
+      const suggestionsForPatient = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+        patient.id,
+        txn,
+      );
       expect(suggestionsForPatient.length).toEqual(2);
 
-      // accept only one
-      await CarePlanSuggestion.accept(suggestions[0], user.id, txn);
+      // accept for that concernId
+      await CarePlanSuggestion.acceptForConcern(
+        {
+          concernId: suggestions[0].concernId!,
+          patientId: suggestions[0].patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
 
       // getForPatient should return correct number as well
-      const suggestionsForPatientAfterAccepting = await CarePlanSuggestion.getForPatient(
+      const suggestionsForPatientAfterAccepting = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
         patient.id,
         txn,
       );
@@ -355,11 +1384,21 @@ describe('care plan suggestion', () => {
       expect(suggestions.length).toEqual(2);
 
       // getForPatient should NOT de-dupe them
-      const suggestionsForPatient = await CarePlanSuggestion.getForPatient(patient.id, txn);
+      const suggestionsForPatient = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+        patient.id,
+        txn,
+      );
       expect(suggestionsForPatient.length).toEqual(2);
 
-      // accept only one
-      await CarePlanSuggestion.accept(suggestions[0], user.id, txn);
+      // accept for that goal template
+      await CarePlanSuggestion.acceptForGoal(
+        {
+          goalSuggestionTemplateId: suggestions[0].goalSuggestionTemplateId!,
+          patientId: suggestions[0].patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
 
       const suggestionsAfterAccepting = await CarePlanSuggestion.query(txn).where({
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -367,7 +1406,7 @@ describe('care plan suggestion', () => {
       });
 
       // getForPatient should return correct number as well
-      const suggestionsForPatientAfterAccepting = await CarePlanSuggestion.getForPatient(
+      const suggestionsForPatientAfterAccepting = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
         patient.id,
         txn,
       );
@@ -454,9 +1493,19 @@ describe('care plan suggestion', () => {
         },
         txn,
       );
-      await CarePlanSuggestion.accept(carePlanSuggestion2, user.id, txn);
+      await CarePlanSuggestion.acceptForConcern(
+        {
+          concernId: carePlanSuggestion2.concernId!,
+          patientId: carePlanSuggestion2.patientId,
+          acceptedById: user.id,
+        },
+        txn,
+      );
 
-      const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+      const patientCarePlanSuggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+        patient.id,
+        txn,
+      );
       expect(patientCarePlanSuggestions.length).toEqual(1);
       expect(patientCarePlanSuggestions[0].id).toEqual(carePlanSuggestion3.id);
     });

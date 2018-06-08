@@ -16,13 +16,13 @@ import { IContext } from './shared/utils';
 
 export interface IResolveCarePlanSuggestionsOptions {
   patientId: string;
-  riskAreaId?: string;
   glassBreakId: string | null;
 }
 
 export interface IResolveCarePlanOptions {
   patientId: string;
   glassBreakId: string | null;
+  riskAreaId: string;
 }
 
 export interface ISuggestionsForPatient {
@@ -38,11 +38,11 @@ export interface ICarePlanSuggestionDismissArgs {
   input: ICarePlanSuggestionDismissInput;
 }
 
-export async function resolveCarePlanSuggestionsForPatient(
+export async function resolveCarePlanSuggestionsFromRiskAreaAssessmentsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
   { userId, permissions, testTransaction }: IContext,
-): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
+): Promise<IRootQueryType['carePlanSuggestionsFromRiskAreaAssessmentsForPatient']> {
   return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
     await validateGlassBreak(
@@ -54,7 +54,47 @@ export async function resolveCarePlanSuggestionsForPatient(
       args.glassBreakId,
     );
 
-    return CarePlanSuggestion.getForPatient(args.patientId, txn);
+    return CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(args.patientId, txn);
+  });
+}
+
+export async function resolveCarePlanSuggestionsFromScreeningToolsForPatient(
+  root: any,
+  args: IResolveCarePlanSuggestionsOptions,
+  { userId, permissions, testTransaction }: IContext,
+): Promise<IRootQueryType['carePlanSuggestionsFromScreeningToolsForPatient']> {
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
+
+    return CarePlanSuggestion.getFromScreeningToolsForPatient(args.patientId, txn);
+  });
+}
+
+export async function resolveCarePlanSuggestionsFromComputedFieldsForPatient(
+  root: any,
+  args: IResolveCarePlanSuggestionsOptions,
+  { userId, permissions, testTransaction }: IContext,
+): Promise<IRootQueryType['carePlanSuggestionsFromComputedFieldsForPatient']> {
+  return transaction(testTransaction || CarePlanSuggestion.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
+    await validateGlassBreak(
+      userId!,
+      permissions,
+      'patient',
+      args.patientId,
+      txn,
+      args.glassBreakId,
+    );
+
+    return CarePlanSuggestion.getFromComputedFieldsForPatient(args.patientId, txn);
   });
 }
 
@@ -132,7 +172,6 @@ export async function carePlanSuggestionAccept(
     );
 
     const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
-    let secondaryCarePlanSuggestions: CarePlanSuggestion[] = [];
 
     if (!carePlanSuggestion) {
       throw new Error('Suggestion does not exist');
@@ -141,39 +180,32 @@ export async function carePlanSuggestionAccept(
     }
 
     const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-    const { startedAt, concernId, taskTemplateIds } = input;
+    const { startedAt, taskTemplateIds } = input;
     let { patientConcernId } = input;
 
-    if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
-      await PatientConcern.create(
+    const concernToAcceptId = carePlanSuggestion.concernId || input.concernId;
+    if (concernToAcceptId) {
+      const patientConcern = await PatientConcern.create(
         {
-          concernId: carePlanSuggestion.concernId,
+          concernId: concernToAcceptId,
           patientId,
           startedAt: startedAt || undefined,
           userId: userId!,
         },
         txn,
       );
-    } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
-      if (concernId) {
-        const patientConcern = await PatientConcern.create(
-          {
-            concernId,
-            patientId,
-            startedAt: startedAt || undefined,
-            userId: userId!,
-          },
-          txn,
-        );
-
-        patientConcernId = patientConcern.id;
-
-        secondaryCarePlanSuggestions = await CarePlanSuggestion.findForPatientAndConcern(
+      patientConcernId = patientConcern.id;
+      await CarePlanSuggestion.acceptForConcern(
+        {
+          concernId: concernToAcceptId,
           patientId,
-          concernId,
-          txn,
-        );
-      }
+          acceptedById: userId!,
+        },
+        txn,
+      );
+    }
+
+    if (carePlanSuggestion.goalSuggestionTemplate) {
       if (!patientConcernId) {
         throw new Error('patientConcernId is required');
       }
@@ -189,16 +221,14 @@ export async function carePlanSuggestionAccept(
         },
         txn,
       );
-    }
-
-    await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
-
-    if (secondaryCarePlanSuggestions) {
-      await Promise.all([
-        secondaryCarePlanSuggestions.forEach(async suggestion =>
-          CarePlanSuggestion.accept(suggestion, userId!, txn),
-        ),
-      ]);
+      await CarePlanSuggestion.acceptForGoal(
+        {
+          goalSuggestionTemplateId: carePlanSuggestion.goalSuggestionTemplate.id,
+          patientId,
+          acceptedById: userId!,
+        },
+        txn,
+      );
     }
 
     return carePlanSuggestion || null;

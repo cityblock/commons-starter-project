@@ -1,7 +1,0 @@
-#import "../fragments/full-care-plan-suggestion-for-patient.graphql"
-
-query getPatientCarePlanSuggestions($patientId: ID!, $glassBreakId: ID) {
-  carePlanSuggestionsForPatient(patientId: $patientId, glassBreakId: $glassBreakId) {
-    ...FullCarePlanSuggestionForPatient
-  }
-}

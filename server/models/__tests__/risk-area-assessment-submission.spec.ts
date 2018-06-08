@@ -123,7 +123,10 @@ describe('patient risk area assessment submission model', () => {
   it('creates a patient risk area assessment submission with the correct suggestions', async () => {
     const { riskArea, user, patient } = await setup(txn);
 
-    const initialSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+    const initialSuggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+      patient.id,
+      txn,
+    );
     expect(initialSuggestions.length).toEqual(0);
 
     const concern = await Concern.create({ title: 'Screening Tool Concern' }, txn);
@@ -242,7 +245,10 @@ describe('patient risk area assessment submission model', () => {
     expect(completedSubmission.forceHighRisk).toBeTruthy();
     expect(completedSubmission.score).toBe(1);
 
-    const suggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
+    const suggestions = await CarePlanSuggestion.getFromRiskAreaAssessmentsForPatient(
+      patient.id,
+      txn,
+    );
     expect(suggestions).toHaveLength(2);
   });
 

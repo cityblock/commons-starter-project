@@ -1,0 +1,10 @@
+#import "../fragments/full-care-plan-suggestion-for-patient.graphql"
+
+query getCarePlanSuggestionsFromComputedFieldsForPatient($patientId: ID!, $glassBreakId: ID) {
+  carePlanSuggestionsFromComputedFieldsForPatient(
+    patientId: $patientId
+    glassBreakId: $glassBreakId
+  ) {
+    ...FullCarePlanSuggestionForPatient
+  }
+}

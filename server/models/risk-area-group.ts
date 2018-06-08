@@ -64,6 +64,8 @@ export default class RiskAreaGroup extends BaseModel {
 
   static async getAll(txn: Transaction): Promise<RiskAreaGroup[]> {
     return this.query(txn)
+      .eager('[riskAreas]')
+      .modifyEager('riskAreas', builder => builder.where({ deletedAt: null }))
       .where({ deletedAt: null })
       .orderBy('order', 'asc')
       .orderBy('title', 'asc');

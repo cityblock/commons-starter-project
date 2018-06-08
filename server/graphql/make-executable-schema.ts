@@ -29,7 +29,9 @@ import {
   carePlanSuggestionAccept,
   carePlanSuggestionDismiss,
   resolveCarePlanForPatient,
-  resolveCarePlanSuggestionsForPatient,
+  resolveCarePlanSuggestionsFromComputedFieldsForPatient,
+  resolveCarePlanSuggestionsFromRiskAreaAssessmentsForPatient,
+  resolveCarePlanSuggestionsFromScreeningToolsForPatient,
 } from './care-plan-resolver';
 import {
   careTeamAddUser,
@@ -410,7 +412,9 @@ const resolveFunctions = {
     taskTemplate: resolveTaskTemplate,
     taskTemplates: resolveTaskTemplates,
     taskTemplatesForAnswer: resolveTaskSuggestionTemplatesForAnswer,
-    carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
+    carePlanSuggestionsFromComputedFieldsForPatient: resolveCarePlanSuggestionsFromComputedFieldsForPatient,
+    carePlanSuggestionsFromRiskAreaAssessmentsForPatient: resolveCarePlanSuggestionsFromRiskAreaAssessmentsForPatient,
+    carePlanSuggestionsFromScreeningToolsForPatient: resolveCarePlanSuggestionsFromScreeningToolsForPatient,
     carePlanForPatient: resolveCarePlanForPatient,
     screeningTool: resolveScreeningTool,
     screeningTools: resolveScreeningTools,

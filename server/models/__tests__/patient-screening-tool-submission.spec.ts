@@ -148,7 +148,10 @@ describe('patient screening tool submission model', () => {
 
   it('creates a patient screening tool submission with the correct score', async () => {
     const { patient1, riskArea, screeningTool1, user } = await setup(txn);
-    const initialSuggestions = await CarePlanSuggestion.getForPatient(patient1.id, txn);
+    const initialSuggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(
+      patient1.id,
+      txn,
+    );
     expect(initialSuggestions.length).toEqual(0);
 
     const concern = await Concern.create({ title: 'Screening Tool Concern' }, txn);
@@ -303,7 +306,7 @@ describe('patient screening tool submission model', () => {
     const finalSubmission = await PatientScreeningToolSubmission.get(submission.id, txn);
     expect(finalSubmission.progressNoteId).not.toBeFalsy();
 
-    const suggestions = await CarePlanSuggestion.getForPatient(patient1.id, txn);
+    const suggestions = await CarePlanSuggestion.getFromScreeningToolsForPatient(patient1.id, txn);
     expect(suggestions.length).toEqual(4);
   });
 

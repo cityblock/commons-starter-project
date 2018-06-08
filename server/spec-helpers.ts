@@ -34,6 +34,7 @@ import ComputedField from './models/computed-field';
 import ComputedPatientStatus from './models/computed-patient-status';
 import Concern from './models/concern';
 import EventNotification from './models/event-notification';
+import GoalSuggestionTemplate from './models/goal-suggestion-template';
 import Patient from './models/patient';
 import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
@@ -2363,5 +2364,250 @@ export function createMockSiuMessage(options: ISiuMessageOptions) {
         diagnosisType: 'Bad',
       },
     ],
+  };
+}
+
+interface IRiskAreaSubmissionInput {
+  riskAreaId: string;
+  patientId: string;
+  userId: string;
+}
+
+export async function setupRiskAreaSubmissionWithSuggestionsForPatient(
+  { riskAreaId, patientId, userId }: IRiskAreaSubmissionInput,
+  txn: Transaction,
+) {
+  const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+    {
+      patientId,
+      userId,
+      riskAreaId,
+    },
+    txn,
+  );
+
+  const concern1 = await Concern.create({ title: 'Food' }, txn);
+  const concernSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern1.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+    },
+    txn,
+  );
+
+  const concern2 = await Concern.create({ title: 'Medical' }, txn);
+  const concernSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern2.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate1 = await GoalSuggestionTemplate.create({ title: 'Find CBO' }, txn);
+  const goalSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create(
+    { title: 'Talk to patient more' },
+    txn,
+  );
+  const goalSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+    },
+    txn,
+  );
+
+  return {
+    riskAreaAssessmentSubmission,
+    concern1,
+    concernSuggestion1,
+    concern2,
+    concernSuggestion2,
+    goalSuggestionTemplate1,
+    goalSuggestion1,
+    goalSuggestionTemplate2,
+    goalSuggestion2,
+  };
+}
+
+interface IScreeningToolSubmissionInput {
+  screeningToolId: string;
+  patientId: string;
+  userId: string;
+}
+
+export async function setupScreeningToolSubmissionWithSuggestionsForPatient(
+  { screeningToolId, patientId, userId }: IScreeningToolSubmissionInput,
+  txn: Transaction,
+) {
+  const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId,
+      patientId,
+      userId,
+    },
+    txn,
+  );
+
+  const concern1 = await Concern.create({ title: 'Transit' }, txn);
+  const concernSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern1.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+    },
+    txn,
+  );
+
+  const concern2 = await Concern.create({ title: 'Healthcare' }, txn);
+  const concernSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern2.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate1 = await GoalSuggestionTemplate.create(
+    { title: 'Find travel' },
+    txn,
+  );
+  const goalSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create(
+    { title: 'Talk to provider' },
+    txn,
+  );
+  const goalSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+    },
+    txn,
+  );
+
+  return {
+    patientScreeningToolSubmission,
+    concern1,
+    concernSuggestion1,
+    concern2,
+    concernSuggestion2,
+    goalSuggestionTemplate1,
+    goalSuggestion1,
+    goalSuggestionTemplate2,
+    goalSuggestion2,
+  };
+}
+
+interface IComputedFieldAnswerInput {
+  computedFieldId: string;
+  patientId: string;
+  userId: string;
+}
+
+export async function setupComputedFieldAnswerWithSuggestionsForPatient(
+  { computedFieldId, patientId, userId }: IComputedFieldAnswerInput,
+  txn: Transaction,
+) {
+  const concern1 = await Concern.create({ title: 'Housing' }, txn);
+  const concernSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern1.id,
+      type: 'computedFieldAnswer',
+      computedFieldId,
+    },
+    txn,
+  );
+
+  const concern2 = await Concern.create({ title: 'Resiliency' }, txn);
+  const concernSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'concern' as CarePlanSuggestionType,
+      concernId: concern2.id,
+      type: 'computedFieldAnswer',
+      computedFieldId,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate1 = await GoalSuggestionTemplate.create(
+    { title: 'Apply for section 8' },
+    txn,
+  );
+  const goalSuggestion1 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate1.id,
+      type: 'computedFieldAnswer',
+      computedFieldId,
+    },
+    txn,
+  );
+
+  const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create(
+    { title: 'Find therapist' },
+    txn,
+  );
+  const goalSuggestion2 = await CarePlanSuggestion.create(
+    {
+      patientId,
+      suggestionType: 'goal' as CarePlanSuggestionType,
+      goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+      type: 'computedFieldAnswer',
+      computedFieldId,
+    },
+    txn,
+  );
+
+  return {
+    concern1,
+    concernSuggestion1,
+    concern2,
+    concernSuggestion2,
+    goalSuggestionTemplate1,
+    goalSuggestion1,
+    goalSuggestionTemplate2,
+    goalSuggestion2,
   };
 }

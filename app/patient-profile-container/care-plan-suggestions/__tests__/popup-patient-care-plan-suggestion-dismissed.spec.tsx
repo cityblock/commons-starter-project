@@ -1,12 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Modal from '../../shared/library/modal/modal';
-import Option from '../../shared/library/option/option';
-import Select from '../../shared/library/select/select';
+import Modal from '../../../shared/library/modal/modal';
+import Option from '../../../shared/library/option/option';
+import Select from '../../../shared/library/select/select';
 import {
   fullCarePlanSuggestionWithConcern as concernSuggestion,
   fullCarePlanSuggestionWithGoal as goalSuggestion,
-} from '../../shared/util/test-data';
+} from '../../../shared/util/test-data';
 import { PopupPatientCarePlanSuggestionDismissed } from '../popup-patient-care-plan-suggestion-dismissed';
 
 describe('Dismiss Care Plan Suggestion Modal', () => {

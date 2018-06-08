@@ -3,7 +3,7 @@ import * as React from 'react';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import { patient } from '../../shared/util/test-data';
-import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
+import PatientCarePlanSuggestions from '../care-plan-suggestions/patient-care-plan-suggestions';
 import { PatientCarePlanView } from '../patient-care-plan-view';
 import PatientMap, { IProps } from '../patient-map';
 import PrintMapButton from '../print-map-button';
@@ -17,10 +17,10 @@ describe('Patient Care Plan View Component', () => {
   const wrapper = shallow(
     <PatientCarePlanView
       match={match}
-      addConcern={placeholderFn}
-      isPopupOpen={false}
-      closePopup={placeholderFn}
       glassBreakId={glassBreakId}
+      addConcern={placeholderFn}
+      closePopup={placeholderFn}
+      isPopupOpen={false}
     />,
   );
 

@@ -1829,6 +1829,333 @@ export interface getCalendarForPatientQuery {
   },
 };
 
+export interface getCarePlanSuggestionsFromComputedFieldsForPatientQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getCarePlanSuggestionsFromComputedFieldsForPatientQuery {
+  // Care Plan Suggestions From Computed Fields
+  carePlanSuggestionsFromComputedFieldsForPatient:  Array< {
+    id: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string,
+      middleName: string | null,
+      lastName: string,
+      dateOfBirth: string | null,
+      createdAt: string,
+      coreIdentityVerifiedAt: string | null,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        language: string | null,
+        preferredName: string | null,
+        hasUploadedPhoto: boolean | null,
+      },
+      patientState:  {
+        id: string,
+        currentState: CurrentPatientState,
+      },
+    },
+    suggestionType: CarePlanSuggestionType,
+    concernId: string | null,
+    concern:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
+    } | null,
+    goalSuggestionTemplateId: string | null,
+    goalSuggestionTemplate:  {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+        CBOCategoryId: string | null,
+      } >,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
+    acceptedById: string | null,
+    acceptedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedById: string | null,
+    dismissedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedReason: string | null,
+    createdAt: string,
+    updatedAt: string,
+    dismissedAt: string | null,
+    acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      riskArea:  {
+        id: string,
+        title: string,
+      },
+    } | null,
+    riskArea:  {
+      id: string,
+      title: string,
+    } | null,
+    screeningTool:  {
+      id: string,
+      title: string,
+    } | null,
+  } >,
+};
+
+export interface getCarePlanSuggestionsFromRiskAreaAssessmentsForPatientQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getCarePlanSuggestionsFromRiskAreaAssessmentsForPatientQuery {
+  // Care Plan Suggestions From Risk Area Assessments
+  carePlanSuggestionsFromRiskAreaAssessmentsForPatient:  Array< {
+    id: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string,
+      middleName: string | null,
+      lastName: string,
+      dateOfBirth: string | null,
+      createdAt: string,
+      coreIdentityVerifiedAt: string | null,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        language: string | null,
+        preferredName: string | null,
+        hasUploadedPhoto: boolean | null,
+      },
+      patientState:  {
+        id: string,
+        currentState: CurrentPatientState,
+      },
+    },
+    suggestionType: CarePlanSuggestionType,
+    concernId: string | null,
+    concern:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
+    } | null,
+    goalSuggestionTemplateId: string | null,
+    goalSuggestionTemplate:  {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+        CBOCategoryId: string | null,
+      } >,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
+    acceptedById: string | null,
+    acceptedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedById: string | null,
+    dismissedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedReason: string | null,
+    createdAt: string,
+    updatedAt: string,
+    dismissedAt: string | null,
+    acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      riskArea:  {
+        id: string,
+        title: string,
+      },
+    } | null,
+    riskArea:  {
+      id: string,
+      title: string,
+    } | null,
+    screeningTool:  {
+      id: string,
+      title: string,
+    } | null,
+  } >,
+};
+
+export interface getCarePlanSuggestionsFromScreeningToolsForPatientQueryVariables {
+  patientId: string,
+  glassBreakId?: string | null,
+};
+
+export interface getCarePlanSuggestionsFromScreeningToolsForPatientQuery {
+  // Care Plan Suggestions From Screening Tools
+  carePlanSuggestionsFromScreeningToolsForPatient:  Array< {
+    id: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string,
+      middleName: string | null,
+      lastName: string,
+      dateOfBirth: string | null,
+      createdAt: string,
+      coreIdentityVerifiedAt: string | null,
+      patientInfo:  {
+        id: string,
+        gender: Gender | null,
+        language: string | null,
+        preferredName: string | null,
+        hasUploadedPhoto: boolean | null,
+      },
+      patientState:  {
+        id: string,
+        currentState: CurrentPatientState,
+      },
+    },
+    suggestionType: CarePlanSuggestionType,
+    concernId: string | null,
+    concern:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
+    } | null,
+    goalSuggestionTemplateId: string | null,
+    goalSuggestionTemplate:  {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+        CBOCategoryId: string | null,
+      } >,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
+    acceptedById: string | null,
+    acceptedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedById: string | null,
+    dismissedBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    dismissedReason: string | null,
+    createdAt: string,
+    updatedAt: string,
+    dismissedAt: string | null,
+    acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      riskArea:  {
+        id: string,
+        title: string,
+      },
+    } | null,
+    riskArea:  {
+      id: string,
+      title: string,
+    } | null,
+    screeningTool:  {
+      id: string,
+      title: string,
+    } | null,
+  } >,
+};
+
 export interface getCBOCategoriesQuery {
   // all CBO categories
   CBOCategories:  Array< {
@@ -2372,117 +2699,6 @@ export interface getPatientAnswersQuery {
     } | null,
     patientScreeningToolSubmissionId: string | null,
   } >,
-};
-
-export interface getPatientCarePlanSuggestionsQueryVariables {
-  patientId: string,
-  glassBreakId?: string | null,
-};
-
-export interface getPatientCarePlanSuggestionsQuery {
-  // Care Plan Suggestions
-  carePlanSuggestionsForPatient:  Array< {
-    id: string,
-    patientId: string,
-    patient:  {
-      id: string,
-      firstName: string,
-      middleName: string | null,
-      lastName: string,
-      dateOfBirth: string | null,
-      createdAt: string,
-      coreIdentityVerifiedAt: string | null,
-      patientInfo:  {
-        id: string,
-        gender: Gender | null,
-        language: string | null,
-        preferredName: string | null,
-        hasUploadedPhoto: boolean | null,
-      },
-      patientState:  {
-        id: string,
-        currentState: CurrentPatientState,
-      },
-    },
-    suggestionType: CarePlanSuggestionType,
-    concernId: string | null,
-    concern:  {
-      id: string,
-      title: string,
-      createdAt: string,
-      updatedAt: string,
-      deletedAt: string | null,
-      diagnosisCodes:  Array< {
-        id: string,
-        code: string,
-        codesetName: string,
-        label: string,
-        version: string,
-      } > | null,
-    } | null,
-    goalSuggestionTemplateId: string | null,
-    goalSuggestionTemplate:  {
-      id: string,
-      title: string,
-      taskTemplates:  Array< {
-        id: string,
-        title: string,
-        completedWithinNumber: number | null,
-        completedWithinInterval: CompletedWithinInterval | null,
-        repeating: boolean | null,
-        goalSuggestionTemplateId: string,
-        priority: Priority | null,
-        careTeamAssigneeRole: UserRole | null,
-        createdAt: string,
-        updatedAt: string,
-        deletedAt: string | null,
-        CBOCategoryId: string | null,
-      } >,
-      createdAt: string,
-      updatedAt: string,
-      deletedAt: string | null,
-    } | null,
-    acceptedById: string | null,
-    acceptedBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      userRole: UserRole,
-      googleProfileImageUrl: string | null,
-    } | null,
-    dismissedById: string | null,
-    dismissedBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      userRole: UserRole,
-      googleProfileImageUrl: string | null,
-    } | null,
-    dismissedReason: string | null,
-    createdAt: string,
-    updatedAt: string,
-    dismissedAt: string | null,
-    acceptedAt: string | null,
-    patientScreeningToolSubmissionId: string | null,
-    computedField:  {
-      id: string,
-      label: string,
-    } | null,
-    riskAreaAssessmentSubmission:  {
-      id: string,
-      riskArea:  {
-        id: string,
-        title: string,
-      } | null,
-    } | null,
-    patientScreeningToolSubmission:  {
-      id: string,
-      screeningTool:  {
-        id: string,
-        title: string,
-      },
-    } | null,
-  } | null >,
 };
 
 export interface getPatientCarePlanQueryVariables {
@@ -5536,6 +5752,11 @@ export interface getRiskAreaGroupsQuery {
     order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
+    riskAreas:  Array< {
+      id: string,
+      title: string,
+      assessmentType: AssessmentType,
+    } > | null,
   } >,
 };
 
@@ -10521,20 +10742,18 @@ export interface FullCarePlanSuggestionForPatientFragment {
   computedField:  {
     id: string,
     label: string,
-  } | null,
-  riskAreaAssessmentSubmission:  {
-    id: string,
     riskArea:  {
       id: string,
       title: string,
-    } | null,
-  } | null,
-  patientScreeningToolSubmission:  {
-    id: string,
-    screeningTool:  {
-      id: string,
-      title: string,
     },
+  } | null,
+  riskArea:  {
+    id: string,
+    title: string,
+  } | null,
+  screeningTool:  {
+    id: string,
+    title: string,
   } | null,
 };
 

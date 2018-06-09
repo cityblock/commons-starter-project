@@ -14,7 +14,7 @@ describe('Patient Left Navigation Care Team Contact', () => {
       firstName={firstName}
       isVisible={true}
       email="sansa@cityblock.com"
-      getMattermostLink={() => true as any}
+      getMattermostLink={jest.fn()}
     />,
   );
 

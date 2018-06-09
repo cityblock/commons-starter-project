@@ -4,7 +4,7 @@ import TextArea from '../../shared/library/textarea/textarea';
 import { ProgressNoteTextArea } from '../progress-note-textarea';
 
 describe('Progress Note Text Area', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const value = 'Winter is Coming';
 
   const wrapper = shallow(

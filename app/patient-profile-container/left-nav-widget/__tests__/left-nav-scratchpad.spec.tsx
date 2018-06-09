@@ -6,7 +6,7 @@ import { LeftNavScratchPad } from '../left-nav-scratchpad';
 import LeftNavScratchPadStatus from '../left-nav-scratchpad-status';
 
 describe('Patient Left Navigation Scratch Pad', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <LeftNavScratchPad

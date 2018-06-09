@@ -4,7 +4,7 @@ import LeftNavAction from '../left-nav-action';
 import LeftNavActions from '../left-nav-actions';
 
 describe('Patient Left Navigation Action Buttons', () => {
-  const wrapper = shallow(<LeftNavActions onClick={() => true as any} />);
+  const wrapper = shallow(<LeftNavActions onClick={jest.fn()} />);
 
   it('renders all action options', () => {
     expect(wrapper.find(LeftNavAction).length).toBe(4);

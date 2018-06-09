@@ -5,7 +5,7 @@ import { taskTemplate } from '../../../shared/util/test-data';
 import TaskTemplate from '../task-template';
 
 describe('Care Plan Suggestion Task Template', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <TaskTemplate taskTemplate={taskTemplate} selected={false} onToggle={placeholderFn} />,

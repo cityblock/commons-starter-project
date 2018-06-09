@@ -5,7 +5,7 @@ import Text from '../../shared/library/text/text';
 import ProgressNoteWorryScore, { WorryScoreChoice } from '../progress-note-worry-score';
 
 describe('Progress Note Worry Score Field', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   describe('Worry Score Choice', () => {
     const wrapper = shallow(

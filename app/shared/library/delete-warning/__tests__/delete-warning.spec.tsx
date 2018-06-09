@@ -7,7 +7,7 @@ import ModalButtons from '../../modal-buttons/modal-buttons';
 import DeleteWarning from '../delete-warning';
 
 describe('Library Delete Modal Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const titleMessageId = 'Are you sure you want to delete this dragon?';
   const descriptionMessageId = 'If you do the Night King will control it';
 

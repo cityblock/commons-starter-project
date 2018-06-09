@@ -12,7 +12,7 @@ describe('Patient Search Pagination Component', () => {
   const total = 44;
   const pageNumber = 2;
   const pageSize = 10;
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <Pagination

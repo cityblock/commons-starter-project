@@ -5,7 +5,7 @@ import HamburgerMenu from '../../../library/hamburger-menu/hamburger-menu';
 import { PatientConcernOptions } from '../options-menu';
 
 describe('Patient Concern Options Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PatientConcernOptions

@@ -5,7 +5,7 @@ import TextInput from '../../../shared/library/text-input/text-input';
 import { RiskAreaGroupCreate } from '../risk-area-group-create';
 
 describe('Builder Risk Area Group Create', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const errorFn = (message: string) => true as any;
   const wrapper = shallow(
     <RiskAreaGroupCreate

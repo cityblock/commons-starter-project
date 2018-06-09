@@ -5,10 +5,10 @@ import HamburgerMenu from '../../library/hamburger-menu/hamburger-menu';
 import { GoalOptions } from '../goal-options';
 
 describe('Patient Goal Options Menu Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientGoalId = 'nymeria';
   const patientGoalTitle = "Arya's Direwolf";
-  const addTask = () => true as any;
+  const addTask = jest.fn();
 
   const wrapper = shallow(
     <GoalOptions

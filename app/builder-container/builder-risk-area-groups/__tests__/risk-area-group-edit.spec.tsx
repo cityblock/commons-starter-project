@@ -6,7 +6,7 @@ import { riskAreaGroup } from '../../../shared/util/test-data';
 import { RiskAreaGroupEdit } from '../risk-area-group-edit';
 
 describe('Builder Risk Area Group Edit Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <RiskAreaGroupEdit

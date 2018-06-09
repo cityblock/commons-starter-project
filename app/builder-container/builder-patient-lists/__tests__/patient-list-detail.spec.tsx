@@ -7,7 +7,7 @@ import { PatientListDetail } from '../patient-list-detail';
 import PatientListEdit from '../patient-list-edit';
 
 describe('Builder Patient List Detail', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(

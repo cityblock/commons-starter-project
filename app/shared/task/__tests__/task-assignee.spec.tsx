@@ -8,7 +8,7 @@ import { TaskAssignee } from '../task-assignee';
 
 describe('Task Assignee Component', () => {
   const patientId = 'aryaStark';
-  const onAssigneeClick = () => true as any;
+  const onAssigneeClick = jest.fn();
 
   const wrapper = shallow(
     <TaskAssignee

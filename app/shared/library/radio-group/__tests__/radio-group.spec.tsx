@@ -9,7 +9,7 @@ describe('Library Radio Group Component', () => {
   const label1 = "Robb Stark's Direwolf";
   const value2 = 'ghost';
   const label2 = "Jon Snow's Direwolf";
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <RadioGroup>

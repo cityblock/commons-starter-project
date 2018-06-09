@@ -13,7 +13,7 @@ module.exports = {
     pool: {
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 1000,
-      max: 20,
+      max: 200,
       min: 4,
     },
     seeds: {
@@ -37,7 +37,7 @@ module.exports = {
     pool: {
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 1000,
-      max: 20,
+      max: 200,
       min: 4,
     },
   },

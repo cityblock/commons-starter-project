@@ -6,7 +6,7 @@ import GoalSuggestion from '../goal-suggestion';
 import TaskTemplate from '../task-template';
 
 describe('Care Plan Suggestion Goal Suggestion Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <GoalSuggestion

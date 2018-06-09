@@ -8,7 +8,7 @@ import TaskCBOAddInformationFields from '../task-cbo-add-information-fields';
 import { TaskCBOAddInformationPopup } from '../task-cbo-add-information-popup';
 
 describe('Task CBO Referral Add Information Popup', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const wrapper = shallow(
     <TaskCBOAddInformationPopup
       isVisible={true}

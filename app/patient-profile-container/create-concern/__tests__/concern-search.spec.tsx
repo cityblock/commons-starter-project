@@ -8,7 +8,7 @@ import { ConcernSearch } from '../concern-search';
 import ConcernTypeSelect from '../concern-type-select';
 
 describe('Create Concern Modal Concern Select Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const searchTerm = 'sansaStark';
   const id = 'kingsLanding';
   const concern1 = {

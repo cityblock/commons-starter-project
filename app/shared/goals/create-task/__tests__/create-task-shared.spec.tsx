@@ -7,7 +7,7 @@ import CreateTaskDueDate from '../due-date';
 import CreateTaskPriority from '../priority';
 
 describe('Create Task Share Fields', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'jonSnow';
   const title = 'Defeat the Night King';
   const description = 'The epic final battle in the war for the dawn';

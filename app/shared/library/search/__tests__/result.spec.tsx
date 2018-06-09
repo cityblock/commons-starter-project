@@ -8,7 +8,7 @@ describe('Library Search Result Component', () => {
   const title = 'First Of Her Name';
   const searchResult = { title, id };
   const value = '';
-  const onOptionClick = () => true as any;
+  const onOptionClick = jest.fn();
 
   const wrapper = shallow(
     <SearchResult searchResult={searchResult} value={value} onOptionClick={onOptionClick} />,

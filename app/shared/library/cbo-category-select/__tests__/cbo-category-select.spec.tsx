@@ -6,7 +6,7 @@ import Select from '../../select/select';
 import { CBOCategorySelect } from '../cbo-category-select';
 
 describe('CBO Category Select', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const categoryId = CBOCategory2.id;
 
   const wrapper = shallow(

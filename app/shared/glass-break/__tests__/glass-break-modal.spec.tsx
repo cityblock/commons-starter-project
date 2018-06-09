@@ -11,7 +11,7 @@ import GlassBreakModal from '../glass-break-modal';
 import { reasonOptions } from '../reason-options';
 
 describe('Glass Break Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const reason = 'Other';
   const note = 'Winter is Coming';
 

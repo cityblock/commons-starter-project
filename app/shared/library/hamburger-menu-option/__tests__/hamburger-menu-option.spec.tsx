@@ -5,7 +5,7 @@ import Icon from '../../icon/icon';
 import HamburgerMenuOption from '../hamburger-menu-option';
 
 describe('Library Hamburger Menu Option Component', () => {
-  const onClick = () => true as any;
+  const onClick = jest.fn();
   const messageId = 'el';
   const icon = 'event';
 

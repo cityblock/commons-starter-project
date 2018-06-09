@@ -8,7 +8,7 @@ import Search from '../../../library/search/search';
 import DefineGoal from '../define-goal';
 
 describe('Create Goal Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const title = '';
   const goalSuggestionTemplateId = '011';
 

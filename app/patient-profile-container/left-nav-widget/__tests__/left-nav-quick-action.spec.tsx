@@ -7,7 +7,7 @@ import LeftNavQuickAction from '../left-nav-quick-action';
 
 describe('Patient Left Navigation Quick Action Button', () => {
   const quickAction = 'addQuickCall';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <LeftNavQuickAction

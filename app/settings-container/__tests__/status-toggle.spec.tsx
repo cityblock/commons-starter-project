@@ -5,7 +5,7 @@ import ToggleSwitch from '../../shared/library/toggle-switch/toggle-switch';
 import StatusToggle from '../status-toggle';
 
 describe('Settings Status Toggle', () => {
-  const wrapper = shallow(<StatusToggle isAvailable={true} editCurrentUser={() => true as any} />);
+  const wrapper = shallow(<StatusToggle isAvailable={true} editCurrentUser={jest.fn()} />);
 
   it('renders status label', () => {
     expect(wrapper.find(Text).length).toBe(2);

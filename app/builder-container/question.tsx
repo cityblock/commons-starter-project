@@ -60,10 +60,10 @@ interface IState {
 type allProps = IProps & IStateProps & IGraphqlProps;
 
 export class Question extends React.Component<allProps, IState> {
-  editTitleInput: HTMLInputElement | null;
-  editOrderInput: HTMLInputElement | null;
-  titleBody: HTMLDivElement | null;
-  orderBody: HTMLDivElement | null;
+  editTitleInput: HTMLInputElement | null = null;
+  editOrderInput: HTMLInputElement | null = null;
+  titleBody: HTMLDivElement | null = null;
+  orderBody: HTMLDivElement | null = null;
 
   constructor(props: allProps) {
     super(props);
@@ -79,11 +79,6 @@ export class Question extends React.Component<allProps, IState> {
     this.onClickToEditOrder = this.onClickToEditOrder.bind(this);
     this.focusInput = this.focusInput.bind(this);
     this.onSelectChange = this.onSelectChange.bind(this);
-
-    this.editTitleInput = null;
-    this.editOrderInput = null;
-    this.titleBody = null;
-    this.orderBody = null;
 
     this.state = {
       deleteConfirmationInProgress: false,
@@ -369,9 +364,7 @@ export class Question extends React.Component<allProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => {
-                  this.titleBody = div;
-                }}
+                ref={div => (this.titleBody = div)}
                 className={titleTextStyles}
                 onClick={this.onClickToEditTitle}
               >

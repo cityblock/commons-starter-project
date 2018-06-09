@@ -7,7 +7,7 @@ import InfoGroupItem from '../item';
 import Plan from '../plan';
 
 describe('Patient Left Nav Plan Accordion', () => {
-  const wrapper = shallow(<Plan isOpen={false} onClick={() => true as any} patient={patient} />);
+  const wrapper = shallow(<Plan isOpen={false} onClick={jest.fn()} patient={patient} />);
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

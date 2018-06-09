@@ -18,7 +18,7 @@ describe('Task CBO Referral Add Information Fields', () => {
     CBOName: '',
     CBOUrl: '',
   };
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <TaskCBOAddInformationFields

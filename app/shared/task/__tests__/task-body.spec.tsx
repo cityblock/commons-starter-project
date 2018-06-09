@@ -12,7 +12,7 @@ describe('Task Body Component', () => {
   const description = 'Splash sucks :(';
   const goal = 'Become stronger';
   const concern = 'Pokemon master';
-  const editTask = () => true as any;
+  const editTask = jest.fn();
 
   const wrapper = shallow(
     <TaskBody

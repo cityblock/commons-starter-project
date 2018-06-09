@@ -8,7 +8,7 @@ import { address1, address2, address3 } from '../../../shared/util/test-data';
 import { AddressSelect } from '../address-select';
 
 describe('Patient Address Select', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'testId';
   const placeholderMessageId = 'appointmentModal.locationPlaceholder';
 

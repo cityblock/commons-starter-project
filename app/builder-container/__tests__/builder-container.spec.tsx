@@ -18,7 +18,7 @@ it('renders builder container', () => {
       concernsError={null}
       goalsLoading={false}
       goalsError={null}
-      refetchGoals={() => null as any}
+      refetchGoals={jest.fn()}
       assessments={[]}
       concerns={[concern]}
       goals={[goal]}

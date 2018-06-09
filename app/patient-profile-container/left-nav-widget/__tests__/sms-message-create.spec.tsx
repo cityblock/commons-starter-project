@@ -16,7 +16,7 @@ describe('SMS Message Create Form', () => {
 
   const wrapper = shallow(
     <SmsMessageCreate
-      createSmsMessage={() => true as any}
+      createSmsMessage={jest.fn()}
       patient={patientCanReceiveTexts}
       loading={false}
       error={null}

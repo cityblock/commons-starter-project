@@ -48,7 +48,7 @@ const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const renderedCarePlan: JSX.Element[] = activeConcerns.length
     ? []
-    : [<Empty label={copy.noCarePlan} />];
+    : [<Empty key="empty" label={copy.noCarePlan} />];
 
   // get each item in care plan in list to avoid deep nesting
   activeConcerns.forEach((patientConcern, i) => {
@@ -74,7 +74,7 @@ const PrintableMAP: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <Document title={copy.documentTitle}>
-      <Page size="A4" style={styles.page} wrap>
+      <Page size="A4" style={styles.page} wrap={true}>
         <Header title={copy.map} />
         <View style={styles.container}>
           <Divider color="darkGray" />

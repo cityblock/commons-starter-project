@@ -4,7 +4,7 @@ import { AdministerScreeningTool } from '../administer-screening-tool';
 import LeftNavQuickAction from '../left-nav-quick-action';
 
 describe('Patient Left Navigation Quick Action: Administer Screening Tool', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'aryaStark';
 
   const wrapper = shallow(

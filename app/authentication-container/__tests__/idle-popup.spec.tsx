@@ -4,7 +4,7 @@ import { Popup } from '../../shared/popup/popup';
 import { IdlePopup } from '../idle-popup';
 
 describe('Idle popup', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   it('renders visible popup', () => {
     const wrapper = shallow(

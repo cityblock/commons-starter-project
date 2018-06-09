@@ -14,7 +14,7 @@ describe('Patient Left Navigation Quick Actions', () => {
     <LeftNavQuickActions
       patientId={patientId}
       glassBreakId={glassBreakId}
-      onClose={() => true as any}
+      onClose={jest.fn()}
     />,
   );
 

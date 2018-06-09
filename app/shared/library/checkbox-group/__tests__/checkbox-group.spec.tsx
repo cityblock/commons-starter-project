@@ -8,7 +8,7 @@ describe('Library Checkbox Group Component', () => {
   const label1 = "Arya Stark's Direwolf";
   const value2 = 'lady';
   const label2 = "Sansa Stark's Direwolf";
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CheckboxGroup>

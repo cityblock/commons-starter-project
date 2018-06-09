@@ -12,7 +12,7 @@ describe('Patient Left Navigation Widget', () => {
     <LeftNavWidget
       patientId={patientId}
       glassBreakId={glassBreakId}
-      updateSelected={() => true as any}
+      updateSelected={jest.fn()}
       selected={null}
     />,
   );

@@ -7,7 +7,7 @@ import CreateTaskType from '../task-type';
 
 describe('Create Task Modal Select Task Type', () => {
   const value = 'general';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(<CreateTaskType value="" onChange={placeholderFn} />);
 

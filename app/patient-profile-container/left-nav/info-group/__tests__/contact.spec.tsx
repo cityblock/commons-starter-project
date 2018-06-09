@@ -12,7 +12,7 @@ import InfoGroupHeader from '../header';
 import InfoGroupItem from '../item';
 
 describe('Patient Left Navigation Contact Accordion', () => {
-  const wrapper = shallow(<Contact patient={patient} onClick={() => true as any} isOpen={false} />);
+  const wrapper = shallow(<Contact patient={patient} onClick={jest.fn()} isOpen={false} />);
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

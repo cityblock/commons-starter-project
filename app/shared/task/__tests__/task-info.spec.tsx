@@ -8,7 +8,7 @@ describe('Task Info Component', () => {
   const description = 'There are no words';
   const taskId = 'brennanMoore';
 
-  const editTask = () => true as any;
+  const editTask = jest.fn();
   const wrapper = shallow(
     <TaskInfo
       title={title}

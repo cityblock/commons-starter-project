@@ -7,7 +7,7 @@ import TaskProgress from '../task-progress';
 describe('Task Progress Component - Due Date and Completion Toggle', () => {
   const dueAt = '2017-11-10 17:33:51.972-05';
   const completedAt = '';
-  const editTask = () => true as any;
+  const editTask = jest.fn();
   const taskId = 'common';
 
   const wrapper = shallow(

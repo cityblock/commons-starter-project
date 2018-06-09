@@ -4,7 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import DnDPatientConcern from '../drag-and-drop-patient-concern';
 
 describe('Drag and Drop Patient Concern', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const id = 'vulpix';
   const index = 11;
   const userId = 'growlithe';

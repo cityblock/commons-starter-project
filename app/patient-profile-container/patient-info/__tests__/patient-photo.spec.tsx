@@ -15,7 +15,7 @@ describe('Renders Patient Photo Component', () => {
     <PatientPhoto
       patientPhoto={patientPhoto}
       onChange={onChange}
-      openPatientPhotoPopup={() => true as any}
+      openPatientPhotoPopup={jest.fn()}
       patientId={patientId}
       patientInfoId="lady"
       gender={'female' as any}

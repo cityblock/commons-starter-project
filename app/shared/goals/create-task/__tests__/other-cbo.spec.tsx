@@ -6,7 +6,7 @@ import CreateTaskOtherCBO from '../other-cbo';
 describe('Create Task Modal Other CBO Component', () => {
   const CBOName = "Arya's Meat Pie Pantry";
   const CBOUrl = 'www.agirlhasnoname.com';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CreateTaskOtherCBO CBOName={CBOName} CBOUrl={CBOUrl} onChange={placeholderFn} />,

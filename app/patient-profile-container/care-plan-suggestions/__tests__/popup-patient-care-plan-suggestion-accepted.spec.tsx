@@ -9,7 +9,7 @@ import { PopupPatientCarePlanSuggestionAccepted } from '../popup-patient-care-pl
 import PopupPatientCarePlanSuggestionAcceptedModalBody from '../popup-patient-care-plan-suggestion-accepted-modal-body';
 
 describe('Care Plan Suggestion Accept Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PopupPatientCarePlanSuggestionAccepted

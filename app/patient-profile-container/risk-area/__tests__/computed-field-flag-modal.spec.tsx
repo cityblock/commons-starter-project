@@ -9,7 +9,7 @@ import { Popup } from '../../../shared/popup/popup';
 import { ComputedFieldFlagModal } from '../computed-field-flag-modal';
 
 describe('Computed Field Flag Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const wrapper = shallow(
     <ComputedFieldFlagModal
       visible={true}

@@ -6,7 +6,7 @@ import ModalButtons from '../modal-buttons';
 describe('Library Modal Buttons Component', () => {
   const cancelMessageId = 'Demogorgon!';
   const submitMessageId = 'Eleven';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <ModalButtons

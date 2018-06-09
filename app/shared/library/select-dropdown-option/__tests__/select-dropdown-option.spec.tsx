@@ -5,7 +5,7 @@ import SelectDropdownOption from '../select-dropdown-option';
 
 describe('Library Select Dropdown Option Component', () => {
   const value = 'Sansa Stark';
-  const onClick = () => true as any;
+  const onClick = jest.fn();
 
   it('renders basic option component', () => {
     const wrapper = shallow(<SelectDropdownOption value={value} onClick={onClick} />);

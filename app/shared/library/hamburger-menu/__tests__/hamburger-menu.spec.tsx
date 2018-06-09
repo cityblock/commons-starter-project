@@ -5,7 +5,7 @@ import Icon from '../../icon/icon';
 import { Divider, HamburgerMenu } from '../hamburger-menu';
 
 describe('Library Hamburger Menu Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   it('renders icon and no options if closed', () => {
     const wrapper = shallow(

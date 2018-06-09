@@ -11,7 +11,7 @@ import PatientLatestSmsMessage from '../patient-latest-sms-message';
 import PatientListItemBody from '../patient-list-item-body';
 
 describe('Dashboard Patient List Item Body', () => {
-  const wrapper = shallow(<PatientListItemBody patient={patient} onClick={() => true as any} />);
+  const wrapper = shallow(<PatientListItemBody patient={patient} onClick={jest.fn()} />);
 
   it('renders formatted cityblock ID', () => {
     expect(wrapper.find(Text).length).toBe(2);

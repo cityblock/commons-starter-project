@@ -5,7 +5,7 @@ import Select from '../select';
 
 describe('Library Select Component', () => {
   const value = 'Venusaur';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
   const className = 'grassPokemon';
 
   const wrapper = shallow(

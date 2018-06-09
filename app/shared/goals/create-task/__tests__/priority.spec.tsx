@@ -6,7 +6,7 @@ import CreateTaskPriority from '../priority';
 
 describe('Create Task Modal Priority Component', () => {
   const value = 'low' as any;
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(<CreateTaskPriority value={value} onChange={onChange} />);
 

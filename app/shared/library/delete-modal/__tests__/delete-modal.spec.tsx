@@ -6,7 +6,7 @@ import Icon from '../../icon/icon';
 import DeleteModal from '../delete-modal';
 
 describe('Library Delete Modal Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const titleMessageId = 'Are you sure you want to delete this dragon?';
   const descriptionMessageId = 'If you do the Night King will control it';
 

@@ -10,7 +10,7 @@ describe('Task CBO referral date component', () => {
   const value = 'newYearsEve';
   const taskId = 'keepResolutions';
   const CBOReferralId = 'resolutionServices';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <TaskCBOReferralDate

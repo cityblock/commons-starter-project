@@ -15,7 +15,7 @@ describe('Patient Left Navigation Open Component', () => {
     <LeftNavOpen
       patientId={patientId}
       selected={null}
-      onClose={() => true as any}
+      onClose={jest.fn()}
       isOpen={false}
       glassBreakId={glassBreakId}
     />,

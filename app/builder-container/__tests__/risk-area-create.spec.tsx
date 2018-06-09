@@ -20,7 +20,7 @@ describe('Builder Risk Area Create component', () => {
     title: "Robb Stark's Direwolf",
   };
   const riskAreaGroups = [riskAreaGroup1, riskAreaGroup2, riskAreaGroup3] as any;
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const history = { push: jest.fn() } as any;
   const errorFn = (message: string) => true as any;
 

@@ -7,7 +7,7 @@ import PhotoModal from '../photo-modal';
 import PhotoModalButtons from '../photo-modal-buttons';
 
 describe('Library Photo Modal Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const imgData = new Blob(['daenerysTargaryen']);
 
   const wrapper = shallow(

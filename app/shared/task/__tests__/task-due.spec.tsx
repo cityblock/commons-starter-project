@@ -7,7 +7,7 @@ import TaskDue from '../task-due';
 const oldDate = Date.now;
 const dueAt = '2017-12-01 00:00:00-05';
 const taskId = 'aryaStark';
-const editTask = () => true as any;
+const editTask = jest.fn();
 
 describe('Task Due Date Component', () => {
   let wrapper: ShallowWrapper<any, any>;

@@ -15,7 +15,7 @@ import TaskProgress from '../task-progress';
 import TaskTracking from '../task-tracking';
 
 describe('Task Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const routeBase = '/tasks';
   const taskId = taskWithComment.id;
   const patientId = taskWithComment.patientId;

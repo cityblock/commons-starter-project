@@ -5,7 +5,7 @@ import TextArea from '../textarea';
 
 describe('Library TextArea Component', () => {
   const value = 'Eleven';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   it('renders textarea with correct value and change handler', () => {
     const wrapper = shallow(<TextArea value={value} onChange={onChange} />);
@@ -43,8 +43,8 @@ describe('Library TextArea Component', () => {
   });
 
   it('passes optional handlers for on blur and on focus', () => {
-    const onBlur = () => true as any;
-    const onFocus = () => true as any;
+    const onBlur = jest.fn();
+    const onFocus = jest.fn();
 
     const wrapper = shallow(
       <TextArea value={value} onChange={onChange} onBlur={onBlur} onFocus={onFocus} />,

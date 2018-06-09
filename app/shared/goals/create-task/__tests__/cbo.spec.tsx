@@ -10,7 +10,7 @@ import { OTHER_CBO } from '../create-task';
 import CreateTaskOtherCBO from '../other-cbo';
 
 describe('Create Task Modal CBO Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const categoryId = 'foodServices';
 
   const wrapper = shallow(

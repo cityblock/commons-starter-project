@@ -8,7 +8,7 @@ import { getFamilyMemberInfo, getProviderInfo } from '../get-info-helpers';
 import CareTeamMultiSelect from '../user-multi-select';
 
 describe('External Care Team Multi Select', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = patient.id;
   const name = 'familyMember';
   const placeholderMessageId = 'appointmentModal.externalGuestPlaceholder';

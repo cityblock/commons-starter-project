@@ -5,7 +5,7 @@ import { PrintMapButton } from '../print-map-button';
 
 describe('Print MAP Button', () => {
   const patientId = 'sansaStark';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PrintMapButton patientId={patientId} generateJwtForPdf={placeholderFn} />,

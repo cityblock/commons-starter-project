@@ -11,7 +11,7 @@ describe('Task Tracking Component', () => {
   const patientId = 'nala';
   const priority = 'high' as Priority;
   const followers = taskWithComment.followers;
-  const onPriorityClick = () => true as any;
+  const onPriorityClick = jest.fn();
 
   const wrapper = shallow(
     <TaskTracking

@@ -10,7 +10,7 @@ describe('Create Task Modal Component', () => {
   const goal = 'Find 008';
   const patientId = '011';
   const patientGoalId = 'terryIves';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CreateTaskModal

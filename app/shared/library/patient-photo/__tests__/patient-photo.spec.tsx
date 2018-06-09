@@ -4,7 +4,7 @@ import { PatientPhoto } from '../patient-photo';
 import PatientPhotoImage from '../patient-photo-image';
 
 describe('Library Patient Photo Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const imgUrl = '../lady/of/winterfell.png';
   const className = 'redHair';
 

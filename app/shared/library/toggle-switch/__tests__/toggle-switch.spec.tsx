@@ -4,7 +4,7 @@ import Icon from '../../icon/icon';
 import ToggleSwitch from '../toggle-switch';
 
 describe('Library Toggle Switch Component', () => {
-  const wrapper = shallow(<ToggleSwitch isOn={true} onClick={() => true as any} />);
+  const wrapper = shallow(<ToggleSwitch isOn={true} onClick={jest.fn()} />);
 
   it('renders background', () => {
     expect(

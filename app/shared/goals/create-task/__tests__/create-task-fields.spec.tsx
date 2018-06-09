@@ -24,7 +24,7 @@ describe('Create Task Modal Fields', () => {
     CBOId: '',
   } as any;
 
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CreateTaskFields

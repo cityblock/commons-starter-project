@@ -6,7 +6,7 @@ import CreateTaskDescription from '../description';
 
 describe('Create Task Modal Description Component', () => {
   const value = 'Eleven';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(
     <CreateTaskDescription value={value} onChange={onChange} taskType="general" />,

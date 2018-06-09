@@ -30,7 +30,7 @@ describe('Left Nav Messages', () => {
       smsMessages={smsMessages}
       messagesError={null}
       messagesLoading={false}
-      subscribeToMore={() => true as any}
+      subscribeToMore={jest.fn()}
     />,
   );
 

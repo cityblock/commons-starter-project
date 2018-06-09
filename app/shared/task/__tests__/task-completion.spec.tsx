@@ -4,8 +4,8 @@ import { TaskCompletion } from '../task-completion';
 
 describe('Task Complete Toggle Button', () => {
   const taskId = 'padmaLakshmi';
-  const completeTask = () => true as any;
-  const uncompleteTask = () => true as any;
+  const completeTask = jest.fn();
+  const uncompleteTask = jest.fn();
 
   it('renders a button if not complete', () => {
     const completedAt = '';

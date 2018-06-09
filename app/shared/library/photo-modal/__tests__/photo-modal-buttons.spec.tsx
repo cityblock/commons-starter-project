@@ -4,7 +4,7 @@ import ModalButtons from '../../modal-buttons/modal-buttons';
 import PhotoModalButtons from '../photo-modal-buttons';
 
 describe('Library Photo Modal Buttons Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PhotoModalButtons

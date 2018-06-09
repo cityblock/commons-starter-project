@@ -7,7 +7,7 @@ import SearchInput from '../input';
 describe('Library Search Input Component', () => {
   const value = 'Arya and Sansa';
   const placeholderMessageId = 'Enter Favorite Starks';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(
     <SearchInput value={value} placeholderMessageId={placeholderMessageId} onChange={onChange} />,

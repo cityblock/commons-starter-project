@@ -10,7 +10,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   const patientId = 'bulbasaur';
   const selectedTaskId = '';
   const selectedGoalId = '';
-  const patientConcernBulkEdit = () => true as any;
+  const patientConcernBulkEdit = jest.fn();
 
   const activeConcern1 = {
     id: 'activeConcern1',

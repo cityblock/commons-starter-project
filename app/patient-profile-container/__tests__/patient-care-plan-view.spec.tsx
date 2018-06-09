@@ -12,7 +12,7 @@ describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
   const glassBreakId = 'lady';
   const routeBase = '/patients';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const match = { params: { patientId: patient.id, subTab: 'active' as any } };
   const wrapper = shallow(
     <PatientCarePlanView

@@ -4,7 +4,7 @@ import Icon from '../../../shared/library/icon/icon';
 import LeftNavAction from '../left-nav-action';
 
 describe('Patient Left Navigation Action Button', () => {
-  const wrapper = shallow(<LeftNavAction action="scratchPad" onClick={() => true as any} />);
+  const wrapper = shallow(<LeftNavAction action="scratchPad" onClick={jest.fn()} />);
 
   it('renders button', () => {
     expect(wrapper.find('button').props().className).toBe('button');

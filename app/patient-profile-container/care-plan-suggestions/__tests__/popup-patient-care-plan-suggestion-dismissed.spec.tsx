@@ -10,7 +10,7 @@ import {
 import { PopupPatientCarePlanSuggestionDismissed } from '../popup-patient-care-plan-suggestion-dismissed';
 
 describe('Dismiss Care Plan Suggestion Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PopupPatientCarePlanSuggestionDismissed

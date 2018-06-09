@@ -25,7 +25,7 @@ const patientPanel = {
 
 describe('Contacts Container', () => {
   const wrapper = shallow(
-    <ContactsContainer generateJwtForVcf={() => true as any} patientPanel={patientPanel} />,
+    <ContactsContainer generateJwtForVcf={jest.fn()} patientPanel={patientPanel} />,
   );
 
   it('renders mobile header', () => {

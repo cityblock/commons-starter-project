@@ -7,7 +7,7 @@ import StatusToggle from '../status-toggle';
 
 describe('Settings Left Rail', () => {
   const wrapper = shallow(
-    <SettingsLeftRail currentUser={currentUser} editCurrentUser={() => true as any} />,
+    <SettingsLeftRail currentUser={currentUser} editCurrentUser={jest.fn()} />,
   );
 
   it('renders container', () => {

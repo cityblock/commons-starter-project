@@ -5,7 +5,7 @@ import Icon from '../../icon/icon';
 import Button from '../button';
 
 describe('Library Button Component', () => {
-  const onClick = () => true as any;
+  const onClick = jest.fn();
 
   it('returns button when message id given', () => {
     const messageId = 'charmander';

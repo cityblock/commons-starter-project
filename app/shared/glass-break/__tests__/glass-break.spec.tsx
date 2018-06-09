@@ -14,7 +14,7 @@ describe('Glass Break Component', () => {
     <GlassBreak
       resource={resource}
       patientName={patientName}
-      createGlassBreak={() => true as any}
+      createGlassBreak={jest.fn()}
     />,
   );
 

@@ -5,7 +5,7 @@ import Button from '../../library/button/button';
 import { TaskDelete } from '../task-delete';
 
 describe('Task Delete Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const taskId = 'eevee';
   const patientId = 'ash';
 

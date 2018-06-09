@@ -6,7 +6,7 @@ import PrioritySelect from '../priority-select';
 
 describe('Task Priority Select Component', () => {
   const priority = 'high' as any;
-  const onPriorityClick = () => true as any;
+  const onPriorityClick = jest.fn();
 
   const wrapper = shallow(<PrioritySelect priority={priority} onPriorityClick={onPriorityClick} />);
 

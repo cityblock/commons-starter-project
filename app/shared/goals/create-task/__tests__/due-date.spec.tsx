@@ -6,7 +6,7 @@ import CreateTaskDueDate from '../due-date';
 
 describe('Create Task Modal Due Date Component', () => {
   const value = 'Eleven';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(
     <CreateTaskDueDate value={value} onChange={onChange} taskType="general" />,

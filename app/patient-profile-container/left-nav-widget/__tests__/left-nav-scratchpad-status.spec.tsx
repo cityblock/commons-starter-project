@@ -13,7 +13,7 @@ describe('Patient Left Navigation ScratchPad Status', () => {
       charCount={charCount}
       saveSuccess={false}
       saveError={false}
-      resaveScratchPad={() => true as any}
+      resaveScratchPad={jest.fn()}
     />,
   );
 

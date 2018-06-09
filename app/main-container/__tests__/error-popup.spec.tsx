@@ -5,7 +5,7 @@ import { Popup } from '../../shared/popup/popup';
 import { ErrorPopup } from '../error-popup';
 
 describe('Error Popup Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const errorMessage = 'some test error message';
 
   const wrapper = shallow(

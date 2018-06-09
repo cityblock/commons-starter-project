@@ -5,7 +5,7 @@ import { TaskCBOReferralView } from '../task-cbo-referral-view';
 
 describe('Task CBO Referral view button', () => {
   const taskId = 'trainRhaegal';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <TaskCBOReferralView

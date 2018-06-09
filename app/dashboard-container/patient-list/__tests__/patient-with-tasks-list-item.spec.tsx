@@ -6,7 +6,7 @@ import PatientListItem, { IProps } from '../patient-list-item';
 import { PatientWithTasksListItem } from '../patient-with-tasks-list-item';
 
 describe('Dashboard Patient with Tasks List Item', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const selectedPatientId = 'jonSnow';
 
   const wrapper = shallow(

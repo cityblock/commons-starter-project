@@ -10,7 +10,7 @@ describe('Care Plan Suggestions Modal', () => {
     <CarePlanSuggestions
       isVisible={true}
       patientId="sansaStark"
-      closePopup={() => true as any}
+      closePopup={jest.fn()}
       carePlanSuggestions={[carePlanSuggestionWithConcern, carePlanSuggestionWithGoal]}
       match={{} as any}
       staticContext={{} as any}

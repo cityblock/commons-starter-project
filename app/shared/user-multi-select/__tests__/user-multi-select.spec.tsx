@@ -5,7 +5,7 @@ import SelectDropdown from '../../library/select-dropdown/select-dropdown';
 import UserMultiSelect from '../user-multi-select';
 
 describe('Care Team Multi Select', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const name = 'careMember';
   const placeholderMessageId = 'something.id';
 

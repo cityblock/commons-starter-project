@@ -40,7 +40,7 @@ describe('Library Modal Header Component', () => {
       titleMessageId={titleMessageId}
       bodyMessageId={bodyMessageId}
       color="navy"
-      closePopup={() => true as any}
+      closePopup={jest.fn()}
     />,
   );
 

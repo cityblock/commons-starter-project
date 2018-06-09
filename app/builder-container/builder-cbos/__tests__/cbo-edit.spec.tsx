@@ -8,7 +8,7 @@ import { CBO } from '../../../shared/util/test-data';
 import { CBOEdit } from '../cbo-edit';
 
 describe('Builder CBO Edit Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CBOEdit close={placeholderFn} deleteCBO={placeholderFn} editCBO={placeholderFn} CBO={CBO} />,

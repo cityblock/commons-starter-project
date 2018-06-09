@@ -8,7 +8,7 @@ import InternalCareTeamMultiSelectContainer from '../internal-care-team-multi-se
 import UserMultiSelect from '../user-multi-select';
 
 describe('Internal Care Team Multi Select', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = patient.id;
   const name = 'careMember';
   const placeholderMessageId = 'appointmentModal.guestPlaceholder';

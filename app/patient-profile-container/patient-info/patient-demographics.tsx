@@ -33,16 +33,31 @@ interface IProps {
 type allProps = IProps & RouteComponentProps<IProps>;
 
 export class PatientDemographics extends React.Component<allProps> {
+  basic: React.Component<any> | null = null;
+  photo: React.Component<any> | null = null;
+  advancedDirectives: React.Component<any> | null = null;
+
   componentDidUpdate() {
     const { history, routeBase, location } = this.props;
     const hash = location.hash.replace('#', '');
 
     if (hash) {
-      const node = ReactDOM.findDOMNode(this.refs[hash]);
+      const node = (n => {
+        switch (n) {
+          case 'basic':
+            return this.basic;
+          case 'photo':
+            return this.photo;
+          case 'advancedDirectives':
+            return this.advancedDirectives;
+          default:
+            return null;
+        }
+      })(hash);
 
       if (node) {
         // scrollIntoView is on all nodes https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-        (node as any).scrollIntoView();
+        (ReactDOM.findDOMNode(node) as any).scrollIntoView();
         history.push(routeBase);
       }
     }
@@ -63,7 +78,7 @@ export class PatientDemographics extends React.Component<allProps> {
           onChange={onChange}
           patientId={patient.patientId}
           patientInfoId={patient.patientInfoId}
-          ref="basic"
+          ref={ref => (this.basic = ref)}
         />
         <ContactInfo
           contactInfo={patient.contact}
@@ -78,7 +93,7 @@ export class PatientDemographics extends React.Component<allProps> {
           patientInfoId={patient.patientInfoId}
           onChange={onChange}
           routeBase={routeBase}
-          ref="advancedDirectives"
+          ref={ref => (this.advancedDirectives = ref)}
         />
         <PatientPhoto
           patientPhoto={patient.photo}
@@ -86,7 +101,7 @@ export class PatientDemographics extends React.Component<allProps> {
           patientId={patient.patientId}
           patientInfoId={patient.patientInfoId}
           gender={patient.basic.gender}
-          ref="photo"
+          ref={ref => (this.photo = ref)}
         />
       </div>
     );

@@ -7,7 +7,7 @@ import PatientSearchInput from '../input';
 
 describe('Patient Search Input Component', () => {
   const searchTerm = 'shaggydog';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PatientSearchInput

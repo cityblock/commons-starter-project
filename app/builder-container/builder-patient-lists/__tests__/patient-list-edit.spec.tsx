@@ -6,7 +6,7 @@ import { patientList } from '../../../shared/util/test-data';
 import { PatientListEdit } from '../patient-list-edit';
 
 describe('Builder Patient List Edit Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PatientListEdit

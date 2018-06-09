@@ -1,44 +1,26 @@
 {
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rulesDirectory": ["node_modules/tslint-microsoft-contrib", "rules"],
   "rules": {
     // Rules where we disagree with tslint:recommended
     "curly": false,
-    "quotemark": false, // handled by prettier
-    "indent": [true, "spaces"],
     "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
     "check-model-variable": true, // our custom rule to check that each model has "hasPHI" boolean class variable
     "triple-equals": true,
-    "max-line-length": false, // handeled by prettier
     "ordered-imports": [
       true,
       {
         "named-imports-order": "lowercase-first" // aka Nehabetical
       }
     ],
-    "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "object-literal-key-quotes": [true, "as-needed"],
     "variable-name": [true, "ban-keywords", "allow-pascal-case"],
     "object-literal-sort-keys": false,
     "member-access": false,
-    // no parens required around one param lambdas.
-    "arrow-parens": [true, "ban-single-arg-parens"],
     "only-arrow-functions": [true, "allow-named-functions"],
     "arrow-return-shorthand": false,
     // New rules that we add beyond tslint:recommended
     "no-angle-bracket-type-assertion": true,
     "interface-over-type-literal": true,
-    "space-before-function-paren": [
-      true,
-      {
-        "anonymous": "never",
-        "asyncArrow": "always",
-        "constructor": "never",
-        "method": "never",
-        "named": "never"
-      }
-    ],
-    "import-spacing": true,
     "no-string-throw": true,
     "prefer-const": true,
     "no-for-in-array": true,
@@ -70,6 +52,10 @@
     "no-string-based-set-interval": true,
     "no-string-based-set-timeout": true,
     "no-eval": true,
-    "no-return-await": true
+    "no-return-await": true,
+    // Where we disagree with tslint-react
+    "jsx-boolean-value": false,
+    "jsx-no-lambda": false, // would like to re-enable this one
+    "jsx-use-translation-function": false // would like to enable this one but requires significant work in Builder
   }
 }

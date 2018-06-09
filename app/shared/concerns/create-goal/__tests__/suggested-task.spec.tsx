@@ -5,7 +5,7 @@ import SuggestedTask from '../suggested-task';
 
 describe('Suggested Task Component in Create Goal Modal', () => {
   const title = 'Stranger Things 2';
-  const onClick = () => true as any;
+  const onClick = jest.fn();
 
   const wrapper = shallow(<SuggestedTask title={title} onClick={onClick} />);
 

@@ -8,7 +8,7 @@ import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestions from '../goal-suggestions';
 
 describe('Care Plan Suggestions Goal Suggestion List', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <GoalSuggestions

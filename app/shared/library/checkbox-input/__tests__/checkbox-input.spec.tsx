@@ -5,7 +5,7 @@ import CheckboxInput from '../checkbox-input';
 describe('Library Checkbox Input Component', () => {
   const value = 'jonSnow';
   const label = 'King in the North';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(<CheckboxInput value={value} onChange={placeholderFn} checked={false} />);
 

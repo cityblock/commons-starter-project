@@ -4,7 +4,7 @@ import { AddProgressNote } from '../add-progress-note';
 import LeftNavQuickAction from '../left-nav-quick-action';
 
 describe('Patient Left Navigation Quick Action: Add Progress Note', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'aryaStark';
 
   const wrapper = shallow(

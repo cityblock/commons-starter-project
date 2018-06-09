@@ -11,7 +11,7 @@ describe('Patient Left Navigation Care Team Member', () => {
   const wrapper = shallow(
     <CareTeamMember
       careTeamMember={user}
-      handleClick={() => true as any}
+      handleClick={jest.fn()}
       isSelected={false}
       isLead={false}
     />,

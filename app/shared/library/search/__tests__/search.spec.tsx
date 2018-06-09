@@ -6,7 +6,7 @@ import Search from '../search';
 
 describe('Library Search Component', () => {
   const value = 'Sansa';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const searchOption1 = {
     title: 'Lady of Winterfell',
     id: 'sansa',

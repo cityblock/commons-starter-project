@@ -15,7 +15,7 @@ describe('Library Search Results Component', () => {
   const value = 'queen';
   const emptyPlaceholderMessageId = 'No lords or ladies matching search term';
 
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <SearchResults

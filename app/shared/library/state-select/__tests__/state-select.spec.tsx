@@ -6,7 +6,7 @@ import StateSelect from '../state-select';
 
 describe('Library State Select Component', () => {
   const value = 'NY';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(<StateSelect value={value} onChange={placeholderFn} />);
 

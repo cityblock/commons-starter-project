@@ -6,7 +6,7 @@ import InfoGroupHeader from '../header';
 
 describe('Patient Left Navigation Info Group Header', () => {
   const wrapper = shallow(
-    <InfoGroupHeader selected="demographics" onClick={() => true as any} isOpen={false} />,
+    <InfoGroupHeader selected="demographics" onClick={jest.fn()} isOpen={false} />,
   );
 
   it('renders button', () => {

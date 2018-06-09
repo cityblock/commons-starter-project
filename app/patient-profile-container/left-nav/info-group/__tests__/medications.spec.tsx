@@ -15,7 +15,7 @@ describe('Patient Left Nav Medications Accordion', () => {
   });
   const container = mount(
     <ApolloTestProvider graphqlMocks={graphqlMocks()}>
-      <Medications isOpen={false} onClick={() => true as any} patientId="patientId" />
+      <Medications isOpen={false} onClick={jest.fn()} patientId="patientId" />
     </ApolloTestProvider>,
   );
 
@@ -39,7 +39,7 @@ describe('Patient Left Nav Medications Accordion', () => {
   it('opens info group header', () => {
     const openContainer = mount(
       <ApolloTestProvider graphqlMocks={graphqlMocks()}>
-        <Medications isOpen={true} onClick={() => true as any} patientId="patientId" />
+        <Medications isOpen={true} onClick={jest.fn()} patientId="patientId" />
       </ApolloTestProvider>,
     );
     const wrapper = openContainer.update();

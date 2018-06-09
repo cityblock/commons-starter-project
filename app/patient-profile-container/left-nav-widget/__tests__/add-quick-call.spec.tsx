@@ -4,7 +4,7 @@ import { AddQuickCall } from '../add-quick-call';
 import LeftNavQuickAction from '../left-nav-quick-action';
 
 describe('Patient Left Navigation Quick Action: Add Quick Call', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const patientId = 'aryaStark';
 
   const wrapper = shallow(

@@ -4,7 +4,7 @@ import PhotoModal from '../../../shared/library/photo-modal/photo-modal';
 import { PatientPhotoPopup } from '../patient-photo-popup';
 
 describe('Patient Photo Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <PatientPhotoPopup

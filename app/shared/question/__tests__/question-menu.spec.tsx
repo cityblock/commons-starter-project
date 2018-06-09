@@ -5,7 +5,7 @@ import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu
 import { PatientQuestionMenu } from '../question-menu';
 
 describe('Patient Question Menu', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const questionId = 'warForTheDawn';
 
   const wrapper = shallow(

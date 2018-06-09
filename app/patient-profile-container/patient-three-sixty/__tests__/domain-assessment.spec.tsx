@@ -39,7 +39,7 @@ describe('Patient 360 Domain Assessment List Item', () => {
       routeBase={routeBase}
       riskArea={riskArea}
       suppressed={false}
-      markAsSuppressed={() => true as any}
+      markAsSuppressed={jest.fn()}
     />,
   );
 

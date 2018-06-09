@@ -7,7 +7,7 @@ import SuggestedTask from '../suggested-task';
 import SuggestedTasks from '../suggested-tasks';
 
 describe('Suggested Tasks Component in Create Goal Modal', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const title = 'The Flea and the Acrobat';
   const id1 = 'janeIves';
   const id2 = 'nancyWheeler';

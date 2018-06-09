@@ -6,7 +6,7 @@ import MobileHeader from '../../shared/library/mobile-header/mobile-header';
 import { VoicemailContainer } from '../voicemail-container';
 
 describe('Voicemail Container', () => {
-  const wrapper = shallow(<VoicemailContainer getSignedVoicemailUrl={() => true as any} />);
+  const wrapper = shallow(<VoicemailContainer getSignedVoicemailUrl={jest.fn()} />);
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

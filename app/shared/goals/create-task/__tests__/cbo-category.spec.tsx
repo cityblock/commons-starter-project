@@ -7,7 +7,7 @@ import CreateTaskCBOCategory, { MAP_LINK } from '../cbo-category';
 
 describe('Create Task Modal CBO Category Component', () => {
   const categoryId = 'nightsWatch';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(<CreateTaskCBOCategory categoryId="" onChange={onChange} />);
 

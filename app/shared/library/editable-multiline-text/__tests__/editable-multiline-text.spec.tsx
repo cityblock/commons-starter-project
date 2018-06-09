@@ -7,7 +7,7 @@ import { EditableMultilineText } from '../editable-multiline-text';
 
 describe('Library Editable Text Component', () => {
   const text = 'Mike at the Snow Ball';
-  const onSubmit = () => true as any;
+  const onSubmit = jest.fn();
   const wrapper = shallow(<EditableMultilineText text={text} onSubmit={onSubmit} />);
 
   it('renders text', () => {

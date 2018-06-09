@@ -4,7 +4,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import DnDPatientConcerns from '../drag-and-drop-patient-concerns';
 
 describe('Drag and Drop Patient Concerns Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   it('renders droppable wrapper for inactive concerns', () => {
     const wrapper = shallow(

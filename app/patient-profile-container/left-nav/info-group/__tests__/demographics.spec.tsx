@@ -8,7 +8,7 @@ import InfoGroupItem from '../item';
 
 describe('Patient Left Nav Demographics', () => {
   const wrapper = shallow(
-    <Demographics isOpen={false} onClick={() => true as any} patient={patient} />,
+    <Demographics isOpen={false} onClick={jest.fn()} patient={patient} />,
   );
 
   it('renders container', () => {

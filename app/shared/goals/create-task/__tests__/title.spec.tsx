@@ -6,7 +6,7 @@ import CreateTaskTitle from '../title';
 
 describe('Create Task Modal Title Component', () => {
   const value = 'Eleven';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   const wrapper = shallow(<CreateTaskTitle value={value} onChange={onChange} />);
 

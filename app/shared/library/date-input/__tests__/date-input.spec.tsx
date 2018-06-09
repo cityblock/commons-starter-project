@@ -5,7 +5,7 @@ import DateInput, { DEFAULT_FORMAT } from '../date-input';
 
 describe('Library Date Input Component', () => {
   const value = '2017-11-07T13:45:14.532Z';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(<DateInput value={value} onChange={placeholderFn} />);
 

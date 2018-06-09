@@ -12,7 +12,7 @@ describe('Dashboard Patient List Item', () => {
   const match = {} as any;
   const wrapper = shallow(
     <PatientListItem
-      openMessages={() => true as any}
+      openMessages={jest.fn()}
       match={match}
       location={location}
       history={history}

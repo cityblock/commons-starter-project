@@ -7,7 +7,7 @@ import { CBODetail } from '../cbo-detail';
 import CBOEdit from '../cbo-edit';
 
 describe('Builder CBO Detail', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
   const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(

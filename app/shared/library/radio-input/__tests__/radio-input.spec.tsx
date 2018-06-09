@@ -6,7 +6,7 @@ describe('Library Radio Input Component', () => {
   const value = 'sansaStark';
   const label = 'Lady of Winterfell';
   const name = 'GoT';
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <RadioInput value={value} onChange={placeholderFn} checked={false} name={name} />,

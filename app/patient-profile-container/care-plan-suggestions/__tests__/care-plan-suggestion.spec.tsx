@@ -12,7 +12,7 @@ import CarePlanSuggestion from '../care-plan-suggestion';
 import SuggestionSource from '../suggestion-source';
 
 describe('Care Plan Suggestion Component', () => {
-  const placeholderFn = () => true as any;
+  const placeholderFn = jest.fn();
 
   const wrapper = shallow(
     <CarePlanSuggestion

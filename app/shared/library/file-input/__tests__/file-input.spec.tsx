@@ -5,7 +5,7 @@ import FileInput from '../file-input';
 
 describe('Library File Input Component', () => {
   const value = 'photo.jpg';
-  const onChange = () => true as any;
+  const onChange = jest.fn();
 
   it('renders input with correct value and change handler', () => {
     const wrapper = shallow(<FileInput value={value} onChange={onChange} />);

@@ -11,11 +11,7 @@ describe('Glass Break Component', () => {
   const patientName = 'Arya Stark';
 
   const wrapper = shallow(
-    <GlassBreak
-      resource={resource}
-      patientName={patientName}
-      createGlassBreak={jest.fn()}
-    />,
+    <GlassBreak resource={resource} patientName={patientName} createGlassBreak={jest.fn()} />,
   );
 
   it('renders container', () => {

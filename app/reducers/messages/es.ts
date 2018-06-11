@@ -1023,5 +1023,8 @@ export const SPANISH_TRANSLATION = {
     'settings.status': 'Status: ',
     'settings.available': 'Available',
     'settings.unavailable': 'Unavailable',
+    'settings.autoResponse': 'Automated Response',
+    'settings.autoResponsePlaceholder': 'Enter after-hours automated response...',
+    'settings.autoResponseEdit': 'Edit',
   },
 };

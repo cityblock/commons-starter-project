@@ -7,6 +7,7 @@ import {
   FullUserFragment,
 } from '../graphql/types';
 import Text from '../shared/library/text/text';
+import AutomatedResponse from './automated-response';
 import * as styles from './css/left-rail.css';
 import StatusToggle from './status-toggle';
 
@@ -24,7 +25,7 @@ type allProps = IProps & IGraphqlProps;
 
 export const SettingsLeftRail: React.StatelessComponent<allProps> = (props: allProps) => {
   const {
-    currentUser: { isAvailable },
+    currentUser: { isAvailable, awayMessage },
     editCurrentUser,
   } = props;
 
@@ -41,6 +42,7 @@ export const SettingsLeftRail: React.StatelessComponent<allProps> = (props: allP
         <Text messageId="settings.workHoursDetail" size="medium" color="gray" />
       </div>
       <StatusToggle isAvailable={isAvailable} editCurrentUser={editCurrentUser} />
+      <AutomatedResponse awayMessage={awayMessage} editCurrentUser={editCurrentUser} />
     </div>
   );
 };

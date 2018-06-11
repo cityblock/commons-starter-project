@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Text from '../../shared/library/text/text';
 import { currentUser } from '../../shared/util/test-data';
+import AutomatedResponse from '../automated-response';
 import { SettingsLeftRail } from '../left-rail';
 import StatusToggle from '../status-toggle';
 
@@ -72,5 +73,9 @@ describe('Settings Left Rail', () => {
 
   it('renders status toggle', () => {
     expect(wrapper.find(StatusToggle).props().isAvailable).toBe(currentUser.isAvailable);
+  });
+
+  it('renders automated response edit field', () => {
+    expect(wrapper.find(AutomatedResponse).props().awayMessage).toBe(currentUser.awayMessage);
   });
 });

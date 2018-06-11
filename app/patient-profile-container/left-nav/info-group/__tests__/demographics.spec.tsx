@@ -7,9 +7,7 @@ import InfoGroupHeader from '../header';
 import InfoGroupItem from '../item';
 
 describe('Patient Left Nav Demographics', () => {
-  const wrapper = shallow(
-    <Demographics isOpen={false} onClick={jest.fn()} patient={patient} />,
-  );
+  const wrapper = shallow(<Demographics isOpen={false} onClick={jest.fn()} patient={patient} />);
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);

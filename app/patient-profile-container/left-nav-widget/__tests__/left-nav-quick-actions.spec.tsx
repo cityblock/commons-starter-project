@@ -11,11 +11,7 @@ describe('Patient Left Navigation Quick Actions', () => {
   const glassBreakId = 'lady';
 
   const wrapper = shallow(
-    <LeftNavQuickActions
-      patientId={patientId}
-      glassBreakId={glassBreakId}
-      onClose={jest.fn()}
-    />,
+    <LeftNavQuickActions patientId={patientId} glassBreakId={glassBreakId} onClose={jest.fn()} />,
   );
 
   it('renders quick action to add progress note', () => {

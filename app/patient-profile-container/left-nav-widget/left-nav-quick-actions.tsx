@@ -18,16 +18,8 @@ const LeftNavQuickActions: React.StatelessComponent<IProps> = (props: IProps) =>
       <AddProgressNote patientId={patientId} onClose={onClose} />
       <AddQuickCall patientId={patientId} onClose={onClose} />
       <AdministerScreeningTool patientId={patientId} onClose={onClose} />
-      <LeftNavQuickAction
-        quickAction="viewDocuments"
-        onClick={jest.fn()}
-        onClose={onClose}
-      />
-      <LeftNavQuickAction
-        quickAction="openFormLibrary"
-        onClick={jest.fn()}
-        onClose={onClose}
-      />
+      <LeftNavQuickAction quickAction="viewDocuments" onClick={jest.fn()} onClose={onClose} />
+      <LeftNavQuickAction quickAction="openFormLibrary" onClick={jest.fn()} onClose={onClose} />
     </div>
   );
 };

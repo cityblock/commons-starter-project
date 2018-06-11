@@ -14,6 +14,7 @@ interface IProps {
   loadingMessageId?: string;
   placeholderMessageId?: string;
   titleStyles?: boolean; // if true, apply title styles when editing
+  disabled?: boolean;
 }
 
 interface IState {
@@ -78,6 +79,14 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
     }
   };
 
+  enterEditMode = (): void => {
+    this.setState({ isEditing: true });
+  }
+
+  exitEditMode = (): void => {
+    this.setState({ isEditing: false });
+  }
+
   render(): JSX.Element {
     const {
       value,
@@ -86,18 +95,27 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
       placeholderMessageId,
       loadingMessageId,
       titleStyles,
+      disabled,
     } = this.props;
     const { isEditing, error, loading } = this.state;
 
     const buttonMessageId = loading
       ? loadingMessageId || 'modalButtons.submitting'
       : submitMessageId || 'modalButtons.submit';
+
     const textMessageId = placeholderMessageId || 'task.addComment';
 
     const containerStyles = classNames(styles.container, {
       [styles.title]: !!titleStyles,
-      [styles.blueBorder]: isEditing,
+      [styles.blueBorder]: isEditing && !disabled,
       [styles.redBorder]: !!error,
+      [styles.disabled]: !!disabled,
+    });
+    const textAreaStyles = classNames(styles.textarea, {
+      [styles.textAreaDisabled]: !!disabled,
+    });
+    const buttonStyles = classNames(styles.button, {
+      [styles.buttonDisabled]: !!disabled,
     });
 
     return (
@@ -109,16 +127,17 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
               value={value}
               onChange={onChange}
               placeholder={message}
-              className={styles.textarea}
-              onFocus={() => this.setState({ isEditing: true })}
-              onBlur={() => this.setState({ isEditing: false })}
+              className={textAreaStyles}
+              onFocus={this.enterEditMode}
+              onBlur={this.exitEditMode}
+              disabled={!!disabled}
             />
             <Button
               messageId={buttonMessageId}
               color="white"
               onClick={this.handleClick}
-              className={styles.button}
-              disabled={loading}
+              disabled={!!disabled}
+              className={buttonStyles}
             />
           </div>
         )}

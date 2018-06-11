@@ -17,6 +17,14 @@
   border-color: var(--blue-color);
 }
 
+.disabled,
+.disabled:hover,
+.disabled:hover .textarea {
+  cursor: default;
+  background: var(--gray-background-color);
+  border-color: var(--border-color);
+}
+
 .container.redBorder,
 .container.redBorder .textarea {
   border-color: var(--red-color);
@@ -42,6 +50,11 @@
   color: var(--gray-font-color);
 }
 
+.textAreaDisabled {
+  background: var(--gray-background-color);
+  color: var(--gray-font-color);
+}
+
 button.button {
   border: none;
   height: auto;
@@ -52,6 +65,15 @@ button.button {
 button.button:hover {
   background: var(--white-color);
   opacity: 0.4;
+  cursor: pointer;
+}
+
+button.buttonDisabled,
+button.buttonDisabled:hover {
+  background: var(--gray-background-color);
+  color: var(--gray-background-color);
+  opacity: 1;
+  cursor: default;
 }
 
 .title .textarea {

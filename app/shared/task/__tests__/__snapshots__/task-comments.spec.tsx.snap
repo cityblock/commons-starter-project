@@ -10,6 +10,7 @@ exports[`correctly renders comments component 1`] = `
   >
     <textarea
       className="textarea"
+      disabled={false}
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}

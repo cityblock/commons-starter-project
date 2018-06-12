@@ -23,6 +23,9 @@ it('renders patient care plan suggestions', () => {
       routeBase={'/patients/patient-1/map'}
       glassBreakId="lady"
       riskAreaLabels={riskAreaLabels}
+      screeningToolLabels={{}}
+      sectionNameFilter={null}
+      groupIdFilter={null}
     />,
   );
   const suggestionAccepted = wrapper.find<IProps>(PopupPatientCarePlanSuggestionAccepted as any);

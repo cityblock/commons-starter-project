@@ -12,6 +12,7 @@ interface IProps {
   title: string;
   suggestions: FullCarePlanSuggestionForPatientFragment[];
   isSelected: boolean;
+  isHidden: boolean;
   onAccept: (
     suggestion: FullCarePlanSuggestionForPatientFragment,
     taskTemplateIds?: string[],
@@ -41,7 +42,7 @@ export class SuggestionsGroup extends React.Component<IProps> {
   }
 
   render() {
-    const { suggestions, title, isSelected, onClick } = this.props;
+    const { suggestions, title, isSelected, isHidden, onClick } = this.props;
     const subGroups = groupBy(suggestions, 'suggestionType');
     const concernSuggestions = uniqBy(subGroups.concern, 'concernId');
     const goalSuggestions = uniqBy(subGroups.goal, 'goalSuggestionTemplateId');
@@ -55,7 +56,7 @@ export class SuggestionsGroup extends React.Component<IProps> {
     const headerStyles = classNames(styles.header, { [styles.selected]: isSelected });
 
     return (
-      <React.Fragment>
+      <div className={classNames({ [styles.hidden]: isHidden })}>
         <div className={headerStyles} onClick={onClick}>
           <div className={styles.title}>{title}</div>
           <div className={styles.stats}>
@@ -76,7 +77,7 @@ export class SuggestionsGroup extends React.Component<IProps> {
           {dividerHtml}
           {goalSuggestionsHtml}
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

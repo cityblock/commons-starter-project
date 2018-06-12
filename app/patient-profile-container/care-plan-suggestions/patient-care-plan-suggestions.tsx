@@ -1,4 +1,3 @@
-import { mapValues } from 'lodash';
 import * as React from 'react';
 import {
   FullCarePlanSuggestionForPatientFragment,
@@ -32,6 +31,9 @@ interface IProps {
   screeningToolSuggestionGroups: ISuggestionGroups | null;
   allSuggestions: FullCarePlanSuggestionForPatientFragment[];
   riskAreaLabels: { [key: string]: string };
+  screeningToolLabels: { [key: string]: string };
+  sectionNameFilter: SectionName | null;
+  groupIdFilter: string | null;
 }
 
 interface IState {
@@ -55,7 +57,6 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
 
   handleAcceptSuggestion = (
     acceptedSuggestion: FullCarePlanSuggestionForPatientFragment,
-    refetchSectionName: SectionName,
     taskTemplateIds?: string[],
   ) => {
     this.setState({
@@ -75,10 +76,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
     });
   };
 
-  handleDismissSuggestion = (
-    dismissedSuggestion: FullCarePlanSuggestionForPatientFragment,
-    refetchSectionName: SectionName,
-  ) => {
+  handleDismissSuggestion = (dismissedSuggestion: FullCarePlanSuggestionForPatientFragment) => {
     this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: null,
@@ -130,6 +128,68 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
     );
   }
 
+  renderSection(
+    sectionName: SectionName,
+    suggestionGroups: ISuggestionGroups | null,
+    labels: { [key: string]: string },
+  ) {
+    const { sectionNameFilter, groupIdFilter } = this.props;
+    const { selectedGroupId, selectedSection } = this.state;
+
+    const sectionGroupIdFilter = sectionNameFilter === sectionName ? groupIdFilter : null;
+    const selectedSectionGroupId = selectedSection === sectionName ? selectedGroupId : null;
+    const isHidden = !!sectionNameFilter && sectionNameFilter !== sectionName;
+
+    return (
+      <SuggestionsSection
+        name={sectionName}
+        titleMessageId={`suggestionsSection.${sectionName}`}
+        suggestionGroups={suggestionGroups}
+        onAccept={this.handleAcceptSuggestion}
+        onDismiss={this.handleDismissSuggestion}
+        onGroupClick={this.handleGroupClick}
+        selectedGroupId={selectedSectionGroupId}
+        labels={labels}
+        groupIdFilter={sectionGroupIdFilter}
+        isHidden={isHidden}
+      />
+    );
+  }
+
+  renderSections() {
+    const {
+      computedFieldSuggestionGroups,
+      riskAreaAssessmentSuggestionGroups,
+      screeningToolSuggestionGroups,
+      riskAreaLabels,
+      screeningToolLabels,
+    } = this.props;
+
+    const riskAreaAssessmentSection = this.renderSection(
+      'riskAreaAssessment',
+      riskAreaAssessmentSuggestionGroups,
+      riskAreaLabels,
+    );
+    const screeningToolSection = this.renderSection(
+      'screeningTool',
+      screeningToolSuggestionGroups,
+      screeningToolLabels,
+    );
+    const computedFieldSection = this.renderSection(
+      'computedField',
+      computedFieldSuggestionGroups,
+      riskAreaLabels,
+    );
+
+    return (
+      <React.Fragment>
+        {riskAreaAssessmentSection}
+        {screeningToolSection}
+        {computedFieldSection}
+      </React.Fragment>
+    );
+  }
+
   render() {
     const {
       acceptedSuggestion,
@@ -137,59 +197,12 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
       acceptedTaskTemplateIds,
       dismissedSuggestion,
       dismissModalVisible,
-      selectedGroupId,
-      selectedSection,
     } = this.state;
-    const {
-      patientId,
-      computedFieldSuggestionGroups,
-      riskAreaAssessmentSuggestionGroups,
-      screeningToolSuggestionGroups,
-      allSuggestions,
-      riskAreaLabels,
-    } = this.props;
-    const selectedRiskAreaAssessmentGroupId =
-      selectedSection === 'riskAreaAssessment' ? selectedGroupId : null;
-    const selectedScreeningToolGroupId =
-      selectedSection === 'screeningTool' ? selectedGroupId : null;
-    const selectedComputedFieldGroupId =
-      selectedSection === 'computedField' ? selectedGroupId : null;
-    const screeningToolLabels = mapValues(screeningToolSuggestionGroups, group => {
-      return group[0].screeningTool!.title;
-    });
+    const { patientId, allSuggestions } = this.props;
 
     return (
       <React.Fragment>
-        <SuggestionsSection
-          name="riskAreaAssessment"
-          titleMessageId="suggestionsSection.riskAreaAssessments"
-          suggestionGroups={riskAreaAssessmentSuggestionGroups}
-          onAccept={this.handleAcceptSuggestion}
-          onDismiss={this.handleDismissSuggestion}
-          onGroupClick={this.handleGroupClick}
-          selectedGroupId={selectedRiskAreaAssessmentGroupId}
-          labels={riskAreaLabels}
-        />
-        <SuggestionsSection
-          name="screeningTool"
-          titleMessageId="suggestionsSection.screeningTools"
-          suggestionGroups={screeningToolSuggestionGroups}
-          onAccept={this.handleAcceptSuggestion}
-          onDismiss={this.handleDismissSuggestion}
-          onGroupClick={this.handleGroupClick}
-          selectedGroupId={selectedScreeningToolGroupId}
-          labels={screeningToolLabels}
-        />
-        <SuggestionsSection
-          name="computedField"
-          titleMessageId="suggestionsSection.computedFields"
-          suggestionGroups={computedFieldSuggestionGroups}
-          onAccept={this.handleAcceptSuggestion}
-          onDismiss={this.handleDismissSuggestion}
-          onGroupClick={this.handleGroupClick}
-          selectedGroupId={selectedComputedFieldGroupId}
-          labels={riskAreaLabels}
-        />
+        {this.renderSections()}
         {this.renderEmptySuggestionsHtml()}
         <PopupPatientCarePlanSuggestionAccepted
           visible={acceptModalVisible}

@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-client';
 import * as classNames from 'classnames';
-import { get, groupBy, keys } from 'lodash';
+import { get, groupBy, keys, mapValues } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -23,6 +23,11 @@ import { IState as IAppState } from '../store';
 import PatientCarePlanSuggestions, {
   ISuggestionGroups,
 } from './care-plan-suggestions/patient-care-plan-suggestions';
+import SuggestionCategorySelect, {
+  ILabels,
+  ISuggestionFilters,
+} from './care-plan-suggestions/suggestion-category-select';
+import { SectionName } from './care-plan-suggestions/suggestions-section';
 import * as styles from './css/patient-care-plan.css';
 import PatientMap from './patient-map';
 import * as sharedStyles from './patient-three-sixty/css/shared.css';
@@ -65,23 +70,32 @@ interface IGraphqlProps {
 
 export type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
-interface ISuggestionFilters {
-  computedFieldFilters: string[];
-  riskAreaAssessmentFilters: string[];
-  screeningToolFilters: string[];
-}
-
 interface ISuggestionSections {
   computedFieldGroups: ISuggestionGroups | null;
   riskAreaAssessmentGroups: ISuggestionGroups | null;
   screeningToolGroups: ISuggestionGroups | null;
-  riskAreaLabels: { [key: string]: string };
+  riskAreaLabels: ILabels;
+  screeningToolLabels: ILabels;
 }
 
-export class PatientCarePlanView extends React.Component<allProps> {
+interface IState {
+  selectedSectionName: SectionName | null;
+  selectedGroupId: string | null;
+}
+
+export class PatientCarePlanView extends React.Component<allProps, IState> {
+  state = {
+    selectedGroupId: null,
+    selectedSectionName: null,
+  };
+
   onContainerClick = () => {
     const { isPopupOpen, closePopup } = this.props;
     if (isPopupOpen) closePopup(); // only dispatch action if needed
+  };
+
+  handleFilterChange = (sectionName: SectionName | null, groupId: string | null) => {
+    this.setState({ selectedSectionName: sectionName, selectedGroupId: groupId });
   };
 
   getRouteInfo() {
@@ -127,7 +141,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
 
   getRiskAreaLabels() {
     const { riskAreaGroups } = this.props;
-    const riskAreaLabels: { [key: string]: string } = {};
+    const riskAreaLabels: ILabels = {};
     (riskAreaGroups || []).forEach(riskAreaGroup => {
       const assessmentTypes = groupBy(riskAreaGroup.riskAreas, 'assessmentType');
       const manualRiskAreas = assessmentTypes.manual || [];
@@ -152,6 +166,21 @@ export class PatientCarePlanView extends React.Component<allProps> {
     const { match, addConcern } = this.props;
     const { patientId } = match.params;
     const { routeBase, isSuggestions } = this.getRouteInfo();
+    const { selectedSectionName, selectedGroupId } = this.state;
+
+    const actionsHtml = isSuggestions ? (
+      <SuggestionCategorySelect
+        {...suggestionFilters}
+        onChange={this.handleFilterChange}
+        selectedSectionName={selectedSectionName}
+        selectedGroupId={selectedGroupId}
+      />
+    ) : (
+      <div>
+        <PrintMapButton patientId={patientId} />
+        <Button messageId="concernCreate.addConcern" onClick={addConcern} />
+      </div>
+    );
 
     return (
       <UnderlineTabs className={styles.navBar}>
@@ -167,12 +196,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
             selected={isSuggestions}
           />
         </div>
-        {!isSuggestions && (
-          <div>
-            <PrintMapButton patientId={patientId} />
-            <Button messageId="concernCreate.addConcern" onClick={addConcern} />
-          </div>
-        )}
+        {actionsHtml}
       </UnderlineTabs>
     );
   }
@@ -185,6 +209,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
       riskAreaAssessmentSuggestions,
       screeningToolSuggestions,
     } = this.props;
+    const { selectedSectionName, selectedGroupId } = this.state;
     const { patientId, taskId, goalId } = match.params;
     const { routeBase, isSuggestions } = this.getRouteInfo();
     const {
@@ -192,6 +217,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
       riskAreaAssessmentGroups,
       screeningToolGroups,
       riskAreaLabels,
+      screeningToolLabels,
     } = suggestionSections;
 
     let suggestions: FullCarePlanSuggestionForPatientFragment[] = [];
@@ -219,6 +245,9 @@ export class PatientCarePlanView extends React.Component<allProps> {
           screeningToolSuggestionGroups={screeningToolGroups}
           allSuggestions={suggestions}
           riskAreaLabels={riskAreaLabels}
+          screeningToolLabels={screeningToolLabels}
+          sectionNameFilter={selectedSectionName}
+          groupIdFilter={selectedGroupId}
         />
       </div>
     ) : (
@@ -239,17 +268,23 @@ export class PatientCarePlanView extends React.Component<allProps> {
       screeningToolGroups,
     } = this.getGroupedSuggestions();
     const riskAreaLabels = this.getRiskAreaLabels();
+    const screeningToolLabels = mapValues(screeningToolGroups, group => {
+      return group[0].screeningTool!.title;
+    });
 
     const headerHtml = this.renderHeader({
       computedFieldFilters: keys(computedFieldGroups),
       riskAreaAssessmentFilters: keys(riskAreaAssessmentGroups),
       screeningToolFilters: keys(screeningToolGroups),
+      riskAreaLabels,
+      screeningToolLabels,
     });
     const bodyHtml = this.renderBody({
       computedFieldGroups,
       riskAreaAssessmentGroups,
       screeningToolGroups,
       riskAreaLabels,
+      screeningToolLabels,
     });
 
     return (

@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import { keys } from 'lodash';
 import * as React from 'react';
 import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
@@ -12,15 +13,13 @@ interface IProps {
   suggestionGroups: ISuggestionGroups | null;
   selectedGroupId?: string | null;
   labels: { [key: string]: string };
+  groupIdFilter: string | null;
+  isHidden: boolean;
   onAccept: (
     suggestion: FullCarePlanSuggestionForPatientFragment,
-    refetchSectionName: SectionName,
     taskTemplateIds?: string[],
   ) => void;
-  onDismiss: (
-    suggestion: FullCarePlanSuggestionForPatientFragment,
-    refetchSectionName: SectionName,
-  ) => void;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => void;
   onGroupClick: (sectionName: SectionName | null, groupId: string | null) => void;
 }
 
@@ -34,6 +33,7 @@ export class SuggestionsSection extends React.Component<IProps> {
       onDismiss,
       onGroupClick,
       selectedGroupId,
+      groupIdFilter,
       labels,
       name,
     } = this.props;
@@ -42,7 +42,9 @@ export class SuggestionsSection extends React.Component<IProps> {
     }
 
     return keys(suggestionGroups).map(groupId => {
-      const isSelected = groupId === selectedGroupId;
+      const isFiltered = !!groupIdFilter;
+      const isHidden = isFiltered && groupIdFilter !== groupId;
+      const isSelected = groupId === selectedGroupId || isFiltered;
       const clickedGroupId = isSelected ? null : groupId;
       const clickedSectionName = isSelected ? null : name;
 
@@ -52,8 +54,9 @@ export class SuggestionsSection extends React.Component<IProps> {
           title={labels[groupId] || ''}
           suggestions={suggestionGroups[groupId]}
           isSelected={isSelected}
-          onAccept={(suggestion, taskTemplateIds) => onAccept(suggestion, name, taskTemplateIds)}
-          onDismiss={suggestion => onDismiss(suggestion, name)}
+          isHidden={isHidden}
+          onAccept={onAccept}
+          onDismiss={onDismiss}
           onClick={() => onGroupClick(clickedSectionName, clickedGroupId)}
         />
       );
@@ -61,7 +64,7 @@ export class SuggestionsSection extends React.Component<IProps> {
   }
 
   render() {
-    const { titleMessageId, suggestionGroups } = this.props;
+    const { titleMessageId, suggestionGroups, isHidden } = this.props;
     const suggestionsHtml = this.renderSuggestionGroups();
 
     const bodyHtml = suggestionGroups ? (
@@ -78,7 +81,7 @@ export class SuggestionsSection extends React.Component<IProps> {
       ) : null;
 
     return (
-      <div className={styles.section}>
+      <div className={classNames(styles.section, { [styles.hidden]: isHidden })}>
         {dividerHtml}
         {bodyHtml}
       </div>

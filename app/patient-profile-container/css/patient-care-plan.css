@@ -24,6 +24,10 @@
   flex-direction: column;
 }
 
+.section.hidden {
+  display: none;
+}
+
 .section:last-child {
   margin-bottom: 0;
 }

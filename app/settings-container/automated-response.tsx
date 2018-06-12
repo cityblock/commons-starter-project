@@ -48,7 +48,7 @@ class AutomatedResponse extends React.Component<IProps, IState> {
     const { editedAwayMessage, editMode } = this.state;
 
     return (
-      <React.Fragment>
+      <div>
         <div className={styles.text}>
           <Text
             messageId="settings.autoResponse"
@@ -75,7 +75,7 @@ class AutomatedResponse extends React.Component<IProps, IState> {
           loadingMessageId="editableText.saving"
           disabled={!editMode}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }

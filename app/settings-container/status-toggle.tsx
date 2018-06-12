@@ -43,7 +43,7 @@ class StatusToggle extends React.Component<IProps, IState> {
     const statusColor = isAvailable ? 'green' : 'red';
 
     return (
-      <React.Fragment>
+      <div>
         <div className={styles.text}>
           <Text
             messageId="settings.status"
@@ -62,7 +62,7 @@ class StatusToggle extends React.Component<IProps, IState> {
           />
         </div>
         <ToggleSwitch isOn={isAvailable} onClick={this.handleClick} />
-      </React.Fragment>
+      </div>
     );
   }
 }

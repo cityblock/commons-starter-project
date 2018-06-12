@@ -8,7 +8,7 @@ import * as styles from './css/select.css';
 export type Color = 'black' | 'blue';
 
 interface IProps {
-  value: string;
+  value: string | number;
   onChange: (e?: any) => void;
   options?: string[];
   prefix?: string;

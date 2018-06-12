@@ -7,6 +7,7 @@ import Spinner from '../shared/library/spinner/spinner';
 import Text from '../shared/library/text/text';
 import * as styles from './css/settings-container.css';
 import SettingsLeftRail from './left-rail';
+import WorkHours from './work-hours';
 
 interface IProps {
   mutate?: any;
@@ -24,10 +25,10 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export const SettingsContainer: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { userLoading, hoursLoading, userError, hoursError, currentUser } = props;
+  const { userLoading, hoursLoading, userError, hoursError, currentUser, currentUserHours } = props;
 
   // return spinner if loading
-  if (userLoading || hoursLoading || userError || hoursError || !currentUser) {
+  if (userLoading || hoursLoading || userError || hoursError || !currentUser || !currentUserHours) {
     return <Spinner />;
   }
 
@@ -35,8 +36,9 @@ export const SettingsContainer: React.StatelessComponent<allProps> = (props: all
     <div className={styles.container}>
       <Text messageId="settings.settings" color="black" font="baseticaBold" isHeader />
       <div className={styles.divider} />
-      <div>
+      <div className={styles.workHours}>
         <SettingsLeftRail currentUser={currentUser} />
+        <WorkHours currentUserHours={currentUserHours} disabled={!currentUser.isAvailable} />
       </div>
     </div>
   );

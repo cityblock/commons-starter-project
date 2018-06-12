@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import DefaultText from '../default-text/default-text';
 import * as styles from './css/checkbox.css';
@@ -7,19 +8,29 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   labelMessageId?: string;
+  labelClassName?: string;
+  disabled?: boolean;
   name?: string;
 }
 
 const Checkbox: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { isChecked, onChange, className, labelMessageId, name } = props;
+  const { isChecked, onChange, className, labelMessageId, name, labelClassName, disabled } = props;
+
+  const labelStyles = classNames(styles.label, labelClassName);
 
   const labelComponent = labelMessageId ? (
-    <DefaultText messageId={labelMessageId} color="gray" className={styles.label} />
+    <DefaultText messageId={labelMessageId} color="gray" className={labelStyles} />
   ) : null;
 
   return (
     <div className={className}>
-      <input type="checkbox" checked={isChecked} onChange={onChange} name={name} />
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={onChange}
+        name={name}
+        disabled={!!disabled}
+      />
       {labelComponent}
     </div>
   );

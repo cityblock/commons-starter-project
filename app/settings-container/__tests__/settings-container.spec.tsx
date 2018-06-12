@@ -5,6 +5,7 @@ import Text from '../../shared/library/text/text';
 import { currentUser, currentUserHours } from '../../shared/util/test-data';
 import SettingsLeftRail from '../left-rail';
 import { SettingsContainer } from '../settings-container';
+import WorkHours from '../work-hours';
 
 describe('Settings Container Component', () => {
   const wrapper = shallow(
@@ -28,6 +29,11 @@ describe('Settings Container Component', () => {
 
   it('renders settings left rail', () => {
     expect(wrapper.find(SettingsLeftRail).props().currentUser).toEqual(currentUser);
+  });
+
+  it('renders work hours', () => {
+    expect(wrapper.find(WorkHours).props().currentUserHours).toEqual(currentUserHours);
+    expect(wrapper.find(WorkHours).props().disabled).toBe(!currentUser.isAvailable);
   });
 
   it('renders spinner if loading', () => {

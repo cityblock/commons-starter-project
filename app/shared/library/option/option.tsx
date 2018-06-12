@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 interface IProps {
-  value: string;
+  value: string | number;
   label?: string;
   messageId?: string;
   disabled?: boolean;

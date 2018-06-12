@@ -7,6 +7,7 @@ import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
 import User from '../user';
+import UserHours from '../user-hours';
 
 const userRole = 'physician' as UserRole;
 
@@ -30,6 +31,36 @@ describe('user model', () => {
 
     const userById = await User.get(user.id, txn);
     expect(userById).toEqual(user);
+
+    const userHours = await UserHours.getForUser(user.id, txn);
+
+    expect(userHours).toMatchObject([
+      {
+        weekday: 1,
+        timeRange: '[800,1801)',
+        userId: user.id,
+      },
+      {
+        weekday: 2,
+        timeRange: '[800,1801)',
+        userId: user.id,
+      },
+      {
+        weekday: 3,
+        timeRange: '[800,1801)',
+        userId: user.id,
+      },
+      {
+        weekday: 4,
+        timeRange: '[800,1801)',
+        userId: user.id,
+      },
+      {
+        weekday: 5,
+        timeRange: '[800,1801)',
+        userId: user.id,
+      },
+    ]);
   });
 
   it('should create an attribution user', async () => {

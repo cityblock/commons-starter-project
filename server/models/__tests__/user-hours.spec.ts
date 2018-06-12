@@ -96,6 +96,16 @@ describe('User Hours Model', () => {
   describe('createDefaultsForUser', () => {
     it('creates hours for user based on template', async () => {
       const { user } = await setup(txn);
+      const userHours = await UserHours.getForUser(user.id, txn);
+
+      // delete default hours first
+      const promises: Array<Promise<UserHours>> = [];
+
+      userHours.forEach(hours => {
+        promises.push(UserHours.delete(hours.id, txn));
+      });
+
+      await Promise.all(promises);
 
       const templates = [
         {
@@ -199,6 +209,16 @@ describe('User Hours Model', () => {
   describe('getForUser', () => {
     it('should get all non-deleted hours for a given user', async () => {
       const { user } = await setup(txn);
+      const userHours = await UserHours.getForUser(user.id, txn);
+
+      // delete default hours first
+      const promises: Array<Promise<UserHours>> = [];
+
+      userHours.forEach(hours => {
+        promises.push(UserHours.delete(hours.id, txn));
+      });
+
+      await Promise.all(promises);
 
       const userHours0 = await UserHours.create(
         {

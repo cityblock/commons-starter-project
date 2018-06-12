@@ -58,7 +58,7 @@ describe('User Hours Resolver', () => {
           logger,
         },
         {
-          weekday: 1,
+          weekday: 0,
           startTime: 1200,
           endTime: 1530,
         },
@@ -68,7 +68,7 @@ describe('User Hours Resolver', () => {
         userId: user.id,
         startTime: 1200,
         endTime: 1530,
-        weekday: 1,
+        weekday: 0,
       });
 
       expect(log).toBeCalled();
@@ -176,19 +176,9 @@ describe('User Hours Resolver', () => {
       const userHours1 = await UserHours.create(
         {
           userId: user.id,
-          weekday: 1,
+          weekday: 6,
           startTime: 400,
           endTime: 1200,
-        },
-        txn,
-      );
-
-      await UserHours.create(
-        {
-          userId: user.id,
-          weekday: 2,
-          startTime: 1300,
-          endTime: 1500,
         },
         txn,
       );
@@ -214,14 +204,38 @@ describe('User Hours Resolver', () => {
         {
           userId: user.id,
           weekday: 1,
-          startTime: 1600,
-          endTime: 2030,
+          startTime: 800,
+          endTime: 1800,
         },
         {
           userId: user.id,
           weekday: 2,
-          startTime: 1300,
-          endTime: 1500,
+          startTime: 800,
+          endTime: 1800,
+        },
+        {
+          userId: user.id,
+          weekday: 3,
+          startTime: 800,
+          endTime: 1800,
+        },
+        {
+          userId: user.id,
+          weekday: 4,
+          startTime: 800,
+          endTime: 1800,
+        },
+        {
+          userId: user.id,
+          weekday: 5,
+          startTime: 800,
+          endTime: 1800,
+        },
+        {
+          userId: user.id,
+          weekday: 6,
+          startTime: 1600,
+          endTime: 2030,
         },
       ]);
 

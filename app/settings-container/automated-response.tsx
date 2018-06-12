@@ -42,7 +42,7 @@ class AutomatedResponse extends React.Component<IProps, IState> {
 
   enterEditMode = (): void => {
     this.setState({ editMode: true });
-  }
+  };
 
   render(): JSX.Element {
     const { editedAwayMessage, editMode } = this.state;

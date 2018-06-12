@@ -6,6 +6,7 @@ import {
   formatPhoneNumberForTwilio,
   validatePhoneNumberForTwilio,
 } from '../helpers/twilio-helpers';
+import { defaultWorkHours } from '../helpers/user-hours-helpers';
 import {
   attributionUserEmail,
   attributionUserPermissions,
@@ -16,6 +17,7 @@ import CareTeam from './care-team';
 import Clinic from './clinic';
 import GoogleAuth from './google-auth';
 import Patient from './patient';
+import UserHours from './user-hours';
 
 export const USER_ROLE: UserRole[] = [
   'physician' as UserRole,
@@ -188,7 +190,12 @@ export default class User extends BaseModel {
     };
     await validatePhoneNumberForTwilio(formattedInput.phone);
 
-    return this.query(txn).insertAndFetch(formattedInput);
+    const newUser = await this.query(txn).insertAndFetch(formattedInput);
+
+    // create default user hours
+    await UserHours.createDefaultsForUser(newUser.id, defaultWorkHours, txn);
+
+    return newUser;
   }
 
   static async findOrCreateAttributionUser(txn: Transaction): Promise<User> {

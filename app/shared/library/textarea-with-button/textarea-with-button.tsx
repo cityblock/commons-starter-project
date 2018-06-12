@@ -81,11 +81,11 @@ class TextAreaWithButton extends React.Component<IProps, IState> {
 
   enterEditMode = (): void => {
     this.setState({ isEditing: true });
-  }
+  };
 
   exitEditMode = (): void => {
     this.setState({ isEditing: false });
-  }
+  };
 
   render(): JSX.Element {
     const {

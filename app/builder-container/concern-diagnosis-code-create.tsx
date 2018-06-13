@@ -25,7 +25,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  concernAddDiagnosisCode: (options: ICreateOptions) => { data: concernAddDiagnosisCodeMutation };
+  concernAddDiagnosisCode: (
+    options: ICreateOptions,
+  ) => { data: concernAddDiagnosisCodeMutation; errors: ApolloError[] };
 }
 
 interface IState {
@@ -50,7 +52,7 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
     this.setState({ loading: true, error: null });
 
     try {
-      await concernAddDiagnosisCode({
+      const response = await concernAddDiagnosisCode({
         variables: {
           concernId,
           code: newDiagnosisCode,
@@ -58,7 +60,11 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
           version: CODESET_VERSION,
         },
       });
-      this.setState({ loading: false, error: null, newDiagnosisCode: '' });
+      if (response.errors) {
+        this.setState({ loading: false, error: response.errors[0] });
+      } else {
+        this.setState({ loading: false, error: null, newDiagnosisCode: '' });
+      }
     } catch (err) {
       this.setState({ loading: false, error: err });
     }

@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as concernEditMutationGraphql from '../graphql/queries/concern-edit-mutation.graphql';
 import * as concernQuery from '../graphql/queries/get-concern.graphql';
@@ -12,7 +11,6 @@ import {
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
-import { IState as IAppState } from '../store';
 import ConcernDiagnosisCodes from './concern-diagnosis-codes';
 
 interface IStateProps {
@@ -21,11 +19,8 @@ interface IStateProps {
 
 interface IProps {
   routeBase: string;
-  match?: {
-    params: {
-      objectId: string | null;
-    };
-  };
+  concernId: string | null;
+  onDelete: (concernId: string) => any;
   mutate?: any;
 }
 
@@ -37,7 +32,6 @@ interface IGraphqlProps {
   editConcern: (
     options: { variables: concernEditMutationVariables },
   ) => { data: concernEditMutation };
-  onDelete: (concernId: string) => any;
 }
 
 interface IState {
@@ -51,88 +45,50 @@ interface IState {
 type allProps = IProps & IStateProps & IGraphqlProps;
 
 export class Concern extends React.Component<allProps, IState> {
-  editTitleInput: HTMLInputElement | null;
-  titleBody: HTMLDivElement | null;
+  editTitleInput: HTMLInputElement | null = null;
+  titleBody: HTMLDivElement | null = null;
 
-  constructor(props: allProps) {
-    super(props);
+  state: IState = {
+    deleteConfirmationInProgress: false,
+    deleteError: null,
+    editedTitle: '',
+    editingTitle: false,
+    editTitleError: null,
+  };
 
-    this.reloadConcern = this.reloadConcern.bind(this);
-    this.onClickDelete = this.onClickDelete.bind(this);
-    this.onConfirmDelete = this.onConfirmDelete.bind(this);
-    this.onCancelDelete = this.onCancelDelete.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onClickToEditTitle = this.onClickToEditTitle.bind(this);
-    this.focusInput = this.focusInput.bind(this);
-
-    this.editTitleInput = null;
-    this.titleBody = null;
-
-    this.state = {
-      deleteConfirmationInProgress: false,
-      deleteError: null,
-      editedTitle: '',
-      editingTitle: false,
-      editTitleError: null,
-    };
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    const { concern } = nextProps;
-
-    if (concern) {
-      if (!this.props.concern) {
-        this.setState({ editedTitle: concern.title });
-      } else if (this.props.concern.id !== concern.id) {
-        this.setState({ editedTitle: concern.title });
-      }
-    }
-  }
-
-  reloadConcern() {
-    const { refetchConcern } = this.props;
-
-    if (refetchConcern) {
-      refetchConcern();
-    }
-  }
-
-  onClickDelete() {
+  onClickDelete = () => {
     const { concernId } = this.props;
 
     if (concernId) {
       this.setState({ deleteConfirmationInProgress: true });
     }
-  }
+  };
 
-  async onConfirmDelete() {
+  onConfirmDelete = async () => {
     const { onDelete, concernId } = this.props;
 
     if (concernId) {
       try {
         this.setState({ deleteError: null });
         await onDelete(concernId);
-        this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
         this.setState({ deleteError: err.message });
       }
     }
-  }
+  };
 
-  onCancelDelete() {
+  onCancelDelete = () => {
     this.setState({ deleteError: null, deleteConfirmationInProgress: false });
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLInputElement>) {
+  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
     this.setState({ [name as any]: value || '' } as any);
-  }
+  };
 
-  async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+  onKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { concernId, editConcern } = this.props;
     const { editedTitle } = this.state;
     const enterPressed = event.keyCode === 13;
@@ -151,20 +107,24 @@ export class Concern extends React.Component<allProps, IState> {
         }
       }
     }
-  }
+  };
 
-  onBlur(event: React.FocusEvent<HTMLInputElement>) {
+  onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const name = event.currentTarget.name;
 
     if (name === 'editedTitle') {
       this.setState({ editingTitle: false });
     }
-  }
+  };
 
-  onClickToEditTitle() {
-    this.setState({ editingTitle: true });
+  onClickToEditTitle = () => {
+    const { concern } = this.props;
+    const { editedTitle } = this.state;
+    const newTitle =
+      (editedTitle && editedTitle.length > 0) || !concern ? editedTitle : concern.title;
+    this.setState({ editingTitle: true, editedTitle: newTitle });
     setTimeout(() => (this.focusInput(this.editTitleInput), 100));
-  }
+  };
 
   focusInput(input: HTMLInputElement | null) {
     if (input) {
@@ -285,7 +245,6 @@ export class Concern extends React.Component<allProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <Button onClick={this.reloadConcern} label="Try again" />
             </div>
           </div>
         );
@@ -296,14 +255,7 @@ export class Concern extends React.Component<allProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  return {
-    concernId: ownProps.match ? ownProps.match.params.objectId : null,
-  };
-}
-
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql(concernEditMutationGraphql as any, {
     name: 'editConcern',
   }),

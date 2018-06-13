@@ -2,7 +2,6 @@ import * as classNames from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
 import * as concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
@@ -14,7 +13,6 @@ import {
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
-import { IState as IAppState } from '../store';
 import Concern from './concern';
 import ConcernCreate from './concern-create';
 import { ConcernRow } from './concern-row';
@@ -36,28 +34,26 @@ interface IGraphqlProps {
   ) => { data: concernDeleteMutation };
 }
 
-interface IStateProps {
+type allProps = IGraphqlProps & IProps;
+
+interface IState {
+  showCreateConcern: boolean;
   routeBase: string;
   concernId: string | null;
 }
 
-type allProps = IGraphqlProps & IProps & IStateProps;
-
-interface IState {
-  showCreateConcern: boolean;
-}
-
 class BuilderConcerns extends React.Component<allProps, IState> {
-  state = {
+  static getDerivedStateFromProps(nextProps: IProps) {
+    if (nextProps && nextProps.match && nextProps.match.params.concernId) {
+      return { concernId: nextProps.match.params.concernId };
+    }
+    return null;
+  }
+
+  state: IState = {
     showCreateConcern: false,
-  };
-
-  showCreateConcern = () => {
-    this.setState({ showCreateConcern: true });
-  };
-
-  hideCreateConcern = () => {
-    this.setState({ showCreateConcern: false });
+    routeBase: '/builder/concerns',
+    concernId: null,
   };
 
   renderConcerns(concerns: FullConcernFragment[]) {
@@ -68,20 +64,29 @@ class BuilderConcerns extends React.Component<allProps, IState> {
     }
   }
 
-  renderConcern(concern: FullConcernFragment) {
-    const selected = concern.id === this.props.concernId;
+  showCreateConcern = () => {
+    this.setState({ showCreateConcern: true });
+  };
+
+  hideCreateConcern = () => {
+    this.setState({ showCreateConcern: false });
+  };
+
+  renderConcern = (concern: FullConcernFragment) => {
+    const selected = concern.id === this.state.concernId;
     return (
       <ConcernRow
         key={concern.id}
         concern={concern}
         selected={selected}
-        routeBase={this.props.routeBase}
+        routeBase={this.state.routeBase}
       />
     );
-  }
+  };
 
   onDeleteConcern = async (concernId: string) => {
-    const { history, routeBase, deleteConcern } = this.props;
+    const { history, deleteConcern } = this.props;
+    const { routeBase } = this.state;
 
     await deleteConcern({ variables: { concernId } });
 
@@ -89,8 +94,8 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { concerns, routeBase, concernId } = this.props;
-    const { showCreateConcern } = this.state;
+    const { concerns } = this.props;
+    const { showCreateConcern, routeBase, concernId } = this.state;
     const concernsList = concerns || [];
     const concernContainerStyles = classNames(styles.itemContainer, {
       [styles.visible]: !!concernId || showCreateConcern,
@@ -104,10 +109,15 @@ class BuilderConcerns extends React.Component<allProps, IState> {
       </div>
     );
     const createConcernHtml = showCreateConcern ? (
-      <ConcernCreate onClose={this.hideCreateConcern} routeBase={this.props.routeBase} />
+      <ConcernCreate onClose={this.hideCreateConcern} routeBase={routeBase} />
     ) : null;
     const RenderedConcern = (props: any) => (
-      <Concern routeBase={routeBase} onDelete={this.onDeleteConcern} {...props} />
+      <Concern
+        key={concernId || 'blank'}
+        concernId={concernId}
+        routeBase={routeBase}
+        onDelete={this.onDeleteConcern}
+      />
     );
     const concernHtml = showCreateConcern ? null : (
       <Route path={`${routeBase}/:objectId`} render={RenderedConcern} />
@@ -127,16 +137,8 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  return {
-    concernId: ownProps.match.params.concernId,
-    routeBase: '/builder/concerns',
-  };
-}
-
 export default compose(
   withRouter,
-  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,

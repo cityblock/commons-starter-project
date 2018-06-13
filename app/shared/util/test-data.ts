@@ -1133,7 +1133,6 @@ export const healthcareProxy = {
   address: null,
   isHealthcareProxy: true,
   isEmergencyContact: false,
-  canContact: false,
   description: 'some healthcare person',
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',

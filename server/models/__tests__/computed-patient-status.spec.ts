@@ -540,7 +540,6 @@ describe('computed patient status model', () => {
         lastName: 'Stark',
         isEmergencyContact: false,
         isHealthcareProxy: false,
-        canContact: true,
       },
       txn,
     );
@@ -557,7 +556,6 @@ describe('computed patient status model', () => {
         lastName: 'Stark',
         isEmergencyContact: true,
         isHealthcareProxy: false,
-        canContact: true,
       },
       txn,
     );
@@ -789,7 +787,6 @@ describe('computed patient status model', () => {
             lastName: 'Stark',
             isEmergencyContact: false,
             isHealthcareProxy: true,
-            canContact: true,
           },
           txn,
         );
@@ -878,7 +875,6 @@ describe('computed patient status model', () => {
             lastName: 'Stark',
             isEmergencyContact: false,
             isHealthcareProxy: true,
-            canContact: true,
           },
           txn,
         );
@@ -940,7 +936,6 @@ describe('computed patient status model', () => {
             lastName: 'Stark',
             isEmergencyContact: false,
             isHealthcareProxy: true,
-            canContact: true,
           },
           txn,
         );
@@ -991,7 +986,6 @@ describe('computed patient status model', () => {
             lastName: 'Stark',
             isEmergencyContact: false,
             isHealthcareProxy: true,
-            canContact: true,
           },
           txn,
         );

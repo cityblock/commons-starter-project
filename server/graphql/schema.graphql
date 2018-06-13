@@ -444,7 +444,6 @@ type PatientContact implements uniqueId {
   lastName: String!
   isEmergencyContact: Boolean!
   isHealthcareProxy: Boolean!
-  canContact: Boolean!
   description: String
   phone: Phone!
   address: Address
@@ -1842,7 +1841,6 @@ input PatientContactCreateInput {
   phone: PhoneCreateInput!
   isEmergencyContact: Boolean
   isHealthcareProxy: Boolean
-  canContact: Boolean
   description: String
   address: AddressCreateInput
   email: EmailCreateInput
@@ -1862,7 +1860,6 @@ input PatientContactEditInput {
   lastName: String
   isEmergencyContact: Boolean
   isHealthcareProxy: Boolean
-  canContact: Boolean
   description: String
   address: AddressInput
   email: EmailInput

@@ -9,7 +9,6 @@ fragment FullPatientContact on PatientContact {
   lastName
   isEmergencyContact
   isHealthcareProxy
-  canContact
   description
   address {
     ...FullAddress

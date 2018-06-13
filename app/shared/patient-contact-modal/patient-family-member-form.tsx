@@ -21,7 +21,6 @@ interface IProps {
   relationToPatient?: string | null;
   relationFreeText?: string | null;
   description?: string | null;
-  canContact?: boolean | null;
   isEmergencyContact?: boolean | null;
   onChange: (e?: any) => void;
   onAddresssChange: (e?: any) => void;
@@ -114,7 +113,6 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
       relationFreeText,
       hasFieldError,
       isEmergencyContact,
-      canContact,
     } = this.props;
 
     const isOtherRelation = relationToPatient === 'other';
@@ -224,26 +222,6 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
                 name="isEmergencyContact"
                 value="true"
                 checked={!!isEmergencyContact}
-                label="Yes"
-                onChange={onRadioChange}
-              />
-            </RadioGroup>
-          </div>
-
-          <div className={styles.field}>
-            <FormLabel messageId="patientContact.canContact" />
-            <RadioGroup>
-              <RadioInput
-                name="canContact"
-                value="false"
-                checked={!canContact}
-                label="No"
-                onChange={onRadioChange}
-              />
-              <RadioInput
-                name="canContact"
-                value="true"
-                checked={!!canContact}
                 label="Yes"
                 onChange={onRadioChange}
               />

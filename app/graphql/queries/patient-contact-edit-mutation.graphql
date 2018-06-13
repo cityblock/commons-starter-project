@@ -8,7 +8,6 @@ mutation patientContactEdit(
   $lastName: String
   $isEmergencyContact: Boolean
   $isHealthcareProxy: Boolean
-  $canContact: Boolean
   $description: String
   $address: AddressInput
   $email: EmailInput
@@ -23,7 +22,6 @@ mutation patientContactEdit(
       lastName: $lastName
       isEmergencyContact: $isEmergencyContact
       isHealthcareProxy: $isHealthcareProxy
-      canContact: $canContact
       description: $description
       address: $address
       phone: $phone

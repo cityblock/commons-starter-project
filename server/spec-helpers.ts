@@ -221,13 +221,11 @@ export function createMockPatientContact(
     relationFreeText?: string;
     isEmergencyContact?: boolean;
     isHealthcareProxy?: boolean;
-    canContact?: boolean;
     description?: string;
   },
 ) {
   const isEmergencyContact = get(options, 'isEmergencyContact');
   const isHealthcareProxy = get(options, 'isHealthcareProxy');
-  const canContact = get(options, 'canContact');
 
   return {
     phone,
@@ -239,7 +237,6 @@ export function createMockPatientContact(
     relationFreeText: get(options, 'relationFreeText') || null,
     isEmergencyContact: isNil(isEmergencyContact) ? false : isEmergencyContact,
     isHealthcareProxy: isNil(isHealthcareProxy) ? false : isHealthcareProxy,
-    canContact: isNil(canContact) ? false : canContact,
     email: get(options, 'email'),
     address: get(options, 'address'),
     description: get(options, 'description') || 'some contact description',
@@ -850,7 +847,6 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
       lastName: 'Stark',
       isEmergencyContact: true,
       isHealthcareProxy: false,
-      canContact: true,
     },
     txn,
   );

@@ -20,7 +20,6 @@ export interface IPatientContactOptions {
   lastName: string;
   isEmergencyContact: boolean;
   isHealthcareProxy: boolean;
-  canContact: boolean;
   description?: string;
 }
 
@@ -32,7 +31,6 @@ interface IEditPatientContact extends Partial<IPatientContactOptions> {
   lastName?: string;
   isEmergencyContact?: boolean;
   isHealthcareProxy?: boolean;
-  canContact?: boolean;
   description?: string;
 }
 
@@ -50,7 +48,6 @@ export default class PatientContact extends Model {
   lastName!: string;
   isEmergencyContact!: boolean;
   isHealthcareProxy!: boolean;
-  canContact!: boolean;
   description!: string;
   createdAt!: string;
   updatedAt!: string;
@@ -84,7 +81,6 @@ export default class PatientContact extends Model {
       lastName: { type: 'string', minLength: 1 },
       isEmergencyContact: { type: 'boolean' },
       isHealthcareProxy: { type: 'boolean' },
-      canContact: { type: 'boolean' },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },

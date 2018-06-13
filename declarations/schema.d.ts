@@ -1609,7 +1609,6 @@ declare module 'schema' {
     lastName: string;
     isEmergencyContact: boolean;
     isHealthcareProxy: boolean;
-    canContact: boolean;
     description: string | null;
     phone: IPhone;
     address: IAddress | null;
@@ -4401,7 +4400,6 @@ declare module 'schema' {
     phone: IPhoneCreateInput;
     isEmergencyContact?: boolean | null;
     isHealthcareProxy?: boolean | null;
-    canContact?: boolean | null;
     description?: string | null;
     address?: IAddressCreateInput | null;
     email?: IEmailCreateInput | null;
@@ -4425,7 +4423,6 @@ declare module 'schema' {
     lastName?: string | null;
     isEmergencyContact?: boolean | null;
     isHealthcareProxy?: boolean | null;
-    canContact?: boolean | null;
     description?: string | null;
     address?: IAddressInput | null;
     email?: IEmailInput | null;

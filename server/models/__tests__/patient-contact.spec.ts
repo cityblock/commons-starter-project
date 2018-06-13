@@ -99,7 +99,6 @@ describe('patient info model', () => {
         relationToPatient: 'parent',
         isEmergencyContact: false,
         isHealthcareProxy: false,
-        canContact: false,
         email: null,
         address: null,
         description: 'some contact description',
@@ -116,7 +115,6 @@ describe('patient info model', () => {
           email,
           isEmergencyContact: true,
           isHealthcareProxy: true,
-          canContact: true,
         }),
         txn,
       );
@@ -144,7 +142,6 @@ describe('patient info model', () => {
         relationToPatient: 'parent',
         isEmergencyContact: true,
         isHealthcareProxy: true,
-        canContact: true,
         description: 'some contact description',
       });
 
@@ -160,7 +157,6 @@ describe('patient info model', () => {
         relationToPatient: 'parent',
         isEmergencyContact: true,
         isHealthcareProxy: true,
-        canContact: true,
         description: 'some contact description',
       });
     });
@@ -176,7 +172,6 @@ describe('patient info model', () => {
           relationToPatient: 'friend' as PatientRelationOptions,
           isEmergencyContact: true,
           isHealthcareProxy: true,
-          canContact: true,
           description: 'some magical thing',
           updatedById: user.id,
         },
@@ -192,7 +187,6 @@ describe('patient info model', () => {
         relationToPatient: 'friend',
         isEmergencyContact: true,
         isHealthcareProxy: true,
-        canContact: true,
         email: null,
         address: null,
         description: 'some magical thing',
@@ -212,7 +206,6 @@ describe('patient info model', () => {
         relationToPatient: 'parent',
         isEmergencyContact: false,
         isHealthcareProxy: false,
-        canContact: false,
         description: 'some contact description',
       });
     });

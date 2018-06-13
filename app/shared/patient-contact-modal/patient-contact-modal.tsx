@@ -35,7 +35,6 @@ interface IEditableFieldState {
   phoneNumber?: string | null;
   phoneType?: PhoneTypeOptions | null;
   isEmergencyContact?: boolean | null;
-  canContact?: boolean | null;
   address?: AddressInput | null;
 }
 
@@ -68,7 +67,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
           address: patientContact.address,
           isEmergencyContact:
             patientContact.isEmergencyContact || contactType === 'emergencyContact',
-          canContact: patientContact.canContact,
         };
       }
     }
@@ -92,7 +90,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
     phoneType: null,
     address: null,
     isEmergencyContact: null,
-    canContact: null,
     saveError: null,
     hasFieldError: undefined,
   };
@@ -166,7 +163,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
       emailAddress,
       description,
       isEmergencyContact,
-      canContact,
     } = this.state;
 
     const hasErrors = this.validateFields();
@@ -181,7 +177,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
       phone: { phoneNumber: phoneNumber!, type: phoneType! },
       description,
       isEmergencyContact,
-      canContact,
       email: isNil(emailAddress) ? null : { emailAddress },
       address: this.getContactAddress(),
       relationFreeText,
@@ -224,7 +219,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
       relationToPatient,
       relationFreeText,
       description,
-      canContact,
       isEmergencyContact,
       hasFieldError,
     } = this.state;
@@ -258,7 +252,6 @@ class PatientContactModal extends React.Component<IProps, allState> {
         relationFreeText={relationFreeText}
         description={description}
         isEmergencyContact={isEmergencyContact}
-        canContact={canContact}
         onChange={this.handleChange}
         onAddresssChange={this.handleAddressChange}
         onRadioChange={this.handleRadioChange}

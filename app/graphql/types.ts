@@ -2947,7 +2947,6 @@ export interface getPatientContactHealthcareProxiesQuery {
     lastName: string,
     isEmergencyContact: boolean,
     isHealthcareProxy: boolean,
-    canContact: boolean,
     description: string | null,
     address:  {
       id: string,
@@ -2988,7 +2987,6 @@ export interface getPatientContactsQuery {
     lastName: string,
     isEmergencyContact: boolean,
     isHealthcareProxy: boolean,
-    canContact: boolean,
     description: string | null,
     address:  {
       id: string,
@@ -6955,7 +6953,6 @@ export interface patientContactCreateMutationVariables {
   phone: PhoneCreateInput,
   isEmergencyContact?: boolean | null,
   isHealthcareProxy?: boolean | null,
-  canContact?: boolean | null,
   description?: string | null,
   address?: AddressCreateInput | null,
   email?: EmailCreateInput | null,
@@ -6972,7 +6969,6 @@ export interface patientContactCreateMutation {
     lastName: string,
     isEmergencyContact: boolean,
     isHealthcareProxy: boolean,
-    canContact: boolean,
     description: string | null,
     address:  {
       id: string,
@@ -7013,7 +7009,6 @@ export interface patientContactDeleteMutation {
     lastName: string,
     isEmergencyContact: boolean,
     isHealthcareProxy: boolean,
-    canContact: boolean,
     description: string | null,
     address:  {
       id: string,
@@ -7047,7 +7042,6 @@ export interface patientContactEditMutationVariables {
   lastName?: string | null,
   isEmergencyContact?: boolean | null,
   isHealthcareProxy?: boolean | null,
-  canContact?: boolean | null,
   description?: string | null,
   address?: AddressInput | null,
   email?: EmailInput | null,
@@ -7065,7 +7059,6 @@ export interface patientContactEditMutation {
     lastName: string,
     isEmergencyContact: boolean,
     isHealthcareProxy: boolean,
-    canContact: boolean,
     description: string | null,
     address:  {
       id: string,
@@ -11693,7 +11686,6 @@ export interface FullPatientContactFragment {
   lastName: string,
   isEmergencyContact: boolean,
   isHealthcareProxy: boolean,
-  canContact: boolean,
   description: string | null,
   address:  {
     id: string,

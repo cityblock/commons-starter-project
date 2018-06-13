@@ -362,7 +362,6 @@ export const ENGLISH_TRANSLATION = {
     'patientContact.phoneNumber': 'Phone number',
     'patientContact.emailAddress': 'Email address',
     'patientContact.isEmergencyContact': 'Is this their emergency contact?',
-    'patientContact.canContact': 'Can we contact them about this member?',
     'patientContact.proxyDescription': 'Notes about this health care proxy',
     'patientContact.note': 'Additional notes',
     'patientContact.fieldEmptyError': 'This field is required',

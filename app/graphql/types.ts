@@ -3063,6 +3063,37 @@ export interface getPatientEncountersQuery {
   } >,
 };
 
+export interface getPatientExternalOrganizationsQueryVariables {
+  patientId: string,
+};
+
+export interface getPatientExternalOrganizationsQuery {
+  // Patient external organizations for patient
+  patientExternalOrganizations:  Array< {
+    id: string,
+    patientId: string,
+    name: string,
+    description: string | null,
+    phoneNumber: string | null,
+    faxNumber: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    isConsentedForSubstanceUse: boolean | null,
+    isConsentedForHiv: boolean | null,
+    isConsentedForStd: boolean | null,
+    isConsentedForGeneticTesting: boolean | null,
+    isConsentedForFamilyPlanning: boolean | null,
+    consentDocumentId: string | null,
+  } > | null,
+};
+
 export interface getPatientExternalProvidersQueryVariables {
   patientId: string,
 };
@@ -7188,6 +7219,121 @@ export interface patientDocumentSignedUrlCreateMutation {
   patientDocumentSignedUrlCreate:  {
     signedUrl: string,
   },
+};
+
+export interface patientExternalOrganizationCreateMutationVariables {
+  patientId: string,
+  name: string,
+  description?: string | null,
+  phoneNumber?: string | null,
+  faxNumber?: string | null,
+  address?: AddressCreateInput | null,
+  isConsentedForSubstanceUse?: boolean | null,
+  isConsentedForHiv?: boolean | null,
+  isConsentedForStd?: boolean | null,
+  isConsentedForGeneticTesting?: boolean | null,
+  isConsentedForFamilyPlanning?: boolean | null,
+};
+
+export interface patientExternalOrganizationCreateMutation {
+  // Create patient external organization
+  patientExternalOrganizationCreate:  {
+    id: string,
+    patientId: string,
+    name: string,
+    description: string | null,
+    phoneNumber: string | null,
+    faxNumber: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    isConsentedForSubstanceUse: boolean | null,
+    isConsentedForHiv: boolean | null,
+    isConsentedForStd: boolean | null,
+    isConsentedForGeneticTesting: boolean | null,
+    isConsentedForFamilyPlanning: boolean | null,
+    consentDocumentId: string | null,
+  } | null,
+};
+
+export interface patientExternalOrganizationDeleteMutationVariables {
+  patientExternalOrganizationId: string,
+};
+
+export interface patientExternalOrganizationDeleteMutation {
+  // Delete patient external organization
+  patientExternalOrganizationDelete:  {
+    id: string,
+    patientId: string,
+    name: string,
+    description: string | null,
+    phoneNumber: string | null,
+    faxNumber: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    isConsentedForSubstanceUse: boolean | null,
+    isConsentedForHiv: boolean | null,
+    isConsentedForStd: boolean | null,
+    isConsentedForGeneticTesting: boolean | null,
+    isConsentedForFamilyPlanning: boolean | null,
+    consentDocumentId: string | null,
+    deletedAt: string | null,
+  } | null,
+};
+
+export interface patientExternalOrganizationEditMutationVariables {
+  patientExternalOrganizationId: string,
+  name?: string | null,
+  description?: string | null,
+  phoneNumber?: string | null,
+  faxNumber?: string | null,
+  address?: AddressInput | null,
+  isConsentedForSubstanceUse?: boolean | null,
+  isConsentedForHiv?: boolean | null,
+  isConsentedForStd?: boolean | null,
+  isConsentedForGeneticTesting?: boolean | null,
+  isConsentedForFamilyPlanning?: boolean | null,
+  consentDocumentId?: string | null,
+};
+
+export interface patientExternalOrganizationEditMutation {
+  // Edit fields on patient external organization stored in the db
+  patientExternalOrganizationEdit:  {
+    id: string,
+    patientId: string,
+    name: string,
+    description: string | null,
+    phoneNumber: string | null,
+    faxNumber: string | null,
+    address:  {
+      id: string,
+      city: string | null,
+      state: string | null,
+      street1: string | null,
+      street2: string | null,
+      zip: string | null,
+      description: string | null,
+    } | null,
+    isConsentedForSubstanceUse: boolean | null,
+    isConsentedForHiv: boolean | null,
+    isConsentedForStd: boolean | null,
+    isConsentedForGeneticTesting: boolean | null,
+    isConsentedForFamilyPlanning: boolean | null,
+    consentDocumentId: string | null,
+  } | null,
 };
 
 export interface patientExternalProviderCreateMutationVariables {
@@ -11741,6 +11887,30 @@ export interface FullPatientEncounterFragment {
   title: string | null,
   notes: string | null,
   progressNoteId: string | null,
+};
+
+export interface FullPatientExternalOrganizationFragment {
+  id: string,
+  patientId: string,
+  name: string,
+  description: string | null,
+  phoneNumber: string | null,
+  faxNumber: string | null,
+  address:  {
+    id: string,
+    city: string | null,
+    state: string | null,
+    street1: string | null,
+    street2: string | null,
+    zip: string | null,
+    description: string | null,
+  } | null,
+  isConsentedForSubstanceUse: boolean | null,
+  isConsentedForHiv: boolean | null,
+  isConsentedForStd: boolean | null,
+  isConsentedForGeneticTesting: boolean | null,
+  isConsentedForFamilyPlanning: boolean | null,
+  consentDocumentId: string | null,
 };
 
 export interface FullPatientExternalProviderFragment {

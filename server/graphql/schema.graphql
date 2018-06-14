@@ -470,6 +470,26 @@ type PatientExternalProvider implements uniqueId {
   deletedAt: String
 }
 
+# Patient external organization that is editable in Commons
+type PatientExternalOrganization implements uniqueId {
+  id: ID!
+  patientId: ID!
+  name: String!
+  description: String
+  phoneNumber: String
+  faxNumber: String
+  address: Address
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
+  consentDocumentId: String
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+}
+
 # Documents and consents for a user
 type PatientDocument implements uniqueId {
   id: ID!
@@ -1897,6 +1917,42 @@ input PatientExternalProviderEditInput {
   phone: PhoneInput
 }
 
+# params for creating a patient external organization in the db
+input PatientExternalOrganizationCreateInput {
+  patientId: ID!
+  name: String!
+  description: String
+  phoneNumber: String
+  faxNumber: String
+  address: AddressCreateInput
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
+}
+
+# params for deleting a patient external organization and all associated models in the db
+input PatientExternalOrganizationDeleteInput {
+  patientExternalOrganizationId: ID!
+}
+
+# params for editing a patient external organization in the db
+input PatientExternalOrganizationEditInput {
+  patientExternalOrganizationId: ID!
+  name: String
+  description: String
+  phoneNumber: String
+  faxNumber: String
+  address: AddressInput
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
+  consentDocumentId: String
+}
+
 # params for creating a patient document in the db
 input PatientDocumentCreateInput {
   id: ID
@@ -2643,6 +2699,18 @@ type RootMutationType {
   patientExternalProviderDelete(input: PatientExternalProviderDeleteInput): PatientExternalProvider
   # Edit fields on patient external provider stored in the db
   patientExternalProviderEdit(input: PatientExternalProviderEditInput): PatientExternalProvider
+  # Create patient external organization
+  patientExternalOrganizationCreate(
+    input: PatientExternalOrganizationCreateInput
+  ): PatientExternalOrganization
+  # Delete patient external organization
+  patientExternalOrganizationDelete(
+    input: PatientExternalOrganizationDeleteInput
+  ): PatientExternalOrganization
+  # Edit fields on patient external organization stored in the db
+  patientExternalOrganizationEdit(
+    input: PatientExternalOrganizationEditInput
+  ): PatientExternalOrganization
   # Create patient document
   patientDocumentCreate(input: PatientDocumentCreateInput): PatientDocument
   # Delete patient document
@@ -2934,6 +3002,8 @@ type RootQueryType {
   patientContactHealthcareProxies(patientId: ID!): [PatientContact!]
   # Patient external providers for patient
   patientExternalProviders(patientId: ID!): [PatientExternalProvider!]
+  # Patient external organizations for patient
+  patientExternalOrganizations(patientId: ID!): [PatientExternalOrganization!]
   # Patient documents for patient
   patientDocuments(patientId: ID!): [PatientDocument!]
   # A single clinic

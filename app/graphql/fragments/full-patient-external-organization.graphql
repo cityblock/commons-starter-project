@@ -1,0 +1,19 @@
+#import "./full-address.graphql"
+
+fragment FullPatientExternalOrganization on PatientExternalOrganization {
+  id
+  patientId
+  name
+  description
+  phoneNumber
+  faxNumber
+  address {
+    ...FullAddress
+  }
+  isConsentedForSubstanceUse
+  isConsentedForHiv
+  isConsentedForStd
+  isConsentedForGeneticTesting
+  isConsentedForFamilyPlanning
+  consentDocumentId
+}

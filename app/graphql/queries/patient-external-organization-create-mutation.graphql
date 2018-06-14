@@ -1,0 +1,33 @@
+#import "../fragments/full-patient-external-organization.graphql"
+
+mutation patientExternalOrganizationCreate(
+  $patientId: ID!
+  $name: String!
+  $description: String
+  $phoneNumber: String
+  $faxNumber: String
+  $address: AddressCreateInput
+  $isConsentedForSubstanceUse: Boolean
+  $isConsentedForHiv: Boolean
+  $isConsentedForStd: Boolean
+  $isConsentedForGeneticTesting: Boolean
+  $isConsentedForFamilyPlanning: Boolean
+) {
+  patientExternalOrganizationCreate(
+    input: {
+      patientId: $patientId
+      name: $name
+      description: $description
+      phoneNumber: $phoneNumber
+      faxNumber: $faxNumber
+      address: $address
+      isConsentedForSubstanceUse: $isConsentedForSubstanceUse
+      isConsentedForHiv: $isConsentedForHiv
+      isConsentedForStd: $isConsentedForStd
+      isConsentedForGeneticTesting: $isConsentedForGeneticTesting
+      isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
+    }
+  ) {
+    ...FullPatientExternalOrganization
+  }
+}

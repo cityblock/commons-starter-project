@@ -130,6 +130,11 @@ declare module 'schema' {
     patientExternalProviders: Array<IPatientExternalProvider>;
 
     /**
+     * Patient external organizations for patient
+     */
+    patientExternalOrganizations: Array<IPatientExternalOrganization>;
+
+    /**
      * Patient documents for patient
      */
     patientDocuments: Array<IPatientDocument>;
@@ -757,6 +762,10 @@ declare module 'schema' {
     patientId: string;
   }
 
+  interface IPatientExternalOrganizationsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+
   interface IPatientDocumentsOnRootQueryTypeArguments {
     patientId: string;
   }
@@ -1214,6 +1223,7 @@ declare module 'schema' {
     | IPatientForDashboard
     | IPatientContact
     | IPatientExternalProvider
+    | IPatientExternalOrganization
     | IPatientDocument
     | IClinic
     | ITask
@@ -1686,6 +1696,28 @@ declare module 'schema' {
     hematology = 'hematology',
     dermatology = 'dermatology',
     otherMedicalSpecialist = 'otherMedicalSpecialist'
+  }
+
+  /**
+   * Patient external organization that is editable in Commons
+   */
+  interface IPatientExternalOrganization {
+    id: string;
+    patientId: string;
+    name: string;
+    description: string | null;
+    phoneNumber: string | null;
+    faxNumber: string | null;
+    address: IAddress | null;
+    isConsentedForSubstanceUse: boolean | null;
+    isConsentedForHiv: boolean | null;
+    isConsentedForStd: boolean | null;
+    isConsentedForGeneticTesting: boolean | null;
+    isConsentedForFamilyPlanning: boolean | null;
+    consentDocumentId: string | null;
+    createdAt: string | null;
+    updatedAt: string | null;
+    deletedAt: string | null;
   }
 
   /**
@@ -3036,6 +3068,21 @@ declare module 'schema' {
     patientExternalProviderEdit: IPatientExternalProvider | null;
 
     /**
+     * Create patient external organization
+     */
+    patientExternalOrganizationCreate: IPatientExternalOrganization | null;
+
+    /**
+     * Delete patient external organization
+     */
+    patientExternalOrganizationDelete: IPatientExternalOrganization | null;
+
+    /**
+     * Edit fields on patient external organization stored in the db
+     */
+    patientExternalOrganizationEdit: IPatientExternalOrganization | null;
+
+    /**
      * Create patient document
      */
     patientDocumentCreate: IPatientDocument | null;
@@ -3705,6 +3752,18 @@ declare module 'schema' {
 
   interface IPatientExternalProviderEditOnRootMutationTypeArguments {
     input?: IPatientExternalProviderEditInput | null;
+  }
+
+  interface IPatientExternalOrganizationCreateOnRootMutationTypeArguments {
+    input?: IPatientExternalOrganizationCreateInput | null;
+  }
+
+  interface IPatientExternalOrganizationDeleteOnRootMutationTypeArguments {
+    input?: IPatientExternalOrganizationDeleteInput | null;
+  }
+
+  interface IPatientExternalOrganizationEditOnRootMutationTypeArguments {
+    input?: IPatientExternalOrganizationEditInput | null;
   }
 
   interface IPatientDocumentCreateOnRootMutationTypeArguments {
@@ -4495,6 +4554,48 @@ declare module 'schema' {
     description?: string | null;
     email?: IEmailInput | null;
     phone?: IPhoneInput | null;
+  }
+
+  /**
+   * params for creating a patient external organization in the db
+   */
+  interface IPatientExternalOrganizationCreateInput {
+    patientId: string;
+    name: string;
+    description?: string | null;
+    phoneNumber?: string | null;
+    faxNumber?: string | null;
+    address?: IAddressCreateInput | null;
+    isConsentedForSubstanceUse?: boolean | null;
+    isConsentedForHiv?: boolean | null;
+    isConsentedForStd?: boolean | null;
+    isConsentedForGeneticTesting?: boolean | null;
+    isConsentedForFamilyPlanning?: boolean | null;
+  }
+
+  /**
+   * params for deleting a patient external organization and all associated models in the db
+   */
+  interface IPatientExternalOrganizationDeleteInput {
+    patientExternalOrganizationId: string;
+  }
+
+  /**
+   * params for editing a patient external organization in the db
+   */
+  interface IPatientExternalOrganizationEditInput {
+    patientExternalOrganizationId: string;
+    name?: string | null;
+    description?: string | null;
+    phoneNumber?: string | null;
+    faxNumber?: string | null;
+    address?: IAddressInput | null;
+    isConsentedForSubstanceUse?: boolean | null;
+    isConsentedForHiv?: boolean | null;
+    isConsentedForStd?: boolean | null;
+    isConsentedForGeneticTesting?: boolean | null;
+    isConsentedForFamilyPlanning?: boolean | null;
+    consentDocumentId?: string | null;
   }
 
   /**

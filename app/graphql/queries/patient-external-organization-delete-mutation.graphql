@@ -1,0 +1,10 @@
+#import "../fragments/full-patient-external-organization.graphql"
+
+mutation patientExternalOrganizationDelete($patientExternalOrganizationId: ID!) {
+  patientExternalOrganizationDelete(
+    input: { patientExternalOrganizationId: $patientExternalOrganizationId }
+  ) {
+    ...FullPatientExternalOrganization
+    deletedAt
+  }
+}

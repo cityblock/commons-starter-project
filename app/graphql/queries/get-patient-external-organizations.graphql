@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-external-organization.graphql"
+
+query getPatientExternalOrganizations($patientId: ID!) {
+  patientExternalOrganizations(patientId: $patientId) {
+    ...FullPatientExternalOrganization
+  }
+}

@@ -136,6 +136,12 @@ import {
 import { resolveEmails } from './patient-email-resolver';
 import { resolvePatientEncounters } from './patient-encounter-resolver';
 import {
+  patientExternalOrganizationCreate,
+  patientExternalOrganizationDelete,
+  patientExternalOrganizationEdit,
+  resolvePatientExternalOrganizationsForPatient,
+} from './patient-external-organization-resolver';
+import {
   patientExternalProviderCreate,
   patientExternalProviderDelete,
   patientExternalProviderEdit,
@@ -367,6 +373,7 @@ const resolveFunctions = {
     patientsForComputedList: resolvePatientsForComputedList,
     patientContacts: resolvePatientContactsForPatient,
     patientContactHealthcareProxies: resolveHealthcareProxiesForPatient,
+    patientExternalOrganizations: resolvePatientExternalOrganizationsForPatient,
     patientExternalProviders: resolvePatientExternalProvidersForPatient,
     patientDocuments: resolvePatientDocuments,
     users: resolveUsers,
@@ -488,6 +495,9 @@ const resolveFunctions = {
     patientContactCreate,
     patientContactDelete,
     patientContactEdit,
+    patientExternalOrganizationCreate,
+    patientExternalOrganizationDelete,
+    patientExternalOrganizationEdit,
     patientExternalProviderCreate,
     patientExternalProviderDelete,
     patientExternalProviderEdit,

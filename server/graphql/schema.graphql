@@ -297,6 +297,7 @@ enum DocumentTypeOptions {
   hieHealthixConsent
   hcp
   molst
+  textConsent
 }
 
 enum SmsMessageDirection {

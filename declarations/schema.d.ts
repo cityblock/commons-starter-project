@@ -1738,7 +1738,8 @@ declare module 'schema' {
     hipaaConsent = 'hipaaConsent',
     hieHealthixConsent = 'hieHealthixConsent',
     hcp = 'hcp',
-    molst = 'molst'
+    molst = 'molst',
+    textConsent = 'textConsent'
   }
 
   /**

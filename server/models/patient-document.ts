@@ -5,7 +5,7 @@ import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';
 
-export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent'];
+export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent', 'textConsent'];
 
 const EAGER_QUERY = '[uploadedBy]';
 
@@ -114,15 +114,21 @@ export default class PatientDocument extends Model {
   }
 
   static async getMOLSTForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
-    return this.query(txn)
-      .eager(EAGER_QUERY)
-      .where({ patientId, deletedAt: null, documentType: 'molst' });
+    return this.getByDocumentTypeForPatient(patientId, 'molst' as DocumentTypeOptions, txn);
   }
 
   static async getHCPsForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {
+    return this.getByDocumentTypeForPatient(patientId, 'hcp' as DocumentTypeOptions, txn);
+  }
+
+  static async getByDocumentTypeForPatient(
+    patientId: string,
+    documentType: DocumentTypeOptions,
+    txn: Transaction,
+  ): Promise<PatientDocument[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .where({ patientId, deletedAt: null, documentType: 'hcp' });
+      .where({ patientId, deletedAt: null, documentType });
   }
 
   static async create(input: IPatientDocumentOptions, txn: Transaction) {

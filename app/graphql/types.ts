@@ -119,6 +119,7 @@ export enum DocumentTypeOptions {
   hieHealthixConsent = "hieHealthixConsent",
   hipaaConsent = "hipaaConsent",
   molst = "molst",
+  textConsent = "textConsent",
 }
 
 

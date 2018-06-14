@@ -178,14 +178,15 @@ export default class ComputedPatientStatus extends BaseModel {
     let isConsented = true;
     const documents = await PatientDocument.getConsentsForPatient(patientId, txn);
 
-    if (!documents.length || documents.length < CONSENT_TYPES.length) {
+    // ignore text consent for now
+    if (!documents.length || documents.length < CONSENT_TYPES.length - 1) {
       return false;
     }
 
     CONSENT_TYPES.forEach(consentType => {
       const document = find(documents, ['documentType', consentType]);
 
-      if (!document) {
+      if (!document && consentType !== 'textConsent') {
         isConsented = false;
       }
     });

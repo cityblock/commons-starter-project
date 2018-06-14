@@ -13,6 +13,7 @@ const CONSENTS = [
   DocumentTypeOptions.cityblockConsent,
   DocumentTypeOptions.hipaaConsent,
   DocumentTypeOptions.hieHealthixConsent,
+  DocumentTypeOptions.textConsent,
 ];
 
 interface IProps {
@@ -87,7 +88,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
 
     return patientDocuments
       ? patientDocuments.map(patientDocument => {
-          return !patientDocument.documentType ? (
+          return patientDocument.documentType && !CONSENTS.includes(patientDocument.documentType) ? (
             <PatientDocument
               patientDocument={patientDocument}
               key={`document-${patientDocument.id}`}

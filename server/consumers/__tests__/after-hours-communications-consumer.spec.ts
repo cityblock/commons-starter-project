@@ -179,7 +179,7 @@ describe('After Hours Communications Consumer', () => {
       );
 
       expect(createMessage).not.toBeCalled();
-    })
+    });
   });
 
   describe('isInDateRange', () => {

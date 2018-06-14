@@ -18,6 +18,7 @@ import PatientContact from '../patient-contact';
 import PatientContactAddress from '../patient-contact-address';
 import PatientContactEmail from '../patient-contact-email';
 import PatientContactPhone from '../patient-contact-phone';
+import PatientDocument from '../patient-document';
 import Phone from '../phone';
 import User from '../user';
 
@@ -109,12 +110,26 @@ describe('patient info model', () => {
       const { user, phone, patient } = await setup(txn);
       const address = await Address.create(createMockAddress(user.id), txn);
       const email = await Email.create(createMockEmail(user.id), txn);
+      const consentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc.pdf',
+        },
+        txn,
+      );
       const patientContact = await PatientContact.create(
         createMockPatientContact(patient.id, user.id, phone, {
           address,
           email,
           isEmergencyContact: true,
           isHealthcareProxy: true,
+          consentDocumentId: consentDocument.id,
+          isConsentedForSubstanceUse: true,
+          isConsentedForHiv: true,
+          isConsentedForStd: false,
+          isConsentedForGeneticTesting: true,
+          isConsentedForFamilyPlanning: false,
         }),
         txn,
       );
@@ -143,6 +158,12 @@ describe('patient info model', () => {
         isEmergencyContact: true,
         isHealthcareProxy: true,
         description: 'some contact description',
+        consentDocumentId: consentDocument.id,
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: true,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
       });
 
       const fullPatientContact = await PatientContact.get(patientContact.id, txn);
@@ -158,6 +179,12 @@ describe('patient info model', () => {
         isEmergencyContact: true,
         isHealthcareProxy: true,
         description: 'some contact description',
+        consentDocumentId: consentDocument.id,
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: true,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
       });
     });
   });
@@ -165,6 +192,15 @@ describe('patient info model', () => {
   describe('edit', async () => {
     it('should edit patient contact', async () => {
       const { patient, patientContact, user, phone } = await setup(txn);
+      const consentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc.pdf',
+        },
+        txn,
+      );
+
       const result = await PatientContact.edit(
         {
           firstName: 'ron',
@@ -174,6 +210,12 @@ describe('patient info model', () => {
           isHealthcareProxy: true,
           description: 'some magical thing',
           updatedById: user.id,
+          consentDocumentId: consentDocument.id,
+          isConsentedForSubstanceUse: true,
+          isConsentedForHiv: true,
+          isConsentedForStd: false,
+          isConsentedForGeneticTesting: true,
+          isConsentedForFamilyPlanning: false,
         },
         patientContact.id,
         txn,
@@ -190,6 +232,12 @@ describe('patient info model', () => {
         email: null,
         address: null,
         description: 'some magical thing',
+        consentDocumentId: consentDocument.id,
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: true,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
       });
     });
   });

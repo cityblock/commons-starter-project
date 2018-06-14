@@ -7,6 +7,7 @@ import Patient from './patient';
 import PatientContactAddress from './patient-contact-address';
 import PatientContactEmail from './patient-contact-email';
 import PatientContactPhone from './patient-contact-phone';
+import PatientDocument from './patient-document';
 import Phone from './phone';
 
 const EAGER_QUERY = '[address, email, phone]';
@@ -21,9 +22,15 @@ export interface IPatientContactOptions {
   isEmergencyContact: boolean;
   isHealthcareProxy: boolean;
   description?: string;
+  isConsentedForSubstanceUse?: boolean;
+  isConsentedForHiv?: boolean;
+  isConsentedForStd?: boolean;
+  isConsentedForGeneticTesting?: boolean;
+  isConsentedForFamilyPlanning?: boolean;
+  consentDocumentId?: string;
 }
 
-interface IEditPatientContact extends Partial<IPatientContactOptions> {
+interface IEditPatientContact {
   updatedById: string;
   relationToPatient?: PatientRelationOptions;
   relationFreeText?: string | null;
@@ -32,6 +39,12 @@ interface IEditPatientContact extends Partial<IPatientContactOptions> {
   isEmergencyContact?: boolean;
   isHealthcareProxy?: boolean;
   description?: string;
+  isConsentedForSubstanceUse?: boolean;
+  isConsentedForHiv?: boolean;
+  isConsentedForStd?: boolean;
+  isConsentedForGeneticTesting?: boolean;
+  isConsentedForFamilyPlanning?: boolean;
+  consentDocumentId?: string | null;
 }
 
 /* tslint:disable:member-ordering */
@@ -46,16 +59,22 @@ export default class PatientContact extends BaseModel {
   isEmergencyContact!: boolean;
   isHealthcareProxy!: boolean;
   description!: string;
-  createdAt!: string;
-  updatedAt!: string;
   address!: Address;
   email!: Email;
   phone!: Phone;
+  isConsentedForSubstanceUse!: boolean;
+  isConsentedForHiv!: boolean;
+  isConsentedForStd!: boolean;
+  isConsentedForGeneticTesting!: boolean;
+  isConsentedForFamilyPlanning!: boolean;
+  consentDocumentId!: string | null;
+  createdAt!: string;
+  updatedAt!: string;
   deletedAt!: string;
 
   static tableName = 'patient_contact';
 
-  static hasPHI = false;
+  static hasPHI = true;
 
   static jsonSchema = {
     type: 'object',
@@ -69,6 +88,12 @@ export default class PatientContact extends BaseModel {
       isEmergencyContact: { type: 'boolean' },
       isHealthcareProxy: { type: 'boolean' },
       description: { type: 'string' },
+      isConsentedForSubstanceUse: { type: 'boolean' },
+      isConsentedForHiv: { type: 'boolean' },
+      isConsentedForStd: { type: 'boolean' },
+      isConsentedForGeneticTesting: { type: 'boolean' },
+      isConsentedForFamilyPlanning: { type: 'boolean' },
+      consentDocumentId: { type: ['string', 'null'], format: 'uuid' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
@@ -129,6 +154,15 @@ export default class PatientContact extends BaseModel {
             to: 'patient_contact_phone.phoneId',
           },
           to: 'phone.id',
+        },
+      },
+
+      consentDocument: {
+        relation: Model.HasOneRelation,
+        modelClass: PatientDocument,
+        join: {
+          from: 'patient_contact.consentDocumentId',
+          to: 'patient_document.id',
         },
       },
     };
@@ -221,6 +255,17 @@ export default class PatientContact extends BaseModel {
     }
 
     return deleted;
+  }
+
+  static async getPatientIdForResource(
+    patientContactId: string,
+    txn: Transaction,
+  ): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(patientContactId);
+
+    return result ? result.patientId : '';
   }
 }
 /* tslint:enable:member-ordering */

@@ -222,6 +222,12 @@ export function createMockPatientContact(
     isEmergencyContact?: boolean;
     isHealthcareProxy?: boolean;
     description?: string;
+    isConsentedForSubstanceUse?: boolean;
+    isConsentedForHiv?: boolean;
+    isConsentedForStd?: boolean;
+    isConsentedForGeneticTesting?: boolean;
+    isConsentedForFamilyPlanning?: boolean;
+    consentDocumentId?: string;
   },
 ) {
   const isEmergencyContact = get(options, 'isEmergencyContact');
@@ -240,6 +246,12 @@ export function createMockPatientContact(
     email: get(options, 'email'),
     address: get(options, 'address'),
     description: get(options, 'description') || 'some contact description',
+    isConsentedForSubstanceUse: get(options, 'isConsentedForSubstanceUse'),
+    isConsentedForHiv: get(options, 'isConsentedForHiv'),
+    isConsentedForStd: get(options, 'isConsentedForStd'),
+    isConsentedForGeneticTesting: get(options, 'isConsentedForGeneticTesting'),
+    isConsentedForFamilyPlanning: get(options, 'isConsentedForFamilyPlanning'),
+    consentDocumentId: get(options, 'consentDocumentId'),
   };
 }
 

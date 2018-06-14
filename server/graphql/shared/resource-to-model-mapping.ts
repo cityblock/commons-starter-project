@@ -32,6 +32,7 @@ import PatientContactPhone from '../../models/patient-contact-phone';
 import PatientDataFlag from '../../models/patient-data-flag';
 import PatientDocument from '../../models/patient-document';
 import PatientEmail from '../../models/patient-email';
+import PatientExternalOrganization from '../../models/patient-external-organization';
 import PatientExternalProvider from '../../models/patient-external-provider';
 import PatientExternalProviderEmail from '../../models/patient-external-provider-email';
 import PatientExternalProviderPhone from '../../models/patient-external-provider-phone';
@@ -103,6 +104,7 @@ export type ModelResource =
   | 'patientDataFlag'
   | 'patientDocument'
   | 'patientEmail'
+  | 'patientExternalOrganization'
   | 'patientExternalProvider'
   | 'patientExternalProviderEmail'
   | 'patientExternalProviderPhone'
@@ -178,6 +180,7 @@ const resourceToModelMapping: ResourceToModelMapping = {
   patientDataFlag: PatientDataFlag,
   patientDocument: PatientDocument,
   patientEmail: PatientEmail,
+  patientExternalOrganization: PatientExternalOrganization,
   patientExternalProvider: PatientExternalProvider,
   patientExternalProviderEmail: PatientExternalProviderEmail,
   patientExternalProviderPhone: PatientExternalProviderPhone,

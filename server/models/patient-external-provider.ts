@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { ExternalProviderOptions } from 'schema';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Email from './email';
 import Patient from './patient';
 import PatientExternalProviderEmail from './patient-external-provider-email';
@@ -31,10 +31,7 @@ interface IEditPatientExternalProvider extends Partial<IPatientExternalProviderO
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientExternalProvider extends Model {
-  static modelPaths = [__dirname];
-  static pickJsonSchemaProperties = true;
-
+export default class PatientExternalProvider extends BaseModel {
   id!: string;
   patientId!: string;
   updatedById!: string;
@@ -49,16 +46,6 @@ export default class PatientExternalProvider extends Model {
   email!: Email;
   phone!: Phone;
   deletedAt!: string;
-
-  $beforeInsert() {
-    this.id = uuid();
-    // NOTE: We are NOT setting updatedAt on insert. This is so we can know when first updated.
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static tableName = 'patient_external_provider';
 

@@ -8,11 +8,7 @@ import DayOffToggle from '../day-off-toggle';
 
 describe('Settings Work Hours Options', () => {
   const wrapper = shallow(
-    <DailyWorkHours
-      userHours={[currentUserHours[0]]}
-      weekday={1}
-      disabled={false}
-    />,
+    <DailyWorkHours userHours={[currentUserHours[0]]} weekday={1} disabled={false} />,
   );
 
   it('renders container', () => {

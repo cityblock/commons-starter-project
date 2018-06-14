@@ -16,19 +16,16 @@ describe('renders care plan suggestion section', () => {
   const titleMessageId = 'test.id';
   const name = 'riskAreaAssessment';
   const suggestionGroups = {
-    [riskArea.id]: [
-      fullCarePlanSuggestionWithConcern,
-      fullCarePlanSuggestionWithGoal,
-    ],
+    [riskArea.id]: [fullCarePlanSuggestionWithConcern, fullCarePlanSuggestionWithGoal],
     id2: [
       {
         ...fullCarePlanSuggestionWithConcern,
         riskArea: {
           id: 'id2',
           title: 'second risk area',
-        }
-      }
-    ]
+        },
+      },
+    ],
   };
   const labels = { [riskArea.id]: riskArea.title, id2: 'second risk area' };
 
@@ -62,7 +59,6 @@ describe('renders care plan suggestion section', () => {
     expect(firstGroupProps.onAccept).toBe(onAccept);
     expect(firstGroupProps.onDismiss).toBe(onDismiss);
     expect(firstGroupProps.onClick).not.toBe(onGroupClick);
-
 
     const secondGroupProps = groups.at(1).props();
     expect(secondGroupProps.title).toBe(labels.id2);
@@ -120,5 +116,4 @@ describe('renders care plan suggestion section', () => {
     const groups = wrapper.find(SuggestionsGroup);
     expect(groups).toHaveLength(2);
   });
-
 });

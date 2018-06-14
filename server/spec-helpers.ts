@@ -271,6 +271,38 @@ export function createMockPatientExternalProvider(
   };
 }
 
+export function createMockPatientExternalOrganization(
+  patientId: string,
+  name: string,
+  options?: {
+    addressId?: string;
+    description?: string;
+    phoneNumber?: string;
+    faxNumber?: string;
+    isConsentedForSubstanceUse?: boolean;
+    isConsentedForHiv?: boolean;
+    isConsentedForStd?: boolean;
+    isConsentedForGeneticTesting?: boolean;
+    isConsentedForFamilyPlanning?: boolean;
+    consentDocumentId?: string;
+  },
+) {
+  return {
+    patientId,
+    name,
+    addressId: get(options, 'addressId'),
+    description: get(options, 'description') || 'some organization description',
+    phoneNumber: get(options, 'phoneNumber') || '+17778884455',
+    faxNumber: get(options, 'faxNumber') || '+12223338899',
+    isConsentedForSubstanceUse: get(options, 'isConsentedForSubstanceUse'),
+    isConsentedForHiv: get(options, 'isConsentedForHiv'),
+    isConsentedForStd: get(options, 'isConsentedForStd'),
+    isConsentedForGeneticTesting: get(options, 'isConsentedForGeneticTesting'),
+    isConsentedForFamilyPlanning: get(options, 'isConsentedForFamilyPlanning'),
+    consentDocumentId: get(options, 'consentDocumentId'),
+  };
+}
+
 export function createMockPatientInfo(primaryAddressId?: string) {
   return {
     gender: 'male' as Gender,

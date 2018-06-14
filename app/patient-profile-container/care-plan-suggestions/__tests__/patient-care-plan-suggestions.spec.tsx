@@ -1,6 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { carePlanSuggestionWithConcern, fullCarePlanSuggestionWithConcern, riskArea } from '../../../shared/util/test-data';
+import {
+  carePlanSuggestionWithConcern,
+  fullCarePlanSuggestionWithConcern,
+  riskArea,
+} from '../../../shared/util/test-data';
 import { PatientCarePlanSuggestions } from '../patient-care-plan-suggestions';
 import PopupPatientCarePlanSuggestionAccepted from '../popup-patient-care-plan-suggestion-accepted';
 import SuggestionsSection from '../suggestions-section';
@@ -44,7 +48,11 @@ describe('renders patient care plan suggestions', () => {
       riskAreaAssessmentSuggestionGroups={riskAreaAssessmentSuggestionGroups}
       computedFieldSuggestionGroups={computedFieldSuggestionGroups}
       screeningToolSuggestionGroups={screeningToolSuggestionGroups}
-      allSuggestions={[fullCarePlanSuggestionWithConcern, suggestionWithScreeningTool, suggestionWithComputedField]}
+      allSuggestions={[
+        fullCarePlanSuggestionWithConcern,
+        suggestionWithScreeningTool,
+        suggestionWithComputedField,
+      ]}
       patientId={fullCarePlanSuggestionWithConcern.patientId}
       routeBase={'/patients/patient-1/map'}
       glassBreakId="lady"
@@ -88,9 +96,10 @@ describe('renders patient care plan suggestions', () => {
     const suggestionAccepted = wrapper.find(PopupPatientCarePlanSuggestionAccepted);
     expect(suggestionAccepted.props().patientId).toBe(fullCarePlanSuggestionWithConcern.patientId);
     expect(suggestionAccepted.props().carePlanSuggestions).toHaveLength(3);
-    expect(suggestionAccepted.props().carePlanSuggestions).toContain(fullCarePlanSuggestionWithConcern);
+    expect(suggestionAccepted.props().carePlanSuggestions).toContain(
+      fullCarePlanSuggestionWithConcern,
+    );
     expect(suggestionAccepted.props().carePlanSuggestions).toContain(suggestionWithComputedField);
     expect(suggestionAccepted.props().carePlanSuggestions).toContain(suggestionWithScreeningTool);
   });
-
 });

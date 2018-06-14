@@ -12,6 +12,7 @@ import smsMessageBlockFn from './sms-message-block';
 
 interface IProps {
   patient: getPatientQuery['patient'];
+  isConsented: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -50,10 +51,10 @@ export class SmsMessageCreate extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { body } = this.state;
-    const { loading, error, patient } = this.props;
+    const { loading, error, patient, isConsented } = this.props;
 
     // if loading, error, not consented, or no primary phone, render block UI
-    const smsMessageBlock = smsMessageBlockFn({ patient, loading, error });
+    const smsMessageBlock = smsMessageBlockFn({ patient, loading, error, isConsented });
 
     if (smsMessageBlock) {
       return <div className={styles.container}>{smsMessageBlock}</div>;

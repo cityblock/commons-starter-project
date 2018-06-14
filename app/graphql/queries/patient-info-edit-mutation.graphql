@@ -15,7 +15,6 @@ mutation patientInfoEdit(
   $primaryPhoneId: ID
   $preferredContactMethod: ContactMethodOptions
   $canReceiveCalls: Boolean
-  $canReceiveTexts: Boolean
   $hasHealthcareProxy: Boolean
   $hasMolst: Boolean
   $hasDeclinedPhotoUpload: Boolean
@@ -37,7 +36,6 @@ mutation patientInfoEdit(
       primaryPhoneId: $primaryPhoneId
       preferredContactMethod: $preferredContactMethod
       canReceiveCalls: $canReceiveCalls
-      canReceiveTexts: $canReceiveTexts
       hasMolst: $hasMolst
       hasHealthcareProxy: $hasHealthcareProxy
       hasDeclinedPhotoUpload: $hasDeclinedPhotoUpload

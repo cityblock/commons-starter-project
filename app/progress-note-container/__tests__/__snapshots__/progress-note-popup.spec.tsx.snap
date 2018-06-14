@@ -106,7 +106,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
-              "canReceiveTexts": false,
               "gender": "male",
               "genderFreeText": null,
               "googleCalendarId": null,
@@ -280,7 +279,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
-              "canReceiveTexts": false,
               "gender": "male",
               "genderFreeText": null,
               "googleCalendarId": null,
@@ -471,7 +469,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
-              "canReceiveTexts": false,
               "gender": "male",
               "genderFreeText": null,
               "googleCalendarId": null,
@@ -645,7 +642,6 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "patientDataFlags": Array [],
             "patientInfo": Object {
               "canReceiveCalls": true,
-              "canReceiveTexts": false,
               "gender": "male",
               "genderFreeText": null,
               "googleCalendarId": null,

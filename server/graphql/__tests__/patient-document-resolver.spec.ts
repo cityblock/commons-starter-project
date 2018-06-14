@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import * as uuid from 'uuid/v4';
+import * as getPatientDocumentsByType from '../../../app/graphql/queries/get-patient-documents-by-type.graphql';
 import * as getPatientDocuments from '../../../app/graphql/queries/get-patient-documents.graphql';
 import * as patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
 import * as patientDocumentDelete from '../../../app/graphql/queries/patient-document-delete-mutation.graphql';
@@ -53,6 +54,7 @@ describe('patient document resolver', () => {
   const patientDocumentCreateMutation = print(patientDocumentCreate);
   const patientDocumentDeleteMutation = print(patientDocumentDelete);
   const getPatientDocumentsQuery = print(getPatientDocuments);
+  const getPatientDocumentsByTypeQuery = print(getPatientDocumentsByType);
   const patientDocumentSignedUrlCreateMutation = print(patientDocumentSignedUrlCreate);
 
   beforeEach(async () => {
@@ -305,6 +307,51 @@ describe('patient document resolver', () => {
         }),
       );
       expect(cloneDeep(result.data!.patientDocuments)).toContainEqual(
+        expect.objectContaining({
+          ...document2,
+          uploadedBy: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        }),
+      );
+      expect(log).toBeCalled();
+    });
+
+    it('should get patient documents of a specific type', async () => {
+      const { patient, user } = await setup(txn);
+      const document1 = {
+        patientId: patient.id,
+        filename: 'test2.txt',
+        documentType: 'hipaaConsent' as any,
+      };
+      await PatientDocument.create({ ...document1, uploadedById: user.id }, txn);
+
+      const document2 = {
+        patientId: patient.id,
+        filename: 'test3.txt',
+        documentType: 'hieHealthixConsent' as any,
+      };
+      await PatientDocument.create({ ...document2, uploadedById: user.id }, txn);
+
+      const result = await graphql(
+        schema,
+        getPatientDocumentsByTypeQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        {
+          patientId: patient.id,
+          documentType: 'hieHealthixConsent' as any,
+        },
+      );
+
+      expect(cloneDeep(result.data!.patientDocumentsByType).length).toBe(1);
+      expect(cloneDeep(result.data!.patientDocumentsByType)).toContainEqual(
         expect.objectContaining({
           ...document2,
           uploadedBy: {

@@ -298,8 +298,6 @@ export const SPANISH_TRANSLATION = {
       "This member's plan information has been flagged for review and is pending an update in our database.",
     'contactInfo.sectionTitle': 'Contact Information',
     'contactInfo.hasEmail': '',
-    'contactInfo.canReceiveTexts':
-      'Is the member able and willing to receive text messages from their care team?',
     'contactInfo.canReceiveCalls':
       'Is the member able and willing to receive phone calls from their care team?',
     'contactInfo.preferredContactMethod': 'What is the best way to contact this member?',

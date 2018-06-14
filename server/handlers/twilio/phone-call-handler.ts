@@ -150,16 +150,6 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
           userId: user.id,
           contactNumber: phoneCall.contactNumber,
         });
-      } else if (
-        !isInbound &&
-        phoneCall.patient &&
-        !phoneCall.patient.patientInfo.canReceiveCalls
-      ) {
-        addJobToQueue('notifyNoConsent', {
-          userId: user.id,
-          patientId: phoneCall.patientId,
-          type: 'phoneCall',
-        });
       }
     } catch (err) {
       reportError(err, 'Error processing completed phone call', twilioPayload);

@@ -1,6 +1,7 @@
 import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import {
+  DocumentTypeOptions,
   IPatientDocumentCreateInput,
   IPatientDocumentDeleteInput,
   IPatientDocumentSignedUrlCreateInput,
@@ -16,6 +17,11 @@ export interface IResolvePatientDocumentsOptions {
   patientId: string;
 }
 
+export interface IResolvePatientDocumentsByTypeOptions {
+  patientId: string;
+  documentType: DocumentTypeOptions;
+}
+
 export async function resolvePatientDocuments(
   source: any,
   { patientId }: IResolvePatientDocumentsOptions,
@@ -25,6 +31,19 @@ export async function resolvePatientDocuments(
     await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
     logger.log(`GET all documents for patient ${patientId} by ${userId}`);
     return PatientDocument.getAllForPatient(patientId, txn);
+  });
+}
+
+export async function resolvePatientDocumentsByType(
+  root: {},
+  { patientId, documentType }: IResolvePatientDocumentsByTypeOptions,
+  { permissions, userId, logger, testTransaction }: IContext,
+): Promise<IRootQueryType['patientDocumentsByType']> {
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+    logger.log(`GET documents of type ${documentType} for patient ${patientId} by ${userId}`);
+
+    return PatientDocument.getByDocumentTypeForPatient(patientId, documentType, txn);
   });
 }
 

@@ -3025,6 +3025,27 @@ export interface getPatientContactsQuery {
   } > | null,
 };
 
+export interface getPatientDocumentsByTypeQueryVariables {
+  patientId: string,
+  documentType: DocumentTypeOptions,
+};
+
+export interface getPatientDocumentsByTypeQuery {
+  // Patient documents by type
+  patientDocumentsByType:  Array< {
+    id: string,
+    patientId: string,
+    uploadedBy:  {
+      firstName: string | null,
+      lastName: string | null,
+    },
+    filename: string,
+    description: string | null,
+    documentType: DocumentTypeOptions | null,
+    createdAt: string,
+  } >,
+};
+
 export interface getPatientDocumentsQueryVariables {
   patientId: string,
 };
@@ -3839,7 +3860,6 @@ export interface getPatientQuery {
       } | null,
       preferredContactMethod: ContactMethodOptions | null,
       canReceiveCalls: boolean | null,
-      canReceiveTexts: boolean | null,
       hasHealthcareProxy: boolean | null,
       hasMolst: boolean | null,
       hasDeclinedPhotoUpload: boolean | null,
@@ -7664,7 +7684,6 @@ export interface patientInfoEditMutationVariables {
   primaryPhoneId?: string | null,
   preferredContactMethod?: ContactMethodOptions | null,
   canReceiveCalls?: boolean | null,
-  canReceiveTexts?: boolean | null,
   hasHealthcareProxy?: boolean | null,
   hasMolst?: boolean | null,
   hasDeclinedPhotoUpload?: boolean | null,
@@ -7705,7 +7724,6 @@ export interface patientInfoEditMutation {
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
     canReceiveCalls: boolean | null,
-    canReceiveTexts: boolean | null,
     hasHealthcareProxy: boolean | null,
     hasMolst: boolean | null,
     hasDeclinedPhotoUpload: boolean | null,
@@ -12097,7 +12115,6 @@ export interface FullPatientForProfileFragment {
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
     canReceiveCalls: boolean | null,
-    canReceiveTexts: boolean | null,
     hasHealthcareProxy: boolean | null,
     hasMolst: boolean | null,
     hasDeclinedPhotoUpload: boolean | null,
@@ -12221,7 +12238,6 @@ export interface FullPatientInfoFragment {
   } | null,
   preferredContactMethod: ContactMethodOptions | null,
   canReceiveCalls: boolean | null,
-  canReceiveTexts: boolean | null,
   hasHealthcareProxy: boolean | null,
   hasMolst: boolean | null,
   hasDeclinedPhotoUpload: boolean | null,

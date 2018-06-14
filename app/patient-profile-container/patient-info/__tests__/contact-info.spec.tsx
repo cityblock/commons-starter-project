@@ -37,14 +37,13 @@ describe('Render Patient Comtact Info Component', () => {
 
   it('renders toggles', () => {
     const formLabels = wrapper.find(FormLabel);
-    expect(formLabels).toHaveLength(3);
+    expect(formLabels).toHaveLength(2);
 
     expect(formLabels.at(0).props().messageId).toBe('contactInfo.canReceiveCalls');
-    expect(formLabels.at(1).props().messageId).toBe('contactInfo.canReceiveTexts');
-    expect(formLabels.at(2).props().messageId).toBe('contactInfo.preferredContactMethod');
+    expect(formLabels.at(1).props().messageId).toBe('contactInfo.preferredContactMethod');
 
     const radioInputs = wrapper.find(RadioInput);
-    expect(radioInputs).toHaveLength(7);
+    expect(radioInputs).toHaveLength(5);
 
     expect(radioInputs.at(0).props().name).toBe('canReceiveCalls');
     expect(radioInputs.at(0).props().value).toBe('false');
@@ -56,33 +55,23 @@ describe('Render Patient Comtact Info Component', () => {
     expect(radioInputs.at(1).props().label).toBe('Yes');
     expect(radioInputs.at(1).props().checked).toBeTruthy();
 
-    expect(radioInputs.at(2).props().name).toBe('canReceiveTexts');
-    expect(radioInputs.at(2).props().value).toBe('false');
-    expect(radioInputs.at(2).props().label).toBe('No');
+    expect(radioInputs.at(2).props().name).toBe('preferredContactMethod');
+    expect(radioInputs.at(2).props().value).toBe(ContactMethodOptions.phone);
+    expect(radioInputs.at(2).props().label).toBe(ContactMethodOptions.phone);
     expect(radioInputs.at(2).props().checked).toBeTruthy();
 
-    expect(radioInputs.at(3).props().name).toBe('canReceiveTexts');
-    expect(radioInputs.at(3).props().value).toBe('true');
-    expect(radioInputs.at(3).props().label).toBe('Yes');
+    expect(radioInputs.at(3).props().name).toBe('preferredContactMethod');
+    expect(radioInputs.at(3).props().value).toBe(ContactMethodOptions.email);
+    expect(radioInputs.at(3).props().label).toBe(ContactMethodOptions.email);
     expect(radioInputs.at(3).props().checked).toBeFalsy();
 
     expect(radioInputs.at(4).props().name).toBe('preferredContactMethod');
-    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.phone);
-    expect(radioInputs.at(4).props().label).toBe(ContactMethodOptions.phone);
-    expect(radioInputs.at(4).props().checked).toBeTruthy();
-
-    expect(radioInputs.at(5).props().name).toBe('preferredContactMethod');
-    expect(radioInputs.at(5).props().value).toBe(ContactMethodOptions.email);
-    expect(radioInputs.at(5).props().label).toBe(ContactMethodOptions.email);
-    expect(radioInputs.at(5).props().checked).toBeFalsy();
-
-    expect(radioInputs.at(6).props().name).toBe('preferredContactMethod');
-    expect(radioInputs.at(6).props().value).toBe(ContactMethodOptions.text);
-    expect(radioInputs.at(6).props().label).toBe(ContactMethodOptions.text);
-    expect(radioInputs.at(6).props().checked).toBeFalsy();
+    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.text);
+    expect(radioInputs.at(4).props().label).toBe(ContactMethodOptions.text);
+    expect(radioInputs.at(4).props().checked).toBeFalsy();
   });
 
-  it('toggles con receive calls states', () => {
+  it('toggles can receive calls states', () => {
     wrapper.setProps({ contactInfo: { ...wrapper.props().contactInfo, canReceiveCalls: false } });
     let radioInputs = wrapper.find(RadioInput);
 
@@ -99,23 +88,6 @@ describe('Render Patient Comtact Info Component', () => {
     expect(radioInputs.at(1).props().checked).toBeFalsy();
   });
 
-  it('toggles con receive texts states', () => {
-    wrapper.setProps({ contactInfo: { ...wrapper.props().contactInfo, canReceiveTexts: true } });
-    let radioInputs = wrapper.find(RadioInput);
-
-    expect(radioInputs.at(2).props().value).toBe('false');
-    expect(radioInputs.at(2).props().checked).toBeFalsy();
-
-    expect(radioInputs.at(3).props().value).toBe('true');
-    expect(radioInputs.at(3).props().checked).toBeTruthy();
-
-    wrapper.setProps({ contactInfo: { ...wrapper.props().contactInfo, canReceiveTexts: null } });
-    radioInputs = wrapper.find(RadioInput);
-
-    expect(radioInputs.at(2).props().checked).toBeFalsy();
-    expect(radioInputs.at(3).props().checked).toBeFalsy();
-  });
-
   it('toggles preferred contact method states', () => {
     wrapper.setProps({
       contactInfo: {
@@ -125,14 +97,14 @@ describe('Render Patient Comtact Info Component', () => {
     });
     let radioInputs = wrapper.find(RadioInput);
 
-    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.phone);
+    expect(radioInputs.at(2).props().value).toBe(ContactMethodOptions.phone);
+    expect(radioInputs.at(2).props().checked).toBeFalsy();
+
+    expect(radioInputs.at(3).props().value).toBe(ContactMethodOptions.email);
+    expect(radioInputs.at(3).props().checked).toBeTruthy();
+
+    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.text);
     expect(radioInputs.at(4).props().checked).toBeFalsy();
-
-    expect(radioInputs.at(5).props().value).toBe(ContactMethodOptions.email);
-    expect(radioInputs.at(5).props().checked).toBeTruthy();
-
-    expect(radioInputs.at(6).props().value).toBe(ContactMethodOptions.text);
-    expect(radioInputs.at(6).props().checked).toBeFalsy();
 
     wrapper.setProps({
       contactInfo: {
@@ -142,13 +114,13 @@ describe('Render Patient Comtact Info Component', () => {
     });
     radioInputs = wrapper.find(RadioInput);
 
-    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.phone);
-    expect(radioInputs.at(4).props().checked).toBeFalsy();
+    expect(radioInputs.at(2).props().value).toBe(ContactMethodOptions.phone);
+    expect(radioInputs.at(2).props().checked).toBeFalsy();
 
-    expect(radioInputs.at(5).props().value).toBe(ContactMethodOptions.email);
-    expect(radioInputs.at(5).props().checked).toBeFalsy();
+    expect(radioInputs.at(3).props().value).toBe(ContactMethodOptions.email);
+    expect(radioInputs.at(3).props().checked).toBeFalsy();
 
-    expect(radioInputs.at(6).props().value).toBe(ContactMethodOptions.text);
-    expect(radioInputs.at(6).props().checked).toBeTruthy();
+    expect(radioInputs.at(4).props().value).toBe(ContactMethodOptions.text);
+    expect(radioInputs.at(4).props().checked).toBeTruthy();
   });
 });

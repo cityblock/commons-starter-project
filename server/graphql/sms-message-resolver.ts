@@ -2,6 +2,7 @@ import { withFilter } from 'graphql-subscriptions';
 import { transaction } from 'objection';
 import { Transaction } from 'objection';
 import {
+  DocumentTypeOptions,
   IRootMutationType,
   IRootQueryType,
   ISmsMessageCreateInput,
@@ -9,6 +10,7 @@ import {
 } from 'schema';
 import { IPaginationOptions } from '../db';
 import Patient from '../models/patient';
+import PatientDocument from '../models/patient-document';
 import PatientPhone from '../models/patient-phone';
 import SmsMessage from '../models/sms-message';
 import User from '../models/user';
@@ -95,10 +97,16 @@ export async function smsMessageCreate(
       );
     }
 
-    const patient = await Patient.get(patientId, txn);
-    if (!patient.patientInfo.canReceiveTexts) {
+    const patientDocuments = await PatientDocument.getByDocumentTypeForPatient(
+      patientId,
+      'textConsent' as DocumentTypeOptions,
+      txn,
+    );
+    if (!patientDocuments.length) {
       return Promise.reject('This patient has not consented to receive text messages.');
     }
+
+    const patient = await Patient.get(patientId, txn);
 
     const patientPhoneNumber = await getPatientPhoneNumber(
       patientId,

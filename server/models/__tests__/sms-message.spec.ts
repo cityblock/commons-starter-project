@@ -136,7 +136,6 @@ describe('SMS model', () => {
         patient: {
           patientInfo: {
             gender: patient.patientInfo.gender,
-            canReceiveTexts: patient.patientInfo.canReceiveTexts,
           },
         },
       });

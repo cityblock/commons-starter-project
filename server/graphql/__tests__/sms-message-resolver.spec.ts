@@ -1,13 +1,12 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
-import { PhoneTypeOptions, SmsMessageDirection, UserRole } from 'schema';
+import { DocumentTypeOptions, PhoneTypeOptions, SmsMessageDirection, UserRole } from 'schema';
 import * as getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
 import * as getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
 import * as smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
-
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
-import PatientInfo from '../../models/patient-info';
+import PatientDocument from '../../models/patient-document';
 import PatientPhone from '../../models/patient-phone';
 import Phone from '../../models/phone';
 import SmsMessage from '../../models/sms-message';
@@ -273,9 +272,13 @@ describe('SMS Message Resolver', () => {
     it("texts patient's primary phone if it is mobile", async () => {
       const { patient, user } = await setup(txn);
       await User.update(user.id, { phone: userPhone }, txn);
-      await PatientInfo.edit(
-        { canReceiveTexts: true, updatedById: user.id },
-        patient.patientInfo.id,
+      await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: '/lets/go/pikachu.png',
+          documentType: 'textConsent' as DocumentTypeOptions,
+        },
         txn,
       );
 
@@ -303,11 +306,6 @@ describe('SMS Message Resolver', () => {
     it('texts mobile phone of patient if primary phone not mobile', async () => {
       const { patient, user, phone } = await setup(txn);
       await User.update(user.id, { phone: userPhone }, txn);
-      await PatientInfo.edit(
-        { canReceiveTexts: true, updatedById: user.id },
-        patient.patientInfo.id,
-        txn,
-      );
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
 
       const phone2 = await Phone.create(
@@ -315,6 +313,15 @@ describe('SMS Message Resolver', () => {
         txn,
       );
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient.id }, txn);
+      await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: '/lets/go/pikachu.png',
+          documentType: 'textConsent' as DocumentTypeOptions,
+        },
+        txn,
+      );
 
       const result = await graphql(
         schema,
@@ -340,17 +347,23 @@ describe('SMS Message Resolver', () => {
     it('does not text patient if no valid phone number set up', async () => {
       const { patient, user, phone } = await setup(txn);
       await User.update(user.id, { phone: userPhone }, txn);
-      await PatientInfo.edit(
-        { canReceiveTexts: true, updatedById: user.id },
-        patient.patientInfo.id,
-        txn,
-      );
       await PatientPhone.delete({ patientId: patient.id, phoneId: phone.id }, txn);
 
       const phone2 = await Phone.create(
         createMockPhone('123-456-7777', 'home' as PhoneTypeOptions),
         txn,
       );
+
+      await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: '/lets/go/pikachu.png',
+          documentType: 'textConsent' as DocumentTypeOptions,
+        },
+        txn,
+      );
+
       await PatientPhone.create({ phoneId: phone2.id, patientId: patient.id }, txn);
       await SmsMessage.create(
         {

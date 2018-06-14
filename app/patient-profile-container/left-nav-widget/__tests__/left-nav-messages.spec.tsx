@@ -1,6 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patient, smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
+import {
+  patient,
+  smsMessage1,
+  smsMessage2,
+  textConsentDocument,
+} from '../../../shared/util/test-data';
 import { LeftNavMessages } from '../left-nav-messages';
 import SmsMessageCreate from '../sms-message-create';
 import SmsMessages from '../sms-messages';
@@ -31,6 +36,7 @@ describe('Left Nav Messages', () => {
       messagesError={null}
       messagesLoading={false}
       subscribeToMore={jest.fn()}
+      patientDocuments={[textConsentDocument]}
     />,
   );
 
@@ -44,5 +50,6 @@ describe('Left Nav Messages', () => {
     expect(wrapper.find(SmsMessageCreate).props().patient).toBe(patient);
     expect(wrapper.find(SmsMessageCreate).props().loading).toBeFalsy();
     expect(wrapper.find(SmsMessageCreate).props().error).toBeNull();
+    expect(wrapper.find(SmsMessageCreate).props().isConsented).toBeTruthy();
   });
 });

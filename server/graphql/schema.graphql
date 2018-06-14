@@ -426,7 +426,6 @@ type PatientInfo implements uniqueId {
   primaryEmail: Email
   preferredContactMethod: ContactMethodOptions
   canReceiveCalls: Boolean
-  canReceiveTexts: Boolean
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
@@ -1851,7 +1850,6 @@ input PatientInfoEditInput {
   primaryPhoneId: ID
   preferredContactMethod: ContactMethodOptions
   canReceiveCalls: Boolean
-  canReceiveTexts: Boolean
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
@@ -3024,6 +3022,8 @@ type RootQueryType {
   patientExternalOrganizations(patientId: ID!): [PatientExternalOrganization!]
   # Patient documents for patient
   patientDocuments(patientId: ID!): [PatientDocument!]
+  # Patient documents by type
+  patientDocumentsByType(patientId: ID!, documentType: DocumentTypeOptions!): [PatientDocument!]!
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

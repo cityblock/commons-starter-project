@@ -111,7 +111,6 @@ describe('Phone Call Model', () => {
         patient: {
           patientInfo: {
             gender: patient.patientInfo.gender,
-            canReceiveTexts: patient.patientInfo.canReceiveTexts,
           },
         },
       });

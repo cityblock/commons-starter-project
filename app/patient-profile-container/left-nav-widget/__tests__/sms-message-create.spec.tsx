@@ -6,18 +6,11 @@ import { patient } from '../../../shared/util/test-data';
 import { SmsMessageCreate } from '../sms-message-create';
 
 describe('SMS Message Create Form', () => {
-  const patientCanReceiveTexts = {
-    ...patient,
-    patientInfo: {
-      ...patient.patientInfo,
-      canReceiveTexts: true,
-    },
-  };
-
   const wrapper = shallow(
     <SmsMessageCreate
       createSmsMessage={jest.fn()}
-      patient={patientCanReceiveTexts}
+      isConsented={true}
+      patient={patient}
       loading={false}
       error={null}
     />,
@@ -44,14 +37,14 @@ describe('SMS Message Create Form', () => {
   });
 
   it('renders blocker if patient cannot receive texts', () => {
-    wrapper.setProps({ patient });
+    wrapper.setProps({ isConsented: false });
 
     expect(wrapper.find('.container').length).toBe(2);
     expect(wrapper.find(Text).length).toBe(1);
   });
 
   it('renders blocker if loading', () => {
-    wrapper.setProps({ loading: true, patient: patientCanReceiveTexts });
+    wrapper.setProps({ loading: true });
 
     expect(wrapper.find('.container').length).toBe(2);
     expect(wrapper.find(Text).length).toBe(1);

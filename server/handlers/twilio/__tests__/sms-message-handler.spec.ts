@@ -1,10 +1,10 @@
 import * as kue from 'kue';
 import * as httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
-import { SmsMessageDirection, UserRole } from 'schema';
+import { DocumentTypeOptions, SmsMessageDirection, UserRole } from 'schema';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
-import PatientInfo from '../../../models/patient-info';
+import PatientDocument from '../../../models/patient-document';
 import PatientPhone from '../../../models/patient-phone';
 import Phone from '../../../models/phone';
 import SmsMessage from '../../../models/sms-message';
@@ -148,12 +148,13 @@ describe('SMS Message Handler', () => {
       { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
       txn,
     );
-    await PatientInfo.edit(
+    await PatientDocument.create(
       {
-        canReceiveTexts: true,
-        updatedById: user.id,
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: '/lets/go/pikachu.png',
+        documentType: 'textConsent' as DocumentTypeOptions,
       },
-      patient.patientInfo.id,
       txn,
     );
 

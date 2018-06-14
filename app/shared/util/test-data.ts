@@ -1,6 +1,7 @@
 import {
   ContactMethodOptions,
   CurrentPatientState,
+  DocumentTypeOptions,
   ExternalProviderOptions,
   Gender,
   GoogleCalendarEventType,
@@ -249,7 +250,6 @@ export const patient = {
     primaryPhone: phone1 as IPhone,
     preferredContactMethod: ContactMethodOptions.phone,
     canReceiveCalls: true,
-    canReceiveTexts: false,
     hasHealthcareProxy: false,
     hasMolst: false,
     hasDeclinedPhotoUpload: false,
@@ -1226,7 +1226,6 @@ export const contactInfo = {
   primaryPhone: patient.patientInfo.primaryPhone,
   hasEmail: patient.patientInfo.hasEmail,
   canReceiveCalls: patient.patientInfo.canReceiveCalls,
-  canReceiveTexts: patient.patientInfo.canReceiveTexts,
   preferredContactMethod: patient.patientInfo.preferredContactMethod,
 };
 
@@ -1369,4 +1368,16 @@ export const partialCalendarEventSIU = {
   eventType: 'siu' as GoogleCalendarEventType,
   providerName: 'Jane Doctor',
   providerCredentials: 'MD, DDS',
+};
+
+export const textConsentDocument = {
+  id: 'textmeyo',
+  documentType: 'textConsent' as DocumentTypeOptions,
+  patientId: patient.id,
+  uploadedById: user.id,
+  uploadedBy: user,
+  description: 'textmeyo',
+  filename: '/lets/go/eevee.png',
+  createdAt: '2017-11-08T13:50:14.532Z',
+  updatedAt: '2017-11-08T13:50:14.532Z',
 };

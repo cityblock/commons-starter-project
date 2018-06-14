@@ -14,7 +14,6 @@ import PhoneInfo from './phone-info/phone-info';
 export interface IContactInfo {
   preferredContactMethod?: ContactMethodOptions | null;
   canReceiveCalls?: boolean | null;
-  canReceiveTexts?: boolean | null;
   hasEmail?: boolean | null;
   primaryEmail?: ISavedEmail | null;
   emails?: ISavedEmail[];
@@ -46,7 +45,7 @@ export default class ContactInfo extends React.Component<IProps> {
   };
 
   renderToggles() {
-    const { canReceiveCalls, canReceiveTexts, preferredContactMethod } = this.props.contactInfo;
+    const { canReceiveCalls, preferredContactMethod } = this.props.contactInfo;
 
     return (
       <div className={styles.subSection}>
@@ -65,26 +64,6 @@ export default class ContactInfo extends React.Component<IProps> {
                 name="canReceiveCalls"
                 value="true"
                 checked={canReceiveCalls === true}
-                label="Yes"
-                onChange={this.handleBooleanChange}
-              />
-            </RadioGroup>
-          </div>
-
-          <div className={styles.field}>
-            <FormLabel messageId="contactInfo.canReceiveTexts" />
-            <RadioGroup>
-              <RadioInput
-                name="canReceiveTexts"
-                value="false"
-                checked={canReceiveTexts === false}
-                label="No"
-                onChange={this.handleBooleanChange}
-              />
-              <RadioInput
-                name="canReceiveTexts"
-                value="true"
-                checked={canReceiveTexts === true}
                 label="Yes"
                 onChange={this.handleBooleanChange}
               />

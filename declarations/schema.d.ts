@@ -140,6 +140,11 @@ declare module 'schema' {
     patientDocuments: Array<IPatientDocument>;
 
     /**
+     * Patient documents by type
+     */
+    patientDocumentsByType: Array<IPatientDocument>;
+
+    /**
      * A single clinic
      */
     clinic: IClinic;
@@ -770,6 +775,11 @@ declare module 'schema' {
     patientId: string;
   }
 
+  interface IPatientDocumentsByTypeOnRootQueryTypeArguments {
+    patientId: string;
+    documentType: DocumentTypeOptions;
+  }
+
   interface IClinicOnRootQueryTypeArguments {
     clinicId: string;
   }
@@ -1373,7 +1383,6 @@ declare module 'schema' {
     primaryEmail: IEmail | null;
     preferredContactMethod: ContactMethodOptions | null;
     canReceiveCalls: boolean | null;
-    canReceiveTexts: boolean | null;
     hasHealthcareProxy: boolean | null;
     hasMolst: boolean | null;
     hasDeclinedPhotoUpload: boolean | null;
@@ -4447,7 +4456,6 @@ declare module 'schema' {
     primaryPhoneId?: string | null;
     preferredContactMethod?: ContactMethodOptions | null;
     canReceiveCalls?: boolean | null;
-    canReceiveTexts?: boolean | null;
     hasHealthcareProxy?: boolean | null;
     hasMolst?: boolean | null;
     hasDeclinedPhotoUpload?: boolean | null;

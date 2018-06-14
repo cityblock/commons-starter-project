@@ -61,7 +61,6 @@ export interface IEditableFieldState {
   primaryPhone?: ISavedPhone | null;
   flags?: getPatientQuery['patient']['patientDataFlags'];
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
-  canReceiveTexts?: getPatientQuery['patient']['patientInfo']['canReceiveTexts'];
   canReceiveCalls?: getPatientQuery['patient']['patientInfo']['canReceiveCalls'];
   preferredContactMethod?: getPatientQuery['patient']['patientInfo']['preferredContactMethod'];
   isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
@@ -120,7 +119,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
       verifiedAt,
       hasEmail,
       canReceiveCalls,
-      canReceiveTexts,
       preferredContactMethod,
       isMarginallyHoused,
       preferredName,
@@ -163,7 +161,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
         hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
         primaryEmail: checkDefined<ISavedEmail>(primaryEmail, patientInfo.primaryEmail),
         canReceiveCalls: checkDefined<boolean>(canReceiveCalls, patientInfo.canReceiveCalls),
-        canReceiveTexts: checkDefined<boolean>(canReceiveTexts, patientInfo.canReceiveTexts),
         preferredContactMethod: preferredContactMethod || patientInfo.preferredContactMethod,
         primaryPhone: checkDefined<ISavedPhone>(primaryPhone, patientInfo.primaryPhone),
       },
@@ -199,7 +196,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
       maritalStatus,
       preferredContactMethod,
       canReceiveCalls,
-      canReceiveTexts,
       hasEmail,
       isMarginallyHoused,
       preferredName,
@@ -223,7 +219,6 @@ export class PatientInfo extends React.Component<allProps, allState> {
           language,
           preferredContactMethod,
           canReceiveCalls,
-          canReceiveTexts,
           hasEmail,
           isMarginallyHoused,
           preferredName,

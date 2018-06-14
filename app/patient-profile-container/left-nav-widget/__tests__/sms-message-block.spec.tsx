@@ -6,7 +6,14 @@ import SmsMessageBlock from '../sms-message-block';
 
 describe('SMS Message Block Component', () => {
   it('returns loading message if loading', () => {
-    const wrapper = shallow(<SmsMessageBlock loading={true} error={null} patient={patient} />);
+    const wrapper = shallow(
+      <SmsMessageBlock
+        loading={true}
+        error={null}
+        patient={patient}
+        isConsented={true}
+      />,
+    );
 
     expect(wrapper.find('.container').length).toBe(1);
     expect(wrapper.find('.flex').length).toBe(1);
@@ -18,7 +25,12 @@ describe('SMS Message Block Component', () => {
 
   it('returns error message if error', () => {
     const wrapper = shallow(
-      <SmsMessageBlock loading={false} error="DEMOGORGON!" patient={patient} />,
+      <SmsMessageBlock
+        loading={false}
+        error="DEMOGORGON!"
+        patient={patient}
+        isConsented={true}
+      />,
     );
 
     expect(wrapper.find('.container').length).toBe(1);
@@ -30,7 +42,9 @@ describe('SMS Message Block Component', () => {
   });
 
   it('returns no consent message if patient did not consent', () => {
-    const wrapper = shallow(<SmsMessageBlock loading={false} error={null} patient={patient} />);
+    const wrapper = shallow(
+      <SmsMessageBlock loading={false} error={null} patient={patient} isConsented={false} />,
+    );
 
     expect(wrapper.find('.container').length).toBe(1);
     expect(wrapper.find('.flex').length).toBe(1);
@@ -45,13 +59,17 @@ describe('SMS Message Block Component', () => {
       ...patient,
       patientInfo: {
         ...patient.patientInfo,
-        canReceiveTexts: true,
         primaryPhone: null,
       },
     };
 
     const wrapper = shallow(
-      <SmsMessageBlock loading={false} error={null} patient={patientNoPhone} />,
+      <SmsMessageBlock
+        loading={false}
+        error={null}
+        patient={patientNoPhone}
+        isConsented={true}
+      />,
     );
 
     expect(wrapper.find('.container').length).toBe(1);

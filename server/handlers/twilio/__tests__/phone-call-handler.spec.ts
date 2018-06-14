@@ -266,12 +266,7 @@ describe('Phone Call Handler', () => {
     expect(res.end).toHaveBeenCalledTimes(1);
     expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
 
-    expect(queue.testMode.jobs.length).toBe(1);
-    expect(queue.testMode.jobs[0].data).toMatchObject({
-      type: 'phoneCall',
-      userId: user.id,
-      patientId: patient.id,
-    });
+    expect(queue.testMode.jobs.length).toBe(0);
   });
 
   it('handles a complete outbound phone call not associated with past patient number', async () => {

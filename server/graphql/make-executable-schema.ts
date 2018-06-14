@@ -132,6 +132,7 @@ import {
   patientDocumentDelete,
   patientDocumentSignedUrlCreate,
   resolvePatientDocuments,
+  resolvePatientDocumentsByType,
 } from './patient-document-resolver';
 import { resolveEmails } from './patient-email-resolver';
 import { resolvePatientEncounters } from './patient-encounter-resolver';
@@ -376,6 +377,7 @@ const resolveFunctions = {
     patientExternalOrganizations: resolvePatientExternalOrganizationsForPatient,
     patientExternalProviders: resolvePatientExternalProvidersForPatient,
     patientDocuments: resolvePatientDocuments,
+    patientDocumentsByType: resolvePatientDocumentsByType,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
     task: resolveTask,

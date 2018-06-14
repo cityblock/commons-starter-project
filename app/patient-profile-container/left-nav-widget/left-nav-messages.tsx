@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import * as patientDocumentsByTypeQuery from '../../graphql/queries/get-patient-documents-by-type.graphql';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 import * as smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
 import * as smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
-import { getPatientQuery, getSmsMessagesQuery } from '../../graphql/types';
+import {
+  getPatientDocumentsByTypeQuery,
+  getPatientQuery,
+  getSmsMessagesQuery,
+} from '../../graphql/types';
 import * as styles from './css/left-nav-messages.css';
 import SmsMessageCreate from './sms-message-create';
 import SmsMessages from './sms-messages';
@@ -21,7 +26,10 @@ interface IGraphqlProps {
   messagesError?: string | null;
   patientLoading?: boolean;
   patientError?: string | null;
+  documentsLoading?: boolean;
+  documentsError?: string | null;
   patient: getPatientQuery['patient'];
+  patientDocuments: getPatientDocumentsByTypeQuery['patientDocumentsByType'];
   smsMessages: getSmsMessagesQuery['smsMessages'];
   subscribeToMore: ((args: any) => () => void) | null;
 }
@@ -63,6 +71,9 @@ export class LeftNavMessages extends React.Component<allProps> {
       messagesError,
       smsMessages,
       patient,
+      documentsError,
+      documentsLoading,
+      patientDocuments,
     } = this.props;
 
     return (
@@ -70,8 +81,9 @@ export class LeftNavMessages extends React.Component<allProps> {
         <SmsMessages loading={messagesLoading} error={messagesError} smsMessages={smsMessages} />
         <SmsMessageCreate
           patient={patient}
-          loading={patientLoading || false}
-          error={patientError || null}
+          isConsented={!!patientDocuments && !!patientDocuments.length}
+          loading={patientLoading || documentsLoading || false}
+          error={patientError || documentsError || null}
         />
       </div>
     );
@@ -87,6 +99,16 @@ export default compose(
       patientLoading: data ? data.loading : false,
       patientError: data ? data.error : null,
       patient: data ? (data as any).patient : null,
+    }),
+  }),
+  graphql(patientDocumentsByTypeQuery as any, {
+    options: ({ patientId }: IProps) => ({
+      variables: { patientId, documentType: 'textConsent' },
+    }),
+    props: ({ data }) => ({
+      documentsLoading: data ? data.loading : false,
+      documentsError: data ? data.error : null,
+      patientDocuments: data ? (data as any).patientDocumentsByType : null,
     }),
   }),
   graphql(smsMessagesQuery as any, {

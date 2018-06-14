@@ -1,9 +1,10 @@
 import * as express from 'express';
 import { transaction } from 'objection';
-import { SmsMessageDirection } from 'schema';
+import { DocumentTypeOptions, SmsMessageDirection } from 'schema';
 import * as twilio from 'twilio';
 import { reportError } from '../../helpers/error-helpers';
 import { addJobToQueue } from '../../helpers/queue-helpers';
+import PatientDocument from '../../models/patient-document';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
 import pubsub from '../../subscriptions';
@@ -127,12 +128,20 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
           contactNumber: smsMessage.contactNumber,
         });
         // else if patient did not consent to be texted, background job to SMS user
-      } else if (smsMessage.patient && !smsMessage.patient.patientInfo.canReceiveTexts) {
-        addJobToQueue('notifyNoConsent', {
-          userId: user.id,
-          patientId: smsMessage.patientId,
-          type: 'smsMessage',
-        });
+      } else if (smsMessage.patientId) {
+        const textConsentDocuments = await PatientDocument.getByDocumentTypeForPatient(
+          smsMessage.patientId,
+          'textConsent' as DocumentTypeOptions,
+          txn,
+        );
+
+        if (!textConsentDocuments.length) {
+          addJobToQueue('notifyNoConsent', {
+            userId: user.id,
+            patientId: smsMessage.patientId,
+            type: 'smsMessage',
+          });
+        }
       }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);

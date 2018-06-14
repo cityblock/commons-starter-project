@@ -6,12 +6,13 @@ import * as styles from './css/sms-message-block.css';
 
 interface IProps {
   patient: getPatientQuery['patient'];
+  isConsented: boolean;
   loading: boolean;
   error: string | null;
 }
 
 const smsMessageBlock = (props: IProps): JSX.Element | null => {
-  const { patient, loading, error } = props;
+  const { patient, isConsented, loading, error } = props;
 
   let messageId = '';
 
@@ -19,7 +20,7 @@ const smsMessageBlock = (props: IProps): JSX.Element | null => {
     messageId = 'messages.loading';
   } else if (error) {
     messageId = 'messages.errorLoading';
-  } else if (!patient.patientInfo.canReceiveTexts) {
+  } else if (!isConsented) {
     messageId = 'messages.noConsent';
   }
 

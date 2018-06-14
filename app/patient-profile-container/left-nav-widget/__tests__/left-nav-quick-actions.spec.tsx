@@ -4,14 +4,25 @@ import AddProgressNote, { IProps as IAddProgressNoteProps } from '../add-progres
 import AddQuickCall from '../add-quick-call';
 import AdministerScreeningTool from '../administer-screening-tool';
 import LeftNavQuickAction from '../left-nav-quick-action';
-import LeftNavQuickActions from '../left-nav-quick-actions';
+import { LeftNavQuickActions } from '../left-nav-quick-actions';
 
 describe('Patient Left Navigation Quick Actions', () => {
   const patientId = 'sansaStark';
   const glassBreakId = 'lady';
+  const history = { push: jest.fn } as any;
+  const location = {} as any;
+  const match = {} as any;
 
   const wrapper = shallow(
-    <LeftNavQuickActions patientId={patientId} glassBreakId={glassBreakId} onClose={jest.fn()} />,
+    <LeftNavQuickActions
+      patientId={patientId}
+      glassBreakId={glassBreakId}
+      onClose={jest.fn()}
+      history={history}
+      location={location}
+      match={match}
+      staticContext={{} as any}
+    />,
   );
 
   it('renders quick action to add progress note', () => {

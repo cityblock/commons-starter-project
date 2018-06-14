@@ -88,7 +88,8 @@ class PatientDocuments extends React.Component<allProps, IState> {
 
     return patientDocuments
       ? patientDocuments.map(patientDocument => {
-          return patientDocument.documentType && !CONSENTS.includes(patientDocument.documentType) ? (
+          return patientDocument.documentType &&
+            !CONSENTS.includes(patientDocument.documentType) ? (
             <PatientDocument
               patientDocument={patientDocument}
               key={`document-${patientDocument.id}`}

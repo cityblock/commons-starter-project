@@ -12,6 +12,7 @@ module.exports = ({ production = false } = {}) => {
       'IS_BUILDER_ENABLED',
       'SUBSCRIPTIONS_ENDPOINT',
       'GA_TRACKING_ID',
+      'FORMS_LIBRARY_URL',
     ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];

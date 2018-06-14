@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 import AddProgressNote from './add-progress-note';
 import AddQuickCall from './add-quick-call';
 import AdministerScreeningTool from './administer-screening-tool';
@@ -10,18 +11,35 @@ interface IProps {
   onClose: () => void;
 }
 
-const LeftNavQuickActions: React.StatelessComponent<IProps> = (props: IProps) => {
+type allProps = IProps & RouteComponentProps<IProps>;
+
+export const LeftNavQuickActions: React.StatelessComponent<allProps> = (props: allProps) => {
   const { patientId, onClose } = props;
+
+  // TODO: hook up this button
+  const openFormsLibrary = () =>
+    window.open(process.env.FORMS_LIBRARY_URL, '_blank');
+
+  const redirectToDocuments = () =>
+    props.history.push(`/patients/${patientId}/member-info/documents`);
 
   return (
     <div>
       <AddProgressNote patientId={patientId} onClose={onClose} />
       <AddQuickCall patientId={patientId} onClose={onClose} />
       <AdministerScreeningTool patientId={patientId} onClose={onClose} />
-      <LeftNavQuickAction quickAction="viewDocuments" onClick={jest.fn()} onClose={onClose} />
-      <LeftNavQuickAction quickAction="openFormLibrary" onClick={jest.fn()} onClose={onClose} />
+      <LeftNavQuickAction
+        quickAction="viewDocuments"
+        onClick={redirectToDocuments}
+        onClose={onClose}
+      />
+      <LeftNavQuickAction
+        quickAction="openFormLibrary"
+        onClick={openFormsLibrary}
+        onClose={onClose}
+      />
     </div>
   );
 };
 
-export default LeftNavQuickActions;
+export default withRouter(LeftNavQuickActions);

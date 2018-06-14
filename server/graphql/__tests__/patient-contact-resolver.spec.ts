@@ -1,8 +1,12 @@
-import { graphql } from 'graphql';
+import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { PatientRelationOptions, UserRole } from 'schema';
-
+import * as getPatientContactHealthcareProxies from '../../../app/graphql/queries/get-patient-contact-healthcare-proxies.graphql';
+import * as getPatientContacts from '../../../app/graphql/queries/get-patient-contacts.graphql';
+import * as patientContactCreate from '../../../app/graphql/queries/patient-contact-create-mutation.graphql';
+import * as patientContactDelete from '../../../app/graphql/queries/patient-contact-delete-mutation.graphql';
+import * as patientContactEdit from '../../../app/graphql/queries/patient-contact-edit-mutation.graphql';
 import Address from '../../models/address';
 import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';
@@ -12,6 +16,7 @@ import PatientContact from '../../models/patient-contact';
 import PatientContactAddress from '../../models/patient-contact-address';
 import PatientContactEmail from '../../models/patient-contact-email';
 import PatientContactPhone from '../../models/patient-contact-phone';
+import PatientDocument from '../../models/patient-document';
 import Phone from '../../models/phone';
 import User from '../../models/user';
 import {
@@ -31,6 +36,7 @@ const permissions = 'green';
 interface ISetup {
   patient: Patient;
   user: User;
+  clinic: Clinic;
 }
 
 interface ISetupContact {
@@ -43,15 +49,16 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
-  return { patient, user };
+  return { patient, user, clinic };
 }
 
 async function setupPatientContact(
   patientId: string,
   userId: string,
   txn: Transaction,
+  phoneNumber?: string,
 ): Promise<ISetupContact> {
-  const phone = await Phone.create(createMockPhone(), txn);
+  const phone = await Phone.create(createMockPhone(phoneNumber), txn);
   const address = await Address.create(createMockAddress(userId), txn);
   const email = await Email.create(createMockEmail(userId), txn);
 
@@ -71,6 +78,11 @@ async function setupPatientContact(
 }
 
 describe('patient info model', () => {
+  const patientContactHealthcareProxiesQuery = print(getPatientContactHealthcareProxies);
+  const patientContactsQuery = print(getPatientContacts);
+  const patientContactCreateMutation = print(patientContactCreate);
+  const patientContactDeleteMutation = print(patientContactDelete);
+  const patientContactEditMutation = print(patientContactEdit);
   const log = jest.fn();
   const logger = { log };
   let txn = null as any;
@@ -86,25 +98,27 @@ describe('patient info model', () => {
   describe('patient contact resolvers', async () => {
     it('gets all patient contact healthcare proxies for patient with id', async () => {
       const { user, patient } = await setup(txn);
+      await setupPatientContact(patient.id, user.id, txn);
+
       const phone = await Phone.create(createMockPhone(), txn);
-      await PatientContact.create(createMockPatientContact(patient.id, user.id, phone), txn);
       const proxy = await PatientContact.create(
         createMockPatientContact(patient.id, user.id, phone, { isHealthcareProxy: true }),
         txn,
       );
+      await PatientContactPhone.create({ phoneId: phone.id, patientContactId: proxy.id }, txn);
 
-      const query = `{
-          patientContactHealthcareProxies(patientId: "${patient.id}") {
-            id, patientId, isHealthcareProxy
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      const result = await graphql(
+        schema,
+        patientContactHealthcareProxiesQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        { patientId: patient.id },
+      );
 
       expect(cloneDeep(result.data!.patientContactHealthcareProxies[0])).toMatchObject({
         id: proxy.id,
@@ -113,53 +127,102 @@ describe('patient info model', () => {
       });
       expect(log).toBeCalled();
     });
+
+    it('gets all patient contacts for patient with id', async () => {
+      const { user, patient, clinic } = await setup(txn);
+      const { patientContact: contact, phone } = await setupPatientContact(
+        patient.id,
+        user.id,
+        txn,
+      );
+      const { patientContact: contact2, phone: phone2 } = await setupPatientContact(
+        patient.id,
+        user.id,
+        txn,
+        '5558783377',
+      );
+
+      const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+      await setupPatientContact(patient2.id, user.id, txn, '5552223377');
+
+      const result = await graphql(
+        schema,
+        patientContactsQuery,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        { patientId: patient.id },
+      );
+
+      const contacts = cloneDeep(result.data!.patientContacts);
+      expect(contacts).toHaveLength(2);
+      expect(contacts).toContainEqual(
+        expect.objectContaining({
+          id: contact2.id,
+          patientId: patient.id,
+          phone: expect.objectContaining({
+            id: phone2.id,
+            phoneNumber: phone2.phoneNumber,
+          }),
+        }),
+      );
+      expect(contacts).toContainEqual(
+        expect.objectContaining({
+          id: contact.id,
+          patientId: patient.id,
+          phone: expect.objectContaining({
+            id: phone.id,
+            phoneNumber: phone.phoneNumber,
+          }),
+        }),
+      );
+      expect(log).toBeCalled();
+    });
   });
 
   describe('create', async () => {
     it('should create a patient contact with minimal info', async () => {
       const { patient, user } = await setup(txn);
-
-      const query = `mutation {
-          patientContactCreate(input: {
-            patientId: "${patient.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            phone: {
-              phoneNumber: "+11112223344",
-              type: mobile
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip },
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
-
-      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+      const patientContactFields = {
         patientId: patient.id,
         firstName: 'Hermione',
         lastName: 'Granger',
         relationToPatient: 'friend',
+        phone: {
+          phoneNumber: '+11112223344',
+          type: 'mobile',
+        },
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: false,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
+      };
+
+      const result = await graphql(
+        schema,
+        patientContactCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+        ...patientContactFields,
         isHealthcareProxy: false,
         isEmergencyContact: false,
-        phone: { phoneNumber: '+11112223344' },
         email: null,
         address: null,
+        consentDocumentId: null,
       });
       expect(log).toBeCalled();
 
@@ -173,6 +236,17 @@ describe('patient info model', () => {
 
     it('updates computed patient status when creating a contact', async () => {
       const { patient, user } = await setup(txn);
+      const patientContactFields = {
+        patientId: patient.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        phone: {
+          phoneNumber: '+11112223344',
+          type: 'mobile',
+        },
+        isEmergencyContact: true,
+      };
       const computedPatientStatus = await ComputedPatientStatus.updateForPatient(
         patient.id,
         user.id,
@@ -180,28 +254,18 @@ describe('patient info model', () => {
       );
 
       expect(computedPatientStatus.isEmergencyContactAdded).toEqual(false);
-
-      const query = `mutation {
-          patientContactCreate(input: {
-            patientId: "${patient.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            phone: {
-              phoneNumber: "+11112223344",
-              type: mobile
-            },
-            isEmergencyContact: true,
-          }) {
-            id
-          }
-        }`;
-      await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      await graphql(
+        schema,
+        patientContactCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
       const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
         patient.id,
         user.id,
@@ -213,57 +277,39 @@ describe('patient info model', () => {
 
     it('should create a patient contact with all contact fields', async () => {
       const { patient, user } = await setup(txn);
-
-      const query = `mutation {
-          patientContactCreate(input: {
-            patientId: "${patient.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            isHealthcareProxy: true,
-            isEmergencyContact: true,
-            phone: {
-              phoneNumber: "+11112223344",
-              type: mobile
-            },
-            email: {
-              emailAddress: "test@email.com",
-            },
-            address: {
-              zip: "11238",
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip },
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
-
-      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+      const patientContactFields = {
         patientId: patient.id,
         firstName: 'Hermione',
         lastName: 'Granger',
         relationToPatient: 'friend',
         isHealthcareProxy: true,
         isEmergencyContact: true,
-        phone: { phoneNumber: '+11112223344' },
-        email: { emailAddress: 'test@email.com' },
-        address: { zip: '11238' },
-      });
+        phone: {
+          phoneNumber: '+11112223344',
+          type: 'mobile',
+        },
+        email: {
+          emailAddress: 'test@email.com',
+        },
+        address: {
+          zip: '11238',
+        },
+      };
+
+      const result = await graphql(
+        schema,
+        patientContactCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject(patientContactFields);
       expect(log).toBeCalled();
 
       const patientContactPhone = await PatientContactPhone.getForPatientContact(
@@ -290,54 +336,40 @@ describe('patient info model', () => {
 
     it('should create a patient contact but not empty address or email', async () => {
       const { patient, user } = await setup(txn);
-
-      const query = `mutation {
-          patientContactCreate(input: {
-            patientId: "${patient.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            isHealthcareProxy: true,
-            isEmergencyContact: true,
-            phone: {
-              phoneNumber: "+11112223344",
-              type: mobile
-            },
-            email: {
-              emailAddress: "",
-            },
-            address: {
-              zip: "",
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip },
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
-
-      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+      const patientContactFields = {
         patientId: patient.id,
         firstName: 'Hermione',
         lastName: 'Granger',
         relationToPatient: 'friend',
         isHealthcareProxy: true,
         isEmergencyContact: true,
-        phone: { phoneNumber: '+11112223344' },
+        phone: {
+          phoneNumber: '+11112223344',
+          type: 'mobile',
+        },
+        email: {
+          emailAddress: '',
+        },
+        address: {
+          zip: '',
+        },
+      };
+
+      const result = await graphql(
+        schema,
+        patientContactCreateMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
+
+      expect(cloneDeep(result.data!.patientContactCreate)).toMatchObject({
+        ...patientContactFields,
         email: null,
         address: null,
       });
@@ -371,18 +403,18 @@ describe('patient info model', () => {
       const { patient, user } = await setup(txn);
       const { patientContact } = await setupPatientContact(patient.id, user.id, txn);
 
-      const query = `mutation {
-          patientContactDelete(input: {
-            patientContactId: "${patientContact.id}",
-          }) { deletedAt }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      const result = await graphql(
+        schema,
+        patientContactDeleteMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        { patientContactId: patientContact.id },
+      );
 
       expect(cloneDeep(result.data!.patientContactDelete).deletedAt).not.toBeFalsy();
       expect(log).toBeCalled();
@@ -405,6 +437,14 @@ describe('patient info model', () => {
   describe('edit', async () => {
     it('should edit patient contact and create email and address', async () => {
       const { patient, user } = await setup(txn);
+      const consentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc.pdf',
+        },
+        txn,
+      );
       const phone = await Phone.create(createMockPhone(), txn);
 
       const patientContact = await PatientContact.create(
@@ -417,45 +457,44 @@ describe('patient info model', () => {
         txn,
       );
 
-      const query = `mutation {
-          patientContactEdit(input: {
-            patientContactId: "${patientContact.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            isHealthcareProxy: true,
-            isEmergencyContact: true,
-            phone: {
-              phoneNumber: "+10001112255",
-              type: mobile
-            },
-            email: {
-              emailAddress: "changed@email.com",
-            },
-            address: {
-              zip: "02139",
-              state: "MA",
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip, state },
-          }
-        }`;
+      const patientContactFields = {
+        patientContactId: patientContact.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        phone: {
+          phoneNumber: '+10001112255',
+          type: 'mobile',
+        },
+        email: {
+          emailAddress: 'changed@email.com',
+        },
+        address: {
+          zip: '02139',
+          state: 'MA',
+        },
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: false,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
+        consentDocumentId: consentDocument.id,
+      };
 
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      const result = await graphql(
+        schema,
+        patientContactEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
         patientId: patient.id,
@@ -467,6 +506,11 @@ describe('patient info model', () => {
         phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
         address: { zip: '02139', state: 'MA' },
+        isConsentedForSubstanceUse: true,
+        isConsentedForHiv: false,
+        isConsentedForStd: false,
+        isConsentedForGeneticTesting: true,
+        isConsentedForFamilyPlanning: false,
       });
       expect(log).toBeCalled();
 
@@ -507,20 +551,21 @@ describe('patient info model', () => {
 
       expect(computedPatientStatus.isEmergencyContactAdded).toEqual(true);
 
-      const query = `mutation {
-          patientContactEdit(input: {
-            patientContactId: "${patientContact.id}"
-            isEmergencyContact: false,
-          }) {
-            id
-          }
-        }`;
-      await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      await graphql(
+        schema,
+        patientContactEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        {
+          patientContactId: patientContact.id,
+          isEmergencyContact: false,
+        },
+      );
       const updatedComputedPatientStatus = await ComputedPatientStatus.updateForPatient(
         patient.id,
         user.id,
@@ -534,45 +579,38 @@ describe('patient info model', () => {
       const { patient, user } = await setup(txn);
       const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
 
-      const query = `mutation {
-          patientContactEdit(input: {
-            patientContactId: "${patientContact.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            isHealthcareProxy: true,
-            isEmergencyContact: true,
-            phone: {
-              phoneNumber: "+10001112255",
-              type: mobile,
-            },
-            email: {
-              emailAddress: "changed@email.com",
-            },
-            address: {
-              zip: "02139",
-              state: "MA",
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip, state },
-          }
-        }`;
+      const patientContactFields = {
+        patientContactId: patientContact.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        phone: {
+          phoneNumber: '+10001112255',
+          type: 'mobile',
+        },
+        email: {
+          emailAddress: 'changed@email.com',
+        },
+        address: {
+          zip: '02139',
+          state: 'MA',
+        },
+      };
 
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      const result = await graphql(
+        schema,
+        patientContactEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
         patientId: patient.id,
@@ -605,45 +643,38 @@ describe('patient info model', () => {
     it('should edit patient contact and delete email and address', async () => {
       const { patient, user } = await setup(txn);
       const { patientContact, phone } = await setupPatientContact(patient.id, user.id, txn);
+      const patientContactFields = {
+        patientContactId: patientContact.id,
+        firstName: 'Hermione',
+        lastName: 'Granger',
+        relationToPatient: 'friend',
+        isHealthcareProxy: true,
+        isEmergencyContact: true,
+        phone: {
+          phoneNumber: '+10001112255',
+          type: 'mobile',
+        },
+        email: {
+          emailAddress: '',
+        },
+        address: {
+          zip: '',
+          state: '',
+        },
+      };
 
-      const query = `mutation {
-          patientContactEdit(input: {
-            patientContactId: "${patientContact.id}",
-            firstName: "Hermione",
-            lastName: "Granger",
-            relationToPatient: friend,
-            isHealthcareProxy: true,
-            isEmergencyContact: true,
-            phone: {
-              phoneNumber: "+10001112255",
-            },
-            email: {
-              emailAddress: "",
-            },
-            address: {
-              zip: "",
-              state: "",
-            },
-          }) {
-            id,
-            patientId,
-            firstName,
-            lastName,
-            relationToPatient,
-            isHealthcareProxy,
-            isEmergencyContact,
-            phone { id, phoneNumber },
-            email { id, emailAddress },
-            address { id, zip, state },
-          }
-        }`;
-
-      const result = await graphql(schema, query, null, {
-        permissions,
-        userId: user.id,
-        logger,
-        testTransaction: txn,
-      });
+      const result = await graphql(
+        schema,
+        patientContactEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          logger,
+          testTransaction: txn,
+        },
+        patientContactFields,
+      );
 
       expect(cloneDeep(result.data!.patientContactEdit)).toMatchObject({
         patientId: patient.id,

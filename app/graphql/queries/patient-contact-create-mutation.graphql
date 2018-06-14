@@ -12,6 +12,11 @@ mutation patientContactCreate(
   $description: String
   $address: AddressCreateInput
   $email: EmailCreateInput
+  $isConsentedForSubstanceUse: Boolean
+  $isConsentedForHiv: Boolean
+  $isConsentedForStd: Boolean
+  $isConsentedForGeneticTesting: Boolean
+  $isConsentedForFamilyPlanning: Boolean
 ) {
   patientContactCreate(
     input: {
@@ -26,6 +31,11 @@ mutation patientContactCreate(
       description: $description
       address: $address
       email: $email
+      isConsentedForSubstanceUse: $isConsentedForSubstanceUse
+      isConsentedForHiv: $isConsentedForHiv
+      isConsentedForStd: $isConsentedForStd
+      isConsentedForGeneticTesting: $isConsentedForGeneticTesting
+      isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
     }
   ) {
     ...FullPatientContact

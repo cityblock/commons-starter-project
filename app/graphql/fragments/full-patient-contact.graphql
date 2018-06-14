@@ -22,6 +22,12 @@ fragment FullPatientContact on PatientContact {
     phoneNumber
     type
   }
+  isConsentedForSubstanceUse
+  isConsentedForHiv
+  isConsentedForStd
+  isConsentedForGeneticTesting
+  isConsentedForFamilyPlanning
+  consentDocumentId
   createdAt
   updatedAt
   deletedAt

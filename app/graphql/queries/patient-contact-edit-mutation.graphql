@@ -12,6 +12,12 @@ mutation patientContactEdit(
   $address: AddressInput
   $email: EmailInput
   $phone: PhoneInput
+  $isConsentedForSubstanceUse: Boolean
+  $isConsentedForHiv: Boolean
+  $isConsentedForStd: Boolean
+  $isConsentedForGeneticTesting: Boolean
+  $isConsentedForFamilyPlanning: Boolean
+  $consentDocumentId: String
 ) {
   patientContactEdit(
     input: {
@@ -26,6 +32,12 @@ mutation patientContactEdit(
       address: $address
       phone: $phone
       email: $email
+      isConsentedForSubstanceUse: $isConsentedForSubstanceUse
+      isConsentedForHiv: $isConsentedForHiv
+      isConsentedForStd: $isConsentedForStd
+      isConsentedForGeneticTesting: $isConsentedForGeneticTesting
+      isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
+      consentDocumentId: $consentDocumentId
     }
   ) {
     ...FullPatientContact

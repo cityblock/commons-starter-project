@@ -5,7 +5,12 @@ import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';
 
-export const CONSENT_TYPES = ['cityblockConsent', 'hipaaConsent', 'hieHealthixConsent', 'textConsent'];
+export const CONSENT_TYPES = [
+  'cityblockConsent',
+  'hipaaConsent',
+  'hieHealthixConsent',
+  'textConsent',
+];
 
 const EAGER_QUERY = '[uploadedBy]';
 

@@ -1623,6 +1623,12 @@ declare module 'schema' {
     phone: IPhone;
     address: IAddress | null;
     email: IEmail | null;
+    isConsentedForSubstanceUse: boolean | null;
+    isConsentedForHiv: boolean | null;
+    isConsentedForStd: boolean | null;
+    isConsentedForGeneticTesting: boolean | null;
+    isConsentedForFamilyPlanning: boolean | null;
+    consentDocumentId: string | null;
     createdAt: string | null;
     updatedAt: string | null;
     deletedAt: string | null;
@@ -4463,6 +4469,11 @@ declare module 'schema' {
     description?: string | null;
     address?: IAddressCreateInput | null;
     email?: IEmailCreateInput | null;
+    isConsentedForSubstanceUse?: boolean | null;
+    isConsentedForHiv?: boolean | null;
+    isConsentedForStd?: boolean | null;
+    isConsentedForGeneticTesting?: boolean | null;
+    isConsentedForFamilyPlanning?: boolean | null;
   }
 
   /**
@@ -4487,6 +4498,12 @@ declare module 'schema' {
     address?: IAddressInput | null;
     email?: IEmailInput | null;
     phone?: IPhoneInput | null;
+    isConsentedForSubstanceUse?: boolean | null;
+    isConsentedForHiv?: boolean | null;
+    isConsentedForStd?: boolean | null;
+    isConsentedForGeneticTesting?: boolean | null;
+    isConsentedForFamilyPlanning?: boolean | null;
+    consentDocumentId?: string | null;
   }
 
   /**

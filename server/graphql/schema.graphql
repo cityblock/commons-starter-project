@@ -449,6 +449,12 @@ type PatientContact implements uniqueId {
   phone: Phone!
   address: Address
   email: Email
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
+  consentDocumentId: String
   createdAt: String
   updatedAt: String
   deletedAt: String
@@ -1865,6 +1871,11 @@ input PatientContactCreateInput {
   description: String
   address: AddressCreateInput
   email: EmailCreateInput
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
 }
 
 # params for deleting a patient contact and all associated models in the db
@@ -1885,6 +1896,12 @@ input PatientContactEditInput {
   address: AddressInput
   email: EmailInput
   phone: PhoneInput
+  isConsentedForSubstanceUse: Boolean
+  isConsentedForHiv: Boolean
+  isConsentedForStd: Boolean
+  isConsentedForGeneticTesting: Boolean
+  isConsentedForFamilyPlanning: Boolean
+  consentDocumentId: String
 }
 
 # params for creating a patient external provider in the db

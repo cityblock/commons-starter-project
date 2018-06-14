@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ContactMethodOptions } from '../../graphql/types';
+import { ContactMethodOptions, ContactTimeOptions } from '../../graphql/types';
 import { ISavedEmail } from '../../shared/email-modal/email-modal';
 import FormLabel from '../../shared/library/form-label/form-label';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
@@ -13,6 +13,7 @@ import PhoneInfo from './phone-info/phone-info';
 
 export interface IContactInfo {
   preferredContactMethod?: ContactMethodOptions | null;
+  preferredContactTime?: ContactTimeOptions | null;
   canReceiveCalls?: boolean | null;
   hasEmail?: boolean | null;
   primaryEmail?: ISavedEmail | null;
@@ -45,7 +46,11 @@ export default class ContactInfo extends React.Component<IProps> {
   };
 
   renderToggles() {
-    const { canReceiveCalls, preferredContactMethod } = this.props.contactInfo;
+    const {
+      canReceiveCalls,
+      preferredContactMethod,
+      preferredContactTime,
+    } = this.props.contactInfo;
 
     return (
       <div className={styles.subSection}>
@@ -93,6 +98,32 @@ export default class ContactInfo extends React.Component<IProps> {
               value={ContactMethodOptions.text}
               checked={preferredContactMethod === ContactMethodOptions.text}
               label={ContactMethodOptions.text}
+              onChange={this.handleChange}
+            />
+          </RadioGroup>
+        </div>
+        <div className={styles.field}>
+          <FormLabel messageId="contactInfo.preferredContactTime" />
+          <RadioGroup className={styles.capitalize}>
+            <RadioInput
+              name="preferredContactTime"
+              value={ContactTimeOptions.morning}
+              checked={preferredContactTime === ContactTimeOptions.morning}
+              label={ContactTimeOptions.morning}
+              onChange={this.handleChange}
+            />
+            <RadioInput
+              name="preferredContactTime"
+              value={ContactTimeOptions.afternoon}
+              checked={preferredContactTime === ContactTimeOptions.afternoon}
+              label={ContactTimeOptions.afternoon}
+              onChange={this.handleChange}
+            />
+            <RadioInput
+              name="preferredContactTime"
+              value={ContactTimeOptions.evening}
+              checked={preferredContactTime === ContactTimeOptions.evening}
+              label={ContactTimeOptions.evening}
               onChange={this.handleChange}
             />
           </RadioGroup>

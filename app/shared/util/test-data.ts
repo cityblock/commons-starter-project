@@ -1,5 +1,6 @@
 import {
   ContactMethodOptions,
+  ContactTimeOptions,
   CurrentPatientState,
   DocumentTypeOptions,
   ExternalProviderOptions,
@@ -249,6 +250,7 @@ export const patient = {
     primaryEmail: email1 as IEmail,
     primaryPhone: phone1 as IPhone,
     preferredContactMethod: ContactMethodOptions.phone,
+    preferredContactTime: ContactTimeOptions.afternoon,
     canReceiveCalls: true,
     hasHealthcareProxy: false,
     hasMolst: false,
@@ -1227,6 +1229,7 @@ export const contactInfo = {
   hasEmail: patient.patientInfo.hasEmail,
   canReceiveCalls: patient.patientInfo.canReceiveCalls,
   preferredContactMethod: patient.patientInfo.preferredContactMethod,
+  preferredContactTime: patient.patientInfo.preferredContactTime,
 };
 
 export const patientPhoto = {

@@ -219,6 +219,12 @@ enum ContactMethodOptions {
   email
 }
 
+enum ContactTimeOptions {
+  morning
+  afternoon
+  evening
+}
+
 enum CurrentPatientState {
   attributed
   assigned
@@ -425,6 +431,7 @@ type PatientInfo implements uniqueId {
   hasEmail: Boolean
   primaryEmail: Email
   preferredContactMethod: ContactMethodOptions
+  preferredContactTime: ContactTimeOptions
   canReceiveCalls: Boolean
   hasHealthcareProxy: Boolean
   hasMolst: Boolean
@@ -1849,6 +1856,7 @@ input PatientInfoEditInput {
   primaryEmailId: ID
   primaryPhoneId: ID
   preferredContactMethod: ContactMethodOptions
+  preferredContactTime: ContactTimeOptions
   canReceiveCalls: Boolean
   hasHealthcareProxy: Boolean
   hasMolst: Boolean

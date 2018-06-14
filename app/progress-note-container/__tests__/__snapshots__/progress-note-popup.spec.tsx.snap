@@ -119,6 +119,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "language": "en",
               "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
+              "preferredContactTime": "afternoon",
               "preferredName": "Bobby",
               "primaryAddress": Object {
                 "city": "Brooklyn",
@@ -292,6 +293,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "language": "en",
               "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
+              "preferredContactTime": "afternoon",
               "preferredName": "Bobby",
               "primaryAddress": Object {
                 "city": "Brooklyn",
@@ -482,6 +484,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "language": "en",
               "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
+              "preferredContactTime": "afternoon",
               "preferredName": "Bobby",
               "primaryAddress": Object {
                 "city": "Brooklyn",
@@ -655,6 +658,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
               "language": "en",
               "maritalStatus": "currentlyMarried",
               "preferredContactMethod": "phone",
+              "preferredContactTime": "afternoon",
               "preferredName": "Bobby",
               "primaryAddress": Object {
                 "city": "Brooklyn",

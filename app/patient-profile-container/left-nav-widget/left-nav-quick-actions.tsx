@@ -17,8 +17,7 @@ export const LeftNavQuickActions: React.StatelessComponent<allProps> = (props: a
   const { patientId, onClose } = props;
 
   // TODO: hook up this button
-  const openFormsLibrary = () =>
-    window.open(process.env.FORMS_LIBRARY_URL, '_blank');
+  const openFormsLibrary = () => window.open(process.env.FORMS_LIBRARY_URL, '_blank');
 
   const redirectToDocuments = () =>
     props.history.push(`/patients/${patientId}/member-info/documents`);

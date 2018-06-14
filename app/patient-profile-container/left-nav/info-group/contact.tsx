@@ -23,6 +23,7 @@ const Contact: React.StatelessComponent<IProps> = (props: IProps) => {
     primaryPhone,
     primaryEmail,
     preferredContactMethod,
+    preferredContactTime,
     primaryAddress,
   } = patient.patientInfo;
 
@@ -31,6 +32,7 @@ const Contact: React.StatelessComponent<IProps> = (props: IProps) => {
   const formattedPreferredMethod = preferredContactMethod
     ? capitalize(preferredContactMethod)
     : null;
+  const formattedPreferredTime = preferredContactTime ? capitalize(preferredContactTime) : null;
   const formattedAddressLine1 = primaryAddress ? formatAddressFirstLine(primaryAddress) : null;
   const formattedAddressLine2 = primaryAddress ? formatAddressSecondLine(primaryAddress) : null;
 
@@ -49,6 +51,7 @@ const Contact: React.StatelessComponent<IProps> = (props: IProps) => {
           emptyValueMessageId="patientInfo.notOnFile"
         />
         <InfoGroupItem labelMessageId="contact.preferredMethod" value={formattedPreferredMethod} />
+        <InfoGroupItem labelMessageId="contact.preferredTime" value={formattedPreferredTime} />
         <InfoGroupItem
           labelMessageId="contact.address"
           value={formattedAddressLine1}

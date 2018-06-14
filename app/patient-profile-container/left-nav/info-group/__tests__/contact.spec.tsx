@@ -28,7 +28,7 @@ describe('Patient Left Navigation Contact Accordion', () => {
   });
 
   it('renders info group item for phone', () => {
-    expect(wrapper.find(InfoGroupItem).length).toBe(5);
+    expect(wrapper.find(InfoGroupItem).length).toBe(6);
 
     expect(
       wrapper
@@ -92,23 +92,44 @@ describe('Patient Left Navigation Contact Accordion', () => {
     ).toBeFalsy();
   });
 
-  it('renders info group item for address line 1', () => {
+  it('renders info group item for preferred contact time', () => {
     expect(
       wrapper
         .find(InfoGroupItem)
         .at(3)
         .props().labelMessageId,
-    ).toBe('contact.address');
+    ).toBe('contact.preferredTime');
     expect(
       wrapper
         .find(InfoGroupItem)
         .at(3)
         .props().value,
-    ).toBe(formatAddressFirstLine(patient.patientInfo.primaryAddress));
+    ).toBe(capitalize(patient.patientInfo.preferredContactTime));
     expect(
       wrapper
         .find(InfoGroupItem)
         .at(3)
+        .props().emptyValueMessageId,
+    ).toBeFalsy();
+  });
+
+  it('renders info group item for address line 1', () => {
+    expect(
+      wrapper
+        .find(InfoGroupItem)
+        .at(4)
+        .props().labelMessageId,
+    ).toBe('contact.address');
+    expect(
+      wrapper
+        .find(InfoGroupItem)
+        .at(4)
+        .props().value,
+    ).toBe(formatAddressFirstLine(patient.patientInfo.primaryAddress));
+    expect(
+      wrapper
+        .find(InfoGroupItem)
+        .at(4)
         .props().emptyValueMessageId,
     ).toBe('patientInfo.notOnFile');
   });
@@ -117,19 +138,19 @@ describe('Patient Left Navigation Contact Accordion', () => {
     expect(
       wrapper
         .find(InfoGroupItem)
-        .at(4)
+        .at(5)
         .props().labelMessageId,
     ).toBeNull();
     expect(
       wrapper
         .find(InfoGroupItem)
-        .at(4)
+        .at(5)
         .props().value,
     ).toBe(formatAddressSecondLine(patient.patientInfo.primaryAddress));
     expect(
       wrapper
         .find(InfoGroupItem)
-        .at(4)
+        .at(5)
         .props().emptyValueMessageId,
     ).toBe('patientInfo.notOnFile');
   });
@@ -145,11 +166,11 @@ describe('Patient Left Navigation Contact Accordion', () => {
 
     wrapper.setProps({ patient: newPatient });
 
-    expect(wrapper.find(InfoGroupItem).length).toBe(4);
+    expect(wrapper.find(InfoGroupItem).length).toBe(5);
     expect(
       wrapper
         .find(InfoGroupItem)
-        .at(3)
+        .at(4)
         .props().value,
     ).toBeNull();
   });

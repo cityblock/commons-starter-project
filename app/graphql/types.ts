@@ -193,6 +193,13 @@ export enum ContactMethodOptions {
 }
 
 
+export enum ContactTimeOptions {
+  afternoon = "afternoon",
+  evening = "evening",
+  morning = "morning",
+}
+
+
 export enum QuestionConditionTypeOptions {
   allTrue = "allTrue",
   oneTrue = "oneTrue",
@@ -3859,6 +3866,7 @@ export interface getPatientQuery {
         description: string | null,
       } | null,
       preferredContactMethod: ContactMethodOptions | null,
+      preferredContactTime: ContactTimeOptions | null,
       canReceiveCalls: boolean | null,
       hasHealthcareProxy: boolean | null,
       hasMolst: boolean | null,
@@ -7683,6 +7691,7 @@ export interface patientInfoEditMutationVariables {
   primaryEmailId?: string | null,
   primaryPhoneId?: string | null,
   preferredContactMethod?: ContactMethodOptions | null,
+  preferredContactTime?: ContactTimeOptions | null,
   canReceiveCalls?: boolean | null,
   hasHealthcareProxy?: boolean | null,
   hasMolst?: boolean | null,
@@ -7723,6 +7732,7 @@ export interface patientInfoEditMutation {
       description: string | null,
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
+    preferredContactTime: ContactTimeOptions | null,
     canReceiveCalls: boolean | null,
     hasHealthcareProxy: boolean | null,
     hasMolst: boolean | null,
@@ -12114,6 +12124,7 @@ export interface FullPatientForProfileFragment {
       description: string | null,
     } | null,
     preferredContactMethod: ContactMethodOptions | null,
+    preferredContactTime: ContactTimeOptions | null,
     canReceiveCalls: boolean | null,
     hasHealthcareProxy: boolean | null,
     hasMolst: boolean | null,
@@ -12237,6 +12248,7 @@ export interface FullPatientInfoFragment {
     description: string | null,
   } | null,
   preferredContactMethod: ContactMethodOptions | null,
+  preferredContactTime: ContactTimeOptions | null,
   canReceiveCalls: boolean | null,
   hasHealthcareProxy: boolean | null,
   hasMolst: boolean | null,

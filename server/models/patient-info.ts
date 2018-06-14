@@ -1,6 +1,12 @@
 import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import { ContactMethodOptions, Gender, MaritalStatus, Transgender } from 'schema';
+import {
+  ContactMethodOptions,
+  ContactTimeOptions,
+  Gender,
+  MaritalStatus,
+  Transgender,
+} from 'schema';
 import { PhoneTypeOptions } from 'schema';
 import * as uuid from 'uuid/v4';
 import { formatPhoneNumberForTwilio, VALID_PHONE_NUMBER_LENGTH } from '../helpers/twilio-helpers';
@@ -49,6 +55,7 @@ export interface IPatientInfoOptions {
   primaryEmailId?: string;
   primaryPhoneId?: string;
   preferredContactMethod?: ContactMethodOptions;
+  preferredContactTime?: ContactTimeOptions;
   canReceiveCalls?: boolean;
   hasHealthcareProxy?: boolean;
   hasMolst?: boolean;
@@ -70,6 +77,7 @@ interface IEditPatientInfo {
   primaryEmailId?: string | null;
   primaryPhoneId?: string | null;
   preferredContactMethod?: ContactMethodOptions;
+  preferredContactTime?: ContactTimeOptions;
   canReceiveCalls?: boolean;
   hasHealthcareProxy?: boolean;
   hasMolst?: boolean;
@@ -102,6 +110,7 @@ export default class PatientInfo extends Model {
   primaryPhoneId!: string | null;
   primaryPhone!: Phone;
   preferredContactMethod!: ContactMethodOptions;
+  preferredContactTime!: ContactTimeOptions | null;
   canReceiveCalls!: boolean;
   hasHealthcareProxy!: boolean;
   hasMolst!: boolean;
@@ -146,6 +155,7 @@ export default class PatientInfo extends Model {
       primaryEmailId: { type: ['string', 'null'], format: 'uuid' },
       primaryPhoneId: { type: ['string', 'null'], format: 'uuid' },
       preferredContactMethod: { type: 'string', enum: ['text', 'phone', 'email'] },
+      preferredContactTime: { type: 'string', enum: ['morning', 'afternoon', 'evening'] },
       canReceiveCalls: { type: 'boolean' },
       hasHealthcareProxy: { type: 'boolean' },
       hasMolst: { type: 'boolean' },

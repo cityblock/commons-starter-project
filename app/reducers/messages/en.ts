@@ -302,6 +302,7 @@ export const ENGLISH_TRANSLATION = {
     'contactInfo.canReceiveCalls':
       'Is the member able and willing to receive phone calls from their care team?',
     'contactInfo.preferredContactMethod': 'What is the best way to contact this member?',
+    'contactInfo.preferredContactTime': 'When is the best time to contact this member?',
     'email.hasEmail': 'This member does not have an email address',
     'email.description': 'Notes about this email address',
     'email.emailAddress': 'Email address',
@@ -968,6 +969,7 @@ export const ENGLISH_TRANSLATION = {
     'contact.phone': 'Phone:',
     'contact.email': 'Email:',
     'contact.preferredMethod': 'Preferred method:',
+    'contact.preferredTime': 'Preferred time:',
     'contact.address': 'Address:',
     'plan.cityblockId': 'CBH Member ID:',
     'plan.insurance': 'Insurance:',

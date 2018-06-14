@@ -1382,6 +1382,7 @@ declare module 'schema' {
     hasEmail: boolean | null;
     primaryEmail: IEmail | null;
     preferredContactMethod: ContactMethodOptions | null;
+    preferredContactTime: ContactTimeOptions | null;
     canReceiveCalls: boolean | null;
     hasHealthcareProxy: boolean | null;
     hasMolst: boolean | null;
@@ -1456,6 +1457,12 @@ declare module 'schema' {
     phone = 'phone',
     text = 'text',
     email = 'email'
+  }
+
+  enum ContactTimeOptions {
+    morning = 'morning',
+    afternoon = 'afternoon',
+    evening = 'evening'
   }
 
   /**
@@ -4455,6 +4462,7 @@ declare module 'schema' {
     primaryEmailId?: string | null;
     primaryPhoneId?: string | null;
     preferredContactMethod?: ContactMethodOptions | null;
+    preferredContactTime?: ContactTimeOptions | null;
     canReceiveCalls?: boolean | null;
     hasHealthcareProxy?: boolean | null;
     hasMolst?: boolean | null;

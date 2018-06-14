@@ -7,12 +7,7 @@ import SmsMessageBlock from '../sms-message-block';
 describe('SMS Message Block Component', () => {
   it('returns loading message if loading', () => {
     const wrapper = shallow(
-      <SmsMessageBlock
-        loading={true}
-        error={null}
-        patient={patient}
-        isConsented={true}
-      />,
+      <SmsMessageBlock loading={true} error={null} patient={patient} isConsented={true} />,
     );
 
     expect(wrapper.find('.container').length).toBe(1);
@@ -25,12 +20,7 @@ describe('SMS Message Block Component', () => {
 
   it('returns error message if error', () => {
     const wrapper = shallow(
-      <SmsMessageBlock
-        loading={false}
-        error="DEMOGORGON!"
-        patient={patient}
-        isConsented={true}
-      />,
+      <SmsMessageBlock loading={false} error="DEMOGORGON!" patient={patient} isConsented={true} />,
     );
 
     expect(wrapper.find('.container').length).toBe(1);
@@ -64,12 +54,7 @@ describe('SMS Message Block Component', () => {
     };
 
     const wrapper = shallow(
-      <SmsMessageBlock
-        loading={false}
-        error={null}
-        patient={patientNoPhone}
-        isConsented={true}
-      />,
+      <SmsMessageBlock loading={false} error={null} patient={patientNoPhone} isConsented={true} />,
     );
 
     expect(wrapper.find('.container').length).toBe(1);

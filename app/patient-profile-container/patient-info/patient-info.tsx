@@ -63,6 +63,7 @@ export interface IEditableFieldState {
   verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
   canReceiveCalls?: getPatientQuery['patient']['patientInfo']['canReceiveCalls'];
   preferredContactMethod?: getPatientQuery['patient']['patientInfo']['preferredContactMethod'];
+  preferredContactTime?: getPatientQuery['patient']['patientInfo']['preferredContactTime'];
   isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
   preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
   hasMolst?: getPatientQuery['patient']['patientInfo']['hasMolst'];
@@ -120,6 +121,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       hasEmail,
       canReceiveCalls,
       preferredContactMethod,
+      preferredContactTime,
       isMarginallyHoused,
       preferredName,
       hasMolst,
@@ -162,6 +164,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
         primaryEmail: checkDefined<ISavedEmail>(primaryEmail, patientInfo.primaryEmail),
         canReceiveCalls: checkDefined<boolean>(canReceiveCalls, patientInfo.canReceiveCalls),
         preferredContactMethod: preferredContactMethod || patientInfo.preferredContactMethod,
+        preferredContactTime: preferredContactTime || patientInfo.preferredContactTime,
         primaryPhone: checkDefined<ISavedPhone>(primaryPhone, patientInfo.primaryPhone),
       },
       plan: {
@@ -195,6 +198,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       transgender,
       maritalStatus,
       preferredContactMethod,
+      preferredContactTime,
       canReceiveCalls,
       hasEmail,
       isMarginallyHoused,
@@ -218,6 +222,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
           maritalStatus,
           language,
           preferredContactMethod,
+          preferredContactTime,
           canReceiveCalls,
           hasEmail,
           isMarginallyHoused,

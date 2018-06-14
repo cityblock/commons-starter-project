@@ -562,6 +562,12 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
 
+"@types/moment-timezone@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@types/moment-timezone/-/moment-timezone-0.5.6.tgz#21341f5cbeeca6e773702b24fffd39f06bf6e203"
+  dependencies:
+    moment ">=2.14.0"
+
 "@types/mongodb@*":
   version "3.0.19"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.0.19.tgz#09b1f3f6abce5aea879dfc9832aad27cd6fa81c6"
@@ -7324,11 +7330,17 @@ modelo@^4.2.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/modelo/-/modelo-4.2.3.tgz#b278588a4db87fc1e5107ae3a277c0876f38d894"
 
+moment-timezone@^0.5.17:
+  version "0.5.17"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.17.tgz#3c8fef32051d84c3af174d91dc52977dcb0ad7e5"
+  dependencies:
+    moment ">= 2.9.0"
+
 moment@2.19.3:
   version "2.19.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.3.tgz#bdb99d270d6d7fda78cc0fbace855e27fe7da69f"
 
-moment@>=2.14.0, moment@^2.10.2:
+"moment@>= 2.9.0", moment@>=2.14.0, moment@^2.10.2:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 

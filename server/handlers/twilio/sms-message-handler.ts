@@ -59,6 +59,14 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
       );
       // publish notification that message created
       publishMessage(smsMessage);
+
+      // if message from patient, handle auto response after hours
+      if (smsMessage.patientId) {
+        addJobToQueue('afterHoursCommunications', {
+          userId: user.id,
+          contactNumber: smsMessage.contactNumber,
+        });
+      }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);
     }

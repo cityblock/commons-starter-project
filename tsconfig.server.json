@@ -18,6 +18,7 @@
     "./server/consumers/contact-update-consumer",
     "./server/consumers/contact-no-consent-consumer",
     "./server/consumers/previous-contact-consumer",
+    "./server/consumers/after-hours-communications-consumer",
     "./server/jobs/process-voicemail",
     "./server/jobs/process-phone-call",
     "./server/jobs/process-sms-message"

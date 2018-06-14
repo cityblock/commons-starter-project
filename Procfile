@@ -10,4 +10,5 @@ consume-task-event: yarn run consume:task-event:production
 consume-contact-update: yarn run consume:contact-update:production
 consume-contact-no-consent: yarn run consume:contact-no-consent:production
 consume-previous-contact: yarn run consume:previous-contact:production
+consume-after-hours-communications: yarn run consume:after-hours-communications:production
 cron: exec supercronic /app/crontab

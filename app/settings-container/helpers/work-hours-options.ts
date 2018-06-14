@@ -88,14 +88,6 @@ export const workHoursOptions = [
     label: '10:30 AM',
   },
   {
-    value: 1000,
-    label: '10:00 AM',
-  },
-  {
-    value: 1030,
-    label: '10:30 AM',
-  },
-  {
     value: 1100,
     label: '11:00 AM',
   },
@@ -109,7 +101,7 @@ export const workHoursOptions = [
   },
   {
     value: 1230,
-    label: '11:30 PM',
+    label: '12:30 PM',
   },
   {
     value: 1300,

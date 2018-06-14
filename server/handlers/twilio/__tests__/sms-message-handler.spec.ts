@@ -106,8 +106,39 @@ describe('SMS Message Handler', () => {
       patientId: patient.id,
     });
 
+    expect(queue.testMode.jobs.length).toBe(1);
+    expect(queue.testMode.jobs[0].data).toMatchObject({
+      userId: user.id,
+      contactNumber: '+11234567890',
+    });
+
     expect(res.end).toHaveBeenCalledTimes(1);
     expect(res.end).toHaveBeenCalledWith(expectedIncomingTwiml);
+  });
+
+  it('does not enqueue after hours job if message not from patient', async () => {
+    const { user } = await setup(txn);
+    await User.update(
+      user.id,
+      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
+      txn,
+    );
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    pubsub.publish = jest.fn();
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234567777',
+        From: '+11234562222',
+        Body: 'Winter is here.',
+        MessageSid: messageSid,
+      },
+    });
+
+    await twilioIncomingSmsHandler(req, res);
+
+    expect(queue.testMode.jobs.length).toBe(0);
   });
 
   it('handles an outgoing SMS', async () => {

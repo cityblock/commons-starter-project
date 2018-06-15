@@ -3101,9 +3101,9 @@ d@1:
   dependencies:
     es5-ext "^0.10.9"
 
-danger@3.7.17:
-  version "3.7.17"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.7.17.tgz#fdb70be02eb10ad4de0ab3e0cc4fb717468852ad"
+danger@3.7.18:
+  version "3.7.18"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.7.18.tgz#944e0e2786b3f40c044345f8185c0e2e61131cdc"
   dependencies:
     "@octokit/rest" "^15.5.0"
     babel-polyfill "^6.23.0"

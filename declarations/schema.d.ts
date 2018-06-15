@@ -1362,6 +1362,16 @@ declare module 'schema' {
     patientState: IPatientState;
     coreIdentityVerifiedAt: string | null;
     coreIdentityVerifiedById: string | null;
+    productDescription: string | null;
+    lineOfBusiness: string | null;
+    medicaidPremiumGroup: string | null;
+    pcpName: string | null;
+    pcpPractice: string | null;
+    pcpPhone: string | null;
+    pcpAddress: string | null;
+    memberId: string;
+    insurance: string | null;
+    inNetwork: boolean;
   }
 
   /**

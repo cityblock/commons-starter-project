@@ -52,6 +52,16 @@ export interface IPatientCreateFields {
   phone: string;
   nmi: string;
   mrn: string | null;
+  productDescription: string | null;
+  lineOfBusiness: string | null;
+  medicaidPremiumGroup: string | null;
+  pcpName: string | null;
+  pcpPractice: string | null;
+  pcpPhone: string | null;
+  pcpAddress: string | null;
+  memberId: string;
+  insurance: string | null;
+  inNetwork: boolean;
 }
 
 export interface IPatientUpdateFromAttributionFields {
@@ -64,6 +74,16 @@ export interface IPatientUpdateFromAttributionFields {
   ssnEnd: string;
   nmi: string;
   mrn: string | null;
+  productDescription: string | null;
+  lineOfBusiness: string | null;
+  medicaidPremiumGroup: string | null;
+  pcpName: string | null;
+  pcpPractice: string | null;
+  pcpPhone: string | null;
+  pcpAddress: string | null;
+  memberId: string;
+  insurance: string | null;
+  inNetwork: boolean;
 }
 
 export interface IPatientUpdateFields {
@@ -115,6 +135,16 @@ export default class Patient extends Model {
   computedPatientStatus!: ComputedPatientStatus;
   patientState!: PatientState;
   phones!: Phone[];
+  productDescription!: string | null;
+  lineOfBusiness!: string | null;
+  medicaidPremiumGroup!: string | null;
+  pcpName!: string | null;
+  pcpPractice!: string | null;
+  pcpPhone!: string | null;
+  pcpAddress!: string | null;
+  memberId!: string;
+  insurance!: string | null;
+  inNetwork!: boolean;
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();
@@ -143,6 +173,16 @@ export default class Patient extends Model {
       ssnEnd: { type: 'string', minLength: 1 },
       nmi: { type: 'string' }, // can probably add a constraint later...just not sure what data will look like
       mrn: { type: 'string' }, // can probably add a constraint later...just not sure what data will look like
+      productDescription: { type: ['string', 'null'] },
+      lineOfBusiness: { type: ['string', 'null'] },
+      medicaidPremiumGroup: { type: ['string', 'null'] },
+      pcpName: { type: ['string', 'null'] },
+      pcpPractice: { type: ['string', 'null'] },
+      pcpPhone: { type: ['string', 'null'] },
+      pcpAddress: { type: ['string', 'null'] },
+      memberId: { type: 'string', minLength: 1 },
+      insurance: { type: ['string', 'null'] },
+      inNetwork: { type: 'boolean' },
       coreIdentityVerifiedAt: { type: ['string', 'null'] },
       coreIdentityVerifiedById: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
@@ -318,6 +358,16 @@ export default class Patient extends Model {
       phone,
       nmi,
       mrn,
+      productDescription,
+      lineOfBusiness,
+      medicaidPremiumGroup,
+      pcpName,
+      pcpPractice,
+      pcpPhone,
+      pcpAddress,
+      memberId,
+      insurance,
+      inNetwork,
     } = input;
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
     const attributionUser = await User.findOrCreateAttributionUser(txn);
@@ -334,6 +384,16 @@ export default class Patient extends Model {
         ssnEnd,
         nmi,
         mrn,
+        productDescription,
+        lineOfBusiness,
+        medicaidPremiumGroup,
+        pcpName,
+        pcpPractice,
+        pcpPhone,
+        pcpAddress,
+        memberId,
+        insurance,
+        inNetwork,
       },
       isNil,
     );
@@ -387,8 +447,21 @@ export default class Patient extends Model {
       },
       isNil,
     );
-    const updatedPatient = await this.query(txn).patchAndFetchById(patientId, {
+    const finalUpdateInput = {
       ...updateInput,
+      productDescription: input.productDescription,
+      lineOfBusiness: input.lineOfBusiness,
+      medicaidPremiumGroup: input.medicaidPremiumGroup,
+      pcpName: input.pcpName,
+      pcpPractice: input.pcpPractice,
+      pcpPhone: input.pcpPhone,
+      pcpAddress: input.pcpAddress,
+      memberId: input.memberId,
+      insurance: input.insurance,
+      inNetwork: input.inNetwork,
+    };
+    const updatedPatient = await this.query(txn).patchAndFetchById(patientId, {
+      ...finalUpdateInput,
       coreIdentityVerifiedById: null,
       coreIdentityVerifiedAt: null,
     });

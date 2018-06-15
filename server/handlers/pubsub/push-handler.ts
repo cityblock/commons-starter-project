@@ -44,6 +44,15 @@ export interface IMemberAttributionMessageData {
   maritalStatus: string;
   jobId: string;
   externalIds: IMemberAttributionMessageDataExternalIds;
+  productDescription: string | null;
+  lineOfBusiness: string | null;
+  medicaidPremiumGroup: string | null;
+  pcpName: string | null;
+  pcpPractice: string | null;
+  pcpPhone: string | null;
+  pcpAddress: string | null;
+  insurance: string | null;
+  inNetwork: boolean;
 }
 
 export type SchedulingEventType =

@@ -413,6 +413,16 @@ type Patient implements uniqueId {
   patientState: PatientState!
   coreIdentityVerifiedAt: String
   coreIdentityVerifiedById: ID
+  productDescription: String
+  lineOfBusiness: String
+  medicaidPremiumGroup: String
+  pcpName: String
+  pcpPractice: String
+  pcpPhone: String
+  pcpAddress: String
+  memberId: String!
+  insurance: String
+  inNetwork: Boolean!
 }
 
 # Patient info that is editable in Commons

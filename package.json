@@ -221,7 +221,7 @@
     "classnames": "2.2.6",
     "compression": "1.7.2",
     "copy-webpack-plugin": "4.5.1",
-    "cross-env": "5.1.6",
+    "cross-env": "5.2.0",
     "css-loader": "0.28.11",
     "date-fns": "1.29.0",
     "dotenv": "6.0.0",

@@ -12,7 +12,7 @@ import CareTeam from '../models/care-team';
 import * as knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientPhone from '../models/patient-phone';
-import { getActionCopy, notifyUserOfContactEdit } from './contact-update-consumer';
+import { notifyUserOfContactEdit } from './contact-update-consumer';
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);
@@ -68,9 +68,8 @@ export async function processPreviousContactCheck(
     const patient = await Patient.get(patientId, txn);
 
     const noticeCopy = getNoticeCopy(patient);
-    const actionCopy = getActionCopy(patient, 'deletePhoneNumber');
 
-    await notifyUserOfContactEdit(user, noticeCopy, actionCopy);
+    await notifyUserOfContactEdit(user, noticeCopy);
   });
 }
 
@@ -81,5 +80,5 @@ export function getNoticeCopy(patient: Patient): string {
     patient.patientInfo.preferredName,
   );
 
-  return `It looks like you're trying to reach a number no long associated with ${patientName}`;
+  return `It looks like you're trying to reach a number no long associated with ${patientName} Please visit Commons to get their updated contact info.`;
 }

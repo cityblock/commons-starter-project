@@ -35,8 +35,8 @@ interface IProcessPatientContactEditData {
 type NoticeCopyVerbs = { [K in PatientContactEdit]: string };
 
 const noticeCopyVerbs: Partial<NoticeCopyVerbs> = {
-  addPhoneNumber: 'added to',
-  deletePhoneNumber: 'deleted in',
+  addPhoneNumber: 'added',
+  deletePhoneNumber: 'deleted',
 };
 
 const queue = kue.createQueue({ redis: createRedisClient() });
@@ -79,18 +79,17 @@ async function processSinglePatientContactEdit(
   await transaction(existingTxn || Patient.knex(), async txn => {
     const patient = await Patient.get(data.patientId!, txn);
     const noticeCopy = getNoticeCopy(patient, data.type, data.prevPreferredName);
-    const actionCopy = getActionCopy(patient, data.type, data.prevPreferredName);
 
     // if no user specified, update care team
     if (!data.userId) {
       const careTeam = await CareTeam.getForPatient(data.patientId!, txn);
       careTeam.forEach(async user => {
-        await notifyUserOfContactEdit(user, noticeCopy, actionCopy);
+        await notifyUserOfContactEdit(user, noticeCopy);
       });
       // if new patient has at least one phone, notify user of new contact
     } else if (patient.patientInfo.primaryPhone) {
       const user = await User.get(data.userId, txn);
-      await notifyUserOfContactEdit(user, noticeCopy, actionCopy);
+      await notifyUserOfContactEdit(user, noticeCopy);
     }
   });
 }
@@ -106,9 +105,8 @@ async function processBulkPatientContactEdit(
       if (patient.patientInfo.primaryPhone) {
         const user = await User.get(data.userId!, txn);
         const noticeCopy = getNoticeCopy(patient, data.type);
-        const actionCopy = getActionCopy(patient, data.type);
 
-        await notifyUserOfContactEdit(user, noticeCopy, actionCopy);
+        await notifyUserOfContactEdit(user, noticeCopy);
         // break loop, since don't want to notify user multiple times
         break;
       }
@@ -116,11 +114,7 @@ async function processBulkPatientContactEdit(
   });
 }
 
-export async function notifyUserOfContactEdit(
-  user: User,
-  noticeCopy: string,
-  actionCopy: string | null,
-): Promise<void> {
+export async function notifyUserOfContactEdit(user: User, noticeCopy: string): Promise<void> {
   // if in production or test actually throw error for users without phones
   if (!user.phone && (config.NODE_ENV === 'production' || config.NODE_ENV === 'test')) {
     throw new Error(`User ${user.id} does not have phone number registered in Commons.`);
@@ -135,14 +129,6 @@ export async function notifyUserOfContactEdit(
     to: user.phone,
     body: noticeCopy,
   });
-
-  if (actionCopy) {
-    await twilioClient.messages.create({
-      from: config.CITYBLOCK_ADMIN,
-      to: user.phone,
-      body: actionCopy,
-    });
-  }
 }
 
 export function getNoticeCopy(
@@ -150,19 +136,18 @@ export function getNoticeCopy(
   type: PatientContactEdit,
   prevPreferredName?: string | null,
 ): string {
-  // if add to care team message, short enough for 1 SMS
-  if (type === 'addCareTeamMember') {
-    const url = `${config.GOOGLE_OAUTH_REDIRECT_URI}/contacts`;
-    return `A member has been added to your care team. Please download updated contacts here: ${url}`;
-  }
-
   const preferredName =
     prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
 
   const patientName = formatAbbreviatedName(patient.firstName, patient.lastName, preferredName);
 
+  // if add to care team message, short enough for 1 SMS
+  if (type === 'addCareTeamMember') {
+    return `A member ${patientName} has been added to your care team. Please visit Commons to get their contact info.`;
+  }
+
   if (type === 'editPreferredName') {
-    return `The preferred name of ${patientName} has been updated in Commons.`;
+    return `The preferred name of ${patientName} has been updated in Commons. Please visit Commons to see the update.`;
   }
 
   let copy = type === 'addPhoneNumber' ? 'A new contact for ' : 'An existing contact for ';
@@ -171,28 +156,7 @@ export function getNoticeCopy(
 
   const verb = noticeCopyVerbs[type];
 
-  copy += `${verb} Commons.`;
+  copy += `${verb}. Please visit Commons to get their updated contact info.`;
 
   return copy;
-}
-
-export function getActionCopy(
-  patient: Patient,
-  type: PatientContactEdit,
-  prevPreferredName?: string | null,
-): string | null {
-  if (type === 'addCareTeamMember') return null;
-
-  const url = `${config.GOOGLE_OAUTH_REDIRECT_URI}/contacts`;
-
-  if (type === 'addPhoneNumber') {
-    return `Please download it here: ${url}`;
-  }
-
-  const preferredName =
-    prevPreferredName === undefined ? patient.patientInfo.preferredName : prevPreferredName;
-
-  const patientName = formatAbbreviatedName(patient.firstName, patient.lastName, preferredName);
-
-  return `Please delete the ${patientName} contact and download updated contacts here: ${url}`;
 }

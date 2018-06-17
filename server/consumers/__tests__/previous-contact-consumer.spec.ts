@@ -133,20 +133,15 @@ describe('Previous Contact Consumer', () => {
         txn,
       );
 
-      expect(createMessage).toHaveBeenCalledTimes(2);
+      expect(createMessage).toHaveBeenCalledTimes(1);
 
       const args = createMessage.mock.calls;
 
       expect(args[0][0]).toMatchObject({
         from: '+17273415787',
         to: phoneNumber,
-        body: "It looks like you're trying to reach a number no long associated with Jon S.",
-      });
-      expect(args[1][0]).toMatchObject({
-        from: '+17273415787',
-        to: phoneNumber,
         body:
-          'Please delete the Jon S. contact and download updated contacts here: http://localhost:3000/contacts',
+          "It looks like you're trying to reach a number no long associated with Jon S. Please visit Commons to get their updated contact info.",
       });
     });
   });
@@ -157,7 +152,7 @@ describe('Previous Contact Consumer', () => {
       const noticeCopy = getNoticeCopy(patient);
 
       expect(noticeCopy).toBe(
-        "It looks like you're trying to reach a number no long associated with Jon S.",
+        "It looks like you're trying to reach a number no long associated with Jon S. Please visit Commons to get their updated contact info.",
       );
     });
   });

@@ -11686,9 +11686,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-twilio@3.17.2:
-  version "3.17.2"
-  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.17.2.tgz#a779a05aa08174799eb1ce18641b772798c2aa99"
+twilio@3.17.3:
+  version "3.17.3"
+  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.17.3.tgz#5bb4f8bc0ac1e81949c9956e3c29d91fcbc13a24"
   dependencies:
     deprecate "1.0.0"
     jsonwebtoken "^8.1.0"

@@ -34,11 +34,6 @@ module.exports = (env = '') => {
     mode: isProduction ? 'production' : 'development',
     module: { rules: rules({ production: isProduction }) },
     node,
-    optimization: {
-      removeAvailableModules: isProduction,
-      removeEmptyChunks: isProduction,
-      splitChunks: isProduction,
-    },
     output: {
       chunkFilename: '[name].bundle.js',
       filename: '[name].js',

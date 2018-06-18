@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
-import * as styles from './css/empty-placeholder.css';
+import styles from './css/empty-placeholder.css';
 
 export const DEFAULT_ICON = 'inbox'; // empty box icon
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../library/form-label/form-label';
 import ModalButtons from '../library/modal-buttons/modal-buttons';
 import ModalHeader from '../library/modal-header/modal-header';
@@ -6,7 +6,7 @@ import Option from '../library/option/option';
 import Select from '../library/select/select';
 import TextArea from '../library/textarea/textarea';
 import { Popup } from '../popup/popup';
-import * as styles from './css/glass-break-modal.css';
+import styles from './css/glass-break-modal.css';
 import { Resource } from './glass-break';
 import { reasonOptions, OTHER_VALUE } from './reason-options';
 

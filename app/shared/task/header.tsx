@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import * as styles from './css/header.css';
+import styles from './css/header.css';
 import TaskHamburgerMenu from './task-hamburger-menu';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;

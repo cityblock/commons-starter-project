@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as langs from 'langs';
+import classNames from 'classnames';
+import langs from 'langs';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as computedPatientStatusQuery from '../../graphql/queries/get-patient-computed-patient-status.graphql';
+import computedPatientStatusQuery from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import {
   getPatientComputedPatientStatusQuery,
   getPatientQuery,
@@ -19,7 +19,7 @@ import Option from '../../shared/library/option/option';
 import Select, { Color } from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
 import AddressInfo from './address-info/address-info';
-import * as styles from './css/patient-demographics.css';
+import styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
 export interface IBasicInfo {
@@ -213,7 +213,7 @@ export class BasicInfo extends React.Component<allProps> {
   }
 }
 
-export default graphql(computedPatientStatusQuery as any, {
+export default graphql(computedPatientStatusQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

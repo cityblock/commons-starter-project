@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import { formatPatientName } from '../../shared/helpers/format-helpers';
 import variables from '../shared/variables/variables';

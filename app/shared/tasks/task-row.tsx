@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { format } from 'date-fns';
 import { get } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Gender, ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
@@ -10,8 +10,8 @@ import { formatFullName, isDueSoon } from '../helpers/format-helpers';
 import Avatar from '../library/avatar/avatar';
 import PatientPhoto from '../library/patient-photo/patient-photo';
 import Text from '../library/text/text';
-import * as styles from './css/task-row.css';
-import * as tasksStyles from './css/tasks.css';
+import styles from './css/task-row.css';
+import tasksStyles from './css/tasks.css';
 
 interface ITask extends ShortTaskFragment {
   patient?: {

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Spinner from '../../library/spinner/spinner';
 import { PatientTableNoResults, PatientTablePlaceholder } from '../helper-components';
 import PatientTable from '../patient-table';

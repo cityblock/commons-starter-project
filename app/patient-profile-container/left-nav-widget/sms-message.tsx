@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { FullSmsMessageFragment } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/sms-message.css';
+import styles from './css/sms-message.css';
 
 export const TIME_FORMAT = 'h:mm a';
 

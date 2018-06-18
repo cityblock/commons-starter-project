@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TextInput from '../../../library/text-input/text-input';
 import CreateTaskOtherCBO from '../other-cbo';
 

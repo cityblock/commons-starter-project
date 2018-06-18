@@ -1,4 +1,4 @@
-import * as Logging from '@google-cloud/logging';
+import Logging from '@google-cloud/logging';
 import config from './config';
 
 let singleton: Logger | null = null;

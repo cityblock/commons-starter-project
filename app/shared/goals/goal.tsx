@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullPatientGoalFragment } from '../../graphql/types';
 import TaskRow from '../tasks/task-row';
 import CreateTask from './create-task/create-task';
-import * as styles from './css/goal.css';
+import styles from './css/goal.css';
 import GoalOptions from './goal-options';
 import { isGoalTasksComplete } from './helpers/helpers';
 

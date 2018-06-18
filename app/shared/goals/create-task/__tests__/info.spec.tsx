@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import CreateTaskInfo, { FormattedLabel } from '../info';
 
 describe('Create Task Modal Header Component', () => {

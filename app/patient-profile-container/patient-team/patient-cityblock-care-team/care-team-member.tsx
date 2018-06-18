@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as careTeamMakeTeamLeadMutationGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
-import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import careTeamMakeTeamLeadMutationGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
+import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
 import {
   careTeamMakeTeamLeadMutation,
   careTeamMakeTeamLeadMutationVariables,
@@ -14,7 +14,7 @@ import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/h
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import Icon from '../../../shared/library/icon/icon';
 import Text from '../../../shared/library/text/text';
-import * as styles from '../css/team-member.css';
+import styles from '../css/team-member.css';
 
 interface IProps {
   careTeamMember: FullCareTeamUserFragment;
@@ -125,12 +125,12 @@ export class CareTeamMember extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(careTeamMakeTeamLeadMutationGraphql as any, {
+export default graphql<any>(careTeamMakeTeamLeadMutationGraphql, {
   name: 'careTeamMakeTeamLead',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: patientCareTeamQuery as any,
+        query: patientCareTeamQuery,
         variables: {
           patientId: props.patientId,
         },

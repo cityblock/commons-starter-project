@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../../library/modal/modal';
 import { CreateTaskModal } from '../create-task';
 import CreateTaskFields from '../create-task-fields';

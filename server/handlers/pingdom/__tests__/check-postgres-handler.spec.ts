@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
 import config from '../../../config';

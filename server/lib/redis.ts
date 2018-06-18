@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv';
-import * as kue from 'kue';
-import * as redis from 'redis';
+import dotenv from 'dotenv';
+import kue from 'kue';
+import redis from 'redis';
 import config from '../config';
 
 dotenv.config();

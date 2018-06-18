@@ -1,6 +1,6 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
-import * as React from 'react';
+import React from 'react';
 import 'regenerator-runtime/runtime';
 import { Priority, UserRole } from 'schema';
 import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';

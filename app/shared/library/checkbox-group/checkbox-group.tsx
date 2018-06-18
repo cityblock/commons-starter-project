@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as styles from './css/checkbox-group.css';
+import React from 'react';
+import styles from './css/checkbox-group.css';
 
 interface IProps {
   children?: any;

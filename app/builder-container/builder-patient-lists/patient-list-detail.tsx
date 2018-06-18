@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientListDeleteMutationGraphql from '../../graphql/queries/patient-list-delete-mutation.graphql';
+import patientListDeleteMutationGraphql from '../../graphql/queries/patient-list-delete-mutation.graphql';
 import {
   patientListDeleteMutation,
   patientListDeleteMutationVariables,
@@ -11,7 +11,7 @@ import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/patient-list-detail.css';
+import styles from './css/patient-list-detail.css';
 import PatientListCreate from './patient-list-create';
 import PatientListEdit from './patient-list-edit';
 
@@ -96,7 +96,7 @@ export class PatientListDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientListDeleteMutationGraphql as any, {
+  graphql(patientListDeleteMutationGraphql, {
     name: 'deletePatientList',
     options: {
       refetchQueries: ['getPatientLists'],

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import CBOCategorySelect from '../../library/cbo-category-select/cbo-category-select';
 import FormLabel from '../../library/form-label/form-label';
 import Link from '../../library/link/link';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 
 export const MAP_LINK = 'www.cityblock.com';
 

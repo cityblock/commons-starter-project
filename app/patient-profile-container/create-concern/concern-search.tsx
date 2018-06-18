@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as concernsQuery from '../../graphql/queries/get-concerns.graphql';
-import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
+import concernsQuery from '../../graphql/queries/get-concerns.graphql';
+import patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
 import { getConcernsQuery, getPatientCarePlanQuery } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Search, { SearchOptions } from '../../shared/library/search/search';
 import Spinner from '../../shared/library/spinner/spinner';
 import ConcernTypeSelect from './concern-type-select';
-import * as styles from './css/concern-select.css';
+import styles from './css/concern-select.css';
 import createConcernFuseOptions from './fuse-options';
 
 export interface IProps {
@@ -98,7 +98,7 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 };
 
 export default compose(
-  graphql(concernsQuery as any, {
+  graphql(concernsQuery, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
@@ -107,7 +107,7 @@ export default compose(
     }),
   }),
   // For now this will be cached. Can reassess later to see if this is good enough.
-  graphql(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

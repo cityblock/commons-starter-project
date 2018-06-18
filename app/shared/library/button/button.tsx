@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
-import * as styles from './css/button.css';
+import styles from './css/button.css';
 
 export type Color = 'blue' | 'white' | 'red' | 'teal' | 'gray';
 export type IconFillColor = 'white' | 'blue' | 'green';

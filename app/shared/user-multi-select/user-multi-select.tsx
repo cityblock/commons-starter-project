@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '../library/avatar/avatar';
 import Icon from '../library/icon/icon';
 import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../library/select-dropdown/select-dropdown';
-import * as styles from './css/care-team-multi-select.css';
+import styles from './css/care-team-multi-select.css';
 
 export interface IUser {
   id: string;

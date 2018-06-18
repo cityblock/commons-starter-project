@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import Knex from 'knex';
 import { transaction, Model } from 'objection';
 import Patient from '../server/models/patient';
 import User from '../server/models/user';

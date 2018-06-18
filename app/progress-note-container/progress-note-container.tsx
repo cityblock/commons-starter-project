@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup, openPopup } from '../actions/popup-action';
-import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
-import * as progressNotesForSupervisorReviewQuery from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
+import progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
+import progressNotesForSupervisorReviewQuery from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
 import {
   getCurrentUserQuery,
   getProgressNotesForCurrentUserQuery,
@@ -12,7 +12,7 @@ import {
 } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import { IState as IAppState } from '../store';
-import * as styles from './css/progress-note-container.css';
+import styles from './css/progress-note-container.css';
 import ProgressNoteSmallRow from './progress-note-small-row';
 
 const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager', 'voicemails'];
@@ -162,7 +162,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(progressNotesForCurrentUserQuery as any, {
+  graphql(progressNotesForCurrentUserQuery, {
     options: () => ({
       variables: {
         completed: false,
@@ -175,7 +175,7 @@ export default compose(
       refetchProgressNotes: data ? data.refetch : null,
     }),
   }),
-  graphql(progressNotesForSupervisorReviewQuery as any, {
+  graphql(progressNotesForSupervisorReviewQuery, {
     props: ({ data }) => ({
       progressNotesForSupervisorReviewLoading: data ? data.loading : false,
       progressNotesForSupervisorReviewError: data ? data.error : null,

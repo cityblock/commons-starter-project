@@ -1,6 +1,6 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { formatDateOfBirth, formatGender } from '../../../shared/helpers/format-helpers';
 import { patient } from '../../../shared/util/test-data';
 import copy from '../copy/copy';

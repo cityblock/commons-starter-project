@@ -1,4 +1,4 @@
-import * as kue from 'kue';
+import kue from 'kue';
 const queue = kue.createQueue();
 import { addJobToQueue, addProcessingJobToQueue } from '../queue-helpers';
 

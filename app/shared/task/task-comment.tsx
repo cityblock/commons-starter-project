@@ -1,16 +1,16 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import * as currentUserQuery from '../../graphql/queries/get-current-user.graphql';
+import currentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import {
   taskCommentEditMutationVariables,
   FullTaskCommentFragment,
   FullUserFragment,
 } from '../../graphql/types';
 import Avatar from '../library/avatar/avatar';
-import * as styles from './css/task-comments.css';
+import styles from './css/task-comments.css';
 
 interface IProps {
   onEdit: (editedComment: taskCommentEditMutationVariables) => any;
@@ -196,7 +196,7 @@ export class TaskComment extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any, any, any, any>(currentUserQuery as any, {
+export default graphql<any, any, any, any>(currentUserQuery, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

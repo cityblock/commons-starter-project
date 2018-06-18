@@ -24,10 +24,8 @@ module.exports = (env = '') => {
   };
 
   const devtool = isProduction ? '(none)' : 'inline-source-map';
-  const app = isProduction
-    ? ['./client.tsx']
-    : ['react-hot-loader/patch', 'webpack-hot-middleware/client', './client.tsx'];
-  const clientRender = {
+  const app = './client.tsx';
+  return {
     context: PATHS.app,
     devtool,
     entry: {
@@ -36,16 +34,20 @@ module.exports = (env = '') => {
     mode: isProduction ? 'production' : 'development',
     module: { rules: rules({ production: isProduction }) },
     node,
+    optimization: {
+      removeAvailableModules: isProduction,
+      removeEmptyChunks: isProduction,
+      splitChunks: isProduction,
+    },
     output: {
-      filename: '[name].js',
       chunkFilename: '[name].bundle.js',
+      filename: '[name].js',
       path: PATHS.assets,
+      pathinfo: false, // https://medium.com/@kenneth_chau/speeding-up-webpack-typescript-incremental-builds-by-7x-3912ba4c1d15
       publicPath: PATHS.public,
     },
     plugins: plugins({ production: isProduction }),
     resolve,
     target: 'web',
   };
-
-  return [clientRender];
 };

@@ -1,6 +1,6 @@
-import * as kue from 'kue';
-import * as httpMocks from 'node-mocks-http';
-import * as uuid from 'uuid/v4';
+import kue from 'kue';
+import httpMocks from 'node-mocks-http';
+import uuid from 'uuid/v4';
 import { pubsubPushHandler } from '../push-handler';
 import { createHmac } from '../validator';
 

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DeleteWarning from '../../../shared/library/delete-warning/delete-warning';
 import { riskAreaGroup } from '../../../shared/util/test-data';
 import RiskAreaGroupCreate from '../risk-area-group-create';

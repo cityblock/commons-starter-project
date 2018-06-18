@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import PatientSearchHeader from '../header';
 import { PatientSearchDescription, PatientSearchTitle } from '../helper-components';
 

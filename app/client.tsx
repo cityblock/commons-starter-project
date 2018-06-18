@@ -1,9 +1,8 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient, ErrorPolicy, FetchPolicy } from 'apollo-client';
 import createHistory from 'history/createBrowserHistory';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './app';
 import { getMiddlewareLink } from './middleware-link';
 import createStore from './store';
@@ -33,12 +32,6 @@ const store = createStore(history);
 
 const rootEl = document.getElementById('app');
 const render = (Component: typeof App) =>
-  ReactDOM.render(
-    <AppContainer>
-      <Component store={store} client={client} />
-    </AppContainer>,
-    rootEl,
-  );
+  ReactDOM.render(<Component store={store} client={client} />, rootEl);
 
 render(App);
-if ((module as any).hot) (module as any).hot.accept('./app', () => render(App));

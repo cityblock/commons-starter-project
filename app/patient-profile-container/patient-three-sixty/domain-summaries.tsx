@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { getRiskAreaGroupsForPatientQuery } from '../../graphql/types';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import { DomainSummary } from './domain-summary';
 import { ThreeSixtyRadar } from './three-sixty-radar/three-sixty-radar';
 

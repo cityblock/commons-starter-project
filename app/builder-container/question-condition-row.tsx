@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as answerQuery from '../graphql/queries/get-answer.graphql';
-import * as questionConditionDeleteMutationGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
+import answerQuery from '../graphql/queries/get-answer.graphql';
+import questionConditionDeleteMutationGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
 import {
   getAnswerQuery,
   questionConditionDeleteMutation,
   questionConditionDeleteMutationVariables,
   FullQuestionConditionFragment,
 } from '../graphql/types';
-import * as styles from './css/risk-area-row.css';
+import styles from './css/risk-area-row.css';
 import QuestionConditionRowText from './question-condition-row-text';
 
 export interface IDeleteOptions {
@@ -49,7 +49,7 @@ class QuestionConditionRow extends React.Component<IProps & IGraphqlProps> {
 }
 
 export default compose(
-  graphql(answerQuery as any, {
+  graphql(answerQuery, {
     options: (props: IProps) => ({
       variables: { answerId: props.questionCondition.answerId },
     }),
@@ -57,7 +57,7 @@ export default compose(
       answer: data ? (data as any).answer : null,
     }),
   }),
-  graphql(questionConditionDeleteMutationGraphql as any, {
+  graphql(questionConditionDeleteMutationGraphql, {
     name: 'deleteQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

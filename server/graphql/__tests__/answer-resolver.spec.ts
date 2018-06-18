@@ -7,12 +7,12 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as answerCreate from '../../../app/graphql/queries/answer-create-mutation.graphql';
-import * as answerDelete from '../../../app/graphql/queries/answer-delete-mutation.graphql';
-import * as answerEdit from '../../../app/graphql/queries/answer-edit-mutation.graphql';
-import * as getAnswer from '../../../app/graphql/queries/get-answer.graphql';
-import * as getAnswersForQuestion from '../../../app/graphql/queries/get-question-answers.graphql';
+import uuid from 'uuid/v4';
+import answerCreate from '../../../app/graphql/queries/answer-create-mutation.graphql';
+import answerDelete from '../../../app/graphql/queries/answer-delete-mutation.graphql';
+import answerEdit from '../../../app/graphql/queries/answer-edit-mutation.graphql';
+import getAnswer from '../../../app/graphql/queries/get-answer.graphql';
+import getAnswersForQuestion from '../../../app/graphql/queries/get-question-answers.graphql';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

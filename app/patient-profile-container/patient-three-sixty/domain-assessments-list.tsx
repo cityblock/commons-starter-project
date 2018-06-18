@@ -1,5 +1,5 @@
 import { size } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullRiskAreaForPatientFragment } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import TextDivider from '../../shared/library/text-divider/text-divider';

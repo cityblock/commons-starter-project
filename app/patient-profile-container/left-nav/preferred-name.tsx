@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/preferred-name.css';
+import styles from './css/preferred-name.css';
 
 interface IProps {
   patient: FullPatientForProfileFragment;

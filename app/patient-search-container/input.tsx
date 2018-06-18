@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
 import TextInput from '../shared/library/text-input/text-input';
-import * as styles from './css/input.css';
+import styles from './css/input.css';
 
 interface IProps {
   searchTerm: string;

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import PatientTable from '../../shared/patient-table/patient-table';
 import PatientTablePagination from '../../shared/patient-table/patient-table-pagination';
 import PatientSearchHeader from '../header';

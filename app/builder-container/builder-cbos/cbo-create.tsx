@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as createCBOMutationGraphql from '../../graphql/queries/cbo-create-mutation.graphql';
+import createCBOMutationGraphql from '../../graphql/queries/cbo-create-mutation.graphql';
 import { CBOCreateMutation, CBOCreateMutationVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
@@ -9,7 +9,7 @@ import TextInput from '../../shared/library/text-input/text-input';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/cbo-shared.css';
+import styles from './css/cbo-shared.css';
 
 interface IProps {
   cancelCreateCBO: () => void;
@@ -144,7 +144,7 @@ export class CBOCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(createCBOMutationGraphql as any, {
+  graphql(createCBOMutationGraphql, {
     name: 'createCBO',
     options: {
       refetchQueries: ['getCBOs'],

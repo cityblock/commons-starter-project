@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Icon from '../../icon/icon';
 import Text from '../../text/text';
 import ModalError from '../modal-error';

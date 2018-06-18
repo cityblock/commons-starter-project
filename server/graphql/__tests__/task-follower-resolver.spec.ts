@@ -1,10 +1,10 @@
 import { graphql, print } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as taskFollow from '../../../app/graphql/queries/task-user-follow-mutation.graphql';
-import * as taskUnfollow from '../../../app/graphql/queries/task-user-unfollow-mutation.graphql';
+import taskFollow from '../../../app/graphql/queries/task-user-follow-mutation.graphql';
+import taskUnfollow from '../../../app/graphql/queries/task-user-unfollow-mutation.graphql';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';

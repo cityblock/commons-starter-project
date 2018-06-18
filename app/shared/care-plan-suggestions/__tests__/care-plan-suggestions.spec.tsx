@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../library/modal/modal';
 import Text from '../../library/text/text';
 import { carePlanSuggestionWithConcern, carePlanSuggestionWithGoal } from '../../util/test-data';

@@ -2,8 +2,8 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { CompletedWithinInterval, Priority, UserRole } from 'schema';
-import * as patientGoalCreate from '../../../app/graphql/queries/patient-goal-create-mutation.graphql';
-import * as patientGoalDelete from '../../../app/graphql/queries/patient-goal-delete-mutation.graphql';
+import patientGoalCreate from '../../../app/graphql/queries/patient-goal-create-mutation.graphql';
+import patientGoalDelete from '../../../app/graphql/queries/patient-goal-delete-mutation.graphql';
 
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';

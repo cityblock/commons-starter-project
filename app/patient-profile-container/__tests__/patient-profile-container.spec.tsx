@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import ProgressNotePopupContainer from '../../progress-note-container/progress-note-popup-container';
 import { PatientProfileContainer as Component, SelectableTabs } from '../patient-profile-container';
 

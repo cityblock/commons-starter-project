@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
-import * as Knex from 'knex';
-import * as kue from 'kue';
+import Knex from 'knex';
+import kue from 'kue';
 import { Model, Transaction } from 'objection';
 import config from '../config';
 import { reportError } from '../helpers/error-helpers';

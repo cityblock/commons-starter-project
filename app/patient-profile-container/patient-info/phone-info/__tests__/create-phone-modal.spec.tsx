@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import PhoneModal, { ISavedPhone } from '../../../../shared/phone-modal/phone-modal';
 import { patient } from '../../../../shared/util/test-data';
 import { CreatePhoneModal } from '../create-phone-modal';

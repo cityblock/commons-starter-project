@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import {
   getCurrentUserQuery,
   getPatientCareTeamQuery,
@@ -12,7 +12,7 @@ import Option from '../shared/library/option/option';
 import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
 import Select from '../shared/library/select/select';
-import * as styles from './css/progress-note-cosignature.css';
+import styles from './css/progress-note-cosignature.css';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
 
 interface IProps {
@@ -123,7 +123,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientCareTeamQuery as any, {
+  graphql(patientCareTeamQuery, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -136,7 +136,7 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

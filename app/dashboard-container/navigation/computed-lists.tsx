@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientListFragment } from '../../graphql/types';
 import NavigationItem from './navigation-item';
 

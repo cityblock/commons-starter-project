@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as styles from './css/patient-task-count.css';
+import React from 'react';
+import styles from './css/patient-task-count.css';
 import TaskCountItem from './task-count-item';
 
 interface IProps {

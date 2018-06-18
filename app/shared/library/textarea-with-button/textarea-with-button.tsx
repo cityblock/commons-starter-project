@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../button/button';
-import * as styles from './css/textarea-with-button.css';
+import styles from './css/textarea-with-button.css';
 
 const BASE_TEXT_HEIGHT = '2px';
 

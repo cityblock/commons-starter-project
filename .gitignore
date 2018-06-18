@@ -17,6 +17,8 @@ npm-debug.log*
 # dotenv file for local development
 .env
 
+.cache-loader
+
 # build
 public
 

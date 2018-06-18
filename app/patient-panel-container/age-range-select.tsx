@@ -1,5 +1,5 @@
 import { isNil } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';

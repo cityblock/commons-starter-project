@@ -2,7 +2,7 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as getClinics from '../../../app/graphql/queries/get-clinics.graphql';
+import getClinics from '../../../app/graphql/queries/get-clinics.graphql';
 
 import Clinic from '../../models/clinic';
 import User from '../../models/user';

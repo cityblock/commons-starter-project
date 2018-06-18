@@ -1,9 +1,9 @@
 import { concat, filter, findIndex, slice, values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as addressDeleteMutationGraphql from '../../../graphql/queries/address-delete-for-patient-mutation.graphql';
-import * as addressesQuery from '../../../graphql/queries/get-patient-addresses.graphql';
+import addressDeleteMutationGraphql from '../../../graphql/queries/address-delete-for-patient-mutation.graphql';
+import addressesQuery from '../../../graphql/queries/get-patient-addresses.graphql';
 import {
   addressDeleteForPatientMutation,
   addressDeleteForPatientMutationVariables,
@@ -20,7 +20,7 @@ import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
 import CreateAddressModal from './create-address-modal';
-import * as styles from './css/address-info.css';
+import styles from './css/address-info.css';
 import EditAddressModal from './edit-address-modal';
 
 interface IProps {
@@ -264,10 +264,10 @@ export class AddressInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(addressDeleteMutationGraphql as any, {
+  graphql(addressDeleteMutationGraphql, {
     name: 'addressDeleteMutation',
   }),
-  graphql(addressesQuery as any, {
+  graphql(addressesQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

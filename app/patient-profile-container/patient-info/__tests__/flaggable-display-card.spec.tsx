@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../shared/library/button/button';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';

@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
-import * as styles from './css/concern-stats.css';
+import styles from './css/concern-stats.css';
 
 interface IProps {
   goalCount: number;

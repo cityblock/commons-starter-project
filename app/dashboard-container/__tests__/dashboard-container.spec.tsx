@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { currentUser, featureFlags } from '../../shared/util/test-data';
 import { DashboardContainer, Selected } from '../dashboard-container';
 import DashboardPatients, { IProps } from '../dashboard-patients';

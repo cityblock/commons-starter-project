@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import { patient, taskWithComment, user } from '../../../shared/util/test-data';
 import BodyText from '../../shared/body-text';

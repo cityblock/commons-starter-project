@@ -2,7 +2,7 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as getComputedPatientStatus from '../../../app/graphql/queries/get-patient-computed-patient-status.graphql';
+import getComputedPatientStatus from '../../../app/graphql/queries/get-patient-computed-patient-status.graphql';
 
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';

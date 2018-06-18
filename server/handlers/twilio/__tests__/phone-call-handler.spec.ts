@@ -1,5 +1,5 @@
-import * as kue from 'kue';
-import * as httpMocks from 'node-mocks-http';
+import kue from 'kue';
+import httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import Clinic from '../../../models/clinic';

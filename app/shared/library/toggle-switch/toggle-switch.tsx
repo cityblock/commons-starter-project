@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Icon from '../icon/icon';
-import * as styles from './css/toggle-switch.css';
+import styles from './css/toggle-switch.css';
 
 interface IProps {
   isOn: boolean;

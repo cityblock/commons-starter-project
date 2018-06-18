@@ -1,5 +1,5 @@
 import { addMonths, format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
 

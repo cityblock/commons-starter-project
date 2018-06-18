@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { getSmsMessagesQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
-import * as styles from './css/sms-messages.css';
+import styles from './css/sms-messages.css';
 import EmptySmsMessages from './empty-sms-messages';
 import { isNewDate } from './helpers';
 import SmsMessage from './sms-message';

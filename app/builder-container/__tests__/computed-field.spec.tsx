@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { computedField } from '../../shared/util/test-data';
 import { ComputedField as Component } from '../computed-field';
 

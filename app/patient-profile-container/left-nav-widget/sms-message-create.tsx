@@ -1,13 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as smsMessageCreateMutationGraphql from '../../graphql/queries/sms-message-create-mutation.graphql';
+import smsMessageCreateMutationGraphql from '../../graphql/queries/sms-message-create-mutation.graphql';
 import {
   getPatientQuery,
   smsMessageCreateMutation,
   smsMessageCreateMutationVariables,
 } from '../../graphql/types';
 import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';
-import * as styles from './css/sms-message-create.css';
+import styles from './css/sms-message-create.css';
 import smsMessageBlockFn from './sms-message-block';
 
 interface IProps {
@@ -75,6 +75,6 @@ export class SmsMessageCreate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(smsMessageCreateMutationGraphql as any, {
+export default graphql<any>(smsMessageCreateMutationGraphql, {
   name: 'createSmsMessage',
 })(SmsMessageCreate) as React.ComponentClass<IProps>;

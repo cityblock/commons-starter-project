@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import onClickOutside, { OnClickOutProps } from 'react-onclickoutside';
 import TextArea from '../shared/library/textarea/textarea';
 

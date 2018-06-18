@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
-import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
-import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-import * as goalSuggestionCreateMutationGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
+import concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
+import concernsQuery from '../graphql/queries/get-concerns.graphql';
+import goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
+import goalSuggestionCreateMutationGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
 import {
   concernSuggestionCreateMutation,
   concernSuggestionCreateMutationVariables,
@@ -14,15 +14,15 @@ import {
   FullGoalSuggestionTemplateFragment,
   FullScreeningToolScoreRangeFragment,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 interface IProps {
   goals: FullGoalSuggestionTemplateFragment[] | null;
@@ -251,14 +251,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
 export default compose(
   withErrorHandler(),
-  graphql(concernsQuery as any, {
+  graphql(concernsQuery, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data && data.error ? data.error.message : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(goalsQuery as any, {
+  graphql(goalsQuery, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -266,13 +266,13 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-  graphql(concernSuggestionCreateMutationGraphql as any, {
+  graphql(concernSuggestionCreateMutationGraphql, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql(goalSuggestionCreateMutationGraphql as any, {
+  graphql(goalSuggestionCreateMutationGraphql, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

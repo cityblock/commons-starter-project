@@ -1,5 +1,5 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as express from 'express';
+import express from 'express';
 import { graphqlExpress } from 'graphql-server-express';
 import { Transaction } from 'objection';
 import { IGraphQLResponseError } from 'schema';

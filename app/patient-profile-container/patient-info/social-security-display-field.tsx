@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientSocialSecurityQuery from '../../graphql/queries/get-patient-social-security.graphql';
+import patientSocialSecurityQuery from '../../graphql/queries/get-patient-social-security.graphql';
 import { getPatientSocialSecurityQuery } from '../../graphql/types';
 import { formatSocialSecurity } from '../../shared/helpers/format-helpers';
 import DefaultText from '../../shared/library/default-text/default-text';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/flaggable-display-field.css';
+import styles from './css/flaggable-display-field.css';
 
 interface IProps {
   patientId: string;
@@ -68,7 +68,7 @@ export class SocialSecurityDisplayField extends React.Component<allProps> {
   }
 }
 
-export default graphql(patientSocialSecurityQuery as any, {
+export default graphql(patientSocialSecurityQuery, {
   skip: (props: IProps) => !props.shouldLoad,
   options: (props: IProps) => ({
     variables: { patientId: props.patientId, glassBreakId: props.glassBreakId },

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import RadioInput from '../radio-input';
 
 describe('Library Radio Input Component', () => {

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import PatientIntakeChecklistItem from '../patient-intake-checklist-item';
 
 describe('Patient Intake Checklist Item', () => {

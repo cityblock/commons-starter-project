@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
-import * as React from 'react';
+import React from 'react';
 import { FullCalendarEventFragment } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import EventTime from './event-time';

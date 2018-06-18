@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../../icon/icon';
 import Button from '../button';

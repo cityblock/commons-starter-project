@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../shared/library/button/button';
 import Text from '../shared/library/text/text';
-import * as styles from './css/patient-intake-checklist-item.css';
+import styles from './css/patient-intake-checklist-item.css';
 
 export interface IProps {
   isCompleted: boolean;

@@ -1,7 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as cboCategories from '../../../app/graphql/queries/get-cbo-categories.graphql';
+import cboCategories from '../../../app/graphql/queries/get-cbo-categories.graphql';
 
 import CBOCategory from '../../models/cbo-category';
 import Clinic from '../../models/clinic';

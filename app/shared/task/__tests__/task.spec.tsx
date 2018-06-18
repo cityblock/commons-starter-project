@@ -1,6 +1,6 @@
 import { mount, shallow } from 'enzyme';
-import * as React from 'react';
-import * as uuid from 'uuid/v4';
+import React from 'react';
+import uuid from 'uuid/v4';
 import Spinner from '../../library/spinner/spinner';
 import ApolloTestProvider from '../../util/apollo-test-provider';
 import { comment, taskWithComment, CBOReferral } from '../../util/test-data';

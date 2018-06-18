@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../../library/form-label/form-label';
 import PrioritySelect from '../../../task/priority-select';
 import CreateTaskPriority from '../priority';

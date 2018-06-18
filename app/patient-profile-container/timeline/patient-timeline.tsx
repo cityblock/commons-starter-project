@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
 import { toString } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientEncountersQuery from '../../graphql/queries/get-patient-encounters.graphql';
+import patientEncountersQuery from '../../graphql/queries/get-patient-encounters.graphql';
 import { getPatientEncountersQuery, FullPatientEncounterFragment } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
-import * as styles from './css/patient-timeline.css';
+import styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNoteRow from './progress-note-row';
 import TimelineCard from './shared/timeline-card';
@@ -115,7 +115,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(patientEncountersQuery as any, {
+export default graphql(patientEncountersQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,

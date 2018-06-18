@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patient, task } from '../../../shared/util/test-data';
 import PatientTasks from '../../tasks/patient-tasks';
 import PatientListItem, { IProps } from '../patient-list-item';

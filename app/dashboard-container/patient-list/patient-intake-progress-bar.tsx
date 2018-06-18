@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
-import * as styles from './css/patient-intake-progress-bar.css';
+import styles from './css/patient-intake-progress-bar.css';
 
 interface IProps {
   computedPatientStatus: FullPatientForDashboardFragment['computedPatientStatus'];

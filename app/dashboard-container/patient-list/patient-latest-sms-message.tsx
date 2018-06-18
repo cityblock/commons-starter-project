@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
 import { format, isToday } from 'date-fns';
 import { capitalize, truncate } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
-import * as smsMessageLatestQuery from '../../graphql/queries/get-sms-message-latest.graphql';
+import smsMessageLatestQuery from '../../graphql/queries/get-sms-message-latest.graphql';
 import { getSmsMessageLatestQuery } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/patient-latest-sms-message.css';
+import styles from './css/patient-latest-sms-message.css';
 
 export const TIMESTAMP_FORMAT = 'h:mm a';
 const MAX_DISPLAY_LENGTH = 50;
@@ -57,7 +57,7 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
   );
 };
 
-export default graphql(smsMessageLatestQuery as any, {
+export default graphql(smsMessageLatestQuery, {
   options: ({ patientId }: IProps) => ({
     variables: { patientId },
   }),

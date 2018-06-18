@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import {
@@ -21,7 +21,7 @@ import BuilderQuestions from './builder-questions';
 import BuilderRiskAreaGroups from './builder-risk-area-groups/builder-risk-area-groups';
 import BuilderRiskAreas from './builder-risk-areas';
 import BuilderScreeningTools from './builder-screening-tools';
-import * as styles from './css/builder.css';
+import styles from './css/builder.css';
 
 type Tab =
   | 'domains'

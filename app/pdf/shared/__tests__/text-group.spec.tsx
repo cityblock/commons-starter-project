@@ -1,6 +1,6 @@
 import { Image, Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TextGroup from '../text-group';
 
 describe('Printable MAP text group', () => {

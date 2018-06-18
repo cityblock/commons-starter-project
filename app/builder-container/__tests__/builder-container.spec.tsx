@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { concern, goal, screeningTool } from '../../shared/util/test-data';
 import { BuilderContainer as Component } from '../builder-container';
 

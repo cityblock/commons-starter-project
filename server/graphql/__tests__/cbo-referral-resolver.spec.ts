@@ -1,9 +1,9 @@
 import { graphql, print } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
-import * as cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
+import cboReferralCreate from '../../../app/graphql/queries/cbo-referral-create-mutation.graphql';
+import cboReferralEdit from '../../../app/graphql/queries/cbo-referral-edit-mutation.graphql';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
 import {

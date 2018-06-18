@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';
 import ModalHeader from '../../../shared/library/modal-header/modal-header';

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DefaultText from '../../default-text/default-text';
 import FileInput from '../file-input';
 

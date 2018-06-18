@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { progressNoteTemplate } from '../../shared/util/test-data';
 import { ProgressNoteTemplate as Component } from '../progress-note-template';
 

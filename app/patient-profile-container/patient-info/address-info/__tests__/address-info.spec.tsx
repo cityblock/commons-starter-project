@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../../shared/library/button/button';
 import Checkbox from '../../../../shared/library/checkbox/checkbox';
 import DefaultText from '../../../../shared/library/default-text/default-text';

@@ -1,14 +1,14 @@
 import { ApolloError } from 'apollo-client';
 import { History } from 'history';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as getCurrentUserQueryGraphql from '../../graphql/queries/get-current-user.graphql';
-import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
-import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
+import getCurrentUserQueryGraphql from '../../graphql/queries/get-current-user.graphql';
+import taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
+import taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
   getTaskIdsWithNotificationsQuery,
   taskDeleteMutation,
@@ -18,7 +18,7 @@ import {
   FullUserFragment,
 } from '../../graphql/types';
 import { TasksTab } from '../../tasks-container/tasks-container';
-import * as sortSearchStyles from '../css/sort-search.css';
+import sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Option from '../library/option/option';
 import Select from '../library/select/select';
@@ -26,7 +26,7 @@ import Text from '../library/text/text';
 import UnderlineTab from '../library/underline-tab/underline-tab';
 import UnderlineTabs from '../library/underline-tabs/underline-tabs';
 import Task from '../task/task';
-import * as styles from './css/tasks.css';
+import styles from './css/tasks.css';
 import TaskRow from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
@@ -225,8 +225,8 @@ export class Tasks extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
-  graphql(taskIdsWithNotificationsQuery as any, {
+  graphql<IGraphqlProps>(taskDeleteMutationGraphql, { name: 'deleteTask' }),
+  graphql(taskIdsWithNotificationsQuery, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
@@ -244,7 +244,7 @@ export default compose(
       };
     },
   }),
-  graphql(getCurrentUserQueryGraphql as any, {
+  graphql(getCurrentUserQueryGraphql, {
     props: ({ data }) => ({
       currentUserLoading: data ? data.loading : false,
       currentUserError: data ? data.error : null,

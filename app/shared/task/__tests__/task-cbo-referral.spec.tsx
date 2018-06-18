@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { CBOReferral, CBOReferralRequiringAction } from '../../util/test-data';
 import { Divider } from '../task';
 import TaskCBOAddInformation from '../task-cbo-add-information';

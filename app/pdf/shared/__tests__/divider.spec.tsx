@@ -1,6 +1,6 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Divider from '../divider';
 
 describe('CBO Referral PDF Divider', () => {

@@ -1,7 +1,7 @@
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as progressNoteAddSupervisorNotesMutationGraphql from '../graphql/queries/progress-note-add-supervisor-notes-mutation.graphql';
+import progressNoteAddSupervisorNotesMutationGraphql from '../graphql/queries/progress-note-add-supervisor-notes-mutation.graphql';
 import {
   progressNoteAddSupervisorNotesMutation,
   progressNoteAddSupervisorNotesMutationVariables,
@@ -9,7 +9,7 @@ import {
 } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Textarea from '../shared/library/textarea/textarea';
-import * as styles from './css/progress-note-context.css';
+import styles from './css/progress-note-context.css';
 
 interface IProps {
   progressNote?: FullProgressNoteFragment;
@@ -104,6 +104,6 @@ export class ProgressNoteSupervisorNotes extends React.Component<allProps, IStat
   }
 }
 
-export default graphql<any>(progressNoteAddSupervisorNotesMutationGraphql as any, {
+export default graphql<any>(progressNoteAddSupervisorNotesMutationGraphql, {
   name: 'progressNoteAddSupervisorNotes',
 })(ProgressNoteSupervisorNotes) as React.ComponentClass<IProps>;

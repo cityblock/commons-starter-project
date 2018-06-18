@@ -1,18 +1,18 @@
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router';
-import * as patientsForComputedListQuery from '../graphql/queries/get-patients-for-computed-list.graphql';
-import * as patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
-import * as patientsWithAssignedStateQuery from '../graphql/queries/get-patients-with-assigned-state.graphql';
-import * as patientsWithIntakeInProgressQuery from '../graphql/queries/get-patients-with-intake-in-progress.graphql';
-import * as patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
-import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
-import * as patientsWithOpenCBOReferralsQuery from '../graphql/queries/get-patients-with-open-cbo-referrals.graphql';
-import * as patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-with-out-of-date-map.graphql';
-import * as patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
-import * as patientsWithRecentConversationsQuery from '../graphql/queries/get-patients-with-recent-conversations.graphql';
-import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
+import patientsForComputedListQuery from '../graphql/queries/get-patients-for-computed-list.graphql';
+import patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
+import patientsWithAssignedStateQuery from '../graphql/queries/get-patients-with-assigned-state.graphql';
+import patientsWithIntakeInProgressQuery from '../graphql/queries/get-patients-with-intake-in-progress.graphql';
+import patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
+import patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
+import patientsWithOpenCBOReferralsQuery from '../graphql/queries/get-patients-with-open-cbo-referrals.graphql';
+import patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-with-out-of-date-map.graphql';
+import patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
+import patientsWithRecentConversationsQuery from '../graphql/queries/get-patients-with-recent-conversations.graphql';
+import patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
 import {
   getPatientsForComputedListQuery,
   getPatientsNewToCareTeamQuery,
@@ -85,7 +85,7 @@ const fetchPatientList = () => <P extends {}>(
 
   return compose(
     withRouter,
-    graphql(patientsWithUrgentTasksQuery as any, {
+    graphql(patientsWithUrgentTasksQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'tasks',
       props: ({ data }) => ({
@@ -94,7 +94,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithUrgentTasks : null,
       }),
     }),
-    graphql(patientsWithRecentConversationsQuery as any, {
+    graphql(patientsWithRecentConversationsQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'conversations',
       props: ({ data }) => ({
@@ -103,7 +103,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithRecentConversations : null,
       }),
     }),
-    graphql(patientsWithOpenCBOReferralsQuery as any, {
+    graphql(patientsWithOpenCBOReferralsQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'referrals',
       props: ({ data }) => ({
@@ -112,7 +112,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithOpenCBOReferrals : null,
       }),
     }),
-    graphql(patientsNewToCareTeamQuery as any, {
+    graphql(patientsNewToCareTeamQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'new',
       props: ({ data }) => ({
@@ -121,7 +121,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsNewToCareTeam : null,
       }),
     }),
-    graphql(patientsWithPendingSuggestionsQuery as any, {
+    graphql(patientsWithPendingSuggestionsQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'suggestions',
       props: ({ data }) => ({
@@ -130,7 +130,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithPendingSuggestions : null,
       }),
     }),
-    graphql(patientsWithMissingInfoQuery as any, {
+    graphql(patientsWithMissingInfoQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'demographics',
       props: ({ data }) => ({
@@ -139,7 +139,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithMissingInfo : null,
       }),
     }),
-    graphql(patientsWithNoRecentEngagementQuery as any, {
+    graphql(patientsWithNoRecentEngagementQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'engage',
       props: ({ data }) => ({
@@ -148,7 +148,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithNoRecentEngagement : null,
       }),
     }),
-    graphql(patientsWithOutOfDateMAPQuery as any, {
+    graphql(patientsWithOutOfDateMAPQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'updateMAP',
       props: ({ data }) => ({
@@ -157,7 +157,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
       }),
     }),
-    graphql(patientsWithAssignedStateQuery as any, {
+    graphql(patientsWithAssignedStateQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'assigned',
       props: ({ data }) => ({
@@ -166,7 +166,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithAssignedState : null,
       }),
     }),
-    graphql(patientsWithIntakeInProgressQuery as any, {
+    graphql(patientsWithIntakeInProgressQuery, {
       options: getPageParams,
       skip: ({ selected }) => selected !== 'intake',
       props: ({ data }) => ({
@@ -175,7 +175,7 @@ const fetchPatientList = () => <P extends {}>(
         patientResults: data ? (data as any).patientsWithIntakeInProgress : null,
       }),
     }),
-    graphql(patientsForComputedListQuery as any, {
+    graphql(patientsForComputedListQuery, {
       options: (props: RouteComponentProps<P> & IExternalProps) => {
         const {
           variables: { pageNumber, pageSize },

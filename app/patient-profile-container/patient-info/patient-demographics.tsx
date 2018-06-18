@@ -1,12 +1,12 @@
 import { History } from 'history';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import AdvancedDirectives, { IAdvancedDirectives } from './advanced-directives';
 import BasicInfo, { IBasicInfo } from './basic-info';
 import ContactInfo, { IContactInfo } from './contact-info';
 import CoreIdentity, { ICoreIdentity } from './core-identity';
-import * as styles from './css/patient-demographics.css';
+import styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 import PatientPhoto, { IPatientPhoto } from './patient-photo';
 import PlanInfo, { IPlanInfo } from './plan-info';

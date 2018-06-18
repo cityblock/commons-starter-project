@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import SelectDropdownOption from '../../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../../library/select-dropdown/select-dropdown';
 import UserMultiSelect from '../user-multi-select';

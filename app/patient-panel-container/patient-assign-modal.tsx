@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as careTeamAssignPatientsMutationGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
-import * as getPatientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import careTeamAssignPatientsMutationGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
+import getPatientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import {
   careTeamAssignPatientsMutation,
   careTeamAssignPatientsMutationVariables,
@@ -12,7 +12,7 @@ import { formatFullName } from '../shared/helpers/format-helpers';
 import FormLabel from '../shared/library/form-label/form-label';
 import Modal from '../shared/library/modal/modal';
 import CareWorkerSelect from './care-worker-select';
-import * as styles from './css/patient-assign-modal.css';
+import styles from './css/patient-assign-modal.css';
 
 export interface IPatientState {
   [key: string]: boolean;
@@ -166,12 +166,12 @@ export function filterPatientState(patientSelectState: object): string[] {
   });
 }
 
-export default graphql<any>(careTeamAssignPatientsMutationGraphql as any, {
+export default graphql<any>(careTeamAssignPatientsMutationGraphql, {
   name: 'careTeamAssignPatients',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: getPatientPanelQuery as any,
+        query: getPatientPanelQuery,
         variables: {
           pageNumber: props.pageNumber,
           pageSize: props.pageSize,

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { concern } from '../../shared/util/test-data';
 import { Concern as Component } from '../concern';
 

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import TextInput from '../../library/text-input/text-input';
 import { ChangeEvent } from './create-task';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 
 interface IProps {
   CBOName: string;

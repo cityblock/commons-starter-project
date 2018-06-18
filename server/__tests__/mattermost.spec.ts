@@ -1,17 +1,12 @@
 import axios from 'axios';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as queueHelpersRaw from '../helpers/queue-helpers';
+import queueHelpers from '../helpers/queue-helpers';
 import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import User from '../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../spec-helpers';
-
-// allows mocking without type errors below
-/* tslint:disable:prefer-const */
-let queueHelpers = queueHelpersRaw as any;
-/* tslint:enable:prefer-const */
 
 interface ISetup {
   patient: Patient;

@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as concernSuggestionDeleteMutationGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
-import * as goalSuggestionDeleteMutationGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
+import concernSuggestionDeleteMutationGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
+import goalSuggestionDeleteMutationGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
 import {
   concernSuggestionCreateMutation,
   concernSuggestionDeleteMutationVariables,
@@ -11,7 +11,7 @@ import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Icon from '../shared/library/icon/icon';
 import withErrorHandler, {
   IInjectedErrorProps,
@@ -133,13 +133,13 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(concernSuggestionDeleteMutationGraphql as any, {
+  graphql(concernSuggestionDeleteMutationGraphql, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql(goalSuggestionDeleteMutationGraphql as any, {
+  graphql(goalSuggestionDeleteMutationGraphql, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

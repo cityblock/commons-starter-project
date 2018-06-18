@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as createAddressMutationGraphql from '../../../graphql/queries/address-create-for-patient-mutation.graphql';
+import createAddressMutationGraphql from '../../../graphql/queries/address-create-for-patient-mutation.graphql';
 import {
   addressCreateForPatientMutation,
   addressCreateForPatientMutationVariables,
@@ -65,6 +65,6 @@ export class CreateAddressModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(createAddressMutationGraphql as any, {
+export default graphql<any>(createAddressMutationGraphql, {
   name: 'createAddressMutation',
 })(CreateAddressModal) as React.ComponentClass<IProps>;

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import Icon from '../../../shared/library/icon/icon';
 import FlaggableDisplayField from '../flaggable-display-field';

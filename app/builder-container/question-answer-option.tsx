@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as questionQuery from '../graphql/queries/get-question.graphql';
+import questionQuery from '../graphql/queries/get-question.graphql';
 import {
   questionConditionDeleteMutationVariables,
   FullAnswerFragment,
@@ -30,7 +30,7 @@ class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
   }
 }
 
-export default graphql(questionQuery as any, {
+export default graphql(questionQuery, {
   options: (props: IProps) => ({
     variables: { questionId: props.answer.questionId },
   }),

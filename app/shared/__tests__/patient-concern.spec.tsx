@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { cloneDeep } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../../shared/constants';
 import { isDueSoon } from '../../shared/helpers/format-helpers';
 import PatientConcernStats from '../concerns/concern-stats/concern-stats';

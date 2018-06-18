@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as createPhoneMutationGraphql from '../../../graphql/queries/phone-create-for-patient-mutation.graphql';
+import createPhoneMutationGraphql from '../../../graphql/queries/phone-create-for-patient-mutation.graphql';
 import {
   phoneCreateForPatientMutation,
   phoneCreateForPatientMutationVariables,
@@ -63,6 +63,6 @@ export class CreatePhoneModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(createPhoneMutationGraphql as any, {
+export default graphql<any>(createPhoneMutationGraphql, {
   name: 'createPhoneMutation',
 })(CreatePhoneModal) as React.ComponentClass<IProps>;

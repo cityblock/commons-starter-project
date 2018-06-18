@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { DomainSummaryBulletItems } from '../domain-summary-bullet-items';
 import DomainSummaryBullets from '../domain-summary-bullets';

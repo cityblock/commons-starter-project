@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientPhotoSignedUrlCreate from '../../../graphql/queries/patient-photo-signed-url-create.graphql';
+import patientPhotoSignedUrlCreateQuery from '../../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
   patientPhotoSignedUrlCreateMutation,
   patientPhotoSignedUrlCreateMutationVariables,
@@ -76,6 +76,6 @@ export class PatientPhoto extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientPhotoSignedUrlCreate as any, {
+export default graphql<any>(patientPhotoSignedUrlCreateQuery, {
   name: 'getSignedPhotoUrl',
 })(PatientPhoto) as React.ComponentClass<IProps>;

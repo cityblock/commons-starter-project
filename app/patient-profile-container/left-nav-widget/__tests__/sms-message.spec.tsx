@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Text from '../../../shared/library/text/text';
 import { smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
 import SmsMessage, { TIME_FORMAT } from '../sms-message';

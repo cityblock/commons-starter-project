@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FullProgressNoteFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/progress-note-supervisor-badge.css';
+import styles from './css/progress-note-supervisor-badge.css';
 
 interface IProps {
   progressNote: FullProgressNoteFragment;

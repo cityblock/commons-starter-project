@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import {
   formatAge,
@@ -9,7 +9,7 @@ import {
 } from '../../shared/helpers/format-helpers';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/header-patient.css';
+import styles from './css/header-patient.css';
 
 interface IProps {
   patient: FullPatientForProfileFragment;

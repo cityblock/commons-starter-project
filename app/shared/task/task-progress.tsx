@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
-import * as styles from './css/task-progress.css';
+import styles from './css/task-progress.css';
 import TaskCompletion from './task-completion';
 import TaskDue from './task-due';
 

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Icon from '../icon/icon';
 import TextInput from '../text-input/text-input';
-import * as styles from './css/input.css';
+import styles from './css/input.css';
 
 interface IProps {
   value: string;

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as styles from './css/container.css';
+import React from 'react';
+import styles from './css/container.css';
 
 const ITEM_HEIGHT = 36;
 

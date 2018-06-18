@@ -5,7 +5,7 @@ import {
   AssessmentType,
   RiskAdjustmentTypeOptions,
 } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

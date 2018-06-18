@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { currentUserEditMutation, currentUserEditMutationVariables } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Text from '../shared/library/text/text';
 import TextAreaWithButton from '../shared/library/textarea-with-button/textarea-with-button';
-import * as styles from './css/automated-response.css';
+import styles from './css/automated-response.css';
 
 interface IProps {
   awayMessage: string;

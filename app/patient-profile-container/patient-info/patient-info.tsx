@@ -1,12 +1,12 @@
 import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
-import * as patientQuery from '../../graphql/queries/get-patient.graphql';
-import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import patientQuery from '../../graphql/queries/get-patient.graphql';
+import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
   getPatientQuery,
   patientInfoEditMutation,
@@ -21,7 +21,7 @@ import Text from '../../shared/library/text/text';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
-import * as styles from './css/patient-info.css';
+import styles from './css/patient-info.css';
 import PatientDocuments from './documents/patient-documents';
 import PatientDemographics, { IDemographics } from './patient-demographics';
 
@@ -362,13 +362,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
 }
 
 export default compose(
-  graphql(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql, {
     name: 'editPatientInfoMutation',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql(patientQuery as any, {
+  graphql(patientQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,

@@ -1,14 +1,14 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as mattermostUrlForUserCreate from '../../graphql/queries/mattermost-url-for-user-create.graphql';
+import mattermostUrlForUserCreateGraphql from '../../graphql/queries/mattermost-url-for-user-create.graphql';
 import {
   mattermostUrlForUserCreateMutation,
   mattermostUrlForUserCreateMutationVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/care-team-member-contact.css';
+import styles from './css/care-team-member-contact.css';
 
 interface IProps {
   careTeamMemberId: string;
@@ -83,6 +83,6 @@ export class CareTeamMemberContact extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(mattermostUrlForUserCreate as any, {
+export default graphql<any>(mattermostUrlForUserCreateGraphql, {
   name: 'getMattermostLink',
 })(CareTeamMemberContact) as React.ComponentClass<IProps>;

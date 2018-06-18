@@ -1,12 +1,12 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as computedFieldQuery from '../graphql/queries/get-computed-field.graphql';
+import computedFieldQuery from '../graphql/queries/get-computed-field.graphql';
 import { FullComputedFieldFragment } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 
@@ -184,7 +184,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(computedFieldQuery as any, {
+  graphql(computedFieldQuery, {
     skip: (props: IProps & IStateProps) => !props.computedFieldId,
     options: (props: IProps & IStateProps) => ({
       variables: { computedFieldId: props.computedFieldId },

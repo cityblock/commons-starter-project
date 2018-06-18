@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { getPatientQuery } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/sms-message-block.css';
+import styles from './css/sms-message-block.css';
 
 interface IProps {
   patient: getPatientQuery['patient'];

@@ -1,5 +1,5 @@
 import { transaction, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createCBO, createCBOCategory } from '../../spec-helpers';
 import CBO from '../cbo';

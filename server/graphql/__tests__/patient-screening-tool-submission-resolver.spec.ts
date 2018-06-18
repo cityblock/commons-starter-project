@@ -3,7 +3,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { AnswerTypeOptions, AnswerValueTypeOptions, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

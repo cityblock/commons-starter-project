@@ -9,8 +9,8 @@ module.exports = ({ production = false } = {}) => [
   css({ production }),
   image(),
   {
-    test: /\.json$/,
     exclude: /node_modules/,
     loader: 'json-loader',
+    test: /\.json$/,
   },
 ];

@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-client';
 import { omit } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientGlassBreakCheckQuery from '../../graphql/queries/get-patient-glass-break-check.graphql';
-import * as patientGlassBreaksForUserQuery from '../../graphql/queries/get-patient-glass-breaks-for-user.graphql';
-import * as createPatientGlassBreakMutationGraphql from '../../graphql/queries/patient-glass-break-create-mutation.graphql';
+import patientGlassBreakCheckQuery from '../../graphql/queries/get-patient-glass-break-check.graphql';
+import patientGlassBreaksForUserQuery from '../../graphql/queries/get-patient-glass-breaks-for-user.graphql';
+import createPatientGlassBreakMutationGraphql from '../../graphql/queries/patient-glass-break-create-mutation.graphql';
 import {
   getPatientGlassBreaksForUserQuery,
   getPatientGlassBreakCheckQuery,
@@ -18,7 +18,7 @@ import Spinner from '../library/spinner/spinner';
 import withCurrentUser, {
   IInjectedProps as ICurrentUserProps,
 } from '../with-current-user/with-current-user';
-import * as styles from './css/patient-glass-break.css';
+import styles from './css/patient-glass-break.css';
 import GlassBreak from './glass-break';
 
 export interface IInjectedProps {
@@ -112,7 +112,7 @@ const patientGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql(patientGlassBreakCheckQuery as any, {
+    graphql(patientGlassBreakCheckQuery, {
       options: (props: IProps) => ({
         variables: {
           patientId: props.patientId,
@@ -124,7 +124,7 @@ const patientGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).patientGlassBreakCheck : null,
       }),
     }),
-    graphql(patientGlassBreaksForUserQuery as any, {
+    graphql(patientGlassBreaksForUserQuery, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
       }),
@@ -134,7 +134,7 @@ const patientGlassBreak = () => <P extends {}>(
         glassBreaks: data ? (data as any).patientGlassBreaksForUser : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(createPatientGlassBreakMutationGraphql as any, {
+    graphql<IGraphqlProps, IProps, resultProps>(createPatientGlassBreakMutationGraphql, {
       name: 'createPatientGlassBreak',
       options: {
         refetchQueries: ['getPatientGlassBreaksForUser'],

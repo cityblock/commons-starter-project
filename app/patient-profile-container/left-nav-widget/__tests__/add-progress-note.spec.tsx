@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { AddProgressNote } from '../add-progress-note';
 import LeftNavQuickAction from '../left-nav-quick-action';
 

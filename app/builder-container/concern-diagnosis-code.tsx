@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as concernRemoveDiagnosisCodeMutationGraphql from '../graphql/queries/concern-remove-diagnosis-code-mutation.graphql';
+import concernRemoveDiagnosisCodeMutationGraphql from '../graphql/queries/concern-remove-diagnosis-code-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
   concernRemoveDiagnosisCodeMutation,
   concernRemoveDiagnosisCodeMutationVariables,
   FullDiagnosisCodeFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Icon from '../shared/library/icon/icon';
 
 export interface IRemoveOptions {
@@ -70,7 +70,7 @@ export class ConcernDiagnosisCode extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(concernRemoveDiagnosisCodeMutationGraphql as any, {
+export default graphql<any>(concernRemoveDiagnosisCodeMutationGraphql, {
   name: 'concernRemoveDiagnosisCode',
   options: {
     refetchQueries: ['concern'],

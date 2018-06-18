@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
-import * as patientExternalProviderDeleteMutationGraphql from '../../../graphql/queries/patient-external-provider-delete-mutation.graphql';
+import patientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
+import patientExternalProviderDeleteMutationGraphql from '../../../graphql/queries/patient-external-provider-delete-mutation.graphql';
 import {
   getPatientExternalProvidersQuery,
   patientExternalProviderDeleteMutation,
@@ -9,7 +9,7 @@ import {
   FullPatientExternalProviderFragment,
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
-import * as styles from '../css/patient-team.css';
+import styles from '../css/patient-team.css';
 import EditPatientExternalProviderModal from './edit-patient-external-provider-modal';
 import PatientExternalProvider from './patient-external-provider';
 
@@ -110,13 +110,13 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(patientExternalProviderDeleteMutationGraphql as any, {
+  graphql(patientExternalProviderDeleteMutationGraphql, {
     name: 'patientExternalProviderDelete',
     options: {
       refetchQueries: ['getPatientExternalProviders'],
     },
   }),
-  graphql(patientExternalProvidersQuery as any, {
+  graphql(patientExternalProvidersQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

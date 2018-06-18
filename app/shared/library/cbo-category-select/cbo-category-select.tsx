@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as CBOCategoriesQuery from '../../../graphql/queries/get-cbo-categories.graphql';
+import CBOCategoriesQuery from '../../../graphql/queries/get-cbo-categories.graphql';
 import { FullCBOCategoryFragment } from '../../../graphql/types';
 import Option from '../option/option';
 import Select from '../select/select';
@@ -35,7 +35,7 @@ export const CBOCategorySelect: React.StatelessComponent<allProps> = (props: all
   );
 };
 
-export default graphql<any, any, any, any>(CBOCategoriesQuery as any, {
+export default graphql<any, any, any, any>(CBOCategoriesQuery, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

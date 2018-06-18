@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import config from './config';
 
 export default function app(req: express.Request, res: express.Response) {

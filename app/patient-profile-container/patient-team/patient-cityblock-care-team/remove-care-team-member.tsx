@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { filter, includes, toString } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import FormLabel from '../../../shared/library/form-label/form-label';
@@ -8,7 +8,7 @@ import OptGroup from '../../../shared/library/optgroup/optgroup';
 import Option from '../../../shared/library/option/option';
 import Select from '../../../shared/library/select/select';
 import Text from '../../../shared/library/text/text';
-import * as styles from './css/remove-care-team-member.css';
+import styles from './css/remove-care-team-member.css';
 
 interface IProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;

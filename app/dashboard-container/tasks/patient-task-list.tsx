@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
-import * as styles from './css/patient-task-list.css';
+import styles from './css/patient-task-list.css';
 import PatientTask from './patient-task';
 
 interface IProps {

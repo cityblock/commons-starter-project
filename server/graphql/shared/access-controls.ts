@@ -1,4 +1,4 @@
-import * as acl from 'acl';
+import acl from 'acl';
 import { UserRole } from 'schema';
 import { BusinessToggleName } from '../../../shared/permissions/business-toggle-names';
 import aclJson from './acl';

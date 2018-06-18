@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from '@react-pdf/core';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import BodyText from '../shared/body-text';
 import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';

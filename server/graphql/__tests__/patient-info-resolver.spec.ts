@@ -1,10 +1,10 @@
 import { graphql, print } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { Gender, UserRole } from 'schema';
-import * as getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
-import * as patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
+import getPatientNeedToKnow from '../../../app/graphql/queries/get-patient-need-to-know.graphql';
+import patientNeedToKnowEdit from '../../../app/graphql/queries/patient-need-to-know-edit-mutation.graphql';
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';

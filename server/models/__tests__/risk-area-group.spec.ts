@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Clinic from '../../models/clinic';
 import RiskAreaGroup from '../../models/risk-area-group';

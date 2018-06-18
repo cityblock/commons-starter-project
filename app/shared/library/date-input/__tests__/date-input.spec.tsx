@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DateInput, { DEFAULT_FORMAT } from '../date-input';
 
 describe('Library Date Input Component', () => {

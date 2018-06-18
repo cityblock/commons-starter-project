@@ -1,15 +1,15 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
-import * as JwtForVcfCreate from '../graphql/queries/jwt-for-vcf-create.graphql';
+import patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import JwtForVcfCreateGraphql from '../graphql/queries/jwt-for-vcf-create.graphql';
 import { getPatientPanelQuery, JwtForVcfCreateMutation } from '../graphql/types';
 import { getContactsVcfRoute } from '../shared/helpers/route-helpers';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
 import MobileHeader from '../shared/library/mobile-header/mobile-header';
-import * as styles from './css/contacts-container.css';
+import styles from './css/contacts-container.css';
 
 interface IGraphqlProps {
   generateJwtForVcf: () => { data: JwtForVcfCreateMutation };
@@ -80,10 +80,10 @@ export class ContactsContainer extends React.Component<IGraphqlProps, IState> {
 }
 
 export default compose(
-  graphql(JwtForVcfCreate as any, {
+  graphql(JwtForVcfCreateGraphql, {
     name: 'generateJwtForVcf',
   }),
-  graphql(patientPanelQuery as any, {
+  graphql(patientPanelQuery, {
     options: () => ({
       variables: { pageNumber: 0, pageSize: 1, filters: {}, showAllPatients: false },
     }),

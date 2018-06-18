@@ -1,5 +1,5 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Popup } from '../../popup/popup';
 import { Color as IconColor } from '../icon/icon';
 import { IconName } from '../icon/icon-types';
@@ -7,7 +7,7 @@ import ModalButtons from '../modal-buttons/modal-buttons';
 import ModalError from '../modal-error/modal-error';
 import ModalHeader, { Color } from '../modal-header/modal-header';
 import Spinner from '../spinner/spinner';
-import * as styles from './css/modal.css';
+import styles from './css/modal.css';
 
 interface IProps {
   onClose?: () => void;

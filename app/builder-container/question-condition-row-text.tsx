@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as questionQuery from '../graphql/queries/get-question.graphql';
+import questionQuery from '../graphql/queries/get-question.graphql';
 import {
   questionConditionDeleteMutationVariables,
   FullAnswerFragment,
   FullQuestionFragment,
 } from '../graphql/types';
-import * as styles from './css/risk-area-row.css';
+import styles from './css/risk-area-row.css';
 import formatQuestionCondition from './helpers/format-question-condition';
 
 export interface IDeleteOptions {
@@ -31,7 +31,7 @@ class QuestionConditionRowText extends React.Component<IProps & IGraphqlProps> {
   }
 }
 
-export default graphql(questionQuery as any, {
+export default graphql(questionQuery, {
   options: (props: IProps) => ({
     variables: { questionId: props.questionId },
   }),

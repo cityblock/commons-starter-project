@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import CreateTaskInfo from '../../goals/create-task/info';
 import ModalHeader from '../../library/modal-header/modal-header';
 import { Popup } from '../../popup/popup';

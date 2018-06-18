@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientListEditMutationGraphql from '../../graphql/queries/patient-list-edit-mutation.graphql';
+import patientListEditMutationGraphql from '../../graphql/queries/patient-list-edit-mutation.graphql';
 import {
   patientListEditMutation,
   patientListEditMutationVariables,
@@ -8,7 +8,7 @@ import {
 } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
-import * as styles from './css/patient-list-shared.css';
+import styles from './css/patient-list-shared.css';
 
 interface IProps {
   patientList: FullPatientListFragment;
@@ -72,6 +72,6 @@ export class PatientListEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<any>(patientListEditMutationGraphql as any, {
+export default graphql<any>(patientListEditMutationGraphql, {
   name: 'editPatientList',
 })(PatientListEdit) as React.ComponentClass<IProps>;

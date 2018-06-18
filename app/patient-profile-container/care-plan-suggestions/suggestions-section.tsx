@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { keys } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
 import TextDivider from '../../shared/library/text-divider/text-divider';
-import * as styles from '../css/patient-care-plan.css';
+import styles from '../css/patient-care-plan.css';
 import { ISuggestionGroups } from './patient-care-plan-suggestions';
 import SuggestionsGroup from './suggestions-group';
 

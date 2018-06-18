@@ -1,5 +1,5 @@
 import { View } from '@react-pdf/core';
-import * as React from 'react';
+import React from 'react';
 import { FullCareTeamUserFragment } from '../../graphql/types';
 import HeaderText from '../shared/header-text';
 import CareTeamMember from './care-team-member';

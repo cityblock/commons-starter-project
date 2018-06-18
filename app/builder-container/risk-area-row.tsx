@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as riskAreaGroupShortQueryGraphql from '../graphql/queries/get-risk-area-group-short.graphql';
+import riskAreaGroupShortQueryGraphql from '../graphql/queries/get-risk-area-group-short.graphql';
 import { getRiskAreaGroupShortQuery, FullRiskAreaFragment } from '../graphql/types';
-import * as riskAreasStyles from '../shared/css/two-panel.css';
-import * as styles from './css/risk-area-row.css';
+import riskAreasStyles from '../shared/css/two-panel.css';
+import styles from './css/risk-area-row.css';
 
 interface IProps {
   riskArea: FullRiskAreaFragment;
@@ -63,7 +63,7 @@ const RiskAreaRow: React.StatelessComponent<allProps> = (props: allProps) => {
   );
 };
 
-export default graphql(riskAreaGroupShortQueryGraphql as any, {
+export default graphql(riskAreaGroupShortQueryGraphql, {
   options: (props: IProps) => ({
     variables: { riskAreaGroupId: props.riskArea.riskAreaGroupId },
   }),

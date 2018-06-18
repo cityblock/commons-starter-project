@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import FormLabel from '../../library/form-label/form-label';
 import ModalButtons from '../../library/modal-buttons/modal-buttons';
 import ModalHeader from '../../library/modal-header/modal-header';
 import Search, { SearchOptions } from '../../library/search/search';
-import * as styles from './css/create-goal.css';
+import styles from './css/create-goal.css';
 
 interface IProps {
   title: string;

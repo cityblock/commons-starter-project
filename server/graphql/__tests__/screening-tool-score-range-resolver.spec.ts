@@ -2,7 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { RiskAdjustmentTypeOptions, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Clinic from '../../models/clinic';
 import RiskArea from '../../models/risk-area';

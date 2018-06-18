@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../shared/library/button/button';
 import Text from '../../shared/library/text/text';
 import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';

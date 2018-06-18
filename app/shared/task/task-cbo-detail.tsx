@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { FullCBOReferralFragment } from '../../graphql/types';
 import { formatAddress } from '../helpers/format-helpers';
 import DefaultText from '../library/default-text/default-text';
 import FormLabel from '../library/form-label/form-label';
 import Link from '../library/link/link';
-import * as styles from './css/task-cbo-detail.css';
+import styles from './css/task-cbo-detail.css';
 
 interface IProps {
   CBOReferral: FullCBOReferralFragment;

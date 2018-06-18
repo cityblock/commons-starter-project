@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
 import Text from '../text/text';
 import TextAreaWithButton from '../textarea-with-button/textarea-with-button';
-import * as styles from './css/editable-multiline-text.css';
+import styles from './css/editable-multiline-text.css';
 
 interface IProps {
   text: string;

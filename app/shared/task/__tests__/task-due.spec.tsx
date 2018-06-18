@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DateInput from '../../library/date-input/date-input';
 import Icon from '../../library/icon/icon';
 import TaskDue from '../task-due';

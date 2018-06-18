@@ -7,9 +7,9 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import * as concernSuggestionCreate from '../../../app/graphql/queries/concern-suggestion-create-mutation.graphql';
-import * as concernSuggestionDelete from '../../../app/graphql/queries/concern-suggestion-delete-mutation.graphql';
-import * as getConcernSuggestionsForAnswer from '../../../app/graphql/queries/get-concern-suggestions-for-answer.graphql';
+import concernSuggestionCreate from '../../../app/graphql/queries/concern-suggestion-create-mutation.graphql';
+import concernSuggestionDelete from '../../../app/graphql/queries/concern-suggestion-delete-mutation.graphql';
+import getConcernSuggestionsForAnswer from '../../../app/graphql/queries/get-concern-suggestions-for-answer.graphql';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

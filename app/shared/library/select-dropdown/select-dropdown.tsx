@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Avatar from '../avatar/avatar';
 import SelectDropdownOption from '../select-dropdown-option/select-dropdown-option';
 import Text from '../text/text';
-import * as styles from './css/select-dropdown.css';
+import styles from './css/select-dropdown.css';
 
 interface IProps {
   value: string;

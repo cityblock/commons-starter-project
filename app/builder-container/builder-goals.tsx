@@ -1,19 +1,19 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
+import goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
+import goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 import {
   getGoalSuggestionTemplatesQuery,
   goalSuggestionTemplateDeleteMutation,
   goalSuggestionTemplateDeleteMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import Goal from './goal';
@@ -159,8 +159,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(goalDeleteMutation as any, { name: 'deleteGoal' }),
-  graphql(goalsQuery as any, {
+  graphql(goalDeleteMutation, { name: 'deleteGoal' }),
+  graphql(goalsQuery, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,

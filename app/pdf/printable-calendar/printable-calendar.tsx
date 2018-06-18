@@ -1,6 +1,6 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import {
   FullCalendarEventFragment,
   FullCareTeamUserFragment,

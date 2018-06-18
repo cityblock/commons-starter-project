@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as carePlanSuggestionDismissMutationGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import carePlanSuggestionDismissMutationGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
   carePlanSuggestionDismissMutation,
   carePlanSuggestionDismissMutationVariables,
@@ -101,7 +101,7 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
   }
 }
 
-export default graphql<any>(carePlanSuggestionDismissMutationGraphql as any, {
+export default graphql<any>(carePlanSuggestionDismissMutationGraphql, {
   name: 'dismissCarePlanSuggestion',
   options: {
     refetchQueries: [

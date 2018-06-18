@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
 import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
 import DropdownAnswer from './dropdown-answer';

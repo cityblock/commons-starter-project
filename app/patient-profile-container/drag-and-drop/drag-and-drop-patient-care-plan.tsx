@@ -1,9 +1,9 @@
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
-import * as patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
+import patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
 import {
   getPatientCarePlanQuery,
   FullPatientConcernFragment,
@@ -15,7 +15,7 @@ import {
 } from '../../graphql/types';
 import { getOrderDiffs, insert, remove, reorder } from '../../shared/helpers/order-helpers';
 import PatientCarePlan from '../patient-care-plan';
-import * as styles from './css/patient-care-plan.css';
+import styles from './css/patient-care-plan.css';
 
 interface IProps {
   loading?: boolean;
@@ -212,6 +212,6 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientConcernBulkEditMutationGraphql as any, {
+export default graphql<any>(patientConcernBulkEditMutationGraphql, {
   name: 'patientConcernBulkEdit',
 })(DnDPatientCarePlan) as React.ComponentClass<IProps>;

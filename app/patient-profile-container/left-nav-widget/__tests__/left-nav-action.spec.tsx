@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Icon from '../../../shared/library/icon/icon';
 import LeftNavAction from '../left-nav-action';
 

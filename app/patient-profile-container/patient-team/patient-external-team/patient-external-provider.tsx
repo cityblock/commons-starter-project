@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientExternalProviderFragment } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import Text from '../../../shared/library/text/text';
-import * as styles from '../css/team-member.css';
+import styles from '../css/team-member.css';
 
 interface IProps {
   patientExternalProvider: FullPatientExternalProviderFragment;

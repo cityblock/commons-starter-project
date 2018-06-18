@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Option from '../option/option';
 import Select from '../select/select';
 import stateList from './state-list';

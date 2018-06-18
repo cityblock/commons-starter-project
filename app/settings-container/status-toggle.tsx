@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { currentUserEditMutation, currentUserEditMutationVariables } from '../graphql/types';
 import Text from '../shared/library/text/text';
 import ToggleSwitch from '../shared/library/toggle-switch/toggle-switch';
-import * as styles from './css/status-toggle.css';
+import styles from './css/status-toggle.css';
 
 interface IProps {
   isAvailable: boolean;

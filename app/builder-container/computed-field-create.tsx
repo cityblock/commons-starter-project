@@ -1,16 +1,16 @@
 import { History } from 'history';
 import { isEmpty } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as computedFieldCreateMutationGraphql from '../graphql/queries/computed-field-create-mutation.graphql';
+import computedFieldCreateMutationGraphql from '../graphql/queries/computed-field-create-mutation.graphql';
 import {
   computedFieldCreateMutation,
   computedFieldCreateMutationVariables,
   ComputedFieldDataTypes,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as computedFieldStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import computedFieldStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import Option from '../shared/library/option/option';
@@ -21,7 +21,7 @@ import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
 import { getMessageIdForOption } from './answer-create-edit';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: computedFieldCreateMutationVariables;
@@ -159,7 +159,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(computedFieldCreateMutationGraphql as any, {
+  graphql(computedFieldCreateMutationGraphql, {
     name: 'createComputedField',
     options: {
       refetchQueries: ['getComputedFields'],

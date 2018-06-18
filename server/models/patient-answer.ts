@@ -323,7 +323,7 @@ export default class PatientAnswer extends BaseModel {
   ): Promise<PatientAnswer[]> {
     const deletedPatientAnswers: PatientAnswer[] = (await PatientAnswer.query(txn)
       .eager('answer')
-      .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
+      .where('id', 'in', patientAnswerIdsToDeleteQuery)
       .patch({ deletedAt: new Date().toISOString() })
       .returning('*')) as any;
     const uniqueDeletedPatientAnswers = uniqBy(

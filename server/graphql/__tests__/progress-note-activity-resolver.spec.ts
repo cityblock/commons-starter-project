@@ -9,7 +9,7 @@ import {
   TaskEventTypes,
   UserRole,
 } from 'schema';
-import * as progressNoteActivity from '../../../app/graphql/queries/get-progress-note-activity-for-progress-note.graphql';
+import progressNoteActivity from '../../../app/graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 
 import Answer from '../../models/answer';
 import CarePlanUpdateEvent from '../../models/care-plan-update-event';

@@ -1,17 +1,17 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
 import { pickBy } from 'lodash';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import * as usersQuery from '../graphql/queries/get-users.graphql';
-import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
-import * as userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
-import * as userEditPermissionsMutationGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
-import * as userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import usersQuery from '../graphql/queries/get-users.graphql';
+import userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
+import userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
+import userEditPermissionsMutationGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
+import userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
 import {
   getUsersQuery,
   getUsersQueryVariables,
@@ -28,8 +28,8 @@ import {
   UserOrderOptions,
   UserRole,
 } from '../graphql/types';
-import * as sortSearchStyles from '../shared/css/sort-search.css';
-import * as styles from '../shared/css/two-panel.css';
+import sortSearchStyles from '../shared/css/sort-search.css';
+import styles from '../shared/css/two-panel.css';
 import InfiniteScroll from '../shared/infinite-scroll/infinite-scroll';
 import Button from '../shared/library/button/button';
 import { fetchMore } from '../shared/util/fetch-more';
@@ -248,31 +248,31 @@ const getPageParams = (props: IProps): getUsersQueryVariables => {
 
 export default compose(
   withRouter,
-  graphql(userDeleteMutationGraphql as any, {
+  graphql(userDeleteMutationGraphql, {
     name: 'deleteUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(userEditPermissionsMutationGraphql as any, {
+  graphql(userEditPermissionsMutationGraphql, {
     name: 'editUserPermissions',
   }),
 
-  graphql(userEditRoleMutationGraphql as any, {
+  graphql(userEditRoleMutationGraphql, {
     name: 'editUserRole',
   }),
-  graphql(userCreateMutationGraphql as any, {
+  graphql(userCreateMutationGraphql, {
     name: 'createUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     props: ({ data }) => ({
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql(usersQuery as any, {
+  graphql(usersQuery, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
       fetchMoreUsers: () =>

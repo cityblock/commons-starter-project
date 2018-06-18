@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql, Mutation } from 'react-apollo';
-import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import * as riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
-import * as patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
+import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
+import riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
+import patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
 import {
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
@@ -65,10 +65,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     const dataForQuestion = answerData[question.id] || [];
 
     return (
-      <Mutation
-        mutation={patientAnswersCreateMutationGraphql as any}
-        key={`${question.id}-${index}`}
-      >
+      <Mutation mutation={patientAnswersCreateMutationGraphql} key={`${question.id}-${index}`}>
         {mutate => (
           <PatientQuestion
             visible={visible}
@@ -138,7 +135,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(riskAreaQuestionsQuery as any, {
+  graphql(riskAreaQuestionsQuery, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -151,7 +148,7 @@ export default compose(
       riskAreaQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',

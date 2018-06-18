@@ -4,11 +4,11 @@ import { SchemaLink } from 'apollo-link-schema';
 import { print } from 'graphql';
 import { addMockFunctionsToSchema, makeExecutableSchema } from 'graphql-tools';
 import createHistory from 'history/createBrowserHistory';
-import * as React from 'react';
+import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import * as schema from '../../../server/graphql/schema.graphql';
+import schema from '../../../server/graphql/schema.graphql';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import createStore from '../../store';
 

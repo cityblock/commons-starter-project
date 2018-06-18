@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
-import * as screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
-import * as patientScreeningToolSubmissionCreate from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
+import patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
+import screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
+import patientScreeningToolSubmissionCreateGraphql from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
 import {
   getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery,
   getQuestionsQuery,
@@ -84,7 +84,7 @@ export const ScreeningToolSubmission: React.StatelessComponent<allProps> = props
 };
 
 export default compose(
-  graphql(patientScreeningToolSubmissionCreate as any, {
+  graphql(patientScreeningToolSubmissionCreateGraphql, {
     name: 'createScreeningToolSubmission',
     options: {
       refetchQueries: [
@@ -93,7 +93,7 @@ export default compose(
       ],
     },
   }),
-  graphql(screeningToolQuestionsQuery as any, {
+  graphql(screeningToolQuestionsQuery, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
@@ -106,7 +106,7 @@ export default compose(
       screeningToolQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientScreeningToolSubmissionQuery as any, {
+  graphql(patientScreeningToolSubmissionQuery, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.screeningTool.id,

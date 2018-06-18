@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { PatientRelationOptions, PhoneTypeOptions } from '../../graphql/types';
 import FormLabel from '../library/form-label/form-label';
-import * as styles from '../library/form/css/form.css';
+import styles from '../library/form/css/form.css';
 import Select from '../library/select/select';
 import TextInput from '../library/text-input/text-input';
 

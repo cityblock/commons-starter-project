@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as calendarCreateForPatientMutationGraphql from '../../graphql/queries/calendar-create-for-patient-mutation.graphql';
-import * as calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
-import * as calendarForPatientQuery from '../../graphql/queries/get-calendar-for-patient.graphql';
+import calendarCreateForPatientMutationGraphql from '../../graphql/queries/calendar-create-for-patient-mutation.graphql';
+import calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
+import calendarForPatientQuery from '../../graphql/queries/get-calendar-for-patient.graphql';
 import {
   calendarCreateForPatientMutation,
   calendarCreateForPatientMutationVariables,
@@ -17,7 +17,7 @@ import RequestRefreshModal from '../../shared/appointment-modal/request-refresh-
 import Calendar from '../../shared/calendar/calendar';
 import PrintCalendarModal from '../../shared/calendar/print-calendar-modal';
 import Button from '../../shared/library/button/button';
-import * as styles from './css/patient-calendar.css';
+import styles from './css/patient-calendar.css';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -219,13 +219,13 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
 };
 
 export default compose(
-  graphql<any>(calendarCreateForPatientMutationGraphql as any, {
+  graphql<any>(calendarCreateForPatientMutationGraphql, {
     name: 'createCalendarForPatient',
     options: {
       refetchQueries: ['getCalendarForPatient'],
     },
   }),
-  graphql(calendarForPatientQuery as any, {
+  graphql(calendarForPatientQuery, {
     options: (props: IProps) => ({
       variables: { patientId: props.match.params.patientId },
     }),
@@ -233,7 +233,7 @@ export default compose(
       calendarResponse: data ? (data as any).calendarForPatient : null,
     }),
   }),
-  graphql(calendarEventsForPatientQuery as any, {
+  graphql(calendarEventsForPatientQuery, {
     options: (props: IProps) => ({
       variables: {
         timeMin: new Date().toISOString(),

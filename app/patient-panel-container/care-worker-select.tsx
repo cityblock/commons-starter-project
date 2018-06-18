@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as userSummaryListQuery from '../graphql/queries/get-user-summary-list.graphql';
+import userSummaryListQuery from '../graphql/queries/get-user-summary-list.graphql';
 import { getUserSummaryListQuery, ShortUserFragment } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import OptGroup from '../shared/library/optgroup/optgroup';
@@ -79,7 +79,7 @@ class CareWorkerSelect extends React.Component<allProps> {
   }
 }
 
-export default graphql(userSummaryListQuery as any, {
+export default graphql(userSummaryListQuery, {
   options: (props: IProps) => ({
     variables: {
       userRoleFilters: CARE_WORKER_ROLES,

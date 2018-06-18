@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
-import * as styles from './css/underline-tabs.css';
+import classNames from 'classnames';
+import React from 'react';
+import styles from './css/underline-tabs.css';
 
 type Color = 'gray' | 'white';
 

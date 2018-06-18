@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patientList, patientList2 } from '../../../shared/util/test-data';
 import ComputedLists from '../computed-lists';
 import NavigationItem, { IProps } from '../navigation-item';

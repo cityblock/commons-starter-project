@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { filter, groupBy, keys } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientAnswerEventFragment } from '../../graphql/types';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityPatientAnswerGroup from './progress-note-activity-patient-answer-group';
 
 interface IProps {

@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../shared/library/button/button';
-import * as styles from './css/tasks.css';
+import styles from './css/tasks.css';
 
 interface IProps {
   onRetryClick: () => any;

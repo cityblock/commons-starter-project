@@ -1,4 +1,4 @@
-import * as kue from 'kue';
+import kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import {
   AnswerTypeOptions,
@@ -6,7 +6,7 @@ import {
   ComputedFieldDataTypes,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';

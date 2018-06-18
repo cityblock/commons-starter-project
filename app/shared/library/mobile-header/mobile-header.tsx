@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import Text from '../text/text';
-import * as styles from './css/mobile-header.css';
+import styles from './css/mobile-header.css';
 
 interface IProps {
   messageId: string;

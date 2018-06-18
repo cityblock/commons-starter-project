@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import Text, { Color, IProps as ITextProps, Size } from '../text/text';
-import * as styles from './css/text-info.css';
+import styles from './css/text-info.css';
 
 export interface IProps {
   messageId: string; // translate id for label of information

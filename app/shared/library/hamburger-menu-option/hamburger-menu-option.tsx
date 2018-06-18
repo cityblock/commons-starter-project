@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
-import * as styles from './css/hamburger-menu-option.css';
+import styles from './css/hamburger-menu-option.css';
 
 interface IProps {
   messageId?: string; // prefer using translation for menu item text

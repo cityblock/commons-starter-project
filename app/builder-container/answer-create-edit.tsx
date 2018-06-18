@@ -1,9 +1,9 @@
 import { clone, isNil, omit, omitBy, range } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';
-import * as answerDeleteMutationGraphql from '../graphql/queries/answer-delete-mutation.graphql';
-import * as answerEditMutationGraphql from '../graphql/queries/answer-edit-mutation.graphql';
+import answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';
+import answerDeleteMutationGraphql from '../graphql/queries/answer-delete-mutation.graphql';
+import answerEditMutationGraphql from '../graphql/queries/answer-edit-mutation.graphql';
 import {
   answerCreateMutation,
   answerCreateMutationVariables,
@@ -15,8 +15,8 @@ import {
   ComputedFieldDataTypes,
   FullAnswerFragment,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as answerStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import answerStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import Option from '../shared/library/option/option';
@@ -26,7 +26,7 @@ import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 interface ICreateOptions {
   variables: answerCreateMutationVariables;
@@ -342,16 +342,16 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(answerCreateMutationGraphql as any, {
+  graphql(answerCreateMutationGraphql, {
     name: 'createAnswer',
     options: {
       refetchQueries: ['getQuestions'],
     },
   }),
-  graphql(answerEditMutationGraphql as any, {
+  graphql(answerEditMutationGraphql, {
     name: 'editAnswer',
   }),
-  graphql(answerDeleteMutationGraphql as any, {
+  graphql(answerDeleteMutationGraphql, {
     name: 'deleteAnswer',
     options: {
       refetchQueries: ['getQuestions'],

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../../../shared/library/modal/modal';
 import { patient, task, userForCareTeam } from '../../../../shared/util/test-data';
 import RemoveCareTeamMember from '../remove-care-team-member';

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../library/form-label/form-label';
 import TextInput from '../../library/text-input/text-input';
 

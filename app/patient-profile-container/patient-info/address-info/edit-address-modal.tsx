@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as editAddressMutationGraphql from '../../../graphql/queries/address-edit-mutation.graphql';
-import * as editPatientInfoMutationGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
+import editAddressMutationGraphql from '../../../graphql/queries/address-edit-mutation.graphql';
+import editPatientInfoMutationGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
   addressEditMutation,
   addressEditMutationVariables,
@@ -88,10 +88,10 @@ export class EditAddressModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(editAddressMutationGraphql as any, {
+  graphql(editAddressMutationGraphql, {
     name: 'editAddressMutation',
   }),
-  graphql(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql, {
     name: 'editPatientInfoMutation',
   }),
 )(EditAddressModal) as React.ComponentClass<IProps>;

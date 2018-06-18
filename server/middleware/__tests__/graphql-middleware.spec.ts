@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { transaction } from 'objection';
 import User from '../../models/user';
 import { graphqlMiddleware } from '../graphql-middleware';

@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { FullCBOFragment } from '../../../graphql/types';
 import { formatAddress } from '../../helpers/format-helpers';
 import DefaultText from '../../library/default-text/default-text';
 import Link from '../../library/link/link';
-import * as styles from './css/cbo-detail.css';
+import styles from './css/cbo-detail.css';
 
 interface IProps {
   CBO: FullCBOFragment | null;

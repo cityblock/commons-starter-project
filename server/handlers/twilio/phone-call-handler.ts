@@ -1,8 +1,8 @@
 import { subSeconds } from 'date-fns';
-import * as express from 'express';
+import express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
-import * as twilio from 'twilio';
+import twilio from 'twilio';
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
 import { reportError } from '../../helpers/error-helpers';
 import { addJobToQueue } from '../../helpers/queue-helpers';

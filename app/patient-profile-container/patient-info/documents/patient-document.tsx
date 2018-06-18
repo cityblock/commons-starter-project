@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientDocumentDeleteMutationGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
-import * as patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
+import patientDocumentDeleteMutationGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
+import patientDocumentSignedUrlCreateGraphql from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
   patientDocumentDeleteMutation,
   patientDocumentDeleteMutationVariables,
@@ -21,7 +21,7 @@ import Text from '../../../shared/library/text/text';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/patient-document.css';
+import styles from './css/patient-document.css';
 
 interface IProps {
   patientDocument: FullPatientDocumentFragment;
@@ -147,10 +147,10 @@ export class PatientDocument extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientDocumentSignedUrlCreate as any, {
+  graphql(patientDocumentSignedUrlCreateGraphql, {
     name: 'getSignedDocumentUrl',
   }),
-  graphql(patientDocumentDeleteMutationGraphql as any, {
+  graphql(patientDocumentDeleteMutationGraphql, {
     name: 'deletePatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],

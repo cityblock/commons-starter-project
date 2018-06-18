@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
-import * as Knex from 'knex';
-import * as kue from 'kue';
+import Knex from 'knex';
+import kue from 'kue';
 import { transaction, Model, Transaction } from 'objection';
 import config from '../config';
 import { IComputedFieldMessageData } from '../handlers/pubsub/push-handler';
@@ -9,7 +9,7 @@ import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import { createSuggestionsForComputedFieldAnswer } from '../lib/suggestions';
 import Answer from '../models/answer';
-import * as knexConfig from '../models/knexfile';
+import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
 

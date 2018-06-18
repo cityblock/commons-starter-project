@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Priority } from '../../../graphql/types';
 import FormLabel from '../../library/form-label/form-label';
 import PrioritySelect from '../../task/priority-select';
-import * as priorityStyles from './css/priority.css';
-import * as styles from './css/shared.css';
+import priorityStyles from './css/priority.css';
+import styles from './css/shared.css';
 
 interface IProps {
   onChange: (priority: Priority) => void;

@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../library/icon/icon';
-import * as styles from './css/helper-components.css';
+import styles from './css/helper-components.css';
 
 interface IColumnHeaderProps {
   messageId: string;

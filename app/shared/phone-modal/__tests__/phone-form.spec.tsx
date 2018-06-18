@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { PhoneTypeOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import RadioGroup from '../../../shared/library/radio-group/radio-group';

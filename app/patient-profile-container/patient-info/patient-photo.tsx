@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
@@ -7,7 +7,7 @@ import Button from '../../shared/library/button/button';
 import Checkbox from '../../shared/library/checkbox/checkbox';
 import DefaultText from '../../shared/library/default-text/default-text';
 import PatientProfilePhoto from '../../shared/library/patient-photo/patient-photo';
-import * as parentStyles from './css/patient-demographics.css';
+import parentStyles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
 export interface IPatientPhoto {

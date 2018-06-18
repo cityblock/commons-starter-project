@@ -1,21 +1,21 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
+import questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
 import {
   questionConditionCreateMutation,
   questionConditionCreateMutationVariables,
   FullAnswerFragment,
   FullQuestionConditionFragment,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as questionConditionStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import questionConditionStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 import QuestionAnswerOption from './question-answer-option';
 
 export interface ICreateOptions {
@@ -114,7 +114,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(questionConditionCreateMutationGraphql as any, {
+  graphql(questionConditionCreateMutationGraphql, {
     name: 'createQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { AddressInput, PatientRelationOptions, PhoneTypeOptions } from '../../graphql/types';
 import AddressForm from '../address-modal/address-form';
 import Button from '../library/button/button';
 import FormLabel from '../library/form-label/form-label';
-import * as styles from '../library/form/css/form.css';
+import styles from '../library/form/css/form.css';
 import RadioGroup from '../library/radio-group/radio-group';
 import RadioInput from '../library/radio-input/radio-input';
 import Select from '../library/select/select';

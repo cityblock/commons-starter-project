@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { getClinicsQuery } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Select from '../shared/library/select/select';
-import * as styles from './css/progress-note-context.css';
+import styles from './css/progress-note-context.css';
 
 interface IProps {
   disabled: boolean;

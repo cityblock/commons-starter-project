@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientContactsQuery from '../../../graphql/queries/get-patient-contacts.graphql';
-import * as patientContactDeleteMutationGraphql from '../../../graphql/queries/patient-contact-delete-mutation.graphql';
+import patientContactsQuery from '../../../graphql/queries/get-patient-contacts.graphql';
+import patientContactDeleteMutationGraphql from '../../../graphql/queries/patient-contact-delete-mutation.graphql';
 import {
   getPatientContactsQuery,
   patientContactDeleteMutation,
@@ -13,7 +13,7 @@ import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../../shared/with-error-handler/with-error-handler';
 import RequiredPlaceholder from '../../required-placeholder';
-import * as styles from '../css/patient-team.css';
+import styles from '../css/patient-team.css';
 import PatientFamilyMember from './patient-family-member';
 
 interface IProps {
@@ -125,13 +125,13 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientContactDeleteMutationGraphql as any, {
+  graphql(patientContactDeleteMutationGraphql, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContacts'],
     },
   }),
-  graphql(patientContactsQuery as any, {
+  graphql(patientContactsQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

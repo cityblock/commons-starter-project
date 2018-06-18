@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import * as patientConcernDeleteMutationGraphql from '../../graphql/queries/patient-concern-delete-mutation.graphql';
+import patientConcernDeleteMutationGraphql from '../../graphql/queries/patient-concern-delete-mutation.graphql';
 import {
   patientConcernDeleteMutation,
   patientConcernDeleteMutationVariables,
@@ -101,7 +101,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(patientConcernDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, {}, allProps>(patientConcernDeleteMutationGraphql, {
     name: 'deletePatientConcern',
   }),
 )(DeleteConcernModal) as React.ComponentClass<IProps>;

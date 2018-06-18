@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link, LinkProps } from 'react-router-dom';
 import Icon from '../../shared/library/icon/icon';
 import { IconName } from '../../shared/library/icon/icon-types';
 import { Selected } from '../dashboard-container';
 import fetchPatientList, { IInjectedProps } from '../fetch-patient-list';
-import * as styles from './css/navigation-item.css';
+import styles from './css/navigation-item.css';
 
 export const Divider: React.StatelessComponent<{ className: string }> = ({ className }) => {
   return <div className={className} />;

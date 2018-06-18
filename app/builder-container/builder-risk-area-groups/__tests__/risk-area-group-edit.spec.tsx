@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../shared/library/button/button';
 import EditableMultilineText from '../../../shared/library/editable-multiline-text/editable-multiline-text';
 import { riskAreaGroup } from '../../../shared/util/test-data';

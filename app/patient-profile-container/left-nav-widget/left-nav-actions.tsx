@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Selected } from '../../reducers/patient-left-nav-reducer';
-import * as styles from './css/left-nav-actions.css';
+import styles from './css/left-nav-actions.css';
 import LeftNavAction from './left-nav-action';
 
 interface IProps {

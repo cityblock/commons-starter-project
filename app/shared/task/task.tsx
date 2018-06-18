@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
-import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
-import * as taskQuery from '../../graphql/queries/get-task.graphql';
-import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
+import eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
+import taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
+import taskQuery from '../../graphql/queries/get-task.graphql';
+import taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
   eventNotificationsForTaskDismissMutationVariables,
   taskEditMutation,
@@ -17,7 +17,7 @@ import {
 } from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
 import Spinner from '../library/spinner/spinner';
-import * as styles from './css/index.css';
+import styles from './css/index.css';
 import TaskHeader from './header';
 import TaskAssignee from './task-assignee';
 import TaskBody from './task-body';
@@ -190,8 +190,8 @@ export class Task extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql(taskEditMutationGraphql as any, { name: 'editTask' }),
-  graphql(taskQuery as any, {
+  graphql(taskEditMutationGraphql, { name: 'editTask' }),
+  graphql(taskQuery, {
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
@@ -201,10 +201,10 @@ export default compose(
       refetchTask: data ? data.refetch : null,
     }),
   }),
-  graphql(eventNotificationsForTaskDismissMutation as any, {
+  graphql(eventNotificationsForTaskDismissMutation, {
     name: 'dismissTaskNotifications',
     options: {
-      refetchQueries: [{ query: taskIdsWithNotificationsQuery as any }],
+      refetchQueries: [{ query: taskIdsWithNotificationsQuery }],
     },
   }),
 )(Task) as React.ComponentClass<IProps>;

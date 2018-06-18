@@ -1,5 +1,5 @@
 import { transaction, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createRiskArea } from '../../spec-helpers';
 import RiskArea from '../risk-area';

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { clinic, patient, userForCareTeam } from '../../../../shared/util/test-data';
 import CareTeamMember from '../care-team-member';
 import { PatientCityblockCareTeam } from '../patient-cityblock-care-team';

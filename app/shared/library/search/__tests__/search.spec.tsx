@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import SearchInput from '../input';
 import SearchResults from '../results';
 import Search from '../search';

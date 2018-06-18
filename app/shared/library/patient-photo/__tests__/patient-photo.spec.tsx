@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { PatientPhoto } from '../patient-photo';
 import PatientPhotoImage from '../patient-photo-image';
 

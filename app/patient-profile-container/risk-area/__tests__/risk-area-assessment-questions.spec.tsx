@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Mutation } from 'react-apollo';
 import { question, riskArea, riskAreaAssessmentSubmission } from '../../../shared/util/test-data';
 import RiskAreaAssessmentHeader from '../risk-area-assessment-header';

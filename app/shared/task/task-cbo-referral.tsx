@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FullCBOReferralFragment } from '../../graphql/types';
 import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';

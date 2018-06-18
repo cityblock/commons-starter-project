@@ -1,18 +1,18 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import * as riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
+import riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
+import riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
 import {
   riskAreaDeleteMutation,
   riskAreaDeleteMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import RiskArea from './risk-area';
@@ -167,14 +167,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(riskAreasQuery as any, {
+  graphql(riskAreasQuery, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(riskAreaDeleteMutationGraphql as any, {
+  graphql(riskAreaDeleteMutationGraphql, {
     name: 'deleteRiskArea',
   }),
 )(AdminRiskAreas) as React.ComponentClass<IProps>;

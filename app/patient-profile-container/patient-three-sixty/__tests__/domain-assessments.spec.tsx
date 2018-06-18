@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import BackLink from '../../../shared/library/back-link/back-link';
 import Spinner from '../../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../../shared/library/underline-tabs/underline-tabs';

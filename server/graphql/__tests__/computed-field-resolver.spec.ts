@@ -2,10 +2,10 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { ComputedFieldDataTypes, UserRole } from 'schema';
-import * as computedFieldCreate from '../../../app/graphql/queries/computed-field-create-mutation.graphql';
-import * as computedFieldDelete from '../../../app/graphql/queries/computed-field-delete-mutation.graphql';
-import * as getComputedField from '../../../app/graphql/queries/get-computed-field.graphql';
-import * as getComputedFields from '../../../app/graphql/queries/get-computed-fields.graphql';
+import computedFieldCreate from '../../../app/graphql/queries/computed-field-create-mutation.graphql';
+import computedFieldDelete from '../../../app/graphql/queries/computed-field-delete-mutation.graphql';
+import getComputedField from '../../../app/graphql/queries/get-computed-field.graphql';
+import getComputedFields from '../../../app/graphql/queries/get-computed-fields.graphql';
 
 import Clinic from '../../models/clinic';
 import ComputedField from '../../models/computed-field';

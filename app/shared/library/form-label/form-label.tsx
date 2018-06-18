@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/form-label.css';
+import styles from './css/form-label.css';
 
 interface IProps {
   messageId?: string; // use either message id (strongly preferred) or text

@@ -1,8 +1,8 @@
 import { filter } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getPatientQuery, patientDataFlagCreateMutation } from '../../graphql/types';
-import * as styles from './css/patient-demographics.css';
+import styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';

@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { format } from 'date-fns';
-import * as React from 'react';
-import * as styles from './css/date-input.css';
+import React from 'react';
+import styles from './css/date-input.css';
 
 export const DEFAULT_FORMAT = 'YYYY-MM-DD';
 

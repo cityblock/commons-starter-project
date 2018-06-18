@@ -1,6 +1,6 @@
 import { Text } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import HeaderText from '../header-text';
 
 describe('CBO Referral PDF Header Text', () => {

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Selected } from '../../reducers/patient-left-nav-reducer';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/left-nav-header.css';
+import styles from './css/left-nav-header.css';
 import { ActionIconsMapping } from './helpers';
 
 interface IProps {

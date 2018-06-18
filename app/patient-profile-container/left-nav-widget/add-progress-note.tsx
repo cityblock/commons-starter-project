@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import * as progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
+import progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
 import {
   progressNoteCreateMutation,
   progressNoteCreateMutationVariables,
@@ -71,7 +71,7 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(progressNoteCreateMutationGraphql as any, {
+  graphql(progressNoteCreateMutationGraphql, {
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
   }),

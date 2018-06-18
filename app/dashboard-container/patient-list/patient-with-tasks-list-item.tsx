@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as tasksDueSoonForPatientQuery from '../../graphql/queries/get-tasks-due-soon-for-patient.graphql';
-import * as tasksWithNotificationsForPatientQuery from '../../graphql/queries/get-tasks-with-notifications-for-patient.graphql';
+import tasksDueSoonForPatientQuery from '../../graphql/queries/get-tasks-due-soon-for-patient.graphql';
+import tasksWithNotificationsForPatientQuery from '../../graphql/queries/get-tasks-with-notifications-for-patient.graphql';
 import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
 import PatientTasks from '../tasks/patient-tasks';
-import * as styles from './css/patient-with-tasks-list-item.css';
+import styles from './css/patient-with-tasks-list-item.css';
 import PatientListItem from './patient-list-item';
 
 export interface IProps {
@@ -89,7 +89,7 @@ export class PatientWithTasksListItem extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(tasksDueSoonForPatientQuery as any, {
+  graphql(tasksDueSoonForPatientQuery, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),
@@ -99,7 +99,7 @@ export default compose(
       tasksDueSoon: data ? (data as any).tasksDueSoonForPatient : null,
     }),
   }),
-  graphql(tasksWithNotificationsForPatientQuery as any, {
+  graphql(tasksWithNotificationsForPatientQuery, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),

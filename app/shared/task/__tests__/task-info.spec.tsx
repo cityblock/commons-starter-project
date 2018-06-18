@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import EditableMultilineText from '../../library/editable-multiline-text/editable-multiline-text';
 import TaskInfo from '../task-info';
 

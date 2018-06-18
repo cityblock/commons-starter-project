@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientListsQuery from '../../graphql/queries/get-patient-lists.graphql';
+import patientListsQuery from '../../graphql/queries/get-patient-lists.graphql';
 import { FullPatientListFragment } from '../../graphql/types';
 import { Selected } from '../dashboard-container';
 import ComputedLists from './computed-lists';
-import * as styles from './css/navigation.css';
+import styles from './css/navigation.css';
 import NavigationItem from './navigation-item';
 
 export const ROUTE_BASE = '/dashboard';
@@ -134,7 +134,7 @@ export const DashboardNavigation: React.StatelessComponent<allProps> = (props: a
   );
 };
 
-export default graphql<any, any, any, any>(patientListsQuery as any, {
+export default graphql<any, any, any, any>(patientListsQuery, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

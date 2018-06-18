@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import { AnswerValueTypeOptions, ComputedFieldDataTypes } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';

@@ -1,8 +1,8 @@
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as questionCreateMutationGraphql from '../graphql/queries/question-create-mutation.graphql';
+import questionCreateMutationGraphql from '../graphql/queries/question-create-mutation.graphql';
 import {
   questionCreateMutation,
   questionCreateMutationVariables,
@@ -10,9 +10,9 @@ import {
   AssessmentType,
   FullComputedFieldFragment,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as questionStyles from '../shared/css/two-panel-right.css';
-import * as builderStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import questionStyles from '../shared/css/two-panel-right.css';
+import builderStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -22,7 +22,7 @@ import { IUpdatedField } from '../shared/util/updated-fields';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 const NOT_COMPUTED_FIELD_ID = 'not-computed-field';
 
@@ -263,7 +263,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(questionCreateMutationGraphql as any, {
+  graphql(questionCreateMutationGraphql, {
     name: 'createQuestion',
     options: {
       refetchQueries: ['getQuestions', 'getComputedFields'],

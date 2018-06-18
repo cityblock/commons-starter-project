@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import Button from '../../shared/library/button/button';
-import * as styles from './css/task.css';
+import styles from './css/task.css';
 
 interface IProps {
   taskLoading?: boolean;

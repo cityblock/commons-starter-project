@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Mutation } from 'react-apollo';
-import * as patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
+import patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
 import { AnswerFilterType, FullQuestionFragment } from '../../graphql/types';
 import { createPatientAnswer } from '../../shared/patient-answer-create-mutation/patient-answer-create-mutation';
 import PatientQuestion from '../../shared/question/patient-question';
@@ -27,10 +27,7 @@ export class ScreeningToolQuestions extends React.Component<IProps> {
     const dataForQuestion = answerHash[question.id] || [];
 
     return (
-      <Mutation
-        mutation={patientAnswersCreateMutationGraphql as any}
-        key={`${question.id}-${index}`}
-      >
+      <Mutation mutation={patientAnswersCreateMutationGraphql} key={`${question.id}-${index}`}>
         {mutate => (
           <PatientQuestion
             editable={isEditable}

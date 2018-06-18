@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Button from '../button/button';
-import * as styles from './css/modal-buttons.css';
+import styles from './css/modal-buttons.css';
 
 interface IProps {
   cancelMessageId?: string; // translate id for cancel (white left) button, default = 'Cancel'

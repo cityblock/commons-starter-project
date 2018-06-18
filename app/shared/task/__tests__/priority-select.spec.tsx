@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Option from '../../library/option/option';
 import Select from '../../library/select/select';
 import PrioritySelect from '../priority-select';

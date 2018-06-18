@@ -1,6 +1,6 @@
 import { Document, Page, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { taskWithComment as task, CBOReferralOther } from '../../../shared/util/test-data';
 import CBOReferral from '../cbo-referral';
 import Footer from '../footer';

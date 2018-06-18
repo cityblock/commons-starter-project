@@ -1,5 +1,5 @@
-import * as Fuse from 'fuse.js';
-import * as React from 'react';
+import Fuse from 'fuse.js';
+import React from 'react';
 import defaultFuseOptions, { MAX_PATTERN_LENGTH } from './fuse-options';
 import SearchInput from './input';
 import SearchResults from './results';

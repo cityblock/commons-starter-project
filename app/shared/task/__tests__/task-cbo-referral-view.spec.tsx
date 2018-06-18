@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../library/button/button';
 import { TaskCBOReferralView } from '../task-cbo-referral-view';
 

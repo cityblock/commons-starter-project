@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TextArea from '../../../shared/library/textarea/textarea';
 import { patientScratchPad } from '../../../shared/util/test-data';
 import { LeftNavScratchPad } from '../left-nav-scratchpad';

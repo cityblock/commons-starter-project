@@ -1,5 +1,5 @@
 import { Model } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 /* tslint:disable:check-model-variable */
 export default class BaseModel extends Model {

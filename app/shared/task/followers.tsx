@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { ShortUserFragment } from '../../graphql/types';
 import AddTaskFollower from './add-task-follower';
-import * as styles from './css/followers.css';
+import styles from './css/followers.css';
 import Follower from './follower';
 
 export interface IProps {

@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { filter, includes, sortBy } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import * as getPatientQuery from '../../../graphql/queries/get-patient.graphql';
-import * as userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
-import * as patientCareTeamAddUserMutationGraphql from '../../../graphql/queries/patient-care-team-add-user-mutation.graphql';
+import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
+import userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
+import patientCareTeamAddUserMutationGraphql from '../../../graphql/queries/patient-care-team-add-user-mutation.graphql';
 import {
   getPatientCareTeamQuery,
   getUserSummaryListQuery,
@@ -23,7 +23,7 @@ import Option from '../../../shared/library/option/option';
 import Select from '../../../shared/library/select/select';
 import { Popup } from '../../../shared/popup/popup';
 import { AddCareTeamMemberModalFilters } from '../patient-team';
-import * as styles from './css/add-care-team-member-modal.css';
+import styles from './css/add-care-team-member-modal.css';
 
 interface IProps {
   isVisible: boolean;
@@ -259,7 +259,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(userSummaryListQuery as any, {
+  graphql(userSummaryListQuery, {
     options: (props: IProps) => ({
       variables: {
         userRoleFilters: Object.keys(UserRole),
@@ -271,7 +271,7 @@ export default compose(
       userSummaryList: data ? (data as any).userSummaryList : null,
     }),
   }),
-  graphql(patientCareTeamQuery as any, {
+  graphql(patientCareTeamQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -283,24 +283,24 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(patientCareTeamAddUserMutationGraphql as any, {
+  graphql(patientCareTeamAddUserMutationGraphql, {
     name: 'addUserToPatientCareTeamMutation',
     options: (props: IProps) => ({
       refetchQueries: [
         {
-          query: userSummaryListQuery as any,
+          query: userSummaryListQuery,
           variables: {
             userRoleFilters: Object.keys(UserRole),
           },
         },
         {
-          query: patientCareTeamQuery as any,
+          query: patientCareTeamQuery,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: getPatientQuery as any,
+          query: getPatientQuery,
           variables: {
             patientId: props.patientId,
           },

@@ -1,9 +1,9 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { DocumentTypeOptions, PhoneTypeOptions, SmsMessageDirection, UserRole } from 'schema';
-import * as getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
-import * as getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
-import * as smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
+import getSmsMessageLatest from '../../../app/graphql/queries/get-sms-message-latest.graphql';
+import getSmsMessages from '../../../app/graphql/queries/get-sms-messages.graphql';
+import smsMessageCreate from '../../../app/graphql/queries/sms-message-create-mutation.graphql';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientDocument from '../../models/patient-document';

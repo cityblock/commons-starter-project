@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Text from '../../../shared/library/text/text';
-import * as styles from './css/item.css';
+import styles from './css/item.css';
 
 interface IProps {
   labelMessageId?: string | null;

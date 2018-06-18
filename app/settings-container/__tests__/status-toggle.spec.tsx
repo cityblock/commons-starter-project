@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Text from '../../shared/library/text/text';
 import ToggleSwitch from '../../shared/library/toggle-switch/toggle-switch';
 import StatusToggle from '../status-toggle';

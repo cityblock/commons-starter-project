@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { AddQuickCall } from '../add-quick-call';
 import LeftNavQuickAction from '../left-nav-quick-action';
 

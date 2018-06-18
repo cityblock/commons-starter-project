@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../shared/library/form-label/form-label';
-import * as styles from '../../shared/library/form/css/form.css';
+import styles from '../../shared/library/form/css/form.css';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
 import TextInput from '../../shared/library/text-input/text-input';

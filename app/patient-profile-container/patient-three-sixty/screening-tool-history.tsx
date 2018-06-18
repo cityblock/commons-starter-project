@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import * as riskAreaShortQueryGraphql from '../../graphql/queries/get-risk-area-short.graphql';
+import riskAreaShortQueryGraphql from '../../graphql/queries/get-risk-area-short.graphql';
 import {
   getRiskAreaShortQuery,
   ShortPatientScreeningToolSubmission360Fragment,
@@ -12,7 +12,7 @@ import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
 import TextInfo, { IProps as ITextInfoProps } from '../../shared/library/text-info/text-info';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/screening-tool-history.css';
+import styles from './css/screening-tool-history.css';
 
 interface IProps {
   submission: ShortPatientScreeningToolSubmission360Fragment;
@@ -91,7 +91,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
   );
 };
 
-export default graphql(riskAreaShortQueryGraphql as any, {
+export default graphql(riskAreaShortQueryGraphql, {
   options: (props: IProps) => ({
     variables: { riskAreaId: props.submission.screeningTool.riskAreaId },
   }),

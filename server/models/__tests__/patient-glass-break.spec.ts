@@ -1,7 +1,7 @@
 import { subHours } from 'date-fns';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';

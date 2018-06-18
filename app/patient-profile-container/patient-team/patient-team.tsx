@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import CreatePatientContactModal from '../../shared/patient-contact-modal/create-patient-contact-modal';
-import * as styles from './css/patient-team.css';
+import styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
 import CreatePatientExternalProviderModal from './patient-external-team/create-patient-external-provider-modal';

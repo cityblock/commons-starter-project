@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import * as patientQuery from '../graphql/queries/get-patient.graphql';
+import patientQuery from '../graphql/queries/get-patient.graphql';
 import { getPatientQuery } from '../graphql/types';
 import ProgressNotePopupContainer from '../progress-note-container/progress-note-popup-container';
 import ErrorComponent from '../shared/error-component/error-component';
@@ -12,7 +12,7 @@ import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import PatientCalendar from './calendar/patient-calendar';
-import * as styles from './css/patient-profile.css';
+import styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info/patient-info';
 import PatientIntakeChecklist from './patient-intake-checklist';
@@ -161,7 +161,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientQuery as any, {
+  graphql(patientQuery, {
     options: (props: IProps & IStateProps) => ({
       variables: {
         patientId: props.patientId,

@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as helperStyles from '../builder-container/css/risk-area-create.css';
+import helperStyles from '../builder-container/css/risk-area-create.css';
 /* tslint:disable:max-line-length */
-import * as concernAddDiagnosisCodeMutationGraphql from '../graphql/queries/concern-add-diagnosis-code-mutation.graphql';
+import concernAddDiagnosisCodeMutationGraphql from '../graphql/queries/concern-add-diagnosis-code-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
   concernAddDiagnosisCodeMutation,
@@ -97,7 +97,7 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
   }
 }
 
-export default graphql<any>(concernAddDiagnosisCodeMutationGraphql as any, {
+export default graphql<any>(concernAddDiagnosisCodeMutationGraphql, {
   name: 'concernAddDiagnosisCode',
   options: {
     refetchQueries: ['concern'],

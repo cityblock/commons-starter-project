@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/pagination-info.css';
+import styles from './css/pagination-info.css';
 
 interface IProps {
   currentPage: number;

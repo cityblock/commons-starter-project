@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import LeftNavCareTeam from '../left-nav-care-team';
 import LeftNavHeader from '../left-nav-header';
 import LeftNavMessages from '../left-nav-messages';

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { ManagerContainer as Component } from '../manager-container';
 
 it('renders manager container', () => {

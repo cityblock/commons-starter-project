@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { IState as Selected } from '../../reducers/patient-left-nav-reducer';
-import * as styles from './css/left-nav-open.css';
+import styles from './css/left-nav-open.css';
 import LeftNavCareTeam from './left-nav-care-team';
 import LeftNavHeader from './left-nav-header';
 import LeftNavMessages from './left-nav-messages';

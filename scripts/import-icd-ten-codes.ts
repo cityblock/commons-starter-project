@@ -12,8 +12,8 @@
 */
 
 /* tslint:disable no-console */
-import * as fs from 'fs';
-import * as Knex from 'knex';
+import fs from 'fs';
+import Knex from 'knex';
 import { transaction, Model } from 'objection';
 
 /* tslint:disable no-var-requires */

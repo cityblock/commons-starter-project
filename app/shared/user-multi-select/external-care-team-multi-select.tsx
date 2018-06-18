@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as familyQuery from '../../graphql/queries/get-patient-contacts.graphql';
-import * as externalProvidersQuery from '../../graphql/queries/get-patient-external-providers.graphql';
+import familyQuery from '../../graphql/queries/get-patient-contacts.graphql';
+import externalProvidersQuery from '../../graphql/queries/get-patient-external-providers.graphql';
 import {
   FullPatientContactFragment,
   FullPatientExternalProviderFragment,
@@ -62,7 +62,7 @@ export const ExternalCareTeamMultiSelect = (props: allProps) => {
 };
 
 export default compose(
-  graphql(externalProvidersQuery as any, {
+  graphql(externalProvidersQuery, {
     options: (ownProps: IProps) => ({
       variables: {
         patientId: ownProps.patientId,
@@ -74,7 +74,7 @@ export default compose(
       externalProviders: data ? (data as any).patientExternalProviders : null,
     }),
   }),
-  graphql(familyQuery as any, {
+  graphql(familyQuery, {
     options: (ownProps: IProps) => ({
       variables: {
         patientId: ownProps.patientId,

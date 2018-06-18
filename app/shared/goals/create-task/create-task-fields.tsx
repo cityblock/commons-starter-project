@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { Priority } from '../../../graphql/types';
 import CreateTaskCBO from './cbo';
 import CreateTaskCBOCategory from './cbo-category';
 import { ChangeEvent, ITaskFields } from './create-task';
 import CreateTaskShared from './create-task-shared';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import CreateTaskType from './task-type';
 import CreateTaskTitle from './title';
 

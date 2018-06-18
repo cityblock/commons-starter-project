@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { FullComputedFieldFragment } from '../graphql/types';
-import * as computedFieldStyles from '../shared/css/two-panel.css';
-import * as styles from './css/risk-area-row.css';
+import computedFieldStyles from '../shared/css/two-panel.css';
+import styles from './css/risk-area-row.css';
 
 interface IProps {
   computedField: FullComputedFieldFragment;

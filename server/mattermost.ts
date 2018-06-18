@@ -3,7 +3,7 @@ import { transaction, Transaction } from 'objection';
 import config from './config';
 import { reportError } from './helpers/error-helpers';
 import { formatChannelDisplayName, formatChannelName } from './helpers/format-helpers';
-import { addJobToQueue } from './helpers/queue-helpers';
+import queueHelpers from './helpers/queue-helpers';
 import Patient from './models/patient';
 import User from './models/user';
 
@@ -66,7 +66,7 @@ class Mattermost {
   public queueAddUserToPatientChannel(patientId: string, userId: string): void {
     const message = `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${patientId} and user: ${userId}`;
 
-    addJobToQueue(ADD_USER_TO_CHANNEL_TOPIC, { patientId, userId }, { message });
+    queueHelpers.addJobToQueue(ADD_USER_TO_CHANNEL_TOPIC, { patientId, userId }, { message });
   }
 
   public async addUserToPatientChannel(

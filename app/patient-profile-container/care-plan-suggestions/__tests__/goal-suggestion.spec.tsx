@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { fullCarePlanSuggestionWithGoal as suggestion } from '../../../shared/util/test-data';
 import CarePlanSuggestion from '../care-plan-suggestion';
 import GoalSuggestion from '../goal-suggestion';

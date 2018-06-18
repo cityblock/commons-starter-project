@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { getCurrentUserHoursQuery } from '../graphql/types';
 import Text from '../shared/library/text/text';
-import * as styles from './css/daily-work-hours.css';
+import styles from './css/daily-work-hours.css';
 import DailyWorkHoursDropdown from './daily-work-hours-dropdown';
 import DayOffToggle from './day-off-toggle';
 

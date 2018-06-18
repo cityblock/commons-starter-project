@@ -1,7 +1,7 @@
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
-import * as styles from './css/dashboard-container.css';
+import styles from './css/dashboard-container.css';
 import DashboardPatients from './dashboard-patients';
 import DashboardNavigation from './navigation/navigation';
 

@@ -8,7 +8,7 @@ import {
   Transgender,
 } from 'schema';
 import { PhoneTypeOptions } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { formatPhoneNumberForTwilio, VALID_PHONE_NUMBER_LENGTH } from '../helpers/twilio-helpers';
 import Address from './address';
 import ComputedPatientStatus from './computed-patient-status';

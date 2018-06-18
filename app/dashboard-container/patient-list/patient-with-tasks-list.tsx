@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
-import * as styles from './css/patient-list.css';
+import styles from './css/patient-list.css';
 import PatientWithTasksListItem from './patient-with-tasks-list-item';
 
 interface IProps {

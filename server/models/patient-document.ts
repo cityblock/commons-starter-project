@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { DocumentTypeOptions } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';

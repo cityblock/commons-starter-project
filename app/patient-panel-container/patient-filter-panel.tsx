@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { CurrentPatientState, Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
@@ -9,7 +9,7 @@ import TextInput from '../shared/library/text-input/text-input';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import AgeRangeSelect, { formatAgeValue } from './age-range-select';
 import CareWorkerSelect from './care-worker-select';
-import * as styles from './css/patient-filter-panel.css';
+import styles from './css/patient-filter-panel.css';
 
 interface IProps extends IInjectedProps {
   onClickApply: (filters: PatientFilterOptions) => any;

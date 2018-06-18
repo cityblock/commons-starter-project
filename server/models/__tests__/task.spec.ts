@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { Priority, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import {
   createCBOReferral,

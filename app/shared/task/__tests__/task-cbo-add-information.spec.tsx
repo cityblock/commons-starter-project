@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../library/button/button';
 import { taskWithComment as task } from '../../util/test-data';
 import { TaskCBOAddInformation } from '../task-cbo-add-information';

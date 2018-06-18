@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { formatFullName, formatScreeningToolScore } from '../../../shared/helpers/format-helpers';
 import DateInfo from '../../../shared/library/date-info/date-info';

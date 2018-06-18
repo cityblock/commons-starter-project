@@ -1,13 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as createPatientListMutationGraphql from '../../graphql/queries/patient-list-create-mutation.graphql';
+import createPatientListMutationGraphql from '../../graphql/queries/patient-list-create-mutation.graphql';
 import { patientListCreateMutation, patientListCreateMutationVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/patient-list-shared.css';
+import styles from './css/patient-list-shared.css';
 
 interface IProps {
   cancelCreatePatientList: () => void;
@@ -115,7 +115,7 @@ export class PatientListCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(createPatientListMutationGraphql as any, {
+  graphql(createPatientListMutationGraphql, {
     name: 'createPatientList',
     options: {
       refetchQueries: ['getPatientLists'],

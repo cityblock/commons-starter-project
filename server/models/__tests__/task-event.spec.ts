@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import { TaskEventTypes, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { createMockClinic, createMockUser, createPatient, createTask } from '../../spec-helpers';
 import Clinic from '../clinic';
 import ProgressNote from '../progress-note';

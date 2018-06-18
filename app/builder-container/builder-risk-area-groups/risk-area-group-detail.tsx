@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
+import riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
 import {
   riskAreaGroupDeleteMutation,
   riskAreaGroupDeleteMutationVariables,
@@ -11,7 +11,7 @@ import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-group-detail.css';
+import styles from './css/risk-area-group-detail.css';
 import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';
 
@@ -101,7 +101,7 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(riskAreaGroupDeleteMutationGraphql as any, {
+  graphql(riskAreaGroupDeleteMutationGraphql, {
     name: 'deleteRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],

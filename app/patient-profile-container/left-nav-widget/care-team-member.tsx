@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { FullCareTeamUserFragment } from '../../graphql/types';
 import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/format-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
 import CareTeamMemberContact from './care-team-member-contact';
-import * as styles from './css/care-team-member.css';
+import styles from './css/care-team-member.css';
 
 interface IProps {
   careTeamMember: FullCareTeamUserFragment;

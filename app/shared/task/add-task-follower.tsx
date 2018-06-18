@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import * as taskUserFollowMutationGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
+import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
+import taskUserFollowMutationGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
 import {
   taskUserFollowMutation,
   taskUserFollowMutationVariables,
@@ -11,7 +11,7 @@ import {
   ShortUserFragment,
 } from '../../graphql/types';
 import Avatar from '../../shared/library/avatar/avatar';
-import * as styles from './css/add-task-follower.css';
+import styles from './css/add-task-follower.css';
 
 interface IProps {
   patientId: string;
@@ -148,10 +148,10 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskUserFollowMutationGraphql as any, {
+  graphql(taskUserFollowMutationGraphql, {
     name: 'addTaskFollower',
   }),
-  graphql(careTeamQuery as any, {
+  graphql(careTeamQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

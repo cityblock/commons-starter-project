@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { ProgressNoteLoadingError } from '../progress-note-loading-error';
 
 it('renders progress note error', () => {

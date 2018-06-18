@@ -1,16 +1,16 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
-import * as taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
+import patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
+import taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
 import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
-import * as styles from './css/patient-map.css';
+import styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from './modals/modals';
-import * as sharedStyles from './patient-three-sixty/css/shared.css';
+import sharedStyles from './patient-three-sixty/css/shared.css';
 
 export interface IProps {
   patientId: string;
@@ -88,7 +88,7 @@ export class PatientMap extends React.Component<allProps, {}> {
 
 export default compose(
   withRouter,
-  graphql(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -102,7 +102,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql(taskIdsWithNotificationsQuery as any, {
+  graphql(taskIdsWithNotificationsQuery, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {

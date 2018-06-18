@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import Answer from './answer';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';

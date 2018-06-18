@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import CheckboxInput from '../../checkbox-input/checkbox-input';
 import CheckboxGroup from '../checkbox-group';
 

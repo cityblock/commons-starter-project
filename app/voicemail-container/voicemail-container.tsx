@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as userVoicemailSignedUrlCreate from '../graphql/queries/user-voicemail-signed-url-create.graphql';
+import userVoicemailSignedUrlCreateQuery from '../graphql/queries/user-voicemail-signed-url-create.graphql';
 import {
   userVoicemailSignedUrlCreateMutation,
   userVoicemailSignedUrlCreateMutationVariables,
 } from '../graphql/types';
 import Icon from '../shared/library/icon/icon';
 import MobileHeader from '../shared/library/mobile-header/mobile-header';
-import * as styles from './css/voicemail-container.css';
+import styles from './css/voicemail-container.css';
 
 interface IProps {
   match?: {
@@ -66,6 +66,6 @@ export class VoicemailContainer extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(userVoicemailSignedUrlCreate as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(userVoicemailSignedUrlCreateQuery, {
   name: 'getSignedVoicemailUrl',
 })(VoicemailContainer);

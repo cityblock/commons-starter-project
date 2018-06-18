@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
 import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
-import * as styles from '../css/patient-team.css';
+import styles from '../css/patient-team.css';
 import { AddCareTeamMemberModalFilters } from '../patient-team';
 import CareTeamMember from './care-team-member';
 import RemoveCareTeamMemberModal from './remove-care-team-member-modal';
@@ -87,7 +87,7 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   }
 }
 
-export default graphql(patientCareTeamQuery as any, {
+export default graphql(patientCareTeamQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { clone } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { currentUser } from '../../shared/util/test-data';
 import { AuthenticationContainer as Component } from '../authentication-container';

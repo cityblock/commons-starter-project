@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import PatientGoal from '../../models/patient-goal';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';

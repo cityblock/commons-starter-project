@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import DateInput from '../../library/date-input/date-input';
 import FormLabel from '../../library/form-label/form-label';
 import { TaskType } from './create-task';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 
 interface IProps {
   value: string | null;

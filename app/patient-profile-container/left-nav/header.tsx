@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
-import * as progressNoteLatestForPatientQuery from '../../graphql/queries/get-progress-note-latest-for-patient.graphql';
+import progressNoteLatestForPatientQuery from '../../graphql/queries/get-progress-note-latest-for-patient.graphql';
 import {
   getProgressNoteLatestForPatientQuery,
   FullPatientForProfileFragment,
 } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
 import { IState as IAppState } from '../../store';
-import * as styles from './css/header.css';
+import styles from './css/header.css';
 import LeftNavHeaderPatient from './header-patient';
 import PatientNeedToKnow from './patient-need-to-know';
 import LeftNavPreferredName from './preferred-name';
@@ -67,7 +67,7 @@ const mapStateToProps = (state: IAppState): IStateProps => {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(progressNoteLatestForPatientQuery as any, {
+  graphql(progressNoteLatestForPatientQuery, {
     skip: ({ patient }: IProps) => !patient,
     options: ({ patient }: IProps) => {
       const patientId = patient ? patient.id : '';

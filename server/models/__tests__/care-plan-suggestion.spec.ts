@@ -5,7 +5,7 @@ import {
   ComputedFieldDataTypes,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import {
   createMockClinic,
   createMockUser,

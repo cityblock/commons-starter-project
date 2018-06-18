@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import TextInput from '../../../shared/library/text-input/text-input';
 import AddressForm from '../address-form';

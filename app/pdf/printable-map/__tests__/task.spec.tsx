@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { task } from '../../../shared/util/test-data';
 import Task from '../task';
 import TaskHeader from '../task-header';

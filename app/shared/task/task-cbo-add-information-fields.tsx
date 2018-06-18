@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import CreateTaskCBO from '../goals/create-task/cbo';
 import CreateTaskCBOCategory from '../goals/create-task/cbo-category';
 import CreateTaskDescription from '../goals/create-task/description';
 import ModalButtons from '../library/modal-buttons/modal-buttons';
-import * as styles from './css/task-cbo-add-information-fields.css';
+import styles from './css/task-cbo-add-information-fields.css';
 import { ChangeEvent, ITaskCBOInformationFields } from './task-cbo-add-information-popup';
 
 interface IProps {

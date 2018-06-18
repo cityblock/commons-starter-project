@@ -1,13 +1,13 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as cboCreate from '../../../app/graphql/queries/cbo-create-mutation.graphql';
-import * as cboDelete from '../../../app/graphql/queries/cbo-delete-mutation.graphql';
-import * as cboEdit from '../../../app/graphql/queries/cbo-edit-mutation.graphql';
-import * as getCbo from '../../../app/graphql/queries/get-cbo.graphql';
-import * as getCbosForCategory from '../../../app/graphql/queries/get-cbos-for-category.graphql';
-import * as getCbos from '../../../app/graphql/queries/get-cbos.graphql';
+import uuid from 'uuid/v4';
+import cboCreate from '../../../app/graphql/queries/cbo-create-mutation.graphql';
+import cboDelete from '../../../app/graphql/queries/cbo-delete-mutation.graphql';
+import cboEdit from '../../../app/graphql/queries/cbo-edit-mutation.graphql';
+import getCbo from '../../../app/graphql/queries/get-cbo.graphql';
+import getCbosForCategory from '../../../app/graphql/queries/get-cbos-for-category.graphql';
+import getCbos from '../../../app/graphql/queries/get-cbos.graphql';
 
 import CBO from '../../models/cbo';
 import Clinic from '../../models/clinic';

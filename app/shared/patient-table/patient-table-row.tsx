@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientTableRowFragment } from '../../graphql/types';
 import {
@@ -13,7 +13,7 @@ import Checkbox from '../library/checkbox/checkbox';
 import PatientAge from '../library/patient-age/patient-age';
 import { formatSearchText } from '../library/search/helpers';
 import Text from '../library/text/text';
-import * as styles from './css/patient-table.css';
+import styles from './css/patient-table.css';
 
 interface IFormattedPatient extends FullPatientTableRowFragment {
   isSelected?: boolean;

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DeleteModal from '../../../shared/library/delete-modal/delete-modal';
 import { DeleteConcernModal } from '../delete-concern';
 

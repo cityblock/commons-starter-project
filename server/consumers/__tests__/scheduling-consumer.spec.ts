@@ -2,11 +2,11 @@
  * @jest-environment node
  */
 
-import * as kue from 'kue';
-import * as nock from 'nock';
+import kue from 'kue';
+import nock from 'nock';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { getGoogleCalendarFieldsFromSIU } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';

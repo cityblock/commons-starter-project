@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../actions/popup-action';
-import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import * as progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
+import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
+import progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment, FullProgressNoteTemplateFragment } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Spinner from '../shared/library/spinner/spinner';
 import { IState as IAppState } from '../store';
-import * as styles from './css/progress-note-popup.css';
+import styles from './css/progress-note-popup.css';
 import ProgressNotePopup from './progress-note-popup';
 
 interface IProps {
@@ -92,7 +92,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(progressNoteQuery as any, {
+  graphql(progressNoteQuery, {
     skip: (props: IStateProps) => !props.progressNoteId,
     options: (props: IStateProps) => ({
       variables: {
@@ -106,7 +106,7 @@ export default compose(
       progressNote: data ? (data as any).progressNote : null,
     }),
   }),
-  graphql(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,

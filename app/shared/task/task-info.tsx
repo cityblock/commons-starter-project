@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
 import EditableMultilineText from '../library/editable-multiline-text/editable-multiline-text';
 

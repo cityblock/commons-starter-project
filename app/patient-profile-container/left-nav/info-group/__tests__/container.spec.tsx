@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import InfoGroupContainer from '../container';
 import InfoGroupItem from '../item';
 

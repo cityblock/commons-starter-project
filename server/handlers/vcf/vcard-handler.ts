@@ -1,6 +1,6 @@
-import * as express from 'express';
+import express from 'express';
 import { transaction } from 'objection';
-import * as vCard from 'vcards-js';
+import vCard from 'vcards-js';
 import { decodeJwt, IJWTForVCFData } from '../../graphql/shared/utils';
 import Patient from '../../models/patient';
 

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import {
   FullCarePlanSuggestionForPatientFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
-import * as styles from '../css/patient-care-plan.css';
+import styles from '../css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
 import PopupPatientCarePlanSuggestionDismissed from './popup-patient-care-plan-suggestion-dismissed';
 import SuggestionsSection, { SectionName } from './suggestions-section';

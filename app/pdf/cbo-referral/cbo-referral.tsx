@@ -1,5 +1,5 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
-import * as React from 'react';
+import React from 'react';
 import { FullTaskForCBOReferralFormPDFFragment } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';

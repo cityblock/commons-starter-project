@@ -1,9 +1,9 @@
 import { clone, isNil, omit, omitBy } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';
-import * as taskTemplateDeleteMutationGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
-import * as taskTemplateEditMutationGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
+import taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';
+import taskTemplateDeleteMutationGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
+import taskTemplateEditMutationGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
 import {
   taskTemplateCreateMutation,
   taskTemplateCreateMutationVariables,
@@ -13,15 +13,15 @@ import {
   taskTemplateEditMutationVariables,
   FullTaskTemplateFragment,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as taskTemplateStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import taskTemplateStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import CBOCategorySelect from '../shared/library/cbo-category-select/cbo-category-select';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import TextInput from '../shared/library/text-input/text-input';
 import { IUpdatedField } from '../shared/util/updated-fields';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 export interface ICreateOptions {
   variables: taskTemplateCreateMutationVariables;
@@ -328,16 +328,16 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskTemplateCreateMutationGraphql as any, {
+  graphql(taskTemplateCreateMutationGraphql, {
     name: 'createTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
-  graphql(taskTemplateEditMutationGraphql as any, {
+  graphql(taskTemplateEditMutationGraphql, {
     name: 'editTaskTemplate',
   }),
-  graphql(taskTemplateDeleteMutationGraphql as any, {
+  graphql(taskTemplateDeleteMutationGraphql, {
     name: 'deleteTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],

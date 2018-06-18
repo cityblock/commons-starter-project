@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { addSecurityHeadersMiddleware } from '../add-security-headers-middleware';
 
 describe('addHeadersMiddleware', () => {

@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Popup } from '../../popup/popup';
 import ModalHeader from '../modal-header/modal-header';
 import Spinner from '../spinner/spinner';
-import * as styles from './css/photo-modal.css';
+import styles from './css/photo-modal.css';
 import PhotoModalButtons from './photo-modal-buttons';
 
 interface IProps {

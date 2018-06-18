@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullTaskTemplateFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/task-template.css';
+import styles from './css/task-template.css';
 
 interface IProps {
   taskTemplate: FullTaskTemplateFragment;

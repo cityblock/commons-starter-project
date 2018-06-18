@@ -6,7 +6,7 @@
  *      tsc checkModelVariableRule.ts
  */
 
-import * as Lint from 'tslint';
+import Lint from 'tslint';
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static FAILURE_STRING = 'must define static boolean class variable "hasPHI"';

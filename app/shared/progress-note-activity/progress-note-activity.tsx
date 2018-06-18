@@ -1,14 +1,14 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
+import progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import {
   getProgressNoteActivityForProgressNoteQuery,
   FullProgressNoteFragment,
 } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 
 interface IProps {
@@ -75,7 +75,7 @@ class ProgressNoteActivity extends React.Component<allProps> {
   }
 }
 
-export default graphql(progressNoteActivityQuery as any, {
+export default graphql(progressNoteActivityQuery, {
   skip: (props: IProps) => !props.progressNote,
   options: (props: IProps) => ({
     variables: {

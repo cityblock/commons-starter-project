@@ -1,5 +1,5 @@
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
@@ -7,7 +7,7 @@ import {
 } from '../../../shared/helpers/format-helpers';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import InfoGroupHeader from './header';
 import InfoGroupItem from './item';
 

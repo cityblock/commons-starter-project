@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
+import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
 import BackLink from '../../shared/library/back-link/back-link';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import DomainAssessmentsList from './domain-assessments-list';
 
 interface IProps {
@@ -60,7 +60,7 @@ export class DomainAssessments extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql(getRiskAreaGroupForPatientGraphql as any, {
+export default graphql(getRiskAreaGroupForPatientGraphql, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId, glassBreakId } = props;
     return { variables: { riskAreaGroupId, patientId, glassBreakId } };

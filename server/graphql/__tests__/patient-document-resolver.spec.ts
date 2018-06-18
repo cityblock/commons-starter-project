@@ -2,12 +2,12 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as getPatientDocumentsByType from '../../../app/graphql/queries/get-patient-documents-by-type.graphql';
-import * as getPatientDocuments from '../../../app/graphql/queries/get-patient-documents.graphql';
-import * as patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
-import * as patientDocumentDelete from '../../../app/graphql/queries/patient-document-delete-mutation.graphql';
-import * as patientDocumentSignedUrlCreate from '../../../app/graphql/queries/patient-document-signed-url-create.graphql';
+import uuid from 'uuid/v4';
+import getPatientDocumentsByType from '../../../app/graphql/queries/get-patient-documents-by-type.graphql';
+import getPatientDocuments from '../../../app/graphql/queries/get-patient-documents.graphql';
+import patientDocumentCreate from '../../../app/graphql/queries/patient-document-create-mutation.graphql';
+import patientDocumentDelete from '../../../app/graphql/queries/patient-document-delete-mutation.graphql';
+import patientDocumentSignedUrlCreate from '../../../app/graphql/queries/patient-document-signed-url-create.graphql';
 
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';

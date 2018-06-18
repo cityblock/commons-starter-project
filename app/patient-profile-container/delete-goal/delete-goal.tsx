@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import * as patientGoalDeleteMutationGraphql from '../../graphql/queries/patient-goal-delete-mutation.graphql';
+import patientGoalDeleteMutationGraphql from '../../graphql/queries/patient-goal-delete-mutation.graphql';
 import { patientGoalDeleteMutation, patientGoalDeleteMutationVariables } from '../../graphql/types';
 import { IPatientGoalDeletePopupOptions } from '../../reducers/popup-reducer';
 import DeleteModal from '../../shared/library/delete-modal/delete-modal';
@@ -94,7 +94,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(patientGoalDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, {}, allProps>(patientGoalDeleteMutationGraphql, {
     name: 'deletePatientGoal',
   }),
 )(DeleteGoalModal) as React.ComponentClass<IProps>;

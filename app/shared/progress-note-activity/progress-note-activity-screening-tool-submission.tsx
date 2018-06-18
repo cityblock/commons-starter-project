@@ -1,5 +1,5 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import {
   FullCarePlanSuggestionFragment,
@@ -9,7 +9,7 @@ import Icon from '../../shared/library/icon/icon';
 import TextInfo from '../../shared/library/text-info/text-info';
 import Text from '../../shared/library/text/text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 
 interface IProps {
   screeningToolSubmission: FullPatientScreeningToolSubmissionFragment;

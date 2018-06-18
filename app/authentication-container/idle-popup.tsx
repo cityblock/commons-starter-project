@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../shared/library/icon/icon';
 import ModalButtons from '../shared/library/modal-buttons/modal-buttons';
 import { Popup } from '../shared/popup/popup';
-import * as styles from './css/idle-popup.css';
+import styles from './css/idle-popup.css';
 
 interface IProps {
   idleEnd: () => void;

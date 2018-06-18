@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { compose } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -9,7 +9,7 @@ import { IState as IAppState } from '../../store';
 import Modal from '../library/modal/modal';
 import Text from '../library/text/text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
-import * as styles from './css/care-plan-suggestions.css';
+import styles from './css/care-plan-suggestions.css';
 
 interface IStateProps {
   isVisible: boolean;

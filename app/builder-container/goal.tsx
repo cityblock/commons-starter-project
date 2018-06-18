@@ -1,16 +1,16 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as goalSuggestionTemplateQuery from '../graphql/queries/get-goal-suggestion-template.graphql';
-import * as goalSuggestionTemplateEditMutationGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
+import goalSuggestionTemplateQuery from '../graphql/queries/get-goal-suggestion-template.graphql';
+import goalSuggestionTemplateEditMutationGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
 import {
   goalSuggestionTemplateEditMutation,
   goalSuggestionTemplateEditMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import TaskTemplateCreateEdit from './task-template-create-edit';
@@ -317,10 +317,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(goalSuggestionTemplateEditMutationGraphql as any, {
+  graphql(goalSuggestionTemplateEditMutationGraphql, {
     name: 'editGoal',
   }),
-  graphql(goalSuggestionTemplateQuery as any, {
+  graphql(goalSuggestionTemplateQuery, {
     skip: (props: IProps & IStateProps) => !props.goalId,
     options: (props: IProps & IStateProps) => ({
       variables: { goalSuggestionTemplateId: props.goalId },

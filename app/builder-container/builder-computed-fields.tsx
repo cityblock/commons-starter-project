@@ -1,18 +1,18 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as computedFieldDeleteMutationGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
-import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
+import computedFieldDeleteMutationGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
+import computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
 import {
   computedFieldDeleteMutation,
   computedFieldDeleteMutationVariables,
   FullComputedFieldFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import ComputedField from './computed-field';
@@ -141,14 +141,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(computedFieldsQuery as any, {
+  graphql(computedFieldsQuery, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,
       computedFields: data ? (data as any).computedFields : null,
     }),
   }),
-  graphql(computedFieldDeleteMutationGraphql as any, {
+  graphql(computedFieldDeleteMutationGraphql, {
     name: 'deleteComputedField',
   }),
 )(BuilderComputedFields) as React.ComponentClass<IProps>;

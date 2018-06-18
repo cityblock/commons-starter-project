@@ -1,14 +1,14 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { get, groupBy, keys, mapValues } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
-import * as computedFieldSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
-import * as riskAreaAssessmentSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
-import * as screeningToolSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
-import * as riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
+import computedFieldSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
+import riskAreaAssessmentSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
+import screeningToolSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
+import riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
 import {
   getCarePlanSuggestionsFromComputedFieldsForPatientQuery,
   getCarePlanSuggestionsFromRiskAreaAssessmentsForPatientQuery,
@@ -28,9 +28,9 @@ import SuggestionCategorySelect, {
   ISuggestionFilters,
 } from './care-plan-suggestions/suggestion-category-select';
 import { SectionName } from './care-plan-suggestions/suggestions-section';
-import * as styles from './css/patient-care-plan.css';
+import styles from './css/patient-care-plan.css';
 import PatientMap from './patient-map';
-import * as sharedStyles from './patient-three-sixty/css/shared.css';
+import sharedStyles from './patient-three-sixty/css/shared.css';
 import PrintMapButton from './print-map-button';
 
 type SelectableTabs = 'active' | 'suggestions';
@@ -325,7 +325,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(computedFieldSuggestionsQuery as any, {
+  graphql(computedFieldSuggestionsQuery, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -340,7 +340,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(riskAreaAssessmentSuggestionsQuery as any, {
+  graphql(riskAreaAssessmentSuggestionsQuery, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -355,7 +355,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(screeningToolSuggestionsQuery as any, {
+  graphql(screeningToolSuggestionsQuery, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -370,7 +370,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(riskAreaGroupsQuery as any, {
+  graphql(riskAreaGroupsQuery, {
     skip: shouldSkip,
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,

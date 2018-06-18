@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { ensurePostMiddleware } from '../ensure-post-middleware';
 
 describe('ensurePostMiddleware', () => {

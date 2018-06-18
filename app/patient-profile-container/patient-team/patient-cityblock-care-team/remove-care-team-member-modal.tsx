@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as careTeamReassignUserMutationGraphql from '../../../graphql/queries/care-team-reassign-user-mutation.graphql';
-import * as patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import * as patientQuery from '../../../graphql/queries/get-patient.graphql';
-import * as tasksForUserForPatientQuery from '../../../graphql/queries/get-tasks-for-user-for-patient.graphql';
-import * as userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
+import careTeamReassignUserMutationGraphql from '../../../graphql/queries/care-team-reassign-user-mutation.graphql';
+import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import patientQuery from '../../../graphql/queries/get-patient.graphql';
+import tasksForUserForPatientQuery from '../../../graphql/queries/get-tasks-for-user-for-patient.graphql';
+import userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
 import {
   careTeamReassignUserMutation,
   careTeamReassignUserMutationVariables,
@@ -16,7 +16,7 @@ import {
 } from '../../../graphql/types';
 import { formatErrorMessage } from '../../../shared/helpers/format-helpers';
 import Modal from '../../../shared/library/modal/modal';
-import * as styles from './css/remove-care-team-member-modal.css';
+import styles from './css/remove-care-team-member-modal.css';
 import RemoveCareTeamMember from './remove-care-team-member';
 
 interface IProps {
@@ -169,7 +169,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
 }
 
 export default compose(
-  graphql(tasksForUserForPatientQuery as any, {
+  graphql(tasksForUserForPatientQuery, {
     skip: (props: IProps) => !props.careTeamMember,
     options: (props: IProps) => ({
       variables: {
@@ -183,24 +183,24 @@ export default compose(
       careTeamMemberTasks: data ? (data as any).tasksForUserForPatient : null,
     }),
   }),
-  graphql(careTeamReassignUserMutationGraphql as any, {
+  graphql(careTeamReassignUserMutationGraphql, {
     name: 'careTeamReassignUser',
     options: (props: IProps) => ({
       refetchQueries: [
         {
-          query: patientCareTeamQuery as any,
+          query: patientCareTeamQuery,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: patientQuery as any,
+          query: patientQuery,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: userSummaryListQuery as any,
+          query: userSummaryListQuery,
           variables: {
             userRoleFilters: Object.keys(UserRole),
           },

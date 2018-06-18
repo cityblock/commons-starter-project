@@ -1,15 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientDocumentsByTypeQuery from '../../graphql/queries/get-patient-documents-by-type.graphql';
-import * as patientQuery from '../../graphql/queries/get-patient.graphql';
-import * as smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
-import * as smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
+import patientDocumentsByTypeQuery from '../../graphql/queries/get-patient-documents-by-type.graphql';
+import patientQuery from '../../graphql/queries/get-patient.graphql';
+import smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
+import smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
 import {
   getPatientDocumentsByTypeQuery,
   getPatientQuery,
   getSmsMessagesQuery,
 } from '../../graphql/types';
-import * as styles from './css/left-nav-messages.css';
+import styles from './css/left-nav-messages.css';
 import SmsMessageCreate from './sms-message-create';
 import SmsMessages from './sms-messages';
 
@@ -54,7 +54,7 @@ export class LeftNavMessages extends React.Component<allProps> {
   subscribe = () => {
     if (this.props.subscribeToMore) {
       return this.props.subscribeToMore({
-        document: smsMessageSubscription as any,
+        document: smsMessageSubscription,
         variables: { patientId: this.props.patientId },
         updateQuery: leftNavMessagesUpdateQuery,
       });
@@ -91,7 +91,7 @@ export class LeftNavMessages extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientQuery as any, {
+  graphql(patientQuery, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId },
     }),
@@ -101,7 +101,7 @@ export default compose(
       patient: data ? (data as any).patient : null,
     }),
   }),
-  graphql(patientDocumentsByTypeQuery as any, {
+  graphql(patientDocumentsByTypeQuery, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, documentType: 'textConsent' },
     }),
@@ -111,7 +111,7 @@ export default compose(
       patientDocuments: data ? (data as any).patientDocumentsByType : null,
     }),
   }),
-  graphql(smsMessagesQuery as any, {
+  graphql(smsMessagesQuery, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
     }),

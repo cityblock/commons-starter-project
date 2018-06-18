@@ -1,6 +1,6 @@
 import { addMinutes } from 'date-fns';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Calendar from '../../../shared/calendar/calendar';
 import {
   partialCalendarEvent,

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import * as styles from '../shared/css/create-form.css';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
+import React from 'react';
+import styles from '../shared/css/create-form.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
 

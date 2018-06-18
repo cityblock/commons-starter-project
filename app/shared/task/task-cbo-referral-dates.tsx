@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FullCBOReferralFragment } from '../../graphql/types';
 import TaskCBOReferralDate from './task-cbo-referral-date';
 

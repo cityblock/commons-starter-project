@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import RiskAreaAssessment from '../risk-area/risk-area-assessment';
 import DomainAssessments from './domain-assessments';
 import PatientThreeSixtyDomains, { HISTORY_ROUTE } from './patient-three-sixty-domains';

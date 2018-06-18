@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import DnDPatientConcerns from '../drag-and-drop-patient-concerns';
 

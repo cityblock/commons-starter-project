@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Icon from '../icon/icon';
-import * as styles from './css/back-link.css';
+import styles from './css/back-link.css';
 
 interface IProps {
   messageId?: string; // optional translate message, default is "Back"

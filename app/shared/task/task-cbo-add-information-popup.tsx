@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
-import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
+import CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
+import taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
   taskEditMutation,
   taskEditMutationVariables,
@@ -14,7 +14,7 @@ import CreateTaskInfo from '../goals/create-task/info';
 import { formatCBOReferralTaskTitle } from '../helpers/format-helpers';
 import ModalHeader from '../library/modal-header/modal-header';
 import { Popup } from '../popup/popup';
-import * as styles from './css/task-cbo-add-information-popup.css';
+import styles from './css/task-cbo-add-information-popup.css';
 import TaskCBOAddInformationFields from './task-cbo-add-information-fields';
 
 export type ChangeEvent =
@@ -181,10 +181,10 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 }
 
 export default compose(
-  graphql(CBOReferralEditMutationGraphql as any, {
+  graphql(CBOReferralEditMutationGraphql, {
     name: 'editCBOReferral',
   }),
-  graphql(taskEditMutationGraphql as any, {
+  graphql(taskEditMutationGraphql, {
     name: 'editTask',
     options: { refetchQueries: ['getPatientCarePlan'] },
   }),

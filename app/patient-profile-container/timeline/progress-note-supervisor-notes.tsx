@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedDate } from 'react-intl';
 import { ShortUserFragment } from '../../graphql/types';
-import * as styles from './css/progress-note-row-questions.css';
+import styles from './css/progress-note-row-questions.css';
 
 interface IProps {
   supervisor: ShortUserFragment | null;

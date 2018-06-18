@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientScreeningToolSubmissionsFor360Query from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
+import patientScreeningToolSubmissionsFor360Query from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
 import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import Spinner from '../../shared/library/spinner/spinner';
-import * as styles from './css/patient-three-sixty-history.css';
+import styles from './css/patient-three-sixty-history.css';
 import ScreeningToolHistory from './screening-tool-history';
 
 interface IProps {
@@ -53,7 +53,7 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
   return <div className={styles.container}>{renderedSubmissions}</div>;
 };
 
-export default graphql(patientScreeningToolSubmissionsFor360Query as any, {
+export default graphql(patientScreeningToolSubmissionsFor360Query, {
   options: (props: IProps) => {
     const { patientId, glassBreakId } = props;
     return {

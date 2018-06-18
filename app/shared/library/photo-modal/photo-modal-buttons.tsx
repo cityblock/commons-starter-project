@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import ModalButtons from '../modal-buttons/modal-buttons';
-import * as styles from './css/photo-modal-buttons.css';
+import styles from './css/photo-modal-buttons.css';
 
 interface IProps {
   isPhotoTaken: boolean;

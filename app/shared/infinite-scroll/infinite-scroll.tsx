@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Waypoint from 'react-waypoint';
 import Button from '../library/button/button';
-import * as styles from './css/infinite-scroll.css';
+import styles from './css/infinite-scroll.css';
 
 interface IProps {
   error?: ApolloError | null;

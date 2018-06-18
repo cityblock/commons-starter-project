@@ -148,7 +148,7 @@ export default class EventNotification extends BaseModel {
     return (await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
-      .where('id', 'in', taskEventIdsToDismissQuery as any)
+      .where('id', 'in', taskEventIdsToDismissQuery)
       .patch({ seenAt: new Date().toISOString() })
       .returning('*')) as any;
   }

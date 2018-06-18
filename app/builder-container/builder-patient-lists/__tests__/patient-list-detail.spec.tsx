@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DeleteWarning from '../../../shared/library/delete-warning/delete-warning';
 import { patientList } from '../../../shared/util/test-data';
 import PatientListCreate from '../patient-list-create';

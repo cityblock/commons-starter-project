@@ -1,6 +1,6 @@
 import { View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patient, patientConcern, userForCareTeam } from '../../../shared/util/test-data';
 import CareTeam from '../care-team';
 import Info from '../info';

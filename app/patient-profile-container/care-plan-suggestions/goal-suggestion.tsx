@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
 import CarePlanSuggestion from './care-plan-suggestion';
-import * as styles from './css/goal-suggestion.css';
+import styles from './css/goal-suggestion.css';
 import TaskTemplate from './task-template';
 
 interface IProps {

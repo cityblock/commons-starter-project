@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Empty from '../empty';
 
 describe('Printable MAP Empty Care Plan Component', () => {

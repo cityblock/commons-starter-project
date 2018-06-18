@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import { CBO as CBOItem, CBO2 as CBOItem2 } from '../../../shared/util/test-data';
 import { ROUTE_BASE } from '../builder-cbos';

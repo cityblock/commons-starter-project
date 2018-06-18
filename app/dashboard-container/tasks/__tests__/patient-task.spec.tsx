@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { getMapTaskRoute } from '../../../shared/helpers/route-helpers';
 import Avatar from '../../../shared/library/avatar/avatar';

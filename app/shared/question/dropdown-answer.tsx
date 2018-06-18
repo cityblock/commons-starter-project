@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { slice } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
 import FreeTextAnswer from './free-text-answer';
-import * as styles from './patient-question.css';
+import styles from './patient-question.css';
 
 interface IProps {
   currentAnswer: { id: string; value: string };

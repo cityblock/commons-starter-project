@@ -1,14 +1,14 @@
 import { ApolloError } from 'apollo-client';
 import { format } from 'date-fns';
 import { filter, groupBy } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { Fragment } from 'react';
 import { FullCalendarEventFragment, GoogleCalendarEventType } from '../../graphql/types';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Spinner from '../library/spinner/spinner';
 import TextDivider from '../library/text-divider/text-divider';
 import CalendarEvent from './calendar-event';
-import * as styles from './css/calendar.css';
+import styles from './css/calendar.css';
 
 interface IProps {
   calendarEvents?: FullCalendarEventFragment[];

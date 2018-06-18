@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import OptGroup from '../../shared/library/optgroup/optgroup';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/suggestion-category-select.css';
+import styles from './css/suggestion-category-select.css';
 import { SectionName } from './suggestions-section';
 
 export interface ILabels {

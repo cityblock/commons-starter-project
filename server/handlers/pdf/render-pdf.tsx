@@ -1,8 +1,8 @@
 import ReactPDF from '@react-pdf/node';
 import { addMonths, subDays } from 'date-fns';
-import * as express from 'express';
+import express from 'express';
 import { transaction } from 'objection';
-import * as React from 'react';
+import React from 'react';
 import { PatientSignedUrlAction } from 'schema';
 import CBOReferral from '../../../app/pdf/cbo-referral/cbo-referral';
 import PrintableCalendar from '../../../app/pdf/printable-calendar/printable-calendar';

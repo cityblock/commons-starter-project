@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import * as patientScreeningToolSubmissionScore from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
+import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
+import patientScreeningToolSubmissionScoreMutationGraphql from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
 import {
   getPatientAnswersQuery,
   patientScreeningToolSubmissionScoreMutation,
@@ -13,7 +13,7 @@ import {
   FullQuestionFragment,
   FullScreeningToolFragment,
 } from '../../graphql/types';
-import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -22,7 +22,7 @@ import {
   getQuestionAnswerHash,
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
-import * as styles from './css/screening-tool.css';
+import styles from './css/screening-tool.css';
 import ScreeningToolQuestions from './screening-tool-questions';
 
 interface IProps {
@@ -180,7 +180,7 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientScreeningToolSubmissionScore as any, {
+  graphql(patientScreeningToolSubmissionScoreMutationGraphql, {
     name: 'scoreScreeningToolSubmission',
     options: {
       refetchQueries: [
@@ -189,7 +189,7 @@ export default compose(
       ],
     },
   }),
-  graphql(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',

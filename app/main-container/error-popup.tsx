@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../actions/popup-action';
 import { IGlobalErrorPopupOptions } from '../reducers/popup-reducer';
 import Icon from '../shared/library/icon/icon';
 import { Popup } from '../shared/popup/popup';
 import { IState as IAppState } from '../store';
-import * as styles from './css/error-popup.css';
+import styles from './css/error-popup.css';
 
 interface IStateProps {
   isVisible: boolean;

@@ -2,10 +2,10 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as getPatientExternalProviders from '../../../app/graphql/queries/get-patient-external-providers.graphql';
-import * as patientExternalProviderCreate from '../../../app/graphql/queries/patient-external-provider-create-mutation.graphql';
-import * as patientExternalProviderDelete from '../../../app/graphql/queries/patient-external-provider-delete-mutation.graphql';
-import * as patientExternalProviderEdit from '../../../app/graphql/queries/patient-external-provider-edit-mutation.graphql';
+import getPatientExternalProviders from '../../../app/graphql/queries/get-patient-external-providers.graphql';
+import patientExternalProviderCreate from '../../../app/graphql/queries/patient-external-provider-create-mutation.graphql';
+import patientExternalProviderDelete from '../../../app/graphql/queries/patient-external-provider-delete-mutation.graphql';
+import patientExternalProviderEdit from '../../../app/graphql/queries/patient-external-provider-edit-mutation.graphql';
 
 import Clinic from '../../models/clinic';
 import Email from '../../models/email';

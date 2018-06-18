@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
-import * as styles from './css/suggestion-source.css';
+import styles from './css/suggestion-source.css';
 
 interface IProps {
   suggestion: FullCarePlanSuggestionForPatientFragment;

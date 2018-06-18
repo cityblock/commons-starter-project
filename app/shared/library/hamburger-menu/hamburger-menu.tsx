@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import onClickOutside, { OnClickOutProps } from 'react-onclickoutside';
 import Icon from '../icon/icon';
-import * as styles from './css/hamburger-menu.css';
+import styles from './css/hamburger-menu.css';
 
 export const Divider: React.StatelessComponent<{}> = () => <div className={styles.border} />;
 

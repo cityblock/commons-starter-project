@@ -1,7 +1,7 @@
-import * as express from 'express';
+import express from 'express';
 import { transaction } from 'objection';
 import { DocumentTypeOptions, SmsMessageDirection } from 'schema';
-import * as twilio from 'twilio';
+import twilio from 'twilio';
 import { reportError } from '../../helpers/error-helpers';
 import { addJobToQueue } from '../../helpers/queue-helpers';
 import PatientDocument from '../../models/patient-document';

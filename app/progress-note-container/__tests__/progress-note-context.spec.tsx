@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Mutation } from 'react-apollo';
 import { clinic, progressNote, progressNoteTemplate, question } from '../../shared/util/test-data';
 import { ProgressNoteContext as Component } from '../progress-note-context';

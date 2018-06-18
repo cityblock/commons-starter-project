@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import {
   taskEditMutation,
   taskEditMutationVariables,
   FullCBOReferralFragment,
 } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
-import * as styles from './css/task-body.css';
+import styles from './css/task-body.css';
 import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';
 import TaskCBOReferral from './task-cbo-referral';

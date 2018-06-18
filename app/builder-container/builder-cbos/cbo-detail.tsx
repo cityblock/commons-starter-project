@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as CBODeleteMutationGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
+import CBODeleteMutationGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
 import {
   CBODeleteMutation,
   CBODeleteMutationVariables,
@@ -12,7 +12,7 @@ import withErrorHandler, {
 } from '../../shared/with-error-handler/with-error-handler';
 import CBOCreate from './cbo-create';
 import CBOEdit from './cbo-edit';
-import * as styles from './css/cbo-detail.css';
+import styles from './css/cbo-detail.css';
 
 interface IProps {
   CBO: FullCBOFragment | null;
@@ -91,7 +91,7 @@ export class CBODetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(CBODeleteMutationGraphql as any, {
+  graphql(CBODeleteMutationGraphql, {
     name: 'deleteCBO',
     options: {
       refetchQueries: ['getCBOs'],

@@ -8,8 +8,8 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as getPatientAnswers from '../../../app/graphql/queries/get-patient-answers.graphql';
+import uuid from 'uuid/v4';
+import getPatientAnswers from '../../../app/graphql/queries/get-patient-answers.graphql';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';

@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { groupBy, keys } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullTaskEventFragment } from '../../graphql/types';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityTask from './progress-note-activity-task';
 
 interface IProps {

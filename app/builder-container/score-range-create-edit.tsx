@@ -1,9 +1,9 @@
 import { clone, isNil, omit, omitBy } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
-import * as scoreRangeDeleteMutationGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
-import * as scoreRangeEditMutationGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
+import scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
+import scoreRangeDeleteMutationGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
+import scoreRangeEditMutationGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
 import {
   screeningToolScoreRangeCreateMutation,
   screeningToolScoreRangeCreateMutationVariables,
@@ -14,8 +14,8 @@ import {
   FullScreeningToolScoreRangeFragment,
   RiskAdjustmentTypeOptions,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as scoreRangeStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import scoreRangeStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -25,7 +25,7 @@ import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
 import CarePlanSuggestions from './care-plan-suggestions';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 interface ICreateOptions {
   variables: screeningToolScoreRangeCreateMutationVariables;
@@ -223,16 +223,16 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(scoreRangeCreateMutationGraphql as any, {
+  graphql(scoreRangeCreateMutationGraphql, {
     name: 'createScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-  graphql(scoreRangeEditMutationGraphql as any, {
+  graphql(scoreRangeEditMutationGraphql, {
     name: 'editScoreRange',
   }),
-  graphql(scoreRangeDeleteMutationGraphql as any, {
+  graphql(scoreRangeDeleteMutationGraphql, {
     name: 'deleteScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],

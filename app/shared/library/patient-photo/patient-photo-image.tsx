@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Gender } from '../../../graphql/types';
-import * as styles from './css/patient-photo-image.css';
+import styles from './css/patient-photo-image.css';
 import { PhotoType } from './patient-photo';
 
 interface IProps {

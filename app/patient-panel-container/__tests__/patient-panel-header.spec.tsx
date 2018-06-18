@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { PatientFilterOptions } from '../../graphql/types';
 import PatientPanelHeader from '../patient-panel-header';
 

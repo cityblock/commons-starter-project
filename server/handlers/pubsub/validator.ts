@@ -1,5 +1,5 @@
-import * as crypto from 'crypto';
-import * as express from 'express';
+import crypto from 'crypto';
+import express from 'express';
 import config from '../../config';
 import { IComputedFieldMessageData, IMemberAttributionMessageData } from './push-handler';
 

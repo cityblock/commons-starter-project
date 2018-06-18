@@ -4,17 +4,17 @@
 
 import { addMinutes } from 'date-fns';
 import { graphql, print } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { cloneDeep } from 'lodash';
-import * as nock from 'nock';
+import nock from 'nock';
 import { transaction, Transaction } from 'objection';
 import { Permissions, UserRole } from 'schema';
-import * as calendarCreateEventForCurrentUser from '../../../app/graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
-import * as calendarCreateEventForPatient from '../../../app/graphql/queries/calendar-create-event-for-patient-mutation.graphql';
-import * as calendarCreateForPatient from '../../../app/graphql/queries/calendar-create-for-patient-mutation.graphql';
-import * as getCalendarEventsForCurrentUser from '../../../app/graphql/queries/get-calendar-events-for-current-user.graphql';
-import * as getCalendarEventsForPatient from '../../../app/graphql/queries/get-calendar-events-for-patient.graphql';
-import * as getCalendarForPatient from '../../../app/graphql/queries/get-calendar-for-patient.graphql';
+import calendarCreateEventForCurrentUser from '../../../app/graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
+import calendarCreateEventForPatient from '../../../app/graphql/queries/calendar-create-event-for-patient-mutation.graphql';
+import calendarCreateForPatient from '../../../app/graphql/queries/calendar-create-for-patient-mutation.graphql';
+import getCalendarEventsForCurrentUser from '../../../app/graphql/queries/get-calendar-events-for-current-user.graphql';
+import getCalendarEventsForPatient from '../../../app/graphql/queries/get-calendar-events-for-patient.graphql';
+import getCalendarForPatient from '../../../app/graphql/queries/get-calendar-for-patient.graphql';
 import { createGoogleCalendarEventUrl } from '../../helpers/google-calendar-helpers';
 import Clinic from '../../models/clinic';
 import GoogleAuth from '../../models/google-auth';

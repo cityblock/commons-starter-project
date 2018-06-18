@@ -1,5 +1,5 @@
-import * as Storage from '@google-cloud/storage';
-import * as crypto from 'crypto';
+import Storage from '@google-cloud/storage';
+import crypto from 'crypto';
 import { isEmpty } from 'lodash';
 import {
   IPatientDiagnosis,
@@ -259,4 +259,14 @@ export const loadUserVoicemailUrl = async (
   const signedUrls = await file.getSignedUrl(signedUrlParams);
 
   return signedUrls && signedUrls[0] ? signedUrls[0] : null;
+};
+
+export default {
+  loadUserVoicemailUrl,
+  loadPatientCcdEncounters,
+  loadPatientEncounters,
+  loadPatientPhotoUrl,
+  loadPatientDocumentUrl,
+  loadPatientAggregatedDataFile,
+  loadPatientDiagnoses,
 };

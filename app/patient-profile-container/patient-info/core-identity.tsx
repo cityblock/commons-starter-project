@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 import { filter, includes, values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientVerifyMutationGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
+import patientVerifyMutationGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
 import {
   getPatientQuery,
   patientCoreIdentityVerifyMutation,
@@ -12,7 +12,7 @@ import {
   CoreIdentityOptions,
 } from '../../graphql/types';
 import { formatCityblockId } from '../../shared/helpers/format-helpers';
-import * as styles from './css/patient-demographics.css';
+import styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';
@@ -224,7 +224,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientVerifyMutationGraphql as any, {
+export default graphql<any>(patientVerifyMutationGraphql, {
   name: 'verifyCoreIdentity',
   options: {
     refetchQueries: ['getPatientComputedPatientStatus'],

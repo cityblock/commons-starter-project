@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as CBOsQuery from '../../graphql/queries/get-cbos.graphql';
+import CBOsQuery from '../../graphql/queries/get-cbos.graphql';
 import { FullCBOFragment } from '../../graphql/types';
-import * as styles from '../../shared/css/two-panel.css';
+import styles from '../../shared/css/two-panel.css';
 import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
 import { IState as IAppState } from '../../store';
@@ -92,7 +92,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(CBOsQuery as any, {
+  graphql(CBOsQuery, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

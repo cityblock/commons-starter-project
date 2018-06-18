@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FullTaskEventFragment } from '../../graphql/types';
 import { getMapTaskRoute } from '../../shared/helpers/route-helpers';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 
 interface IProps {
   taskEvents: FullTaskEventFragment[];

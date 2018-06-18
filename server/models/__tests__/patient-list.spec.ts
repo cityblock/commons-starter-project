@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createAnswerAssociations } from '../../spec-helpers';
 import PatientList from '../patient-list';

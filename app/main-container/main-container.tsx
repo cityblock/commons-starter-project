@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as styles from './css/main.css';
+import React from 'react';
+import styles from './css/main.css';
 import ErrorPopup from './error-popup';
 
 const App: React.StatelessComponent<{}> = props => (

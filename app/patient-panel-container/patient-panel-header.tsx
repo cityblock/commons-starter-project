@@ -1,8 +1,8 @@
 import { uniq } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { PatientFilterOptions } from '../graphql/types';
-import * as styles from './css/patient-panel-header.css';
+import styles from './css/patient-panel-header.css';
 
 interface IProps {
   filters: PatientFilterOptions;

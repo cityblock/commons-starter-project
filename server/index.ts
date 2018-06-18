@@ -1,15 +1,15 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 import { ErrorReporting } from '@google-cloud/error-reporting';
 import { ApolloEngine } from 'apollo-engine';
-import * as compression from 'compression';
-import * as express from 'express';
+import compression from 'compression';
+import express from 'express';
 import { execute, subscribe } from 'graphql';
 import { Server as HttpServer } from 'http';
-import * as Knex from 'knex';
-import * as kue from 'kue';
+import Knex from 'knex';
+import kue from 'kue';
 import { Model, Transaction } from 'objection';
-import * as pg from 'pg';
+import pg from 'pg';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import config from './config';
 import expressConfig from './express';
@@ -17,7 +17,7 @@ import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { createRedisClient } from './lib/redis';
 import Logging from './logging';
-import * as knexConfig from './models/knexfile';
+import knexConfig from './models/knexfile';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 

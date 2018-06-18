@@ -1,5 +1,5 @@
 import { StyleSheet, View } from '@react-pdf/core';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import HeaderText from '../shared/header-text';
 import TextGroup from '../shared/text-group';

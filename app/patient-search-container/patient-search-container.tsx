@@ -1,16 +1,16 @@
 import { ApolloError } from 'apollo-client';
 import { History } from 'history';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
+import patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
 import { getPatientSearchQuery, FullPatientTableRowFragment } from '../graphql/types';
 import PatientTable from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import { IState as IAppState } from '../store';
-import * as styles from './css/patient-search-container.css';
+import styles from './css/patient-search-container.css';
 import PatientSearchHeader from './header';
 import PatientSearchInput from './input';
 
@@ -137,7 +137,7 @@ const mapStateToProps = (state: IAppState, props: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientSearchQuery as any, {
+  graphql(patientSearchQuery, {
     skip: (props: IProps & IStateProps) => !props.query,
     options: ({ query, pageNumber, pageSize }: IProps & IStateProps) => ({
       variables: { query, pageNumber, pageSize },

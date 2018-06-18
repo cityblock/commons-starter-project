@@ -1,20 +1,20 @@
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as progressNoteTemplateCreateMutationGraphql from '../graphql/queries/progress-note-template-create-mutation.graphql';
+import progressNoteTemplateCreateMutationGraphql from '../graphql/queries/progress-note-template-create-mutation.graphql';
 import {
   progressNoteTemplateCreateMutation,
   progressNoteTemplateCreateMutationVariables,
 } from '../graphql/types';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
-import * as progressNoteTemplateStyles from '../shared/css/two-panel-right.css';
+import loadingStyles from '../shared/css/loading-spinner.css';
+import progressNoteTemplateStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 export interface IOptions {
   variables: progressNoteTemplateCreateMutationVariables;
@@ -126,7 +126,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(progressNoteTemplateCreateMutationGraphql as any, {
+  graphql(progressNoteTemplateCreateMutationGraphql, {
     name: 'createProgressNoteTemplate',
     options: {
       refetchQueries: ['getProgressNoteTemplates'],

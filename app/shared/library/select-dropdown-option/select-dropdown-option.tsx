@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '../avatar/avatar';
 import Text from '../text/text';
-import * as styles from './css/select-dropdown-option.css';
+import styles from './css/select-dropdown-option.css';
 
 interface IProps {
   value: string;

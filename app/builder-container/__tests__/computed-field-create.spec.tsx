@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { ComputedFieldCreate as Component } from '../computed-field-create';
 
 describe('shallow rendered', () => {

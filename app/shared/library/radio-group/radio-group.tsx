@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
-import * as styles from './css/radio-group.css';
+import classNames from 'classnames';
+import React from 'react';
+import styles from './css/radio-group.css';
 
 interface IProps {
   children?: any;

@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { createHmac, pubsubValidator } from '../validator';
 
 describe('validates requests actually come from google', () => {

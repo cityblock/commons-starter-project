@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as JwtForPdfCreate from '../graphql/queries/jwt-for-pdf-create.graphql';
+import JwtForPdfCreateGraphql from '../graphql/queries/jwt-for-pdf-create.graphql';
 import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../graphql/types';
 import { getPrintableMapPdfRoute } from '../shared/helpers/route-helpers';
 import Button from '../shared/library/button/button';
-import * as styles from './css/print-map-button.css';
+import styles from './css/print-map-button.css';
 
 interface IProps {
   patientId: string;
@@ -62,6 +62,6 @@ export class PrintMapButton extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(JwtForPdfCreate as any, {
+export default graphql<any>(JwtForPdfCreateGraphql, {
   name: 'generateJwtForPdf',
 })(PrintMapButton) as React.ComponentClass<IProps>;

@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
-import * as calendarForCurrentUserQuery from '../graphql/queries/get-calendar-for-current-user.graphql';
+import calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
+import calendarForCurrentUserQuery from '../graphql/queries/get-calendar-for-current-user.graphql';
 import {
   getCalendarEventsForCurrentUserQuery,
   getCalendarForCurrentUserQuery,
@@ -13,7 +13,7 @@ import AppointmentModal from '../shared/appointment-modal/appointment-modal';
 import RequestRefreshModal from '../shared/appointment-modal/request-refresh-modal';
 import Calendar from '../shared/calendar/calendar';
 import Button from '../shared/library/button/button';
-import * as styles from './css/calendar-container.css';
+import styles from './css/calendar-container.css';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -154,7 +154,7 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
 };
 
 export default compose(
-  graphql(calendarQuery as any, {
+  graphql(calendarQuery, {
     options: () => ({
       variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
     }),
@@ -184,7 +184,7 @@ export default compose(
       },
     }),
   }),
-  graphql(calendarForCurrentUserQuery as any, {
+  graphql(calendarForCurrentUserQuery, {
     props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
       calendarResponse: data ? (data as any).calendarForCurrentUser : null,
     }),

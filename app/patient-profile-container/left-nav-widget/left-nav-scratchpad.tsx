@@ -1,15 +1,15 @@
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as patientScratchPadQuery from '../../graphql/queries/get-patient-scratch-pad.graphql';
-import * as savePatientScratchPadMutationGraphql from '../../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
+import patientScratchPadQuery from '../../graphql/queries/get-patient-scratch-pad.graphql';
+import savePatientScratchPadMutationGraphql from '../../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
 import {
   getPatientScratchPadQuery,
   patientScratchPadEditMutation,
   patientScratchPadEditMutationVariables,
 } from '../../graphql/types';
 import TextArea from '../../shared/library/textarea/textarea';
-import * as styles from './css/left-nav-scratchpad.css';
+import styles from './css/left-nav-scratchpad.css';
 import LeftNavScratchPadStatus from './left-nav-scratchpad-status';
 
 const SAVE_TIMEOUT_MILLISECONDS = 500;
@@ -132,10 +132,10 @@ export class LeftNavScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(savePatientScratchPadMutationGraphql as any, {
+  graphql(savePatientScratchPadMutationGraphql, {
     name: 'saveScratchPad',
   }),
-  graphql(patientScratchPadQuery as any, {
+  graphql(patientScratchPadQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Selected } from '../../reducers/patient-left-nav-reducer';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/left-nav-action.css';
+import styles from './css/left-nav-action.css';
 import { ActionIconsMapping } from './helpers';
 
 interface IProps {

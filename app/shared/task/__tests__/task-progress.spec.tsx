@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TaskCompletion from '../task-completion';
 import TaskDue, { IProps } from '../task-due';
 import TaskProgress from '../task-progress';

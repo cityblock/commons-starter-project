@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { get, isNil } from 'lodash';
-import * as nock from 'nock';
+import nock from 'nock';
 import { Transaction } from 'objection';
 import {
   AnswerTypeOptions,
@@ -20,7 +20,7 @@ import {
   TaskEventTypes,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import Address from './models/address';
 import Answer from './models/answer';
 import CarePlanSuggestion from './models/care-plan-suggestion';

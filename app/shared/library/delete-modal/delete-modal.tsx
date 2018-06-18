@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import ErrorComponent from '../../error-component/error-component';
 import { Popup } from '../../popup/popup';
 import DeleteWarning from '../delete-warning/delete-warning';
 import Icon from '../icon/icon';
-import * as styles from './css/delete-modal.css';
+import styles from './css/delete-modal.css';
 
 interface IProps {
   visible: boolean;

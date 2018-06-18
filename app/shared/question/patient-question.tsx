@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
-import * as styles from './patient-question.css';
+import styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
 import QuestionMenu from './question-menu';
 

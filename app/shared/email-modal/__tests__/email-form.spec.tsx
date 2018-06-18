@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import RadioGroup from '../../../shared/library/radio-group/radio-group';
 import RadioInput from '../../../shared/library/radio-input/radio-input';

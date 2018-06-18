@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DateInput from '../../../library/date-input/date-input';
 import FormLabel from '../../../library/form-label/form-label';
 import CreateTaskDueDate from '../due-date';

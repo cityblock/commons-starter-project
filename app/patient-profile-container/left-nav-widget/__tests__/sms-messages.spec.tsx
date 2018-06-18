@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
 import { smsMessage1, smsMessage2 } from '../../../shared/util/test-data';
 import EmptySmsMessages from '../empty-sms-messages';

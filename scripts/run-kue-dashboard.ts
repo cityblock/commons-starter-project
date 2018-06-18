@@ -1,8 +1,8 @@
 /* tslint:disable no-console */
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
-import * as kue from 'kue';
+import kue from 'kue';
 import { createRedisClient } from '../server/lib/redis';
 
 kue.createQueue({

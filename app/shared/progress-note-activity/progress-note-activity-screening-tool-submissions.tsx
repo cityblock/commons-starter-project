@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FullPatientScreeningToolSubmissionFragment } from '../../graphql/types';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityScreeningToolSubmission from './progress-note-activity-screening-tool-submission';
 
 interface IProps {

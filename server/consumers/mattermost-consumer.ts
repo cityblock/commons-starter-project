@@ -1,14 +1,14 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
-import * as Knex from 'knex';
-import * as kue from 'kue';
+import Knex from 'knex';
+import kue from 'kue';
 import { Model } from 'objection';
 import config from '../config';
 import { reportError } from '../helpers/error-helpers';
 import { createRedisClient } from '../lib/redis';
 import Logging from '../logging';
 import Mattermost, { ADD_USER_TO_CHANNEL_TOPIC } from '../mattermost';
-import * as knexConfig from '../models/knexfile';
+import knexConfig from '../models/knexfile';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 

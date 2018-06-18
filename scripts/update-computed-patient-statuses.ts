@@ -1,5 +1,5 @@
 /* tslint:disable no-console */
-import * as Knex from 'knex';
+import Knex from 'knex';
 import { transaction, Model } from 'objection';
 import ComputedPatientStatus from '../server/models/computed-patient-status';
 import User from '../server/models/user';

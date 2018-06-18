@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as createPatientContactMutationGraphql from '../../graphql/queries/patient-contact-create-mutation.graphql';
-import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import createPatientContactMutationGraphql from '../../graphql/queries/patient-contact-create-mutation.graphql';
+import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
   patientContactCreateMutation,
   patientContactCreateMutationVariables,
@@ -93,13 +93,13 @@ export class CreatePatientContactModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(createPatientContactMutationGraphql as any, {
+  graphql(createPatientContactMutationGraphql, {
     name: 'createPatientContactMutation',
     options: {
       refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql(editPatientInfoMutationGraphql as any, {
+  graphql(editPatientInfoMutationGraphql, {
     name: 'editPatientInfoMutation',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatientComputedPatientStatus'],

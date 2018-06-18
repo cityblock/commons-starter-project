@@ -1,8 +1,8 @@
 // TODO: Write a full integration test once final core data/demo data is available
-import * as kue from 'kue';
+import kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { Gender, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';

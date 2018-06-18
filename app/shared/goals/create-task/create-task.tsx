@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as CBOReferralCreateMutationGraphql from '../../../graphql/queries/cbo-referral-create-mutation.graphql';
-import * as taskCreateMutationGraphql from '../../../graphql/queries/task-create-mutation.graphql';
+import CBOReferralCreateMutationGraphql from '../../../graphql/queries/cbo-referral-create-mutation.graphql';
+import taskCreateMutationGraphql from '../../../graphql/queries/task-create-mutation.graphql';
 import {
   taskCreateMutation,
   taskCreateMutationVariables,
@@ -212,13 +212,13 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskCreateMutationGraphql as any, {
+  graphql(taskCreateMutationGraphql, {
     name: 'createTask',
     options: {
       refetchQueries: ['getPatientCarePlan'],
     },
   }),
-  graphql(CBOReferralCreateMutationGraphql as any, {
+  graphql(CBOReferralCreateMutationGraphql, {
     name: 'createCBOReferral',
   }),
 )(CreateTaskModal) as React.ComponentClass<IProps>;

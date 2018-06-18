@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 import { AxiosResponse } from 'axios';
@@ -6,7 +6,7 @@ import { addMinutes } from 'date-fns';
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import { get } from 'lodash';
-import * as querystring from 'querystring';
+import querystring from 'querystring';
 import config from '../config';
 import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
 import GoogleAuth from '../models/google-auth';

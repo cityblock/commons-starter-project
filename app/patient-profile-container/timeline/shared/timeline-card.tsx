@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { FullProgressNoteFragment } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import Text from '../../../shared/library/text/text';
 import ProgressNoteSupervisorBadge from '../progress-note-supervisor-badge';
-import * as styles from './css/timeline-card.css';
+import styles from './css/timeline-card.css';
 
 interface IProps {
   source: string;

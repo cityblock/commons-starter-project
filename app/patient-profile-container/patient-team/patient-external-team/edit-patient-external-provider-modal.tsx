@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
-import * as getPatientQuery from '../../../graphql/queries/get-patient.graphql';
-import * as editPatientExternalProviderMutationGraphql from '../../../graphql/queries/patient-external-provider-edit-mutation.graphql';
+import getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
+import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
+import editPatientExternalProviderMutationGraphql from '../../../graphql/queries/patient-external-provider-edit-mutation.graphql';
 import {
   patientExternalProviderEditMutation,
   patientExternalProviderEditMutationVariables,
@@ -63,18 +63,18 @@ export class EditPatientExternalProviderModal extends React.Component<allProps> 
   }
 }
 
-export default graphql<any>(editPatientExternalProviderMutationGraphql as any, {
+export default graphql<any>(editPatientExternalProviderMutationGraphql, {
   name: 'editPatientExternalProviderMutation',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: getPatientExternalProvidersQuery as any,
+        query: getPatientExternalProvidersQuery,
         variables: {
           patientId: props.patientId,
         },
       },
       {
-        query: getPatientQuery as any,
+        query: getPatientQuery,
         variables: {
           patientId: props.patientId,
         },

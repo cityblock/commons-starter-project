@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/textarea.css';
+import styles from './css/textarea.css';
 
 interface IProps {
   value: string;

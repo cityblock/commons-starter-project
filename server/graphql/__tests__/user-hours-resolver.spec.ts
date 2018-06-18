@@ -1,10 +1,10 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as getCurrentUserHours from '../../../app/graphql/queries/get-current-user-hours.graphql';
-import * as userHoursCreate from '../../../app/graphql/queries/user-hours-create-mutation.graphql';
-import * as userHoursDelete from '../../../app/graphql/queries/user-hours-delete-mutation.graphql';
-import * as userHoursEdit from '../../../app/graphql/queries/user-hours-edit-mutation.graphql';
+import getCurrentUserHours from '../../../app/graphql/queries/get-current-user-hours.graphql';
+import userHoursCreate from '../../../app/graphql/queries/user-hours-create-mutation.graphql';
+import userHoursDelete from '../../../app/graphql/queries/user-hours-delete-mutation.graphql';
+import userHoursEdit from '../../../app/graphql/queries/user-hours-edit-mutation.graphql';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
 import UserHours from '../../models/user-hours';

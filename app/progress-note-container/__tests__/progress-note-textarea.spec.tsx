@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TextArea from '../../shared/library/textarea/textarea';
 import { ProgressNoteTextArea } from '../progress-note-textarea';
 

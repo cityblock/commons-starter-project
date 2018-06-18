@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import * as progressNoteTemplateQuery from '../graphql/queries/get-progress-note-template.graphql';
-import * as progressNoteTemplateEditMutationGraphql from '../graphql/queries/progress-note-template-edit-mutation.graphql';
+import progressNoteTemplateQuery from '../graphql/queries/get-progress-note-template.graphql';
+import progressNoteTemplateEditMutationGraphql from '../graphql/queries/progress-note-template-edit-mutation.graphql';
 import {
   progressNoteTemplateEditMutation,
   progressNoteTemplateEditMutationVariables,
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 
 interface IProps {
@@ -292,10 +292,10 @@ function getProgressNoteTemplateId(ownProps: IProps): string | null {
 }
 
 export default compose(
-  graphql(progressNoteTemplateEditMutationGraphql as any, {
+  graphql(progressNoteTemplateEditMutationGraphql, {
     name: 'editProgressNoteTemplate',
   }),
-  graphql(progressNoteTemplateQuery as any, {
+  graphql(progressNoteTemplateQuery, {
     skip: (props: IProps) => !getProgressNoteTemplateId(props),
     options: (props: IProps) => ({
       variables: { progressNoteTemplateId: getProgressNoteTemplateId(props) },

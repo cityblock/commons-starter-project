@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as styles from './css/underline-tab.css';
+import styles from './css/underline-tab.css';
 
 interface IProps {
   messageId: string; // message id for translation

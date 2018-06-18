@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { getProgressNoteActivityForProgressNoteQuery } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/progress-note-activity.css';
+import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdates from './progress-note-activity-care-plan-updates';
 import ProgressNoteActivityPatientAnswers from './progress-note-activity-patient-answers';
 import ProgressNoteActivityQuickCalls from './progress-note-activity-quick-calls';

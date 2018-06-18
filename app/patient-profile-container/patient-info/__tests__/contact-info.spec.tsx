@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ContactMethodOptions, ContactTimeOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';

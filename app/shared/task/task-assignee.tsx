@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
+import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import { FullUserFragment, ShortUserFragment } from '../../graphql/types';
 import { getAssigneeInfo } from '../helpers/assignee-helpers';
 import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../library/select-dropdown/select-dropdown';
-import * as styles from './css/task-body.css';
+import styles from './css/task-body.css';
 
 export interface IProps {
   patientId: string;
@@ -118,7 +118,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(careTeamQuery as any, {
+export default graphql(careTeamQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patientGoal } from '../../shared/util/test-data';
 import CreateTaskModal, { IProps } from '../goals/create-task/create-task';
 import PatientGoal from '../goals/goal';

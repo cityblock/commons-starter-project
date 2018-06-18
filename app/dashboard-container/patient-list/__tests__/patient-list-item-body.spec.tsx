@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { formatCityblockId, getPatientStatusColor } from '../../../shared/helpers/format-helpers';
 import Icon from '../../../shared/library/icon/icon';
 import PatientAge from '../../../shared/library/patient-age/patient-age';

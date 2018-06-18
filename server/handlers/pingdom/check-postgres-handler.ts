@@ -1,9 +1,9 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as express from 'express';
+import express from 'express';
 import { transaction } from 'objection';
 import config from '../../config';
 import Logging from '../../logging';
-import * as knexConfig from '../../models/knexfile';
+import knexConfig from '../../models/knexfile';
 import User from '../../models/user';
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();

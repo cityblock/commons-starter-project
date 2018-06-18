@@ -11,13 +11,13 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as carePlanSuggestionAccept from '../../../app/graphql/queries/care-plan-suggestion-accept-mutation.graphql';
-import * as carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
-import * as getComputedFieldSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
-import * as getRiskAreaAssessmentSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
-import * as getScreeningToolSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
-import * as getCarePlanForPatient from '../../../app/graphql/queries/get-patient-care-plan.graphql';
+import uuid from 'uuid/v4';
+import carePlanSuggestionAccept from '../../../app/graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import carePlanSuggestionDismiss from '../../../app/graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import getComputedFieldSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
+import getRiskAreaAssessmentSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
+import getScreeningToolSuggestionsQuery from '../../../app/graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
+import getCarePlanForPatient from '../../../app/graphql/queries/get-patient-care-plan.graphql';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';

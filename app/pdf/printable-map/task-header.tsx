@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { ShortTaskFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import variables from '../shared/variables/variables';

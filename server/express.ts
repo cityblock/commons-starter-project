@@ -1,12 +1,14 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
+import bodyParser from 'body-parser';
+import express from 'express';
 import { graphiqlExpress } from 'graphql-server-express';
-import * as morgan from 'morgan';
+import morgan from 'morgan';
 import { Transaction } from 'objection';
-import * as path from 'path';
+import path from 'path';
 import 'regenerator-runtime/runtime';
-import * as webpack from 'webpack';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackConfig from '../webpack/webpack.config';
 import renderApp from './app';
 import config from './config';
 import {
@@ -54,14 +56,9 @@ export default async (
 
   if (config.NODE_ENV === 'development') {
     // Enable webpack dev middleware
-    const webpackDevMiddleware = require('webpack-dev-middleware');
-    const webpackConfig = require('../webpack/webpack.config');
-    const devConfig = webpackConfig()[0];
+    const devConfig = webpackConfig() as any;
     const compiler = webpack(devConfig);
-    app.use(
-      webpackDevMiddleware(compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
-    );
-    app.use(require('webpack-hot-middleware')(compiler));
+    app.use(webpackDevMiddleware(compiler, { publicPath: devConfig.output.publicPath }));
   }
 
   // This adds request logging using some decent defaults.

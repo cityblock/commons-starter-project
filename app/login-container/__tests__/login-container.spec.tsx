@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { LoginContainer as Component } from '../login-container';
 
 it('renders login form correctly', () => {

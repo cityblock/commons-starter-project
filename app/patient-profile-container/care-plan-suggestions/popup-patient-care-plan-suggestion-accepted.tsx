@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as carePlanSuggestionAcceptMutationGraphql from '../../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
-import * as concernsQuery from '../../graphql/queries/get-concerns.graphql';
-import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
+import carePlanSuggestionAcceptMutationGraphql from '../../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import concernsQuery from '../../graphql/queries/get-concerns.graphql';
+import patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
 import {
   carePlanSuggestionAcceptMutation,
   carePlanSuggestionAcceptMutationVariables,
@@ -150,7 +150,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
 }
 
 export default compose(
-  graphql(patientCarePlanQuery as any, {
+  graphql(patientCarePlanQuery, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
@@ -162,14 +162,14 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql(concernsQuery as any, {
+  graphql(concernsQuery, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(carePlanSuggestionAcceptMutationGraphql as any, {
+  graphql(carePlanSuggestionAcceptMutationGraphql, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: [

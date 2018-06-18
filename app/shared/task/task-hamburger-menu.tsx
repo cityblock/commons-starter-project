@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
-import * as styles from './css/task.css';
+import classNames from 'classnames';
+import React from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import styles from './css/task.css';
 
 interface IProps {
   taskId: string;

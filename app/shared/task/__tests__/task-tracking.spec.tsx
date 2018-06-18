@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Priority } from '../../../graphql/types';
 import { taskWithComment } from '../../util/test-data';
 import TaskFollowers from '../followers';

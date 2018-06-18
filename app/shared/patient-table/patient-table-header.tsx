@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Checkbox from '../library/checkbox/checkbox';
-import * as styles from './css/patient-table.css';
+import styles from './css/patient-table.css';
 import { PatientTableColumnHeader } from './helper-components';
 
 interface IProps {

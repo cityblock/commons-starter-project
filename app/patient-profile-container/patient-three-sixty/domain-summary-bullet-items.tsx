@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { IScreeningToolResultSummary } from 'schema';
-import * as styles from './css/domain-summary-bullets.css';
+import styles from './css/domain-summary-bullets.css';
 
 interface IProps {
   items: string[];

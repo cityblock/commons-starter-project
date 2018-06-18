@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/display-card.css';
+import styles from './css/display-card.css';
 
 interface IProps {
   children?: any;

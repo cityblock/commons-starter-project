@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Icon from '../../shared/library/icon/icon';
 import { Popup } from '../../shared/popup/popup';
 import { ErrorPopup } from '../error-popup';

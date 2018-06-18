@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { CBO as CBOItem } from '../../../shared/util/test-data';

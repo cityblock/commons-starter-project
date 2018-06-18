@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
+import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
 import { DomainAssessment } from '../patient-three-sixty/domain-assessment';
 
@@ -36,7 +36,7 @@ export const RiskAreaAssessmentHeader: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql(getRiskAreaGroupForPatientGraphql as any, {
+export default graphql(getRiskAreaGroupForPatientGraphql, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId, glassBreakId } = props;
     return { variables: { riskAreaGroupId, patientId, glassBreakId } };

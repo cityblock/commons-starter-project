@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { adminTasksConcernTitle } from '../../../../server/lib/consts';
 import PatientCarePlan from '../../patient-care-plan';

@@ -1,13 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as mattermostUrlForPatientCreate from '../../graphql/queries/mattermost-url-for-patient-create.graphql';
+import mattermostUrlForPatientCreateGraphql from '../../graphql/queries/mattermost-url-for-patient-create.graphql';
 import {
   mattermostUrlForPatientCreateMutation,
   mattermostUrlForPatientCreateMutationVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/care-team-member.css';
+import styles from './css/care-team-member.css';
 
 interface IProps {
   patientId: string;
@@ -72,6 +72,6 @@ export class CareTeamMattermost extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(mattermostUrlForPatientCreate as any, {
+export default graphql<any>(mattermostUrlForPatientCreateGraphql, {
   name: 'getMattermostLink',
 })(CareTeamMattermost) as React.ComponentClass<IProps>;

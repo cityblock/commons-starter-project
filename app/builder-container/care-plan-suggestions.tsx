@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import {
   FullAnswerFragment,
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
   FullScreeningToolScoreRangeFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
 

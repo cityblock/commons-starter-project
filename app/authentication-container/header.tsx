@@ -1,13 +1,13 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import Icon from '../shared/library/icon/icon';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
-import * as styles from './css/header.css';
+import styles from './css/header.css';
 
 interface IProps extends IInjectedProps {
   mutate?: any;

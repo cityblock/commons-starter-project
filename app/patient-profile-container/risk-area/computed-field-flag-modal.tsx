@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import * as computedFieldFlagCreateMutationGraphql from '../../graphql/queries/computed-field-flag-create-mutation.graphql';
+import computedFieldFlagCreateMutationGraphql from '../../graphql/queries/computed-field-flag-create-mutation.graphql';
 import {
   computedFieldFlagCreateMutation,
   computedFieldFlagCreateMutationVariables,
@@ -15,7 +15,7 @@ import Spinner from '../../shared/library/spinner/spinner';
 import TextArea from '../../shared/library/textarea/textarea';
 import { Popup } from '../../shared/popup/popup';
 import { IState as IAppState } from '../../store';
-import * as styles from './css/computed-field-flag-modal.css';
+import styles from './css/computed-field-flag-modal.css';
 
 interface IStateProps {
   visible: boolean;
@@ -127,7 +127,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(computedFieldFlagCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, {}, allProps>(computedFieldFlagCreateMutationGraphql, {
     name: 'flagComputedField',
   }),
 )(ComputedFieldFlagModal);

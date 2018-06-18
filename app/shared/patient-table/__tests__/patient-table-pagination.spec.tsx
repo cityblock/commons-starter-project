@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import Pagination from '../../library/pagination/pagination';
 import { PatientTablePagination } from '../patient-table-pagination';
 

@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Fragment } from 'react';
 import Option from '../option/option';
 import Text from '../text/text';
-import * as styles from './css/select.css';
+import styles from './css/select.css';
 
 export type Color = 'black' | 'blue';
 

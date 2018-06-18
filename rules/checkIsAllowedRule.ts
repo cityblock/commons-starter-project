@@ -6,7 +6,7 @@
  *      tsc checkIsAllowedRule.ts
  */
 
-import * as Lint from 'tslint';
+import Lint from 'tslint';
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static FAILURE_STRING = 'must call check user permissions in GraphQL resolver function';

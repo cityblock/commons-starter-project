@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import LeftNavActions from '../left-nav-actions';
 import LeftNavOpen from '../left-nav-open';
 import { LeftNavWidget } from '../left-nav-widget';

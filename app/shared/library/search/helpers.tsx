@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 export const formatSearchText = (fullText: string, searchTerm: string) => {
   if (!fullText) return null;

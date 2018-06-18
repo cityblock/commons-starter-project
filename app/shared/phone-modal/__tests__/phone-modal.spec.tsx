@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../library/modal/modal';
 import { phone1 } from '../../util/test-data';
 import PhoneForm from '../phone-form';

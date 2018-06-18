@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { Radar } from 'react-chartjs-2';
 import { FullRiskAreaGroupForPatientFragment } from '../../../graphql/types';
 import Spinner from '../../../shared/library/spinner/spinner';
-import * as styles from './css/three-sixty-radar.css';
+import styles from './css/three-sixty-radar.css';
 import { black, dataOptions, getChartOptions, gray, pointColors, pointData } from './radar-options';
 
 export interface IProps {

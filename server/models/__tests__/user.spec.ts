@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import { Permissions, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { attributionUserEmail } from '../../lib/consts';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';

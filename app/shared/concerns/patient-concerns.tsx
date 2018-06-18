@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as getCurrentUserQuery from '../../graphql/queries/get-current-user.graphql';
+import getCurrentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import { FullPatientConcernFragment, FullUserFragment } from '../../graphql/types';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
@@ -67,7 +67,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
   return <React.Fragment>{renderedConcerns}</React.Fragment>;
 };
 
-export default graphql<any, any, any, any>(getCurrentUserQuery as any, {
+export default graphql<any, any, any, any>(getCurrentUserQuery, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

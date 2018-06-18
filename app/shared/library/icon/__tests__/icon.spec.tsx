@@ -1,6 +1,6 @@
 import EventIcon from '@material-ui/icons/Event';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Icon from '../icon';
 
 describe('Library Icon Component', () => {

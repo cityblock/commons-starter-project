@@ -1,7 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as userVoicemailSignedUrlCreate from '../../../app/graphql/queries/user-voicemail-signed-url-create.graphql';
+import userVoicemailSignedUrlCreate from '../../../app/graphql/queries/user-voicemail-signed-url-create.graphql';
 
 import Clinic from '../../models/clinic';
 import User from '../../models/user';

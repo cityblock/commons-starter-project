@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FullRiskAreaGroupForPatientFragment } from '../../graphql/types';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/domain-summary.css';
+import styles from './css/domain-summary.css';
 import DomainSummaryBullets from './domain-summary-bullets';
 
 interface IProps {

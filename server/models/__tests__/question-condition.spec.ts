@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { AnswerTypeOptions, AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';

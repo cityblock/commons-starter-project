@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
 import { eventNotification, task } from '../../../shared/util/test-data';
 import TaskNotification from '../task-notification';

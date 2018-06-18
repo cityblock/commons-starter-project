@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../shared/library/button/button';
 import Spinner from '../../../shared/library/spinner/spinner';
 import { riskAreaGroup } from '../../../shared/util/test-data';

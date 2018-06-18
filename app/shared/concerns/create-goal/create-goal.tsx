@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../../actions/popup-action';
-import * as goalSuggestionTemplatesQuery from '../../../graphql/queries/get-goal-suggestion-templates.graphql';
-import * as patientGoalCreateMutationGraphql from '../../../graphql/queries/patient-goal-create-mutation.graphql';
+import goalSuggestionTemplatesQuery from '../../../graphql/queries/get-goal-suggestion-templates.graphql';
+import patientGoalCreateMutationGraphql from '../../../graphql/queries/patient-goal-create-mutation.graphql';
 import {
   patientGoalCreateMutation,
   patientGoalCreateMutationVariables,
@@ -14,7 +14,7 @@ import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer'
 import { SearchOptions } from '../../../shared/library/search/search';
 import { IState as IAppState } from '../../../store';
 import { Popup } from '../../popup/popup';
-import * as styles from './css/create-goal.css';
+import styles from './css/create-goal.css';
 import DefineGoal from './define-goal';
 import SuggestedTasks from './suggested-tasks';
 
@@ -286,10 +286,10 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(patientGoalCreateMutationGraphql as any, {
+  graphql(patientGoalCreateMutationGraphql, {
     name: 'createPatientGoal',
   }),
-  graphql(goalSuggestionTemplatesQuery as any, {
+  graphql(goalSuggestionTemplatesQuery, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,

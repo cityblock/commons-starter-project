@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as CBOEditMutationGraphql from '../../graphql/queries/cbo-edit-mutation.graphql';
+import CBOEditMutationGraphql from '../../graphql/queries/cbo-edit-mutation.graphql';
 import { CBOEditMutation, CBOEditMutationVariables, FullCBOFragment } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
 import StateSelect from '../../shared/library/state-select/state-select';
-import * as styles from './css/cbo-shared.css';
+import styles from './css/cbo-shared.css';
 
 interface IProps {
   CBO: FullCBOFragment;
@@ -94,6 +94,6 @@ export class CBOEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<any>(CBOEditMutationGraphql as any, {
+export default graphql<any>(CBOEditMutationGraphql, {
   name: 'editCBO',
 })(CBOEdit) as React.ComponentClass<IProps>;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Fragment } from 'react';
 import OptGroup from '../../../shared/library/optgroup/optgroup';
 import Option from '../../../shared/library/option/option';

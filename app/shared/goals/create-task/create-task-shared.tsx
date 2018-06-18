@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Priority } from '../../../graphql/types';
 import TaskAssignee from '../../task/task-assignee';
 import { ChangeEvent, ITaskFields } from './create-task';
-import * as styles from './css/create-task-shared.css';
-import * as labelStyles from './css/shared.css';
+import styles from './css/create-task-shared.css';
+import labelStyles from './css/shared.css';
 import CreateTaskDescription from './description';
 import CreateTaskDueDate from './due-date';
 import CreateTaskPriority from './priority';

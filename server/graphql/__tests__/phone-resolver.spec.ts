@@ -1,5 +1,5 @@
 import { graphql } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';

@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -9,7 +9,7 @@ import { FullPatientForDashboardFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
-import * as styles from './css/patient-list-item.css';
+import styles from './css/patient-list-item.css';
 import PatientListItemBody from './patient-list-item-body';
 
 interface IContainerProps {

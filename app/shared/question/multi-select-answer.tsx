@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FullAnswerFragment } from '../../graphql/types';
 import CheckboxInput from '../../shared/library/checkbox-input/checkbox-input';
 

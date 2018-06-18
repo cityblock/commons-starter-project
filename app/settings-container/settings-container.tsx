@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as currentUserHoursQuery from '../graphql/queries/get-current-user-hours.graphql';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import currentUserHoursQuery from '../graphql/queries/get-current-user-hours.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { getCurrentUserHoursQuery, FullUserFragment } from '../graphql/types';
 import Spinner from '../shared/library/spinner/spinner';
 import Text from '../shared/library/text/text';
-import * as styles from './css/settings-container.css';
+import styles from './css/settings-container.css';
 import SettingsLeftRail from './left-rail';
 import WorkHours from './work-hours';
 
@@ -45,14 +45,14 @@ export const SettingsContainer: React.StatelessComponent<allProps> = (props: all
 };
 
 export default compose(
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     props: ({ data }) => ({
       userLoading: data ? data.loading : false,
       userError: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql(currentUserHoursQuery as any, {
+  graphql(currentUserHoursQuery, {
     props: ({ data }) => ({
       hoursLoading: data ? data.loading : false,
       hoursError: data ? data.error : null,

@@ -1,5 +1,5 @@
-import * as basicAuth from 'basic-auth';
-import * as express from 'express';
+import basicAuth from 'basic-auth';
+import express from 'express';
 
 export const checkAuthMiddleware = (username: string, password: string) => (
   req: express.Request,

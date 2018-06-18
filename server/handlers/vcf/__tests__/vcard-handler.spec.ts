@@ -1,7 +1,7 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { transaction, Transaction } from 'objection';
 import { PhoneTypeOptions, UserRole } from 'schema';
-import * as vCard from 'vcards-js';
+import vCard from 'vcards-js';
 import { signJwt } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';

@@ -2,7 +2,7 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as computedFieldFlagCreate from '../../../app/graphql/queries/computed-field-flag-create-mutation.graphql';
+import computedFieldFlagCreate from '../../../app/graphql/queries/computed-field-flag-create-mutation.graphql';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

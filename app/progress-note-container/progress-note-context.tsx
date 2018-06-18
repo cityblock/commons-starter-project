@@ -1,9 +1,9 @@
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql, Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import * as clinicsQuery from '../graphql/queries/get-clinics.graphql';
-import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
+import clinicsQuery from '../graphql/queries/get-clinics.graphql';
+import patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import {
   getClinicsQuery,
   getPatientAnswersQuery,
@@ -25,7 +25,7 @@ import {
   getQuestionVisibility,
   IQuestionAnswerHash,
 } from '../shared/question/question-helpers';
-import * as styles from './css/progress-note-context.css';
+import styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
 import ProgressNoteTextArea from './progress-note-textarea';
@@ -105,10 +105,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
     return (
-      <Mutation
-        mutation={patientAnswersCreateMutationGraphql as any}
-        key={`${question.id}-${index}`}
-      >
+      <Mutation mutation={patientAnswersCreateMutationGraphql} key={`${question.id}-${index}`}>
         {mutate => (
           <PatientQuestion
             editable={editable}
@@ -317,7 +314,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any, any, any, any>(clinicsQuery as any, {
+export default graphql<any, any, any, any>(clinicsQuery, {
   options: {
     variables: {
       pageNumber: 0,

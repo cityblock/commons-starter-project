@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { groupBy, uniqBy } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import TextInfo from '../../shared/library/text-info/text-info';
 import CarePlanSuggestion from './care-plan-suggestion';
-import * as styles from './css/suggestions-group.css';
+import styles from './css/suggestions-group.css';
 import GoalSuggestions from './goal-suggestions';
 
 interface IProps {

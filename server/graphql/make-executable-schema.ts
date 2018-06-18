@@ -1,6 +1,6 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
-import * as path from 'path';
+import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 import {

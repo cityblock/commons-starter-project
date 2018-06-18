@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../shared/library/button/button';
 import CBOCategorySelect from '../../../shared/library/cbo-category-select/cbo-category-select';
 import StateSelect from '../../../shared/library/state-select/state-select';

@@ -1,8 +1,8 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as mattermostUrlForPatientCreate from '../../../app/graphql/queries/mattermost-url-for-patient-create.graphql';
-import * as mattermostUrlForUserCreate from '../../../app/graphql/queries/mattermost-url-for-user-create.graphql';
+import mattermostUrlForPatientCreate from '../../../app/graphql/queries/mattermost-url-for-patient-create.graphql';
+import mattermostUrlForUserCreate from '../../../app/graphql/queries/mattermost-url-for-user-create.graphql';
 
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';

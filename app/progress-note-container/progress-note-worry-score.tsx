@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import Icon from '../shared/library/icon/icon';
 import { IconName } from '../shared/library/icon/icon-types';
 import Text from '../shared/library/text/text';
-import * as styles from './css/progress-note-worry-score.css';
+import styles from './css/progress-note-worry-score.css';
 
 interface IProps {
   worryScore: number | null;

@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Icon from '../../library/icon/icon';
-import * as styles from './css/suggested-task.css';
+import styles from './css/suggested-task.css';
 
 interface IProps {
   title: string;

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import AddProgressNote, { IProps as IAddProgressNoteProps } from '../add-progress-note';
 import AddQuickCall from '../add-quick-call';
 import AdministerScreeningTool from '../administer-screening-tool';

@@ -1,6 +1,6 @@
 import { Document, Page, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import {
   patient,
   patientConcern,

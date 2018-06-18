@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Icon from '../icon/icon';
 import Text from '../text/text';
-import * as styles from './css/modal-error.css';
+import styles from './css/modal-error.css';
 
 interface IProps {
   error?: string;

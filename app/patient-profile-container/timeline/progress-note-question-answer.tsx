@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FullPatientAnswerFragment } from '../../graphql/types';
-import * as styles from './css/progress-note-question-answer.css';
+import styles from './css/progress-note-question-answer.css';
 
 interface IProps {
   answer: FullPatientAnswerFragment;

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/helper-components.css';
+import styles from './css/helper-components.css';
 
 interface ITitleProps {
   query: string | null;

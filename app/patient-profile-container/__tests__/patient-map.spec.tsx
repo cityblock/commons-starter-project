@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Task from '../../shared/task/task';
 import PatientCarePlanDnD from '../drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from '../modals/modals';

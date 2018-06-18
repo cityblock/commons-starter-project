@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { updatePatientLeftNavSelected } from '../../actions/patient-left-nav-action';
 import { IState as Selected } from '../../reducers/patient-left-nav-reducer';

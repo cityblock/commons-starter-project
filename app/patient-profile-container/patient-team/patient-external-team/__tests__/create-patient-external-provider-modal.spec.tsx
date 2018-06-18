@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patient } from '../../../../shared/util/test-data';
 import { CreatePatientExternalProviderModal } from '../create-patient-external-provider-modal';
 import PatientExternalProviderModal from '../patient-external-provider-modal';

@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import Icon from '../icon/icon';
-import * as styles from './css/avatar.css';
+import styles from './css/avatar.css';
 
 type Size = 'small' | 'medium' | 'large' | 'xLarge' | 'xxLarge'; // 20x20, 30x30, 40x40, 80x80, 120x120 default is medium
 type BorderColor = 'gray' | 'lightGray' | 'white'; // default is gray

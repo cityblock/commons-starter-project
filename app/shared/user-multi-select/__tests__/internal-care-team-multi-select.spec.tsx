@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
-import * as uuid from 'uuid/v4';
+import React from 'react';
+import uuid from 'uuid/v4';
 import ApolloTestProvider from '../../util/apollo-test-provider';
 import { patient, userForCareTeam } from '../../util/test-data';
 import { getUserInfo } from '../get-info-helpers';

@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import { isDueSoon } from '../../shared/helpers/format-helpers';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';
-import * as styles from './css/patient-concern.css';
+import styles from './css/patient-concern.css';
 import PatientConcernOptions from './options-menu/options-menu';
 
 interface IProps {

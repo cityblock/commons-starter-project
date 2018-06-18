@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientMedicationsQuery from '../../../graphql/queries/get-patient-medications.graphql';
+import patientMedicationsQuery from '../../../graphql/queries/get-patient-medications.graphql';
 import { getPatientMedicationsQuery } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import InfoGroupHeader from './header';
 import InfoGroupItem from './item';
 
@@ -56,7 +56,7 @@ export const Medications: React.StatelessComponent<allProps> = (props: allProps)
   );
 };
 
-export default graphql(patientMedicationsQuery as any, {
+export default graphql(patientMedicationsQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

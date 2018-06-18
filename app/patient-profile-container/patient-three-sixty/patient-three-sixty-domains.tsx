@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as riskAreaGroupsForPatientQuery from '../../graphql/queries/get-risk-area-groups-for-patient.graphql';
+import riskAreaGroupsForPatientQuery from '../../graphql/queries/get-risk-area-groups-for-patient.graphql';
 import { getRiskAreaGroupsForPatientQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import { DomainSummaries } from './domain-summaries';
 import PatientThreeSixtyHistory from './patient-three-sixty-history';
 
@@ -55,7 +55,7 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql(riskAreaGroupsForPatientQuery as any, {
+export default graphql(riskAreaGroupsForPatientQuery, {
   skip: (props: IProps) => props.history,
   options: (props: IProps) => ({
     variables: {

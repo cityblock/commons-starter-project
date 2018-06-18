@@ -1,5 +1,5 @@
 import { danger, fail, markdown, schedule, warn } from 'danger';
-import * as fs from 'fs';
+import fs from 'fs';
 import { includes } from 'lodash';
 
 const filesOnly = (file: string) => fs.existsSync(file) && fs.lstatSync(file).isFile();

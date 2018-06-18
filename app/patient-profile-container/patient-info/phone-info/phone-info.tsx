@@ -1,9 +1,9 @@
 import { concat, filter, findIndex, slice, values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as phonesQuery from '../../../graphql/queries/get-patient-phones.graphql';
-import * as phoneDeleteMutationGraphql from '../../../graphql/queries/phone-delete-for-patient-mutation.graphql';
+import phonesQuery from '../../../graphql/queries/get-patient-phones.graphql';
+import phoneDeleteMutationGraphql from '../../../graphql/queries/phone-delete-for-patient-mutation.graphql';
 import {
   getPatientPhonesQuery,
   phoneDeleteForPatientMutation,
@@ -19,7 +19,7 @@ import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
 import CreatePhoneModal from './create-phone-modal';
-import * as styles from './css/phone-info.css';
+import styles from './css/phone-info.css';
 
 interface IProps {
   onChange: (field: IEditableFieldState) => void;
@@ -235,10 +235,10 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(phoneDeleteMutationGraphql as any, {
+  graphql(phoneDeleteMutationGraphql, {
     name: 'phoneDeleteMutation',
   }),
-  graphql(phonesQuery as any, {
+  graphql(phonesQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

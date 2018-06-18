@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../library/button/button';
 import Icon from '../library/icon/icon';
-import * as styles from './css/glass-break.css';
+import styles from './css/glass-break.css';
 import GlassBreakModal from './glass-break-modal';
 
 export type Resource = 'patient' | 'progressNote';

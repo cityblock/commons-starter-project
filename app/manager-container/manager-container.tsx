@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
-import * as styles from './css/manager.css';
+import styles from './css/manager.css';
 import ManagerUsers from './manager-users';
 
 interface IProps {

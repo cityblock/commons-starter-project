@@ -1,5 +1,5 @@
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
 import TextArea from '../../shared/library/textarea/textarea';
 

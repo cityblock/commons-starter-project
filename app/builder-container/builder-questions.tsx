@@ -1,16 +1,16 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
-import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import * as questionsQuery from '../graphql/queries/get-questions.graphql';
-import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
-import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
+import computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
+import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
+import questionsQuery from '../graphql/queries/get-questions.graphql';
+import riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
+import screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
+import questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
 import {
   getQuestionsQueryVariables,
   questionDeleteMutation,
@@ -22,8 +22,8 @@ import {
   FullScreeningToolFragment,
   QuestionFilterType,
 } from '../graphql/types';
-import * as sortSearchStyles from '../shared/css/sort-search.css';
-import * as styles from '../shared/css/two-panel.css';
+import sortSearchStyles from '../shared/css/sort-search.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import Question from './question';
@@ -352,10 +352,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(questionDeleteMutationGraphql as any, {
+  graphql(questionDeleteMutationGraphql, {
     name: 'deleteQuestion',
   }),
-  graphql(questionsQuery as any, {
+  graphql(questionsQuery, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
@@ -367,28 +367,28 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(riskAreasQuery as any, {
+  graphql(riskAreasQuery, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-  graphql(screeningToolsQuery as any, {
+  graphql(screeningToolsQuery, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
-  graphql(computedFieldsQuery as any, {
+  graphql(computedFieldsQuery, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,

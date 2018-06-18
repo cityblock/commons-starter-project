@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ContactMethodOptions, ContactTimeOptions } from '../../graphql/types';
 import { ISavedEmail } from '../../shared/email-modal/email-modal';
@@ -6,7 +6,7 @@ import FormLabel from '../../shared/library/form-label/form-label';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
 import { ISavedPhone } from '../../shared/phone-modal/phone-modal';
-import * as styles from './css/patient-demographics.css';
+import styles from './css/patient-demographics.css';
 import EmailInfo from './email-info/email-info';
 import { IEditableFieldState } from './patient-info';
 import PhoneInfo from './phone-info/phone-info';

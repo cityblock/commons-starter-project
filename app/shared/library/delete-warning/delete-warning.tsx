@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../library/button/button';
 import Icon from '../../library/icon/icon';
 import ModalButtons from '../../library/modal-buttons/modal-buttons';
-import * as styles from './css/delete-warning.css';
+import styles from './css/delete-warning.css';
 
 interface IProps {
   cancel: () => void; // for use when clicking cancel button

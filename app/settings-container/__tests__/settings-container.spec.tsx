@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Spinner from '../../shared/library/spinner/spinner';
 import Text from '../../shared/library/text/text';
 import { currentUser, currentUserHours } from '../../shared/util/test-data';

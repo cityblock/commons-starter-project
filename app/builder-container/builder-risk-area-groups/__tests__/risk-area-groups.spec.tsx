@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import { ROUTE_BASE } from '../builder-risk-area-groups';
 import RiskAreaGroup from '../risk-area-group';

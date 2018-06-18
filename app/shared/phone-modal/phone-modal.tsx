@@ -1,5 +1,5 @@
 import { isNil } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { PhoneTypeOptions } from '../../graphql/types';
 import Modal from '../library/modal/modal';
 import PhoneForm from './phone-form';

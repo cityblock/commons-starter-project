@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import CreateGoalModal from '../../shared/concerns/create-goal/create-goal';
 import CreateConcernModal from '../create-concern/create-concern';
 import DeleteConcernModal from '../delete-concern/delete-concern';

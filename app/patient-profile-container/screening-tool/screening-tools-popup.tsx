@@ -1,18 +1,18 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup } from '../../actions/popup-action';
-import * as screeningToolsQuery from '../../graphql/queries/get-screening-tools.graphql';
+import screeningToolsQuery from '../../graphql/queries/get-screening-tools.graphql';
 import { getScreeningToolsQuery, FullScreeningToolFragment } from '../../graphql/types';
 import { IScreeningToolPopupOptions } from '../../reducers/popup-reducer';
 import { getPatientRoute } from '../../shared/helpers/route-helpers';
 import Button from '../../shared/library/button/button';
 import { Popup } from '../../shared/popup/popup';
 import { IState as IAppState } from '../../store';
-import * as styles from './css/screening-tools-popup.css';
+import styles from './css/screening-tools-popup.css';
 
 interface IProps {
   history: History;
@@ -115,7 +115,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(screeningToolsQuery as any, {
+  graphql(screeningToolsQuery, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

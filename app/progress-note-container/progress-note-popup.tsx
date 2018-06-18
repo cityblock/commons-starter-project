@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
-import * as questionsQuery from '../graphql/queries/get-questions.graphql';
-import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
-import * as progressNoteCompleteSupervisorReviewMutationGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
-import * as progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
+import patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
+import questionsQuery from '../graphql/queries/get-questions.graphql';
+import progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
+import progressNoteCompleteSupervisorReviewMutationGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
+import progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
 import {
   getCurrentUserQuery,
   getPatientAnswersQuery,
@@ -30,7 +30,7 @@ import { getPatientFullName } from '../shared/util/patient-name';
 import withCurrentUser, {
   IInjectedProps as ICurrentUserProps,
 } from '../shared/with-current-user/with-current-user';
-import * as styles from './css/progress-note-popup.css';
+import styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
 import ProgressNoteCosignature from './progress-note-cosignature';
 import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
@@ -320,7 +320,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 
 export default compose(
   withCurrentUser(),
-  graphql(progressNoteCompleteMutationGraphql as any, {
+  graphql(progressNoteCompleteMutationGraphql, {
     name: 'completeProgressNote',
     options: {
       refetchQueries: [
@@ -332,7 +332,7 @@ export default compose(
       ],
     },
   }),
-  graphql(progressNoteEditMutationGraphql as any, {
+  graphql(progressNoteEditMutationGraphql, {
     name: 'editProgressNote',
     options: {
       refetchQueries: [
@@ -342,13 +342,13 @@ export default compose(
       ],
     },
   }),
-  graphql(progressNoteCompleteSupervisorReviewMutationGraphql as any, {
+  graphql(progressNoteCompleteSupervisorReviewMutationGraphql, {
     name: 'completeProgressNoteSupervisorReview',
     options: {
       refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
     },
   }),
-  graphql(questionsQuery as any, {
+  graphql(questionsQuery, {
     skip: (props: IProps) => !props.progressNote.progressNoteTemplate,
     options: (props: IProps) => ({
       variables: {
@@ -362,7 +362,7 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNote',

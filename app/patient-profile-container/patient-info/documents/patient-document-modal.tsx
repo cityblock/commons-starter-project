@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { values } from 'lodash';
 import { lookup } from 'mime-types';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as uuid from 'uuid/v4';
-import * as patientDocumentCreateMutationGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
-import * as patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
+import uuid from 'uuid/v4';
+import patientDocumentCreateMutationGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
+import patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
   patientDocumentCreateMutation,
   patientDocumentCreateMutationVariables,
@@ -16,7 +16,7 @@ import {
 } from '../../../graphql/types';
 import FileInput from '../../../shared/library/file-input/file-input';
 import FormLabel from '../../../shared/library/form-label/form-label';
-import * as styles from '../../../shared/library/form/css/form.css';
+import styles from '../../../shared/library/form/css/form.css';
 import Modal from '../../../shared/library/modal/modal';
 import Select from '../../../shared/library/select/select';
 import Spinner from '../../../shared/library/spinner/spinner';
@@ -195,10 +195,10 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(patientDocumentSignedUrlCreate as any, {
+  graphql(patientDocumentSignedUrlCreate, {
     name: 'getSignedUploadUrl',
   }),
-  graphql(patientDocumentCreateMutationGraphql as any, {
+  graphql(patientDocumentCreateMutationGraphql, {
     name: 'createPatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],

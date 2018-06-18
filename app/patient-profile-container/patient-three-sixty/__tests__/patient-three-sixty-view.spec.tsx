@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import RiskAreaAssessment, { IProps } from '../../risk-area/risk-area-assessment';
 import DomainAssessments from '../domain-assessments';
 import PatientThreeSixtyDomains from '../patient-three-sixty-domains';

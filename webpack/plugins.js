@@ -21,6 +21,7 @@ module.exports = ({ production = false } = {}) => {
       new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
       new webpack.HotModuleReplacementPlugin(),
       new ForkTsCheckerWebpackPlugin({
+        checkSyntacticErrors: true,
         tsconfig: path.resolve('tsconfig.webpack.json'),
         watch: ['../app'],
       }),

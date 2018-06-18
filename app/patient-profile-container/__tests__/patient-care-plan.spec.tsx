@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Spinner from '../../shared/library/spinner/spinner';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import DnDPatientConcerns from '../drag-and-drop/drag-and-drop-patient-concerns';

@@ -3,9 +3,9 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
-import * as progressNoteIdsForPatient from '../../../app/graphql/queries/get-progress-note-ids-for-patient.graphql';
-import * as progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
+import uuid from 'uuid/v4';
+import progressNoteIdsForPatient from '../../../app/graphql/queries/get-progress-note-ids-for-patient.graphql';
+import progressNoteLatestForPatient from '../../../app/graphql/queries/get-progress-note-latest-for-patient.graphql';
 
 import Clinic from '../../models/clinic';
 import ComputedPatientStatus from '../../models/computed-patient-status';

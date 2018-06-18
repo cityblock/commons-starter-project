@@ -1,6 +1,6 @@
 import { Image, Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patient } from '../../../shared/util/test-data';
 import HeaderText from '../../shared/header-text';
 import copy from '../copy/copy';

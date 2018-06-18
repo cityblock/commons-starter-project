@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../shared/library/button/button';
 import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/flaggable-display-card.css';
+import styles from './css/flaggable-display-card.css';
 
 export type FooterState = 'flagged' | 'confirm' | 'none' | 'verified';
 

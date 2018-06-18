@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import CarePlanSuggestionsPopup from '../shared/care-plan-suggestions/care-plan-suggestions';
 import TaskUnfollowPopup from '../shared/task/unfollow-popup';
 import PatientPhotoPopup from './patient-photo/patient-photo-popup';

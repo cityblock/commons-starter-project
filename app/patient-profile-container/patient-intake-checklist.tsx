@@ -1,16 +1,16 @@
 import { ApolloError } from 'apollo-client';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { filter } from 'lodash';
 import { Fragment } from 'react';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as computedPatientStatusQuery from '../graphql/queries/get-patient-computed-patient-status.graphql';
+import computedPatientStatusQuery from '../graphql/queries/get-patient-computed-patient-status.graphql';
 import { getPatientComputedPatientStatusQuery } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
 import Text from '../shared/library/text/text';
-import * as styles from './css/patient-intake-checklist.css';
+import styles from './css/patient-intake-checklist.css';
 import PatientIntakeChecklistItem from './patient-intake-checklist-item';
 
 interface IProps {
@@ -214,7 +214,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(computedPatientStatusQuery as any, {
+export default graphql(computedPatientStatusQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

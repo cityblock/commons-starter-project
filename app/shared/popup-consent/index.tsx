@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Popup } from '../popup/popup';
-import * as styles from './popup-consent.css';
+import styles from './popup-consent.css';
 
 interface IProps {
   visible: boolean;

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Popup } from '../../../popup/popup';
 import { CreateGoalModal } from '../create-goal';
 import DefineGoal from '../define-goal';

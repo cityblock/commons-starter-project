@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { currentUserHours } from '../../shared/util/test-data';
 import DailyWorkHours from '../daily-work-hours';
 import WorkHours from '../work-hours';

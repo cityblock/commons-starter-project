@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
-import * as styles from './css/left-nav.css';
+import styles from './css/left-nav.css';
 import LeftNavHeader from './header';
 import Contact from './info-group/contact';
 import Demographics from './info-group/demographics';

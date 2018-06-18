@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/sms-message-date.css';
+import styles from './css/sms-message-date.css';
 
 const DATE_FORMAT = 'ddd, MMM D, YYYY';
 

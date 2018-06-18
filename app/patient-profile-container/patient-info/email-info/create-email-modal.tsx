@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as createEmailMutationGraphql from '../../../graphql/queries/email-create-for-patient-mutation.graphql';
+import createEmailMutationGraphql from '../../../graphql/queries/email-create-for-patient-mutation.graphql';
 import {
   emailCreateForPatientMutation,
   emailCreateForPatientMutationVariables,
@@ -62,6 +62,6 @@ export class CreateEmailModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(createEmailMutationGraphql as any, {
+export default graphql<any>(createEmailMutationGraphql, {
   name: 'createEmailMutation',
 })(CreateEmailModal) as React.ComponentClass<IProps>;

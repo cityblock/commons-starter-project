@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import EmailModal, { ISavedEmail } from '../../../../shared/email-modal/email-modal';
 import { patient } from '../../../../shared/util/test-data';
 import { CreateEmailModal } from '../create-email-modal';

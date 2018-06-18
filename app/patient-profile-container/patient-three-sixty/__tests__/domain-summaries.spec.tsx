@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { fullRiskAreaGroup } from '../../../shared/util/test-data';
 import { DomainSummaries } from '../domain-summaries';
 import { DomainSummary } from '../domain-summary';

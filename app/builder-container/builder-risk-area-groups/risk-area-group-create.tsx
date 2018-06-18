@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as createRiskAreaGroupMutationGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
+import createRiskAreaGroupMutationGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
 import {
   riskAreaGroupCreateMutation,
   riskAreaGroupCreateMutationVariables,
@@ -10,7 +10,7 @@ import TextInput from '../../shared/library/text-input/text-input';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-group-shared.css';
+import styles from './css/risk-area-group-shared.css';
 
 interface IProps {
   cancelCreateRiskAreaGroup: () => void;
@@ -141,7 +141,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(createRiskAreaGroupMutationGraphql as any, {
+  graphql(createRiskAreaGroupMutationGraphql, {
     name: 'createRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],

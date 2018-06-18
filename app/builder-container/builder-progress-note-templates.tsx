@@ -1,18 +1,18 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import * as progressNoteTemplateDeleteMutationGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
+import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
+import progressNoteTemplateDeleteMutationGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
 import {
   progressNoteTemplateDeleteMutation,
   progressNoteTemplateDeleteMutationVariables,
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import ProgressNoteTemplate from './progress-note-template';
@@ -161,10 +161,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(progressNoteTemplateDeleteMutationGraphql as any, {
+  graphql(progressNoteTemplateDeleteMutationGraphql, {
     name: 'deleteProgressNoteTemplate',
   }),
-  graphql(progressNoteTemplatesQuery as any, {
+  graphql(progressNoteTemplatesQuery, {
     props: ({ data, ownProps }) => ({
       progressNoteTemplatesRefetch: data ? data.refetch : false,
       progressNoteTemplatesLoading: data ? data.loading : false,

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Gender } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import Select from '../../../shared/library/select/select';

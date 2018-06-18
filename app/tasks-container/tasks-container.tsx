@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import { pickBy } from 'lodash';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
+import tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import {
   getTasksForCurrentUserQuery,
   getTasksForCurrentUserQueryVariables,
@@ -13,7 +13,7 @@ import {
 } from '../graphql/types';
 import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
-import * as styles from './css/tasks-container.css';
+import styles from './css/tasks-container.css';
 
 export type TasksTab = 'assigned' | 'following';
 
@@ -84,7 +84,7 @@ const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
   };
 };
 
-const withQuery = graphql(tasksQuery as any, {
+const withQuery = graphql(tasksQuery, {
   options: (props: IProps) => ({
     variables: getPageParams(props),
   }),

@@ -1,14 +1,14 @@
 import { ApolloError } from 'apollo-client';
 import { History } from 'history';
 import { isNil, omitBy } from 'lodash';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import {
   getCurrentUserQuery,
   getPatientPanelQuery,
@@ -22,7 +22,7 @@ import RadioInput from '../shared/library/radio-input/radio-input';
 import PatientTable, { IFormattedPatient } from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
-import * as styles from './css/patient-panel.css';
+import styles from './css/patient-panel.css';
 import PatientAssignModal, { filterPatientState, IPatientState } from './patient-assign-modal';
 import PatientFilterPanel from './patient-filter-panel';
 import PatientPanelHeader from './patient-panel-header';
@@ -381,7 +381,7 @@ export default compose(
   withRouter,
   withCurrentUser(),
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientPanelQuery as any, {
+  graphql(patientPanelQuery, {
     options: ({ pageNumber, pageSize, filters, showAllPatients }: any) => ({
       variables: { pageNumber, pageSize, filters, showAllPatients },
     }),
@@ -391,7 +391,7 @@ export default compose(
       patientPanel: data ? (data as any).patientPanel : null,
     }),
   }),
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     options: (props: IProps) => ({
       variables: {},
     }),

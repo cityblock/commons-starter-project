@@ -1,9 +1,9 @@
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
-import * as styles from './css/concern-select.css';
+import styles from './css/concern-select.css';
 
 interface IProps {
   value: string | null;

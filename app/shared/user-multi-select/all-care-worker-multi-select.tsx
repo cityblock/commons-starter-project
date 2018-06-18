@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as userSummaryListQuery from '../../graphql/queries/get-user-summary-list.graphql';
+import userSummaryListQuery from '../../graphql/queries/get-user-summary-list.graphql';
 import { getUserSummaryListQuery } from '../../graphql/types';
 import { getUserInfo } from './get-info-helpers';
 import UserMultiSelect, { IUser } from './user-multi-select';
@@ -55,7 +55,7 @@ export const AllCareWorkerMultiSelect: React.StatelessComponent<allProps> = prop
   );
 };
 
-export default graphql(userSummaryListQuery as any, {
+export default graphql(userSummaryListQuery, {
   options: (props: IProps) => ({
     variables: {
       userRoleFilters: CARE_WORKER_ROLES,

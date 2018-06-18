@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { screeningTool } from '../../shared/util/test-data';
 import { ScreeningTool as Component } from '../screening-tool';
 

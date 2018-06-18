@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import DeleteWarning from '../../../shared/library/delete-warning/delete-warning';
 import { CBO } from '../../../shared/util/test-data';
 import CBOCreate from '../cbo-create';

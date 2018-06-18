@@ -7,9 +7,9 @@ import {
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-import * as goalSuggestionTemplateForAnswer from '../../../app/graphql/queries/get-goal-suggestions-for-answer.graphql';
-import * as goalSuggestionCreate from '../../../app/graphql/queries/goal-suggestion-create-mutation.graphql';
-import * as goalSuggestionDelete from '../../../app/graphql/queries/goal-suggestion-delete-mutation.graphql';
+import goalSuggestionTemplateForAnswer from '../../../app/graphql/queries/get-goal-suggestions-for-answer.graphql';
+import goalSuggestionCreate from '../../../app/graphql/queries/goal-suggestion-create-mutation.graphql';
+import goalSuggestionDelete from '../../../app/graphql/queries/goal-suggestion-delete-mutation.graphql';
 
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';

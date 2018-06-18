@@ -1,9 +1,9 @@
 import { concat, filter, findIndex, slice, values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as emailDeleteMutationGraphql from '../../../graphql/queries/email-delete-for-patient-mutation.graphql';
-import * as emailsQuery from '../../../graphql/queries/get-patient-emails.graphql';
+import emailDeleteMutationGraphql from '../../../graphql/queries/email-delete-for-patient-mutation.graphql';
+import emailsQuery from '../../../graphql/queries/get-patient-emails.graphql';
 import {
   emailDeleteForPatientMutation,
   emailDeleteForPatientMutationVariables,
@@ -20,7 +20,7 @@ import DisplayCard from '../display-card';
 import FlaggableDisplayField from '../flaggable-display-field';
 import { IEditableFieldState } from '../patient-info';
 import CreateEmailModal from './create-email-modal';
-import * as styles from './css/email-info.css';
+import styles from './css/email-info.css';
 import EditEmailModal from './edit-email-modal';
 
 interface IProps {
@@ -267,10 +267,10 @@ export class EmailInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(emailDeleteMutationGraphql as any, {
+  graphql(emailDeleteMutationGraphql, {
     name: 'emailDeleteMutation',
   }),
-  graphql(emailsQuery as any, {
+  graphql(emailsQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

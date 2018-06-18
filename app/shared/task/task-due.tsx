@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
 import { isDueSoon, isPastDue } from '../helpers/format-helpers';
 import DateInput from '../library/date-input/date-input';
 import Icon from '../library/icon/icon';
-import * as styles from './css/task-due.css';
+import styles from './css/task-due.css';
 
 export interface IProps {
   dueAt: string | null;

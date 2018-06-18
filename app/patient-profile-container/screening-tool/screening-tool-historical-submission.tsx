@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
+import screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
 import { getQuestionsQuery, FullScreeningToolFragment } from '../../graphql/types';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -53,7 +53,7 @@ export class ScreeningToolHistoricalSubmission extends React.Component<allProps>
   }
 }
 
-export default graphql(screeningToolQuestionsQuery as any, {
+export default graphql(screeningToolQuestionsQuery, {
   options: (props: IProps) => ({
     variables: {
       filterType: 'screeningTool',

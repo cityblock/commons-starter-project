@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from '@react-pdf/core';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import HeaderText from '../shared/header-text';

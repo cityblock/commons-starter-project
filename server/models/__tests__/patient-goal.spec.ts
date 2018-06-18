@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
-import * as kue from 'kue';
+import kue from 'kue';
 import { transaction, Transaction } from 'objection';
 import { CompletedWithinInterval, Priority, UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
 import CareTeam from '../care-team';

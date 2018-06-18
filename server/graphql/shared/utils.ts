@@ -1,6 +1,6 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as base64 from 'base-64';
-import * as express from 'express';
+import base64 from 'base-64';
+import express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { isArray } from 'lodash';

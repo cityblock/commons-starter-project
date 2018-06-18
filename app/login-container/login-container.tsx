@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-client';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
@@ -8,12 +8,12 @@ import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
 import { logInUserMutation, logInUserMutationVariables } from '../graphql/types';
 import { getCurrentUserQuery } from '../graphql/types';
 import { IState as IAppState } from '../store';
-import * as styles from './css/login.css';
+import styles from './css/login.css';
 import Footer from './footer';
 
 interface IProps {
@@ -163,7 +163,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
@@ -171,5 +171,5 @@ export default compose(
       refetchCurrentUser: data ? (data as any).refetch : null,
     }),
   }),
-  graphql(loginMutation as any, { name: 'logIn' }),
+  graphql(loginMutation, { name: 'logIn' }),
 )(LoginContainer) as React.ComponentClass<IProps>;

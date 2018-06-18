@@ -1,8 +1,8 @@
 import { format, isAfter } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as calendarCreateEventForUserMutationGraphql from '../../graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
-import * as calendarCreateEventForPatientMutationGraphql from '../../graphql/queries/calendar-create-event-for-patient-mutation.graphql';
+import calendarCreateEventForUserMutationGraphql from '../../graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
+import calendarCreateEventForPatientMutationGraphql from '../../graphql/queries/calendar-create-event-for-patient-mutation.graphql';
 import {
   calendarCreateEventForCurrentUserMutation,
   calendarCreateEventForCurrentUserMutationVariables,
@@ -10,7 +10,7 @@ import {
   calendarCreateEventForPatientMutationVariables,
   FullAddressFragment,
 } from '../../graphql/types';
-import * as styles from '../../shared/library/form/css/form.css';
+import styles from '../../shared/library/form/css/form.css';
 import Modal from '../../shared/library/modal/modal';
 import Spinner from '../../shared/library/spinner/spinner';
 import { getUserInfo } from '../../shared/user-multi-select/get-info-helpers';
@@ -235,10 +235,10 @@ export class AppointmentModal extends React.Component<allProps, IState> {
 
 export default compose(
   withCurrentUser(),
-  graphql<any>(calendarCreateEventForPatientMutationGraphql as any, {
+  graphql<any>(calendarCreateEventForPatientMutationGraphql, {
     name: 'getCalendarEventUrlForPatient',
   }),
-  graphql<any>(calendarCreateEventForUserMutationGraphql as any, {
+  graphql<any>(calendarCreateEventForUserMutationGraphql, {
     name: 'getCalendarEventUrlForUser',
   }),
 )(AppointmentModal) as React.ComponentClass<IProps>;

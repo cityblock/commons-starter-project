@@ -6,7 +6,7 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { Permissions, UserRole } from 'schema';
-import * as getPatientMedications from '../../../app/graphql/queries/get-patient-medications.graphql';
+import getPatientMedications from '../../../app/graphql/queries/get-patient-medications.graphql';
 
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';

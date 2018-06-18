@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import * as screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
+import screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
 import { FullCarePlanSuggestionFragment, FullScreeningToolFragment } from '../../graphql/types';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -103,7 +103,7 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(screeningToolQuery as any, {
+  graphql(screeningToolQuery, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.match.params.screeningToolId,

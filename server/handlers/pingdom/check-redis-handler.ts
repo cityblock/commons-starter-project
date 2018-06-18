@@ -1,5 +1,5 @@
 import { ErrorReporting } from '@google-cloud/error-reporting';
-import * as express from 'express';
+import express from 'express';
 import config from '../../config';
 import Logging from '../../logging';
 

@@ -1,5 +1,5 @@
-import * as express from 'express';
-import * as kue from 'kue';
+import express from 'express';
+import kue from 'kue';
 import { createRedisClient } from '../../lib/redis';
 
 const queue = kue.createQueue({ redis: createRedisClient() });

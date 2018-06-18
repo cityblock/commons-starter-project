@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { formatAddress } from '../../../shared/helpers/format-helpers';
 import SelectDropdownOption from '../../../shared/library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../../../shared/library/select-dropdown/select-dropdown';

@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
-import * as commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
-import * as commentEditMutationGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
+import taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
+import commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
+import commentEditMutationGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
 import {
   getTaskCommentsQuery,
   getTaskCommentsQueryVariables,
@@ -15,7 +15,7 @@ import {
   FullTaskCommentFragment,
 } from '../../graphql/types';
 import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';
-import * as styles from './css/task-comments.css';
+import styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 
 export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
@@ -188,13 +188,13 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(commentCreateMutationGraphql as any, {
+  graphql(commentCreateMutationGraphql, {
     name: 'createComment',
   }),
-  graphql(commentEditMutationGraphql as any, {
+  graphql(commentEditMutationGraphql, {
     name: 'editComment',
   }),
-  graphql(taskCommentsQuery as any, {
+  graphql(taskCommentsQuery, {
     options: (props: IProps) => ({
       variables: {
         taskId: props.taskId,

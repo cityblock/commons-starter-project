@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as styles from './css/results.css';
+import React from 'react';
+import styles from './css/results.css';
 import SearchResult from './result';
 import { SearchOptions } from './search';
 

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { ShortEventNotificationsForUserTaskFragment } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
-import * as styles from './css/task-notification.css';
+import styles from './css/task-notification.css';
 
 interface IProps {
   notification: ShortEventNotificationsForUserTaskFragment;

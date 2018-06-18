@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { Mutation, MutationFn } from 'react-apollo';
-import * as userHoursCreateMutationGraphql from '../graphql/queries/user-hours-create-mutation.graphql';
-import * as userHoursDeleteMutationGraphql from '../graphql/queries/user-hours-delete-mutation.graphql';
+import userHoursCreateMutationGraphql from '../graphql/queries/user-hours-create-mutation.graphql';
+import userHoursDeleteMutationGraphql from '../graphql/queries/user-hours-delete-mutation.graphql';
 import { getCurrentUserHoursQuery } from '../graphql/types';
 import Checkbox from '../shared/library/checkbox/checkbox';
-import * as styles from './css/day-off-toggle.css';
+import styles from './css/day-off-toggle.css';
 
 interface IProps {
   userHours: getCurrentUserHoursQuery['currentUserHours'];
@@ -63,9 +63,9 @@ class DayOffToggle extends React.Component<IProps, IState> {
     const { userHours, disabled } = this.props;
 
     return (
-      <Mutation mutation={userHoursCreateMutationGraphql as any}>
+      <Mutation mutation={userHoursCreateMutationGraphql}>
         {createMutation => (
-          <Mutation mutation={userHoursDeleteMutationGraphql as any}>
+          <Mutation mutation={userHoursDeleteMutationGraphql}>
             {deleteMutation => (
               <Checkbox
                 onChange={this.handleChange(createMutation, deleteMutation)}

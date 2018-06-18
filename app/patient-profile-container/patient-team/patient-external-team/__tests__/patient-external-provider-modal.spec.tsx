@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../../../shared/library/modal/modal';
 import { externalProviderEntity, externalProviderPerson } from '../../../../shared/util/test-data';
 import PatientExternalProviderForm from '../patient-external-provider-form';

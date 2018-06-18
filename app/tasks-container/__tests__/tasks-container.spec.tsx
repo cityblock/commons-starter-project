@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Tasks, { IProps } from '../../shared/tasks/tasks';
 import { taskWithComment } from '../../shared/util/test-data';
 import { TasksContainer } from '../tasks-container';

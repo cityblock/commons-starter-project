@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import Spinner from '../../../shared/library/spinner/spinner';
 import {

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/task-count-item.css';
+import styles from './css/task-count-item.css';
 
 interface IProps {
   messageId: string;

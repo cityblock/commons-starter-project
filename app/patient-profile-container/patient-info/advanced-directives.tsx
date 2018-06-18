@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import * as healthcareProxiesQuery from '../../graphql/queries/get-patient-contact-healthcare-proxies.graphql';
-import * as patientContactDeleteMutationGraphql from '../../graphql/queries/patient-contact-delete-mutation.graphql';
+import healthcareProxiesQuery from '../../graphql/queries/get-patient-contact-healthcare-proxies.graphql';
+import patientContactDeleteMutationGraphql from '../../graphql/queries/patient-contact-delete-mutation.graphql';
 import {
   getPatientContactHealthcareProxiesQuery,
   patientContactDeleteMutation,
@@ -24,8 +24,8 @@ import EditPatientContactModal from '../../shared/patient-contact-modal/edit-pat
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../../shared/with-error-handler/with-error-handler';
-import * as styles from './css/advanced-directives.css';
-import * as parentStyles from './css/patient-demographics.css';
+import styles from './css/advanced-directives.css';
+import parentStyles from './css/patient-demographics.css';
 import DisplayCard from './display-card';
 import { IEditableFieldState } from './patient-info';
 
@@ -294,13 +294,13 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientContactDeleteMutationGraphql as any, {
+  graphql(patientContactDeleteMutationGraphql, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContactHealthcareProxies'],
     },
   }),
-  graphql(healthcareProxiesQuery as any, {
+  graphql(healthcareProxiesQuery, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

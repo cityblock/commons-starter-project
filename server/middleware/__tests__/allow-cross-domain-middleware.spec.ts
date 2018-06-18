@@ -1,4 +1,4 @@
-import * as httpMocks from 'node-mocks-http';
+import httpMocks from 'node-mocks-http';
 import { allowCrossDomainMiddleware } from '../allow-cross-domain-middleware';
 
 describe('allowCrossDomainMiddleware', () => {

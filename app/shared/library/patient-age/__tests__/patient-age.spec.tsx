@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Gender } from '../../../../graphql/types';
 import { formatAgeDetails, formatDateOfBirth } from '../../../helpers/format-helpers';
 import PatientAge from '../patient-age';

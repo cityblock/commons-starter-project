@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
+import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import { getPatientCareTeamQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import withCurrentUser, { IInjectedProps } from '../../shared/with-current-user/with-current-user';
 import CareTeamMattermost from './care-team-mattermost';
 import CareTeamMember from './care-team-member';
-import * as styles from './css/left-nav-care-team.css';
+import styles from './css/left-nav-care-team.css';
 
 interface IProps {
   patientId: string;
@@ -65,7 +65,7 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(careTeamQuery as any, {
+export default graphql(careTeamQuery, {
   options: (props: IProps) => ({
     variables: { patientId: props.patientId },
   }),

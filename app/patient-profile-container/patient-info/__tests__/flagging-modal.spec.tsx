@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { patientDataFlagCreateMutation, CoreIdentityOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';

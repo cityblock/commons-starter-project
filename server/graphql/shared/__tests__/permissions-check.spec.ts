@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { permissionsMappings } from '../../../../shared/permissions/permissions-mapping';
 
 import Clinic from '../../../models/clinic';

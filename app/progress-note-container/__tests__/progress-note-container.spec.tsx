@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { currentUser, progressNote } from '../../shared/util/test-data';
 import { ProgressNoteContainer as Component } from '../progress-note-container';
 

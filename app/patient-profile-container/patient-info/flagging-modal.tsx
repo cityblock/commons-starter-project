@@ -1,7 +1,7 @@
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientFlagCreateMutationGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';
+import patientFlagCreateMutationGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';
 import {
   patientDataFlagCreateMutation,
   patientDataFlagCreateMutationVariables,
@@ -14,7 +14,7 @@ import ModalHeader from '../../shared/library/modal-header/modal-header';
 import Select from '../../shared/library/select/select';
 import TextInput from '../../shared/library/text-input/text-input';
 import { Popup } from '../../shared/popup/popup';
-import * as styles from './css/flagging-modal.css';
+import styles from './css/flagging-modal.css';
 
 interface IProps {
   closePopup: () => void;
@@ -157,7 +157,7 @@ export class FlaggingModal extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientFlagCreateMutationGraphql as any, {
+export default graphql<any>(patientFlagCreateMutationGraphql, {
   name: 'createFlag',
   options: {
     refetchQueries: ['getPatientComputedPatientStatus'],

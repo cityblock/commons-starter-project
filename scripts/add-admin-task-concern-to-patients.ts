@@ -1,5 +1,5 @@
 /* tslint:disable no-console */
-import * as Knex from 'knex';
+import Knex from 'knex';
 import { transaction, Model } from 'objection';
 import { adminTasksConcernTitle } from '../server/lib/consts';
 import Concern from '../server/models/concern';

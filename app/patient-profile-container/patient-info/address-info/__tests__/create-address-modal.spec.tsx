@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import AddressModal, { ISavedAddress } from '../../../../shared/address-modal/address-modal';
 import { patient } from '../../../../shared/util/test-data';
 import { CreateAddressModal } from '../create-address-modal';

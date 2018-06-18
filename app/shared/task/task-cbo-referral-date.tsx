@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
+import CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
 import { CBOReferralEditMutation, CBOReferralEditMutationVariables } from '../../graphql/types';
 import DateInput from '../library/date-input/date-input';
 import FormLabel from '../library/form-label/form-label';
 import Icon from '../library/icon/icon';
-import * as styles from './css/task-cbo-referral-date.css';
+import styles from './css/task-cbo-referral-date.css';
 
 export type Field = 'sentAt' | 'acknowledgedAt';
 
@@ -79,6 +79,6 @@ export class TaskCBOReferralDate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(CBOReferralEditMutationGraphql as any, {
+export default graphql<any>(CBOReferralEditMutationGraphql, {
   name: 'editCBOReferral',
 })(TaskCBOReferralDate) as React.ComponentClass<IProps>;

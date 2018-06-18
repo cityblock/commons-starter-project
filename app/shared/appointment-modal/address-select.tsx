@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientAddressesQuery from '../../graphql/queries/get-patient-addresses.graphql';
+import patientAddressesQuery from '../../graphql/queries/get-patient-addresses.graphql';
 import { getPatientAddressesQuery, FullAddressFragment } from '../../graphql/types';
 import { formatAddress } from '../../shared/helpers/format-helpers';
 import FormLabel from '../../shared/library/form-label/form-label';
-import * as styles from '../../shared/library/form/css/form.css';
+import styles from '../../shared/library/form/css/form.css';
 import SelectDropdownOption from '../../shared/library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../../shared/library/select-dropdown/select-dropdown';
 import TextInput from '../../shared/library/text-input/text-input';
@@ -104,7 +104,7 @@ export class AddressSelect extends React.Component<allProps> {
   }
 }
 
-export default graphql(patientAddressesQuery as any, {
+export default graphql(patientAddressesQuery, {
   skip: (props: IProps) => !props.patientId,
   options: (props: IProps) => ({
     variables: {

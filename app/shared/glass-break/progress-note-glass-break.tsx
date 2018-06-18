@@ -1,9 +1,9 @@
 import { omit } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as progressNoteGlassBreakCheckQuery from '../../graphql/queries/get-progress-note-glass-break-check.graphql';
-import * as progressNoteGlassBreaksForUserQuery from '../../graphql/queries/get-progress-note-glass-breaks-for-user.graphql';
-import * as createProgressNoteGlassBreakMutationGraphql from '../../graphql/queries/progress-note-glass-break-create-mutation.graphql';
+import progressNoteGlassBreakCheckQuery from '../../graphql/queries/get-progress-note-glass-break-check.graphql';
+import progressNoteGlassBreaksForUserQuery from '../../graphql/queries/get-progress-note-glass-breaks-for-user.graphql';
+import createProgressNoteGlassBreakMutationGraphql from '../../graphql/queries/progress-note-glass-break-create-mutation.graphql';
 import {
   getProgressNoteGlassBreaksForUserQuery,
   getProgressNoteGlassBreakCheckQuery,
@@ -94,7 +94,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql(progressNoteGlassBreakCheckQuery as any, {
+    graphql(progressNoteGlassBreakCheckQuery, {
       options: (props: IProps) => ({
         variables: {
           progressNoteId: props.progressNoteId,
@@ -106,7 +106,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).progressNoteGlassBreakCheck : null,
       }),
     }),
-    graphql(progressNoteGlassBreaksForUserQuery as any, {
+    graphql(progressNoteGlassBreaksForUserQuery, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
       }),
@@ -116,15 +116,12 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreaks: data ? (data as any).progressNoteGlassBreaksForUser : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(
-      createProgressNoteGlassBreakMutationGraphql as any,
-      {
-        name: 'createProgressNoteGlassBreak',
-        options: {
-          refetchQueries: ['getProgressNoteGlassBreaksForUser'],
-        },
+    graphql<IGraphqlProps, IProps, resultProps>(createProgressNoteGlassBreakMutationGraphql, {
+      name: 'createProgressNoteGlassBreak',
+      options: {
+        refetchQueries: ['getProgressNoteGlassBreaksForUser'],
       },
-    ),
+    }),
   )(ProgressNoteGlassBreak);
 };
 

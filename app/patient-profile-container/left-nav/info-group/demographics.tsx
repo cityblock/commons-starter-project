@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientForProfileFragment } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
-import * as styles from './css/shared.css';
+import styles from './css/shared.css';
 import InfoGroupHeader from './header';
 import InfoGroupItem from './item';
 

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { taskWithComment } from '../../util/test-data';
 import AddTaskFollower from '../add-task-follower';
 import Follower from '../follower';

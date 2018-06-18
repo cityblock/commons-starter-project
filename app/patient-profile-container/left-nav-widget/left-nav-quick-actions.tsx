@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import AddProgressNote from './add-progress-note';
 import AddQuickCall from './add-quick-call';

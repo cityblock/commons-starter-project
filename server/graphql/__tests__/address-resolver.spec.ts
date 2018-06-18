@@ -2,10 +2,10 @@ import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as addressCreateForPatient from '../../../app/graphql/queries/address-create-for-patient-mutation.graphql';
-import * as addressCreate from '../../../app/graphql/queries/address-create-mutation.graphql';
-import * as addressDeleteForPatient from '../../../app/graphql/queries/address-delete-for-patient-mutation.graphql';
-import * as addressEditForPatient from '../../../app/graphql/queries/address-edit-mutation.graphql';
+import addressCreateForPatient from '../../../app/graphql/queries/address-create-for-patient-mutation.graphql';
+import addressCreate from '../../../app/graphql/queries/address-create-mutation.graphql';
+import addressDeleteForPatient from '../../../app/graphql/queries/address-delete-for-patient-mutation.graphql';
+import addressEditForPatient from '../../../app/graphql/queries/address-edit-mutation.graphql';
 
 import Address from '../../models/address';
 import HomeClinic from '../../models/clinic';

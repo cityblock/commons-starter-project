@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientTableRowFragment } from '../../graphql/types';
 import Spinner from '../library/spinner/spinner';
 import { PatientTableNoResults, PatientTablePlaceholder } from './helper-components';

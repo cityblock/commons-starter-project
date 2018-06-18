@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Button from '../../../shared/library/button/button';
 import TextInput from '../../../shared/library/text-input/text-input';
 import { PatientListCreate } from '../patient-list-create';

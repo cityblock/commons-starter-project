@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
 import { ShortUserFragment } from '../../graphql/types';
 import Avatar from '../library/avatar/avatar';
-import * as styles from './css/followers.css';
+import styles from './css/followers.css';
 
 interface IProps {
   follower: ShortUserFragment;

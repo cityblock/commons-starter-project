@@ -1,6 +1,6 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { includes } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import {
   getConcernsQuery,
   getPatientCarePlanQuery,
@@ -8,7 +8,7 @@ import {
 } from '../../graphql/types';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
-import * as styles from '../css/patient-care-plan.css';
+import styles from '../css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
 interface IProps {

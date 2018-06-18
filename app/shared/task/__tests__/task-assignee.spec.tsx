@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import SelectDropdown from '../../library/select-dropdown/select-dropdown';
 import SelectDropdownOption from '../../library/select-dropdown/select-dropdown';

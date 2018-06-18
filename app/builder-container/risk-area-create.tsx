@@ -1,16 +1,16 @@
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import * as riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
-import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
+import riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
+import riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 import {
   riskAreaCreateMutation,
   riskAreaCreateMutationVariables,
   AssessmentType,
   FullRiskAreaGroupFragment,
 } from '../graphql/types';
-import * as riskAreaStyles from '../shared/css/two-panel-right.css';
+import riskAreaStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -19,7 +19,7 @@ import TextInput from '../shared/library/text-input/text-input';
 import withErrorHandler, {
   IInjectedErrorProps,
 } from '../shared/with-error-handler/with-error-handler';
-import * as styles from './css/risk-area-create.css';
+import styles from './css/risk-area-create.css';
 
 interface IOptions {
   variables: riskAreaCreateMutationVariables;
@@ -204,14 +204,14 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(riskAreaGroupsQuery as any, {
+  graphql(riskAreaGroupsQuery, {
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,
       error: data ? data.error : null,
       riskAreaGroups: data ? (data as any).riskAreaGroups : null,
     }),
   }),
-  graphql(riskAreaCreateMutationGraphql as any, {
+  graphql(riskAreaCreateMutationGraphql, {
     name: 'createRiskArea',
     options: {
       refetchQueries: ['getRiskAreas'],

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../shared/library/button/button';
-import * as styles from './css/table-loading-error.css';
+import styles from './css/table-loading-error.css';
 
 interface IProps {
   onRetryClick: () => any;

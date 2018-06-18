@@ -1,9 +1,9 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { Priority } from '../../graphql/types';
 import Option from '../library/option/option';
 import Select from '../library/select/select';
-import * as styles from './css/priority-select.css';
+import styles from './css/priority-select.css';
 
 interface IProps {
   priority: Priority | null;

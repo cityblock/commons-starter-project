@@ -1,10 +1,10 @@
 import axios from 'axios';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
-import * as editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
-import * as patientPhotoSignedUrlCreate from '../../graphql/queries/patient-photo-signed-url-create.graphql';
+import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import patientPhotoSignedUrlCreateGraphql from '../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
   patientInfoEditMutation,
   patientInfoEditMutationVariables,
@@ -87,18 +87,15 @@ export default compose(
     mapDispatchToProps as any,
   ),
   graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(
-    patientPhotoSignedUrlCreate as any,
+    patientPhotoSignedUrlCreateGraphql,
     {
       name: 'getSignedUploadUrl',
     },
   ),
-  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(
-    editPatientInfoMutationGraphql as any,
-    {
-      name: 'editPatientInfo',
-      options: {
-        refetchQueries: ['getPatientComputedPatientStatus'],
-      },
+  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(editPatientInfoMutationGraphql, {
+    name: 'editPatientInfo',
+    options: {
+      refetchQueries: ['getPatientComputedPatientStatus'],
     },
-  ),
+  }),
 )(PatientPhotoPopup);

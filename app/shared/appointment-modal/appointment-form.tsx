@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FullAddressFragment, FullUserFragment } from '../../graphql/types';
 import DateInput from '../../shared/library/date-input/date-input';
 import FormLabel from '../../shared/library/form-label/form-label';
-import * as styles from '../../shared/library/form/css/form.css';
+import styles from '../../shared/library/form/css/form.css';
 import TextInput from '../../shared/library/text-input/text-input';
 import TextArea from '../../shared/library/textarea/textarea';
 import AllCareWorkerMultiSelect from '../../shared/user-multi-select/all-care-worker-multi-select';

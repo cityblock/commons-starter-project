@@ -1,6 +1,6 @@
 import { addMinutes } from 'date-fns';
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TextDivider from '../../../shared/library/text-divider/text-divider';
 import { partialCalendarEvent, partialCalendarEventSIU } from '../../util/test-data';
 import Calendar from '../calendar';

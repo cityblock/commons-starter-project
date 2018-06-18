@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
 import Text from '../../../../shared/library/text/text';
 import { clinic, userForCareTeam } from '../../../../shared/util/test-data';

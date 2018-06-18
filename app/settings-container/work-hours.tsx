@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { getCurrentUserHoursQuery } from '../graphql/types';
-import * as styles from './css/work-hours.css';
+import styles from './css/work-hours.css';
 import DailyWorkHours from './daily-work-hours';
 
 const WEEKDAY_ORDER = [1, 2, 3, 4, 5, 6, 0];

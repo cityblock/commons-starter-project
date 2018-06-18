@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import * as riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
-import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-import * as riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
-import * as riskAreaAssessmentSubmissionCompleteMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
-import * as riskAreaAssessmentSubmissionCreateMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
+import riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
+import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
+import riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
+import riskAreaAssessmentSubmissionCompleteMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
+import riskAreaAssessmentSubmissionCreateMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
 import {
   getRiskAreaGroupForPatientQuery,
   riskAreaAssessmentSubmissionCompleteMutation,
@@ -27,7 +27,7 @@ import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { Popup } from '../../shared/popup/popup';
 import ComputedFieldFlagModal from './computed-field-flag-modal';
-import * as styles from './css/risk-area-assessment.css';
+import styles from './css/risk-area-assessment.css';
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
 
 export interface IProps {
@@ -313,19 +313,19 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql as any, {
+  graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql, {
     name: 'riskAreaAssessmentSubmissionComplete',
     options: {
       refetchQueries: ['getProgressNotesForCurrentUser'],
     },
   }),
-  graphql(riskAreaAssessmentSubmissionCreateMutationGraphql as any, {
+  graphql(riskAreaAssessmentSubmissionCreateMutationGraphql, {
     name: 'riskAreaAssessmentSubmissionCreate',
     options: {
       refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
     },
   }),
-  graphql(riskAreaQuery as any, {
+  graphql(riskAreaQuery, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -337,7 +337,7 @@ export default compose(
       riskArea: data ? (data as any).riskArea : null,
     }),
   }),
-  graphql(riskAreaAssessmentSubmissionForPatientQuery as any, {
+  graphql(riskAreaAssessmentSubmissionForPatientQuery, {
     skip: (props: IProps) => !props.riskAreaId,
     options: (props: IProps) => ({
       variables: {
@@ -354,7 +354,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(getRiskAreaGroupForPatientGraphql as any, {
+  graphql(getRiskAreaGroupForPatientGraphql, {
     options: (props: IProps) => {
       const { riskAreaGroupId, patientId, glassBreakId } = props;
       return { variables: { riskAreaGroupId, patientId, glassBreakId } };

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import Text from '../shared/library/text/text';
-import * as styles from './css/required-placeholder.css';
+import styles from './css/required-placeholder.css';
 
 interface IProps {
   headerMessageId: string;

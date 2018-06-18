@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link as ReactRouterLink, LinkProps } from 'react-router-dom';
-import * as styles from './css/link.css';
+import styles from './css/link.css';
 
 interface IProps {
   to: string;

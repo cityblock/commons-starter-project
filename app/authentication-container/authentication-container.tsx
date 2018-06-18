@@ -1,17 +1,17 @@
 import { ApolloError } from 'apollo-client';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
-import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { getCurrentUserQuery } from '../graphql/types';
 import ProgressNoteContainer from '../progress-note-container/progress-note-container';
 import { Lang } from '../reducers/locale-reducer';
 import { IState as IAppState } from '../store';
-import * as styles from './css/auth.css';
+import styles from './css/auth.css';
 import Header from './header';
 import { IdlePopup } from './idle-popup';
 
@@ -162,7 +162,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(currentUserQuery as any, {
+  graphql(currentUserQuery, {
     props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

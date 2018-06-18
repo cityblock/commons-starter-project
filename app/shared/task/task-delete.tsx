@@ -1,12 +1,12 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
-import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
+import patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
+import taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import { taskDeleteMutation, taskDeleteMutationVariables } from '../../graphql/types';
 import Button from '../library/button/button';
-import * as styles from './css/task-delete.css';
+import styles from './css/task-delete.css';
 
 interface IProps {
   mutate?: any;
@@ -85,12 +85,12 @@ export class TaskDelete extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(taskDeleteMutationGraphql as any, {
+export default graphql<any>(taskDeleteMutationGraphql, {
   name: 'deleteTask',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: patientCarePlanQuery as any,
+        query: patientCarePlanQuery,
         variables: {
           patientId: props.patientId,
         },

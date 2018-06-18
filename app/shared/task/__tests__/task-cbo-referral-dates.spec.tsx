@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { CBOReferral } from '../../util/test-data';
 import TaskCBOReferralDate from '../task-cbo-referral-date';
 import TaskCBOReferralDates from '../task-cbo-referral-dates';

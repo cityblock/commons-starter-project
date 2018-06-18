@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';

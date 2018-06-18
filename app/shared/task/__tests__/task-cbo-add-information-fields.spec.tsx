@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import CreateTaskCBO from '../../goals/create-task/cbo';
 import CreateTaskCBOCategory from '../../goals/create-task/cbo-category';
 import CreateTaskDescription from '../../goals/create-task/description';

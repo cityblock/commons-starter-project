@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { capitalize } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { isDueSoon } from '../../helpers/format-helpers';
 import TextInfo from '../text-info/text-info';
-import * as styles from './css/date-info.css';
+import styles from './css/date-info.css';
 
 type Label = 'created' | 'updated' | 'due' | 'suggested'; // predefined translate message ids
 type Units = 'second' | 'minute' | 'hour' | 'day' | 'month' | 'year';

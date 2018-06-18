@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { FullUserFragment, Permissions, UserRole } from '../graphql/types';
 import Button from '../shared/library/button/button';
@@ -6,7 +6,7 @@ import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import { Popup } from '../shared/popup/popup';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
-import * as styles from './css/user-row.css';
+import styles from './css/user-row.css';
 
 interface IProps extends IInjectedProps {
   user: FullUserFragment;

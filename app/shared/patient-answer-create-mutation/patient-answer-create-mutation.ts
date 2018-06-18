@@ -1,6 +1,6 @@
 import { MutationFn } from 'react-apollo';
-import * as uuid from 'uuid/v4';
-import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
+import uuid from 'uuid/v4';
+import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
 import {
   getPatientAnswersQuery,
   getPatientAnswersQueryVariables,
@@ -67,7 +67,7 @@ export const createPatientAnswer = (
       const patientAnswersCreate = response.data.patientAnswersCreate;
       // Read the data from our cache for this query.
       const data = proxy.readQuery({
-        query: patientAnswersQuery as any,
+        query: patientAnswersQuery,
         variables: patientAnswerVaraiables,
       }) as getPatientAnswersQuery;
 
@@ -79,7 +79,7 @@ export const createPatientAnswer = (
 
       // Write our data back to the cache.
       proxy.writeQuery({
-        query: patientAnswersQuery as any,
+        query: patientAnswersQuery,
         variables: patientAnswerVaraiables,
         data: { patientAnswers: newPatientAnswers.concat(patientAnswersCreate) },
       });

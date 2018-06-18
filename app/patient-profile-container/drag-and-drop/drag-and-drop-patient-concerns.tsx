@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import PatientConcerns from '../../shared/concerns/patient-concerns';

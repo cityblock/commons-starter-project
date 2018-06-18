@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patientContactCreateMutation } from '../../../graphql/types';
 import { patient } from '../../../shared/util/test-data';
 import { CreatePatientContactModal } from '../create-patient-contact-modal';

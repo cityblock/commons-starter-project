@@ -1,13 +1,13 @@
 import { History } from 'history';
-import * as querystring from 'querystring';
-import * as React from 'react';
+import querystring from 'querystring';
+import React from 'react';
 import { compose } from 'react-apollo';
 import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../graphql/types';
 import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
 import Pagination from '../shared/library/pagination/pagination';
 import Spinner from '../shared/library/spinner/spinner';
-import * as styles from './css/dashboard-patients.css';
+import styles from './css/dashboard-patients.css';
 import { Selected } from './dashboard-container';
 import fetchPatientList, { IInjectedProps, PatientResults } from './fetch-patient-list';
 import PatientList from './patient-list/patient-list';

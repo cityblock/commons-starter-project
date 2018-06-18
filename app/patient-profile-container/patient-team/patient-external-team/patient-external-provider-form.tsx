@@ -1,10 +1,10 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { values } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { PhoneTypeOptions } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import FormLabel from '../../../shared/library/form-label/form-label';
-import * as styles from '../../../shared/library/form/css/form.css';
+import styles from '../../../shared/library/form/css/form.css';
 import Select from '../../../shared/library/select/select';
 import TextInput from '../../../shared/library/text-input/text-input';
 import ExternalProviderRoleSelect from './external-provider-role-select';

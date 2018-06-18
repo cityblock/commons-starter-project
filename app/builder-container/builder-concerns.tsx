@@ -1,17 +1,17 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import * as concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
-import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
+import concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
+import concernsQuery from '../graphql/queries/get-concerns.graphql';
 import {
   concernDeleteMutation,
   concernDeleteMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel.css';
+import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import Concern from './concern';
 import ConcernCreate from './concern-create';
@@ -139,14 +139,14 @@ class BuilderConcerns extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql(concernsQuery as any, {
+  graphql(concernsQuery, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(concernDeleteMutationGraphql as any, {
+  graphql(concernDeleteMutationGraphql, {
     name: 'deleteConcern',
   }),
 )(BuilderConcerns) as React.ComponentClass<IProps>;

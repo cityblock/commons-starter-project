@@ -1,13 +1,13 @@
 import { graphql, print } from 'graphql';
-import * as kue from 'kue';
+import kue from 'kue';
 import { find } from 'lodash';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
-import * as careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
-import * as careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
-import * as patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
-import * as careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
+import careTeamMakeTeamLead from '../../../app/graphql/queries/care-team-make-team-lead-mutation.graphql';
+import careTeamReassignUser from '../../../app/graphql/queries/care-team-reassign-user-mutation.graphql';
+import patientCareTeam from '../../../app/graphql/queries/get-patient-care-team.graphql';
+import careTeamAddUser from '../../../app/graphql/queries/patient-care-team-add-user-mutation.graphql';
 import Mattermost from '../../mattermost';
 import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';

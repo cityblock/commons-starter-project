@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import Modal from '../../../shared/library/modal/modal';
 import Option from '../../../shared/library/option/option';
 import Select from '../../../shared/library/select/select';

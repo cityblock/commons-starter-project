@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
+import progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
 import { FullProgressNoteFragment } from '../../graphql/types';
 import progressNoteGlassBreak, {
   IInjectedProps,
@@ -10,7 +10,7 @@ import { formatCareTeamMemberRole, formatFullName } from '../../shared/helpers/f
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../../shared/progress-note-activity/progress-note-activity';
-import * as styles from './css/progress-note-row.css';
+import styles from './css/progress-note-row.css';
 import ProgressNoteRowQuestions from './progress-note-row-questions';
 import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
 import TimelineCard from './shared/timeline-card';
@@ -120,7 +120,7 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
 
 export default compose(
   progressNoteGlassBreak(),
-  graphql(progressNoteQuery as any, {
+  graphql(progressNoteQuery, {
     options: (props: IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,

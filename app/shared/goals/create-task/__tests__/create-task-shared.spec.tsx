@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import TaskAssignee, { IProps } from '../../../task/task-assignee';
 import CreateTaskShared from '../create-task-shared';
 import CreateTaskDescription from '../description';

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as JwtForPdfCreate from '../../graphql/queries/jwt-for-pdf-create.graphql';
+import JwtForPdfCreateGraphql from '../../graphql/queries/jwt-for-pdf-create.graphql';
 import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../../graphql/types';
 import { getPrintableCalendarPdfRoute } from '../../shared/helpers/route-helpers';
 import Modal from '../../shared/library/modal/modal';
@@ -90,6 +90,6 @@ export class PrintMapButton extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(JwtForPdfCreate as any, {
+export default graphql<any>(JwtForPdfCreateGraphql, {
   name: 'generateJwtForPdf',
 })(PrintMapButton) as React.ComponentClass<IProps>;

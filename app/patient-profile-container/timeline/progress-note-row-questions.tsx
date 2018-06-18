@@ -1,15 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
+import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
+import progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import {
   getPatientAnswersQuery,
   getProgressNoteActivityForProgressNoteQuery,
   FullProgressNoteFragment,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from './css/progress-note-row-questions.css';
+import styles from './css/progress-note-row-questions.css';
 import { ProgressNoteQuestionAnswer } from './progress-note-question-answer';
 
 interface IProps {
@@ -86,7 +86,7 @@ export class ProgressNoteRowQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(progressNoteActivityQuery as any, {
+  graphql(progressNoteActivityQuery, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -99,7 +99,7 @@ export default compose(
       progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
     }),
   }),
-  graphql(patientAnswersQuery as any, {
+  graphql(patientAnswersQuery, {
     options: (props: IProps) => ({
       variables: {
         filterId: props.progressNote.id,

@@ -1,10 +1,10 @@
 import { History } from 'history';
-import * as React from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup } from '../../actions/popup-action';
-import * as taskUserUnfollowMutationGraphql from '../../graphql/queries/task-user-unfollow-mutation.graphql';
+import taskUserUnfollowMutationGraphql from '../../graphql/queries/task-user-unfollow-mutation.graphql';
 import { taskUserUnfollowMutation, taskUserUnfollowMutationVariables } from '../../graphql/types';
 import { ITaskUnfollowPopupOptions } from '../../reducers/popup-reducer';
 import Modal from '../../shared/library/modal/modal';
@@ -81,7 +81,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(taskUserUnfollowMutationGraphql as any, {
+  graphql(taskUserUnfollowMutationGraphql, {
     name: 'removeTaskFollower',
   }),
 )(UnfollowPopup) as React.ComponentClass<{}>;

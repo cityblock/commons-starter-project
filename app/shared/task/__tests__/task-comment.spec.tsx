@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';

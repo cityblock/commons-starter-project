@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { patient, progressNote } from '../../../shared/util/test-data';
 import { ProgressNoteRow } from '../progress-note-row';
 import TimelineCard from '../shared/timeline-card';

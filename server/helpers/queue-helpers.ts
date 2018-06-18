@@ -1,5 +1,5 @@
-import * as kue from 'kue';
-import * as uuid from 'uuid/v4';
+import kue from 'kue';
+import uuid from 'uuid/v4';
 import { createRedisClient } from '../lib/redis';
 import { reportError } from './error-helpers';
 
@@ -53,3 +53,5 @@ export function addProcessingJobToQueue(topic: string, testMode?: boolean) {
 
   addJobToQueue(topic, data, options);
 }
+
+export default { addJobToQueue, addProcessingJobToQueue };

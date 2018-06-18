@@ -1,5 +1,5 @@
-import * as base64 from 'base-64';
-import * as httpMocks from 'node-mocks-http';
+import base64 from 'base-64';
+import httpMocks from 'node-mocks-http';
 import { checkAuthMiddleware } from '../check-auth-middleware';
 
 describe('basicAuth', () => {

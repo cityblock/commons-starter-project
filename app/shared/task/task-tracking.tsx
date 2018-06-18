@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Priority } from '../../graphql/types';
 import { ShortUserFragment } from '../../graphql/types';
-import * as styles from './css/task-body.css';
+import styles from './css/task-body.css';
 import TaskFollowers from './followers';
 import PrioritySelect from './priority-select';
 

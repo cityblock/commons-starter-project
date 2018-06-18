@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import * as concernEditMutationGraphql from '../graphql/queries/concern-edit-mutation.graphql';
-import * as concernQuery from '../graphql/queries/get-concern.graphql';
+import concernEditMutationGraphql from '../graphql/queries/concern-edit-mutation.graphql';
+import concernQuery from '../graphql/queries/get-concern.graphql';
 import {
   concernEditMutation,
   concernEditMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
-import * as styles from '../shared/css/two-panel-right.css';
+import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import ConcernDiagnosisCodes from './concern-diagnosis-codes';
 
@@ -256,10 +256,10 @@ export class Concern extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(concernEditMutationGraphql as any, {
+  graphql(concernEditMutationGraphql, {
     name: 'editConcern',
   }),
-  graphql(concernQuery as any, {
+  graphql(concernQuery, {
     skip: (props: IProps & IStateProps) => !props.concernId,
     options: (props: IProps & IStateProps) => ({ variables: { concernId: props.concernId } }),
     props: ({ data }) => ({

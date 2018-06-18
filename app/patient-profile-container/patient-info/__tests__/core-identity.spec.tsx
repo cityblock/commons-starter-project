@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { formatCityblockId } from '../../../shared/helpers/format-helpers';
 import { coreIdentity, patient, user } from '../../../shared/util/test-data';
 import { CoreIdentity } from '../core-identity';

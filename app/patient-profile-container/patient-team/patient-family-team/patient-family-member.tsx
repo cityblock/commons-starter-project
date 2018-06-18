@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import * as React from 'react';
+import React from 'react';
 import { FullPatientContactFragment } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
@@ -9,7 +9,7 @@ import {
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import Text, { Color } from '../../../shared/library/text/text';
-import * as styles from '../css/team-member.css';
+import styles from '../css/team-member.css';
 
 interface IProps {
   patientContact: FullPatientContactFragment;

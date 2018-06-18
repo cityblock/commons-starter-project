@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { TaskHeader } from '../header';
 import TaskHamburgerMenu from '../task-hamburger-menu';

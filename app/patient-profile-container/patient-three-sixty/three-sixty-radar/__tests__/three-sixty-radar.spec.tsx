@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
 import { Radar } from 'react-chartjs-2';
 import Spinner from '../../../../shared/library/spinner/spinner';
 import { fullRiskAreaGroup } from '../../../../shared/util/test-data';

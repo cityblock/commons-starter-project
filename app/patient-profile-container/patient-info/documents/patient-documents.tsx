@@ -1,12 +1,12 @@
 import { ApolloError } from 'apollo-client';
 import { find } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'react-apollo';
-import * as Loadable from 'react-loadable';
-import * as patientDocumentsQuery from '../../../graphql/queries/get-patient-documents.graphql';
+import Loadable from 'react-loadable';
+import patientDocumentsQuery from '../../../graphql/queries/get-patient-documents.graphql';
 import { getPatientDocumentsQuery, DocumentTypeOptions } from '../../../graphql/types';
 import RequiredPlaceholder from '../../required-placeholder';
-import * as styles from './css/patient-documents.css';
+import styles from './css/patient-documents.css';
 import PatientDocument from './patient-document';
 
 const CONSENTS = [
@@ -118,7 +118,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(patientDocumentsQuery as any, {
+export default graphql(patientDocumentsQuery, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

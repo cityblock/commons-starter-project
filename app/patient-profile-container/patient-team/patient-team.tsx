@@ -6,11 +6,12 @@ import CreatePatientContactModal from '../../shared/patient-contact-modal/create
 import styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
+import PatientExternalOrganizations from './patient-external-organizations/patient-external-organizations';
 import CreatePatientExternalProviderModal from './patient-external-team/create-patient-external-provider-modal';
 import PatientExternalTeam from './patient-external-team/patient-external-team';
 import PatientFamilyTeam from './patient-family-team/patient-family-team';
 
-export type SelectableTabs = 'cityblock' | 'external' | 'family-and-support';
+export type SelectableTabs = 'cityblock' | 'external' | 'family-and-support' | 'organizations';
 
 interface IProps {
   match: {
@@ -25,6 +26,7 @@ interface ICurrentSubTab {
   isCityblockCareTeam: boolean;
   isExternalCareTeam: boolean;
   isFamilyAndSupportTeam: boolean;
+  isOrganizations: boolean;
 }
 
 export type AddCareTeamMemberModalFilters = 'primaryCarePhysician' | 'communityHealthPartner';
@@ -49,11 +51,13 @@ export class PatientTeam extends React.Component<IProps, IState> {
     const isCityblockCareTeam = !subTab || subTab === 'cityblock';
     const isExternalCareTeam = subTab === 'external';
     const isFamilyAndSupportTeam = subTab === 'family-and-support';
+    const isOrganizations = subTab === 'organizations';
 
     return {
       isCityblockCareTeam,
       isExternalCareTeam,
       isFamilyAndSupportTeam,
+      isOrganizations,
     };
   }
 
@@ -85,6 +89,8 @@ export class PatientTeam extends React.Component<IProps, IState> {
       messageId = 'patientTeam.addExternalCareTeamButton';
     } else if (currentSubTab.isFamilyAndSupportTeam) {
       messageId = 'patientTeam.addFamilyAndSupportTeamButton';
+    } else if (currentSubTab.isOrganizations) {
+      messageId = 'patientTeam.addOrganizationButton';
     }
 
     return <Button messageId={messageId} onClick={this.onClickAddButton} />;
@@ -154,6 +160,9 @@ export class PatientTeam extends React.Component<IProps, IState> {
         onAddEmergencyContact={this.handleAddEmergencyContact}
       />
     ) : null;
+    const organizations = currentSubTab.isOrganizations ? (
+      <PatientExternalOrganizations patientId={match.params.patientId} />
+    ) : null;
 
     return (
       <React.Fragment>
@@ -174,6 +183,11 @@ export class PatientTeam extends React.Component<IProps, IState> {
               href={`${routeBase}/family-and-support`}
               selected={currentSubTab.isFamilyAndSupportTeam}
             />
+            <UnderlineTab
+              messageId="patientTeam.organizations"
+              href={`${routeBase}/organizations`}
+              selected={currentSubTab.isOrganizations}
+            />
           </div>
           {this.renderAddButton()}
         </UnderlineTabs>
@@ -181,6 +195,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
           {cityblockCareTeam}
           {externalCareTeam}
           {familyAndSupportTeam}
+          {organizations}
           {this.renderAddModal()}
         </div>
       </React.Fragment>

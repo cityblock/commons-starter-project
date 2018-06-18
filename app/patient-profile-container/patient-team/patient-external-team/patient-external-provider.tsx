@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import React from 'react';
 import { FullPatientExternalProviderFragment } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
@@ -71,8 +70,8 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
       );
 
     return (
-      <Fragment>
-        <div className={styles.container}>
+      <div className={styles.container}>
+        <div className={styles.body}>
           <div className={styles.row}>
             <div className={styles.column}>
               <Text text={nameText} color="black" size="largest" isBold={true} />
@@ -100,7 +99,7 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
           </HamburgerMenu>
         </div>
         {noteHtml}
-      </Fragment>
+      </div>
     );
   }
 }

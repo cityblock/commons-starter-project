@@ -104,8 +104,8 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
       );
 
     return (
-      <Fragment>
-        <div className={styles.container}>
+      <div className={styles.container}>
+        <div className={styles.body}>
           <div className={styles.row}>
             <div className={styles.column}>
               <Text
@@ -141,7 +141,7 @@ export class PatientFamilyMember extends React.Component<IProps, IState> {
           </HamburgerMenu>
         </div>
         {noteHtml}
-      </Fragment>
+      </div>
     );
   }
 }

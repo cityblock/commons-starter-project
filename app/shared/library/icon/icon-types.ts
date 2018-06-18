@@ -60,6 +60,7 @@ export type IconName =
   | 'removeCircle'
   | 'rotateRight'
   | 'search'
+  | 'security'
   | 'sentimentSatisfied'
   | 'sentimentNeutral'
   | 'sentimentDissatisfied'

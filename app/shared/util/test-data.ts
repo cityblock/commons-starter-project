@@ -1245,6 +1245,25 @@ export const externalOrganization = {
   deletedAt: null,
 };
 
+export const externalOrganization2 = {
+  id: 'external-organization-2',
+  patientId: patient.id,
+  name: 'Test Organization 2',
+  phoneNumber: '+144455567889',
+  faxNumber: '+123455067889',
+  address: address1,
+  description: 'some organization',
+  isConsentedForSubstanceUse: null,
+  isConsentedForHiv: null,
+  isConsentedForStd: null,
+  isConsentedForGeneticTesting: null,
+  isConsentedForFamilyPlanning: null,
+  consentDocumentId: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
 export const basicInfo = {
   gender: patient.patientInfo.gender,
   genderFreeText: patient.patientInfo.genderFreeText,

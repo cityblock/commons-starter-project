@@ -888,12 +888,18 @@ export const SPANISH_TRANSLATION = {
     'patientIntakeChecklist.bannerLabel': 'Member intake incomplete',
     'patientIntakeChecklist.completed': 'Completed',
     'patientIntakeChecklist.headerText': 'Member intake checklist',
+    'patientTeam.edit': 'Edit info',
+    'patientTeam.remove': 'Remove',
+    'patientTeam.updateConsent': 'Update consent',
+    'patientTeam.noAddress': 'No address on file',
     'patientTeam.cityblockCareTeam': 'Cityblock Care Team',
     'patientTeam.externalCareTeam': 'External Care Team',
     'patientTeam.familyAndSupportTeam': 'Family & Support',
+    'patientTeam.organizations': 'Organizations',
     'patientTeam.addCityblockCareTeamButton': 'Add Cityblock team member',
     'patientTeam.addExternalCareTeamButton': 'Add external team member',
     'patientTeam.addFamilyAndSupportTeamButton': 'Add family & support',
+    'patientTeam.addOrganizationButton': 'Add organization',
     'patientTeam.externalTeamEmptyTitle':
       "No one has been added to this member's external care team",
     'patientTeam.externalTeamEmptyDetail':
@@ -1061,5 +1067,17 @@ export const SPANISH_TRANSLATION = {
     'settings.weekday6': 'Saturday',
     'settings.notAvailable': 'Not available',
     'settings.dayOff': 'Check this box if you are off this day',
+    'patientExternalOrganization.phone': 'Tel:',
+    'patientExternalOrganization.fax': 'Fax:',
+    'sharingConsent.fullConsent':
+      'You can share any health or social service information with this person.',
+    'sharingConsent.partialConsent': 'Do not share the following information with this person:',
+    'sharingConsent.noConsent':
+      'Do not share any health or social service information with this person.',
+    'sharingConsent.isConsentedForSubstanceUse': 'Substance use disorder information',
+    'sharingConsent.isConsentedForHiv': 'HIV/AIDS information',
+    'sharingConsent.isConsentedForStd': 'Sexually transmitted diseases',
+    'sharingConsent.isConsentedForGeneticTesting': 'Genetic testing information',
+    'sharingConsent.isConsentedForFamilyPlanning': 'Family planning services',
   },
 };

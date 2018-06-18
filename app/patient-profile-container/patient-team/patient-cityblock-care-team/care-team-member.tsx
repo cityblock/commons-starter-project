@@ -86,7 +86,7 @@ export class CareTeamMember extends React.Component<allProps, IState> {
     });
 
     return (
-      <div className={styles.container}>
+      <div className={classNames(styles.container, styles.body)}>
         <div className={styles.row}>
           <div className={styles.row}>
             <Avatar size="large" src={careTeamMember.googleProfileImageUrl} />

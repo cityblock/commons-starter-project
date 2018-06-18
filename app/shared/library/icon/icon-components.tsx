@@ -60,6 +60,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import ReportIcon from '@material-ui/icons/Report';
 import RotateRightIcon from '@material-ui/icons/RotateRight';
 import SearchIcon from '@material-ui/icons/Search';
+import SecurityIcon from '@material-ui/icons/Security';
 import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
 import SentimentNeutralIcon from '@material-ui/icons/SentimentNeutral';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
@@ -138,6 +139,7 @@ const components: IconComponents = {
   report: ReportIcon,
   rotateRight: RotateRightIcon,
   search: SearchIcon,
+  security: SecurityIcon,
   sentimentDissatisfied: SentimentDissatisfiedIcon,
   sentimentNeutral: SentimentNeutralIcon,
   sentimentSatisfied: SentimentSatisfiedIcon,

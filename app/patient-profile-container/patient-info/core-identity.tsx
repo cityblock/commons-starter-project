@@ -26,6 +26,7 @@ export interface ICoreIdentity {
   dateOfBirth: getPatientQuery['patient']['dateOfBirth'];
   ssnEnd: getPatientQuery['patient']['ssnEnd'];
   nmi: getPatientQuery['patient']['nmi'];
+  memberId: getPatientQuery['patient']['memberId'];
   mrn: getPatientQuery['patient']['mrn'];
   cityblockId: getPatientQuery['patient']['cityblockId'];
   patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
@@ -122,7 +123,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
       coreIdentityVerifiedAt,
       cityblockId,
       glassBreakId,
-      nmi,
+      memberId,
       mrn,
     } = patientIdentity;
     const { isModalVisible, shouldLoadSSN } = this.state;
@@ -195,9 +196,9 @@ export class CoreIdentity extends React.Component<allProps, IState> {
               correctedValue={this.findFlag('lastName')}
             />
             <FlaggableDisplayField
-              labelMessageId="coreIdentity.nmiNumber"
-              value={nmi}
-              correctedValue={this.findFlag('nmiNumber')}
+              labelMessageId="coreIdentity.memberId"
+              value={memberId}
+              correctedValue={this.findFlag('memberId')}
             />
           </div>
           <div>

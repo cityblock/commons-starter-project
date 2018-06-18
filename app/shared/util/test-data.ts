@@ -236,6 +236,16 @@ export const patient = {
   scratchPad: 'Note',
   coreIdentityVerifiedAt: '2017-09-07T13:45:14.532Z',
   coreIdentityVerifiedById: user.id,
+  productDescription: 'Something',
+  lineOfBusiness: 'HMO',
+  medicaidPremiumGroup: null,
+  pcpName: null,
+  pcpPractice: null,
+  pcpPhone: null,
+  pcpAddress: null,
+  memberId: '12345',
+  insurance: 'Company A',
+  inNetwork: true,
   patientInfo: {
     id: 'patient-info-id',
     preferredName: 'Bobby',
@@ -1260,6 +1270,7 @@ export const coreIdentity = {
   ssnEnd: patient.ssnEnd,
   nmi: patient.nmi,
   mrn: patient.mrn,
+  memberId: patient.memberId,
 };
 
 export const contactInfo = {

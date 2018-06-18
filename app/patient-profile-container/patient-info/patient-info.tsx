@@ -106,6 +106,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
       cityblockId,
       nmi,
       mrn,
+      memberId,
     } = patient;
     const {
       language,
@@ -145,6 +146,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
         glassBreakId,
         nmi,
         mrn,
+        memberId,
       },
       basic: {
         gender: gender || patientInfo.gender,
@@ -313,7 +315,8 @@ export class PatientInfo extends React.Component<allProps, allState> {
           </FormattedMessage>
           <PatientDemographics
             routeBase={routeBase}
-            patient={this.getPatientFields(patient)}
+            patientDemographics={this.getPatientFields(patient)}
+            patient={patient}
             onChange={this.handleFieldChange}
           />
         </Fragment>

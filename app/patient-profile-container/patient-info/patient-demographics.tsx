@@ -2,6 +2,7 @@ import { History } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { getPatientQuery } from '../../graphql/types';
 import AdvancedDirectives, { IAdvancedDirectives } from './advanced-directives';
 import BasicInfo, { IBasicInfo } from './basic-info';
 import ContactInfo, { IContactInfo } from './contact-info';
@@ -23,11 +24,12 @@ export interface IDemographics {
 }
 
 interface IProps {
-  patient: IDemographics;
+  patientDemographics: IDemographics;
   routeBase: string;
   onChange: (fields: IEditableFieldState) => void;
   location: Location;
   history: History;
+  patient?: getPatientQuery['patient'];
 }
 
 type allProps = IProps & RouteComponentProps<IProps>;
@@ -64,43 +66,48 @@ export class PatientDemographics extends React.Component<allProps> {
   }
 
   render() {
-    const { patient, onChange, routeBase } = this.props;
+    const { patientDemographics, patient, onChange, routeBase } = this.props;
 
     return (
       <div className={styles.container}>
         <CoreIdentity
-          patientIdentity={patient.core}
+          patientIdentity={patientDemographics.core}
           onChange={onChange}
-          patientId={patient.patientId}
+          patientId={patientDemographics.patientId}
         />
         <BasicInfo
-          patientInformation={patient.basic}
+          patientInformation={patientDemographics.basic}
           onChange={onChange}
-          patientId={patient.patientId}
-          patientInfoId={patient.patientInfoId}
+          patientId={patientDemographics.patientId}
+          patientInfoId={patientDemographics.patientInfoId}
           ref={ref => (this.basic = ref)}
         />
         <ContactInfo
-          contactInfo={patient.contact}
-          patientId={patient.patientId}
-          patientInfoId={patient.patientInfoId}
+          contactInfo={patientDemographics.contact}
+          patientId={patientDemographics.patientId}
+          patientInfoId={patientDemographics.patientInfoId}
           onChange={onChange}
         />
-        <PlanInfo planInfo={patient.plan} patientId={patient.patientId} onChange={onChange} />
+        <PlanInfo
+          planInfo={patientDemographics.plan}
+          patientId={patientDemographics.patientId}
+          patient={patient}
+          onChange={onChange}
+        />
         <AdvancedDirectives
-          advancedDirectives={patient.advanced}
-          patientId={patient.patientId}
-          patientInfoId={patient.patientInfoId}
+          advancedDirectives={patientDemographics.advanced}
+          patientId={patientDemographics.patientId}
+          patientInfoId={patientDemographics.patientInfoId}
           onChange={onChange}
           routeBase={routeBase}
           ref={ref => (this.advancedDirectives = ref)}
         />
         <PatientPhoto
-          patientPhoto={patient.photo}
+          patientPhoto={patientDemographics.photo}
           onChange={onChange}
-          patientId={patient.patientId}
-          patientInfoId={patient.patientInfoId}
-          gender={patient.basic.gender}
+          patientId={patientDemographics.patientId}
+          patientInfoId={patientDemographics.patientInfoId}
+          gender={patientDemographics.basic.gender}
           ref={ref => (this.photo = ref)}
         />
       </div>

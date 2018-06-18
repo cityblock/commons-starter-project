@@ -206,7 +206,7 @@ export function createMockPatient(
     nmi: '12345',
     mrn: '23456',
     productDescription: 'something',
-    lineOfBusiness: 'HMO',
+    lineOfBusiness: 'medicaid',
     medicaidPremiumGroup: null,
     pcpName: null,
     pcpPractice: null,

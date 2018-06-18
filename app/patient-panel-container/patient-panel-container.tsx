@@ -14,7 +14,9 @@ import {
   getPatientPanelQuery,
   CurrentPatientState,
   Gender,
+  LinesOfBusiness,
   PatientFilterOptions,
+  PatientInNetwork,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import RadioGroup from '../shared/library/radio-group/radio-group';
@@ -78,6 +80,8 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         zip: props.filters.zip,
         careWorkerId: props.filters.careWorkerId,
         patientState: props.filters.patientState,
+        lineOfBusiness: props.filters.lineOfBusiness,
+        inNetwork: props.filters.inNetwork,
       },
       patientSelectState: {},
       isGloballySelected: false,
@@ -366,6 +370,8 @@ const mapStateToProps = (state: IState, props: allProps): IStateProps => {
     ageMin: parseInt(searchParams.ageMin as string, 10) || null,
     ageMax: parseInt(searchParams.ageMax as string, 10) || null,
     patientState: (searchParams.patientState as CurrentPatientState) || null,
+    lineOfBusiness: (searchParams.lineOfBusiness as LinesOfBusiness) || null,
+    inNetwork: (searchParams.inNetwork as PatientInNetwork) || null,
   };
 
   const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);

@@ -23,7 +23,7 @@ describe('Patient Left Nav Plan Accordion', () => {
   });
 
   it('renders info group item for Cityblock ID', () => {
-    expect(wrapper.find(InfoGroupItem).length).toBe(5);
+    expect(wrapper.find(InfoGroupItem).length).toBe(4);
 
     expect(
       wrapper
@@ -42,31 +42,22 @@ describe('Patient Left Nav Plan Accordion', () => {
     ).toBe('plan.insurance');
   });
 
-  it('renders info group for insurance plan ID', () => {
+  it('renders info group for insurance plan description', () => {
     expect(
       wrapper
         .find(InfoGroupItem)
         .at(2)
         .props().labelMessageId,
-    ).toBe('plan.planId');
+    ).toBe('plan.planDescription');
   });
 
-  it('renders info group for insurance plan type', () => {
+  it('renders info group for insurance member id', () => {
     expect(
       wrapper
         .find(InfoGroupItem)
         .at(3)
         .props().labelMessageId,
-    ).toBe('plan.planType');
-  });
-
-  it('renders info group for plan CIN', () => {
-    expect(
-      wrapper
-        .find(InfoGroupItem)
-        .at(4)
-        .props().labelMessageId,
-    ).toBe('plan.cin');
+    ).toBe('plan.memberId');
   });
 
   it('opens info group container and header', () => {

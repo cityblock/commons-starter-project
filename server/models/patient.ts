@@ -537,10 +537,20 @@ export default class Patient extends Model {
     };
   }
 
+  /* tslint:disable:cyclomatic-complexity */
   static async filter(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    { ageMax, ageMin, gender, zip, careWorkerId, patientState }: Partial<IPatientFilterOptions>,
+    {
+      ageMax,
+      ageMin,
+      gender,
+      zip,
+      careWorkerId,
+      patientState,
+      lineOfBusiness,
+      inNetwork,
+    }: Partial<IPatientFilterOptions>,
     showAllPatients: boolean,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
@@ -551,6 +561,8 @@ export default class Patient extends Model {
       !zip &&
       !careWorkerId &&
       !patientState &&
+      !lineOfBusiness &&
+      !inNetwork &&
       !showAllPatients
     ) {
       return CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
@@ -578,6 +590,18 @@ export default class Patient extends Model {
 
     if (ageMin) {
       builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) >= ${ageMin}`);
+    }
+
+    if (lineOfBusiness) {
+      builder.where('patient.lineOfBusiness', lineOfBusiness);
+    }
+
+    if (inNetwork) {
+      if (inNetwork === 'yes') {
+        builder.where('patient.inNetwork', true);
+      } else if (inNetwork === 'no') {
+        builder.where('patient.inNetwork', false);
+      }
     }
 
     if (!isEmpty(patientState)) {
@@ -608,6 +632,7 @@ export default class Patient extends Model {
       total: patientResult.total,
     };
   }
+  /* tslint:enable:cyclomatic-complexity */
 
   // Returns a list of patients on care team that have tasks due soon or task notifications
   static async getPatientsWithUrgentTasks(

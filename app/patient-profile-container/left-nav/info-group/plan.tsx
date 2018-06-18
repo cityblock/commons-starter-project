@@ -23,10 +23,9 @@ const Plan: React.StatelessComponent<IProps> = (props: IProps) => {
       <InfoGroupHeader selected="plan" isOpen={isOpen} onClick={onClick} />
       <InfoGroupContainer isOpen={isOpen}>
         <InfoGroupItem labelMessageId="plan.cityblockId" value={formattedCityblockId} />
-        <InfoGroupItem labelMessageId="plan.insurance" value="EmblemHealth" />
-        <InfoGroupItem labelMessageId="plan.planId" value="EMB1234567" />
-        <InfoGroupItem labelMessageId="plan.planType" value="Medicaid" />
-        <InfoGroupItem labelMessageId="plan.cin" value="AA-AAAA-12" />
+        <InfoGroupItem labelMessageId="plan.insurance" value={patient.insurance} />
+        <InfoGroupItem labelMessageId="plan.planDescription" value={patient.productDescription} />
+        <InfoGroupItem labelMessageId="plan.memberId" value={patient.memberId} />
       </InfoGroupContainer>
     </div>
   );

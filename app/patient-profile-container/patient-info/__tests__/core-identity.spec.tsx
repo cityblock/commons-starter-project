@@ -66,7 +66,7 @@ describe('Render Core Idenity Component', () => {
       .find(FlaggableDisplayField)
       .at(4)
       .props();
-    expect(nmiNumber.labelMessageId).toBe('coreIdentity.nmiNumber');
+    expect(nmiNumber.labelMessageId).toBe('coreIdentity.memberId');
 
     const dateOfBirth = wrapper
       .find(FlaggableDisplayField)

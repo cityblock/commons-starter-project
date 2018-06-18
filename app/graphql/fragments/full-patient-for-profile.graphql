@@ -12,6 +12,16 @@ fragment FullPatientForProfile on Patient {
   ssnEnd
   nmi
   mrn
+  productDescription
+  lineOfBusiness
+  medicaidPremiumGroup
+  pcpName
+  pcpPractice
+  pcpPhone
+  pcpAddress
+  memberId
+  insurance
+  inNetwork
   createdAt
   coreIdentityVerifiedAt
   coreIdentityVerifiedById

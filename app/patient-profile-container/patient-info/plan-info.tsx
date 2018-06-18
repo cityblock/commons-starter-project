@@ -16,6 +16,7 @@ interface IProps {
   planInfo: IPlanInfo;
   onChange: (fields: IEditableFieldState) => void;
   patientId: string;
+  patient?: getPatientQuery['patient'];
 }
 
 interface IState {
@@ -61,7 +62,7 @@ export default class PlanInfo extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { planInfo, patientId } = this.props;
+    const { planInfo, patientId, patient } = this.props;
     const { patientDataFlags } = planInfo;
     const { isModalVisible } = this.state;
 
@@ -78,6 +79,25 @@ export default class PlanInfo extends React.Component<IProps, IState> {
         }
       });
     }
+    const {
+      productDescription,
+      lineOfBusiness,
+      medicaidPremiumGroup,
+      pcpName,
+      pcpPractice,
+      pcpPhone,
+      pcpAddress,
+    } = patient
+      ? patient
+      : {
+          productDescription: 'Unknown',
+          lineOfBusiness: 'Unknown',
+          medicaidPremiumGroup: 'Unknown',
+          pcpName: 'Unknown',
+          pcpPractice: 'Unknown',
+          pcpPhone: 'Unknown',
+          pcpAddress: 'Unknown',
+        };
 
     return (
       <div className={styles.section}>
@@ -91,16 +111,24 @@ export default class PlanInfo extends React.Component<IProps, IState> {
           flaggedMessageId="planInfo.flaggedDescription"
           flaggedOn={flaggedOn}
         >
-          <div>
-            <FlaggableDisplayField labelMessageId="planInfo.medicaidNumber" value="123456789" />
-            <FlaggableDisplayField labelMessageId="planInfo.planId" value="BZ729440" />
-            <FlaggableDisplayField labelMessageId="planInfo.productDescription" value="HMO" />
-            <FlaggableDisplayField labelMessageId="planInfo.lineOfBusiness" value="Medicaid" />
+          <div className={styles.flaggableDisplayContainer}>
+            <FlaggableDisplayField
+              labelMessageId="planInfo.productDescription"
+              value={productDescription}
+            />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.lineOfBusiness"
+              value={lineOfBusiness}
+            />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.medicaidPremiumGroup"
+              value={medicaidPremiumGroup}
+            />
+            <FlaggableDisplayField labelMessageId="planInfo.pcpName" value={pcpName} />
+            <FlaggableDisplayField labelMessageId="planInfo.pcpPractice" value={pcpPractice} />
+            <FlaggableDisplayField labelMessageId="planInfo.pcpPhone" value={pcpPhone} />
+            <FlaggableDisplayField labelMessageId="planInfo.pcpAddress" value={pcpAddress} />
           </div>
-          <FlaggableDisplayField
-            labelMessageId="planInfo.primaryCare"
-            value="Mount Sinai Doctors Brooklyn"
-          />
         </FlaggableDisplayCard>
         <FlaggingModal
           isVisible={isModalVisible}

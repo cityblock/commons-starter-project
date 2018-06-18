@@ -2,6 +2,12 @@
   padding: 0;
 }
 
+.flaggableDisplayContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .section {
   padding: var(--medium-gutter);
   background: var(--gray-background-color);

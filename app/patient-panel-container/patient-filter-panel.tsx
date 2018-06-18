@@ -1,7 +1,13 @@
 import classNames from 'classnames';
 import { values } from 'lodash';
 import React from 'react';
-import { CurrentPatientState, Gender, PatientFilterOptions } from '../graphql/types';
+import {
+  CurrentPatientState,
+  Gender,
+  LinesOfBusiness,
+  PatientFilterOptions,
+  PatientInNetwork,
+} from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import Select from '../shared/library/select/select';
@@ -40,7 +46,16 @@ export class PatientFilterPanel extends React.Component<IProps> {
   };
 
   handleApplyClick = () => {
-    const { gender, ageMin, ageMax, zip, careWorkerId, patientState } = this.props.filters;
+    const {
+      gender,
+      ageMin,
+      ageMax,
+      zip,
+      careWorkerId,
+      patientState,
+      lineOfBusiness,
+      inNetwork,
+    } = this.props.filters;
     this.props.onClickApply({
       gender,
       ageMin,
@@ -48,6 +63,8 @@ export class PatientFilterPanel extends React.Component<IProps> {
       zip,
       careWorkerId,
       patientState,
+      lineOfBusiness,
+      inNetwork,
     });
   };
 
@@ -57,7 +74,16 @@ export class PatientFilterPanel extends React.Component<IProps> {
 
   render() {
     const { isVisible, filters, onClickCancel } = this.props;
-    const { gender, zip, careWorkerId, ageMin, ageMax, patientState } = filters;
+    const {
+      gender,
+      zip,
+      careWorkerId,
+      ageMin,
+      ageMax,
+      patientState,
+      lineOfBusiness,
+      inNetwork,
+    } = filters;
 
     return (
       <div
@@ -144,6 +170,32 @@ export class PatientFilterPanel extends React.Component<IProps> {
               onChange={this.handleChange}
               value={patientState || ''}
               options={values(CurrentPatientState)}
+              hasPlaceholder={true}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <FormLabel messageId="patientFilter.lineOfBusiness" />
+            <Select
+              name="lineOfBusiness"
+              large={true}
+              isUnselectable={true}
+              onChange={this.handleChange}
+              value={lineOfBusiness || ''}
+              options={values(LinesOfBusiness)}
+              hasPlaceholder={true}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <FormLabel messageId="patientFilter.inNetwork" />
+            <Select
+              name="inNetwork"
+              large={true}
+              isUnselectable={true}
+              onChange={this.handleChange}
+              value={inNetwork || ''}
+              options={values(PatientInNetwork)}
               hasPlaceholder={true}
             />
           </div>

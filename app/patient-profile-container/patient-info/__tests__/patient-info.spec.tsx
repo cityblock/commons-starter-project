@@ -56,7 +56,7 @@ describe('Render Patient Info Component', () => {
 
     const routeBase = `/patients/${patient.id}/member-info`;
     expect(wrapper.find(PatientDemographics).props().routeBase).toBe(routeBase);
-    expect(wrapper.find(PatientDemographics).props().patient).toMatchObject({
+    expect(wrapper.find(PatientDemographics).props().patientDemographics).toMatchObject({
       core: coreIdentity,
       basic: basicInfo,
     });

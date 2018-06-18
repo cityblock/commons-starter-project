@@ -1600,6 +1600,21 @@ declare module 'schema' {
     zip?: string | null;
     careWorkerId?: string | null;
     patientState?: CurrentPatientState | null;
+    lineOfBusiness?: LinesOfBusiness | null;
+    inNetwork?: PatientInNetwork | null;
+  }
+
+  enum LinesOfBusiness {
+    hmo = 'hmo',
+    medicaid = 'medicaid',
+    medicare = 'medicare',
+    ppo = 'ppo',
+    ps = 'ps'
+  }
+
+  enum PatientInNetwork {
+    yes = 'yes',
+    no = 'no'
   }
 
   /**

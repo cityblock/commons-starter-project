@@ -3,6 +3,7 @@
   padding-right: 80px;
   margin-bottom: 20px;
   height: 70px;
+  flex-basis: 25%;
 }
 
 .container:last-child {

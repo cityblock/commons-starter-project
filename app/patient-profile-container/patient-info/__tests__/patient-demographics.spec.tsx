@@ -25,7 +25,7 @@ describe('Render Patient Demographics Component', () => {
 
   const wrapper = shallow(
     <PatientDemographics
-      patient={{
+      patientDemographics={{
         core: coreIdentity,
         basic: basicInfo,
         contact: contactInfo,
@@ -35,6 +35,7 @@ describe('Render Patient Demographics Component', () => {
         patientId: patient.id,
         patientInfoId: patient.patientInfo.id,
       }}
+      patient={patient}
       routeBase={'/foo/bar'}
       onChange={onChange}
       staticContext={{} as any}

@@ -16,6 +16,8 @@ const FILTER_MESSAGE_IDS = {
   zip: 'patientFilter.zip',
   careWorkerId: 'patientFilter.careWorkerId',
   patientState: 'patientFilter.patientStatus',
+  lineOfBusiness: 'patientFilter.lineOfBusiness',
+  inNetwork: 'patientFilter.inNetwork',
 } as any;
 
 class PatientPanelHeader extends React.Component<IProps> {

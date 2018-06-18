@@ -314,7 +314,24 @@ export interface PatientFilterOptions {
   zip?: string | null,
   careWorkerId?: string | null,
   patientState?: CurrentPatientState | null,
+  lineOfBusiness?: LinesOfBusiness | null,
+  inNetwork?: PatientInNetwork | null,
 };
+
+export enum LinesOfBusiness {
+  hmo = "hmo",
+  medicaid = "medicaid",
+  medicare = "medicare",
+  ppo = "ppo",
+  ps = "ps",
+}
+
+
+export enum PatientInNetwork {
+  no = "no",
+  yes = "yes",
+}
+
 
 export enum TaskOrderOptions {
   createdAtAsc = "createdAtAsc",
@@ -3842,6 +3859,16 @@ export interface getPatientQuery {
     ssnEnd: string | null,
     nmi: string | null,
     mrn: string | null,
+    productDescription: string | null,
+    lineOfBusiness: string | null,
+    medicaidPremiumGroup: string | null,
+    pcpName: string | null,
+    pcpPractice: string | null,
+    pcpPhone: string | null,
+    pcpAddress: string | null,
+    memberId: string,
+    insurance: string | null,
+    inNetwork: boolean,
     createdAt: string,
     coreIdentityVerifiedAt: string | null,
     coreIdentityVerifiedById: string | null,
@@ -12140,6 +12167,16 @@ export interface FullPatientForProfileFragment {
   ssnEnd: string | null,
   nmi: string | null,
   mrn: string | null,
+  productDescription: string | null,
+  lineOfBusiness: string | null,
+  medicaidPremiumGroup: string | null,
+  pcpName: string | null,
+  pcpPractice: string | null,
+  pcpPhone: string | null,
+  pcpAddress: string | null,
+  memberId: string,
+  insurance: string | null,
+  inNetwork: boolean,
   createdAt: string,
   coreIdentityVerifiedAt: string | null,
   coreIdentityVerifiedById: string | null,

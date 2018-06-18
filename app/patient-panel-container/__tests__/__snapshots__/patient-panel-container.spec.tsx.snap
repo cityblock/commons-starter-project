@@ -390,6 +390,85 @@ exports[`renders patient panel container correctly 1`] = `
           </option>
         </select>
       </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+        >
+          Line of Business
+        </label>
+        <select
+          className="select large noValue"
+          name="lineOfBusiness"
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            disabled={false}
+            value=""
+          >
+            Select a line of business
+          </option>
+          <option
+            value="hmo"
+          >
+            HMO
+          </option>
+          <option
+            value="medicaid"
+          >
+            Medicaid
+          </option>
+          <option
+            value="medicare"
+          >
+            Medicare
+          </option>
+          <option
+            value="ppo"
+          >
+            PPO
+          </option>
+          <option
+            value="ps"
+          >
+            PS
+          </option>
+        </select>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+        >
+          Patient In Network
+        </label>
+        <select
+          className="select large noValue"
+          name="inNetwork"
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            disabled={false}
+            value=""
+          >
+            Select if patient is in network
+          </option>
+          <option
+            value="no"
+          >
+            No
+          </option>
+          <option
+            value="yes"
+          >
+            Yes
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </div>

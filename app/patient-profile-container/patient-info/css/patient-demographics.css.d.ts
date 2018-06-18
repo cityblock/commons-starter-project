@@ -1,4 +1,5 @@
 export const container: string;
+export const flaggableDisplayContainer: string;
 export const section: string;
 export const subSection: string;
 export const fieldRow: string;

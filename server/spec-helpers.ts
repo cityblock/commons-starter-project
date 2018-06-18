@@ -269,13 +269,13 @@ export function createMockPatientExternalProvider(
   patientId: string,
   userId: string,
   { phoneNumber }: { phoneNumber: string },
+  organizationId: string,
   options?: {
     email?: { emailAddress: string };
     firstName?: string;
     lastName?: string;
     role?: ExternalProviderOptions;
     roleFreeText?: string;
-    agencyName?: string;
     description?: string;
   },
 ) {
@@ -286,7 +286,7 @@ export function createMockPatientExternalProvider(
     firstName: get(options, 'firstName') || 'Hermione',
     lastName: get(options, 'lastName') || 'Granger',
     role: get(options, 'role') || ('psychiatrist' as ExternalProviderOptions),
-    agencyName: get(options, 'agencyName') || 'Hogwarts',
+    patientExternalOrganizationId: organizationId,
     roleFreeText: get(options, 'roleFreeText') || null,
     email: get(options, 'email'),
     description: get(options, 'description') || 'some provider description',

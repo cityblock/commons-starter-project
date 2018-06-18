@@ -5,7 +5,17 @@ fragment FullPatientExternalProvider on PatientExternalProvider {
   roleFreeText
   firstName
   lastName
-  agencyName
+  patientExternalOrganizationId
+  patientExternalOrganization {
+    id
+    name
+    isConsentedForSubstanceUse
+    isConsentedForHiv
+    isConsentedForStd
+    isConsentedForGeneticTesting
+    isConsentedForFamilyPlanning
+    consentDocumentId
+  }
   description
   email {
     id

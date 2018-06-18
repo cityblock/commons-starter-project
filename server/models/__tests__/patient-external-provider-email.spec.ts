@@ -4,6 +4,7 @@ import { UserRole } from 'schema';
 import {
   createMockClinic,
   createMockEmail,
+  createMockPatientExternalOrganization,
   createMockPatientExternalProvider,
   createMockPhone,
   createMockUser,
@@ -12,6 +13,7 @@ import {
 import Clinic from '../clinic';
 import Email from '../email';
 import Patient from '../patient';
+import PatientExternalOrganization from '../patient-external-organization';
 import PatientExternalProvider from '../patient-external-provider';
 import PatientExternalProviderEmail from '../patient-external-provider-email';
 import PatientExternalProviderPhone from '../patient-external-provider-phone';
@@ -23,6 +25,7 @@ const userRole = 'admin' as UserRole;
 interface ISetup {
   patient: Patient;
   patientExternalProvider: PatientExternalProvider;
+  organization: PatientExternalOrganization;
   user: User;
   email: Email;
   phone: Phone;
@@ -34,8 +37,12 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const phone = await Phone.create(createMockPhone(), txn);
   const email = await Email.create(createMockEmail(user.id), txn);
+  const organization = await PatientExternalOrganization.create(
+    createMockPatientExternalOrganization(patient.id, 'Test organization'),
+    txn,
+  );
   const patientExternalProvider = await PatientExternalProvider.create(
-    createMockPatientExternalProvider(patient.id, user.id, phone),
+    createMockPatientExternalProvider(patient.id, user.id, phone, organization.id),
     txn,
   );
   await PatientExternalProviderPhone.create(
@@ -47,7 +54,14 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { patient, patientExternalProvider: fullPatientExternalProvider, user, phone, email };
+  return {
+    patient,
+    patientExternalProvider: fullPatientExternalProvider,
+    user,
+    phone,
+    email,
+    organization,
+  };
 }
 
 describe('patient external provider email model', () => {
@@ -110,7 +124,9 @@ describe('patient external provider email model', () => {
 
   describe('get for patient external provider', async () => {
     it('should get the one non deleted email for a patient external provider', async () => {
-      const { patientExternalProvider, patient, phone, email, user } = await setup(txn);
+      const { patientExternalProvider, patient, phone, email, user, organization } = await setup(
+        txn,
+      );
 
       // first email for provider (deleted)
       await PatientExternalProviderEmail.create(
@@ -134,7 +150,7 @@ describe('patient external provider email model', () => {
 
       // email for another patient external provider
       const patientExternalProvider2 = await PatientExternalProvider.create(
-        createMockPatientExternalProvider(patient.id, user.id, phone),
+        createMockPatientExternalProvider(patient.id, user.id, phone, organization.id),
         txn,
       );
       await PatientExternalProviderPhone.create(

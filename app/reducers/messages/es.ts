@@ -366,7 +366,7 @@ export const SPANISH_TRANSLATION = {
     'patientExternalProvider.note': 'Additional notes',
     'patientExternalProvider.fieldEmptyError': 'This field is required',
     'patientExternalProvider.addNote': 'Add a note',
-    'patientExternalProvider.agencyName': 'Name of their agency',
+    'patientExternalProvider.organization': 'Name of their organization',
     'patientExternalProvider.firstName': 'First name',
     'patientExternalProvider.lastName': 'Last Name',
     'patientExternalProvider.role': 'Role',

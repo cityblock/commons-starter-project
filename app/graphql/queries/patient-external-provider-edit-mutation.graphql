@@ -6,7 +6,7 @@ mutation patientExternalProviderEdit(
   $roleFreeText: String
   $firstName: String
   $lastName: String
-  $agencyName: String
+  $patientExternalOrganizationId: ID
   $description: String
   $email: EmailInput
   $phone: PhoneInput
@@ -18,7 +18,7 @@ mutation patientExternalProviderEdit(
       roleFreeText: $roleFreeText
       firstName: $firstName
       lastName: $lastName
-      agencyName: $agencyName
+      patientExternalOrganizationId: $patientExternalOrganizationId
       description: $description
       phone: $phone
       email: $email

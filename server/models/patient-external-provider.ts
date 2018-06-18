@@ -3,11 +3,12 @@ import { ExternalProviderOptions } from 'schema';
 import BaseModel from './base-model';
 import Email from './email';
 import Patient from './patient';
+import PatientExternalOrganization from './patient-external-organization';
 import PatientExternalProviderEmail from './patient-external-provider-email';
 import PatientExternalProviderPhone from './patient-external-provider-phone';
 import Phone from './phone';
 
-const EAGER_QUERY = '[email, phone]';
+const EAGER_QUERY = '[email, phone, patientExternalOrganization]';
 
 export interface IPatientExternalProviderOptions {
   patientId: string;
@@ -15,7 +16,7 @@ export interface IPatientExternalProviderOptions {
   role: ExternalProviderOptions;
   roleFreeText?: string | null;
   lastName?: string;
-  agencyName: string;
+  patientExternalOrganizationId: string;
   firstName?: string;
   description?: string;
 }
@@ -25,7 +26,7 @@ interface IEditPatientExternalProvider extends Partial<IPatientExternalProviderO
   role?: ExternalProviderOptions;
   roleFreeText?: string | null;
   lastName?: string;
-  agencyName?: string;
+  patientExternalOrganizationId?: string;
   firstName?: string;
   description?: string;
 }
@@ -38,7 +39,8 @@ export default class PatientExternalProvider extends BaseModel {
   role!: ExternalProviderOptions;
   roleFreeText!: string | null;
   lastName!: string;
-  agencyName!: string;
+  patientExternalOrganizationId!: string;
+  patientExternalOrganization!: PatientExternalOrganization;
   firstName!: string;
   description!: string;
   createdAt!: string;
@@ -60,14 +62,14 @@ export default class PatientExternalProvider extends BaseModel {
       roleFreeText: { type: ['string', 'null'] },
       firstName: { type: 'string', minLength: 1 },
       lastName: { type: 'string', minLength: 1 },
-      agencyName: { type: 'string', minLength: 1 },
+      patientExternalOrganizationId: { type: 'string', format: 'uuid' },
       description: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: ['patientId', 'updatedById', 'role', 'agencyName'],
+    required: ['patientId', 'updatedById', 'role', 'patientExternalOrganizationId'],
   };
 
   static get relationMappings(): RelationMappings {
@@ -78,6 +80,15 @@ export default class PatientExternalProvider extends BaseModel {
         join: {
           from: 'patient_external_provider.patientId',
           to: 'patient.id',
+        },
+      },
+
+      patientExternalOrganization: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: PatientExternalOrganization,
+        join: {
+          from: 'patient_external_provider.patientExternalOrganizationId',
+          to: 'patient_external_organization.id',
         },
       },
 

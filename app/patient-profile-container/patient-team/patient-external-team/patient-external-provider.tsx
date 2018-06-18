@@ -40,12 +40,12 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
     const {
       firstName,
       lastName,
-      agencyName,
       role,
       roleFreeText,
       phone,
       email,
       description,
+      patientExternalOrganization,
     } = this.props.patientExternalProvider;
     const { isMenuOpen } = this.state;
     const emailAddress = email ? email.emailAddress : 'Unknown Email';
@@ -57,8 +57,11 @@ export class PatientExternalProvider extends React.Component<IProps, IState> {
       </div>
     ) : null;
 
-    const nameText = firstName || lastName ? formatFullName(firstName, lastName) : agencyName;
-    const agencyText = firstName || lastName ? agencyName : null;
+    const nameText =
+      firstName || lastName
+        ? formatFullName(firstName, lastName)
+        : patientExternalOrganization.name;
+    const agencyText = firstName || lastName ? patientExternalOrganization.name : null;
 
     const roleHtml =
       role === 'other' || role === 'otherMedicalSpecialist' ? (

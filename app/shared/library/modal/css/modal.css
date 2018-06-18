@@ -16,6 +16,10 @@
   margin: var(--gutter);
 }
 
+.icon {
+  margin-bottom: var(--small-gutter);
+}
+
 .buttons {
   flex-shrink: 0;
   border-top: 1px solid var(--border-color);
@@ -34,4 +38,11 @@
 
 .header.headerNoBody {
   background-color: var(--white-color);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  margin: var(--medium-gutter);
+  align-items: center;
 }

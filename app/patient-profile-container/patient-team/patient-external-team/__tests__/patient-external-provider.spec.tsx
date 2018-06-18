@@ -26,7 +26,7 @@ describe('Render Patient External Provider', () => {
     expect(text.at(1).props().messageId).toBe('externalProviderRole.cardiology');
     expect(text.at(2).props().text).toBe(externalProviderPerson.phone.phoneNumber);
     expect(text.at(3).props().text).toBe(externalProviderPerson.email.emailAddress);
-    expect(text.at(4).props().text).toBe(externalProviderPerson.agencyName);
+    expect(text.at(4).props().text).toBe(externalProviderPerson.patientExternalOrganization.name);
     expect(text.at(5).props().text).toBe(externalProviderPerson.description);
 
     expect(wrapper.find(HamburgerMenu)).toHaveLength(1);
@@ -43,7 +43,7 @@ describe('Render Patient External Provider', () => {
     const text = wrapper.find(Text);
     expect(text).toHaveLength(5);
 
-    expect(text.at(0).props().text).toBe(externalProviderEntity.agencyName);
+    expect(text.at(0).props().text).toBe(externalProviderEntity.patientExternalOrganization.name);
     expect(text.at(1).props().text).toBe(externalProviderEntity.roleFreeText);
     expect(text.at(2).props().text).toBe(externalProviderEntity.phone.phoneNumber);
     expect(text.at(3).props().text).toBe('Unknown Email');

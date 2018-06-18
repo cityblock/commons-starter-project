@@ -482,7 +482,8 @@ type PatientExternalProvider implements uniqueId {
   patientId: ID!
   role: ExternalProviderOptions!
   roleFreeText: String
-  agencyName: String!
+  patientExternalOrganizationId: ID!
+  patientExternalOrganization: PatientExternalOrganization!
   firstName: String
   lastName: String
   description: String
@@ -1928,7 +1929,7 @@ input PatientExternalProviderCreateInput {
   firstName: String
   lastName: String
   phone: PhoneCreateInput!
-  agencyName: String!
+  patientExternalOrganizationId: ID!
   description: String
   email: EmailCreateInput
 }
@@ -1945,7 +1946,7 @@ input PatientExternalProviderEditInput {
   roleFreeText: String
   firstName: String
   lastName: String
-  agencyName: String
+  patientExternalOrganizationId: ID
   description: String
   email: EmailInput
   phone: PhoneInput

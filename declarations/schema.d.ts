@@ -1682,7 +1682,8 @@ declare module 'schema' {
     patientId: string;
     role: ExternalProviderOptions;
     roleFreeText: string | null;
-    agencyName: string;
+    patientExternalOrganizationId: string;
+    patientExternalOrganization: IPatientExternalOrganization;
     firstName: string | null;
     lastName: string | null;
     description: string | null;
@@ -4573,7 +4574,7 @@ declare module 'schema' {
     firstName?: string | null;
     lastName?: string | null;
     phone: IPhoneCreateInput;
-    agencyName: string;
+    patientExternalOrganizationId: string;
     description?: string | null;
     email?: IEmailCreateInput | null;
   }
@@ -4594,7 +4595,7 @@ declare module 'schema' {
     roleFreeText?: string | null;
     firstName?: string | null;
     lastName?: string | null;
-    agencyName?: string | null;
+    patientExternalOrganizationId?: string | null;
     description?: string | null;
     email?: IEmailInput | null;
     phone?: IPhoneInput | null;

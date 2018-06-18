@@ -10,6 +10,7 @@ import patientExternalProviderEdit from '../../../app/graphql/queries/patient-ex
 import Clinic from '../../models/clinic';
 import Email from '../../models/email';
 import Patient from '../../models/patient';
+import PatientExternalOrganization from '../../models/patient-external-organization';
 import PatientExternalProvider from '../../models/patient-external-provider';
 import PatientExternalProviderEmail from '../../models/patient-external-provider-email';
 import PatientExternalProviderPhone from '../../models/patient-external-provider-phone';
@@ -18,6 +19,7 @@ import User from '../../models/user';
 import {
   createMockClinic,
   createMockEmail,
+  createMockPatientExternalOrganization,
   createMockPatientExternalProvider,
   createMockPhone,
   createMockUser,
@@ -35,6 +37,7 @@ interface ISetup {
 
 interface ISetupContact {
   patientExternalProvider: PatientExternalProvider;
+  patientExternalOrganization: PatientExternalOrganization;
   phone: Phone;
   email: Email;
 }
@@ -55,8 +58,15 @@ async function setupPatientExternalProvider(
   const phone = await Phone.create(createMockPhone(), txn);
   const email = await Email.create(createMockEmail(userId), txn);
 
+  const patientExternalOrganization = await PatientExternalOrganization.create(
+    createMockPatientExternalOrganization(patientId, 'Test organization'),
+    txn,
+  );
+
   const patientExternalProvider = await PatientExternalProvider.create(
-    createMockPatientExternalProvider(patientId, userId, phone, { email }),
+    createMockPatientExternalProvider(patientId, userId, phone, patientExternalOrganization.id, {
+      email,
+    }),
     txn,
   );
 
@@ -69,7 +79,7 @@ async function setupPatientExternalProvider(
     txn,
   );
 
-  return { patientExternalProvider, phone, email };
+  return { patientExternalProvider, patientExternalOrganization, phone, email };
 }
 
 describe('patient info model', () => {
@@ -92,11 +102,12 @@ describe('patient info model', () => {
   describe('patient external providers resolvers', async () => {
     it('gets all patient external providers for patient with id', async () => {
       const { user, patient } = await setup(txn);
-      const { patientExternalProvider, phone, email } = await setupPatientExternalProvider(
-        patient.id,
-        user.id,
-        txn,
-      );
+      const {
+        patientExternalProvider,
+        patientExternalOrganization,
+        phone,
+        email,
+      } = await setupPatientExternalProvider(patient.id, user.id, txn);
 
       const result = await graphql(
         schema,
@@ -111,19 +122,16 @@ describe('patient info model', () => {
         { patientId: patient.id },
       );
 
-      const {
-        lastName,
-        firstName,
-        agencyName,
-        role,
-        roleFreeText,
-        description,
-      } = patientExternalProvider;
+      const { lastName, firstName, role, roleFreeText, description } = patientExternalProvider;
       expect(cloneDeep(result.data!.patientExternalProviders)).toHaveLength(1);
       expect(cloneDeep(result.data!.patientExternalProviders[0])).toMatchObject({
         firstName,
         lastName,
-        agencyName,
+        patientExternalOrganizationId: patientExternalOrganization.id,
+        patientExternalOrganization: {
+          name: patientExternalOrganization.name,
+          id: patientExternalOrganization.id,
+        },
         roleFreeText,
         role,
         description,
@@ -144,7 +152,16 @@ describe('patient info model', () => {
     it('should create a patient external provider with minimal info', async () => {
       const { patient, user } = await setup(txn);
       const phone = { phoneNumber: '+11112223333' };
-      const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone);
+      const organization = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test organization'),
+        txn,
+      );
+      const providerFields = createMockPatientExternalProvider(
+        patient.id,
+        user.id,
+        phone,
+        organization.id,
+      );
 
       const result = await graphql(
         schema,
@@ -165,7 +182,7 @@ describe('patient info model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'psychiatrist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: null,
         email: null,
         description: 'some provider description',
@@ -184,9 +201,19 @@ describe('patient info model', () => {
       const { patient, user } = await setup(txn);
       const phone = { phoneNumber: '+11112223333' };
       const email = { emailAddress: 'test@email.com' };
-      const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone, {
-        email,
-      });
+      const organization = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test organization'),
+        txn,
+      );
+      const providerFields = createMockPatientExternalProvider(
+        patient.id,
+        user.id,
+        phone,
+        organization.id,
+        {
+          email,
+        },
+      );
 
       const result = await graphql(
         schema,
@@ -208,7 +235,7 @@ describe('patient info model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'psychiatrist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: null,
         description: 'some provider description',
       });
@@ -233,9 +260,19 @@ describe('patient info model', () => {
       const { patient, user } = await setup(txn);
       const phone = { phoneNumber: '+11112223333' };
       const email = { emailAddress: '' };
-      const providerFields = createMockPatientExternalProvider(patient.id, user.id, phone, {
-        email,
-      });
+      const organization = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test organization'),
+        txn,
+      );
+      const providerFields = createMockPatientExternalProvider(
+        patient.id,
+        user.id,
+        phone,
+        organization.id,
+        {
+          email,
+        },
+      );
 
       const result = await graphql(
         schema,
@@ -257,7 +294,7 @@ describe('patient info model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'psychiatrist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: null,
         description: 'some provider description',
       });
@@ -326,14 +363,22 @@ describe('patient info model', () => {
     it('should edit patient external provider and create email', async () => {
       const { patient, user } = await setup(txn);
       const phone = await Phone.create(createMockPhone(), txn);
-
+      const organization = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test organization'),
+        txn,
+      );
       const patientExternalProvider = await PatientExternalProvider.create(
-        createMockPatientExternalProvider(patient.id, user.id, phone),
+        createMockPatientExternalProvider(patient.id, user.id, phone, organization.id),
         txn,
       );
 
       await PatientExternalProviderPhone.create(
         { phoneId: phone.id, patientExternalProviderId: patientExternalProvider.id },
+        txn,
+      );
+
+      const organization2 = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Quibbler'),
         txn,
       );
 
@@ -352,7 +397,7 @@ describe('patient info model', () => {
           firstName: 'Luna',
           lastName: 'Lovegood',
           role: 'other',
-          agencyName: 'Quibbler',
+          patientExternalOrganizationId: organization2.id,
           roleFreeText: 'magical potion provider',
           phone: { phoneNumber: '000-111-2255' },
           email: { emailAddress: 'changed@email.com' },
@@ -364,7 +409,7 @@ describe('patient info model', () => {
         firstName: 'Luna',
         lastName: 'Lovegood',
         role: 'other',
-        agencyName: 'Quibbler',
+        patientExternalOrganization: { id: organization2.id, name: organization2.name },
         roleFreeText: 'magical potion provider',
         phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { emailAddress: 'changed@email.com' },
@@ -402,7 +447,6 @@ describe('patient info model', () => {
           firstName: 'Luna',
           lastName: 'Lovegood',
           role: 'dermatology',
-          agencyName: 'Quibbler',
           phone: { phoneNumber: '000-111-2255' },
           email: { emailAddress: 'changed@email.com' },
         },
@@ -413,7 +457,6 @@ describe('patient info model', () => {
         firstName: 'Luna',
         lastName: 'Lovegood',
         role: 'dermatology',
-        agencyName: 'Quibbler',
         roleFreeText: null,
         phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: { id: email.id, emailAddress: 'changed@email.com' },
@@ -451,7 +494,6 @@ describe('patient info model', () => {
           firstName: 'Luna',
           lastName: 'Lovegood',
           role: 'dermatology',
-          agencyName: 'Quibbler',
           phone: { phoneNumber: '000-111-2255' },
           email: { emailAddress: '' },
         },
@@ -462,7 +504,6 @@ describe('patient info model', () => {
         firstName: 'Luna',
         lastName: 'Lovegood',
         role: 'dermatology',
-        agencyName: 'Quibbler',
         roleFreeText: null,
         phone: { id: phone.id, phoneNumber: '+10001112255' },
         email: null,

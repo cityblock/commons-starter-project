@@ -48,10 +48,11 @@ export class EditPatientExternalProviderModal extends React.Component<allProps> 
   };
 
   render() {
-    const { patientExternalProvider, isVisible, closePopup } = this.props;
+    const { patientExternalProvider, isVisible, closePopup, patientId } = this.props;
 
     return (
       <PatientExternalProviderModal
+        patientId={patientId}
         isVisible={isVisible}
         patientExternalProvider={patientExternalProvider}
         saveExternalProvider={this.editPatientExternalProvider}

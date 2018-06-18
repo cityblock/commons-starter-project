@@ -1,13 +1,19 @@
 import { ApolloError } from 'apollo-client';
 import { get, isNil } from 'lodash';
 import React from 'react';
+import { graphql } from 'react-apollo';
+import patientExternalOrganizationsQuery from '../../../graphql/queries/get-patient-external-organizations.graphql';
 import {
+  getPatientExternalOrganizationsQuery,
   EmailInput,
   ExternalProviderOptions,
   PhoneCreateInput,
   PhoneTypeOptions,
 } from '../../../graphql/types';
+import Icon from '../../../shared/library/icon/icon';
+import styles from '../../../shared/library/modal/css/modal.css';
 import Modal from '../../../shared/library/modal/modal';
+import Text from '../../../shared/library/text/text';
 import PatientExternalProviderForm from './patient-external-provider-form';
 
 export interface IPatientExternalProvider {
@@ -15,13 +21,14 @@ export interface IPatientExternalProvider {
   lastName?: string | null;
   role: ExternalProviderOptions;
   roleFreeText?: string | null;
-  agencyName: string;
+  patientExternalOrganizationId: string;
   phone: PhoneCreateInput;
   email?: EmailInput | null;
   description?: string | null;
 }
 
 interface IProps {
+  patientId: string;
   saveExternalProvider: (
     patientExternalProvider: IPatientExternalProvider,
   ) => Promise<{ data: any; errors?: ApolloError[] }>;
@@ -32,12 +39,20 @@ interface IProps {
   subTitleMessageId?: string;
 }
 
+interface IGraphqlProps {
+  patientExternalOrganizations?: getPatientExternalOrganizationsQuery['patientExternalOrganizations'];
+  isLoading?: boolean;
+  error?: ApolloError | null;
+}
+
+export type allProps = IGraphqlProps & IProps;
+
 interface IEditableFieldState {
   firstName?: string | null;
   lastName?: string | null;
   role?: string | null;
   roleFreeText?: string | null;
-  agencyName?: string | null;
+  patientExternalOrganizationId?: string | null;
   description?: string | null;
   emailAddress?: string | null;
   phoneNumber?: string | null;
@@ -51,20 +66,20 @@ interface IState {
 
 type allState = IState & IEditableFieldState;
 
-const REQUIRED_FIELDS = ['role', 'agencyName', 'phoneNumber', 'phoneType'];
+const REQUIRED_FIELDS = ['role', 'patientExternalOrganizationId', 'phoneNumber', 'phoneType'];
 
-class PatientExternalProviderModal extends React.Component<IProps, allState> {
+export class PatientExternalProviderModal extends React.Component<allProps, allState> {
   static getDerivedStateFromProps(nextProps: IProps, prevState: allState) {
     const { patientExternalProvider } = nextProps;
     const oldPatientExternalProvider = prevState;
 
-    if (patientExternalProvider && !oldPatientExternalProvider.firstName) {
+    if (patientExternalProvider && !oldPatientExternalProvider.role) {
       return {
         firstName: patientExternalProvider.firstName,
         lastName: patientExternalProvider.lastName,
         role: patientExternalProvider.role,
         roleFreeText: patientExternalProvider.roleFreeText,
-        agencyName: patientExternalProvider.agencyName,
+        patientExternalOrganizationId: patientExternalProvider.patientExternalOrganizationId,
         description: patientExternalProvider.description,
         emailAddress: get(patientExternalProvider, 'email.emailAddress'),
         phoneNumber: get(patientExternalProvider, 'phone.phoneNumber'),
@@ -79,7 +94,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
     lastName: null,
     role: null,
     roleFreeText: null,
-    agencyName: null,
+    patientExternalOrganizationId: null,
     description: null,
     emailAddress: null,
     phoneNumber: null,
@@ -129,6 +144,10 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
     this.props.closePopup();
   };
 
+  handleGoToOrganizations = () => {
+    // TODO: add in go to organizations;
+  };
+
   handleSubmit = async () => {
     const { saveExternalProvider } = this.props;
     const {
@@ -136,7 +155,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
       lastName,
       role,
       roleFreeText,
-      agencyName,
+      patientExternalOrganizationId,
       phoneNumber,
       phoneType,
       emailAddress,
@@ -150,7 +169,7 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
 
     const updatedPatientExternalProvider = {
       role: role!,
-      agencyName: agencyName!,
+      patientExternalOrganizationId: patientExternalOrganizationId!,
       phone: { phoneNumber: phoneNumber!, type: phoneType! },
       roleFreeText,
       firstName,
@@ -180,10 +199,20 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
       lastName,
       role,
       roleFreeText,
-      agencyName,
+      patientExternalOrganizationId,
       description,
       hasFieldError,
     } = this.state;
+    const { patientExternalOrganizations } = this.props;
+
+    if (!patientExternalOrganizations || !patientExternalOrganizations.length) {
+      return (
+        <div className={styles.empty}>
+          <Icon name="errorOutline" color="red" isExtraLarge={true} className={styles.icon} />
+          <Text messageId="patientExternalProvider.noOrganzitions" color="gray" size="largest" />
+        </div>
+      );
+    }
 
     return (
       <PatientExternalProviderForm
@@ -194,7 +223,8 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
         lastName={lastName}
         role={role}
         roleFreeText={roleFreeText}
-        agencyName={agencyName}
+        patientExternalOrganizationId={patientExternalOrganizationId}
+        patientExternalOrganizations={patientExternalOrganizations}
         description={description}
         onChange={this.handleChange}
         hasFieldError={hasFieldError || {}}
@@ -203,8 +233,18 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
   }
 
   render() {
-    const { isVisible, titleMessageId, subTitleMessageId } = this.props;
+    const {
+      isVisible,
+      titleMessageId,
+      subTitleMessageId,
+      patientExternalOrganizations,
+    } = this.props;
     const { saveError } = this.state;
+    const noOrganizations = !patientExternalOrganizations || !patientExternalOrganizations.length;
+    const submitMessageId = noOrganizations
+      ? 'patientExternalProvider.goToOrganizations'
+      : 'patientExternalProvider.save';
+    const onSubmit = noOrganizations ? this.handleGoToOrganizations : this.handleSubmit;
 
     return (
       <Modal
@@ -212,11 +252,11 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
         titleMessageId={titleMessageId}
         subTitleMessageId={subTitleMessageId}
         cancelMessageId="patientExternalProvider.cancel"
-        submitMessageId="patientExternalProvider.save"
+        submitMessageId={submitMessageId}
         errorMessageId="patientExternalProvider.saveError"
         error={saveError}
         onClose={this.handleClose}
-        onSubmit={this.handleSubmit}
+        onSubmit={onSubmit}
       >
         {this.renderForm()}
       </Modal>
@@ -224,4 +264,15 @@ class PatientExternalProviderModal extends React.Component<IProps, allState> {
   }
 }
 
-export default PatientExternalProviderModal;
+export default graphql(patientExternalOrganizationsQuery, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+    },
+  }),
+  props: ({ data }): IGraphqlProps => ({
+    isLoading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientExternalOrganizations: data ? (data as any).patientExternalOrganizations : null,
+  }),
+})(PatientExternalProviderModal);

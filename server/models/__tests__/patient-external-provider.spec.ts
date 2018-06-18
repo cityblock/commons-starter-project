@@ -4,6 +4,7 @@ import { ExternalProviderOptions, UserRole } from 'schema';
 import {
   createMockClinic,
   createMockEmail,
+  createMockPatientExternalOrganization,
   createMockPatientExternalProvider,
   createMockPhone,
   createMockUser,
@@ -12,6 +13,7 @@ import {
 import Clinic from '../clinic';
 import Email from '../email';
 import Patient from '../patient';
+import PatientExternalOrganization from '../patient-external-organization';
 import PatientExternalProvider from '../patient-external-provider';
 import PatientExternalProviderEmail from '../patient-external-provider-email';
 import PatientExternalProviderPhone from '../patient-external-provider-phone';
@@ -25,6 +27,7 @@ interface ISetup {
   user: User;
   phone: Phone;
   patientExternalProvider: PatientExternalProvider;
+  organization: PatientExternalOrganization;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -32,8 +35,12 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
   const phone = await Phone.create(createMockPhone(), txn);
+  const organization = await PatientExternalOrganization.create(
+    createMockPatientExternalOrganization(patient.id, 'Test organization'),
+    txn,
+  );
   const patientExternalProvider = await PatientExternalProvider.create(
-    createMockPatientExternalProvider(patient.id, user.id, phone),
+    createMockPatientExternalProvider(patient.id, user.id, phone, organization.id),
     txn,
   );
   await PatientExternalProviderPhone.create(
@@ -45,7 +52,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { patient, patientExternalProvider: fullPatientExternalProvider, user, phone };
+  return {
+    patient,
+    patientExternalProvider: fullPatientExternalProvider,
+    user,
+    phone,
+    organization,
+  };
 }
 
 describe('patient external provider model', () => {
@@ -70,7 +83,7 @@ describe('patient external provider model', () => {
 
   describe('create', async () => {
     it('should create a patient external provider with minimal info', async () => {
-      const { phone, patient, patientExternalProvider } = await setup(txn);
+      const { phone, patient, patientExternalProvider, organization } = await setup(txn);
 
       expect(patientExternalProvider).toMatchObject({
         phone,
@@ -78,7 +91,7 @@ describe('patient external provider model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'psychiatrist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: null,
         email: null,
         description: 'some provider description',
@@ -86,10 +99,10 @@ describe('patient external provider model', () => {
     });
 
     it('should create a patient external provider with all contact fields', async () => {
-      const { user, phone, patient } = await setup(txn);
+      const { user, phone, patient, organization } = await setup(txn);
       const email = await Email.create(createMockEmail(user.id), txn);
       const patientExternalProvider = await PatientExternalProvider.create(
-        createMockPatientExternalProvider(patient.id, user.id, phone, {
+        createMockPatientExternalProvider(patient.id, user.id, phone, organization.id, {
           email,
           role: 'otherMedicalSpecialist' as ExternalProviderOptions,
           roleFreeText: 'potion intern',
@@ -113,7 +126,7 @@ describe('patient external provider model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'otherMedicalSpecialist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: 'potion intern',
         description: 'some provider description',
       });
@@ -130,7 +143,7 @@ describe('patient external provider model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'otherMedicalSpecialist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: 'potion intern',
         description: 'some provider description',
       });
@@ -138,14 +151,18 @@ describe('patient external provider model', () => {
   });
 
   describe('edit', async () => {
-    it('should edit patient info', async () => {
+    it('should edit patient provider', async () => {
       const { patient, patientExternalProvider, user, phone } = await setup(txn);
+      const organization2 = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Another organization'),
+        txn,
+      );
       const result = await PatientExternalProvider.edit(
         {
           firstName: 'Ron',
           lastName: 'Weasley',
           role: 'oncology' as ExternalProviderOptions,
-          agencyName: 'Hogwarts Cancer Ward',
+          patientExternalOrganizationId: organization2.id,
           description: 'magical cancer treatments',
           updatedById: user.id,
         },
@@ -162,13 +179,14 @@ describe('patient external provider model', () => {
         roleFreeText: null,
         email: null,
         description: 'magical cancer treatments',
+        patientExternalOrganizationId: organization2.id,
       });
     });
   });
 
   describe('delete', async () => {
     it('should delete patient external provider', async () => {
-      const { patient, user, patientExternalProvider } = await setup(txn);
+      const { patient, user, patientExternalProvider, organization } = await setup(txn);
       const result = await PatientExternalProvider.delete(patientExternalProvider.id, user.id, txn);
 
       expect(result).toMatchObject({
@@ -176,7 +194,7 @@ describe('patient external provider model', () => {
         firstName: 'Hermione',
         lastName: 'Granger',
         role: 'psychiatrist',
-        agencyName: 'Hogwarts',
+        patientExternalOrganizationId: organization.id,
         roleFreeText: null,
         email: null,
         description: 'some provider description',

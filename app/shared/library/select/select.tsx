@@ -11,6 +11,7 @@ interface IProps {
   value: string | number;
   onChange: (e?: any) => void;
   options?: string[];
+  optionsObject?: { [key: string]: string }; // object where key is option value, and value is option label
   prefix?: string;
   hasPlaceholder?: boolean;
   children?: any;
@@ -38,6 +39,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     errorMessageId,
     large,
     options,
+    optionsObject,
     isUnselectable,
     hasPlaceholder,
     color,
@@ -63,7 +65,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     <Option disabled={!isUnselectable} messageId={`${prefix}.placeholder`} value="" />
   ) : null;
 
-  const optionsComponent = options
+  let optionsComponent = options
     ? options.map(option => (
         <Option
           value={option}
@@ -72,6 +74,13 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
         />
       ))
     : null;
+
+  optionsComponent =
+    !optionsComponent && optionsObject
+      ? Object.keys(optionsObject).map(key => (
+          <Option value={key} label={optionsObject[key]} key={`${prefix}-option-${key}`} />
+        ))
+      : optionsComponent;
 
   return (
     <Fragment>

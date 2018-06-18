@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { values } from 'lodash';
+import { reduce, values } from 'lodash';
 import React from 'react';
-import { PhoneTypeOptions } from '../../../graphql/types';
+import { FullPatientExternalOrganizationFragment, PhoneTypeOptions } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import styles from '../../../shared/library/form/css/form.css';
@@ -10,6 +10,7 @@ import TextInput from '../../../shared/library/text-input/text-input';
 import ExternalProviderRoleSelect from './external-provider-role-select';
 
 interface IProps {
+  patientExternalOrganizations: FullPatientExternalOrganizationFragment[];
   emailAddress?: string | null;
   phoneNumber?: string | null;
   phoneType?: PhoneTypeOptions | null;
@@ -17,7 +18,7 @@ interface IProps {
   lastName?: string | null;
   role?: string | null;
   roleFreeText?: string | null;
-  agencyName?: string | null;
+  patientExternalOrganizationId?: string | null;
   description?: string | null;
   onChange: (e?: any) => void;
   hasFieldError: { [key: string]: boolean };
@@ -69,23 +70,38 @@ export class PatientExternalProviderForm extends React.Component<IProps, IState>
       lastName,
       role,
       roleFreeText,
-      agencyName,
+      patientExternalOrganizationId,
+      patientExternalOrganizations,
       hasFieldError,
     } = this.props;
 
+    if (!patientExternalOrganizations || !patientExternalOrganizations.length) {
+      return;
+    }
+
     const isOtherRole = role === 'other' || role === 'otherMedicalSpecialist';
+    const organizationOptions = reduce(
+      patientExternalOrganizations,
+      (result, value) => {
+        result[value.id] = value.name;
+        return result;
+      },
+      {} as any,
+    );
 
     return (
       <div>
         <div className={styles.field}>
-          <FormLabel messageId="patientExternalProvider.agencyName" className={styles.required} />
-          <TextInput
-            name="agencyName"
-            value={agencyName || ''}
+          <FormLabel messageId="patientExternalProvider.organization" className={styles.required} />
+          <Select
+            name="patientExternalOrganizationId"
+            value={patientExternalOrganizationId || ''}
             onChange={onChange}
-            required={true}
+            large={true}
             errorMessageId="patientExternalProvider.fieldEmptyError"
-            hasError={hasFieldError.agencyName}
+            hasError={hasFieldError.patientExternalOrganizationId}
+            optionsObject={organizationOptions}
+            hasPlaceholder={true}
           />
         </div>
 

@@ -12,6 +12,7 @@ mutation patientExternalOrganizationEdit(
   $isConsentedForStd: Boolean
   $isConsentedForGeneticTesting: Boolean
   $isConsentedForFamilyPlanning: Boolean
+  $isConsentedForMentalHealth: Boolean
   $consentDocumentId: String
 ) {
   patientExternalOrganizationEdit(
@@ -27,6 +28,7 @@ mutation patientExternalOrganizationEdit(
       isConsentedForStd: $isConsentedForStd
       isConsentedForGeneticTesting: $isConsentedForGeneticTesting
       isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
+      isConsentedForMentalHealth: $isConsentedForMentalHealth
       consentDocumentId: $consentDocumentId
     }
   ) {

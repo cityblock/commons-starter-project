@@ -17,6 +17,7 @@ mutation patientContactCreate(
   $isConsentedForStd: Boolean
   $isConsentedForGeneticTesting: Boolean
   $isConsentedForFamilyPlanning: Boolean
+  $isConsentedForMentalHealth: Boolean
 ) {
   patientContactCreate(
     input: {
@@ -36,6 +37,7 @@ mutation patientContactCreate(
       isConsentedForStd: $isConsentedForStd
       isConsentedForGeneticTesting: $isConsentedForGeneticTesting
       isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
+      isConsentedForMentalHealth: $isConsentedForMentalHealth
     }
   ) {
     ...FullPatientContact

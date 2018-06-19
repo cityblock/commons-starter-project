@@ -1079,5 +1079,6 @@ export const SPANISH_TRANSLATION = {
     'sharingConsent.isConsentedForStd': 'Sexually transmitted diseases',
     'sharingConsent.isConsentedForGeneticTesting': 'Genetic testing information',
     'sharingConsent.isConsentedForFamilyPlanning': 'Family planning services',
+    'sharingConsent.isConsentedForMentalHealth': 'Mental health information',
   },
 };

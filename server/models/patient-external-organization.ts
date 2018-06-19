@@ -23,6 +23,7 @@ export interface IPatientExternalOrganizationOptions {
   isConsentedForStd?: boolean;
   isConsentedForGeneticTesting?: boolean;
   isConsentedForFamilyPlanning?: boolean;
+  isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string;
 }
 
@@ -37,6 +38,7 @@ interface IEditPatientExternalOrganization {
   isConsentedForStd?: boolean;
   isConsentedForGeneticTesting?: boolean;
   isConsentedForFamilyPlanning?: boolean;
+  isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string | null;
 }
 
@@ -55,6 +57,7 @@ export default class PatientExternalOrganization extends BaseModel {
   isConsentedForStd!: boolean;
   isConsentedForGeneticTesting!: boolean;
   isConsentedForFamilyPlanning!: boolean;
+  isConsentedForMentalHealth!: boolean;
   consentDocumentId!: string | null;
   createdAt!: string;
   updatedAt!: string;
@@ -79,6 +82,7 @@ export default class PatientExternalOrganization extends BaseModel {
       isConsentedForStd: { type: 'boolean' },
       isConsentedForGeneticTesting: { type: 'boolean' },
       isConsentedForFamilyPlanning: { type: 'boolean' },
+      isConsentedForMentalHealth: { type: 'boolean' },
       consentDocumentId: { type: ['string', 'null'], format: 'uuid' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },

@@ -73,6 +73,7 @@ describe('Render consent display card for generic team member', () => {
         isConsentedForStd: true,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: true,
+        isConsentedForMentalHealth: true,
       },
     });
 
@@ -96,6 +97,7 @@ describe('Render consent display card for generic team member', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: true,
+        isConsentedForMentalHealth: true,
       },
     });
 

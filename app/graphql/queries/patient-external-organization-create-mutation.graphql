@@ -12,6 +12,7 @@ mutation patientExternalOrganizationCreate(
   $isConsentedForStd: Boolean
   $isConsentedForGeneticTesting: Boolean
   $isConsentedForFamilyPlanning: Boolean
+  $isConsentedForMentalHealth: Boolean
 ) {
   patientExternalOrganizationCreate(
     input: {
@@ -26,6 +27,7 @@ mutation patientExternalOrganizationCreate(
       isConsentedForStd: $isConsentedForStd
       isConsentedForGeneticTesting: $isConsentedForGeneticTesting
       isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
+      isConsentedForMentalHealth: $isConsentedForMentalHealth
     }
   ) {
     ...FullPatientExternalOrganization

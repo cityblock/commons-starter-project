@@ -105,6 +105,7 @@ describe('patient external organization model', () => {
           'isConsentedForStd',
           'isConsentedForGeneticTesting',
           'isConsentedForFamilyPlanning',
+          'isConsentedForMentalHealth',
           'consentDocumentId',
         ]),
         address: pick(organization.address, [
@@ -130,6 +131,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: true,
         isConsentedForGeneticTesting: false,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       }) as any;
       organizationFields.address = {
         city: 'Boston',
@@ -248,6 +250,7 @@ describe('patient external organization model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: true,
           isConsentedForFamilyPlanning: true,
+          isConsentedForMentalHealth: false,
           consentDocumentId: consentDocument.id,
         },
       );
@@ -268,6 +271,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: true,
+        isConsentedForMentalHealth: false,
         consentDocumentId: consentDocument.id,
       });
       expect(log).toBeCalled();

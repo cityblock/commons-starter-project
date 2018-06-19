@@ -15,5 +15,6 @@ fragment FullPatientExternalOrganization on PatientExternalOrganization {
   isConsentedForStd
   isConsentedForGeneticTesting
   isConsentedForFamilyPlanning
+  isConsentedForMentalHealth
   consentDocumentId
 }

@@ -27,6 +27,7 @@ export interface IPatientContactOptions {
   isConsentedForStd?: boolean;
   isConsentedForGeneticTesting?: boolean;
   isConsentedForFamilyPlanning?: boolean;
+  isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string;
 }
 
@@ -44,6 +45,7 @@ interface IEditPatientContact {
   isConsentedForStd?: boolean;
   isConsentedForGeneticTesting?: boolean;
   isConsentedForFamilyPlanning?: boolean;
+  isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string | null;
 }
 
@@ -67,6 +69,7 @@ export default class PatientContact extends BaseModel {
   isConsentedForStd!: boolean;
   isConsentedForGeneticTesting!: boolean;
   isConsentedForFamilyPlanning!: boolean;
+  isConsentedForMentalHealth!: boolean;
   consentDocumentId!: string | null;
   createdAt!: string;
   updatedAt!: string;
@@ -93,6 +96,7 @@ export default class PatientContact extends BaseModel {
       isConsentedForStd: { type: 'boolean' },
       isConsentedForGeneticTesting: { type: 'boolean' },
       isConsentedForFamilyPlanning: { type: 'boolean' },
+      isConsentedForMentalHealth: { type: 'boolean' },
       consentDocumentId: { type: ['string', 'null'], format: 'uuid' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },

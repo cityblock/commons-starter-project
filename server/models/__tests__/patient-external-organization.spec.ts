@@ -71,6 +71,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: null,
         isConsentedForGeneticTesting: null,
         isConsentedForFamilyPlanning: null,
+        isConsentedForMentalHealth: null,
       });
     });
 
@@ -95,6 +96,7 @@ describe('patient external organization model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: true,
           isConsentedForFamilyPlanning: false,
+          isConsentedForMentalHealth: false,
         }),
         txn,
       );
@@ -112,6 +114,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       });
     });
 
@@ -182,6 +185,7 @@ describe('patient external organization model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: false,
           isConsentedForFamilyPlanning: false,
+          isConsentedForMentalHealth: true,
         },
         patientExternalOrganization.id,
         txn,
@@ -199,6 +203,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: false,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: true,
       });
     });
 
@@ -223,6 +228,7 @@ describe('patient external organization model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: true,
           isConsentedForFamilyPlanning: false,
+          isConsentedForMentalHealth: false,
         }),
         txn,
       );
@@ -252,6 +258,7 @@ describe('patient external organization model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       });
     });
 

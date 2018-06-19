@@ -12,6 +12,7 @@ interface IMember {
   isConsentedForGeneticTesting?: boolean | null;
   isConsentedForStd?: boolean | null;
   isConsentedForSubstanceUse?: boolean | null;
+  isConsentedForMentalHealth?: boolean | null;
   description?: string | null;
 }
 
@@ -56,6 +57,7 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
       isConsentedForGeneticTesting,
       isConsentedForStd,
       isConsentedForSubstanceUse,
+      isConsentedForMentalHealth,
     } = this.props.member;
 
     const level =
@@ -63,7 +65,8 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
       isConsentedForHiv &&
       isConsentedForGeneticTesting &&
       isConsentedForStd &&
-      isConsentedForSubstanceUse;
+      isConsentedForSubstanceUse &&
+      isConsentedForMentalHealth;
     if (level === true) {
       return 'fullConsent';
     } else if (level === false) {
@@ -79,23 +82,27 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
       isConsentedForGeneticTesting,
       isConsentedForStd,
       isConsentedForSubstanceUse,
+      isConsentedForMentalHealth,
     } = this.props.member;
     const stylingProps = { color: 'gray' as Color, size: 'medium' as Size, isBold: true };
 
     const family = !isConsentedForFamilyPlanning ? (
-      <Text messageId={`sharingConsent.isConsentedForFamilyPlanning`} {...stylingProps} />
+      <Text messageId="sharingConsent.isConsentedForFamilyPlanning" {...stylingProps} />
     ) : null;
     const hiv = !isConsentedForHiv ? (
-      <Text messageId={`sharingConsent.isConsentedForHiv`} {...stylingProps} />
+      <Text messageId="sharingConsent.isConsentedForHiv" {...stylingProps} />
     ) : null;
     const std = !isConsentedForStd ? (
-      <Text messageId={`sharingConsent.isConsentedForStd`} {...stylingProps} />
+      <Text messageId="sharingConsent.isConsentedForStd" {...stylingProps} />
     ) : null;
     const genetic = !isConsentedForGeneticTesting ? (
-      <Text messageId={`sharingConsent.isConsentedForGeneticTesting`} {...stylingProps} />
+      <Text messageId="sharingConsent.isConsentedForGeneticTesting" {...stylingProps} />
     ) : null;
     const substance = !isConsentedForSubstanceUse ? (
-      <Text messageId={`sharingConsent.isConsentedForSubstanceUse`} {...stylingProps} />
+      <Text messageId="sharingConsent.isConsentedForSubstanceUse" {...stylingProps} />
+    ) : null;
+    const mental = !isConsentedForMentalHealth ? (
+      <Text messageId="sharingConsent.isConsentedForMentalHealth" {...stylingProps} />
     ) : null;
 
     return (
@@ -105,6 +112,7 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
         {std}
         {substance}
         {genetic}
+        {mental}
       </div>
     );
   };

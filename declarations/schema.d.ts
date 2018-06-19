@@ -1669,6 +1669,7 @@ declare module 'schema' {
     isConsentedForStd: boolean | null;
     isConsentedForGeneticTesting: boolean | null;
     isConsentedForFamilyPlanning: boolean | null;
+    isConsentedForMentalHealth: boolean | null;
     consentDocumentId: string | null;
     createdAt: string | null;
     updatedAt: string | null;
@@ -1762,6 +1763,7 @@ declare module 'schema' {
     isConsentedForStd: boolean | null;
     isConsentedForGeneticTesting: boolean | null;
     isConsentedForFamilyPlanning: boolean | null;
+    isConsentedForMentalHealth: boolean | null;
     consentDocumentId: string | null;
     createdAt: string | null;
     updatedAt: string | null;
@@ -4516,6 +4518,7 @@ declare module 'schema' {
     isConsentedForStd?: boolean | null;
     isConsentedForGeneticTesting?: boolean | null;
     isConsentedForFamilyPlanning?: boolean | null;
+    isConsentedForMentalHealth?: boolean | null;
   }
 
   /**
@@ -4545,6 +4548,7 @@ declare module 'schema' {
     isConsentedForStd?: boolean | null;
     isConsentedForGeneticTesting?: boolean | null;
     isConsentedForFamilyPlanning?: boolean | null;
+    isConsentedForMentalHealth?: boolean | null;
     consentDocumentId?: string | null;
   }
 
@@ -4631,6 +4635,7 @@ declare module 'schema' {
     isConsentedForStd?: boolean | null;
     isConsentedForGeneticTesting?: boolean | null;
     isConsentedForFamilyPlanning?: boolean | null;
+    isConsentedForMentalHealth?: boolean | null;
   }
 
   /**
@@ -4655,6 +4660,7 @@ declare module 'schema' {
     isConsentedForStd?: boolean | null;
     isConsentedForGeneticTesting?: boolean | null;
     isConsentedForFamilyPlanning?: boolean | null;
+    isConsentedForMentalHealth?: boolean | null;
     consentDocumentId?: string | null;
   }
 

@@ -201,6 +201,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: true,
       };
 
       const result = await graphql(
@@ -480,6 +481,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
         consentDocumentId: consentDocument.id,
       };
 
@@ -511,6 +513,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       });
       expect(log).toBeCalled();
 

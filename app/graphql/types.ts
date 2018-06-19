@@ -2996,6 +2996,7 @@ export interface getPatientContactHealthcareProxiesQuery {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     createdAt: string | null,
     updatedAt: string | null,
@@ -3042,6 +3043,7 @@ export interface getPatientContactsQuery {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     createdAt: string | null,
     updatedAt: string | null,
@@ -3148,6 +3150,7 @@ export interface getPatientExternalOrganizationsQuery {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
   } > | null,
 };
@@ -7070,6 +7073,7 @@ export interface patientContactCreateMutationVariables {
   isConsentedForStd?: boolean | null,
   isConsentedForGeneticTesting?: boolean | null,
   isConsentedForFamilyPlanning?: boolean | null,
+  isConsentedForMentalHealth?: boolean | null,
 };
 
 export interface patientContactCreateMutation {
@@ -7107,6 +7111,7 @@ export interface patientContactCreateMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     createdAt: string | null,
     updatedAt: string | null,
@@ -7153,6 +7158,7 @@ export interface patientContactDeleteMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     createdAt: string | null,
     updatedAt: string | null,
@@ -7177,6 +7183,7 @@ export interface patientContactEditMutationVariables {
   isConsentedForStd?: boolean | null,
   isConsentedForGeneticTesting?: boolean | null,
   isConsentedForFamilyPlanning?: boolean | null,
+  isConsentedForMentalHealth?: boolean | null,
   consentDocumentId?: string | null,
 };
 
@@ -7215,6 +7222,7 @@ export interface patientContactEditMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     createdAt: string | null,
     updatedAt: string | null,
@@ -7340,6 +7348,7 @@ export interface patientExternalOrganizationCreateMutationVariables {
   isConsentedForStd?: boolean | null,
   isConsentedForGeneticTesting?: boolean | null,
   isConsentedForFamilyPlanning?: boolean | null,
+  isConsentedForMentalHealth?: boolean | null,
 };
 
 export interface patientExternalOrganizationCreateMutation {
@@ -7365,6 +7374,7 @@ export interface patientExternalOrganizationCreateMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
   } | null,
 };
@@ -7396,6 +7406,7 @@ export interface patientExternalOrganizationDeleteMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
     deletedAt: string | null,
   } | null,
@@ -7413,6 +7424,7 @@ export interface patientExternalOrganizationEditMutationVariables {
   isConsentedForStd?: boolean | null,
   isConsentedForGeneticTesting?: boolean | null,
   isConsentedForFamilyPlanning?: boolean | null,
+  isConsentedForMentalHealth?: boolean | null,
   consentDocumentId?: string | null,
 };
 
@@ -7439,6 +7451,7 @@ export interface patientExternalOrganizationEditMutation {
     isConsentedForStd: boolean | null,
     isConsentedForGeneticTesting: boolean | null,
     isConsentedForFamilyPlanning: boolean | null,
+    isConsentedForMentalHealth: boolean | null,
     consentDocumentId: string | null,
   } | null,
 };
@@ -11993,6 +12006,7 @@ export interface FullPatientContactFragment {
   isConsentedForStd: boolean | null,
   isConsentedForGeneticTesting: boolean | null,
   isConsentedForFamilyPlanning: boolean | null,
+  isConsentedForMentalHealth: boolean | null,
   consentDocumentId: string | null,
   createdAt: string | null,
   updatedAt: string | null,
@@ -12053,6 +12067,7 @@ export interface FullPatientExternalOrganizationFragment {
   isConsentedForStd: boolean | null,
   isConsentedForGeneticTesting: boolean | null,
   isConsentedForFamilyPlanning: boolean | null,
+  isConsentedForMentalHealth: boolean | null,
   consentDocumentId: string | null,
 };
 

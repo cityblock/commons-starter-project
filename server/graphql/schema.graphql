@@ -483,6 +483,7 @@ type PatientContact implements uniqueId {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
   consentDocumentId: String
   createdAt: String
   updatedAt: String
@@ -521,6 +522,7 @@ type PatientExternalOrganization implements uniqueId {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
   consentDocumentId: String
   createdAt: String
   updatedAt: String
@@ -1908,6 +1910,7 @@ input PatientContactCreateInput {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
 }
 
 # params for deleting a patient contact and all associated models in the db
@@ -1933,6 +1936,7 @@ input PatientContactEditInput {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
   consentDocumentId: String
 }
 
@@ -1980,6 +1984,7 @@ input PatientExternalOrganizationCreateInput {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
 }
 
 # params for deleting a patient external organization and all associated models in the db
@@ -2000,6 +2005,7 @@ input PatientExternalOrganizationEditInput {
   isConsentedForStd: Boolean
   isConsentedForGeneticTesting: Boolean
   isConsentedForFamilyPlanning: Boolean
+  isConsentedForMentalHealth: Boolean
   consentDocumentId: String
 }
 

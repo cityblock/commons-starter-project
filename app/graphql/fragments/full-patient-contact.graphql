@@ -27,6 +27,7 @@ fragment FullPatientContact on PatientContact {
   isConsentedForStd
   isConsentedForGeneticTesting
   isConsentedForFamilyPlanning
+  isConsentedForMentalHealth
   consentDocumentId
   createdAt
   updatedAt

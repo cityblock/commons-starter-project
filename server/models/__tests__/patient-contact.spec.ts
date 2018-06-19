@@ -130,6 +130,7 @@ describe('patient info model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: true,
           isConsentedForFamilyPlanning: false,
+          isConsentedForMentalHealth: false,
         }),
         txn,
       );
@@ -164,6 +165,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       });
 
       const fullPatientContact = await PatientContact.get(patientContact.id, txn);
@@ -185,6 +187,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: false,
       });
     });
   });
@@ -216,6 +219,7 @@ describe('patient info model', () => {
           isConsentedForStd: false,
           isConsentedForGeneticTesting: true,
           isConsentedForFamilyPlanning: false,
+          isConsentedForMentalHealth: true,
         },
         patientContact.id,
         txn,
@@ -238,6 +242,7 @@ describe('patient info model', () => {
         isConsentedForStd: false,
         isConsentedForGeneticTesting: true,
         isConsentedForFamilyPlanning: false,
+        isConsentedForMentalHealth: true,
       });
     });
   });

@@ -121,8 +121,18 @@ describe('Render Patient External Provider Form', () => {
     });
     const inputs = wrapper.find(TextInput);
 
-    expect(wrapper.find(Select).at(0).props().name).toBe('patientExternalOrganizationId');
-    expect(wrapper.find(Select).at(0).props().hasError).toBeTruthy();
+    expect(
+      wrapper
+        .find(Select)
+        .at(0)
+        .props().name,
+    ).toBe('patientExternalOrganizationId');
+    expect(
+      wrapper
+        .find(Select)
+        .at(0)
+        .props().hasError,
+    ).toBeTruthy();
 
     expect(wrapper.find(ExternalProviderRoleSelect).props().hasError).toBeTruthy();
 

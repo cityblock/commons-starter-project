@@ -1,7 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import { get, isNil } from 'lodash';
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import { withRouter, RouteComponentProps } from 'react-router';
 import patientExternalOrganizationsQuery from '../../../graphql/queries/get-patient-external-organizations.graphql';
 import {
   getPatientExternalOrganizationsQuery,
@@ -45,7 +46,7 @@ interface IGraphqlProps {
   error?: ApolloError | null;
 }
 
-export type allProps = IGraphqlProps & IProps;
+export type allProps = IGraphqlProps & IProps & RouteComponentProps<IProps & IGraphqlProps>;
 
 interface IEditableFieldState {
   firstName?: string | null;
@@ -145,7 +146,8 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
   };
 
   handleGoToOrganizations = () => {
-    // TODO: add in go to organizations;
+    const { patientId, history } = this.props;
+    history.push(`/patients/${patientId}/team/organizations`);
   };
 
   handleSubmit = async () => {
@@ -264,15 +266,18 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
   }
 }
 
-export default graphql(patientExternalOrganizationsQuery, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.patientId,
-    },
+export default compose(
+  withRouter,
+  graphql(patientExternalOrganizationsQuery, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }): IGraphqlProps => ({
+      isLoading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patientExternalOrganizations: data ? (data as any).patientExternalOrganizations : null,
+    }),
   }),
-  props: ({ data }): IGraphqlProps => ({
-    isLoading: data ? data.loading : false,
-    error: data ? data.error : null,
-    patientExternalOrganizations: data ? (data as any).patientExternalOrganizations : null,
-  }),
-})(PatientExternalProviderModal);
+)(PatientExternalProviderModal) as React.ComponentClass<IProps>;

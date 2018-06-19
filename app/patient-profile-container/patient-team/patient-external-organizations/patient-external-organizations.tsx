@@ -9,6 +9,7 @@ import {
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import styles from '../css/patient-team.css';
+import EditPatientExternalOrganizationModal from './edit-patient-external-organization-modal';
 import PatientExternalOrganization from './patient-external-organization';
 
 interface IProps {
@@ -57,7 +58,20 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
   };
 
   renderEditModal() {
-    // TODO
+    const { patientId } = this.props;
+    const { isEditModalVisible, patientExternalOrganizationToEdit } = this.state;
+
+    if (patientExternalOrganizationToEdit) {
+      return (
+        <EditPatientExternalOrganizationModal
+          isVisible={isEditModalVisible}
+          closePopup={this.handleCloseModal}
+          patientExternalOrganization={patientExternalOrganizationToEdit}
+          patientId={patientId}
+        />
+      );
+    }
+
     return null;
   }
 

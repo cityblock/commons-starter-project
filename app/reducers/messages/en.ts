@@ -272,6 +272,7 @@ export const ENGLISH_TRANSLATION = {
     'address.zip': 'Zip code',
     'address.description': 'Notes about this address',
     'address.street1': 'Street 1',
+    'address.street2': 'Street 2',
     'address.saveError': 'There was an error saving. Try again',
     'address.addAdditional': 'Add additional address',
     'address.addPrimary': 'Add a primary address',
@@ -405,6 +406,19 @@ export const ENGLISH_TRANSLATION = {
     'patientExternalProvider.emailAddress': 'Email address',
     'patientExternalProvider.noOrganzitions':
       'No organizations on record for this member. In order to add an external care team member, you first need to add their organization.',
+    'patientExternalOrganization.save': 'Save',
+    'patientExternalOrganization.cancel': 'Cancel',
+    'patientExternalOrganization.saveError': 'There was an error saving. Try again',
+    'patientExternalOrganization.name': 'Name of organization',
+    'patientExternalOrganization.phoneNumber': 'Phone number',
+    'patientExternalOrganization.faxNumber': 'Fax number',
+    'patientExternalOrganization.createModalTitle': 'Add organization',
+    'patientExternalOrganization.editModalTitle': 'Edit organization',
+    'patientExternalOrganization.modalSubTitle':
+      'Provide the following information for the organization',
+    'patientExternalOrganization.addNote': 'Add a note',
+    'patientExternalOrganization.note': 'Additional notes',
+    'patientExternalOrganization.fieldEmptyError': 'This field is required',
     'patientPhoto.sectionTitle': 'Member Photo',
     'patientPhoto.description':
       'Patient identification is very important to us. Uploading a patient photo will help ensure the identity of the patient.',

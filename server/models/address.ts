@@ -40,7 +40,7 @@ export default class Address extends BaseModel {
       deletedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
     },
-    required: ['zip', 'updatedById'],
+    required: ['updatedById'],
   };
 
   static async get(addressId: string, txn: Transaction) {

@@ -8,6 +8,7 @@ import { PatientExternalProviderModal } from '../patient-external-provider-modal
 
 describe('Render External Provider Modal Component', () => {
   const closePopup = () => true;
+  const history = { push: jest.fn() } as any;
   const wrapper = shallow(
     <PatientExternalProviderModal
       patientId={externalProviderPerson.patientId}
@@ -15,6 +16,10 @@ describe('Render External Provider Modal Component', () => {
       closePopup={closePopup}
       isVisible={false}
       titleMessageId="title.id"
+      history={history}
+      match={{} as any}
+      location={{} as any}
+      staticContext={{} as any}
     />,
   );
 

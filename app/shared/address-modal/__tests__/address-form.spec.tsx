@@ -9,8 +9,8 @@ describe('Render Address Form', () => {
   const wrapper = shallow(<AddressForm onChange={onChange} />);
 
   it('renders empty address form', () => {
-    expect(wrapper.find(FormLabel).length).toBe(5);
-    expect(wrapper.find(TextInput).length).toBe(5);
+    expect(wrapper.find(FormLabel).length).toBe(6);
+    expect(wrapper.find(TextInput).length).toBe(6);
 
     expect(
       wrapper
@@ -36,7 +36,7 @@ describe('Render Address Form', () => {
         .find(FormLabel)
         .at(1)
         .props().messageId,
-    ).toBe('address.city');
+    ).toBe('address.street2');
     expect(
       wrapper
         .find(TextInput)
@@ -55,7 +55,7 @@ describe('Render Address Form', () => {
         .find(FormLabel)
         .at(2)
         .props().messageId,
-    ).toBe('address.state');
+    ).toBe('address.city');
     expect(
       wrapper
         .find(TextInput)
@@ -68,54 +68,73 @@ describe('Render Address Form', () => {
         .at(2)
         .props().onChange,
     ).toBe(onChange);
+
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(3)
+        .props().messageId,
+    ).toBe('address.state');
     expect(
       wrapper
         .find(TextInput)
-        .at(2)
+        .at(3)
+        .props().value,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find(TextInput)
+        .at(3)
+        .props().onChange,
+    ).toBe(onChange);
+    expect(
+      wrapper
+        .find(TextInput)
+        .at(3)
         .props().pattern,
     ).toBe('[A-Za-z]{2}');
 
     expect(
       wrapper
         .find(FormLabel)
-        .at(3)
+        .at(4)
         .props().messageId,
     ).toBe('address.zip');
     expect(
       wrapper
         .find(TextInput)
-        .at(3)
+        .at(4)
         .props().value,
     ).toBeFalsy();
     expect(
       wrapper
         .find(TextInput)
-        .at(3)
+        .at(4)
         .props().onChange,
     ).toBe(onChange);
     expect(
       wrapper
         .find(TextInput)
-        .at(3)
+        .at(4)
         .props().pattern,
     ).toBe('[0-9]{5}');
 
     expect(
       wrapper
         .find(FormLabel)
-        .at(4)
+        .at(5)
         .props().messageId,
     ).toBe('address.description');
     expect(
       wrapper
         .find(TextInput)
-        .at(4)
+        .at(5)
         .props().value,
     ).toBeFalsy();
     expect(
       wrapper
         .find(TextInput)
-        .at(4)
+        .at(5)
         .props().onChange,
     ).toBe(onChange);
   });
@@ -123,14 +142,15 @@ describe('Render Address Form', () => {
   it('renders filled out address form', () => {
     wrapper.setProps({
       street1: 'A',
+      street2: 'E',
       city: 'B',
       state: 'C',
       zip: '1',
       description: 'D',
     });
 
-    expect(wrapper.find(FormLabel).length).toBe(5);
-    expect(wrapper.find(TextInput).length).toBe(5);
+    expect(wrapper.find(FormLabel).length).toBe(6);
+    expect(wrapper.find(TextInput).length).toBe(6);
 
     expect(
       wrapper
@@ -143,23 +163,29 @@ describe('Render Address Form', () => {
         .find(TextInput)
         .at(1)
         .props().value,
-    ).toBe('B');
+    ).toBe('E');
     expect(
       wrapper
         .find(TextInput)
         .at(2)
         .props().value,
-    ).toBe('C');
+    ).toBe('B');
     expect(
       wrapper
         .find(TextInput)
         .at(3)
         .props().value,
-    ).toBe('1');
+    ).toBe('C');
     expect(
       wrapper
         .find(TextInput)
         .at(4)
+        .props().value,
+    ).toBe('1');
+    expect(
+      wrapper
+        .find(TextInput)
+        .at(5)
         .props().value,
     ).toBe('D');
   });

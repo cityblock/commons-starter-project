@@ -6,6 +6,7 @@ import CreatePatientContactModal from '../../shared/patient-contact-modal/create
 import styles from './css/patient-team.css';
 import AddCareTeamMemberModal from './patient-cityblock-care-team/add-care-team-member-modal';
 import PatientCityblockCareTeam from './patient-cityblock-care-team/patient-cityblock-care-team';
+import CreatePatientExternalOrganizationModal from './patient-external-organizations/create-patient-external-organization-modal';
 import PatientExternalOrganizations from './patient-external-organizations/patient-external-organizations';
 import CreatePatientExternalProviderModal from './patient-external-team/create-patient-external-provider-modal';
 import PatientExternalTeam from './patient-external-team/patient-external-team';
@@ -103,6 +104,7 @@ export class PatientTeam extends React.Component<IProps, IState> {
       isCityblockCareTeam,
       isExternalCareTeam,
       isFamilyAndSupportTeam,
+      isOrganizations,
     } = this.getCurrentSubTab();
 
     if (isCityblockCareTeam) {
@@ -135,6 +137,14 @@ export class PatientTeam extends React.Component<IProps, IState> {
           }}
           titleMessageId="patientContact.addFamily"
           subTitleMessageId="patientContact.familySubtitle"
+        />
+      );
+    } else if (isOrganizations) {
+      return (
+        <CreatePatientExternalOrganizationModal
+          isVisible={isModalVisible}
+          closePopup={this.onClosePopup}
+          patientId={match.params.patientId}
         />
       );
     }

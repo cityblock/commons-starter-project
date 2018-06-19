@@ -24,6 +24,7 @@ const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
     onPrimaryChange,
     isPrimary,
     street1,
+    street2,
     state,
     zip,
     city,
@@ -66,6 +67,13 @@ const AddressForm: React.StatelessComponent<IProps> = (props: IProps) => {
         <div className={styles.field}>
           <FormLabel messageId="address.street1" />
           <TextInput name="street1" value={street1 || ''} onChange={onChange} />
+        </div>
+      </div>
+
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <FormLabel messageId="address.street2" />
+          <TextInput name="street2" value={street2 || ''} onChange={onChange} />
         </div>
       </div>
 

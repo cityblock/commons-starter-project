@@ -13,7 +13,9 @@ import {
 } from '../../../../shared/util/test-data';
 import createStore from '../../../../store';
 import PatientExternalOrganization from '../patient-external-organization';
-import PatientExternalOrganizations, { PatientExternalOrganizations as Component } from '../patient-external-organizations';
+import PatientExternalOrganizations, {
+  PatientExternalOrganizations as Component,
+} from '../patient-external-organizations';
 
 const history = createHistory();
 const store = createStore(history);
@@ -24,9 +26,7 @@ describe('Render Patient External Organizations', () => {
   });
   const container = mount(
     <ApolloTestProvider graphqlMocks={graphqlMocks()}>
-      <PatientExternalOrganizations
-        patientId={patient.id}
-      />
+      <PatientExternalOrganizations patientId={patient.id} />
     </ApolloTestProvider>,
   );
 

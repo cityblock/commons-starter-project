@@ -164,7 +164,7 @@ export const formatAddressSecondLine = (address: {
   if (city && (zip || state)) {
     formattedCity = `${city}, `;
   }
-  return `${formattedCity}${state} ${zip}`;
+  return `${formattedCity}${state} ${zip || ''}`;
 };
 
 export const formatCBOReferralTaskTitle = (CBOName: string): string => {

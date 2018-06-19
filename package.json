@@ -202,7 +202,7 @@
     "@types/twilio": "0.0.9",
     "@types/uuid": "3.4.3",
     "@types/validator": "9.4.1",
-    "@types/webpack": "4.4.0",
+    "@types/webpack": "4.4.1",
     "@types/webpack-dev-middleware": "2.0.1",
     "@types/ws": "5.1.2",
     "acl": "0.4.11",

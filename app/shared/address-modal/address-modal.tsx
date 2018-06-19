@@ -5,6 +5,7 @@ import AddressForm from './address-form';
 
 export interface IAddress {
   street1?: string | null;
+  street2?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
@@ -28,6 +29,7 @@ interface IProps {
 
 interface IState {
   street1?: string | null;
+  street2?: string | null;
   state?: string | null;
   zip?: string | null;
   city?: string | null;
@@ -39,6 +41,7 @@ interface IState {
 class AddressModal extends React.Component<IProps, IState> {
   state = {
     street1: null,
+    street2: null,
     state: null,
     zip: null,
     city: null,
@@ -50,6 +53,7 @@ class AddressModal extends React.Component<IProps, IState> {
   clearState() {
     this.setState({
       street1: null,
+      street2: null,
       state: null,
       zip: null,
       city: null,
@@ -73,12 +77,13 @@ class AddressModal extends React.Component<IProps, IState> {
   handleSubmit = async () => {
     const { address, saveAddress, onSaved, isPrimary } = this.props;
     const originalAddress = address || {};
-    const { street1, state, zip, city, description, updatedIsPrimary } = this.state;
+    const { street1, street2, state, zip, city, description, updatedIsPrimary } = this.state;
     const isPrimaryUpdatedToTrue = updatedIsPrimary === true && updatedIsPrimary !== isPrimary;
 
     const updatedAddress = {
       id: originalAddress.id,
       street1: street1 || originalAddress.street1,
+      street2: street2 || originalAddress.street2,
       state: state || originalAddress.state,
       zip: zip || originalAddress.zip,
       city: city || originalAddress.city,
@@ -103,9 +108,10 @@ class AddressModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, isPrimary, titleMessageId } = this.props;
     const address = this.props.address || {};
-    const { saveError, updatedIsPrimary, street1, state, zip, city, description } = this.state;
+    const { saveError, updatedIsPrimary, street1, street2, state, zip, city, description } = this.state;
 
     const updatedStreet1 = isNil(street1) ? address.street1 : street1;
+    const updatedStreet2 = isNil(street2) ? address.street2 : street2;
     const updatedState = isNil(state) ? address.state : state;
     const updatedCity = isNil(city) ? address.city : city;
     const updatedZip = isNil(zip) ? address.zip : zip;
@@ -126,6 +132,7 @@ class AddressModal extends React.Component<IProps, IState> {
       >
         <AddressForm
           street1={updatedStreet1}
+          street2={updatedStreet2}
           state={updatedState}
           city={updatedCity}
           zip={updatedZip}

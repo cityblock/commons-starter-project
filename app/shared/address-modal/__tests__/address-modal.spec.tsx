@@ -41,6 +41,7 @@ describe('Render Address Info Component', () => {
 
     expect(wrapper.find(AddressForm).length).toBe(1);
     expect(wrapper.find(AddressForm).props().street1).toBe(address1.street1);
+    expect(wrapper.find(AddressForm).props().street2).toBe(address1.street2);
     expect(wrapper.find(AddressForm).props().state).toBe(address1.state);
     expect(wrapper.find(AddressForm).props().city).toBe(address1.city);
     expect(wrapper.find(AddressForm).props().zip).toBe(address1.zip);
@@ -48,6 +49,7 @@ describe('Render Address Info Component', () => {
 
     wrapper.setState({
       street1: '111 First Ave',
+      street2: 'Apt 2',
       state: 'CA',
       city: 'San Francisco',
       zip: '99999',
@@ -56,6 +58,7 @@ describe('Render Address Info Component', () => {
 
     expect(wrapper.find(AddressForm).length).toBe(1);
     expect(wrapper.find(AddressForm).props().street1).toBe('111 First Ave');
+    expect(wrapper.find(AddressForm).props().street2).toBe('Apt 2');
     expect(wrapper.find(AddressForm).props().state).toBe('CA');
     expect(wrapper.find(AddressForm).props().city).toBe('San Francisco');
     expect(wrapper.find(AddressForm).props().zip).toBe('99999');

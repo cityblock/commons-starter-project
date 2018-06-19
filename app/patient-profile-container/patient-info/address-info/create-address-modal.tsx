@@ -34,6 +34,7 @@ export class CreateAddressModal extends React.Component<allProps> {
       variables: {
         patientId,
         street1: address.street1,
+        street2: address.street2,
         state: address.state,
         city: address.city,
         description: address.description,

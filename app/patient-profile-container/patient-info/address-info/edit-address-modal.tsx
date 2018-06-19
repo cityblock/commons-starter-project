@@ -53,6 +53,7 @@ export class EditAddressModal extends React.Component<allProps> {
         patientId,
         addressId: address.id,
         street1: address.street1,
+        street2: address.street2,
         state: address.state,
         city: address.city,
         description: address.description,

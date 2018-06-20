@@ -14,6 +14,7 @@ import withErrorHandler, {
 } from '../../../shared/with-error-handler/with-error-handler';
 import RequiredPlaceholder from '../../required-placeholder';
 import styles from '../css/patient-team.css';
+import EditPatientContactConsentModal from './edit-patient-contact-consent-modal';
 import PatientFamilyMember from './patient-family-member';
 
 interface IProps {
@@ -34,11 +35,16 @@ export type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
+  isEditConsentModalVisible: boolean;
   patientContactToEdit?: FullPatientContact | null;
 }
 
 export class PatientFamilyTeam extends React.Component<allProps, IState> {
-  state = { isEditModalVisible: false, patientContactToEdit: undefined };
+  state = {
+    isEditModalVisible: false,
+    isEditConsentModalVisible: false,
+    patientContactToEdit: undefined,
+  };
 
   handleRemove = async (patientContactId: string) => {
     const { openErrorPopup } = this.props;
@@ -49,16 +55,20 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
     }
   };
 
-  handleEditSuccess = () => {
-    // TODO: get rid of these
-  };
-
   handleOpenEditModal = (patientContactToEdit: FullPatientContact) => {
     this.setState({ isEditModalVisible: true, patientContactToEdit });
   };
 
+  handleOpenEditConsentModal = (patientContactToEdit: FullPatientContact) => {
+    this.setState({ isEditConsentModalVisible: true, patientContactToEdit });
+  };
+
   handleCloseModal = () => {
-    this.setState({ isEditModalVisible: false, patientContactToEdit: null });
+    this.setState({
+      isEditModalVisible: false,
+      isEditConsentModalVisible: false,
+      patientContactToEdit: null,
+    });
   };
 
   renderEditModal() {
@@ -73,9 +83,26 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
           patientContact={patientContactToEdit}
           patientId={patientId}
           contactType="familyMember"
-          onSaved={this.handleEditSuccess}
           titleMessageId="patientContact.editFamily"
           subTitleMessageId="patientContact.familySubtitle"
+        />
+      );
+    }
+
+    return null;
+  }
+
+  renderEditConsentModal() {
+    const { patientId } = this.props;
+    const { isEditConsentModalVisible, patientContactToEdit } = this.state;
+
+    if (patientContactToEdit) {
+      return (
+        <EditPatientContactConsentModal
+          isVisible={isEditConsentModalVisible}
+          closePopup={this.handleCloseModal}
+          patientContact={patientContactToEdit}
+          patientId={patientId}
         />
       );
     }
@@ -118,6 +145,7 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
         {placeholder}
         {this.renderCareTeamMembers()}
         {this.renderEditModal()}
+        {this.renderEditConsentModal()}
       </div>
     );
   }

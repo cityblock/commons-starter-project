@@ -9,4 +9,5 @@ export const column: string;
 export const bullet: string;
 export const hiddenStar: string;
 export const spacing: string;
+export const spacingRight: string;
 export const commaSeparated: string;

@@ -9,12 +9,12 @@ import {
 import PatientContactModal, { ContactType } from './patient-contact-modal';
 
 interface IProps {
-  onSaved: (patientContact: FullPatientContact) => void;
   patientContact: FullPatientContact;
   patientId: string;
   contactType: ContactType;
   isVisible: boolean;
   closePopup: () => void;
+  onSaved?: (patientContact: FullPatientContact) => void;
   subTitleMessageId?: string;
   titleMessageId?: string;
 }
@@ -47,8 +47,9 @@ export class EditPatientContactModal extends React.Component<allProps> {
   };
 
   handlePatientContactSaved = (response: { data: patientContactEdit }) => {
-    if (response.data.patientContactEdit) {
-      this.props.onSaved(response.data.patientContactEdit);
+    const { onSaved } = this.props;
+    if (response.data.patientContactEdit && onSaved) {
+      onSaved(response.data.patientContactEdit);
     }
   };
 

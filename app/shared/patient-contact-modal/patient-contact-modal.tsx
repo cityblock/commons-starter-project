@@ -16,7 +16,7 @@ export type ContactType = 'healthcareProxy' | 'familyMember' | 'emergencyContact
 interface IProps {
   saveContact: (patientContact: any) => Promise<any>; // NOTE: Patient contact should be either the create or edit mutation variables
   closePopup: () => void;
-  onSaved: (response: any) => void;
+  onSaved?: (response: any) => void;
   isVisible: boolean;
   contactType?: ContactType;
   patientContact?: FullPatientContact | null;
@@ -188,7 +188,9 @@ class PatientContactModal extends React.Component<IProps, allState> {
 
     try {
       const response = await saveContact(updatedPatientContact);
-      onSaved(response);
+      if (onSaved) {
+        onSaved(response);
+      }
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error

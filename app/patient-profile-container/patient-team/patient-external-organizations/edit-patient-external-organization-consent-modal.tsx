@@ -8,9 +8,8 @@ import {
   patientExternalOrganizationEditVariables,
   FullPatientExternalOrganization,
 } from '../../../graphql/types';
-import PatientExternalOrganizationModal, {
-  IPatientExternalOrganization,
-} from './patient-external-organization-modal';
+import ConsentModal from '../consent-modal';
+import { getConsentSettingsObject, IConsentSettings } from '../helpers/consent-helpers';
 
 interface IProps {
   patientExternalOrganization: FullPatientExternalOrganization;
@@ -27,31 +26,30 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-export class EditPatientExternalOrganizationModal extends React.Component<allProps> {
-  editPatientExternalOrganization = async (organization: IPatientExternalOrganization) => {
+export class EditPatientExternalOrganizationConsentModal extends React.Component<allProps> {
+  editPatientExternalOrganization = async (consentSettings: IConsentSettings) => {
     const { editPatientExternalOrganizationMutation, patientExternalOrganization } = this.props;
 
     // edit patient external organization
     return editPatientExternalOrganizationMutation({
       variables: {
-        ...organization,
+        ...consentSettings,
         patientExternalOrganizationId: patientExternalOrganization.id,
       },
     });
   };
 
   render() {
-    const { patientExternalOrganization, isVisible, closePopup, patientId } = this.props;
+    const { patientExternalOrganization, isVisible, closePopup } = this.props;
+    const consentSettings = getConsentSettingsObject(patientExternalOrganization);
 
     return (
-      <PatientExternalOrganizationModal
-        patientId={patientId}
+      <ConsentModal
+        consenterId={patientExternalOrganization.id}
         isVisible={isVisible}
-        patientExternalOrganization={patientExternalOrganization}
-        saveExternalOrganization={this.editPatientExternalOrganization}
+        consentSettings={consentSettings}
+        saveConsentSettings={this.editPatientExternalOrganization}
         closePopup={closePopup}
-        titleMessageId="patientExternalOrganization.editModalTitle"
-        subTitleMessageId="patientExternalOrganization.modalSubTitle"
       />
     );
   }
@@ -69,4 +67,4 @@ export default graphql<any>(editPatientExternalOrganizationMutationGraphql, {
       },
     ],
   }),
-})(EditPatientExternalOrganizationModal) as React.ComponentClass<IProps>;
+})(EditPatientExternalOrganizationConsentModal) as React.ComponentClass<IProps>;

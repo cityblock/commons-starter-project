@@ -4,6 +4,7 @@ import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamb
 import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import Text, { Color, Size } from '../../shared/library/text/text';
 import styles from './css/team-member.css';
+import { getConsentLevel, getConsentSettingsObject } from './helpers/consent-helpers';
 
 interface IMember {
   id: string;
@@ -13,6 +14,7 @@ interface IMember {
   isConsentedForStd?: boolean | null;
   isConsentedForSubstanceUse?: boolean | null;
   isConsentedForMentalHealth?: boolean | null;
+  consentDocumentId?: string | null;
   description?: string | null;
 }
 
@@ -21,6 +23,7 @@ interface IProps<T extends IMember> {
   children: any;
   onRemoveClick: (patientExternalOrganizationId: string) => void;
   onEditClick: (memberToEdit: T) => void;
+  onConsentClick: (memberToEdit: T) => void;
 }
 
 interface IState {
@@ -47,32 +50,8 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
   };
 
   handleConsents = () => {
-    // TODO
-  };
-
-  getConsentLevel = () => {
-    const {
-      isConsentedForFamilyPlanning,
-      isConsentedForHiv,
-      isConsentedForGeneticTesting,
-      isConsentedForStd,
-      isConsentedForSubstanceUse,
-      isConsentedForMentalHealth,
-    } = this.props.member;
-
-    const level =
-      isConsentedForFamilyPlanning &&
-      isConsentedForHiv &&
-      isConsentedForGeneticTesting &&
-      isConsentedForStd &&
-      isConsentedForSubstanceUse &&
-      isConsentedForMentalHealth;
-    if (level === true) {
-      return 'fullConsent';
-    } else if (level === false) {
-      return 'partialConsent';
-    }
-    return 'noConsent';
+    const { member, onConsentClick } = this.props;
+    onConsentClick(member);
   };
 
   getConsentOptions = () => {
@@ -126,10 +105,23 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
       <Text color="gray" text={description} size="medium" className={styles.spacing} />
     ) : null;
 
-    const level = this.getConsentLevel();
+    const level = getConsentLevel(getConsentSettingsObject(member));
     const consentStyle = classNames(styles.body, styles[level]);
+
+    const pendingHtml = !member.consentDocumentId ? (
+      <Text
+        messageId={`sharingConsent.pending`}
+        color="black"
+        size="medium"
+        isBold={true}
+        className={styles.spacingRight}
+      />
+    ) : null;
     let consentHtml = (
-      <Text messageId={`sharingConsent.${level}`} color="gray" size="medium" isBold={true} />
+      <div>
+        {pendingHtml}
+        <Text messageId={`sharingConsent.${level}`} color="gray" size="medium" isBold={true} />
+      </div>
     );
     if (level === 'partialConsent') {
       consentHtml = (

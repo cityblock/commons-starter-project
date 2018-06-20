@@ -78,6 +78,10 @@
   margin-top: 5px;
 }
 
+.spacingRight {
+  margin-right: 3px;
+}
+
 .commaSeparated {
   display: inline-block;
 }

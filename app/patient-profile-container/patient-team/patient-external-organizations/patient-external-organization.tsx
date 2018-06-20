@@ -13,10 +13,11 @@ interface IProps {
   patientExternalOrganization: FullPatientExternalOrganization;
   onRemoveClick: (patientExternalOrganizationId: string) => void;
   onEditClick: (patientExternalOrganizationToEdit: FullPatientExternalOrganization) => void;
+  onConsentClick: (patientExternalOrganizationToEdit: FullPatientExternalOrganization) => void;
 }
 
 export const PatientExternalOrganization: React.StatelessComponent<IProps> = props => {
-  const { patientExternalOrganization, onRemoveClick, onEditClick } = props;
+  const { patientExternalOrganization, onRemoveClick, onEditClick, onConsentClick } = props;
   const { name, address, phoneNumber, faxNumber } = patientExternalOrganization;
 
   const addressHtml = address ? (
@@ -38,6 +39,7 @@ export const PatientExternalOrganization: React.StatelessComponent<IProps> = pro
       member={patientExternalOrganization}
       onRemoveClick={onRemoveClick}
       onEditClick={onEditClick}
+      onConsentClick={onConsentClick}
     >
       <div className={styles.row}>
         <div className={styles.column}>

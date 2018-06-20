@@ -9,6 +9,7 @@ import {
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import styles from '../css/patient-team.css';
+import EditPatientExternalOrganizationConsentModal from './edit-patient-external-organization-consent-modal';
 import EditPatientExternalOrganizationModal from './edit-patient-external-organization-modal';
 import PatientExternalOrganization from './patient-external-organization';
 
@@ -26,12 +27,17 @@ export type allProps = IGraphqlProps & IProps;
 
 interface IState {
   isEditModalVisible: boolean;
+  isEditConsentModalVisible: boolean;
   patientExternalOrganizationToEdit?: FullPatientExternalOrganization | null;
   error?: string | null;
 }
 
 export class PatientExternalOrganizations extends React.Component<allProps, IState> {
-  state = { isEditModalVisible: false, patientExternalOrganizationToEdit: undefined };
+  state = {
+    isEditModalVisible: false,
+    isEditConsentModalVisible: false,
+    patientExternalOrganizationToEdit: undefined,
+  };
 
   handleRemove = async (patientExternalOrganizationId: string, mutate: MutationFn) => {
     try {
@@ -51,8 +57,18 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
     this.setState({ isEditModalVisible: true, patientExternalOrganizationToEdit });
   };
 
+  handleOpenEditConsentModal = (
+    patientExternalOrganizationToEdit: FullPatientExternalOrganization,
+  ) => {
+    this.setState({ isEditConsentModalVisible: true, patientExternalOrganizationToEdit });
+  };
+
   handleCloseModal = () => {
-    this.setState({ isEditModalVisible: false, patientExternalOrganizationToEdit: null });
+    this.setState({
+      isEditModalVisible: false,
+      isEditConsentModalVisible: false,
+      patientExternalOrganizationToEdit: null,
+    });
   };
 
   renderEditModal() {
@@ -63,6 +79,24 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
       return (
         <EditPatientExternalOrganizationModal
           isVisible={isEditModalVisible}
+          closePopup={this.handleCloseModal}
+          patientExternalOrganization={patientExternalOrganizationToEdit}
+          patientId={patientId}
+        />
+      );
+    }
+
+    return null;
+  }
+
+  renderEditConsentsModal() {
+    const { patientId } = this.props;
+    const { isEditConsentModalVisible, patientExternalOrganizationToEdit } = this.state;
+
+    if (patientExternalOrganizationToEdit) {
+      return (
+        <EditPatientExternalOrganizationConsentModal
+          isVisible={isEditConsentModalVisible}
           closePopup={this.handleCloseModal}
           patientExternalOrganization={patientExternalOrganizationToEdit}
           patientId={patientId}
@@ -104,6 +138,7 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
               this.handleRemove(patientExternalOrganizationId, mutate)
             }
             onEditClick={this.handleOpenEditModal}
+            onConsentClick={this.handleOpenEditConsentModal}
           />
         )}
       </Mutation>
@@ -115,6 +150,7 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
       <div className={styles.container}>
         {this.renderOrganizations()}
         {this.renderEditModal()}
+        {this.renderEditConsentsModal()}
       </div>
     );
   }

@@ -1125,6 +1125,8 @@ export const ENGLISH_TRANSLATION = {
     'settings.dayOff': 'Check this box if you are off this day',
     'patientExternalOrganization.phone': 'Tel:',
     'patientExternalOrganization.fax': 'Fax:',
+    'sharingConsent.fieldEmptyError': 'You must select one of the following options',
+    'sharingConsent.pending': 'PENDING DOCUMENT UPLOAD:',
     'sharingConsent.fullConsent':
       'You can share any health or social service information with this person.',
     'sharingConsent.partialConsent': 'Do not share the following information with this person:',
@@ -1136,5 +1138,16 @@ export const ENGLISH_TRANSLATION = {
     'sharingConsent.isConsentedForGeneticTesting': 'Genetic testing information',
     'sharingConsent.isConsentedForFamilyPlanning': 'Family planning services',
     'sharingConsent.isConsentedForMentalHealth': 'Mental health information',
+    'sharingConsent.title': 'AUTHORIZATION TO USE OR DISCLOSE PROTECTED HEALTH INFORMATION',
+    'sharingConsent.subtitle':
+      "Indicate if we are authorized to share this member's health information and social services with this entity",
+    'sharingConsent.consentSelectLabel':
+      'Do you authorize Cityblock Medical Practice to share your health information and social services information with this person?',
+    'consentSelectState.fullConsent': 'YES, to ALL health and social services information',
+    'consentSelectState.partialConsent': 'YES, but with SOME exclusions',
+    'consentSelectState.noConsent': 'NO, to ALL health and social services information',
+    'sharingConsent.save': 'Save',
+    'sharingConsent.cancel': 'Cancel',
+    'sharingConsent.saveError': 'There was an error saving. Try again',
   },
 };

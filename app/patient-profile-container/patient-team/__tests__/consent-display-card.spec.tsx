@@ -8,13 +8,19 @@ import ContentDisplayCard from '../consent-display-card';
 describe('Render consent display card for generic team member', () => {
   const onRemoveClick = jest.fn();
   const onEditClick = jest.fn();
+  const onConsentClick = jest.fn();
   const children = <div id="test">Test</div>;
+  const member = {
+    ...externalOrganization2,
+    consentDocumentId: 'test-document-id',
+  };
 
   const wrapper = shallow(
     <ContentDisplayCard
-      member={externalOrganization2}
+      member={member}
       onRemoveClick={onRemoveClick}
       onEditClick={onEditClick}
+      onConsentClick={onConsentClick}
     >
       {children}
     </ContentDisplayCard>,
@@ -34,6 +40,7 @@ describe('Render consent display card for generic team member', () => {
       .props();
     expect(option1.messageId).toBe('patientTeam.updateConsent');
     expect(option1.icon).toBe('security');
+    expect(option1.onClick).not.toBe(onConsentClick);
 
     const option2 = wrapper
       .find(HamburgerMenuOption)
@@ -67,7 +74,7 @@ describe('Render consent display card for generic team member', () => {
   it('renders full consent state', () => {
     wrapper.setProps({
       member: {
-        ...externalOrganization2,
+        ...member,
         isConsentedForSubstanceUse: true,
         isConsentedForHiv: true,
         isConsentedForStd: true,
@@ -91,7 +98,7 @@ describe('Render consent display card for generic team member', () => {
   it('renders full consent state', () => {
     wrapper.setProps({
       member: {
-        ...externalOrganization2,
+        ...member,
         isConsentedForSubstanceUse: false,
         isConsentedForHiv: false,
         isConsentedForStd: false,

@@ -7,12 +7,14 @@ import PatientExternalOrganization from '../patient-external-organization';
 describe('Render Patient External Organizations', () => {
   const onRemoveClick = jest.fn();
   const onEditClick = jest.fn();
+  const onConsentClick = jest.fn();
 
   const wrapper = shallow(
     <PatientExternalOrganization
       patientExternalOrganization={externalOrganization}
       onRemoveClick={onRemoveClick}
       onEditClick={onEditClick}
+      onConsentClick={onConsentClick}
     />,
   );
 
@@ -21,5 +23,6 @@ describe('Render Patient External Organizations', () => {
     expect(cardProps.member).toBe(externalOrganization);
     expect(cardProps.onEditClick).toBe(onEditClick);
     expect(cardProps.onRemoveClick).toBe(onRemoveClick);
+    expect(cardProps.onConsentClick).toBe(onConsentClick);
   });
 });

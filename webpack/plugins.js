@@ -13,6 +13,7 @@ module.exports = ({ production = false } = {}) => {
       'SUBSCRIPTIONS_ENDPOINT',
       'GA_TRACKING_ID',
       'FORMS_LIBRARY_URL',
+      'GOOGLE_OAUTH_VALID_EMAIL_DOMAIN',
     ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];

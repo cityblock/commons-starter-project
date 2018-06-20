@@ -171,7 +171,7 @@ export class ManagerUsers extends React.Component<allProps, IState> {
     if (createUser && currentUser) {
       await createUser({
         variables: {
-          email: `${localPartOfEmail}@cityblock.com`,
+          email: `${localPartOfEmail}@${process.env.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN}`,
           homeClinicId: currentUser.homeClinicId,
         },
       });

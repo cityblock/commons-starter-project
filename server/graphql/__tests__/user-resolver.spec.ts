@@ -404,7 +404,9 @@ describe('user tests', () => {
         },
         { googleAuthCode: 'google-auth-code' },
       );
-      expect(result.errors![0].message).toMatch('Email must have a @cityblock.com domain');
+      expect(result.errors![0].message).toMatch(
+        'Email must have an @cityblock.com or an @cityblock.com domain',
+      );
     });
   });
 

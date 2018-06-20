@@ -293,8 +293,14 @@ export async function userLogin(
     }
 
     const googleResult = parseIdToken(oauth.id_token);
-    if (googleResult.email.indexOf(config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN) < 0) {
-      throw new Error(`Email must have a ${config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN} domain`);
+    // NOTE: For security, we include the @ symbol in our check. Do not want to allow ramsay-cityblock.com@bolton.com to log in
+    if (
+      googleResult.email.indexOf(`@${config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN}`) < 0 &&
+      googleResult.email.indexOf('@cityblock.com') < 0
+    ) {
+      throw new Error(
+        `Email must have an @${config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN} or an @cityblock.com domain`,
+      );
     }
 
     const user = await User.getBy({ fieldName: 'email', field: googleResult.email }, txn);

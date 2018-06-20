@@ -820,7 +820,9 @@ export const ENGLISH_TRANSLATION = {
     'manager.cancel': 'Cancel',
     'manager.confirmDelete': 'Confirm Delete',
     'manager.invites': 'Invites',
-    'manager.enterEmail': 'Enter text before @cityblock in email',
+    'manager.enterEmail': `Enter text before @${
+      process.env.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN
+    } in email`,
     'stateSelect.default': 'Select state',
     'select.loading': 'Loading...',
     'select.unselect': 'Unselect',

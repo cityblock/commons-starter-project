@@ -8,7 +8,7 @@ export default {
   GOOGLE_OAUTH_TOKEN: null,
   GOOGLE_OAUTH_SECRET: null,
   GOOGLE_OAUTH_REDIRECT_URI: 'http://localhost:3000',
-  GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: '@cityblock.com',
+  GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: 'cityblock.com',
   PUBSUB_HMAC_SECRET: 'supertopsecret',
   TZ: 'UTC',
   JWT_SECRET: 'topsecret',

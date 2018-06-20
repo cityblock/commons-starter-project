@@ -1,12 +1,12 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import editEmailMutationGraphql from '../../../graphql/queries/email-edit-mutation.graphql';
-import editPatientInfoMutationGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
+import editEmailGraphql from '../../../graphql/queries/email-edit-mutation.graphql';
+import editPatientInfoGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
-  emailEditMutation,
-  emailEditMutationVariables,
-  patientInfoEditMutation,
-  patientInfoEditMutationVariables,
+  emailEdit,
+  emailEditVariables,
+  patientInfoEdit,
+  patientInfoEditVariables,
 } from '../../../graphql/types';
 import EmailModal, { IEmail, ISavedEmail } from '../../../shared/email-modal/email-modal';
 
@@ -21,12 +21,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  editEmailMutation: (
-    options: { variables: emailEditMutationVariables },
-  ) => { data: emailEditMutation };
-  editPatientInfoMutation: (
-    options: { variables: patientInfoEditMutationVariables },
-  ) => { data: patientInfoEditMutation };
+  editEmail: (options: { variables: emailEditVariables }) => { data: emailEdit };
+  editPatientInfo: (options: { variables: patientInfoEditVariables }) => { data: patientInfoEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -37,10 +33,10 @@ export class EditEmailModal extends React.Component<allProps> {
       return;
     }
 
-    const { editEmailMutation, editPatientInfoMutation, patientId, patientInfoId } = this.props;
+    const { editEmail, editPatientInfo, patientId, patientInfoId } = this.props;
 
     if (isPrimaryUpdatedToTrue) {
-      await editPatientInfoMutation({
+      await editPatientInfo({
         variables: {
           patientInfoId,
           primaryEmailId: email.id,
@@ -48,7 +44,7 @@ export class EditEmailModal extends React.Component<allProps> {
       });
     }
 
-    return editEmailMutation({
+    return editEmail({
       variables: {
         patientId,
         emailId: email.id,
@@ -58,7 +54,7 @@ export class EditEmailModal extends React.Component<allProps> {
     });
   };
 
-  handleEmailSaved = (response: { data: emailEditMutation }, isPrimaryUpdatedToTrue: boolean) => {
+  handleEmailSaved = (response: { data: emailEdit }, isPrimaryUpdatedToTrue: boolean) => {
     if (response.data.emailEdit) {
       this.props.onSaved(response.data.emailEdit, isPrimaryUpdatedToTrue);
     }
@@ -82,10 +78,10 @@ export class EditEmailModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(editEmailMutationGraphql, {
-    name: 'editEmailMutation',
+  graphql(editEmailGraphql, {
+    name: 'editEmail',
   }),
-  graphql(editPatientInfoMutationGraphql, {
-    name: 'editPatientInfoMutation',
+  graphql(editPatientInfoGraphql, {
+    name: 'editPatientInfo',
   }),
 )(EditEmailModal) as React.ComponentClass<IProps>;

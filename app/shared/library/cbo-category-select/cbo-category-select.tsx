@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import CBOCategoriesQuery from '../../../graphql/queries/get-cbo-categories.graphql';
-import { FullCBOCategoryFragment } from '../../../graphql/types';
+import CBOCategoriesGraphql from '../../../graphql/queries/get-cbo-categories.graphql';
+import { FullCBOCategory } from '../../../graphql/types';
 import Option from '../option/option';
 import Select from '../select/select';
 
@@ -14,7 +14,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  CBOCategories: FullCBOCategoryFragment[];
+  CBOCategories: FullCBOCategory[];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -35,7 +35,7 @@ export const CBOCategorySelect: React.StatelessComponent<allProps> = (props: all
   );
 };
 
-export default graphql<any, any, any, any>(CBOCategoriesQuery, {
+export default graphql<any, any, any, any>(CBOCategoriesGraphql, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

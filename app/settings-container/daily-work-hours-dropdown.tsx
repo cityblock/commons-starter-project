@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mutation, MutationFn } from 'react-apollo';
 import userHoursEditMutationGraphql from '../graphql/queries/user-hours-edit-mutation.graphql';
-import { getCurrentUserHoursQuery } from '../graphql/types';
+import { getCurrentUserHours } from '../graphql/types';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 import Text from '../shared/library/text/text';
@@ -9,7 +9,7 @@ import styles from './css/daily-work-hours-dropdown.css';
 import { workHoursOptions } from './helpers/work-hours-options';
 
 interface IProps {
-  userHours: getCurrentUserHoursQuery['currentUserHours'];
+  userHours: getCurrentUserHours['currentUserHours'];
   disabled: boolean;
 }
 

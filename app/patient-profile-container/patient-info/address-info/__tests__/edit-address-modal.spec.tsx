@@ -7,8 +7,8 @@ import { EditAddressModal } from '../edit-address-modal';
 describe('Render Edit Address Modal', () => {
   const onSaved = (address: ISavedAddress) => true;
   const closePopup = () => true;
-  const editAddressMutation = jest.fn();
-  const editPatientInfoMutation = jest.fn();
+  const editAddress = jest.fn();
+  const editPatientInfo = jest.fn();
 
   const wrapper = shallow(
     <EditAddressModal
@@ -17,8 +17,8 @@ describe('Render Edit Address Modal', () => {
       patientInfoId={patient.patientInfo.id}
       isVisible={false}
       closePopup={closePopup}
-      editAddressMutation={editAddressMutation}
-      editPatientInfoMutation={editPatientInfoMutation}
+      editAddress={editAddress}
+      editPatientInfo={editPatientInfo}
       address={address1}
     />,
   );

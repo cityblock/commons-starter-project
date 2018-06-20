@@ -5,7 +5,7 @@ import { compose } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { updatePatientLeftNavSelected } from '../../actions/patient-left-nav-action';
-import { FullPatientForDashboardFragment } from '../../graphql/types';
+import { FullPatientForDashboard } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
 import PatientPhoto from '../../shared/library/patient-photo/patient-photo';
@@ -20,7 +20,7 @@ interface IContainerProps {
 export type DisplayOptions = 'task' | 'conversations' | 'progress' | 'default';
 
 export interface IProps {
-  patient: FullPatientForDashboardFragment;
+  patient: FullPatientForDashboard;
   displayType?: DisplayOptions; // optional body view option
   tasksDueCount?: number | null; // number of tasks due, only for task view
   notificationsCount?: number | null; // number of tasks with notifications, only for task view

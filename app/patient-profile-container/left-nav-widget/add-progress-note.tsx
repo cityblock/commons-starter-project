@@ -2,11 +2,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
-import {
-  progressNoteCreateMutation,
-  progressNoteCreateMutationVariables,
-} from '../../graphql/types';
+import progressNoteCreateGraphql from '../../graphql/queries/progress-note-create.graphql';
+import { progressNoteCreate, progressNoteCreateVariables } from '../../graphql/types';
 import LeftNavQuickAction from './left-nav-quick-action';
 
 export interface IProps {
@@ -20,17 +17,17 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   progressNoteCreate: (
-    options: { variables: progressNoteCreateMutationVariables },
-  ) => { data: progressNoteCreateMutation };
+    options: { variables: progressNoteCreateVariables },
+  ) => { data: progressNoteCreate };
 }
 
 type allProps = IProps & IDispatchProps & IGraphqlProps;
 
 export class AddProgressNote extends React.Component<allProps> {
   showNewProgressNotePopup = async (): Promise<void> => {
-    const { progressNoteCreate, openProgressNotePopup, patientId } = this.props;
+    const { openProgressNotePopup, patientId } = this.props;
 
-    const progressNote = await progressNoteCreate({
+    const progressNote = await this.props.progressNoteCreate({
       variables: { patientId },
     });
     if (progressNote.data.progressNoteCreate) {
@@ -71,7 +68,7 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(progressNoteCreateMutationGraphql, {
+  graphql(progressNoteCreateGraphql, {
     name: 'progressNoteCreate',
     options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
   }),

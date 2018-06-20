@@ -1,16 +1,16 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import editPatientContactMutationGraphql from '../../graphql/queries/patient-contact-edit-mutation.graphql';
+import editPatientContactGraphql from '../../graphql/queries/patient-contact-edit-mutation.graphql';
 import {
-  patientContactEditMutation,
-  patientContactEditMutationVariables,
-  FullPatientContactFragment,
+  patientContactEdit,
+  patientContactEditVariables,
+  FullPatientContact,
 } from '../../graphql/types';
 import PatientContactModal, { ContactType } from './patient-contact-modal';
 
 interface IProps {
-  onSaved: (patientContact: FullPatientContactFragment) => void;
-  patientContact: FullPatientContactFragment;
+  onSaved: (patientContact: FullPatientContact) => void;
+  patientContact: FullPatientContact;
   patientId: string;
   contactType: ContactType;
   isVisible: boolean;
@@ -20,16 +20,16 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  editPatientContactMutation: (
-    options: { variables: patientContactEditMutationVariables },
-  ) => { data: patientContactEditMutation };
+  editPatientContact: (
+    options: { variables: patientContactEditVariables },
+  ) => { data: patientContactEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
 
 export class EditPatientContactModal extends React.Component<allProps> {
-  editPatientContact = async (contact: patientContactEditMutationVariables) => {
-    const { editPatientContactMutation, patientContact } = this.props;
+  editPatientContact = async (contact: patientContactEditVariables) => {
+    const { editPatientContact, patientContact } = this.props;
 
     let relationFreeText = null;
     if (contact.relationToPatient === 'other') {
@@ -37,7 +37,7 @@ export class EditPatientContactModal extends React.Component<allProps> {
     }
 
     // edit patient contact healthcare contact
-    return editPatientContactMutation({
+    return editPatientContact({
       variables: {
         ...contact,
         patientContactId: patientContact.id,
@@ -46,7 +46,7 @@ export class EditPatientContactModal extends React.Component<allProps> {
     });
   };
 
-  handlePatientContactSaved = (response: { data: patientContactEditMutation }) => {
+  handlePatientContactSaved = (response: { data: patientContactEdit }) => {
     if (response.data.patientContactEdit) {
       this.props.onSaved(response.data.patientContactEdit);
     }
@@ -77,8 +77,8 @@ export class EditPatientContactModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(editPatientContactMutationGraphql, {
-  name: 'editPatientContactMutation',
+export default graphql<any>(editPatientContactGraphql, {
+  name: 'editPatientContact',
   options: {
     refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
   },

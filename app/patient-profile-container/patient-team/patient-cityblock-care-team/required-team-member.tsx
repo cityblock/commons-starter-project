@@ -1,18 +1,18 @@
 import React from 'react';
-import { getPatientCareTeamQuery } from '../../../graphql/types';
+import { getPatientCareTeam } from '../../../graphql/types';
 import RequiredPlaceholder from '../../required-placeholder';
 
 type RequiredRoleTypes = 'communityHealthPartner' | 'primaryCarePhysician';
 
 interface IProps {
-  patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  patientCareTeam?: getPatientCareTeam['patientCareTeam'];
   isLoading?: boolean;
   requiredRoleType: RequiredRoleTypes;
   onClick: () => void;
 }
 
 const patientHasRequiredTeamMember = (
-  patientCareTeam: getPatientCareTeamQuery['patientCareTeam'],
+  patientCareTeam: getPatientCareTeam['patientCareTeam'],
   requiredRoleType: RequiredRoleTypes,
 ): boolean => {
   return (

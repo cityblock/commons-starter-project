@@ -108,7 +108,16 @@ class AddressModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, isPrimary, titleMessageId } = this.props;
     const address = this.props.address || {};
-    const { saveError, updatedIsPrimary, street1, street2, state, zip, city, description } = this.state;
+    const {
+      saveError,
+      updatedIsPrimary,
+      street1,
+      street2,
+      state,
+      zip,
+      city,
+      description,
+    } = this.state;
 
     const updatedStreet1 = isNil(street1) ? address.street1 : street1;
     const updatedStreet2 = isNil(street2) ? address.street2 : street2;

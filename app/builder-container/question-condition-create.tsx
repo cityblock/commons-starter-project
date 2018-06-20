@@ -1,11 +1,11 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
+import questionConditionCreateGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
 import {
-  questionConditionCreateMutation,
-  questionConditionCreateMutationVariables,
-  FullAnswerFragment,
-  FullQuestionConditionFragment,
+  questionConditionCreate,
+  questionConditionCreateVariables,
+  FullAnswer,
+  FullQuestionCondition,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import questionConditionStyles from '../shared/css/two-panel-right.css';
@@ -19,17 +19,17 @@ import styles from './css/risk-area-create.css';
 import QuestionAnswerOption from './question-answer-option';
 
 export interface ICreateOptions {
-  variables: questionConditionCreateMutationVariables;
+  variables: questionConditionCreateVariables;
 }
 
 interface IProps {
-  questionCondition?: FullQuestionConditionFragment;
+  questionCondition?: FullQuestionCondition;
   questionId: string;
-  answers: FullAnswerFragment[];
+  answers: FullAnswer[];
 }
 
 interface IGraphqlProps {
-  createQuestionCondition: (options: ICreateOptions) => { data: questionConditionCreateMutation };
+  createQuestionCondition: (options: ICreateOptions) => { data: questionConditionCreate };
 }
 
 interface IState {
@@ -85,7 +85,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
     const { answers } = this.props;
     const { loading, questionCondition } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
-    const answerOptions = answers.map((answer: FullAnswerFragment) => (
+    const answerOptions = answers.map((answer: FullAnswer) => (
       <QuestionAnswerOption key={answer.id} answer={answer} />
     ));
     const selectedAnswer = questionCondition.answerId || '';
@@ -114,7 +114,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(questionConditionCreateMutationGraphql, {
+  graphql(questionConditionCreateGraphql, {
     name: 'createQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { FullTaskForCBOReferralFormPDFFragment, FullUserFragment } from '../../graphql/types';
+import { FullTaskForCBOReferralFormPDF, FullUser } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import BodyText from '../shared/body-text';
 import Divider from '../shared/divider';
@@ -10,7 +10,7 @@ import copy from './copy/copy';
 import TextGroup from './text-group';
 
 interface IProps {
-  task: FullTaskForCBOReferralFormPDFFragment;
+  task: FullTaskForCBOReferralFormPDF;
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +51,7 @@ const Introduction: React.StatelessComponent<IProps> = ({ task }) => {
 
   // Note: assuming only one physician on care team for now, later can modify this logic
   const careTeamPCP = (task.patient.careTeam || []).find(
-    (user: FullUserFragment) => user.userRole === 'physician',
+    (user: FullUser) => user.userRole === 'physician',
   );
 
   return (

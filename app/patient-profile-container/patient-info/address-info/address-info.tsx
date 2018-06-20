@@ -2,12 +2,12 @@ import { concat, filter, findIndex, slice, values } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import addressDeleteMutationGraphql from '../../../graphql/queries/address-delete-for-patient-mutation.graphql';
-import addressesQuery from '../../../graphql/queries/get-patient-addresses.graphql';
+import addressDeleteGraphql from '../../../graphql/queries/address-delete-for-patient-mutation.graphql';
+import addressesGraphql from '../../../graphql/queries/get-patient-addresses.graphql';
 import {
-  addressDeleteForPatientMutation,
-  addressDeleteForPatientMutationVariables,
-  getPatientAddressesQuery,
+  addressDeleteForPatient,
+  addressDeleteForPatientVariables,
+  getPatientAddresses,
 } from '../../../graphql/types';
 import { ISavedAddress } from '../../../shared/address-modal/address-modal';
 import Button from '../../../shared/library/button/button';
@@ -33,10 +33,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  addressDeleteMutation: (
-    options: { variables: addressDeleteForPatientMutationVariables },
-  ) => { data: addressDeleteForPatientMutation };
-  addresses?: getPatientAddressesQuery['patientAddresses'];
+  addressDelete: (
+    options: { variables: addressDeleteForPatientVariables },
+  ) => { data: addressDeleteForPatient };
+  addresses?: getPatientAddresses['patientAddresses'];
   loading?: boolean;
   error: string | null;
 }
@@ -60,9 +60,9 @@ export class AddressInfo extends React.Component<allProps, IState> {
   };
 
   handleAddressDelete = async (addressId: string, isPrimary: boolean) => {
-    const { addressDeleteMutation, patientId, onChange, addresses, openErrorPopup } = this.props;
+    const { addressDelete, patientId, onChange, addresses, openErrorPopup } = this.props;
     try {
-      await addressDeleteMutation({
+      await addressDelete({
         variables: {
           patientId,
           addressId,
@@ -265,10 +265,10 @@ export class AddressInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(addressDeleteMutationGraphql, {
-    name: 'addressDeleteMutation',
+  graphql(addressDeleteGraphql, {
+    name: 'addressDelete',
   }),
-  graphql(addressesQuery, {
+  graphql(addressesGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

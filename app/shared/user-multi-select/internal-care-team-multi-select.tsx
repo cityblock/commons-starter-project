@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import { FullUserFragment } from '../../graphql/types';
+import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
+import { FullUser } from '../../graphql/types';
 import { getUserInfo } from './get-info-helpers';
 import UserMultiSelect, { IUser } from './user-multi-select';
 
@@ -17,7 +17,7 @@ export interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  careTeam: FullUserFragment[];
+  careTeam: FullUser[];
 }
 
 export type allProps = IProps & IGraphqlProps;
@@ -39,7 +39,7 @@ export const InternalCareTeamMultiSelect: React.StatelessComponent<allProps> = p
   );
 };
 
-export default graphql(careTeamQuery, {
+export default graphql(careTeamGraphql, {
   options: (ownProps: IProps) => ({
     variables: {
       patientId: ownProps.patientId,

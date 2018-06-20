@@ -5,13 +5,9 @@ import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
-import patientQuery from '../../graphql/queries/get-patient.graphql';
-import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
-import {
-  getPatientQuery,
-  patientInfoEditMutation,
-  patientInfoEditMutationVariables,
-} from '../../graphql/types';
+import patientGraphql from '../../graphql/queries/get-patient.graphql';
+import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import { getPatient, patientInfoEdit, patientInfoEditVariables } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
 import { ISavedEmail } from '../../shared/email-modal/email-modal';
 import ErrorComponent from '../../shared/error-component/error-component';
@@ -39,10 +35,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  editPatientInfoMutation: (
-    options: { variables: patientInfoEditMutationVariables },
-  ) => { data: patientInfoEditMutation };
-  patient?: getPatientQuery['patient'];
+  editPatientInfo: (options: { variables: patientInfoEditVariables }) => { data: patientInfoEdit };
+  patient?: getPatient['patient'];
   loading?: boolean;
   error: ApolloError | null;
 }
@@ -50,25 +44,25 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export interface IEditableFieldState {
-  gender?: getPatientQuery['patient']['patientInfo']['gender'];
-  genderFreeText?: getPatientQuery['patient']['patientInfo']['genderFreeText'];
-  transgender?: getPatientQuery['patient']['patientInfo']['transgender'];
-  maritalStatus?: getPatientQuery['patient']['patientInfo']['maritalStatus'];
-  language?: getPatientQuery['patient']['patientInfo']['language'];
+  gender?: getPatient['patient']['patientInfo']['gender'];
+  genderFreeText?: getPatient['patient']['patientInfo']['genderFreeText'];
+  transgender?: getPatient['patient']['patientInfo']['transgender'];
+  maritalStatus?: getPatient['patient']['patientInfo']['maritalStatus'];
+  language?: getPatient['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
-  hasEmail?: getPatientQuery['patient']['patientInfo']['hasEmail'];
+  hasEmail?: getPatient['patient']['patientInfo']['hasEmail'];
   primaryEmail?: ISavedEmail | null;
   primaryPhone?: ISavedPhone | null;
-  flags?: getPatientQuery['patient']['patientDataFlags'];
-  verifiedAt?: getPatientQuery['patient']['coreIdentityVerifiedAt'];
-  canReceiveCalls?: getPatientQuery['patient']['patientInfo']['canReceiveCalls'];
-  preferredContactMethod?: getPatientQuery['patient']['patientInfo']['preferredContactMethod'];
-  preferredContactTime?: getPatientQuery['patient']['patientInfo']['preferredContactTime'];
-  isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
-  preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
-  hasMolst?: getPatientQuery['patient']['patientInfo']['hasMolst'];
-  hasHealthcareProxy?: getPatientQuery['patient']['patientInfo']['hasHealthcareProxy'];
-  hasDeclinedPhotoUpload?: getPatientQuery['patient']['patientInfo']['hasDeclinedPhotoUpload'];
+  flags?: getPatient['patient']['patientDataFlags'];
+  verifiedAt?: getPatient['patient']['coreIdentityVerifiedAt'];
+  canReceiveCalls?: getPatient['patient']['patientInfo']['canReceiveCalls'];
+  preferredContactMethod?: getPatient['patient']['patientInfo']['preferredContactMethod'];
+  preferredContactTime?: getPatient['patient']['patientInfo']['preferredContactTime'];
+  isMarginallyHoused?: getPatient['patient']['patientInfo']['isMarginallyHoused'];
+  preferredName?: getPatient['patient']['patientInfo']['preferredName'];
+  hasMolst?: getPatient['patient']['patientInfo']['hasMolst'];
+  hasHealthcareProxy?: getPatient['patient']['patientInfo']['hasHealthcareProxy'];
+  hasDeclinedPhotoUpload?: getPatient['patient']['patientInfo']['hasDeclinedPhotoUpload'];
 }
 
 interface IState {
@@ -92,7 +86,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     isUploadModalVisible: false,
   };
 
-  getPatientFields(patient: getPatientQuery['patient']): IDemographics {
+  getPatientFields(patient: getPatient['patient']): IDemographics {
     const {
       id,
       lastName,
@@ -192,7 +186,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
   resetSaveSuccess = () => this.setState({ saveSuccess: false });
 
   handleSaveClick = async () => {
-    const { patient, editPatientInfoMutation } = this.props;
+    const { patient, editPatientInfo } = this.props;
     const {
       language,
       gender,
@@ -215,7 +209,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     this.setState({ isSaving: true });
 
     try {
-      await editPatientInfoMutation({
+      await editPatientInfo({
         variables: {
           patientInfoId: patient.patientInfo.id,
           gender,
@@ -365,13 +359,13 @@ export class PatientInfo extends React.Component<allProps, allState> {
 }
 
 export default compose(
-  graphql(editPatientInfoMutationGraphql, {
-    name: 'editPatientInfoMutation',
+  graphql(editPatientInfoGraphql, {
+    name: 'editPatientInfo',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql(patientQuery, {
+  graphql(patientGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,

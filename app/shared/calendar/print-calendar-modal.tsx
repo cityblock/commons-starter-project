@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import JwtForPdfCreateGraphql from '../../graphql/queries/jwt-for-pdf-create.graphql';
-import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../../graphql/types';
+import { JwtForPdfCreate, JwtForPdfCreateVariables } from '../../graphql/types';
 import { getPrintableCalendarPdfRoute } from '../../shared/helpers/route-helpers';
 import Modal from '../../shared/library/modal/modal';
 import MonthSelect from './month-select';
@@ -15,8 +15,8 @@ interface IProps {
 
 interface IGraphqlProps {
   generateJwtForPdf: (
-    options: { variables: JwtForPdfCreateMutationVariables },
-  ) => { data: JwtForPdfCreateMutation };
+    options: { variables: JwtForPdfCreateVariables },
+  ) => { data: JwtForPdfCreate };
 }
 
 type allProps = IProps & IGraphqlProps;

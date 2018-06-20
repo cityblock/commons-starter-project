@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
-import { CBOReferralEditMutation, CBOReferralEditMutationVariables } from '../../graphql/types';
+import CBOReferralEditGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
+import { CBOReferralEdit, CBOReferralEditVariables } from '../../graphql/types';
 import DateInput from '../library/date-input/date-input';
 import FormLabel from '../library/form-label/form-label';
 import Icon from '../library/icon/icon';
@@ -18,9 +18,7 @@ export interface IProps {
 }
 
 interface IGraphqlProps {
-  editCBOReferral: (
-    options: { variables: CBOReferralEditMutationVariables },
-  ) => { data: CBOReferralEditMutation };
+  editCBOReferral: (options: { variables: CBOReferralEditVariables }) => { data: CBOReferralEdit };
   mutate?: any;
   kind?: any;
 }
@@ -79,6 +77,6 @@ export class TaskCBOReferralDate extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(CBOReferralEditMutationGraphql, {
+export default graphql<any>(CBOReferralEditGraphql, {
   name: 'editCBOReferral',
 })(TaskCBOReferralDate) as React.ComponentClass<IProps>;

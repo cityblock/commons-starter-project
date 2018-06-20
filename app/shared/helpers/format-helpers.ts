@@ -3,9 +3,9 @@ import { differenceInYears, format } from 'date-fns';
 import { padStart, startCase } from 'lodash';
 import {
   CurrentPatientState,
-  FullPatientAnswerFragment,
-  ShortPatientFragment,
-  ShortPatientScreeningToolSubmission360Fragment,
+  FullPatientAnswer,
+  ShortPatient,
+  ShortPatientScreeningToolSubmission360,
   UserRole,
 } from '../../graphql/types';
 import { Color } from '../library/text/text';
@@ -29,10 +29,10 @@ export const formatPhoneNumber = (phoneNumber?: string | null): string => {
   return phoneNumberDupe;
 };
 
-export const formatPatientName = (patient: ShortPatientFragment) =>
+export const formatPatientName = (patient: ShortPatient) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
-export const formatPatientNameForProfile = (patient: ShortPatientFragment) => {
+export const formatPatientNameForProfile = (patient: ShortPatient) => {
   const names = [patient.firstName, patient.middleName, patient.lastName].filter(Boolean);
 
   // abbreviate middle name if it is present
@@ -172,7 +172,7 @@ export const formatCBOReferralTaskTitle = (CBOName: string): string => {
 };
 
 export const formatScreeningToolScore = (
-  submission: ShortPatientScreeningToolSubmission360Fragment,
+  submission: ShortPatientScreeningToolSubmission360,
 ): string => {
   if (submission.score === null) return '';
   return submission.screeningToolScoreRange
@@ -180,7 +180,7 @@ export const formatScreeningToolScore = (
     : `${submission.score}`;
 };
 
-export const formatPatientAnswer = (patientAnswer: FullPatientAnswerFragment): string => {
+export const formatPatientAnswer = (patientAnswer: FullPatientAnswer): string => {
   if (patientAnswer.question && patientAnswer.question.answerType === 'freetext') {
     return patientAnswer.answerValue;
   } else {

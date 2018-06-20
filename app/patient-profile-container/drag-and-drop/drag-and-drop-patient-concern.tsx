@@ -1,10 +1,10 @@
 import React from 'react';
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
-import { FullPatientConcernFragment } from '../../graphql/types';
+import { FullPatientConcern } from '../../graphql/types';
 import PatientConcern from '../../shared/concerns/patient-concern';
 
 interface IProps {
-  patientConcern: FullPatientConcernFragment;
+  patientConcern: FullPatientConcern;
   selected: boolean;
   index: number;
   onClick: () => void;

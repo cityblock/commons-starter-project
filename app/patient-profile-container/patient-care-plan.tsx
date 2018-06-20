@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullPatientConcernFragment } from '../graphql/types';
+import { FullPatientConcern } from '../graphql/types';
 import Spinner from '../shared/library/spinner/spinner';
 import TextDivider from '../shared/library/text-divider/text-divider';
 import styles from './css/patient-care-plan.css';
@@ -12,8 +12,8 @@ interface IProps {
   patientId: string;
   selectedTaskId: string;
   selectedGoalId: string;
-  activeConcerns: FullPatientConcernFragment[];
-  inactiveConcerns: FullPatientConcernFragment[];
+  activeConcerns: FullPatientConcern[];
+  inactiveConcerns: FullPatientConcern[];
   taskIdsWithNotifications?: string[];
   isDragging?: boolean;
   error?: string | null;

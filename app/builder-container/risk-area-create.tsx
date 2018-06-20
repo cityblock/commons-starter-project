@@ -5,10 +5,10 @@ import { withRouter } from 'react-router';
 import riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
 import riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 import {
-  riskAreaCreateMutation,
-  riskAreaCreateMutationVariables,
+  riskAreaCreate,
+  riskAreaCreateVariables,
   AssessmentType,
-  FullRiskAreaGroupFragment,
+  FullRiskAreaGroup,
 } from '../graphql/types';
 import riskAreaStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -22,7 +22,7 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 interface IOptions {
-  variables: riskAreaCreateMutationVariables;
+  variables: riskAreaCreateVariables;
 }
 
 interface IProps {
@@ -37,8 +37,8 @@ interface IRouterProps {
 interface IGraphqlProps {
   riskAreaGroupsLoading?: boolean;
   error?: string | null;
-  riskAreaGroups: FullRiskAreaGroupFragment[];
-  createRiskArea?: (options: IOptions) => { data: riskAreaCreateMutation };
+  riskAreaGroups: FullRiskAreaGroup[];
+  createRiskArea?: (options: IOptions) => { data: riskAreaCreate };
 }
 
 interface IState {

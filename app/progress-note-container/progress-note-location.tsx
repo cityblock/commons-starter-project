@@ -1,17 +1,17 @@
 import React from 'react';
-import { getClinicsQuery } from '../graphql/types';
+import { getClinics } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Select from '../shared/library/select/select';
 import styles from './css/progress-note-context.css';
 
 interface IProps {
   disabled: boolean;
-  clinics: getClinicsQuery['clinics'];
+  clinics: getClinics['clinics'];
   progressNoteLocation: string;
   onLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function getLocations(clinics: getClinicsQuery['clinics']): string[] {
+function getLocations(clinics: getClinics['clinics']): string[] {
   const clinicItems = clinics && clinics.edges ? clinics.edges : [];
   const locations = clinicItems.map(item => item.node.name);
 

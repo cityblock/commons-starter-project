@@ -1,9 +1,9 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import concernsQuery from '../../graphql/queries/get-concerns.graphql';
-import patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
-import { getConcernsQuery, getPatientCarePlanQuery } from '../../graphql/types';
+import concernsGraphql from '../../graphql/queries/get-concerns.graphql';
+import patientCarePlanGraphql from '../../graphql/queries/get-patient-care-plan.graphql';
+import { getConcerns, getPatientCarePlan } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Search, { SearchOptions } from '../../shared/library/search/search';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -27,8 +27,8 @@ export interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error?: string | null;
-  concerns?: getConcernsQuery['concerns'];
-  patientCarePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  concerns?: getConcerns['concerns'];
+  patientCarePlan?: getPatientCarePlan['carePlanForPatient'];
   patientCarePlanLoading: boolean;
   patientCarePlanError?: string | null;
 }
@@ -98,7 +98,7 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 };
 
 export default compose(
-  graphql(concernsQuery, {
+  graphql(concernsGraphql, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
@@ -106,8 +106,7 @@ export default compose(
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  // For now this will be cached. Can reassess later to see if this is good enough.
-  graphql(patientCarePlanQuery, {
+  graphql(patientCarePlanGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

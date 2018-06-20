@@ -3,13 +3,9 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
-import riskAreaEditMutationGraphql from '../graphql/queries/risk-area-edit-mutation.graphql';
-import {
-  riskAreaEditMutation,
-  riskAreaEditMutationVariables,
-  FullRiskAreaFragment,
-} from '../graphql/types';
+import riskAreaGraphql from '../graphql/queries/get-risk-area.graphql';
+import riskAreaEditGraphql from '../graphql/queries/risk-area-edit-mutation.graphql';
+import { riskAreaEdit, riskAreaEditVariables, FullRiskArea } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import EditableMultilineText from '../shared/library/editable-multiline-text/editable-multiline-text';
@@ -29,13 +25,11 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  riskArea?: FullRiskAreaFragment;
+  riskArea?: FullRiskArea;
   riskAreaLoading?: boolean;
   riskAreaError: string | null;
   refetchRiskArea: () => any;
-  editRiskArea: (
-    options: { variables: riskAreaEditMutationVariables },
-  ) => { data: riskAreaEditMutation };
+  editRiskArea: (options: { variables: riskAreaEditVariables }) => { data: riskAreaEdit };
   onDelete: (riskAreaId: string) => any;
 }
 
@@ -225,10 +219,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(riskAreaEditMutationGraphql, {
+  graphql(riskAreaEditGraphql, {
     name: 'editRiskArea',
   }),
-  graphql(riskAreaQuery, {
+  graphql(riskAreaGraphql, {
     skip: (props: IProps & IStateProps) => !props.riskAreaId,
     options: (props: IProps & IStateProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
     props: ({ data }) => ({

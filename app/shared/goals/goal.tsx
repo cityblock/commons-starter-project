@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullPatientGoalFragment } from '../../graphql/types';
+import { FullPatientGoal } from '../../graphql/types';
 import TaskRow from '../tasks/task-row';
 import CreateTask from './create-task/create-task';
 import styles from './css/goal.css';
@@ -9,7 +9,7 @@ import { isGoalTasksComplete } from './helpers/helpers';
 
 interface IProps {
   goalNumber: number;
-  patientGoal: FullPatientGoalFragment;
+  patientGoal: FullPatientGoal;
   selectedTaskId: string;
   concernTitle: string;
   taskIdsWithNotifications?: string[];

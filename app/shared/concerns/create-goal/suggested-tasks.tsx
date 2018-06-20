@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullGoalSuggestionTemplateFragment } from '../../../graphql/types';
+import { FullGoalSuggestionTemplate } from '../../../graphql/types';
 import FormLabel from '../../library/form-label/form-label';
 import ModalButtons from '../../library/modal-buttons/modal-buttons';
 import ModalHeader from '../../library/modal-header/modal-header';
@@ -11,7 +11,7 @@ interface IProps {
   onSubmit: () => void;
   closePopup: () => void;
   onTaskTemplateClick: (templateId: string) => void;
-  goalSuggestionTemplate: FullGoalSuggestionTemplateFragment | null;
+  goalSuggestionTemplate: FullGoalSuggestionTemplate | null;
   rejectedTaskTemplateIds: string[];
 }
 

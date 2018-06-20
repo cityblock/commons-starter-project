@@ -2,11 +2,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import patientConcernDeleteMutationGraphql from '../../graphql/queries/patient-concern-delete-mutation.graphql';
-import {
-  patientConcernDeleteMutation,
-  patientConcernDeleteMutationVariables,
-} from '../../graphql/types';
+import patientConcernDeleteGraphql from '../../graphql/queries/patient-concern-delete-mutation.graphql';
+import { patientConcernDelete, patientConcernDeleteVariables } from '../../graphql/types';
 import { IPatientConcernDeletePopupOptions } from '../../reducers/popup-reducer';
 import DeleteModal from '../../shared/library/delete-modal/delete-modal';
 import { IState as IAppState } from '../../store';
@@ -27,8 +24,8 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   deletePatientConcern: (
-    options: { variables: patientConcernDeleteMutationVariables },
-  ) => { data: patientConcernDeleteMutation };
+    options: { variables: patientConcernDeleteVariables },
+  ) => { data: patientConcernDelete };
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
@@ -101,7 +98,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(patientConcernDeleteMutationGraphql, {
+  graphql<IGraphqlProps, {}, allProps>(patientConcernDeleteGraphql, {
     name: 'deletePatientConcern',
   }),
 )(DeleteConcernModal) as React.ComponentClass<IProps>;

@@ -1,11 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import CBODeleteMutationGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
-import {
-  CBODeleteMutation,
-  CBODeleteMutationVariables,
-  FullCBOFragment,
-} from '../../graphql/types';
+import CBODeleteGraphql from '../../graphql/queries/cbo-delete-mutation.graphql';
+import { CBODelete, CBODeleteVariables, FullCBO } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import withErrorHandler, {
   IInjectedErrorProps,
@@ -15,14 +11,14 @@ import CBOEdit from './cbo-edit';
 import styles from './css/cbo-detail.css';
 
 interface IProps {
-  CBO: FullCBOFragment | null;
+  CBO: FullCBO | null;
   close: () => void;
   createMode: boolean;
   cancelCreateCBO: () => void;
 }
 
 interface IGraphqlProps {
-  deleteCBO: (options: { variables: CBODeleteMutationVariables }) => { data: CBODeleteMutation };
+  deleteCBO: (options: { variables: CBODeleteVariables }) => { data: CBODelete };
 }
 
 type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
@@ -91,7 +87,7 @@ export class CBODetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(CBODeleteMutationGraphql, {
+  graphql(CBODeleteGraphql, {
     name: 'deleteCBO',
     options: {
       refetchQueries: ['getCBOs'],

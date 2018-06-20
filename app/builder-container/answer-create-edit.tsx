@@ -1,19 +1,19 @@
 import { clone, isNil, omit, omitBy, range } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';
-import answerDeleteMutationGraphql from '../graphql/queries/answer-delete-mutation.graphql';
-import answerEditMutationGraphql from '../graphql/queries/answer-edit-mutation.graphql';
+import answerCreateGraphql from '../graphql/queries/answer-create-mutation.graphql';
+import answerDeleteGraphql from '../graphql/queries/answer-delete-mutation.graphql';
+import answerEditGraphql from '../graphql/queries/answer-edit-mutation.graphql';
 import {
-  answerCreateMutation,
-  answerCreateMutationVariables,
-  answerDeleteMutation,
-  answerDeleteMutationVariables,
-  answerEditMutation,
-  answerEditMutationVariables,
+  answerCreate,
+  answerCreateVariables,
+  answerDelete,
+  answerDeleteVariables,
+  answerEdit,
+  answerEditVariables,
   AnswerValueTypeOptions,
   ComputedFieldDataTypes,
-  FullAnswerFragment,
+  FullAnswer,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import answerStyles from '../shared/css/two-panel-right.css';
@@ -29,17 +29,17 @@ import CarePlanSuggestions from './care-plan-suggestions';
 import styles from './css/risk-area-create.css';
 
 interface ICreateOptions {
-  variables: answerCreateMutationVariables;
+  variables: answerCreateVariables;
 }
 interface IEditOptions {
-  variables: answerEditMutationVariables;
+  variables: answerEditVariables;
 }
 interface IDeleteOptions {
-  variables: answerDeleteMutationVariables;
+  variables: answerDeleteVariables;
 }
 
 interface IProps {
-  answer?: FullAnswerFragment;
+  answer?: FullAnswer;
   questionId: string;
   screeningToolAnswer?: boolean;
   dataType?: ComputedFieldDataTypes;
@@ -48,17 +48,15 @@ interface IProps {
 interface IGraphqlProps {
   createAnswer: (
     options: ICreateOptions,
-  ) => { data: answerCreateMutation; errors: Array<{ message: string }> };
-  editAnswer: (
-    options: IEditOptions,
-  ) => { data: answerEditMutation; errors: Array<{ message: string }> };
-  deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: answerDeleteMutation } };
+  ) => { data: answerCreate; errors: Array<{ message: string }> };
+  editAnswer: (options: IEditOptions) => { data: answerEdit; errors: Array<{ message: string }> };
+  deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: answerDelete } };
 }
 
 interface IState {
   loading: boolean;
   error: string | null;
-  answer: answerCreateMutationVariables;
+  answer: answerCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -151,9 +149,9 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     try {
       // TODO: remove as any and use regular type checking
       this.setState({ loading: true, error: null });
-      const filtered = omitBy<answerCreateMutationVariables>(this.state.answer, isNil);
+      const filtered = omitBy<answerCreateVariables>(this.state.answer, isNil);
       let result: {
-        data: answerCreateMutation | answerEditMutation;
+        data: answerCreate | answerEdit;
         errors?: Array<{ message: string }>;
       } | null = null;
       if (this.props.answer) {
@@ -342,16 +340,16 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(answerCreateMutationGraphql, {
+  graphql(answerCreateGraphql, {
     name: 'createAnswer',
     options: {
       refetchQueries: ['getQuestions'],
     },
   }),
-  graphql(answerEditMutationGraphql, {
+  graphql(answerEditGraphql, {
     name: 'editAnswer',
   }),
-  graphql(answerDeleteMutationGraphql, {
+  graphql(answerDeleteGraphql, {
     name: 'deleteAnswer',
     options: {
       refetchQueries: ['getQuestions'],

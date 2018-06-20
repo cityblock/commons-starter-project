@@ -1,4 +1,4 @@
-import { FullTaskFragment } from '../../../graphql/types';
+import { FullTask } from '../../../graphql/types';
 import { fetchMore } from '../fetch-more';
 import { task } from '../test-data';
 
@@ -108,6 +108,6 @@ describe('fetch more tasks', () => {
       );
     };
 
-    fetchMore<FullTaskFragment>(tasksResponse as any, {}, 'tasksForPatient');
+    fetchMore<FullTask>(tasksResponse as any, {}, 'tasksForPatient');
   });
 });

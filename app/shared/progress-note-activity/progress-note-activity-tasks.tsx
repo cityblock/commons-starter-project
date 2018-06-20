@@ -1,17 +1,17 @@
 import classNames from 'classnames';
 import { groupBy, keys } from 'lodash';
 import React from 'react';
-import { FullTaskEventFragment } from '../../graphql/types';
+import { FullTaskEvent } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityTask from './progress-note-activity-task';
 
 interface IProps {
-  taskEvents: FullTaskEventFragment[];
+  taskEvents: FullTaskEvent[];
   expanded: boolean;
 }
 
 interface IState {
-  tasks: { [taskId: string]: FullTaskEventFragment[] };
+  tasks: { [taskId: string]: FullTaskEvent[] };
 }
 
 class ProgressNoteActivityTasks extends React.Component<IProps, IState> {

@@ -1,14 +1,14 @@
 import { format, isAfter } from 'date-fns';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import calendarCreateEventForUserMutationGraphql from '../../graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
-import calendarCreateEventForPatientMutationGraphql from '../../graphql/queries/calendar-create-event-for-patient-mutation.graphql';
+import calendarCreateEventForUserGraphql from '../../graphql/queries/calendar-create-event-for-current-user-mutation.graphql';
+import calendarCreateEventForPatientGraphql from '../../graphql/queries/calendar-create-event-for-patient-mutation.graphql';
 import {
-  calendarCreateEventForCurrentUserMutation,
-  calendarCreateEventForCurrentUserMutationVariables,
-  calendarCreateEventForPatientMutation,
-  calendarCreateEventForPatientMutationVariables,
-  FullAddressFragment,
+  calendarCreateEventForCurrentUser,
+  calendarCreateEventForCurrentUserVariables,
+  calendarCreateEventForPatient,
+  calendarCreateEventForPatientVariables,
+  FullAddress,
 } from '../../graphql/types';
 import styles from '../../shared/library/form/css/form.css';
 import Modal from '../../shared/library/modal/modal';
@@ -29,11 +29,11 @@ interface IProps {
 
 interface IGraphqlProps extends IInjectedProps {
   getCalendarEventUrlForPatient: (
-    options: { variables: calendarCreateEventForPatientMutationVariables },
-  ) => { data: calendarCreateEventForPatientMutation };
+    options: { variables: calendarCreateEventForPatientVariables },
+  ) => { data: calendarCreateEventForPatient };
   getCalendarEventUrlForUser: (
-    options: { variables: calendarCreateEventForCurrentUserMutationVariables },
-  ) => { data: calendarCreateEventForCurrentUserMutation };
+    options: { variables: calendarCreateEventForCurrentUserVariables },
+  ) => { data: calendarCreateEventForCurrentUser };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -47,7 +47,7 @@ interface IState {
   internalGuests: IUser[];
   externalGuests: IUser[];
   location?: string | null;
-  selectedAddress?: FullAddressFragment | { description: 'External location' } | null;
+  selectedAddress?: FullAddress | { description: 'External location' } | null;
   isSaving?: boolean;
   error?: string | null;
 }
@@ -235,10 +235,10 @@ export class AppointmentModal extends React.Component<allProps, IState> {
 
 export default compose(
   withCurrentUser(),
-  graphql<any>(calendarCreateEventForPatientMutationGraphql, {
+  graphql<any>(calendarCreateEventForPatientGraphql, {
     name: 'getCalendarEventUrlForPatient',
   }),
-  graphql<any>(calendarCreateEventForUserMutationGraphql, {
+  graphql<any>(calendarCreateEventForUserGraphql, {
     name: 'getCalendarEventUrlForUser',
   }),
 )(AppointmentModal) as React.ComponentClass<IProps>;

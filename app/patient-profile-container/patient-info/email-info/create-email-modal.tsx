@@ -1,10 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import createEmailMutationGraphql from '../../../graphql/queries/email-create-for-patient-mutation.graphql';
-import {
-  emailCreateForPatientMutation,
-  emailCreateForPatientMutationVariables,
-} from '../../../graphql/types';
+import createEmailGraphql from '../../../graphql/queries/email-create-for-patient-mutation.graphql';
+import { emailCreateForPatient, emailCreateForPatientVariables } from '../../../graphql/types';
 import EmailModal, { IEmail, ISavedEmail } from '../../../shared/email-modal/email-modal';
 
 interface IProps {
@@ -16,9 +13,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createEmailMutation: (
-    options: { variables: emailCreateForPatientMutationVariables },
-  ) => { data: emailCreateForPatientMutation };
+  createEmail: (
+    options: { variables: emailCreateForPatientVariables },
+  ) => { data: emailCreateForPatient };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -29,8 +26,8 @@ export class CreateEmailModal extends React.Component<allProps> {
       return;
     }
 
-    const { createEmailMutation, patientId, isPrimary } = this.props;
-    return createEmailMutation({
+    const { createEmail, patientId, isPrimary } = this.props;
+    return createEmail({
       variables: {
         patientId,
         description: email.description,
@@ -40,7 +37,7 @@ export class CreateEmailModal extends React.Component<allProps> {
     });
   };
 
-  handleEmailSaved = (response: { data: emailCreateForPatientMutation }) => {
+  handleEmailSaved = (response: { data: emailCreateForPatient }) => {
     if (response.data.emailCreateForPatient) {
       this.props.onSaved(response.data.emailCreateForPatient);
     }
@@ -62,6 +59,6 @@ export class CreateEmailModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(createEmailMutationGraphql, {
-  name: 'createEmailMutation',
+export default graphql<any>(createEmailGraphql, {
+  name: 'createEmail',
 })(CreateEmailModal) as React.ComponentClass<IProps>;

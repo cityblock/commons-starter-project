@@ -1,15 +1,15 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
-import { FullRiskAreaGroupForPatientFragment } from '../../../graphql/types';
+import { FullRiskAreaGroupForPatient } from '../../../graphql/types';
 import Spinner from '../../../shared/library/spinner/spinner';
 import styles from './css/three-sixty-radar.css';
 import { black, dataOptions, getChartOptions, gray, pointColors, pointData } from './radar-options';
 
 export interface IProps {
-  riskAreaGroups: FullRiskAreaGroupForPatientFragment[];
+  riskAreaGroups: FullRiskAreaGroupForPatient[];
 }
 
-const getRadarData = (riskAreaGroups: FullRiskAreaGroupForPatientFragment[]) => {
+const getRadarData = (riskAreaGroups: FullRiskAreaGroupForPatient[]) => {
   const labels: string[] = [];
   const data: number[] = [];
   const pointBackgroundColor: string[] = [];

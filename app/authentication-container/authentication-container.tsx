@@ -6,8 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
-import currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import { getCurrentUserQuery } from '../graphql/types';
+import currentUser from '../graphql/queries/get-current-user.graphql';
+import { getCurrentUser } from '../graphql/types';
 import ProgressNoteContainer from '../progress-note-container/progress-note-container';
 import { Lang } from '../reducers/locale-reducer';
 import { IState as IAppState } from '../store';
@@ -20,7 +20,7 @@ interface IStateProps {
   isAuthenticated: boolean;
 }
 
-type CurrentUser = getCurrentUserQuery['currentUser'];
+type CurrentUser = getCurrentUser['currentUser'];
 
 export interface IDispatchProps {
   idleStart: () => void;
@@ -37,7 +37,7 @@ interface IProps {
 interface IGraphqlProps {
   error: ApolloError | null | undefined;
   loading: boolean;
-  currentUser?: getCurrentUserQuery['currentUser'];
+  currentUser?: getCurrentUser['currentUser'];
 }
 
 const IDLE_TIME = 1000000; // 18 minutes
@@ -117,14 +117,14 @@ export class AuthenticationContainer extends React.Component<allProps> {
   };
 
   render() {
-    const { isIdle, currentUser, isAuthenticated, loading } = this.props;
+    const { isIdle, isAuthenticated, loading } = this.props;
     if (isAuthenticated && currentUser) {
       return (
         <React.Fragment>
           <Header logout={this.logout} />
           <div className={styles.app}>{this.props.children}</div>
           <IdlePopup idleEnd={this.idleEnd} isIdle={isIdle} logout={this.logout} />
-          <ProgressNoteContainer currentUser={currentUser} />
+          <ProgressNoteContainer currentUser={this.props.currentUser || null} />
         </React.Fragment>
       );
     } else if (!isAuthenticated && !loading) {
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
     selectLocale: (lang: Lang) => dispatch(selectLocale(lang)),
     idleStart: () => dispatch(idleStart()),
     idleEnd: () => dispatch(idleEnd()),
-    setCurrentUser: (currentUser: CurrentUser) => dispatch(setCurrentUser(currentUser)),
+    setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
   };
 }
 
@@ -162,7 +162,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(currentUserQuery, {
+  graphql(currentUser, {
     props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

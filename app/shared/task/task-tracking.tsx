@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Priority } from '../../graphql/types';
-import { ShortUserFragment } from '../../graphql/types';
+import { ShortUser } from '../../graphql/types';
 import styles from './css/task-body.css';
 import TaskFollowers from './followers';
 import PrioritySelect from './priority-select';
@@ -10,7 +10,7 @@ interface IProps {
   taskId: string;
   patientId: string;
   priority: Priority;
-  followers: ShortUserFragment[];
+  followers: ShortUser[];
   onPriorityClick: (priority: Priority) => void;
 }
 

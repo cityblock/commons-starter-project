@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import { values } from 'lodash';
 import React from 'react';
-import { patientDataFlagCreateMutation, CoreIdentityOptions } from '../../../graphql/types';
+import { patientDataFlagCreate, CoreIdentityOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';
 import ModalError from '../../../shared/library/modal-error/modal-error';
@@ -13,7 +13,7 @@ import { FlaggingModal } from '../flagging-modal';
 
 describe('Render Flaggable Display Card Component', () => {
   const closePopup = () => true;
-  const onSaved = (flag: patientDataFlagCreateMutation['patientDataFlagCreate']) => true;
+  const onSaved = (flag: patientDataFlagCreate['patientDataFlagCreate']) => true;
   const patientId = 'patient-id';
   const createFlag = jest.fn();
 

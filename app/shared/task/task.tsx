@@ -3,16 +3,16 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
-import taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
-import taskQuery from '../../graphql/queries/get-task.graphql';
-import taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
+import eventNotificationsForTaskDismiss from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
+import taskIdsWithNotifications from '../../graphql/queries/get-task-ids-with-notifications.graphql';
+import taskGraphql from '../../graphql/queries/get-task.graphql';
+import taskEditGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
-  eventNotificationsForTaskDismissMutationVariables,
-  taskEditMutation,
-  taskEditMutationVariables,
-  FullEventNotificationFragment,
-  FullTaskFragment,
+  eventNotificationsForTaskDismissVariables,
+  taskEdit,
+  taskEditVariables,
+  FullEventNotification,
+  FullTask,
   Priority,
 } from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
@@ -38,13 +38,13 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  task: FullTaskFragment;
+  task: FullTask;
   taskLoading?: boolean;
   taskError: string | null;
   dismissTaskNotifications: (
-    options: { variables: eventNotificationsForTaskDismissMutationVariables },
-  ) => { data: { eventNotificationsForTaskDismiss: FullEventNotificationFragment } };
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+    options: { variables: eventNotificationsForTaskDismissVariables },
+  ) => { data: { eventNotificationsForTaskDismiss: FullEventNotification } };
+  editTask: (options: { variables: taskEditVariables }) => { data: taskEdit };
 }
 
 interface IState {
@@ -120,7 +120,7 @@ export class Task extends React.Component<allProps, IState> {
     }
   };
 
-  renderTask(task: FullTaskFragment) {
+  renderTask(task: FullTask) {
     const { routeBase, editTask } = this.props;
     const patientName = task.patient
       ? formatFullName(task.patient.firstName || '', task.patient.lastName || '')
@@ -190,8 +190,8 @@ export class Task extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql(taskEditMutationGraphql, { name: 'editTask' }),
-  graphql(taskQuery, {
+  graphql(taskEditGraphql, { name: 'editTask' }),
+  graphql(taskGraphql, {
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
@@ -201,10 +201,10 @@ export default compose(
       refetchTask: data ? data.refetch : null,
     }),
   }),
-  graphql(eventNotificationsForTaskDismissMutation, {
+  graphql(eventNotificationsForTaskDismiss, {
     name: 'dismissTaskNotifications',
     options: {
-      refetchQueries: [{ query: taskIdsWithNotificationsQuery }],
+      refetchQueries: [{ query: taskIdsWithNotifications }],
     },
   }),
 )(Task) as React.ComponentClass<IProps>;

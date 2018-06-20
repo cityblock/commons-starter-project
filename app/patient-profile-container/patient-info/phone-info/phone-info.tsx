@@ -2,12 +2,12 @@ import { concat, filter, findIndex, slice, values } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import phonesQuery from '../../../graphql/queries/get-patient-phones.graphql';
-import phoneDeleteMutationGraphql from '../../../graphql/queries/phone-delete-for-patient-mutation.graphql';
+import phonesGraphql from '../../../graphql/queries/get-patient-phones.graphql';
+import phoneDeleteGraphql from '../../../graphql/queries/phone-delete-for-patient-mutation.graphql';
 import {
-  getPatientPhonesQuery,
-  phoneDeleteForPatientMutation,
-  phoneDeleteForPatientMutationVariables,
+  getPatientPhones,
+  phoneDeleteForPatient,
+  phoneDeleteForPatientVariables,
 } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
@@ -30,10 +30,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  phoneDeleteMutation: (
-    options: { variables: phoneDeleteForPatientMutationVariables },
-  ) => { data: phoneDeleteForPatientMutation };
-  phones?: getPatientPhonesQuery['patientPhones'];
+  phoneDelete: (
+    options: { variables: phoneDeleteForPatientVariables },
+  ) => { data: phoneDeleteForPatient };
+  phones?: getPatientPhones['patientPhones'];
   loading?: boolean;
   error: string | null;
 }
@@ -55,9 +55,9 @@ export class PhoneInfo extends React.Component<allProps, IState> {
   };
 
   handlePhoneDelete = async (phoneId: string, isPrimary: boolean) => {
-    const { phoneDeleteMutation, patientId, onChange, phones, openErrorPopup } = this.props;
+    const { phoneDelete, patientId, onChange, phones, openErrorPopup } = this.props;
     try {
-      await phoneDeleteMutation({
+      await phoneDelete({
         variables: {
           patientId,
           phoneId,
@@ -235,10 +235,10 @@ export class PhoneInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(phoneDeleteMutationGraphql, {
-    name: 'phoneDeleteMutation',
+  graphql(phoneDeleteGraphql, {
+    name: 'phoneDelete',
   }),
-  graphql(phonesQuery, {
+  graphql(phonesGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

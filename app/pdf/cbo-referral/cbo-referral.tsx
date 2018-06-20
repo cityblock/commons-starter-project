@@ -1,6 +1,6 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import { FullTaskForCBOReferralFormPDFFragment } from '../../graphql/types';
+import { FullTaskForCBOReferralFormPDF } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import Footer from './footer';
@@ -10,7 +10,7 @@ import PatientInfo from './patient-info';
 import Title from './title';
 
 interface IProps {
-  task: FullTaskForCBOReferralFormPDFFragment;
+  task: FullTaskForCBOReferralFormPDF;
 }
 
 const styles = StyleSheet.create({

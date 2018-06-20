@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
-import { FullPatientListFragment } from '../../graphql/types';
+import { FullPatientList } from '../../graphql/types';
 import NavigationItem from './navigation-item';
 
 interface IProps {
-  patientLists: FullPatientListFragment[];
+  patientLists: FullPatientList[];
   loading: boolean;
   error: ApolloError | null | undefined;
   routeBase: string;

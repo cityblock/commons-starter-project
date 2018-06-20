@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import { ShortUserFragment } from '../../graphql/types';
+import { ShortUser } from '../../graphql/types';
 import Avatar from '../library/avatar/avatar';
 import styles from './css/followers.css';
 
 interface IProps {
-  follower: ShortUserFragment;
+  follower: ShortUser;
   taskId: string;
 }
 

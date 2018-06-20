@@ -7,7 +7,7 @@ import { CreateEmailModal } from '../create-email-modal';
 describe('Render Create Email Modal', () => {
   const onSaved = (email: ISavedEmail) => true;
   const closePopup = () => true;
-  const createEmailMutation = jest.fn();
+  const createEmail = jest.fn();
 
   const wrapper = shallow(
     <CreateEmailModal
@@ -15,7 +15,7 @@ describe('Render Create Email Modal', () => {
       patientId={patient.id}
       isVisible={false}
       closePopup={closePopup}
-      createEmailMutation={createEmailMutation}
+      createEmail={createEmail}
     />,
   );
 

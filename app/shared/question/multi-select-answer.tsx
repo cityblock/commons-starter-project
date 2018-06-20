@@ -1,10 +1,10 @@
 import React from 'react';
-import { FullAnswerFragment } from '../../graphql/types';
+import { FullAnswer } from '../../graphql/types';
 import CheckboxInput from '../../shared/library/checkbox-input/checkbox-input';
 
 interface IProps {
   onClick: (value: string | number, answerId: string, isRemove: boolean) => any;
-  answer: FullAnswerFragment;
+  answer: FullAnswer;
   editable: boolean;
   selected: boolean;
 }

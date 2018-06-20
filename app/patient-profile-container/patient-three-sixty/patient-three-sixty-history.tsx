@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientScreeningToolSubmissionsFor360Query from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
-import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
+import patientScreeningToolSubmissionsFor360 from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
+import { ShortPatientScreeningToolSubmission360 } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import Spinner from '../../shared/library/spinner/spinner';
 import styles from './css/patient-three-sixty-history.css';
@@ -16,7 +16,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  submissions: ShortPatientScreeningToolSubmission360Fragment[];
+  submissions: ShortPatientScreeningToolSubmission360[];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -53,7 +53,7 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
   return <div className={styles.container}>{renderedSubmissions}</div>;
 };
 
-export default graphql(patientScreeningToolSubmissionsFor360Query, {
+export default graphql(patientScreeningToolSubmissionsFor360, {
   options: (props: IProps) => {
     const { patientId, glassBreakId } = props;
     return {

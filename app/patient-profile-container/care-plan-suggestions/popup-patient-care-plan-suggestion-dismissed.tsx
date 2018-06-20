@@ -1,10 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import carePlanSuggestionDismissMutationGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import carePlanSuggestionDismissGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
-  carePlanSuggestionDismissMutation,
-  carePlanSuggestionDismissMutationVariables,
-  FullCarePlanSuggestionForPatientFragment,
+  carePlanSuggestionDismiss,
+  carePlanSuggestionDismissVariables,
+  FullCarePlanSuggestionForPatient,
 } from '../../graphql/types';
 import Modal from '../../shared/library/modal/modal';
 import Option from '../../shared/library/option/option';
@@ -12,14 +12,14 @@ import Select from '../../shared/library/select/select';
 
 interface IProps {
   visible: boolean;
-  suggestion: FullCarePlanSuggestionForPatientFragment | null;
+  suggestion: FullCarePlanSuggestionForPatient | null;
   onDismiss: () => any;
 }
 
 interface IGraphqlProps {
   dismissCarePlanSuggestion: (
-    options: { variables: carePlanSuggestionDismissMutationVariables },
-  ) => { data: carePlanSuggestionDismissMutation };
+    options: { variables: carePlanSuggestionDismissVariables },
+  ) => { data: carePlanSuggestionDismiss };
 }
 
 interface IState {
@@ -101,7 +101,7 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
   }
 }
 
-export default graphql<any>(carePlanSuggestionDismissMutationGraphql, {
+export default graphql<any>(carePlanSuggestionDismissGraphql, {
   name: 'dismissCarePlanSuggestion',
   options: {
     refetchQueries: [

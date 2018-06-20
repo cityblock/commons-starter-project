@@ -3,12 +3,12 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../../actions/popup-action';
-import goalSuggestionTemplatesQuery from '../../../graphql/queries/get-goal-suggestion-templates.graphql';
-import patientGoalCreateMutationGraphql from '../../../graphql/queries/patient-goal-create-mutation.graphql';
+import goalSuggestionTemplatesGraphql from '../../../graphql/queries/get-goal-suggestion-templates.graphql';
+import patientGoalCreateGraphql from '../../../graphql/queries/patient-goal-create-mutation.graphql';
 import {
-  patientGoalCreateMutation,
-  patientGoalCreateMutationVariables,
-  FullGoalSuggestionTemplateFragment,
+  patientGoalCreate,
+  patientGoalCreateVariables,
+  FullGoalSuggestionTemplate,
 } from '../../../graphql/types';
 import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer';
 import { SearchOptions } from '../../../shared/library/search/search';
@@ -35,9 +35,9 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   createPatientGoal: (
-    options: { variables: patientGoalCreateMutationVariables },
-  ) => { data: patientGoalCreateMutation };
-  goalSuggestionTemplates: FullGoalSuggestionTemplateFragment[];
+    options: { variables: patientGoalCreateVariables },
+  ) => { data: patientGoalCreate };
+  goalSuggestionTemplates: FullGoalSuggestionTemplate[];
   loading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -185,7 +185,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
     }
   };
 
-  getSelectedGoal(): FullGoalSuggestionTemplateFragment | null {
+  getSelectedGoal(): FullGoalSuggestionTemplate | null {
     const { goalSuggestionTemplateId } = this.state;
     const { goalSuggestionTemplates } = this.props;
 
@@ -286,10 +286,10 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(patientGoalCreateMutationGraphql, {
+  graphql(patientGoalCreateGraphql, {
     name: 'createPatientGoal',
   }),
-  graphql(goalSuggestionTemplatesQuery, {
+  graphql(goalSuggestionTemplatesGraphql, {
     options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,

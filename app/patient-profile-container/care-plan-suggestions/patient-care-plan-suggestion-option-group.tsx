@@ -1,26 +1,26 @@
 import { includes, uniqBy } from 'lodash';
 import React from 'react';
 import {
-  getConcernsQuery,
-  getPatientCarePlanQuery,
-  FullCarePlanSuggestionForPatientFragment,
-  FullCarePlanSuggestionFragment,
-  FullPatientConcernFragment,
+  getConcerns,
+  getPatientCarePlan,
+  FullCarePlanSuggestion,
+  FullCarePlanSuggestionForPatient,
+  FullPatientConcern,
 } from '../../graphql/types';
 
 interface IProps {
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
-  concerns?: getConcernsQuery['concerns'];
+  carePlan?: getPatientCarePlan['carePlanForPatient'];
+  carePlanSuggestions?: FullCarePlanSuggestionForPatient[];
+  concerns?: getConcerns['concerns'];
   optionType: 'suggested' | 'active' | 'inactive' | 'other';
 }
 
 const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
   const { carePlan, carePlanSuggestions, concerns, optionType } = props;
   let label: string = '';
-  let patientConcerns: FullPatientConcernFragment[] = [];
-  let concernSuggestions: FullCarePlanSuggestionFragment[] = [];
-  let otherConcernOptions: getConcernsQuery['concerns'] = [];
+  let patientConcerns: FullPatientConcern[] = [];
+  let concernSuggestions: FullCarePlanSuggestion[] = [];
+  let otherConcernOptions: getConcerns['concerns'] = [];
   let optionsHtml: Array<JSX.Element | null> = [];
 
   if (carePlan && ['active', 'inactive'].includes(optionType)) {

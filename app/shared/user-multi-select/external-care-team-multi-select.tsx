@@ -1,12 +1,9 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import familyQuery from '../../graphql/queries/get-patient-contacts.graphql';
-import externalProvidersQuery from '../../graphql/queries/get-patient-external-providers.graphql';
-import {
-  FullPatientContactFragment,
-  FullPatientExternalProviderFragment,
-} from '../../graphql/types';
+import familyGraphql from '../../graphql/queries/get-patient-contacts.graphql';
+import externalProvidersGraphql from '../../graphql/queries/get-patient-external-providers.graphql';
+import { FullPatientContact, FullPatientExternalProvider } from '../../graphql/types';
 import { getFamilyMemberInfo, getProviderInfo } from './get-info-helpers';
 import UserMultiSelect, { IUser } from './user-multi-select';
 
@@ -21,10 +18,10 @@ export interface IProps {
 interface IGraphqlProps {
   isExternalProvidersLoading?: boolean;
   externalProvidersError?: ApolloError | null | undefined;
-  externalProviders?: FullPatientExternalProviderFragment[];
+  externalProviders?: FullPatientExternalProvider[];
   isFamilyLoading?: boolean;
   familyError?: ApolloError | null | undefined;
-  family?: FullPatientContactFragment[];
+  family?: FullPatientContact[];
 }
 
 export type allProps = IProps & IGraphqlProps;
@@ -62,7 +59,7 @@ export const ExternalCareTeamMultiSelect = (props: allProps) => {
 };
 
 export default compose(
-  graphql(externalProvidersQuery, {
+  graphql(externalProvidersGraphql, {
     options: (ownProps: IProps) => ({
       variables: {
         patientId: ownProps.patientId,
@@ -74,7 +71,7 @@ export default compose(
       externalProviders: data ? (data as any).patientExternalProviders : null,
     }),
   }),
-  graphql(familyQuery, {
+  graphql(familyGraphql, {
     options: (ownProps: IProps) => ({
       variables: {
         patientId: ownProps.patientId,

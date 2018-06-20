@@ -2,23 +2,23 @@ import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
-import commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
-import commentEditMutationGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
+import taskCommentsGraphql from '../../graphql/queries/get-task-comments.graphql';
+import commentCreateGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
+import commentEditGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
 import {
-  getTaskCommentsQuery,
-  getTaskCommentsQueryVariables,
-  taskCommentCreateMutation,
-  taskCommentCreateMutationVariables,
-  taskCommentEditMutation,
-  taskCommentEditMutationVariables,
-  FullTaskCommentFragment,
+  getTaskComments,
+  getTaskCommentsVariables,
+  taskCommentCreate,
+  taskCommentCreateVariables,
+  taskCommentEdit,
+  taskCommentEditVariables,
+  FullTaskComment,
 } from '../../graphql/types';
 import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';
 import styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 
-export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
+export type ITaskCommentsResponse = getTaskComments['taskComments'];
 
 export interface IProps {
   taskId: string;
@@ -26,26 +26,24 @@ export interface IProps {
 
 interface IGraphqlProps {
   createComment: (
-    options: { variables: taskCommentCreateMutationVariables },
-  ) => { data: taskCommentCreateMutation };
+    options: { variables: taskCommentCreateVariables },
+  ) => { data: taskCommentCreate };
   taskCommentsLoading: boolean;
   taskCommentsError: string | null;
   taskCommentsResponse?: ITaskCommentsResponse;
   refetchTaskComments: () => any;
   updateTaskComments: (
     updateFunction: (
-      previousResult: getTaskCommentsQuery,
-      args?: { variables: getTaskCommentsQueryVariables },
+      previousResult: getTaskComments,
+      args?: { variables: getTaskCommentsVariables },
     ) => any,
   ) => { taskComments: ITaskCommentsResponse };
-  editComment: (
-    options: { variables: taskCommentEditMutationVariables },
-  ) => { data: taskCommentEditMutation };
+  editComment: (options: { variables: taskCommentEditVariables }) => { data: taskCommentEdit };
 }
 
 interface IState {
   commentBody: string;
-  comments: FullTaskCommentFragment[];
+  comments: FullTaskComment[];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -72,13 +70,13 @@ export class TaskComments extends React.Component<allProps, IState> {
     this.setState({ commentBody: value || '' });
   };
 
-  onCommentEdit = async (editedComment: taskCommentEditMutationVariables): Promise<void> => {
+  onCommentEdit = async (editedComment: taskCommentEditVariables): Promise<void> => {
     const { editComment, updateTaskComments } = this.props;
     const { taskCommentId, body } = editedComment;
 
     try {
       await editComment({ variables: { taskCommentId, body } });
-      updateTaskComments((previousResult: getTaskCommentsQuery) => {
+      updateTaskComments((previousResult: getTaskComments) => {
         const edges =
           previousResult.taskComments && previousResult.taskComments.edges
             ? previousResult.taskComments.edges
@@ -121,7 +119,7 @@ export class TaskComments extends React.Component<allProps, IState> {
     }
   };
 
-  renderComment = (comment: FullTaskCommentFragment): JSX.Element => {
+  renderComment = (comment: FullTaskComment): JSX.Element => {
     return <TaskComment key={comment.id} comment={comment} onEdit={this.onCommentEdit} />;
   };
 
@@ -188,13 +186,13 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(commentCreateMutationGraphql, {
+  graphql(commentCreateGraphql, {
     name: 'createComment',
   }),
-  graphql(commentEditMutationGraphql, {
+  graphql(commentEditGraphql, {
     name: 'editComment',
   }),
-  graphql(taskCommentsQuery, {
+  graphql(taskCommentsGraphql, {
     options: (props: IProps) => ({
       variables: {
         taskId: props.taskId,

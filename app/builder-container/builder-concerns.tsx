@@ -4,13 +4,9 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
-import concernsQuery from '../graphql/queries/get-concerns.graphql';
-import {
-  concernDeleteMutation,
-  concernDeleteMutationVariables,
-  FullConcernFragment,
-} from '../graphql/types';
+import concernDeleteGraphql from '../graphql/queries/concern-delete-mutation.graphql';
+import concerns from '../graphql/queries/get-concerns.graphql';
+import { concernDelete, concernDeleteVariables, FullConcern } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import Concern from './concern';
@@ -28,10 +24,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  concerns?: FullConcernFragment[];
-  deleteConcern: (
-    options: { variables: concernDeleteMutationVariables },
-  ) => { data: concernDeleteMutation };
+  concerns?: FullConcern[];
+  deleteConcern: (options: { variables: concernDeleteVariables }) => { data: concernDelete };
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -56,8 +50,8 @@ class BuilderConcerns extends React.Component<allProps, IState> {
     concernId: null,
   };
 
-  renderConcerns(concerns: FullConcernFragment[]) {
-    const validConcerns = concerns.filter(concern => !concern.deletedAt);
+  renderConcerns(concernsList: FullConcern[]) {
+    const validConcerns = concernsList.filter(concern => !concern.deletedAt);
 
     if (validConcerns.length > 0) {
       return validConcerns.map(this.renderConcern);
@@ -72,7 +66,7 @@ class BuilderConcerns extends React.Component<allProps, IState> {
     this.setState({ showCreateConcern: false });
   };
 
-  renderConcern = (concern: FullConcernFragment) => {
+  renderConcern = (concern: FullConcern) => {
     const selected = concern.id === this.state.concernId;
     return (
       <ConcernRow
@@ -94,9 +88,8 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { concerns } = this.props;
     const { showCreateConcern, routeBase, concernId } = this.state;
-    const concernsList = concerns || [];
+    const concernsList = this.props.concerns || [];
     const concernContainerStyles = classNames(styles.itemContainer, {
       [styles.visible]: !!concernId || showCreateConcern,
     });
@@ -139,14 +132,14 @@ class BuilderConcerns extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql(concernsQuery, {
+  graphql(concerns, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(concernDeleteMutationGraphql, {
+  graphql(concernDeleteGraphql, {
     name: 'deleteConcern',
   }),
 )(BuilderConcerns) as React.ComponentClass<IProps>;

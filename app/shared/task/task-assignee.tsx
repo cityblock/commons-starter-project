@@ -2,8 +2,8 @@ import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import { FullUserFragment, ShortUserFragment } from '../../graphql/types';
+import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
+import { FullUser, ShortUser } from '../../graphql/types';
 import { getAssigneeInfo } from '../helpers/assignee-helpers';
 import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../library/select-dropdown/select-dropdown';
@@ -12,7 +12,7 @@ import styles from './css/task-body.css';
 export interface IProps {
   patientId: string;
   onAssigneeClick: (assignedToId: string, assignedToEmail: string | null) => void;
-  assignee?: ShortUserFragment | null;
+  assignee?: ShortUser | null;
   selectedAssigneeId?: string;
   messageId?: string;
   messageStyles?: string;
@@ -24,7 +24,7 @@ export interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  careTeam: FullUserFragment[];
+  careTeam: FullUser[];
 }
 
 interface IState {
@@ -55,7 +55,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     }
   };
 
-  getValidAssignees(): FullUserFragment[] {
+  getValidAssignees(): FullUser[] {
     const { careTeam, assignee } = this.props;
 
     return (careTeam || []).filter(member => (assignee ? member.id !== assignee.id : member));
@@ -118,7 +118,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(careTeamQuery, {
+export default graphql(careTeamGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

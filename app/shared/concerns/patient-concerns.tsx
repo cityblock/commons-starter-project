@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import getCurrentUserQuery from '../../graphql/queries/get-current-user.graphql';
-import { FullPatientConcernFragment, FullUserFragment } from '../../graphql/types';
+import getCurrentUser from '../../graphql/queries/get-current-user.graphql';
+import { FullPatientConcern, FullUser } from '../../graphql/types';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 
 interface IProps {
-  concerns: FullPatientConcernFragment[];
+  concerns: FullPatientConcern[];
   selectedPatientConcernId: string;
   inactive?: boolean;
   onClick: (id: string) => void;
@@ -19,7 +19,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  currentUser: FullUserFragment;
+  currentUser: FullUser;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -67,7 +67,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
   return <React.Fragment>{renderedConcerns}</React.Fragment>;
 };
 
-export default graphql<any, any, any, any>(getCurrentUserQuery, {
+export default graphql<any, any, any, any>(getCurrentUser, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

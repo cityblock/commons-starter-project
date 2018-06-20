@@ -1,18 +1,18 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import createPatientContactMutationGraphql from '../../graphql/queries/patient-contact-create-mutation.graphql';
-import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import createPatientContactGraphql from '../../graphql/queries/patient-contact-create-mutation.graphql';
+import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
-  patientContactCreateMutation,
-  patientContactCreateMutationVariables,
-  patientInfoEditMutation,
-  patientInfoEditMutationVariables,
-  FullPatientContactFragment,
+  patientContactCreate,
+  patientContactCreateVariables,
+  patientInfoEdit,
+  patientInfoEditVariables,
+  FullPatientContact,
 } from '../../graphql/types';
 import PatientContactModal, { ContactType } from './patient-contact-modal';
 
 interface IProps {
-  onSaved: (patientContact: FullPatientContactFragment) => void;
+  onSaved: (patientContact: FullPatientContact) => void;
   isVisible: boolean;
   patientId: string;
   patientInfoId?: string;
@@ -23,21 +23,19 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createPatientContactMutation: (
-    options: { variables: patientContactCreateMutationVariables },
-  ) => { data: patientContactCreateMutation };
-  editPatientInfoMutation: (
-    options: { variables: patientInfoEditMutationVariables },
-  ) => { data: patientInfoEditMutation };
+  createPatientContact: (
+    options: { variables: patientContactCreateVariables },
+  ) => { data: patientContactCreate };
+  editPatientInfo: (options: { variables: patientInfoEditVariables }) => { data: patientInfoEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
 
 export class CreatePatientContactModal extends React.Component<allProps> {
-  createPatientContact = async (patientContact: patientContactCreateMutationVariables) => {
+  createPatientContact = async (patientContact: patientContactCreateVariables) => {
     const {
-      createPatientContactMutation,
-      editPatientInfoMutation,
+      createPatientContact,
+      editPatientInfo,
       patientId,
       patientInfoId,
       contactType,
@@ -49,7 +47,7 @@ export class CreatePatientContactModal extends React.Component<allProps> {
     }
 
     // create patient contact heathcare proxy
-    const response = await createPatientContactMutation({
+    const response = await createPatientContact({
       variables: {
         ...patientContact,
         patientId,
@@ -58,7 +56,7 @@ export class CreatePatientContactModal extends React.Component<allProps> {
     });
 
     if (contactType === 'healthcareProxy' && patientInfoId) {
-      await editPatientInfoMutation({
+      await editPatientInfo({
         variables: {
           patientInfoId,
           hasHealthcareProxy: true,
@@ -69,7 +67,7 @@ export class CreatePatientContactModal extends React.Component<allProps> {
     return response;
   };
 
-  handlePatientContactSaved = (response: { data: patientContactCreateMutation }) => {
+  handlePatientContactSaved = (response: { data: patientContactCreate }) => {
     if (response.data.patientContactCreate) {
       this.props.onSaved(response.data.patientContactCreate);
     }
@@ -93,14 +91,14 @@ export class CreatePatientContactModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(createPatientContactMutationGraphql, {
-    name: 'createPatientContactMutation',
+  graphql(createPatientContactGraphql, {
+    name: 'createPatientContact',
     options: {
       refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
     },
   }),
-  graphql(editPatientInfoMutationGraphql, {
-    name: 'editPatientInfoMutation',
+  graphql(editPatientInfoGraphql, {
+    name: 'editPatientInfo',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus', 'getPatientComputedPatientStatus'],
     },

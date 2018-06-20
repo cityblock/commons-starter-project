@@ -2,12 +2,12 @@ import { concat, filter, findIndex, slice, values } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import emailDeleteMutationGraphql from '../../../graphql/queries/email-delete-for-patient-mutation.graphql';
-import emailsQuery from '../../../graphql/queries/get-patient-emails.graphql';
+import emailDeleteGraphql from '../../../graphql/queries/email-delete-for-patient-mutation.graphql';
+import emailsGraphql from '../../../graphql/queries/get-patient-emails.graphql';
 import {
-  emailDeleteForPatientMutation,
-  emailDeleteForPatientMutationVariables,
-  getPatientEmailsQuery,
+  emailDeleteForPatient,
+  emailDeleteForPatientVariables,
+  getPatientEmails,
 } from '../../../graphql/types';
 import { ISavedEmail } from '../../../shared/email-modal/email-modal';
 import Button from '../../../shared/library/button/button';
@@ -33,10 +33,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  emailDeleteMutation: (
-    options: { variables: emailDeleteForPatientMutationVariables },
-  ) => { data: emailDeleteForPatientMutation };
-  emails?: getPatientEmailsQuery['patientEmails'];
+  emailDelete: (
+    options: { variables: emailDeleteForPatientVariables },
+  ) => { data: emailDeleteForPatient };
+  emails?: getPatientEmails['patientEmails'];
   loading?: boolean;
   error: string | null;
 }
@@ -60,9 +60,9 @@ export class EmailInfo extends React.Component<allProps, IState> {
   };
 
   handleEmailDelete = async (emailId: string, isPrimary: boolean) => {
-    const { emailDeleteMutation, patientId, onChange, emails, openErrorPopup } = this.props;
+    const { emailDelete, patientId, onChange, emails, openErrorPopup } = this.props;
     try {
-      await emailDeleteMutation({
+      await emailDelete({
         variables: {
           patientId,
           emailId,
@@ -267,10 +267,10 @@ export class EmailInfo extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(emailDeleteMutationGraphql, {
-    name: 'emailDeleteMutation',
+  graphql(emailDeleteGraphql, {
+    name: 'emailDelete',
   }),
-  graphql(emailsQuery, {
+  graphql(emailsGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

@@ -1,18 +1,14 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import {
-  FullCareTeamUserFragment,
-  FullPatientConcernFragment,
-  FullPatientForProfileFragment,
-} from '../../graphql/types';
+import { FullCareTeamUser, FullPatientConcern, FullPatientForProfile } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import CareTeam from './care-team';
 import PatientInfo from './patient-info';
 
 interface IProps {
-  patient: FullPatientForProfileFragment;
-  careTeam: FullCareTeamUserFragment[];
-  carePlan: FullPatientConcernFragment[];
+  patient: FullPatientForProfile;
+  careTeam: FullCareTeamUser[];
+  carePlan: FullPatientConcern[];
   profilePhotoUrl: string | null;
 }
 

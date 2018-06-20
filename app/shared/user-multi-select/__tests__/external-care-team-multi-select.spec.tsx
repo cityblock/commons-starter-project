@@ -13,11 +13,11 @@ describe('External Care Team Multi Select', () => {
   const name = 'familyMember';
   const placeholderMessageId = 'appointmentModal.externalGuestPlaceholder';
   const selectedUsers = [] as any;
-  const familyQuery = () => ({ ...healthcareProxy, id: uuid() });
-  const externalProvidersQuery = () => ({ ...externalProviderPerson, id: uuid() });
+  const family = () => ({ ...healthcareProxy, id: uuid() });
+  const externalProviders = () => ({ ...externalProviderPerson, id: uuid() });
   const graphqlMocks = () => ({
-    PatientContact: familyQuery,
-    PatientExternalProvider: externalProvidersQuery,
+    PatientContact: family,
+    PatientExternalProvider: externalProviders,
   });
 
   const container = mount(

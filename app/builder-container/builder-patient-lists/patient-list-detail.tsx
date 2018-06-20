@@ -1,11 +1,11 @@
 import { isEqual } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientListDeleteMutationGraphql from '../../graphql/queries/patient-list-delete-mutation.graphql';
+import patientListDeleteGraphql from '../../graphql/queries/patient-list-delete-mutation.graphql';
 import {
-  patientListDeleteMutation,
-  patientListDeleteMutationVariables,
-  FullPatientListFragment,
+  patientListDelete,
+  patientListDeleteVariables,
+  FullPatientList,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import withErrorHandler, {
@@ -16,7 +16,7 @@ import PatientListCreate from './patient-list-create';
 import PatientListEdit from './patient-list-edit';
 
 interface IProps {
-  patientList: FullPatientListFragment | null;
+  patientList: FullPatientList | null;
   close: () => void;
   createMode: boolean;
   cancelCreatePatientList: () => void;
@@ -24,8 +24,8 @@ interface IProps {
 
 interface IGraphqlProps {
   deletePatientList: (
-    options: { variables: patientListDeleteMutationVariables },
-  ) => { data: patientListDeleteMutation };
+    options: { variables: patientListDeleteVariables },
+  ) => { data: patientListDelete };
 }
 
 type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
@@ -96,7 +96,7 @@ export class PatientListDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientListDeleteMutationGraphql, {
+  graphql(patientListDeleteGraphql, {
     name: 'deletePatientList',
     options: {
       refetchQueries: ['getPatientLists'],

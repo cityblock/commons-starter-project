@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
 import TextInfo from '../../shared/library/text-info/text-info';
@@ -9,7 +9,7 @@ import styles from './css/care-plan-suggestion.css';
 import SuggestionSource from './suggestion-source';
 
 interface IProps {
-  suggestion: FullCarePlanSuggestionForPatientFragment;
+  suggestion: FullCarePlanSuggestionForPatient;
   onAccept: () => void;
   onDismiss: () => void;
   hideButtons?: boolean;

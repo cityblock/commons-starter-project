@@ -1,17 +1,14 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import CarePlanSuggestion from './care-plan-suggestion';
 import styles from './css/goal-suggestion.css';
 import TaskTemplate from './task-template';
 
 interface IProps {
-  suggestion: FullCarePlanSuggestionForPatientFragment;
-  onAccept: (
-    suggestion: FullCarePlanSuggestionForPatientFragment,
-    taskTemplateIds?: string[],
-  ) => void;
-  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => void;
+  suggestion: FullCarePlanSuggestionForPatient;
+  onAccept: (suggestion: FullCarePlanSuggestionForPatient, taskTemplateIds?: string[]) => void;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatient) => void;
   selectedGoalSuggestionId: string;
   toggleSelectedGoalSuggestionId: (goalSuggestionId: string) => void;
 }

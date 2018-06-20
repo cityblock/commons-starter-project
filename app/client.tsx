@@ -8,7 +8,7 @@ import { getMiddlewareLink } from './middleware-link';
 import createStore from './store';
 
 const defaultOptions = {
-  watchQuery: {
+  watch: {
     fetchPolicy: 'network-only' as FetchPolicy,
     errorPolicy: 'all' as ErrorPolicy,
   },

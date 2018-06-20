@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullAddressFragment, FullUserFragment } from '../../graphql/types';
+import { FullAddress, FullUser } from '../../graphql/types';
 import DateInput from '../../shared/library/date-input/date-input';
 import FormLabel from '../../shared/library/form-label/form-label';
 import styles from '../../shared/library/form/css/form.css';
@@ -15,7 +15,7 @@ import AddressSelect from './address-select';
 
 interface IProps {
   patientId?: string;
-  currentUser?: FullUserFragment | null;
+  currentUser?: FullUser | null;
   onChange: (values: { [key: string]: any }) => void;
   appointmentDate: string | null;
   startTime: string | null;
@@ -25,7 +25,7 @@ interface IProps {
   internalGuests: IUser[];
   externalGuests: IUser[];
   location?: string | null;
-  selectedAddress?: FullAddressFragment | { description: 'External location' } | null;
+  selectedAddress?: FullAddress | { description: 'External location' } | null;
   isSaving?: boolean;
   error?: string | null;
 }

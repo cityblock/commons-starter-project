@@ -1,4 +1,4 @@
-import { ShortUserFragment } from '../../graphql/types';
+import { ShortUser } from '../../graphql/types';
 import { formatFullName } from './format-helpers';
 
 interface IAssigneeInfo {
@@ -7,7 +7,7 @@ interface IAssigneeInfo {
   role: string;
 }
 
-export const getAssigneeInfo = (assignee: ShortUserFragment | null): IAssigneeInfo => {
+export const getAssigneeInfo = (assignee: ShortUser | null): IAssigneeInfo => {
   if (assignee) {
     return {
       avatar: assignee.googleProfileImageUrl,

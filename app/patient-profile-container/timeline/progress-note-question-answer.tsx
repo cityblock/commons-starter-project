@@ -1,9 +1,9 @@
 import React from 'react';
-import { FullPatientAnswerFragment } from '../../graphql/types';
+import { FullPatientAnswer } from '../../graphql/types';
 import styles from './css/progress-note-question-answer.css';
 
 interface IProps {
-  answer: FullPatientAnswerFragment;
+  answer: FullPatientAnswer;
 }
 
 export const ProgressNoteQuestionAnswer: React.StatelessComponent<IProps> = props => {

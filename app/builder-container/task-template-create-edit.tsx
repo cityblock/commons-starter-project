@@ -1,17 +1,17 @@
 import { clone, isNil, omit, omitBy } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';
-import taskTemplateDeleteMutationGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
-import taskTemplateEditMutationGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
+import taskTemplateCreateGraphql from '../graphql/queries/task-template-create-mutation.graphql';
+import taskTemplateDeleteGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
+import taskTemplateEditGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
 import {
-  taskTemplateCreateMutation,
-  taskTemplateCreateMutationVariables,
-  taskTemplateDeleteMutation,
-  taskTemplateDeleteMutationVariables,
-  taskTemplateEditMutation,
-  taskTemplateEditMutationVariables,
-  FullTaskTemplateFragment,
+  taskTemplateCreate,
+  taskTemplateCreateVariables,
+  taskTemplateDelete,
+  taskTemplateDeleteVariables,
+  taskTemplateEdit,
+  taskTemplateEditVariables,
+  FullTaskTemplate,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import taskTemplateStyles from '../shared/css/two-panel-right.css';
@@ -24,17 +24,17 @@ import { IUpdatedField } from '../shared/util/updated-fields';
 import styles from './css/risk-area-create.css';
 
 export interface ICreateOptions {
-  variables: taskTemplateCreateMutationVariables;
+  variables: taskTemplateCreateVariables;
 }
 export interface IEditOptions {
-  variables: taskTemplateEditMutationVariables;
+  variables: taskTemplateEditVariables;
 }
 export interface IDeleteOptions {
-  variables: taskTemplateDeleteMutationVariables;
+  variables: taskTemplateDeleteVariables;
 }
 
 interface IProps {
-  taskTemplate?: FullTaskTemplateFragment | null;
+  taskTemplate?: FullTaskTemplate | null;
   goalSuggestionTemplateId: string;
 }
 
@@ -42,26 +42,26 @@ interface IGraphqlProps {
   createTaskTemplate: (
     options: ICreateOptions,
   ) => {
-    data: taskTemplateCreateMutation;
+    data: taskTemplateCreate;
     errors: Array<{ message: string }>;
   };
   editTaskTemplate: (
     options: IEditOptions,
   ) => {
-    data: taskTemplateEditMutation;
+    data: taskTemplateEdit;
     errors: Array<{ message: string }>;
   };
   deleteTaskTemplate: (
     options: IDeleteOptions,
   ) => {
-    data: taskTemplateDeleteMutation;
+    data: taskTemplateDelete;
   };
 }
 
 interface IState {
   loading: boolean;
   error: string | null;
-  taskTemplate: taskTemplateCreateMutationVariables;
+  taskTemplate: taskTemplateCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -136,13 +136,10 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     } = this.props;
     try {
       this.setState({ loading: true });
-      const filtered = omitBy<taskTemplateCreateMutationVariables>(
-        this.state.taskTemplate,
-        isNil,
-      ) as any;
+      const filtered = omitBy<taskTemplateCreateVariables>(this.state.taskTemplate, isNil) as any;
 
       let result: {
-        data: taskTemplateCreateMutation | taskTemplateEditMutation;
+        data: taskTemplateCreate | taskTemplateEdit;
         errors?: Array<{ message: string }>;
       } | null = null;
 
@@ -161,7 +158,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
       const error = result.errors ? result.errors[0].message : null;
 
       const taskTemplateData = taskTemplate
-        ? (result.data as taskTemplateEditMutation).taskTemplateEdit
+        ? (result.data as taskTemplateEdit).taskTemplateEdit
         : {
             title: 'edit me!',
             priority: null,
@@ -175,7 +172,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         loading: false,
         error,
         taskTemplate: {
-          ...(taskTemplateData as taskTemplateCreateMutationVariables),
+          ...(taskTemplateData as taskTemplateCreateVariables),
           goalSuggestionTemplateId,
         },
       });
@@ -328,16 +325,16 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskTemplateCreateMutationGraphql, {
+  graphql(taskTemplateCreateGraphql, {
     name: 'createTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
-  graphql(taskTemplateEditMutationGraphql, {
+  graphql(taskTemplateEditGraphql, {
     name: 'editTaskTemplate',
   }),
-  graphql(taskTemplateDeleteMutationGraphql, {
+  graphql(taskTemplateDeleteGraphql, {
     name: 'deleteTaskTemplate',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],

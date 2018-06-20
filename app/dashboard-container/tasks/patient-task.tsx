@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
+import { ShortUrgentTaskForPatient } from '../../graphql/types';
 import { getMapTaskRoute } from '../../shared/helpers/route-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import DateInfo from '../../shared/library/date-info/date-info';
@@ -9,7 +9,7 @@ import styles from './css/patient-task.css';
 import TaskNotifications from './task-notifications';
 
 interface IProps {
-  task: ShortUrgentTaskForPatientFragment;
+  task: ShortUrgentTaskForPatient;
   withNotifications: boolean;
 }
 

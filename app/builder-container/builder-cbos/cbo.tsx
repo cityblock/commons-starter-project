@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullCBOFragment } from '../../graphql/types';
+import { FullCBO } from '../../graphql/types';
 import sharedStyles from '../../shared/css/two-panel.css';
 import styles from '../css/risk-area-row.css';
 
 interface IProps {
-  CBOItem: FullCBOFragment;
+  CBOItem: FullCBO;
   routeBase: string;
   selected: boolean;
 }

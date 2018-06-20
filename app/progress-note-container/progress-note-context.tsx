@@ -2,18 +2,18 @@ import { debounce } from 'lodash';
 import React from 'react';
 import { graphql, Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import clinicsQuery from '../graphql/queries/get-clinics.graphql';
-import patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
+import clinicsGraphql from '../graphql/queries/get-clinics.graphql';
+import patientAnswersCreateGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import {
-  getClinicsQuery,
-  getPatientAnswersQuery,
-  getQuestionsQuery,
-  patientAnswersCreateMutation,
-  patientAnswersCreateMutationVariables,
+  getClinics,
+  getPatientAnswers,
+  getQuestions,
+  patientAnswersCreate,
+  patientAnswersCreateVariables,
   AnswerFilterType,
-  FullProgressNoteFragment,
-  FullProgressNoteTemplateFragment,
-  FullQuestionFragment,
+  FullProgressNote,
+  FullProgressNoteTemplate,
+  FullQuestion,
 } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Icon from '../shared/library/icon/icon';
@@ -36,20 +36,20 @@ import ProgressNoteWorryScore from './progress-note-worry-score';
 interface IProps {
   disabled: boolean;
   close: () => void;
-  progressNote: FullProgressNoteFragment;
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
-  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
-  questions: getQuestionsQuery['questions'];
+  progressNote: FullProgressNote;
+  progressNoteTemplates: FullProgressNoteTemplate[];
+  patientAnswers?: getPatientAnswers['patientAnswers'];
+  questions: getQuestions['questions'];
   onChange: (options: IUpdateProgressNoteOptions) => void;
 }
 
 interface IGraphqlProps {
-  clinics: getClinicsQuery['clinics'];
+  clinics: getClinics['clinics'];
   clinicsLoading?: boolean;
   clinicsError?: string | null;
   createPatientAnswers?: (
-    options: { variables: patientAnswersCreateMutationVariables },
-  ) => { data: patientAnswersCreateMutation };
+    options: { variables: patientAnswersCreateVariables },
+  ) => { data: patientAnswersCreate };
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -96,7 +96,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 
   renderQuestion = (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     index: number,
     answerData: IQuestionAnswerHash,
     editable: boolean,
@@ -105,7 +105,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
     return (
-      <Mutation mutation={patientAnswersCreateMutationGraphql} key={`${question.id}-${index}`}>
+      <Mutation mutation={patientAnswersCreateGraphql} key={`${question.id}-${index}`}>
         {mutate => (
           <PatientQuestion
             editable={editable}
@@ -314,7 +314,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any, any, any, any>(clinicsQuery, {
+export default graphql<any, any, any, any>(clinicsGraphql, {
   options: {
     variables: {
       pageNumber: 0,

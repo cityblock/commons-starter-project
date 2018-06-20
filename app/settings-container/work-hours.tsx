@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
-import { getCurrentUserHoursQuery } from '../graphql/types';
+import { getCurrentUserHours } from '../graphql/types';
 import styles from './css/work-hours.css';
 import DailyWorkHours from './daily-work-hours';
 
 const WEEKDAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
 
 interface IProps {
-  currentUserHours: getCurrentUserHoursQuery['currentUserHours'];
+  currentUserHours: getCurrentUserHours['currentUserHours'];
   disabled: boolean;
 }
 

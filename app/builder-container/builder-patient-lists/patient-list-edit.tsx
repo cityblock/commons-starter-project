@@ -1,25 +1,19 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientListEditMutationGraphql from '../../graphql/queries/patient-list-edit-mutation.graphql';
-import {
-  patientListEditMutation,
-  patientListEditMutationVariables,
-  FullPatientListFragment,
-} from '../../graphql/types';
+import patientListEditGraphql from '../../graphql/queries/patient-list-edit-mutation.graphql';
+import { patientListEdit, patientListEditVariables, FullPatientList } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
 import styles from './css/patient-list-shared.css';
 
 interface IProps {
-  patientList: FullPatientListFragment;
+  patientList: FullPatientList;
   close: () => void;
   deletePatientList: () => void;
 }
 
 interface IGraphqlProps {
-  editPatientList: (
-    options: { variables: patientListEditMutationVariables },
-  ) => { data: patientListEditMutation };
+  editPatientList: (options: { variables: patientListEditVariables }) => { data: patientListEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -72,6 +66,6 @@ export class PatientListEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<any>(patientListEditMutationGraphql, {
+export default graphql<any>(patientListEditGraphql, {
   name: 'editPatientList',
 })(PatientListEdit) as React.ComponentClass<IProps>;

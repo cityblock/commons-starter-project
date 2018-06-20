@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
-import { ShortUserFragment } from '../../graphql/types';
+import { ShortUser } from '../../graphql/types';
 import styles from './css/progress-note-row-questions.css';
 
 interface IProps {
-  supervisor: ShortUserFragment | null;
+  supervisor: ShortUser | null;
   supervisorNotes: string;
   reviewedBySupervisorAt: string;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCurrentUserHoursQuery } from '../graphql/types';
+import { getCurrentUserHours } from '../graphql/types';
 import Text from '../shared/library/text/text';
 import styles from './css/daily-work-hours.css';
 import DailyWorkHoursDropdown from './daily-work-hours-dropdown';
@@ -7,7 +7,7 @@ import DayOffToggle from './day-off-toggle';
 
 interface IProps {
   weekday: number;
-  userHours: getCurrentUserHoursQuery['currentUserHours'];
+  userHours: getCurrentUserHours['currentUserHours'];
   disabled: boolean;
 }
 

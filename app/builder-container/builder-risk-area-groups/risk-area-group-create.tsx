@@ -1,10 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import createRiskAreaGroupMutationGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
-import {
-  riskAreaGroupCreateMutation,
-  riskAreaGroupCreateMutationVariables,
-} from '../../graphql/types';
+import createRiskAreaGroupGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
+import { riskAreaGroupCreate, riskAreaGroupCreateVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import TextInput from '../../shared/library/text-input/text-input';
 import withErrorHandler, {
@@ -18,8 +15,8 @@ interface IProps {
 
 interface IGraphqlProps {
   createRiskAreaGroup: (
-    options: { variables: riskAreaGroupCreateMutationVariables },
-  ) => { data: riskAreaGroupCreateMutation };
+    options: { variables: riskAreaGroupCreateVariables },
+  ) => { data: riskAreaGroupCreate };
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
@@ -141,7 +138,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(createRiskAreaGroupMutationGraphql, {
+  graphql(createRiskAreaGroupGraphql, {
     name: 'createRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],

@@ -3,10 +3,10 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import computedFieldCreateMutationGraphql from '../graphql/queries/computed-field-create-mutation.graphql';
+import computedFieldCreateGraphql from '../graphql/queries/computed-field-create-mutation.graphql';
 import {
-  computedFieldCreateMutation,
-  computedFieldCreateMutationVariables,
+  computedFieldCreate,
+  computedFieldCreateVariables,
   ComputedFieldDataTypes,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
@@ -24,7 +24,7 @@ import { getMessageIdForOption } from './answer-create-edit';
 import styles from './css/risk-area-create.css';
 
 interface IOptions {
-  variables: computedFieldCreateMutationVariables;
+  variables: computedFieldCreateVariables;
 }
 
 interface IProps {
@@ -37,12 +37,12 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  createComputedField?: (options: IOptions) => { data: computedFieldCreateMutation };
+  createComputedField?: (options: IOptions) => { data: computedFieldCreate };
 }
 
 interface IState {
   loading: boolean;
-  computedField: computedFieldCreateMutationVariables;
+  computedField: computedFieldCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -159,7 +159,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(computedFieldCreateMutationGraphql, {
+  graphql(computedFieldCreateGraphql, {
     name: 'createComputedField',
     options: {
       refetchQueries: ['getComputedFields'],

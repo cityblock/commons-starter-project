@@ -2,18 +2,15 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
-import patientConcernCreateMutationGraphql from '../../graphql/queries/patient-concern-create-mutation.graphql';
-import {
-  patientConcernCreateMutation,
-  patientConcernCreateMutationVariables,
-} from '../../graphql/types';
+import patientConcernCreateGraphql from '../../graphql/queries/patient-concern-create-mutation.graphql';
+import { patientConcernCreate, patientConcernCreateVariables } from '../../graphql/types';
 import Modal from '../../shared/library/modal/modal';
 import { IState as IAppState } from '../../store';
 import ConcernSearch from './concern-search';
 import styles from './css/create-concern.css';
 
 interface IPatientConcernCreateOptions {
-  variables: patientConcernCreateMutationVariables;
+  variables: patientConcernCreateVariables;
 }
 
 interface IProps {
@@ -30,9 +27,7 @@ interface IDispatchProps {
 }
 
 interface IGraphqlProps {
-  createPatientConcern?: (
-    options: IPatientConcernCreateOptions,
-  ) => { data: patientConcernCreateMutation };
+  createPatientConcern?: (options: IPatientConcernCreateOptions) => { data: patientConcernCreate };
 }
 
 type ConcernType = 'active' | 'inactive';
@@ -169,7 +164,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(patientConcernCreateMutationGraphql, {
+  graphql<IGraphqlProps, {}, allProps>(patientConcernCreateGraphql, {
     name: 'createPatientConcern',
   }),
 )(CreateConcernModal) as React.ComponentClass<IProps>;

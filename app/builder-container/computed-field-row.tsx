@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullComputedFieldFragment } from '../graphql/types';
+import { FullComputedField } from '../graphql/types';
 import computedFieldStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  computedField: FullComputedFieldFragment;
+  computedField: FullComputedField;
   selected: boolean;
   routeBase: string;
 }

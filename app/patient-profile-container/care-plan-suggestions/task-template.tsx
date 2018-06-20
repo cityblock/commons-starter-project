@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullTaskTemplateFragment } from '../../graphql/types';
+import { FullTaskTemplate } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import styles from './css/task-template.css';
 
 interface IProps {
-  taskTemplate: FullTaskTemplateFragment;
+  taskTemplate: FullTaskTemplate;
   selected: boolean;
   onToggle: (taskTemplateId: string) => void;
 }

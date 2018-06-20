@@ -1,10 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import userVoicemailSignedUrlCreateQuery from '../graphql/queries/user-voicemail-signed-url-create.graphql';
+import userVoicemailSignedUrlCreateGraphql from '../graphql/queries/user-voicemail-signed-url-create.graphql';
 import {
-  userVoicemailSignedUrlCreateMutation,
-  userVoicemailSignedUrlCreateMutationVariables,
+  userVoicemailSignedUrlCreate,
+  userVoicemailSignedUrlCreateVariables,
 } from '../graphql/types';
 import Icon from '../shared/library/icon/icon';
 import MobileHeader from '../shared/library/mobile-header/mobile-header';
@@ -20,8 +20,8 @@ interface IProps {
 
 interface IGraphqlProps {
   getSignedVoicemailUrl: (
-    options: { variables: userVoicemailSignedUrlCreateMutationVariables },
-  ) => { data: userVoicemailSignedUrlCreateMutation };
+    options: { variables: userVoicemailSignedUrlCreateVariables },
+  ) => { data: userVoicemailSignedUrlCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -66,6 +66,6 @@ export class VoicemailContainer extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(userVoicemailSignedUrlCreateQuery, {
+export default graphql<IGraphqlProps, IProps, allProps>(userVoicemailSignedUrlCreateGraphql, {
   name: 'getSignedVoicemailUrl',
 })(VoicemailContainer);

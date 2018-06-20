@@ -3,8 +3,8 @@ import { find } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import Loadable from 'react-loadable';
-import patientDocumentsQuery from '../../../graphql/queries/get-patient-documents.graphql';
-import { getPatientDocumentsQuery, DocumentTypeOptions } from '../../../graphql/types';
+import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
+import { getPatientDocuments, DocumentTypeOptions } from '../../../graphql/types';
 import RequiredPlaceholder from '../../required-placeholder';
 import styles from './css/patient-documents.css';
 import PatientDocument from './patient-document';
@@ -25,7 +25,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientDocuments?: getPatientDocumentsQuery['patientDocuments'];
+  patientDocuments?: getPatientDocuments['patientDocuments'];
   isLoading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -118,7 +118,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(patientDocumentsQuery, {
+export default graphql(patientDocumentsGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

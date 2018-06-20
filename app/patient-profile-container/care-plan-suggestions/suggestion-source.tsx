@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import styles from './css/suggestion-source.css';
 
 interface IProps {
-  suggestion: FullCarePlanSuggestionForPatientFragment;
+  suggestion: FullCarePlanSuggestionForPatient;
 }
 
 const SuggestionSource: React.StatelessComponent<IProps> = ({ suggestion }) => {

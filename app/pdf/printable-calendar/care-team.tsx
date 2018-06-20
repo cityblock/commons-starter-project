@@ -1,12 +1,12 @@
 import { View } from '@react-pdf/core';
 import React from 'react';
-import { FullCareTeamUserFragment } from '../../graphql/types';
+import { FullCareTeamUser } from '../../graphql/types';
 import HeaderText from '../shared/header-text';
 import CareTeamMember from './care-team-member';
 import copy from './copy/copy';
 
 interface IProps {
-  careTeam: FullCareTeamUserFragment[];
+  careTeam: FullCareTeamUser[];
 }
 
 const CareTeam: React.StatelessComponent<IProps> = ({ careTeam }) => {

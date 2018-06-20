@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullProgressNoteFragment } from '../../graphql/types';
+import { FullProgressNote } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import Icon from '../../shared/library/icon/icon';
 import styles from './css/progress-note-supervisor-badge.css';
 
 interface IProps {
-  progressNote: FullProgressNoteFragment;
+  progressNote: FullProgressNote;
 }
 
 const ProgressNoteSupervisorBadge: React.StatelessComponent<IProps> = (props: IProps) => {

@@ -3,9 +3,9 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
-import taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
-import { getPatientCarePlanQuery } from '../graphql/types';
+import patientCarePlanGraphql from '../graphql/queries/get-patient-care-plan.graphql';
+import taskIdsWithNotificationsGraphql from '../graphql/queries/get-task-ids-with-notifications.graphql';
+import { getPatientCarePlan } from '../graphql/types';
 import Task from '../shared/task/task';
 import styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
@@ -25,7 +25,7 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  carePlan?: getPatientCarePlan['carePlanForPatient'];
   taskIdsWithNotifications?: string[];
   refetch: () => Promise<any>;
   loading?: boolean;
@@ -88,7 +88,7 @@ export class PatientMap extends React.Component<allProps, {}> {
 
 export default compose(
   withRouter,
-  graphql(patientCarePlanQuery, {
+  graphql(patientCarePlanGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -102,7 +102,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql(taskIdsWithNotificationsQuery, {
+  graphql(taskIdsWithNotificationsGraphql, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {

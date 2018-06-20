@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullQuestionFragment } from '../../graphql/types';
+import { FullQuestion } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
@@ -8,12 +8,12 @@ import QuestionMenu from './question-menu';
 
 interface IProps {
   onChange: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => Promise<any>;
   onEditableChange?: () => any;
   visible: boolean;
-  question: FullQuestionFragment;
+  question: FullQuestion;
   editable: boolean;
   displayHamburger: boolean;
   answerData: Array<{

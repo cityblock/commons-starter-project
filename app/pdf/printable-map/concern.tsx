@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { FullPatientConcernFragment } from '../../graphql/types';
+import { FullPatientConcern } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  patientConcern: FullPatientConcernFragment;
+  patientConcern: FullPatientConcern;
   index: number; // do not add one
 }
 

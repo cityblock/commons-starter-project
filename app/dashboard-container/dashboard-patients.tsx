@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import React from 'react';
 import { compose } from 'react-apollo';
 import { withRouter } from 'react-router';
-import { FullPatientForDashboardFragment } from '../graphql/types';
+import { FullPatientForDashboard } from '../graphql/types';
 import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
 import Pagination from '../shared/library/pagination/pagination';
 import Spinner from '../shared/library/spinner/spinner';
@@ -76,15 +76,12 @@ export class DashboardPatients extends React.Component<allProps> {
     const patientList =
       selected === 'tasks' ? (
         <PatientWithTasksList
-          patients={patients as FullPatientForDashboardFragment[]}
+          patients={patients as FullPatientForDashboard[]}
           pageNumber={pageNumber}
           pageSize={pageSize}
         />
       ) : (
-        <PatientList
-          patients={patients as FullPatientForDashboardFragment[]}
-          displayType={displayType}
-        />
+        <PatientList patients={patients as FullPatientForDashboard[]} displayType={displayType} />
       );
 
     return (

@@ -1,10 +1,10 @@
 import { values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientFlagCreateMutationGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';
+import patientFlagCreateGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';
 import {
-  patientDataFlagCreateMutation,
-  patientDataFlagCreateMutationVariables,
+  patientDataFlagCreate,
+  patientDataFlagCreateVariables,
   CoreIdentityOptions,
 } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
@@ -18,17 +18,17 @@ import styles from './css/flagging-modal.css';
 
 interface IProps {
   closePopup: () => void;
-  onSaved: (flag: patientDataFlagCreateMutation['patientDataFlagCreate']) => void;
+  onSaved: (flag: patientDataFlagCreate['patientDataFlagCreate']) => void;
   isVisible: boolean;
   patientId: string;
 }
 
 interface ICreateFlagOptions {
-  variables: patientDataFlagCreateMutationVariables;
+  variables: patientDataFlagCreateVariables;
 }
 
 interface IGraphqlProps {
-  createFlag: (options: ICreateFlagOptions) => { data: patientDataFlagCreateMutation };
+  createFlag: (options: ICreateFlagOptions) => { data: patientDataFlagCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -157,7 +157,7 @@ export class FlaggingModal extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientFlagCreateMutationGraphql, {
+export default graphql<any>(patientFlagCreateGraphql, {
   name: 'createFlag',
   options: {
     refetchQueries: ['getPatientComputedPatientStatus'],

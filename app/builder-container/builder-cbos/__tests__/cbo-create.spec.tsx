@@ -4,13 +4,13 @@ import Button from '../../../shared/library/button/button';
 import CBOCategorySelect from '../../../shared/library/cbo-category-select/cbo-category-select';
 import StateSelect from '../../../shared/library/state-select/state-select';
 import TextInput from '../../../shared/library/text-input/text-input';
-import { CBOCreate } from '../cbo-create';
+import { CBOCreateComponent } from '../cbo-create';
 
 describe('Builder Patient List Group Create', () => {
   const placeholderFn = jest.fn();
   const errorFn = (message: string) => true as any;
   const wrapper = shallow(
-    <CBOCreate
+    <CBOCreateComponent
       cancelCreateCBO={placeholderFn}
       createCBO={placeholderFn}
       openErrorPopup={errorFn}

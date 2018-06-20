@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullDiagnosisCodeFragment } from '../graphql/types';
+import { FullDiagnosisCode } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Text from '../shared/library/text/text';
 import ConcernDiagnosisCode from './concern-diagnosis-code';
@@ -7,7 +7,7 @@ import ConcernDiagnosisCodeCreate from './concern-diagnosis-code-create';
 
 interface IProps {
   concernId: string;
-  diagnosisCodes: FullDiagnosisCodeFragment[] | null;
+  diagnosisCodes: FullDiagnosisCode[] | null;
 }
 
 export class ConcernDiagnosisCodes extends React.Component<IProps> {

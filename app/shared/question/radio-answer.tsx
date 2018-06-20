@@ -1,20 +1,20 @@
 import React from 'react';
-import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
+import { FullAnswer, FullQuestion } from '../../graphql/types';
 import RadioGroup from '../../shared/library/radio-group/radio-group';
 import RadioInput from '../../shared/library/radio-input/radio-input';
 
 interface IProps {
   editable: boolean;
   currentAnswer: { id: string; value: string };
-  question: FullQuestionFragment;
+  question: FullQuestion;
   onChange: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
 
 export default class RadioAnswer extends React.Component<IProps, {}> {
-  renderRadioItem = (answer: FullAnswerFragment, index: number): JSX.Element => {
+  renderRadioItem = (answer: FullAnswer, index: number): JSX.Element => {
     const { question, currentAnswer, onChange, editable } = this.props;
 
     return (

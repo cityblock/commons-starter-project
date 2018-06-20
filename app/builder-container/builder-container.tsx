@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import {
-  FullConcernFragment,
-  FullGoalSuggestionTemplateFragment,
-  FullProgressNoteTemplateFragment,
-  FullRiskAreaFragment,
-  FullScreeningToolFragment,
+  FullConcern,
+  FullGoalSuggestionTemplate,
+  FullProgressNoteTemplate,
+  FullRiskArea,
+  FullScreeningTool,
 } from '../graphql/types';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
@@ -62,11 +62,11 @@ interface IGraphqlProps {
   goalsLoading: boolean;
   goalsError: string | null;
   refetchGoals: () => any;
-  assessments: FullRiskAreaFragment[];
-  concerns: FullConcernFragment[];
-  goals: FullGoalSuggestionTemplateFragment[];
-  screeningTools: FullScreeningToolFragment[];
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  assessments: FullRiskArea[];
+  concerns: FullConcern[];
+  goals: FullGoalSuggestionTemplate[];
+  screeningTools: FullScreeningTool[];
+  progressNoteTemplates: FullProgressNoteTemplate[];
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps;

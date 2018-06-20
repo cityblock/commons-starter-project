@@ -1,10 +1,10 @@
 import React from 'react';
 import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
-import { FullPatientConcernFragment } from '../../graphql/types';
+import { FullPatientConcern } from '../../graphql/types';
 import PatientConcerns from '../../shared/concerns/patient-concerns';
 
 interface IProps {
-  concerns: FullPatientConcernFragment[];
+  concerns: FullPatientConcern[];
   selectedPatientConcernId: string;
   inactive: boolean;
   onClick: (id: string) => void;

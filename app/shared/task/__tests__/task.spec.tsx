@@ -20,11 +20,11 @@ describe('Task Component', () => {
   const taskId = taskWithComment.id;
   const patientId = taskWithComment.patientId;
   const history = { push: jest.fn } as any;
-  const taskQuery = () => taskWithComment;
-  const commentsQuery = () => ({ ...comment, id: uuid() });
+  const task = () => taskWithComment;
+  const comments = () => ({ ...comment, id: uuid() });
   const graphqlMocks = () => ({
-    Task: taskQuery,
-    TaskComment: commentsQuery,
+    Task: task,
+    TaskComment: comments,
   });
   const container = mount(
     <ApolloTestProvider graphqlMocks={graphqlMocks()}>
@@ -96,10 +96,10 @@ describe('Task Component', () => {
 
   it('renders task comments with correct props', () => {
     const wrapper = container.update(); // .find(TaskContainer);
-    const comments = wrapper.find<ITaskCommentsProps>(TaskComments as any);
+    const commentsComponent = wrapper.find<ITaskCommentsProps>(TaskComments as any);
 
-    expect(comments.length).toBe(1);
-    expect(comments.props().taskId).toBe(taskId);
+    expect(commentsComponent.length).toBe(1);
+    expect(commentsComponent.props().taskId).toBe(taskId);
   });
 
   it('renders loading component if fetching data', () => {
@@ -121,9 +121,9 @@ describe('Task Component', () => {
   });
 
   it('renders task delete if delete confirmation in progress', () => {
-    const wrapper = container.update(); // .find(TaskContainer);
-    const task = wrapper.find(Task).instance() as Task;
-    task.confirmDelete();
+    const wrapper = container.update();
+    const taskComponent = wrapper.find(Task).instance() as Task;
+    taskComponent.confirmDelete();
 
     // update to re-render after confirm delete
     container.update();

@@ -1,24 +1,24 @@
 import { debounce } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import progressNoteAddSupervisorNotesMutationGraphql from '../graphql/queries/progress-note-add-supervisor-notes-mutation.graphql';
+import progressNoteAddSupervisorNotesGraphql from '../graphql/queries/progress-note-add-supervisor-notes-mutation.graphql';
 import {
-  progressNoteAddSupervisorNotesMutation,
-  progressNoteAddSupervisorNotesMutationVariables,
-  FullProgressNoteFragment,
+  progressNoteAddSupervisorNotes,
+  progressNoteAddSupervisorNotesVariables,
+  FullProgressNote,
 } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Textarea from '../shared/library/textarea/textarea';
 import styles from './css/progress-note-context.css';
 
 interface IProps {
-  progressNote?: FullProgressNoteFragment;
+  progressNote?: FullProgressNote;
 }
 
 interface IGraphqlProps {
   progressNoteAddSupervisorNotes?: (
-    options: { variables: progressNoteAddSupervisorNotesMutationVariables },
-  ) => { data: progressNoteAddSupervisorNotesMutation };
+    options: { variables: progressNoteAddSupervisorNotesVariables },
+  ) => { data: progressNoteAddSupervisorNotes };
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -104,6 +104,6 @@ export class ProgressNoteSupervisorNotes extends React.Component<allProps, IStat
   }
 }
 
-export default graphql<any>(progressNoteAddSupervisorNotesMutationGraphql, {
+export default graphql<any>(progressNoteAddSupervisorNotesGraphql, {
   name: 'progressNoteAddSupervisorNotes',
 })(ProgressNoteSupervisorNotes) as React.ComponentClass<IProps>;

@@ -3,21 +3,21 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
+import riskAreaAssessmentSubmissionForPatient from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
 import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-import riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
-import riskAreaAssessmentSubmissionCompleteMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
-import riskAreaAssessmentSubmissionCreateMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
+import riskAreaGraphql from '../../graphql/queries/get-risk-area.graphql';
+import riskAreaAssessmentSubmissionCompleteGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
+import riskAreaAssessmentSubmissionCreateGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
 import {
-  getRiskAreaGroupForPatientQuery,
-  riskAreaAssessmentSubmissionCompleteMutation,
-  riskAreaAssessmentSubmissionCompleteMutationVariables,
-  riskAreaAssessmentSubmissionCreateMutation,
-  riskAreaAssessmentSubmissionCreateMutationVariables,
+  getRiskAreaGroupForPatient,
+  riskAreaAssessmentSubmissionComplete,
+  riskAreaAssessmentSubmissionCompleteVariables,
+  riskAreaAssessmentSubmissionCreate,
+  riskAreaAssessmentSubmissionCreateVariables,
   AssessmentType,
-  FullCarePlanSuggestionFragment,
-  FullRiskAreaAssessmentSubmissionFragment,
-  FullRiskAreaFragment,
+  FullCarePlanSuggestion,
+  FullRiskArea,
+  FullRiskAreaAssessmentSubmission,
 } from '../../graphql/types';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
@@ -40,25 +40,25 @@ export interface IProps {
 }
 
 interface IGraphqlProps {
-  riskArea?: FullRiskAreaFragment;
+  riskArea?: FullRiskArea;
   riskAreaLoading?: boolean;
   riskAreaError?: ApolloError | null;
   riskAreaAssessmentSubmissionCreate?: (
-    options: { variables: riskAreaAssessmentSubmissionCreateMutationVariables },
-  ) => { data: riskAreaAssessmentSubmissionCreateMutation };
+    options: { variables: riskAreaAssessmentSubmissionCreateVariables },
+  ) => { data: riskAreaAssessmentSubmissionCreate };
   riskAreaAssessmentSubmissionComplete?: (
-    options: { variables: riskAreaAssessmentSubmissionCompleteMutationVariables },
-  ) => { data: riskAreaAssessmentSubmissionCompleteMutation };
+    options: { variables: riskAreaAssessmentSubmissionCompleteVariables },
+  ) => { data: riskAreaAssessmentSubmissionComplete };
   riskAreaAssessmentSubmissionLoading?: boolean;
   riskAreaAssessmentSubmissionError: string | null;
-  riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
-  riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
+  riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmission;
+  riskAreaGroup: getRiskAreaGroupForPatient['riskAreaGroupForPatient'];
   riskAreaGroupLoading?: boolean;
   riskAreaGroupError?: ApolloError | null;
 }
 
 interface IDispatchProps {
-  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) => void;
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestion[]) => void;
 }
 
 type allProps = IGraphqlProps & IProps & IDispatchProps;
@@ -66,7 +66,7 @@ type allProps = IGraphqlProps & IProps & IDispatchProps;
 interface IState {
   inProgress: boolean;
   editPopupVisible: boolean;
-  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions: FullCarePlanSuggestion[];
 }
 
 export interface IQuestionCondition {
@@ -83,22 +83,17 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   }
 
   async componentDidMount() {
-    const {
-      riskAreaAssessmentSubmissionCreate,
-      riskAreaId,
-      patientId,
-      riskAreaAssessmentSubmission,
-    } = this.props;
+    const { riskAreaId, patientId, riskAreaAssessmentSubmission } = this.props;
 
     // Handle returning to a risk area after completing the risk area
     // We set in progress to false, forcing the popup to close and the use to re-start the
     // submission by creating / fetching a new submission
     if (
-      riskAreaAssessmentSubmissionCreate &&
+      this.props.riskAreaAssessmentSubmissionCreate &&
       riskAreaAssessmentSubmission &&
       riskAreaAssessmentSubmission.createdAt
     ) {
-      await riskAreaAssessmentSubmissionCreate({
+      await this.props.riskAreaAssessmentSubmissionCreate({
         variables: {
           riskAreaId,
           patientId,
@@ -121,9 +116,9 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   }
 
   onStart = async () => {
-    const { riskAreaAssessmentSubmissionCreate, riskAreaId, patientId } = this.props;
-    if (riskAreaAssessmentSubmissionCreate) {
-      const result = await riskAreaAssessmentSubmissionCreate({
+    const { riskAreaId, patientId } = this.props;
+    if (this.props.riskAreaAssessmentSubmissionCreate) {
+      const result = await this.props.riskAreaAssessmentSubmissionCreate({
         variables: {
           riskAreaId,
           patientId,
@@ -143,14 +138,10 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   };
 
   onSubmit = async () => {
-    const {
-      riskAreaAssessmentSubmissionComplete,
-      riskAreaAssessmentSubmission,
-      openSuggestionsPopup,
-    } = this.props;
+    const { riskAreaAssessmentSubmission, openSuggestionsPopup } = this.props;
 
-    if (riskAreaAssessmentSubmission && riskAreaAssessmentSubmissionComplete) {
-      const result = await riskAreaAssessmentSubmissionComplete({
+    if (riskAreaAssessmentSubmission && this.props.riskAreaAssessmentSubmissionComplete) {
+      const result = await this.props.riskAreaAssessmentSubmissionComplete({
         variables: {
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         },
@@ -296,7 +287,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => ({
-  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) =>
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestion[]) =>
     dispatch(
       openPopup({
         name: 'CARE_PLAN_SUGGESTIONS',
@@ -313,19 +304,19 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(riskAreaAssessmentSubmissionCompleteMutationGraphql, {
+  graphql(riskAreaAssessmentSubmissionCompleteGraphql, {
     name: 'riskAreaAssessmentSubmissionComplete',
     options: {
       refetchQueries: ['getProgressNotesForCurrentUser'],
     },
   }),
-  graphql(riskAreaAssessmentSubmissionCreateMutationGraphql, {
+  graphql(riskAreaAssessmentSubmissionCreateGraphql, {
     name: 'riskAreaAssessmentSubmissionCreate',
     options: {
       refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
     },
   }),
-  graphql(riskAreaQuery, {
+  graphql(riskAreaGraphql, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -337,7 +328,7 @@ export default compose(
       riskArea: data ? (data as any).riskArea : null,
     }),
   }),
-  graphql(riskAreaAssessmentSubmissionForPatientQuery, {
+  graphql(riskAreaAssessmentSubmissionForPatient, {
     skip: (props: IProps) => !props.riskAreaId,
     options: (props: IProps) => ({
       variables: {

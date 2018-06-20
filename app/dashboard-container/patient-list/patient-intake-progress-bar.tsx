@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullPatientForDashboardFragment } from '../../graphql/types';
+import { FullPatientForDashboard } from '../../graphql/types';
 import styles from './css/patient-intake-progress-bar.css';
 
 interface IProps {
-  computedPatientStatus: FullPatientForDashboardFragment['computedPatientStatus'];
+  computedPatientStatus: FullPatientForDashboard['computedPatientStatus'];
 }
 
 const PatientIntakeProgressBar: React.StatelessComponent<IProps> = (props: IProps) => {

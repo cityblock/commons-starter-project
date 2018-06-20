@@ -1,11 +1,11 @@
 import { isEqual } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
+import riskAreaGroupDeleteGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
 import {
-  riskAreaGroupDeleteMutation,
-  riskAreaGroupDeleteMutationVariables,
-  FullRiskAreaGroupFragment,
+  riskAreaGroupDelete,
+  riskAreaGroupDeleteVariables,
+  FullRiskAreaGroup,
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import withErrorHandler, {
@@ -16,7 +16,7 @@ import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';
 
 interface IProps {
-  riskAreaGroup: FullRiskAreaGroupFragment | null;
+  riskAreaGroup: FullRiskAreaGroup | null;
   close: () => void;
   createMode: boolean;
   cancelCreateRiskAreaGroup: () => void;
@@ -24,8 +24,8 @@ interface IProps {
 
 interface IGraphqlProps {
   deleteRiskAreaGroup: (
-    options: { variables: riskAreaGroupDeleteMutationVariables },
-  ) => { data: riskAreaGroupDeleteMutation };
+    options: { variables: riskAreaGroupDeleteVariables },
+  ) => { data: riskAreaGroupDelete };
 }
 
 type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
@@ -101,7 +101,7 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(riskAreaGroupDeleteMutationGraphql, {
+  graphql(riskAreaGroupDeleteGraphql, {
     name: 'deleteRiskAreaGroup',
     options: {
       refetchQueries: ['getRiskAreaGroups'],

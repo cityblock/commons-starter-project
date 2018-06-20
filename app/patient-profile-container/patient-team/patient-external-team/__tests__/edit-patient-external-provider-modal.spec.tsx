@@ -6,7 +6,7 @@ import PatientExternalProviderModal from '../patient-external-provider-modal';
 
 describe('Render Edit Patient External Provider Modal', () => {
   const closePopup = () => true;
-  const editPatientExternalProviderMutation = jest.fn();
+  const editPatientExternalProvider = jest.fn();
 
   const wrapper = shallow(
     <EditPatientExternalProviderModal
@@ -14,7 +14,7 @@ describe('Render Edit Patient External Provider Modal', () => {
       patientId={patient.id}
       isVisible={false}
       closePopup={closePopup}
-      editPatientExternalProviderMutation={editPatientExternalProviderMutation}
+      editPatientExternalProvider={editPatientExternalProvider}
     />,
   );
 

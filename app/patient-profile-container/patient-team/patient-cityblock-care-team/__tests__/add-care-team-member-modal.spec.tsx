@@ -35,7 +35,7 @@ describe('Render Care Team Member Modal', () => {
       isVisible={false}
       closePopup={closePopup}
       patientId={patient.id}
-      addUserToPatientCareTeamMutation={addUser}
+      addUserToPatientCareTeam={addUser}
       patientCareTeam={[userForCareTeam]}
       userSummaryList={[userForSummary, user2]}
     />,

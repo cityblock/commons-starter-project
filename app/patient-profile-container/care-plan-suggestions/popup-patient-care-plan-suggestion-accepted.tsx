@@ -1,22 +1,22 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import carePlanSuggestionAcceptMutationGraphql from '../../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
-import concernsQuery from '../../graphql/queries/get-concerns.graphql';
-import patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
+import carePlanSuggestionAcceptGraphql from '../../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import concernsGraphql from '../../graphql/queries/get-concerns.graphql';
+import patientCarePlan from '../../graphql/queries/get-patient-care-plan.graphql';
 import {
-  carePlanSuggestionAcceptMutation,
-  carePlanSuggestionAcceptMutationVariables,
-  getConcernsQuery,
-  getPatientCarePlanQuery,
-  FullCarePlanSuggestionForPatientFragment,
+  carePlanSuggestionAccept,
+  carePlanSuggestionAcceptVariables,
+  getConcerns,
+  getPatientCarePlan,
+  FullCarePlanSuggestionForPatient,
 } from '../../graphql/types';
 import Modal from '../../shared/library/modal/modal';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-care-plan-suggestion-accepted-modal-body';
 
 export interface IProps {
   visible: boolean;
-  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
-  suggestion: FullCarePlanSuggestionForPatientFragment | null;
+  carePlanSuggestions?: FullCarePlanSuggestionForPatient[];
+  suggestion: FullCarePlanSuggestionForPatient | null;
   taskTemplateIds: string[] | null[];
   patientId: string;
   onDismiss: () => any;
@@ -25,11 +25,11 @@ export interface IProps {
 interface IGraphqlProps {
   carePlanLoading?: boolean;
   carePlanError: string | null;
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  concerns?: getConcernsQuery['concerns'];
+  carePlan?: getPatientCarePlan['carePlanForPatient'];
+  concerns?: getConcerns['concerns'];
   acceptCarePlanSuggestion: (
-    options: { variables: carePlanSuggestionAcceptMutationVariables },
-  ) => { data: carePlanSuggestionAcceptMutation };
+    options: { variables: carePlanSuggestionAcceptVariables },
+  ) => { data: carePlanSuggestionAccept };
 }
 
 type concernTypeType = '' | 'inactive' | 'active';
@@ -56,9 +56,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
     } = this.props;
     const { concernType, concernId } = this.state;
     const startedAt = concernType === 'active' ? new Date().toISOString() : null;
-    const acceptCarePlanSuggestionVariables: Partial<
-      carePlanSuggestionAcceptMutationVariables
-    > = {};
+    const acceptCarePlanSuggestionVariables: Partial<carePlanSuggestionAcceptVariables> = {};
     const acceptingConcernSuggestion = suggestion && !!suggestion.concern && concernType;
     const acceptingGoalSuggestion = suggestion && !!suggestion.goalSuggestionTemplate;
 
@@ -89,7 +87,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
 
     try {
       await acceptCarePlanSuggestion({
-        variables: acceptCarePlanSuggestionVariables as carePlanSuggestionAcceptMutationVariables,
+        variables: acceptCarePlanSuggestionVariables as carePlanSuggestionAcceptVariables,
       });
       this.setState({ loading: false, error: null });
       this.onDismiss();
@@ -150,7 +148,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
 }
 
 export default compose(
-  graphql(patientCarePlanQuery, {
+  graphql(patientCarePlan, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
@@ -162,14 +160,14 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql(concernsQuery, {
+  graphql(concernsGraphql, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(carePlanSuggestionAcceptMutationGraphql, {
+  graphql(carePlanSuggestionAcceptGraphql, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: [

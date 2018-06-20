@@ -1,6 +1,6 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import { FullPatientForCBOReferralFormPDFFragment } from '../../graphql/types';
+import { FullPatientForCBOReferralFormPDF } from '../../graphql/types';
 import {
   formatAddress,
   formatCityblockId,
@@ -12,7 +12,7 @@ import copy from './copy/copy';
 import TextGroup from './text-group';
 
 interface IProps {
-  patient: FullPatientForCBOReferralFormPDFFragment;
+  patient: FullPatientForCBOReferralFormPDF;
   description: string | null;
 }
 

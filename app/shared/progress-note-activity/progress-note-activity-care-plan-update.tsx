@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullCarePlanUpdateEventFragment } from '../../graphql/types';
+import { FullCarePlanUpdateEvent } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 
 interface IProps {
-  carePlanUpdateEvents: FullCarePlanUpdateEventFragment[];
+  carePlanUpdateEvents: FullCarePlanUpdateEvent[];
   updateType: 'concern' | 'goal';
   expanded: boolean;
 }

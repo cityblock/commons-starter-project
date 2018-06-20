@@ -2,8 +2,8 @@ import { ApolloError } from 'apollo-client';
 import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientSocialSecurityQuery from '../../graphql/queries/get-patient-social-security.graphql';
-import { getPatientSocialSecurityQuery } from '../../graphql/types';
+import patientSocialSecurityGraphql from '../../graphql/queries/get-patient-social-security.graphql';
+import { getPatientSocialSecurity } from '../../graphql/types';
 import { formatSocialSecurity } from '../../shared/helpers/format-helpers';
 import DefaultText from '../../shared/library/default-text/default-text';
 import Icon from '../../shared/library/icon/icon';
@@ -21,7 +21,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientSocialSecurity?: getPatientSocialSecurityQuery['patientSocialSecurity'];
+  patientSocialSecurity?: getPatientSocialSecurity['patientSocialSecurity'];
   loading?: boolean;
   error: ApolloError | null | undefined;
 }
@@ -68,7 +68,7 @@ export class SocialSecurityDisplayField extends React.Component<allProps> {
   }
 }
 
-export default graphql(patientSocialSecurityQuery, {
+export default graphql(patientSocialSecurityGraphql, {
   skip: (props: IProps) => !props.shouldLoad,
   options: (props: IProps) => ({
     variables: { patientId: props.patientId, glassBreakId: props.glassBreakId },

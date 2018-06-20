@@ -1,5 +1,5 @@
 import React from 'react';
-import { getSmsMessagesQuery } from '../../graphql/types';
+import { getSmsMessages } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import styles from './css/sms-messages.css';
 import EmptySmsMessages from './empty-sms-messages';
@@ -10,7 +10,7 @@ import SmsMessageDate from './sms-message-date';
 export interface IProps {
   loading?: boolean;
   error?: string | null;
-  smsMessages: getSmsMessagesQuery['smsMessages'];
+  smsMessages: getSmsMessages['smsMessages'];
 }
 
 class SmsMessages extends React.Component<IProps> {

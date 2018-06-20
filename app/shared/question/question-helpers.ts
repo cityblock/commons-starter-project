@@ -1,9 +1,5 @@
 import { values } from 'lodash';
-import {
-  getQuestionsQuery,
-  FullPatientAnswerFragment,
-  FullQuestionFragment,
-} from '../../graphql/types';
+import { getQuestions, FullPatientAnswer, FullQuestion } from '../../graphql/types';
 
 export interface IQuestionAnswerHash {
   [questionId: string]: Array<{
@@ -23,7 +19,7 @@ interface IConditionState {
   satisfied: number;
 }
 
-export function getQuestionAnswerHash(nextPatientAnswers?: FullPatientAnswerFragment[] | null) {
+export function getQuestionAnswerHash(nextPatientAnswers?: FullPatientAnswer[] | null) {
   const questionAnswerHash: IQuestionAnswerHash = {};
   if (!nextPatientAnswers) {
     return questionAnswerHash;
@@ -75,7 +71,7 @@ export function evaluateQuestionConditions(
 }
 
 export const getQuestionVisibility = (
-  question: FullQuestionFragment,
+  question: FullQuestion,
   questions: IQuestionAnswerHash,
 ): boolean => {
   let visible: boolean = true;
@@ -112,8 +108,8 @@ export const getQuestionVisibility = (
 };
 
 export const getAnswerDataForQuestion = (
-  question: FullQuestionFragment,
-  patientAnswers: FullPatientAnswerFragment[],
+  question: FullQuestion,
+  patientAnswers: FullPatientAnswer[],
 ) => {
   const answerData = { answers: [] as any, oldAnswers: [] as any, changed: false };
   patientAnswers.forEach(answer => {
@@ -127,7 +123,7 @@ export const getAnswerDataForQuestion = (
 };
 
 export const allQuestionsAnswered = (
-  questions: getQuestionsQuery['questions'],
+  questions: getQuestions['questions'],
   answerData: IQuestionAnswerHash,
 ) => {
   for (const question of questions || []) {

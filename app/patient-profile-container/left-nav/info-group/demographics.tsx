@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../../graphql/types';
+import { FullPatientForProfile } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
 import styles from './css/shared.css';
@@ -12,7 +12,7 @@ const DATE_OF_BIRTH_FORMAT = 'MMM D, YYYY';
 interface IProps {
   isOpen: boolean;
   onClick: (clicked: Accordion) => void;
-  patient: FullPatientForProfileFragment;
+  patient: FullPatientForProfile;
 }
 
 const Demographics: React.StatelessComponent<IProps> = (props: IProps) => {

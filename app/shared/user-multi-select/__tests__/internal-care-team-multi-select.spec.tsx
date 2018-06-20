@@ -13,9 +13,9 @@ describe('Internal Care Team Multi Select', () => {
   const name = 'careMember';
   const placeholderMessageId = 'appointmentModal.guestPlaceholder';
   const selectedUsers = [] as any;
-  const careTeamQuery = () => ({ ...userForCareTeam, id: uuid() });
+  const careTeam = () => ({ ...userForCareTeam, id: uuid() });
   const graphqlMocks = () => ({
-    CareTeamUser: careTeamQuery,
+    CareTeamUser: careTeam,
   });
 
   const container = mount(

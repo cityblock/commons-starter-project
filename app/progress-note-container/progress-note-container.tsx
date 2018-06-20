@@ -3,12 +3,12 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup, openPopup } from '../actions/popup-action';
-import progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
-import progressNotesForSupervisorReviewQuery from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
+import progressNotesForCurrentUserGraphql from '../graphql/queries/get-progress-notes-for-current-user.graphql';
+import progressNotesForSupervisorReviewGraphql from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
 import {
-  getCurrentUserQuery,
-  getProgressNotesForCurrentUserQuery,
-  getProgressNotesForSupervisorReviewQuery,
+  getCurrentUser,
+  getProgressNotesForCurrentUser,
+  getProgressNotesForSupervisorReview,
 } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import { IState as IAppState } from '../store';
@@ -18,7 +18,7 @@ import ProgressNoteSmallRow from './progress-note-small-row';
 const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager', 'voicemails'];
 
 interface IProps {
-  currentUser: getCurrentUserQuery['currentUser'];
+  currentUser: getCurrentUser['currentUser'];
 }
 
 interface IRouterProps {
@@ -28,10 +28,10 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  progressNotes: getProgressNotesForCurrentUserQuery['progressNotesForCurrentUser'];
+  progressNotes: getProgressNotesForCurrentUser['progressNotesForCurrentUser'];
   progressNotesLoading?: boolean;
   progressNotesError: string | null;
-  progressNotesForSupervisorReview: getProgressNotesForSupervisorReviewQuery['progressNotesForSupervisorReview'];
+  progressNotesForSupervisorReview: getProgressNotesForSupervisorReview['progressNotesForSupervisorReview'];
   progressNotesForSupervisorReviewLoading?: boolean;
   progressNotesForSupervisorReviewError: string | null;
 }
@@ -162,7 +162,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(progressNotesForCurrentUserQuery, {
+  graphql(progressNotesForCurrentUserGraphql, {
     options: () => ({
       variables: {
         completed: false,
@@ -175,7 +175,7 @@ export default compose(
       refetchProgressNotes: data ? data.refetch : null,
     }),
   }),
-  graphql(progressNotesForSupervisorReviewQuery, {
+  graphql(progressNotesForSupervisorReviewGraphql, {
     props: ({ data }) => ({
       progressNotesForSupervisorReviewLoading: data ? data.loading : false,
       progressNotesForSupervisorReviewError: data ? data.error : null,

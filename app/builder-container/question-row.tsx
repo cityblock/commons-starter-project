@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullQuestionFragment } from '../graphql/types';
+import { FullQuestion } from '../graphql/types';
 import questionsStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  question: FullQuestionFragment;
+  question: FullQuestion;
   selected: boolean;
   routeBase: string;
 }

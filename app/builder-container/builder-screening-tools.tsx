@@ -5,14 +5,14 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
-import screeningToolDeleteMutationGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
+import riskAreasGraphql from '../graphql/queries/get-risk-areas.graphql';
+import screeningToolsGraphql from '../graphql/queries/get-screening-tools.graphql';
+import screeningToolDeleteGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
 import {
-  screeningToolDeleteMutation,
-  screeningToolDeleteMutationVariables,
-  FullRiskAreaFragment,
-  FullScreeningToolFragment,
+  screeningToolDelete,
+  screeningToolDeleteVariables,
+  FullRiskArea,
+  FullScreeningTool,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
@@ -42,11 +42,11 @@ interface IStateProps {
 interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
-  riskAreas?: FullRiskAreaFragment[];
-  screeningTools?: FullScreeningToolFragment[];
+  riskAreas?: FullRiskArea[];
+  screeningTools?: FullScreeningTool[];
   deleteScreeningTool: (
-    options: { variables: screeningToolDeleteMutationVariables },
-  ) => { data: screeningToolDeleteMutation };
+    options: { variables: screeningToolDeleteVariables },
+  ) => { data: screeningToolDelete };
 }
 
 interface IState {
@@ -83,11 +83,11 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     this.setState({ showCreateScreeningTool: true });
   }
 
-  hideCreateScreeningTool(screeningTool?: FullScreeningToolFragment) {
+  hideCreateScreeningTool(screeningTool?: FullScreeningTool) {
     this.setState({ showCreateScreeningTool: false });
   }
 
-  renderScreeningTools(screeningTools: FullScreeningToolFragment[]) {
+  renderScreeningTools(screeningTools: FullScreeningTool[]) {
     const { loading, error } = this.props;
     const validScreeningTools = screeningTools.filter(screeningTool => !screeningTool.deletedAt);
 
@@ -103,7 +103,7 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     }
   }
 
-  renderScreeningTool(screeningTool: FullScreeningToolFragment) {
+  renderScreeningTool(screeningTool: FullScreeningTool) {
     const selected = screeningTool.id === this.props.screeningToolId;
     return (
       <ScreeningToolRow
@@ -178,17 +178,17 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(screeningToolDeleteMutationGraphql, {
+  graphql(screeningToolDeleteGraphql, {
     name: 'deleteScreeningTool',
   }),
-  graphql(riskAreasQuery, {
+  graphql(riskAreasGraphql, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(screeningToolsQuery, {
+  graphql(screeningToolsGraphql, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

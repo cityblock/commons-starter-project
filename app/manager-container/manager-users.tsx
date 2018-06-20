@@ -6,24 +6,24 @@ import querystring from 'querystring';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import usersQuery from '../graphql/queries/get-users.graphql';
-import userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
-import userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
-import userEditPermissionsMutationGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
-import userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
+import currentUserGraphql from '../graphql/queries/get-current-user.graphql';
+import usersGraphql from '../graphql/queries/get-users.graphql';
+import userCreateGraphql from '../graphql/queries/user-create-mutation.graphql';
+import userDeleteGraphql from '../graphql/queries/user-delete-mutation.graphql';
+import userEditPermissionsGraphql from '../graphql/queries/user-edit-permissions-mutation.graphql';
+import userEditRoleGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
 import {
-  getUsersQuery,
-  getUsersQueryVariables,
-  userCreateMutation,
-  userCreateMutationVariables,
-  userDeleteMutation,
-  userDeleteMutationVariables,
-  userEditPermissionsMutation,
-  userEditPermissionsMutationVariables,
-  userEditRoleMutation,
-  userEditRoleMutationVariables,
-  FullUserFragment,
+  getUsers,
+  getUsersVariables,
+  userCreate,
+  userCreateVariables,
+  userDelete,
+  userDeleteVariables,
+  userEditPermissions,
+  userEditPermissionsVariables,
+  userEditRole,
+  userEditRoleVariables,
+  FullUser,
   Permissions,
   UserOrderOptions,
   UserRole,
@@ -65,22 +65,16 @@ interface IState {
 }
 
 export interface IGraphqlProps {
-  currentUser?: FullUserFragment;
+  currentUser?: FullUser;
   loading: boolean;
   error: ApolloError | null | undefined;
-  deleteUser?: (
-    options: { variables: userDeleteMutationVariables },
-  ) => { data: userDeleteMutation };
+  deleteUser?: (options: { variables: userDeleteVariables }) => { data: userDelete };
   editUserPermissions?: (
-    options: { variables: userEditPermissionsMutationVariables },
-  ) => { data: userEditPermissionsMutation };
-  editUserRole?: (
-    options: { variables: userEditRoleMutationVariables },
-  ) => { data: userEditRoleMutation };
-  createUser?: (
-    options: { variables: userCreateMutationVariables },
-  ) => { data: userCreateMutation };
-  usersResponse?: getUsersQuery['users'];
+    options: { variables: userEditPermissionsVariables },
+  ) => { data: userEditPermissions };
+  editUserRole?: (options: { variables: userEditRoleVariables }) => { data: userEditRole };
+  createUser?: (options: { variables: userCreateVariables }) => { data: userCreate };
+  usersResponse?: getUsers['users'];
   fetchMoreUsers: () => any;
 }
 
@@ -104,11 +98,11 @@ export class ManagerUsers extends React.Component<allProps, IState> {
     this.setState({ showInviteUser: false });
   };
 
-  renderUsers(users: FullUserFragment[]) {
+  renderUsers(usersList: FullUser[]) {
     const { loading, error } = this.props;
 
-    if (users.length > 0) {
-      return users.map(this.renderUser);
+    if (usersList.length > 0) {
+      return usersList.map(this.renderUser);
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
@@ -129,7 +123,7 @@ export class ManagerUsers extends React.Component<allProps, IState> {
     this.props.history.push({ search: querystring.stringify(cleanedPageParams) });
   };
 
-  renderUser = (user: FullUserFragment) => {
+  renderUser = (user: FullUser) => {
     return (
       <UserRow
         key={user.id}
@@ -189,7 +183,7 @@ export class ManagerUsers extends React.Component<allProps, IState> {
         </div>
       );
     }
-    const users =
+    const usersList =
       usersResponse && usersResponse.edges ? usersResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage =
       usersResponse && usersResponse.pageInfo ? usersResponse.pageInfo.hasNextPage : false;
@@ -224,10 +218,10 @@ export class ManagerUsers extends React.Component<allProps, IState> {
             error={error}
             fetchMore={fetchMoreUsers}
             hasNextPage={hasNextPage}
-            isEmpty={users ? users.length > 0 : true}
+            isEmpty={usersList ? usersList.length > 0 : true}
             compressed={showInviteUser}
           >
-            {this.renderUsers(users || [])}
+            {this.renderUsers(usersList || [])}
           </InfiniteScroll>
           <div className={usersStyles}>{inviteUserHtml}</div>
         </div>
@@ -236,7 +230,7 @@ export class ManagerUsers extends React.Component<allProps, IState> {
   }
 }
 
-const getPageParams = (props: IProps): getUsersQueryVariables => {
+const getPageParams = (props: IProps): getUsersVariables => {
   const pageParams = querystring.parse(window.location.search.substring(1));
   return {
     pageNumber: 0,
@@ -248,35 +242,34 @@ const getPageParams = (props: IProps): getUsersQueryVariables => {
 
 export default compose(
   withRouter,
-  graphql(userDeleteMutationGraphql, {
+  graphql(userDeleteGraphql, {
     name: 'deleteUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(userEditPermissionsMutationGraphql, {
+  graphql(userEditPermissionsGraphql, {
     name: 'editUserPermissions',
   }),
 
-  graphql(userEditRoleMutationGraphql, {
+  graphql(userEditRoleGraphql, {
     name: 'editUserRole',
   }),
-  graphql(userCreateMutationGraphql, {
+  graphql(userCreateGraphql, {
     name: 'createUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(currentUserQuery, {
+  graphql(currentUserGraphql, {
     props: ({ data }) => ({
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql(usersQuery, {
+  graphql(usersGraphql, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
-      fetchMoreUsers: () =>
-        fetchMore<FullUserFragment>(data as any, getPageParams(ownProps), 'users'),
+      fetchMoreUsers: () => fetchMore<FullUser>(data as any, getPageParams(ownProps), 'users'),
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       usersResponse: data ? (data as any).users : null,

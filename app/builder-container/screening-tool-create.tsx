@@ -2,12 +2,8 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import screeningToolCreateMutationGraphql from '../graphql/queries/screening-tool-create-mutation.graphql';
-import {
-  screeningToolCreateMutation,
-  screeningToolCreateMutationVariables,
-  FullRiskAreaFragment,
-} from '../graphql/types';
+import screeningToolCreateGraphql from '../graphql/queries/screening-tool-create-mutation.graphql';
+import { screeningToolCreate, screeningToolCreateVariables, FullRiskArea } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import screeningToolStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -21,12 +17,12 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 interface IOptions {
-  variables: screeningToolCreateMutationVariables;
+  variables: screeningToolCreateVariables;
 }
 
 interface IProps {
   routeBase: string;
-  riskAreas?: FullRiskAreaFragment[];
+  riskAreas?: FullRiskArea[];
   onClose: () => any;
 }
 
@@ -35,12 +31,12 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  createScreeningTool?: (options: IOptions) => { data: screeningToolCreateMutation };
+  createScreeningTool?: (options: IOptions) => { data: screeningToolCreate };
 }
 
 interface IState {
   loading: boolean;
-  screeningTool: screeningToolCreateMutationVariables;
+  screeningTool: screeningToolCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -163,7 +159,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(screeningToolCreateMutationGraphql, {
+  graphql(screeningToolCreateGraphql, {
     name: 'createScreeningTool',
     options: {
       refetchQueries: ['getScreeningTools'],

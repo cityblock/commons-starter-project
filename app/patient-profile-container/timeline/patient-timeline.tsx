@@ -2,8 +2,8 @@ import { ApolloError } from 'apollo-client';
 import { toString } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientEncountersQuery from '../../graphql/queries/get-patient-encounters.graphql';
-import { getPatientEncountersQuery, FullPatientEncounterFragment } from '../../graphql/types';
+import patientEncountersGraphql from '../../graphql/queries/get-patient-encounters.graphql';
+import { getPatientEncounters, FullPatientEncounter } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
@@ -22,7 +22,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  patientEncounters: getPatientEncountersQuery['patientEncounters'];
+  patientEncounters: getPatientEncounters['patientEncounters'];
 }
 
 interface IState {
@@ -71,7 +71,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  renderPatientEncounter = (patientEncounter: FullPatientEncounterFragment) => {
+  renderPatientEncounter = (patientEncounter: FullPatientEncounter) => {
     const { id, location, source, date, title, notes, progressNoteId } = patientEncounter;
     const { patientId } = this.props.match.params;
 
@@ -115,7 +115,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(patientEncountersQuery, {
+export default graphql(patientEncountersGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,

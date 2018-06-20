@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientProblemListQuery from '../../../graphql/queries/get-patient-problem-list.graphql';
-import { getPatientProblemListQuery } from '../../../graphql/types';
+import patientProblemListGraphql from '../../../graphql/queries/get-patient-problem-list.graphql';
+import { getPatientProblemList } from '../../../graphql/types';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
 import styles from './css/shared.css';
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientProblemList: getPatientProblemListQuery['patientProblemList'];
+  patientProblemList: getPatientProblemList['patientProblemList'];
   isLoading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -56,7 +56,7 @@ export const ProblemList: React.StatelessComponent<allProps> = (props: allProps)
   );
 };
 
-export default graphql(patientProblemListQuery, {
+export default graphql(patientProblemListGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

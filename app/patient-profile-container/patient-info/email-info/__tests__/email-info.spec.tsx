@@ -12,7 +12,7 @@ import { EmailInfo } from '../email-info';
 
 describe('Render Email Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
-  const emailDeleteMutation = jest.fn();
+  const emailDelete = jest.fn();
   const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
@@ -21,7 +21,7 @@ describe('Render Email Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.patientInfo.id}
       className="something"
-      emailDeleteMutation={emailDeleteMutation}
+      emailDelete={emailDelete}
       error={null}
       openErrorPopup={errorFn}
     />,

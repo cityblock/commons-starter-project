@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { filter, groupBy } from 'lodash';
 import React from 'react';
 import { Fragment } from 'react';
-import { FullCalendarEventFragment, GoogleCalendarEventType } from '../../graphql/types';
+import { FullCalendarEvent, GoogleCalendarEventType } from '../../graphql/types';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Spinner from '../library/spinner/spinner';
 import TextDivider from '../library/text-divider/text-divider';
@@ -11,7 +11,7 @@ import CalendarEvent from './calendar-event';
 import styles from './css/calendar.css';
 
 interface IProps {
-  calendarEvents?: FullCalendarEventFragment[];
+  calendarEvents?: FullCalendarEvent[];
   fetchMore: () => void;
   showRefreshModal: () => void;
   hasNextPage?: boolean;
@@ -63,7 +63,7 @@ export default class Calendar extends React.Component<IProps> {
     );
   }
 
-  renderYear(yearOfEvents: FullCalendarEventFragment[]) {
+  renderYear(yearOfEvents: FullCalendarEvent[]) {
     const eventsByMonth = groupBy(yearOfEvents, event => new Date(event.startDate).getMonth());
     const months = Object.keys(eventsByMonth).sort();
 

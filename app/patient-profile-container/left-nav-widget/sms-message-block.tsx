@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
-import { getPatientQuery } from '../../graphql/types';
+import { getPatient } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
 import styles from './css/sms-message-block.css';
 
 interface IProps {
-  patient: getPatientQuery['patient'];
+  patient: getPatient['patient'];
   isConsented: boolean;
   loading: boolean;
   error: string | null;

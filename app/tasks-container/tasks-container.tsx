@@ -5,11 +5,11 @@ import querystring from 'querystring';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
+import tasksGraphql from '../graphql/queries/tasks-for-current-user.graphql';
 import {
-  getTasksForCurrentUserQuery,
-  getTasksForCurrentUserQueryVariables,
-  FullTaskFragment,
+  getTasksForCurrentUser,
+  getTasksForCurrentUserVariables,
+  FullTask,
 } from '../graphql/types';
 import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
@@ -35,7 +35,7 @@ interface IProps {
 interface IGraphqlProps {
   tasksLoading: boolean;
   tasksError?: ApolloError | null;
-  tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
+  tasksResponse?: getTasksForCurrentUser['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
 }
 
@@ -74,7 +74,7 @@ export const TasksContainer = (props: allProps) => {
   );
 };
 
-const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
+const getPageParams = (props: IProps): getTasksForCurrentUserVariables => {
   const pageParams = querystring.parse(props.location.search.substring(1));
   return {
     pageNumber: 0,
@@ -84,13 +84,13 @@ const getPageParams = (props: IProps): getTasksForCurrentUserQueryVariables => {
   };
 };
 
-const withQuery = graphql(tasksQuery, {
+const withQuery = graphql(tasksGraphql, {
   options: (props: IProps) => ({
     variables: getPageParams(props),
   }),
   props: ({ data, ownProps }) => ({
     fetchMoreTasks: () =>
-      fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
+      fetchMore<FullTask>(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
     tasksLoading: data ? data.loading : false,
     tasksError: data ? data.error : null,
     tasksResponse: data ? (data as any).tasksForCurrentUser : null,

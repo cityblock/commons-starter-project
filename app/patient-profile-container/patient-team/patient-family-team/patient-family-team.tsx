@@ -1,12 +1,12 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientContactsQuery from '../../../graphql/queries/get-patient-contacts.graphql';
-import patientContactDeleteMutationGraphql from '../../../graphql/queries/patient-contact-delete-mutation.graphql';
+import patientContactsGraphql from '../../../graphql/queries/get-patient-contacts.graphql';
+import patientContactDeleteGraphql from '../../../graphql/queries/patient-contact-delete-mutation.graphql';
 import {
-  getPatientContactsQuery,
-  patientContactDeleteMutation,
-  patientContactDeleteMutationVariables,
-  FullPatientContactFragment,
+  getPatientContacts,
+  patientContactDelete,
+  patientContactDeleteVariables,
+  FullPatientContact,
 } from '../../../graphql/types';
 import EditPatientContactModal from '../../../shared/patient-contact-modal/edit-patient-contact-modal';
 import withErrorHandler, {
@@ -22,10 +22,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientContacts?: getPatientContactsQuery['patientContacts'];
+  patientContacts?: getPatientContacts['patientContacts'];
   patientContactDelete: (
-    options: { variables: patientContactDeleteMutationVariables },
-  ) => { data: patientContactDeleteMutation };
+    options: { variables: patientContactDeleteVariables },
+  ) => { data: patientContactDelete };
   isLoading?: boolean;
   error?: string | null;
 }
@@ -34,16 +34,16 @@ export type allProps = IGraphqlProps & IProps & IInjectedErrorProps;
 
 interface IState {
   isEditModalVisible: boolean;
-  patientContactToEdit?: FullPatientContactFragment | null;
+  patientContactToEdit?: FullPatientContact | null;
 }
 
 export class PatientFamilyTeam extends React.Component<allProps, IState> {
   state = { isEditModalVisible: false, patientContactToEdit: undefined };
 
   handleRemove = async (patientContactId: string) => {
-    const { patientContactDelete, openErrorPopup } = this.props;
+    const { openErrorPopup } = this.props;
     try {
-      await patientContactDelete({ variables: { patientContactId } });
+      await this.props.patientContactDelete({ variables: { patientContactId } });
     } catch (err) {
       openErrorPopup(err.message);
     }
@@ -53,7 +53,7 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
     // TODO: get rid of these
   };
 
-  handleOpenEditModal = (patientContactToEdit: FullPatientContactFragment) => {
+  handleOpenEditModal = (patientContactToEdit: FullPatientContact) => {
     this.setState({ isEditModalVisible: true, patientContactToEdit });
   };
 
@@ -125,13 +125,13 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientContactDeleteMutationGraphql, {
+  graphql(patientContactDeleteGraphql, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContacts'],
     },
   }),
-  graphql(patientContactsQuery, {
+  graphql(patientContactsGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

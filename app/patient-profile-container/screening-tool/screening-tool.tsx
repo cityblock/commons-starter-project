@@ -3,8 +3,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
-import { FullCarePlanSuggestionFragment, FullScreeningToolFragment } from '../../graphql/types';
+import screeningToolGraphql from '../../graphql/queries/get-screening-tool.graphql';
+import { FullCarePlanSuggestion, FullScreeningTool } from '../../graphql/types';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
 import ScreeningToolHistoricalSubmission from './screening-tool-historical-submission';
@@ -21,19 +21,19 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  screeningTool?: FullScreeningToolFragment;
+  screeningTool?: FullScreeningTool;
   screeningToolLoading?: boolean;
   screeningToolError: ApolloError | undefined | null;
 }
 
 interface IDispatchProps {
-  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) => void;
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestion[]) => void;
 }
 
 type allProps = IGraphqlProps & IProps & IDispatchProps;
 
 interface IState {
-  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions: FullCarePlanSuggestion[];
 }
 
 export class ScreeningTool extends React.Component<allProps, IState> {
@@ -43,7 +43,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
     this.setState({ carePlanSuggestions: [] });
   }
 
-  handleSubmissionScored = (suggestions: FullCarePlanSuggestionFragment[]) => {
+  handleSubmissionScored = (suggestions: FullCarePlanSuggestion[]) => {
     this.setState({ carePlanSuggestions: suggestions });
 
     if (suggestions.length > 0) {
@@ -86,7 +86,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: IProps): IDispatchProps => ({
-  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestionFragment[]) =>
+  openSuggestionsPopup: (carePlanSuggestions: FullCarePlanSuggestion[]) =>
     dispatch(
       openPopup({
         name: 'CARE_PLAN_SUGGESTIONS',
@@ -103,7 +103,7 @@ export default compose(
     null,
     mapDispatchToProps as any,
   ),
-  graphql(screeningToolQuery, {
+  graphql(screeningToolGraphql, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.match.params.screeningToolId,

@@ -1,6 +1,6 @@
 import { size } from 'lodash';
 import React from 'react';
-import { FullRiskAreaForPatientFragment } from '../../graphql/types';
+import { FullRiskAreaForPatient } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import { DomainAssessment } from './domain-assessment';
@@ -8,7 +8,7 @@ import { DomainAssessment } from './domain-assessment';
 interface IProps {
   routeBase: string;
   assessmentType: 'automated' | 'manual';
-  riskAreas: FullRiskAreaForPatientFragment[];
+  riskAreas: FullRiskAreaForPatient[];
 }
 
 // keep track of which risk areas are suppressed

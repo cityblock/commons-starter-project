@@ -5,8 +5,8 @@ import getPatientExternalOrganizationsQuery from '../../../graphql/queries/get-p
 import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
 import createPatientExternalOrganizationMutationGraphql from '../../../graphql/queries/patient-external-organization-create-mutation.graphql';
 import {
-  patientExternalOrganizationCreateMutation,
-  patientExternalOrganizationCreateMutationVariables,
+  patientExternalOrganizationCreate,
+  patientExternalOrganizationCreateVariables,
 } from '../../../graphql/types';
 import PatientExternalOrganizationModal, {
   IPatientExternalOrganization,
@@ -20,8 +20,8 @@ interface IProps {
 
 interface IGraphqlProps {
   createPatientExternalOrganizationMutation: (
-    options: { variables: patientExternalOrganizationCreateMutationVariables },
-  ) => Promise<{ data: patientExternalOrganizationCreateMutation; errors: ApolloError[] }>;
+    options: { variables: patientExternalOrganizationCreateVariables },
+  ) => Promise<{ data: patientExternalOrganizationCreate; errors: ApolloError[] }>;
 }
 
 type allProps = IProps & IGraphqlProps;

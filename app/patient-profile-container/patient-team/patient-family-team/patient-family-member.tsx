@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import React from 'react';
-import { FullPatientContactFragment } from '../../../graphql/types';
+import { FullPatientContact } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
   formatAddressSecondLine,
@@ -12,9 +12,9 @@ import Text, { Color } from '../../../shared/library/text/text';
 import styles from '../css/team-member.css';
 
 interface IProps {
-  patientContact: FullPatientContactFragment;
+  patientContact: FullPatientContact;
   onRemoveClick: (patientContactId: string) => void;
-  onEditClick: (patientContactToEdit: FullPatientContactFragment) => void;
+  onEditClick: (patientContactToEdit: FullPatientContact) => void;
 }
 
 interface IState {

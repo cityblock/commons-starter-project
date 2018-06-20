@@ -5,13 +5,13 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-import goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
+import goals from '../graphql/queries/get-goal-suggestion-templates.graphql';
+import goalDelete from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 import {
-  getGoalSuggestionTemplatesQuery,
-  goalSuggestionTemplateDeleteMutation,
-  goalSuggestionTemplateDeleteMutationVariables,
-  FullGoalSuggestionTemplateFragment,
+  getGoalSuggestionTemplates,
+  goalSuggestionTemplateDelete,
+  goalSuggestionTemplateDeleteVariables,
+  FullGoalSuggestionTemplate,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
@@ -37,12 +37,12 @@ interface IStateProps {
 
 interface IGraphqlProps {
   refetchGoals: () => any;
-  goals?: getGoalSuggestionTemplatesQuery['goalSuggestionTemplates'];
+  goals?: getGoalSuggestionTemplates['goalSuggestionTemplates'];
   loading: boolean;
   error: string | null;
   deleteGoal?: (
-    options: { variables: goalSuggestionTemplateDeleteMutationVariables },
-  ) => { data: goalSuggestionTemplateDeleteMutation };
+    options: { variables: goalSuggestionTemplateDeleteVariables },
+  ) => { data: goalSuggestionTemplateDelete };
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps;
@@ -72,15 +72,15 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     this.setState({ showCreateGoal: true });
   };
 
-  hideCreateGoal = (goal?: FullGoalSuggestionTemplateFragment) => {
+  hideCreateGoal = (goal?: FullGoalSuggestionTemplate) => {
     this.setState({ showCreateGoal: false });
   };
 
-  renderGoals = (goals: getGoalSuggestionTemplatesQuery['goalSuggestionTemplates']) => {
+  renderGoals = (goalsList: getGoalSuggestionTemplates['goalSuggestionTemplates']) => {
     const { loading, error } = this.props;
-    const validGoals = (goals || []).filter(
+    const validGoals = (goalsList || []).filter(
       goal => goal && !goal.deletedAt,
-    ) as FullGoalSuggestionTemplateFragment[];
+    ) as FullGoalSuggestionTemplate[];
 
     if (validGoals.length > 0) {
       return validGoals.map(this.renderGoal);
@@ -94,7 +94,7 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     }
   };
 
-  renderGoal = (goal: FullGoalSuggestionTemplateFragment) => {
+  renderGoal = (goal: FullGoalSuggestionTemplate) => {
     const selected = goal.id === this.props.goalId;
     return (
       <GoalRow key={goal.id} goal={goal} selected={selected} routeBase={this.props.routeBase} />
@@ -111,9 +111,9 @@ export class BuilderGoals extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { goals, routeBase, goalId } = this.props;
+    const { routeBase, goalId } = this.props;
     const { showCreateGoal } = this.state;
-    const goalsList = goals || [];
+    const goalsList = this.props.goals || [];
     const goalContainerStyles = classNames(styles.itemContainer, {
       [styles.visible]: !!goalId || showCreateGoal,
     });
@@ -159,8 +159,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(goalDeleteMutation, { name: 'deleteGoal' }),
-  graphql(goalsQuery, {
+  graphql(goalDelete, { name: 'deleteGoal' }),
+  graphql(goals, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,

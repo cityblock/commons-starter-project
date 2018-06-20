@@ -3,8 +3,8 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import mattermostUrlForUserCreateGraphql from '../../graphql/queries/mattermost-url-for-user-create.graphql';
 import {
-  mattermostUrlForUserCreateMutation,
-  mattermostUrlForUserCreateMutationVariables,
+  mattermostUrlForUserCreate,
+  mattermostUrlForUserCreateVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
@@ -19,8 +19,8 @@ interface IProps {
 
 interface IGraphqlProps {
   getMattermostLink: (
-    options: { variables: mattermostUrlForUserCreateMutationVariables },
-  ) => { data: mattermostUrlForUserCreateMutation };
+    options: { variables: mattermostUrlForUserCreateVariables },
+  ) => { data: mattermostUrlForUserCreate };
 }
 
 type allProps = IProps & IGraphqlProps;

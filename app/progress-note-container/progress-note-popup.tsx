@@ -2,23 +2,23 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
-import questionsQuery from '../graphql/queries/get-questions.graphql';
-import progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
-import progressNoteCompleteSupervisorReviewMutationGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
-import progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
+import patientAnswersGraphql from '../graphql/queries/get-patient-answers.graphql';
+import questionsGraphql from '../graphql/queries/get-questions.graphql';
+import progressNoteCompleteGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
+import progressNoteCompleteSupervisorReviewGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
+import progressNoteEditGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
 import {
-  getCurrentUserQuery,
-  getPatientAnswersQuery,
-  getQuestionsQuery,
-  progressNoteCompleteMutation,
-  progressNoteCompleteMutationVariables,
-  progressNoteCompleteSupervisorReviewMutation,
-  progressNoteCompleteSupervisorReviewMutationVariables,
-  progressNoteEditMutation,
-  progressNoteEditMutationVariables,
-  FullProgressNoteFragment,
-  FullProgressNoteTemplateFragment,
+  getCurrentUser,
+  getPatientAnswers,
+  getQuestions,
+  progressNoteComplete,
+  progressNoteCompleteSupervisorReview,
+  progressNoteCompleteSupervisorReviewVariables,
+  progressNoteCompleteVariables,
+  progressNoteEdit,
+  progressNoteEditVariables,
+  FullProgressNote,
+  FullProgressNoteTemplate,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import PatientPhoto from '../shared/library/patient-photo/patient-photo';
@@ -48,25 +48,25 @@ export interface IUpdateProgressNoteOptions {
 
 interface IProps {
   close: () => void;
-  progressNote: FullProgressNoteFragment;
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  progressNote: FullProgressNote;
+  progressNoteTemplates: FullProgressNoteTemplate[];
   mutate?: any;
 }
 
 interface IGraphqlProps {
   editProgressNote: (
-    options: { variables: progressNoteEditMutationVariables },
-  ) => { data: progressNoteEditMutation };
+    options: { variables: progressNoteEditVariables },
+  ) => { data: progressNoteEdit };
   completeProgressNote: (
-    options: { variables: progressNoteCompleteMutationVariables },
-  ) => { data: progressNoteCompleteMutation };
+    options: { variables: progressNoteCompleteVariables },
+  ) => { data: progressNoteComplete };
   completeProgressNoteSupervisorReview: (
-    options: { variables: progressNoteCompleteSupervisorReviewMutationVariables },
-  ) => { data: progressNoteCompleteSupervisorReviewMutation };
+    options: { variables: progressNoteCompleteSupervisorReviewVariables },
+  ) => { data: progressNoteCompleteSupervisorReview };
   questionsLoading?: boolean;
   questionsError?: string | null;
-  questions: getQuestionsQuery['questions'];
-  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
+  questions: getQuestions['questions'];
+  patientAnswers?: getPatientAnswers['patientAnswers'];
   patientAnswersLoading?: boolean;
   patientAnswersError?: string | null;
 }
@@ -82,8 +82,8 @@ type Tab = 'context' | 'activity' | 'supervisor';
 type allProps = IProps & IGraphqlProps & ICurrentUserProps;
 
 const getIsInSupervisorMode = (
-  currentUser: getCurrentUserQuery['currentUser'],
-  progressNote?: FullProgressNoteFragment,
+  currentUser: getCurrentUser['currentUser'],
+  progressNote?: FullProgressNote,
 ) => {
   return currentUser &&
     progressNote &&
@@ -320,7 +320,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 
 export default compose(
   withCurrentUser(),
-  graphql(progressNoteCompleteMutationGraphql, {
+  graphql(progressNoteCompleteGraphql, {
     name: 'completeProgressNote',
     options: {
       refetchQueries: [
@@ -332,7 +332,7 @@ export default compose(
       ],
     },
   }),
-  graphql(progressNoteEditMutationGraphql, {
+  graphql(progressNoteEditGraphql, {
     name: 'editProgressNote',
     options: {
       refetchQueries: [
@@ -342,13 +342,13 @@ export default compose(
       ],
     },
   }),
-  graphql(progressNoteCompleteSupervisorReviewMutationGraphql, {
+  graphql(progressNoteCompleteSupervisorReviewGraphql, {
     name: 'completeProgressNoteSupervisorReview',
     options: {
       refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
     },
   }),
-  graphql(questionsQuery, {
+  graphql(questionsGraphql, {
     skip: (props: IProps) => !props.progressNote.progressNoteTemplate,
     options: (props: IProps) => ({
       variables: {
@@ -362,7 +362,7 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientAnswersQuery, {
+  graphql(patientAnswersGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNote',

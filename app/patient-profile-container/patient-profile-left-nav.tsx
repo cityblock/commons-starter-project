@@ -1,11 +1,11 @@
 import React from 'react';
-import { FullPatientForProfileFragment } from '../graphql/types';
+import { FullPatientForProfile } from '../graphql/types';
 import styles from './css/patient-profile-left-nav.css';
 import LeftNavWidget from './left-nav-widget/left-nav-widget';
 import LeftNav from './left-nav/left-nav';
 
 interface IProps {
-  patient: FullPatientForProfileFragment | null;
+  patient: FullPatientForProfile | null;
   patientId: string;
   glassBreakId: string | null;
 }

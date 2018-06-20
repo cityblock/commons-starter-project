@@ -5,13 +5,18 @@ import CBOCategorySelect from '../../../shared/library/cbo-category-select/cbo-c
 import EditableMultilineText from '../../../shared/library/editable-multiline-text/editable-multiline-text';
 import StateSelect from '../../../shared/library/state-select/state-select';
 import { CBO } from '../../../shared/util/test-data';
-import { CBOEdit } from '../cbo-edit';
+import { CBOEditComponent } from '../cbo-edit';
 
 describe('Builder CBO Edit Component', () => {
   const placeholderFn = jest.fn();
 
   const wrapper = shallow(
-    <CBOEdit close={placeholderFn} deleteCBO={placeholderFn} editCBO={placeholderFn} CBO={CBO} />,
+    <CBOEditComponent
+      close={placeholderFn}
+      deleteCBO={placeholderFn}
+      editCBO={placeholderFn}
+      CBO={CBO}
+    />,
   );
 
   it('renders button to close CBO', () => {

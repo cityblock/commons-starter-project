@@ -1,6 +1,6 @@
-import { FullCarePlanSuggestionFragment } from '../../graphql/types';
+import { FullCarePlanSuggestion } from '../../graphql/types';
 
-export function getConcernCount(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
+export function getConcernCount(carePlanSuggestions: FullCarePlanSuggestion[]) {
   if (!carePlanSuggestions.length) {
     return 0;
   }
@@ -12,7 +12,7 @@ export function getConcernCount(carePlanSuggestions: FullCarePlanSuggestionFragm
   return concernSuggestions.length;
 }
 
-export function getGoalSuggestions(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
+export function getGoalSuggestions(carePlanSuggestions: FullCarePlanSuggestion[]) {
   if (!carePlanSuggestions.length) {
     return [];
   }
@@ -20,11 +20,11 @@ export function getGoalSuggestions(carePlanSuggestions: FullCarePlanSuggestionFr
   return carePlanSuggestions.filter(suggestion => suggestion.suggestionType === 'goal');
 }
 
-export function getGoalCount(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
+export function getGoalCount(carePlanSuggestions: FullCarePlanSuggestion[]) {
   return getGoalSuggestions(carePlanSuggestions).length;
 }
 
-export function getTaskCount(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
+export function getTaskCount(carePlanSuggestions: FullCarePlanSuggestion[]) {
   if (getGoalCount(carePlanSuggestions) === 0) {
     return 0;
   }

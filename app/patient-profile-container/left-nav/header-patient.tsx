@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { capitalize } from 'lodash';
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../graphql/types';
+import { FullPatientForProfile } from '../../graphql/types';
 import {
   formatAge,
   formatPatientNameForProfile,
@@ -12,7 +12,7 @@ import Text from '../../shared/library/text/text';
 import styles from './css/header-patient.css';
 
 interface IProps {
-  patient: FullPatientForProfileFragment;
+  patient: FullPatientForProfile;
   isWidgetOpen: boolean;
 }
 

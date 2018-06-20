@@ -2,7 +2,7 @@ import { History } from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { getPatientQuery } from '../../graphql/types';
+import { getPatient } from '../../graphql/types';
 import AdvancedDirectives, { IAdvancedDirectives } from './advanced-directives';
 import BasicInfo, { IBasicInfo } from './basic-info';
 import ContactInfo, { IContactInfo } from './contact-info';
@@ -29,7 +29,7 @@ interface IProps {
   onChange: (fields: IEditableFieldState) => void;
   location: Location;
   history: History;
-  patient?: getPatientQuery['patient'];
+  patient?: getPatient['patient'];
 }
 
 type allProps = IProps & RouteComponentProps<IProps>;

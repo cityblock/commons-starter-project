@@ -6,16 +6,16 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import getCurrentUserQueryGraphql from '../../graphql/queries/get-current-user.graphql';
-import taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
-import taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
+import getCurrentUserGraphql from '../../graphql/queries/get-current-user.graphql';
+import taskIdsWithNotificationsGraphql from '../../graphql/queries/get-task-ids-with-notifications.graphql';
+import taskDeleteGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
-  getTaskIdsWithNotificationsQuery,
-  taskDeleteMutation,
-  taskDeleteMutationVariables,
-  FullPatientGoalFragment,
-  FullTaskFragment,
-  FullUserFragment,
+  getTaskIdsWithNotifications,
+  taskDelete,
+  taskDeleteVariables,
+  FullPatientGoal,
+  FullTask,
+  FullUser,
 } from '../../graphql/types';
 import { TasksTab } from '../../tasks-container/tasks-container';
 import sortSearchStyles from '../css/sort-search.css';
@@ -38,8 +38,8 @@ export interface IPageParams {
 
 export interface IProps {
   routeBase: string;
-  patientGoals?: FullPatientGoalFragment[];
-  tasks?: FullTaskFragment[];
+  patientGoals?: FullPatientGoal[];
+  tasks?: FullTask[];
   loading?: boolean;
   error?: ApolloError | null;
   updatePageParams: (params: IPageParams) => any;
@@ -56,9 +56,9 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
-  taskIdsWithNotifications?: getTaskIdsWithNotificationsQuery['taskIdsWithNotifications'];
-  currentUser: FullUserFragment;
+  deleteTask: (options: { variables: taskDeleteVariables }) => { data: taskDelete };
+  taskIdsWithNotifications?: getTaskIdsWithNotifications['taskIdsWithNotifications'];
+  currentUser: FullUser;
   currentUserLoading?: boolean;
   currentUserError?: string | null;
 }
@@ -95,7 +95,7 @@ export class Tasks extends React.Component<allProps, IState> {
     pageNumber: 0,
   };
 
-  renderTasks(tasks: FullTaskFragment[]) {
+  renderTasks(tasks: FullTask[]) {
     const { loading, error, currentUser } = this.props;
     const validTasks = tasks.filter(task => !task.deletedAt);
 
@@ -115,7 +115,7 @@ export class Tasks extends React.Component<allProps, IState> {
     }
   }
 
-  renderTask = (task: FullTaskFragment) => {
+  renderTask = (task: FullTask) => {
     const { taskIdsWithNotifications, currentUser } = this.props;
 
     return (
@@ -225,8 +225,8 @@ export class Tasks extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps>(taskDeleteMutationGraphql, { name: 'deleteTask' }),
-  graphql(taskIdsWithNotificationsQuery, {
+  graphql<IGraphqlProps>(taskDeleteGraphql, { name: 'deleteTask' }),
+  graphql(taskIdsWithNotificationsGraphql, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
@@ -244,7 +244,7 @@ export default compose(
       };
     },
   }),
-  graphql(getCurrentUserQueryGraphql, {
+  graphql(getCurrentUserGraphql, {
     props: ({ data }) => ({
       currentUserLoading: data ? data.loading : false,
       currentUserError: data ? data.error : null,

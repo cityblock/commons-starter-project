@@ -4,8 +4,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import patientListsQuery from '../../graphql/queries/get-patient-lists.graphql';
-import { FullPatientListFragment } from '../../graphql/types';
+import patientListsGraphql from '../../graphql/queries/get-patient-lists.graphql';
+import { FullPatientList } from '../../graphql/types';
 import styles from '../../shared/css/two-panel.css';
 import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -29,7 +29,7 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
-  patientLists: FullPatientListFragment[];
+  patientLists: FullPatientList[];
   loading: boolean;
   error: string | null;
 }
@@ -46,7 +46,7 @@ export class AdminPatientLists extends React.Component<allProps, IState> {
   redirectToPatientLists = () => this.props.history.push(ROUTE_BASE);
 
   render(): JSX.Element {
-    const { patientListId, patientLists, loading, error } = this.props;
+    const { patientListId, loading, error, patientLists } = this.props;
     const { createMode } = this.state;
 
     if (loading || error) return <Spinner />;
@@ -97,7 +97,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientListsQuery, {
+  graphql(patientListsGraphql, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { filter, includes, toString } from 'lodash';
 import React from 'react';
-import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
+import { getPatientCareTeam, FullCareTeamUser } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import OptGroup from '../../../shared/library/optgroup/optgroup';
@@ -14,9 +14,9 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   tasksCount: number;
   isLoading?: boolean;
-  careTeamMember?: FullCareTeamUserFragment | null;
+  careTeamMember?: FullCareTeamUser | null;
   reassignedToId?: string | null;
-  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  careTeam?: getPatientCareTeam['patientCareTeam'];
 }
 
 class RemoveCareTeamMember extends React.Component<IProps> {

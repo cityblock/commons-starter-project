@@ -1,18 +1,13 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientDocumentsByTypeQuery from '../../graphql/queries/get-patient-documents-by-type.graphql';
-import patientQuery from '../../graphql/queries/get-patient.graphql';
-import smsMessagesQuery from '../../graphql/queries/get-sms-messages.graphql';
-import smsMessageSubscription from '../../graphql/queries/sms-message-subscription.graphql';
-import {
-  getPatientDocumentsByTypeQuery,
-  getPatientQuery,
-  getSmsMessagesQuery,
-} from '../../graphql/types';
+import patientDocumentsByTypeGraphql from '../../graphql/queries/get-patient-documents-by-type.graphql';
+import patientGraphql from '../../graphql/queries/get-patient.graphql';
+import smsMessagesGraphql from '../../graphql/queries/get-sms-messages.graphql';
+import smsMessageSubscriptionGraphql from '../../graphql/queries/sms-message-subscription.graphql';
+import { getPatient, getPatientDocumentsByType, getSmsMessages } from '../../graphql/types';
 import styles from './css/left-nav-messages.css';
 import SmsMessageCreate from './sms-message-create';
 import SmsMessages from './sms-messages';
-
 import { leftNavMessagesUpdateQuery } from './update-queries/left-nav-messages';
 
 const INITIAL_PAGE_SIZE = 50;
@@ -28,9 +23,9 @@ interface IGraphqlProps {
   patientError?: string | null;
   documentsLoading?: boolean;
   documentsError?: string | null;
-  patient: getPatientQuery['patient'];
-  patientDocuments: getPatientDocumentsByTypeQuery['patientDocumentsByType'];
-  smsMessages: getSmsMessagesQuery['smsMessages'];
+  patient: getPatient['patient'];
+  patientDocuments: getPatientDocumentsByType['patientDocumentsByType'];
+  smsMessages: getSmsMessages['smsMessages'];
   subscribeToMore: ((args: any) => () => void) | null;
 }
 
@@ -54,9 +49,9 @@ export class LeftNavMessages extends React.Component<allProps> {
   subscribe = () => {
     if (this.props.subscribeToMore) {
       return this.props.subscribeToMore({
-        document: smsMessageSubscription,
+        document: smsMessageSubscriptionGraphql,
         variables: { patientId: this.props.patientId },
-        updateQuery: leftNavMessagesUpdateQuery,
+        update: leftNavMessagesUpdateQuery,
       });
     }
 
@@ -69,8 +64,6 @@ export class LeftNavMessages extends React.Component<allProps> {
       patientError,
       messagesLoading,
       messagesError,
-      smsMessages,
-      patient,
       documentsError,
       documentsLoading,
       patientDocuments,
@@ -78,9 +71,13 @@ export class LeftNavMessages extends React.Component<allProps> {
 
     return (
       <div className={styles.container}>
-        <SmsMessages loading={messagesLoading} error={messagesError} smsMessages={smsMessages} />
+        <SmsMessages
+          loading={messagesLoading}
+          error={messagesError}
+          smsMessages={this.props.smsMessages}
+        />
         <SmsMessageCreate
-          patient={patient}
+          patient={this.props.patient}
           isConsented={!!patientDocuments && !!patientDocuments.length}
           loading={patientLoading || documentsLoading || false}
           error={patientError || documentsError || null}
@@ -91,7 +88,7 @@ export class LeftNavMessages extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientQuery, {
+  graphql(patientGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId },
     }),
@@ -101,7 +98,7 @@ export default compose(
       patient: data ? (data as any).patient : null,
     }),
   }),
-  graphql(patientDocumentsByTypeQuery, {
+  graphql(patientDocumentsByTypeGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, documentType: 'textConsent' },
     }),
@@ -111,7 +108,7 @@ export default compose(
       patientDocuments: data ? (data as any).patientDocumentsByType : null,
     }),
   }),
-  graphql(smsMessagesQuery, {
+  graphql(smsMessagesGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
     }),

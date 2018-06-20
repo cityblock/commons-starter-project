@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import completeMutationGraphql from '../../graphql/queries/task-complete-mutation.graphql';
-import uncompleteMutationGraphql from '../../graphql/queries/task-uncomplete-mutation.graphql';
+import completeGraphql from '../../graphql/queries/task-complete-mutation.graphql';
+import uncompleteGraphql from '../../graphql/queries/task-uncomplete-mutation.graphql';
 import {
-  taskCompleteMutation,
-  taskCompleteMutationVariables,
-  taskUncompleteMutation,
-  taskUncompleteMutationVariables,
+  taskComplete,
+  taskCompleteVariables,
+  taskUncomplete,
+  taskUncompleteVariables,
 } from '../../graphql/types';
 import styles from './css/task-completion.css';
 
@@ -17,12 +17,8 @@ interface IOwnProps {
 }
 
 interface IGraphqlProps {
-  completeTask: (
-    options: { variables: taskCompleteMutationVariables },
-  ) => { data: taskCompleteMutation };
-  uncompleteTask: (
-    options: { variables: taskUncompleteMutationVariables },
-  ) => { data: taskUncompleteMutation };
+  completeTask: (options: { variables: taskCompleteVariables }) => { data: taskComplete };
+  uncompleteTask: (options: { variables: taskUncompleteVariables }) => { data: taskUncomplete };
 }
 
 type IProps = IOwnProps & IGraphqlProps;
@@ -72,6 +68,6 @@ export class TaskCompletion extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IOwnProps>(completeMutationGraphql, { name: 'completeTask' }),
-  graphql<IGraphqlProps, IOwnProps>(uncompleteMutationGraphql, { name: 'uncompleteTask' }),
+  graphql<IGraphqlProps, IOwnProps>(completeGraphql, { name: 'completeTask' }),
+  graphql<IGraphqlProps, IOwnProps>(uncompleteGraphql, { name: 'uncompleteTask' }),
 )(TaskCompletion);

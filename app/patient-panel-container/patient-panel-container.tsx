@@ -7,11 +7,11 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import currentUser from '../graphql/queries/get-current-user.graphql';
+import patientPanelGraphql from '../graphql/queries/get-patient-panel.graphql';
 import {
-  getCurrentUserQuery,
-  getPatientPanelQuery,
+  getCurrentUser,
+  getPatientPanel,
   CurrentPatientState,
   Gender,
   LinesOfBusiness,
@@ -36,8 +36,8 @@ interface IGraphqlProps {
   refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => void;
   loading: boolean;
   error: ApolloError | null | undefined;
-  patientPanel?: getPatientPanelQuery['patientPanel'];
-  currentUser?: getCurrentUserQuery['currentUser'];
+  patientPanel?: getPatientPanel['patientPanel'];
+  currentUser?: getCurrentUser['currentUser'];
 }
 
 interface IStateProps {
@@ -199,7 +199,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     }
   };
 
-  createQueryString = (pageNumber: number, pageSize: number) => {
+  createString = (pageNumber: number, pageSize: number) => {
     const { showAllPatients, filters } = this.props;
     const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
     return querystring.stringify({
@@ -326,7 +326,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
               totalCount={patientPanel.totalCount}
               pageNumber={pageNumber}
               pageSize={pageSize}
-              getQuery={this.createQueryString}
+              get={this.createString}
             />
           )}
         </div>
@@ -387,7 +387,7 @@ export default compose(
   withRouter,
   withCurrentUser(),
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientPanelQuery, {
+  graphql(patientPanelGraphql, {
     options: ({ pageNumber, pageSize, filters, showAllPatients }: any) => ({
       variables: { pageNumber, pageSize, filters, showAllPatients },
     }),
@@ -397,7 +397,7 @@ export default compose(
       patientPanel: data ? (data as any).patientPanel : null,
     }),
   }),
-  graphql(currentUserQuery, {
+  graphql(currentUser, {
     options: (props: IProps) => ({
       variables: {},
     }),

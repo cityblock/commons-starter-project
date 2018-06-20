@@ -1,14 +1,14 @@
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import React from 'react';
-import { FullSmsMessageFragment } from '../../graphql/types';
+import { FullSmsMessage } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
 import styles from './css/sms-message.css';
 
 export const TIME_FORMAT = 'h:mm a';
 
 interface IProps {
-  smsMessage: FullSmsMessageFragment;
+  smsMessage: FullSmsMessage;
 }
 
 const SmsMessage: React.StatelessComponent<IProps> = ({ smsMessage }) => {

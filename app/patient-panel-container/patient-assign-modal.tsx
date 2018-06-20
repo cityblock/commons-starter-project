@@ -1,11 +1,11 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import careTeamAssignPatientsMutationGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
-import getPatientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import careTeamAssignPatientsGraphql from '../graphql/queries/care-team-assign-patients-mutation.graphql';
+import getPatientPanel from '../graphql/queries/get-patient-panel.graphql';
 import {
-  careTeamAssignPatientsMutation,
-  careTeamAssignPatientsMutationVariables,
+  careTeamAssignPatients,
+  careTeamAssignPatientsVariables,
   PatientFilterOptions,
 } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
@@ -30,8 +30,8 @@ interface IProps {
 
 interface IGraphqlProps {
   careTeamAssignPatients: (
-    options: { variables: careTeamAssignPatientsMutationVariables },
-  ) => { data: careTeamAssignPatientsMutation };
+    options: { variables: careTeamAssignPatientsVariables },
+  ) => { data: careTeamAssignPatients };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -41,7 +41,7 @@ interface IState {
   assignLoading?: boolean;
   assignError: string | null;
   assignSuccess?: boolean;
-  assignedCareWorker: careTeamAssignPatientsMutation['careTeamAssignPatients'];
+  assignedCareWorker: careTeamAssignPatients['careTeamAssignPatients'];
 }
 
 class PatientAssignModal extends React.Component<allProps, IState> {
@@ -52,7 +52,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
   };
 
   handleAssignMembers = async () => {
-    const { careTeamAssignPatients, patientSelectState } = this.props;
+    const { patientSelectState } = this.props;
     const { careWorkerId } = this.state;
     const patientIds = filterPatientState(patientSelectState);
 
@@ -62,7 +62,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
 
     try {
       this.setState({ assignLoading: true });
-      const result = await careTeamAssignPatients({
+      const result = await this.props.careTeamAssignPatients({
         variables: {
           patientIds,
           userId: careWorkerId,
@@ -166,12 +166,12 @@ export function filterPatientState(patientSelectState: object): string[] {
   });
 }
 
-export default graphql<any>(careTeamAssignPatientsMutationGraphql, {
+export default graphql<any>(careTeamAssignPatientsGraphql, {
   name: 'careTeamAssignPatients',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: getPatientPanelQuery,
+        query: getPatientPanel,
         variables: {
           pageNumber: props.pageNumber,
           pageSize: props.pageSize,

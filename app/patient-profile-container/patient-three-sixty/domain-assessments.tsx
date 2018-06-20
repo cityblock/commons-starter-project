@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
+import { getRiskAreaGroupForPatient } from '../../graphql/types';
 import BackLink from '../../shared/library/back-link/back-link';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
@@ -20,7 +20,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
+  riskAreaGroup: getRiskAreaGroupForPatient['riskAreaGroupForPatient'];
 }
 
 type allProps = IGraphqlProps & IProps;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import riskAreaGroupsForPatientQuery from '../../graphql/queries/get-risk-area-groups-for-patient.graphql';
-import { getRiskAreaGroupsForPatientQuery } from '../../graphql/types';
+import riskAreaGroupsForPatient from '../../graphql/queries/get-risk-area-groups-for-patient.graphql';
+import { getRiskAreaGroupsForPatient } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
@@ -20,7 +20,7 @@ interface IProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  riskAreaGroups: getRiskAreaGroupsForPatientQuery['riskAreaGroupsForPatient'];
+  riskAreaGroups: getRiskAreaGroupsForPatient['riskAreaGroupsForPatient'];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -55,7 +55,7 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
   );
 };
 
-export default graphql(riskAreaGroupsForPatientQuery, {
+export default graphql(riskAreaGroupsForPatient, {
   skip: (props: IProps) => props.history,
   options: (props: IProps) => ({
     variables: {

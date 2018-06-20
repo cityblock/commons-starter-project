@@ -15,7 +15,7 @@ describe('Patient Table Pagination', () => {
     hasNextPage: true,
     hasPreviousPage: true,
   };
-  const createQueryString = (pageNum: number, size: number) => {
+  const createString = (pageNum: number, size: number) => {
     return querystring.stringify({
       pageNumber: pageNum,
       pageSize: size,
@@ -27,7 +27,7 @@ describe('Patient Table Pagination', () => {
       history={history}
       location={location}
       match={match}
-      getQuery={createQueryString}
+      get={createString}
       pageNumber={pageNumber}
       pageSize={pageSize}
       staticContext={{} as any}

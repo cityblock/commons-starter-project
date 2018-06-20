@@ -1,15 +1,15 @@
-import { getSmsMessagesQuery, smsMessageCreatedSubscription } from '../../../graphql/types';
+import { getSmsMessages, smsMessageCreated } from '../../../graphql/types';
 
 interface ISubscriptionData {
   subscriptionData: {
     data?: {
-      smsMessageCreated: smsMessageCreatedSubscription['smsMessageCreated'];
+      smsMessageCreated: smsMessageCreated['smsMessageCreated'];
     };
   };
 }
 
 export const leftNavMessagesUpdateQuery = (
-  previousResult: getSmsMessagesQuery,
+  previousResult: getSmsMessages,
   { subscriptionData }: ISubscriptionData,
 ) => {
   if (!subscriptionData.data) return previousResult;

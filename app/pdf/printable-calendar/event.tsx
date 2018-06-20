@@ -1,13 +1,13 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import { FullCalendarEventFragment } from '../../graphql/types';
+import { FullCalendarEvent } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 import EventDetail from './event-detail';
 import EventHeader from './event-header';
 
 interface IProps {
-  calendarEvent: FullCalendarEventFragment;
+  calendarEvent: FullCalendarEvent;
 }
 
 const styles = StyleSheet.create({

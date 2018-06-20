@@ -3,9 +3,9 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../actions/popup-action';
-import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
-import { FullProgressNoteFragment, FullProgressNoteTemplateFragment } from '../graphql/types';
+import progressNoteTemplatesGraphql from '../graphql/queries/get-progress-note-templates.graphql';
+import progressNoteGraphql from '../graphql/queries/get-progress-note.graphql';
+import { FullProgressNote, FullProgressNoteTemplate } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Spinner from '../shared/library/spinner/spinner';
 import { IState as IAppState } from '../store';
@@ -28,10 +28,10 @@ interface IDispatchProps {
 interface IGraphqlProps {
   progressNoteTemplatesLoading?: boolean;
   progressNoteTemplatesError?: string | null;
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  progressNoteTemplates: FullProgressNoteTemplate[];
   progressNoteError?: string | null;
   progressNoteLoading?: boolean;
-  progressNote?: FullProgressNoteFragment;
+  progressNote?: FullProgressNote;
 }
 
 type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
@@ -92,7 +92,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(progressNoteQuery, {
+  graphql(progressNoteGraphql, {
     skip: (props: IStateProps) => !props.progressNoteId,
     options: (props: IStateProps) => ({
       variables: {
@@ -106,7 +106,7 @@ export default compose(
       progressNote: data ? (data as any).progressNote : null,
     }),
   }),
-  graphql(progressNoteTemplatesQuery, {
+  graphql(progressNoteTemplatesGraphql, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,

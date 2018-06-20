@@ -3,24 +3,20 @@ import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import currentUserQuery from '../../graphql/queries/get-current-user.graphql';
-import {
-  taskCommentEditMutationVariables,
-  FullTaskCommentFragment,
-  FullUserFragment,
-} from '../../graphql/types';
+import currentUserGraphql from '../../graphql/queries/get-current-user.graphql';
+import { taskCommentEditVariables, FullTaskComment, FullUser } from '../../graphql/types';
 import Avatar from '../library/avatar/avatar';
 import styles from './css/task-comments.css';
 
 interface IProps {
-  onEdit: (editedComment: taskCommentEditMutationVariables) => any;
-  comment: FullTaskCommentFragment;
+  onEdit: (editedComment: taskCommentEditVariables) => any;
+  comment: FullTaskComment;
 }
 
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  currentUser?: FullUserFragment;
+  currentUser?: FullUser;
 }
 
 interface IState {
@@ -125,7 +121,7 @@ export class TaskComment extends React.Component<allProps, IState> {
     return currentUser && comment.user.id === currentUser.id;
   };
 
-  getCommentDate(comment: FullTaskCommentFragment) {
+  getCommentDate(comment: FullTaskComment) {
     if (comment.createdAt) {
       return <FormattedDate value={comment.createdAt} year="numeric" month="short" day="numeric" />;
     } else {
@@ -196,7 +192,7 @@ export class TaskComment extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any, any, any, any>(currentUserQuery, {
+export default graphql<any, any, any, any>(currentUserGraphql, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

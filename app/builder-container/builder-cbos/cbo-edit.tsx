@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import CBOEditMutationGraphql from '../../graphql/queries/cbo-edit-mutation.graphql';
-import { CBOEditMutation, CBOEditMutationVariables, FullCBOFragment } from '../../graphql/types';
+import CBOEditGraphql from '../../graphql/queries/cbo-edit-mutation.graphql';
+import { CBOEdit, CBOEditVariables, FullCBO } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
@@ -9,18 +9,18 @@ import StateSelect from '../../shared/library/state-select/state-select';
 import styles from './css/cbo-shared.css';
 
 interface IProps {
-  CBO: FullCBOFragment;
+  CBO: FullCBO;
   close: () => void;
   deleteCBO: () => void;
 }
 
 interface IGraphqlProps {
-  editCBO: (options: { variables: CBOEditMutationVariables }) => { data: CBOEditMutation };
+  editCBO: (options: { variables: CBOEditVariables }) => { data: CBOEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
 
-export class CBOEdit extends React.Component<allProps, {}> {
+export class CBOEditComponent extends React.Component<allProps, {}> {
   onSubmit(field: string) {
     const { CBO, editCBO } = this.props;
 
@@ -94,6 +94,6 @@ export class CBOEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<any>(CBOEditMutationGraphql, {
+export default graphql<any>(CBOEditGraphql, {
   name: 'editCBO',
-})(CBOEdit) as React.ComponentClass<IProps>;
+})(CBOEditComponent) as React.ComponentClass<IProps>;

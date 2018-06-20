@@ -1,24 +1,18 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import currentUserEditMutationGraphql from '../graphql/queries/current-user-edit-mutation.graphql';
-import {
-  currentUserEditMutation,
-  currentUserEditMutationVariables,
-  FullUserFragment,
-} from '../graphql/types';
+import currentUserEditGraphql from '../graphql/queries/current-user-edit-mutation.graphql';
+import { currentUserEdit, currentUserEditVariables, FullUser } from '../graphql/types';
 import Text from '../shared/library/text/text';
 import AutomatedResponse from './automated-response';
 import styles from './css/left-rail.css';
 import StatusToggle from './status-toggle';
 
 interface IProps {
-  currentUser: FullUserFragment;
+  currentUser: FullUser;
 }
 
 interface IGraphqlProps {
-  editCurrentUser: (
-    options: { variables: currentUserEditMutationVariables },
-  ) => { data: currentUserEditMutation };
+  editCurrentUser: (options: { variables: currentUserEditVariables }) => { data: currentUserEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -47,6 +41,6 @@ export const SettingsLeftRail: React.StatelessComponent<allProps> = (props: allP
   );
 };
 
-export default graphql<any>(currentUserEditMutationGraphql, {
+export default graphql<any>(currentUserEditGraphql, {
   name: 'editCurrentUser',
 })(SettingsLeftRail) as React.ComponentClass<IProps>;

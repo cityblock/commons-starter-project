@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  FullCarePlanSuggestionForPatientFragment,
-  FullGoalSuggestionTemplateFragment,
-} from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient, FullGoalSuggestionTemplate } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import styles from '../css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
@@ -10,14 +7,14 @@ import PopupPatientCarePlanSuggestionDismissed from './popup-patient-care-plan-s
 import SuggestionsSection, { SectionName } from './suggestions-section';
 
 export interface IAcceptedGoalSuggestion {
-  goalSuggestionTemplate: FullGoalSuggestionTemplateFragment;
+  goalSuggestionTemplate: FullGoalSuggestionTemplate;
   concernId: string | null;
   concernTitle: string | null;
   taskTemplateIds: string | null[];
 }
 
 export interface ISuggestionGroups {
-  [key: string]: FullCarePlanSuggestionForPatientFragment[];
+  [key: string]: FullCarePlanSuggestionForPatient[];
 }
 
 export type SuggestionTypes = 'goal' | 'concern';
@@ -29,7 +26,7 @@ interface IProps {
   computedFieldSuggestionGroups: ISuggestionGroups | null;
   riskAreaAssessmentSuggestionGroups: ISuggestionGroups | null;
   screeningToolSuggestionGroups: ISuggestionGroups | null;
-  allSuggestions: FullCarePlanSuggestionForPatientFragment[];
+  allSuggestions: FullCarePlanSuggestionForPatient[];
   riskAreaLabels: { [key: string]: string };
   screeningToolLabels: { [key: string]: string };
   sectionNameFilter: SectionName | null;
@@ -38,10 +35,10 @@ interface IProps {
 
 interface IState {
   acceptModalVisible: boolean;
-  acceptedSuggestion: FullCarePlanSuggestionForPatientFragment | null;
+  acceptedSuggestion: FullCarePlanSuggestionForPatient | null;
   acceptedTaskTemplateIds: string[];
   dismissModalVisible: boolean;
-  dismissedSuggestion: FullCarePlanSuggestionForPatientFragment | null;
+  dismissedSuggestion: FullCarePlanSuggestionForPatient | null;
   selectedSection?: SectionName | null;
   selectedGroupId?: string | null;
 }
@@ -56,7 +53,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
   } as IState;
 
   handleAcceptSuggestion = (
-    acceptedSuggestion: FullCarePlanSuggestionForPatientFragment,
+    acceptedSuggestion: FullCarePlanSuggestionForPatient,
     taskTemplateIds?: string[],
   ) => {
     this.setState({
@@ -76,7 +73,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
     });
   };
 
-  handleDismissSuggestion = (dismissedSuggestion: FullCarePlanSuggestionForPatientFragment) => {
+  handleDismissSuggestion = (dismissedSuggestion: FullCarePlanSuggestionForPatient) => {
     this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: null,

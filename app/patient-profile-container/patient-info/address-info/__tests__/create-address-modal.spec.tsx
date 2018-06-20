@@ -7,7 +7,7 @@ import { CreateAddressModal } from '../create-address-modal';
 describe('Render Create Address Modal', () => {
   const onSaved = (address: ISavedAddress) => true;
   const closePopup = () => true;
-  const createAddressMutation = jest.fn();
+  const createAddress = jest.fn();
 
   const wrapper = shallow(
     <CreateAddressModal
@@ -15,7 +15,7 @@ describe('Render Create Address Modal', () => {
       patientId={patient.id}
       isVisible={false}
       closePopup={closePopup}
-      createAddressMutation={createAddressMutation}
+      createAddress={createAddress}
     />,
   );
 

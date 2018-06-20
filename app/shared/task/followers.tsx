@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShortUserFragment } from '../../graphql/types';
+import { ShortUser } from '../../graphql/types';
 import AddTaskFollower from './add-task-follower';
 import styles from './css/followers.css';
 import Follower from './follower';
@@ -7,7 +7,7 @@ import Follower from './follower';
 export interface IProps {
   patientId: string;
   taskId: string;
-  followers: ShortUserFragment[];
+  followers: ShortUser[];
 }
 
 const TaskFollowers: React.StatelessComponent<IProps> = (props: IProps) => {

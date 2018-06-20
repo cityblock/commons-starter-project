@@ -1,16 +1,16 @@
 import React from 'react';
 import { compose, graphql, Mutation } from 'react-apollo';
-import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
-import patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
+import patientAnswersGraphql from '../../graphql/queries/get-patient-answers.graphql';
+import riskAreaQuestionsGraphql from '../../graphql/queries/get-questions.graphql';
+import patientAnswersCreateGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
 import {
-  patientAnswersCreateMutation,
-  patientAnswersCreateMutationVariables,
+  patientAnswersCreate,
+  patientAnswersCreateVariables,
   AnswerFilterType,
-  FullPatientAnswerFragment,
-  FullQuestionFragment,
-  FullRiskAreaAssessmentSubmissionFragment,
-  FullRiskAreaFragment,
+  FullPatientAnswer,
+  FullQuestion,
+  FullRiskArea,
+  FullRiskAreaAssessmentSubmission,
 } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import { createPatientAnswer } from '../../shared/patient-answer-create-mutation/patient-answer-create-mutation';
@@ -26,21 +26,21 @@ interface IProps {
   patientId: string;
   routeBase: string;
   patientRoute: string;
-  riskArea: FullRiskAreaFragment;
+  riskArea: FullRiskArea;
   inProgress: boolean;
-  riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
+  riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmission;
   onEditableChange?: () => any;
   glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
-  riskAreaQuestions: FullQuestionFragment[] | null;
+  riskAreaQuestions: FullQuestion[] | null;
   riskAreaQuestionsLoading?: boolean;
   riskAreaQuestionsError?: string | null;
   createPatientAnswers?: (
-    options: { variables: patientAnswersCreateMutationVariables },
-  ) => { data: patientAnswersCreateMutation };
-  patientAnswers?: [FullPatientAnswerFragment];
+    options: { variables: patientAnswersCreateVariables },
+  ) => { data: patientAnswersCreate };
+  patientAnswers?: [FullPatientAnswer];
   patientAnswersLoading?: boolean;
   patientAnswersError?: string | null;
 }
@@ -49,7 +49,7 @@ type allProps = IGraphqlProps & IProps;
 
 export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   renderQuestion = (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     index: number,
     answerData: IQuestionAnswerHash,
     patientAnswerIds: string[],
@@ -65,7 +65,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     const dataForQuestion = answerData[question.id] || [];
 
     return (
-      <Mutation mutation={patientAnswersCreateMutationGraphql} key={`${question.id}-${index}`}>
+      <Mutation mutation={patientAnswersCreateGraphql} key={`${question.id}-${index}`}>
         {mutate => (
           <PatientQuestion
             visible={visible}
@@ -135,7 +135,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(riskAreaQuestionsQuery, {
+  graphql(riskAreaQuestionsGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -148,7 +148,7 @@ export default compose(
       riskAreaQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientAnswersQuery, {
+  graphql(patientAnswersGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',

@@ -3,16 +3,13 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
-import patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
+import patientConcernBulkEditGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
 import {
-  getPatientCarePlanQuery,
-  FullPatientConcernFragment,
+  getPatientCarePlan,
+  FullPatientConcern,
   PatientConcernBulkEditFields,
 } from '../../graphql/types';
-import {
-  patientConcernBulkEditMutation,
-  patientConcernBulkEditMutationVariables,
-} from '../../graphql/types';
+import { patientConcernBulkEdit, patientConcernBulkEditVariables } from '../../graphql/types';
 import { getOrderDiffs, insert, remove, reorder } from '../../shared/helpers/order-helpers';
 import PatientCarePlan from '../patient-care-plan';
 import styles from './css/patient-care-plan.css';
@@ -21,7 +18,7 @@ interface IProps {
   loading?: boolean;
   routeBase: string;
   patientId: string;
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  carePlan?: getPatientCarePlan['carePlanForPatient'];
   taskIdsWithNotifications?: string[];
   selectedTaskId: string;
   selectedGoalId: string;
@@ -29,15 +26,15 @@ interface IProps {
 
 interface IGraphqlProps {
   patientConcernBulkEdit: (
-    options: { variables: patientConcernBulkEditMutationVariables },
-  ) => { data: patientConcernBulkEditMutation };
+    options: { variables: patientConcernBulkEditVariables },
+  ) => { data: patientConcernBulkEdit };
 }
 
 export type allProps = IProps & IGraphqlProps;
 
 interface IState {
-  activeConcerns: FullPatientConcernFragment[];
-  inactiveConcerns: FullPatientConcernFragment[];
+  activeConcerns: FullPatientConcern[];
+  inactiveConcerns: FullPatientConcern[];
   isDragging: boolean;
   loading: boolean;
   reorderError: string;
@@ -56,10 +53,10 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     if (!nextProps.carePlan || !nextProps.carePlan.concerns.length) return;
 
     const activeConcerns = nextProps.carePlan.concerns
-      .filter((patientConcern: FullPatientConcernFragment) => !!patientConcern.startedAt)
+      .filter((patientConcern: FullPatientConcern) => !!patientConcern.startedAt)
       .sort((a, b) => a.order - b.order);
     const inactiveConcerns = nextProps.carePlan.concerns
-      .filter((patientConcern: FullPatientConcernFragment) => !patientConcern.startedAt)
+      .filter((patientConcern: FullPatientConcern) => !patientConcern.startedAt)
       .sort((a, b) => a.order - b.order);
 
     if (!isEqual(this.state.activeConcerns, activeConcerns)) {
@@ -142,7 +139,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
       this.state[endList],
       this.state[startList].find(concern => concern.id === result.draggableId),
       result.destination!.index,
-    ) as FullPatientConcernFragment[];
+    ) as FullPatientConcern[];
 
     const newList =
       startList === 'activeConcerns'
@@ -166,13 +163,15 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 
   async updateConcernOrder(orderDiffs: PatientConcernBulkEditFields[]) {
-    const { patientConcernBulkEdit, patientId } = this.props;
+    const { patientId } = this.props;
 
     if (!this.state.loading) {
       this.setState({ loading: true, reorderError: '' });
 
       try {
-        await patientConcernBulkEdit({ variables: { patientConcerns: orderDiffs, patientId } });
+        await this.props.patientConcernBulkEdit({
+          variables: { patientConcerns: orderDiffs, patientId },
+        });
         this.setState({ loading: false });
       } catch (err) {
         this.setState({ loading: false, reorderError: err.message });
@@ -212,6 +211,6 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientConcernBulkEditMutationGraphql, {
+export default graphql<any>(patientConcernBulkEditGraphql, {
   name: 'patientConcernBulkEdit',
 })(DnDPatientCarePlan) as React.ComponentClass<IProps>;

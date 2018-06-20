@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import { format } from 'date-fns';
 import React from 'react';
-import { ShortTaskFragment } from '../../graphql/types';
+import { ShortTask } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  task: ShortTaskFragment;
+  task: ShortTask;
 }
 
 const textStyles = {

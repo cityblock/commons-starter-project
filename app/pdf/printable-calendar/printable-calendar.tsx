@@ -1,11 +1,7 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import { format } from 'date-fns';
 import React from 'react';
-import {
-  FullCalendarEventFragment,
-  FullCareTeamUserFragment,
-  FullPatientForProfileFragment,
-} from '../../graphql/types';
+import { FullCalendarEvent, FullCareTeamUser, FullPatientForProfile } from '../../graphql/types';
 import Divider from '../shared/divider';
 import Empty from '../shared/empty';
 import Footer from '../shared/footer';
@@ -17,11 +13,11 @@ import Event from './event';
 import PatientHeader from './patient-header';
 
 interface IProps {
-  events: FullCalendarEventFragment[];
+  events: FullCalendarEvent[];
   year: number;
   month: number;
-  careTeam: FullCareTeamUserFragment[];
-  patient: FullPatientForProfileFragment;
+  careTeam: FullCareTeamUser[];
+  patient: FullPatientForProfile;
   profilePhotoUrl: string | null;
 }
 

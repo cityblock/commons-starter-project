@@ -7,8 +7,8 @@ import { EditEmailModal } from '../edit-email-modal';
 describe('Render Edit Email Modal', () => {
   const onSaved = (email: ISavedEmail) => true;
   const closePopup = () => true;
-  const editEmailMutation = jest.fn();
-  const editPatientInfoMutation = jest.fn();
+  const editEmail = jest.fn();
+  const editPatientInfo = jest.fn();
 
   const wrapper = shallow(
     <EditEmailModal
@@ -17,8 +17,8 @@ describe('Render Edit Email Modal', () => {
       patientInfoId={patient.patientInfo.id}
       isVisible={false}
       closePopup={closePopup}
-      editEmailMutation={editEmailMutation}
-      editPatientInfoMutation={editPatientInfoMutation}
+      editEmail={editEmail}
+      editPatientInfo={editPatientInfo}
       email={email1}
     />,
   );

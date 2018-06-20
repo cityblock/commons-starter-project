@@ -2,8 +2,8 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import concernCreateMutationGraphql from '../graphql/queries/concern-create-mutation.graphql';
-import { concernCreateMutation, concernCreateMutationVariables } from '../graphql/types';
+import concernCreateGraphql from '../graphql/queries/concern-create-mutation.graphql';
+import { concernCreate, concernCreateVariables } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import concernStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -15,7 +15,7 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 interface IOptions {
-  variables: concernCreateMutationVariables;
+  variables: concernCreateVariables;
 }
 
 interface IProps {
@@ -28,12 +28,12 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  createConcern?: (options: IOptions) => { data: concernCreateMutation };
+  createConcern?: (options: IOptions) => { data: concernCreate };
 }
 
 interface IState {
   loading: boolean;
-  concern: concernCreateMutationVariables;
+  concern: concernCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -131,7 +131,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(concernCreateMutationGraphql, {
+  graphql(concernCreateGraphql, {
     name: 'createConcern',
     options: {
       refetchQueries: ['getConcerns'],

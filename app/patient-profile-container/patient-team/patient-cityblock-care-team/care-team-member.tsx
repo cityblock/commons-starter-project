@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import careTeamMakeTeamLeadMutationGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
-import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
+import careTeamMakeTeamLeadGraphql from '../../../graphql/queries/care-team-make-team-lead-mutation.graphql';
+import patientCareTeamGraphql from '../../../graphql/queries/get-patient-care-team.graphql';
 import {
-  careTeamMakeTeamLeadMutation,
-  careTeamMakeTeamLeadMutationVariables,
-  FullCareTeamUserFragment,
+  careTeamMakeTeamLead,
+  careTeamMakeTeamLeadVariables,
+  FullCareTeamUser,
 } from '../../../graphql/types';
 import { formatCareTeamMemberRole, formatFullName } from '../../../shared/helpers/format-helpers';
 import Avatar from '../../../shared/library/avatar/avatar';
@@ -17,15 +17,15 @@ import Text from '../../../shared/library/text/text';
 import styles from '../css/team-member.css';
 
 interface IProps {
-  careTeamMember: FullCareTeamUserFragment;
+  careTeamMember: FullCareTeamUser;
   patientId: string;
-  onClickToRemove: (careTeamMemberToRemove: FullCareTeamUserFragment) => void;
+  onClickToRemove: (careTeamMemberToRemove: FullCareTeamUser) => void;
 }
 
 interface IGraphqlProps {
   careTeamMakeTeamLead: (
-    options: { variables: careTeamMakeTeamLeadMutationVariables },
-  ) => { data: careTeamMakeTeamLeadMutation };
+    options: { variables: careTeamMakeTeamLeadVariables },
+  ) => { data: careTeamMakeTeamLead };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -47,12 +47,11 @@ export class CareTeamMember extends React.Component<allProps, IState> {
 
   onMakeTeamLead = async () => {
     const { careTeamMember, patientId } = this.props;
-    const { careTeamMakeTeamLead } = this.props;
 
     try {
       this.setState({ isMakeTeamLeadLoading: false, makeTeamLeadError: null });
 
-      await careTeamMakeTeamLead({
+      await this.props.careTeamMakeTeamLead({
         variables: {
           patientId,
           userId: careTeamMember.id,
@@ -125,12 +124,12 @@ export class CareTeamMember extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(careTeamMakeTeamLeadMutationGraphql, {
+export default graphql<any>(careTeamMakeTeamLeadGraphql, {
   name: 'careTeamMakeTeamLead',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: patientCareTeamQuery,
+        query: patientCareTeamGraphql,
         variables: {
           patientId: props.patientId,
         },

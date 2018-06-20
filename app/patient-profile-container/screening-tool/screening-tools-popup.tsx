@@ -5,8 +5,8 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup } from '../../actions/popup-action';
-import screeningToolsQuery from '../../graphql/queries/get-screening-tools.graphql';
-import { getScreeningToolsQuery, FullScreeningToolFragment } from '../../graphql/types';
+import screeningToolsGraphql from '../../graphql/queries/get-screening-tools.graphql';
+import { getScreeningTools, FullScreeningTool } from '../../graphql/types';
 import { IScreeningToolPopupOptions } from '../../reducers/popup-reducer';
 import { getPatientRoute } from '../../shared/helpers/route-helpers';
 import Button from '../../shared/library/button/button';
@@ -28,7 +28,7 @@ interface IDispatchProps {
 }
 
 interface IGraphqlProps {
-  screeningTools?: getScreeningToolsQuery['screeningTools'];
+  screeningTools?: getScreeningTools['screeningTools'];
   screeningToolsLoading?: boolean;
   screeningToolsError?: string | null;
 }
@@ -51,7 +51,7 @@ class ScreeningToolsPopup extends React.Component<allProps> {
       );
     }
 
-    const redirectToScreeningTool = (screeningTool: FullScreeningToolFragment) => {
+    const redirectToScreeningTool = (screeningTool: FullScreeningTool) => {
       if (patientRoute) {
         history.push(`${patientRoute}/tools/${screeningTool.id}`);
         onDismiss();
@@ -115,7 +115,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(screeningToolsQuery, {
+  graphql(screeningToolsGraphql, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

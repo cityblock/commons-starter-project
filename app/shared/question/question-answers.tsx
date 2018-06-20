@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
+import { FullAnswer, FullQuestion } from '../../graphql/types';
 import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
 import DropdownAnswer from './dropdown-answer';
 import FreeTextAnswer from './free-text-answer';
@@ -7,10 +7,10 @@ import MultiSelectAnswer from './multi-select-answer';
 import RadioAnswer from './radio-answer';
 
 interface IProps {
-  question: FullQuestionFragment;
+  question: FullQuestion;
   editable: boolean;
   onChange: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
   answerData: Array<{
@@ -48,7 +48,7 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
     }
   }
 
-  renderMultiSelectItem(multiSelectAnswer: FullAnswerFragment, index: number) {
+  renderMultiSelectItem(multiSelectAnswer: FullAnswer, index: number) {
     const { answerData, editable } = this.props;
     const answers = answerData || [];
     const selected = !!answers.find(answer => answer.id === multiSelectAnswer.id);

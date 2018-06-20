@@ -15,7 +15,7 @@ interface IProps {
   totalCount: number; // total number of results
   pageNumber: number; // do NOT add 1
   pageSize: number;
-  getQuery: (pageNumber: number, pageSize: number) => string;
+  get: (pageNumber: number, pageSize: number) => string;
   className?: string; // optional styles
 }
 
@@ -27,7 +27,7 @@ type allProps = IProps & RouteComponentProps<IProps>;
 
 export class PatientTablePagination extends React.Component<allProps, IState> {
   onPaginate = (pageBack: boolean): void => {
-    const { history, pageNumber, pageSize, totalCount, getQuery } = this.props;
+    const { history, pageNumber, pageSize, totalCount, get } = this.props;
     let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
     // extra security, though UI should not allow this
     if (newPageNumber < 0) newPageNumber = 0;
@@ -35,7 +35,7 @@ export class PatientTablePagination extends React.Component<allProps, IState> {
       newPageNumber = Math.ceil(totalCount / pageSize);
     }
 
-    const newParams = getQuery(newPageNumber, pageSize);
+    const newParams = get(newPageNumber, pageSize);
     history.push({ search: newParams });
   };
 

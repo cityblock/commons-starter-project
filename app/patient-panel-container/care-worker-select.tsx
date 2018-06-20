@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import userSummaryListQuery from '../graphql/queries/get-user-summary-list.graphql';
-import { getUserSummaryListQuery, ShortUserFragment } from '../graphql/types';
+import userSummaryListGraphql from '../graphql/queries/get-user-summary-list.graphql';
+import { getUserSummaryList, ShortUser } from '../graphql/types';
 import { formatFullName } from '../shared/helpers/format-helpers';
 import OptGroup from '../shared/library/optgroup/optgroup';
 import Option from '../shared/library/option/option';
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  userSummaryList: getUserSummaryListQuery['userSummaryList'];
+  userSummaryList: getUserSummaryList['userSummaryList'];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -28,7 +28,7 @@ const CARE_WORKER_ROLES = [
 ];
 
 class CareWorkerSelect extends React.Component<allProps> {
-  renderOption(users: ShortUserFragment[]) {
+  renderOption(users: ShortUser[]) {
     return users.map(user => {
       return (
         <Option
@@ -48,9 +48,7 @@ class CareWorkerSelect extends React.Component<allProps> {
     }
 
     const options = CARE_WORKER_ROLES.reduce((accumulator: any, role) => {
-      accumulator[role] = userSummaryList.filter(
-        (user: ShortUserFragment) => user.userRole === role,
-      );
+      accumulator[role] = userSummaryList.filter((user: ShortUser) => user.userRole === role);
       return accumulator;
     }, {});
 
@@ -79,7 +77,7 @@ class CareWorkerSelect extends React.Component<allProps> {
   }
 }
 
-export default graphql(userSummaryListQuery, {
+export default graphql(userSummaryListGraphql, {
   options: (props: IProps) => ({
     variables: {
       userRoleFilters: CARE_WORKER_ROLES,

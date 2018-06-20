@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullCBOReferralFragment } from '../../graphql/types';
+import { FullCBOReferral } from '../../graphql/types';
 import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';
 import TaskCBOAddInformation from './task-cbo-add-information';
@@ -8,7 +8,7 @@ import TaskCBOReferralDates from './task-cbo-referral-dates';
 import TaskCBOReferralView from './task-cbo-referral-view';
 
 interface IProps {
-  CBOReferral: FullCBOReferralFragment;
+  CBOReferral: FullCBOReferral;
   taskId: string;
   patientId: string;
 }

@@ -2,12 +2,12 @@ import React from 'react';
 import { Mutation, MutationFn } from 'react-apollo';
 import userHoursCreateMutationGraphql from '../graphql/queries/user-hours-create-mutation.graphql';
 import userHoursDeleteMutationGraphql from '../graphql/queries/user-hours-delete-mutation.graphql';
-import { getCurrentUserHoursQuery } from '../graphql/types';
+import { getCurrentUserHours } from '../graphql/types';
 import Checkbox from '../shared/library/checkbox/checkbox';
 import styles from './css/day-off-toggle.css';
 
 interface IProps {
-  userHours: getCurrentUserHoursQuery['currentUserHours'];
+  userHours: getCurrentUserHours['currentUserHours'];
   weekday: number;
   disabled: boolean;
 }

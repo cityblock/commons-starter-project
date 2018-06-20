@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { groupBy, uniqBy } from 'lodash';
 import React from 'react';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import TextInfo from '../../shared/library/text-info/text-info';
 import CarePlanSuggestion from './care-plan-suggestion';
@@ -10,19 +10,16 @@ import GoalSuggestions from './goal-suggestions';
 
 interface IProps {
   title: string;
-  suggestions: FullCarePlanSuggestionForPatientFragment[];
+  suggestions: FullCarePlanSuggestionForPatient[];
   isSelected: boolean;
   isHidden: boolean;
-  onAccept: (
-    suggestion: FullCarePlanSuggestionForPatientFragment,
-    taskTemplateIds?: string[],
-  ) => void;
-  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => void;
+  onAccept: (suggestion: FullCarePlanSuggestionForPatient, taskTemplateIds?: string[]) => void;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatient) => void;
   onClick: () => void;
 }
 
 export class SuggestionsGroup extends React.Component<IProps> {
-  renderConcerns(suggestions: FullCarePlanSuggestionForPatientFragment[]) {
+  renderConcerns(suggestions: FullCarePlanSuggestionForPatient[]) {
     const { onAccept, onDismiss } = this.props;
 
     return suggestions.map(suggestion => (
@@ -35,7 +32,7 @@ export class SuggestionsGroup extends React.Component<IProps> {
     ));
   }
 
-  renderGoals(suggestions: FullCarePlanSuggestionForPatientFragment[]) {
+  renderGoals(suggestions: FullCarePlanSuggestionForPatient[]) {
     const { onAccept, onDismiss } = this.props;
 
     return <GoalSuggestions suggestions={suggestions} onAccept={onAccept} onDismiss={onDismiss} />;

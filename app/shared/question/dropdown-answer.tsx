@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { slice } from 'lodash';
 import React from 'react';
-import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
+import { FullAnswer, FullQuestion } from '../../graphql/types';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
 import FreeTextAnswer from './free-text-answer';
@@ -10,15 +10,15 @@ import styles from './patient-question.css';
 interface IProps {
   currentAnswer: { id: string; value: string };
   editable: boolean;
-  question: FullQuestionFragment;
+  question: FullQuestion;
   onChange: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
 
 export default class DropdownAnswer extends React.Component<IProps, {}> {
-  renderDropdownOption = (answer: FullAnswerFragment, index: number) => {
+  renderDropdownOption = (answer: FullAnswer, index: number) => {
     return <Option key={`${answer.id}-${index}`} value={answer.id} label={answer.displayValue} />;
   };
 

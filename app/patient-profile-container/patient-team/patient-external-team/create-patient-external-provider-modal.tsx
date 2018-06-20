@@ -1,12 +1,12 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
-import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
-import createPatientExternalProviderMutationGraphql from '../../../graphql/queries/patient-external-provider-create-mutation.graphql';
+import getPatientExternalProviders from '../../../graphql/queries/get-patient-external-providers.graphql';
+import getPatient from '../../../graphql/queries/get-patient.graphql';
+import createPatientExternalProviderGraphql from '../../../graphql/queries/patient-external-provider-create-mutation.graphql';
 import {
-  patientExternalProviderCreateMutation,
-  patientExternalProviderCreateMutationVariables,
+  patientExternalProviderCreate,
+  patientExternalProviderCreateVariables,
 } from '../../../graphql/types';
 import PatientExternalProviderModal, {
   IPatientExternalProvider,
@@ -19,16 +19,16 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createPatientExternalProviderMutation: (
-    options: { variables: patientExternalProviderCreateMutationVariables },
-  ) => Promise<{ data: patientExternalProviderCreateMutation; errors: ApolloError[] }>;
+  createPatientExternalProvider: (
+    options: { variables: patientExternalProviderCreateVariables },
+  ) => Promise<{ data: patientExternalProviderCreate; errors: ApolloError[] }>;
 }
 
 type allProps = IProps & IGraphqlProps;
 
 export class CreatePatientExternalProviderModal extends React.Component<allProps> {
   createPatientExternalProvider = async (provider: IPatientExternalProvider) => {
-    const { createPatientExternalProviderMutation, patientId } = this.props;
+    const { createPatientExternalProvider, patientId } = this.props;
 
     let roleFreeText = null;
     if (provider.role === 'other' || provider.role === 'otherMedicalSpecialist') {
@@ -36,7 +36,7 @@ export class CreatePatientExternalProviderModal extends React.Component<allProps
     }
 
     // create patient external provider
-    return createPatientExternalProviderMutation({
+    return createPatientExternalProvider({
       variables: {
         ...provider,
         patientId,
@@ -61,18 +61,18 @@ export class CreatePatientExternalProviderModal extends React.Component<allProps
   }
 }
 
-export default graphql(createPatientExternalProviderMutationGraphql, {
-  name: 'createPatientExternalProviderMutation',
+export default graphql(createPatientExternalProviderGraphql, {
+  name: 'createPatientExternalProvider',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: getPatientExternalProvidersQuery,
+        query: getPatientExternalProviders,
         variables: {
           patientId: props.patientId,
         },
       },
       {
-        query: getPatientQuery,
+        query: getPatient,
         variables: {
           patientId: props.patientId,
         },

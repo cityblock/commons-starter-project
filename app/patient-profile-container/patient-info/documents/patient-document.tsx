@@ -2,14 +2,14 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientDocumentDeleteMutationGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
+import patientDocumentDeleteGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
 import patientDocumentSignedUrlCreateGraphql from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
-  patientDocumentDeleteMutation,
-  patientDocumentDeleteMutationVariables,
-  patientDocumentSignedUrlCreateMutation,
-  patientDocumentSignedUrlCreateMutationVariables,
-  FullPatientDocumentFragment,
+  patientDocumentDelete,
+  patientDocumentDeleteVariables,
+  patientDocumentSignedUrlCreate,
+  patientDocumentSignedUrlCreateVariables,
+  FullPatientDocument,
   PatientSignedUrlAction,
 } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
@@ -24,16 +24,16 @@ import withErrorHandler, {
 import styles from './css/patient-document.css';
 
 interface IProps {
-  patientDocument: FullPatientDocumentFragment;
+  patientDocument: FullPatientDocument;
 }
 
 interface IGraphqlProps {
   getSignedDocumentUrl: (
-    options: { variables: patientDocumentSignedUrlCreateMutationVariables },
-  ) => { data: patientDocumentSignedUrlCreateMutation };
+    options: { variables: patientDocumentSignedUrlCreateVariables },
+  ) => { data: patientDocumentSignedUrlCreate };
   deletePatientDocument: (
-    options: { variables: patientDocumentDeleteMutationVariables },
-  ) => { data: patientDocumentDeleteMutation };
+    options: { variables: patientDocumentDeleteVariables },
+  ) => { data: patientDocumentDelete };
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
@@ -150,7 +150,7 @@ export default compose(
   graphql(patientDocumentSignedUrlCreateGraphql, {
     name: 'getSignedDocumentUrl',
   }),
-  graphql(patientDocumentDeleteMutationGraphql, {
+  graphql(patientDocumentDeleteGraphql, {
     name: 'deletePatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],

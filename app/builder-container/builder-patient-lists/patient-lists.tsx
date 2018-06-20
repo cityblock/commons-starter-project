@@ -1,12 +1,12 @@
 import React from 'react';
-import { FullPatientListFragment } from '../../graphql/types';
+import { FullPatientList } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import { ROUTE_BASE } from './builder-patient-lists';
 import PatientList from './patient-list';
 
 interface IProps {
   patientListId: string | null;
-  patientLists: FullPatientListFragment[];
+  patientLists: FullPatientList[];
 }
 
 const PatientLists: React.StatelessComponent<IProps> = (props: IProps) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
+import { taskEdit, taskEditVariables } from '../../graphql/types';
 import EditableMultilineText from '../library/editable-multiline-text/editable-multiline-text';
 
 export type CBOReferralStatusType = 'notCBOReferral' | 'CBOReferralRequiringAction' | 'CBOReferral';
@@ -8,7 +8,7 @@ interface IProps {
   title: string;
   description: string;
   taskId: string;
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  editTask: (options: { variables: taskEditVariables }) => { data: taskEdit };
   CBOReferralStatus: CBOReferralStatusType;
 }
 

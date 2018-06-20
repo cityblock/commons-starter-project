@@ -1,16 +1,16 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
-import screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
+import patientScreeningToolSubmissionGraphql from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
+import screeningToolQuestionsGraphql from '../../graphql/queries/get-questions.graphql';
 import patientScreeningToolSubmissionCreateGraphql from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
 import {
-  getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery,
-  getQuestionsQuery,
-  patientScreeningToolSubmissionCreateMutation,
-  patientScreeningToolSubmissionCreateMutationVariables,
-  FullCarePlanSuggestionFragment,
-  FullScreeningToolFragment,
+  getPatientScreeningToolSubmissionForPatientAndScreeningTool,
+  getQuestions,
+  patientScreeningToolSubmissionCreate,
+  patientScreeningToolSubmissionCreateVariables,
+  FullCarePlanSuggestion,
+  FullScreeningTool,
 } from '../../graphql/types';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -18,18 +18,18 @@ import ScreeningToolAssessment from './screening-tool-assessment';
 
 interface IProps {
   patientId: string;
-  screeningTool: FullScreeningToolFragment;
-  onSubmissionScored: (suggestions: FullCarePlanSuggestionFragment[]) => void;
+  screeningTool: FullScreeningTool;
+  onSubmissionScored: (suggestions: FullCarePlanSuggestion[]) => void;
 }
 
 interface IGraphqlProps {
   createScreeningToolSubmission: (
-    options: { variables: patientScreeningToolSubmissionCreateMutationVariables },
-  ) => { data: patientScreeningToolSubmissionCreateMutation };
-  screeningToolSubmission?: getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery['patientScreeningToolSubmissionForPatientAndScreeningTool'];
+    options: { variables: patientScreeningToolSubmissionCreateVariables },
+  ) => { data: patientScreeningToolSubmissionCreate };
+  screeningToolSubmission?: getPatientScreeningToolSubmissionForPatientAndScreeningTool['patientScreeningToolSubmissionForPatientAndScreeningTool'];
   screeningToolSubmissionLoading?: boolean;
   screeningToolSubmissionError: ApolloError | undefined | null;
-  screeningToolQuestions?: getQuestionsQuery['questions'];
+  screeningToolQuestions?: getQuestions['questions'];
   screeningToolQuestionsLoading?: boolean;
   screeningToolQuestionsError: ApolloError | undefined | null;
 }
@@ -93,7 +93,7 @@ export default compose(
       ],
     },
   }),
-  graphql(screeningToolQuestionsQuery, {
+  graphql(screeningToolQuestionsGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
@@ -106,7 +106,7 @@ export default compose(
       screeningToolQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientScreeningToolSubmissionQuery, {
+  graphql(patientScreeningToolSubmissionGraphql, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.screeningTool.id,

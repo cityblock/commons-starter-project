@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullPatientAnswerEventFragment } from '../../graphql/types';
+import { FullPatientAnswerEvent } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityPatientAnswer from './progress-note-activity-patient-answer';
 
 interface IProps {
-  patientAnswerEvents: FullPatientAnswerEventFragment[];
+  patientAnswerEvents: FullPatientAnswerEvent[];
   expanded: boolean;
   title: string;
 }

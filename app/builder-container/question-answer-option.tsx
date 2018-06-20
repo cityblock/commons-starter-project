@@ -1,24 +1,20 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import questionQuery from '../graphql/queries/get-question.graphql';
-import {
-  questionConditionDeleteMutationVariables,
-  FullAnswerFragment,
-  FullQuestionFragment,
-} from '../graphql/types';
+import questionGraphql from '../graphql/queries/get-question.graphql';
+import { questionConditionDeleteVariables, FullAnswer, FullQuestion } from '../graphql/types';
 import Option from '../shared/library/option/option';
 import formatQuestionCondition from './helpers/format-question-condition';
 
 export interface IDeleteOptions {
-  variables: questionConditionDeleteMutationVariables;
+  variables: questionConditionDeleteVariables;
 }
 
 interface IProps {
-  answer: FullAnswerFragment;
+  answer: FullAnswer;
 }
 
 interface IGraphqlProps {
-  question?: FullQuestionFragment;
+  question?: FullQuestion;
 }
 
 class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
@@ -30,7 +26,7 @@ class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
   }
 }
 
-export default graphql(questionQuery, {
+export default graphql(questionGraphql, {
   options: (props: IProps) => ({
     variables: { questionId: props.answer.questionId },
   }),

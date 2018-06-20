@@ -1,5 +1,5 @@
 import { Action } from '../actions';
-import { FullCarePlanSuggestionFragment } from '../graphql/types';
+import { FullCarePlanSuggestion } from '../graphql/types';
 
 export interface IProgressNotePopupOptions {
   progressNoteId: string;
@@ -136,7 +136,7 @@ export interface ICarePlanSuggestionsPopup {
 
 export interface ICarePlanSuggestionsPopupOptions {
   patientId: string;
-  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions: FullCarePlanSuggestion[];
 }
 
 export interface ITaskUnfollowPopup {

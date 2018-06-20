@@ -1,13 +1,13 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import { FullPatientConcernFragment } from '../../graphql/types';
+import { FullPatientConcern } from '../../graphql/types';
 import HeaderText from '../shared/header-text';
 import TextGroup from '../shared/text-group';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  carePlan: FullPatientConcernFragment[];
+  carePlan: FullPatientConcern[];
 }
 
 const styles = StyleSheet.create({

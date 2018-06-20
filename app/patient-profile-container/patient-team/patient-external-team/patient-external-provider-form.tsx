@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { reduce, values } from 'lodash';
 import React from 'react';
-import { FullPatientExternalOrganizationFragment, PhoneTypeOptions } from '../../../graphql/types';
+import { FullPatientExternalOrganization, PhoneTypeOptions } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import styles from '../../../shared/library/form/css/form.css';
@@ -10,7 +10,7 @@ import TextInput from '../../../shared/library/text-input/text-input';
 import ExternalProviderRoleSelect from './external-provider-role-select';
 
 interface IProps {
-  patientExternalOrganizations: FullPatientExternalOrganizationFragment[];
+  patientExternalOrganizations: FullPatientExternalOrganization[];
   emailAddress?: string | null;
   phoneNumber?: string | null;
   phoneType?: PhoneTypeOptions | null;

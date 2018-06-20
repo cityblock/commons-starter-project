@@ -2,12 +2,12 @@ import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import calendarQuery from '../graphql/queries/get-calendar-events-for-current-user.graphql';
-import calendarForCurrentUserQuery from '../graphql/queries/get-calendar-for-current-user.graphql';
+import calendar from '../graphql/queries/get-calendar-events-for-current-user.graphql';
+import calendarForCurrentUser from '../graphql/queries/get-calendar-for-current-user.graphql';
 import {
-  getCalendarEventsForCurrentUserQuery,
-  getCalendarForCurrentUserQuery,
-  FullCalendarEventFragment,
+  getCalendarEventsForCurrentUser,
+  getCalendarForCurrentUser,
+  FullCalendarEvent,
 } from '../graphql/types';
 import AppointmentModal from '../shared/appointment-modal/appointment-modal';
 import RequestRefreshModal from '../shared/appointment-modal/request-refresh-modal';
@@ -20,8 +20,8 @@ const DEFAULT_PAGE_SIZE = 20;
 interface IGraphqlProps {
   calendarLoading: boolean;
   calendarError: ApolloError | null | undefined;
-  calendarEventsResponse?: getCalendarEventsForCurrentUserQuery['calendarEventsForCurrentUser'];
-  calendarResponse?: getCalendarForCurrentUserQuery['calendarForCurrentUser'];
+  calendarEventsResponse?: getCalendarEventsForCurrentUser['calendarEventsForCurrentUser'];
+  calendarResponse?: getCalendarForCurrentUser['calendarForCurrentUser'];
   fetchMoreCalendarEvents: () => any;
   refetchCalendar: () => any;
 }
@@ -131,7 +131,7 @@ export class CalendarContainer extends React.Component<IGraphqlProps, IState> {
 
 interface IResponse {
   [key: string]: {
-    events: FullCalendarEventFragment[];
+    events: FullCalendarEvent[];
     pageInfo: {
       nextPageToken: string | null;
       previousPageToken: string | null;
@@ -139,7 +139,7 @@ interface IResponse {
   };
 }
 
-const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) => {
+const update = (previousResponse: IResponse, fetchMoreResponse: IResponse) => {
   const result = fetchMoreResponse.calendarEventsForCurrentUser;
   if (!result) {
     return previousResponse;
@@ -154,7 +154,7 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
 };
 
 export default compose(
-  graphql(calendarQuery, {
+  graphql(calendar, {
     options: () => ({
       variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
     }),
@@ -170,7 +170,7 @@ export default compose(
           return data!.fetchMore({
             variables,
             updateQuery: (previousResult: IResponse, d: any) =>
-              updateQuery(previousResult, d.fetchMoreResult),
+              update(previousResult, d.fetchMoreResult),
           });
         }
       },
@@ -184,7 +184,7 @@ export default compose(
       },
     }),
   }),
-  graphql(calendarForCurrentUserQuery, {
+  graphql(calendarForCurrentUser, {
     props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
       calendarResponse: data ? (data as any).calendarForCurrentUser : null,
     }),

@@ -4,13 +4,9 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import questionQuery from '../graphql/queries/get-question.graphql';
-import questionEditMutationGraphql from '../graphql/queries/question-edit-mutation.graphql';
-import {
-  questionEditMutation,
-  questionEditMutationVariables,
-  FullQuestionFragment,
-} from '../graphql/types';
+import questionGraphql from '../graphql/queries/get-question.graphql';
+import questionEditGraphql from '../graphql/queries/question-edit-mutation.graphql';
+import { questionEdit, questionEditVariables, FullQuestion } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
@@ -26,7 +22,7 @@ interface IStateProps {
 }
 
 interface IProps {
-  questions: FullQuestionFragment[];
+  questions: FullQuestion[];
   routeBase: string;
   match?: {
     params: {
@@ -36,13 +32,11 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  question?: FullQuestionFragment;
+  question?: FullQuestion;
   loading: boolean;
   error: ApolloError | null | undefined;
   refetchQuestion: (() => any) | null;
-  editQuestion: (
-    options: { variables: questionEditMutationVariables },
-  ) => { data: questionEditMutation };
+  editQuestion: (options: { variables: questionEditVariables }) => { data: questionEdit };
   onDelete: (questionId: string) => any;
 }
 
@@ -486,10 +480,10 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(questionEditMutationGraphql, {
+  graphql(questionEditGraphql, {
     name: 'editQuestion',
   }),
-  graphql(questionQuery, {
+  graphql(questionGraphql, {
     skip: (props: IProps & IStateProps) => !props.questionId || props.questionId === 'builder',
     options: (props: IProps & IStateProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }): Partial<IGraphqlProps> => ({

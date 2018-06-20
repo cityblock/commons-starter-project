@@ -2,13 +2,13 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import questionCreateMutationGraphql from '../graphql/queries/question-create-mutation.graphql';
+import questionCreateGraphql from '../graphql/queries/question-create-mutation.graphql';
 import {
-  questionCreateMutation,
-  questionCreateMutationVariables,
+  questionCreate,
+  questionCreateVariables,
   AnswerTypeOptions,
   AssessmentType,
-  FullComputedFieldFragment,
+  FullComputedField,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import questionStyles from '../shared/css/two-panel-right.css';
@@ -27,7 +27,7 @@ import styles from './css/risk-area-create.css';
 const NOT_COMPUTED_FIELD_ID = 'not-computed-field';
 
 export interface IOptions {
-  variables: questionCreateMutationVariables;
+  variables: questionCreateVariables;
 }
 
 interface IProps {
@@ -37,7 +37,7 @@ interface IProps {
   progressNoteTemplateId?: string | null;
   routeBase: string;
   onClose: () => any;
-  computedFields?: FullComputedFieldFragment[];
+  computedFields?: FullComputedField[];
 }
 
 interface IRouterProps {
@@ -45,12 +45,12 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  createQuestion?: (options: IOptions) => { data: questionCreateMutation };
+  createQuestion?: (options: IOptions) => { data: questionCreate };
 }
 
 interface IState {
   loading: boolean;
-  question: questionCreateMutationVariables;
+  question: questionCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -263,7 +263,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(questionCreateMutationGraphql, {
+  graphql(questionCreateGraphql, {
     name: 'createQuestion',
     options: {
       refetchQueries: ['getQuestions', 'getComputedFields'],

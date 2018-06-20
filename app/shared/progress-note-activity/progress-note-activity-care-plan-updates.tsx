@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { groupBy, keys } from 'lodash';
 import React from 'react';
-import { FullCarePlanUpdateEventFragment } from '../../graphql/types';
+import { FullCarePlanUpdateEvent } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdate from './progress-note-activity-care-plan-update';
 
 interface IProps {
-  carePlanUpdates: FullCarePlanUpdateEventFragment[];
+  carePlanUpdates: FullCarePlanUpdateEvent[];
   expanded: boolean;
 }
 

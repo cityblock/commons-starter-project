@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { getPatientQuery, patientDataFlagCreateMutation } from '../../graphql/types';
+import { getPatient, patientDataFlagCreate } from '../../graphql/types';
 import styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
@@ -9,14 +9,14 @@ import FlaggingModal from './flagging-modal';
 import { IEditableFieldState } from './patient-info';
 
 export interface IPlanInfo {
-  patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
+  patientDataFlags: getPatient['patient']['patientDataFlags'];
 }
 
 interface IProps {
   planInfo: IPlanInfo;
   onChange: (fields: IEditableFieldState) => void;
   patientId: string;
-  patient?: getPatientQuery['patient'];
+  patient?: getPatient['patient'];
 }
 
 interface IState {
@@ -42,7 +42,7 @@ export default class PlanInfo extends React.Component<IProps, IState> {
     return flagInfo ? flagInfo.suggestedValue : null;
   }
 
-  handleFlagCreation = (savedFlag: patientDataFlagCreateMutation['patientDataFlagCreate']) => {
+  handleFlagCreation = (savedFlag: patientDataFlagCreate['patientDataFlagCreate']) => {
     const { onChange, planInfo } = this.props;
     const flags = planInfo.patientDataFlags || [];
 

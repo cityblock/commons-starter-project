@@ -1,10 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import createAddressMutationGraphql from '../../../graphql/queries/address-create-for-patient-mutation.graphql';
-import {
-  addressCreateForPatientMutation,
-  addressCreateForPatientMutationVariables,
-} from '../../../graphql/types';
+import createAddressGraphql from '../../../graphql/queries/address-create-for-patient-mutation.graphql';
+import { addressCreateForPatient, addressCreateForPatientVariables } from '../../../graphql/types';
 import AddressModal, { IAddress, ISavedAddress } from '../../../shared/address-modal/address-modal';
 
 interface IProps {
@@ -16,9 +13,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createAddressMutation: (
-    options: { variables: addressCreateForPatientMutationVariables },
-  ) => { data: addressCreateForPatientMutation };
+  createAddress: (
+    options: { variables: addressCreateForPatientVariables },
+  ) => { data: addressCreateForPatient };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -29,8 +26,8 @@ export class CreateAddressModal extends React.Component<allProps> {
       return;
     }
 
-    const { createAddressMutation, patientId, isPrimary } = this.props;
-    return createAddressMutation({
+    const { createAddress, patientId, isPrimary } = this.props;
+    return createAddress({
       variables: {
         patientId,
         street1: address.street1,
@@ -44,7 +41,7 @@ export class CreateAddressModal extends React.Component<allProps> {
     });
   };
 
-  handleAddressSaved = (response: { data: addressCreateForPatientMutation }) => {
+  handleAddressSaved = (response: { data: addressCreateForPatient }) => {
     if (response.data.addressCreateForPatient) {
       this.props.onSaved(response.data.addressCreateForPatient);
     }
@@ -66,6 +63,6 @@ export class CreateAddressModal extends React.Component<allProps> {
   }
 }
 
-export default graphql<any>(createAddressMutationGraphql, {
-  name: 'createAddressMutation',
+export default graphql<any>(createAddressGraphql, {
+  name: 'createAddress',
 })(CreateAddressModal) as React.ComponentClass<IProps>;

@@ -7,7 +7,7 @@ import { CreatePhoneModal } from '../create-phone-modal';
 describe('Render Create Phone Modal', () => {
   const onSaved = (phone: ISavedPhone) => true;
   const closePopup = () => true;
-  const createPhoneMutation = jest.fn();
+  const createPhone = jest.fn();
 
   const wrapper = shallow(
     <CreatePhoneModal
@@ -15,7 +15,7 @@ describe('Render Create Phone Modal', () => {
       patientId={patient.id}
       isVisible={false}
       closePopup={closePopup}
-      createPhoneMutation={createPhoneMutation}
+      createPhone={createPhone}
     />,
   );
 

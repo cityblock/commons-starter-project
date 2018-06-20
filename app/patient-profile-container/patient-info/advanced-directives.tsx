@@ -3,13 +3,13 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import healthcareProxiesQuery from '../../graphql/queries/get-patient-contact-healthcare-proxies.graphql';
-import patientContactDeleteMutationGraphql from '../../graphql/queries/patient-contact-delete-mutation.graphql';
+import healthcareProxiesGraphql from '../../graphql/queries/get-patient-contact-healthcare-proxies.graphql';
+import patientContactDeleteGraphql from '../../graphql/queries/patient-contact-delete-mutation.graphql';
 import {
-  getPatientContactHealthcareProxiesQuery,
-  patientContactDeleteMutation,
-  patientContactDeleteMutationVariables,
-  FullPatientContactFragment,
+  getPatientContactHealthcareProxies,
+  patientContactDelete,
+  patientContactDeleteVariables,
+  FullPatientContact,
 } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import Button from '../../shared/library/button/button';
@@ -43,11 +43,11 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  healthcareProxies?: getPatientContactHealthcareProxiesQuery['patientContactHealthcareProxies'];
+  healthcareProxies?: getPatientContactHealthcareProxies['patientContactHealthcareProxies'];
   refetchHealthcareProxies?: ((variables: { patientId: string }) => void) | null;
   patientContactDelete: (
-    options: { variables: patientContactDeleteMutationVariables },
-  ) => { data: patientContactDeleteMutation };
+    options: { variables: patientContactDeleteVariables },
+  ) => { data: patientContactDelete };
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
@@ -55,7 +55,7 @@ type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
 interface IState {
   isEditModalVisible: boolean;
   isCreateModalVisible: boolean;
-  currentProxy: FullPatientContactFragment | null;
+  currentProxy: FullPatientContact | null;
 }
 
 export class AdvancedDirectives extends React.Component<allProps, IState> {
@@ -89,9 +89,9 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
   };
 
   handleProxyDelete = async (proxyId: string) => {
-    const { patientContactDelete, openErrorPopup } = this.props;
+    const { openErrorPopup } = this.props;
     try {
-      await patientContactDelete({ variables: { patientContactId: proxyId } });
+      await this.props.patientContactDelete({ variables: { patientContactId: proxyId } });
     } catch (err) {
       openErrorPopup(err.message);
     }
@@ -101,7 +101,7 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
     this.setState({ isEditModalVisible: false, isCreateModalVisible: false, currentProxy: null });
   };
 
-  handleCreateSuccess = (savedProxy: FullPatientContactFragment) => {
+  handleCreateSuccess = (savedProxy: FullPatientContact) => {
     const { onChange, patientId, refetchHealthcareProxies } = this.props;
     if (refetchHealthcareProxies) {
       refetchHealthcareProxies({ patientId });
@@ -109,18 +109,18 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
     onChange({ hasHealthcareProxy: true });
   };
 
-  handleEditSuccess = (savedProxy: FullPatientContactFragment) => {
+  handleEditSuccess = (savedProxy: FullPatientContact) => {
     const { patientId, refetchHealthcareProxies } = this.props;
     if (refetchHealthcareProxies) {
       refetchHealthcareProxies({ patientId });
     }
   };
 
-  handleOpenEditModal = (proxy: FullPatientContactFragment) => {
+  handleOpenEditModal = (proxy: FullPatientContact) => {
     this.setState({ isEditModalVisible: true, currentProxy: proxy });
   };
 
-  renderHealthcareProxyCard = (proxy: FullPatientContactFragment) => {
+  renderHealthcareProxyCard = (proxy: FullPatientContact) => {
     const emailHtml = proxy.email ? <p>{proxy.email.emailAddress}</p> : <p>Unknown Email</p>;
     const phoneHtml = proxy.phone ? <p>{proxy.phone.phoneNumber}</p> : <p>Unknown Phone</p>;
     const relationHtml =
@@ -294,13 +294,13 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(patientContactDeleteMutationGraphql, {
+  graphql(patientContactDeleteGraphql, {
     name: 'patientContactDelete',
     options: {
       refetchQueries: ['getPatientContactHealthcareProxies'],
     },
   }),
-  graphql(healthcareProxiesQuery, {
+  graphql(healthcareProxiesGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

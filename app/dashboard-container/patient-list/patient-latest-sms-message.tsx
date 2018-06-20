@@ -4,8 +4,8 @@ import { capitalize, truncate } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
-import smsMessageLatestQuery from '../../graphql/queries/get-sms-message-latest.graphql';
-import { getSmsMessageLatestQuery } from '../../graphql/types';
+import smsMessageLatest from '../../graphql/queries/get-sms-message-latest.graphql';
+import { getSmsMessageLatest } from '../../graphql/types';
 import Text from '../../shared/library/text/text';
 import styles from './css/patient-latest-sms-message.css';
 
@@ -19,7 +19,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  smsMessage: getSmsMessageLatestQuery['smsMessageLatest'];
+  smsMessage: getSmsMessageLatest['smsMessageLatest'];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -57,7 +57,7 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
   );
 };
 
-export default graphql(smsMessageLatestQuery, {
+export default graphql(smsMessageLatest, {
   options: ({ patientId }: IProps) => ({
     variables: { patientId },
   }),

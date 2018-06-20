@@ -2,29 +2,27 @@ import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import concernRemoveDiagnosisCodeMutationGraphql from '../graphql/queries/concern-remove-diagnosis-code-mutation.graphql';
+import concernRemoveDiagnosisCodeGraphql from '../graphql/queries/concern-remove-diagnosis-code-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
-  concernRemoveDiagnosisCodeMutation,
-  concernRemoveDiagnosisCodeMutationVariables,
-  FullDiagnosisCodeFragment,
+  concernRemoveDiagnosisCode,
+  concernRemoveDiagnosisCodeVariables,
+  FullDiagnosisCode,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Icon from '../shared/library/icon/icon';
 
 export interface IRemoveOptions {
-  variables: concernRemoveDiagnosisCodeMutationVariables;
+  variables: concernRemoveDiagnosisCodeVariables;
 }
 
 interface IProps {
-  diagnosisCode: FullDiagnosisCodeFragment;
+  diagnosisCode: FullDiagnosisCode;
   concernId: string;
 }
 
 interface IGraphqlProps {
-  concernRemoveDiagnosisCode: (
-    options: IRemoveOptions,
-  ) => { data: concernRemoveDiagnosisCodeMutation };
+  concernRemoveDiagnosisCode: (options: IRemoveOptions) => { data: concernRemoveDiagnosisCode };
 }
 
 interface IState {
@@ -38,12 +36,12 @@ export class ConcernDiagnosisCode extends React.Component<allProps, IState> {
   state = { loading: false, error: null };
 
   onClickDelete = async () => {
-    const { diagnosisCode, concernId, concernRemoveDiagnosisCode } = this.props;
+    const { diagnosisCode, concernId } = this.props;
 
     this.setState({ loading: true, error: null });
 
     try {
-      await concernRemoveDiagnosisCode({
+      await this.props.concernRemoveDiagnosisCode({
         variables: {
           concernId,
           diagnosisCodeId: diagnosisCode.id,
@@ -70,7 +68,7 @@ export class ConcernDiagnosisCode extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(concernRemoveDiagnosisCodeMutationGraphql, {
+export default graphql<any>(concernRemoveDiagnosisCodeGraphql, {
   name: 'concernRemoveDiagnosisCode',
   options: {
     refetchQueries: ['concern'],

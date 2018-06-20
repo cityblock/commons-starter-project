@@ -1,15 +1,15 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import tasksDueSoonForPatientQuery from '../../graphql/queries/get-tasks-due-soon-for-patient.graphql';
-import tasksWithNotificationsForPatientQuery from '../../graphql/queries/get-tasks-with-notifications-for-patient.graphql';
-import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
-import { FullPatientForDashboardFragment } from '../../graphql/types';
+import tasksDueSoonForPatient from '../../graphql/queries/get-tasks-due-soon-for-patient.graphql';
+import tasksWithNotificationsForPatient from '../../graphql/queries/get-tasks-with-notifications-for-patient.graphql';
+import { ShortUrgentTaskForPatient } from '../../graphql/types';
+import { FullPatientForDashboard } from '../../graphql/types';
 import PatientTasks from '../tasks/patient-tasks';
 import styles from './css/patient-with-tasks-list-item.css';
 import PatientListItem from './patient-list-item';
 
 export interface IProps {
-  patient: FullPatientForDashboardFragment;
+  patient: FullPatientForDashboard;
   selectedPatientId: string | null;
   toggleSelectedPatient: (patientId: string) => void;
 }
@@ -17,10 +17,10 @@ export interface IProps {
 interface IGraphqlProps {
   tasksDueSoonLoading?: boolean;
   tasksDueSoonError?: string | null;
-  tasksDueSoon: ShortUrgentTaskForPatientFragment[];
+  tasksDueSoon: ShortUrgentTaskForPatient[];
   tasksWithNotificationsLoading?: boolean;
   tasksWithNotificationsError?: string | null;
-  tasksWithNotifications: ShortUrgentTaskForPatientFragment[];
+  tasksWithNotifications: ShortUrgentTaskForPatient[];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -89,7 +89,7 @@ export class PatientWithTasksListItem extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(tasksDueSoonForPatientQuery, {
+  graphql(tasksDueSoonForPatient, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),
@@ -99,7 +99,7 @@ export default compose(
       tasksDueSoon: data ? (data as any).tasksDueSoonForPatient : null,
     }),
   }),
-  graphql(tasksWithNotificationsForPatientQuery, {
+  graphql(tasksWithNotificationsForPatient, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
     }),

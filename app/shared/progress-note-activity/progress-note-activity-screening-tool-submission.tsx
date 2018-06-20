@@ -1,10 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
-import {
-  FullCarePlanSuggestionFragment,
-  FullPatientScreeningToolSubmissionFragment,
-} from '../../graphql/types';
+import { FullCarePlanSuggestion, FullPatientScreeningToolSubmission } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import TextInfo from '../../shared/library/text-info/text-info';
 import Text from '../../shared/library/text/text';
@@ -12,7 +9,7 @@ import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-c
 import styles from './css/progress-note-activity.css';
 
 interface IProps {
-  screeningToolSubmission: FullPatientScreeningToolSubmissionFragment;
+  screeningToolSubmission: FullPatientScreeningToolSubmission;
   expanded: boolean;
 }
 
@@ -29,7 +26,7 @@ class ProgressNoteActivityScreeningToolSubmission extends React.Component<IProps
     this.setState({ summaryExpanded: !summaryExpanded });
   };
 
-  getCarePlanSuggestionsHtml(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
+  getCarePlanSuggestionsHtml(carePlanSuggestions: FullCarePlanSuggestion[]) {
     const concernCount = getConcernCount(carePlanSuggestions);
     const taskCount = getTaskCount(carePlanSuggestions);
     const goalCount = getGoalCount(carePlanSuggestions);

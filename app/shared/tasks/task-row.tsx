@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Gender, ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
+import { Gender, ShortTask, ShortUser } from '../../graphql/types';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import { formatFullName, isDueSoon } from '../helpers/format-helpers';
 import Avatar from '../library/avatar/avatar';
@@ -13,7 +13,7 @@ import Text from '../library/text/text';
 import styles from './css/task-row.css';
 import tasksStyles from './css/tasks.css';
 
-interface ITask extends ShortTaskFragment {
+interface ITask extends ShortTask {
   patient?: {
     id: string;
     firstName: string;
@@ -35,7 +35,7 @@ interface IProps {
   currentUserId: string;
 }
 
-function renderFollowers(followers: ShortUserFragment[]) {
+function renderFollowers(followers: ShortUser[]) {
   const followerCount = followers.length;
   const followersHtmlMap = [];
 
@@ -50,7 +50,7 @@ function renderFollowers(followers: ShortUserFragment[]) {
   return followersHtmlMap;
 }
 
-function renderAssignedTo(user: ShortUserFragment | null) {
+function renderAssignedTo(user: ShortUser | null) {
   return <Avatar src={user ? user.googleProfileImageUrl : null} size="small" />;
 }
 

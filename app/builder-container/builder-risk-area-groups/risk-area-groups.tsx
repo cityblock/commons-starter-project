@@ -1,12 +1,12 @@
 import React from 'react';
-import { FullRiskAreaGroupFragment } from '../../graphql/types';
+import { FullRiskAreaGroup } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import { ROUTE_BASE } from './builder-risk-area-groups';
 import RiskAreaGroup from './risk-area-group';
 
 interface IProps {
   riskAreaGroupId: string | null;
-  riskAreaGroups: FullRiskAreaGroupFragment[];
+  riskAreaGroups: FullRiskAreaGroup[];
 }
 
 const RiskAreaGroups: React.StatelessComponent<IProps> = (props: IProps) => {

@@ -8,10 +8,10 @@ import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../actions/current-user-action';
-import currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
-import { logInUserMutation, logInUserMutationVariables } from '../graphql/types';
-import { getCurrentUserQuery } from '../graphql/types';
+import currentUserGraphql from '../graphql/queries/get-current-user.graphql';
+import login from '../graphql/queries/log-in-user-mutation.graphql';
+import { logInUser, logInUserVariables } from '../graphql/types';
+import { getCurrentUser } from '../graphql/types';
 import { IState as IAppState } from '../store';
 import styles from './css/login.css';
 import Footer from './footer';
@@ -28,12 +28,12 @@ interface IProps {
 
 interface IGraphqlProps {
   logIn: (
-    options: { variables: logInUserMutationVariables },
-  ) => { data: logInUserMutation; errors: ApolloError[] | null };
+    options: { variables: logInUserVariables },
+  ) => { data: logInUser; errors: ApolloError[] | null };
   error: ApolloError | null | undefined;
   loading: boolean;
-  currentUser?: getCurrentUserQuery['currentUser'];
-  refetchCurrentUser: () => Promise<{ data: getCurrentUserQuery }>;
+  currentUser?: getCurrentUser['currentUser'];
+  refetchCurrentUser: () => Promise<{ data: getCurrentUser }>;
 }
 
 interface IStateProps {
@@ -41,7 +41,7 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-  setCurrentUser: (currentUser: getCurrentUserQuery['currentUser']) => void;
+  setCurrentUser: (currentUser: getCurrentUser['currentUser']) => void;
 }
 
 interface IGoogleLoginError {
@@ -152,7 +152,7 @@ function mapStateToProps(state: IAppState, ownProps: any): IStateProps {
 
 function mapDispatchToProps(dispatch: Dispatch<any>): IDispatchProps {
   return {
-    setCurrentUser: (currentUser: getCurrentUserQuery['currentUser']) =>
+    setCurrentUser: (currentUser: getCurrentUser['currentUser']) =>
       dispatch(setCurrentUser(currentUser)),
   };
 }
@@ -163,7 +163,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(currentUserQuery, {
+  graphql(currentUserGraphql, {
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
@@ -171,5 +171,5 @@ export default compose(
       refetchCurrentUser: data ? (data as any).refetch : null,
     }),
   }),
-  graphql(loginMutation, { name: 'logIn' }),
+  graphql(login, { name: 'logIn' }),
 )(LoginContainer) as React.ComponentClass<IProps>;

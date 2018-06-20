@@ -3,19 +3,19 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import riskAreaGroupShortQueryGraphql from '../graphql/queries/get-risk-area-group-short.graphql';
-import { getRiskAreaGroupShortQuery, FullRiskAreaFragment } from '../graphql/types';
+import riskAreaGroupShortGraphql from '../graphql/queries/get-risk-area-group-short.graphql';
+import { getRiskAreaGroupShort, FullRiskArea } from '../graphql/types';
 import riskAreasStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  riskArea: FullRiskAreaFragment;
+  riskArea: FullRiskArea;
   selected: boolean;
   routeBase: string;
 }
 
 interface IGraphqlProps {
-  riskAreaGroup: getRiskAreaGroupShortQuery['riskAreaGroup'];
+  riskAreaGroup: getRiskAreaGroupShort['riskAreaGroup'];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -63,7 +63,7 @@ const RiskAreaRow: React.StatelessComponent<allProps> = (props: allProps) => {
   );
 };
 
-export default graphql(riskAreaGroupShortQueryGraphql, {
+export default graphql(riskAreaGroupShortGraphql, {
   options: (props: IProps) => ({
     variables: { riskAreaGroupId: props.riskArea.riskAreaGroupId },
   }),

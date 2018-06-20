@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router';
 import patientExternalOrganizationsQuery from '../../../graphql/queries/get-patient-external-organizations.graphql';
 import {
-  getPatientExternalOrganizationsQuery,
+  getPatientExternalOrganizations,
   EmailInput,
   ExternalProviderOptions,
   PhoneCreateInput,
@@ -41,7 +41,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientExternalOrganizations?: getPatientExternalOrganizationsQuery['patientExternalOrganizations'];
+  patientExternalOrganizations?: getPatientExternalOrganizations['patientExternalOrganizations'];
   isLoading?: boolean;
   error?: ApolloError | null;
 }

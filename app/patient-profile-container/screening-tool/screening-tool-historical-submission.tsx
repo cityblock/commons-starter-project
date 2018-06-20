@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
-import { getQuestionsQuery, FullScreeningToolFragment } from '../../graphql/types';
+import screeningToolQuestionsGraphql from '../../graphql/queries/get-questions.graphql';
+import { getQuestions, FullScreeningTool } from '../../graphql/types';
 import ErrorComponent from '../../shared/error-component/error-component';
 import Spinner from '../../shared/library/spinner/spinner';
 import ScreeningToolAssessment from './screening-tool-assessment';
@@ -10,11 +10,11 @@ import ScreeningToolAssessment from './screening-tool-assessment';
 interface IProps {
   patientId: string;
   submissionId: string;
-  screeningTool: FullScreeningToolFragment;
+  screeningTool: FullScreeningTool;
 }
 
 interface IGraphqlProps {
-  screeningToolQuestions?: getQuestionsQuery['questions'];
+  screeningToolQuestions?: getQuestions['questions'];
   screeningToolQuestionsLoading?: boolean;
   screeningToolQuestionsError: ApolloError | undefined | null;
 }
@@ -53,7 +53,7 @@ export class ScreeningToolHistoricalSubmission extends React.Component<allProps>
   }
 }
 
-export default graphql(screeningToolQuestionsQuery, {
+export default graphql(screeningToolQuestionsGraphql, {
   options: (props: IProps) => ({
     variables: {
       filterType: 'screeningTool',

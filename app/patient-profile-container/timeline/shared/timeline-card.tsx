@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import React from 'react';
-import { FullProgressNoteFragment } from '../../../graphql/types';
+import { FullProgressNote } from '../../../graphql/types';
 import Button from '../../../shared/library/button/button';
 import Text from '../../../shared/library/text/text';
 import ProgressNoteSupervisorBadge from '../progress-note-supervisor-badge';
@@ -13,7 +13,7 @@ interface IProps {
   title: string;
   date: string;
   notes: string | null;
-  progressNote?: FullProgressNoteFragment;
+  progressNote?: FullProgressNote;
   onClose?: (() => void) | null; // if passed, displays close button
   children?: any;
 }

@@ -2,21 +2,18 @@ import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
-import {
-  getProgressNoteActivityForProgressNoteQuery,
-  FullProgressNoteFragment,
-} from '../../graphql/types';
+import progressNoteActivityGraphql from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
+import { getProgressNoteActivityForProgressNote, FullProgressNote } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 
 interface IProps {
-  progressNote?: FullProgressNoteFragment | null;
+  progressNote?: FullProgressNote | null;
 }
 
 interface IGraphqlProps {
-  progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
+  progressNoteActivity?: getProgressNoteActivityForProgressNote['progressNoteActivityForProgressNote'];
   loading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -75,7 +72,7 @@ class ProgressNoteActivity extends React.Component<allProps> {
   }
 }
 
-export default graphql(progressNoteActivityQuery, {
+export default graphql(progressNoteActivityGraphql, {
   skip: (props: IProps) => !props.progressNote,
   options: (props: IProps) => ({
     variables: {

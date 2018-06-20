@@ -2,11 +2,8 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import progressNoteTemplateCreateMutationGraphql from '../graphql/queries/progress-note-template-create-mutation.graphql';
-import {
-  progressNoteTemplateCreateMutation,
-  progressNoteTemplateCreateMutationVariables,
-} from '../graphql/types';
+import progressNoteTemplateCreateGraphql from '../graphql/queries/progress-note-template-create-mutation.graphql';
+import { progressNoteTemplateCreate, progressNoteTemplateCreateVariables } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import progressNoteTemplateStyles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -17,7 +14,7 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 export interface IOptions {
-  variables: progressNoteTemplateCreateMutationVariables;
+  variables: progressNoteTemplateCreateVariables;
 }
 
 interface IProps {
@@ -31,12 +28,12 @@ interface IRouterProps {
 }
 
 interface IGraphqlProps {
-  createProgressNoteTemplate?: (options: IOptions) => { data: progressNoteTemplateCreateMutation };
+  createProgressNoteTemplate?: (options: IOptions) => { data: progressNoteTemplateCreate };
 }
 
 interface IState {
   loading: boolean;
-  progressNoteTemplate: progressNoteTemplateCreateMutationVariables;
+  progressNoteTemplate: progressNoteTemplateCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -126,7 +123,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(progressNoteTemplateCreateMutationGraphql, {
+  graphql(progressNoteTemplateCreateGraphql, {
     name: 'createProgressNoteTemplate',
     options: {
       refetchQueries: ['getProgressNoteTemplates'],

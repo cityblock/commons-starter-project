@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
-import { FullPatientConcernFragment } from '../../graphql/types';
+import { FullPatientConcern } from '../../graphql/types';
 import { isDueSoon } from '../../shared/helpers/format-helpers';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import PatientGoal from '../goals/goal';
@@ -10,7 +10,7 @@ import styles from './css/patient-concern.css';
 import PatientConcernOptions from './options-menu/options-menu';
 
 interface IProps {
-  patientConcern: FullPatientConcernFragment;
+  patientConcern: FullPatientConcern;
   selected: boolean;
   onClick: (e?: React.MouseEvent<HTMLDivElement>) => void;
   inactive?: boolean;

@@ -1,10 +1,6 @@
 import { Document, Page, StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import {
-  FullCareTeamUserFragment,
-  FullPatientConcernFragment,
-  FullPatientForProfileFragment,
-} from '../../graphql/types';
+import { FullCareTeamUser, FullPatientConcern, FullPatientForProfile } from '../../graphql/types';
 import Divider from '../shared/divider';
 import Empty from '../shared/empty';
 import Footer from '../shared/footer';
@@ -17,9 +13,9 @@ import Info from './info';
 import Task from './task';
 
 interface IProps {
-  carePlan: FullPatientConcernFragment[];
-  careTeam: FullCareTeamUserFragment[];
-  patient: FullPatientForProfileFragment;
+  carePlan: FullPatientConcern[];
+  careTeam: FullCareTeamUser[];
+  patient: FullPatientForProfile;
   profilePhotoUrl: string | null;
 }
 

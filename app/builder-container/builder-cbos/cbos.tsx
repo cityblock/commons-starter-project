@@ -1,12 +1,12 @@
 import React from 'react';
-import { FullCBOFragment } from '../../graphql/types';
+import { FullCBO } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import { ROUTE_BASE } from './builder-cbos';
 import CBO from './cbo';
 
 interface IProps {
   CBOId: string | null;
-  CBOItems: FullCBOFragment[];
+  CBOItems: FullCBO[];
 }
 
 const CBOs: React.StatelessComponent<IProps> = (props: IProps) => {

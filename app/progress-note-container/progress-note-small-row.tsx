@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedTime } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { FullProgressNoteFragment } from '../graphql/types';
+import { FullProgressNote } from '../graphql/types';
 import PatientPhoto from '../shared/library/patient-photo/patient-photo';
 import styles from './css/progress-note-small-row.css';
 
 interface IProps {
-  progressNote: FullProgressNoteFragment;
+  progressNote: FullProgressNote;
   currentUserId: string;
   onClick: (patientId: string) => void;
 }

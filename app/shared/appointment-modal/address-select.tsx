@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientAddressesQuery from '../../graphql/queries/get-patient-addresses.graphql';
-import { getPatientAddressesQuery, FullAddressFragment } from '../../graphql/types';
+import patientAddressesGraphql from '../../graphql/queries/get-patient-addresses.graphql';
+import { getPatientAddresses, FullAddress } from '../../graphql/types';
 import { formatAddress } from '../../shared/helpers/format-helpers';
 import FormLabel from '../../shared/library/form-label/form-label';
 import styles from '../../shared/library/form/css/form.css';
@@ -13,7 +13,7 @@ import TextInput from '../../shared/library/text-input/text-input';
 export interface IProps {
   patientId?: string;
   onChange: (values: { [key: string]: any }) => void;
-  selectedAddress?: FullAddressFragment | { description: string } | null;
+  selectedAddress?: FullAddress | { description: string } | null;
   location?: string | null;
   placeholderMessageId: string;
 }
@@ -21,7 +21,7 @@ export interface IProps {
 interface IGraphqlProps {
   isLoading: boolean;
   error: ApolloError | null | undefined;
-  patientAddresses: getPatientAddressesQuery['patientAddresses'];
+  patientAddresses: getPatientAddresses['patientAddresses'];
 }
 
 export type allProps = IProps & IGraphqlProps;
@@ -35,7 +35,7 @@ export class AddressSelect extends React.Component<allProps> {
     onChange({ [name as any]: value });
   };
 
-  handleClick = (address?: FullAddressFragment, external?: { description: string }) => {
+  handleClick = (address?: FullAddress, external?: { description: string }) => {
     const { onChange } = this.props;
     if (address) {
       const { city, state, street1, street2, zip } = address;
@@ -104,7 +104,7 @@ export class AddressSelect extends React.Component<allProps> {
   }
 }
 
-export default graphql(patientAddressesQuery, {
+export default graphql(patientAddressesGraphql, {
   skip: (props: IProps) => !props.patientId,
   options: (props: IProps) => ({
     variables: {

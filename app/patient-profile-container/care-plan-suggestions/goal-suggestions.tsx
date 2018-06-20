@@ -1,14 +1,11 @@
 import React from 'react';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import GoalSuggestion from './goal-suggestion';
 
 interface IProps {
-  suggestions: FullCarePlanSuggestionForPatientFragment[];
-  onAccept: (
-    suggestion: FullCarePlanSuggestionForPatientFragment,
-    taskTemplateIds?: string[],
-  ) => void;
-  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => void;
+  suggestions: FullCarePlanSuggestionForPatient[];
+  onAccept: (suggestion: FullCarePlanSuggestionForPatient, taskTemplateIds?: string[]) => void;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatient) => void;
 }
 
 interface IState {

@@ -3,13 +3,13 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
-import editPatientInfoMutationGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
+import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import patientPhotoSignedUrlCreateGraphql from '../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
-  patientInfoEditMutation,
-  patientInfoEditMutationVariables,
-  patientPhotoSignedUrlCreateMutation,
-  patientPhotoSignedUrlCreateMutationVariables,
+  patientInfoEdit,
+  patientInfoEditVariables,
+  patientPhotoSignedUrlCreate,
+  patientPhotoSignedUrlCreateVariables,
   PatientSignedUrlAction,
 } from '../../graphql/types';
 import { IPatientPhotoPopupOptions } from '../../reducers/popup-reducer';
@@ -28,11 +28,9 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   getSignedUploadUrl: (
-    options: { variables: patientPhotoSignedUrlCreateMutationVariables },
-  ) => { data: patientPhotoSignedUrlCreateMutation };
-  editPatientInfo: (
-    options: { variables: patientInfoEditMutationVariables },
-  ) => { data: patientInfoEditMutation };
+    options: { variables: patientPhotoSignedUrlCreateVariables },
+  ) => { data: patientPhotoSignedUrlCreate };
+  editPatientInfo: (options: { variables: patientInfoEditVariables }) => { data: patientInfoEdit };
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
@@ -92,7 +90,7 @@ export default compose(
       name: 'getSignedUploadUrl',
     },
   ),
-  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(editPatientInfoMutationGraphql, {
+  graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(editPatientInfoGraphql, {
     name: 'editPatientInfo',
     options: {
       refetchQueries: ['getPatientComputedPatientStatus'],

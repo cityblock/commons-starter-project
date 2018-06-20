@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import progressNoteTemplateQuery from '../graphql/queries/get-progress-note-template.graphql';
-import progressNoteTemplateEditMutationGraphql from '../graphql/queries/progress-note-template-edit-mutation.graphql';
+import progressNoteTemplateGraphql from '../graphql/queries/get-progress-note-template.graphql';
+import progressNoteTemplateEditGraphql from '../graphql/queries/progress-note-template-edit-mutation.graphql';
 import {
-  progressNoteTemplateEditMutation,
-  progressNoteTemplateEditMutationVariables,
-  FullProgressNoteTemplateFragment,
+  progressNoteTemplateEdit,
+  progressNoteTemplateEditVariables,
+  FullProgressNoteTemplate,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -22,13 +22,13 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  progressNoteTemplate: FullProgressNoteTemplateFragment | null;
+  progressNoteTemplate: FullProgressNoteTemplate | null;
   progressNoteTemplateLoading?: boolean;
   progressNoteTemplateError?: string | null;
   refetchProgressNoteTemplate: () => any;
   editProgressNoteTemplate: (
-    options: { variables: progressNoteTemplateEditMutationVariables },
-  ) => { data: progressNoteTemplateEditMutation };
+    options: { variables: progressNoteTemplateEditVariables },
+  ) => { data: progressNoteTemplateEdit };
   onDelete: (progressNoteTemplateId: string) => any;
 }
 
@@ -292,10 +292,10 @@ function getProgressNoteTemplateId(ownProps: IProps): string | null {
 }
 
 export default compose(
-  graphql(progressNoteTemplateEditMutationGraphql, {
+  graphql(progressNoteTemplateEditGraphql, {
     name: 'editProgressNoteTemplate',
   }),
-  graphql(progressNoteTemplateQuery, {
+  graphql(progressNoteTemplateGraphql, {
     skip: (props: IProps) => !getProgressNoteTemplateId(props),
     options: (props: IProps) => ({
       variables: { progressNoteTemplateId: getProgressNoteTemplateId(props) },

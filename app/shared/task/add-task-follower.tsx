@@ -2,30 +2,23 @@ import { ApolloError } from 'apollo-client';
 import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import taskUserFollowMutationGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
-import {
-  taskUserFollowMutation,
-  taskUserFollowMutationVariables,
-  FullUserFragment,
-  ShortUserFragment,
-} from '../../graphql/types';
+import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
+import taskUserFollowGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
+import { taskUserFollow, taskUserFollowVariables, FullUser, ShortUser } from '../../graphql/types';
 import Avatar from '../../shared/library/avatar/avatar';
 import styles from './css/add-task-follower.css';
 
 interface IProps {
   patientId: string;
   taskId: string;
-  followers: ShortUserFragment[];
+  followers: ShortUser[];
 }
 
 interface IGraphqlProps {
   loading?: boolean;
   error?: ApolloError | null | undefined;
-  careTeam?: FullUserFragment[];
-  addTaskFollower: (
-    options: { variables: taskUserFollowMutationVariables },
-  ) => { data: taskUserFollowMutation };
+  careTeam?: FullUser[];
+  addTaskFollower: (options: { variables: taskUserFollowVariables }) => { data: taskUserFollow };
   mutate?: any;
 }
 
@@ -46,7 +39,7 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     lastCareTeamMemberId: null,
   };
 
-  renderCareTeamMember = (careTeamMember: FullUserFragment) => {
+  renderCareTeamMember = (careTeamMember: FullUser) => {
     const { addFollowerError, lastCareTeamMemberId } = this.state;
 
     const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
@@ -79,7 +72,7 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     );
   };
 
-  renderCareTeamMembers = (careTeamMembers: FullUserFragment[]) => {
+  renderCareTeamMembers = (careTeamMembers: FullUser[]) => {
     return careTeamMembers.map(this.renderCareTeamMember);
   };
 
@@ -148,10 +141,10 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskUserFollowMutationGraphql, {
+  graphql(taskUserFollowGraphql, {
     name: 'addTaskFollower',
   }),
-  graphql(careTeamQuery, {
+  graphql(careTeamGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

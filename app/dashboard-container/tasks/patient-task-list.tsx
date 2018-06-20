@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
+import { ShortUrgentTaskForPatient } from '../../graphql/types';
 import styles from './css/patient-task-list.css';
 import PatientTask from './patient-task';
 
 interface IProps {
   messageId: string; // for header of list
-  tasks: ShortUrgentTaskForPatientFragment[];
+  tasks: ShortUrgentTaskForPatient[];
   withNotifications: boolean;
 }
 

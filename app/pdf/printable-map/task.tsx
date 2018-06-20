@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { ShortTaskFragment } from '../../graphql/types';
+import { ShortTask } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import TaskHeader from './task-header';
 
 interface IProps {
-  task: ShortTaskFragment;
+  task: ShortTask;
   isLastInConcern: boolean; // adds extra margin if last in concern
 }
 

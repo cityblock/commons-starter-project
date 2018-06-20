@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { filter, groupBy, keys } from 'lodash';
 import React from 'react';
-import { FullPatientAnswerEventFragment } from '../../graphql/types';
+import { FullPatientAnswerEvent } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityPatientAnswerGroup from './progress-note-activity-patient-answer-group';
 
 interface IProps {
-  patientAnswerEvents: FullPatientAnswerEventFragment[];
+  patientAnswerEvents: FullPatientAnswerEvent[];
   expanded: boolean;
 }
 
@@ -17,14 +17,11 @@ class ProgressNoteActivityPatientAnswers extends React.Component<IProps> {
       const answer = patientAnswerEvent.patientAnswer.answer;
       return !!answer.riskArea;
     });
-    const groupedEvents = groupBy(
-      filteredEvents,
-      (patientAnswerEvent: FullPatientAnswerEventFragment) => {
-        const answer = patientAnswerEvent.patientAnswer.answer;
+    const groupedEvents = groupBy(filteredEvents, (patientAnswerEvent: FullPatientAnswerEvent) => {
+      const answer = patientAnswerEvent.patientAnswer.answer;
 
-        return answer.riskArea!.id;
-      },
-    );
+      return answer.riskArea!.id;
+    });
 
     return keys(groupedEvents).map(patientAnswerEventsGroupId => {
       const events = groupedEvents[patientAnswerEventsGroupId];

@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
+import { getRiskAreaGroupForPatient } from '../../graphql/types';
 import { DomainAssessment } from '../patient-three-sixty/domain-assessment';
 
 interface IProps {
@@ -15,7 +15,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
+  riskAreaGroup: getRiskAreaGroupForPatient['riskAreaGroupForPatient'];
 }
 
 type allProps = IGraphqlProps & IProps;

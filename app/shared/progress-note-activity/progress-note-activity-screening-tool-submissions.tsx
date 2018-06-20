@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullPatientScreeningToolSubmissionFragment } from '../../graphql/types';
+import { FullPatientScreeningToolSubmission } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityScreeningToolSubmission from './progress-note-activity-screening-tool-submission';
 
 interface IProps {
-  screeningToolSubmissions: FullPatientScreeningToolSubmissionFragment[];
+  screeningToolSubmissions: FullPatientScreeningToolSubmission[];
   expanded: boolean;
 }
 

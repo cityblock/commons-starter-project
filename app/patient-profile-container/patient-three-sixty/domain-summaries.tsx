@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { getRiskAreaGroupsForPatientQuery } from '../../graphql/types';
+import { getRiskAreaGroupsForPatient } from '../../graphql/types';
 import styles from './css/shared.css';
 import { DomainSummary } from './domain-summary';
 import { ThreeSixtyRadar } from './three-sixty-radar/three-sixty-radar';
@@ -8,7 +8,7 @@ import { ThreeSixtyRadar } from './three-sixty-radar/three-sixty-radar';
 interface IProps {
   patientId: string;
   routeBase: string;
-  riskAreaGroups: getRiskAreaGroupsForPatientQuery['riskAreaGroupsForPatient'];
+  riskAreaGroups: getRiskAreaGroupsForPatient['riskAreaGroupsForPatient'];
   glassBreakId: string | null;
 }
 

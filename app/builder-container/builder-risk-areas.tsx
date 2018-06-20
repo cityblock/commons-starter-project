@@ -5,13 +5,9 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
-import {
-  riskAreaDeleteMutation,
-  riskAreaDeleteMutationVariables,
-  FullRiskAreaFragment,
-} from '../graphql/types';
+import riskAreasGraphql from '../graphql/queries/get-risk-areas.graphql';
+import riskAreaDeleteGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
+import { riskAreaDelete, riskAreaDeleteVariables, FullRiskArea } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
@@ -34,12 +30,10 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
-  riskAreas?: FullRiskAreaFragment[];
+  riskAreas?: FullRiskArea[];
   loading?: boolean;
   error: string | null;
-  deleteRiskArea: (
-    options: { variables: riskAreaDeleteMutationVariables },
-  ) => { data: riskAreaDeleteMutation };
+  deleteRiskArea: (options: { variables: riskAreaDeleteVariables }) => { data: riskAreaDelete };
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps;
@@ -78,11 +72,11 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
     this.setState({ showCreateRiskArea: true });
   }
 
-  hideCreateRiskArea(riskArea?: FullRiskAreaFragment) {
+  hideCreateRiskArea(riskArea?: FullRiskArea) {
     this.setState({ showCreateRiskArea: false });
   }
 
-  renderRiskAreas(riskAreas: FullRiskAreaFragment[]) {
+  renderRiskAreas(riskAreas: FullRiskArea[]) {
     const { loading, error } = this.props;
     const validRiskAreas = riskAreas.filter(riskArea => !riskArea.deletedAt);
 
@@ -98,7 +92,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
     }
   }
 
-  renderRiskArea(riskArea: FullRiskAreaFragment) {
+  renderRiskArea(riskArea: FullRiskArea) {
     const selected = riskArea.id === this.props.riskAreaId;
 
     return (
@@ -167,14 +161,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(riskAreasQuery, {
+  graphql(riskAreasGraphql, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(riskAreaDeleteMutationGraphql, {
+  graphql(riskAreaDeleteGraphql, {
     name: 'deleteRiskArea',
   }),
 )(AdminRiskAreas) as React.ComponentClass<IProps>;

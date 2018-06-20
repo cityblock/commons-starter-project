@@ -1,25 +1,25 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import riskAreaGroupEditMutationGraphql from '../../graphql/queries/risk-area-group-edit-mutation.graphql';
+import riskAreaGroupEditGraphql from '../../graphql/queries/risk-area-group-edit-mutation.graphql';
 import {
-  riskAreaGroupEditMutation,
-  riskAreaGroupEditMutationVariables,
-  FullRiskAreaGroupFragment,
+  riskAreaGroupEdit,
+  riskAreaGroupEditVariables,
+  FullRiskAreaGroup,
 } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
 import styles from './css/risk-area-group-shared.css';
 
 interface IProps {
-  riskAreaGroup: FullRiskAreaGroupFragment;
+  riskAreaGroup: FullRiskAreaGroup;
   close: () => void;
   deleteRiskAreaGroup: () => void;
 }
 
 interface IGraphqlProps {
   editRiskAreaGroup: (
-    options: { variables: riskAreaGroupEditMutationVariables },
-  ) => { data: riskAreaGroupEditMutation };
+    options: { variables: riskAreaGroupEditVariables },
+  ) => { data: riskAreaGroupEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -88,6 +88,6 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
   }
 }
 
-export default graphql<any>(riskAreaGroupEditMutationGraphql, {
+export default graphql<any>(riskAreaGroupEditGraphql, {
   name: 'editRiskAreaGroup',
 })(RiskAreaGroupEdit) as React.ComponentClass<IProps>;

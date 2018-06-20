@@ -3,15 +3,15 @@ import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import patientScreeningToolSubmissionScoreMutationGraphql from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
+import patientAnswersGraphql from '../../graphql/queries/get-patient-answers.graphql';
+import patientScreeningToolSubmissionScoreGraphql from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
 import {
-  getPatientAnswersQuery,
-  patientScreeningToolSubmissionScoreMutation,
-  patientScreeningToolSubmissionScoreMutationVariables,
-  FullCarePlanSuggestionFragment,
-  FullQuestionFragment,
-  FullScreeningToolFragment,
+  getPatientAnswers,
+  patientScreeningToolSubmissionScore,
+  patientScreeningToolSubmissionScoreVariables,
+  FullCarePlanSuggestion,
+  FullQuestion,
+  FullScreeningTool,
 } from '../../graphql/types';
 import sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
@@ -27,18 +27,18 @@ import ScreeningToolQuestions from './screening-tool-questions';
 
 interface IProps {
   patientId: string;
-  screeningTool: FullScreeningToolFragment;
+  screeningTool: FullScreeningTool;
   screeningToolSubmissionId: string;
-  screeningToolQuestions: FullQuestionFragment[];
-  onSubmissionScored?: (suggestions: FullCarePlanSuggestionFragment[]) => void;
+  screeningToolQuestions: FullQuestion[];
+  onSubmissionScored?: (suggestions: FullCarePlanSuggestion[]) => void;
   isEditable: boolean;
 }
 
 interface IGraphqlProps {
   scoreScreeningToolSubmission: (
-    options: { variables: patientScreeningToolSubmissionScoreMutationVariables },
-  ) => { data: patientScreeningToolSubmissionScoreMutation };
-  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
+    options: { variables: patientScreeningToolSubmissionScoreVariables },
+  ) => { data: patientScreeningToolSubmissionScore };
+  patientAnswers?: getPatientAnswers['patientAnswers'];
   patientAnswersLoading?: boolean;
   patientAnswersError: ApolloError | undefined | null;
 }
@@ -180,7 +180,7 @@ export class ScreeningToolAssessment extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientScreeningToolSubmissionScoreMutationGraphql, {
+  graphql(patientScreeningToolSubmissionScoreGraphql, {
     name: 'scoreScreeningToolSubmission',
     options: {
       refetchQueries: [
@@ -189,7 +189,7 @@ export default compose(
       ],
     },
   }),
-  graphql(patientAnswersQuery, {
+  graphql(patientAnswersGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',

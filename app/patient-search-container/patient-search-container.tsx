@@ -5,8 +5,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
-import { getPatientSearchQuery, FullPatientTableRowFragment } from '../graphql/types';
+import patientSearch from '../graphql/queries/get-patient-search.graphql';
+import { getPatientSearch, FullPatientTableRow } from '../graphql/types';
 import PatientTable from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import { IState as IAppState } from '../store';
@@ -32,7 +32,7 @@ interface IGraphqlProps {
   refetch: ((variables: { pageNumber: number; pageSize: number }) => void) | null;
   loading: boolean;
   error: ApolloError | undefined | null;
-  searchResults?: getPatientSearchQuery['patientSearch'];
+  searchResults?: getPatientSearch['patientSearch'];
 }
 
 type allProps = IProps & IStateProps & IGraphqlProps;
@@ -74,7 +74,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
     history.push({ search: newParams });
   };
 
-  createQueryString = (pageNumber: number, pageSize: number) => {
+  createString = (pageNumber: number, pageSize: number) => {
     return querystring.stringify({
       query: this.props.query,
       pageNumber,
@@ -102,7 +102,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
           />
         </div>
         <PatientTable
-          patients={formattedSearchResults as FullPatientTableRowFragment[]}
+          patients={formattedSearchResults as FullPatientTableRow[]}
           isLoading={loading}
           error={error}
           messageIdPrefix="patientSearch"
@@ -116,7 +116,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
             totalCount={searchResults.totalCount}
             pageNumber={pageNumber}
             pageSize={pageSize}
-            getQuery={this.createQueryString}
+            get={this.createString}
           />
         )}
       </div>
@@ -137,7 +137,7 @@ const mapStateToProps = (state: IAppState, props: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientSearchQuery, {
+  graphql(patientSearch, {
     skip: (props: IProps & IStateProps) => !props.query,
     options: ({ query, pageNumber, pageSize }: IProps & IStateProps) => ({
       variables: { query, pageNumber, pageSize },

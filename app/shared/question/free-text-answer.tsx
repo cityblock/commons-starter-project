@@ -1,15 +1,15 @@
 import { debounce } from 'lodash';
 import React from 'react';
-import { FullQuestionFragment } from '../../graphql/types';
+import { FullQuestion } from '../../graphql/types';
 import TextArea from '../../shared/library/textarea/textarea';
 
 interface IProps {
   editable: boolean;
   currentAnswer?: { id: string; value: string };
-  question: FullQuestionFragment;
+  question: FullQuestion;
   otherTextAnswer?: boolean;
   onChange: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 }
@@ -35,7 +35,7 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
   }
 
   save: (
-    question: FullQuestionFragment,
+    question: FullQuestion,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
 

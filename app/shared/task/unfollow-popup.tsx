@@ -4,8 +4,8 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { closePopup } from '../../actions/popup-action';
-import taskUserUnfollowMutationGraphql from '../../graphql/queries/task-user-unfollow-mutation.graphql';
-import { taskUserUnfollowMutation, taskUserUnfollowMutationVariables } from '../../graphql/types';
+import taskUserUnfollowGraphql from '../../graphql/queries/task-user-unfollow-mutation.graphql';
+import { taskUserUnfollow, taskUserUnfollowVariables } from '../../graphql/types';
 import { ITaskUnfollowPopupOptions } from '../../reducers/popup-reducer';
 import Modal from '../../shared/library/modal/modal';
 import { IState as IAppState } from '../../store';
@@ -26,8 +26,8 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   removeTaskFollower: (
-    options: { variables: taskUserUnfollowMutationVariables },
-  ) => { data: taskUserUnfollowMutation };
+    options: { variables: taskUserUnfollowVariables },
+  ) => { data: taskUserUnfollow };
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
@@ -81,7 +81,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(taskUserUnfollowMutationGraphql, {
+  graphql(taskUserUnfollowGraphql, {
     name: 'removeTaskFollower',
   }),
 )(UnfollowPopup) as React.ComponentClass<{}>;

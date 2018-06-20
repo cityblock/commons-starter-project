@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import JwtForPdfCreateQuery from '../../graphql/queries/jwt-for-pdf-create.graphql';
-import { JwtForPdfCreateMutation, JwtForPdfCreateMutationVariables } from '../../graphql/types';
+import JwtForPdfCreateGraphql from '../../graphql/queries/jwt-for-pdf-create.graphql';
+import { JwtForPdfCreate, JwtForPdfCreateVariables } from '../../graphql/types';
 import { getCBOReferralPdfRoute } from '../helpers/route-helpers';
 import Button from '../library/button/button';
 import styles from './css/task-cbo-referral-view.css';
@@ -13,8 +13,8 @@ interface IProps {
 
 interface IGraphqlProps {
   generateJwtForPdf: (
-    options: { variables: JwtForPdfCreateMutationVariables },
-  ) => { data: JwtForPdfCreateMutation };
+    options: { variables: JwtForPdfCreateVariables },
+  ) => { data: JwtForPdfCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -64,6 +64,6 @@ export class TaskCBOReferralView extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(JwtForPdfCreateQuery, {
+export default graphql<any>(JwtForPdfCreateGraphql, {
   name: 'generateJwtForPdf',
 })(TaskCBOReferralView) as React.ComponentClass<IProps>;

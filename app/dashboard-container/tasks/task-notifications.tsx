@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import getEventNotificationsForUserTaskQuery from '../../graphql/queries/get-event-notifications-for-user-task.graphql';
-import { ShortEventNotificationsForUserTaskFragment } from '../../graphql/types';
+import getEventNotificationsForUserTask from '../../graphql/queries/get-event-notifications-for-user-task.graphql';
+import { ShortEventNotificationsForUserTask } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import styles from './css/task-notifications.css';
 import TaskNotification from './task-notification';
@@ -14,7 +14,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  notifications: ShortEventNotificationsForUserTaskFragment[];
+  notifications: ShortEventNotificationsForUserTask[];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -30,7 +30,7 @@ export const TaskNotifications: React.StatelessComponent<allProps> = (props: all
   return <div className={styles.container}>{renderedNotifications}</div>;
 };
 
-export default graphql(getEventNotificationsForUserTaskQuery, {
+export default graphql(getEventNotificationsForUserTask, {
   options: ({ taskId }: IProps) => ({
     variables: { taskId },
   }),

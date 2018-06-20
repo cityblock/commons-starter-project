@@ -1,30 +1,30 @@
 import classNames from 'classnames';
 import React from 'react';
 import {
-  FullAnswerFragment,
-  FullConcernFragment,
-  FullGoalSuggestionTemplateFragment,
-  FullScreeningToolScoreRangeFragment,
+  FullAnswer,
+  FullConcern,
+  FullGoalSuggestionTemplate,
+  FullScreeningToolScoreRange,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
 
 interface IProps {
-  answer?: FullAnswerFragment;
-  scoreRange?: FullScreeningToolScoreRangeFragment;
+  answer?: FullAnswer;
+  scoreRange?: FullScreeningToolScoreRange;
 }
 
 class CarePlanSuggestions extends React.Component<IProps> {
   renderConcernSuggestions() {
     const { answer, scoreRange } = this.props;
 
-    let concernSuggestions: FullConcernFragment[] | null = null;
+    let concernSuggestions: FullConcern[] | null = null;
 
     if (answer) {
-      concernSuggestions = answer.concernSuggestions as FullConcernFragment[];
+      concernSuggestions = answer.concernSuggestions as FullConcern[];
     } else if (scoreRange) {
-      concernSuggestions = scoreRange.concernSuggestions as FullConcernFragment[];
+      concernSuggestions = scoreRange.concernSuggestions as FullConcern[];
     }
 
     if (concernSuggestions && concernSuggestions.length) {
@@ -47,12 +47,12 @@ class CarePlanSuggestions extends React.Component<IProps> {
 
   renderGoalSuggestions() {
     const { answer, scoreRange } = this.props;
-    let goalSuggestions: FullGoalSuggestionTemplateFragment[] | null = null;
+    let goalSuggestions: FullGoalSuggestionTemplate[] | null = null;
 
     if (answer) {
-      goalSuggestions = answer.goalSuggestions as FullGoalSuggestionTemplateFragment[];
+      goalSuggestions = answer.goalSuggestions as FullGoalSuggestionTemplate[];
     } else if (scoreRange) {
-      goalSuggestions = scoreRange.goalSuggestions as FullGoalSuggestionTemplateFragment[];
+      goalSuggestions = scoreRange.goalSuggestions as FullGoalSuggestionTemplate[];
     }
 
     if (goalSuggestions && goalSuggestions.length) {

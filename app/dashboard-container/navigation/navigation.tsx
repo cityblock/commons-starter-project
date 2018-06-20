@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import patientListsQuery from '../../graphql/queries/get-patient-lists.graphql';
-import { FullPatientListFragment } from '../../graphql/types';
+import patientListsGraphql from '../../graphql/queries/get-patient-lists.graphql';
+import { FullPatientList } from '../../graphql/types';
 import { Selected } from '../dashboard-container';
 import ComputedLists from './computed-lists';
 import styles from './css/navigation.css';
@@ -13,7 +13,7 @@ import NavigationItem from './navigation-item';
 export const ROUTE_BASE = '/dashboard';
 
 interface IGraphqlProps {
-  patientLists: FullPatientListFragment[];
+  patientLists: FullPatientList[];
   loading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -134,7 +134,7 @@ export const DashboardNavigation: React.StatelessComponent<allProps> = (props: a
   );
 };
 
-export default graphql<any, any, any, any>(patientListsQuery, {
+export default graphql<any, any, any, any>(patientListsGraphql, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

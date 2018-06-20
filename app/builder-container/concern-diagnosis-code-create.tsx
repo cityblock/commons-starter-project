@@ -3,12 +3,9 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import helperStyles from '../builder-container/css/risk-area-create.css';
 /* tslint:disable:max-line-length */
-import concernAddDiagnosisCodeMutationGraphql from '../graphql/queries/concern-add-diagnosis-code-mutation.graphql';
+import concernAddDiagnosisCodeGraphql from '../graphql/queries/concern-add-diagnosis-code-mutation.graphql';
 /* tslint:enable:max-line-length */
-import {
-  concernAddDiagnosisCodeMutation,
-  concernAddDiagnosisCodeMutationVariables,
-} from '../graphql/types';
+import { concernAddDiagnosisCode, concernAddDiagnosisCodeVariables } from '../graphql/types';
 import ErrorComponent from '../shared/error-component/error-component';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
@@ -17,7 +14,7 @@ const CODESET_NAME = 'ICD-10';
 const CODESET_VERSION = '2018';
 
 export interface ICreateOptions {
-  variables: concernAddDiagnosisCodeMutationVariables;
+  variables: concernAddDiagnosisCodeVariables;
 }
 
 interface IProps {
@@ -27,7 +24,7 @@ interface IProps {
 interface IGraphqlProps {
   concernAddDiagnosisCode: (
     options: ICreateOptions,
-  ) => { data: concernAddDiagnosisCodeMutation; errors: ApolloError[] };
+  ) => { data: concernAddDiagnosisCode; errors: ApolloError[] };
 }
 
 interface IState {
@@ -46,13 +43,13 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
   };
 
   onSubmit = async () => {
-    const { concernId, concernAddDiagnosisCode } = this.props;
+    const { concernId } = this.props;
     const { newDiagnosisCode } = this.state;
 
     this.setState({ loading: true, error: null });
 
     try {
-      const response = await concernAddDiagnosisCode({
+      const response = await this.props.concernAddDiagnosisCode({
         variables: {
           concernId,
           code: newDiagnosisCode,
@@ -97,7 +94,7 @@ export class ConcernDiagnosisCodeCreate extends React.Component<allProps, IState
   }
 }
 
-export default graphql<any>(concernAddDiagnosisCodeMutationGraphql, {
+export default graphql<any>(concernAddDiagnosisCodeGraphql, {
   name: 'concernAddDiagnosisCode',
   options: {
     refetchQueries: ['concern'],

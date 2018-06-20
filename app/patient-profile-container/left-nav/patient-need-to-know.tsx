@@ -1,12 +1,9 @@
 import { debounce } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientNeedToKnowQuery from '../../graphql/queries/get-patient-need-to-know.graphql';
-import savePatientNeedToKnowMutationGraphql from '../../graphql/queries/patient-need-to-know-edit-mutation.graphql';
-import {
-  patientNeedToKnowEditMutation,
-  patientNeedToKnowEditMutationVariables,
-} from '../../graphql/types';
+import patientNeedToKnow from '../../graphql/queries/get-patient-need-to-know.graphql';
+import savePatientNeedToKnowGraphql from '../../graphql/queries/patient-need-to-know-edit-mutation.graphql';
+import { patientNeedToKnowEdit, patientNeedToKnowEditVariables } from '../../graphql/types';
 import styles from './css/patient-need-to-know.css';
 import { PatientNeedToKnowStatus } from './patient-need-to-know-status';
 
@@ -22,8 +19,8 @@ interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
   saveNeedToKnow: (
-    options: { variables: patientNeedToKnowEditMutationVariables },
-  ) => { data: patientNeedToKnowEditMutation };
+    options: { variables: patientNeedToKnowEditVariables },
+  ) => { data: patientNeedToKnowEdit };
   refetchNeedToKnow: (variables: { patientInfoId: string }) => any;
 }
 
@@ -154,10 +151,10 @@ class PatientNeedToKnow extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(savePatientNeedToKnowMutationGraphql, {
+  graphql(savePatientNeedToKnowGraphql, {
     name: 'saveNeedToKnow',
   }),
-  graphql(patientNeedToKnowQuery, {
+  graphql(patientNeedToKnow, {
     options: (props: IProps) => ({
       variables: {
         patientInfoId: props.patientInfoId,

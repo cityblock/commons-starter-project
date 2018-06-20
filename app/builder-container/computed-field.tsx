@@ -4,8 +4,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import computedFieldQuery from '../graphql/queries/get-computed-field.graphql';
-import { FullComputedFieldFragment } from '../graphql/types';
+import computedField from '../graphql/queries/get-computed-field.graphql';
+import { FullComputedField } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
@@ -26,7 +26,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  computedField?: FullComputedFieldFragment;
+  computedField?: FullComputedField;
   computedFieldLoading: boolean;
   computedFieldError: ApolloError | null | undefined;
   refetchComputedField: (() => any) | null;
@@ -77,7 +77,7 @@ export class ComputedField extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { computedField, routeBase } = this.props;
+    const { routeBase } = this.props;
     const { deleteConfirmationInProgress, deleteError } = this.state;
 
     const outerContainerStyles = classNames(styles.container, {
@@ -96,7 +96,7 @@ export class ComputedField extends React.Component<allProps, IState> {
 
     const closeRoute = routeBase || '/builder/computed-fields';
 
-    if (computedField) {
+    if (this.props.computedField) {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
@@ -184,7 +184,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(computedFieldQuery, {
+  graphql(computedField, {
     skip: (props: IProps & IStateProps) => !props.computedFieldId,
     options: (props: IProps & IStateProps) => ({
       variables: { computedFieldId: props.computedFieldId },

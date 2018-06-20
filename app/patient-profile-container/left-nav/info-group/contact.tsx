@@ -1,6 +1,6 @@
 import { capitalize } from 'lodash';
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../../graphql/types';
+import { FullPatientForProfile } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
   formatAddressSecondLine,
@@ -14,7 +14,7 @@ import InfoGroupItem from './item';
 interface IProps {
   isOpen: boolean;
   onClick: (clicked: Accordion) => void;
-  patient: FullPatientForProfileFragment;
+  patient: FullPatientForProfile;
 }
 
 const Contact: React.StatelessComponent<IProps> = (props: IProps) => {

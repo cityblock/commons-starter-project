@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { FullCareTeamUserFragment } from '../../graphql/types';
+import { FullCareTeamUser } from '../../graphql/types';
 import {
   formatCareTeamMemberRole,
   formatFullName,
@@ -9,7 +9,7 @@ import {
 import variables from '../shared/variables/variables';
 
 interface IProps {
-  user: FullCareTeamUserFragment;
+  user: FullCareTeamUser;
   index: number;
 }
 

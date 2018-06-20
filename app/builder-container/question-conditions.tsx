@@ -1,21 +1,17 @@
 import React from 'react';
-import {
-  FullAnswerFragment,
-  FullQuestionConditionFragment,
-  FullQuestionFragment,
-} from '../graphql/types';
+import { FullAnswer, FullQuestion, FullQuestionCondition } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import QuestionConditionCreate from './question-condition-create';
 import QuestionConditionRow from './question-condition-row';
 
 interface IProps {
-  questions: FullQuestionFragment[];
-  questionConditions?: FullQuestionConditionFragment[] | null;
+  questions: FullQuestion[];
+  questionConditions?: FullQuestionCondition[] | null;
   questionId: string;
 }
 
-function getAnswersForQuestions(questions: FullQuestionFragment[], questionId: string) {
-  let answers: FullAnswerFragment[] = [];
+function getAnswersForQuestions(questions: FullQuestion[], questionId: string) {
+  let answers: FullAnswer[] = [];
   (questions || []).filter(question => question.id !== questionId).forEach(question => {
     if (question.answers) {
       answers = answers.concat(question.answers);
@@ -25,7 +21,7 @@ function getAnswersForQuestions(questions: FullQuestionFragment[], questionId: s
 }
 
 class QuestionConditions extends React.Component<IProps> {
-  renderQuestionConditions(questionConditions: FullQuestionConditionFragment[]) {
+  renderQuestionConditions(questionConditions: FullQuestionCondition[]) {
     return questionConditions.map(questionCondition => (
       <QuestionConditionRow key={questionCondition.id} questionCondition={questionCondition} />
     ));

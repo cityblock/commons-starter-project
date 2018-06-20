@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { keys } from 'lodash';
 import React from 'react';
-import { FullCarePlanSuggestionForPatientFragment } from '../../graphql/types';
+import { FullCarePlanSuggestionForPatient } from '../../graphql/types';
 import TextDivider from '../../shared/library/text-divider/text-divider';
 import styles from '../css/patient-care-plan.css';
 import { ISuggestionGroups } from './patient-care-plan-suggestions';
@@ -15,11 +15,8 @@ interface IProps {
   labels: { [key: string]: string };
   groupIdFilter: string | null;
   isHidden: boolean;
-  onAccept: (
-    suggestion: FullCarePlanSuggestionForPatientFragment,
-    taskTemplateIds?: string[],
-  ) => void;
-  onDismiss: (suggestion: FullCarePlanSuggestionForPatientFragment) => void;
+  onAccept: (suggestion: FullCarePlanSuggestionForPatient, taskTemplateIds?: string[]) => void;
+  onDismiss: (suggestion: FullCarePlanSuggestionForPatient) => void;
   onGroupClick: (sectionName: SectionName | null, groupId: string | null) => void;
 }
 

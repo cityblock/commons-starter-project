@@ -2,8 +2,8 @@ import { ApolloError } from 'apollo-client';
 import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import CBOsForCategoryQuery from '../../../graphql/queries/get-cbos-for-category.graphql';
-import { FullCBOFragment } from '../../../graphql/types';
+import CBOsForCategory from '../../../graphql/queries/get-cbos-for-category.graphql';
+import { FullCBO } from '../../../graphql/types';
 import FormLabel from '../../library/form-label/form-label';
 import Option from '../../library/option/option';
 import Select from '../../library/select/select';
@@ -13,7 +13,7 @@ import styles from './css/shared.css';
 import CreateTaskOtherCBO from './other-cbo';
 
 interface IGraphqlProps {
-  CBOs: FullCBOFragment[];
+  CBOs: FullCBO[];
   loading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -60,7 +60,7 @@ export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProp
   );
 };
 
-export default graphql(CBOsForCategoryQuery, {
+export default graphql(CBOsForCategory, {
   skip: ({ categoryId }) => !categoryId,
   options: ({ categoryId }: IProps) => ({
     variables: { categoryId },

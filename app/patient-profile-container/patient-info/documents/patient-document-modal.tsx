@@ -4,13 +4,13 @@ import { lookup } from 'mime-types';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import uuid from 'uuid/v4';
-import patientDocumentCreateMutationGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
-import patientDocumentSignedUrlCreate from '../../../graphql/queries/patient-document-signed-url-create.graphql';
+import patientDocumentCreateGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
+import patientDocumentSignedUrlCreateGraphql from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
-  patientDocumentCreateMutation,
-  patientDocumentCreateMutationVariables,
-  patientDocumentSignedUrlCreateMutation,
-  patientDocumentSignedUrlCreateMutationVariables,
+  patientDocumentCreate,
+  patientDocumentCreateVariables,
+  patientDocumentSignedUrlCreate,
+  patientDocumentSignedUrlCreateVariables,
   DocumentTypeOptions,
   PatientSignedUrlAction,
 } from '../../../graphql/types';
@@ -33,11 +33,11 @@ interface IProps {
 
 interface IGraphqlProps {
   getSignedUploadUrl: (
-    options: { variables: patientDocumentSignedUrlCreateMutationVariables },
-  ) => { data: patientDocumentSignedUrlCreateMutation };
+    options: { variables: patientDocumentSignedUrlCreateVariables },
+  ) => { data: patientDocumentSignedUrlCreate };
   createPatientDocument: (
-    options: { variables: patientDocumentCreateMutationVariables },
-  ) => { data: patientDocumentCreateMutation };
+    options: { variables: patientDocumentCreateVariables },
+  ) => { data: patientDocumentCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -195,10 +195,10 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(patientDocumentSignedUrlCreate, {
+  graphql(patientDocumentSignedUrlCreateGraphql, {
     name: 'getSignedUploadUrl',
   }),
-  graphql(patientDocumentCreateMutationGraphql, {
+  graphql(patientDocumentCreateGraphql, {
     name: 'createPatientDocument',
     options: {
       refetchQueries: ['getPatientDocuments'],

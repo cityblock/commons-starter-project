@@ -2,15 +2,15 @@ import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import calendarCreateForPatientMutationGraphql from '../../graphql/queries/calendar-create-for-patient-mutation.graphql';
-import calendarEventsForPatientQuery from '../../graphql/queries/get-calendar-events-for-patient.graphql';
-import calendarForPatientQuery from '../../graphql/queries/get-calendar-for-patient.graphql';
+import calendarCreateForPatientGraphql from '../../graphql/queries/calendar-create-for-patient-mutation.graphql';
+import calendarEventsForPatient from '../../graphql/queries/get-calendar-events-for-patient.graphql';
+import calendarForPatient from '../../graphql/queries/get-calendar-for-patient.graphql';
 import {
-  calendarCreateForPatientMutation,
-  calendarCreateForPatientMutationVariables,
-  getCalendarEventsForPatientQuery,
-  getCalendarForPatientQuery,
-  FullCalendarEventFragment,
+  calendarCreateForPatient,
+  calendarCreateForPatientVariables,
+  getCalendarEventsForPatient,
+  getCalendarForPatient,
+  FullCalendarEvent,
 } from '../../graphql/types';
 import AppointmentModal from '../../shared/appointment-modal/appointment-modal';
 import RequestRefreshModal from '../../shared/appointment-modal/request-refresh-modal';
@@ -31,10 +31,10 @@ interface IProps {
 
 interface IGraphqlProps {
   createCalendarForPatient: (
-    options: { variables: calendarCreateForPatientMutationVariables },
-  ) => { data: calendarCreateForPatientMutation };
-  calendarEventsResponse?: getCalendarEventsForPatientQuery['calendarEventsForPatient'];
-  calendarResponse?: getCalendarForPatientQuery['calendarForPatient'];
+    options: { variables: calendarCreateForPatientVariables },
+  ) => { data: calendarCreateForPatient };
+  calendarEventsResponse?: getCalendarEventsForPatient['calendarEventsForPatient'];
+  calendarResponse?: getCalendarForPatient['calendarForPatient'];
   isLoading?: boolean;
   error: ApolloError | null | undefined;
   fetchMoreCalendarEvents: () => any;
@@ -196,7 +196,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
 
 interface IResponse {
   [key: string]: {
-    events: FullCalendarEventFragment[];
+    events: FullCalendarEvent[];
     pageInfo: {
       nextPageToken: string | null;
       previousPageToken: string | null;
@@ -204,7 +204,7 @@ interface IResponse {
   };
 }
 
-const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) => {
+const update = (previousResponse: IResponse, fetchMoreResponse: IResponse) => {
   const result = fetchMoreResponse.calendarEventsForPatient;
   if (!result) {
     return previousResponse;
@@ -219,13 +219,13 @@ const updateQuery = (previousResponse: IResponse, fetchMoreResponse: IResponse) 
 };
 
 export default compose(
-  graphql<any>(calendarCreateForPatientMutationGraphql, {
+  graphql<any>(calendarCreateForPatientGraphql, {
     name: 'createCalendarForPatient',
     options: {
       refetchQueries: ['getCalendarForPatient'],
     },
   }),
-  graphql(calendarForPatientQuery, {
+  graphql(calendarForPatient, {
     options: (props: IProps) => ({
       variables: { patientId: props.match.params.patientId },
     }),
@@ -233,7 +233,7 @@ export default compose(
       calendarResponse: data ? (data as any).calendarForPatient : null,
     }),
   }),
-  graphql(calendarEventsForPatientQuery, {
+  graphql(calendarEventsForPatient, {
     options: (props: IProps) => ({
       variables: {
         timeMin: new Date().toISOString(),
@@ -254,7 +254,7 @@ export default compose(
           return data.fetchMore({
             variables,
             updateQuery: (previousResult: IResponse, d: any) =>
-              updateQuery(previousResult, d.fetchMoreResult),
+              update(previousResult, d.fetchMoreResult),
           });
         }
       },

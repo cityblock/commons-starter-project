@@ -1,12 +1,12 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
-import patientExternalProviderDeleteMutationGraphql from '../../../graphql/queries/patient-external-provider-delete-mutation.graphql';
+import patientExternalProvidersGraphql from '../../../graphql/queries/get-patient-external-providers.graphql';
+import patientExternalProviderDeleteGraphql from '../../../graphql/queries/patient-external-provider-delete-mutation.graphql';
 import {
-  getPatientExternalProvidersQuery,
-  patientExternalProviderDeleteMutation,
-  patientExternalProviderDeleteMutationVariables,
-  FullPatientExternalProviderFragment,
+  getPatientExternalProviders,
+  patientExternalProviderDelete,
+  patientExternalProviderDeleteVariables,
+  FullPatientExternalProvider,
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import styles from '../css/patient-team.css';
@@ -18,10 +18,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientExternalProviders?: getPatientExternalProvidersQuery['patientExternalProviders'];
+  patientExternalProviders?: getPatientExternalProviders['patientExternalProviders'];
   patientExternalProviderDelete: (
-    options: { variables: patientExternalProviderDeleteMutationVariables },
-  ) => { data: patientExternalProviderDeleteMutation };
+    options: { variables: patientExternalProviderDeleteVariables },
+  ) => { data: patientExternalProviderDelete };
   isLoading?: boolean;
   error?: string | null;
 }
@@ -30,22 +30,21 @@ export type allProps = IGraphqlProps & IProps;
 
 interface IState {
   isEditModalVisible: boolean;
-  patientExternalProviderToEdit?: FullPatientExternalProviderFragment | null;
+  patientExternalProviderToEdit?: FullPatientExternalProvider | null;
 }
 
 export class PatientExternalTeam extends React.Component<allProps, IState> {
   state = { isEditModalVisible: false, patientExternalProviderToEdit: undefined };
 
   handleRemove = async (patientExternalProviderId: string) => {
-    const { patientExternalProviderDelete } = this.props;
     try {
-      await patientExternalProviderDelete({ variables: { patientExternalProviderId } });
+      await this.props.patientExternalProviderDelete({ variables: { patientExternalProviderId } });
     } catch (err) {
       // TODO: handle errors
     }
   };
 
-  handleOpenEditModal = (patientExternalProviderToEdit: FullPatientExternalProviderFragment) => {
+  handleOpenEditModal = (patientExternalProviderToEdit: FullPatientExternalProvider) => {
     this.setState({ isEditModalVisible: true, patientExternalProviderToEdit });
   };
 
@@ -110,13 +109,13 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(patientExternalProviderDeleteMutationGraphql, {
+  graphql(patientExternalProviderDeleteGraphql, {
     name: 'patientExternalProviderDelete',
     options: {
       refetchQueries: ['getPatientExternalProviders'],
     },
   }),
-  graphql(patientExternalProvidersQuery, {
+  graphql(patientExternalProvidersGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

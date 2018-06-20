@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
-import { FullUserFragment, Permissions, UserRole } from '../graphql/types';
+import { FullUser, Permissions, UserRole } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -9,7 +9,7 @@ import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/wit
 import styles from './css/user-row.css';
 
 interface IProps extends IInjectedProps {
-  user: FullUserFragment;
+  user: FullUser;
   deleteUser: (userEmail: string) => void;
   editUserPermissions: (permission: Permissions, userEmail: string) => void;
   editUserRole: (userRole: UserRole, userEmail: string) => void;

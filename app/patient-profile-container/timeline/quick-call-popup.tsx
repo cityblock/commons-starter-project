@@ -4,14 +4,14 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
-import patientCareTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import patientQuery from '../../graphql/queries/get-patient.graphql';
-import quickCallCreateMutationGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
+import patientCareTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
+import patientGraphql from '../../graphql/queries/get-patient.graphql';
+import quickCallCreateGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
 import {
-  getPatientCareTeamQuery,
-  getPatientQuery,
-  quickCallCreateMutation,
-  quickCallCreateMutationVariables,
+  getPatient,
+  getPatientCareTeam,
+  quickCallCreate,
+  quickCallCreateVariables,
   QuickCallDirection,
 } from '../../graphql/types';
 import { IQuickCallPopupOptions } from '../../reducers/popup-reducer';
@@ -42,12 +42,12 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   createQuickCall: (
-    options: { variables: quickCallCreateMutationVariables },
-  ) => { data: quickCallCreateMutation; errors?: Array<{ message: string }> };
+    options: { variables: quickCallCreateVariables },
+  ) => { data: quickCallCreate; errors?: Array<{ message: string }> };
   patientLoading?: boolean;
   patientError?: string | null;
-  patient?: getPatientQuery['patient'];
-  patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  patient?: getPatient['patient'];
+  patientCareTeam?: getPatientCareTeam['patientCareTeam'];
   patientCareTeamLoading?: boolean;
   patientCareTeamError?: string | null;
 }
@@ -320,13 +320,13 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(quickCallCreateMutationGraphql, {
+  graphql(quickCallCreateGraphql, {
     name: 'createQuickCall',
     options: {
       refetchQueries: ['getProgressNotesForCurrentUser'],
     },
   }),
-  graphql(patientCareTeamQuery, {
+  graphql(patientCareTeamGraphql, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,
     options: (props: IStateProps & IDispatchProps) => ({
       variables: {
@@ -339,7 +339,7 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(patientQuery, {
+  graphql(patientGraphql, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,
     options: (props: IStateProps & IDispatchProps) => ({
       variables: {

@@ -1,10 +1,10 @@
 import React from 'react';
-import { FullPatientForDashboardFragment } from '../../graphql/types';
+import { FullPatientForDashboard } from '../../graphql/types';
 import styles from './css/patient-list.css';
 import PatientWithTasksListItem from './patient-with-tasks-list-item';
 
 interface IProps {
-  patients: FullPatientForDashboardFragment[];
+  patients: FullPatientForDashboard[];
   pageNumber: number;
   pageSize: number;
 }

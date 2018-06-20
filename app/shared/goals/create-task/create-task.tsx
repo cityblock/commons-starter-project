@@ -1,12 +1,12 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import CBOReferralCreateMutationGraphql from '../../../graphql/queries/cbo-referral-create-mutation.graphql';
-import taskCreateMutationGraphql from '../../../graphql/queries/task-create-mutation.graphql';
+import CBOReferralCreateGraphql from '../../../graphql/queries/cbo-referral-create-mutation.graphql';
+import taskCreateGraphql from '../../../graphql/queries/task-create-mutation.graphql';
 import {
-  taskCreateMutation,
-  taskCreateMutationVariables,
-  CBOReferralCreateMutation,
-  CBOReferralCreateMutationVariables,
+  taskCreate,
+  taskCreateVariables,
+  CBOReferralCreate,
+  CBOReferralCreateVariables,
   Priority,
 } from '../../../graphql/types';
 import { formatCBOReferralTaskTitle } from '../../helpers/format-helpers';
@@ -30,10 +30,10 @@ export interface IProps {
 }
 
 interface IGraphqlProps {
-  createTask: (options: { variables: taskCreateMutationVariables }) => { data: taskCreateMutation };
+  createTask: (options: { variables: taskCreateVariables }) => { data: taskCreate };
   createCBOReferral: (
-    options: { variables: CBOReferralCreateMutationVariables },
-  ) => { data: CBOReferralCreateMutation };
+    options: { variables: CBOReferralCreateVariables },
+  ) => { data: CBOReferralCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -126,7 +126,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
     const { patientId, patientGoalId, createTask } = this.props;
     const { title, description, dueAt, assignedToId, priority } = this.state;
 
-    const variables: taskCreateMutationVariables = {
+    const variables: taskCreateVariables = {
       patientId,
       patientGoalId,
       title: finalCBOName ? formatCBOReferralTaskTitle(finalCBOName) : title,
@@ -154,7 +154,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
         if (taskType === 'CBOReferral' && CBOId) {
           const definedCBO = CBOId !== OTHER_CBO;
-          const variables: CBOReferralCreateMutationVariables = { categoryId };
+          const variables: CBOReferralCreateVariables = { categoryId };
 
           if (definedCBO) {
             variables.CBOId = CBOId;
@@ -212,13 +212,13 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(taskCreateMutationGraphql, {
+  graphql(taskCreateGraphql, {
     name: 'createTask',
     options: {
       refetchQueries: ['getPatientCarePlan'],
     },
   }),
-  graphql(CBOReferralCreateMutationGraphql, {
+  graphql(CBOReferralCreateGraphql, {
     name: 'createCBOReferral',
   }),
 )(CreateTaskModal) as React.ComponentClass<IProps>;

@@ -1,13 +1,13 @@
 import { Image, StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../graphql/types';
+import { FullPatientForProfile } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import HeaderText from '../shared/header-text';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  patient: FullPatientForProfileFragment;
+  patient: FullPatientForProfile;
   profilePhotoUrl: string | null;
 }
 

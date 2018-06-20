@@ -3,8 +3,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import patientQuery from '../graphql/queries/get-patient.graphql';
-import { getPatientQuery } from '../graphql/types';
+import patientGraphql from '../graphql/queries/get-patient.graphql';
+import { getPatient } from '../graphql/types';
 import ProgressNotePopupContainer from '../progress-note-container/progress-note-popup-container';
 import ErrorComponent from '../shared/error-component/error-component';
 import patientGlassBreak, { IInjectedProps } from '../shared/glass-break/patient-glass-break';
@@ -50,7 +50,7 @@ interface IStateProps {
 interface IGraphqlProps {
   loading: boolean;
   error?: ApolloError | null;
-  patient?: getPatientQuery['patient'];
+  patient?: getPatient['patient'];
 }
 
 type allProps = IStateProps & IProps & IGraphqlProps;
@@ -161,7 +161,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(patientQuery, {
+  graphql(patientGraphql, {
     options: (props: IProps & IStateProps) => ({
       variables: {
         patientId: props.patientId,

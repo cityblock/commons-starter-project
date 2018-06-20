@@ -2,11 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import riskAreaShortQueryGraphql from '../../graphql/queries/get-risk-area-short.graphql';
-import {
-  getRiskAreaShortQuery,
-  ShortPatientScreeningToolSubmission360Fragment,
-} from '../../graphql/types';
+import riskAreaShortGraphql from '../../graphql/queries/get-risk-area-short.graphql';
+import { getRiskAreaShort, ShortPatientScreeningToolSubmission360 } from '../../graphql/types';
 import { formatFullName, formatScreeningToolScore } from '../../shared/helpers/format-helpers';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
@@ -15,13 +12,13 @@ import Text from '../../shared/library/text/text';
 import styles from './css/screening-tool-history.css';
 
 interface IProps {
-  submission: ShortPatientScreeningToolSubmission360Fragment;
-  prevSubmission: ShortPatientScreeningToolSubmission360Fragment | null;
+  submission: ShortPatientScreeningToolSubmission360;
+  prevSubmission: ShortPatientScreeningToolSubmission360 | null;
   routeBase: string;
 }
 
 interface IGraphqlProps {
-  riskArea: getRiskAreaShortQuery['riskArea'];
+  riskArea: getRiskAreaShort['riskArea'];
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -91,7 +88,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
   );
 };
 
-export default graphql(riskAreaShortQueryGraphql, {
+export default graphql(riskAreaShortGraphql, {
   options: (props: IProps) => ({
     variables: { riskAreaId: props.submission.screeningTool.riskAreaId },
   }),

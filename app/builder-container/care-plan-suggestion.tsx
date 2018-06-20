@@ -1,15 +1,15 @@
 import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import concernSuggestionDeleteMutationGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
-import goalSuggestionDeleteMutationGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
+import concernSuggestionDeleteGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
+import goalSuggestionDeleteGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
 import {
-  concernSuggestionCreateMutation,
-  concernSuggestionDeleteMutationVariables,
-  goalSuggestionCreateMutation,
-  goalSuggestionDeleteMutationVariables,
-  FullConcernFragment,
-  FullGoalSuggestionTemplateFragment,
+  concernSuggestionCreate,
+  concernSuggestionDeleteVariables,
+  goalSuggestionCreate,
+  goalSuggestionDeleteVariables,
+  FullConcern,
+  FullGoalSuggestionTemplate,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Icon from '../shared/library/icon/icon';
@@ -21,16 +21,16 @@ interface IProps {
   answerId?: string | null;
   screeningToolScoreRangeId?: string | null;
   suggestionType: 'concern' | 'goal';
-  suggestion: FullGoalSuggestionTemplateFragment | FullConcernFragment;
+  suggestion: FullGoalSuggestionTemplate | FullConcern;
 }
 
 interface IGraphqlProps {
   deleteConcernSuggestion: (
-    options: { variables: concernSuggestionDeleteMutationVariables },
-  ) => { data: concernSuggestionCreateMutation };
+    options: { variables: concernSuggestionDeleteVariables },
+  ) => { data: concernSuggestionCreate };
   deleteGoalSuggestion: (
-    options: { variables: goalSuggestionDeleteMutationVariables },
-  ) => { data: goalSuggestionCreateMutation };
+    options: { variables: goalSuggestionDeleteVariables },
+  ) => { data: goalSuggestionCreate };
 }
 
 interface IState {
@@ -76,7 +76,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
     }
   };
 
-  renderGoalTaskTemplates(goalSuggestion: FullGoalSuggestionTemplateFragment) {
+  renderGoalTaskTemplates(goalSuggestion: FullGoalSuggestionTemplate) {
     return (goalSuggestion.taskTemplates || []).map(taskTemplate => {
       if (taskTemplate) {
         return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
@@ -97,7 +97,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
             <div>{suggestion.title}</div>
           </div>
           <ul className={styles.smallMarginPadding}>
-            {this.renderGoalTaskTemplates(suggestion as FullGoalSuggestionTemplateFragment)}
+            {this.renderGoalTaskTemplates(suggestion as FullGoalSuggestionTemplate)}
           </ul>
         </div>
       );
@@ -133,13 +133,13 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(concernSuggestionDeleteMutationGraphql, {
+  graphql(concernSuggestionDeleteGraphql, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql(goalSuggestionDeleteMutationGraphql, {
+  graphql(goalSuggestionDeleteGraphql, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

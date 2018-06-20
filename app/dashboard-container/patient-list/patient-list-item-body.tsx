@@ -1,6 +1,6 @@
 import { capitalize } from 'lodash';
 import React from 'react';
-import { FullPatientForDashboardFragment } from '../../graphql/types';
+import { FullPatientForDashboard } from '../../graphql/types';
 import { formatCityblockId, getPatientStatusColor } from '../../shared/helpers/format-helpers';
 import Icon from '../../shared/library/icon/icon';
 import PatientAge from '../../shared/library/patient-age/patient-age';
@@ -12,7 +12,7 @@ import PatientLatestSmsMessage from './patient-latest-sms-message';
 import { DisplayOptions } from './patient-list-item';
 
 interface IProps {
-  patient: FullPatientForDashboardFragment;
+  patient: FullPatientForDashboard;
   onClick: () => void;
   displayType?: DisplayOptions; // optional body view option
   tasksDueCount?: number | null; // number of tasks due, only for task view

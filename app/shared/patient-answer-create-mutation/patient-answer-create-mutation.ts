@@ -2,26 +2,26 @@ import { MutationFn } from 'react-apollo';
 import uuid from 'uuid/v4';
 import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
 import {
-  getPatientAnswersQuery,
-  getPatientAnswersQueryVariables,
-  patientAnswersCreateMutation,
-  patientAnswersCreateMutationVariables,
-  FullAnswerFragment,
-  FullQuestionFragment,
+  getPatientAnswers,
+  getPatientAnswersVariables,
+  patientAnswersCreate,
+  patientAnswersCreateVariables,
+  FullAnswer,
+  FullQuestion,
   PatientAnswerInput,
 } from '../../graphql/types';
 
 export const createPatientAnswer = (
   mutate: MutationFn,
-  patientAnswerVaraiables: getPatientAnswersQueryVariables,
+  patientAnswerVaraiables: getPatientAnswersVariables,
   patientId: string,
   submissionId: string | null,
   submissionType: 'screeningTool' | 'riskArea' | 'progressNote',
 ) => async (
-  question: FullQuestionFragment,
+  question: FullQuestion,
   answers: Array<{ answerId: string; value: string | number }>,
 ) => {
-  const answersById: { [id: string]: FullAnswerFragment } = {};
+  const answersById: { [id: string]: FullAnswer } = {};
   (question.answers || []).forEach(answer => {
     answersById[answer.id] = answer;
   });
@@ -32,7 +32,7 @@ export const createPatientAnswer = (
     patientId,
     applicable: true,
   }));
-  const variables: patientAnswersCreateMutationVariables = {
+  const variables: patientAnswersCreateVariables = {
     riskAreaAssessmentSubmissionId: submissionType === 'riskArea' ? submissionId : null,
     patientScreeningToolSubmissionId: submissionType === 'screeningTool' ? submissionId : null,
     progressNoteId: submissionType === 'progressNote' ? submissionId : null,
@@ -40,7 +40,7 @@ export const createPatientAnswer = (
     patientAnswers,
     questionIds: [question.id],
   };
-  const optimisticResponse: patientAnswersCreateMutation['patientAnswersCreate'] = patientAnswers.map(
+  const optimisticResponse: patientAnswersCreate['patientAnswersCreate'] = patientAnswers.map(
     patientAnswer => ({
       __typename: 'PatientAnswer',
       id: uuid(),
@@ -64,12 +64,12 @@ export const createPatientAnswer = (
       patientAnswersCreate: optimisticResponse,
     },
     update: (proxy, response) => {
-      const patientAnswersCreate = response.data.patientAnswersCreate;
+      const patientAnswersCreateResponse = response.data.patientAnswersCreate;
       // Read the data from our cache for this query.
       const data = proxy.readQuery({
         query: patientAnswersQuery,
         variables: patientAnswerVaraiables,
-      }) as getPatientAnswersQuery;
+      }) as getPatientAnswers;
 
       // Filter out old patient answers for the current question
       const newPatientAnswers = data.patientAnswers.filter(
@@ -81,7 +81,7 @@ export const createPatientAnswer = (
       proxy.writeQuery({
         query: patientAnswersQuery,
         variables: patientAnswerVaraiables,
-        data: { patientAnswers: newPatientAnswers.concat(patientAnswersCreate) },
+        data: { patientAnswers: newPatientAnswers.concat(patientAnswersCreateResponse) },
       });
     },
   });

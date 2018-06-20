@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullGoalSuggestionTemplateFragment } from '../graphql/types';
+import { FullGoalSuggestionTemplate } from '../graphql/types';
 import concernStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  goal: FullGoalSuggestionTemplateFragment;
+  goal: FullGoalSuggestionTemplate;
   selected: boolean;
   routeBase: string;
 }

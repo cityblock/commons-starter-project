@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import CBOsQuery from '../../graphql/queries/get-cbos.graphql';
-import { FullCBOFragment } from '../../graphql/types';
+import { FullCBO } from '../../graphql/types';
 import styles from '../../shared/css/two-panel.css';
 import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -29,7 +29,7 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
-  CBOItems: FullCBOFragment[];
+  CBOItems: FullCBO[];
   loading: boolean;
   error: string | null;
 }

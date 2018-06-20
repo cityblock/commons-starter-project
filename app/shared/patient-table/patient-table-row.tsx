@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { capitalize } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FullPatientTableRowFragment } from '../../graphql/types';
+import { FullPatientTableRow } from '../../graphql/types';
 import {
   formatAddress,
   formatCityblockId,
@@ -15,7 +15,7 @@ import { formatSearchText } from '../library/search/helpers';
 import Text from '../library/text/text';
 import styles from './css/patient-table.css';
 
-interface IFormattedPatient extends FullPatientTableRowFragment {
+interface IFormattedPatient extends FullPatientTableRow {
   isSelected?: boolean;
 }
 

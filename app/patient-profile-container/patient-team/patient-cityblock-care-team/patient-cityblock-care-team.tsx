@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import { getPatientCareTeamQuery, FullCareTeamUserFragment } from '../../../graphql/types';
+import patientCareTeamGraphql from '../../../graphql/queries/get-patient-care-team.graphql';
+import { getPatientCareTeam, FullCareTeamUser } from '../../../graphql/types';
 import styles from '../css/patient-team.css';
 import { AddCareTeamMemberModalFilters } from '../patient-team';
 import CareTeamMember from './care-team-member';
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  patientCareTeam?: getPatientCareTeam['patientCareTeam'];
   loading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -24,13 +24,13 @@ export type allProps = IGraphqlProps & IProps;
 
 interface IState {
   isRemoveModalVisible: boolean;
-  careTeamMemberToRemove?: FullCareTeamUserFragment | null;
+  careTeamMemberToRemove?: FullCareTeamUser | null;
 }
 
 export class PatientCityblockCareTeam extends React.Component<allProps, IState> {
   state: IState = { isRemoveModalVisible: false };
 
-  onShowRemoveModal = (careTeamMemberToRemove: FullCareTeamUserFragment) => {
+  onShowRemoveModal = (careTeamMemberToRemove: FullCareTeamUser) => {
     this.setState({ isRemoveModalVisible: true, careTeamMemberToRemove });
   };
 
@@ -87,7 +87,7 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
   }
 }
 
-export default graphql(patientCareTeamQuery, {
+export default graphql(patientCareTeamGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

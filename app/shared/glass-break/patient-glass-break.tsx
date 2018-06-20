@@ -2,15 +2,15 @@ import { ApolloError } from 'apollo-client';
 import { omit } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientGlassBreakCheckQuery from '../../graphql/queries/get-patient-glass-break-check.graphql';
-import patientGlassBreaksForUserQuery from '../../graphql/queries/get-patient-glass-breaks-for-user.graphql';
-import createPatientGlassBreakMutationGraphql from '../../graphql/queries/patient-glass-break-create-mutation.graphql';
+import patientGlassBreakCheck from '../../graphql/queries/get-patient-glass-break-check.graphql';
+import patientGlassBreaksForUser from '../../graphql/queries/get-patient-glass-breaks-for-user.graphql';
+import createPatientGlassBreakGraphql from '../../graphql/queries/patient-glass-break-create-mutation.graphql';
 import {
-  getPatientGlassBreaksForUserQuery,
-  getPatientGlassBreakCheckQuery,
-  getPatientQuery,
-  patientGlassBreakCreateMutation,
-  patientGlassBreakCreateMutationVariables,
+  getPatient,
+  getPatientGlassBreaksForUser,
+  getPatientGlassBreakCheck,
+  patientGlassBreakCreate,
+  patientGlassBreakCreateVariables,
 } from '../../graphql/types';
 import ErrorComponent from '../error-component/error-component';
 import { formatPatientName } from '../helpers/format-helpers';
@@ -26,7 +26,7 @@ export interface IInjectedProps {
 }
 
 interface IExternalProps {
-  patient: getPatientQuery['patient'];
+  patient: getPatient['patient'];
   patientId: string;
   loading?: boolean;
   error?: ApolloError;
@@ -35,13 +35,13 @@ interface IExternalProps {
 interface IGraphqlProps {
   loadingGlassBreakCheck: boolean;
   errorGlassBreakCheck: string | null;
-  glassBreakCheck: getPatientGlassBreakCheckQuery['patientGlassBreakCheck'];
+  glassBreakCheck: getPatientGlassBreakCheck['patientGlassBreakCheck'];
   loadingGlassBreaks: boolean;
   errorGlassBreaks: string | null;
-  glassBreaks: getPatientGlassBreaksForUserQuery['patientGlassBreaksForUser'];
+  glassBreaks: getPatientGlassBreaksForUser['patientGlassBreaksForUser'];
   createPatientGlassBreak: (
-    options: { variables: patientGlassBreakCreateMutationVariables },
-  ) => { data: patientGlassBreakCreateMutation };
+    options: { variables: patientGlassBreakCreateVariables },
+  ) => { data: patientGlassBreakCreate };
 }
 
 const patientGlassBreak = () => <P extends {}>(
@@ -112,7 +112,7 @@ const patientGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql(patientGlassBreakCheckQuery, {
+    graphql(patientGlassBreakCheck, {
       options: (props: IProps) => ({
         variables: {
           patientId: props.patientId,
@@ -124,7 +124,7 @@ const patientGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).patientGlassBreakCheck : null,
       }),
     }),
-    graphql(patientGlassBreaksForUserQuery, {
+    graphql(patientGlassBreaksForUser, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
       }),
@@ -134,7 +134,7 @@ const patientGlassBreak = () => <P extends {}>(
         glassBreaks: data ? (data as any).patientGlassBreaksForUser : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(createPatientGlassBreakMutationGraphql, {
+    graphql<IGraphqlProps, IProps, resultProps>(createPatientGlassBreakGraphql, {
       name: 'createPatientGlassBreak',
       options: {
         refetchQueries: ['getPatientGlassBreaksForUser'],

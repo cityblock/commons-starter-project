@@ -5,16 +5,16 @@ import getPatientExternalOrganizationsQuery from '../../../graphql/queries/get-p
 import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
 import editPatientExternalOrganizationMutationGraphql from '../../../graphql/queries/patient-external-organization-edit-mutation.graphql';
 import {
-  patientExternalOrganizationEditMutation,
-  patientExternalOrganizationEditMutationVariables,
-  FullPatientExternalOrganizationFragment,
+  patientExternalOrganizationEdit,
+  patientExternalOrganizationEditVariables,
+  FullPatientExternalOrganization,
 } from '../../../graphql/types';
 import PatientExternalOrganizationModal, {
   IPatientExternalOrganization,
 } from './patient-external-organization-modal';
 
 interface IProps {
-  patientExternalOrganization: FullPatientExternalOrganizationFragment;
+  patientExternalOrganization: FullPatientExternalOrganization;
   patientId: string;
   isVisible: boolean;
   closePopup: () => void;
@@ -22,8 +22,8 @@ interface IProps {
 
 interface IGraphqlProps {
   editPatientExternalOrganizationMutation: (
-    options: { variables: patientExternalOrganizationEditMutationVariables },
-  ) => Promise<{ data: patientExternalOrganizationEditMutation; errors?: ApolloError[] }>;
+    options: { variables: patientExternalOrganizationEditVariables },
+  ) => Promise<{ data: patientExternalOrganizationEdit; errors?: ApolloError[] }>;
 }
 
 type allProps = IProps & IGraphqlProps;

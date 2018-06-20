@@ -1,8 +1,4 @@
-import {
-  FullPatientContactFragment,
-  FullPatientExternalProviderFragment,
-  UserRole,
-} from '../../graphql/types';
+import { FullPatientContact, FullPatientExternalProvider, UserRole } from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
 import { IUser } from './user-multi-select';
 
@@ -26,7 +22,7 @@ export const getUserInfo = (user: IUserFragment, isPermanent?: boolean) => {
   } as IUser;
 };
 
-export const getProviderInfo = (provider: FullPatientExternalProviderFragment) => {
+export const getProviderInfo = (provider: FullPatientExternalProvider) => {
   return {
     id: provider.id,
     name: formatFullName(provider.firstName, provider.lastName),
@@ -35,7 +31,7 @@ export const getProviderInfo = (provider: FullPatientExternalProviderFragment) =
   } as IUser;
 };
 
-export const getFamilyMemberInfo = (member: FullPatientContactFragment) => {
+export const getFamilyMemberInfo = (member: FullPatientContact) => {
   return {
     id: member.id,
     name: formatFullName(member.firstName, member.lastName),

@@ -3,9 +3,9 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import screeningToolQuery from '../graphql/queries/get-screening-tool.graphql';
-import screeningToolEditMutation from '../graphql/queries/screening-tool-edit-mutation.graphql';
-import { screeningToolEditMutationVariables, FullScreeningToolFragment } from '../graphql/types';
+import screeningToolGraphql from '../graphql/queries/get-screening-tool.graphql';
+import screeningToolEditGraphql from '../graphql/queries/screening-tool-edit-mutation.graphql';
+import { screeningToolEditVariables, FullScreeningTool } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
@@ -23,12 +23,12 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  screeningTool?: FullScreeningToolFragment;
+  screeningTool?: FullScreeningTool;
   screeningToolLoading?: boolean;
   screeningToolError?: string | null;
   editScreeningTool: (
-    options: { variables: screeningToolEditMutationVariables },
-  ) => { data: { screeningToolEdit: FullScreeningToolFragment } };
+    options: { variables: screeningToolEditVariables },
+  ) => { data: { screeningToolEdit: FullScreeningTool } };
 }
 
 interface IStateProps {
@@ -316,10 +316,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(screeningToolEditMutation, {
+  graphql(screeningToolEditGraphql, {
     name: 'editScreeningTool',
   }),
-  graphql(screeningToolQuery, {
+  graphql(screeningToolGraphql, {
     skip: (props: IProps & IStateProps) => !props.screeningToolId,
     options: (props: IProps & IStateProps) => ({
       variables: { screeningToolId: props.screeningToolId },

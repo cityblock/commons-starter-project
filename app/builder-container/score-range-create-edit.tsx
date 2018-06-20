@@ -1,17 +1,17 @@
 import { clone, isNil, omit, omitBy } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
-import scoreRangeDeleteMutationGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
-import scoreRangeEditMutationGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
+import scoreRangeCreateGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
+import scoreRangeDeleteGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
+import scoreRangeEditGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
 import {
-  screeningToolScoreRangeCreateMutation,
-  screeningToolScoreRangeCreateMutationVariables,
-  screeningToolScoreRangeDeleteMutation,
-  screeningToolScoreRangeDeleteMutationVariables,
-  screeningToolScoreRangeEditMutation,
-  screeningToolScoreRangeEditMutationVariables,
-  FullScreeningToolScoreRangeFragment,
+  screeningToolScoreRangeCreate,
+  screeningToolScoreRangeCreateVariables,
+  screeningToolScoreRangeDelete,
+  screeningToolScoreRangeDeleteVariables,
+  screeningToolScoreRangeEdit,
+  screeningToolScoreRangeEditVariables,
+  FullScreeningToolScoreRange,
   RiskAdjustmentTypeOptions,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
@@ -28,30 +28,30 @@ import CarePlanSuggestions from './care-plan-suggestions';
 import styles from './css/risk-area-create.css';
 
 interface ICreateOptions {
-  variables: screeningToolScoreRangeCreateMutationVariables;
+  variables: screeningToolScoreRangeCreateVariables;
 }
 interface IEditOptions {
-  variables: screeningToolScoreRangeEditMutationVariables;
+  variables: screeningToolScoreRangeEditVariables;
 }
 interface IDeleteOptions {
-  variables: screeningToolScoreRangeDeleteMutationVariables;
+  variables: screeningToolScoreRangeDeleteVariables;
 }
 
 interface IProps {
-  scoreRange?: FullScreeningToolScoreRangeFragment | null;
+  scoreRange?: FullScreeningToolScoreRange | null;
   screeningToolId: string;
   mutate?: any;
 }
 
 interface IGraphqlProps {
-  createScoreRange?: (options: ICreateOptions) => { data: screeningToolScoreRangeCreateMutation };
-  editScoreRange?: (options: IEditOptions) => { data: screeningToolScoreRangeEditMutation };
-  deleteScoreRange?: (options: IDeleteOptions) => { data: screeningToolScoreRangeDeleteMutation };
+  createScoreRange?: (options: ICreateOptions) => { data: screeningToolScoreRangeCreate };
+  editScoreRange?: (options: IEditOptions) => { data: screeningToolScoreRangeEdit };
+  deleteScoreRange?: (options: IDeleteOptions) => { data: screeningToolScoreRangeDelete };
 }
 
 interface IState {
   loading: boolean;
-  scoreRange: screeningToolScoreRangeCreateMutationVariables;
+  scoreRange: screeningToolScoreRangeCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
@@ -108,10 +108,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
   async onSubmit() {
     try {
       this.setState({ loading: true });
-      const filtered = omitBy<screeningToolScoreRangeCreateMutationVariables>(
-        this.state.scoreRange,
-        isNil,
-      );
+      const filtered = omitBy<screeningToolScoreRangeCreateVariables>(this.state.scoreRange, isNil);
 
       if (this.props.scoreRange && this.props.editScoreRange) {
         await this.props.editScoreRange({
@@ -223,16 +220,16 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(scoreRangeCreateMutationGraphql, {
+  graphql(scoreRangeCreateGraphql, {
     name: 'createScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-  graphql(scoreRangeEditMutationGraphql, {
+  graphql(scoreRangeEditGraphql, {
     name: 'editScoreRange',
   }),
-  graphql(scoreRangeDeleteMutationGraphql, {
+  graphql(scoreRangeDeleteGraphql, {
     name: 'deleteScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],

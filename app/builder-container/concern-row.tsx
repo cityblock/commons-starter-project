@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullConcernFragment } from '../graphql/types';
+import { FullConcern } from '../graphql/types';
 import concernStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  concern: FullConcernFragment;
+  concern: FullConcern;
   selected: boolean;
   routeBase: string;
 }

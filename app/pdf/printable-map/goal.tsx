@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import { FullPatientGoalFragment } from '../../graphql/types';
+import { FullPatientGoal } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  patientGoal: FullPatientGoalFragment;
+  patientGoal: FullPatientGoal;
 }
 
 const styles = StyleSheet.create({

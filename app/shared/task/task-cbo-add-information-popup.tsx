@@ -1,13 +1,13 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
-import taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
+import CBOReferralEditGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
+import taskEditGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
-  taskEditMutation,
-  taskEditMutationVariables,
-  CBOReferralEditMutation,
-  CBOReferralEditMutationVariables,
-  FullTaskFragment,
+  taskEdit,
+  taskEditVariables,
+  CBOReferralEdit,
+  CBOReferralEditVariables,
+  FullTask,
 } from '../../graphql/types';
 import { OTHER_CBO } from '../goals/create-task/create-task';
 import CreateTaskInfo from '../goals/create-task/info';
@@ -24,14 +24,12 @@ export type ChangeEvent =
 export interface IProps {
   isVisible: boolean;
   closePopup: () => void;
-  task: FullTaskFragment;
+  task: FullTask;
 }
 
 interface IGraphqlProps {
-  editCBOReferral: (
-    options: { variables: CBOReferralEditMutationVariables },
-  ) => { data: CBOReferralEditMutation };
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  editCBOReferral: (options: { variables: CBOReferralEditVariables }) => { data: CBOReferralEdit };
+  editTask: (options: { variables: taskEditVariables }) => { data: taskEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -89,7 +87,7 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
     const { categoryId, CBOId, CBOName, CBOUrl, description } = this.state;
     const { editCBOReferral, editTask, task } = this.props;
 
-    const referralVariables: CBOReferralEditMutationVariables = {
+    const referralVariables: CBOReferralEditVariables = {
       CBOReferralId: task.CBOReferralId as string,
       categoryId,
       taskId: task.id,
@@ -181,10 +179,10 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 }
 
 export default compose(
-  graphql(CBOReferralEditMutationGraphql, {
+  graphql(CBOReferralEditGraphql, {
     name: 'editCBOReferral',
   }),
-  graphql(taskEditMutationGraphql, {
+  graphql(taskEditGraphql, {
     name: 'editTask',
     options: { refetchQueries: ['getPatientCarePlan'] },
   }),

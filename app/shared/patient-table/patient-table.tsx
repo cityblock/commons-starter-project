@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
-import { FullPatientTableRowFragment } from '../../graphql/types';
+import { FullPatientTableRow } from '../../graphql/types';
 import Spinner from '../library/spinner/spinner';
 import { PatientTableNoResults, PatientTablePlaceholder } from './helper-components';
 import PatientTableHeader from './patient-table-header';
 import PatientTableRow from './patient-table-row';
 import { TableLoadingError } from './table-loading-error';
 
-export interface IFormattedPatient extends FullPatientTableRowFragment {
+export interface IFormattedPatient extends FullPatientTableRow {
   isSelected?: boolean;
 }
 

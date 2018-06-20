@@ -3,15 +3,15 @@ import { filter, includes, sortBy } from 'lodash';
 import React from 'react';
 import { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
-import userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
-import patientCareTeamAddUserMutationGraphql from '../../../graphql/queries/patient-care-team-add-user-mutation.graphql';
+import getPatientCareTeamGraphql from '../../../graphql/queries/get-patient-care-team.graphql';
+import getPatientGraphql from '../../../graphql/queries/get-patient.graphql';
+import getUserSummaryListGraphql from '../../../graphql/queries/get-user-summary-list.graphql';
+import patientCareTeamAddUserGraphql from '../../../graphql/queries/patient-care-team-add-user-mutation.graphql';
 import {
-  getPatientCareTeamQuery,
-  getUserSummaryListQuery,
-  patientCareTeamAddUserMutation,
-  patientCareTeamAddUserMutationVariables,
+  getPatientCareTeam,
+  getUserSummaryList,
+  patientCareTeamAddUser,
+  patientCareTeamAddUserVariables,
   UserRole,
 } from '../../../graphql/types';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
@@ -33,15 +33,15 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  patientCareTeam?: getPatientCareTeam['patientCareTeam'];
   isPatientCareTeamLoading?: boolean;
   patientCareTeamError?: string;
-  userSummaryList?: getUserSummaryListQuery['userSummaryList'];
+  userSummaryList?: getUserSummaryList['userSummaryList'];
   isUserSummaryListLoading?: boolean;
   userSummaryListError?: string;
-  addUserToPatientCareTeamMutation: (
-    options: { variables: patientCareTeamAddUserMutationVariables },
-  ) => { data: patientCareTeamAddUserMutation };
+  addUserToPatientCareTeam: (
+    options: { variables: patientCareTeamAddUserVariables },
+  ) => { data: patientCareTeamAddUser };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -51,7 +51,7 @@ interface IState {
   addUserLoading?: boolean;
   addUserError?: string;
   addUserSuccess?: boolean;
-  addedCareMember?: patientCareTeamAddUserMutation['careTeamAddUser'];
+  addedCareMember?: patientCareTeamAddUser['careTeamAddUser'];
 }
 
 export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
@@ -67,7 +67,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
   }
 
   handleAddCareTeamMember = async () => {
-    const { addUserToPatientCareTeamMutation, patientId } = this.props;
+    const { addUserToPatientCareTeam, patientId } = this.props;
     const { careMemberId } = this.state;
 
     if (!careMemberId) {
@@ -75,7 +75,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
     }
 
     try {
-      const result = await addUserToPatientCareTeamMutation({
+      const result = await addUserToPatientCareTeam({
         variables: {
           patientId,
           userId: careMemberId,
@@ -259,7 +259,7 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(userSummaryListQuery, {
+  graphql(getUserSummaryListGraphql, {
     options: (props: IProps) => ({
       variables: {
         userRoleFilters: Object.keys(UserRole),
@@ -271,7 +271,7 @@ export default compose(
       userSummaryList: data ? (data as any).userSummaryList : null,
     }),
   }),
-  graphql(patientCareTeamQuery, {
+  graphql(getPatientCareTeamGraphql, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -283,24 +283,24 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(patientCareTeamAddUserMutationGraphql, {
-    name: 'addUserToPatientCareTeamMutation',
+  graphql(patientCareTeamAddUserGraphql, {
+    name: 'addUserToPatientCareTeam',
     options: (props: IProps) => ({
       refetchQueries: [
         {
-          query: userSummaryListQuery,
+          query: getUserSummaryListGraphql,
           variables: {
             userRoleFilters: Object.keys(UserRole),
           },
         },
         {
-          query: patientCareTeamQuery,
+          query: getPatientCareTeamGraphql,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: getPatientQuery,
+          query: getPatientGraphql,
           variables: {
             patientId: props.patientId,
           },

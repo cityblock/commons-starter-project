@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  taskEditMutation,
-  taskEditMutationVariables,
-  FullCBOReferralFragment,
-} from '../../graphql/types';
+import { taskEdit, taskEditVariables, FullCBOReferral } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import styles from './css/task-body.css';
 import { isCBOReferralRequiringAction } from './helpers/helpers';
@@ -19,8 +15,8 @@ interface IProps {
   concern: string;
   goal: string;
   patientId: string;
-  CBOReferral: FullCBOReferralFragment | null;
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  CBOReferral: FullCBOReferral | null;
+  editTask: (options: { variables: taskEditVariables }) => { data: taskEdit };
 }
 
 const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {

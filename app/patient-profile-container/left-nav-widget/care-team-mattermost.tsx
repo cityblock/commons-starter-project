@@ -2,8 +2,8 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import mattermostUrlForPatientCreateGraphql from '../../graphql/queries/mattermost-url-for-patient-create.graphql';
 import {
-  mattermostUrlForPatientCreateMutation,
-  mattermostUrlForPatientCreateMutationVariables,
+  mattermostUrlForPatientCreate,
+  mattermostUrlForPatientCreateVariables,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
@@ -15,8 +15,8 @@ interface IProps {
 
 interface IGraphqlProps {
   getMattermostLink: (
-    options: { variables: mattermostUrlForPatientCreateMutationVariables },
-  ) => { data: mattermostUrlForPatientCreateMutation };
+    options: { variables: mattermostUrlForPatientCreateVariables },
+  ) => { data: mattermostUrlForPatientCreate };
 }
 
 type allProps = IProps & IGraphqlProps;

@@ -3,12 +3,12 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import goalSuggestionTemplateQuery from '../graphql/queries/get-goal-suggestion-template.graphql';
-import goalSuggestionTemplateEditMutationGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
+import goalSuggestionTemplate from '../graphql/queries/get-goal-suggestion-template.graphql';
+import goalSuggestionTemplateEditGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
 import {
-  goalSuggestionTemplateEditMutation,
-  goalSuggestionTemplateEditMutationVariables,
-  FullGoalSuggestionTemplateFragment,
+  goalSuggestionTemplateEdit,
+  goalSuggestionTemplateEditVariables,
+  FullGoalSuggestionTemplate,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel-right.css';
 import Button from '../shared/library/button/button';
@@ -29,13 +29,13 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  goal?: FullGoalSuggestionTemplateFragment;
+  goal?: FullGoalSuggestionTemplate;
   goalLoading?: boolean;
   goalError: string | null;
   refetchGoal: () => any;
   editGoal: (
-    options: { variables: goalSuggestionTemplateEditMutationVariables },
-  ) => { data: goalSuggestionTemplateEditMutation; errors: Array<{ message: string }> };
+    options: { variables: goalSuggestionTemplateEditVariables },
+  ) => { data: goalSuggestionTemplateEdit; errors: Array<{ message: string }> };
   onDelete: (goalId: string) => any;
 }
 
@@ -317,10 +317,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(goalSuggestionTemplateEditMutationGraphql, {
+  graphql(goalSuggestionTemplateEditGraphql, {
     name: 'editGoal',
   }),
-  graphql(goalSuggestionTemplateQuery, {
+  graphql(goalSuggestionTemplate, {
     skip: (props: IProps & IStateProps) => !props.goalId,
     options: (props: IProps & IStateProps) => ({
       variables: { goalSuggestionTemplateId: props.goalId },

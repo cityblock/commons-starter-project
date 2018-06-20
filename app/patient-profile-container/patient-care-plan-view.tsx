@@ -5,16 +5,16 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
-import computedFieldSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
-import riskAreaAssessmentSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
-import screeningToolSuggestionsQuery from '../graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
-import riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
+import computedFieldSuggestionsGraphql from '../graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
+import riskAreaAssessmentSuggestionsGraphql from '../graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
+import screeningToolSuggestionsGraphql from '../graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
+import riskAreaGroupsGraphql from '../graphql/queries/get-risk-area-groups.graphql';
 import {
-  getCarePlanSuggestionsFromComputedFieldsForPatientQuery,
-  getCarePlanSuggestionsFromRiskAreaAssessmentsForPatientQuery,
-  getCarePlanSuggestionsFromScreeningToolsForPatientQuery,
-  getRiskAreaGroupsQuery,
-  FullCarePlanSuggestionForPatientFragment,
+  getCarePlanSuggestionsFromComputedFieldsForPatient,
+  getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient,
+  getCarePlanSuggestionsFromScreeningToolsForPatient,
+  getRiskAreaGroups,
+  FullCarePlanSuggestionForPatient,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
@@ -58,14 +58,14 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   computedFieldSuggestionsError?: ApolloError | null;
-  computedFieldSuggestions?: getCarePlanSuggestionsFromComputedFieldsForPatientQuery['carePlanSuggestionsFromComputedFieldsForPatient'];
+  computedFieldSuggestions?: getCarePlanSuggestionsFromComputedFieldsForPatient['carePlanSuggestionsFromComputedFieldsForPatient'];
   riskAreaAssessmentSuggestionsError?: ApolloError | null;
-  riskAreaAssessmentSuggestions?: getCarePlanSuggestionsFromRiskAreaAssessmentsForPatientQuery['carePlanSuggestionsFromRiskAreaAssessmentsForPatient'];
+  riskAreaAssessmentSuggestions?: getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient['carePlanSuggestionsFromRiskAreaAssessmentsForPatient'];
   screeningToolSuggestionsError?: ApolloError | null;
-  screeningToolSuggestions?: getCarePlanSuggestionsFromScreeningToolsForPatientQuery['carePlanSuggestionsFromScreeningToolsForPatient'];
+  screeningToolSuggestions?: getCarePlanSuggestionsFromScreeningToolsForPatient['carePlanSuggestionsFromScreeningToolsForPatient'];
   riskAreaGroupsLoading?: boolean;
   riskAreaGroupsError?: ApolloError | null;
-  riskAreaGroups?: getRiskAreaGroupsQuery['riskAreaGroups'];
+  riskAreaGroups?: getRiskAreaGroups['riskAreaGroups'];
 }
 
 export type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
@@ -220,7 +220,7 @@ export class PatientCarePlanView extends React.Component<allProps, IState> {
       screeningToolLabels,
     } = suggestionSections;
 
-    let suggestions: FullCarePlanSuggestionForPatientFragment[] = [];
+    let suggestions: FullCarePlanSuggestionForPatient[] = [];
     suggestions = computedFieldSuggestions
       ? suggestions.concat(computedFieldSuggestions)
       : suggestions;
@@ -325,7 +325,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql(computedFieldSuggestionsQuery, {
+  graphql(computedFieldSuggestionsGraphql, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -340,7 +340,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(riskAreaAssessmentSuggestionsQuery, {
+  graphql(riskAreaAssessmentSuggestionsGraphql, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -355,7 +355,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(screeningToolSuggestionsQuery, {
+  graphql(screeningToolSuggestionsGraphql, {
     skip: shouldSkip,
     options: (props: IProps) => ({
       variables: {
@@ -370,7 +370,7 @@ export default compose(
         : null,
     }),
   }),
-  graphql(riskAreaGroupsQuery, {
+  graphql(riskAreaGroupsGraphql, {
     skip: shouldSkip,
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,

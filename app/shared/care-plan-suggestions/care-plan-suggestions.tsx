@@ -3,7 +3,7 @@ import { compose } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import { FullCarePlanSuggestionFragment } from '../../graphql/types';
+import { FullCarePlanSuggestion } from '../../graphql/types';
 import { ICarePlanSuggestionsPopupOptions } from '../../reducers/popup-reducer';
 import { IState as IAppState } from '../../store';
 import Modal from '../library/modal/modal';
@@ -14,7 +14,7 @@ import styles from './css/care-plan-suggestions.css';
 interface IStateProps {
   isVisible: boolean;
   patientId: string;
-  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions: FullCarePlanSuggestion[];
 }
 
 interface IDispatchProps {

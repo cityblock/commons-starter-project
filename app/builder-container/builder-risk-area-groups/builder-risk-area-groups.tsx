@@ -4,8 +4,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import riskAreaGroupsQuery from '../../graphql/queries/get-risk-area-groups.graphql';
-import { FullRiskAreaGroupFragment } from '../../graphql/types';
+import riskAreaGroupsGraphql from '../../graphql/queries/get-risk-area-groups.graphql';
+import { FullRiskAreaGroup } from '../../graphql/types';
 import styles from '../../shared/css/two-panel.css';
 import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
@@ -29,7 +29,7 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
-  riskAreaGroups: FullRiskAreaGroupFragment[];
+  riskAreaGroups: FullRiskAreaGroup[];
   loading: boolean;
   error: string | null;
 }
@@ -46,7 +46,7 @@ export class AdminRiskAreaGroups extends React.Component<allProps, IState> {
   redirectToRiskAreaGroups = () => this.props.history.push(ROUTE_BASE);
 
   render(): JSX.Element {
-    const { riskAreaGroupId, riskAreaGroups, loading, error } = this.props;
+    const { riskAreaGroupId, loading, error, riskAreaGroups } = this.props;
     const { createMode } = this.state;
 
     if (loading || error) return <Spinner />;
@@ -97,7 +97,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 export default compose(
   withRouter,
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(riskAreaGroupsQuery, {
+  graphql(riskAreaGroupsGraphql, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

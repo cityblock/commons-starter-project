@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullPatientExternalOrganizationFragment } from '../../../graphql/types';
+import { FullPatientExternalOrganization } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
   formatAddressSecondLine,
@@ -10,9 +10,9 @@ import ConsentDisplayCard from '../consent-display-card';
 import styles from '../css/team-member.css';
 
 interface IProps {
-  patientExternalOrganization: FullPatientExternalOrganizationFragment;
+  patientExternalOrganization: FullPatientExternalOrganization;
   onRemoveClick: (patientExternalOrganizationId: string) => void;
-  onEditClick: (patientExternalOrganizationToEdit: FullPatientExternalOrganizationFragment) => void;
+  onEditClick: (patientExternalOrganizationToEdit: FullPatientExternalOrganization) => void;
 }
 
 export const PatientExternalOrganization: React.StatelessComponent<IProps> = props => {

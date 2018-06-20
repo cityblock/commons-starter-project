@@ -1,11 +1,11 @@
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../graphql/types';
+import { FullPatientForProfile } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import Text from '../../shared/library/text/text';
 import styles from './css/preferred-name.css';
 
 interface IProps {
-  patient: FullPatientForProfileFragment;
+  patient: FullPatientForProfile;
 }
 
 const LeftNavPreferredName: React.StatelessComponent<IProps> = (props: IProps) => {

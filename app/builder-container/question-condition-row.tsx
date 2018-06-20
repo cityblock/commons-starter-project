@@ -1,28 +1,28 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import answerQuery from '../graphql/queries/get-answer.graphql';
-import questionConditionDeleteMutationGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
+import answerGraphql from '../graphql/queries/get-answer.graphql';
+import questionConditionDeleteGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
 import {
-  getAnswerQuery,
-  questionConditionDeleteMutation,
-  questionConditionDeleteMutationVariables,
-  FullQuestionConditionFragment,
+  getAnswer,
+  questionConditionDelete,
+  questionConditionDeleteVariables,
+  FullQuestionCondition,
 } from '../graphql/types';
 import styles from './css/risk-area-row.css';
 import QuestionConditionRowText from './question-condition-row-text';
 
 export interface IDeleteOptions {
-  variables: questionConditionDeleteMutationVariables;
+  variables: questionConditionDeleteVariables;
 }
 
 interface IProps {
-  questionCondition: FullQuestionConditionFragment;
+  questionCondition: FullQuestionCondition;
   mutation?: any;
 }
 
 interface IGraphqlProps {
-  answer?: getAnswerQuery['answer'];
-  deleteQuestionCondition?: (options: IDeleteOptions) => { data: questionConditionDeleteMutation };
+  answer?: getAnswer['answer'];
+  deleteQuestionCondition?: (options: IDeleteOptions) => { data: questionConditionDelete };
 }
 
 class QuestionConditionRow extends React.Component<IProps & IGraphqlProps> {
@@ -49,7 +49,7 @@ class QuestionConditionRow extends React.Component<IProps & IGraphqlProps> {
 }
 
 export default compose(
-  graphql(answerQuery, {
+  graphql(answerGraphql, {
     options: (props: IProps) => ({
       variables: { answerId: props.questionCondition.answerId },
     }),
@@ -57,7 +57,7 @@ export default compose(
       answer: data ? (data as any).answer : null,
     }),
   }),
-  graphql(questionConditionDeleteMutationGraphql, {
+  graphql(questionConditionDeleteGraphql, {
     name: 'deleteQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

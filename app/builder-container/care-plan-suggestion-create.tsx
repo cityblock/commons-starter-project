@@ -1,18 +1,18 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
-import concernsQuery from '../graphql/queries/get-concerns.graphql';
-import goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-import goalSuggestionCreateMutationGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
+import concernSuggestionCreateGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
+import concernsGraphql from '../graphql/queries/get-concerns.graphql';
+import goalsGraphql from '../graphql/queries/get-goal-suggestion-templates.graphql';
+import goalSuggestionCreateGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
 import {
-  concernSuggestionCreateMutation,
-  concernSuggestionCreateMutationVariables,
-  goalSuggestionCreateMutation,
-  goalSuggestionCreateMutationVariables,
-  FullAnswerFragment,
-  FullConcernFragment,
-  FullGoalSuggestionTemplateFragment,
-  FullScreeningToolScoreRangeFragment,
+  concernSuggestionCreate,
+  concernSuggestionCreateVariables,
+  goalSuggestionCreate,
+  goalSuggestionCreateVariables,
+  FullAnswer,
+  FullConcern,
+  FullGoalSuggestionTemplate,
+  FullScreeningToolScoreRange,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
@@ -25,21 +25,21 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 interface IProps {
-  goals: FullGoalSuggestionTemplateFragment[] | null;
+  goals: FullGoalSuggestionTemplate[] | null;
   goalsError?: string | null;
-  concerns: FullConcernFragment[] | null;
+  concerns: FullConcern[] | null;
   concernsError?: string | null;
-  answer: FullAnswerFragment | null;
-  screeningToolScoreRange: FullScreeningToolScoreRangeFragment | null;
+  answer: FullAnswer | null;
+  screeningToolScoreRange: FullScreeningToolScoreRange | null;
 }
 
 interface IGraphqlProps {
   createConcernSuggestion?: (
-    options: { variables: concernSuggestionCreateMutationVariables },
-  ) => { data: concernSuggestionCreateMutation };
+    options: { variables: concernSuggestionCreateVariables },
+  ) => { data: concernSuggestionCreate };
   createGoalSuggestion?: (
-    options: { variables: goalSuggestionCreateMutationVariables },
-  ) => { data: goalSuggestionCreateMutation };
+    options: { variables: goalSuggestionCreateVariables },
+  ) => { data: goalSuggestionCreate };
 }
 
 type SuggestionType = 'concern' | 'goal';
@@ -125,7 +125,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     }
   }
 
-  renderTaskTemplates(goal?: FullGoalSuggestionTemplateFragment) {
+  renderTaskTemplates(goal?: FullGoalSuggestionTemplate) {
     if (goal) {
       const taskTemplatesHtml = goal.taskTemplates
         ? goal.taskTemplates
@@ -148,10 +148,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
   renderMetadata() {
     const { suggestionType, suggestionId } = this.state;
-    const { goals } = this.props;
 
-    if (suggestionType === 'goal' && suggestionId && goals && goals.length) {
-      const fetchedGoal = goals.find(goal => goal.id === suggestionId);
+    if (suggestionType === 'goal' && suggestionId && this.props.goals && this.props.goals.length) {
+      const fetchedGoal = this.props.goals.find(goal => goal.id === suggestionId);
 
       return this.renderTaskTemplates(fetchedGoal);
     }
@@ -177,7 +176,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
   }
 
   getConcernOptions() {
-    const { concerns, answer, screeningToolScoreRange } = this.props;
+    const { answer, screeningToolScoreRange } = this.props;
     let existingConcernIds: any[] = [];
 
     if (answer) {
@@ -190,7 +189,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
         .filter(id => !!id);
     }
 
-    return (concerns || [])
+    return (this.props.concerns || [])
       .filter(concern => existingConcernIds.indexOf(concern.id) === -1)
       .map(concern => <Option key={concern.id} value={concern.id} label={concern.title} />);
   }
@@ -251,14 +250,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
 export default compose(
   withErrorHandler(),
-  graphql(concernsQuery, {
+  graphql(concernsGraphql, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data && data.error ? data.error.message : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(goalsQuery, {
+  graphql(goalsGraphql, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -266,13 +265,13 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-  graphql(concernSuggestionCreateMutationGraphql, {
+  graphql(concernSuggestionCreateGraphql, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql(goalSuggestionCreateMutationGraphql, {
+  graphql(goalSuggestionCreateGraphql, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

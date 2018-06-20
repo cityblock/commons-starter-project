@@ -1,36 +1,36 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import getPatientExternalProvidersQuery from '../../../graphql/queries/get-patient-external-providers.graphql';
-import getPatientQuery from '../../../graphql/queries/get-patient.graphql';
-import editPatientExternalProviderMutationGraphql from '../../../graphql/queries/patient-external-provider-edit-mutation.graphql';
+import getPatientExternalProviders from '../../../graphql/queries/get-patient-external-providers.graphql';
+import getPatient from '../../../graphql/queries/get-patient.graphql';
+import editPatientExternalProviderGraphql from '../../../graphql/queries/patient-external-provider-edit-mutation.graphql';
 import {
-  patientExternalProviderEditMutation,
-  patientExternalProviderEditMutationVariables,
-  FullPatientExternalProviderFragment,
+  patientExternalProviderEdit,
+  patientExternalProviderEditVariables,
+  FullPatientExternalProvider,
 } from '../../../graphql/types';
 import PatientExternalProviderModal, {
   IPatientExternalProvider,
 } from './patient-external-provider-modal';
 
 interface IProps {
-  patientExternalProvider: FullPatientExternalProviderFragment;
+  patientExternalProvider: FullPatientExternalProvider;
   patientId: string;
   isVisible: boolean;
   closePopup: () => void;
 }
 
 interface IGraphqlProps {
-  editPatientExternalProviderMutation: (
-    options: { variables: patientExternalProviderEditMutationVariables },
-  ) => Promise<{ data: patientExternalProviderEditMutation; errors?: ApolloError[] }>;
+  editPatientExternalProvider: (
+    options: { variables: patientExternalProviderEditVariables },
+  ) => Promise<{ data: patientExternalProviderEdit; errors?: ApolloError[] }>;
 }
 
 type allProps = IProps & IGraphqlProps;
 
 export class EditPatientExternalProviderModal extends React.Component<allProps> {
   editPatientExternalProvider = async (provider: IPatientExternalProvider) => {
-    const { editPatientExternalProviderMutation, patientExternalProvider } = this.props;
+    const { editPatientExternalProvider, patientExternalProvider } = this.props;
 
     let roleFreeText = null;
     if (provider.role === 'other' || provider.role === 'otherMedicalSpecialist') {
@@ -38,7 +38,7 @@ export class EditPatientExternalProviderModal extends React.Component<allProps> 
     }
 
     // edit patient external provider
-    return editPatientExternalProviderMutation({
+    return editPatientExternalProvider({
       variables: {
         ...provider,
         patientExternalProviderId: patientExternalProvider.id,
@@ -64,18 +64,18 @@ export class EditPatientExternalProviderModal extends React.Component<allProps> 
   }
 }
 
-export default graphql<any>(editPatientExternalProviderMutationGraphql, {
-  name: 'editPatientExternalProviderMutation',
+export default graphql<any>(editPatientExternalProviderGraphql, {
+  name: 'editPatientExternalProvider',
   options: (props: IProps) => ({
     refetchQueries: [
       {
-        query: getPatientExternalProvidersQuery,
+        query: getPatientExternalProviders,
         variables: {
           patientId: props.patientId,
         },
       },
       {
-        query: getPatientQuery,
+        query: getPatient,
         variables: {
           patientId: props.patientId,
         },

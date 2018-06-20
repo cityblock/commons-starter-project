@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
+import { taskEdit, taskEditVariables } from '../../graphql/types';
 import { isDueSoon, isPastDue } from '../helpers/format-helpers';
 import DateInput from '../library/date-input/date-input';
 import Icon from '../library/icon/icon';
@@ -10,7 +10,7 @@ export interface IProps {
   dueAt: string | null;
   taskId: string;
   completedAt: string | null;
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  editTask: (options: { variables: taskEditVariables }) => { data: taskEdit };
 }
 
 class TaskDue extends React.Component<IProps> {

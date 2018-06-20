@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullScreeningToolFragment } from '../graphql/types';
+import { FullScreeningTool } from '../graphql/types';
 import screeningToolStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 export interface IProps {
-  screeningTool: FullScreeningToolFragment;
+  screeningTool: FullScreeningTool;
   selected: boolean;
   routeBase: string;
 }

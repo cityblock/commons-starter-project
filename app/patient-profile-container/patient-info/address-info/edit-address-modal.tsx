@@ -1,12 +1,12 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import editAddressMutationGraphql from '../../../graphql/queries/address-edit-mutation.graphql';
-import editPatientInfoMutationGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
+import editAddressGraphql from '../../../graphql/queries/address-edit-mutation.graphql';
+import editPatientInfoGraphql from '../../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
-  addressEditMutation,
-  addressEditMutationVariables,
-  patientInfoEditMutation,
-  patientInfoEditMutationVariables,
+  addressEdit,
+  addressEditVariables,
+  patientInfoEdit,
+  patientInfoEditVariables,
 } from '../../../graphql/types';
 import AddressModal, { IAddress, ISavedAddress } from '../../../shared/address-modal/address-modal';
 
@@ -21,12 +21,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  editAddressMutation: (
-    options: { variables: addressEditMutationVariables },
-  ) => { data: addressEditMutation };
-  editPatientInfoMutation: (
-    options: { variables: patientInfoEditMutationVariables },
-  ) => { data: patientInfoEditMutation };
+  editAddress: (options: { variables: addressEditVariables }) => { data: addressEdit };
+  editPatientInfo: (options: { variables: patientInfoEditVariables }) => { data: patientInfoEdit };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -37,10 +33,10 @@ export class EditAddressModal extends React.Component<allProps> {
       return;
     }
 
-    const { editAddressMutation, editPatientInfoMutation, patientId, patientInfoId } = this.props;
+    const { editAddress, editPatientInfo, patientId, patientInfoId } = this.props;
 
     if (isPrimaryUpdatedToTrue) {
-      await editPatientInfoMutation({
+      await editPatientInfo({
         variables: {
           patientInfoId,
           primaryAddressId: address.id,
@@ -48,7 +44,7 @@ export class EditAddressModal extends React.Component<allProps> {
       });
     }
 
-    return editAddressMutation({
+    return editAddress({
       variables: {
         patientId,
         addressId: address.id,
@@ -62,10 +58,7 @@ export class EditAddressModal extends React.Component<allProps> {
     });
   };
 
-  handleAddressSaved = (
-    response: { data: addressEditMutation },
-    isPrimaryUpdatedToTrue: boolean,
-  ) => {
+  handleAddressSaved = (response: { data: addressEdit }, isPrimaryUpdatedToTrue: boolean) => {
     if (response.data.addressEdit) {
       this.props.onSaved(response.data.addressEdit, isPrimaryUpdatedToTrue);
     }
@@ -89,10 +82,10 @@ export class EditAddressModal extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(editAddressMutationGraphql, {
-    name: 'editAddressMutation',
+  graphql(editAddressGraphql, {
+    name: 'editAddress',
   }),
-  graphql(editPatientInfoMutationGraphql, {
-    name: 'editPatientInfoMutation',
+  graphql(editPatientInfoGraphql, {
+    name: 'editPatientInfo',
   }),
 )(EditAddressModal) as React.ComponentClass<IProps>;

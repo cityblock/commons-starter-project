@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import { getPatientCareTeamQuery } from '../../graphql/types';
+import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
+import { getPatientCareTeam } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import withCurrentUser, { IInjectedProps } from '../../shared/with-current-user/with-current-user';
 import CareTeamMattermost from './care-team-mattermost';
@@ -16,7 +16,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  careTeam: getPatientCareTeamQuery['patientCareTeam'];
+  careTeam: getPatientCareTeam['patientCareTeam'];
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedProps;
@@ -65,7 +65,7 @@ export class LeftNavCareTeam extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(careTeamQuery, {
+export default graphql(careTeamGraphql, {
   options: (props: IProps) => ({
     variables: { patientId: props.patientId },
   }),

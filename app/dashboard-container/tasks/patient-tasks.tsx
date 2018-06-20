@@ -1,11 +1,11 @@
 import React from 'react';
-import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
+import { ShortUrgentTaskForPatient } from '../../graphql/types';
 import styles from './css/patient-tasks.css';
 import PatientTaskList from './patient-task-list';
 
 interface IProps {
-  tasksDueSoon: ShortUrgentTaskForPatientFragment[];
-  tasksWithNotifications: ShortUrgentTaskForPatientFragment[];
+  tasksDueSoon: ShortUrgentTaskForPatient[];
+  tasksWithNotifications: ShortUrgentTaskForPatient[];
 }
 
 const PatientTasks: React.StatelessComponent<IProps> = (props: IProps) => {

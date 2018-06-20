@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import { includes } from 'lodash';
 import React from 'react';
 import {
-  getConcernsQuery,
-  getPatientCarePlanQuery,
-  FullCarePlanSuggestionForPatientFragment,
+  getConcerns,
+  getPatientCarePlan,
+  FullCarePlanSuggestionForPatient,
 } from '../../graphql/types';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
@@ -12,12 +12,12 @@ import styles from '../css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
 interface IProps {
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  carePlanSuggestions?: FullCarePlanSuggestionForPatientFragment[];
-  concerns?: getConcernsQuery['concerns'];
+  carePlan?: getPatientCarePlan['carePlanForPatient'];
+  carePlanSuggestions?: FullCarePlanSuggestionForPatient[];
+  concerns?: getConcerns['concerns'];
   concernId: string;
   concernType: '' | 'inactive' | 'active';
-  suggestion: FullCarePlanSuggestionForPatientFragment | null;
+  suggestion: FullCarePlanSuggestionForPatient | null;
   onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => any;
 }
 

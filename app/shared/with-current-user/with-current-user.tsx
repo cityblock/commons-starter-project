@@ -4,11 +4,11 @@ import {
   permissionsMappings,
   PermissionsMapping,
 } from '../../../shared/permissions/permissions-mapping';
-import { getCurrentUserQuery } from '../../graphql/types';
+import { getCurrentUser } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 
 export interface IInjectedProps {
-  currentUser: getCurrentUserQuery['currentUser'];
+  currentUser: getCurrentUser['currentUser'];
   featureFlags: PermissionsMapping;
 }
 

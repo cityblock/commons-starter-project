@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import patientPhotoSignedUrlCreateQuery from '../../../graphql/queries/patient-photo-signed-url-create.graphql';
+import patientPhotoSignedUrlCreateGraphql from '../../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
-  patientPhotoSignedUrlCreateMutation,
-  patientPhotoSignedUrlCreateMutationVariables,
+  patientPhotoSignedUrlCreate,
+  patientPhotoSignedUrlCreateVariables,
   Gender,
   PatientSignedUrlAction,
 } from '../../../graphql/types';
@@ -23,8 +23,8 @@ interface IProps {
 
 interface IGraphqlProps {
   getSignedPhotoUrl: (
-    options: { variables: patientPhotoSignedUrlCreateMutationVariables },
-  ) => { data: patientPhotoSignedUrlCreateMutation };
+    options: { variables: patientPhotoSignedUrlCreateVariables },
+  ) => { data: patientPhotoSignedUrlCreate };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -76,6 +76,6 @@ export class PatientPhoto extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientPhotoSignedUrlCreateQuery, {
+export default graphql<any>(patientPhotoSignedUrlCreateGraphql, {
   name: 'getSignedPhotoUrl',
 })(PatientPhoto) as React.ComponentClass<IProps>;

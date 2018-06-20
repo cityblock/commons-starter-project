@@ -1,10 +1,10 @@
 import { get, isNil } from 'lodash';
 import React from 'react';
 import {
-  patientContactCreateMutationVariables,
-  patientContactEditMutationVariables,
+  patientContactCreateVariables,
+  patientContactEditVariables,
   AddressInput,
-  FullPatientContactFragment,
+  FullPatientContact,
   PhoneTypeOptions,
 } from '../../graphql/types';
 import Modal from '../library/modal/modal';
@@ -19,7 +19,7 @@ interface IProps {
   onSaved: (response: any) => void;
   isVisible: boolean;
   contactType?: ContactType;
-  patientContact?: FullPatientContactFragment | null;
+  patientContact?: FullPatientContact | null;
   titleMessageId?: string;
   subTitleMessageId?: string;
 }
@@ -180,7 +180,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       email: isNil(emailAddress) ? null : { emailAddress },
       address: this.getContactAddress(),
       relationFreeText,
-    } as patientContactCreateMutationVariables | patientContactEditMutationVariables;
+    } as patientContactCreateVariables | patientContactEditVariables;
 
     if (contactType === 'healthcareProxy') {
       updatedPatientContact.isHealthcareProxy = true;

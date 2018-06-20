@@ -1,26 +1,26 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-import progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
+import patientAnswersGraphql from '../../graphql/queries/get-patient-answers.graphql';
+import progressNoteActivityGraphql from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import {
-  getPatientAnswersQuery,
-  getProgressNoteActivityForProgressNoteQuery,
-  FullProgressNoteFragment,
+  getPatientAnswers,
+  getProgressNoteActivityForProgressNote,
+  FullProgressNote,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import styles from './css/progress-note-row-questions.css';
 import { ProgressNoteQuestionAnswer } from './progress-note-question-answer';
 
 interface IProps {
-  progressNote: FullProgressNoteFragment;
+  progressNote: FullProgressNote;
   patientId: string;
   goToActivityTab: () => void;
 }
 
 interface IGraphqlProps {
-  answers: getPatientAnswersQuery['patientAnswers'];
-  progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
+  answers: getPatientAnswers['patientAnswers'];
+  progressNoteActivity?: getProgressNoteActivityForProgressNote['progressNoteActivityForProgressNote'];
   progressNoteActivityLoading?: boolean;
   progressNoteActivityError: string | null;
 }
@@ -28,7 +28,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 export class ProgressNoteRowQuestions extends React.Component<allProps> {
-  renderAnswers(answers: getPatientAnswersQuery['patientAnswers']) {
+  renderAnswers(answers: getPatientAnswers['patientAnswers']) {
     return (answers || []).map(
       answer => (answer ? <ProgressNoteQuestionAnswer key={answer.id} answer={answer} /> : null),
     );
@@ -86,7 +86,7 @@ export class ProgressNoteRowQuestions extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(progressNoteActivityQuery, {
+  graphql(progressNoteActivityGraphql, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -99,7 +99,7 @@ export default compose(
       progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
     }),
   }),
-  graphql(patientAnswersQuery, {
+  graphql(patientAnswersGraphql, {
     options: (props: IProps) => ({
       variables: {
         filterId: props.progressNote.id,

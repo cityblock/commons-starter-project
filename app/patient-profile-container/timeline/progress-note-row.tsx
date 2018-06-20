@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import progressNoteQuery from '../../graphql/queries/get-progress-note.graphql';
-import { FullProgressNoteFragment } from '../../graphql/types';
+import progressNoteGraphql from '../../graphql/queries/get-progress-note.graphql';
+import { FullProgressNote } from '../../graphql/types';
 import progressNoteGlassBreak, {
   IInjectedProps,
 } from '../../shared/glass-break/progress-note-glass-break';
@@ -21,7 +21,7 @@ interface IProps extends IInjectedProps {
 }
 
 interface IGraphqlProps {
-  progressNote: FullProgressNoteFragment;
+  progressNote: FullProgressNote;
   loading?: boolean;
   error?: string | null;
 }
@@ -120,7 +120,7 @@ export class ProgressNoteRow extends React.Component<allProps, IState> {
 
 export default compose(
   progressNoteGlassBreak(),
-  graphql(progressNoteQuery, {
+  graphql(progressNoteGraphql, {
     options: (props: IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,

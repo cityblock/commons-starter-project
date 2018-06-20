@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullPatientForProfileFragment } from '../../graphql/types';
+import { FullPatientForProfile } from '../../graphql/types';
 import styles from './css/left-nav.css';
 import LeftNavHeader from './header';
 import Contact from './info-group/contact';
@@ -11,7 +11,7 @@ import ProblemList from './info-group/problem-list';
 export type Accordion = 'demographics' | 'contact' | 'plan' | 'medications' | 'problemList';
 
 interface IProps {
-  patient: FullPatientForProfileFragment | null;
+  patient: FullPatientForProfile | null;
 }
 
 interface IState {

@@ -1,9 +1,9 @@
-import { getCurrentUserQuery } from '../graphql/types';
+import { getCurrentUser } from '../graphql/types';
 
 type SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_CURRENT_USER: SET_CURRENT_USER = 'SET_CURRENT_USER';
 
-export type CurrentUser = getCurrentUserQuery['currentUser'];
+export type CurrentUser = getCurrentUser['currentUser'];
 
 export interface ISetCurrentUser {
   type: SET_CURRENT_USER;

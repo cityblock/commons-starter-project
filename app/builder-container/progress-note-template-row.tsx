@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullProgressNoteTemplateFragment } from '../graphql/types';
+import { FullProgressNoteTemplate } from '../graphql/types';
 import progressNoteTemplatesStyles from '../shared/css/two-panel.css';
 import styles from './css/risk-area-row.css';
 
 interface IProps {
-  progressNoteTemplate: FullProgressNoteTemplateFragment;
+  progressNoteTemplate: FullProgressNoteTemplate;
   selected: boolean;
   routeBase: string;
 }

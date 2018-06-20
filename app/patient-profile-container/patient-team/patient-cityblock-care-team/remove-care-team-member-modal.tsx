@@ -1,17 +1,17 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import careTeamReassignUserMutationGraphql from '../../../graphql/queries/care-team-reassign-user-mutation.graphql';
-import patientCareTeamQuery from '../../../graphql/queries/get-patient-care-team.graphql';
-import patientQuery from '../../../graphql/queries/get-patient.graphql';
-import tasksForUserForPatientQuery from '../../../graphql/queries/get-tasks-for-user-for-patient.graphql';
-import userSummaryListQuery from '../../../graphql/queries/get-user-summary-list.graphql';
+import careTeamReassignUserGraphql from '../../../graphql/queries/care-team-reassign-user-mutation.graphql';
+import patientCareTeam from '../../../graphql/queries/get-patient-care-team.graphql';
+import patient from '../../../graphql/queries/get-patient.graphql';
+import tasksForUserForPatient from '../../../graphql/queries/get-tasks-for-user-for-patient.graphql';
+import userSummaryList from '../../../graphql/queries/get-user-summary-list.graphql';
 import {
-  careTeamReassignUserMutation,
-  careTeamReassignUserMutationVariables,
-  getPatientCareTeamQuery,
-  getTasksForUserForPatientQuery,
-  FullCareTeamUserFragment,
+  careTeamReassignUser,
+  careTeamReassignUserVariables,
+  getPatientCareTeam,
+  getTasksForUserForPatient,
+  FullCareTeamUser,
   UserRole,
 } from '../../../graphql/types';
 import { formatErrorMessage } from '../../../shared/helpers/format-helpers';
@@ -23,17 +23,17 @@ interface IProps {
   closePopup: () => void;
   isVisible: boolean;
   patientId: string;
-  careTeamMember?: FullCareTeamUserFragment | null;
-  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  careTeamMember?: FullCareTeamUser | null;
+  careTeam?: getPatientCareTeam['patientCareTeam'];
 }
 
 interface IGraphqlProps {
-  careTeamMemberTasks: getTasksForUserForPatientQuery['tasksForUserForPatient'];
+  careTeamMemberTasks: getTasksForUserForPatient['tasksForUserForPatient'];
   isTasksLoading?: boolean;
   tasksError?: string | null;
   careTeamReassignUser: (
-    options: { variables: careTeamReassignUserMutationVariables },
-  ) => { data: careTeamReassignUserMutation; errors?: ApolloError[] };
+    options: { variables: careTeamReassignUserVariables },
+  ) => { data: careTeamReassignUser; errors?: ApolloError[] };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -72,7 +72,6 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
       closePopup,
       careTeamMemberTasks,
       isTasksLoading,
-      careTeamReassignUser,
       patientId,
       careTeamMember,
     } = this.props;
@@ -94,7 +93,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
         reassignUserError: null,
       });
 
-      const reassignResponse = await careTeamReassignUser({
+      const reassignResponse = await this.props.careTeamReassignUser({
         variables: {
           patientId,
           userId: careTeamMember.id,
@@ -169,7 +168,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
 }
 
 export default compose(
-  graphql(tasksForUserForPatientQuery, {
+  graphql(tasksForUserForPatient, {
     skip: (props: IProps) => !props.careTeamMember,
     options: (props: IProps) => ({
       variables: {
@@ -183,24 +182,24 @@ export default compose(
       careTeamMemberTasks: data ? (data as any).tasksForUserForPatient : null,
     }),
   }),
-  graphql(careTeamReassignUserMutationGraphql, {
+  graphql(careTeamReassignUserGraphql, {
     name: 'careTeamReassignUser',
     options: (props: IProps) => ({
       refetchQueries: [
         {
-          query: patientCareTeamQuery,
+          query: patientCareTeam,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: patientQuery,
+          query: patient,
           variables: {
             patientId: props.patientId,
           },
         },
         {
-          query: userSummaryListQuery,
+          query: userSummaryList,
           variables: {
             userRoleFilters: Object.keys(UserRole),
           },

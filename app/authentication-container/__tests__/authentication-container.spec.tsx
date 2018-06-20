@@ -61,7 +61,7 @@ describe('shallow rendered', () => {
       loading: false,
       currentUser,
     });
-    // Can't yet match against React.Fragment
+    // Can't yet match against Fragment
     expect(component).toMatchSnapshot();
   });
 

@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import userSummaryListQuery from '../../graphql/queries/get-user-summary-list.graphql';
-import { getUserSummaryListQuery } from '../../graphql/types';
+import userSummaryListGraphql from '../../graphql/queries/get-user-summary-list.graphql';
+import { getUserSummaryList } from '../../graphql/types';
 import { getUserInfo } from './get-info-helpers';
 import UserMultiSelect, { IUser } from './user-multi-select';
 
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  userSummaryList: getUserSummaryListQuery['userSummaryList'];
+  userSummaryList: getUserSummaryList['userSummaryList'];
   isLoading: boolean;
   error: ApolloError | null | undefined;
 }
@@ -55,7 +55,7 @@ export const AllCareWorkerMultiSelect: React.StatelessComponent<allProps> = prop
   );
 };
 
-export default graphql(userSummaryListQuery, {
+export default graphql(userSummaryListGraphql, {
   options: (props: IProps) => ({
     variables: {
       userRoleFilters: CARE_WORKER_ROLES,

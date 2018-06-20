@@ -5,12 +5,12 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import computedFieldDeleteMutationGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
-import computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
+import computedFieldDeleteGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
+import computedFields from '../graphql/queries/get-computed-fields.graphql';
 import {
-  computedFieldDeleteMutation,
-  computedFieldDeleteMutationVariables,
-  FullComputedFieldFragment,
+  computedFieldDelete,
+  computedFieldDeleteVariables,
+  FullComputedField,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
@@ -32,10 +32,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  computedFields?: FullComputedFieldFragment[];
+  computedFields?: FullComputedField[];
   deleteComputedField: (
-    options: { variables: computedFieldDeleteMutationVariables },
-  ) => { data: computedFieldDeleteMutation };
+    options: { variables: computedFieldDeleteVariables },
+  ) => { data: computedFieldDelete };
 }
 
 interface IStateProps {
@@ -62,8 +62,7 @@ export class BuilderComputedFields extends React.Component<allProps, IState> {
   };
 
   renderComputedFields() {
-    const { computedFields } = this.props;
-    const validComputedFields = (computedFields || []).filter(
+    const validComputedFields = (this.props.computedFields || []).filter(
       computedField => !computedField.deletedAt,
     );
 
@@ -72,7 +71,7 @@ export class BuilderComputedFields extends React.Component<allProps, IState> {
     }
   }
 
-  renderComputedField = (computedField: FullComputedFieldFragment) => {
+  renderComputedField = (computedField: FullComputedField) => {
     const { match, routeBase } = this.props;
     const selected = computedField.id === match.params.computedFieldId;
 
@@ -141,14 +140,14 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(computedFieldsQuery, {
+  graphql(computedFields, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,
       computedFields: data ? (data as any).computedFields : null,
     }),
   }),
-  graphql(computedFieldDeleteMutationGraphql, {
+  graphql(computedFieldDeleteGraphql, {
     name: 'deleteComputedField',
   }),
 )(BuilderComputedFields) as React.ComponentClass<IProps>;

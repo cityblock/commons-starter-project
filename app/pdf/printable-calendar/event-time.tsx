@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import { differenceInMinutes, format } from 'date-fns';
 import React from 'react';
-import { FullCalendarEventFragment } from '../../graphql/types';
+import { FullCalendarEvent } from '../../graphql/types';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
 
 interface IProps {
-  calendarEvent: FullCalendarEventFragment;
+  calendarEvent: FullCalendarEvent;
 }
 
 const textStyles = {

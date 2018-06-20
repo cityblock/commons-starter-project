@@ -12,7 +12,7 @@ import { PhoneInfo } from '../phone-info';
 
 describe('Render Phone Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
-  const phoneDeleteMutation = jest.fn();
+  const phoneDelete = jest.fn();
   const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
@@ -21,7 +21,7 @@ describe('Render Phone Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.patientInfo.id}
       className="something"
-      phoneDeleteMutation={phoneDeleteMutation}
+      phoneDelete={phoneDelete}
       error={null}
       openErrorPopup={errorFn}
     />,

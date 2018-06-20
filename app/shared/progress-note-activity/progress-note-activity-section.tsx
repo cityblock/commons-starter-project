@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { getProgressNoteActivityForProgressNoteQuery } from '../../graphql/types';
+import { getProgressNoteActivityForProgressNote } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdates from './progress-note-activity-care-plan-updates';
@@ -18,7 +18,7 @@ type ActivityType =
 
 interface IProps {
   activityType: ActivityType;
-  progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
+  progressNoteActivity?: getProgressNoteActivityForProgressNote['progressNoteActivityForProgressNote'];
 }
 
 interface IState {

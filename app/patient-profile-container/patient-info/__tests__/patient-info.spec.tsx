@@ -15,11 +15,11 @@ const match = {
 };
 
 describe('Render Patient Info Component', () => {
-  const editPatientInfoMutation = jest.fn();
+  const editPatientInfo = jest.fn();
   const wrapper = shallow(
     <PatientInfo
       match={match}
-      editPatientInfoMutation={editPatientInfoMutation}
+      editPatientInfo={editPatientInfo}
       patient={patient}
       loading={false}
       error={null}

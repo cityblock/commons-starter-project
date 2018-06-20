@@ -5,21 +5,21 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
-import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import questionsQuery from '../graphql/queries/get-questions.graphql';
-import riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
-import questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
+import computedFieldsGraphql from '../graphql/queries/get-computed-fields.graphql';
+import progressNoteTemplatesGraphql from '../graphql/queries/get-progress-note-templates.graphql';
+import questionsGraphql from '../graphql/queries/get-questions.graphql';
+import riskAreasGraphql from '../graphql/queries/get-risk-areas.graphql';
+import screeningToolsGraphql from '../graphql/queries/get-screening-tools.graphql';
+import questionDeleteGraphql from '../graphql/queries/question-delete-mutation.graphql';
 import {
-  getQuestionsQueryVariables,
-  questionDeleteMutation,
-  questionDeleteMutationVariables,
-  FullComputedFieldFragment,
-  FullProgressNoteTemplateFragment,
-  FullQuestionFragment,
-  FullRiskAreaFragment,
-  FullScreeningToolFragment,
+  getQuestionsVariables,
+  questionDelete,
+  questionDeleteVariables,
+  FullComputedField,
+  FullProgressNoteTemplate,
+  FullQuestion,
+  FullRiskArea,
+  FullScreeningTool,
   QuestionFilterType,
 } from '../graphql/types';
 import sortSearchStyles from '../shared/css/sort-search.css';
@@ -43,16 +43,14 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  riskAreas?: FullRiskAreaFragment[];
-  screeningTools?: FullScreeningToolFragment[];
-  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
-  computedFields?: FullComputedFieldFragment[];
+  riskAreas?: FullRiskArea[];
+  screeningTools?: FullScreeningTool[];
+  progressNoteTemplates?: FullProgressNoteTemplate[];
+  computedFields?: FullComputedField[];
   loading?: boolean;
   error: string | null;
-  deleteQuestion: (
-    options: { variables: questionDeleteMutationVariables },
-  ) => { data: questionDeleteMutation };
-  questions?: FullQuestionFragment[];
+  deleteQuestion: (options: { variables: questionDeleteVariables }) => { data: questionDelete };
+  questions?: FullQuestion[];
   questionsRefetch?: (
     variables: {
       riskAreaId?: string;
@@ -115,14 +113,13 @@ class BuilderQuestions extends React.Component<allProps, IState> {
       riskAreaId,
       toolId,
       progressNoteTemplateId,
-      riskAreas,
       questionsRefetch,
     } = nextProps;
 
-    if (!riskAreaId && !toolId && !progressNoteTemplateId && riskAreas) {
+    if (!riskAreaId && !toolId && !progressNoteTemplateId && this.props.riskAreas) {
       // safeguard explosion if no risk areas
-      if (!riskAreas.length) return;
-      return this.directToRiskAreaQuestions(riskAreas[0].id);
+      if (!this.props.riskAreas.length) return;
+      return this.directToRiskAreaQuestions(this.props.riskAreas[0].id);
     }
 
     if (questionsRefetch) {
@@ -158,13 +155,13 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     this.setState({ showCreateQuestion: true });
   }
 
-  hideCreateQuestion(question?: FullQuestionFragment) {
+  hideCreateQuestion(question?: FullQuestion) {
     this.setState({ showCreateQuestion: false });
   }
 
-  renderQuestions(questions: FullQuestionFragment[]) {
+  renderQuestions(questionsList: FullQuestion[]) {
     const { loading, error } = this.props;
-    const validQuestions = questions.filter(question => !question.deletedAt);
+    const validQuestions = questionsList.filter(question => !question.deletedAt);
 
     if (validQuestions.length > 0) {
       return validQuestions.map(this.renderQuestion);
@@ -178,7 +175,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     }
   }
 
-  renderQuestion(question: FullQuestionFragment) {
+  renderQuestion(question: FullQuestion) {
     const selected = question.id === this.props.questionId;
     return (
       <QuestionRow
@@ -200,15 +197,12 @@ class BuilderQuestions extends React.Component<allProps, IState> {
 
   render() {
     const {
-      questions,
       questionId,
-      riskAreas,
       riskAreaId,
-      screeningTools,
       toolId,
       routeBase,
       progressNoteTemplateId,
-      progressNoteTemplates,
+      questions,
       computedFields,
     } = this.props;
     const { showCreateQuestion } = this.state;
@@ -224,7 +218,9 @@ class BuilderQuestions extends React.Component<allProps, IState> {
         <Button onClick={this.showCreateQuestion} messageId="builder.createQuestion" />
       </div>
     );
-    const selectedRiskArea = riskAreas ? riskAreas.find(area => area.id === riskAreaId) : null;
+    const selectedRiskArea = this.props.riskAreas
+      ? this.props.riskAreas.find(area => area.id === riskAreaId)
+      : null;
 
     const createQuestionHtml = showCreateQuestion ? (
       <QuestionCreate
@@ -248,17 +244,17 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     const questionHtml = showCreateQuestion ? null : (
       <Route path={`${routeBase}/:questionId`} render={renderedQuestion} />
     );
-    const riskAreaSortOptions = (riskAreas || []).map(riskArea => (
+    const riskAreaSortOptions = (this.props.riskAreas || []).map(riskArea => (
       <option key={riskArea.id} value={riskArea.id} data-optiontype={'riskArea'}>
         {riskArea.title}
       </option>
     ));
-    const screeningToolSortOptions = (screeningTools || []).map(screeningTool => (
+    const screeningToolSortOptions = (this.props.screeningTools || []).map(screeningTool => (
       <option key={screeningTool.id} value={screeningTool.id} data-optiontype={'screeningTool'}>
         {screeningTool.title}
       </option>
     ));
-    const progressNoteTemplateSortOptions = (progressNoteTemplates || []).map(
+    const progressNoteTemplateSortOptions = (this.props.progressNoteTemplates || []).map(
       progressNoteTemplate => (
         <option
           key={progressNoteTemplate.id}
@@ -302,7 +298,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   }
 }
 
-function getPageParams(props: IProps): getQuestionsQueryVariables | null {
+function getPageParams(props: IProps): getQuestionsVariables | null {
   const { match } = props;
   if (match.params.riskAreaId && match.params.riskAreaId !== 'redirect') {
     return {
@@ -352,10 +348,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(questionDeleteMutationGraphql, {
+  graphql(questionDeleteGraphql, {
     name: 'deleteQuestion',
   }),
-  graphql(questionsQuery, {
+  graphql(questionsGraphql, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
@@ -367,28 +363,28 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(riskAreasQuery, {
+  graphql(riskAreasGraphql, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(progressNoteTemplatesQuery, {
+  graphql(progressNoteTemplatesGraphql, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-  graphql(screeningToolsQuery, {
+  graphql(screeningToolsGraphql, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
-  graphql(computedFieldsQuery, {
+  graphql(computedFieldsGraphql, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,

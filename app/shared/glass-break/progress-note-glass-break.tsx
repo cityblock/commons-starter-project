@@ -1,14 +1,14 @@
 import { omit } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import progressNoteGlassBreakCheckQuery from '../../graphql/queries/get-progress-note-glass-break-check.graphql';
-import progressNoteGlassBreaksForUserQuery from '../../graphql/queries/get-progress-note-glass-breaks-for-user.graphql';
-import createProgressNoteGlassBreakMutationGraphql from '../../graphql/queries/progress-note-glass-break-create-mutation.graphql';
+import progressNoteGlassBreakCheck from '../../graphql/queries/get-progress-note-glass-break-check.graphql';
+import progressNoteGlassBreaksForUser from '../../graphql/queries/get-progress-note-glass-breaks-for-user.graphql';
+import createProgressNoteGlassBreakGraphql from '../../graphql/queries/progress-note-glass-break-create-mutation.graphql';
 import {
-  getProgressNoteGlassBreaksForUserQuery,
-  getProgressNoteGlassBreakCheckQuery,
-  progressNoteGlassBreakCreateMutation,
-  progressNoteGlassBreakCreateMutationVariables,
+  getProgressNoteGlassBreaksForUser,
+  getProgressNoteGlassBreakCheck,
+  progressNoteGlassBreakCreate,
+  progressNoteGlassBreakCreateVariables,
 } from '../../graphql/types';
 import withCurrentUser, {
   IInjectedProps as ICurrentUserProps,
@@ -26,13 +26,13 @@ interface IExternalProps {
 interface IGraphqlProps {
   loadingGlassBreakCheck: boolean;
   errorGlassBreakCheck: string | null;
-  glassBreakCheck: getProgressNoteGlassBreakCheckQuery['progressNoteGlassBreakCheck'];
+  glassBreakCheck: getProgressNoteGlassBreakCheck['progressNoteGlassBreakCheck'];
   loadingGlassBreaks: boolean;
   errorGlassBreaks: string | null;
-  glassBreaks: getProgressNoteGlassBreaksForUserQuery['progressNoteGlassBreaksForUser'];
+  glassBreaks: getProgressNoteGlassBreaksForUser['progressNoteGlassBreaksForUser'];
   createProgressNoteGlassBreak: (
-    options: { variables: progressNoteGlassBreakCreateMutationVariables },
-  ) => { data: progressNoteGlassBreakCreateMutation };
+    options: { variables: progressNoteGlassBreakCreateVariables },
+  ) => { data: progressNoteGlassBreakCreate };
 }
 
 const progressNoteGlassBreak = () => <P extends {}>(
@@ -94,7 +94,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
 
   return compose(
     withCurrentUser(),
-    graphql(progressNoteGlassBreakCheckQuery, {
+    graphql(progressNoteGlassBreakCheck, {
       options: (props: IProps) => ({
         variables: {
           progressNoteId: props.progressNoteId,
@@ -106,7 +106,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreakCheck: data ? (data as any).progressNoteGlassBreakCheck : null,
       }),
     }),
-    graphql(progressNoteGlassBreaksForUserQuery, {
+    graphql(progressNoteGlassBreaksForUser, {
       options: () => ({
         // Lazy load to ensure cache always has updated session glass breaks
       }),
@@ -116,7 +116,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         glassBreaks: data ? (data as any).progressNoteGlassBreaksForUser : null,
       }),
     }),
-    graphql<IGraphqlProps, IProps, resultProps>(createProgressNoteGlassBreakMutationGraphql, {
+    graphql<IGraphqlProps, IProps, resultProps>(createProgressNoteGlassBreakGraphql, {
       name: 'createProgressNoteGlassBreak',
       options: {
         refetchQueries: ['getProgressNoteGlassBreaksForUser'],

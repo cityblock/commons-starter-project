@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
-import { FullQuickCallFragment } from '../../graphql/types';
+import { FullQuickCall } from '../../graphql/types';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivityQuickCall from './progress-note-activity-quick-call';
 
 interface IProps {
-  quickCalls: FullQuickCallFragment[];
+  quickCalls: FullQuickCall[];
   expanded: boolean;
 }
 

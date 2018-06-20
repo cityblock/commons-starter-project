@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql, Mutation, MutationFn } from 'react-apollo';
-import patientExternalOrganizationsQuery from '../../../graphql/queries/get-patient-external-organizations.graphql';
+import patientExternalOrganizationsGraphql from '../../../graphql/queries/get-patient-external-organizations.graphql';
 import patientExternalOrganizationDeleteMutationGraphql from '../../../graphql/queries/patient-external-organization-delete-mutation.graphql';
 import {
-  getPatientExternalOrganizationsQuery,
-  FullPatientExternalOrganizationFragment,
+  getPatientExternalOrganizations,
+  FullPatientExternalOrganization,
 } from '../../../graphql/types';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import styles from '../css/patient-team.css';
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientExternalOrganizations?: getPatientExternalOrganizationsQuery['patientExternalOrganizations'];
+  patientExternalOrganizations?: getPatientExternalOrganizations['patientExternalOrganizations'];
   isLoading?: boolean;
   error?: ApolloError | null;
 }
@@ -26,7 +26,7 @@ export type allProps = IGraphqlProps & IProps;
 
 interface IState {
   isEditModalVisible: boolean;
-  patientExternalOrganizationToEdit?: FullPatientExternalOrganizationFragment | null;
+  patientExternalOrganizationToEdit?: FullPatientExternalOrganization | null;
   error?: string | null;
 }
 
@@ -47,9 +47,7 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
     }
   };
 
-  handleOpenEditModal = (
-    patientExternalOrganizationToEdit: FullPatientExternalOrganizationFragment,
-  ) => {
+  handleOpenEditModal = (patientExternalOrganizationToEdit: FullPatientExternalOrganization) => {
     this.setState({ isEditModalVisible: true, patientExternalOrganizationToEdit });
   };
 
@@ -122,7 +120,7 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
   }
 }
 
-export default graphql(patientExternalOrganizationsQuery, {
+export default graphql(patientExternalOrganizationsGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { FullSmsMessageFragment } from '../../graphql/types';
+import { FullSmsMessage } from '../../graphql/types';
 import { Selected } from '../../reducers/patient-left-nav-reducer';
 import { Color } from '../../shared/library/icon/icon';
 import { IconName } from '../../shared/library/icon/icon-types';
@@ -34,9 +34,6 @@ export const QuickActionColorsMapping: QuickActionColors = {
   openFormLibrary: 'purple',
 };
 
-export const isNewDate = (
-  message1: FullSmsMessageFragment,
-  message2: FullSmsMessageFragment,
-): boolean => {
+export const isNewDate = (message1: FullSmsMessage, message2: FullSmsMessage): boolean => {
   return format(message1.createdAt, DATE_FORMAT) !== format(message2.createdAt, DATE_FORMAT);
 };

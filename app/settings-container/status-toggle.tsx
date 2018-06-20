@@ -1,14 +1,12 @@
 import React from 'react';
-import { currentUserEditMutation, currentUserEditMutationVariables } from '../graphql/types';
+import { currentUserEdit, currentUserEditVariables } from '../graphql/types';
 import Text from '../shared/library/text/text';
 import ToggleSwitch from '../shared/library/toggle-switch/toggle-switch';
 import styles from './css/status-toggle.css';
 
 interface IProps {
   isAvailable: boolean;
-  editCurrentUser: (
-    options: { variables: currentUserEditMutationVariables },
-  ) => { data: currentUserEditMutation };
+  editCurrentUser: (options: { variables: currentUserEditVariables }) => { data: currentUserEdit };
 }
 
 interface IState {

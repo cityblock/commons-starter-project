@@ -3,12 +3,12 @@ import { filter, includes, values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import patientVerifyMutationGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
+import patientVerifyGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
 import {
-  getPatientQuery,
-  patientCoreIdentityVerifyMutation,
-  patientCoreIdentityVerifyMutationVariables,
-  patientDataFlagCreateMutation,
+  getPatient,
+  patientCoreIdentityVerify,
+  patientCoreIdentityVerifyVariables,
+  patientDataFlagCreate,
   CoreIdentityOptions,
 } from '../../graphql/types';
 import { formatCityblockId } from '../../shared/helpers/format-helpers';
@@ -20,16 +20,16 @@ import { IEditableFieldState } from './patient-info';
 import SocialSecurityDisplayField from './social-security-display-field';
 
 export interface ICoreIdentity {
-  firstName: getPatientQuery['patient']['firstName'];
-  middleName: getPatientQuery['patient']['middleName'];
-  lastName: getPatientQuery['patient']['lastName'];
-  dateOfBirth: getPatientQuery['patient']['dateOfBirth'];
-  ssnEnd: getPatientQuery['patient']['ssnEnd'];
-  nmi: getPatientQuery['patient']['nmi'];
-  memberId: getPatientQuery['patient']['memberId'];
-  mrn: getPatientQuery['patient']['mrn'];
-  cityblockId: getPatientQuery['patient']['cityblockId'];
-  patientDataFlags: getPatientQuery['patient']['patientDataFlags'];
+  firstName: getPatient['patient']['firstName'];
+  middleName: getPatient['patient']['middleName'];
+  lastName: getPatient['patient']['lastName'];
+  dateOfBirth: getPatient['patient']['dateOfBirth'];
+  ssnEnd: getPatient['patient']['ssnEnd'];
+  nmi: getPatient['patient']['nmi'];
+  memberId: getPatient['patient']['memberId'];
+  mrn: getPatient['patient']['mrn'];
+  cityblockId: getPatient['patient']['cityblockId'];
+  patientDataFlags: getPatient['patient']['patientDataFlags'];
   coreIdentityVerifiedAt?: string | null;
   glassBreakId?: string;
 }
@@ -42,8 +42,8 @@ interface IProps {
 
 interface IGraphqlProps {
   verifyCoreIdentity: (
-    options: { variables: patientCoreIdentityVerifyMutationVariables },
-  ) => { data: patientCoreIdentityVerifyMutation };
+    options: { variables: patientCoreIdentityVerifyVariables },
+  ) => { data: patientCoreIdentityVerify };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -75,7 +75,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
     return flagInfo ? flagInfo.suggestedValue : null;
   }
 
-  handleFlagCreation = (savedFlag: patientDataFlagCreateMutation['patientDataFlagCreate']) => {
+  handleFlagCreation = (savedFlag: patientDataFlagCreate['patientDataFlagCreate']) => {
     const { onChange, patientIdentity } = this.props;
     const flags = patientIdentity.patientDataFlags || [];
 
@@ -225,7 +225,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<any>(patientVerifyMutationGraphql, {
+export default graphql<any>(patientVerifyGraphql, {
   name: 'verifyCoreIdentity',
   options: {
     refetchQueries: ['getPatientComputedPatientStatus'],

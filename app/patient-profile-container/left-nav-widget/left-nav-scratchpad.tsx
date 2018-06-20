@@ -1,12 +1,12 @@
 import { debounce } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientScratchPadQuery from '../../graphql/queries/get-patient-scratch-pad.graphql';
-import savePatientScratchPadMutationGraphql from '../../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
+import patientScratchPad from '../../graphql/queries/get-patient-scratch-pad.graphql';
+import savePatientScratchPadGraphql from '../../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
 import {
-  getPatientScratchPadQuery,
-  patientScratchPadEditMutation,
-  patientScratchPadEditMutationVariables,
+  getPatientScratchPad,
+  patientScratchPadEdit,
+  patientScratchPadEditVariables,
 } from '../../graphql/types';
 import TextArea from '../../shared/library/textarea/textarea';
 import styles from './css/left-nav-scratchpad.css';
@@ -22,12 +22,12 @@ export interface IProps {
 }
 
 interface IGraphqlProps {
-  scratchPad: getPatientScratchPadQuery['patientScratchPad'];
+  scratchPad: getPatientScratchPad['patientScratchPad'];
   loading: boolean;
   error: string | null;
   saveScratchPad: (
-    options: { variables: patientScratchPadEditMutationVariables },
-  ) => { data: patientScratchPadEditMutation };
+    options: { variables: patientScratchPadEditVariables },
+  ) => { data: patientScratchPadEdit };
   refetchScratchPad: (variables: { patientId: string }) => void;
 }
 
@@ -132,10 +132,10 @@ export class LeftNavScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql(savePatientScratchPadMutationGraphql, {
+  graphql(savePatientScratchPadGraphql, {
     name: 'saveScratchPad',
   }),
-  graphql(patientScratchPadQuery, {
+  graphql(patientScratchPad, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

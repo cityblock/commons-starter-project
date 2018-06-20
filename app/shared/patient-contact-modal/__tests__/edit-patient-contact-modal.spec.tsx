@@ -1,14 +1,14 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { patientContactEditMutation } from '../../../graphql/types';
+import { patientContactEdit } from '../../../graphql/types';
 import { healthcareProxy, patient } from '../../../shared/util/test-data';
 import { EditPatientContactModal } from '../edit-patient-contact-modal';
 import PatientContactModal from '../patient-contact-modal';
 
 describe('Render Edit Patient Proxy Modal', () => {
-  const onSaved = (patientContact: patientContactEditMutation['patientContactEdit']) => true;
+  const onSaved = (patientContact: patientContactEdit['patientContactEdit']) => true;
   const closePopup = () => true;
-  const editPatientContactMutation = jest.fn();
+  const editPatientContact = jest.fn();
 
   const wrapper = shallow(
     <EditPatientContactModal
@@ -19,7 +19,7 @@ describe('Render Edit Patient Proxy Modal', () => {
       closePopup={closePopup}
       contactType="healthcareProxy"
       titleMessageId="testTitle"
-      editPatientContactMutation={editPatientContactMutation}
+      editPatientContact={editPatientContact}
     />,
   );
 

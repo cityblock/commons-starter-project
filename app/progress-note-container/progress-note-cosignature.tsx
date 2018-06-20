@@ -1,12 +1,8 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
-import {
-  getCurrentUserQuery,
-  getPatientCareTeamQuery,
-  FullProgressNoteFragment,
-} from '../graphql/types';
+import currentUserGraphql from '../graphql/queries/get-current-user.graphql';
+import patientCareTeamGraphql from '../graphql/queries/get-patient-care-team.graphql';
+import { getCurrentUser, getPatientCareTeam, FullProgressNote } from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Option from '../shared/library/option/option';
 import RadioGroup from '../shared/library/radio-group/radio-group';
@@ -17,15 +13,15 @@ import { IUpdateProgressNoteOptions } from './progress-note-popup';
 
 interface IProps {
   disabled: boolean;
-  progressNote?: FullProgressNoteFragment;
+  progressNote?: FullProgressNote;
   updateProgressNote: (options: IUpdateProgressNoteOptions) => void;
 }
 
 interface IGraphqlProps {
-  patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
+  patientCareTeam?: getPatientCareTeam['patientCareTeam'];
   patientCareTeamLoading?: boolean;
   patientCareTeamError?: string | null;
-  currentUser?: getCurrentUserQuery['currentUser'];
+  currentUser?: getCurrentUser['currentUser'];
   error?: string | null;
   loading?: boolean;
 }
@@ -123,7 +119,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql(patientCareTeamQuery, {
+  graphql(patientCareTeamGraphql, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
@@ -136,7 +132,7 @@ export default compose(
       patientCareTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(currentUserQuery, {
+  graphql(currentUserGraphql, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

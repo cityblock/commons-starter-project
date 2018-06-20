@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import createCBOMutationGraphql from '../../graphql/queries/cbo-create-mutation.graphql';
-import { CBOCreateMutation, CBOCreateMutationVariables } from '../../graphql/types';
+import createCBOGraphql from '../../graphql/queries/cbo-create-mutation.graphql';
+import { CBOCreate, CBOCreateVariables } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import CBOCategorySelect from '../../shared/library/cbo-category-select/cbo-category-select';
 import StateSelect from '../../shared/library/state-select/state-select';
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createCBO: (options: { variables: CBOCreateMutationVariables }) => { data: CBOCreateMutation };
+  createCBO: (options: { variables: CBOCreateVariables }) => { data: CBOCreate };
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps;
@@ -36,7 +36,7 @@ interface IState {
 
 type Field = 'name' | 'categoryId' | 'address' | 'city' | 'state' | 'zip' | 'fax' | 'phone' | 'url';
 
-export class CBOCreate extends React.Component<allProps, IState> {
+export class CBOCreateComponent extends React.Component<allProps, IState> {
   state = {
     name: '',
     categoryId: '',
@@ -65,7 +65,7 @@ export class CBOCreate extends React.Component<allProps, IState> {
     if (!loading) {
       try {
         this.setState({ loading: true });
-        const variables: CBOCreateMutationVariables = {
+        const variables: CBOCreateVariables = {
           name,
           categoryId,
           address,
@@ -144,10 +144,10 @@ export class CBOCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withErrorHandler(),
-  graphql(createCBOMutationGraphql, {
+  graphql(createCBOGraphql, {
     name: 'createCBO',
     options: {
       refetchQueries: ['getCBOs'],
     },
   }),
-)(CBOCreate) as React.ComponentClass<IProps>;
+)(CBOCreateComponent) as React.ComponentClass<IProps>;

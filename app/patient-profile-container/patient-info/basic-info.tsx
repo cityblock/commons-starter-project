@@ -5,10 +5,10 @@ import { values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import computedPatientStatusQuery from '../../graphql/queries/get-patient-computed-patient-status.graphql';
+import computedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import {
-  getPatientComputedPatientStatusQuery,
-  getPatientQuery,
+  getPatient,
+  getPatientComputedPatientStatus,
   Gender,
   MaritalStatus,
   Transgender,
@@ -23,15 +23,15 @@ import styles from './css/patient-demographics.css';
 import { IEditableFieldState } from './patient-info';
 
 export interface IBasicInfo {
-  gender: getPatientQuery['patient']['patientInfo']['gender'];
-  genderFreeText: getPatientQuery['patient']['patientInfo']['genderFreeText'];
-  transgender: getPatientQuery['patient']['patientInfo']['transgender'];
-  maritalStatus: getPatientQuery['patient']['patientInfo']['maritalStatus'];
-  language: getPatientQuery['patient']['patientInfo']['language'];
+  gender: getPatient['patient']['patientInfo']['gender'];
+  genderFreeText: getPatient['patient']['patientInfo']['genderFreeText'];
+  transgender: getPatient['patient']['patientInfo']['transgender'];
+  maritalStatus: getPatient['patient']['patientInfo']['maritalStatus'];
+  language: getPatient['patient']['patientInfo']['language'];
   primaryAddress?: ISavedAddress | null;
   addresses?: ISavedAddress[];
-  isMarginallyHoused?: getPatientQuery['patient']['patientInfo']['isMarginallyHoused'];
-  preferredName?: getPatientQuery['patient']['patientInfo']['preferredName'];
+  isMarginallyHoused?: getPatient['patient']['patientInfo']['isMarginallyHoused'];
+  preferredName?: getPatient['patient']['patientInfo']['preferredName'];
 }
 
 interface IProps {
@@ -45,7 +45,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  computedPatientStatus?: getPatientComputedPatientStatusQuery['patientComputedPatientStatus'];
+  computedPatientStatus?: getPatientComputedPatientStatus['patientComputedPatientStatus'];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -213,7 +213,7 @@ export class BasicInfo extends React.Component<allProps> {
   }
 }
 
-export default graphql(computedPatientStatusQuery, {
+export default graphql(computedPatientStatusGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

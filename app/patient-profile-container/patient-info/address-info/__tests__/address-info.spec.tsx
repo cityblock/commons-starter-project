@@ -13,7 +13,7 @@ import EditAddressModal from '../edit-address-modal';
 
 describe('Render Address Info Component', () => {
   const onChange = (fields: IEditableFieldState) => true;
-  const addressDeleteMutation = jest.fn();
+  const addressDelete = jest.fn();
   const errorFn = (message: string) => true as any;
 
   const wrapper = shallow(
@@ -22,7 +22,7 @@ describe('Render Address Info Component', () => {
       patientId={patient.id}
       patientInfoId={patient.id}
       className="something"
-      addressDeleteMutation={addressDeleteMutation}
+      addressDelete={addressDelete}
       error={null}
       openErrorPopup={errorFn}
     />,

@@ -5,8 +5,8 @@ import { Fragment } from 'react';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import computedPatientStatusQuery from '../graphql/queries/get-patient-computed-patient-status.graphql';
-import { getPatientComputedPatientStatusQuery } from '../graphql/types';
+import computedPatientStatusGraphql from '../graphql/queries/get-patient-computed-patient-status.graphql';
+import { getPatientComputedPatientStatus } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import Icon from '../shared/library/icon/icon';
 import Text from '../shared/library/text/text';
@@ -20,7 +20,7 @@ interface IProps {
 interface IGraphqlProps {
   loading: boolean;
   error: ApolloError | null | undefined;
-  computedPatientStatus?: getPatientComputedPatientStatusQuery['patientComputedPatientStatus'];
+  computedPatientStatus?: getPatientComputedPatientStatus['patientComputedPatientStatus'];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -214,7 +214,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(computedPatientStatusQuery, {
+export default graphql(computedPatientStatusGraphql, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

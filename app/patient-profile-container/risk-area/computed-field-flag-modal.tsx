@@ -2,11 +2,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-import computedFieldFlagCreateMutationGraphql from '../../graphql/queries/computed-field-flag-create-mutation.graphql';
-import {
-  computedFieldFlagCreateMutation,
-  computedFieldFlagCreateMutationVariables,
-} from '../../graphql/types';
+import computedFieldFlagCreateGraphql from '../../graphql/queries/computed-field-flag-create-mutation.graphql';
+import { computedFieldFlagCreate, computedFieldFlagCreateVariables } from '../../graphql/types';
 import { IComputedFieldFlagPopupOptions } from '../../reducers/popup-reducer';
 import FormLabel from '../../shared/library/form-label/form-label';
 import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
@@ -28,8 +25,8 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   flagComputedField: (
-    options: { variables: computedFieldFlagCreateMutationVariables },
-  ) => { data: computedFieldFlagCreateMutation };
+    options: { variables: computedFieldFlagCreateVariables },
+  ) => { data: computedFieldFlagCreate };
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
@@ -127,7 +124,7 @@ export default compose(
     mapStateToProps as (args?: any) => IStateProps,
     mapDispatchToProps as any,
   ),
-  graphql<IGraphqlProps, {}, allProps>(computedFieldFlagCreateMutationGraphql, {
+  graphql<IGraphqlProps, {}, allProps>(computedFieldFlagCreateGraphql, {
     name: 'flagComputedField',
   }),
 )(ComputedFieldFlagModal);

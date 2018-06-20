@@ -5,12 +5,12 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import progressNoteTemplateDeleteMutationGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
+import progressNoteTemplatesGraphql from '../graphql/queries/get-progress-note-templates.graphql';
+import progressNoteTemplateDeleteGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
 import {
-  progressNoteTemplateDeleteMutation,
-  progressNoteTemplateDeleteMutationVariables,
-  FullProgressNoteTemplateFragment,
+  progressNoteTemplateDelete,
+  progressNoteTemplateDeleteVariables,
+  FullProgressNoteTemplate,
 } from '../graphql/types';
 import styles from '../shared/css/two-panel.css';
 import Button from '../shared/library/button/button';
@@ -38,9 +38,9 @@ interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
   deleteProgressNoteTemplate: (
-    options: { variables: progressNoteTemplateDeleteMutationVariables },
-  ) => { data: progressNoteTemplateDeleteMutation };
-  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
+    options: { variables: progressNoteTemplateDeleteVariables },
+  ) => { data: progressNoteTemplateDelete };
+  progressNoteTemplates?: FullProgressNoteTemplate[];
   progressNoteTemplatesRefetch: () => any;
 }
 
@@ -63,10 +63,10 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
     this.setState({ showCreateProgressNoteTemplate: false });
   };
 
-  renderProgressNoteTemplates = (progressNoteTemplates: FullProgressNoteTemplateFragment[]) => {
+  renderProgressNoteTemplates = (progressNoteTemplatesList: FullProgressNoteTemplate[]) => {
     const { loading, error } = this.props;
-    if (progressNoteTemplates.length > 0) {
-      return progressNoteTemplates.map(this.renderProgressNoteTemplate);
+    if (progressNoteTemplatesList.length > 0) {
+      return progressNoteTemplatesList.map(this.renderProgressNoteTemplate);
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
@@ -77,7 +77,7 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
     }
   };
 
-  renderProgressNoteTemplate = (progressNoteTemplate: FullProgressNoteTemplateFragment) => {
+  renderProgressNoteTemplate = (progressNoteTemplate: FullProgressNoteTemplate) => {
     const selected = progressNoteTemplate.id === this.props.progressNoteTemplateId;
     return (
       <ProgressNoteTemplateRow
@@ -161,10 +161,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 export default compose(
   withRouter,
   connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(progressNoteTemplateDeleteMutationGraphql, {
+  graphql(progressNoteTemplateDeleteGraphql, {
     name: 'deleteProgressNoteTemplate',
   }),
-  graphql(progressNoteTemplatesQuery, {
+  graphql(progressNoteTemplatesGraphql, {
     props: ({ data, ownProps }) => ({
       progressNoteTemplatesRefetch: data ? data.refetch : false,
       progressNoteTemplatesLoading: data ? data.loading : false,

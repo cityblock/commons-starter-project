@@ -2,10 +2,10 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
-import goalCreateMutationGraphql from '../graphql/queries/goal-suggestion-template-create-mutation.graphql';
+import goalCreateGraphql from '../graphql/queries/goal-suggestion-template-create-mutation.graphql';
 import {
-  goalSuggestionTemplateCreateMutation,
-  goalSuggestionTemplateCreateMutationVariables,
+  goalSuggestionTemplateCreate,
+  goalSuggestionTemplateCreateVariables,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import goalStyles from '../shared/css/two-panel-right.css';
@@ -18,7 +18,7 @@ import withErrorHandler, {
 import styles from './css/risk-area-create.css';
 
 interface IOptions {
-  variables: goalSuggestionTemplateCreateMutationVariables;
+  variables: goalSuggestionTemplateCreateVariables;
 }
 
 interface IProps {
@@ -34,13 +34,13 @@ interface IGraphqlProps {
   createGoal?: (
     options: IOptions,
   ) => {
-    data: goalSuggestionTemplateCreateMutation;
+    data: goalSuggestionTemplateCreate;
   };
 }
 
 interface IState {
   loading: boolean;
-  goal: goalSuggestionTemplateCreateMutationVariables;
+  goal: goalSuggestionTemplateCreateVariables;
 }
 
 type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
@@ -140,7 +140,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   withErrorHandler(),
-  graphql(goalCreateMutationGraphql, {
+  graphql(goalCreateGraphql, {
     name: 'createGoal',
     options: {
       refetchQueries: ['getGoalSuggestionTemplates'],

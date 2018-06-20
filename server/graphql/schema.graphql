@@ -1636,6 +1636,11 @@ type JwtForVcf {
   authToken: String!
 }
 
+# HelloSign URL
+type HelloSignUrl {
+  url: String!
+}
+
 # Patient Data Flag
 type PatientDataFlag implements uniqueId {
   id: ID!
@@ -2694,6 +2699,12 @@ input UserHoursDeleteInput {
   userHoursId: ID!
 }
 
+# params for signing document via HelloSign
+input HelloSignCreateInput {
+  patientId: ID!
+  documentType: DocumentTypeOptions!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -3002,6 +3013,8 @@ type RootMutationType {
   userHoursEdit(input: UserHoursEditInput): UserHours!
   # delete user hours
   userHoursDelete(input: UserHoursDeleteInput): UserHours!
+  # create hello sign
+  helloSignCreate(input: HelloSignCreateInput): HelloSignUrl!
 }
 
 type RootQueryType {

@@ -17,7 +17,11 @@ export const formatChannelDisplayName = (
   lastName: string,
   cityblockId: number,
 ): string => {
-  return `${capitalize(firstName)} ${capitalize(lastName)} ${cityblockId}`;
+  return `${formatPatientName(firstName, lastName)} ${cityblockId}`;
+};
+
+export const formatPatientName = (firstName: string, lastName: string): string => {
+  return `${capitalize(firstName)} ${capitalize(lastName)}`;
 };
 
 export const formatChannelName = (

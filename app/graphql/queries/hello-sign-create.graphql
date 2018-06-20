@@ -1,0 +1,5 @@
+mutation helloSignCreate($patientId: ID!, $documentType: DocumentTypeOptions!) {
+  helloSignCreate(input: { patientId: $patientId, documentType: $documentType }) {
+    url
+  }
+}

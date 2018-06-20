@@ -5,8 +5,8 @@ import { graphql } from 'react-apollo';
 import Loadable from 'react-loadable';
 import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
 import { getPatientDocuments, DocumentTypeOptions } from '../../../graphql/types';
-import RequiredPlaceholder from '../../required-placeholder';
 import styles from './css/patient-documents.css';
+import DocumentPlaceholder from './document-placeholder';
 import PatientDocument from './patient-document';
 
 const CONSENTS = [
@@ -51,17 +51,13 @@ class PatientDocuments extends React.Component<allProps, IState> {
   };
 
   renderPlaceholderOrDocument(type: DocumentTypeOptions) {
-    const { patientDocuments } = this.props;
+    const { patientDocuments, patientId } = this.props;
     const foundDocument = find(patientDocuments, document => document.documentType === type);
 
     return foundDocument ? (
       <PatientDocument patientDocument={foundDocument} key={`document-${foundDocument.id}`} />
     ) : (
-      <RequiredPlaceholder
-        headerMessageId={`patientDocument.${type}`}
-        onClick={() => this.setState({ modalDocumentType: type })}
-        key={`placeholder-${type}`}
-      />
+      <DocumentPlaceholder patientId={patientId} documentType={type} key={`placeholder-${type}`} />
     );
   }
 

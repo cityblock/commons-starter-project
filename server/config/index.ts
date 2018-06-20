@@ -33,5 +33,7 @@ export default {
   CITYBLOCK_ADMIN: '+17273415787',
   GA_TRACKING_ID: 'UA-105679021-5',
   ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
+  HELLOSIGN_CLIENT_ID: '',
+  HELLOSIGN_API_KEY: '',
   ...process.env,
 };

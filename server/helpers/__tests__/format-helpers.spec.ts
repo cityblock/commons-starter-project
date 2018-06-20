@@ -2,6 +2,7 @@ import {
   formatAbbreviatedName,
   formatChannelDisplayName,
   formatChannelName,
+  formatPatientName,
 } from '../format-helpers';
 
 describe('Server Format Helpers', () => {
@@ -28,6 +29,12 @@ describe('Server Format Helpers', () => {
   describe('formatChannelName', () => {
     it('returns formatted channel name', () => {
       expect(formatChannelName('Sansa Lady', 'Stark', 11)).toBe('sansa-lady-stark-11');
+    });
+  });
+
+  describe('formatPatientName', () => {
+    it('returns formatted patient name', () => {
+      expect(formatPatientName('Sansa', 'Stark')).toBe('Sansa Stark');
     });
   });
 });

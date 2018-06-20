@@ -3683,6 +3683,11 @@ declare module 'schema' {
      * delete user hours
      */
     userHoursDelete: IUserHours;
+
+    /**
+     * create hello sign
+     */
+    helloSignCreate: IHelloSignUrl;
   }
 
   interface IUserCreateOnRootMutationTypeArguments {
@@ -4255,6 +4260,10 @@ declare module 'schema' {
 
   interface IUserHoursDeleteOnRootMutationTypeArguments {
     input?: IUserHoursDeleteInput | null;
+  }
+
+  interface IHelloSignCreateOnRootMutationTypeArguments {
+    input?: IHelloSignCreateInput | null;
   }
 
   /**
@@ -5503,6 +5512,21 @@ declare module 'schema' {
    */
   interface IUserHoursDeleteInput {
     userHoursId: string;
+  }
+
+  /**
+   * params for signing document via HelloSign
+   */
+  interface IHelloSignCreateInput {
+    patientId: string;
+    documentType: DocumentTypeOptions;
+  }
+
+  /**
+   * HelloSign URL
+   */
+  interface IHelloSignUrl {
+    url: string;
   }
 
   interface IRootSubscriptionType {

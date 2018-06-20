@@ -8386,6 +8386,27 @@ export interface goalSuggestionTemplateEditVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: helloSignCreate
+// ====================================================
+
+export interface helloSignCreate_helloSignCreate {
+  url: string;
+}
+
+export interface helloSignCreate {
+  helloSignCreate: helloSignCreate_helloSignCreate;  // create hello sign
+}
+
+export interface helloSignCreateVariables {
+  patientId: string;
+  documentType: DocumentTypeOptions;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: JwtForPdfCreate
 // ====================================================
 

@@ -1,9 +1,15 @@
 import { format } from 'date-fns';
 import { transaction } from 'objection';
-import { DocumentTypeOptions, IHelloSignCreateInput, IRootMutationType } from 'schema';
+import {
+  DocumentTypeOptions,
+  IHelloSignCreateInput,
+  IHelloSignTransferInput,
+  IRootMutationType,
+} from 'schema';
 import config from '../config';
 import { reportError } from '../helpers/error-helpers';
 import { formatPatientName } from '../helpers/format-helpers';
+import { addJobToQueue } from '../helpers/queue-helpers';
 import Patient from '../models/patient';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -37,12 +43,17 @@ export interface IHelloSignCreateArgs {
   input: IHelloSignCreateInput;
 }
 
+export interface IHelloSignTransferArgs {
+  input: IHelloSignTransferInput;
+}
+
 export async function helloSignCreate(
   root: {},
   { input }: IHelloSignCreateArgs,
   { userId, permissions, testTransaction, logger }: IContext,
 ): Promise<IRootMutationType['helloSignCreate']> {
   let url = '';
+  let requestId = '';
 
   await transaction(testTransaction || Patient.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
@@ -58,12 +69,14 @@ export async function helloSignCreate(
           options,
         );
         const signatureId = signatureRequest.signature_request.signatures[0].signature_id;
+        requestId = signatureRequest.signature_request.signature_request_id;
 
         // get url for iframe
         const signUrl = await hellosign.embedded.getSignUrl(signatureId);
         url = signUrl.embedded.sign_url;
       } else {
         url = 'www.winteriscoming.com';
+        requestId = 'winIronThrone';
       }
     } catch (err) {
       reportError(
@@ -74,5 +87,25 @@ export async function helloSignCreate(
     }
   });
 
-  return { url };
+  return { url, requestId };
+}
+
+export async function helloSignTransfer(
+  root: {},
+  { input }: IHelloSignTransferArgs,
+  { userId, permissions, testTransaction, logger }: IContext,
+) {
+  await transaction(testTransaction || Patient.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
+    logger.log(`TRANSFER HelloSign document for ${input.patientId} by ${userId}`);
+
+    addJobToQueue('processHelloSign', {
+      userId,
+      patientId: input.patientId,
+      requestId: input.requestId,
+      documentType: input.documentType,
+    });
+  });
+
+  return true;
 }

@@ -1,8 +1,15 @@
 import HelloSign from 'hellosign-embedded';
 import React from 'react';
-import { Mutation, MutationFn } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { DocumentTypeOptions, IRootMutationType } from 'schema';
 import helloSignCreateMutationGraphql from '../../../graphql/queries/hello-sign-create.graphql';
+import helloSignTransferMutationGraphql from '../../../graphql/queries/hello-sign-transfer.graphql';
+import {
+  helloSignCreate,
+  helloSignCreateVariables,
+  helloSignTransfer,
+  helloSignTransferVariables,
+} from '../../../graphql/types';
 import Text from '../../../shared/library/text/text';
 import * as styles from './css/document-placeholder.css';
 
@@ -23,25 +30,33 @@ interface IProps {
   documentType: DocumentTypeOptions;
 }
 
+interface IGraphqlProps {
+  getHelloSignUrl: (options: { variables: helloSignCreateVariables }) => { data: helloSignCreate };
+  transferHelloSign: (
+    options: { variables: helloSignTransferVariables },
+  ) => { data: helloSignTransfer };
+}
+
 interface IState {
   loading: boolean;
   error: string | null;
 }
 
-class DocumentPlaceholder extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
+
+export class DocumentPlaceholder extends React.Component<allProps, IState> {
   state: IState = {
     loading: false,
     error: null,
   };
 
-  signDocument = (mutation: MutationFn) => {
-    const { patientId, documentType } = this.props;
+  signDocument = async (): Promise<void> => {
+    const { patientId, documentType, getHelloSignUrl } = this.props;
+    this.setState({ loading: true, error: null });
 
-    return async () => {
-      this.setState({ loading: true, error: null });
-
+    if (!this.state.loading) {
       try {
-        const res = (await mutation({
+        const res = (await getHelloSignUrl({
           variables: { patientId, documentType },
         })) as IResponse;
 
@@ -56,7 +71,8 @@ class DocumentPlaceholder extends React.Component<IProps, IState> {
             allowCancel: true,
             debug: testMode,
             skipDomainVerification: testMode,
-            messageListener: this.uploadDocument,
+            uxVersion: 2,
+            messageListener: this.uploadDocument(res.data.helloSignCreate.requestId),
           });
         } else {
           this.setState({
@@ -67,15 +83,24 @@ class DocumentPlaceholder extends React.Component<IProps, IState> {
       } catch (err) {
         this.setState({ loading: false, error: err.message });
       }
-    };
-  };
-
-  uploadDocument = async (message: IMessage) => {
-    // TODO: upload document to GCS
-    if (message.event === 'signature_request_signed') {
-      this.setState({ loading: false, error: null });
     }
   };
+
+  uploadDocument(requestId: string) {
+    return async (message: IMessage) => {
+      const { patientId, documentType, transferHelloSign } = this.props;
+
+      if (message.event === 'signature_request_signed') {
+        await transferHelloSign({
+          variables: {
+            patientId,
+            documentType,
+            requestId,
+          },
+        });
+      }
+    };
+  }
 
   render(): JSX.Element {
     const { documentType } = this.props;
@@ -83,15 +108,18 @@ class DocumentPlaceholder extends React.Component<IProps, IState> {
     const messageId = loading ? 'patientDocument.loading' : `patientDocument.${documentType}`;
 
     return (
-      <Mutation mutation={helloSignCreateMutationGraphql}>
-        {mutation => (
-          <div onClick={this.signDocument(mutation)} className={styles.container}>
-            <Text messageId={messageId} color="red" size="medium" isBold font="basetica" />
-          </div>
-        )}
-      </Mutation>
+      <div onClick={this.signDocument} className={styles.container}>
+        <Text messageId={messageId} color="red" size="medium" isBold font="basetica" />
+      </div>
     );
   }
 }
 
-export default DocumentPlaceholder;
+export default compose(
+  graphql(helloSignCreateMutationGraphql, {
+    name: 'getHelloSignUrl',
+  }),
+  graphql(helloSignTransferMutationGraphql, {
+    name: 'transferHelloSign',
+  }),
+)(DocumentPlaceholder);

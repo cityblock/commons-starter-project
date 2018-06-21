@@ -98,7 +98,7 @@ import {
   resolveGoalSuggestionTemplate,
   resolveGoalSuggestionTemplates,
 } from './goal-suggestion-template-resolver';
-import { helloSignCreate } from './hello-sign-resolver';
+import { helloSignCreate, helloSignTransfer } from './hello-sign-resolver';
 import { mattermostUrlForPatientCreate, mattermostUrlForUserCreate } from './mattermost-resolver';
 import { resolveAddresses } from './patient-address-resolver';
 import {
@@ -620,6 +620,7 @@ const resolveFunctions = {
     userHoursEdit,
     userHoursDelete,
     helloSignCreate,
+    helloSignTransfer,
   },
   RootSubscriptionType: {
     smsMessageCreated: {

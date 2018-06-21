@@ -1639,6 +1639,7 @@ type JwtForVcf {
 # HelloSign URL
 type HelloSignUrl {
   url: String!
+  requestId: ID!
 }
 
 # Patient Data Flag
@@ -2705,6 +2706,13 @@ input HelloSignCreateInput {
   documentType: DocumentTypeOptions!
 }
 
+# params for storing copy of HelloSign document on GCS
+input HelloSignTransferInput {
+  patientId: ID!
+  documentType: DocumentTypeOptions!
+  requestId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -3015,6 +3023,8 @@ type RootMutationType {
   userHoursDelete(input: UserHoursDeleteInput): UserHours!
   # create hello sign
   helloSignCreate(input: HelloSignCreateInput): HelloSignUrl!
+  # transfer hello sign
+  helloSignTransfer(input: HelloSignTransferInput): Boolean!
 }
 
 type RootQueryType {

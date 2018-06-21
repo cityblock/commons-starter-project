@@ -3688,6 +3688,11 @@ declare module 'schema' {
      * create hello sign
      */
     helloSignCreate: IHelloSignUrl;
+
+    /**
+     * transfer hello sign
+     */
+    helloSignTransfer: boolean;
   }
 
   interface IUserCreateOnRootMutationTypeArguments {
@@ -4264,6 +4269,10 @@ declare module 'schema' {
 
   interface IHelloSignCreateOnRootMutationTypeArguments {
     input?: IHelloSignCreateInput | null;
+  }
+
+  interface IHelloSignTransferOnRootMutationTypeArguments {
+    input?: IHelloSignTransferInput | null;
   }
 
   /**
@@ -5527,6 +5536,16 @@ declare module 'schema' {
    */
   interface IHelloSignUrl {
     url: string;
+    requestId: string;
+  }
+
+  /**
+   * params for storing copy of HelloSign document on GCS
+   */
+  interface IHelloSignTransferInput {
+    patientId: string;
+    documentType: DocumentTypeOptions;
+    requestId: string;
   }
 
   interface IRootSubscriptionType {

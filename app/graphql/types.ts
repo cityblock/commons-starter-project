@@ -8391,6 +8391,7 @@ export interface goalSuggestionTemplateEditVariables {
 
 export interface helloSignCreate_helloSignCreate {
   url: string;
+  requestId: string;
 }
 
 export interface helloSignCreate {
@@ -8400,6 +8401,24 @@ export interface helloSignCreate {
 export interface helloSignCreateVariables {
   patientId: string;
   documentType: DocumentTypeOptions;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: helloSignTransfer
+// ====================================================
+
+export interface helloSignTransfer {
+  helloSignTransfer: boolean;  // transfer hello sign
+}
+
+export interface helloSignTransferVariables {
+  patientId: string;
+  documentType: DocumentTypeOptions;
+  requestId: string;
 }
 
 

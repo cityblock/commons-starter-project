@@ -124,6 +124,7 @@ export class PatientFamilyTeam extends React.Component<allProps, IState> {
         patientContact={patientContact}
         onRemoveClick={this.handleRemove}
         onEditClick={this.handleOpenEditModal}
+        onConsentClick={this.handleOpenEditConsentModal}
       />
     ));
   }

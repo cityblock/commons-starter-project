@@ -27,7 +27,7 @@ export const ConsentForm: React.StatelessComponent<IProps> = props => {
     consentSelectState === 'partialConsent' ? (
       <CheckboxGroup
         name="consentSettings"
-        hasError={hasFieldError.consentSettings}
+        hasError={(hasFieldError || {}).consentSettings}
         errorMessageId="sharingConsent.fieldEmptyError"
       >
         {Object.keys(consentSettings).map(settingName => (

@@ -21,9 +21,9 @@ interface IMember {
 interface IProps<T extends IMember> {
   member: T;
   children: any;
-  onRemoveClick: (patientExternalOrganizationId: string) => void;
+  onRemoveClick: (memberId: string) => void;
   onEditClick: (memberToEdit: T) => void;
-  onConsentClick: (memberToEdit: T) => void;
+  onConsentClick?: (memberToEdit: T) => void;
 }
 
 interface IState {
@@ -51,7 +51,7 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
 
   handleConsents = () => {
     const { member, onConsentClick } = this.props;
-    onConsentClick(member);
+    onConsentClick!(member);
   };
 
   getConsentOptions = () => {
@@ -97,7 +97,7 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
   };
 
   render() {
-    const { children, member } = this.props;
+    const { children, member, onConsentClick } = this.props;
     const { description } = member;
     const { isMenuOpen } = this.state;
 
@@ -108,20 +108,21 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
     const level = getConsentLevel(getConsentSettingsObject(member));
     const consentStyle = classNames(styles.body, styles[level]);
 
-    const pendingHtml = !member.consentDocumentId ? (
-      <Text
-        messageId={`sharingConsent.pending`}
-        color="black"
-        size="medium"
-        isBold={true}
-        className={styles.spacingRight}
-      />
-    ) : null;
+    const pendingHtml =
+      !member.consentDocumentId && level !== 'noConsent' ? (
+        <Text
+          messageId={`sharingConsent.pending`}
+          color="black"
+          size="medium"
+          isBold={true}
+          className={styles.spacingRight}
+        />
+      ) : null;
     let consentHtml = (
-      <div>
+      <React.Fragment>
         {pendingHtml}
         <Text messageId={`sharingConsent.${level}`} color="gray" size="medium" isBold={true} />
-      </div>
+      </React.Fragment>
     );
     if (level === 'partialConsent') {
       consentHtml = (
@@ -132,16 +133,20 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
       );
     }
 
+    const consentMenuOption = onConsentClick ? (
+      <HamburgerMenuOption
+        messageId="patientTeam.updateConsent"
+        icon="security"
+        onClick={this.handleConsents}
+      />
+    ) : null;
+
     return (
       <div className={styles.container}>
         <div className={consentStyle}>
           {children}
           <HamburgerMenu open={isMenuOpen} onMenuToggle={this.onMenuToggle}>
-            <HamburgerMenuOption
-              messageId="patientTeam.updateConsent"
-              icon="security"
-              onClick={this.handleConsents}
-            />
+            {consentMenuOption}
             <HamburgerMenuOption
               messageId="patientTeam.edit"
               icon="create"

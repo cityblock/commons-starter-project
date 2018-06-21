@@ -1,9 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import HamburgerMenuOption from '../../../../shared/library/hamburger-menu-option/hamburger-menu-option';
-import HamburgerMenu from '../../../../shared/library/hamburger-menu/hamburger-menu';
 import Text from '../../../../shared/library/text/text';
 import { externalProviderEntity, externalProviderPerson } from '../../../../shared/util/test-data';
+import ConsentDisplayCard from '../../consent-display-card';
 import { PatientExternalProvider } from '../patient-external-provider';
 
 describe('Render Patient External Provider', () => {
@@ -20,21 +19,21 @@ describe('Render Patient External Provider', () => {
 
   it('renders external provider widget with note', () => {
     const text = wrapper.find(Text);
-    expect(text).toHaveLength(6);
+    expect(text).toHaveLength(5);
 
     expect(text.at(0).props().text).toBe('Tonya Willis');
     expect(text.at(1).props().messageId).toBe('externalProviderRole.cardiology');
     expect(text.at(2).props().text).toBe(externalProviderPerson.phone.phoneNumber);
     expect(text.at(3).props().text).toBe(externalProviderPerson.email.emailAddress);
     expect(text.at(4).props().text).toBe(externalProviderPerson.patientExternalOrganization.name);
-    expect(text.at(5).props().text).toBe(externalProviderPerson.description);
 
-    expect(wrapper.find(HamburgerMenu)).toHaveLength(1);
-
-    const menuOptions = wrapper.find(HamburgerMenuOption);
-    expect(menuOptions).toHaveLength(2);
-    expect(menuOptions.at(0).props().messageId).toBe('patientTeam.edit');
-    expect(menuOptions.at(1).props().messageId).toBe('patientTeam.remove');
+    const displayCard = wrapper.find(ConsentDisplayCard);
+    expect(displayCard).toHaveLength(1);
+    expect(displayCard.props().member).toMatchObject(
+      externalProviderPerson.patientExternalOrganization,
+    );
+    expect(displayCard.props().onEditClick).not.toBe(onEditClick);
+    expect(displayCard.props().onRemoveClick).not.toBe(onRemoveClick);
   });
 
   it('renders external provider widget without first and last name ', () => {

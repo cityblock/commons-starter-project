@@ -8,6 +8,7 @@ import Address from './address';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientDocument from './patient-document';
+import PatientExternalProvider from './patient-external-provider';
 
 const EAGER_QUERY = '[address]';
 
@@ -191,6 +192,15 @@ export default class PatientExternalOrganization extends BaseModel {
     patientExternalOrganizationId: string,
     txn: Transaction,
   ): Promise<PatientExternalOrganization> {
+    const providers = await PatientExternalProvider.getAllForOrganization(
+      patientExternalOrganizationId,
+      txn,
+    );
+
+    if (providers && providers.length > 0) {
+      return Promise.reject('You cannot delete an organization that still has active providers');
+    }
+
     await this.query(txn)
       .where({ id: patientExternalOrganizationId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

@@ -150,6 +150,17 @@ export default class PatientExternalProvider extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
+  static async getAllForOrganization(
+    patientExternalOrganizationId: string,
+    txn: Transaction,
+  ): Promise<PatientExternalProvider[]> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('email', builder => builder.where('email.deletedAt', null))
+      .where({ patientExternalOrganizationId, deletedAt: null })
+      .orderBy('createdAt', 'asc');
+  }
+
   static async create(input: IPatientExternalProviderOptions, txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)

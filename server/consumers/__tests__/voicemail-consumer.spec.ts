@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import uuid from 'uuid/v4';
-import gcsHelpersRaw from '../../graphql/shared/gcs/helpers';
+import gcsHelpers from '../../graphql/shared/gcs/helpers';
 import Clinic from '../../models/clinic';
 import PatientPhone from '../../models/patient-phone';
 import Phone from '../../models/phone';
@@ -24,11 +24,6 @@ import {
   uploadVoicemail,
   VOICEMAIL_DATE_FORMAT,
 } from '../voicemail-consumer';
-
-// allows mocking without type errors below
-/* tslint:disable:prefer-const */
-let gcsHelpers = gcsHelpersRaw as any;
-/* tslint:enable:prefer-const */
 
 const timestamp = new Date().toISOString();
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';

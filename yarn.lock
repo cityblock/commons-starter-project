@@ -652,9 +652,9 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.2.tgz#fa8e1ad1d474688a757140c91de6dace6f4abc8d"
 
-"@types/react-beautiful-dnd@6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-6.0.1.tgz#344aedf3254a0af7f4f4e6bc86ff2c249d6dc1ea"
+"@types/react-beautiful-dnd@7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-7.1.0.tgz#a2dedec5e4fd7b301c51901dd709d7d5c1602a02"
   dependencies:
     "@types/react" "*"
 

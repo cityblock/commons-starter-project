@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
     steps:
       - checkout
       - restore_cache:
@@ -28,7 +28,7 @@ jobs:
   test_frontend:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
     steps:
       - checkout
       - restore_cache:
@@ -46,7 +46,7 @@ jobs:
   test_api:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
       - image: postgres:10.4@sha256:e033c99282a81622b1eed36b735034e10d633a34cca3387f6142381770cfbcc8
         environment:
           POSTGRES_DB: commons_test
@@ -82,7 +82,7 @@ jobs:
   test_models:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
       - image: postgres:10.4@sha256:e033c99282a81622b1eed36b735034e10d633a34cca3387f6142381770cfbcc8
         environment:
           POSTGRES_DB: commons_test
@@ -118,7 +118,7 @@ jobs:
   deploy_staging:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
     steps:
       - checkout
       - run:
@@ -134,7 +134,7 @@ jobs:
   deploy_production:
     working_directory: ~/repo
     docker:
-      - image: node:8.11.3@sha256:98755b9281c251f9e712069978975181a9d9b43efcbe0f2270ff6206ebc86dda
+      - image: node:8.11.3@sha256:6d6c00a85a9859339f38eeace91b1f5554e7c7cf1165d3517cff991bf798ee2f
     steps:
       - checkout
       - run:

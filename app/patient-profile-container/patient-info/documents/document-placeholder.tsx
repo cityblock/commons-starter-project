@@ -98,6 +98,8 @@ export class DocumentPlaceholder extends React.Component<allProps, IState> {
             requestId,
           },
         });
+      } else if (message.event === 'signature_request_canceled') {
+        this.setState({ loading: false });
       }
     };
   }

@@ -1,4 +1,4 @@
-import { capitalize, lowerCase } from 'lodash';
+import { capitalize, lowerCase, padStart } from 'lodash';
 
 export const formatAbbreviatedName = (
   firstName: string,
@@ -46,7 +46,11 @@ interface IAddress {
   zip: string | null;
   street2?: string | null;
 }
-export const formatAddress = ({ street1, street2, city, state, zip }: IAddress): string => {
+export const formatAddress = (address?: IAddress | null): string => {
+  if (!address) {
+    return '';
+  }
+  const { street1, street2, city, state, zip } = address;
   const line1 = formatAddressFirstLine({ street1, street2 });
   const line2 = formatAddressSecondLine({ state, city, zip });
 
@@ -98,4 +102,8 @@ export const formatPhoneNumber = (phoneNumber?: string | null): string => {
     return `(${areaCode}) ${first}-${second}`;
   }
   return phoneNumberDupe;
+};
+
+export const formatCityblockId = (id: number): string => {
+  return `CBH-${padStart(id.toString(), 7, '0')}`;
 };

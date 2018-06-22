@@ -9,7 +9,12 @@ import {
 } from 'schema';
 import config from '../config';
 import { reportError } from '../helpers/error-helpers';
-import { formatAddress, formatPatientName, formatPhoneNumber } from '../helpers/format-helpers';
+import {
+  formatAddress,
+  formatCityblockId,
+  formatPatientName,
+  formatPhoneNumber,
+} from '../helpers/format-helpers';
 import { addJobToQueue } from '../helpers/queue-helpers';
 import Patient from '../models/patient';
 import PatientContact from '../models/patient-contact';
@@ -24,10 +29,10 @@ const hellosign = require('hellosign-sdk')({ key: config.HELLOSIGN_API_KEY });
 const MAX_ORGANIZATIONS = 17;
 const MAX_INDIVIDUALS = 12;
 const TEMPLATE_MAP = {
-  cityblockConsent: '',
+  cityblockConsent: config.HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT,
   hipaaConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
-  hieHealthixConsent: '',
-  hcp: '',
+  hieHealthixConsent: config.HELLOSIGN_TEMPLATE_ID_HEALTHIX,
+  hcp: config.HELLOSIGN_TEMPLATE_ID_HCP,
   molst: '',
   textConsent: config.HELLOSIGN_TEMPLATE_ID_TEXT_CONSENT,
 };
@@ -73,6 +78,12 @@ export const getHelloSignOptions = async (
 
   if (documentType === 'hipaaConsent') {
     options.custom_fields = await getPHISharingConsentOptions(patient, txn);
+  } else if (documentType === 'hieHealthixConsent') {
+    options.custom_fields = await getHealthixOptions(patient, txn);
+  } else if (documentType === 'hcp') {
+    options.custom_fields = await getHCPOptions(patient, txn);
+  } else if (documentType === 'cityblockConsent') {
+    options.custom_fields = await getConsentToTreatOptions(patient, txn);
   }
 
   return options;
@@ -153,6 +164,28 @@ export const getPHISharingConsentOptions = async (patient: Patient, txn: Transac
   });
 
   return customFields;
+};
+
+export const getHCPOptions = async (patient: Patient, txn: Transaction) => {
+  return {
+    patient_name: formatPatientName(patient.firstName, patient.lastName),
+    home_address: formatAddress(patient.patientInfo.primaryAddress),
+  };
+};
+
+export const getHealthixOptions = async (patient: Patient, txn: Transaction) => {
+  return {
+    patient_name: formatPatientName(patient.firstName, patient.lastName),
+    home_address: formatAddress(patient.patientInfo.primaryAddress),
+    date_of_birth: format(patient.dateOfBirth, 'MM/DD/YY'),
+    patient_id: formatCityblockId(patient.cityblockId),
+  };
+};
+
+export const getConsentToTreatOptions = async (patient: Patient, txn: Transaction) => {
+  return {
+    patient_name: formatPatientName(patient.firstName, patient.lastName),
+  };
 };
 
 export interface IHelloSignCreateArgs {

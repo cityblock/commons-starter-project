@@ -150,6 +150,24 @@ export default class PatientExternalOrganization extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
+  static async getAllForConsents(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientExternalOrganization[]> {
+    return this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .where(builder => {
+        builder
+          .where({ isConsentedForFamilyPlanning: true })
+          .orWhere({ isConsentedForGeneticTesting: true })
+          .orWhere({ isConsentedForHiv: true })
+          .orWhere({ isConsentedForMentalHealth: true })
+          .orWhere({ isConsentedForStd: true })
+          .orWhere({ isConsentedForSubstanceUse: true });
+      })
+      .orderBy('name', 'asc');
+  }
+
   static async create(input: IPatientExternalOrganizationOptions, txn: Transaction) {
     const formattedInput = clone(input);
     if (input.phoneNumber) {

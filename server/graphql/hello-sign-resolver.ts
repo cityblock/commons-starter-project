@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
-import { transaction } from 'objection';
+import { get } from 'lodash';
+import { transaction, Transaction } from 'objection';
 import {
   DocumentTypeOptions,
   IHelloSignCreateInput,
@@ -8,9 +9,11 @@ import {
 } from 'schema';
 import config from '../config';
 import { reportError } from '../helpers/error-helpers';
-import { formatPatientName } from '../helpers/format-helpers';
+import { formatAddress, formatPatientName, formatPhoneNumber } from '../helpers/format-helpers';
 import { addJobToQueue } from '../helpers/queue-helpers';
 import Patient from '../models/patient';
+import PatientContact from '../models/patient-contact';
+import PatientExternalOrganization from '../models/patient-external-organization';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -18,14 +21,43 @@ import { IContext } from './shared/utils';
 const hellosign = require('hellosign-sdk')({ key: config.HELLOSIGN_API_KEY });
 /* tslint:enable */
 
-export const getHelloSignOptions = (patient: Patient, documentType: DocumentTypeOptions) => {
+const MAX_ORGANIZATIONS = 17;
+const MAX_INDIVIDUALS = 12;
+const TEMPLATE_MAP = {
+  cityblockConsent: '',
+  hipaaConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
+  hieHealthixConsent: '',
+  hcp: '',
+  molst: '',
+  textConsent: config.HELLOSIGN_TEMPLATE_ID_TEXT_CONSENT,
+};
+
+interface ISigners {
+  email_address: string;
+  name: string;
+  role: string;
+}
+
+interface IHelloSignOptions {
+  test_mode: number;
+  clientId: string;
+  subject: string;
+  signers: ISigners[];
+  template_id: string;
+  custom_fields?: any;
+}
+
+export const getHelloSignOptions = async (
+  patient: Patient,
+  documentType: DocumentTypeOptions,
+  txn: Transaction,
+) => {
   const patientName = formatPatientName(patient.firstName, patient.lastName);
   const timestamp = format(new Date(), 'MM/DD/YY h:mm a');
 
-  return {
+  const options = {
     test_mode: config.NODE_ENV === 'production' ? 0 : 1,
     clientId: config.HELLOSIGN_CLIENT_ID,
-    template_id: '9f5fcf47c0ce797d2beed7c62e9ae62487259298', // TODO: parameterize depending on what document
     subject: `${patientName} - ${documentType} ${timestamp}`,
     signers: [
       {
@@ -36,7 +68,91 @@ export const getHelloSignOptions = (patient: Patient, documentType: DocumentType
         role: 'Member',
       },
     ],
-  };
+    template_id: TEMPLATE_MAP[documentType],
+  } as IHelloSignOptions;
+
+  if (documentType === 'hipaaConsent') {
+    options.custom_fields = await getPHISharingConsentOptions(patient, txn);
+  }
+
+  return options;
+};
+
+interface IEntity {
+  isConsentedForFamilyPlanning?: boolean | null;
+  isConsentedForHiv?: boolean | null;
+  isConsentedForGeneticTesting?: boolean | null;
+  isConsentedForStd?: boolean | null;
+  isConsentedForSubstanceUse?: boolean | null;
+  isConsentedForMentalHealth?: boolean | null;
+}
+const getPermissionText = (entity: IEntity) => {
+  const isAllAuthorized =
+    entity.isConsentedForFamilyPlanning &&
+    entity.isConsentedForGeneticTesting &&
+    entity.isConsentedForHiv &&
+    entity.isConsentedForMentalHealth &&
+    entity.isConsentedForStd &&
+    entity.isConsentedForSubstanceUse;
+
+  if (isAllAuthorized) {
+    return 'ALL my health information';
+  }
+  const base = 'ALL my health information, except: ';
+  const exceptions: string[] = [];
+  if (!entity.isConsentedForFamilyPlanning) {
+    exceptions.push('Family planning information');
+  }
+  if (!entity.isConsentedForHiv) {
+    exceptions.push('HIV/AIDS');
+  }
+  if (!entity.isConsentedForStd) {
+    exceptions.push('Sexually transmitted diseases');
+  }
+  if (!entity.isConsentedForGeneticTesting) {
+    exceptions.push('Genetic testing');
+  }
+  if (!entity.isConsentedForSubstanceUse) {
+    exceptions.push('Substance use disorder information');
+  }
+  if (!entity.isConsentedForMentalHealth) {
+    exceptions.push('Mental health conditions');
+  }
+
+  return base + exceptions.join(', ');
+};
+
+export const getPHISharingConsentOptions = async (patient: Patient, txn: Transaction) => {
+  const customFields = {
+    patient_name: formatPatientName(patient.firstName, patient.lastName),
+    home_address: formatAddress(patient.patientInfo.primaryAddress),
+    home_phone_number: formatPhoneNumber(get(patient, 'patientInfo.primaryPhone.phoneNumber')),
+    date_of_birth: format(patient.dateOfBirth, 'MM/DD/YY'),
+  } as any;
+
+  let organizations = await PatientExternalOrganization.getAllForConsents(patient.id, txn);
+  organizations = organizations.slice(0, MAX_ORGANIZATIONS);
+
+  organizations.forEach((organization, index) => {
+    customFields[`organization_name_${index}`] = organization.name;
+    customFields[`organization_permissions_${index}`] = getPermissionText(organization);
+  });
+
+  let individuals = await PatientContact.getAllForConsents(patient.id, txn);
+  individuals = individuals.slice(0, MAX_INDIVIDUALS);
+
+  individuals.forEach((individual, index) => {
+    customFields[`individual_name_${index}`] = formatPatientName(
+      individual.firstName,
+      individual.lastName,
+    );
+    customFields[`phone_number_${index}`] = formatPhoneNumber(get(individual, 'phone.phoneNumber'));
+    customFields[`relationship_${index}`] =
+      individual.relationFreeText || individual.relationToPatient;
+    customFields[`individual_permissions_${index}`] = getPermissionText(individual);
+  });
+
+  return customFields;
 };
 
 export interface IHelloSignCreateArgs {
@@ -63,7 +179,7 @@ export async function helloSignCreate(
 
     try {
       if (!testTransaction) {
-        const options = getHelloSignOptions(patient, input.documentType);
+        const options = await getHelloSignOptions(patient, input.documentType, txn);
         // start signature request
         const signatureRequest = await hellosign.signatureRequest.createEmbeddedWithTemplate(
           options,

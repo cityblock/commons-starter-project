@@ -52,6 +52,45 @@ describe('patient external organization model', () => {
       const result = await PatientExternalOrganization.get(patientExternalOrganization.id, txn);
       expect(result).toMatchObject(patientExternalOrganization);
     });
+
+    it('should get patient contacts for the consent form', async () => {
+      const { patient } = await setup(txn);
+      const org = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test Organization', {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+        }),
+        txn,
+      );
+      const org2 = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test Organization 2', {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+        }),
+        txn,
+      );
+      const orgDeleted = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test Organization Deleted', {
+          isConsentedForHiv: true,
+        }),
+        txn,
+      );
+      await PatientExternalOrganization.delete(orgDeleted.id, txn);
+
+      const results = await PatientExternalOrganization.getAllForConsents(patient.id, txn);
+      expect(results).toHaveLength(2);
+
+      delete org.address;
+      expect(results).toContainEqual(expect.objectContaining(org));
+      delete org2.address;
+      expect(results).toContainEqual(expect.objectContaining(org2));
+    });
   });
 
   describe('create', async () => {

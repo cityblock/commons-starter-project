@@ -86,6 +86,83 @@ describe('patient info model', () => {
       const result = await PatientContact.getEmergencyContactsForPatient(patient.id, txn);
       expect(result[0]).toMatchObject(emergencyContact);
     });
+
+    it('should get patient contacts for the consent form', async () => {
+      const { user, patient } = await setup(txn);
+      const phone = await Phone.create(createMockPhone('6178889903'), txn);
+      const patientContact = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone, {
+          isConsentedForHiv: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          firstName: 'Hermione',
+          lastName: 'Granger',
+        }),
+        txn,
+      );
+      await PatientContactPhone.create(
+        { phoneId: phone.id, patientContactId: patientContact.id },
+        txn,
+      );
+
+      const phone2 = await Phone.create(createMockPhone('6174549903'), txn);
+      const patientContact2 = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone2, {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          firstName: 'Harry',
+          lastName: 'Potter',
+          relationToPatient: 'friend' as PatientRelationOptions,
+        }),
+        txn,
+      );
+      await PatientContactPhone.create(
+        { phoneId: phone2.id, patientContactId: patientContact2.id },
+        txn,
+      );
+
+      const phone3 = await Phone.create(createMockPhone('6174549903'), txn);
+      const patientContactDeleted = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone3, {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          firstName: 'Harry',
+          lastName: 'Potter',
+          relationToPatient: 'friend' as PatientRelationOptions,
+        }),
+        txn,
+      );
+      await PatientContact.delete(patientContactDeleted.id, user.id, txn);
+
+      const results = await PatientContact.getAllForConsents(patient.id, txn);
+      expect(results).toHaveLength(2);
+
+      delete patientContact.email;
+      delete patientContact.address;
+      expect(results).toContainEqual(
+        expect.objectContaining({
+          ...patientContact,
+          phone: expect.objectContaining(phone),
+        }),
+      );
+
+      delete patientContact2.email;
+      delete patientContact2.address;
+      expect(results).toContainEqual(
+        expect.objectContaining({
+          ...patientContact2,
+          phone: expect.objectContaining(phone2),
+        }),
+      );
+    });
   });
 
   describe('create', async () => {

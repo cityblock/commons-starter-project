@@ -195,6 +195,23 @@ export default class PatientContact extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
+  static async getAllForConsents(patientId: string, txn: Transaction): Promise<PatientContact[]> {
+    return this.query(txn)
+      .eager('phone')
+      .modifyEager('phone', builder => builder.where('phone.deletedAt', null))
+      .where({ patientId, deletedAt: null })
+      .where(builder => {
+        builder
+          .where({ isConsentedForFamilyPlanning: true })
+          .orWhere({ isConsentedForGeneticTesting: true })
+          .orWhere({ isConsentedForHiv: true })
+          .orWhere({ isConsentedForMentalHealth: true })
+          .orWhere({ isConsentedForStd: true })
+          .orWhere({ isConsentedForSubstanceUse: true });
+      })
+      .orderBy('lastName', 'asc');
+  }
+
   static async getHealthcareProxiesForPatient(
     patientId: string,
     txn: Transaction,

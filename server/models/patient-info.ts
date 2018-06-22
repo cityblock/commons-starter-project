@@ -61,6 +61,14 @@ export interface IPatientInfoOptions {
   hasMolst?: boolean;
   hasDeclinedPhotoUpload?: boolean;
   needToKnow?: string;
+  isWhite?: boolean;
+  isBlack?: boolean;
+  isAmericanIndianAlaskan?: boolean;
+  isAsian?: boolean;
+  isHawaiianPacific?: boolean;
+  isOtherRace?: boolean;
+  isHispanic?: boolean;
+  raceFreeText?: string;
 }
 
 interface IEditPatientInfo {
@@ -85,6 +93,14 @@ interface IEditPatientInfo {
   hasUploadedPhoto?: boolean;
   needToKnow?: string;
   googleCalendarId?: string;
+  isWhite?: boolean;
+  isBlack?: boolean;
+  isAmericanIndianAlaskan?: boolean;
+  isAsian?: boolean;
+  isHawaiianPacific?: boolean;
+  isOtherRace?: boolean;
+  isHispanic?: boolean;
+  raceFreeText?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -120,6 +136,14 @@ export default class PatientInfo extends Model {
   googleCalendarId!: string;
   createdAt!: string;
   updatedAt!: string;
+  isWhite!: boolean;
+  isBlack!: boolean;
+  isAmericanIndianAlaskan!: boolean;
+  isAsian!: boolean;
+  isHawaiianPacific!: boolean;
+  isOtherRace!: boolean;
+  isHispanic!: boolean;
+  raceFreeText!: string;
 
   $beforeInsert() {
     this.id = uuid();
@@ -143,7 +167,7 @@ export default class PatientInfo extends Model {
       preferredName: { type: 'string' },
       language: { type: 'string' },
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'selfDescribed', 'pass'] },
-      genderFreeText: { type: 'string' },
+      genderFreeText: { type: ['string', 'null'] },
       transgender: { type: 'string', enum: ['yes', 'no', 'pass'] },
       maritalStatus: {
         type: 'string',
@@ -162,6 +186,14 @@ export default class PatientInfo extends Model {
       hasDeclinedPhotoUpload: { type: 'boolean' },
       hasUploadedPhoto: { type: 'boolean' },
       needToKnow: { type: 'text' },
+      isWhite: { type: 'boolean' },
+      isBlack: { type: 'boolean' },
+      isAmericanIndianAlaskan: { type: 'boolean' },
+      isAsian: { type: 'boolean' },
+      isHawaiianPacific: { type: 'boolean' },
+      isOtherRace: { type: 'boolean' },
+      isHispanic: { type: 'boolean' },
+      raceFreeText: { type: ['string', 'null'] },
       googleCalendarId: { type: 'string' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },

@@ -1,5 +1,5 @@
 import { transaction, Transaction } from 'objection';
-import { Gender, UserRole } from 'schema';
+import { Gender, MaritalStatus, Transgender, UserRole } from 'schema';
 
 import {
   createMockClinic,
@@ -55,7 +55,17 @@ describe('patient info model', () => {
       const result = await PatientInfo.edit(
         {
           gender: 'female' as Gender,
+          transgender: 'yes' as Transgender,
+          maritalStatus: 'widowed' as MaritalStatus,
           language: 'ch',
+          isWhite: true,
+          isBlack: false,
+          isAmericanIndianAlaskan: false,
+          isAsian: true,
+          isHawaiianPacific: false,
+          isOtherRace: true,
+          isHispanic: true,
+          raceFreeText: 'self identified race',
           updatedById: user.id,
         },
         patient.patientInfo.id,
@@ -65,8 +75,18 @@ describe('patient info model', () => {
       expect(result).toMatchObject({
         patientId: patient.id,
         id: patient.patientInfo.id,
-        gender: 'female' as Gender,
+        gender: 'female',
+        transgender: 'yes',
+        maritalStatus: 'widowed',
         language: 'ch',
+        isWhite: true,
+        isBlack: false,
+        isAmericanIndianAlaskan: false,
+        isAsian: true,
+        isHawaiianPacific: false,
+        isOtherRace: true,
+        isHispanic: true,
+        raceFreeText: 'self identified race',
       });
     });
 

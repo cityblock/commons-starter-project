@@ -63,10 +63,14 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
 
       // if message from patient, handle auto response after hours
       if (smsMessage.patientId) {
-        addJobToQueue('afterHoursCommunications', {
-          userId: user.id,
-          contactNumber: smsMessage.contactNumber,
-        });
+        addJobToQueue(
+          'afterHoursCommunications',
+          {
+            userId: user.id,
+            contactNumber: smsMessage.contactNumber,
+          },
+          { priority: 'high' },
+        );
       }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);
@@ -123,10 +127,14 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
 
       // if message not associated with patient, background job to ensure not old number
       if (!smsMessage.patientId) {
-        addJobToQueue('checkPreviousContact', {
-          userId: user.id,
-          contactNumber: smsMessage.contactNumber,
-        });
+        addJobToQueue(
+          'checkPreviousContact',
+          {
+            userId: user.id,
+            contactNumber: smsMessage.contactNumber,
+          },
+          { priority: 'high' },
+        );
         // else if patient did not consent to be texted, background job to SMS user
       } else if (smsMessage.patientId) {
         const textConsentDocuments = await PatientDocument.getByDocumentTypeForPatient(
@@ -136,11 +144,15 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
         );
 
         if (!textConsentDocuments.length) {
-          addJobToQueue('notifyNoConsent', {
-            userId: user.id,
-            patientId: smsMessage.patientId,
-            type: 'smsMessage',
-          });
+          addJobToQueue(
+            'notifyNoConsent',
+            {
+              userId: user.id,
+              patientId: smsMessage.patientId,
+              type: 'smsMessage',
+            },
+            { priority: 'high' },
+          );
         }
       }
     } catch (err) {

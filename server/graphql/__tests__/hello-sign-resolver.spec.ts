@@ -84,6 +84,11 @@ describe('HelloSign Resolver', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('helloSignCreate', () => {
     it('gets a link to sign document', async () => {
       const { user, patient } = await setup(txn);

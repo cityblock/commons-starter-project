@@ -5,11 +5,11 @@ import React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Gender, ShortTask, ShortUser } from '../../graphql/types';
-import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import { formatFullName, isDueSoon } from '../helpers/format-helpers';
 import Avatar from '../library/avatar/avatar';
 import PatientPhoto from '../library/patient-photo/patient-photo';
 import Text from '../library/text/text';
+import { isCBOReferralRequiringActionForUser } from '../task/helpers/helpers';
 import styles from './css/task-row.css';
 import tasksStyles from './css/tasks.css';
 

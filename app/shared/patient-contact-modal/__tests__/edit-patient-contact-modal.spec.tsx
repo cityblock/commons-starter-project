@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import { patientContactEdit } from '../../../graphql/types';
-import { healthcareProxy, patient } from '../../../shared/util/test-data';
+import { healthcareProxy, patient } from '../../util/test-data';
 import { EditPatientContactModal } from '../edit-patient-contact-modal';
 import PatientContactModal from '../patient-contact-modal';
 

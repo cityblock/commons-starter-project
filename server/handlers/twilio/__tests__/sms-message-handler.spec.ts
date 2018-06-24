@@ -62,6 +62,11 @@ describe('SMS Message Handler', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   it('handles an incoming SMS', async () => {
     const { user, patient } = await setup(txn);
     await User.update(

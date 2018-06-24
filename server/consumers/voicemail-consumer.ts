@@ -1,17 +1,12 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import axios from 'axios';
 import { format } from 'date-fns';
 import Knex from 'knex';
-import kue from 'kue';
 import { transaction, Model, Transaction } from 'objection';
 import { UserSignedUrlAction } from 'schema';
 import config from '../config';
-import { loadUserVoicemailUrl } from '../graphql/shared/gcs/helpers';
+import gcsHelpers from '../graphql/shared/gcs/helpers';
 import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
 import knexConfig from '../models/knexfile';
 import Voicemail from '../models/voicemail';
 import TwilioClient from '../twilio-client';
@@ -36,27 +31,6 @@ interface ITwilioRecording {
   dateUpdated: Date;
   status: 'completed' | 'processing';
 }
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-queue.process('processVoicemail', async (job, done) => {
-  try {
-    logger.log('[Consumer][processVoicemail] Started processing');
-    await processVoicemails(job.data);
-    logger.log('[Consumer][processVoicemail] Completed processing');
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][processVoicemail] Error processing');
-    reportError(err, 'Kue error processVoicemail');
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processVoicemails(data: IProcessVoicemailData, existingTxn?: Transaction) {
   try {
@@ -127,14 +101,17 @@ export async function createVoicemail(
 }
 
 export async function uploadVoicemail(twilioUrl: string, userId: string, voicemailId: string) {
-  const signedUrl = await loadUserVoicemailUrl(userId, voicemailId, 'write' as UserSignedUrlAction);
+  const signedUrl = await gcsHelpers.loadUserVoicemailUrl(
+    userId,
+    voicemailId,
+    'write' as UserSignedUrlAction,
+  );
   const audioFile = await axios.get(twilioUrl, {
     responseType: 'arraybuffer',
     headers: {
       'Content-Type': 'audio/mpeg',
     },
   });
-
   if (signedUrl && audioFile) {
     return axios.put(signedUrl, audioFile.data, {
       headers: {

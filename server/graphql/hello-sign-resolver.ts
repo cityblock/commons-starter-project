@@ -248,12 +248,16 @@ export async function helloSignTransfer(
     await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
     logger.log(`TRANSFER HelloSign document for ${input.patientId} by ${userId}`);
 
-    addJobToQueue('processHelloSign', {
-      userId,
-      patientId: input.patientId,
-      requestId: input.requestId,
-      documentType: input.documentType,
-    });
+    addJobToQueue(
+      'processHelloSign',
+      {
+        userId,
+        patientId: input.patientId,
+        requestId: input.requestId,
+        documentType: input.documentType,
+      },
+      { priority: 'high' },
+    );
   });
 
   return true;

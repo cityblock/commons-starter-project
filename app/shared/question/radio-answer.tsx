@@ -1,7 +1,7 @@
 import React from 'react';
 import { FullAnswer, FullQuestion } from '../../graphql/types';
-import RadioGroup from '../../shared/library/radio-group/radio-group';
-import RadioInput from '../../shared/library/radio-input/radio-input';
+import RadioGroup from '../library/radio-group/radio-group';
+import RadioInput from '../library/radio-input/radio-input';
 
 interface IProps {
   editable: boolean;

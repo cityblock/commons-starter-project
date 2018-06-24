@@ -9,7 +9,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { question } from '../../../shared/util/test-data';
+import { question } from '../../util/test-data';
 import QuestionAnswers, { QuestionAnswers as Component } from '../question-answers';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };

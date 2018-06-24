@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
 import taskUserFollowGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
 import { taskUserFollow, taskUserFollowVariables, FullUser, ShortUser } from '../../graphql/types';
-import Avatar from '../../shared/library/avatar/avatar';
+import Avatar from '../library/avatar/avatar';
 import styles from './css/add-task-follower.css';
 
 interface IProps {

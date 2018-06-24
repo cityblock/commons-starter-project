@@ -286,7 +286,7 @@ After ensuring the foreign data wrapper is up to date, we then need to copy the 
 Setup your database. First install postgres 10 from brew or postgresapp.
 
     createdb commons_test
-    psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root
+    psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root"
 
 ### Use GraphiQL
 

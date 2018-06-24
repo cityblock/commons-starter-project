@@ -7,8 +7,8 @@ import { closePopup } from '../../actions/popup-action';
 import taskUserUnfollowGraphql from '../../graphql/queries/task-user-unfollow-mutation.graphql';
 import { taskUserUnfollow, taskUserUnfollowVariables } from '../../graphql/types';
 import { ITaskUnfollowPopupOptions } from '../../reducers/popup-reducer';
-import Modal from '../../shared/library/modal/modal';
 import { IState as IAppState } from '../../store';
+import Modal from '../library/modal/modal';
 
 interface IProps {
   history: History;

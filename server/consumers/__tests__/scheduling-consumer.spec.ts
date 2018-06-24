@@ -1,14 +1,14 @@
 /**
  * @jest-environment node
  */
-
 import kue from 'kue';
 import nock from 'nock';
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import uuid from 'uuid/v4';
-
+import config from '../../config';
 import { getGoogleCalendarFieldsFromSIU } from '../../helpers/google-calendar-helpers';
+import queueHelpers from '../../helpers/queue-helpers';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientInfo from '../../models/patient-info';
@@ -22,7 +22,10 @@ import {
   mockGoogleCredentials,
   mockGoogleOauthAuthorize,
 } from '../../spec-helpers';
-import { processNewSchedulingMessage } from '../scheduling-consumer';
+import {
+  processNewCalendarEventMessage,
+  processNewSchedulingMessage,
+} from '../scheduling-consumer';
 
 const queue = kue.createQueue();
 
@@ -49,23 +52,27 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('processing SIU scheduling jobs', () => {
   let txn = null as any;
+  const originalAddJob = queueHelpers.addJobToQueue;
 
   beforeAll(async () => {
     queue.testMode.enter();
+    config.GCP_CREDS = '{"private_key":"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyxrqMnMzxS81l\\n0fbRMDgg2je3wDLBOg96cSnIcb4cq2mmKQwYUQyzSikcVhBF4OwJOuybntOtxlyG\\nDz9f66rW8G4hKdcz0m7Og6fcMP25BT4plVOMNPZPjFu66RJE1ZNqiv6uzZXEgOAn\\na2xlXg+o0ejaqvpxe/meNad4cLjsjM2/pOqy9Pk2sBp3yFggyO1tECVFnitik+Oq\\nRm45796fCmUh8GcvPiJUg+x/u0Url0VZzVBwhiQtdEUYx/tUSWxVggNJGPUcUER2\\nFm+xcfeN5GhaxS5+ZTTZyEWhZJQxeASE17jBl8c7XkDqMQlwotK0GS/hhLluFJvP\\nBAF5B4+dAgMBAAECggEAEcRAK9M1ZtGCsxi/r6BcI5+sI9287YkImsF+RoZPP2gl\\nkrbHle8QFQ1Msp029srYij5J31lUbhOlhEklojG4g63XNAKFeYfzLSDWYMKZpHaJ\\n6/YEHI3y4IrxXszk3ORgxxjTIKobtTCdli1N03Eam0tpGboeM4L/lqJ8ZzLEnfVh\\nXr9A47wgJpB4CZh1ipjmqDQJQ8Ej3JygaXErT04J0mmGs9ZO2M/ijl2PubqibcQs\\njt2MKGMcwVTXxjqES5tjUYKzYpl9IW2528SRUiYH5egQiEr7EUd4m2dWouiQ4UEj\\nJGCbrrOySzMLFcLD7XwuLyze6kkz121MM4vSG8rS4QKBgQD1HvHBuYN4eUd08gkb\\npDZs4zFBjI8okNkZfsvr/o8GFHdm+5in60dXda13ZtrzYT+Bl+ck/jarEZlWgqV6\\nEcti6i58xVP7FLc3bAZg0BMrYAEDYlVeuFZex99nbaawUlY6JyPQppgCX6AY1EhD\\nnfgS1yXl5Ziiom1ASQEiulU7hQKBgQC6tfqsBWRM8l5xUlCz0UJi7+G9kKLbIUQL\\nnJQRP3PTX9/KzUZi5EOzKLp3zEEz3N8fLn9YI9hUu7qAGC/ZLrHORIfOeOL6Tt2C\\nvcrWNlYHzxVp6LG2r6vyYA1XpeDheyMIXuRKPYjAJU91ru70vpPOyQ8xVUKYt2fa\\nhv40zQvDOQKBgE6yhanN1tDqFzALuTLfsP2an6jM6PV8M8eEtxHoo6CvF3q/0k4v\\nMrN4u523LxquoUYJMBPnbkPUHafxwBEF/4edahly/TiCeSRZEV8pzs3BP/IHMyN7\\nCXfasfYx9S9s7/QxtsT5h5pTe0Idfan/4LKj0q4R3cRxY6QdDDlLG6xFAoGAPueQ\\nzOQEJuiBaSyShAK8mxi2tWdFdw5+Hmtid20pWM20WF9Ql4DQTkwqhrIKRa7kfVzt\\nCoUJHYMiEoYTmNhij1wHZUjVL//iIWpQLFuiIH9kd4ouVZ5aEA7Mb/szCMSzyN4v\\ni9Ovfw0S+FM3rr2GjuSuebB//3PLSZSxkJiEngECgYEA416H0a457vjnN6mzTktD\\nXI3Na36Q/VdXmMR5f9GXagpsBIO101XM7U3YY36jD7GzQaOQpZvwiZKy0jVLfx8B\\nXb1Ugj9ljqyWt9K0Fni+LrsvkV2pPURokdT3j+DfcnOklUMAPQzzZZ2FfkFX80do\\ngnIFsJBQxOKRwboOpg2YZtl=\\n-----END PRIVATE KEY-----\\n","client_email":"laura-robot@fake-credentials.iam.gserviceaccount.com"}' as any;
   });
 
   beforeEach(async () => {
     queue.testMode.clear();
-
+    queueHelpers.addJobToQueue = jest.fn();
     txn = await transaction.start(PatientSiuEvent.knex());
   });
 
   afterEach(async () => {
     await txn.rollback();
+    queueHelpers.addJobToQueue = originalAddJob;
   });
 
   afterAll(async () => {
     queue.testMode.exit();
+    config.GCP_CREDS = null as any;
     queue.shutdown(0, () => true); // There must be a better way to do this...
   });
 
@@ -110,7 +117,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
 
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
       expect(siuEvent!.patientId).toBe(patient.id);
@@ -144,6 +158,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
@@ -189,6 +211,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeFalsy();
@@ -231,6 +261,15 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeFalsy();
@@ -333,6 +372,15 @@ describe('processing SIU scheduling jobs', () => {
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
 
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
+
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeFalsy();
 
@@ -382,6 +430,15 @@ describe('processing SIU scheduling jobs', () => {
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
 
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
+
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
       expect(siuEvent!.patientId).toBe(patient.id);
@@ -419,6 +476,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
@@ -517,6 +582,15 @@ describe('processing SIU scheduling jobs', () => {
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
 
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
+
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent!.patientId).toBe(patient.id);
       expect(parseInt(siuEvent!.transmissionId as any, 10)).toBe(message.transmissionId);
@@ -560,6 +634,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
@@ -598,6 +680,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent).toBeTruthy();
@@ -695,6 +785,14 @@ describe('processing SIU scheduling jobs', () => {
         });
 
       await processNewSchedulingMessage(message as any, txn, testConfig);
+      const calendarEventData = (queueHelpers.addJobToQueue as any).mock.calls[0][1];
+
+      expect(queueHelpers.addJobToQueue).toBeCalledWith(
+        'calendarEvent',
+        expect.objectContaining({ googleCalendarId: 'fakeCalendarId' }),
+      );
+      mockGoogleOauthAuthorize('token');
+      await processNewCalendarEventMessage(calendarEventData, txn);
 
       const siuEvent = await PatientSiuEvent.getByVisitId(message.visitId, txn);
       expect(siuEvent!.patientId).toBe(patient.id);

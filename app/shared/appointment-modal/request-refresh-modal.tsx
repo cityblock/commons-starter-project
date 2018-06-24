@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from '../../shared/library/modal/modal';
+import Modal from '../library/modal/modal';
 
 interface IProps {
   isVisible: boolean;

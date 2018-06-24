@@ -2,8 +2,8 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import JwtForPdfCreateGraphql from '../../graphql/queries/jwt-for-pdf-create.graphql';
 import { JwtForPdfCreate, JwtForPdfCreateVariables } from '../../graphql/types';
-import { getPrintableCalendarPdfRoute } from '../../shared/helpers/route-helpers';
-import Modal from '../../shared/library/modal/modal';
+import { getPrintableCalendarPdfRoute } from '../helpers/route-helpers';
+import Modal from '../library/modal/modal';
 import MonthSelect from './month-select';
 
 interface IProps {

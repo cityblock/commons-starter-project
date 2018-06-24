@@ -1,16 +1,13 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import DateInput from '../../../shared/library/date-input/date-input';
-import FormLabel from '../../../shared/library/form-label/form-label';
-import TextInput from '../../../shared/library/text-input/text-input';
-import TextArea from '../../../shared/library/textarea/textarea';
-import ExternalCareTeamMultiSelect from '../../../shared/user-multi-select/external-care-team-multi-select';
-import {
-  getFamilyMemberInfo,
-  getUserInfo,
-} from '../../../shared/user-multi-select/get-info-helpers';
-import InternalCareTeamMultiSelect from '../../../shared/user-multi-select/internal-care-team-multi-select';
-import { currentUser, healthcareProxy, user } from '../../../shared/util/test-data';
+import DateInput from '../../library/date-input/date-input';
+import FormLabel from '../../library/form-label/form-label';
+import TextInput from '../../library/text-input/text-input';
+import TextArea from '../../library/textarea/textarea';
+import ExternalCareTeamMultiSelect from '../../user-multi-select/external-care-team-multi-select';
+import { getFamilyMemberInfo, getUserInfo } from '../../user-multi-select/get-info-helpers';
+import InternalCareTeamMultiSelect from '../../user-multi-select/internal-care-team-multi-select';
+import { currentUser, healthcareProxy, user } from '../../util/test-data';
 import AddressSelect from '../address-select';
 import AppointmentForm from '../appointment-form';
 

@@ -64,6 +64,11 @@ describe('care team', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('patient care team', () => {
     it('adds user to care team', async () => {
       const { user, patient, clinic } = await setup(txn);

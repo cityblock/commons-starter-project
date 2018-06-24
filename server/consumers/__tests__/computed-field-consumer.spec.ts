@@ -7,7 +7,6 @@ import {
   UserRole,
 } from 'schema';
 import uuid from 'uuid/v4';
-
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Clinic from '../../models/clinic';
@@ -246,8 +245,8 @@ describe('processing computedField jobs', () => {
     const sortedSuggestions = carePlanSuggestions.sort((a, b) => {
       return a.suggestionType < b.suggestionType ? -1 : 1;
     });
-    expect(sortedSuggestions.length).toEqual(2);
-    expect(sortedSuggestions[0].concern!.id).toEqual(concern.id);
-    expect(sortedSuggestions[1].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
+    // Should not include concern suggestion
+    expect(sortedSuggestions.length).toEqual(1);
+    expect(sortedSuggestions[0].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
   });
 });

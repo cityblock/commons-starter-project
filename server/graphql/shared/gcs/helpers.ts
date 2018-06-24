@@ -244,7 +244,7 @@ export const loadUserVoicemailUrl = async (
     credentials: JSON.parse(finalConfig.GCP_CREDS || ''),
   });
 
-  const bucket = storage.bucket(finalConfig.GCS_USER_BUCKET || '');
+  const bucket = storage.bucket(finalConfig.GCS_USER_BUCKET || 'TEST_BUCKET');
   const file = bucket.file(`${userId}/voicemails/${voicemailId}.mp3`);
 
   const signedUrlParams: Storage.SignedUrlConfig = {

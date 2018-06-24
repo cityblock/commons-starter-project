@@ -20,7 +20,7 @@ export function addJobToQueue(topic: string, data: object, options?: IAddJobToQu
       title: message || `Handling ${topic} message`,
       ...data,
     })
-    .priority(priority || 'low')
+    .priority(priority || 'normal')
     .attempts(5)
     .backoff({ type: 'exponential' })
     .save((err: Error) => {

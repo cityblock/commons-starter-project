@@ -1,10 +1,10 @@
 import { Image, Text, View } from '@react-pdf/core';
 import { shallow } from 'enzyme';
 import React from 'react';
-import BodyText from '../../shared/body-text';
-import HeaderText from '../../shared/header-text';
+import BodyText from '../body-text';
 import copy from '../copy/copy';
 import Header, { LOGO_PATH } from '../header';
+import HeaderText from '../header-text';
 
 describe('Printable MAP Header', () => {
   const oldDate = Date.now;

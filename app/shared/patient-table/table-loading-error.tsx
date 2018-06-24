@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../shared/library/button/button';
+import Button from '../library/button/button';
 import styles from './css/table-loading-error.css';
 
 interface IProps {

@@ -10,7 +10,7 @@ import {
   parseAndVerifyJwt,
   signJwt,
   TWENTY_FOUR_HOURS_IN_MILLISECONDS,
-} from './../shared/utils';
+} from '../shared/utils';
 
 describe('util tests', () => {
   let txn = null as any;

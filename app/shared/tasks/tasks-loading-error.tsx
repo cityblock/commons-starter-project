@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
-import Button from '../../shared/library/button/button';
+import Button from '../library/button/button';
 import styles from './css/tasks.css';
 
 interface IProps {

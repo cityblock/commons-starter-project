@@ -1,6 +1,6 @@
 import React from 'react';
 import { FullAnswer, FullQuestion } from '../../graphql/types';
-import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
+import CheckboxGroup from '../library/checkbox-group/checkbox-group';
 import DropdownAnswer from './dropdown-answer';
 import FreeTextAnswer from './free-text-answer';
 import MultiSelectAnswer from './multi-select-answer';

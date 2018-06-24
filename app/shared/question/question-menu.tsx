@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup, openPopup } from '../../actions/popup-action';
-import HamburgerMenuOption from '../../shared/library/hamburger-menu-option/hamburger-menu-option';
-import HamburgerMenu from '../../shared/library/hamburger-menu/hamburger-menu';
 import { IState as IAppState } from '../../store';
+import HamburgerMenuOption from '../library/hamburger-menu-option/hamburger-menu-option';
+import HamburgerMenu from '../library/hamburger-menu/hamburger-menu';
 
 interface IStateProps {
   open: boolean;

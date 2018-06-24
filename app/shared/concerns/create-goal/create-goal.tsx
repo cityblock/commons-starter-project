@@ -11,8 +11,8 @@ import {
   FullGoalSuggestionTemplate,
 } from '../../../graphql/types';
 import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer';
-import { SearchOptions } from '../../../shared/library/search/search';
 import { IState as IAppState } from '../../../store';
+import { SearchOptions } from '../../library/search/search';
 import { Popup } from '../../popup/popup';
 import styles from './css/create-goal.css';
 import DefineGoal from './define-goal';

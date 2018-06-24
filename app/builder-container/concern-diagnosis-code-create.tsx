@@ -1,14 +1,12 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { graphql } from 'react-apollo';
-import helperStyles from '../builder-container/css/risk-area-create.css';
-/* tslint:disable:max-line-length */
 import concernAddDiagnosisCodeGraphql from '../graphql/queries/concern-add-diagnosis-code-mutation.graphql';
-/* tslint:enable:max-line-length */
 import { concernAddDiagnosisCode, concernAddDiagnosisCodeVariables } from '../graphql/types';
 import ErrorComponent from '../shared/error-component/error-component';
 import Button from '../shared/library/button/button';
 import TextInput from '../shared/library/text-input/text-input';
+import helperStyles from './css/risk-area-create.css';
 
 const CODESET_NAME = 'ICD-10';
 const CODESET_VERSION = '2018';

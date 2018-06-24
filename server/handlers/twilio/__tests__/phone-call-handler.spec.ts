@@ -65,6 +65,11 @@ describe('Phone Call Handler', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('twilioIncomingCallHandler', () => {
     it('handles an incoming phone call', async () => {
       const { user } = await setup(txn);

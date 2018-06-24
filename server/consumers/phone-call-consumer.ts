@@ -1,20 +1,8 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
-import { transaction, Model, Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
-import config from '../config';
-import { reportError } from '../helpers/error-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
-import knexConfig from '../models/knexfile';
 import PhoneCall, { CallStatus } from '../models/phone-call';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
 
 interface IProcessPhoneCallData {
   title: string;
@@ -31,25 +19,6 @@ interface ITwilioPhoneCall {
   status: CallStatus;
   duration: string | null;
 }
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-queue.process('processPhoneCall', async (job, done) => {
-  try {
-    logger.log('[Consumer][processPhoneCall] Started processing');
-    await processPhoneCalls(job.data);
-    logger.log('[Consumer][processPhoneCall] Completed processing');
-
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][processPhoneCall] Error processing');
-    reportError(err, 'Kue error processPhoneCall');
-
-    return done(err);
-  }
-});
 
 export async function processPhoneCalls(data: IProcessPhoneCallData, existingTxn?: Transaction) {
   const twilioClient = TwilioClient.get();

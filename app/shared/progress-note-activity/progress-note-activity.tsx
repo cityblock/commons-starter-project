@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import progressNoteActivityGraphql from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import { getProgressNoteActivityForProgressNote, FullProgressNote } from '../../graphql/types';
-import Spinner from '../../shared/library/spinner/spinner';
+import Spinner from '../library/spinner/spinner';
 import styles from './css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 

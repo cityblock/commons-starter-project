@@ -87,6 +87,7 @@ describe('Mattermost', () => {
           message: `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${
             patient.id
           } and user: ${user.id}`,
+          priority: 'high',
         },
       );
     });

@@ -66,7 +66,11 @@ class Mattermost {
   public queueAddUserToPatientChannel(patientId: string, userId: string): void {
     const message = `Handling ${ADD_USER_TO_CHANNEL_TOPIC} message for patient: ${patientId} and user: ${userId}`;
 
-    queueHelpers.addJobToQueue(ADD_USER_TO_CHANNEL_TOPIC, { patientId, userId }, { message });
+    queueHelpers.addJobToQueue(
+      ADD_USER_TO_CHANNEL_TOPIC,
+      { patientId, userId },
+      { message, priority: 'high' },
+    );
   }
 
   public async addUserToPatientChannel(

@@ -6,7 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { answer, question } from '../../../shared/util/test-data';
+import { answer, question } from '../../util/test-data';
 import RadioAnswer from '../radio-answer';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };

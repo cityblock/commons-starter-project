@@ -2,11 +2,11 @@ import { Transaction } from 'objection';
 import { TaskEventTypes } from 'schema';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../shared/constants';
 import { addJobToQueue } from '../helpers/queue-helpers';
-import { dateAdd } from '../lib/date';
 import CareTeam from '../models/care-team';
 import CBOReferral from '../models/cbo-referral';
 import Task, { ITaskEditableFields } from '../models/task';
 import TaskTemplate from '../models/task-template';
+import { dateAdd } from './date';
 
 export async function createTaskForTaskTemplate(
   taskTemplate: TaskTemplate,

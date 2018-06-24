@@ -3,7 +3,7 @@ import React from 'react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FullTaskEvent } from '../../graphql/types';
-import { getMapTaskRoute } from '../../shared/helpers/route-helpers';
+import { getMapTaskRoute } from '../helpers/route-helpers';
 import styles from './css/progress-note-activity.css';
 
 interface IProps {

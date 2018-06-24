@@ -68,6 +68,11 @@ describe('patient goal model', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   it('creates and gets patient goal', async () => {
     const { patient, user, patientConcern } = await setup(txn);
     const patientGoal = await PatientGoal.create(

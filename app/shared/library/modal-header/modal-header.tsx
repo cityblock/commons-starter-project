@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Icon, { Color as IconColor } from '../../library/icon/icon';
-import { IconName } from '../../library/icon/icon-types';
+import Icon, { Color as IconColor } from '../icon/icon';
+import { IconName } from '../icon/icon-types';
 import styles from './css/modal-header.css';
 
 export type Color = 'gray' | 'navy' | 'white';

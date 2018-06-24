@@ -1,36 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
 import { toNumber } from 'lodash';
-import { transaction, Model, Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { Gender } from 'schema';
-import config from '../config';
 import { IMemberAttributionMessageData } from '../handlers/pubsub/push-handler';
-import { reportError } from '../helpers/error-helpers';
-import { createRedisClient } from '../lib/redis';
 import Mattermost from '../mattermost';
 import Clinic from '../models/clinic';
-import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
-
-queue.process('memberAttribution', async (job, done) => {
-  try {
-    await processNewMemberAttributionMessage(job.data);
-    return done();
-  } catch (err) {
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processNewMemberAttributionMessage(
   data: IMemberAttributionMessageData,
@@ -68,8 +42,10 @@ export async function processNewMemberAttributionMessage(
     inNetwork,
   } = data;
 
-  if (!patientId || !cityblockId || !firstName || !lastName || !dob) {
-    return Promise.reject('Missing either patientId, cityblockId, firstName, lastName, or dob');
+  if (!patientId || !cityblockId || !firstName || !lastName || !dob || !ssn || !email) {
+    return Promise.reject(
+      'Missing either patientId, cityblockId, firstName, lastName, ssn, email or dateOfBirth',
+    );
   }
 
   await transaction(existingTxn || Patient.knex(), async txn => {

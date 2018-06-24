@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 import { FullQuickCall } from '../../graphql/types';
-import Icon from '../../shared/library/icon/icon';
+import Icon from '../library/icon/icon';
 import styles from './css/progress-note-activity.css';
 
 interface IProps {

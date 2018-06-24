@@ -10,12 +10,12 @@ import {
   calendarCreateEventForPatientVariables,
   FullAddress,
 } from '../../graphql/types';
-import styles from '../../shared/library/form/css/form.css';
-import Modal from '../../shared/library/modal/modal';
-import Spinner from '../../shared/library/spinner/spinner';
-import { getUserInfo } from '../../shared/user-multi-select/get-info-helpers';
-import { IUser } from '../../shared/user-multi-select/user-multi-select';
-import withCurrentUser, { IInjectedProps } from '../../shared/with-current-user/with-current-user';
+import styles from '../library/form/css/form.css';
+import Modal from '../library/modal/modal';
+import Spinner from '../library/spinner/spinner';
+import { getUserInfo } from '../user-multi-select/get-info-helpers';
+import { IUser } from '../user-multi-select/user-multi-select';
+import withCurrentUser, { IInjectedProps } from '../with-current-user/with-current-user';
 import AppointmentForm from './appointment-form';
 
 interface IProps {

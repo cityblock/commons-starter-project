@@ -9,7 +9,7 @@ import configureMockStore from 'redux-mock-store';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../../../shared/constants';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { isDueSoon } from '../../../shared/helpers/format-helpers';
+import { isDueSoon } from '../../helpers/format-helpers';
 import { task, user } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 

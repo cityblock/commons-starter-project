@@ -1,22 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import Knex from 'knex';
-import kue from 'kue';
-import { transaction, Model, Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import config from '../config';
-import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
 import CareTeam from '../models/care-team';
-import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
 
 type PatientContactEdit =
   | 'addPhoneNumber'
@@ -38,28 +26,6 @@ const noticeCopyVerbs: Partial<NoticeCopyVerbs> = {
   addPhoneNumber: 'added',
   deletePhoneNumber: 'deleted',
 };
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-queue.process('patientContactEdit', async (job, done) => {
-  try {
-    logger.log('[Consumer][patientContactEdit] Started processing');
-    await processPatientContactEdit(job.data);
-    logger.log('[Consumer][patientContactEdit] Completed processing');
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][patientContactEdit] Error processing');
-    reportError(err, 'Kue error patientContactEdit');
-
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processPatientContactEdit(
   data: IProcessPatientContactEditData,

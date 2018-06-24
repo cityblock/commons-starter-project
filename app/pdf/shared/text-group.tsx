@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
-import variables from '../shared/variables/variables';
+import variables from './variables/variables';
 
 export const STAR_PATH = `https://www.cityblock.com/static/images/care_team_lead_star.png`;
 

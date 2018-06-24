@@ -2,11 +2,11 @@ import { shallow } from 'enzyme';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../../shared/constants';
-import { isDueSoon } from '../../shared/helpers/format-helpers';
 import PatientConcernStats from '../concerns/concern-stats/concern-stats';
 import PatientConcernOptions from '../concerns/options-menu/options-menu';
 import PatientConcern from '../concerns/patient-concern';
 import PatientGoal from '../goals/goal';
+import { isDueSoon } from '../helpers/format-helpers';
 import { patientConcern, task } from '../util/test-data';
 
 describe('Patient Concern Component', () => {

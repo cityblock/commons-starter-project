@@ -1,12 +1,9 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import React from 'react';
-import Modal from '../../../shared/library/modal/modal';
-import {
-  getFamilyMemberInfo,
-  getUserInfo,
-} from '../../../shared/user-multi-select/get-info-helpers';
-import { currentUser, featureFlags, healthcareProxy, user } from '../../../shared/util/test-data';
+import Modal from '../../library/modal/modal';
+import { getFamilyMemberInfo, getUserInfo } from '../../user-multi-select/get-info-helpers';
+import { currentUser, featureFlags, healthcareProxy, user } from '../../util/test-data';
 import AppointmentForm from '../appointment-form';
 import { AppointmentModal } from '../appointment-modal';
 

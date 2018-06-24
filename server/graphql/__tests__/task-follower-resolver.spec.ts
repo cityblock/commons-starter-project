@@ -90,6 +90,11 @@ describe('task follower', () => {
     txn = null;
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('task followers', () => {
     it('adds and removes user to from task followers and creates TaskEvent models', async () => {
       const { user, task } = await setup(txn);

@@ -13,9 +13,9 @@ import {
   Permissions,
   UserRole,
 } from 'schema';
-import { GENERATE_PDF_JWT_TYPE } from '../../server/handlers/pdf/render-pdf';
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
+import { GENERATE_PDF_JWT_TYPE } from '../handlers/pdf/render-pdf';
 import GoogleAuth from '../models/google-auth';
 import PatientGlassBreak from '../models/patient-glass-break';
 import User, { IUserFilterOptions, Locale, UserOrderOptions } from '../models/user';

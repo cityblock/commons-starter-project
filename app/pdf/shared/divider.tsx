@@ -1,6 +1,6 @@
 import { StyleSheet, View } from '@react-pdf/core';
 import React from 'react';
-import variables from '../shared/variables/variables';
+import variables from './variables/variables';
 
 type Color = 'lightGray' | 'darkGray';
 

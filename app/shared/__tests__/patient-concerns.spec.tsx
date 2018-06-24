@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
-import { currentUser } from '../../shared/util/test-data';
 import { PatientConcerns } from '../concerns/patient-concerns';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
+import { currentUser } from '../util/test-data';
 
 describe('Patient Care Plan Concerns Component', () => {
   const onClick = (() => true) as any;

@@ -1,11 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
-import { transaction, Model, Transaction } from 'objection';
-import config from '../config';
+import { transaction, Transaction } from 'objection';
 import { ISchedulingMessageData } from '../handlers/pubsub/push-handler';
-import { reportError } from '../helpers/error-helpers';
 import {
   addUserToGoogleCalendar,
   createGoogleCalendarAuth,
@@ -15,67 +9,14 @@ import {
   updateGoogleCalendarEvent,
 } from '../helpers/google-calendar-helpers';
 import { createCalendarWithPermissions } from '../helpers/patient-calendar-helpers';
-import { addJobToQueue } from '../helpers/queue-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
+import queueHelpers from '../helpers/queue-helpers';
 import CareTeam from '../models/care-team';
-import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientSiuEvent from '../models/patient-siu-event';
 import User from '../models/user';
 
 export const CALENDAR_PERMISSION_TOPIC = 'calendarPermission';
-const CALENDAR_EVENT_TOPIC = 'calendarEvent';
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
-
-queue.process('scheduling', async (job, done) => {
-  try {
-    logger.log('[Consumer][Scheduling] Started processing');
-    await processNewSchedulingMessage(job.data);
-    logger.log('[Consumer][Scheduling] Completed processing');
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][Scheduling] Error processing');
-    reportError(err, `Kue error ${CALENDAR_PERMISSION_TOPIC}`);
-    return done(err);
-  }
-});
-
-queue.process(CALENDAR_PERMISSION_TOPIC, 1, async (job, done) => {
-  try {
-    logger.log(`[Consumer][${CALENDAR_PERMISSION_TOPIC}] Started processing`);
-    await processNewCalendarPermissionMessage(job.data);
-    logger.log(`[Consumer][${CALENDAR_PERMISSION_TOPIC}] Completed processing`);
-    return done();
-  } catch (err) {
-    logger.log(`[Consumer][${CALENDAR_PERMISSION_TOPIC}] Error processing`);
-    reportError(err, `Kue error ${CALENDAR_PERMISSION_TOPIC}`);
-    return done(err);
-  }
-});
-
-queue.process(CALENDAR_EVENT_TOPIC, async (job, done) => {
-  try {
-    logger.log(`[Consumer][${CALENDAR_EVENT_TOPIC}] Started processing`);
-    await processNewCalendarEventMessage(job.data);
-    logger.log(`[Consumer][${CALENDAR_EVENT_TOPIC}] Completed processing`);
-    return done();
-  } catch (err) {
-    logger.log(`[Consumer][${CALENDAR_EVENT_TOPIC}] Error processing`);
-    reportError(err, `Kue error ${CALENDAR_EVENT_TOPIC}`);
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
+export const CALENDAR_EVENT_TOPIC = 'calendarEvent';
 
 export async function processNewSchedulingMessage(
   data: ISchedulingMessageData,
@@ -108,7 +49,7 @@ export async function processNewSchedulingMessage(
     }
 
     try {
-      return addJobToQueue(CALENDAR_EVENT_TOPIC, {
+      return queueHelpers.addJobToQueue(CALENDAR_EVENT_TOPIC, {
         ...data,
         googleCalendarId,
       });

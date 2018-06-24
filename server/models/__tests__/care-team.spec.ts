@@ -1,8 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { UserRole } from 'schema';
 import uuid from 'uuid/v4';
-
-import PatientGoal from '../../models/patient-goal';
 import {
   createMockClinic,
   createMockUser,
@@ -13,6 +11,7 @@ import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import Concern from '../concern';
 import PatientConcern from '../patient-concern';
+import PatientGoal from '../patient-goal';
 import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import Task from '../task';

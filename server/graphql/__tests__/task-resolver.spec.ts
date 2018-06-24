@@ -141,6 +141,11 @@ describe('task tests', () => {
     txn = null;
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('resolve task', () => {
     it('can fetch task', async () => {
       const { task1, user, patient } = await setup(txn);

@@ -1,21 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import Knex from 'knex';
-import kue from 'kue';
-import { transaction, Model, Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import config from '../config';
-import { reportError } from '../helpers/error-helpers';
 import { formatAbbreviatedName } from '../helpers/format-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
-import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
 
 type NoConsent = 'smsMessage' | 'phoneCall';
 
@@ -24,29 +12,6 @@ interface IProcessContactNoConsentData {
   userId: string;
   type: NoConsent;
 }
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-queue.process('notifyNoConsent', async (job, done) => {
-  try {
-    logger.log('[Consumer][notifyNoConsent] Started processing');
-    await processNotifyNoConsent(job.data);
-    logger.log('[Consumer][notifyNoConsent] Completed processing');
-
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][notifyNoConsent] Error processing');
-    reportError(err, 'Kue error notifyNoConsent');
-
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processNotifyNoConsent(
   data: IProcessContactNoConsentData,

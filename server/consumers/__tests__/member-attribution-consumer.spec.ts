@@ -1,9 +1,8 @@
 // TODO: Write a full integration test once final core data/demo data is available
 import kue from 'kue';
 import { transaction, Transaction } from 'objection';
-import { Gender, UserRole } from 'schema';
+import { UserRole } from 'schema';
 import uuid from 'uuid/v4';
-
 import Mattermost from '../../mattermost';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -60,7 +59,7 @@ describe('processing memberAttribution jobs', () => {
     };
 
     await expect(processNewMemberAttributionMessage(data as any, txn)).rejects.toMatch(
-      'Missing either patientId, homeClinicId, cityblockId, firstName, lastName, dateOfBirth, or jobId',
+      'Missing either patientId, cityblockId, firstName, lastName, ssn, email or dateOfBirth',
     );
   });
 
@@ -79,11 +78,13 @@ describe('processing memberAttribution jobs', () => {
         cityblockId: 124,
         firstName: 'Bob',
         lastName: 'Smith',
-        dateOfBirth: '01/01/1990',
-        gender: 'male' as Gender,
+        dob: '01/01/1990',
+        gender: 'M',
         language: 'en',
         jobId: 'jobId',
+        ssn: '123456789',
         homeClinicId: clinic.id,
+        email: 'a@b.com',
       };
       await processNewMemberAttributionMessage(data as any, txn);
 
@@ -104,9 +105,11 @@ describe('processing memberAttribution jobs', () => {
         cityblockId: patient.cityblockId,
         firstName: patient.firstName,
         lastName: 'New Last Name',
-        dateOfBirth: '01/01/1990',
+        dob: '01/01/1990',
         jobId: 'jobId',
+        ssn: '123456789',
         homeClinicId: clinic.id,
+        email: 'a@b.com',
       };
       await processNewMemberAttributionMessage(data as any, txn);
 

@@ -3,12 +3,12 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import patientAddressesGraphql from '../../graphql/queries/get-patient-addresses.graphql';
 import { getPatientAddresses, FullAddress } from '../../graphql/types';
-import { formatAddress } from '../../shared/helpers/format-helpers';
-import FormLabel from '../../shared/library/form-label/form-label';
-import styles from '../../shared/library/form/css/form.css';
-import SelectDropdownOption from '../../shared/library/select-dropdown-option/select-dropdown-option';
-import SelectDropdown from '../../shared/library/select-dropdown/select-dropdown';
-import TextInput from '../../shared/library/text-input/text-input';
+import { formatAddress } from '../helpers/format-helpers';
+import FormLabel from '../library/form-label/form-label';
+import styles from '../library/form/css/form.css';
+import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
+import SelectDropdown from '../library/select-dropdown/select-dropdown';
+import TextInput from '../library/text-input/text-input';
 
 export interface IProps {
   patientId?: string;

@@ -72,6 +72,11 @@ describe('patient info resolver', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('patient info edit', () => {
     it('edits patient', async () => {
       const { patient, address, user } = await setup(txn);

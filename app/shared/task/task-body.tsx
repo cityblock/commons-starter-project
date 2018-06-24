@@ -1,6 +1,6 @@
 import React from 'react';
 import { taskEdit, taskEditVariables, FullCBOReferral } from '../../graphql/types';
-import FormLabel from '../../shared/library/form-label/form-label';
+import FormLabel from '../library/form-label/form-label';
 import styles from './css/task-body.css';
 import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';

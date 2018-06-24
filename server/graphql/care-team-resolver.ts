@@ -8,11 +8,11 @@ import {
   IRootQueryType,
 } from 'schema';
 import { IPaginationOptions } from '../db';
-import { convertCareTeamUser } from '../graphql/shared/converter';
 import { addJobToQueue } from '../helpers/queue-helpers';
 import Mattermost from '../mattermost';
 import CareTeam from '../models/care-team';
 import ComputedPatientStatus from '../models/computed-patient-status';
+import { convertCareTeamUser } from './shared/converter';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 

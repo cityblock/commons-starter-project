@@ -2,11 +2,11 @@ import { shallow } from 'enzyme';
 import { values } from 'lodash';
 import React from 'react';
 import { PhoneTypeOptions } from '../../../graphql/types';
-import FormLabel from '../../../shared/library/form-label/form-label';
-import RadioGroup from '../../../shared/library/radio-group/radio-group';
-import RadioInput from '../../../shared/library/radio-input/radio-input';
-import Select from '../../../shared/library/select/select';
-import TextInput from '../../../shared/library/text-input/text-input';
+import FormLabel from '../../library/form-label/form-label';
+import RadioGroup from '../../library/radio-group/radio-group';
+import RadioInput from '../../library/radio-input/radio-input';
+import Select from '../../library/select/select';
+import TextInput from '../../library/text-input/text-input';
 import PhoneForm from '../phone-form';
 
 describe('Render Phone Form', () => {

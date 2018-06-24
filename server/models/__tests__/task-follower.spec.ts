@@ -1,12 +1,11 @@
 import { transaction } from 'objection';
 import { UserRole } from 'schema';
 import uuid from 'uuid/v4';
-
-import PatientGoal from '../../models/patient-goal';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Concern from '../concern';
 import PatientConcern from '../patient-concern';
+import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';

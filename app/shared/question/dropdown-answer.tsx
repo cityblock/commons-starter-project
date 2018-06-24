@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import { slice } from 'lodash';
 import React from 'react';
 import { FullAnswer, FullQuestion } from '../../graphql/types';
-import Option from '../../shared/library/option/option';
-import Select from '../../shared/library/select/select';
+import Option from '../library/option/option';
+import Select from '../library/select/select';
 import FreeTextAnswer from './free-text-answer';
 import styles from './patient-question.css';
 

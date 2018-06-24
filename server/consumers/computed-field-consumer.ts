@@ -1,35 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
-import { transaction, Model, Transaction } from 'objection';
-import config from '../config';
+import { transaction, Transaction } from 'objection';
 import { IComputedFieldMessageData } from '../handlers/pubsub/push-handler';
-import { reportError } from '../helpers/error-helpers';
-import { createRedisClient } from '../lib/redis';
 import { createSuggestionsForComputedFieldAnswer } from '../lib/suggestions';
 import Answer from '../models/answer';
-import knexConfig from '../models/knexfile';
 import Patient from '../models/patient';
 import PatientAnswer from '../models/patient-answer';
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
-
-queue.process('computedField', async (job, done) => {
-  try {
-    await processNewComputedFieldValue(job.data);
-    return done();
-  } catch (err) {
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processNewComputedFieldValue(
   data: IComputedFieldMessageData,

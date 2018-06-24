@@ -48,6 +48,11 @@ describe('CBO Referral resolver', () => {
     await txn.rollback();
   });
 
+  afterAll(async () => {
+    queue.testMode.exit();
+    queue.shutdown(0, () => true); // There must be a better way to do this...
+  });
+
   describe('CBO Referral create', () => {
     it('creates a CBO referral', async () => {
       const { user } = await setup(txn);

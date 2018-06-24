@@ -6,22 +6,21 @@ import {
   RiskAdjustmentTypeOptions,
 } from 'schema';
 import uuid from 'uuid/v4';
-
-import Answer from '../../models/answer';
-import Clinic from '../../models/clinic';
-import Patient from '../../models/patient';
-import PatientAnswer from '../../models/patient-answer';
-import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
-import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
-import RiskAreaGroup from '../../models/risk-area-group';
-import User from '../../models/user';
 import {
   createMockClinic,
   createMockRiskAreaGroup,
   createMockUser,
   createPatient,
 } from '../../spec-helpers';
+import Answer from '../answer';
+import Clinic from '../clinic';
+import Patient from '../patient';
+import PatientAnswer from '../patient-answer';
+import Question from '../question';
+import RiskArea from '../risk-area';
+import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
+import RiskAreaGroup from '../risk-area-group';
+import User from '../user';
 
 interface ISetup {
   riskAreaGroup: RiskAreaGroup;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FullAnswer } from '../../graphql/types';
-import CheckboxInput from '../../shared/library/checkbox-input/checkbox-input';
+import CheckboxInput from '../library/checkbox-input/checkbox-input';
 
 interface IProps {
   onClick: (value: string | number, answerId: string, isRemove: boolean) => any;

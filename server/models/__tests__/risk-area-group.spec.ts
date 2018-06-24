@@ -1,9 +1,5 @@
 import { transaction } from 'objection';
 import uuid from 'uuid/v4';
-
-import Clinic from '../../models/clinic';
-import RiskAreaGroup from '../../models/risk-area-group';
-import User from '../../models/user';
 import {
   createFullRiskAreaGroupAssociations,
   createMockClinic,
@@ -11,6 +7,9 @@ import {
   createMockUser,
   createPatient,
 } from '../../spec-helpers';
+import Clinic from '../clinic';
+import RiskAreaGroup from '../risk-area-group';
+import User from '../user';
 
 describe('risk area group model', () => {
   let txn = null as any;

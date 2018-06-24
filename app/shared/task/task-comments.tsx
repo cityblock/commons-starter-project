@@ -14,7 +14,7 @@ import {
   taskCommentEditVariables,
   FullTaskComment,
 } from '../../graphql/types';
-import TextAreaWithButton from '../../shared/library/textarea-with-button/textarea-with-button';
+import TextAreaWithButton from '../library/textarea-with-button/textarea-with-button';
 import styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 

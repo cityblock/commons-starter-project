@@ -1,7 +1,7 @@
 import { addMonths, format } from 'date-fns';
 import React from 'react';
-import Option from '../../shared/library/option/option';
-import Select from '../../shared/library/select/select';
+import Option from '../library/option/option';
+import Select from '../library/select/select';
 
 interface IProps {
   year?: number;

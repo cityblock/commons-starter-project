@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import { patientGoal } from '../../shared/util/test-data';
 import CreateTaskModal, { IProps } from '../goals/create-task/create-task';
 import PatientGoal from '../goals/goal';
 import GoalOptions from '../goals/goal-options';
+import { patientGoal } from '../util/test-data';
 
 describe('Patient Goal Component', () => {
   const concernTitle = 'Housing';

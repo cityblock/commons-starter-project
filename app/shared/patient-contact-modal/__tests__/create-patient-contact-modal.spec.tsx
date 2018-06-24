@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import { patientContactCreate } from '../../../graphql/types';
-import { patient } from '../../../shared/util/test-data';
+import { patient } from '../../util/test-data';
 import { CreatePatientContactModal } from '../create-patient-contact-modal';
 import PatientContactModal from '../patient-contact-modal';
 

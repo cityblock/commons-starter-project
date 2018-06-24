@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import Modal from '../../../shared/library/modal/modal';
-import { healthcareProxy } from '../../../shared/util/test-data';
+import Modal from '../../library/modal/modal';
+import { healthcareProxy } from '../../util/test-data';
 import PatientContactModal from '../patient-contact-modal';
 import PatientProxyForm from '../patient-proxy-form';
 

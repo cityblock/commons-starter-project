@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FullQuestion } from '../../graphql/types';
-import FormLabel from '../../shared/library/form-label/form-label';
+import FormLabel from '../library/form-label/form-label';
 import styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
 import QuestionMenu from './question-menu';

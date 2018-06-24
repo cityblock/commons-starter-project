@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
-import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
+import HamburgerMenuOption from '../../library/hamburger-menu-option/hamburger-menu-option';
+import HamburgerMenu from '../../library/hamburger-menu/hamburger-menu';
 import { PatientQuestionMenu } from '../question-menu';
 
 describe('Patient Question Menu', () => {

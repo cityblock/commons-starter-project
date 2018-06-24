@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { FullCarePlanSuggestion, FullPatientScreeningToolSubmission } from '../../graphql/types';
-import Icon from '../../shared/library/icon/icon';
-import TextInfo from '../../shared/library/text-info/text-info';
-import Text from '../../shared/library/text/text';
+import Icon from '../library/icon/icon';
+import TextInfo from '../library/text-info/text-info';
+import Text from '../library/text/text';
 import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
 import styles from './css/progress-note-activity.css';
 

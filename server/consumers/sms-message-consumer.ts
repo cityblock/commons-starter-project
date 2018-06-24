@@ -1,20 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
-import { Model, Transaction } from 'objection';
-import config from '../config';
-import { reportError } from '../helpers/error-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
+import { Transaction } from 'objection';
 import TwilioClient from '../twilio-client';
-
-/* tslint:disable no-var-requires */
-const knexConfig = require('../models/knexfile');
-/* tslint:enable no-var-requires */
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
 
 interface IProcessSmsMessageData {
   title: string;
@@ -37,25 +22,6 @@ interface ITwilioSmsMessage {
     each: (callback: (mediaItem: ITwilioMediaInstance) => void) => void;
   };
 }
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-queue.process('processSmsMessage', async (job, done) => {
-  try {
-    logger.log('[Consumer][processSmsMessage] Started processing');
-    await processSmsMessages(job.data);
-    logger.log('[Consumer][processSmsMessage] Completed processing');
-
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][processSmsMessage] Error processing');
-    reportError(err, 'Kue error processSmsMessage');
-
-    return done(err);
-  }
-});
 
 export async function processSmsMessages(data: IProcessSmsMessageData, existingTxn?: Transaction) {
   const twilioClient = TwilioClient.get();

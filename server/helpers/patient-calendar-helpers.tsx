@@ -1,7 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 import { Transaction } from 'objection';
 import { CALENDAR_PERMISSION_TOPIC } from '../consumers/scheduling-consumer';
-import { addJobToQueue } from '../helpers/queue-helpers';
 import CareTeam from '../models/care-team';
 import Patient from '../models/patient';
 import PatientInfo from '../models/patient-info';
@@ -9,6 +8,7 @@ import {
   createGoogleCalendarAuth,
   createGoogleCalendarForPatient,
 } from './google-calendar-helpers';
+import { addJobToQueue } from './queue-helpers';
 
 export async function createCalendarForPatient(
   patientId: string,
@@ -54,13 +54,17 @@ export async function createCalendarWithPermissions(
     );
 
     careTeamRecords.map(record => {
-      return addJobToQueue(CALENDAR_PERMISSION_TOPIC, {
-        userId: record.userId,
-        userEmail: record.user.email,
-        patientId,
-        googleCalendarId,
-        transmissionId,
-      });
+      return addJobToQueue(
+        CALENDAR_PERMISSION_TOPIC,
+        {
+          userId: record.userId,
+          userEmail: record.user.email,
+          patientId,
+          googleCalendarId,
+          transmissionId,
+        },
+        { priority: 'high' },
+      );
     });
 
     return googleCalendarId;

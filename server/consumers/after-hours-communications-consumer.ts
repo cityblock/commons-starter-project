@@ -1,22 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import Knex from 'knex';
-import kue from 'kue';
 import moment from 'moment-timezone';
-import { transaction, Model, Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
-import config from '../config';
-import { reportError } from '../helpers/error-helpers';
-import { createRedisClient } from '../lib/redis';
-import Logging from '../logging';
-import knexConfig from '../models/knexfile';
 import SmsMessage from '../models/sms-message';
 import User from '../models/user';
 import UserHours from '../models/user-hours';
 import TwilioClient from '../twilio-client';
-
-const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
-Model.knex(knex);
 
 const SMS_CHAR_LIMIT = 160;
 
@@ -24,29 +12,6 @@ interface IProcessAfterHoursCommunicationsData {
   userId: string;
   contactNumber: string;
 }
-
-const queue = kue.createQueue({ redis: createRedisClient() });
-
-const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
-
-queue.process('afterHoursCommunications', async (job, done) => {
-  try {
-    logger.log('[Consumer][afterHoursCommunications] Started processing');
-    await processAfterHoursCommunications(job.data);
-    logger.log('[Consumer][afterHoursCommunications] Completed processing');
-
-    return done();
-  } catch (err) {
-    logger.log('[Consumer][afterHoursCommunications] Error processing');
-    reportError(err, 'Kue error afterHoursCommunications');
-
-    return done(err);
-  }
-});
-
-queue.on('error', err => {
-  reportError(err, 'Kue uncaught error');
-});
 
 export async function processAfterHoursCommunications(
   data: IProcessAfterHoursCommunicationsData,

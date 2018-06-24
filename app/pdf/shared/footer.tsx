@@ -3,8 +3,8 @@ import { format } from 'date-fns';
 import React from 'react';
 import { FullPatientForProfile } from '../../graphql/types';
 import { formatPatientName } from '../../shared/helpers/format-helpers';
-import variables from '../shared/variables/variables';
 import copy from './copy/copy';
+import variables from './variables/variables';
 
 interface IProps {
   patient: FullPatientForProfile;

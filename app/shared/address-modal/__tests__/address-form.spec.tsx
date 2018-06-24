@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import FormLabel from '../../../shared/library/form-label/form-label';
-import TextInput from '../../../shared/library/text-input/text-input';
+import FormLabel from '../../library/form-label/form-label';
+import TextInput from '../../library/text-input/text-input';
 import AddressForm from '../address-form';
 
 describe('Render Address Form', () => {

@@ -1,7 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { TaskEventTypes, UserRole } from 'schema';
 import uuid from 'uuid/v4';
-import PatientGoal from '../../models/patient-goal';
 import {
   createMockClinic,
   createMockUser,
@@ -13,6 +12,7 @@ import Concern from '../concern';
 import EventNotification from '../event-notification';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
+import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskEvent from '../task-event';
 import TaskFollower from '../task-follower';

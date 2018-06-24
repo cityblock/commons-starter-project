@@ -17,6 +17,7 @@ import {
 } from '../../../spec-helpers';
 import {
   contactsVcfHandler,
+  createvCardForCityblock,
   createvCardForPatient,
   formatvCardNameForPatient,
   isDuplicateName,
@@ -206,6 +207,12 @@ describe('vCard Handler', () => {
       expect(args[0][0]).toMatch(
         'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:dan Targaryen\r\nN;CHARSET=UTF-8:Targaryen;dan;;;\r\nUID;CHARSET=UTF-8:345\r\nTEL;TYPE=CELL:+11234568888\r\nNOTE;CHARSET=UTF-8:CBH-345',
       );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:Cityblock Admin\r\nN;CHARSET=UTF-8:Admin;Cityblock;;;\r\nTEL;TYPE=HOME,VOICE:+17273415787',
+      );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:Cityblock Voicemail\r\nN;CHARSET=UTF-8:Voicemail;Cityblock;;;\r\nTEL;TYPE=HOME,VOICE:+16469417791',
+      );
 
       expect(res.status).not.toBeCalled();
     });
@@ -339,6 +346,16 @@ describe('vCard Handler', () => {
       expect(card!.cellPhone).toEqual(['+11234561111']);
       expect(card!.otherPhone).toEqual(['+11234563333', '+11234565555']);
       expect(card!.workPhone).toEqual(['+11234564444']);
+    });
+  });
+
+  describe('createvCardForCityblock', () => {
+    it('creates a vCard for Cityblock contact', () => {
+      const card = createvCardForCityblock('Admin');
+
+      expect(card.firstName).toBe('Cityblock');
+      expect(card.lastName).toBe('Admin');
+      expect(card.homePhone).toBe('+17273415787');
     });
   });
 

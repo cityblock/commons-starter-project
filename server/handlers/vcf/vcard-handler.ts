@@ -1,8 +1,11 @@
 import express from 'express';
 import { transaction } from 'objection';
 import vCard from 'vcards-js';
+import config from '../../config';
 import { decodeJwt, IJWTForVCFData } from '../../graphql/shared/utils';
 import Patient from '../../models/patient';
+
+type CityblockContact = 'Admin' | 'Voicemail';
 
 interface IPhonesForCard {
   home: string[];
@@ -49,6 +52,12 @@ export const contactsVcfHandler = async (req: express.Request, res: express.Resp
 
   let result = '';
   let error = '';
+
+  const adminContact = createvCardForCityblock('Admin');
+  const voicemailContact = createvCardForCityblock('Voicemail');
+
+  result += adminContact.getFormattedString();
+  result += voicemailContact.getFormattedString();
 
   await transaction(res.locals.existingTxn || Patient.knex(), async txn => {
     const patients = await Patient.getPatientsWithPhonesForUser(decoded.userId, txn);
@@ -126,6 +135,17 @@ export const formatvCardNameForPatient = (card: ICard, patient: Patient): void =
   if (patient.patientInfo.preferredName) {
     card.firstName = `${patient.firstName} (${patient.patientInfo.preferredName})`;
   }
+};
+
+export const createvCardForCityblock = (type: CityblockContact): ICard => {
+  const card = vCard();
+
+  card.firstName = 'Cityblock';
+  card.lastName = type;
+
+  card.homePhone = (config as any)[`CITYBLOCK_${type.toUpperCase()}`];
+
+  return card;
 };
 
 export const isDuplicateName = (patient: Patient, previousPatient: Patient | null): boolean => {

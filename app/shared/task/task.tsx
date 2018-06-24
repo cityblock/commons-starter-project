@@ -193,7 +193,10 @@ export default compose(
   graphql(taskEditGraphql, { name: 'editTask' }),
   graphql(taskGraphql, {
     skip: (props: IProps) => !props.taskId,
-    options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
+    options: (props: IProps) => ({
+      variables: { taskId: props.taskId },
+      fetchPolicy: 'network-only',
+    }),
     props: ({ data }) => ({
       taskLoading: data ? data.loading : false,
       taskError: data ? data.error : null,

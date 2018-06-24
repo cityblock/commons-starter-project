@@ -7,6 +7,7 @@ import App from './app';
 import { getMiddlewareLink } from './middleware-link';
 import createStore from './store';
 
+// NOTE: These do absolutely nothing unfortunately
 const defaultOptions = {
   watch: {
     fetchPolicy: 'network-only' as FetchPolicy,

@@ -91,6 +91,7 @@ export default compose(
         'getPatientScreeningToolSubmissionForPatientAndScreeningTool',
         'getPatientScreeningToolSubmissionsFor360',
       ],
+      fetchPolicy: 'network-only',
     },
   }),
   graphql(screeningToolQuestionsGraphql, {
@@ -99,6 +100,7 @@ export default compose(
         filterType: 'screeningTool',
         filterId: props.screeningTool.id,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       screeningToolQuestionsLoading: data ? data.loading : false,
@@ -113,6 +115,7 @@ export default compose(
         patientId: props.patientId,
         scored: false,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       screeningToolSubmissionLoading: data ? data.loading : false,

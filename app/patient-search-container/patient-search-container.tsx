@@ -141,6 +141,7 @@ export default compose(
     skip: (props: IProps & IStateProps) => !props.query,
     options: ({ query, pageNumber, pageSize }: IProps & IStateProps) => ({
       variables: { query, pageNumber, pageSize },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): IGraphqlProps => ({
       refetch: data ? data.refetch : null,

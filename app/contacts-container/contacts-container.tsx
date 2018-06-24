@@ -86,6 +86,7 @@ export default compose(
   graphql(patientPanelGraphql, {
     options: () => ({
       variables: { pageNumber: 0, pageSize: 1, filters: {}, showAllPatients: false },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,

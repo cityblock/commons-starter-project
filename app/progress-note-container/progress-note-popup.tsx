@@ -323,6 +323,7 @@ export default compose(
   graphql(progressNoteCompleteGraphql, {
     name: 'completeProgressNote',
     options: {
+      // TODO: ensure this works
       refetchQueries: [
         'getProgressNotesForPatient',
         'getProgressNotesForCurrentUser',
@@ -335,6 +336,7 @@ export default compose(
   graphql(progressNoteEditGraphql, {
     name: 'editProgressNote',
     options: {
+      // TODO: ensure this works
       refetchQueries: [
         'getProgressNotesForPatient',
         'getProgressNotesForCurrentUser',
@@ -345,6 +347,7 @@ export default compose(
   graphql(progressNoteCompleteSupervisorReviewGraphql, {
     name: 'completeProgressNoteSupervisorReview',
     options: {
+      // TODO: ensure this works
       refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
     },
   }),
@@ -355,6 +358,7 @@ export default compose(
         filterType: 'progressNoteTemplate',
         filterId: props.progressNote.progressNoteTemplate!.id,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       questionsLoading: data ? data.loading : false,
@@ -369,6 +373,7 @@ export default compose(
         filterId: props.progressNote.id,
         patientId: props.progressNote.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientAnswersLoading: data ? data.loading : false,

@@ -158,6 +158,7 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
 
 export default graphql(patientExternalOrganizationsGraphql, {
   options: (props: IProps) => ({
+    fetchPolicy: 'network-only',
     variables: {
       patientId: props.patientId,
     },

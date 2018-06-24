@@ -264,6 +264,7 @@ export default compose(
       variables: {
         userRoleFilters: Object.keys(UserRole),
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       isUserSummaryListLoading: data ? data.loading : false,
@@ -276,6 +277,7 @@ export default compose(
       variables: {
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       isPatientCareTeamLoading: data ? data.loading : false,

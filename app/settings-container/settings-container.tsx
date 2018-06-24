@@ -46,6 +46,7 @@ export const SettingsContainer: React.StatelessComponent<allProps> = (props: all
 
 export default compose(
   graphql(currentUserGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       userLoading: data ? data.loading : false,
       userError: data ? data.error : null,
@@ -53,6 +54,7 @@ export default compose(
     }),
   }),
   graphql(currentUserHoursGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       hoursLoading: data ? data.loading : false,
       hoursError: data ? data.error : null,

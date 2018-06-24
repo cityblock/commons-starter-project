@@ -162,6 +162,7 @@ export default compose(
   }),
   graphql(patientContactsGraphql, {
     options: (props: IProps) => ({
+      fetchPolicy: 'network-only',
       variables: {
         patientId: props.patientId,
       },

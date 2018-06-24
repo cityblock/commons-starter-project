@@ -167,6 +167,7 @@ export default compose(
       variables: {
         completed: false,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       progressNotesLoading: data ? data.loading : false,
@@ -176,6 +177,7 @@ export default compose(
     }),
   }),
   graphql(progressNotesForSupervisorReviewGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       progressNotesForSupervisorReviewLoading: data ? data.loading : false,
       progressNotesForSupervisorReviewError: data ? data.error : null,

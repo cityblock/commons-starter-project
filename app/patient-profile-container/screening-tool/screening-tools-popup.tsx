@@ -116,6 +116,7 @@ export default compose(
     mapDispatchToProps as any,
   ),
   graphql(screeningToolsGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

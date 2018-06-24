@@ -39,6 +39,7 @@ const getPageParams = (props: RouteComponentProps<any>) => {
       pageNumber: Number(pageParams.pageNumber || INITIAL_PAGE_NUMBER),
       pageSize: Number(pageParams.pageSize || INITIAL_PAGE_SIZE),
     },
+    fetchPolicy: 'network-only',
   };
 };
 
@@ -187,6 +188,7 @@ const fetchPatientList = () => <P extends {}>(
             pageNumber,
             pageSize,
           },
+          fetchPolicy: 'network-only',
         };
       },
       skip: ({ selected }) => selected !== 'computed',

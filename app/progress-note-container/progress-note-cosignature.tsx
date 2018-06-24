@@ -125,6 +125,7 @@ export default compose(
       variables: {
         patientId: props.progressNote!.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientCareTeamLoading: data ? data.loading : false,
@@ -133,6 +134,7 @@ export default compose(
     }),
   }),
   graphql(currentUserGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

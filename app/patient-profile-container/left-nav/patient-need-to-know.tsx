@@ -159,6 +159,7 @@ export default compose(
       variables: {
         patientInfoId: props.patientInfoId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

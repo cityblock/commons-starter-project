@@ -123,6 +123,7 @@ export default graphql(careTeamGraphql, {
     variables: {
       patientId: props.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

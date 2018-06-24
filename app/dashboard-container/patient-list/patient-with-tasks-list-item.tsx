@@ -92,6 +92,7 @@ export default compose(
   graphql(tasksDueSoonForPatient, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       tasksDueSoonLoading: data ? data.loading : false,
@@ -102,6 +103,7 @@ export default compose(
   graphql(tasksWithNotificationsForPatient, {
     options: ({ patient }: IProps) => ({
       variables: { patientId: patient.id },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       tasksWithNotificationsLoading: data ? data.loading : false,

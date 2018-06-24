@@ -63,7 +63,7 @@ export class DomainAssessments extends React.Component<allProps, {}> {
 export default graphql(getRiskAreaGroupForPatientGraphql, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId, glassBreakId } = props;
-    return { variables: { riskAreaGroupId, patientId, glassBreakId } };
+    return { variables: { riskAreaGroupId, patientId, glassBreakId }, fetchPolicy: 'network-only' };
   },
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

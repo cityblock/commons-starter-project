@@ -267,7 +267,7 @@ export default compose(
     }),
   }),
   graphql(usersGraphql, {
-    options: (props: IProps) => ({ variables: getPageParams(props) }),
+    options: (props: IProps) => ({ variables: getPageParams(props), fetchPolicy: 'network-only' }),
     props: ({ data, ownProps }) => ({
       fetchMoreUsers: () => fetchMore<FullUser>(data as any, getPageParams(ownProps), 'users'),
       loading: data ? data.loading : false,

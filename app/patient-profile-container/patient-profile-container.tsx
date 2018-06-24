@@ -19,7 +19,10 @@ import PatientIntakeChecklist from './patient-intake-checklist';
 import PatientModals from './patient-modals';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientTeam from './patient-team/patient-team';
-import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
+import DomainAssessments from './patient-three-sixty/domain-assessments';
+import PatientThreeSixtyDomains from './patient-three-sixty/patient-three-sixty-domains';
+import PatientThreeSixtyHistory from './patient-three-sixty/patient-three-sixty-history';
+import RiskAreaAssessment from './risk-area/risk-area-assessment';
 import ScreeningTool from './screening-tool/screening-tool';
 import PatientTimeline from './timeline/patient-timeline';
 
@@ -116,8 +119,53 @@ export const PatientProfileContainer = (props: allProps) => {
             />
             <Route
               exact
-              path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
-              render={(p: any) => <PatientThreeSixtyView {...p} glassBreakId={glassBreakId} />}
+              path="/patients/:patientId/360/:riskAreaGroupId/assessment/:riskAreaId"
+              render={(p: any) => (
+                <RiskAreaAssessment
+                  {...p}
+                  routeBase={`/patients/${patientId}/360`}
+                  riskAreaGroupId={p.match.params.riskAreaGroupId}
+                  riskAreaId={p.match.params.riskAreaId}
+                  patientId={patientId}
+                  glassBreakId={glassBreakId}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/360/:riskAreaGroupId"
+              render={(p: any) => (
+                <DomainAssessments
+                  {...p}
+                  routeBase={`/patients/${patientId}/360`}
+                  riskAreaGroupId={p.match.params.riskAreaGroupId}
+                  riskAreaId={p.match.params.riskAreaId}
+                  patientId={patientId}
+                  glassBreakId={glassBreakId}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/360/history"
+              render={(p: any) => (
+                <PatientThreeSixtyHistory
+                  {...p}
+                  patientId={patientId}
+                  glassBreakId={glassBreakId}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/patients/:patientId/360"
+              render={(p: any) => (
+                <PatientThreeSixtyDomains
+                  {...p}
+                  patientId={patientId}
+                  glassBreakId={glassBreakId}
+                />
+              )}
             />
             <Route
               exact
@@ -166,6 +214,7 @@ export default compose(
       variables: {
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,

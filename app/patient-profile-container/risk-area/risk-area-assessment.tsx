@@ -321,6 +321,7 @@ export default compose(
       variables: {
         riskAreaId: props.riskAreaId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       riskAreaLoading: data ? data.loading : false,
@@ -336,6 +337,7 @@ export default compose(
         patientId: props.patientId,
         completed: false,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       riskAreaAssessmentSubmissionLoading: data ? data.loading : false,
@@ -348,7 +350,10 @@ export default compose(
   graphql(getRiskAreaGroupForPatientGraphql, {
     options: (props: IProps) => {
       const { riskAreaGroupId, patientId, glassBreakId } = props;
-      return { variables: { riskAreaGroupId, patientId, glassBreakId } };
+      return {
+        variables: { riskAreaGroupId, patientId, glassBreakId },
+        fetchPolicy: 'network-only',
+      };
     },
     props: ({ data }) => ({
       riskAreaGroupLoading: data ? data.loading : false,

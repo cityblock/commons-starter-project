@@ -117,6 +117,7 @@ const patientGlassBreak = () => <P extends {}>(
         variables: {
           patientId: props.patientId,
         },
+        fetchPolicy: 'network-only',
       }),
       props: ({ data }) => ({
         loadingGlassBreakCheck: data ? data.loading : false,
@@ -125,9 +126,9 @@ const patientGlassBreak = () => <P extends {}>(
       }),
     }),
     graphql(patientGlassBreaksForUser, {
-      options: () => ({
-        // Lazy load to ensure cache always has updated session glass breaks
-      }),
+      options: {
+        fetchPolicy: 'network-only',
+      },
       props: ({ data }) => ({
         loadingGlassBreaks: data ? data.loading : false,
         errorGlassBreaks: data ? data.error : null,

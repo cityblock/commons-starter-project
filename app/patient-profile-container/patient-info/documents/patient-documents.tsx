@@ -119,6 +119,7 @@ export default graphql(patientDocumentsGraphql, {
     variables: {
       patientId: props.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     isLoading: data ? data.loading : false,

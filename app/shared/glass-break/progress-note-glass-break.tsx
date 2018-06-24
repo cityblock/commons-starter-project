@@ -99,6 +99,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
         variables: {
           progressNoteId: props.progressNoteId,
         },
+        fetchPolicy: 'network-only',
       }),
       props: ({ data }) => ({
         loadingGlassBreakCheck: data ? data.loading : false,
@@ -107,9 +108,9 @@ const progressNoteGlassBreak = () => <P extends {}>(
       }),
     }),
     graphql(progressNoteGlassBreaksForUser, {
-      options: () => ({
-        // Lazy load to ensure cache always has updated session glass breaks
-      }),
+      options: {
+        fetchPolicy: 'network-only',
+      },
       props: ({ data }) => ({
         loadingGlassBreaks: data ? data.loading : false,
         errorGlassBreaks: data ? data.error : null,

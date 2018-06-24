@@ -69,7 +69,7 @@ export default compose(
     options: ({ patient }: IProps) => {
       const patientId = patient ? patient.id : '';
 
-      return { variables: { patientId } };
+      return { variables: { patientId }, fetchPolicy: 'network-only' };
     },
     props: ({ data }) => ({
       latestProgressNote: data ? (data as any).progressNoteLatestForPatient : null,

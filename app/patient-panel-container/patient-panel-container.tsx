@@ -390,6 +390,7 @@ export default compose(
   graphql(patientPanelGraphql, {
     options: ({ pageNumber, pageSize, filters, showAllPatients }: any) => ({
       variables: { pageNumber, pageSize, filters, showAllPatients },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
@@ -398,9 +399,7 @@ export default compose(
     }),
   }),
   graphql(currentUser, {
-    options: (props: IProps) => ({
-      variables: {},
-    }),
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }): Partial<IGraphqlProps> => ({
       currentUser: data ? (data as any).currentUser : null,
     }),

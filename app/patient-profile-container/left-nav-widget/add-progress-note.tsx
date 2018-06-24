@@ -70,6 +70,6 @@ export default compose(
   ),
   graphql(progressNoteCreateGraphql, {
     name: 'progressNoteCreate',
-    options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
+    options: { refetchQueries: ['getProgressNotesForCurrentUser'], fetchPolicy: 'network-only' },
   }),
 )(AddProgressNote) as React.ComponentClass<IProps>;

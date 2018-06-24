@@ -227,6 +227,7 @@ export default compose(
   withRouter,
   graphql<IGraphqlProps>(taskDeleteGraphql, { name: 'deleteTask' }),
   graphql(taskIdsWithNotificationsGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
@@ -245,6 +246,7 @@ export default compose(
     },
   }),
   graphql(getCurrentUserGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       currentUserLoading: data ? data.loading : false,
       currentUserError: data ? data.error : null,

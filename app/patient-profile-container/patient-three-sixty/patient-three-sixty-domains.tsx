@@ -7,14 +7,11 @@ import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import styles from './css/shared.css';
 import { DomainSummaries } from './domain-summaries';
-import PatientThreeSixtyHistory from './patient-three-sixty-history';
 
 export const HISTORY_ROUTE = 'history';
 
 interface IProps {
   patientId: string;
-  routeBase: string;
-  history: boolean;
   glassBreakId: string | null;
 }
 
@@ -26,41 +23,39 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { patientId, routeBase, riskAreaGroups, loading, history, glassBreakId } = props;
+  const { patientId, riskAreaGroups, loading, glassBreakId } = props;
   if (loading) return <Spinner />;
 
-  const body = history ? (
-    <PatientThreeSixtyHistory patientId={patientId} glassBreakId={glassBreakId} />
-  ) : (
-    <DomainSummaries
-      patientId={patientId}
-      routeBase={routeBase}
-      riskAreaGroups={riskAreaGroups}
-      glassBreakId={glassBreakId}
-    />
-  );
+  const routeBase = `/patients/${patientId}/360`;
 
   return (
     <React.Fragment>
       <UnderlineTabs className={styles.navBar}>
-        <UnderlineTab messageId="threeSixty.summary" selected={!history} href={routeBase} />
+        <UnderlineTab messageId="threeSixty.summary" selected={true} href={routeBase} />
         <UnderlineTab
           messageId="threeSixty.history"
-          selected={history}
+          selected={false}
           href={`${routeBase}/${HISTORY_ROUTE}`}
         />
       </UnderlineTabs>
-      <div className={styles.bodyFlex}>{body}</div>
+      <div className={styles.bodyFlex}>
+        <DomainSummaries
+          patientId={patientId}
+          routeBase={routeBase}
+          riskAreaGroups={riskAreaGroups || []}
+          glassBreakId={glassBreakId}
+        />
+      </div>
     </React.Fragment>
   );
 };
 
 export default graphql(riskAreaGroupsForPatient, {
-  skip: (props: IProps) => props.history,
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

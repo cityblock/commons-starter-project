@@ -141,6 +141,7 @@ export default compose(
         filterType: 'riskArea',
         filterId: props.riskArea.id,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       riskAreaQuestionsLoading: data ? data.loading : false,
@@ -155,6 +156,7 @@ export default compose(
         filterId: props.riskArea.id,
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientAnswersLoading: data ? data.loading : false,

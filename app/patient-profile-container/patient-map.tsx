@@ -94,6 +94,7 @@ export default compose(
         patientId: props.patientId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
@@ -103,6 +104,7 @@ export default compose(
     }),
   }),
   graphql(taskIdsWithNotificationsGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {

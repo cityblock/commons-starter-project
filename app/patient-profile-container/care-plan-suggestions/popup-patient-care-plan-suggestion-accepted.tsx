@@ -153,6 +153,7 @@ export default compose(
       variables: {
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       carePlanLoading: data ? data.loading : false,
@@ -161,6 +162,9 @@ export default compose(
     }),
   }),
   graphql(concernsGraphql, {
+    options: {
+      fetchPolicy: 'network-only',
+    },
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
@@ -169,13 +173,5 @@ export default compose(
   }),
   graphql(carePlanSuggestionAcceptGraphql, {
     name: 'acceptCarePlanSuggestion',
-    options: {
-      refetchQueries: [
-        'getCarePlanSuggestionsFromComputedFieldsForPatient',
-        'getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient',
-        'getCarePlanSuggestionsFromScreeningToolsForPatient',
-        'getPatientCarePlan',
-      ],
-    },
   }),
 )(PopupPatientCarePlanSuggestionAccepted) as React.ComponentClass<IProps>;

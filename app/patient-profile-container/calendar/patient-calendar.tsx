@@ -228,6 +228,7 @@ export default compose(
   graphql(calendarForPatient, {
     options: (props: IProps) => ({
       variables: { patientId: props.match.params.patientId },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
       calendarResponse: data ? (data as any).calendarForPatient : null,
@@ -240,6 +241,7 @@ export default compose(
         patientId: props.match.params.patientId,
         pageSize: DEFAULT_PAGE_SIZE,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
       fetchMoreCalendarEvents: () => {

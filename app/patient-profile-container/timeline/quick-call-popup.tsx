@@ -332,6 +332,7 @@ export default compose(
       variables: {
         patientId: props.patientId,
       },
+      fetchPolicy: 'cache-only',
     }),
     props: ({ data }) => ({
       patientCareTeamLoading: data ? data.loading : false,

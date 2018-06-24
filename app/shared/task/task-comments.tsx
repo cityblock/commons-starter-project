@@ -199,6 +199,7 @@ export default compose(
         pageNumber: 0,
         pageSize: 10,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       refetchTaskComments: data ? data.refetch : null,

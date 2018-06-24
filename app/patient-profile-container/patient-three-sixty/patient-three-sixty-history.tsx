@@ -5,7 +5,11 @@ import patientScreeningToolSubmissionsFor360 from '../../graphql/queries/get-pat
 import { ShortPatientScreeningToolSubmission360 } from '../../graphql/types';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import Spinner from '../../shared/library/spinner/spinner';
+import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import styles from './css/patient-three-sixty-history.css';
+import sharedStyles from './css/shared.css';
+import { HISTORY_ROUTE } from './patient-three-sixty-domains';
 import ScreeningToolHistory from './screening-tool-history';
 
 interface IProps {
@@ -50,7 +54,21 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
     <EmptyPlaceholder headerMessageId="threeSixty.historyEmpty" />
   );
 
-  return <div className={styles.container}>{renderedSubmissions}</div>;
+  return (
+    <React.Fragment>
+      <UnderlineTabs className={sharedStyles.navBar}>
+        <UnderlineTab messageId="threeSixty.summary" selected={false} href={`${routeBase}/360`} />
+        <UnderlineTab
+          messageId="threeSixty.history"
+          selected={true}
+          href={`${routeBase}/360/${HISTORY_ROUTE}`}
+        />
+      </UnderlineTabs>
+      <div className={sharedStyles.bodyFlex}>
+        <div className={styles.container}>{renderedSubmissions}</div>;
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default graphql(patientScreeningToolSubmissionsFor360, {
@@ -58,6 +76,7 @@ export default graphql(patientScreeningToolSubmissionsFor360, {
     const { patientId, glassBreakId } = props;
     return {
       variables: { patientId, glassBreakId },
+      fetchPolicy: 'network-only',
     };
   },
   props: ({ data }): IGraphqlProps => ({

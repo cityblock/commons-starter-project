@@ -87,6 +87,7 @@ const getPageParams = (props: IProps): getTasksForCurrentUserVariables => {
 const withQuery = graphql(tasksGraphql, {
   options: (props: IProps) => ({
     variables: getPageParams(props),
+    fetchPolicy: 'network-only',
   }),
   props: ({ data, ownProps }) => ({
     fetchMoreTasks: () =>

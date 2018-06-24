@@ -99,7 +99,7 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 
 export default compose(
   graphql(concernsGraphql, {
-    options: () => ({ variables: { orderBy: 'titleAsc' } }),
+    options: () => ({ variables: { orderBy: 'titleAsc' }, fetchPolicy: 'network-only' }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
@@ -111,6 +111,7 @@ export default compose(
       variables: {
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientCarePlanLoading: data ? data.loading : false,

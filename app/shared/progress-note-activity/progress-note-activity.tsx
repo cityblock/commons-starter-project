@@ -78,6 +78,7 @@ export default graphql(progressNoteActivityGraphql, {
     variables: {
       progressNoteId: props.progressNote!.id,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

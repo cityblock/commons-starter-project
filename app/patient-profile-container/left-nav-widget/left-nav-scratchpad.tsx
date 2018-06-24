@@ -141,6 +141,7 @@ export default compose(
         patientId: props.patientId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

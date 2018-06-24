@@ -175,6 +175,7 @@ export default compose(
         userId: props.careTeamMember!.id,
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       isTasksLoading: data ? data.loading : false,

@@ -64,6 +64,7 @@ export default graphql(CBOsForCategory, {
   skip: ({ categoryId }) => !categoryId,
   options: ({ categoryId }: IProps) => ({
     variables: { categoryId },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

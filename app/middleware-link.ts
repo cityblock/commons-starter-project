@@ -46,7 +46,6 @@ export const getMiddlewareLink = () => {
             /* tslint:disable no-console */
             console.log(operation, data);
             /* tslint:enable no-console */
-
             return data;
           })
         : null,

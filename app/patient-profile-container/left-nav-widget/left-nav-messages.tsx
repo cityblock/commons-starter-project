@@ -91,6 +91,7 @@ export default compose(
   graphql(patientGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientLoading: data ? data.loading : false,
@@ -101,6 +102,7 @@ export default compose(
   graphql(patientDocumentsByTypeGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, documentType: 'textConsent' },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       documentsLoading: data ? data.loading : false,
@@ -111,6 +113,7 @@ export default compose(
   graphql(smsMessagesGraphql, {
     options: ({ patientId }: IProps) => ({
       variables: { patientId, pageNumber: 0, pageSize: INITIAL_PAGE_SIZE },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data, ownProps }) => ({
       messagesLoading: data ? data.loading : false,

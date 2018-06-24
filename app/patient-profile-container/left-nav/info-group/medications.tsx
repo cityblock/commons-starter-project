@@ -61,6 +61,7 @@ export default graphql(patientMedicationsGraphql, {
     variables: {
       patientId: props.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }) => ({
     isLoading: data ? data.loading : false,

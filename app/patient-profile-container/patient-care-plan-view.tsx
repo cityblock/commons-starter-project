@@ -332,6 +332,7 @@ export default compose(
         patientId: props.match.params.patientId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       computedFieldSuggestionsError: data ? data.error : null,
@@ -347,6 +348,7 @@ export default compose(
         patientId: props.match.params.patientId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       riskAreaAssessmentSuggestionsError: data ? data.error : null,
@@ -362,6 +364,7 @@ export default compose(
         patientId: props.match.params.patientId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       screeningToolSuggestionsError: data ? data.error : null,
@@ -372,6 +375,7 @@ export default compose(
   }),
   graphql(riskAreaGroupsGraphql, {
     skip: shouldSkip,
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,
       riskAreaGroupsError: data ? data.error : null,

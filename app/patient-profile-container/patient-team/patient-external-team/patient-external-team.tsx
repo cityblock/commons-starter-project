@@ -117,6 +117,7 @@ export default compose(
   }),
   graphql(patientExternalProvidersGraphql, {
     options: (props: IProps) => ({
+      fetchPolicy: 'network-only',
       variables: {
         patientId: props.patientId,
       },

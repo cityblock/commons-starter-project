@@ -33,6 +33,7 @@ export const TaskNotifications: React.StatelessComponent<allProps> = (props: all
 export default graphql(getEventNotificationsForUserTask, {
   options: ({ taskId }: IProps) => ({
     variables: { taskId },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

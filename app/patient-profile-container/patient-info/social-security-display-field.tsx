@@ -72,6 +72,7 @@ export default graphql(patientSocialSecurityGraphql, {
   skip: (props: IProps) => !props.shouldLoad,
   options: (props: IProps) => ({
     variables: { patientId: props.patientId, glassBreakId: props.glassBreakId },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

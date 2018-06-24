@@ -290,7 +290,7 @@ export default compose(
     name: 'createPatientGoal',
   }),
   graphql(goalSuggestionTemplatesGraphql, {
-    options: () => ({ variables: { orderBy: 'titleAsc' } }),
+    options: { variables: { orderBy: 'titleAsc' }, fetchPolicy: 'network-only' },
     props: ({ data }): Partial<IGraphqlProps> => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

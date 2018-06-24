@@ -91,6 +91,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
 export default graphql(riskAreaShortGraphql, {
   options: (props: IProps) => ({
     variables: { riskAreaId: props.submission.screeningTool.riskAreaId },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }) => ({
     riskArea: data ? (data as any).riskArea : null,

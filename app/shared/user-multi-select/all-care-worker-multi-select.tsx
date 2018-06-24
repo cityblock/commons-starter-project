@@ -60,6 +60,7 @@ export default graphql(userSummaryListGraphql, {
     variables: {
       userRoleFilters: CARE_WORKER_ROLES,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     isLoading: data ? data.loading : false,

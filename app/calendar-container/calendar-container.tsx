@@ -157,6 +157,7 @@ export default compose(
   graphql(calendar, {
     options: () => ({
       variables: { timeMin: new Date().toISOString(), pageSize: DEFAULT_PAGE_SIZE },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): IGraphqlProps => ({
       fetchMoreCalendarEvents: () => {
@@ -185,6 +186,9 @@ export default compose(
     }),
   }),
   graphql(calendarForCurrentUser, {
+    options: {
+      fetchPolicy: 'network-only',
+    },
     props: ({ data, ownProps }): Partial<IGraphqlProps> => ({
       calendarResponse: data ? (data as any).calendarForCurrentUser : null,
     }),

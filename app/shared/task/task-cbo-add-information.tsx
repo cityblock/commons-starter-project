@@ -50,7 +50,10 @@ export class TaskCBOAddInformation extends React.Component<allProps, IState> {
 
 export default graphql(taskGraphql, {
   skip: (props: IProps) => !props.taskId,
-  options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
+  options: (props: IProps) => ({
+    variables: { taskId: props.taskId },
+    fetchPolicy: 'network-only',
+  }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

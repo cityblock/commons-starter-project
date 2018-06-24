@@ -270,6 +270,7 @@ export default compose(
   withRouter,
   graphql(patientExternalOrganizationsQuery, {
     options: (props: IProps) => ({
+      fetchPolicy: 'network-only',
       variables: {
         patientId: props.patientId,
       },

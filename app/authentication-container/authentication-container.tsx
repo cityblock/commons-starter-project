@@ -163,6 +163,9 @@ export default compose(
     mapDispatchToProps as any,
   ),
   graphql(currentUser, {
+    options: {
+      fetchPolicy: 'network-only',
+    },
     props: ({ data }): IGraphqlProps => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

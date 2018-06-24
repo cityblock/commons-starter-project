@@ -108,6 +108,7 @@ export default compose(
       variables: {
         screeningToolId: props.match.params.screeningToolId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }): IGraphqlProps => ({
       screeningToolLoading: data ? data.loading : false,

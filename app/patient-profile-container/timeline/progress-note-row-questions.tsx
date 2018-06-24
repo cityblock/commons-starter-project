@@ -92,6 +92,7 @@ export default compose(
       variables: {
         progressNoteId: props.progressNote.id,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       progressNoteActivityLoading: data ? data.loading : false,
@@ -106,6 +107,7 @@ export default compose(
         patientId: props.patientId,
         filterType: 'progressNote',
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

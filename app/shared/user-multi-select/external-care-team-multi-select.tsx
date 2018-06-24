@@ -64,6 +64,7 @@ export default compose(
       variables: {
         patientId: ownProps.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       isExternalProvidersLoading: data ? data.loading : false,
@@ -76,6 +77,7 @@ export default compose(
       variables: {
         patientId: ownProps.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       isFamilyLoading: data ? data.loading : false,

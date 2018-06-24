@@ -99,6 +99,7 @@ export default compose(
         progressNoteId: props.progressNoteId,
         glassBreakId: null,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       progressNoteLoading: data ? data.loading : false,
@@ -107,6 +108,7 @@ export default compose(
     }),
   }),
   graphql(progressNoteTemplatesGraphql, {
+    options: { fetchPolicy: 'network-only' },
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,

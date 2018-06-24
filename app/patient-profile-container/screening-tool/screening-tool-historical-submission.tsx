@@ -59,6 +59,7 @@ export default graphql(screeningToolQuestionsGraphql, {
       filterType: 'screeningTool',
       filterId: props.screeningTool.id,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     screeningToolQuestionsLoading: data ? data.loading : false,

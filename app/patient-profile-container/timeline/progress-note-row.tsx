@@ -126,6 +126,7 @@ export default compose(
         progressNoteId: props.progressNoteId,
         glassBreakId: props.glassBreakId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,

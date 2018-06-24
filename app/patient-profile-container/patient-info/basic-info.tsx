@@ -218,6 +218,7 @@ export default graphql(computedPatientStatusGraphql, {
     variables: {
       patientId: props.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

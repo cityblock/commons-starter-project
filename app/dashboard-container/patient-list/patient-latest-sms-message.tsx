@@ -60,6 +60,7 @@ export const PatientLatestSmsMessage: React.StatelessComponent<allProps> = (prop
 export default graphql(smsMessageLatest, {
   options: ({ patientId }: IProps) => ({
     variables: { patientId },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,

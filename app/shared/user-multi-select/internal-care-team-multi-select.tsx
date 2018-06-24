@@ -44,6 +44,7 @@ export default graphql(careTeamGraphql, {
     variables: {
       patientId: ownProps.patientId,
     },
+    fetchPolicy: 'network-only',
   }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

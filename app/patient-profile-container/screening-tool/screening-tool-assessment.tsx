@@ -196,6 +196,7 @@ export default compose(
         filterId: props.screeningToolSubmissionId,
         patientId: props.patientId,
       },
+      fetchPolicy: 'network-only',
     }),
     props: ({ data }) => ({
       patientAnswersLoading: data ? data.loading : false,

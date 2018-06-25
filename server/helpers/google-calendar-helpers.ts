@@ -55,9 +55,7 @@ export function createGoogleCalendarAuth(testConfig?: any) {
     key: credentials.private_key,
     scopes: ['https://www.googleapis.com/auth/calendar'],
     subject:
-      testConfig && testConfig.subject
-        ? testConfig.subject
-        : 'cristina@testorg.cityblock.engineering',
+      testConfig && testConfig.subject ? testConfig.subject : process.env.PATIENT_CALENDAR_ACCOUNT,
   });
 }
 

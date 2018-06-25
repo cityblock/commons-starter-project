@@ -40,5 +40,6 @@ export default {
   HELLOSIGN_TEMPLATE_ID_HEALTHIX: '86ad148dc895ac7bca0ffbf8f720a6a28d42509e',
   HELLOSIGN_TEMPLATE_ID_HCP: '98be369d9b36fc265e67e195903541529b024c3f',
   HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT: 'd42bd7c4dfc8ae7fda752cf06327a8d70904f48f',
+  PATIENT_CALENDAR_ACCOUNT: 'patient-calendar-local@testorg.cityblock.engineering',
   ...process.env,
 };

@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client';
-import { get } from 'lodash';
+import { get, pick } from 'lodash';
 import { Fragment } from 'react';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -64,6 +64,14 @@ export interface IEditableFieldState {
   hasMolst?: getPatient['patient']['patientInfo']['hasMolst'];
   hasHealthcareProxy?: getPatient['patient']['patientInfo']['hasHealthcareProxy'];
   hasDeclinedPhotoUpload?: getPatient['patient']['patientInfo']['hasDeclinedPhotoUpload'];
+  isWhite?: getPatient['patient']['patientInfo']['isWhite'];
+  isBlack?: getPatient['patient']['patientInfo']['isBlack'];
+  isAmericanIndianAlaskan?: getPatient['patient']['patientInfo']['isAmericanIndianAlaskan'];
+  isAsian?: getPatient['patient']['patientInfo']['isAsian'];
+  isHawaiianPacific?: getPatient['patient']['patientInfo']['isHawaiianPacific'];
+  isOtherRace?: getPatient['patient']['patientInfo']['isOtherRace'];
+  isHispanic?: getPatient['patient']['patientInfo']['isHispanic'];
+  raceFreeText?: getPatient['patient']['patientInfo']['raceFreeText'];
 }
 
 interface IState {
@@ -76,7 +84,7 @@ interface IState {
 
 type allState = IState & IEditableFieldState;
 
-function checkDefined<T>(preferred?: T | null, secondary?: T | null) {
+function checkDefined<T>(preferred: T | undefined | null, secondary: T | null) {
   return preferred === undefined ? secondary : preferred;
 }
 
@@ -87,22 +95,7 @@ export class PatientInfo extends React.Component<allProps, allState> {
     isUploadModalVisible: false,
   };
 
-  getPatientFields(patient: getPatient['patient']): IDemographics {
-    const {
-      id,
-      lastName,
-      middleName,
-      firstName,
-      dateOfBirth,
-      ssnEnd,
-      patientDataFlags,
-      patientInfo,
-      coreIdentityVerifiedAt,
-      cityblockId,
-      nmi,
-      mrn,
-      memberId,
-    } = patient;
+  getBasicInfoFields(patientInfo: getPatient['patient']['patientInfo']) {
     const {
       language,
       gender,
@@ -110,52 +103,82 @@ export class PatientInfo extends React.Component<allProps, allState> {
       transgender,
       maritalStatus,
       primaryAddress,
+      isMarginallyHoused,
+      preferredName,
+      isWhite,
+      isBlack,
+      isAmericanIndianAlaskan,
+      isAsian,
+      isHawaiianPacific,
+      isOtherRace,
+      isHispanic,
+      raceFreeText,
+    } = this.state;
+
+    return {
+      gender: gender || patientInfo.gender,
+      genderFreeText: genderFreeText || patientInfo.genderFreeText,
+      transgender: transgender || patientInfo.transgender,
+      maritalStatus: maritalStatus || patientInfo.maritalStatus,
+      language: language || patientInfo.language,
+      primaryAddress: checkDefined<ISavedAddress>(primaryAddress, patientInfo.primaryAddress),
+      isMarginallyHoused: checkDefined<boolean>(isMarginallyHoused, patientInfo.isMarginallyHoused),
+      preferredName: checkDefined<string>(preferredName, patientInfo.preferredName),
+      isWhite: checkDefined<boolean>(isWhite, patientInfo.isWhite),
+      isBlack: checkDefined<boolean>(isBlack, patientInfo.isBlack),
+      isAmericanIndianAlaskan: checkDefined<boolean>(
+        isAmericanIndianAlaskan,
+        patientInfo.isAmericanIndianAlaskan,
+      ),
+      isAsian: checkDefined<boolean>(isAsian, patientInfo.isAsian),
+      isHawaiianPacific: checkDefined<boolean>(isHawaiianPacific, patientInfo.isHawaiianPacific),
+      isOtherRace: checkDefined<boolean>(isOtherRace, patientInfo.isOtherRace),
+      isHispanic: checkDefined<boolean>(isHispanic, patientInfo.isHispanic),
+      raceFreeText: raceFreeText || patientInfo.raceFreeText,
+    };
+  }
+
+  getCoreFields(patient: getPatient['patient']) {
+    const { patientDataFlags, coreIdentityVerifiedAt } = patient;
+    const { flags, verifiedAt } = this.state;
+    const { glassBreakId } = this.props;
+
+    return {
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      cityblockId: patient.cityblockId,
+      dateOfBirth: patient.dateOfBirth,
+      ssnEnd: patient.ssnEnd,
+      patientDataFlags: flags || patientDataFlags,
+      coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
+      glassBreakId,
+      nmi: patient.nmi,
+      mrn: patient.mrn,
+      memberId: patient.memberId,
+    };
+  }
+
+  getPatientFields(patient: getPatient['patient']): IDemographics {
+    const { id, patientDataFlags, patientInfo } = patient;
+    const {
       primaryEmail,
       primaryPhone,
       flags,
-      verifiedAt,
       hasEmail,
       canReceiveCalls,
       preferredContactMethod,
       preferredContactTime,
-      isMarginallyHoused,
-      preferredName,
       hasMolst,
       hasHealthcareProxy,
       hasDeclinedPhotoUpload,
     } = this.state;
-    const { glassBreakId } = this.props;
 
     return {
       patientId: id,
       patientInfoId: patientInfo.id,
-      core: {
-        firstName,
-        lastName,
-        middleName,
-        cityblockId,
-        dateOfBirth,
-        ssnEnd,
-        patientDataFlags: flags || patientDataFlags,
-        coreIdentityVerifiedAt: verifiedAt || coreIdentityVerifiedAt,
-        glassBreakId,
-        nmi,
-        mrn,
-        memberId,
-      },
-      basic: {
-        gender: gender || patientInfo.gender,
-        genderFreeText: genderFreeText || patientInfo.genderFreeText,
-        transgender: transgender || patientInfo.transgender,
-        maritalStatus: maritalStatus || patientInfo.maritalStatus,
-        language: language || patientInfo.language,
-        primaryAddress: checkDefined<ISavedAddress>(primaryAddress, patientInfo.primaryAddress),
-        isMarginallyHoused: checkDefined<boolean>(
-          isMarginallyHoused,
-          patientInfo.isMarginallyHoused,
-        ),
-        preferredName: checkDefined<string>(preferredName, patientInfo.preferredName),
-      },
+      core: this.getCoreFields(patient),
+      basic: this.getBasicInfoFields(patientInfo),
       contact: {
         hasEmail: checkDefined<boolean>(hasEmail, patientInfo.hasEmail),
         primaryEmail: checkDefined<ISavedEmail>(primaryEmail, patientInfo.primaryEmail),
@@ -188,47 +211,39 @@ export class PatientInfo extends React.Component<allProps, allState> {
 
   handleSaveClick = async () => {
     const { patient, editPatientInfo } = this.props;
-    const {
-      language,
-      gender,
-      genderFreeText,
-      transgender,
-      maritalStatus,
-      preferredContactMethod,
-      preferredContactTime,
-      canReceiveCalls,
-      hasEmail,
-      isMarginallyHoused,
-      preferredName,
-      hasMolst,
-      hasHealthcareProxy,
-      hasDeclinedPhotoUpload,
-    } = this.state;
     if (!patient) {
       return;
     }
     this.setState({ isSaving: true });
 
+    const variables = pick(this.state, [
+      'language',
+      'gender',
+      'genderFreeText',
+      'transgender',
+      'maritalStatus',
+      'preferredContactMethod',
+      'preferredContactTime',
+      'canReceiveCalls',
+      'hasEmail',
+      'isMarginallyHoused',
+      'preferredName',
+      'hasMolst',
+      'hasHealthcareProxy',
+      'hasDeclinedPhotoUpload',
+      'isBlack',
+      'isWhite',
+      'isAsian',
+      'isAmericanIndianAlaskan',
+      'isHawaiianPacific',
+      'isOtherRace',
+      'isHispanic',
+      'raceFreeText',
+    ]) as patientInfoEditVariables;
+    variables.patientInfoId = patient.patientInfo.id;
+
     try {
-      await editPatientInfo({
-        variables: {
-          patientInfoId: patient.patientInfo.id,
-          gender,
-          genderFreeText,
-          transgender,
-          maritalStatus,
-          language,
-          preferredContactMethod,
-          preferredContactTime,
-          canReceiveCalls,
-          hasEmail,
-          isMarginallyHoused,
-          preferredName,
-          hasMolst,
-          hasHealthcareProxy,
-          hasDeclinedPhotoUpload,
-        },
-      });
+      await editPatientInfo({ variables });
 
       this.setState({ saveSuccess: true, isSaving: false, hasUnsavedChanges: false });
       setTimeout(this.resetSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);

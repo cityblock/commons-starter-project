@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
 import classNames from 'classnames';
 import langs from 'langs';
-import { values } from 'lodash';
+import { isNil, pick, values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -14,6 +14,8 @@ import {
   Transgender,
 } from '../../graphql/types';
 import { ISavedAddress } from '../../shared/address-modal/address-modal';
+import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
+import CheckboxInput from '../../shared/library/checkbox-input/checkbox-input';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Option from '../../shared/library/option/option';
 import Select, { Color } from '../../shared/library/select/select';
@@ -32,6 +34,14 @@ export interface IBasicInfo {
   addresses?: ISavedAddress[];
   isMarginallyHoused?: getPatient['patient']['patientInfo']['isMarginallyHoused'];
   preferredName?: getPatient['patient']['patientInfo']['preferredName'];
+  isWhite: getPatient['patient']['patientInfo']['isWhite'];
+  isBlack: getPatient['patient']['patientInfo']['isBlack'];
+  isAmericanIndianAlaskan: getPatient['patient']['patientInfo']['isAmericanIndianAlaskan'];
+  isAsian: getPatient['patient']['patientInfo']['isAsian'];
+  isHawaiianPacific: getPatient['patient']['patientInfo']['isHawaiianPacific'];
+  isOtherRace: getPatient['patient']['patientInfo']['isOtherRace'];
+  isHispanic?: getPatient['patient']['patientInfo']['isHispanic'];
+  raceFreeText?: getPatient['patient']['patientInfo']['raceFreeText'];
 }
 
 interface IProps {
@@ -59,6 +69,12 @@ export class BasicInfo extends React.Component<allProps> {
     onChange({ [name]: value });
   };
 
+  handleBooleanSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { onChange } = this.props;
+    const { name, value } = event.target;
+    onChange({ [name]: value === 'true' ? true : false });
+  };
+
   handleGenderChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { onChange, patientInformation } = this.props;
     const gender = event.target.value as any;
@@ -67,10 +83,12 @@ export class BasicInfo extends React.Component<allProps> {
     onChange({ gender, genderFreeText });
   };
 
-  handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { onChange } = this.props;
-    const { name, checked } = event.target;
-    onChange({ [name]: checked });
+  handleRaceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { onChange, patientInformation } = this.props;
+    const { value, checked } = event.target;
+    const raceFreeText = value === 'isOtherRace' && checked ? patientInformation.raceFreeText : '';
+
+    onChange({ [value]: checked, raceFreeText });
   };
 
   renderLanguageSelect(color?: Color) {
@@ -95,6 +113,30 @@ export class BasicInfo extends React.Component<allProps> {
     );
   }
 
+  renderRaceOptions() {
+    const options = pick(this.props.patientInformation, [
+      'isWhite',
+      'isBlack',
+      'isAmericanIndianAlaskan',
+      'isAsian',
+      'isHawaiianPacific',
+      'isOtherRace',
+    ]);
+
+    const raceOptionsHtml = Object.keys(options).map(race => {
+      return (
+        <CheckboxInput
+          key={`raceCheckbox-${race}`}
+          value={race}
+          checked={!!(options as any)[race]}
+          onChange={this.handleRaceChange}
+          labelMessageId={`race.${race}`}
+        />
+      );
+    });
+    return <CheckboxGroup>{raceOptionsHtml}</CheckboxGroup>;
+  }
+
   renderPatientInfo() {
     const { computedPatientStatus, patientInformation } = this.props;
     const {
@@ -103,6 +145,9 @@ export class BasicInfo extends React.Component<allProps> {
       transgender,
       maritalStatus,
       preferredName,
+      isOtherRace,
+      raceFreeText,
+      isHispanic,
     } = patientInformation;
 
     const isUnsaved = computedPatientStatus
@@ -124,6 +169,17 @@ export class BasicInfo extends React.Component<allProps> {
           />
         </div>
       ) : null;
+
+    const raceFreeTextHtml = isOtherRace ? (
+      <div className={styles.field}>
+        <FormLabel messageId="patientInfo.raceFreeText" />
+        <TextInput
+          name="raceFreeText"
+          value={raceFreeText || ''}
+          onChange={this.handleValueChange}
+        />
+      </div>
+    ) : null;
 
     return (
       <div className={styles.subSection}>
@@ -186,6 +242,27 @@ export class BasicInfo extends React.Component<allProps> {
               color={color}
             />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <FormLabel messageId="patientInfo.race" />
+          {this.renderRaceOptions()}
+        </div>
+
+        <div className={styles.fieldRow}>
+          <div className={classNames(styles.field, styles.short)}>
+            <FormLabel messageId="patientInfo.isHispanic" />
+            <Select
+              name="isHispanic"
+              large={true}
+              onChange={this.handleBooleanSelectChange}
+              value={isNil(isHispanic) ? '' : isHispanic.toString()}
+              options={['true', 'false']}
+              hasPlaceholder={true}
+              color={color}
+            />
+          </div>
+          {raceFreeTextHtml}
         </div>
       </div>
     );

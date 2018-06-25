@@ -6,7 +6,7 @@ import styles from './css/checkbox-input.css';
 interface IProps {
   value: string;
   checked: boolean;
-  onChange: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string; // optional label, will default to value if not provided
   labelMessageId?: string;
   disabled?: boolean;

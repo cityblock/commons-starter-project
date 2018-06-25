@@ -1286,6 +1286,14 @@ export const basicInfo = {
   primaryAddress: patient.patientInfo.primaryAddress,
   isMarginallyHoused: patient.patientInfo.isMarginallyHoused,
   preferredName: patient.patientInfo.preferredName,
+  isWhite: patient.patientInfo.isWhite,
+  isBlack: patient.patientInfo.isBlack,
+  isAmericanIndianAlaskan: patient.patientInfo.isAmericanIndianAlaskan,
+  isAsian: patient.patientInfo.isAsian,
+  isHawaiianPacific: patient.patientInfo.isHawaiianPacific,
+  isOtherRace: patient.patientInfo.isOtherRace,
+  isHispanic: patient.patientInfo.isHispanic,
+  raceFreeText: patient.patientInfo.raceFreeText,
 };
 
 export const planInfo = {

@@ -29,13 +29,15 @@ describe('Render Basic Information Component', () => {
 
   it('renders patient info labels', () => {
     const formLabels = wrapper.find(FormLabel);
-    expect(formLabels).toHaveLength(5);
+    expect(formLabels).toHaveLength(7);
 
     expect(formLabels.at(0).props().messageId).toBe('patientInfo.preferredName');
     expect(formLabels.at(1).props().messageId).toBe('patientInfo.maritalStatus');
     expect(formLabels.at(2).props().messageId).toBe('patientInfo.language');
     expect(formLabels.at(3).props().messageId).toBe('patientInfo.gender');
     expect(formLabels.at(4).props().messageId).toBe('patientInfo.transgender');
+    expect(formLabels.at(5).props().messageId).toBe('patientInfo.race');
+    expect(formLabels.at(6).props().messageId).toBe('patientInfo.isHispanic');
   });
 
   it('renders patient info text inputs', () => {
@@ -45,7 +47,7 @@ describe('Render Basic Information Component', () => {
   });
 
   it('renders patient info selects', () => {
-    expect(wrapper.find(Select)).toHaveLength(4);
+    expect(wrapper.find(Select)).toHaveLength(5);
 
     const select1Props = wrapper
       .find(Select)
@@ -82,6 +84,15 @@ describe('Render Basic Information Component', () => {
     expect(select4Props.large).toBeTruthy();
     expect(select4Props.value).toBe(basicInfo.transgender);
     expect(select4Props.hasPlaceholder).toBeTruthy();
+
+    const select5Props = wrapper
+      .find(Select)
+      .at(4)
+      .props();
+    expect(select5Props.name).toBe('isHispanic');
+    expect(select5Props.large).toBeTruthy();
+    expect(select5Props.value).toBe(basicInfo.isHispanic.toString());
+    expect(select5Props.hasPlaceholder).toBeTruthy();
   });
 
   it('renders patient info text inputs', () => {
@@ -91,6 +102,8 @@ describe('Render Basic Information Component', () => {
           ...basicInfo,
           gender: Gender.selfDescribed,
           genderFreeText: 'other',
+          isOtherRace: true,
+          raceFreeText: 'other race',
         }}
         patientId={patient.id}
         patientInfoId={patient.patientInfo.id}
@@ -100,7 +113,7 @@ describe('Render Basic Information Component', () => {
         error={null}
       />,
     );
-    expect(wrapper2.find(TextInput)).toHaveLength(2);
+    expect(wrapper2.find(TextInput)).toHaveLength(3);
     expect(
       wrapper2
         .find(TextInput)
@@ -113,5 +126,18 @@ describe('Render Basic Information Component', () => {
         .at(1)
         .props().value,
     ).toBe('other');
+
+    expect(
+      wrapper2
+        .find(TextInput)
+        .at(2)
+        .props().name,
+    ).toBe('raceFreeText');
+    expect(
+      wrapper2
+        .find(TextInput)
+        .at(2)
+        .props().value,
+    ).toBe('other race');
   });
 });

@@ -4304,6 +4304,7 @@ export interface getPatientScreeningToolSubmissionsFor360_patientScreeningToolSu
   id: string;
   score: number | null;
   createdAt: string;
+  scoredAt: string | null;
   user: getPatientScreeningToolSubmissionsFor360_patientScreeningToolSubmissionsFor360_user;
   screeningTool: getPatientScreeningToolSubmissionsFor360_patientScreeningToolSubmissionsFor360_screeningTool;
   screeningToolScoreRange: getPatientScreeningToolSubmissionsFor360_patientScreeningToolSubmissionsFor360_screeningToolScoreRange | null;
@@ -18633,6 +18634,7 @@ export interface ShortPatientScreeningToolSubmission360 {
   id: string;
   score: number | null;
   createdAt: string;
+  scoredAt: string | null;
   user: ShortPatientScreeningToolSubmission360_user;
   screeningTool: ShortPatientScreeningToolSubmission360_screeningTool;
   screeningToolScoreRange: ShortPatientScreeningToolSubmission360_screeningToolScoreRange | null;

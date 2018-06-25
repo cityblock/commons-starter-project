@@ -2,6 +2,7 @@ fragment ShortPatientScreeningToolSubmission360 on PatientScreeningToolSubmissio
   id
   score
   createdAt
+  scoredAt
   user {
     id
     firstName

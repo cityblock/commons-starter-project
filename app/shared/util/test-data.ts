@@ -931,6 +931,7 @@ export const patientScreeningToolSubmission = {
 export const shortPatientScreeningToolSubmission = {
   id: 'nymeria',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  scoredAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   score: 5,
   screeningTool: {
     id: screeningTool.id,
@@ -952,6 +953,7 @@ export const shortPatientScreeningToolSubmission = {
 export const shortPatientScreeningToolSubmission2 = {
   id: 'ghost',
   createdAt: 'Thu Jul 11 2017 16:52:56 GMT-0400 (EDT)',
+  scoredAt: 'Thu Jul 11 2017 16:52:56 GMT-0400 (EDT)',
   score: 11,
   screeningTool: {
     id: screeningTool.id,

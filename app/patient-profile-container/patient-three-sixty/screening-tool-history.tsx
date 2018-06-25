@@ -70,7 +70,7 @@ export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: 
               className={styles.borderRight}
             />
             <DateInfo
-              date={submission.createdAt}
+              date={submission.scoredAt}
               messageId="history360.conducted"
               className={styles.marginLeft}
             />

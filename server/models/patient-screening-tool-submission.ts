@@ -289,7 +289,6 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       })
       .where({ patientId, 'patient_screening_tool_submission.deletedAt': null })
       .orderBy('createdAt', 'desc');
-
     return submissions;
   }
 

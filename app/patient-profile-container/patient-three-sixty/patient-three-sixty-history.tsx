@@ -7,7 +7,6 @@ import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-place
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
-import styles from './css/patient-three-sixty-history.css';
 import sharedStyles from './css/shared.css';
 import { HISTORY_ROUTE } from './patient-three-sixty-domains';
 import ScreeningToolHistory from './screening-tool-history';
@@ -64,8 +63,10 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
           href={`${routeBase}/360/${HISTORY_ROUTE}`}
         />
       </UnderlineTabs>
-      <div className={sharedStyles.bodyFlex}>
-        <div className={styles.container}>{renderedSubmissions}</div>;
+      <div className={sharedStyles.body}>
+        <div className={sharedStyles.container}>
+          <div className={sharedStyles.paddedScroll}>{renderedSubmissions}</div>
+        </div>
       </div>
     </React.Fragment>
   );

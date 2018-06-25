@@ -133,13 +133,10 @@ export const PatientProfileContainer = (props: allProps) => {
             />
             <Route
               exact
-              path="/patients/:patientId/360/:riskAreaGroupId"
+              path="/patients/:patientId/360/history"
               render={(p: any) => (
-                <DomainAssessments
+                <PatientThreeSixtyHistory
                   {...p}
-                  routeBase={`/patients/${patientId}/360`}
-                  riskAreaGroupId={p.match.params.riskAreaGroupId}
-                  riskAreaId={p.match.params.riskAreaId}
                   patientId={patientId}
                   glassBreakId={glassBreakId}
                 />
@@ -147,10 +144,13 @@ export const PatientProfileContainer = (props: allProps) => {
             />
             <Route
               exact
-              path="/patients/:patientId/360/history"
+              path="/patients/:patientId/360/:riskAreaGroupId"
               render={(p: any) => (
-                <PatientThreeSixtyHistory
+                <DomainAssessments
                   {...p}
+                  routeBase={`/patients/${patientId}/360`}
+                  riskAreaGroupId={p.match.params.riskAreaGroupId}
+                  riskAreaId={p.match.params.riskAreaId}
                   patientId={patientId}
                   glassBreakId={glassBreakId}
                 />

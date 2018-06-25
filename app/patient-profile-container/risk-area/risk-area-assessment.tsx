@@ -322,7 +322,9 @@ export default compose(
         {
           query: riskAreaAssessmentSubmissionForPatientGraphql,
           variables: {
+            riskAreaId: props.riskAreaId,
             patientId: props.patientId,
+            completed: false,
           },
         },
       ],

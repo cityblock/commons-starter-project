@@ -17,7 +17,6 @@ import patientsWithOutOfDateMAP from '../../../app/graphql/queries/get-patients-
 import patientsWithPendingSuggestions from '../../../app/graphql/queries/get-patients-with-pending-suggestions.graphql';
 import patientsWithRecentConversations from '../../../app/graphql/queries/get-patients-with-recent-conversations.graphql';
 import patientsWithUrgentTasks from '../../../app/graphql/queries/get-patients-with-urgent-tasks.graphql';
-
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientGlassBreak from '../../models/patient-glass-break';

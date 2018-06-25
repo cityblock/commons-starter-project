@@ -13,6 +13,7 @@ import { processAfterHoursCommunications } from './after-hours-communications-co
 import { processNewComputedFieldValue } from './computed-field-consumer';
 import { processNotifyNoConsent } from './contact-no-consent-consumer';
 import { processPatientContactEdit } from './contact-update-consumer';
+import { processHelloSign } from './hello-sign-consumer';
 import { processMattermost } from './mattermost-consumer';
 import { processNewMemberAttributionMessage } from './member-attribution-consumer';
 import { processPhoneCalls } from './phone-call-consumer';
@@ -222,6 +223,21 @@ queue.process(ADD_USER_TO_CHANNEL_TOPIC, async (job, done) => {
   } catch (err) {
     logger.log(`[Consumer][${ADD_USER_TO_CHANNEL_TOPIC}] Error processing`);
     reportError(err, `Kue error ${ADD_USER_TO_CHANNEL_TOPIC}`);
+    return done(err);
+  }
+});
+
+queue.process('processHelloSign', async (job, done) => {
+  try {
+    logger.log('[Consumer][processHelloSign] Started processing');
+    await processHelloSign(job.data);
+    logger.log('[Consumer][processHelloSign] Completed processing');
+
+    return done();
+  } catch (err) {
+    logger.log('[Consumer][processHelloSign] Error processing');
+    reportError(err, 'Kue error processHelloSign', job.data);
+
     return done(err);
   }
 });

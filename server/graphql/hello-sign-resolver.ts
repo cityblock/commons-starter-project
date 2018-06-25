@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import HelloSign from 'hellosign-sdk';
 import { get } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import {
@@ -22,9 +23,7 @@ import PatientExternalOrganization from '../models/patient-external-organization
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
-/* tslint:disable no-var-requires */
-const hellosign = require('hellosign-sdk')({ key: config.HELLOSIGN_API_KEY });
-/* tslint:enable */
+const hellosign = HelloSign({ key: config.HELLOSIGN_API_KEY });
 
 const MAX_ORGANIZATIONS = 17;
 const MAX_INDIVIDUALS = 12;

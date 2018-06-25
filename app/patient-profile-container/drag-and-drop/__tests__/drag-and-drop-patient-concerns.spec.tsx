@@ -12,6 +12,7 @@ describe('Drag and Drop Patient Concerns Component', () => {
         concerns={[]}
         selectedPatientConcernId=""
         inactive={true}
+        glassBreakId={null}
         onClick={placeholderFn}
         selectedTaskId=""
         selectedGoalId=""
@@ -30,6 +31,7 @@ describe('Drag and Drop Patient Concerns Component', () => {
         selectedPatientConcernId=""
         inactive={false}
         onClick={placeholderFn}
+        glassBreakId={null}
         selectedTaskId=""
         selectedGoalId=""
       />,

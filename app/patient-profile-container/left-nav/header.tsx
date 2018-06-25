@@ -68,7 +68,6 @@ export default compose(
     skip: ({ patient }: IProps) => !patient,
     options: ({ patient }: IProps) => {
       const patientId = patient ? patient.id : '';
-
       return { variables: { patientId }, fetchPolicy: 'network-only' };
     },
     props: ({ data }) => ({

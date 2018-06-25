@@ -16,6 +16,7 @@ describe('Create Task Modal Component', () => {
     <CreateTaskModal
       visible={false}
       closePopup={placeholderFn}
+      glassBreakId={null}
       patientId={patientId}
       patientGoalId={patientGoalId}
       createTask={placeholderFn}

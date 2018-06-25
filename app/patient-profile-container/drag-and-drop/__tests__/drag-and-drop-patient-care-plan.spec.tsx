@@ -54,6 +54,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
     <Component
       routeBase={routeBase}
       patientId={patientId}
+      glassBreakId={null}
       selectedTaskId={selectedTaskId}
       selectedGoalId={selectedGoalId}
       carePlan={carePlan}

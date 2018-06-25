@@ -14,6 +14,7 @@ describe('Patient Goal Component', () => {
       goalNumber={1}
       patientGoal={patientGoal}
       selectedTaskId=""
+      glassBreakId={null}
       concernTitle={concernTitle}
       currentUserId={userId}
     />,
@@ -51,6 +52,7 @@ describe('Patient Goal Component', () => {
         patientGoal={patientGoal}
         selectedTaskId="aryaStark"
         concernTitle={concernTitle}
+        glassBreakId={null}
         currentUserId={userId}
       />,
     );

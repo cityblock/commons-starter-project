@@ -21,6 +21,7 @@ describe('Patient Concern Component', () => {
       onClick={onClick}
       selectedTaskId={selectedTaskId}
       selectedGoalId=""
+      glassBreakId={null}
       isDragging={true}
       currentUserId={userId}
     />,

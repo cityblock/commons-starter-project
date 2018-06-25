@@ -156,9 +156,16 @@ export default compose(
   withErrorHandler(),
   graphql(patientContactDeleteGraphql, {
     name: 'patientContactDelete',
-    options: {
-      refetchQueries: ['getPatientContacts'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientContactsGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(patientContactsGraphql, {
     options: (props: IProps) => ({

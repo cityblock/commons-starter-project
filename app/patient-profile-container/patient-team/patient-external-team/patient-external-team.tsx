@@ -111,9 +111,16 @@ export class PatientExternalTeam extends React.Component<allProps, IState> {
 export default compose(
   graphql(patientExternalProviderDeleteGraphql, {
     name: 'patientExternalProviderDelete',
-    options: {
-      refetchQueries: ['getPatientExternalProviders'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientExternalProvidersGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(patientExternalProvidersGraphql, {
     options: (props: IProps) => ({

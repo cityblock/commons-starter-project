@@ -138,7 +138,11 @@ const patientGlassBreak = () => <P extends {}>(
     graphql<IGraphqlProps, IProps, resultProps>(createPatientGlassBreakGraphql, {
       name: 'createPatientGlassBreak',
       options: {
-        refetchQueries: ['getPatientGlassBreaksForUser'],
+        refetchQueries: [
+          {
+            query: patientGlassBreaksForUser,
+          },
+        ],
       },
     }),
   )(PatientGlassBreak);

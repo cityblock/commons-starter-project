@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import CBOReferralEditGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
+import patientCarePlanGraphql from '../../graphql/queries/get-patient-care-plan.graphql';
 import taskEditGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
   taskEdit,
@@ -184,6 +185,15 @@ export default compose(
   }),
   graphql(taskEditGraphql, {
     name: 'editTask',
-    options: { refetchQueries: ['getPatientCarePlan'] },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientCarePlanGraphql,
+          variables: {
+            patientId: props.task.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(TaskCBOAddInformationPopup) as React.ComponentClass<IProps>;

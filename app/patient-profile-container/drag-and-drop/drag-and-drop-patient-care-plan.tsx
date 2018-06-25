@@ -20,6 +20,7 @@ interface IProps {
   patientId: string;
   carePlan?: getPatientCarePlan['carePlanForPatient'];
   taskIdsWithNotifications?: string[];
+  glassBreakId: string | null;
   selectedTaskId: string;
   selectedGoalId: string;
 }
@@ -186,6 +187,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
       patientId,
       selectedTaskId,
       selectedGoalId,
+      glassBreakId,
       taskIdsWithNotifications,
     } = this.props;
     const { activeConcerns, inactiveConcerns, isDragging, reorderError } = this.state;
@@ -197,6 +199,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
             loading={loading}
             routeBase={routeBase}
             patientId={patientId}
+            glassBreakId={glassBreakId}
             selectedTaskId={selectedTaskId}
             selectedGoalId={selectedGoalId}
             activeConcerns={activeConcerns}

@@ -19,6 +19,7 @@ interface IProps {
   isDragging?: boolean;
   taskIdsWithNotifications?: string[];
   currentUserId: string;
+  glassBreakId: string | null;
 }
 
 export interface IPatientConcernStats {
@@ -91,7 +92,13 @@ export class PatientConcern extends React.Component<IProps, {}> {
   }
 
   renderGoals() {
-    const { patientConcern, selectedTaskId, taskIdsWithNotifications, currentUserId } = this.props;
+    const {
+      patientConcern,
+      selectedTaskId,
+      taskIdsWithNotifications,
+      currentUserId,
+      glassBreakId,
+    } = this.props;
     const { patientGoals } = patientConcern;
 
     if (!patientGoals) {
@@ -101,6 +108,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
     return patientGoals.map((patientGoal, index) => (
       <PatientGoal
         key={patientGoal.id}
+        glassBreakId={glassBreakId}
         patientGoal={patientGoal}
         concernTitle={patientConcern.concern.title}
         goalNumber={index + 1}

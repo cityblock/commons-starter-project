@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mutation, MutationFn } from 'react-apollo';
+import currentUserHoursGraphql from '../graphql/queries/get-current-user-hours.graphql';
 import userHoursCreateMutationGraphql from '../graphql/queries/user-hours-create-mutation.graphql';
 import userHoursDeleteMutationGraphql from '../graphql/queries/user-hours-delete-mutation.graphql';
 import { getCurrentUserHours } from '../graphql/types';
@@ -39,14 +40,14 @@ class DayOffToggle extends React.Component<IProps, IState> {
                 startTime: 800, // 8 am
                 endTime: 1800, // 6 pm
               },
-              refetchQueries: ['getCurrentUserHours'],
+              refetchQueries: [{ query: currentUserHoursGraphql }],
             });
             // otherwise delete existing user hours
           } else {
             userHours.forEach(async userHourGroup => {
               await deleteMutation({
                 variables: { userHoursId: userHourGroup.id },
-                refetchQueries: ['getCurrentUserHours'],
+                refetchQueries: [{ query: currentUserHoursGraphql }],
               });
             });
           }

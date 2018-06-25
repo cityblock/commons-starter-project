@@ -52,6 +52,7 @@ export class PatientMap extends React.Component<allProps, {}> {
       taskId,
       goalId,
       refetch,
+      glassBreakId,
     } = this.props;
     const mainStyles = classNames(sharedStyles.scroll, {
       [styles.full]: !taskId,
@@ -72,6 +73,7 @@ export class PatientMap extends React.Component<allProps, {}> {
             <DnDPatientCarePlan
               loading={loading}
               carePlan={carePlan}
+              glassBreakId={glassBreakId}
               taskIdsWithNotifications={taskIdsWithNotifications}
               routeBase={routeBase}
               patientId={patientId}

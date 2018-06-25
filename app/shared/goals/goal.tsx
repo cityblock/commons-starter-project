@@ -14,6 +14,7 @@ interface IProps {
   concernTitle: string;
   taskIdsWithNotifications?: string[];
   currentUserId: string;
+  glassBreakId: string | null;
 }
 
 interface IState {
@@ -52,7 +53,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { patientGoal, concernTitle, goalNumber, selectedTaskId } = this.props;
+    const { patientGoal, concernTitle, goalNumber, selectedTaskId, glassBreakId } = this.props;
     const { createTaskModal } = this.state;
 
     const goalStyles = classNames(styles.patientGoal, {
@@ -62,6 +63,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
     return (
       <div className={styles.patientGoalTaskGroup}>
         <CreateTask
+          glassBreakId={glassBreakId}
           visible={createTaskModal}
           closePopup={this.setCreateTaskModal(false)}
           patientId={patientGoal.patient.id}

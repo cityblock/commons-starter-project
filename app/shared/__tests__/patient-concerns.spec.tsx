@@ -15,6 +15,7 @@ describe('Patient Care Plan Concerns Component', () => {
         onClick={onClick}
         concerns={[]}
         selectedTaskId=""
+        glassBreakId={null}
         selectedGoalId=""
         selectedPatientConcernId={selectedPatientConcernId}
         inactive={true}
@@ -49,6 +50,7 @@ describe('Patient Care Plan Concerns Component', () => {
       <PatientConcerns
         onClick={onClick}
         concerns={concerns}
+        glassBreakId={null}
         selectedTaskId=""
         selectedGoalId=""
         selectedPatientConcernId={selectedPatientConcernId}

@@ -244,9 +244,14 @@ export default compose(
   withRouter,
   graphql(userDeleteGraphql, {
     name: 'deleteUser',
-    options: {
-      refetchQueries: ['getUsers'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: usersGraphql,
+          variables: getPageParams(props),
+        },
+      ],
+    }),
   }),
   graphql(userEditPermissionsGraphql, {
     name: 'editUserPermissions',
@@ -257,9 +262,14 @@ export default compose(
   }),
   graphql(userCreateGraphql, {
     name: 'createUser',
-    options: {
-      refetchQueries: ['getUsers'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: usersGraphql,
+          variables: getPageParams(props),
+        },
+      ],
+    }),
   }),
   graphql(currentUserGraphql, {
     props: ({ data }) => ({

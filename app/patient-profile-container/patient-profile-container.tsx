@@ -73,7 +73,7 @@ export const PatientProfileContainer = (props: allProps) => {
         patient={patient || null}
         glassBreakId={glassBreakId}
       />
-      <ProgressNotePopupContainer patientId={patientId} />
+      <ProgressNotePopupContainer patientId={patientId} glassBreakId={glassBreakId} />
       <div className={styles.mainBody}>
         <PatientIntakeChecklist patientId={patientId} />
         <div className={styles.header}>

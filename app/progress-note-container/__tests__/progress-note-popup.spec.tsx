@@ -30,6 +30,7 @@ describe('builder concerns', () => {
           progressNote={progressNote}
           questions={[question]}
           currentUser={currentUser}
+          glassBreakId={null}
           close={jest.fn()}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
@@ -47,6 +48,7 @@ describe('builder concerns', () => {
         <Component
           currentUser={currentUser}
           questions={[question]}
+          glassBreakId={null}
           close={jest.fn()}
           completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
           editProgressNote={editProgressNote}

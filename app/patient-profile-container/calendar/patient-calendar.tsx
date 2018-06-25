@@ -3,8 +3,8 @@ import { get } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import calendarCreateForPatientGraphql from '../../graphql/queries/calendar-create-for-patient-mutation.graphql';
-import calendarEventsForPatient from '../../graphql/queries/get-calendar-events-for-patient.graphql';
-import calendarForPatient from '../../graphql/queries/get-calendar-for-patient.graphql';
+import calendarEventsForPatientGraphql from '../../graphql/queries/get-calendar-events-for-patient.graphql';
+import calendarForPatientGraphql from '../../graphql/queries/get-calendar-for-patient.graphql';
 import {
   calendarCreateForPatient,
   calendarCreateForPatientVariables,
@@ -221,11 +221,16 @@ const update = (previousResponse: IResponse, fetchMoreResponse: IResponse) => {
 export default compose(
   graphql<any>(calendarCreateForPatientGraphql, {
     name: 'createCalendarForPatient',
-    options: {
-      refetchQueries: ['getCalendarForPatient'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: calendarForPatientGraphql,
+          variables: { patientId: props.match.params.patientId },
+        },
+      ],
+    }),
   }),
-  graphql(calendarForPatient, {
+  graphql(calendarForPatientGraphql, {
     options: (props: IProps) => ({
       variables: { patientId: props.match.params.patientId },
       fetchPolicy: 'network-only',
@@ -234,7 +239,7 @@ export default compose(
       calendarResponse: data ? (data as any).calendarForPatient : null,
     }),
   }),
-  graphql(calendarEventsForPatient, {
+  graphql(calendarEventsForPatientGraphql, {
     options: (props: IProps) => ({
       variables: {
         timeMin: new Date().toISOString(),

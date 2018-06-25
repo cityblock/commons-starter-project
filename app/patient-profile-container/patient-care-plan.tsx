@@ -16,6 +16,7 @@ interface IProps {
   inactiveConcerns: FullPatientConcern[];
   taskIdsWithNotifications?: string[];
   isDragging?: boolean;
+  glassBreakId: string | null;
   error?: string | null;
 }
 
@@ -53,6 +54,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
       selectedGoalId,
       activeConcerns,
       inactiveConcerns,
+      glassBreakId,
       error,
       taskIdsWithNotifications,
     } = this.props;
@@ -73,12 +75,14 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}
           selectedGoalId={selectedGoalId}
+          glassBreakId={glassBreakId}
           taskIdsWithNotifications={taskIdsWithNotifications}
         />
         <TextDivider messageId="patientMap.nextUp" hasPadding={true} />
         <DnDPatientConcerns
           concerns={inactiveConcerns}
           inactive={true}
+          glassBreakId={glassBreakId}
           selectedPatientConcernId={selectedPatientConcernId}
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}

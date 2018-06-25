@@ -43,7 +43,14 @@ export class PatientExternalOrganizations extends React.Component<allProps, ISta
     try {
       const response = await mutate({
         variables: { patientExternalOrganizationId },
-        refetchQueries: ['getPatientExternalOrganizations'],
+        refetchQueries: [
+          {
+            query: patientExternalOrganizationsGraphql,
+            variables: {
+              patientId: this.props.patientId,
+            },
+          },
+        ],
       });
       this.setState({
         error: (response as any).errors ? (response as any).errors[0] : null,

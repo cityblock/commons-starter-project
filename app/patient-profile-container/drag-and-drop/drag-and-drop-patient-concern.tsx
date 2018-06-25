@@ -9,6 +9,7 @@ interface IProps {
   index: number;
   onClick: () => void;
   inactive: boolean;
+  glassBreakId: string | null;
   selectedTaskId: string;
   selectedGoalId: string;
   taskIdsWithNotifications?: string[];
@@ -21,6 +22,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
     patientConcern,
     selected,
     inactive,
+    glassBreakId,
     selectedTaskId,
     selectedGoalId,
     taskIdsWithNotifications,
@@ -60,6 +62,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
                 onClick={onClickFull}
                 selected={selected}
                 inactive={inactive}
+                glassBreakId={glassBreakId}
                 selectedTaskId={selectedTaskId}
                 selectedGoalId={selectedGoalId}
                 isDragging={snapshot.isDragging}

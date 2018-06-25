@@ -11,6 +11,7 @@ interface IProps {
   selectedTaskId: string;
   selectedGoalId: string;
   taskIdsWithNotifications?: string[];
+  glassBreakId: string | null;
 }
 
 const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -22,6 +23,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
     selectedTaskId,
     selectedGoalId,
     taskIdsWithNotifications,
+    glassBreakId,
   } = props;
 
   const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
@@ -32,6 +34,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
         <div ref={provided.innerRef}>
           <PatientConcerns
             concerns={concerns}
+            glassBreakId={glassBreakId}
             selectedPatientConcernId={selectedPatientConcernId}
             onClick={onClick}
             selectedTaskId={selectedTaskId}

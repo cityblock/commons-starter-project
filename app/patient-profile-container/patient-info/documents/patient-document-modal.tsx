@@ -4,6 +4,7 @@ import { lookup } from 'mime-types';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import uuid from 'uuid/v4';
+import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
 import patientDocumentCreateGraphql from '../../../graphql/queries/patient-document-create-mutation.graphql';
 import patientDocumentSignedUrlCreateGraphql from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
@@ -200,8 +201,15 @@ export default compose(
   }),
   graphql(patientDocumentCreateGraphql, {
     name: 'createPatientDocument',
-    options: {
-      refetchQueries: ['getPatientDocuments'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientDocumentsGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(PatientDocumentModal) as React.ComponentClass<IProps>;

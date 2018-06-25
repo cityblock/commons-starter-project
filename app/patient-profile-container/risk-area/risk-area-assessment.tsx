@@ -3,7 +3,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import riskAreaAssessmentSubmissionForPatient from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
+import progressNotesForCurrentUserGraphql from '../../graphql/queries/get-progress-notes-for-current-user.graphql';
+import riskAreaAssessmentSubmissionForPatientGraphql from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
 import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import riskAreaGraphql from '../../graphql/queries/get-risk-area.graphql';
 import riskAreaAssessmentSubmissionCompleteGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
@@ -307,14 +308,25 @@ export default compose(
   graphql(riskAreaAssessmentSubmissionCompleteGraphql, {
     name: 'riskAreaAssessmentSubmissionComplete',
     options: {
-      refetchQueries: ['getProgressNotesForCurrentUser'],
+      refetchQueries: [
+        {
+          query: progressNotesForCurrentUserGraphql,
+        },
+      ],
     },
   }),
   graphql(riskAreaAssessmentSubmissionCreateGraphql, {
     name: 'riskAreaAssessmentSubmissionCreate',
-    options: {
-      refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: riskAreaAssessmentSubmissionForPatientGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(riskAreaGraphql, {
     options: (props: IProps) => ({
@@ -329,7 +341,7 @@ export default compose(
       riskArea: data ? (data as any).riskArea : null,
     }),
   }),
-  graphql(riskAreaAssessmentSubmissionForPatient, {
+  graphql(riskAreaAssessmentSubmissionForPatientGraphql, {
     skip: (props: IProps) => !props.riskAreaId,
     options: (props: IProps) => ({
       variables: {

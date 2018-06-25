@@ -296,9 +296,16 @@ export default compose(
   withErrorHandler(),
   graphql(patientContactDeleteGraphql, {
     name: 'patientContactDelete',
-    options: {
-      refetchQueries: ['getPatientContactHealthcareProxies'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: healthcareProxiesGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(healthcareProxiesGraphql, {
     options: (props: IProps) => ({

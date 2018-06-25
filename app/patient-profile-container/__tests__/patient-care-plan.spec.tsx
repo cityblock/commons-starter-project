@@ -14,6 +14,7 @@ describe('Patient Care Plan Component', () => {
       <PatientCarePlan
         patientId={patientId}
         loading={true}
+        glassBreakId={null}
         routeBase={routeBase}
         selectedTaskId=""
         selectedGoalId=""
@@ -35,6 +36,7 @@ describe('Patient Care Plan Component', () => {
     <PatientCarePlan
       patientId={patientId}
       routeBase={routeBase}
+      glassBreakId={null}
       selectedTaskId={selectedTaskId}
       selectedGoalId={selectedGoalId}
       activeConcerns={activeConcerns}

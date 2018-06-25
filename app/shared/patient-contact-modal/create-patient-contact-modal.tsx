@@ -1,5 +1,8 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
+import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
+import patientContactsGraphql from '../../graphql/queries/get-patient-contacts.graphql';
+import patientGraphql from '../../graphql/queries/get-patient.graphql';
 import createPatientContactGraphql from '../../graphql/queries/patient-contact-create-mutation.graphql';
 import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import {
@@ -93,14 +96,40 @@ export class CreatePatientContactModal extends React.Component<allProps> {
 export default compose(
   graphql(createPatientContactGraphql, {
     name: 'createPatientContact',
-    options: {
-      refetchQueries: ['getPatientContacts', 'getPatientComputedPatientStatus', 'getPatient'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientContactsGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+        {
+          query: patientComputedPatientStatusGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+        {
+          query: patientGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(editPatientInfoGraphql, {
     name: 'editPatientInfo',
-    options: {
-      refetchQueries: ['getPatientComputedPatientStatus', 'getPatientComputedPatientStatus'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientComputedPatientStatusGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(CreatePatientContactModal) as React.ComponentClass<IProps>;

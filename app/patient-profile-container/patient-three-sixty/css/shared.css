@@ -2,11 +2,14 @@
   margin-top: var(--gutter);
 }
 
-.scroll, .body, .bodyFlex {
+.scroll,
+.body,
+.bodyFlex {
   background: var(--gray-background-color);
 }
 
-.scroll, .domains {
+.scroll,
+.domains {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
@@ -17,12 +20,14 @@
   padding: var(--medium-gutter) 0 100px;
 }
 
-.body, .bodyFlex {
+.body,
+.bodyFlex {
   padding: 0 var(--medium-gutter);
   height: 100%;
 }
 
-.bodyFlex, .flex {
+.bodyFlex,
+.flex {
   display: flex;
   justify-content: space-between;
 }

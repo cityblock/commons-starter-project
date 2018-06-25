@@ -14,6 +14,7 @@ interface IProps {
   selectedTaskId: string;
   selectedGoalId: string;
   taskIdsWithNotifications?: string[];
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -32,6 +33,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
     onClick,
     selectedTaskId,
     selectedGoalId,
+    glassBreakId,
     taskIdsWithNotifications,
     currentUser,
   } = props;
@@ -58,6 +60,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
         inactive={inactive || false}
         selectedTaskId={selectedTaskId}
         selectedGoalId={selectedGoalId}
+        glassBreakId={glassBreakId}
         taskIdsWithNotifications={taskIdsWithNotifications}
         currentUserId={currentUser.id}
       />

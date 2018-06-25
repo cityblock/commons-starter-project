@@ -3,6 +3,11 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import patientAnswersGraphql from '../graphql/queries/get-patient-answers.graphql';
+import patientComputedPatientStatusGraphql from '../graphql/queries/get-patient-computed-patient-status.graphql';
+import patientEncountersGraphql from '../graphql/queries/get-patient-encounters.graphql';
+import progressNoteLatestForPatient from '../graphql/queries/get-progress-note-latest-for-patient.graphql';
+import progressNotesForCurrentUserGraphql from '../graphql/queries/get-progress-notes-for-current-user.graphql';
+import progressNotesForSupervisorReviewGraphql from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
 import questionsGraphql from '../graphql/queries/get-questions.graphql';
 import progressNoteCompleteGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
 import progressNoteCompleteSupervisorReviewGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
@@ -48,6 +53,7 @@ export interface IUpdateProgressNoteOptions {
 
 interface IProps {
   close: () => void;
+  glassBreakId: string | null;
   progressNote: FullProgressNote;
   progressNoteTemplates: FullProgressNoteTemplate[];
   mutate?: any;
@@ -322,34 +328,68 @@ export default compose(
   withCurrentUser(),
   graphql(progressNoteCompleteGraphql, {
     name: 'completeProgressNote',
-    options: {
-      // TODO: ensure this works
+    options: (props: IProps) => ({
       refetchQueries: [
-        'getProgressNotesForPatient',
-        'getProgressNotesForCurrentUser',
-        'getPatientComputedPatientStatus',
-        'getPatient',
-        'getProgressNoteLatestForPatient',
+        {
+          query: progressNotesForCurrentUserGraphql,
+          variables: {
+            completed: false,
+          },
+        },
+        {
+          query: patientComputedPatientStatusGraphql,
+          variables: {
+            patientId: props.progressNote.patientId,
+          },
+        },
+        {
+          query: progressNoteLatestForPatient,
+          variables: {
+            patientId: props.progressNote.patientId,
+          },
+        },
+        {
+          query: patientEncountersGraphql,
+          variables: {
+            patientId: props.progressNote.patientId,
+            glassBreakId: props.glassBreakId,
+          },
+        },
       ],
-    },
+    }),
   }),
   graphql(progressNoteEditGraphql, {
     name: 'editProgressNote',
-    options: {
-      // TODO: ensure this works
+    options: (props: IProps) => ({
       refetchQueries: [
-        'getProgressNotesForPatient',
-        'getProgressNotesForCurrentUser',
-        'getProgressNotesForSupervisorReview',
+        {
+          query: progressNotesForCurrentUserGraphql,
+          variables: {
+            completed: false,
+          },
+        },
+        {
+          query: progressNotesForSupervisorReviewGraphql,
+        },
       ],
-    },
+    }),
   }),
   graphql(progressNoteCompleteSupervisorReviewGraphql, {
     name: 'completeProgressNoteSupervisorReview',
-    options: {
-      // TODO: ensure this works
-      refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: progressNotesForSupervisorReviewGraphql,
+        },
+        {
+          query: patientEncountersGraphql,
+          variables: {
+            patientId: props.progressNote.patientId,
+            glassBreakId: props.glassBreakId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(questionsGraphql, {
     skip: (props: IProps) => !props.progressNote.progressNoteTemplate,

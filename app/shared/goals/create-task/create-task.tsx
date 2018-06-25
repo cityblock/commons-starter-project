@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import CBOReferralCreateGraphql from '../../../graphql/queries/cbo-referral-create-mutation.graphql';
+import patientCarePlanGraphql from '../../../graphql/queries/get-patient-care-plan.graphql';
 import taskCreateGraphql from '../../../graphql/queries/task-create-mutation.graphql';
 import {
   taskCreate,
@@ -24,6 +25,7 @@ export interface IProps {
   visible: boolean;
   closePopup: () => void;
   patientId: string;
+  glassBreakId: string | null;
   patientGoalId: string;
   goal: string;
   concern: string;
@@ -214,9 +216,17 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 export default compose(
   graphql(taskCreateGraphql, {
     name: 'createTask',
-    options: {
-      refetchQueries: ['getPatientCarePlan'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientCarePlanGraphql,
+          variables: {
+            patientId: props.patientId,
+            glassBreakId: props.glassBreakId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(CBOReferralCreateGraphql, {
     name: 'createCBOReferral',

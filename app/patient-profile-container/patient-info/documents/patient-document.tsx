@@ -2,6 +2,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
+import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
 import patientDocumentDeleteGraphql from '../../../graphql/queries/patient-document-delete-mutation.graphql';
 import patientDocumentSignedUrlCreateGraphql from '../../../graphql/queries/patient-document-signed-url-create.graphql';
 import {
@@ -152,8 +153,15 @@ export default compose(
   }),
   graphql(patientDocumentDeleteGraphql, {
     name: 'deletePatientDocument',
-    options: {
-      refetchQueries: ['getPatientDocuments'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientDocumentsGraphql,
+          variables: {
+            patientId: props.patientDocument.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(PatientDocument) as React.ComponentClass<IProps>;

@@ -14,6 +14,7 @@ import ProgressNotePopup from './progress-note-popup';
 
 interface IProps {
   patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IStateProps {
@@ -38,7 +39,14 @@ type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
   getContent() {
-    const { progressNoteTemplates, progressNote, visible, close, patientId } = this.props;
+    const {
+      progressNoteTemplates,
+      progressNote,
+      visible,
+      close,
+      patientId,
+      glassBreakId,
+    } = this.props;
 
     if (!visible) {
       return null;
@@ -55,6 +63,7 @@ export class ProgressNotePopupContainer extends React.Component<allProps, {}> {
     return (
       <ProgressNotePopup
         close={close}
+        glassBreakId={glassBreakId}
         progressNote={progressNote}
         progressNoteTemplates={progressNoteTemplates}
       />
@@ -94,10 +103,10 @@ export default compose(
   ),
   graphql(progressNoteGraphql, {
     skip: (props: IStateProps) => !props.progressNoteId,
-    options: (props: IStateProps) => ({
+    options: (props: IStateProps & IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
-        glassBreakId: null,
+        glassBreakId: props.glassBreakId,
       },
       fetchPolicy: 'network-only',
     }),

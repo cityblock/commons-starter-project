@@ -120,7 +120,7 @@ const progressNoteGlassBreak = () => <P extends {}>(
     graphql<IGraphqlProps, IProps, resultProps>(createProgressNoteGlassBreakGraphql, {
       name: 'createProgressNoteGlassBreak',
       options: {
-        refetchQueries: ['getProgressNoteGlassBreaksForUser'],
+        refetchQueries: [{ query: progressNoteGlassBreaksForUser }],
       },
     }),
   )(ProgressNoteGlassBreak);

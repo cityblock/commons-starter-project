@@ -1,10 +1,11 @@
 import { ApolloError } from 'apollo-client';
 import { get } from 'lodash';
-import React from 'react';
 import { Fragment } from 'react';
+import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Prompt } from 'react-router';
+import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import patientGraphql from '../../graphql/queries/get-patient.graphql';
 import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import { getPatient, patientInfoEdit, patientInfoEditVariables } from '../../graphql/types';
@@ -361,9 +362,22 @@ export class PatientInfo extends React.Component<allProps, allState> {
 export default compose(
   graphql(editPatientInfoGraphql, {
     name: 'editPatientInfo',
-    options: {
-      refetchQueries: ['getPatientComputedPatientStatus', 'getPatient'],
-    },
+    options: (props: IProps) => ({
+      refetchQueries: [
+        {
+          query: patientComputedPatientStatusGraphql,
+          variables: {
+            patientId: props.match.params.patientId,
+          },
+        },
+        {
+          query: patientGraphql,
+          variables: {
+            patientId: props.match.params.patientId,
+          },
+        },
+      ],
+    }),
   }),
   graphql(patientGraphql, {
     options: (props: IProps) => ({

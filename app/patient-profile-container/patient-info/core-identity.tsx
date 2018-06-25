@@ -3,6 +3,7 @@ import { filter, includes, values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import patientVerifyGraphql from '../../graphql/queries/patient-core-identity-verify-mutation.graphql';
 import {
   getPatient,
@@ -227,7 +228,14 @@ export class CoreIdentity extends React.Component<allProps, IState> {
 
 export default graphql<any>(patientVerifyGraphql, {
   name: 'verifyCoreIdentity',
-  options: {
-    refetchQueries: ['getPatientComputedPatientStatus'],
-  },
+  options: (props: IProps) => ({
+    refetchQueries: [
+      {
+        query: patientComputedPatientStatusGraphql,
+        variables: {
+          patientId: props.patientId,
+        },
+      },
+    ],
+  }),
 })(CoreIdentity) as React.ComponentClass<IProps>;

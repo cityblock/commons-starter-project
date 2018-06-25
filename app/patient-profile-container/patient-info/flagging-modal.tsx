@@ -1,6 +1,7 @@
 import { values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
+import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import patientFlagCreateGraphql from '../../graphql/queries/patient-data-flag-create-mutation.graphql';
 import {
   patientDataFlagCreate,
@@ -159,7 +160,14 @@ export class FlaggingModal extends React.Component<allProps, IState> {
 
 export default graphql<any>(patientFlagCreateGraphql, {
   name: 'createFlag',
-  options: {
-    refetchQueries: ['getPatientComputedPatientStatus'],
-  },
+  options: (props: IProps) => ({
+    refetchQueries: [
+      {
+        query: patientComputedPatientStatusGraphql,
+        variables: {
+          patientId: props.patientId,
+        },
+      },
+    ],
+  }),
 })(FlaggingModal) as React.ComponentClass<IProps>;

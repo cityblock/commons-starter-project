@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import patientScreeningToolSubmissionGraphql from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
+import getPatientScreeningToolSubmissionForPatientAndScreeningToolGraphql from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 import screeningToolQuestionsGraphql from '../../graphql/queries/get-questions.graphql';
 import patientScreeningToolSubmissionCreateGraphql from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
 import {
@@ -86,13 +86,19 @@ export const ScreeningToolSubmission: React.StatelessComponent<allProps> = props
 export default compose(
   graphql(patientScreeningToolSubmissionCreateGraphql, {
     name: 'createScreeningToolSubmission',
-    options: {
+    options: (props: IProps) => ({
       refetchQueries: [
-        'getPatientScreeningToolSubmissionForPatientAndScreeningTool',
-        'getPatientScreeningToolSubmissionsFor360',
+        {
+          query: getPatientScreeningToolSubmissionForPatientAndScreeningToolGraphql,
+          variables: {
+            patientId: props.patientId,
+            screeningToolId: props.screeningTool.id,
+            scored: false,
+          },
+        },
       ],
       fetchPolicy: 'network-only',
-    },
+    }),
   }),
   graphql(screeningToolQuestionsGraphql, {
     options: (props: IProps) => ({
@@ -108,7 +114,7 @@ export default compose(
       screeningToolQuestions: data ? (data as any).questions : null,
     }),
   }),
-  graphql(patientScreeningToolSubmissionGraphql, {
+  graphql(getPatientScreeningToolSubmissionForPatientAndScreeningToolGraphql, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.screeningTool.id,

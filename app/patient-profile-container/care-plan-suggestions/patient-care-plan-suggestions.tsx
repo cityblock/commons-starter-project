@@ -195,7 +195,7 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
       dismissedSuggestion,
       dismissModalVisible,
     } = this.state;
-    const { patientId, allSuggestions } = this.props;
+    const { patientId, allSuggestions, glassBreakId } = this.props;
 
     return (
       <React.Fragment>
@@ -211,7 +211,9 @@ export class PatientCarePlanSuggestions extends React.Component<IProps, IState> 
         />
         <PopupPatientCarePlanSuggestionDismissed
           visible={dismissModalVisible}
+          glassBreakId={glassBreakId}
           suggestion={dismissedSuggestion}
+          patientId={patientId}
           onDismiss={this.handleDismissModalDismiss}
         />
       </React.Fragment>

@@ -15,7 +15,9 @@ describe('Dismiss Care Plan Suggestion Modal', () => {
   const wrapper = shallow(
     <PopupPatientCarePlanSuggestionDismissed
       suggestion={concernSuggestion}
+      glassBreakId={'foo'}
       visible={true}
+      patientId={'patient-id'}
       onDismiss={placeholderFn}
       dismissCarePlanSuggestion={placeholderFn}
     />,

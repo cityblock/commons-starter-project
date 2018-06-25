@@ -1,6 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import carePlanSuggestionDismissGraphql from '../../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import computedFieldSuggestionsGraphql from '../../graphql/queries/get-care-plan-suggestions-from-computed-fields-for-patient.graphql';
+import riskAreaAssessmentSuggestionsGraphql from '../../graphql/queries/get-care-plan-suggestions-from-risk-area-assessments-for-patient.graphql';
+import screeningToolSuggestionsGraphql from '../../graphql/queries/get-care-plan-suggestions-from-screening-tools-for-patient.graphql';
 import {
   carePlanSuggestionDismiss,
   carePlanSuggestionDismissVariables,
@@ -14,6 +17,8 @@ interface IProps {
   visible: boolean;
   suggestion: FullCarePlanSuggestionForPatient | null;
   onDismiss: () => any;
+  patientId: string;
+  glassBreakId: string | null;
 }
 
 interface IGraphqlProps {
@@ -103,11 +108,29 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
 
 export default graphql<any>(carePlanSuggestionDismissGraphql, {
   name: 'dismissCarePlanSuggestion',
-  options: {
+  options: (props: IProps) => ({
     refetchQueries: [
-      'getCarePlanSuggestionsFromComputedFieldsForPatient',
-      'getCarePlanSuggestionsFromRiskAreaAssessmentsForPatient',
-      'getCarePlanSuggestionsFromScreeningToolsForPatient',
+      {
+        query: computedFieldSuggestionsGraphql,
+        variables: {
+          patientId: props.patientId,
+          glassBreakId: props.glassBreakId,
+        },
+      },
+      {
+        query: riskAreaAssessmentSuggestionsGraphql,
+        variables: {
+          patientId: props.patientId,
+          glassBreakId: props.glassBreakId,
+        },
+      },
+      {
+        query: screeningToolSuggestionsGraphql,
+        variables: {
+          patientId: props.patientId,
+          glassBreakId: props.glassBreakId,
+        },
+      },
     ],
-  },
+  }),
 })(PopupPatientCarePlanSuggestionDismissed) as React.ComponentClass<IProps>;

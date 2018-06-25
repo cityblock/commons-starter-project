@@ -3,6 +3,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
+import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
 import editPatientInfoGraphql from '../../graphql/queries/patient-info-edit-mutation.graphql';
 import patientPhotoSignedUrlCreateGraphql from '../../graphql/queries/patient-photo-signed-url-create.graphql';
 import {
@@ -92,8 +93,15 @@ export default compose(
   ),
   graphql<IGraphqlProps, IStateProps & IDispatchProps, allProps>(editPatientInfoGraphql, {
     name: 'editPatientInfo',
-    options: {
-      refetchQueries: ['getPatientComputedPatientStatus'],
-    },
+    options: (props: any) => ({
+      refetchQueries: [
+        {
+          query: patientComputedPatientStatusGraphql,
+          variables: {
+            patientId: props.patientId,
+          },
+        },
+      ],
+    }),
   }),
 )(PatientPhotoPopup);

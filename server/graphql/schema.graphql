@@ -462,6 +462,14 @@ type PatientInfo implements uniqueId {
   hasUploadedPhoto: Boolean
   needToKnow: String
   googleCalendarId: String
+  isWhite: Boolean
+  isBlack: Boolean
+  isAmericanIndianAlaskan: Boolean
+  isAsian: Boolean
+  isHawaiianPacific: Boolean
+  isOtherRace: Boolean
+  isHispanic: Boolean
+  raceFreeText: String
 }
 
 # Patient contact that is editable in Commons
@@ -1896,6 +1904,14 @@ input PatientInfoEditInput {
   hasMolst: Boolean
   hasDeclinedPhotoUpload: Boolean
   hasUploadedPhoto: Boolean
+  isWhite: Boolean
+  isBlack: Boolean
+  isAmericanIndianAlaskan: Boolean
+  isAsian: Boolean
+  isHawaiianPacific: Boolean
+  isOtherRace: Boolean
+  isHispanic: Boolean
+  raceFreeText: String
 }
 
 # params for creating a patient contact in the db

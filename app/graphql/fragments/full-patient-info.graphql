@@ -29,4 +29,12 @@ fragment FullPatientInfo on PatientInfo {
   hasDeclinedPhotoUpload
   hasUploadedPhoto
   googleCalendarId
+  isWhite
+  isBlack
+  isAmericanIndianAlaskan
+  isAsian
+  isHawaiianPacific
+  isOtherRace
+  isHispanic
+  raceFreeText
 }

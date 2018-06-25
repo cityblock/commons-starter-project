@@ -4775,6 +4775,14 @@ export interface getPatient_patient_patientInfo {
   hasDeclinedPhotoUpload: boolean | null;
   hasUploadedPhoto: boolean | null;
   googleCalendarId: string | null;
+  isWhite: boolean | null;
+  isBlack: boolean | null;
+  isAmericanIndianAlaskan: boolean | null;
+  isAsian: boolean | null;
+  isHawaiianPacific: boolean | null;
+  isOtherRace: boolean | null;
+  isHispanic: boolean | null;
+  raceFreeText: string | null;
 }
 
 export interface getPatient_patient_patientDataFlags {
@@ -10120,6 +10128,14 @@ export interface patientInfoEdit_patientInfoEdit {
   hasDeclinedPhotoUpload: boolean | null;
   hasUploadedPhoto: boolean | null;
   googleCalendarId: string | null;
+  isWhite: boolean | null;
+  isBlack: boolean | null;
+  isAmericanIndianAlaskan: boolean | null;
+  isAsian: boolean | null;
+  isHawaiianPacific: boolean | null;
+  isOtherRace: boolean | null;
+  isHispanic: boolean | null;
+  raceFreeText: string | null;
 }
 
 export interface patientInfoEdit {
@@ -10146,6 +10162,14 @@ export interface patientInfoEditVariables {
   hasMolst?: boolean | null;
   hasDeclinedPhotoUpload?: boolean | null;
   hasUploadedPhoto?: boolean | null;
+  isWhite?: boolean | null;
+  isBlack?: boolean | null;
+  isAmericanIndianAlaskan?: boolean | null;
+  isAsian?: boolean | null;
+  isHawaiianPacific?: boolean | null;
+  isOtherRace?: boolean | null;
+  isHispanic?: boolean | null;
+  raceFreeText?: string | null;
 }
 
 
@@ -16077,6 +16101,14 @@ export interface FullPatientForProfile_patientInfo {
   hasDeclinedPhotoUpload: boolean | null;
   hasUploadedPhoto: boolean | null;
   googleCalendarId: string | null;
+  isWhite: boolean | null;
+  isBlack: boolean | null;
+  isAmericanIndianAlaskan: boolean | null;
+  isAsian: boolean | null;
+  isHawaiianPacific: boolean | null;
+  isOtherRace: boolean | null;
+  isHispanic: boolean | null;
+  raceFreeText: string | null;
 }
 
 export interface FullPatientForProfile_patientDataFlags {
@@ -16274,6 +16306,14 @@ export interface FullPatientInfo {
   hasDeclinedPhotoUpload: boolean | null;
   hasUploadedPhoto: boolean | null;
   googleCalendarId: string | null;
+  isWhite: boolean | null;
+  isBlack: boolean | null;
+  isAmericanIndianAlaskan: boolean | null;
+  isAsian: boolean | null;
+  isHawaiianPacific: boolean | null;
+  isOtherRace: boolean | null;
+  isHispanic: boolean | null;
+  raceFreeText: string | null;
 }
 
 

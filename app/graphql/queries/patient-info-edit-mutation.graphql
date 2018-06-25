@@ -20,6 +20,14 @@ mutation patientInfoEdit(
   $hasMolst: Boolean
   $hasDeclinedPhotoUpload: Boolean
   $hasUploadedPhoto: Boolean
+  $isWhite: Boolean
+  $isBlack: Boolean
+  $isAmericanIndianAlaskan: Boolean
+  $isAsian: Boolean
+  $isHawaiianPacific: Boolean
+  $isOtherRace: Boolean
+  $isHispanic: Boolean
+  $raceFreeText: String
 ) {
   patientInfoEdit(
     input: {
@@ -42,6 +50,14 @@ mutation patientInfoEdit(
       hasHealthcareProxy: $hasHealthcareProxy
       hasDeclinedPhotoUpload: $hasDeclinedPhotoUpload
       hasUploadedPhoto: $hasUploadedPhoto
+      isWhite: $isWhite
+      isBlack: $isBlack
+      isAmericanIndianAlaskan: $isAmericanIndianAlaskan
+      isAsian: $isAsian
+      isHawaiianPacific: $isHawaiianPacific
+      isOtherRace: $isOtherRace
+      isHispanic: $isHispanic
+      raceFreeText: $raceFreeText
     }
   ) {
     ...FullPatientInfo

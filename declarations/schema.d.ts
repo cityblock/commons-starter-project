@@ -1400,6 +1400,14 @@ declare module 'schema' {
     hasUploadedPhoto: boolean | null;
     needToKnow: string | null;
     googleCalendarId: string | null;
+    isWhite: boolean | null;
+    isBlack: boolean | null;
+    isAmericanIndianAlaskan: boolean | null;
+    isAsian: boolean | null;
+    isHawaiianPacific: boolean | null;
+    isOtherRace: boolean | null;
+    isHispanic: boolean | null;
+    raceFreeText: string | null;
   }
 
   enum Gender {
@@ -4514,6 +4522,14 @@ declare module 'schema' {
     hasMolst?: boolean | null;
     hasDeclinedPhotoUpload?: boolean | null;
     hasUploadedPhoto?: boolean | null;
+    isWhite?: boolean | null;
+    isBlack?: boolean | null;
+    isAmericanIndianAlaskan?: boolean | null;
+    isAsian?: boolean | null;
+    isHawaiianPacific?: boolean | null;
+    isOtherRace?: boolean | null;
+    isHispanic?: boolean | null;
+    raceFreeText?: string | null;
   }
 
   /**

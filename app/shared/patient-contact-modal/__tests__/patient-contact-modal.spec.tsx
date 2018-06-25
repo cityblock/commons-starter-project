@@ -30,15 +30,15 @@ describe('Render Proxy Modal Component', () => {
 
   it('renders proxy modal form without a patient contact', () => {
     expect(wrapper.find(PatientProxyForm)).toHaveLength(1);
-    expect(wrapper.find(PatientProxyForm).props().emailAddress).toBe(undefined);
-    expect(wrapper.find(PatientProxyForm).props().phoneNumber).toBe(undefined);
-    expect(wrapper.find(PatientProxyForm).props().firstName).toBe(undefined);
-    expect(wrapper.find(PatientProxyForm).props().lastName).toBe(undefined);
-    expect(wrapper.find(PatientProxyForm).props().relationToPatient).toBe(undefined);
-    expect(wrapper.find(PatientProxyForm).props().description).toBe(undefined);
+    expect(wrapper.find(PatientProxyForm).props().emailAddress).toBeFalsy();
+    expect(wrapper.find(PatientProxyForm).props().phoneNumber).toBeFalsy();
+    expect(wrapper.find(PatientProxyForm).props().firstName).toBeFalsy();
+    expect(wrapper.find(PatientProxyForm).props().lastName).toBeFalsy();
+    expect(wrapper.find(PatientProxyForm).props().relationToPatient).toBeFalsy();
+    expect(wrapper.find(PatientProxyForm).props().description).toBeFalsy();
   });
 
-  it.only('renders proxy modal form with a healthcare proxy patient contact', () => {
+  it('renders proxy modal form with a healthcare proxy patient contact', () => {
     wrapper.setProps({ patientContact: healthcareProxy });
 
     expect(wrapper.find(PatientProxyForm)).toHaveLength(1);

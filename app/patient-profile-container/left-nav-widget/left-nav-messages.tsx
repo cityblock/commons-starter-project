@@ -51,7 +51,7 @@ export class LeftNavMessages extends React.Component<allProps> {
       return this.props.subscribeToMore({
         document: smsMessageSubscriptionGraphql,
         variables: { patientId: this.props.patientId },
-        update: leftNavMessagesUpdateQuery,
+        updateQuery: leftNavMessagesUpdateQuery,
       });
     }
 

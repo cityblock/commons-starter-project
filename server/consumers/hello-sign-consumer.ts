@@ -6,6 +6,7 @@ import sleep from 'sleep-promise';
 import uuid from 'uuid/v4';
 import config from '../config';
 import PatientDocument from '../models/patient-document';
+import PubSub from '../subscriptions';
 
 const hellosign = HelloSign({ key: config.HELLOSIGN_API_KEY });
 
@@ -51,7 +52,7 @@ export async function createPatientDocument(
   existingTxn?: Transaction,
 ): Promise<void> {
   await transaction(existingTxn || PatientDocument.knex(), async txn => {
-    await PatientDocument.create(
+    const patientDocument = await PatientDocument.create(
       {
         id,
         patientId: data.patientId,
@@ -61,6 +62,8 @@ export async function createPatientDocument(
       },
       txn,
     );
+
+    publishMessage(patientDocument);
   });
 }
 
@@ -95,5 +98,14 @@ export async function uploadDocument(data: IProcessHelloSignData, testConfig?: a
 
   stream.on('finish', async () => {
     await createPatientDocument(data, id);
+  });
+}
+
+function publishMessage(patientDocument: PatientDocument) {
+  const pubsub = PubSub.get();
+
+  pubsub.publish('patientDocumentCreated', {
+    patientDocumentCreated: patientDocument,
+    patientId: patientDocument.patientId,
   });
 }

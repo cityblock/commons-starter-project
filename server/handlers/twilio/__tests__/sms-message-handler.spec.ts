@@ -15,7 +15,7 @@ import {
   createMockUser,
   createPatient,
 } from '../../../spec-helpers';
-import pubsub from '../../../subscriptions';
+import PubSub from '../../../subscriptions';
 import { twilioIncomingSmsHandler, twilioOutgoingSmsHandler } from '../sms-message-handler';
 
 const queue = kue.createQueue();
@@ -48,6 +48,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('SMS Message Handler', () => {
   let txn = null as any;
+  let publish = null as any;
 
   beforeAll(() => {
     queue.testMode.enter();
@@ -56,6 +57,12 @@ describe('SMS Message Handler', () => {
   beforeEach(async () => {
     txn = await transaction.start(PatientPhone.knex());
     queue.testMode.clear();
+
+    publish = jest.fn();
+
+    PubSub.get = jest.fn().mockReturnValue({
+      publish,
+    });
   });
 
   afterEach(async () => {
@@ -77,7 +84,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
-    pubsub.publish = jest.fn();
+
     const req = httpMocks.createRequest({
       body: {
         To: '+11234567777',
@@ -104,8 +111,8 @@ describe('SMS Message Handler', () => {
       messageSid,
     });
 
-    expect(pubsub.publish).toHaveBeenCalledTimes(1);
-    expect(pubsub.publish).toHaveBeenCalledWith('smsMessageCreated', {
+    expect(publish).toHaveBeenCalledTimes(1);
+    expect(publish).toHaveBeenCalledWith('smsMessageCreated', {
       smsMessageCreated: { node: smsMessages.results[0] },
       userId: user.id,
       patientId: patient.id,
@@ -131,7 +138,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
-    pubsub.publish = jest.fn();
+
     const req = httpMocks.createRequest({
       body: {
         To: '+11234567777',
@@ -166,7 +173,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
-    pubsub.publish = jest.fn();
+
     const req = httpMocks.createRequest({
       body: {
         To: '+11234567890',
@@ -193,9 +200,9 @@ describe('SMS Message Handler', () => {
       messageSid,
     });
 
-    expect(pubsub.publish).toHaveBeenCalledTimes(1);
+    expect(publish).toHaveBeenCalledTimes(1);
 
-    const args = (pubsub.publish as any).mock.calls;
+    const args = publish.mock.calls;
 
     expect(args[0][0]).toBe('smsMessageCreated');
     expect(args[0][1]).toMatchObject({
@@ -220,7 +227,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
-    pubsub.publish = jest.fn();
+
     const req = httpMocks.createRequest({
       body: {
         To: '+11234567890',
@@ -247,9 +254,9 @@ describe('SMS Message Handler', () => {
       messageSid,
     });
 
-    expect(pubsub.publish).toHaveBeenCalledTimes(1);
+    expect(publish).toHaveBeenCalledTimes(1);
 
-    const args = (pubsub.publish as any).mock.calls;
+    const args = publish.mock.calls;
 
     expect(args[0][0]).toBe('smsMessageCreated');
     expect(args[0][1]).toMatchObject({
@@ -279,7 +286,7 @@ describe('SMS Message Handler', () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };
     res.end = jest.fn();
-    pubsub.publish = jest.fn();
+
     const req = httpMocks.createRequest({
       body: {
         To: '+11234562222',
@@ -291,7 +298,7 @@ describe('SMS Message Handler', () => {
 
     await twilioOutgoingSmsHandler(req, res);
 
-    expect(pubsub.publish).toHaveBeenCalledTimes(1);
+    expect(publish).toHaveBeenCalledTimes(1);
 
     expect(res.end).toHaveBeenCalledTimes(1);
     expect(res.end).toHaveBeenCalledWith(expectedOutgoingTwiml2);

@@ -17,6 +17,7 @@ import {
   createMockUser,
   createPatient,
 } from '../../spec-helpers';
+import PubSub from '../../subscriptions';
 import TwilioClient from '../../twilio-client';
 import schema from '../make-executable-schema';
 
@@ -25,6 +26,7 @@ const userPhone = '+11234445555';
 const body1 = 'Winter is coming.';
 const body2 = 'Winter is here.';
 const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
+
 const mockTwilioPayload = {
   From: userPhone,
   To: '+11234567890',
@@ -54,6 +56,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('SMS Message Resolver', () => {
   const log = jest.fn();
+  const publish = jest.fn();
+
   const logger = { log };
   let txn = null as any;
 
@@ -68,6 +72,10 @@ describe('SMS Message Resolver', () => {
       messages: {
         create: () => mockTwilioPayload,
       },
+    });
+
+    PubSub.get = jest.fn().mockReturnValue({
+      publish,
     });
   });
 
@@ -300,6 +308,21 @@ describe('SMS Message Resolver', () => {
         patientId: patient.id,
         contactNumber: '+11234567890',
         body: body1,
+      });
+      const args = publish.mock.calls;
+      expect(publish).toHaveBeenCalledTimes(1);
+
+      expect(args[0][0]).toBe('smsMessageCreated');
+      expect(args[0][1]).toMatchObject({
+        patientId: patient.id,
+        userId: user.id,
+        smsMessageCreated: {
+          node: {
+            userId: user.id,
+            patientId: patient.id,
+            body: body1,
+          },
+        },
       });
     });
 

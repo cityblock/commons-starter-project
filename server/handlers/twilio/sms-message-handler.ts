@@ -7,7 +7,7 @@ import { addJobToQueue } from '../../helpers/queue-helpers';
 import PatientDocument from '../../models/patient-document';
 import SmsMessage from '../../models/sms-message';
 import User from '../../models/user';
-import pubsub from '../../subscriptions';
+import PubSub from '../../subscriptions';
 
 export const SIM_PREFIX = 'sim:';
 
@@ -165,6 +165,8 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
 }
 
 const publishMessage = (smsMessage: SmsMessage) => {
+  const pubsub = PubSub.get();
+
   pubsub.publish('smsMessageCreated', {
     smsMessageCreated: { node: smsMessage },
     userId: smsMessage.userId,

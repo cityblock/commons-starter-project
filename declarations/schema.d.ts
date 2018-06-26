@@ -5566,9 +5566,14 @@ declare module 'schema' {
 
   interface IRootSubscriptionType {
     smsMessageCreated: ISmsMessageNode;
+    patientDocumentCreated: IPatientDocument;
   }
 
   interface ISmsMessageCreatedOnRootSubscriptionTypeArguments {
+    patientId: string;
+  }
+
+  interface IPatientDocumentCreatedOnRootSubscriptionTypeArguments {
     patientId: string;
   }
 

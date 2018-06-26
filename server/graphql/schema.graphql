@@ -3371,6 +3371,7 @@ type RootQueryType {
 
 type RootSubscriptionType {
   smsMessageCreated(patientId: ID!): SmsMessageNode!
+  patientDocumentCreated(patientId: ID!): PatientDocument!
 }
 
 schema {

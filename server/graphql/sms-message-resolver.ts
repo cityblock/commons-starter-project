@@ -14,7 +14,7 @@ import PatientDocument from '../models/patient-document';
 import PatientPhone from '../models/patient-phone';
 import SmsMessage from '../models/sms-message';
 import User from '../models/user';
-import pubsub from '../subscriptions';
+import PubSub from '../subscriptions';
 import TwilioClient from '../twilio-client';
 import checkUserPermissions from './shared/permissions-check';
 import { formatRelayEdge, IContext } from './shared/utils';
@@ -141,6 +141,8 @@ export async function smsMessageCreate(
 
         // update the UI via subscription
         // TODO: in future update cache
+        const pubsub = PubSub.get();
+
         pubsub.publish('smsMessageCreated', {
           smsMessageCreated: { node: smsMessage },
           userId,
@@ -169,6 +171,7 @@ export async function smsMessageSubscribe(
   return transaction(testTransaction || SmsMessage.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'view', 'patient', txn, query.patientId);
 
+    const pubsub = PubSub.get();
     // only listen to messages between given patient and user
     logger.log(`SUBSCRIBE SMS messages between patient ${query.patientId} and user ${userId}`);
 

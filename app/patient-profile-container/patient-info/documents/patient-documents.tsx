@@ -4,10 +4,12 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import Loadable from 'react-loadable';
 import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
+import patientDocumentSubscriptionGraphql from '../../../graphql/queries/patient-document-subscription.graphql';
 import { getPatientDocuments, DocumentTypeOptions } from '../../../graphql/types';
 import styles from './css/patient-documents.css';
 import DocumentPlaceholder from './document-placeholder';
 import PatientDocument from './patient-document';
+import { patientDocumentsUpdateQuery } from './update-queries/patient-documents';
 
 const CONSENTS = [
   DocumentTypeOptions.cityblockConsent,
@@ -28,6 +30,7 @@ interface IGraphqlProps {
   patientDocuments?: getPatientDocuments['patientDocuments'];
   isLoading: boolean;
   error: ApolloError | null | undefined;
+  subscribeToMore: ((args: any) => () => void) | null;
 }
 
 export type allProps = IGraphqlProps & IProps;
@@ -44,6 +47,31 @@ interface IState {
 
 class PatientDocuments extends React.Component<allProps, IState> {
   state = { modalDocumentType: null };
+  private unsubscribe: (() => void) | null = null;
+
+  componentDidMount(): void {
+    if (this.props.subscribeToMore) {
+      this.unsubscribe = this.subscribe();
+    }
+  }
+
+  componentWillUnmount(): void {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  subscribe = () => {
+    if (this.props.subscribeToMore) {
+      return this.props.subscribeToMore({
+        document: patientDocumentSubscriptionGraphql,
+        variables: { patientId: this.props.patientId },
+        updateQuery: patientDocumentsUpdateQuery,
+      });
+    }
+
+    return null;
+  };
 
   handleClosePopup = () => {
     this.setState({ modalDocumentType: null });
@@ -125,5 +153,6 @@ export default graphql(patientDocumentsGraphql, {
     isLoading: data ? data.loading : false,
     error: data ? data.error : null,
     patientDocuments: data ? (data as any).patientDocuments : null,
+    subscribeToMore: data ? data.subscribeToMore : null,
   }),
 })(PatientDocuments);

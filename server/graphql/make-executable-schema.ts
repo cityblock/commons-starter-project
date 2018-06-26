@@ -132,6 +132,7 @@ import {
   patientDocumentCreate,
   patientDocumentDelete,
   patientDocumentSignedUrlCreate,
+  patientDocumentSubscribe,
   resolvePatientDocuments,
   resolvePatientDocumentsByType,
 } from './patient-document-resolver';
@@ -625,6 +626,9 @@ const resolveFunctions = {
   RootSubscriptionType: {
     smsMessageCreated: {
       subscribe: smsMessageSubscribe,
+    },
+    patientDocumentCreated: {
+      subscribe: patientDocumentSubscribe,
     },
   },
   // From https://github.com/apollographql/graphql-tools/pull/698

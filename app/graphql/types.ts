@@ -9528,6 +9528,37 @@ export interface patientDocumentSignedUrlCreateVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL subscription operation: patientDocumentCreated
+// ====================================================
+
+export interface patientDocumentCreated_patientDocumentCreated_uploadedBy {
+  firstName: string | null;
+  lastName: string | null;
+}
+
+export interface patientDocumentCreated_patientDocumentCreated {
+  id: string;
+  patientId: string;
+  uploadedBy: patientDocumentCreated_patientDocumentCreated_uploadedBy;
+  filename: string;
+  description: string | null;
+  documentType: DocumentTypeOptions | null;
+  createdAt: string;
+}
+
+export interface patientDocumentCreated {
+  patientDocumentCreated: patientDocumentCreated_patientDocumentCreated;
+}
+
+export interface patientDocumentCreatedVariables {
+  patientId: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: patientExternalOrganizationCreate
 // ====================================================
 

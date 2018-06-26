@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-document.graphql"
+
+subscription patientDocumentCreated($patientId: ID!) {
+  patientDocumentCreated(patientId: $patientId) {
+    ...FullPatientDocument
+  }
+}

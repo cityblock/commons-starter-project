@@ -6,6 +6,7 @@ import Patient from '../../models/patient';
 import PatientDocument from '../../models/patient-document';
 import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
+import PubSub from '../../subscriptions';
 import { createPatientDocument } from '../hello-sign-consumer';
 
 interface ISetup {
@@ -36,6 +37,11 @@ describe('HelloSign Consumer', () => {
     it('creates a patient document from given information', async () => {
       const { patient, user } = await setup(txn);
       const id = uuid();
+      const publish = jest.fn();
+
+      PubSub.get = jest.fn().mockReturnValue({
+        publish,
+      });
 
       await createPatientDocument(
         {
@@ -56,6 +62,11 @@ describe('HelloSign Consumer', () => {
         uploadedById: user.id,
         filename: 'textConsent.pdf',
         documentType: 'textConsent',
+      });
+
+      expect(publish).toBeCalledWith('patientDocumentCreated', {
+        patientId: patient.id,
+        patientDocumentCreated: documents[0],
       });
     });
   });

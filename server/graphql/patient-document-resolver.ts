@@ -1,3 +1,4 @@
+import { withFilter } from 'graphql-subscriptions';
 import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import {
@@ -9,6 +10,7 @@ import {
   IRootQueryType,
 } from 'schema';
 import PatientDocument from '../models/patient-document';
+import PubSub from '../subscriptions';
 import { loadPatientDocumentUrl } from './shared/gcs/helpers';
 import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
@@ -116,5 +118,27 @@ export async function patientDocumentSignedUrlCreate(
     }
 
     return { signedUrl };
+  });
+}
+
+export async function patientDocumentSubscribe(
+  root: any,
+  query: { patientId: string },
+  context: IContext,
+) {
+  const { permissions, userId, testTransaction, logger } = context;
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, query.patientId);
+
+    logger.log(`SUBSCRIBE patient documents for patient ${query.patientId}`);
+
+    const pubsub = PubSub.get();
+    // only listen to messages for given patient
+    return withFilter(
+      () => pubsub.asyncIterator('patientDocumentCreated'),
+      payload => {
+        return payload.patientId === query.patientId;
+      },
+    )(root, query, context);
   });
 }

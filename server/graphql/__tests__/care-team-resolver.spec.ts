@@ -31,7 +31,7 @@ interface ISetup {
 
 const queue = kue.createQueue();
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -122,7 +122,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner' as UserRole,
+          userRole: 'Community_Health_Partner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,
@@ -271,7 +271,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner' as UserRole,
+          userRole: 'Community_Health_Partner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,
@@ -366,7 +366,7 @@ describe('care team', () => {
           email: 'chp@cityblock.com',
           firstName: 'Chp',
           lastName: 'User',
-          userRole: 'communityHealthPartner' as UserRole,
+          userRole: 'Community_Health_Partner' as UserRole,
           homeClinicId: clinic.id,
         },
         txn,

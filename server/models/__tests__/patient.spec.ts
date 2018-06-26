@@ -31,7 +31,7 @@ import PatientState from '../patient-state';
 import Phone from '../phone';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   clinic: Clinic;

@@ -28,7 +28,7 @@ import {
   GENERATE_PDF_JWT_TYPE,
 } from '../render-pdf';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 const EXPIRED_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiZ2VuZXJhdGVQREZKd3QiLCJpYXQiOjE1MTczMzcwNDUsImV4cCI6MTUxNzMzNzM0NX0.4OG2ho0S5Wj074KpcEP4Qpdqdj2jZ8Kh4rjBtH2kigU';

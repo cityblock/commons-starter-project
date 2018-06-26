@@ -18,7 +18,7 @@ import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   clinic: Clinic;

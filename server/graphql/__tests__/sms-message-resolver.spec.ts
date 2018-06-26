@@ -21,7 +21,7 @@ import PubSub from '../../subscriptions';
 import TwilioClient from '../../twilio-client';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const userPhone = '+11234445555';
 const body1 = 'Winter is coming.';
 const body2 = 'Winter is here.';

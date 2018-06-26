@@ -20,7 +20,7 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const reason = 'Viscerion destroyed the Wall';
 
 interface ISetup {

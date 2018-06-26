@@ -24,7 +24,7 @@ interface ISetup {
   patient: Patient;
 }
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {

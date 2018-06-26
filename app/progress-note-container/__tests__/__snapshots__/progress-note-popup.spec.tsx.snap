@@ -198,7 +198,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "permissions": "orange",
             "phone": "(212) 555-8394",
             "updatedAt": "2017-09-07T13:45:14.532Z",
-            "userRole": "physician",
+            "userRole": "Primary_Care_Physician",
           },
           "worryScore": 2,
         }
@@ -390,7 +390,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "permissions": "orange",
             "phone": "(212) 555-8394",
             "updatedAt": "2017-09-07T13:45:14.532Z",
-            "userRole": "physician",
+            "userRole": "Primary_Care_Physician",
           },
           "worryScore": 2,
         }
@@ -599,7 +599,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "permissions": "orange",
             "phone": "(212) 555-8394",
             "updatedAt": "2017-09-07T13:45:14.532Z",
-            "userRole": "physician",
+            "userRole": "Primary_Care_Physician",
           },
           "worryScore": 2,
         }
@@ -791,7 +791,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "permissions": "orange",
             "phone": "(212) 555-8394",
             "updatedAt": "2017-09-07T13:45:14.532Z",
-            "userRole": "physician",
+            "userRole": "Primary_Care_Physician",
           },
           "worryScore": 2,
         }

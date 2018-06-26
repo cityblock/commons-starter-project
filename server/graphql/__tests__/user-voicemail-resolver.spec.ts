@@ -14,7 +14,7 @@ interface ISetup {
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'admin' as UserRole), txn);
+  const user = await User.create(createMockUser(11, clinic.id, 'Pharmacist' as UserRole), txn);
 
   return { user };
 }

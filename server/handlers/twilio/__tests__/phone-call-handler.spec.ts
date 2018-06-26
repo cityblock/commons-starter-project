@@ -30,7 +30,7 @@ const expectedOutgoingTwiml =
 const expectedCompleteTwiml = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   patient: Patient;

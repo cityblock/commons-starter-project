@@ -9,7 +9,7 @@ import GoogleAuth from '../google-auth';
 import User from '../user';
 import UserHours from '../user-hours';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 describe('user model', () => {
   let txn = null as any;
@@ -259,8 +259,8 @@ describe('user model', () => {
 
   it('fetches a limited set of shortened user objects', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const userRole2 = 'healthCoach' as UserRole;
-    const userRole3 = 'nurseCareManager' as UserRole;
+    const userRole2 = 'Community_Health_Partner' as UserRole;
+    const userRole3 = 'Nurse_Care_Manager' as UserRole;
     const userRoleFilters: UserRole[] = [userRole, userRole2];
     const userRoleFilters2: UserRole[] = [userRole3];
 
@@ -294,7 +294,7 @@ describe('user model', () => {
 
   it('returns the correct patient count in the summary list', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const healthCoachUserRole = 'healthCoach' as UserRole;
+    const healthCoachUserRole = 'Community_Health_Partner' as UserRole;
 
     const user1 = await User.create(
       createMockUser(11, clinic.id, healthCoachUserRole, 'a@b.com'),
@@ -333,8 +333,8 @@ describe('user model', () => {
 
   it('fetches a shortened list of user objects where the users have logged in', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
-    const userRole2 = 'healthCoach' as UserRole;
-    const userRole3 = 'nurseCareManager' as UserRole;
+    const userRole2 = 'Community_Health_Partner' as UserRole;
+    const userRole3 = 'Pharmacist' as UserRole;
     const userRoleFilters: UserRole[] = [userRole2, userRole3];
 
     const user1 = await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
@@ -393,9 +393,9 @@ describe('user model', () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
     const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'), txn);
     expect(user1.userRole).toEqual(userRole);
-    await User.updateUserRole(user1.id, 'nurseCareManager' as UserRole, txn);
+    await User.updateUserRole(user1.id, 'Nurse_Care_Manager' as UserRole, txn);
     const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
-    expect(fetchedUser1!.userRole).toEqual('nurseCareManager');
+    expect(fetchedUser1!.userRole).toEqual('Nurse_Care_Manager');
   });
 
   it('updates user permissions', async () => {

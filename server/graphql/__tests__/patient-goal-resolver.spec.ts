@@ -22,7 +22,7 @@ interface ISetup {
   patientConcern: PatientConcern;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -109,7 +109,7 @@ describe('patient goal resolver', () => {
           repeating: false,
           completedWithinInterval: 'week' as CompletedWithinInterval,
           completedWithinNumber: 1,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
         },
         txn,

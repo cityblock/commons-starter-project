@@ -21,7 +21,7 @@ import checkUserPermissions, {
 } from '../permissions-check';
 
 const reason = "Demogorgon says it's cool";
-const adminUserRole = 'admin' as UserRole;
+const adminUserRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   clinic: Clinic;

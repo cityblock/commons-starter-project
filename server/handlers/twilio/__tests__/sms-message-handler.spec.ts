@@ -26,7 +26,7 @@ const expectedOutgoingTwiml =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="+11234567890" from="+11234567777">Winter is here.</Message></Response>';
 const expectedOutgoingTwiml2 =
   '<?xml version="1.0" encoding="UTF-8"?><Response><Message to="+11234562222" from="+11234567777">Winter is here.</Message></Response>';
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const messageSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 
 interface ISetup {

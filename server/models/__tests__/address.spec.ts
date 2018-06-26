@@ -6,7 +6,7 @@ import Address from '../address';
 import Clinic from '../clinic';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   user: User;

@@ -21,7 +21,7 @@ import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   clinic: Clinic;
@@ -163,17 +163,17 @@ describe('computed patient status model', () => {
 
     expect(patientState!.currentState).toEqual('attributed');
 
-    const outreachSpecialist = await User.create(
+    const chp = await User.create(
       {
         homeClinicId: clinic.id,
         firstName: 'First',
         lastName: 'Last',
         email: 'outreach@cityblock.com',
-        userRole: 'outreachSpecialist' as UserRole,
+        userRole: 'Community_Health_Partner' as UserRole,
       },
       txn,
     );
-    await CareTeam.create({ userId: outreachSpecialist.id, patientId: patient.id }, txn);
+    await CareTeam.create({ userId: chp.id, patientId: patient.id }, txn);
     await ProgressNote.create(
       {
         userId: user.id,
@@ -226,17 +226,17 @@ describe('computed patient status model', () => {
 
     expect(patientState!.currentState).toEqual('attributed');
 
-    const outreachSpecialist = await User.create(
+    const chp = await User.create(
       {
         homeClinicId: clinic.id,
         firstName: 'First',
         lastName: 'Last',
         email: 'outreach@cityblock.com',
-        userRole: 'outreachSpecialist' as UserRole,
+        userRole: 'Community_Health_Partner' as UserRole,
       },
       txn,
     );
-    await CareTeam.create({ userId: outreachSpecialist.id, patientId: patient.id }, txn);
+    await CareTeam.create({ userId: chp.id, patientId: patient.id }, txn);
     await ProgressNote.create(
       {
         userId: user.id,
@@ -297,7 +297,6 @@ describe('computed patient status model', () => {
         isPhotoAddedOrDeclined: false,
         hasProgressNote: false,
         hasChp: false,
-        hasOutreachSpecialist: false,
         hasPcp: false,
         isAssessed: false,
         isIneligible: false,
@@ -309,21 +308,6 @@ describe('computed patient status model', () => {
     });
 
     it('appropriately calculates the assigned state', async () => {
-      const currentStatusWithOutreachSpecialist: IComputedStatus = {
-        isCoreIdentityVerified: false,
-        isDemographicInfoUpdated: false,
-        isEmergencyContactAdded: false,
-        isAdvancedDirectivesAdded: false,
-        isConsentSigned: false,
-        isPhotoAddedOrDeclined: false,
-        hasProgressNote: false,
-        hasChp: false,
-        hasOutreachSpecialist: true,
-        hasPcp: false,
-        isAssessed: false,
-        isIneligible: false,
-        isDisenrolled: false,
-      };
       const currentStatusWithChp: IComputedStatus = {
         isCoreIdentityVerified: false,
         isDemographicInfoUpdated: false,
@@ -333,19 +317,14 @@ describe('computed patient status model', () => {
         isPhotoAddedOrDeclined: false,
         hasProgressNote: false,
         hasChp: true,
-        hasOutreachSpecialist: false,
         hasPcp: false,
         isAssessed: false,
         isIneligible: false,
         isDisenrolled: false,
       };
-      const outreachState = ComputedPatientStatus.getCurrentPatientState(
-        currentStatusWithOutreachSpecialist,
-        txn,
-      );
+
       const chpState = ComputedPatientStatus.getCurrentPatientState(currentStatusWithChp, txn);
 
-      expect(outreachState).toEqual('assigned');
       expect(chpState).toEqual('assigned');
     });
 
@@ -359,7 +338,6 @@ describe('computed patient status model', () => {
         isPhotoAddedOrDeclined: false,
         hasProgressNote: true,
         hasChp: true,
-        hasOutreachSpecialist: true,
         hasPcp: false,
         isAssessed: false,
         isIneligible: false,
@@ -380,7 +358,6 @@ describe('computed patient status model', () => {
         isPhotoAddedOrDeclined: true,
         hasProgressNote: true,
         hasChp: true,
-        hasOutreachSpecialist: true,
         hasPcp: false,
         isAssessed: true,
         isIneligible: false,
@@ -401,7 +378,6 @@ describe('computed patient status model', () => {
         isPhotoAddedOrDeclined: true,
         hasProgressNote: true,
         hasChp: true,
-        hasOutreachSpecialist: true,
         hasPcp: true,
         isAssessed: true,
         isIneligible: false,
@@ -600,7 +576,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         homeClinicId: clinic.id,
-        userRole: 'communityHealthPartner' as UserRole,
+        userRole: 'Community_Health_Partner' as UserRole,
       },
       txn,
     );
@@ -618,33 +594,6 @@ describe('computed patient status model', () => {
     expect(refetchedComputedPatientStatus!.hasChp).toEqual(true);
   });
 
-  it('correctly calculates hasOutreachSpecialist', async () => {
-    const { user, patient, clinic } = await setup(txn);
-    await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
-    const outreachSpecialistUser = await User.create(
-      {
-        email: 'outreach@cityblock.com',
-        firstName: 'First',
-        lastName: 'Last',
-        homeClinicId: clinic.id,
-        userRole: 'outreachSpecialist' as UserRole,
-      },
-      txn,
-    );
-    const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
-
-    expect(computedPatientStatus!.hasOutreachSpecialist).toEqual(false);
-
-    await CareTeam.create({ userId: outreachSpecialistUser.id, patientId: patient.id }, txn);
-    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
-    const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-      patient.id,
-      txn,
-    );
-
-    expect(refetchedComputedPatientStatus!.hasOutreachSpecialist).toEqual(true);
-  });
-
   it('correctly calculates hasPcp', async () => {
     const { user, patient, clinic } = await setup(txn);
     await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
@@ -654,7 +603,7 @@ describe('computed patient status model', () => {
         firstName: 'First',
         lastName: 'Last',
         homeClinicId: clinic.id,
-        userRole: 'primaryCarePhysician' as UserRole,
+        userRole: 'Primary_Care_Physician' as UserRole,
       },
       txn,
     );

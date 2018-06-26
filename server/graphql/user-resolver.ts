@@ -81,7 +81,7 @@ export async function userCreate(
       return User.create(
         {
           email,
-          userRole: 'healthCoach' as UserRole,
+          userRole: 'Community_Health_Partner' as UserRole,
           homeClinicId,
         },
         txn,

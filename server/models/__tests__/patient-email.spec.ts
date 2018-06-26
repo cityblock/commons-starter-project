@@ -13,7 +13,7 @@ import Patient from '../patient';
 import PatientEmail from '../patient-email';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   patient: Patient;

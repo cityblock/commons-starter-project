@@ -35,7 +35,7 @@ Array [
       <div
         className="careTeamMemberRole"
       >
-        physician
+        Primary_Care_Physician
       </div>
     </div>
     <div
@@ -61,7 +61,7 @@ Array [
       <div
         className="careTeamMemberRole"
       >
-        physician
+        Primary_Care_Physician
       </div>
     </div>
     <div

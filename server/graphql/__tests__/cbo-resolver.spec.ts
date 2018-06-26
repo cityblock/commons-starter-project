@@ -28,7 +28,7 @@ const input = {
   phone: '(000) 000-0000',
   url: 'www.facelessmen.com',
 };
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 const setup = async (trx: Transaction) => {

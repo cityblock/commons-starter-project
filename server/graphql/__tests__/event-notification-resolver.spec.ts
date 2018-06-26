@@ -97,7 +97,7 @@ async function setup(trx: Transaction, userRole?: UserRole): Promise<ISetup> {
 }
 
 describe('event notification tests', () => {
-  const userRole = 'physician' as UserRole;
+  const userRole = 'Pharmacist' as UserRole;
   const permissions = 'green';
   let txn = null as any;
 

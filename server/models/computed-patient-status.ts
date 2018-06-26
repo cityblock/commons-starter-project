@@ -20,7 +20,6 @@ export interface IComputedStatus {
   isPhotoAddedOrDeclined: boolean;
   hasProgressNote: boolean;
   hasChp: boolean;
-  hasOutreachSpecialist: boolean;
   hasPcp: boolean;
   isAssessed: boolean;
   isIneligible: boolean;
@@ -41,7 +40,6 @@ export default class ComputedPatientStatus extends BaseModel {
   isPhotoAddedOrDeclined!: boolean;
   hasProgressNote!: boolean;
   hasChp!: boolean;
-  hasOutreachSpecialist!: boolean;
   hasPcp!: boolean;
   isAssessed!: boolean;
   isIneligible!: boolean;
@@ -65,7 +63,6 @@ export default class ComputedPatientStatus extends BaseModel {
       isPhotoAddedOrDeclined: { type: 'boolean' },
       hasProgressNote: { type: 'boolean' },
       hasChp: { type: 'boolean' },
-      hasOutreachSpecialist: { type: 'boolean' },
       hasPcp: { type: 'boolean' },
       isAssessed: { type: 'boolean' },
       isIneligible: { type: 'boolean' },
@@ -86,7 +83,6 @@ export default class ComputedPatientStatus extends BaseModel {
       'hasProgressNote',
       'hasChp',
       'hasPcp',
-      'hasOutreachSpecialist',
       'isAssessed',
       'isIneligible',
       'isDisenrolled',
@@ -140,12 +136,9 @@ export default class ComputedPatientStatus extends BaseModel {
     );
     const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
     const hasProgressNote = patientProgressNoteCount > 0;
-    const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'communityHealthPartner' as UserRole);
-    const hasOutreachSpecialist = this.isRoleOnCareTeam(
-      patientCareTeam,
-      'outreachSpecialist' as UserRole,
-    );
-    const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'primaryCarePhysician' as UserRole);
+    const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'Community_Health_Partner' as UserRole);
+
+    const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'Primary_Care_Physician' as UserRole);
     const isAssessed = false;
     const isPhotoAddedOrDeclined = hasUploadedPhoto || !!hasDeclinedPhotoUpload;
     const isIneligible = false;
@@ -160,7 +153,6 @@ export default class ComputedPatientStatus extends BaseModel {
       isPhotoAddedOrDeclined,
       hasProgressNote,
       hasChp,
-      hasOutreachSpecialist,
       hasPcp,
       isAssessed,
       isIneligible,
@@ -253,7 +245,7 @@ export default class ComputedPatientStatus extends BaseModel {
     txn: Transaction,
   ): CurrentPatientState {
     let currentStatus = 'attributed';
-    const isAssigned = computedStatus.hasOutreachSpecialist || computedStatus.hasChp;
+    const isAssigned = computedStatus.hasPcp || computedStatus.hasChp;
     const isInOutreach = isAssigned && computedStatus.hasProgressNote;
     const isConsented =
       isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;

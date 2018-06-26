@@ -20,7 +20,7 @@ describe('google auth model', () => {
   it('should get and create', async () => {
     const clinic = await Clinic.create(createMockClinic(), txn);
     const user = await User.create(
-      createMockUser(11, clinic.id, 'physician' as UserRole, 'care@care.com'),
+      createMockUser(11, clinic.id, 'Primary_Care_Physician' as UserRole, 'care@care.com'),
       txn,
     );
 

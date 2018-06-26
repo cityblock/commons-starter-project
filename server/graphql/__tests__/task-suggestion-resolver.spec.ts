@@ -24,7 +24,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -58,7 +58,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       title: 'Housing',
       repeating: false,
       priority: 'low' as Priority,
-      careTeamAssigneeRole: 'physician' as UserRole,
+      careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
     },
     txn,
   );

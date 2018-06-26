@@ -27,7 +27,7 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   riskArea: RiskArea;

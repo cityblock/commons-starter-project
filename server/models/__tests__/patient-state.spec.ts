@@ -7,7 +7,7 @@ import Patient from '../patient';
 import PatientState from '../patient-state';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   clinic: Clinic;

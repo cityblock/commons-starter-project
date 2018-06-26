@@ -40,7 +40,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -59,7 +59,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
           CBOCategoryId: CBOCategory.id,
         },
         txn,
@@ -85,7 +85,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -108,7 +108,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -126,7 +126,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -136,7 +136,7 @@ describe('task template model', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );

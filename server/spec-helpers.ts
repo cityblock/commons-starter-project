@@ -340,7 +340,7 @@ export function createMockPatientInfo(primaryAddressId?: string) {
 export function createMockUser(
   athenaProviderId = 1,
   homeClinicId: string,
-  userRole: UserRole = 'admin' as UserRole,
+  userRole: UserRole = 'Pharmacist' as UserRole,
   email: string = 'dan@plant.com',
 ) {
   return {

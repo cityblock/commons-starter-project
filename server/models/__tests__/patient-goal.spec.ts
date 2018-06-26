@@ -20,7 +20,7 @@ import User from '../user';
 
 const queue = kue.createQueue();
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   patient: Patient;
@@ -153,7 +153,7 @@ describe('patient goal model', () => {
         repeating: false,
         completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 1,
-        careTeamAssigneeRole: 'physician' as UserRole,
+        careTeamAssigneeRole: 'Pharmacist' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -203,7 +203,7 @@ describe('patient goal model', () => {
       txn,
     );
     const user2 = await User.create(
-      createMockUser(11, clinic.id, 'healthCoach' as UserRole, 'care@care2.com'),
+      createMockUser(11, clinic.id, 'Community_Health_Partner' as UserRole, 'care@care2.com'),
       txn,
     );
 
@@ -214,7 +214,7 @@ describe('patient goal model', () => {
         title: 'Task 1',
         priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach' as UserRole,
+        careTeamAssigneeRole: 'Community_Health_Partner' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -258,7 +258,7 @@ describe('patient goal model', () => {
         title: 'Task 1',
         priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach' as UserRole,
+        careTeamAssigneeRole: 'Community_Health_Partner' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,
@@ -306,7 +306,7 @@ describe('patient goal model', () => {
         title: 'Task 1',
         priority: 'high' as Priority,
         repeating: false,
-        careTeamAssigneeRole: 'healthCoach' as UserRole,
+        careTeamAssigneeRole: 'Community_Health_Partner' as UserRole,
         completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 2,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -357,7 +357,7 @@ describe('patient goal model', () => {
         repeating: false,
         completedWithinInterval: 'week' as CompletedWithinInterval,
         completedWithinNumber: 1,
-        careTeamAssigneeRole: 'physician' as UserRole,
+        careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       },
       txn,

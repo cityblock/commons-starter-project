@@ -65,14 +65,14 @@ export class PatientCityblockCareTeam extends React.Component<allProps, IState> 
         <RequiredTeamMember
           patientCareTeam={patientCareTeam}
           isLoading={loading}
-          requiredRoleType="communityHealthPartner"
-          onClick={() => onAddCareTeamMember('communityHealthPartner')}
+          requiredRoleType="Community_Health_Partner"
+          onClick={() => onAddCareTeamMember('Community_Health_Partner')}
         />
         <RequiredTeamMember
           patientCareTeam={patientCareTeam}
           isLoading={loading}
-          requiredRoleType="primaryCarePhysician"
-          onClick={() => onAddCareTeamMember('primaryCarePhysician')}
+          requiredRoleType="Primary_Care_Physician"
+          onClick={() => onAddCareTeamMember('Primary_Care_Physician')}
         />
         {this.renderCareTeamMembers()}
         <RemoveCareTeamMemberModal

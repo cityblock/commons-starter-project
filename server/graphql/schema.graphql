@@ -1,14 +1,21 @@
 enum UserRole {
-  physician
-  nurseCareManager
-  primaryCarePhysician
-  communityHealthPartner
-  outreachSpecialist
-  psychiatrist
-  healthCoach
-  familyMember
-  anonymousUser
-  admin
+  Behavioral_Health_Specialist
+  Community_Health_Partner
+  Outreach_Specialist
+  Hub_Care_Coordinator
+  Hub_RN
+  Hub_Operations_Manager
+  Member_Experience_Advocate
+  Primary_Care_Physician
+  Nurse_Practitioner
+  Psychiatrist
+  Nurse_Care_Manager
+  Community_Engagement_Manager
+  Behavioral_Health_Nurse_Practitioner
+  Pharmacist
+  Clinical_Operations_Lead
+  Clinical_Operations_Manager
+  Back_Office_Admin
 }
 
 enum ConcernOrderOptions {

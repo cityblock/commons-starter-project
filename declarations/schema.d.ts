@@ -1300,16 +1300,23 @@ declare module 'schema' {
   }
 
   enum UserRole {
-    physician = 'physician',
-    nurseCareManager = 'nurseCareManager',
-    primaryCarePhysician = 'primaryCarePhysician',
-    communityHealthPartner = 'communityHealthPartner',
-    outreachSpecialist = 'outreachSpecialist',
-    psychiatrist = 'psychiatrist',
-    healthCoach = 'healthCoach',
-    familyMember = 'familyMember',
-    anonymousUser = 'anonymousUser',
-    admin = 'admin'
+    Behavioral_Health_Specialist = 'Behavioral_Health_Specialist',
+    Community_Health_Partner = 'Community_Health_Partner',
+    Outreach_Specialist = 'Outreach_Specialist',
+    Hub_Care_Coordinator = 'Hub_Care_Coordinator',
+    Hub_RN = 'Hub_RN',
+    Hub_Operations_Manager = 'Hub_Operations_Manager',
+    Member_Experience_Advocate = 'Member_Experience_Advocate',
+    Primary_Care_Physician = 'Primary_Care_Physician',
+    Nurse_Practitioner = 'Nurse_Practitioner',
+    Psychiatrist = 'Psychiatrist',
+    Nurse_Care_Manager = 'Nurse_Care_Manager',
+    Community_Engagement_Manager = 'Community_Engagement_Manager',
+    Behavioral_Health_Nurse_Practitioner = 'Behavioral_Health_Nurse_Practitioner',
+    Pharmacist = 'Pharmacist',
+    Clinical_Operations_Lead = 'Clinical_Operations_Lead',
+    Clinical_Operations_Manager = 'Clinical_Operations_Manager',
+    Back_Office_Admin = 'Back_Office_Admin'
   }
 
   enum Permissions {

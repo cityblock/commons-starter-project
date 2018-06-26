@@ -4,7 +4,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { formatFullName } from '../shared/helpers/format-helpers';
+import { formatCareTeamMemberRole, formatFullName } from '../shared/helpers/format-helpers';
 import Icon from '../shared/library/icon/icon';
 import withCurrentUser, { IInjectedProps } from '../shared/with-current-user/with-current-user';
 import styles from './css/header.css';
@@ -141,7 +141,9 @@ export class Header extends React.Component<allProps> {
             <div className={styles.dropdownContainer}>
               <div className={styles.userInfo}>
                 <div className={styles.userName}>{name}</div>
-                <div className={styles.userRole}>{currentUser ? currentUser.userRole : ''}</div>
+                <div className={styles.userRole}>
+                  {currentUser ? formatCareTeamMemberRole(currentUser.userRole) : ''}
+                </div>
               </div>
               <div
                 className={styles.userPhoto}

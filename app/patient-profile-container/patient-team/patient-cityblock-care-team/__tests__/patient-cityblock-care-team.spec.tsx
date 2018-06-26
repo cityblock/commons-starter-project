@@ -46,13 +46,13 @@ describe('Render Patient Cityblock Care Team', () => {
         .find(RequiredTeamMember)
         .at(0)
         .props().requiredRoleType,
-    ).toBe('communityHealthPartner');
+    ).toBe('Community_Health_Partner');
     expect(
       wrapper
         .find(RequiredTeamMember)
         .at(1)
         .props().requiredRoleType,
-    ).toBe('primaryCarePhysician');
+    ).toBe('Primary_Care_Physician');
   });
 
   it('renders the remove care team member modal', () => {

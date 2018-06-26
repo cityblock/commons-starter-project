@@ -18926,16 +18926,23 @@ export enum CarePlanUpdateEventTypes {
 }
 
 export enum UserRole {
-  admin = "admin",
-  anonymousUser = "anonymousUser",
-  communityHealthPartner = "communityHealthPartner",
-  familyMember = "familyMember",
-  healthCoach = "healthCoach",
-  nurseCareManager = "nurseCareManager",
-  outreachSpecialist = "outreachSpecialist",
-  physician = "physician",
-  primaryCarePhysician = "primaryCarePhysician",
-  psychiatrist = "psychiatrist",
+  Back_Office_Admin = "Back_Office_Admin",
+  Behavioral_Health_Nurse_Practitioner = "Behavioral_Health_Nurse_Practitioner",
+  Behavioral_Health_Specialist = "Behavioral_Health_Specialist",
+  Clinical_Operations_Lead = "Clinical_Operations_Lead",
+  Clinical_Operations_Manager = "Clinical_Operations_Manager",
+  Community_Engagement_Manager = "Community_Engagement_Manager",
+  Community_Health_Partner = "Community_Health_Partner",
+  Hub_Care_Coordinator = "Hub_Care_Coordinator",
+  Hub_Operations_Manager = "Hub_Operations_Manager",
+  Hub_RN = "Hub_RN",
+  Member_Experience_Advocate = "Member_Experience_Advocate",
+  Nurse_Care_Manager = "Nurse_Care_Manager",
+  Nurse_Practitioner = "Nurse_Practitioner",
+  Outreach_Specialist = "Outreach_Specialist",
+  Pharmacist = "Pharmacist",
+  Primary_Care_Physician = "Primary_Care_Physician",
+  Psychiatrist = "Psychiatrist",
 }
 
 export enum Permissions {

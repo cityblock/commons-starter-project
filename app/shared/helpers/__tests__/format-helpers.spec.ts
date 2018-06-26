@@ -94,11 +94,7 @@ describe('Shared Component Helpers', () => {
   });
 
   describe('formatCareTeamMemberRole', () => {
-    it('returns special title for admin', () => {
-      expect(formatCareTeamMemberRole('admin' as any)).toBe('Behavioral Health Specialist');
-    });
-
-    it('returns titleized user role otherwise', () => {
+    it('returns titleized user role', () => {
       expect(formatCareTeamMemberRole('nurseCareManager' as any)).toBe('Nurse Care Manager');
     });
   });

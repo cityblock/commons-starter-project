@@ -10,7 +10,7 @@ import User from '../../models/user';
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 const reason = 'Needed to defeat Night King';
 const note = 'Winter is Coming';

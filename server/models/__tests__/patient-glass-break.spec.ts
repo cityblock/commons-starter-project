@@ -9,7 +9,7 @@ import Patient from '../patient';
 import PatientGlassBreak from '../patient-glass-break';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const reason = 'Other';
 const note = 'New phone who dis';
 

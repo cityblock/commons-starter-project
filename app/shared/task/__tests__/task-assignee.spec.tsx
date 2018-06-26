@@ -27,7 +27,7 @@ describe('Task Assignee Component', () => {
 
     expect(wrapper.find(SelectDropdown).length).toBe(1);
     expect(wrapper.find(SelectDropdown).props().value).toBe('first last');
-    expect(wrapper.find(SelectDropdown).props().detail).toBe('physician');
+    expect(wrapper.find(SelectDropdown).props().detail).toBe('Primary Care Physician');
     expect(wrapper.find(SelectDropdown).props().loading).toBeFalsy();
     expect(wrapper.find(SelectDropdown).props().error).toBeFalsy();
   });
@@ -47,7 +47,7 @@ describe('Task Assignee Component', () => {
     );
 
     expect(wrapper2.find(SelectDropdown).props().value).toBe('first last');
-    expect(wrapper2.find(SelectDropdown).props().detail).toBe('physician');
+    expect(wrapper2.find(SelectDropdown).props().detail).toBe('Primary Care Physician');
   });
 
   it('renders custom message id if passed', () => {
@@ -70,7 +70,7 @@ describe('Task Assignee Component', () => {
   it('renders dropdown options for each valid assignee', () => {
     expect(wrapper.find(SelectDropdownOption).length).toBe(1);
     expect(wrapper.find(SelectDropdownOption).props().value).toBe('first last');
-    expect(wrapper.find(SelectDropdownOption).props().detail).toBe('physician');
+    expect(wrapper.find(SelectDropdownOption).props().detail).toBe('Primary Care Physician');
   });
 
   it('passes error data if error present', () => {

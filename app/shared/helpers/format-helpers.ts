@@ -48,10 +48,6 @@ export const formatCityblockId = (id: number): string => {
 };
 
 export const formatCareTeamMemberRole = (role: UserRole): string => {
-  if (role === 'admin') {
-    return 'Behavioral Health Specialist';
-  }
-
   return startCase(role);
 };
 

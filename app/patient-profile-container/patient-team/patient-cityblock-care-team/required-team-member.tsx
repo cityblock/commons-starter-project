@@ -2,7 +2,7 @@ import React from 'react';
 import { getPatientCareTeam } from '../../../graphql/types';
 import RequiredPlaceholder from '../../required-placeholder';
 
-type RequiredRoleTypes = 'communityHealthPartner' | 'primaryCarePhysician';
+type RequiredRoleTypes = 'Community_Health_Partner' | 'Primary_Care_Physician';
 
 interface IProps {
   patientCareTeam?: getPatientCareTeam['patientCareTeam'];
@@ -26,10 +26,10 @@ const RequiredTeamMember: React.StatelessComponent<IProps> = (props: IProps) => 
   let headerMessageId = '';
   let subtextMessageId = '';
 
-  if (requiredRoleType === 'communityHealthPartner') {
+  if (requiredRoleType === 'Community_Health_Partner') {
     headerMessageId = 'patientTeam.missingChpHeader';
     subtextMessageId = 'patientTeam.missingChpSubtext';
-  } else if (requiredRoleType === 'primaryCarePhysician') {
+  } else if (requiredRoleType === 'Primary_Care_Physician') {
     headerMessageId = 'patientTeam.missingPcpHeader';
     subtextMessageId = 'patientTeam.missingPcpSubtext';
   }

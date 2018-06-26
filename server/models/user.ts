@@ -20,15 +20,23 @@ import Patient from './patient';
 import UserHours from './user-hours';
 
 export const USER_ROLE: UserRole[] = [
-  'physician' as UserRole,
-  'nurseCareManager' as UserRole,
-  'healthCoach' as UserRole,
-  'familyMember' as UserRole,
-  'anonymousUser' as UserRole,
-  'admin' as UserRole,
-  'communityHealthPartner' as UserRole,
-  'outreachSpecialist' as UserRole,
-  'primaryCarePhysician' as UserRole,
+  'Behavioral_Health_Specialist' as UserRole,
+  'Community_Health_Partner' as UserRole,
+  'Outreach_Specialist' as UserRole,
+  'Hub_Care_Coordinator' as UserRole,
+  'Hub_RN' as UserRole,
+  'Hub_Operations_Manager' as UserRole,
+  'Member_Experience_Advocate' as UserRole,
+  'Primary_Care_Physician' as UserRole,
+  'Nurse_Practitioner' as UserRole,
+  'Psychiatrist' as UserRole,
+  'Nurse_Care_Manager' as UserRole,
+  'Community_Engagement_Manager' as UserRole,
+  'Behavioral_Health_Nurse_Practitioner' as UserRole,
+  'Pharmacist' as UserRole,
+  'Clinical_Operations_Lead' as UserRole,
+  'Clinical_Operations_Manager' as UserRole,
+  'Back_Office_Admin' as UserRole,
 ];
 
 export type Locale = 'en' | 'es';
@@ -123,7 +131,7 @@ export default class User extends BaseModel {
       email: { type: 'string', format: 'email' },
       locale: { type: 'string', enum: LOCALE },
       userRole: {
-        type: 'string',
+        type: ['string', 'null'],
         enum: USER_ROLE,
       },
       homeClinicId: { type: 'string', format: 'uuid' }, // cannot be blank

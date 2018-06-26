@@ -30,7 +30,7 @@ interface ICurrentSubTab {
   isOrganizations: boolean;
 }
 
-export type AddCareTeamMemberModalFilters = 'primaryCarePhysician' | 'communityHealthPartner';
+export type AddCareTeamMemberModalFilters = 'Primary_Care_Physician' | 'Community_Health_Partner';
 
 interface IState {
   isModalVisible: boolean;

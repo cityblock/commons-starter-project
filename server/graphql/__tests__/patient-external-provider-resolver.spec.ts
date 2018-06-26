@@ -27,7 +27,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 interface ISetup {

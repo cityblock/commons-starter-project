@@ -5,7 +5,7 @@ describe('Assignee Helpers', () => {
   describe('getAssigneeInfo', () => {
     const firstName = 'Eevee';
     const lastName = 'Pokemon';
-    const userRole = 'admin' as UserRole;
+    const userRole = 'Pharmacist' as UserRole;
 
     it('returns assignee info if assignee present', () => {
       const avatarUrl = 'eevee.png';

@@ -7,7 +7,7 @@ import ProgressNote from '../progress-note';
 import TaskEvent from '../task-event';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 describe('task event model', () => {
   let txn = null as any;

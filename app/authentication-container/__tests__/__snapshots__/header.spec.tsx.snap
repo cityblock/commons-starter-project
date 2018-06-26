@@ -124,7 +124,7 @@ exports[`renders header 1`] = `
           <div
             className="userRole"
           >
-            physician
+            Primary Care Physician
           </div>
         </div>
         <div

@@ -9,7 +9,7 @@ import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   progressNoteTemplate: ProgressNoteTemplate;

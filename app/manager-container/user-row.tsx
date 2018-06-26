@@ -1,6 +1,8 @@
+import { values } from 'lodash';
 import React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { FullUser, Permissions, UserRole } from '../graphql/types';
+import { formatCareTeamMemberRole } from '../shared/helpers/format-helpers';
 import Button from '../shared/library/button/button';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -79,6 +81,10 @@ export class UserRow extends React.Component<IProps, IState> {
         {(date: string) => <span className={styles.dateValue}>{date}</span>}
       </FormattedDate>
     );
+    const userRoles = values(UserRole).map(value => (
+      <Option key={value} label={formatCareTeamMemberRole(value as UserRole)} value={value} />
+    ));
+
     return (
       <div className={styles.container}>
         <div className={styles.title}>{this.formatUser()}</div>
@@ -86,14 +92,7 @@ export class UserRow extends React.Component<IProps, IState> {
           <div className={styles.dateSection}>
             {featureFlags.canChangeUserPermissions && (
               <Select value={user.userRole} onChange={onChangeUserRole} className={styles.select}>
-                <Option value="physician" label="Physician" />
-                <Option value="nurseCareManager" label="Nurse Care Manager" />
-                <Option value="healthCoach" label="Health Coach" />
-                <Option value="familyMember" label="Family Member" />
-                <Option value="admin" label="Admin (NOTE: does not grant permissions!)" />
-                <Option value="communityHealthPartner" label="Community Health Partner" />
-                <Option value="outreachSpecialist" label="Outreach Specialist" />
-                <Option value="primaryCarePhysician" label="Primary Care Physician" />
+                {userRoles}
               </Select>
             )}
           </div>

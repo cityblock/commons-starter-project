@@ -3,8 +3,9 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
-import { FullUser, ShortUser } from '../../graphql/types';
+import { FullUser, ShortUser, UserRole } from '../../graphql/types';
 import { getAssigneeInfo } from '../helpers/assignee-helpers';
+import { formatCareTeamMemberRole } from '../helpers/format-helpers';
 import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../library/select-dropdown/select-dropdown';
 import styles from './css/task-body.css';
@@ -73,7 +74,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
           onClick={async () => this.onNewAssigneeClick(assigneeOption.id, assigneeOption.email)}
           avatarUrl={avatar}
           value={name}
-          detail={role}
+          detail={formatCareTeamMemberRole(role as UserRole)}
         />
       );
     });
@@ -103,7 +104,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
         </FormattedMessage>
         <SelectDropdown
           value={assigneeInfo.name}
-          detail={assigneeInfo.role}
+          detail={formatCareTeamMemberRole(assigneeInfo.role as UserRole)}
           avatarUrl={assigneeInfo.avatar}
           loading={this.props.loading}
           error={this.state.changeAssigneeError}

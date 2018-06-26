@@ -14,7 +14,7 @@ import Phone from '../phone';
 import PhoneCall from '../phone-call';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const timestamp = new Date().toISOString();
 const callStatus = 'completed';
 const twilioPayload = {

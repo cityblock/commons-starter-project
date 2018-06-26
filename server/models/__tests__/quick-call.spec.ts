@@ -8,7 +8,7 @@ import Patient from '../patient';
 import QuickCall from '../quick-call';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   user: User;

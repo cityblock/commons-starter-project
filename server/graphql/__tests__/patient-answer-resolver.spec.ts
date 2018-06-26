@@ -46,7 +46,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(trx: Transaction): Promise<ISetup> {
@@ -748,7 +748,7 @@ describe('patient answer tests', () => {
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           repeating: false,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );

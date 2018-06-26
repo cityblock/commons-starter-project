@@ -79,7 +79,7 @@ describe('main', () => {
         innerTxn,
       );
       return User.create(
-        { homeClinicId: clinic.id, email: 'a@b.com', userRole: 'admin' as UserRole },
+        { homeClinicId: clinic.id, email: 'a@b.com', userRole: 'Pharmacist' as UserRole },
         innerTxn,
       );
     });
@@ -130,7 +130,7 @@ describe('main', () => {
         innerTxn,
       );
       return User.create(
-        { homeClinicId: clinic.id, email, userRole: 'admin' as UserRole },
+        { homeClinicId: clinic.id, email, userRole: 'Pharmacist' as UserRole },
         innerTxn,
       );
     });

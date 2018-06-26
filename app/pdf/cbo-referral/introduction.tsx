@@ -51,7 +51,7 @@ const Introduction: React.StatelessComponent<IProps> = ({ task }) => {
 
   // Note: assuming only one physician on care team for now, later can modify this logic
   const careTeamPCP = (task.patient.careTeam || []).find(
-    (user: FullUser) => user.userRole === 'physician',
+    (user: FullUser) => user.userRole === 'Primary_Care_Physician',
   );
 
   return (

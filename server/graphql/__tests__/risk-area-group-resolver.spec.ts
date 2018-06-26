@@ -24,7 +24,7 @@ interface ISetup {
   clinic: Clinic;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 const title = 'Night King Breached the Wall!';
 const shortTitle = 'FML';

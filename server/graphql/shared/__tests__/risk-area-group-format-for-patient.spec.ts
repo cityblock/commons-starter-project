@@ -36,7 +36,7 @@ interface ISetup {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);

@@ -7,7 +7,7 @@ import Task from '../task';
 import TaskComment from '../task-comment';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 describe('task comment model', () => {
   let txn = null as any;

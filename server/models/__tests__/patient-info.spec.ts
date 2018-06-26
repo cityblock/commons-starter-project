@@ -15,7 +15,7 @@ import Patient from '../patient';
 import PatientInfo from '../patient-info';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   patient: Patient;

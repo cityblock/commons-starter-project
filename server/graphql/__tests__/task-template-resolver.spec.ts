@@ -14,7 +14,7 @@ interface ISetup {
   user: User;
 }
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -51,7 +51,7 @@ describe('task template resolver', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -76,7 +76,7 @@ describe('task template resolver', () => {
             repeating: false,
             goalSuggestionTemplateId: "${goalSuggestionTemplate.id}",
             priority: low,
-            careTeamAssigneeRole: "physician",
+            careTeamAssigneeRole: "Pharmacist",
           }) {
             title
           }
@@ -102,7 +102,7 @@ describe('task template resolver', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -131,7 +131,7 @@ describe('task template resolver', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -158,7 +158,7 @@ describe('task template resolver', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );
@@ -168,7 +168,7 @@ describe('task template resolver', () => {
           repeating: false,
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           priority: 'low' as Priority,
-          careTeamAssigneeRole: 'physician' as UserRole,
+          careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
         },
         txn,
       );

@@ -18,7 +18,7 @@ import schema from '../make-executable-schema';
 
 const queue = kue.createQueue();
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const permissions = 'green';
 const sentAt = '2018-01-11T05:00:00.000Z';
 const diagnosis = 'Winter is here';

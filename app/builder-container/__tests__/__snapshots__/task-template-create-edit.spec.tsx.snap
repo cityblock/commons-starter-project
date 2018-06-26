@@ -251,37 +251,87 @@ exports[`renders task template create-edit 1`] = `
           Select role
         </option>
         <option
-          value="physician"
+          value="Back_Office_Admin"
         >
-          Physician
+          Back Office Admin
         </option>
         <option
-          value="nurseCareManager"
+          value="Behavioral_Health_Nurse_Practitioner"
         >
-          Nurse Care Manager
+          Behavioral Health Nurse Practitioner
         </option>
         <option
-          value="healthCoach"
+          value="Behavioral_Health_Specialist"
         >
-          Health Coach
+          Behavioral Health Specialist
         </option>
         <option
-          value="familyMember"
+          value="Clinical_Operations_Lead"
         >
-          Family Member
+          Clinical Operations Lead
         </option>
         <option
-          value="primaryCarePhysician"
+          value="Clinical_Operations_Manager"
         >
-          Primary Care Physician
+          Clinical Operations Manager
         </option>
         <option
-          value="communityHealthPartner"
+          value="Community_Engagement_Manager"
+        >
+          Community Engagement Manager
+        </option>
+        <option
+          value="Community_Health_Partner"
         >
           Community Health Partner
         </option>
         <option
-          value="psychiatrist"
+          value="Hub_Care_Coordinator"
+        >
+          Hub Care Coordinator
+        </option>
+        <option
+          value="Hub_Operations_Manager"
+        >
+          Hub Operations Manager
+        </option>
+        <option
+          value="Hub_RN"
+        >
+          Hub RN
+        </option>
+        <option
+          value="Member_Experience_Advocate"
+        >
+          Member Experience Advocate
+        </option>
+        <option
+          value="Nurse_Care_Manager"
+        >
+          Nurse Care Manager
+        </option>
+        <option
+          value="Nurse_Practitioner"
+        >
+          Nurse Practitioner
+        </option>
+        <option
+          value="Outreach_Specialist"
+        >
+          Outreach Specialist
+        </option>
+        <option
+          value="Pharmacist"
+        >
+          Pharmacist
+        </option>
+        <option
+          value="Primary_Care_Physician"
+        >
+          Primary Care Physician
+        </option>
+        <option
+          value="Psychiatrist"
         >
           Psychiatrist
         </option>

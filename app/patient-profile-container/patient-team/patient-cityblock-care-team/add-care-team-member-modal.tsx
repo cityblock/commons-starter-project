@@ -14,7 +14,7 @@ import {
   patientCareTeamAddUserVariables,
   UserRole,
 } from '../../../graphql/types';
-import { formatFullName } from '../../../shared/helpers/format-helpers';
+import { formatCareTeamMemberRole, formatFullName } from '../../../shared/helpers/format-helpers';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';
 import ModalHeader from '../../../shared/library/modal-header/modal-header';
@@ -152,8 +152,8 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
     if (careWorkerRolesFilter) {
       return (
         <OptGroup
-          messageId={`careWorker.${careWorkerRolesFilter}`}
           key={`optgroup-${careWorkerRolesFilter}`}
+          label={`${formatCareTeamMemberRole(careWorkerRolesFilter as UserRole)}s`}
         >
           {this.renderUserOptions(careWorkerRolesFilter as UserRole)}
         </OptGroup>
@@ -161,11 +161,17 @@ export class AddCareTeamMemberModal extends React.Component<allProps, IState> {
     }
 
     // Note: _.sortBy without a second argument, just does a default sort
-    return sortBy(careTeamRoles).map(careTeamRole => (
-      <OptGroup messageId={`careWorker.${careTeamRole}`} key={`optgroup-${careTeamRole}`}>
-        {this.renderUserOptions(careTeamRole as UserRole)}
-      </OptGroup>
-    ));
+    return sortBy(careTeamRoles).map(
+      careTeamRole =>
+        careTeamRole !== 'Back_Office_Admin' ? (
+          <OptGroup
+            label={`${formatCareTeamMemberRole(careTeamRole as UserRole)}s`}
+            key={`optgroup-${careTeamRole}`}
+          >
+            {this.renderUserOptions(careTeamRole as UserRole)}
+          </OptGroup>
+        ) : null,
+    );
   }
 
   renderAddUser() {

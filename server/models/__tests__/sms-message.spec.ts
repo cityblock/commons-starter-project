@@ -14,7 +14,7 @@ import Phone from '../phone';
 import SmsMessage from '../sms-message';
 import User from '../user';
 
-const userRole = 'admin' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 const body = 'Winter is coming.';
 const body2 = 'Winter is here.';
 const twilioPayload = {

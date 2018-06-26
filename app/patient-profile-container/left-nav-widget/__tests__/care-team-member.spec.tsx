@@ -67,7 +67,7 @@ describe('Patient Left Navigation Care Team Member', () => {
         .find(Text)
         .at(1)
         .props().text,
-    ).toBe('Physician');
+    ).toBe('Primary Care Physician');
   });
 
   it('does not render lead star by default', () => {

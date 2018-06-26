@@ -74,7 +74,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
       repeating: false,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
       priority: 'low' as Priority,
-      careTeamAssigneeRole: 'physician' as UserRole,
+      careTeamAssigneeRole: 'Primary_Care_Physician' as UserRole,
     },
     trx,
   );

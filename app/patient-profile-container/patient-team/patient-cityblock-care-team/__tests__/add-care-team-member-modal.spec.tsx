@@ -43,8 +43,9 @@ describe('Render Care Team Member Modal', () => {
 
   it('renders the correct care team member options', () => {
     const userRoleCount = Object.keys(UserRole).length;
-    // There is an empty option for all userRoles without users in them. Add 1 for placeholder
-    expect(wrapper.find(Option)).toHaveLength(userRoleCount + 1);
+    // There is an empty option for all userRoles without users in them.
+    // Add 1 for placeholder, subtract 1 for back office admin
+    expect(wrapper.find(Option)).toHaveLength(userRoleCount);
     expect(
       wrapper
         .find(Option)

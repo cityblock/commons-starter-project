@@ -1,4 +1,4 @@
-import { clone, isNil, omit, omitBy } from 'lodash';
+import { clone, isNil, omit, omitBy, values } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import taskTemplateCreateGraphql from '../graphql/queries/task-template-create-mutation.graphql';
@@ -12,9 +12,11 @@ import {
   taskTemplateEdit,
   taskTemplateEditVariables,
   FullTaskTemplate,
+  UserRole,
 } from '../graphql/types';
 import loadingStyles from '../shared/css/loading-spinner.css';
 import taskTemplateStyles from '../shared/css/two-panel-right.css';
+import { formatCareTeamMemberRole } from '../shared/helpers/format-helpers';
 import Button from '../shared/library/button/button';
 import CBOCategorySelect from '../shared/library/cbo-category-select/cbo-category-select';
 import Option from '../shared/library/option/option';
@@ -208,6 +210,10 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     ) : (
       <div className={taskTemplateStyles.smallText}>New Task!</div>
     );
+    const userRoles = values(UserRole).map(value => (
+      <Option key={value} label={formatCareTeamMemberRole(value as UserRole)} value={value} />
+    ));
+
     return (
       <div className={taskTemplateStyles.borderContainer}>
         <div className={styles.error}>{error}</div>
@@ -296,13 +302,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               onChange={this.onChange}
             >
               <Option value="" disabled label="Select role" />
-              <Option value="physician" label="Physician" />
-              <Option value="nurseCareManager" label="Nurse Care Manager" />
-              <Option value="healthCoach" label="Health Coach" />
-              <Option value="familyMember" label="Family Member" />
-              <Option value="primaryCarePhysician" label="Primary Care Physician" />
-              <Option value="communityHealthPartner" label="Community Health Partner" />
-              <Option value="psychiatrist" label="Psychiatrist" />
+              {userRoles}
             </Select>
           </div>
           <div className={taskTemplateStyles.smallText}>

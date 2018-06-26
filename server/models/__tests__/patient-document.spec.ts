@@ -9,7 +9,7 @@ import Patient from '../patient';
 import PatientDocument from '../patient-document';
 import User from '../user';
 
-const userRole = 'physician' as UserRole;
+const userRole = 'Pharmacist' as UserRole;
 
 interface ISetup {
   patient: Patient;

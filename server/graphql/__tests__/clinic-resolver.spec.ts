@@ -10,7 +10,7 @@ import { createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('clinic resolver', () => {
-  const userRole = 'admin' as UserRole;
+  const userRole = 'Pharmacist' as UserRole;
   const permissions = 'green';
   let txn = null as any;
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import userSummaryListGraphql from '../graphql/queries/get-user-summary-list.graphql';
-import { getUserSummaryList, ShortUser } from '../graphql/types';
-import { formatFullName } from '../shared/helpers/format-helpers';
+import { getUserSummaryList, ShortUser, UserRole } from '../graphql/types';
+import { formatCareTeamMemberRole, formatFullName } from '../shared/helpers/format-helpers';
 import OptGroup from '../shared/library/optgroup/optgroup';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
@@ -19,13 +19,6 @@ interface IGraphqlProps {
 }
 
 type allProps = IProps & IGraphqlProps;
-
-const CARE_WORKER_ROLES = [
-  'physician',
-  'nurseCareManager',
-  'healthCoach',
-  'communityHealthPartner',
-];
 
 class CareWorkerSelect extends React.Component<allProps> {
   renderOption(users: ShortUser[]) {
@@ -46,8 +39,9 @@ class CareWorkerSelect extends React.Component<allProps> {
     if (!userSummaryList) {
       return;
     }
+    const careTeamRoles = Object.keys(UserRole);
 
-    const options = CARE_WORKER_ROLES.reduce((accumulator: any, role) => {
+    const options = careTeamRoles.reduce((accumulator: any, role) => {
       accumulator[role] = userSummaryList.filter((user: ShortUser) => user.userRole === role);
       return accumulator;
     }, {});
@@ -55,9 +49,10 @@ class CareWorkerSelect extends React.Component<allProps> {
     return Object.keys(options).map(key => {
       const users = options[key];
 
-      if (users.length > 0) {
+      // do not show option to assign to a back office admin
+      if (users.length > 0 && key !== 'Back_Office_Admin') {
         return (
-          <OptGroup messageId={`careWorker.${key}`} key={`optgroup-${key}`}>
+          <OptGroup label={`${formatCareTeamMemberRole(key as UserRole)}s`} key={`optgroup-${key}`}>
             {this.renderOption(users)}
           </OptGroup>
         );
@@ -80,7 +75,7 @@ class CareWorkerSelect extends React.Component<allProps> {
 export default graphql(userSummaryListGraphql, {
   options: (props: IProps) => ({
     variables: {
-      userRoleFilters: CARE_WORKER_ROLES,
+      userRoleFilters: Object.keys(UserRole),
     },
     fetchPolicy: 'network-only',
   }),

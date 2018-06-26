@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { filter, includes, toString } from 'lodash';
 import React from 'react';
-import { getPatientCareTeam, FullCareTeamUser } from '../../../graphql/types';
-import { formatFullName } from '../../../shared/helpers/format-helpers';
+import { getPatientCareTeam, FullCareTeamUser, UserRole } from '../../../graphql/types';
+import { formatCareTeamMemberRole, formatFullName } from '../../../shared/helpers/format-helpers';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import OptGroup from '../../../shared/library/optgroup/optgroup';
 import Option from '../../../shared/library/option/option';
@@ -59,7 +59,10 @@ class RemoveCareTeamMember extends React.Component<IProps> {
     });
 
     return careTeamRoles.map(careTeamRole => (
-      <OptGroup messageId={`careWorker.${careTeamRole}`} key={`optgroup-${careTeamRole}`}>
+      <OptGroup
+        label={`${formatCareTeamMemberRole(careTeamRole as UserRole)}s`}
+        key={`optgroup-${careTeamRole}`}
+      >
         {this.renderCareTeamOptions(careTeamRole)}
       </OptGroup>
     ));

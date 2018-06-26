@@ -223,7 +223,12 @@ export async function calendarCreateForPatient(
     }
 
     const googleCalendarUrl = getGoogleCalendarUrl(calendarId);
-    return { googleCalendarId: calendarId, googleCalendarUrl, patientId, isCurrentUserPermissioned: true };
+    return {
+      googleCalendarId: calendarId,
+      googleCalendarUrl,
+      patientId,
+      isCurrentUserPermissioned: true,
+    };
   });
 }
 

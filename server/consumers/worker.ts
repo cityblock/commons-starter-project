@@ -36,8 +36,20 @@ const queue = kue.createQueue({ redis: createRedisClient() });
 
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
+const JOB_REMOVAL_TIMEOUT = 1000 * 60 * 5; // 5 minutes
+
 queue.on('error', err => {
   reportError(err, 'Kue uncaught error');
+});
+
+queue.on('job complete', id => {
+  kue.Job.get(id, (_err, job) => {
+    if (job) {
+      setTimeout(() => {
+        job.remove();
+      }, JOB_REMOVAL_TIMEOUT);
+    }
+  });
 });
 
 queue.process('afterHoursCommunications', async (job, done) => {

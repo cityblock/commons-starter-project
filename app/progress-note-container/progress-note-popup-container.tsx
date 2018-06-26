@@ -106,7 +106,6 @@ export default compose(
     options: (props: IStateProps & IProps) => ({
       variables: {
         progressNoteId: props.progressNoteId,
-        glassBreakId: props.glassBreakId,
       },
       fetchPolicy: 'network-only',
     }),

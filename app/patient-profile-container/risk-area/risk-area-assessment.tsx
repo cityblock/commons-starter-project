@@ -311,6 +311,9 @@ export default compose(
       refetchQueries: [
         {
           query: progressNotesForCurrentUserGraphql,
+          variables: {
+            completed: false,
+          },
         },
       ],
     },

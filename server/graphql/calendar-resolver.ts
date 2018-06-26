@@ -38,7 +38,13 @@ export async function resolveCalendarForPatient(
     const patient = await Patient.get(patientId, txn);
     const { googleCalendarId } = patient.patientInfo;
     const googleCalendarUrl = getGoogleCalendarUrl(googleCalendarId);
-    return { patientId, googleCalendarId, googleCalendarUrl };
+    const careTeam = await CareTeam.get(patient.id, userId!, txn);
+    const isCurrentUserPermissioned = !!(
+      (googleCalendarId && careTeam && careTeam.googleCalendarAclRuleId) ||
+      (!googleCalendarId && careTeam)
+    );
+
+    return { patientId, googleCalendarId, googleCalendarUrl, isCurrentUserPermissioned };
   });
 }
 
@@ -217,7 +223,7 @@ export async function calendarCreateForPatient(
     }
 
     const googleCalendarUrl = getGoogleCalendarUrl(calendarId);
-    return { googleCalendarId: calendarId, googleCalendarUrl, patientId };
+    return { googleCalendarId: calendarId, googleCalendarUrl, patientId, isCurrentUserPermissioned: true };
   });
 }
 

@@ -2,6 +2,7 @@ import { addMinutes } from 'date-fns';
 import { shallow } from 'enzyme';
 import React from 'react';
 import Calendar from '../../../shared/calendar/calendar';
+import Button from '../../../shared/library/button/button';
 import {
   partialCalendarEvent,
   partialCalendarEventSIU,
@@ -9,11 +10,11 @@ import {
 } from '../../../shared/util/test-data';
 import { PatientCalendar } from '../patient-calendar';
 
-describe('Render Skinny Patient Calendar', () => {
+describe('Render Patient Calendar', () => {
   const match = { params: { patientId: patient.id } };
   const startDatetime = new Date().toISOString();
   const endDatetime = addMinutes(startDatetime, 30).toISOString();
-  const response = {
+  const eventsResponse = {
     events: [
       {
         startDate: startDatetime,
@@ -38,7 +39,7 @@ describe('Render Skinny Patient Calendar', () => {
   const wrapper = shallow(
     <PatientCalendar
       match={match}
-      calendarEventsResponse={response}
+      calendarEventsResponse={eventsResponse}
       fetchMoreCalendarEvents={fetchMoreCalendarEvents}
       createCalendarForPatient={createCalendarForPatient}
       refetchCalendar={refetchCalendar}
@@ -50,5 +51,25 @@ describe('Render Skinny Patient Calendar', () => {
   it('renders the calendar list', () => {
     const events = wrapper.find(Calendar);
     expect(events).toHaveLength(1);
+  });
+
+  it('renders the calendar nav bar buttons', () => {
+    const buttons = wrapper.find(Button);
+    expect(buttons).toHaveLength(0);
+
+    wrapper.setProps({
+      calendarResponse: {
+        googleCalendarId: 'some-id',
+        googleCalendarUrl: 'www.someurl.com',
+        isCurrentUserPermissioned: true,
+      },
+    });
+
+    const updatedButtons = wrapper.find(Button);
+    expect(updatedButtons).toHaveLength(3);
+
+    expect(updatedButtons.at(0).props().messageId).toBe('calendar.print');
+    expect(updatedButtons.at(1).props().messageId).toBe('calendar.openCalendar');
+    expect(updatedButtons.at(2).props().messageId).toBe('calendar.addAppointment');
   });
 });

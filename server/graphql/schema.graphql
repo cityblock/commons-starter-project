@@ -1747,6 +1747,7 @@ type PatientCalendar {
   patientId: ID!
   googleCalendarId: String
   googleCalendarUrl: String
+  isCurrentUserPermissioned: Boolean
 }
 
 # google calendar id and url for current user calendar

@@ -2893,6 +2893,7 @@ declare module 'schema' {
     patientId: string;
     googleCalendarId: string | null;
     googleCalendarUrl: string | null;
+    isCurrentUserPermissioned: boolean | null;
   }
 
   /**

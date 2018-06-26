@@ -133,6 +133,9 @@ export class PatientCalendar extends React.Component<allProps, IState> {
     const hasNextPage = !!get(calendarEventsResponse, 'pageInfo.nextPageToken');
     const googleCalendarId = calendarResponse ? calendarResponse.googleCalendarId : null;
     const googleCalendarUrl = calendarResponse ? calendarResponse.googleCalendarUrl : null;
+    const isCurrentUserPermissioned = calendarResponse
+      ? calendarResponse.isCurrentUserPermissioned
+      : null;
 
     const calendarButton = googleCalendarUrl ? (
       <Button
@@ -151,16 +154,20 @@ export class PatientCalendar extends React.Component<allProps, IState> {
       />
     ) : null;
 
+    const appointmentButton = isCurrentUserPermissioned ? (
+      <Button
+        messageId="calendar.addAppointment"
+        onClick={this.handleAddAppointmentClick}
+        className={styles.button}
+      />
+    ) : null;
+
     return (
       <React.Fragment>
         <div className={styles.navBar}>
           {printButton}
           {calendarButton}
-          <Button
-            messageId="calendar.addAppointment"
-            onClick={this.handleAddAppointmentClick}
-            className={styles.button}
-          />
+          {appointmentButton}
         </div>
         <Calendar
           fetchMore={fetchMoreCalendarEvents}

@@ -1936,6 +1936,7 @@ export interface getCalendarForPatient_calendarForPatient {
   patientId: string;
   googleCalendarId: string | null;
   googleCalendarUrl: string | null;
+  isCurrentUserPermissioned: boolean | null;
 }
 
 export interface getCalendarForPatient {

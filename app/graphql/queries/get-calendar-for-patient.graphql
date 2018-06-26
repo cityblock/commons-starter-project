@@ -3,5 +3,6 @@ query getCalendarForPatient($patientId: ID!) {
     patientId
     googleCalendarId
     googleCalendarUrl
+    isCurrentUserPermissioned
   }
 }

@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import { transaction } from 'objection';
 import {
   IAnswerCreateInput,
@@ -76,15 +75,24 @@ export async function resolveAnswer(
 
 export async function answerEdit(
   root: any,
-  args: IEditAnswerOptions,
+  { input }: IEditAnswerOptions,
   { userId, permissions, testTransaction }: IContext,
 ): Promise<IRootMutationType['answerEdit']> {
   return transaction(testTransaction || Answer.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'edit', 'answer', txn);
 
-    // TODO: fix typings here
-    const cleanedParams = pickBy<IAnswerEditInput>(args.input) as any;
-    return Answer.edit(cleanedParams, args.input.answerId, txn);
+    return Answer.edit(
+      {
+        displayValue: input.displayValue || undefined,
+        value: input.value || undefined,
+        valueType: input.valueType || undefined,
+        riskAdjustmentType: input.riskAdjustmentType || undefined,
+        inSummary: input.inSummary ? true : false,
+        order: input.order || undefined,
+      },
+      input.answerId,
+      txn,
+    );
   });
 }
 

@@ -234,7 +234,7 @@ export class Question extends React.Component<allProps, IState> {
         .filter(answer => answer.id !== question.otherTextAnswerId)
         .map(answer => (
           <AnswerCreateEdit
-            key={answer ? answer.id : ''}
+            key={`${question.id}-${answer ? answer.id : ''}`}
             screeningToolAnswer={!!question.screeningToolId}
             answer={answer}
             questionId={question.id}
@@ -414,6 +414,7 @@ export class Question extends React.Component<allProps, IState> {
               <div>{answers}</div>
               <div className={styles.smallText}>Create answer:</div>
               <AnswerCreateEdit
+                key={`answer-create-${question.id}`}
                 questionId={question.id}
                 screeningToolAnswer={!!question.screeningToolId}
                 dataType={this.getAnswerDataType() || undefined}

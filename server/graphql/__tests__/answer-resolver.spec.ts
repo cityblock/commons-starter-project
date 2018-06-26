@@ -13,7 +13,6 @@ import answerDelete from '../../../app/graphql/queries/answer-delete-mutation.gr
 import answerEdit from '../../../app/graphql/queries/answer-edit-mutation.graphql';
 import getAnswer from '../../../app/graphql/queries/get-answer.graphql';
 import getAnswersForQuestion from '../../../app/graphql/queries/get-question-answers.graphql';
-
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Question from '../../models/question';
@@ -171,6 +170,37 @@ describe('answer tests', () => {
       );
       expect(cloneDeep(result.data!.answerEdit)).toMatchObject({
         displayValue: 'new display value',
+      });
+    });
+    it('edits answer', async () => {
+      const { answer, user } = await setup(txn);
+      const result = await graphql(
+        schema,
+        answerEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          testTransaction: txn,
+        },
+        { inSummary: true, answerId: answer.id },
+      );
+      expect(cloneDeep(result.data!.answerEdit)).toMatchObject({
+        inSummary: true,
+      });
+      const resultTwo = await graphql(
+        schema,
+        answerEditMutation,
+        null,
+        {
+          permissions,
+          userId: user.id,
+          testTransaction: txn,
+        },
+        { inSummary: false, answerId: answer.id },
+      );
+      expect(cloneDeep(resultTwo.data!.answerEdit)).toMatchObject({
+        inSummary: false,
       });
     });
   });

@@ -1,4 +1,4 @@
-import { clone, isNil, omit, omitBy, range } from 'lodash';
+import { clone, range } from 'lodash';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import answerCreateGraphql from '../graphql/queries/answer-create-mutation.graphql';
@@ -71,28 +71,9 @@ export function getMessageIdForOption(value?: string) {
 }
 
 class AnswerCreateEdit extends React.Component<allProps, IState> {
-  static getDerivedStateFromProps(nextProps: allProps, prevState: IState) {
-    const { questionId } = nextProps;
-
-    if (nextProps.questionId !== prevState.answer.questionId) {
-      const { answer } = prevState;
-      answer.questionId = questionId;
-      return { ...prevState, answer };
-    }
-    return prevState;
-  }
-
   constructor(props: allProps) {
     super(props);
-
     const { screeningToolAnswer } = props;
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onFieldUpdate = this.onFieldUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onDeleteClick = this.onDeleteClick.bind(this);
-    this.getValueTypeOptions = this.getValueTypeOptions.bind(this);
-
     this.state = {
       loading: false,
       error: null,
@@ -123,33 +104,43 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     }
   }
 
-  onFieldUpdate(updatedField: IUpdatedField) {
+  onFieldUpdate = (updatedField: IUpdatedField) => {
     const answer = clone(this.state.answer);
     const { fieldName, fieldValue } = updatedField;
 
     (answer as any)[fieldName] = fieldValue;
 
     this.setState({ answer });
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const fieldName = event.target.name;
-    let fieldValue: any = event.target.value;
+  onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const fieldName = event.currentTarget.name.replace(
+      `${this.props.answer ? this.props.answer.id : ''}-`,
+      '',
+    );
+    let fieldValue: any = event.currentTarget.value;
 
     if (fieldValue === 'true') {
       fieldValue = true;
     } else if (fieldValue === 'false') {
       fieldValue = false;
     }
-
     this.onFieldUpdate({ fieldName, fieldValue });
-  }
+  };
 
-  async onSubmit() {
+  onSubmit = async () => {
     try {
       // TODO: remove as any and use regular type checking
       this.setState({ loading: true, error: null });
-      const filtered = omitBy<answerCreateVariables>(this.state.answer, isNil);
+      const filtered = {
+        displayValue: this.state.answer.displayValue,
+        value: this.state.answer.value,
+        valueType: this.state.answer.valueType,
+        riskAdjustmentType: this.state.answer.riskAdjustmentType,
+        inSummary: this.state.answer.inSummary,
+        summaryText: this.state.answer.summaryText,
+        order: this.state.answer.order,
+      };
       let result: {
         data: answerCreate | answerEdit;
         errors?: Array<{ message: string }>;
@@ -158,12 +149,15 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         result = await this.props.editAnswer({
           variables: {
             answerId: this.props.answer.id,
-            ...omit<any>(filtered, ['questionId']),
+            ...filtered,
           },
         });
       } else {
         result = await this.props.createAnswer({
-          variables: filtered as any,
+          variables: {
+            questionId: this.props.questionId,
+            ...filtered,
+          },
         });
       }
       if (result && result.errors) {
@@ -175,9 +169,9 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       this.setState({ error: err.message, loading: false });
     }
     return false;
-  }
+  };
 
-  async onDeleteClick() {
+  onDeleteClick = async () => {
     if (this.props.answer) {
       await this.props.deleteAnswer({
         variables: {
@@ -185,7 +179,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         },
       });
     }
-  }
+  };
 
   getValueTypeOptions() {
     const { screeningToolAnswer, dataType } = this.props;
@@ -220,10 +214,11 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   render() {
     const { loading, answer, error } = this.state;
     const { screeningToolAnswer } = this.props;
+    const answerId = this.props.answer ? this.props.answer.id : '';
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.answer ? 'Save' : 'Add answer';
     const deleteHtml = this.props.answer ? <div onClick={this.onDeleteClick}>delete</div> : null;
-    const answerId = this.props.answer ? (
+    const answerIdText = this.props.answer ? (
       <div className={answerStyles.smallText}>Answer ID: {this.props.answer.id}</div>
     ) : (
       <div className={answerStyles.smallText}>New Answer!</div>
@@ -237,14 +232,14 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       <div className={answerStyles.largeText}>{answer.value}</div>
     ) : (
       <TextInput
-        name="value"
+        name={`${answerId}-value`}
         value={answer.value}
         placeholderMessageId="builder.enterAnswerValue"
         onChange={this.onChange}
       />
     );
     return (
-      <div className={answerStyles.borderContainer}>
+      <div className={answerStyles.borderContainer} key={answerId}>
         <div className={styles.error}>{error}</div>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
@@ -252,11 +247,15 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           </div>
         </div>
         <div className={styles.inputGroup}>
-          {answerId}
+          {answerIdText}
           <br />
           <div className={styles.inlineInputGroup}>
             <FormLabel messageId="builder.order" />
-            <Select name="order" value={answer.order.toString() || '1'} onChange={this.onChange}>
+            <Select
+              name={`${answerId}-order`}
+              value={answer.order.toString() || '1'}
+              onChange={this.onChange}
+            >
               <Option value="" disabled label="Select Answer order" />
               {orders}
             </Select>
@@ -264,7 +263,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <FormLabel messageId="builder.displayValue" />
             <TextInput
-              name="displayValue"
+              name={`${answerId}-displayValue`}
               value={answer.displayValue}
               placeholderMessageId="builder.enterDisplayValue"
               onChange={this.onChange}
@@ -276,7 +275,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           </div>
           <div className={styles.inlineInputGroup}>
             <FormLabel messageId="builder.backendValueType" />
-            <Select name="valueType" value={valueType} onChange={this.onChange}>
+            <Select name={`${answerId}-valueType`} value={valueType} onChange={this.onChange}>
               {this.getValueTypeOptions()}
             </Select>
           </div>
@@ -284,7 +283,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
             <FormLabel messageId="builder.riskAdjustmentType" />
             <Select
               required
-              name="riskAdjustmentType"
+              name={`${answerId}-riskAdjustmentType`}
               value={answer.riskAdjustmentType || ''}
               onChange={this.onChange}
             >
@@ -301,7 +300,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <FormLabel messageId="builder.summaryText" />
             <TextInput
-              name="summaryText"
+              name={`${answerId}-summaryText`}
               placeholderMessageId="builder.enterSummary"
               value={answer.summaryText || ''}
               onChange={this.onChange}
@@ -311,14 +310,14 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
             <FormLabel messageId="builder.displayInSummary" />
             <RadioGroup>
               <RadioInput
-                name="inSummary"
+                name={`${answerId}-inSummary`}
                 onChange={this.onChange}
                 checked={answer.inSummary ? answer.inSummary === true : false}
                 value="true"
                 label="Yes"
               />
               <RadioInput
-                name="inSummary"
+                name={`${answerId}-inSummary`}
                 onChange={this.onChange}
                 checked={answer.inSummary ? false : true}
                 value="false"

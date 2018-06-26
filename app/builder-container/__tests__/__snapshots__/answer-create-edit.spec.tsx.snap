@@ -38,7 +38,7 @@ exports[`renders answer create-edit 1`] = `
       </label>
       <select
         className="select"
-        name="order"
+        name="answer-id-order"
         onChange={[Function]}
         value="1"
       >
@@ -206,7 +206,7 @@ exports[`renders answer create-edit 1`] = `
       <input
         className="input"
         id=""
-        name="displayValue"
+        name="answer-id-displayValue"
         onChange={[Function]}
         placeholder="Enter answer display value"
         required={false}
@@ -238,7 +238,7 @@ exports[`renders answer create-edit 1`] = `
       </label>
       <select
         className="select"
-        name="valueType"
+        name="answer-id-valueType"
         onChange={[Function]}
         value="boolean"
       >
@@ -259,7 +259,7 @@ exports[`renders answer create-edit 1`] = `
       </label>
       <select
         className="select"
-        name="riskAdjustmentType"
+        name="answer-id-riskAdjustmentType"
         onChange={[Function]}
         required={true}
         value="increment"
@@ -298,7 +298,7 @@ exports[`renders answer create-edit 1`] = `
       <input
         className="input"
         id=""
-        name="summaryText"
+        name="answer-id-summaryText"
         onChange={[Function]}
         placeholder="Enter summary text"
         required={false}
@@ -323,8 +323,8 @@ exports[`renders answer create-edit 1`] = `
           <input
             checked={true}
             disabled={false}
-            id="inSummary-true"
-            name="inSummary"
+            id="answer-id-inSummary-true"
+            name="answer-id-inSummary"
             onChange={[Function]}
             readOnly={false}
             type="radio"
@@ -332,7 +332,7 @@ exports[`renders answer create-edit 1`] = `
           />
           <label
             className=""
-            htmlFor="inSummary-true"
+            htmlFor="answer-id-inSummary-true"
           >
             Yes
           </label>
@@ -343,8 +343,8 @@ exports[`renders answer create-edit 1`] = `
           <input
             checked={false}
             disabled={false}
-            id="inSummary-false"
-            name="inSummary"
+            id="answer-id-inSummary-false"
+            name="answer-id-inSummary"
             onChange={[Function]}
             readOnly={false}
             type="radio"
@@ -352,7 +352,7 @@ exports[`renders answer create-edit 1`] = `
           />
           <label
             className=""
-            htmlFor="inSummary-false"
+            htmlFor="answer-id-inSummary-false"
           >
             No
           </label>

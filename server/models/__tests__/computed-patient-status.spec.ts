@@ -298,6 +298,7 @@ describe('computed patient status model', () => {
         hasProgressNote: false,
         hasChp: false,
         hasPcp: false,
+        hasCareTeam: false,
         isAssessed: false,
         isIneligible: false,
         isDisenrolled: false,
@@ -318,6 +319,7 @@ describe('computed patient status model', () => {
         hasProgressNote: false,
         hasChp: true,
         hasPcp: false,
+        hasCareTeam: true,
         isAssessed: false,
         isIneligible: false,
         isDisenrolled: false,
@@ -339,6 +341,7 @@ describe('computed patient status model', () => {
         hasProgressNote: true,
         hasChp: true,
         hasPcp: false,
+        hasCareTeam: true,
         isAssessed: false,
         isIneligible: false,
         isDisenrolled: false,
@@ -359,6 +362,7 @@ describe('computed patient status model', () => {
         hasProgressNote: true,
         hasChp: true,
         hasPcp: false,
+        hasCareTeam: true,
         isAssessed: true,
         isIneligible: false,
         isDisenrolled: false,
@@ -379,6 +383,7 @@ describe('computed patient status model', () => {
         hasProgressNote: true,
         hasChp: true,
         hasPcp: true,
+        hasCareTeam: true,
         isAssessed: true,
         isIneligible: false,
         isDisenrolled: false,
@@ -619,6 +624,25 @@ describe('computed patient status model', () => {
     );
 
     expect(refetchedComputedPatientStatus!.hasPcp).toEqual(true);
+  });
+
+  it('correctly calculates hasCareTeam', async () => {
+    const { user, patient } = await setup(txn);
+
+    const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+    expect(computedPatientStatus!.hasCareTeam).toBe(false);
+
+    await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+
+    const computedPatientStatus2 = await ComputedPatientStatus.getForPatient(patient.id, txn);
+    expect(computedPatientStatus2!.hasCareTeam).toBe(true);
+
+    await CareTeam.delete({ userId: user.id, patientId: patient.id }, txn);
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+
+    const computedPatientStatus3 = await ComputedPatientStatus.getForPatient(patient.id, txn);
+    expect(computedPatientStatus3!.hasCareTeam).toBe(false);
   });
 
   describe('isAdvancedDirectivesAdded', () => {

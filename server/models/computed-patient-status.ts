@@ -19,6 +19,7 @@ export interface IComputedStatus {
   isConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
   hasProgressNote: boolean;
+  hasCareTeam: boolean;
   hasChp: boolean;
   hasPcp: boolean;
   isAssessed: boolean;
@@ -39,6 +40,7 @@ export default class ComputedPatientStatus extends BaseModel {
   isConsentSigned!: boolean;
   isPhotoAddedOrDeclined!: boolean;
   hasProgressNote!: boolean;
+  hasCareTeam!: boolean;
   hasChp!: boolean;
   hasPcp!: boolean;
   isAssessed!: boolean;
@@ -64,6 +66,7 @@ export default class ComputedPatientStatus extends BaseModel {
       hasProgressNote: { type: 'boolean' },
       hasChp: { type: 'boolean' },
       hasPcp: { type: 'boolean' },
+      hasCareTeam: { type: 'boolean' },
       isAssessed: { type: 'boolean' },
       isIneligible: { type: 'boolean' },
       isDisenrolled: { type: 'boolean' },
@@ -81,6 +84,7 @@ export default class ComputedPatientStatus extends BaseModel {
       'isConsentSigned',
       'isPhotoAddedOrDeclined',
       'hasProgressNote',
+      'hasCareTeam',
       'hasChp',
       'hasPcp',
       'isAssessed',
@@ -139,6 +143,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'Community_Health_Partner' as UserRole);
 
     const hasPcp = this.isRoleOnCareTeam(patientCareTeam, 'Primary_Care_Physician' as UserRole);
+    const hasCareTeam = !!patientCareTeam.length;
     const isAssessed = false;
     const isPhotoAddedOrDeclined = hasUploadedPhoto || !!hasDeclinedPhotoUpload;
     const isIneligible = false;
@@ -152,6 +157,7 @@ export default class ComputedPatientStatus extends BaseModel {
       isConsentSigned,
       isPhotoAddedOrDeclined,
       hasProgressNote,
+      hasCareTeam,
       hasChp,
       hasPcp,
       isAssessed,
@@ -245,7 +251,7 @@ export default class ComputedPatientStatus extends BaseModel {
     txn: Transaction,
   ): CurrentPatientState {
     let currentStatus = 'attributed';
-    const isAssigned = computedStatus.hasPcp || computedStatus.hasChp;
+    const isAssigned = computedStatus.hasCareTeam;
     const isInOutreach = isAssigned && computedStatus.hasProgressNote;
     const isConsented =
       isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;

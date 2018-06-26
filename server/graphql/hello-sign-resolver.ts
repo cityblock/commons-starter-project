@@ -60,7 +60,7 @@ export const getHelloSignOptions = async (
   const timestamp = format(new Date(), 'MM/DD/YY h:mm a');
 
   const options = {
-    test_mode: config.NODE_ENV === 'production' ? 0 : 1,
+    test_mode: config.HELLOSIGN_TEST_MODE ? 1 : 0,
     clientId: config.HELLOSIGN_CLIENT_ID,
     subject: `${patientName} - ${documentType} ${timestamp}`,
     signers: [

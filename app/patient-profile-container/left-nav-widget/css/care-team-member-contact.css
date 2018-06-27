@@ -21,7 +21,7 @@
 }
 
 .expanded {
-  height: 120px;
+  height: 60px;
   border-bottom: 1px solid var(--border-color);
 }
 

@@ -22,88 +22,17 @@ describe('Patient Left Navigation Care Team Contact', () => {
     expect(wrapper.find('.container').props().className).toBe('container expanded');
   });
 
-  it('renders phone icon', () => {
-    expect(wrapper.find(Icon).length).toBe(2);
-
-    expect(
-      wrapper
-        .find(Icon)
-        .at(0)
-        .props().name,
-    ).toBe('phone');
-    expect(
-      wrapper
-        .find(Icon)
-        .at(0)
-        .props().color,
-    ).toBe('black');
-  });
-
-  it('renders small text to call care team member', () => {
-    expect(wrapper.find(Text).length).toBe(2);
-
-    expect(
-      wrapper
-        .find(Text)
-        .at(0)
-        .props().messageId,
-    ).toBe('careTeam.call');
-    expect(
-      wrapper
-        .find(Text)
-        .at(0)
-        .props().messageValues,
-    ).toEqual({ name: firstName });
-    expect(
-      wrapper
-        .find(Text)
-        .at(0)
-        .props().color,
-    ).toBe('black');
-    expect(
-      wrapper
-        .find(Text)
-        .at(0)
-        .props().size,
-    ).toBe('medium');
-  });
-
   it('renders mattermost icon', () => {
-    expect(
-      wrapper
-        .find(Icon)
-        .at(1)
-        .props().name,
-    ).toBe('mattermost');
+    expect(wrapper.find(Icon).props().name).toBe('mattermost');
   });
 
   it('renders small text to mattermost care team member', () => {
-    expect(wrapper.find(Text).length).toBe(2);
+    expect(wrapper.find(Text).length).toBe(1);
 
-    expect(
-      wrapper
-        .find(Text)
-        .at(1)
-        .props().messageId,
-    ).toBe('careTeam.mattermost');
-    expect(
-      wrapper
-        .find(Text)
-        .at(1)
-        .props().messageValues,
-    ).toEqual({ name: firstName });
-    expect(
-      wrapper
-        .find(Text)
-        .at(1)
-        .props().color,
-    ).toBe('black');
-    expect(
-      wrapper
-        .find(Text)
-        .at(1)
-        .props().size,
-    ).toBe('medium');
+    expect(wrapper.find(Text).props().messageId).toBe('careTeam.mattermost');
+    expect(wrapper.find(Text).props().messageValues).toEqual({ name: firstName });
+    expect(wrapper.find(Text).props().color).toBe('black');
+    expect(wrapper.find(Text).props().size).toBe('medium');
   });
 
   it('applies collapsed styles if not visible', () => {

@@ -60,15 +60,6 @@ export class CareTeamMemberContact extends React.Component<allProps, IState> {
 
     return (
       <div className={containerStyles} onClick={e => e.stopPropagation()}>
-        <div className={styles.flex}>
-          <Icon name="phone" color="black" className={styles.icon} />
-          <Text
-            messageId="careTeam.call"
-            messageValues={{ name: firstName }}
-            color="black"
-            size="medium"
-          />
-        </div>
         <div className={styles.flex} onClick={this.handleMessageClick}>
           <Icon name="mattermost" className={styles.icon} />
           <Text

@@ -46,7 +46,7 @@
 }
 
 .status {
-  min-width: 125px;
+  min-width: 80px;
 }
 
 .memberId {
@@ -55,7 +55,7 @@
 }
 
 .address {
-  min-width: 250px;
+  min-width: 310px;
   color: var(--black-color);
 }
 

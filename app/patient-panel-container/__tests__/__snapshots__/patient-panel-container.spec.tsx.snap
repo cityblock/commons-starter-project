@@ -187,57 +187,68 @@ exports[`renders patient panel container correctly 1`] = `
           value="endToEnd"
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
             Select age range
           </option>
           <option
+            className=""
             value="endTo19"
           >
             19 and under
           </option>
           <option
+            className=""
             value="20To24"
           >
             20 - 24 years old
           </option>
           <option
+            className=""
             value="25To29"
           >
             25 - 29 years old
           </option>
           <option
+            className=""
             value="30To34"
           >
             30 - 34 years old
           </option>
           <option
+            className=""
             value="35To39"
           >
             35 - 39 years old
           </option>
           <option
+            className=""
             value="40To49"
           >
             40 - 49 years old
           </option>
           <option
+            className=""
             value="50To59"
           >
             50 - 59 years old
           </option>
           <option
+            className=""
             value="60To69"
           >
             60 - 69 years old
           </option>
           <option
+            className=""
             value="70To79"
           >
             70 - 79 years old
           </option>
           <option
+            className=""
             value="80ToEnd"
           >
             80 and older
@@ -259,32 +270,38 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
             Select gender
           </option>
           <option
+            className=""
             value="female"
           >
             Female
           </option>
           <option
+            className=""
             value="male"
           >
             Male
           </option>
           <option
+            className=""
             value="nonbinary"
           >
             Non-binary
           </option>
           <option
+            className=""
             value="pass"
           >
             Prefer to not say
           </option>
           <option
+            className=""
             value="selfDescribed"
           >
             Prefer to self describe
@@ -326,6 +343,7 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
@@ -348,42 +366,50 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
             Select a patient status
           </option>
           <option
+            className=""
             value="assigned"
           >
             Assigned
           </option>
           <option
+            className=""
             value="attributed"
           >
             Attributed
           </option>
           <option
+            className=""
             value="consented"
           >
             Consented
           </option>
           <option
+            className=""
             value="disenrolled"
           >
             Disenrolled
           </option>
           <option
+            className=""
             value="enrolled"
           >
             Enrolled
           </option>
           <option
+            className=""
             value="ineligible"
           >
             Ineligible
           </option>
           <option
+            className=""
             value="outreach"
           >
             Outreach
@@ -405,32 +431,38 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
             Select a line of business
           </option>
           <option
+            className=""
             value="hmo"
           >
             HMO
           </option>
           <option
+            className=""
             value="medicaid"
           >
             Medicaid
           </option>
           <option
+            className=""
             value="medicare"
           >
             Medicare
           </option>
           <option
+            className=""
             value="ppo"
           >
             PPO
           </option>
           <option
+            className=""
             value="ps"
           >
             PS
@@ -452,17 +484,20 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
+            className=""
             disabled={false}
             value=""
           >
             Select if patient is in network
           </option>
           <option
+            className=""
             value="no"
           >
             No
           </option>
           <option
+            className=""
             value="yes"
           >
             Yes

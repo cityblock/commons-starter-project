@@ -57,17 +57,20 @@ exports[`renders question 1`] = `
         value=""
       >
         <option
+          className="undefined"
           disabled={true}
           value=""
         >
           Select an applicable if type (required!)
         </option>
         <option
+          className=""
           value="oneTrue"
         >
           One true
         </option>
         <option
+          className=""
           value="allTrue"
         >
           All true
@@ -81,27 +84,32 @@ exports[`renders question 1`] = `
         value="dropdown"
       >
         <option
+          className="undefined"
           disabled={true}
           value=""
         >
           Select an answer type (required!)
         </option>
         <option
+          className=""
           value="dropdown"
         >
           Dropdown
         </option>
         <option
+          className=""
           value="radio"
         >
           Radio
         </option>
         <option
+          className=""
           value="freetext"
         >
           Free Text
         </option>
         <option
+          className=""
           value="multiselect"
         >
           Multiselect
@@ -114,17 +122,20 @@ exports[`renders question 1`] = `
         value=""
       >
         <option
+          className="undefined"
           disabled={true}
           value=""
         >
           Should this question have an "other" answer?
         </option>
         <option
+          className=""
           value="true"
         >
           Yes
         </option>
         <option
+          className=""
           value="false"
         >
           No

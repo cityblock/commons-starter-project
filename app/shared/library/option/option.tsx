@@ -1,5 +1,7 @@
+import classNames from 'classnames';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import * as styles from './css/option.css';
 
 interface IProps {
   value: string | number;
@@ -11,12 +13,15 @@ interface IProps {
 
 const Option: React.StatelessComponent<IProps> = (props: IProps) => {
   const { value, label, messageId, disabled, indent } = props;
+  const className = classNames(styles.option, {
+    [styles.disabled]: !!disabled,
+  });
 
   if (messageId) {
     return (
       <FormattedMessage id={messageId}>
         {(message: string) => (
-          <option disabled={disabled} value={value}>
+          <option className={className} disabled={disabled} value={value}>
             {indent ? `\u00A0\u00A0\u00A0\u00A0${message}` : `${message}`}
           </option>
         )}
@@ -25,7 +30,7 @@ const Option: React.StatelessComponent<IProps> = (props: IProps) => {
   }
 
   return (
-    <option value={value} disabled={disabled}>
+    <option className={className} value={value} disabled={disabled}>
       {indent ? `\u00A0\u00A0\u00A0\u00A0${label || value}` : `${label || value}`}
     </option>
   );

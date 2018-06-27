@@ -135,15 +135,13 @@ class PatientContactModal extends React.Component<IProps, allState> {
 
   handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const { address } = this.state;
-    if (address) {
-      this.setState({
-        address: {
-          ...address,
-          [name as any]: value,
-        },
-      });
-    }
+    const address = this.state.address || {};
+    this.setState({
+      address: {
+        ...address,
+        [name as any]: value,
+      },
+    });
   };
 
   handleClose = () => {

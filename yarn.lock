@@ -2261,7 +2261,7 @@ caniuse-db@^1.0.30000187, caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, ca
   version "1.0.30000850"
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000850.tgz#965c816641576d08709bee12256a0550164b95d5"
 
-caniuse-lite@1.0.30000859:
+caniuse-lite@1.0.30000859, caniuse-lite@^1.0.30000859:
   version "1.0.30000859"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000859.tgz#da974adc5348fffe94724877a7ef8cb5d6d3d777"
 
@@ -2269,7 +2269,7 @@ caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000850:
   version "1.0.30000850"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000850.tgz#e68a88db4ea598b4c33b8419f7385473e4802495"
 
-caniuse-lite@^1.0.30000856, caniuse-lite@^1.0.30000858:
+caniuse-lite@^1.0.30000856:
   version "1.0.30000858"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000858.tgz#f6f203a9128bac507136de1cf6cfd966d2df027c"
 
@@ -8456,11 +8456,11 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
 
-postcss-attribute-case-insensitive@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-attribute-case-insensitive/-/postcss-attribute-case-insensitive-3.0.0.tgz#03ec32ed221ed0a184fae26a99fea82c7de1a3b9"
+postcss-attribute-case-insensitive@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-attribute-case-insensitive/-/postcss-attribute-case-insensitive-3.0.1.tgz#efd2c40b5d3d27dfab5678073bf652f76eaf4352"
   dependencies:
-    postcss "^6.0.22"
+    postcss "^6.0.23"
     postcss-selector-parser "^4.0.0"
 
 postcss-calc@^5.2.0:
@@ -8847,16 +8847,16 @@ postcss-place@^3.0.1:
     postcss "^6.0.22"
     postcss-values-parser "^1.5.0"
 
-postcss-preset-env@5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-5.2.0.tgz#e4bce98eac115c02873e0856332cac8cc57ed0b0"
+postcss-preset-env@5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-5.2.1.tgz#298fd5a7a6d323e025bd554fc31fe5e1003875c8"
   dependencies:
     autoprefixer "^8.6.3"
     browserslist "^3.2.8"
-    caniuse-lite "^1.0.30000858"
+    caniuse-lite "^1.0.30000859"
     cssdb "^3.1.0"
     postcss "^6.0.23"
-    postcss-attribute-case-insensitive "^3.0.0"
+    postcss-attribute-case-insensitive "^3.0.1"
     postcss-color-functional-notation "^1.0.1"
     postcss-color-hex-alpha "^3.0.0"
     postcss-color-mod-function "^2.4.2"

@@ -70,7 +70,7 @@ export async function main(options: IMainOptions) {
       privateHeaders: ['auth_token'],
       noTraceErrors: true,
       noTraceVariables: true,
-      disabled: config.NODE_ENV === 'test',
+      disabled: config.NODE_ENV !== 'production',
     },
   });
 

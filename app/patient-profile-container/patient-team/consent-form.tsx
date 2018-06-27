@@ -32,6 +32,7 @@ export const ConsentForm: React.StatelessComponent<IProps> = props => {
       >
         {Object.keys(consentSettings).map(settingName => (
           <CheckboxInput
+            inputId={`consentCheckbox-${settingName}`}
             key={`consentCheckbox-${settingName}`}
             value={settingName}
             checked={!!(consentSettings as any)[settingName]}

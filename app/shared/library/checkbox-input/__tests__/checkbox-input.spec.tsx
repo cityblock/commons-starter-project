@@ -6,8 +6,11 @@ describe('Library Checkbox Input Component', () => {
   const value = 'jonSnow';
   const label = 'King in the North';
   const placeholderFn = jest.fn();
+  const inputId = 'jon-snow-king';
 
-  const wrapper = shallow(<CheckboxInput value={value} onChange={placeholderFn} checked={false} />);
+  const wrapper = shallow(
+    <CheckboxInput inputId={inputId} value={value} onChange={placeholderFn} checked={false} />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('div').props().className).toBe('container');
@@ -16,7 +19,7 @@ describe('Library Checkbox Input Component', () => {
   it('renders radio input', () => {
     expect(wrapper.find('input').length).toBe(1);
     expect(wrapper.find('input').props().type).toBe('checkbox');
-    expect(wrapper.find('input').props().id).toBe(value);
+    expect(wrapper.find('input').props().id).toBe(inputId);
     expect(wrapper.find('input').props().value).toBe(value);
     expect(wrapper.find('input').props().checked).toBeFalsy();
     expect(wrapper.find('input').props().disabled).toBeFalsy();
@@ -24,7 +27,7 @@ describe('Library Checkbox Input Component', () => {
 
   it('renders label using value if no display label provided', () => {
     expect(wrapper.find('label').length).toBe(1);
-    expect(wrapper.find('label').props().htmlFor).toBe(value);
+    expect(wrapper.find('label').props().htmlFor).toBe(inputId);
     expect(wrapper.find('label').text()).toBe(value);
   });
 

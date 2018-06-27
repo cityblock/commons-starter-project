@@ -126,6 +126,7 @@ export class BasicInfo extends React.Component<allProps> {
     const raceOptionsHtml = Object.keys(options).map(race => {
       return (
         <CheckboxInput
+          inputId={`raceCheckbox-${race}`}
           key={`raceCheckbox-${race}`}
           value={race}
           checked={!!(options as any)[race]}

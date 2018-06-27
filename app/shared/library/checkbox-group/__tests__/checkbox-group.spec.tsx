@@ -12,8 +12,20 @@ describe('Library Checkbox Group Component', () => {
 
   const wrapper = shallow(
     <CheckboxGroup>
-      <CheckboxInput value={value1} onChange={placeholderFn} label={label1} checked={false} />
-      <CheckboxInput value={value2} onChange={placeholderFn} label={label2} checked={true} />
+      <CheckboxInput
+        inputId={'Sansa'}
+        value={value1}
+        onChange={placeholderFn}
+        label={label1}
+        checked={false}
+      />
+      <CheckboxInput
+        inputId={'Arya'}
+        value={value2}
+        onChange={placeholderFn}
+        label={label2}
+        checked={true}
+      />
     </CheckboxGroup>,
   );
 

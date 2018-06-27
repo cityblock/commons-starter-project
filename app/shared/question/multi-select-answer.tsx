@@ -12,7 +12,6 @@ interface IProps {
 export default class MultiSelectAnswer extends React.Component<IProps, {}> {
   onChange = (): void => {
     const { editable, answer, onClick, selected } = this.props;
-
     if (editable) {
       onClick(answer.value, answer.id, selected);
     }
@@ -23,6 +22,7 @@ export default class MultiSelectAnswer extends React.Component<IProps, {}> {
 
     return (
       <CheckboxInput
+        inputId={`checkbox-${answer.id}`}
         value={answer.value}
         checked={selected}
         onChange={this.onChange}

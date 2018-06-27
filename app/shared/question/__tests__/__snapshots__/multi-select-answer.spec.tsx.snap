@@ -7,13 +7,13 @@ exports[`renders a multi-select answer 1`] = `
   <input
     checked={false}
     disabled={false}
-    id="answer"
+    id="checkbox-456"
     onChange={[Function]}
     type="checkbox"
     value="answer"
   />
   <label
-    htmlFor="answer"
+    htmlFor="checkbox-456"
   >
     Answer
   </label>

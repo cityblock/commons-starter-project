@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import styles from './css/checkbox-input.css';
 
 interface IProps {
+  inputId: string; // should be globally unique
   value: string;
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,7 +14,7 @@ interface IProps {
 }
 
 const CheckboxInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, checked, onChange, label, labelMessageId, disabled } = props;
+  const { value, checked, onChange, label, labelMessageId, disabled, inputId } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
     [styles.disabled]: !!disabled,
@@ -21,17 +22,17 @@ const CheckboxInput: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const labelHtml = labelMessageId ? (
     <FormattedMessage id={labelMessageId}>
-      {(message: string) => <label htmlFor={value}>{message}</label>}
+      {(message: string) => <label htmlFor={inputId}>{message}</label>}
     </FormattedMessage>
   ) : (
-    <label htmlFor={value}>{label || value}</label>
+    <label htmlFor={inputId}>{label || value}</label>
   );
 
   return (
     <div className={containerStyles}>
       <input
         type="checkbox"
-        id={value}
+        id={inputId}
         value={value}
         checked={checked}
         onChange={onChange}

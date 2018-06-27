@@ -388,9 +388,9 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/chart.js@2.7.24":
-  version "2.7.24"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.24.tgz#f8a09bd76098addbfacc916a1f0cbaaae79708c4"
+"@types/chart.js@2.7.25":
+  version "2.7.25"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.25.tgz#f5b10bee5cca4e8bddebe49d4c6ed24b4017c184"
 
 "@types/cheerio@*":
   version "0.22.7"

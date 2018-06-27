@@ -42,16 +42,14 @@ export async function processNewMemberAttributionMessage(
     inNetwork,
   } = data;
 
-  if (!patientId || !cityblockId || !firstName || !lastName || !dob || !ssn || !email) {
-    return Promise.reject(
-      'Missing either patientId, cityblockId, firstName, lastName, ssn, email or dateOfBirth',
-    );
+  if (!patientId || !cityblockId || !firstName || !lastName || !dob) {
+    return Promise.reject('Missing either patientId, cityblockId, firstName, lastName, or dob');
   }
 
   await transaction(existingTxn || Patient.knex(), async txn => {
     const patient = await Patient.getById(patientId, txn);
     const homeClinic = await Clinic.findOrCreateAttributionClinic(txn);
-    const ssnEnd = ssn.slice(5, 9);
+    const ssnEnd = ssn ? ssn.slice(5, 9) : null;
     const mrn =
       externalIds && externalIds.acpny && externalIds.acpny.length
         ? externalIds.acpny[0].externalId

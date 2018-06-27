@@ -39,8 +39,8 @@ export interface IPatientCreateFields {
   lastName: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
-  ssn: string;
-  ssnEnd: string;
+  ssn: string | null;
+  ssnEnd: string | null;
   gender: Gender | null;
   language: string | null;
   addressLine1: string;
@@ -48,7 +48,7 @@ export interface IPatientCreateFields {
   city: string;
   state: string;
   zip: string;
-  email: string;
+  email: string | null;
   phone: string;
   nmi: string;
   mrn: string | null;
@@ -70,8 +70,8 @@ export interface IPatientUpdateFromAttributionFields {
   middleName?: string | null;
   lastName: string;
   dateOfBirth: string;
-  ssn: string;
-  ssnEnd: string;
+  ssn: string | null;
+  ssnEnd: string | null;
   nmi: string;
   mrn: string | null;
   productDescription: string | null;
@@ -120,8 +120,8 @@ export default class Patient extends Model {
   lastName!: string;
   middleName!: string | null;
   dateOfBirth!: string;
-  ssnEnd!: string;
-  ssn!: string;
+  ssnEnd!: string | null;
+  ssn!: string | null;
   homeClinicId!: string;
   homeClinic!: Clinic;
   nmi!: string;

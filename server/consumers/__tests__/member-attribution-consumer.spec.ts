@@ -62,7 +62,7 @@ describe('processing memberAttribution jobs', () => {
     };
 
     await expect(processNewMemberAttributionMessage(data as any, txn)).rejects.toMatch(
-      'Missing either patientId, cityblockId, firstName, lastName, ssn, email or dateOfBirth',
+      'Missing either patientId, cityblockId, firstName, lastName, or dob',
     );
   });
 

@@ -36,7 +36,7 @@ export interface IInitialPatientInfoOptions {
   city: string;
   state: string;
   zip: string;
-  email: string;
+  email: string | null;
   phone: string;
 }
 
@@ -296,7 +296,7 @@ export default class PatientInfo extends Model {
       }
     }
 
-    if (!primaryEmailId && input.email.length > 1) {
+    if (!primaryEmailId && input.email && input.email.length > 1) {
       const email = await Email.create(
         {
           updatedById: input.updatedById,

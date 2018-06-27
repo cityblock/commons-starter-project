@@ -268,7 +268,7 @@
     "typescript-plugin-lodash": "0.1.0",
     "typings-for-css-modules-loader": "1.7.0",
     "url-loader": "1.0.1",
-    "uuid": "3.2.1",
+    "uuid": "3.3.0",
     "vcards-js": "2.8.0",
     "webpack": "4.12.1",
     "webpack-cli": "3.0.8",

@@ -2,7 +2,7 @@
 
 mutation patientDataFlagCreate(
   $patientId: ID!
-  $fieldName: CoreIdentityOptions!
+  $fieldName: DataFlagOptions!
   $suggestedValue: String
   $notes: String
 ) {

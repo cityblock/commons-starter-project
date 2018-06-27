@@ -206,11 +206,22 @@ enum Permissions {
   black
 }
 
-enum CoreIdentityOptions {
+enum DataFlagOptions {
   firstName
   middleName
   lastName
   dateOfBirth
+  cityblockId
+  ssn
+  nmi
+  mrn
+  productDescription
+  lineOfBusiness
+  medicaidPremiumGroup
+  pcpName
+  pcpAddress
+  pcpPractice
+  pcpPhone
 }
 
 enum PhoneTypeOptions {
@@ -1662,7 +1673,7 @@ type PatientDataFlag implements uniqueId {
   id: ID!
   patientId: ID!
   userId: ID!
-  fieldName: CoreIdentityOptions!
+  fieldName: DataFlagOptions!
   suggestedValue: String
   notes: String
   updatedAt: String
@@ -2625,7 +2636,7 @@ input CBOReferralEditInput {
 
 input PatientDataFlagCreateInput {
   patientId: ID!
-  fieldName: CoreIdentityOptions!
+  fieldName: DataFlagOptions!
   suggestedValue: String
   notes: String
 }
@@ -3320,8 +3331,6 @@ type RootQueryType {
   CBOs: [CBO!]!
   # all CBOs for given category
   CBOsForCategory(categoryId: ID!): [CBO!]!
-  # patient data flags for a patient
-  patientDataFlagsForPatient(patientId: ID!): [PatientDataFlag!]!
   # patient glass breaks for user during current session
   patientGlassBreaksForUser: [PatientGlassBreak!]!
   # progress note glass breaks for a user during current session

@@ -39,7 +39,7 @@ describe('Render Core Idenity Component', () => {
     expect(firstName.value).toBe(coreIdentity.firstName);
 
     const ssn = wrapper.find(SocialSecurityDisplayField).props();
-    expect(ssn.labelMessageId).toBe('coreIdentity.socialSecurity');
+    expect(ssn.labelMessageId).toBe('coreIdentity.ssn');
 
     const middleName = wrapper
       .find(FlaggableDisplayField)
@@ -66,7 +66,7 @@ describe('Render Core Idenity Component', () => {
       .find(FlaggableDisplayField)
       .at(4)
       .props();
-    expect(nmiNumber.labelMessageId).toBe('coreIdentity.memberId');
+    expect(nmiNumber.labelMessageId).toBe('coreIdentity.nmi');
 
     const dateOfBirth = wrapper
       .find(FlaggableDisplayField)
@@ -79,7 +79,7 @@ describe('Render Core Idenity Component', () => {
       .find(FlaggableDisplayField)
       .at(6)
       .props();
-    expect(ehrNumber.labelMessageId).toBe('coreIdentity.ehrNumber');
+    expect(ehrNumber.labelMessageId).toBe('coreIdentity.mrn');
   });
 
   it('renders flagged state', () => {

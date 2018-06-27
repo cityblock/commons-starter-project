@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { filter, includes, values } from 'lodash';
+import { filter, includes } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -10,7 +10,7 @@ import {
   patientCoreIdentityVerify,
   patientCoreIdentityVerifyVariables,
   patientDataFlagCreate,
-  CoreIdentityOptions,
+  DataFlagOptions,
 } from '../../graphql/types';
 import { formatCityblockId } from '../../shared/helpers/format-helpers';
 import styles from './css/patient-demographics.css';
@@ -19,6 +19,17 @@ import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';
 import { IEditableFieldState } from './patient-info';
 import SocialSecurityDisplayField from './social-security-display-field';
+
+const CoreIdentityOptions = [
+  DataFlagOptions.firstName,
+  DataFlagOptions.middleName,
+  DataFlagOptions.lastName,
+  DataFlagOptions.dateOfBirth,
+  DataFlagOptions.cityblockId,
+  DataFlagOptions.ssn,
+  DataFlagOptions.nmi,
+  DataFlagOptions.mrn,
+];
 
 export interface ICoreIdentity {
   firstName: getPatient['patient']['firstName'];
@@ -59,9 +70,7 @@ export class CoreIdentity extends React.Component<allProps, IState> {
 
   hasDataFlags() {
     const { patientDataFlags } = this.props.patientIdentity;
-    const flags = filter(patientDataFlags, flag =>
-      includes(values(CoreIdentityOptions), flag.fieldName),
-    );
+    const flags = filter(patientDataFlags, flag => includes(CoreIdentityOptions, flag.fieldName));
     return !!flags.length;
   }
 
@@ -169,9 +178,9 @@ export class CoreIdentity extends React.Component<allProps, IState> {
               correctedValue={this.findFlag('firstName')}
             />
             <SocialSecurityDisplayField
-              labelMessageId="coreIdentity.socialSecurity"
+              labelMessageId="coreIdentity.ssn"
               ssnEnd={ssnEnd}
-              correctedValue={this.findFlag('socialSecurity')}
+              correctedValue={this.findFlag('ssn')}
               onClick={this.handleRequestSSNClick}
               patientId={patientId}
               glassBreakId={glassBreakId}
@@ -197,9 +206,9 @@ export class CoreIdentity extends React.Component<allProps, IState> {
               correctedValue={this.findFlag('lastName')}
             />
             <FlaggableDisplayField
-              labelMessageId="coreIdentity.memberId"
+              labelMessageId="coreIdentity.nmi"
               value={memberId}
-              correctedValue={this.findFlag('memberId')}
+              correctedValue={this.findFlag('nmi')}
             />
           </div>
           <div>
@@ -209,9 +218,9 @@ export class CoreIdentity extends React.Component<allProps, IState> {
               correctedValue={this.findFlag('dateOfBirth')}
             />
             <FlaggableDisplayField
-              labelMessageId="coreIdentity.ehrNumber"
+              labelMessageId="coreIdentity.mrn"
               value={mrn}
-              correctedValue={this.findFlag('ehrNumber')}
+              correctedValue={this.findFlag('mrn')}
             />
           </div>
         </FlaggableDisplayCard>
@@ -220,6 +229,8 @@ export class CoreIdentity extends React.Component<allProps, IState> {
           patientId={patientId}
           closePopup={this.handleCloseModal}
           onSaved={this.handleFlagCreation}
+          flagOptions={CoreIdentityOptions}
+          prefix="coreIdentity"
         />
       </div>
     );

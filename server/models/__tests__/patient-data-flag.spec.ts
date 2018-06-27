@@ -1,7 +1,6 @@
 import { transaction, Transaction } from 'objection';
-import { CoreIdentityOptions, UserRole } from 'schema';
+import { DataFlagOptions, UserRole } from 'schema';
 import uuid from 'uuid/v4';
-
 import { createMockClinic, createMockUser, createPatient } from '../../spec-helpers';
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
@@ -14,6 +13,7 @@ const userRole = 'Pharmacist' as UserRole;
 interface ISetup {
   user: User;
   patient: Patient;
+  clinic: Clinic;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -21,7 +21,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
-  return { user, patient };
+  return { user, patient, clinic };
 }
 
 describe('computed patient status model', () => {
@@ -41,7 +41,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Bob',
       },
       txn,
@@ -61,7 +61,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Bob',
       },
       txn,
@@ -91,7 +91,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -100,7 +100,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName' as CoreIdentityOptions,
+        fieldName: 'lastName' as DataFlagOptions,
         suggestedValue: 'Vader',
       },
       txn,
@@ -116,13 +116,92 @@ describe('computed patient status model', () => {
     expect(refetchedPatientDataFlagIds).toContain(patientDataFlag2.id);
   });
 
+  it('gets all patient core identity data flags for a patient', async () => {
+    const { user, patient, clinic } = await setup(txn);
+    const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+    const initialPatientDataFlags = await PatientDataFlag.getAllCoreIdentityForPatient(
+      patient.id,
+      txn,
+    );
+
+    expect(initialPatientDataFlags.length).toEqual(0);
+    await PatientDataFlag.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        fieldName: 'lastName' as DataFlagOptions,
+        suggestedValue: 'Darth',
+      },
+      txn,
+    );
+    await PatientDataFlag.deleteAllForPatient(patient.id, txn);
+
+    const patientDataFlag1 = await PatientDataFlag.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        fieldName: 'firstName' as DataFlagOptions,
+        suggestedValue: 'Darth',
+      },
+      txn,
+    );
+    await PatientDataFlag.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        fieldName: 'pcpName' as DataFlagOptions,
+        suggestedValue: 'Jane Doe',
+      },
+      txn,
+    );
+    await PatientDataFlag.create(
+      {
+        patientId: patient2.id,
+        userId: user.id,
+        fieldName: 'firstName' as DataFlagOptions,
+        suggestedValue: 'Melanie',
+      },
+      txn,
+    );
+
+    let refetchedPatientDataFlags = await PatientDataFlag.getAllCoreIdentityForPatient(
+      patient.id,
+      txn,
+    );
+    let refetchedPatientDataFlagIds = refetchedPatientDataFlags.map(
+      patientDataFlag => patientDataFlag.id,
+    );
+
+    expect(refetchedPatientDataFlags.length).toEqual(1);
+    expect(refetchedPatientDataFlagIds).toContain(patientDataFlag1.id);
+
+    const patientDataFlag2 = await PatientDataFlag.create(
+      {
+        patientId: patient.id,
+        userId: user.id,
+        fieldName: 'lastName' as DataFlagOptions,
+        suggestedValue: 'Vader',
+      },
+      txn,
+    );
+
+    refetchedPatientDataFlags = await PatientDataFlag.getAllCoreIdentityForPatient(patient.id, txn);
+    refetchedPatientDataFlagIds = refetchedPatientDataFlags.map(
+      patientDataFlag => patientDataFlag.id,
+    );
+
+    expect(refetchedPatientDataFlags.length).toEqual(2);
+    expect(refetchedPatientDataFlagIds).toContain(patientDataFlag1.id);
+    expect(refetchedPatientDataFlagIds).toContain(patientDataFlag2.id);
+  });
+
   it('marks old duplicate patient data flags as deleted when creating a new one', async () => {
     const { user, patient } = await setup(txn);
     const patientDataFlag1 = await PatientDataFlag.create(
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -132,7 +211,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName' as CoreIdentityOptions,
+        fieldName: 'lastName' as DataFlagOptions,
         suggestedValue: 'Vader',
       },
       txn,
@@ -146,7 +225,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Luke',
       },
       txn,
@@ -171,7 +250,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
         suggestedValue: 'Darth',
       },
       txn,
@@ -180,7 +259,7 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         userId: user.id,
-        fieldName: 'lastName' as CoreIdentityOptions,
+        fieldName: 'lastName' as DataFlagOptions,
         suggestedValue: 'Vader',
       },
       txn,

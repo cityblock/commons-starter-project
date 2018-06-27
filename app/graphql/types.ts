@@ -4791,7 +4791,7 @@ export interface getPatient_patient_patientDataFlags {
   id: string;
   patientId: string;
   userId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue: string | null;
   notes: string | null;
   updatedAt: string | null;
@@ -9418,7 +9418,7 @@ export interface patientDataFlagCreate_patientDataFlagCreate {
   id: string;
   patientId: string;
   userId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue: string | null;
   notes: string | null;
   updatedAt: string | null;
@@ -9430,7 +9430,7 @@ export interface patientDataFlagCreate {
 
 export interface patientDataFlagCreateVariables {
   patientId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue?: string | null;
   notes?: string | null;
 }
@@ -15855,7 +15855,7 @@ export interface FullPatientDataFlag {
   id: string;
   patientId: string;
   userId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue: string | null;
   notes: string | null;
   updatedAt: string | null;
@@ -16148,7 +16148,7 @@ export interface FullPatientForProfile_patientDataFlags {
   id: string;
   patientId: string;
   userId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue: string | null;
   notes: string | null;
   updatedAt: string | null;
@@ -18994,11 +18994,22 @@ export enum PhoneTypeOptions {
   work = "work",
 }
 
-export enum CoreIdentityOptions {
+export enum DataFlagOptions {
+  cityblockId = "cityblockId",
   dateOfBirth = "dateOfBirth",
   firstName = "firstName",
   lastName = "lastName",
+  lineOfBusiness = "lineOfBusiness",
+  medicaidPremiumGroup = "medicaidPremiumGroup",
   middleName = "middleName",
+  mrn = "mrn",
+  nmi = "nmi",
+  pcpAddress = "pcpAddress",
+  pcpName = "pcpName",
+  pcpPhone = "pcpPhone",
+  pcpPractice = "pcpPractice",
+  productDescription = "productDescription",
+  ssn = "ssn",
 }
 
 export enum DocumentTypeOptions {

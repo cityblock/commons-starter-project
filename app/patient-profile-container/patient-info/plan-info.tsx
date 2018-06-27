@@ -1,12 +1,22 @@
-import { filter } from 'lodash';
+import { filter, includes } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { getPatient, patientDataFlagCreate } from '../../graphql/types';
+import { getPatient, patientDataFlagCreate, DataFlagOptions } from '../../graphql/types';
 import styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
 import FlaggingModal from './flagging-modal';
 import { IEditableFieldState } from './patient-info';
+
+const PlanInfoOptions = [
+  DataFlagOptions.productDescription,
+  DataFlagOptions.lineOfBusiness,
+  DataFlagOptions.medicaidPremiumGroup,
+  DataFlagOptions.pcpName,
+  DataFlagOptions.pcpAddress,
+  DataFlagOptions.pcpPractice,
+  DataFlagOptions.pcpPhone,
+];
 
 export interface IPlanInfo {
   patientDataFlags: getPatient['patient']['patientDataFlags'];
@@ -27,8 +37,9 @@ export default class PlanInfo extends React.Component<IProps, IState> {
   state = { isModalVisible: false };
 
   hasDataFlags() {
-    // TODO: fix this once we know the field names
-    return false;
+    const { patientDataFlags } = this.props.planInfo;
+    const flags = filter(patientDataFlags, flag => includes(PlanInfoOptions, flag.fieldName));
+    return !!flags.length;
   }
 
   findFlag(fieldName: string) {
@@ -115,19 +126,38 @@ export default class PlanInfo extends React.Component<IProps, IState> {
             <FlaggableDisplayField
               labelMessageId="planInfo.productDescription"
               value={productDescription}
+              correctedValue={this.findFlag('productDescription')}
             />
             <FlaggableDisplayField
               labelMessageId="planInfo.lineOfBusiness"
               value={lineOfBusiness}
+              correctedValue={this.findFlag('lineOfBusiness')}
             />
             <FlaggableDisplayField
               labelMessageId="planInfo.medicaidPremiumGroup"
               value={medicaidPremiumGroup}
+              correctedValue={this.findFlag('medicaidPremiumGroup')}
             />
-            <FlaggableDisplayField labelMessageId="planInfo.pcpName" value={pcpName} />
-            <FlaggableDisplayField labelMessageId="planInfo.pcpPractice" value={pcpPractice} />
-            <FlaggableDisplayField labelMessageId="planInfo.pcpPhone" value={pcpPhone} />
-            <FlaggableDisplayField labelMessageId="planInfo.pcpAddress" value={pcpAddress} />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.pcpName"
+              value={pcpName}
+              correctedValue={this.findFlag('pcpName')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.pcpPractice"
+              value={pcpPractice}
+              correctedValue={this.findFlag('pcpPractice')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.pcpPhone"
+              value={pcpPhone}
+              correctedValue={this.findFlag('pcpPhone')}
+            />
+            <FlaggableDisplayField
+              labelMessageId="planInfo.pcpAddress"
+              value={pcpAddress}
+              correctedValue={this.findFlag('pcpAddress')}
+            />
           </div>
         </FlaggableDisplayCard>
         <FlaggingModal
@@ -135,6 +165,8 @@ export default class PlanInfo extends React.Component<IProps, IState> {
           patientId={patientId}
           closePopup={this.handleCloseModal}
           onSaved={this.handleFlagCreation}
+          flagOptions={PlanInfoOptions}
+          prefix="planInfo"
         />
       </div>
     );

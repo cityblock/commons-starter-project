@@ -1,7 +1,6 @@
 import { shallow } from 'enzyme';
-import { values } from 'lodash';
 import React from 'react';
-import { patientDataFlagCreate, CoreIdentityOptions } from '../../../graphql/types';
+import { patientDataFlagCreate, DataFlagOptions } from '../../../graphql/types';
 import FormLabel from '../../../shared/library/form-label/form-label';
 import ModalButtons from '../../../shared/library/modal-buttons/modal-buttons';
 import ModalError from '../../../shared/library/modal-error/modal-error';
@@ -16,6 +15,7 @@ describe('Render Flaggable Display Card Component', () => {
   const onSaved = (flag: patientDataFlagCreate['patientDataFlagCreate']) => true;
   const patientId = 'patient-id';
   const createFlag = jest.fn();
+  const flagOptions: DataFlagOptions[] = [DataFlagOptions.firstName, DataFlagOptions.lastName];
 
   const wrapper = shallow(
     <FlaggingModal
@@ -24,6 +24,8 @@ describe('Render Flaggable Display Card Component', () => {
       isVisible={false}
       patientId={patientId}
       createFlag={createFlag}
+      flagOptions={flagOptions}
+      prefix="coreIdentity"
     />,
   );
 
@@ -68,7 +70,7 @@ describe('Render Flaggable Display Card Component', () => {
     expect(select.props().name).toBe('fieldName');
     expect(select.props().prefix).toBe('coreIdentity');
     expect(select.props().hasPlaceholder).toBeTruthy();
-    expect(select.props().options).toMatchObject(values(CoreIdentityOptions));
+    expect(select.props().options).toMatchObject(flagOptions);
     expect(select.props().value).toBeFalsy();
     expect(select.props().large).toBe(true);
 

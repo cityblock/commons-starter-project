@@ -1,6 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import {
-  CoreIdentityOptions,
+  DataFlagOptions,
   DocumentTypeOptions,
   Gender,
   PatientRelationOptions,
@@ -68,7 +68,7 @@ describe('computed patient status model', () => {
       {
         userId: user.id,
         patientId: patient.id,
-        fieldName: 'firstName' as CoreIdentityOptions,
+        fieldName: 'firstName' as DataFlagOptions,
       },
       txn,
     );
@@ -425,7 +425,7 @@ describe('computed patient status model', () => {
         {
           userId: user.id,
           patientId: patient.id,
-          fieldName: 'firstName' as CoreIdentityOptions,
+          fieldName: 'firstName' as DataFlagOptions,
         },
         txn,
       );

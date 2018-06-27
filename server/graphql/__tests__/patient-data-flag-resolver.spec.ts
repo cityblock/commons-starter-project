@@ -1,9 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
-import { CoreIdentityOptions, UserRole } from 'schema';
-import { IPatientDataFlag } from 'schema';
-
+import { UserRole } from 'schema';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientDataFlag from '../../models/patient-data-flag';
@@ -36,54 +34,6 @@ describe('computed field resolver', () => {
 
   afterEach(async () => {
     await txn.rollback();
-  });
-
-  describe('resolve patient data flags for patient', () => {
-    it('returns an empty set when a patient has no patient data flags', async () => {
-      const { user, patient } = await setup(txn);
-      const query = `{ patientDataFlagsForPatient(patientId: "${patient.id}") { id } }`;
-      const result = await graphql(schema, query, null, {
-        permissions,
-        testTransaction: txn,
-        userId: user.id,
-      });
-
-      expect(cloneDeep(result.data!.patientDataFlagsForPatient)).toMatchObject([]);
-    });
-
-    it('returns all patient data flags for a patient', async () => {
-      const { user, patient } = await setup(txn);
-      const patientDataFlag1 = await PatientDataFlag.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          fieldName: 'firstName' as CoreIdentityOptions,
-          suggestedValue: 'Darth',
-        },
-        txn,
-      );
-      const patientDataFlag2 = await PatientDataFlag.create(
-        {
-          patientId: patient.id,
-          userId: user.id,
-          fieldName: 'lastName' as CoreIdentityOptions,
-          suggestedValue: 'Vader',
-        },
-        txn,
-      );
-      const query = `{ patientDataFlagsForPatient(patientId: "${patient.id}") { id } }`;
-      const result = await graphql(schema, query, null, {
-        permissions,
-        testTransaction: txn,
-        userId: user.id,
-      });
-      const patientDataFlagsForPatientIds = cloneDeep(result.data!.patientDataFlagsForPatient).map(
-        (patientDataFlag: IPatientDataFlag) => patientDataFlag.id,
-      );
-      expect(patientDataFlagsForPatientIds.length).toEqual(2);
-      expect(patientDataFlagsForPatientIds).toContain(patientDataFlag1.id);
-      expect(patientDataFlagsForPatientIds).toContain(patientDataFlag2.id);
-    });
   });
 
   describe('patient data flag create', () => {

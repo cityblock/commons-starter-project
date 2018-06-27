@@ -1,4 +1,3 @@
-import { values } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import patientComputedPatientStatusGraphql from '../../graphql/queries/get-patient-computed-patient-status.graphql';
@@ -6,7 +5,7 @@ import patientFlagCreateGraphql from '../../graphql/queries/patient-data-flag-cr
 import {
   patientDataFlagCreate,
   patientDataFlagCreateVariables,
-  CoreIdentityOptions,
+  DataFlagOptions,
 } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
@@ -22,6 +21,8 @@ interface IProps {
   onSaved: (flag: patientDataFlagCreate['patientDataFlagCreate']) => void;
   isVisible: boolean;
   patientId: string;
+  flagOptions: DataFlagOptions[];
+  prefix: string;
 }
 
 interface ICreateFlagOptions {
@@ -35,7 +36,7 @@ interface IGraphqlProps {
 type allProps = IProps & IGraphqlProps;
 
 interface IState {
-  fieldName: CoreIdentityOptions | null;
+  fieldName: DataFlagOptions | null;
   suggestedValue: string;
   notes: string;
   saveError?: string | null;
@@ -97,6 +98,7 @@ export class FlaggingModal extends React.Component<allProps, IState> {
   };
 
   renderBody() {
+    const { flagOptions, prefix } = this.props;
     const { fieldName, suggestedValue, notes } = this.state;
 
     return (
@@ -105,9 +107,9 @@ export class FlaggingModal extends React.Component<allProps, IState> {
           <FormLabel messageId="flaggingModal.fieldName" />
           <Select
             name="fieldName"
-            prefix="coreIdentity"
+            prefix={prefix}
             hasPlaceholder={true}
-            options={values(CoreIdentityOptions)}
+            options={flagOptions}
             value={fieldName || ''}
             onChange={this.handleChange}
             large={true}

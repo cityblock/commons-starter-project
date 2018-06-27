@@ -241,6 +241,7 @@ export default class Patient extends Model {
           from: 'patient_data_flag.patientId',
           to: 'patient.id',
         },
+        modify: builder => builder.where({ deletedAt: null }),
       },
 
       computedPatientStatus: {

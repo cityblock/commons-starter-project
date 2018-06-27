@@ -119,7 +119,10 @@ export default class ComputedPatientStatus extends BaseModel {
     const patient = await Patient.get(patientId, txn);
     const { patientInfo } = patient;
     const { hasHealthcareProxy, hasMolst, hasDeclinedPhotoUpload, hasUploadedPhoto } = patientInfo;
-    const patientDataFlags = await PatientDataFlag.getAllForPatient(patientId, txn);
+    const patientCoreIdentityDataFlags = await PatientDataFlag.getAllCoreIdentityForPatient(
+      patientId,
+      txn,
+    );
     const patientEmergencyContacts = await PatientContact.getEmergencyContactsForPatient(
       patientId,
       txn,
@@ -129,7 +132,7 @@ export default class ComputedPatientStatus extends BaseModel {
 
     const isCoreIdentityVerified =
       (!!patient.coreIdentityVerifiedAt && !!patient.coreIdentityVerifiedById) ||
-      patientDataFlags.length > 0;
+      patientCoreIdentityDataFlags.length > 0;
     const isDemographicInfoUpdated = !!patientInfo.updatedAt;
     const isEmergencyContactAdded = !!patientEmergencyContacts.length;
     const isAdvancedDirectivesAdded = await this.getAdvancedDirectivesStatus(

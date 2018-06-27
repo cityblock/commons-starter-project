@@ -1,5 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import { CoreIdentityOptions } from 'schema';
+import { DataFlagOptions } from 'schema';
 import BaseModel from './base-model';
 import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
@@ -8,10 +8,32 @@ import User from './user';
 interface IPatientDataFlagCreateFields {
   patientId: string;
   userId: string;
-  fieldName: CoreIdentityOptions;
+  fieldName: DataFlagOptions;
   suggestedValue?: string;
   notes?: string;
 }
+
+const CoreIdentityOptions = [
+  'firstName',
+  'middleName',
+  'lastName',
+  'dateOfBirth',
+  'cityblockId',
+  'ssn',
+  'nmi',
+  'mrn',
+];
+
+const fieldNameEnum = [
+  ...CoreIdentityOptions,
+  'productDescription',
+  'lineOfBusiness',
+  'medicaidPremiumGroup',
+  'pcpName',
+  'pcpAddress',
+  'pcpPractice',
+  'pcpPhone',
+];
 
 /* tslint:disable:member-ordering */
 export default class PatientDataFlag extends BaseModel {
@@ -19,7 +41,7 @@ export default class PatientDataFlag extends BaseModel {
   patient!: Patient;
   userId!: string;
   user!: User;
-  fieldName!: CoreIdentityOptions;
+  fieldName!: DataFlagOptions;
   suggestedValue!: string;
   notes!: string;
 
@@ -33,7 +55,7 @@ export default class PatientDataFlag extends BaseModel {
       id: { type: 'string' },
       patientId: { type: 'string', minLength: 1 },
       userId: { type: 'string', minLength: 1 },
-      fieldName: { type: 'string', enum: ['firstName', 'middleName', 'lastName', 'dateOfBirth'] },
+      fieldName: { type: 'string', enum: fieldNameEnum },
       suggestedValue: { type: 'string' },
       notes: { type: 'string' },
       deletedAt: { type: 'string' },
@@ -71,7 +93,7 @@ export default class PatientDataFlag extends BaseModel {
   ): Promise<PatientDataFlag> {
     // First, mark any existing tags for the same field as deleted
     await this.query(txn)
-      .where({ fieldName: input.fieldName, deletedAt: null })
+      .where({ fieldName: input.fieldName, patientId: input.patientId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
     // Then, insert and return a new flag
@@ -103,6 +125,15 @@ export default class PatientDataFlag extends BaseModel {
     return this.query(txn)
       .where({ patientId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
+  }
+
+  static async getAllCoreIdentityForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<PatientDataFlag[]> {
+    return this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .whereIn('fieldName', CoreIdentityOptions);
   }
 }
 /* tslint:enable:member-ordering */

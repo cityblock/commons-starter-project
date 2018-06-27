@@ -124,10 +124,7 @@ import {
   resolveHealthcareProxiesForPatient,
   resolvePatientContactsForPatient,
 } from './patient-contact-resolver';
-import {
-  patientDataFlagCreate,
-  resolvePatientDataFlagsForPatient,
-} from './patient-data-flag-resolver';
+import { patientDataFlagCreate } from './patient-data-flag-resolver';
 import {
   patientDocumentCreate,
   patientDocumentDelete,
@@ -458,7 +455,6 @@ const resolveFunctions = {
     CBOs: resolveCBOs,
     CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
-    patientDataFlagsForPatient: resolvePatientDataFlagsForPatient,
     patientGlassBreaksForUser: resolvePatientGlassBreaksForUser,
     progressNoteGlassBreaksForUser: resolveProgressNoteGlassBreaksForUser,
     patientGlassBreakCheck: resolvePatientGlassBreakCheck,

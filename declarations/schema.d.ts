@@ -546,11 +546,6 @@ declare module 'schema' {
     CBOsForCategory: Array<ICBO>;
 
     /**
-     * patient data flags for a patient
-     */
-    patientDataFlagsForPatient: Array<IPatientDataFlag>;
-
-    /**
      * patient glass breaks for user during current session
      */
     patientGlassBreaksForUser: Array<IPatientGlassBreak>;
@@ -1082,10 +1077,6 @@ declare module 'schema' {
     categoryId: string;
   }
 
-  interface IPatientDataFlagsForPatientOnRootQueryTypeArguments {
-    patientId: string;
-  }
-
   interface IPatientGlassBreakCheckOnRootQueryTypeArguments {
     patientId: string;
   }
@@ -1497,17 +1488,28 @@ declare module 'schema' {
     id: string;
     patientId: string;
     userId: string;
-    fieldName: CoreIdentityOptions;
+    fieldName: DataFlagOptions;
     suggestedValue: string | null;
     notes: string | null;
     updatedAt: string | null;
   }
 
-  enum CoreIdentityOptions {
+  enum DataFlagOptions {
     firstName = 'firstName',
     middleName = 'middleName',
     lastName = 'lastName',
-    dateOfBirth = 'dateOfBirth'
+    dateOfBirth = 'dateOfBirth',
+    cityblockId = 'cityblockId',
+    ssn = 'ssn',
+    nmi = 'nmi',
+    mrn = 'mrn',
+    productDescription = 'productDescription',
+    lineOfBusiness = 'lineOfBusiness',
+    medicaidPremiumGroup = 'medicaidPremiumGroup',
+    pcpName = 'pcpName',
+    pcpAddress = 'pcpAddress',
+    pcpPractice = 'pcpPractice',
+    pcpPhone = 'pcpPhone'
   }
 
   /**
@@ -5371,7 +5373,7 @@ declare module 'schema' {
 
   interface IPatientDataFlagCreateInput {
     patientId: string;
-    fieldName: CoreIdentityOptions;
+    fieldName: DataFlagOptions;
     suggestedValue?: string | null;
     notes?: string | null;
   }

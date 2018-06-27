@@ -1,5 +1,5 @@
 import { transaction, Transaction } from 'objection';
-import { CoreIdentityOptions, Gender, PhoneTypeOptions, UserRole } from 'schema';
+import { DataFlagOptions, Gender, PhoneTypeOptions, UserRole } from 'schema';
 import uuid from 'uuid/v4';
 import { adminTasksConcernTitle } from '../../lib/consts';
 import {
@@ -517,7 +517,7 @@ describe('patient model', () => {
         txn,
       );
       await PatientDataFlag.create(
-        { patientId, userId: user.id, fieldName: 'firstName' as CoreIdentityOptions },
+        { patientId, userId: user.id, fieldName: 'firstName' as DataFlagOptions },
         txn,
       );
 

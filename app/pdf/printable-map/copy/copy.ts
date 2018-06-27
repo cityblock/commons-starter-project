@@ -10,7 +10,7 @@ export default {
   map: 'Member Action Plan',
   mapAbbrev: 'MAP:',
   mapInfo:
-    'This is your Member Action Plan from Cityblock Health. porta sem malesuada magna mollis euismod. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Maecenas sed diam eget risus varius blandit sit amet non magna. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.',
+    'This is your Member Action Plan (MAP) from Cityblock, your personalized health system. This is the central document that shows all of the health goals that you and your care team are working on. This document is meant to help you track your goals and hold yourself and your care team accountable to your action plan. Your MAP is structured around concerns, goals, and tasks.\n\nConcerns: Areas we’ve identified to work on together.\n\nGoals: Measurable aims for us to reach together.\n\nTasks: Concrete interventions that will help us achieve your goals together.',
   mapSummary: 'MAP Summary:',
   noAssignee: 'No assignee',
   noCarePlan: 'You currently have no active concerns',

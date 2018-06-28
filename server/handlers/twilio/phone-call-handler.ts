@@ -22,23 +22,12 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
   const { To } = twilioPayload;
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
-    const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
-
-    if (!user) {
-      twiml.say(
-        "We're sorry, we don't have a user with that phone number. Please call us for help",
-      );
-      reportError(
-        new Error(`no associated user with phone number: ${To}`),
-        'Error handling incoming call',
-        twilioPayload,
-      );
-
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      return res.end(twiml.toString());
-    }
-
     try {
+      const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
+
+      if (!user) {
+        throw new Error('No user with that phone number exists');
+      }
       if (!user.twilioSimId) {
         throw new Error(`User ${user.id} does not have Twilio SIM registered`);
       }
@@ -52,6 +41,8 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
       dial.sim(user.twilioSimId);
     } catch (err) {
       reportError(err, 'Error handling incoming call', twilioPayload);
+      res.sendStatus(500);
+      return;
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -68,20 +59,13 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
   const twilioSimId = From.substring(4);
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
-    const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
-
-    if (!user) {
-      reportError(
-        new Error(`no associated user with twilioSimId: ${twilioSimId}`),
-        'Error handling outgoing call',
-        twilioPayload,
-      );
-
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      return res.end(twiml.toString());
-    }
-
     try {
+      const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
+
+      if (!user) {
+        throw new Error(`No user associated with SIM ID ${twilioSimId}`);
+      }
+
       // add outbound parameter to complete endpoint as twilio classifies both calls as inbound
       const dial = twiml.dial({
         action: `${TWILIO_COMPLETE_ENDPOINT}?outbound=true`,
@@ -92,11 +76,13 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
       dial.number(To);
     } catch (err) {
       reportError(err, 'Error handling outgoing call', twilioPayload);
+      res.sendStatus(500);
+      return;
     }
-  });
 
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
-  res.end(twiml.toString());
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    res.end(twiml.toString());
+  });
 }
 
 export async function twilioCompleteCallHandler(req: express.Request, res: express.Response) {
@@ -107,11 +93,11 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
   const { To, From, DialCallStatus, DialCallDuration, CallSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
-    const user = isInbound
-      ? await User.getBy({ fieldName: 'phone', field: To }, txn)
-      : await User.getBy({ fieldName: 'twilioSimId', field: From.substring(4) }, txn);
-
     try {
+      const user = isInbound
+        ? await User.getBy({ fieldName: 'phone', field: To }, txn)
+        : await User.getBy({ fieldName: 'twilioSimId', field: From.substring(4) }, txn);
+
       if (!user) {
         throw new Error(
           `There is not user with the Twilio Phone Number: ${To} or Twilio SIM: ${From}`,
@@ -153,11 +139,13 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
       }
     } catch (err) {
       reportError(err, 'Error processing completed phone call', twilioPayload);
+      res.sendStatus(500);
+      return;
     }
-  });
 
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
-  return res.end(twiml.toString());
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    return res.end(twiml.toString());
+  });
 }
 
 const recordVoicemail = (twiml: any) => {

@@ -22,22 +22,17 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
   const { Body, From, To, MessageSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || SmsMessage.knex(), async txn => {
-    // figure out which Commons user is recipient of message
-    const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
-
-    if (!user) {
-      // TODO: handle (very unlikely) case when no user with that twilio number found'
-      twiml.message(
-        "We're sorry, we don't have a user with that phone number. Please call us for help",
-      );
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      return res.end(twiml.toString());
-    }
-
     try {
+      // figure out which Commons user is recipient of message
+      const user = await User.getBy({ fieldName: 'phone', field: To }, txn);
+
+      if (!user) {
+        throw new Error(`No user associated with phone number ${To}`);
+      }
       if (!user.twilioSimId) {
         throw new Error(`User ${user.id} does not have Twilio SIM registered`);
       }
+
       // relay the SMS message to the user
       twiml.message(
         {
@@ -74,6 +69,8 @@ export async function twilioIncomingSmsHandler(req: express.Request, res: expres
       }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);
+      res.sendStatus(500);
+      return;
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -88,16 +85,14 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
   const { Body, From, To, MessageSid } = twilioPayload;
 
   await transaction(res.locals.existingTxn || SmsMessage.knex(), async txn => {
-    // figure out which Commons user is sending message
-    const twilioSimId = From.split(SIM_PREFIX)[1]; // remove sim: from beginnign of ID
-    const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
-    if (!user) {
-      // TODO: handle (very unlikely) case when no user with that SIM ID found
-      res.writeHead(200, { 'Content-Type': 'text/xml' });
-      return res.end(twiml.toString());
-    }
-
     try {
+      // figure out which Commons user is sending message
+      const twilioSimId = From.split(SIM_PREFIX)[1]; // remove sim: from beginnign of ID
+      const user = await User.getBy({ fieldName: 'twilioSimId', field: twilioSimId }, txn);
+
+      if (!user) {
+        throw new Error(`No user associated with SIM ID ${twilioSimId}`);
+      }
       if (!user.phone) {
         throw new Error('User does not have phone number registered');
       }
@@ -157,6 +152,8 @@ export async function twilioOutgoingSmsHandler(req: express.Request, res: expres
       }
     } catch (err) {
       reportError(err, 'SMS failed to record', twilioPayload);
+      res.sendStatus(500);
+      return;
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });

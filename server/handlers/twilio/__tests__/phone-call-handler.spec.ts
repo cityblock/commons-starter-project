@@ -94,6 +94,26 @@ describe('Phone Call Handler', () => {
       expect(res.end).toHaveBeenCalledTimes(1);
       expect(res.end).toHaveBeenCalledWith(expectedIncomingTwiml);
     });
+
+    it('returns 500 if error with incoming phone call', async () => {
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      res.sendStatus = jest.fn();
+
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567777',
+          From: '+11234567890',
+          Direction: 'inbound',
+        },
+      });
+
+      await twilioIncomingCallHandler(req, res);
+
+      expect(res.sendStatus).toBeCalledWith(500);
+      expect(res.end).not.toBeCalled();
+    });
   });
 
   describe('twilioOutgoingCallHandler', () => {
@@ -118,6 +138,25 @@ describe('Phone Call Handler', () => {
 
       expect(res.end).toHaveBeenCalledTimes(1);
       expect(res.end).toHaveBeenCalledWith(expectedOutgoingTwiml);
+    });
+
+    it('returns 500 if error with outgoing phone call', async () => {
+      const res = httpMocks.createResponse();
+      res.locals = { existingTxn: txn };
+      res.end = jest.fn();
+      res.sendStatus = jest.fn();
+
+      const req = httpMocks.createRequest({
+        body: {
+          To: '+11234567890',
+          From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        },
+      });
+
+      await twilioOutgoingCallHandler(req, res);
+
+      expect(res.sendStatus).toBeCalledWith(500);
+      expect(res.end).not.toBeCalled();
     });
   });
 
@@ -225,55 +264,6 @@ describe('Phone Call Handler', () => {
     });
   });
 
-  it('handles a complete outbound phone call', async () => {
-    const { user, patient, phone } = await setup(txn);
-    await User.update(
-      user.id,
-      { phone: '+11234567777', twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dBOGUS' },
-      txn,
-    );
-
-    const res = httpMocks.createResponse();
-    res.locals = { existingTxn: txn };
-    res.end = jest.fn();
-    const req = httpMocks.createRequest({
-      body: {
-        To: '+11234567890',
-        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
-        DialCallStatus: 'completed',
-        DialCallDuration: '11',
-        Direction: 'inbound',
-        CallSid: callSid,
-      },
-      query: { outbound: true },
-    });
-
-    await twilioCompleteCallHandler(req, res);
-
-    const phoneCalls = await PhoneCall.getForUserPatient(
-      { userId: user.id, patientId: patient.id },
-      { pageNumber: 0, pageSize: 5 },
-      txn,
-    );
-
-    expect(phoneCalls.total).toBe(1);
-    expect(phoneCalls.results[0]).toMatchObject({
-      userId: user.id,
-      patientId: patient.id,
-      contactNumber: phone.phoneNumber,
-      direction: 'fromUser' as SmsMessageDirection,
-      duration: 11,
-      callStatus: 'completed',
-      twilioPayload: req.body,
-      callSid,
-    });
-
-    expect(res.end).toHaveBeenCalledTimes(1);
-    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
-
-    expect(queue.testMode.jobs.length).toBe(0);
-  });
-
   it('handles a complete outbound phone call not associated with past patient number', async () => {
     const { user } = await setup(txn);
     await User.update(
@@ -306,5 +296,29 @@ describe('Phone Call Handler', () => {
       userId: user.id,
       contactNumber: '+11234522222',
     });
+  });
+
+  it('returns 500 if error handling completed call', async () => {
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    res.sendStatus = jest.fn();
+
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234522222',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        DialCallStatus: 'completed',
+        DialCallDuration: '11',
+        Direction: 'inbound',
+        CallSid: callSid,
+      },
+      query: { outbound: true },
+    });
+
+    await twilioCompleteCallHandler(req, res);
+
+    expect(res.sendStatus).toBeCalledWith(500);
+    expect(res.end).not.toBeCalled();
   });
 });

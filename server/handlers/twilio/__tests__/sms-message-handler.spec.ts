@@ -128,6 +128,27 @@ describe('SMS Message Handler', () => {
     expect(res.end).toHaveBeenCalledWith(expectedIncomingTwiml);
   });
 
+  it('returns 500 if error with incoming SMS', async () => {
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    res.sendStatus = jest.fn();
+
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234567777',
+        From: '+11234567890',
+        Body: 'Winter is coming.',
+        MessageSid: messageSid,
+      },
+    });
+
+    await twilioIncomingSmsHandler(req, res);
+
+    expect(res.sendStatus).toBeCalledWith(500);
+    expect(res.end).not.toBeCalled();
+  });
+
   it('does not enqueue after hours job if message not from patient', async () => {
     const { user } = await setup(txn);
     await User.update(
@@ -274,6 +295,27 @@ describe('SMS Message Handler', () => {
       patientId: patient.id,
       type: 'smsMessage',
     });
+  });
+
+  it('returns 500 if error with outgoing SMS', async () => {
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    res.sendStatus = jest.fn();
+
+    const req = httpMocks.createRequest({
+      body: {
+        To: '+11234562222',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        Body: 'Winter is here.',
+        MessageSid: messageSid,
+      },
+    });
+
+    await twilioOutgoingSmsHandler(req, res);
+
+    expect(res.sendStatus).toBeCalledWith(500);
+    expect(res.end).not.toBeCalled();
   });
 
   it('handles an outgoing SMS not associated with patient', async () => {

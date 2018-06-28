@@ -113,13 +113,13 @@ export class Header extends React.Component<allProps> {
     );
 
     const zendeskLink = (
-      <Link
-        to={'https://cityblock.zendesk.com/hc/en-us/requests/new'}
+      <a
+        href={'https://docs.google.com/forms/d/1YlkoXSqqDLdNSr3Cf1YRMgXT2IeRyH15-y02xTCjboY'}
         target="_blank"
         className={styles.zendeskIconContainer}
       >
         <Icon className={styles.zendeskIcon} name="help" color="white" />
-      </Link>
+      </a>
     );
 
     return (

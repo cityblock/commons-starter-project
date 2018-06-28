@@ -93,8 +93,7 @@ exports[`renders header 1`] = `
     >
       <a
         className="zendeskIconContainer"
-        href="https://cityblock.zendesk.com/hc/en-us/requests/new"
-        onClick={[Function]}
+        href="https://docs.google.com/forms/d/1YlkoXSqqDLdNSr3Cf1YRMgXT2IeRyH15-y02xTCjboY"
         target="_blank"
       >
         <svg

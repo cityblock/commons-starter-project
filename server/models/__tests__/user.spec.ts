@@ -37,27 +37,27 @@ describe('user model', () => {
     expect(userHours).toMatchObject([
       {
         weekday: 1,
-        timeRange: '[800,1801)',
+        timeRange: '[800,1601)',
         userId: user.id,
       },
       {
         weekday: 2,
-        timeRange: '[800,1801)',
+        timeRange: '[800,1601)',
         userId: user.id,
       },
       {
         weekday: 3,
-        timeRange: '[800,1801)',
+        timeRange: '[800,1601)',
         userId: user.id,
       },
       {
         weekday: 4,
-        timeRange: '[800,1801)',
+        timeRange: '[800,1601)',
         userId: user.id,
       },
       {
         weekday: 5,
-        timeRange: '[800,1801)',
+        timeRange: '[800,1601)',
         userId: user.id,
       },
     ]);

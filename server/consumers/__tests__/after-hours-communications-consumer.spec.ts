@@ -151,7 +151,7 @@ describe('After Hours Communications Consumer', () => {
     it('does nothing if user currently working', async () => {
       const { user, phone } = await setup(txn);
 
-      const date = new Date('2018-06-12T21:17:12.026Z');
+      const date = new Date('2018-06-12T19:17:12.026Z');
 
       await processAfterHoursCommunications(
         {

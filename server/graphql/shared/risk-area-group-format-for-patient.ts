@@ -123,64 +123,77 @@ export const calculateRisk = (
 export const formatRiskAreaGroupForPatient = (
   riskAreaGroup: RiskAreaGroup,
 ): IFullRiskAreaGroupForPatient => {
-  let totalScore: number = 0;
-  let forceHighRisk = false;
   let automatedSummaryText: string[] = [];
   let manualSummaryText: string[] = [];
   const screeningToolResultSummaries: IScreeningToolResultSummary[] = [];
-  let lastUpdated: string | null = null;
+  let riskAreaGroupLastUpdated: string | null = null;
 
   const riskAreas = riskAreaGroup.riskAreas.map(riskArea => {
     const isAutomated = riskArea.assessmentType === 'automated';
     const summaryText = isAutomated ? automatedSummaryText : manualSummaryText;
     const riskAreaSummaryStats = calculateRiskAreaSummaryStats(riskArea, {
-      lastUpdated,
-      totalScore,
-      forceHighRisk,
+      lastUpdated: null,
+      totalScore: 0,
+      forceHighRisk: false,
       summaryText,
       screeningToolResultSummaries,
     });
 
-    totalScore += riskAreaSummaryStats.totalScore ? riskAreaSummaryStats.totalScore : 0;
-    // ensure we don't mark forceHighRiskFalse
-    forceHighRisk = riskAreaSummaryStats.forceHighRisk ? true : false;
-    screeningToolResultSummaries.concat(riskAreaSummaryStats.screeningToolResultSummaries || []);
-
-    lastUpdated =
+    // Update the risk area group last updated
+    riskAreaGroupLastUpdated =
       riskAreaSummaryStats.lastUpdated &&
-      isAfter(riskAreaSummaryStats.lastUpdated, lastUpdated || new Date(0))
+      isAfter(riskAreaSummaryStats.lastUpdated, riskAreaGroupLastUpdated || new Date(0))
         ? riskAreaSummaryStats.lastUpdated
-        : lastUpdated;
+        : riskAreaGroupLastUpdated;
 
+    // Add manual / automated summaries
     if (isAutomated) {
       automatedSummaryText = riskAreaSummaryStats.summaryText;
     } else {
       manualSummaryText = riskAreaSummaryStats.summaryText;
     }
-    const riskAreaRiskScore = calculateRisk(
-      {
-        totalScore: riskAreaSummaryStats.totalScore,
-        forceHighRisk: riskAreaSummaryStats.forceHighRisk,
-      },
-      riskArea.mediumRiskThreshold,
-      riskArea.highRiskThreshold,
-    );
+    // Add screeningToolSummaries
+    screeningToolResultSummaries.concat(riskAreaSummaryStats.screeningToolResultSummaries || []);
+
+    const riskAreaRiskScore = riskAreaSummaryStats.lastUpdated
+      ? calculateRisk(
+          {
+            totalScore: riskAreaSummaryStats.totalScore,
+            forceHighRisk: riskAreaSummaryStats.forceHighRisk,
+          },
+          riskArea.mediumRiskThreshold,
+          riskArea.highRiskThreshold,
+        )
+      : null;
     return {
       ...riskArea,
-      lastUpdated,
-      forceHighRisk,
+      lastUpdated: riskAreaSummaryStats.lastUpdated,
+      forceHighRisk: riskAreaSummaryStats.forceHighRisk,
+      totalScore: riskAreaSummaryStats.totalScore,
       screeningToolResultSummaries,
       summaryText: automatedSummaryText || manualSummaryText,
-      totalScore,
       riskScore: riskAreaRiskScore,
     };
   });
 
-  const riskScore = calculateRisk(
-    { totalScore: totalScore > 0 ? totalScore : null, forceHighRisk },
-    riskAreaGroup.mediumRiskThreshold,
-    riskAreaGroup.highRiskThreshold,
-  );
+  const riskAreaGroupTotalScore = riskAreas
+    .map(a => (a.totalScore && a.totalScore > 0 ? a.totalScore : 0))
+    .reduce((a, currentValue) => a + currentValue);
+
+  const riskAreaGroupForceHighRisk = riskAreas
+    .map(a => a.forceHighRisk)
+    .reduce((a, currentValue) => (a ? true : currentValue));
+
+  const riskScore = riskAreaGroupLastUpdated
+    ? calculateRisk(
+        {
+          totalScore: riskAreaGroupTotalScore > 0 ? riskAreaGroupTotalScore : null,
+          forceHighRisk: riskAreaGroupForceHighRisk,
+        },
+        riskAreaGroup.mediumRiskThreshold,
+        riskAreaGroup.highRiskThreshold,
+      )
+    : null;
 
   return {
     ...riskAreaGroup,
@@ -188,9 +201,9 @@ export const formatRiskAreaGroupForPatient = (
     automatedSummaryText,
     manualSummaryText,
     screeningToolResultSummaries,
-    lastUpdated,
-    totalScore: totalScore > 0 ? totalScore : null,
-    forceHighRisk,
+    lastUpdated: riskAreaGroupLastUpdated,
+    totalScore: riskAreaGroupTotalScore > 0 ? riskAreaGroupTotalScore : null,
+    forceHighRisk: riskAreaGroupForceHighRisk,
     riskScore,
   };
 };

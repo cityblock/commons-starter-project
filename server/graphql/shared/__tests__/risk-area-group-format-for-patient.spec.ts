@@ -391,6 +391,18 @@ describe('risk area group format', () => {
         txn,
       );
 
+      await RiskArea.create(
+        {
+          title: 'Automated Risk Area number 2',
+          riskAreaGroupId: riskAreaGroup.id,
+          assessmentType: 'automated' as any,
+          order: 2,
+          mediumRiskThreshold: 3,
+          highRiskThreshold: 4,
+        },
+        txn,
+      );
+
       const computedField = await ComputedField.create(
         {
           label: 'Computed Field',
@@ -418,6 +430,7 @@ describe('risk area group format', () => {
           displayValue: 'Answer',
           value: 'answer',
           valueType: 'boolean' as AnswerValueTypeOptions,
+          riskAdjustmentType: 'increment' as RiskAdjustmentTypeOptions,
           order: 1,
           summaryText: 'automated summary',
           inSummary: true,
@@ -541,10 +554,19 @@ describe('risk area group format', () => {
       ]);
       expect(result.manualSummaryText).toEqual(['omg summary']);
       expect(result.automatedSummaryText).toEqual(['automated summary']);
+      expect(result.forceHighRisk).toBeTruthy();
       expect(result.lastUpdated).not.toBeFalsy();
-      expect(result.riskAreas).toHaveLength(2);
+      expect(result.riskAreas).toHaveLength(3);
+
       expect(result.riskAreas[0].lastUpdated).not.toBeFalsy();
+      expect(result.riskAreas[0].riskScore).toBe('high');
+      expect(result.riskAreas[0].forceHighRisk).toBeTruthy();
       expect(result.riskAreas[1].lastUpdated).not.toBeFalsy();
+      expect(result.riskAreas[1].riskScore).toBe('low');
+      expect(result.riskAreas[1].forceHighRisk).toBeFalsy();
+      expect(result.riskAreas[2].lastUpdated).toBeFalsy();
+      expect(result.riskAreas[2].riskScore).toBeFalsy();
+      expect(result.riskAreas[2].forceHighRisk).toBeFalsy();
     });
   });
 });

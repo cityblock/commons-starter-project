@@ -35,7 +35,7 @@ export const DomainAssessment: React.StatelessComponent<IProps> = (props: IProps
   const datesStyles = classNames(styles.dates, {
     [styles.alignEnd]: !assessmentDetailView,
   });
-  const notCompleted = !riskArea.totalScore && !riskArea.forceHighRisk;
+  const notCompleted = !riskArea.lastUpdated;
 
   let formattedSummaryText = null;
   if (!assessmentDetailView && notCompleted) {

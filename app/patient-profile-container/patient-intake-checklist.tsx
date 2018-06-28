@@ -53,7 +53,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
       isDemographicInfoUpdated,
       isEmergencyContactAdded,
       isAdvancedDirectivesAdded,
-      isConsentSigned,
+      isFullConsentSigned,
       isPhotoAddedOrDeclined,
     } = computedPatientStatus;
 
@@ -62,7 +62,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
       isDemographicInfoUpdated &&
       isEmergencyContactAdded &&
       isAdvancedDirectivesAdded &&
-      isConsentSigned &&
+      isFullConsentSigned &&
       isPhotoAddedOrDeclined
     );
   }
@@ -79,7 +79,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
       isDemographicInfoUpdated,
       isEmergencyContactAdded,
       isAdvancedDirectivesAdded,
-      isConsentSigned,
+      isFullConsentSigned,
       isPhotoAddedOrDeclined,
     } = computedPatientStatus;
 
@@ -88,7 +88,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
       isDemographicInfoUpdated,
       isEmergencyContactAdded,
       isAdvancedDirectivesAdded,
-      isConsentSigned,
+      isFullConsentSigned,
       isPhotoAddedOrDeclined,
     ];
 
@@ -109,7 +109,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
       isDemographicInfoUpdated,
       isEmergencyContactAdded,
       isAdvancedDirectivesAdded,
-      isConsentSigned,
+      isFullConsentSigned,
       isPhotoAddedOrDeclined,
     } = computedPatientStatus;
 
@@ -148,7 +148,7 @@ export class PatientIntakeChecklist extends React.Component<allProps, IState> {
           onClick={this.onChecklistItemClick}
         />
         <PatientIntakeChecklistItem
-          isCompleted={isConsentSigned}
+          isCompleted={isFullConsentSigned}
           labelId="patientIntakeChecklist.consentSignedLabel"
           subtextId="patientIntakeChecklist.consentSignedSubtext"
           buttonTextId="patientIntakeChecklist.consentSignedButton"

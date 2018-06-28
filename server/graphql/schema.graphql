@@ -587,7 +587,8 @@ type ComputedPatientStatus implements uniqueId {
   isDemographicInfoUpdated: Boolean!
   isEmergencyContactAdded: Boolean!
   isAdvancedDirectivesAdded: Boolean!
-  isConsentSigned: Boolean!
+  isCoreConsentSigned: Boolean!
+  isFullConsentSigned: Boolean!
   isPhotoAddedOrDeclined: Boolean!
   isIneligible: Boolean!
   isDisenrolled: Boolean!

@@ -6,7 +6,8 @@ fragment FullComputedPatientStatus on ComputedPatientStatus {
   isDemographicInfoUpdated
   isEmergencyContactAdded
   isAdvancedDirectivesAdded
-  isConsentSigned
+  isCoreConsentSigned
+  isFullConsentSigned
   isPhotoAddedOrDeclined
   isIneligible
   isDisenrolled

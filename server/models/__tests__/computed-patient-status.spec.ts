@@ -294,7 +294,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: false,
         isEmergencyContactAdded: false,
         isAdvancedDirectivesAdded: false,
-        isConsentSigned: false,
+        isCoreConsentSigned: false,
+        isFullConsentSigned: false,
         isPhotoAddedOrDeclined: false,
         hasProgressNote: false,
         hasChp: false,
@@ -315,7 +316,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: false,
         isEmergencyContactAdded: false,
         isAdvancedDirectivesAdded: false,
-        isConsentSigned: false,
+        isCoreConsentSigned: false,
+        isFullConsentSigned: false,
         isPhotoAddedOrDeclined: false,
         hasProgressNote: false,
         hasChp: true,
@@ -337,7 +339,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: true,
         isEmergencyContactAdded: true,
         isAdvancedDirectivesAdded: true,
-        isConsentSigned: false,
+        isCoreConsentSigned: false,
+        isFullConsentSigned: false,
         isPhotoAddedOrDeclined: false,
         hasProgressNote: true,
         hasChp: true,
@@ -358,7 +361,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: true,
         isEmergencyContactAdded: true,
         isAdvancedDirectivesAdded: true,
-        isConsentSigned: true,
+        isCoreConsentSigned: true,
+        isFullConsentSigned: false,
         isPhotoAddedOrDeclined: true,
         hasProgressNote: true,
         hasChp: true,
@@ -379,7 +383,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: true,
         isEmergencyContactAdded: true,
         isAdvancedDirectivesAdded: true,
-        isConsentSigned: true,
+        isCoreConsentSigned: true,
+        isFullConsentSigned: false,
         isPhotoAddedOrDeclined: true,
         hasProgressNote: true,
         hasChp: true,
@@ -400,7 +405,8 @@ describe('computed patient status model', () => {
         isDemographicInfoUpdated: true,
         isEmergencyContactAdded: true,
         isAdvancedDirectivesAdded: true,
-        isConsentSigned: true,
+        isCoreConsentSigned: true,
+        isFullConsentSigned: true,
         isPhotoAddedOrDeclined: true,
         hasProgressNote: true,
         hasChp: true,
@@ -484,11 +490,11 @@ describe('computed patient status model', () => {
     expect(refetchedComputedPatientStatus!.isDemographicInfoUpdated).toEqual(true);
   });
 
-  it('correctly calculates isConsentSigned', async () => {
+  it('correctly calculates isCoreConsentSigned and isFullConsentSigned', async () => {
     const { user, patient } = await setup(txn);
     const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-    expect(computedPatientStatus!.isConsentSigned).toEqual(false);
+    expect(computedPatientStatus!.isCoreConsentSigned).toEqual(false);
 
     await PatientDocument.create(
       {
@@ -512,12 +518,54 @@ describe('computed patient status model', () => {
     );
 
     await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
-    const refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(
-      patient.id,
+    let refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+    expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(true);
+    expect(refetchedComputedPatientStatus!.isFullConsentSigned).toEqual(false);
+
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test2.txt',
+        description: 'some file for consent',
+        documentType: 'textConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        description: 'some file for consent',
+        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+      },
       txn,
     );
 
-    expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+    refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+    expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(true);
+    expect(refetchedComputedPatientStatus!.isFullConsentSigned).toEqual(false);
+
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test5.txt',
+        description: 'some file for consent',
+        documentType: 'phiSharingConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+    refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+    expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(true);
+    expect(refetchedComputedPatientStatus!.isFullConsentSigned).toEqual(true);
   });
 
   it('correctly calculates isEmergencyContactAdded', async () => {

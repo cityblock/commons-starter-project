@@ -6,7 +6,7 @@ import { createMockClinic, createMockUser, createPatient } from '../../spec-help
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
-import PatientDocument from '../patient-document';
+import PatientDocument, { CORE_CONSENT_TYPES, FULL_CONSENT_TYPES } from '../patient-document';
 import User from '../user';
 
 const userRole = 'Pharmacist' as UserRole;
@@ -104,7 +104,7 @@ describe('patient document model', () => {
       const { patient, user } = await setup(txn);
       const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-      expect(computedPatientStatus!.isConsentSigned).toEqual(false);
+      expect(computedPatientStatus!.isCoreConsentSigned).toEqual(false);
 
       await PatientDocument.create(
         {
@@ -140,7 +140,7 @@ describe('patient document model', () => {
         txn,
       );
 
-      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
+      expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(false);
 
       await PatientDocument.create(
         {
@@ -185,7 +185,7 @@ describe('patient document model', () => {
 
       refetchedComputedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(true);
+      expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(true);
     });
   });
 
@@ -242,7 +242,7 @@ describe('patient document model', () => {
       );
       const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
-      expect(computedPatientStatus!.isConsentSigned).toEqual(true);
+      expect(computedPatientStatus!.isCoreConsentSigned).toEqual(true);
 
       await PatientDocument.delete(consent.id, user.id, txn);
 
@@ -251,7 +251,7 @@ describe('patient document model', () => {
         txn,
       );
 
-      expect(refetchedComputedPatientStatus!.isConsentSigned).toEqual(false);
+      expect(refetchedComputedPatientStatus!.isCoreConsentSigned).toEqual(false);
     });
   });
 
@@ -299,7 +299,11 @@ describe('patient document model', () => {
   it('should get all consent documents for a patient', async () => {
     const { patient, user } = await setup(txn);
 
-    const documents = await PatientDocument.getCoreConsentsForPatient(patient.id, txn);
+    const documents = await PatientDocument.getConsentsForPatient(
+      patient.id,
+      CORE_CONSENT_TYPES,
+      txn,
+    );
     expect(documents.length).toEqual(0);
 
     const document = await PatientDocument.create(
@@ -311,13 +315,22 @@ describe('patient document model', () => {
       },
       txn,
     );
-    let refetchedPatientDocuments = await PatientDocument.getCoreConsentsForPatient(
+
+    let refetchedCorePatientDocuments = await PatientDocument.getConsentsForPatient(
       patient.id,
+      CORE_CONSENT_TYPES,
       txn,
     );
+    expect(refetchedCorePatientDocuments.length).toEqual(1);
+    expect(refetchedCorePatientDocuments[0]).toMatchObject(document);
 
-    expect(refetchedPatientDocuments.length).toEqual(1);
-    expect(refetchedPatientDocuments[0]).toMatchObject(document);
+    let refetchedFullPatientDocuments = await PatientDocument.getConsentsForPatient(
+      patient.id,
+      FULL_CONSENT_TYPES,
+      txn,
+    );
+    expect(refetchedFullPatientDocuments.length).toEqual(1);
+    expect(refetchedFullPatientDocuments[0]).toMatchObject(document);
 
     await PatientDocument.create(
       {
@@ -366,8 +379,20 @@ describe('patient document model', () => {
       txn,
     );
 
-    refetchedPatientDocuments = await PatientDocument.getCoreConsentsForPatient(patient.id, txn);
-    expect(refetchedPatientDocuments.length).toEqual(2);
+    refetchedCorePatientDocuments = await PatientDocument.getConsentsForPatient(
+      patient.id,
+      CORE_CONSENT_TYPES,
+      txn,
+    );
+    expect(refetchedCorePatientDocuments.length).toEqual(2);
+
+    refetchedFullPatientDocuments = await PatientDocument.getConsentsForPatient(
+      patient.id,
+      FULL_CONSENT_TYPES,
+      txn,
+    );
+    expect(refetchedFullPatientDocuments.length).toEqual(4);
+    expect(refetchedFullPatientDocuments[0]).toMatchObject(document);
   });
 
   it('should get all hcp documents for a patient', async () => {

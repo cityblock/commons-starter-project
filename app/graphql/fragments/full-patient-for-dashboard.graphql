@@ -18,7 +18,7 @@ fragment FullPatientForDashboard on PatientForDashboard {
     isDemographicInfoUpdated
     isEmergencyContactAdded
     isAdvancedDirectivesAdded
-    isConsentSigned
+    isFullConsentSigned
     isPhotoAddedOrDeclined
   }
 }

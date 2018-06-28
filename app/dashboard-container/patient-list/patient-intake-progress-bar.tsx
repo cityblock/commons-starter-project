@@ -13,7 +13,7 @@ const PatientIntakeProgressBar: React.StatelessComponent<IProps> = (props: IProp
     isDemographicInfoUpdated,
     isEmergencyContactAdded,
     isAdvancedDirectivesAdded,
-    isConsentSigned,
+    isFullConsentSigned,
     isPhotoAddedOrDeclined,
   } = props.computedPatientStatus;
 
@@ -23,7 +23,7 @@ const PatientIntakeProgressBar: React.StatelessComponent<IProps> = (props: IProp
       <div className={classNames(styles.box, { [styles.purple]: isDemographicInfoUpdated })} />
       <div className={classNames(styles.box, { [styles.purple]: isEmergencyContactAdded })} />
       <div className={classNames(styles.box, { [styles.purple]: isAdvancedDirectivesAdded })} />
-      <div className={classNames(styles.box, { [styles.purple]: isConsentSigned })} />
+      <div className={classNames(styles.box, { [styles.purple]: isFullConsentSigned })} />
       <div className={classNames(styles.box, { [styles.purple]: isPhotoAddedOrDeclined })} />
     </div>
   );

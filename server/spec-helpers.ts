@@ -958,6 +958,36 @@ export async function setupPatientsWithIntakeInProgress(txn: Transaction) {
     },
     txn,
   );
+  await PatientDocument.create(
+    {
+      patientId: patient2.id,
+      uploadedById: user.id,
+      filename: 'test2.txt',
+      description: 'some file for consent',
+      documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+    },
+    txn,
+  );
+  await PatientDocument.create(
+    {
+      patientId: patient2.id,
+      uploadedById: user.id,
+      filename: 'test3.txt',
+      description: 'some file for consent',
+      documentType: 'textConsent' as DocumentTypeOptions,
+    },
+    txn,
+  );
+  await PatientDocument.create(
+    {
+      patientId: patient2.id,
+      uploadedById: user.id,
+      filename: 'test3.txt',
+      description: 'some file for consent',
+      documentType: 'phiSharingConsent' as DocumentTypeOptions,
+    },
+    txn,
+  );
   await ComputedPatientStatus.updateForPatient(patient2.id, user.id, txn);
 
   // partially complete checklist for patient 3

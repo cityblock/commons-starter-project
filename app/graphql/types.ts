@@ -3438,7 +3438,8 @@ export interface getPatientComputedPatientStatus_patientComputedPatientStatus {
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isCoreConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
@@ -4861,7 +4862,7 @@ export interface getPatientsForComputedList_patientsForComputedList_edges_node_c
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -4924,7 +4925,7 @@ export interface getPatientsNewToCareTeam_patientsNewToCareTeam_edges_node_compu
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -4986,7 +4987,7 @@ export interface getPatientsWithAssignedState_patientsWithAssignedState_edges_no
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5048,7 +5049,7 @@ export interface getPatientsWithIntakeInProgress_patientsWithIntakeInProgress_ed
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5110,7 +5111,7 @@ export interface getPatientsWithMissingInfo_patientsWithMissingInfo_edges_node_c
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5172,7 +5173,7 @@ export interface getPatientsWithNoRecentEngagement_patientsWithNoRecentEngagemen
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5234,7 +5235,7 @@ export interface getPatientsWithOpenCBOReferrals_patientsWithOpenCBOReferrals_ed
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5296,7 +5297,7 @@ export interface getPatientsWithOutOfDateMAP_patientsWithOutOfDateMAP_edges_node
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5358,7 +5359,7 @@ export interface getPatientsWithPendingSuggestions_patientsWithPendingSuggestion
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5420,7 +5421,7 @@ export interface getPatientsWithRecentConversations_patientsWithRecentConversati
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -5482,7 +5483,7 @@ export interface getPatientsWithUrgentTasks_patientsWithUrgentTasks_edges_node_c
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 
@@ -15090,7 +15091,8 @@ export interface FullComputedPatientStatus {
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isCoreConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
   isIneligible: boolean;
   isDisenrolled: boolean;
@@ -16067,7 +16069,7 @@ export interface FullPatientForDashboard_computedPatientStatus {
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
 }
 

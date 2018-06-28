@@ -857,7 +857,7 @@ export default class Patient extends Model {
           OR "isDemographicInfoUpdated" IS NOT TRUE
           OR "isEmergencyContactAdded" IS NOT TRUE
           OR "isAdvancedDirectivesAdded" IS NOT TRUE
-          OR "isConsentSigned" IS NOT TRUE
+          OR "isFullConsentSigned" IS NOT TRUE
           OR "isPhotoAddedOrDeclined" IS NOT TRUE
         )
       `,

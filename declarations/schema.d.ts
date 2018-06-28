@@ -1523,7 +1523,8 @@ declare module 'schema' {
     isDemographicInfoUpdated: boolean;
     isEmergencyContactAdded: boolean;
     isAdvancedDirectivesAdded: boolean;
-    isConsentSigned: boolean;
+    isCoreConsentSigned: boolean;
+    isFullConsentSigned: boolean;
     isPhotoAddedOrDeclined: boolean;
     isIneligible: boolean;
     isDisenrolled: boolean;

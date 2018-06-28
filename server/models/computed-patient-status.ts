@@ -7,7 +7,7 @@ import Patient from './patient';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
 import PatientDisenrollment from './patient-disenrollment';
-import PatientDocument, { CORE_CONSENT_TYPES } from './patient-document';
+import PatientDocument, { CORE_CONSENT_TYPES, FULL_CONSENT_TYPES } from './patient-document';
 import PatientState from './patient-state';
 import ProgressNote from './progress-note';
 import User from './user';
@@ -17,7 +17,8 @@ export interface IComputedStatus {
   isDemographicInfoUpdated: boolean;
   isEmergencyContactAdded: boolean;
   isAdvancedDirectivesAdded: boolean;
-  isConsentSigned: boolean;
+  isCoreConsentSigned: boolean;
+  isFullConsentSigned: boolean;
   isPhotoAddedOrDeclined: boolean;
   hasProgressNote: boolean;
   hasCareTeam: boolean;
@@ -38,7 +39,8 @@ export default class ComputedPatientStatus extends BaseModel {
   isDemographicInfoUpdated!: boolean;
   isEmergencyContactAdded!: boolean;
   isAdvancedDirectivesAdded!: boolean;
-  isConsentSigned!: boolean;
+  isCoreConsentSigned!: boolean;
+  isFullConsentSigned!: boolean;
   isPhotoAddedOrDeclined!: boolean;
   hasProgressNote!: boolean;
   hasCareTeam!: boolean;
@@ -62,7 +64,8 @@ export default class ComputedPatientStatus extends BaseModel {
       isDemographicInfoUpdated: { type: 'boolean' },
       isEmergencyContactAdded: { type: 'boolean' },
       isAdvancedDirectivesAdded: { type: 'boolean' },
-      isConsentSigned: { type: 'boolean' },
+      isCoreConsentSigned: { type: 'boolean' },
+      isFullConsentSigned: { type: 'boolean' },
       isPhotoAddedOrDeclined: { type: 'boolean' },
       hasProgressNote: { type: 'boolean' },
       hasChp: { type: 'boolean' },
@@ -82,7 +85,8 @@ export default class ComputedPatientStatus extends BaseModel {
       'isDemographicInfoUpdated',
       'isEmergencyContactAdded',
       'isAdvancedDirectivesAdded',
-      'isConsentSigned',
+      'isCoreConsentSigned',
+      'isFullConsentSigned',
       'isPhotoAddedOrDeclined',
       'hasProgressNote',
       'hasCareTeam',
@@ -143,7 +147,16 @@ export default class ComputedPatientStatus extends BaseModel {
       hasMolst,
       txn,
     );
-    const isConsentSigned = await this.isCoreConsentSignedForPatient(patientId, txn);
+    const isCoreConsentSigned = await this.isConsentSignedForPatient(
+      patientId,
+      CORE_CONSENT_TYPES,
+      txn,
+    );
+    const isFullConsentSigned = await this.isConsentSignedForPatient(
+      patientId,
+      FULL_CONSENT_TYPES,
+      txn,
+    );
     const hasProgressNote = patientProgressNoteCount > 0;
     const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'Community_Health_Partner' as UserRole);
 
@@ -159,7 +172,8 @@ export default class ComputedPatientStatus extends BaseModel {
       isDemographicInfoUpdated,
       isEmergencyContactAdded,
       isAdvancedDirectivesAdded,
-      isConsentSigned,
+      isCoreConsentSigned,
+      isFullConsentSigned,
       isPhotoAddedOrDeclined,
       hasProgressNote,
       hasCareTeam,
@@ -177,19 +191,20 @@ export default class ComputedPatientStatus extends BaseModel {
     return !!user;
   }
 
-  static async isCoreConsentSignedForPatient(
+  static async isConsentSignedForPatient(
     patientId: string,
+    consentTypes: string[],
     txn: Transaction,
   ): Promise<boolean> {
     let isConsented = true;
-    const documents = await PatientDocument.getCoreConsentsForPatient(patientId, txn);
+    const documents = await PatientDocument.getConsentsForPatient(patientId, consentTypes, txn);
 
     // ignore text consent for now
-    if (!documents.length || documents.length < CORE_CONSENT_TYPES.length) {
+    if (!documents.length || documents.length < consentTypes.length) {
       return false;
     }
 
-    CORE_CONSENT_TYPES.forEach(consentType => {
+    consentTypes.forEach(consentType => {
       const document = find(documents, ['documentType', consentType]);
 
       if (!document) {
@@ -262,7 +277,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const isAssigned = computedStatus.hasCareTeam;
     const isInOutreach = isAssigned && computedStatus.hasProgressNote;
     const isConsented =
-      isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;
+      isInOutreach && computedStatus.isCoreConsentSigned && computedStatus.isCoreIdentityVerified;
     const isEnrolled = isConsented && computedStatus.hasPcp;
 
     if (computedStatus.isDisenrolled) {

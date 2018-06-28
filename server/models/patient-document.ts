@@ -111,14 +111,15 @@ export default class PatientDocument extends Model {
       .where({ patientId, deletedAt: null });
   }
 
-  static async getCoreConsentsForPatient(
+  static async getConsentsForPatient(
     patientId: string,
+    consentTypes: string[],
     txn: Transaction,
   ): Promise<PatientDocument[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, deletedAt: null })
-      .whereIn('documentType', CORE_CONSENT_TYPES);
+      .whereIn('documentType', consentTypes);
   }
 
   static async getMOLSTForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {

@@ -14,6 +14,7 @@ import ComputedPatientStatus, { IComputedStatus } from '../computed-patient-stat
 import Patient from '../patient';
 import PatientContact from '../patient-contact';
 import PatientDataFlag from '../patient-data-flag';
+import PatientDisenrollment from '../patient-disenrollment';
 import PatientDocument from '../patient-document';
 import PatientInfo from '../patient-info';
 import PatientState from '../patient-state';
@@ -266,6 +267,26 @@ describe('computed patient status model', () => {
     expect(refetchedPatientState!.currentState).toEqual('consented');
   });
 
+  it('updates patient state when disenrolling', async () => {
+    const { patient, user } = await setup(txn);
+    const patientState = await PatientState.getForPatient(patient.id, txn);
+
+    expect(patientState!.currentState).toEqual('attributed');
+
+    await PatientDisenrollment.create(
+      {
+        patientId: patient.id,
+        reason: 'moved',
+      },
+      txn,
+    );
+
+    await ComputedPatientStatus.updateForPatient(patient.id, user.id, txn);
+    const refetchedPatientState = await PatientState.getForPatient(patient.id, txn);
+
+    expect(refetchedPatientState!.currentState).toEqual('disenrolled');
+  });
+
   describe('getCurrentPatientState', () => {
     it('appropriately calculates the attributed state', async () => {
       const currentStatus: IComputedStatus = {
@@ -371,6 +392,27 @@ describe('computed patient status model', () => {
       const currentState = ComputedPatientStatus.getCurrentPatientState(currentStatus, txn);
 
       expect(currentState).toEqual('enrolled');
+    });
+
+    it('appropriately calculates the disenrolled state', async () => {
+      const currentStatus: IComputedStatus = {
+        isCoreIdentityVerified: true,
+        isDemographicInfoUpdated: true,
+        isEmergencyContactAdded: true,
+        isAdvancedDirectivesAdded: true,
+        isConsentSigned: true,
+        isPhotoAddedOrDeclined: true,
+        hasProgressNote: true,
+        hasChp: true,
+        hasPcp: true,
+        hasCareTeam: true,
+        isAssessed: true,
+        isIneligible: false,
+        isDisenrolled: true,
+      };
+      const currentState = ComputedPatientStatus.getCurrentPatientState(currentStatus, txn);
+
+      expect(currentState).toEqual('disenrolled');
     });
   });
 

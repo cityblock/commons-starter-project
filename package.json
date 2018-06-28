@@ -25,7 +25,7 @@
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand --logHeapUsage",
     "test:frontend": "jest app/ --maxWorkers=2 --logHeapUsage",
     "test:api": "NODE_ENV=test node initialize-test-db.js && jest server/graphql --forceExit --maxWorkers=2 --logHeapUsage",
-    "test:api-support": "NODE_ENV=test node initialize-test-db.js && jest server/handlers server/lib server/apis server/consumers server/__tests__ --forceExit --maxWorkers=2 --logHeapUsage",
+    "test:api-support": "NODE_ENV=test node initialize-test-db.js && jest server/handlers server/lib server/apis server/consumers server/__tests__ scripts/__tests__ --forceExit --maxWorkers=2 --logHeapUsage",
     "test:models": "NODE_ENV=test node initialize-test-db.js && jest server/models --maxWorkers=2 --logHeapUsage",
     "test:watch": "yarn test --watch",
     "test:notify": "yarn run test:watch --notify",
@@ -43,6 +43,8 @@
     "seed": "knex seed:run --knexfile=server/models/knexfile.js",
     "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
     "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
+    "patients:disenroll:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/disenroll-patient.ts",
+    "patients:disenroll:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/disenroll-patient.ts",
     "import:icd:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
     "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
     "computed-patient-status:update-all:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/update-computed-patient-statuses.ts",
@@ -74,7 +76,8 @@
     },
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
-      "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
+      "<rootDir>/server/**/?(*.)(spec|test).ts?(x)",
+      "<rootDir>/scripts/**/?(*.)(spec|test).ts?(x)"
     ],
     "moduleFileExtensions": [
       "ts",

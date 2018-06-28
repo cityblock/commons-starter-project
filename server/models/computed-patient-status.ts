@@ -6,6 +6,7 @@ import CareTeam from './care-team';
 import Patient from './patient';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
+import PatientDisenrollment from './patient-disenrollment';
 import PatientDocument, { CORE_CONSENT_TYPES } from './patient-document';
 import PatientState from './patient-state';
 import ProgressNote from './progress-note';
@@ -129,6 +130,7 @@ export default class ComputedPatientStatus extends BaseModel {
     );
     const patientProgressNoteCount = await ProgressNote.getCountForPatient(patientId, txn);
     const patientCareTeam = await CareTeam.getForPatient(patientId, txn);
+    const disenrollment = await PatientDisenrollment.getForPatient(patientId, txn);
 
     const isCoreIdentityVerified =
       (!!patient.coreIdentityVerifiedAt && !!patient.coreIdentityVerifiedById) ||
@@ -150,7 +152,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const isAssessed = false;
     const isPhotoAddedOrDeclined = hasUploadedPhoto || !!hasDeclinedPhotoUpload;
     const isIneligible = false;
-    const isDisenrolled = false;
+    const isDisenrolled = !!disenrollment;
 
     return {
       isCoreIdentityVerified,
@@ -263,7 +265,9 @@ export default class ComputedPatientStatus extends BaseModel {
       isInOutreach && computedStatus.isConsentSigned && computedStatus.isCoreIdentityVerified;
     const isEnrolled = isConsented && computedStatus.hasPcp;
 
-    if (isEnrolled) {
+    if (computedStatus.isDisenrolled) {
+      currentStatus = 'disenrolled';
+    } else if (isEnrolled) {
       currentStatus = 'enrolled';
     } else if (isConsented) {
       currentStatus = 'consented';

@@ -1,9 +1,11 @@
 import express from 'express';
+import { startCase } from 'lodash';
 import { transaction } from 'objection';
 import vCard from 'vcards-js';
 import config from '../../config';
 import { decodeJwt, IJWTForVCFData } from '../../graphql/shared/utils';
 import Patient from '../../models/patient';
+import User from '../../models/user';
 
 type CityblockContact = 'Admin' | 'Voicemail';
 
@@ -55,9 +57,13 @@ export const contactsVcfHandler = async (req: express.Request, res: express.Resp
 
   const adminContact = createvCardForCityblock('Admin');
   const voicemailContact = createvCardForCityblock('Voicemail');
+  const doctorOnCallContact = createvCardHardcoded('Doctor', 'On Call', '+19178109932');
+  const bhOnCallContact = createvCardHardcoded('Behavioral Health', 'On Call', '+19176339561');
 
   result += adminContact.getFormattedString();
   result += voicemailContact.getFormattedString();
+  result += doctorOnCallContact.getFormattedString();
+  result += bhOnCallContact.getFormattedString();
 
   await transaction(res.locals.existingTxn || Patient.knex(), async txn => {
     const patients = await Patient.getPatientsWithPhonesForUser(decoded.userId, txn);
@@ -82,6 +88,16 @@ export const contactsVcfHandler = async (req: express.Request, res: express.Resp
       }
     }
     /* tslint:enable:prefer-for-of */
+
+    const users = await User.getAllClinical(txn);
+
+    users.forEach(user => {
+      const card = createvCardForUser(user);
+
+      if (card) {
+        result += card.getFormattedString();
+      }
+    });
   });
 
   if (error) {
@@ -121,6 +137,20 @@ export const createvCardForPatient = (patient: Patient): ICard | null => {
   return card;
 };
 
+export const createvCardForUser = (user: User): ICard | null => {
+  // do not send vCard if user does not have phone setup
+  if (!user.phone || !user.twilioSimId) return null;
+
+  const card = vCard();
+
+  card.firstName = user.firstName;
+  card.lastName = user.lastName;
+  card.note = startCase(user.userRole);
+  card.cellPhone = user.phone;
+
+  return card;
+};
+
 export const formatvCardNameForPatient = (card: ICard, patient: Patient): void => {
   card.uid = patient.cityblockId;
   card.firstName = patient.firstName;
@@ -144,6 +174,21 @@ export const createvCardForCityblock = (type: CityblockContact): ICard => {
   card.lastName = type;
 
   card.homePhone = (config as any)[`CITYBLOCK_${type.toUpperCase()}`];
+
+  return card;
+};
+
+export const createvCardHardcoded = (
+  firstName: string,
+  lastName: string,
+  homePhone: string,
+): ICard => {
+  const card = vCard();
+
+  card.firstName = firstName;
+  card.lastName = lastName;
+
+  card.homePhone = homePhone;
 
   return card;
 };

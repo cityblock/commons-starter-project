@@ -425,4 +425,32 @@ describe('user model', () => {
     // We should have now fetched the re-created user
     expect(fetchedUser2).toMatchObject(user2);
   });
+
+  it('returns all clinical users', async () => {
+    const clinic = await Clinic.create(createMockClinic(), txn);
+    const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+    const user2 = await User.create(
+      createMockUser(12, clinic.id, 'Back_Office_Admin' as UserRole),
+      txn,
+    );
+    const user3 = await User.create(
+      createMockUser(13, clinic.id, 'Community_Health_Partner' as UserRole),
+      txn,
+    );
+    await User.create(createMockUser(14, clinic.id, 'Community_Health_Partner' as UserRole), txn);
+    const lastLoginAt = new Date().toISOString();
+
+    await user.$query(txn).patch({ lastLoginAt });
+    await user2.$query(txn).patch({ lastLoginAt });
+    await user3.$query(txn).patch({ lastLoginAt });
+
+    const users = await User.getAllClinical(txn);
+
+    expect(users.length).toBe(2);
+    const pharmacist = users.find(u => u.userRole === 'Pharmacist');
+    const chp = users.find(u => u.userRole === 'Community_Health_Partner');
+
+    expect(pharmacist!.id).toBe(user.id);
+    expect(chp!.id).toBe(user3.id);
+  });
 });

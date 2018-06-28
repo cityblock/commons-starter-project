@@ -19,6 +19,8 @@ import {
   contactsVcfHandler,
   createvCardForCityblock,
   createvCardForPatient,
+  createvCardForUser,
+  createvCardHardcoded,
   formatvCardNameForPatient,
   isDuplicateName,
   validateJwtForVcf,
@@ -26,6 +28,7 @@ import {
 
 const EXPIRED_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiZ2VuZXJhdGVQREZKd3QiLCJpYXQiOjE1MTczMzcwNDUsImV4cCI6MTUxNzMzNzM0NX0.4OG2ho0S5Wj074KpcEP4Qpdqdj2jZ8Kh4rjBtH2kigU';
+const twilioSimId = 'DEBOGUS14990BOGUS580c2a54713dBOGUS';
 
 interface ISetup {
   clinic: Clinic;
@@ -35,7 +38,10 @@ interface ISetup {
 
 const setup = async (txn: Transaction): Promise<ISetup> => {
   const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id, 'Pharmacist' as UserRole), txn);
+  const user = await User.create(
+    createMockUser(11, clinic.id, 'Community_Health_Partner' as UserRole),
+    txn,
+  );
   const patient = await createPatient({ cityblockId: 123, homeClinicId: clinic.id }, txn);
 
   return { clinic, user, patient };
@@ -81,6 +87,40 @@ describe('vCard Handler', () => {
   describe('contactsVcfHandler', () => {
     it('returns vCards for a given user', async () => {
       const { clinic, user } = await setup(txn);
+
+      const user2 = await User.create(createMockUser(12, clinic.id, 'Pharmacist' as UserRole), txn);
+      const user3 = await User.create(
+        createMockUser(13, clinic.id, 'Back_Office_Admin' as UserRole),
+        txn,
+      );
+
+      await User.update(
+        user.id,
+        {
+          phone: '+17274445555',
+          twilioSimId,
+          lastLoginAt: new Date().toISOString(),
+        },
+        txn,
+      );
+      await User.update(
+        user2.id,
+        {
+          phone: '+17274443333',
+          twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dZZZZZ',
+          lastLoginAt: new Date().toISOString(),
+        },
+        txn,
+      );
+      await User.update(
+        user3.id,
+        {
+          phone: '+17274446666',
+          twilioSimId: 'DEBOGUS14990BOGUS580c2a54713dXXXXX',
+          lastLoginAt: new Date().toISOString(),
+        },
+        txn,
+      );
 
       const patient1 = await createPatient(
         {
@@ -212,6 +252,18 @@ describe('vCard Handler', () => {
       );
       expect(args[0][0]).toMatch(
         'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:Cityblock Voicemail\r\nN;CHARSET=UTF-8:Voicemail;Cityblock;;;\r\nTEL;TYPE=HOME,VOICE:+16469417791',
+      );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:dan plant\r\nN;CHARSET=UTF-8:plant;dan;;;\r\nTEL;TYPE=CELL:+17274445555\r\nNOTE;CHARSET=UTF-8:Community Health Partner',
+      );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:dan plant\r\nN;CHARSET=UTF-8:plant;dan;;;\r\nTEL;TYPE=CELL:+17274443333\r\nNOTE;CHARSET=UTF-8:Pharmacist',
+      );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:Doctor On Call\r\nN;CHARSET=UTF-8:On Call;Doctor;;;\r\nTEL;TYPE=HOME,VOICE:+19178109932',
+      );
+      expect(args[0][0]).toMatch(
+        'BEGIN:VCARD\r\nVERSION:3.0\r\nFN;CHARSET=UTF-8:Behavioral Health On Call\r\nN;CHARSET=UTF-8:On Call;Behavioral Health;;;\r\nTEL;TYPE=HOME,VOICE:+19176339561',
       );
 
       expect(res.status).not.toBeCalled();
@@ -346,6 +398,45 @@ describe('vCard Handler', () => {
       expect(card!.cellPhone).toEqual(['+11234561111']);
       expect(card!.otherPhone).toEqual(['+11234563333', '+11234565555']);
       expect(card!.workPhone).toEqual(['+11234564444']);
+    });
+  });
+
+  describe('createvCardForUser', () => {
+    it('returns a vCard for Cityblock care worker', async () => {
+      const { user } = await setup(txn);
+
+      const updated = await User.update(
+        user.id,
+        {
+          phone: '+17273334444',
+          twilioSimId,
+          lastLoginAt: new Date().toISOString(),
+        },
+        txn,
+      );
+
+      const card = createvCardForUser(updated);
+
+      expect(card!.firstName).toBe('dan');
+      expect(card!.lastName).toBe('plant');
+      expect(card!.note).toBe('Community Health Partner');
+      expect(card!.cellPhone).toBe('+17273334444');
+    });
+
+    it('returns null if user phone not set up', async () => {
+      const { user } = await setup(txn);
+
+      expect(createvCardForUser(user)).toBeNull();
+    });
+  });
+
+  describe('createvCardHardcoded', () => {
+    it('returns a hard coded card', () => {
+      const card = createvCardHardcoded('Doctor', 'on Call', '+17275554444');
+
+      expect(card.firstName).toBe('Doctor');
+      expect(card.lastName).toBe('on Call');
+      expect(card.homePhone).toBe('+17275554444');
     });
   });
 

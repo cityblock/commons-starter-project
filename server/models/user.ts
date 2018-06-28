@@ -289,6 +289,12 @@ export default class User extends BaseModel {
     };
   }
 
+  static async getAllClinical(txn: Transaction): Promise<User[]> {
+    return this.query(txn)
+      .whereNot({ userRole: 'Back_Office_Admin', lastLoginAt: null })
+      .andWhere({ deletedAt: null });
+  }
+
   static async getUserSummaryList(
     userRoleFilters: UserRole[],
     txn: Transaction,

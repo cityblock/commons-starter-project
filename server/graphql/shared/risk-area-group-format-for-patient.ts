@@ -27,7 +27,6 @@ export const calculateRiskAreaSummaryStats = (
 ): ISummaryStats => {
   let { lastUpdated, totalScore, forceHighRisk, screeningToolResultSummaries } = summaryStats;
   const { summaryText } = summaryStats;
-
   (riskArea.questions || []).forEach(question => {
     question.answers.forEach(answer => {
       if (answer.patientAnswers && answer.patientAnswers.length) {
@@ -146,10 +145,10 @@ export const formatRiskAreaGroupForPatient = (
     // ensure we don't mark forceHighRiskFalse
     forceHighRisk = riskAreaSummaryStats.forceHighRisk ? true : false;
     screeningToolResultSummaries.concat(riskAreaSummaryStats.screeningToolResultSummaries || []);
+
     lastUpdated =
-      lastUpdated &&
       riskAreaSummaryStats.lastUpdated &&
-      isAfter(lastUpdated, riskAreaSummaryStats.lastUpdated)
+      isAfter(riskAreaSummaryStats.lastUpdated, lastUpdated || new Date(0))
         ? riskAreaSummaryStats.lastUpdated
         : lastUpdated;
 

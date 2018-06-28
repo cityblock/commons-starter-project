@@ -2,12 +2,13 @@ import { transaction, Transaction } from 'objection';
 import {
   AnswerTypeOptions,
   AnswerValueTypeOptions,
+  ComputedFieldDataTypes,
   RiskAdjustmentTypeOptions,
   UserRole,
 } from 'schema';
-
 import Answer from '../../../models/answer';
 import Clinic from '../../../models/clinic';
+import ComputedField from '../../../models/computed-field';
 import Patient from '../../../models/patient';
 import PatientAnswer from '../../../models/patient-answer';
 import PatientScreeningToolSubmission from '../../../models/patient-screening-tool-submission';
@@ -378,6 +379,70 @@ describe('risk area group format', () => {
         riskArea,
       } = await setup(txn);
 
+      const automatedRiskArea = await RiskArea.create(
+        {
+          title: 'Automated Risk Area',
+          riskAreaGroupId: riskAreaGroup.id,
+          assessmentType: 'automated' as any,
+          order: 1,
+          mediumRiskThreshold: 3,
+          highRiskThreshold: 4,
+        },
+        txn,
+      );
+
+      const computedField = await ComputedField.create(
+        {
+          label: 'Computed Field',
+          slug: 'computed-field',
+          dataType: 'boolean' as ComputedFieldDataTypes,
+        },
+        txn,
+      );
+
+      const computedFieldQuestion = await Question.create(
+        {
+          title: 'Question',
+          answerType: 'radio' as AnswerTypeOptions,
+          riskAreaId: automatedRiskArea.id,
+          type: 'riskArea',
+          order: 1,
+          computedFieldId: computedField.id,
+        },
+        txn,
+      );
+
+      const computedFieldAnswer = await Answer.create(
+        {
+          questionId: computedFieldQuestion.id,
+          displayValue: 'Answer',
+          value: 'answer',
+          valueType: 'boolean' as AnswerValueTypeOptions,
+          order: 1,
+          summaryText: 'automated summary',
+          inSummary: true,
+        },
+        txn,
+      );
+      await PatientAnswer.createForComputedField(
+        {
+          patientId: patient.id,
+          questionIds: [computedFieldQuestion.id],
+          mixerJobId: 'jobId',
+          answers: [
+            {
+              answerId: computedFieldAnswer.id,
+              questionId: computedFieldQuestion.id,
+              answerValue: computedFieldAnswer.value,
+              patientId: patient.id,
+              applicable: true,
+              mixerJobId: 'jobId',
+            },
+          ],
+        },
+        txn,
+      );
+
       await PatientAnswer.createForRiskArea(
         {
           patientId: patient.id,
@@ -475,7 +540,11 @@ describe('risk area group format', () => {
         },
       ]);
       expect(result.manualSummaryText).toEqual(['omg summary']);
-      expect(result.automatedSummaryText).toEqual([]);
+      expect(result.automatedSummaryText).toEqual(['automated summary']);
+      expect(result.lastUpdated).not.toBeFalsy();
+      expect(result.riskAreas).toHaveLength(2);
+      expect(result.riskAreas[0].lastUpdated).not.toBeFalsy();
+      expect(result.riskAreas[1].lastUpdated).not.toBeFalsy();
     });
   });
 });

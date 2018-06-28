@@ -140,8 +140,17 @@ export default class RiskAreaGroup extends BaseModel {
           applicable: true,
         });
       })
+      .modifyEager('riskAreas.questions.answers', builder => {
+        builder.where({
+          deletedAt: null,
+        });
+      })
       .modifyEager('riskAreas.questions', builder => {
-        builder.orderBy('order');
+        builder
+          .where({
+            deletedAt: null,
+          })
+          .orderBy('order');
       })
       .modifyEager('riskAreas.riskAreaAssessmentSubmissions', builder => {
         builder.where({ patientId, deletedAt: null }).orderBy('createdAt', 'asc');

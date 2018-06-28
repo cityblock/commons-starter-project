@@ -79,6 +79,42 @@ jobs:
           command: dockerize -wait tcp://localhost:6379 -timeout 1m
       - run: yarn test:api
 
+  test_api_support:
+    working_directory: ~/repo
+    docker:
+      - image: node:8.11.3@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
+      - image: postgres:10.4@sha256:33f81891e938ac26bbca81c0699dce8a1438e29f9c6767f3a6ae1a3d3b5fba98
+        environment:
+          POSTGRES_DB: commons_test
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ""
+      - image: redis:4.0.10@sha256:6213e498c76eb159d959687c2beb9a77d2ce7b080a38dbd19130a3ad24a6a5c3
+    steps:
+      - checkout
+      - run: apt-get update && apt-get install -y sudo
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - restore_cache:
+          keys:
+            - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v3-dependencies-
+      - run: yarn install
+      - save_cache:
+          key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for Redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+      - run: yarn test:api-support
+
   test_models:
     working_directory: ~/repo
     docker:
@@ -167,6 +203,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test_api_support:
+          filters:
+            tags:
+              only: /.*/
       - test_models:
           filters:
             tags:
@@ -176,6 +216,7 @@ workflows:
             - lint
             - test_frontend
             - test_api
+            - test_api_support
             - test_models
           filters:
             branches:
@@ -185,6 +226,7 @@ workflows:
             - lint
             - test_frontend
             - test_api
+            - test_api_support
             - test_models
           filters:
             tags:

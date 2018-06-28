@@ -117,6 +117,7 @@ const PatientProxyForm: React.StatelessComponent<IProps> = (props: IProps) => {
             large={true}
             errorMessageId="patientContact.fieldEmptyError"
             hasError={hasFieldError.phoneType}
+            hasPlaceholder={true}
           />
         </div>
       </div>

@@ -169,6 +169,7 @@ export class PatientFamilyMemberForm extends React.Component<IProps, IState> {
               large={true}
               errorMessageId="patientContact.fieldEmptyError"
               hasError={hasFieldError.phoneType}
+              hasPlaceholder={true}
             />
           </div>
         </div>

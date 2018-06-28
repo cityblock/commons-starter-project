@@ -12,6 +12,8 @@ import config from '../config';
 import { reportError } from '../helpers/error-helpers';
 import {
   formatAddress,
+  formatAddressFirstLine,
+  formatAddressSecondLine,
   formatCityblockId,
   formatPatientName,
   formatPhoneNumber,
@@ -32,7 +34,7 @@ const TEMPLATE_MAP = {
   hipaaConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
   hieHealthixConsent: config.HELLOSIGN_TEMPLATE_ID_HEALTHIX,
   hcp: config.HELLOSIGN_TEMPLATE_ID_HCP,
-  molst: '',
+  molst: config.HELLOSIGN_TEMPLATE_ID_MOLST,
   textConsent: config.HELLOSIGN_TEMPLATE_ID_TEXT_CONSENT,
 };
 
@@ -83,6 +85,8 @@ export const getHelloSignOptions = async (
     options.custom_fields = await getHCPOptions(patient, txn);
   } else if (documentType === 'cityblockConsent') {
     options.custom_fields = await getConsentToTreatOptions(patient, txn);
+  } else if (documentType === 'molst') {
+    options.custom_fields = await getMolstOptions(patient, txn);
   }
 
   return options;
@@ -184,6 +188,17 @@ export const getHealthixOptions = async (patient: Patient, txn: Transaction) => 
 export const getConsentToTreatOptions = async (patient: Patient, txn: Transaction) => {
   return {
     patient_name: formatPatientName(patient.firstName, patient.lastName),
+  };
+};
+
+export const getMolstOptions = async (patient: Patient, txn: Transaction) => {
+  return {
+    first_name: patient.firstName,
+    last_name: patient.lastName,
+    middle_initial: patient.middleName ? patient.middleName[0] : '',
+    date_of_birth: format(patient.dateOfBirth, 'MM/DD/YY'),
+    address_line_1: formatAddressFirstLine(patient.patientInfo.primaryAddress || {}),
+    address_line_2: formatAddressSecondLine(patient.patientInfo.primaryAddress || {}),
   };
 };
 

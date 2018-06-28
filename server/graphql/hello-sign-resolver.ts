@@ -30,8 +30,8 @@ const hellosign = HelloSign({ key: config.HELLOSIGN_API_KEY });
 const MAX_ORGANIZATIONS = 17;
 const MAX_INDIVIDUALS = 12;
 const TEMPLATE_MAP = {
-  cityblockConsent: config.HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT,
-  hipaaConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
+  treatmentConsent: config.HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT,
+  phiSharingConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
   hieHealthixConsent: config.HELLOSIGN_TEMPLATE_ID_HEALTHIX,
   hcp: config.HELLOSIGN_TEMPLATE_ID_HCP,
   molst: config.HELLOSIGN_TEMPLATE_ID_MOLST,
@@ -74,16 +74,16 @@ export const getHelloSignOptions = async (
         role: 'Member',
       },
     ],
-    template_id: TEMPLATE_MAP[documentType],
+    template_id: (TEMPLATE_MAP as any)[documentType],
   } as IHelloSignOptions;
 
-  if (documentType === 'hipaaConsent') {
+  if (documentType === 'phiSharingConsent') {
     options.custom_fields = await getPHISharingConsentOptions(patient, txn);
   } else if (documentType === 'hieHealthixConsent') {
     options.custom_fields = await getHealthixOptions(patient, txn);
   } else if (documentType === 'hcp') {
     options.custom_fields = await getHCPOptions(patient, txn);
-  } else if (documentType === 'cityblockConsent') {
+  } else if (documentType === 'treatmentConsent') {
     options.custom_fields = await getConsentToTreatOptions(patient, txn);
   } else if (documentType === 'molst') {
     options.custom_fields = await getMolstOptions(patient, txn);

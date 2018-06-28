@@ -19013,12 +19013,24 @@ export enum DataFlagOptions {
 }
 
 export enum DocumentTypeOptions {
-  cityblockConsent = "cityblockConsent",
+  accessARideApplication = "accessARideApplication",
+  epicSeniorRxApplication = "epicSeniorRxApplication",
   hcp = "hcp",
   hieHealthixConsent = "hieHealthixConsent",
-  hipaaConsent = "hipaaConsent",
+  hieHealthixDenial = "hieHealthixDenial",
+  hieHealthixWithdrawal = "hieHealthixWithdrawal",
+  homeHealthFacetoFaceCertification = "homeHealthFacetoFaceCertification",
+  homecareReferral = "homecareReferral",
+  hra2010eApplication = "hra2010eApplication",
+  m11q = "m11q",
+  map2015 = "map2015",
   molst = "molst",
+  molstForDisabilities = "molstForDisabilities",
+  phiSharingConsent = "phiSharingConsent",
+  privacyPracticesNotice = "privacyPracticesNotice",
+  socialSecurityDisability = "socialSecurityDisability",
   textConsent = "textConsent",
+  treatmentConsent = "treatmentConsent",
 }
 
 export enum ExternalProviderOptions {

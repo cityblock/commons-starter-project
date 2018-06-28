@@ -270,7 +270,7 @@ describe('patient document resolver', () => {
       const document1 = {
         patientId: patient.id,
         filename: 'test2.txt',
-        documentType: 'hipaaConsent' as any,
+        documentType: 'phiSharingConsent' as any,
       };
       await PatientDocument.create({ ...document1, uploadedById: user.id }, txn);
 
@@ -323,7 +323,7 @@ describe('patient document resolver', () => {
       const document1 = {
         patientId: patient.id,
         filename: 'test2.txt',
-        documentType: 'hipaaConsent' as any,
+        documentType: 'phiSharingConsent' as any,
       };
       await PatientDocument.create({ ...document1, uploadedById: user.id }, txn);
 

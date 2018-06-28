@@ -130,7 +130,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent' as DocumentTypeOptions,
+          documentType: 'treatmentConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -148,7 +148,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test2.txt',
           description: 'some file for consent',
-          documentType: 'hipaaConsent' as DocumentTypeOptions,
+          documentType: 'phiSharingConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -159,6 +159,26 @@ describe('patient document model', () => {
           filename: 'test3.txt',
           description: 'some file for consent',
           documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+        },
+        txn,
+      );
+      await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test4.txt',
+          description: 'some file for consent',
+          documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
+        },
+        txn,
+      );
+      await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test5.txt',
+          description: 'some file for consent',
+          documentType: 'textConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -182,7 +202,7 @@ describe('patient document model', () => {
           uploadedById: user.id,
           filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent' as DocumentTypeOptions,
+          documentType: 'treatmentConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -204,19 +224,9 @@ describe('patient document model', () => {
         {
           patientId: patient.id,
           uploadedById: user.id,
-          filename: 'test2.txt',
+          filename: 'test.txt',
           description: 'some file for consent',
-          documentType: 'hipaaConsent' as DocumentTypeOptions,
-        },
-        txn,
-      );
-      await PatientDocument.create(
-        {
-          patientId: patient.id,
-          uploadedById: user.id,
-          filename: 'test3.txt',
-          description: 'some file for consent',
-          documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+          documentType: 'treatmentConsent' as DocumentTypeOptions,
         },
         txn,
       );
@@ -224,9 +234,9 @@ describe('patient document model', () => {
         {
           patientId: patient.id,
           uploadedById: user.id,
-          filename: 'test.txt',
+          filename: 'test4.txt',
           description: 'some file for consent',
-          documentType: 'cityblockConsent' as DocumentTypeOptions,
+          documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
         },
         txn,
       );
@@ -289,7 +299,7 @@ describe('patient document model', () => {
   it('should get all consent documents for a patient', async () => {
     const { patient, user } = await setup(txn);
 
-    const documents = await PatientDocument.getConsentsForPatient(patient.id, txn);
+    const documents = await PatientDocument.getCoreConsentsForPatient(patient.id, txn);
     expect(documents.length).toEqual(0);
 
     const document = await PatientDocument.create(
@@ -297,11 +307,14 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test.txt',
-        documentType: 'cityblockConsent' as DocumentTypeOptions,
+        documentType: 'treatmentConsent' as DocumentTypeOptions,
       },
       txn,
     );
-    let refetchedPatientDocuments = await PatientDocument.getConsentsForPatient(patient.id, txn);
+    let refetchedPatientDocuments = await PatientDocument.getCoreConsentsForPatient(
+      patient.id,
+      txn,
+    );
 
     expect(refetchedPatientDocuments.length).toEqual(1);
     expect(refetchedPatientDocuments[0]).toMatchObject(document);
@@ -311,7 +324,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test2.txt',
-        documentType: 'hipaaConsent' as DocumentTypeOptions,
+        documentType: 'phiSharingConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -321,6 +334,15 @@ describe('patient document model', () => {
         uploadedById: user.id,
         filename: 'test3.txt',
         documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test3.txt',
+        documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
       },
       txn,
     );
@@ -344,8 +366,8 @@ describe('patient document model', () => {
       txn,
     );
 
-    refetchedPatientDocuments = await PatientDocument.getConsentsForPatient(patient.id, txn);
-    expect(refetchedPatientDocuments.length).toEqual(3);
+    refetchedPatientDocuments = await PatientDocument.getCoreConsentsForPatient(patient.id, txn);
+    expect(refetchedPatientDocuments.length).toEqual(2);
   });
 
   it('should get all hcp documents for a patient', async () => {
@@ -394,7 +416,7 @@ describe('patient document model', () => {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test4.txt',
-        documentType: 'cityblockConsent' as DocumentTypeOptions,
+        documentType: 'treatmentConsent' as DocumentTypeOptions,
       },
       txn,
     );

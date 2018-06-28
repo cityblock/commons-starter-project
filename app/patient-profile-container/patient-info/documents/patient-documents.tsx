@@ -12,10 +12,11 @@ import PatientDocument from './patient-document';
 import { patientDocumentsUpdateQuery } from './update-queries/patient-documents';
 
 const CONSENTS = [
-  DocumentTypeOptions.cityblockConsent,
-  DocumentTypeOptions.hipaaConsent,
-  DocumentTypeOptions.hieHealthixConsent,
+  DocumentTypeOptions.treatmentConsent,
+  DocumentTypeOptions.privacyPracticesNotice,
   DocumentTypeOptions.textConsent,
+  DocumentTypeOptions.phiSharingConsent,
+  DocumentTypeOptions.hieHealthixConsent,
 ];
 
 interface IProps {

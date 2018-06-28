@@ -189,17 +189,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test2.txt',
         description: 'some file for consent',
-        documentType: 'hipaaConsent' as DocumentTypeOptions,
-      },
-      txn,
-    );
-    await PatientDocument.create(
-      {
-        patientId: patient.id,
-        uploadedById: user.id,
-        filename: 'test3.txt',
-        description: 'some file for consent',
-        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
+        documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
       },
       txn,
     );
@@ -209,7 +199,7 @@ describe('computed patient status model', () => {
         uploadedById: user.id,
         filename: 'test.txt',
         description: 'some file for consent',
-        documentType: 'cityblockConsent' as DocumentTypeOptions,
+        documentType: 'treatmentConsent' as DocumentTypeOptions,
       },
       txn,
     );
@@ -245,37 +235,27 @@ describe('computed patient status model', () => {
       },
       txn,
     );
-
-    await PatientDocument.create(
-      {
-        patientId: patient.id,
-        uploadedById: user.id,
-        filename: 'test2.txt',
-        description: 'some file for consent',
-        documentType: 'hipaaConsent' as DocumentTypeOptions,
-      },
-      txn,
-    );
-    await PatientDocument.create(
-      {
-        patientId: patient.id,
-        uploadedById: user.id,
-        filename: 'test3.txt',
-        description: 'some file for consent',
-        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
-      },
-      txn,
-    );
     await PatientDocument.create(
       {
         patientId: patient.id,
         uploadedById: user.id,
         filename: 'test.txt',
         description: 'some file for consent',
-        documentType: 'cityblockConsent' as DocumentTypeOptions,
+        documentType: 'treatmentConsent' as DocumentTypeOptions,
       },
       txn,
     );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test4.txt',
+        description: 'some file for consent',
+        documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
+      },
+      txn,
+    );
+
     await Patient.query(txn).patchAndFetchById(patient.id, {
       coreIdentityVerifiedAt: new Date().toISOString(),
       coreIdentityVerifiedById: user.id,
@@ -472,29 +452,19 @@ describe('computed patient status model', () => {
       {
         patientId: patient.id,
         uploadedById: user.id,
-        filename: 'test2.txt',
-        description: 'some file for consent',
-        documentType: 'hipaaConsent' as DocumentTypeOptions,
-      },
-      txn,
-    );
-    await PatientDocument.create(
-      {
-        patientId: patient.id,
-        uploadedById: user.id,
-        filename: 'test3.txt',
-        description: 'some file for consent',
-        documentType: 'hieHealthixConsent' as DocumentTypeOptions,
-      },
-      txn,
-    );
-    await PatientDocument.create(
-      {
-        patientId: patient.id,
-        uploadedById: user.id,
         filename: 'test.txt',
         description: 'some file for consent',
-        documentType: 'cityblockConsent' as DocumentTypeOptions,
+        documentType: 'treatmentConsent' as DocumentTypeOptions,
+      },
+      txn,
+    );
+    await PatientDocument.create(
+      {
+        patientId: patient.id,
+        uploadedById: user.id,
+        filename: 'test4.txt',
+        description: 'some file for consent',
+        documentType: 'privacyPracticesNotice' as DocumentTypeOptions,
       },
       txn,
     );

@@ -316,12 +316,24 @@ enum UserSignedUrlAction {
 }
 
 enum DocumentTypeOptions {
-  cityblockConsent
-  hipaaConsent
   hieHealthixConsent
   hcp
   molst
   textConsent
+  treatmentConsent
+  phiSharingConsent
+  hra2010eApplication
+  accessARideApplication
+  epicSeniorRxApplication
+  hieHealthixWithdrawal
+  hieHealthixDenial
+  homecareReferral
+  homeHealthFacetoFaceCertification
+  m11q
+  map2015
+  molstForDisabilities
+  privacyPracticesNotice
+  socialSecurityDisability
 }
 
 enum SmsMessageDirection {

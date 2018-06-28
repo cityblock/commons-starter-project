@@ -6,7 +6,7 @@ import CareTeam from './care-team';
 import Patient from './patient';
 import PatientContact from './patient-contact';
 import PatientDataFlag from './patient-data-flag';
-import PatientDocument, { CONSENT_TYPES } from './patient-document';
+import PatientDocument, { CORE_CONSENT_TYPES } from './patient-document';
 import PatientState from './patient-state';
 import ProgressNote from './progress-note';
 import User from './user';
@@ -141,7 +141,7 @@ export default class ComputedPatientStatus extends BaseModel {
       hasMolst,
       txn,
     );
-    const isConsentSigned = await this.isConsentSignedForPatient(patientId, txn);
+    const isConsentSigned = await this.isCoreConsentSignedForPatient(patientId, txn);
     const hasProgressNote = patientProgressNoteCount > 0;
     const hasChp = this.isRoleOnCareTeam(patientCareTeam, 'Community_Health_Partner' as UserRole);
 
@@ -175,19 +175,22 @@ export default class ComputedPatientStatus extends BaseModel {
     return !!user;
   }
 
-  static async isConsentSignedForPatient(patientId: string, txn: Transaction): Promise<boolean> {
+  static async isCoreConsentSignedForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<boolean> {
     let isConsented = true;
-    const documents = await PatientDocument.getConsentsForPatient(patientId, txn);
+    const documents = await PatientDocument.getCoreConsentsForPatient(patientId, txn);
 
     // ignore text consent for now
-    if (!documents.length || documents.length < CONSENT_TYPES.length - 1) {
+    if (!documents.length || documents.length < CORE_CONSENT_TYPES.length) {
       return false;
     }
 
-    CONSENT_TYPES.forEach(consentType => {
+    CORE_CONSENT_TYPES.forEach(consentType => {
       const document = find(documents, ['documentType', consentType]);
 
-      if (!document && consentType !== 'textConsent') {
+      if (!document) {
         isConsented = false;
       }
     });

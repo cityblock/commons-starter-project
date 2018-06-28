@@ -5,12 +5,15 @@ import ComputedPatientStatus from './computed-patient-status';
 import Patient from './patient';
 import User from './user';
 
-export const CONSENT_TYPES = [
-  'cityblockConsent',
-  'hipaaConsent',
+export const FULL_CONSENT_TYPES = [
+  'treatmentConsent',
+  'phiSharingConsent',
   'hieHealthixConsent',
   'textConsent',
+  'privacyPracticesNotice',
 ];
+
+export const CORE_CONSENT_TYPES = ['treatmentConsent', 'privacyPracticesNotice'];
 
 const EAGER_QUERY = '[uploadedBy]';
 
@@ -108,14 +111,14 @@ export default class PatientDocument extends Model {
       .where({ patientId, deletedAt: null });
   }
 
-  static async getConsentsForPatient(
+  static async getCoreConsentsForPatient(
     patientId: string,
     txn: Transaction,
   ): Promise<PatientDocument[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, deletedAt: null })
-      .whereIn('documentType', CONSENT_TYPES);
+      .whereIn('documentType', CORE_CONSENT_TYPES);
   }
 
   static async getMOLSTForPatient(patientId: string, txn: Transaction): Promise<PatientDocument[]> {

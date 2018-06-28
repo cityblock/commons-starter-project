@@ -1801,12 +1801,24 @@ declare module 'schema' {
   }
 
   enum DocumentTypeOptions {
-    cityblockConsent = 'cityblockConsent',
-    hipaaConsent = 'hipaaConsent',
     hieHealthixConsent = 'hieHealthixConsent',
     hcp = 'hcp',
     molst = 'molst',
-    textConsent = 'textConsent'
+    textConsent = 'textConsent',
+    treatmentConsent = 'treatmentConsent',
+    phiSharingConsent = 'phiSharingConsent',
+    hra2010eApplication = 'hra2010eApplication',
+    accessARideApplication = 'accessARideApplication',
+    epicSeniorRxApplication = 'epicSeniorRxApplication',
+    hieHealthixWithdrawal = 'hieHealthixWithdrawal',
+    hieHealthixDenial = 'hieHealthixDenial',
+    homecareReferral = 'homecareReferral',
+    homeHealthFacetoFaceCertification = 'homeHealthFacetoFaceCertification',
+    m11q = 'm11q',
+    map2015 = 'map2015',
+    molstForDisabilities = 'molstForDisabilities',
+    privacyPracticesNotice = 'privacyPracticesNotice',
+    socialSecurityDisability = 'socialSecurityDisability'
   }
 
   /**

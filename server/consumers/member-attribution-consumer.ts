@@ -84,11 +84,17 @@ export async function processNewMemberAttributionMessage(
       // else, create a new one
     } else {
       let formattedGender: Gender | null = null;
+      const formattedAddressLine1: string = addressLine1 || '';
+      let formattedAddressLine2: string = addressLine2 || '';
 
       if (gender === 'M') {
         formattedGender = 'male' as Gender;
       } else if (gender === 'F') {
         formattedGender = 'female' as Gender;
+      }
+
+      if (formattedAddressLine2 === 'N/A') {
+        formattedAddressLine2 = '';
       }
 
       const newPatient = await Patient.create(
@@ -104,8 +110,8 @@ export async function processNewMemberAttributionMessage(
           ssnEnd,
           gender: formattedGender,
           language,
-          addressLine1,
-          addressLine2,
+          addressLine1: formattedAddressLine1,
+          addressLine2: formattedAddressLine2,
           city,
           state,
           zip,

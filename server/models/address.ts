@@ -29,8 +29,8 @@ export default class Address extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      street1: { type: 'string', minLength: 1 },
-      street2: { type: 'string' }, // Not sure if we can really set a minLength here
+      street1: { type: 'string' }, // Cannot set a min-length here because of attribution data, unfortunately
+      street2: { type: 'string' },
       zip: { type: 'string' },
       state: { type: 'string', minLength: 2, maxLength: 2 },
       city: { type: 'string' },

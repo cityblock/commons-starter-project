@@ -21,7 +21,14 @@ interface IProps {
 const TimelineCard: React.StatelessComponent<IProps> = (props: IProps) => {
   const { source, sourceDetail, title, date, notes, progressNote, onClose, children } = props;
   const formattedDate = format(date, 'MMM D, YYYY');
-  const formattedTime = format(date, 'h:mm a');
+  let formattedTime = format(date, 'h:mm a');
+
+  /* TODO: Make this less brittle. This is just to make it so that all claims encounters don't show
+   *       as having occurred at midnight
+   */
+  if (formattedTime === '12:00 am') {
+    formattedTime = '';
+  }
 
   const sourceInfo = progressNote ? (
     <Text text={sourceDetail} size="medium" />

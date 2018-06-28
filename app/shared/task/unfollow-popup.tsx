@@ -48,6 +48,7 @@ class UnfollowPopup extends React.Component<allProps> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={false}
         titleMessageId="unfollowPopup.title"
         subTitleMessageId="unfollowPopup.subtitle"
         headerIconName="errorOutline"

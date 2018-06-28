@@ -19,6 +19,7 @@ describe('Render Modal Component', () => {
       onClose={onClose}
       onSubmit={onSubmit}
       isVisible={true}
+      isLoading={false}
       titleMessageId={titleMessageId}
       cancelMessageId={cancelMessageId}
       submitMessageId={submitMessageId}

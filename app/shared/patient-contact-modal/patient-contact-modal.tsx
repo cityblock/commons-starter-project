@@ -41,6 +41,7 @@ interface IEditableFieldState {
 interface IState {
   saveError?: string | null;
   hasFieldError?: { [key: string]: boolean };
+  isLoading: boolean;
 }
 
 type allState = IState & IEditableFieldState;
@@ -78,31 +79,29 @@ class PatientContactModal extends React.Component<IProps, allState> {
     return null;
   }
 
-  state: allState = {
-    id: null,
-    firstName: null,
-    lastName: null,
-    relationToPatient: null,
-    relationFreeText: null,
-    description: null,
-    emailAddress: null,
-    phoneNumber: null,
-    phoneType: null,
-    address: null,
-    isEmergencyContact: null,
-    saveError: null,
-    hasFieldError: undefined,
-  };
+  state: allState = this.getInitialState();
+
+  getInitialState() {
+    return {
+      id: null,
+      firstName: null,
+      lastName: null,
+      relationToPatient: null,
+      relationFreeText: null,
+      description: null,
+      emailAddress: null,
+      phoneNumber: null,
+      phoneType: null,
+      address: null,
+      isEmergencyContact: null,
+      saveError: null,
+      hasFieldError: undefined,
+      isLoading: false,
+    };
+  }
 
   clearState() {
-    const clearedFields = {} as any;
-    Object.keys(this.state).forEach(field => {
-      clearedFields[field] = null;
-    }, {});
-
-    this.setState({
-      ...clearedFields,
-    });
+    this.setState(this.getInitialState());
   }
 
   validateFields() {
@@ -185,6 +184,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
     }
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveContact(updatedPatientContact);
       if (onSaved) {
         onSaved(response);
@@ -192,7 +192,7 @@ class PatientContactModal extends React.Component<IProps, allState> {
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -262,11 +262,12 @@ class PatientContactModal extends React.Component<IProps, allState> {
 
   render() {
     const { isVisible, titleMessageId, subTitleMessageId } = this.props;
-    const { saveError } = this.state;
+    const { saveError, isLoading } = this.state;
 
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         subTitleMessageId={subTitleMessageId}
         cancelMessageId="patientContact.cancel"

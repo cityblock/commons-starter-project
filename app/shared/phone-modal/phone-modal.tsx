@@ -31,6 +31,7 @@ interface IState {
   description: string | null;
   saveError: string | null;
   updatedIsPrimary: boolean | null;
+  isLoading: boolean;
 }
 
 class PhoneModal extends React.Component<IProps, IState> {
@@ -40,6 +41,7 @@ class PhoneModal extends React.Component<IProps, IState> {
     description: null,
     saveError: null,
     updatedIsPrimary: null,
+    isLoading: false,
   };
 
   clearState() {
@@ -49,6 +51,7 @@ class PhoneModal extends React.Component<IProps, IState> {
       description: null,
       saveError: null,
       updatedIsPrimary: null,
+      isLoading: false,
     });
   }
 
@@ -77,12 +80,13 @@ class PhoneModal extends React.Component<IProps, IState> {
     };
 
     try {
+      this.setState({ isLoading: true });
       const response = await savePhone(updatedPhone, !!updatedIsPrimary);
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -94,7 +98,7 @@ class PhoneModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, titleMessageId, isPrimary } = this.props;
     const phone = this.props.phone || {};
-    const { saveError, phoneNumber, type, description, updatedIsPrimary } = this.state;
+    const { saveError, phoneNumber, type, description, updatedIsPrimary, isLoading } = this.state;
 
     const updatedPhoneNumber = isNil(phoneNumber) ? phone.phoneNumber : phoneNumber;
     const updatedType = isNil(type) ? phone.type : type;
@@ -105,6 +109,7 @@ class PhoneModal extends React.Component<IProps, IState> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         cancelMessageId="phone.cancel"
         submitMessageId="phone.save"

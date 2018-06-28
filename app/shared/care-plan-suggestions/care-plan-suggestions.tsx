@@ -36,6 +36,7 @@ export class CarePlanSuggestions extends React.Component<allProps> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={false}
         titleMessageId="suggestionsModal.title"
         subTitleMessageId="suggestionsModal.body"
         onSubmit={closePopup}

@@ -48,7 +48,7 @@ interface IState {
   externalGuests: IUser[];
   location?: string | null;
   selectedAddress?: FullAddress | { description: 'External location' } | null;
-  isSaving?: boolean;
+  isSaving: boolean;
   error?: string | null;
 }
 
@@ -65,6 +65,7 @@ export class AppointmentModal extends React.Component<allProps, IState> {
       endTime: null,
       internalGuests,
       externalGuests: [],
+      isSaving: false,
     };
   }
 
@@ -219,12 +220,12 @@ export class AppointmentModal extends React.Component<allProps, IState> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isSaving}
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}
         titleMessageId="appointmentModal.title"
         submitMessageId="appointmentModal.submit"
         cancelMessageId="appointmentModal.cancel"
-        isButtonHidden={isSaving}
         error={error}
       >
         {bodyHtml}

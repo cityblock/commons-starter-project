@@ -39,6 +39,7 @@ interface IState {
   hideSearchResults: boolean;
   showAllConcerns: boolean;
   concernCreateError: string | null;
+  isLoading: boolean;
 }
 
 type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
@@ -58,6 +59,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
       hideSearchResults: false,
       showAllConcerns: false,
       concernCreateError: null,
+      isLoading: false,
     };
   }
 
@@ -72,13 +74,15 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
 
     if (createPatientConcern && concernId) {
       try {
-        this.setState({ concernCreateError: null });
+        this.setState({ concernCreateError: null, isLoading: true });
         const startedAt = concernType === 'active' ? new Date().toISOString() : null;
         await createPatientConcern({ variables: { patientId, concernId, startedAt } });
         await refetchCarePlan();
+
+        this.setState({ isLoading: false });
         this.onClose();
       } catch (err) {
-        this.setState({ concernCreateError: err.message });
+        this.setState({ concernCreateError: err.message, isLoading: false });
       }
     }
   };
@@ -119,11 +123,13 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
       searchTerm,
       showAllConcerns,
       concernCreateError,
+      isLoading,
     } = this.state;
 
     return (
       <Modal
         isVisible={visible}
+        isLoading={isLoading}
         className={styles.popup}
         onClose={this.onClose}
         onSubmit={this.onSubmit}

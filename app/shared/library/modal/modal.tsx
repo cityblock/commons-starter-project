@@ -14,6 +14,7 @@ interface IProps {
   onSubmit?: () => void;
   onCancel?: () => void;
   isVisible: boolean;
+  isLoading: boolean;
   isButtonHidden?: boolean;
   titleMessageId?: string;
   titleText?: string;
@@ -30,7 +31,6 @@ interface IProps {
   headerIconSize?: 'large' | 'extraLarge';
   className?: string;
   headerClassName?: string;
-  isLoading?: boolean;
 }
 
 const Modal: React.StatelessComponent<IProps> = (props: IProps) => {

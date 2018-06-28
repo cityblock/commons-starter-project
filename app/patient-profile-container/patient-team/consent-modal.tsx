@@ -25,6 +25,7 @@ interface IState extends IConsentSettings {
   consenterId: string;
   hasFieldError: { [key: string]: boolean };
   saveError: string | null;
+  isLoading: boolean;
 }
 
 export class ConsentModal extends React.Component<IProps, IState> {
@@ -38,23 +39,21 @@ export class ConsentModal extends React.Component<IProps, IState> {
     return null;
   }
 
-  state = {
-    ...getConsentSettingsObject(this.props.consentSettings),
-    consenterId: this.props.consenterId,
-    consentSelectState: getConsentLevel(getConsentSettingsObject(this.props.consentSettings)),
-    hasFieldError: {},
-    saveError: null,
-  };
+  state = this.getInitialState();
+
+  getInitialState() {
+    return {
+      ...getConsentSettingsObject(this.props.consentSettings),
+      consenterId: this.props.consenterId,
+      consentSelectState: getConsentLevel(getConsentSettingsObject(this.props.consentSettings)),
+      hasFieldError: {},
+      saveError: null,
+      isLoading: false,
+    };
+  }
 
   clearState() {
-    const clearedFields = {} as any;
-    Object.keys(this.state).forEach(field => {
-      clearedFields[field] = null;
-    }, {});
-
-    this.setState({
-      ...clearedFields,
-    });
+    this.setState(this.getInitialState());
   }
 
   validateFields() {
@@ -123,24 +122,28 @@ export class ConsentModal extends React.Component<IProps, IState> {
     }
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveConsentSettings(updatedConsentSettings);
+      this.setState({ isLoading: false });
+
       if (response.errors) {
         return this.setState({ saveError: response.errors[0].message });
       }
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
   render() {
     const { isVisible } = this.props;
-    const { saveError, hasFieldError, consentSelectState } = this.state;
+    const { saveError, hasFieldError, consentSelectState, isLoading } = this.state;
 
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId="sharingConsent.title"
         subTitleMessageId="sharingConsent.subtitle"
         cancelMessageId="sharingConsent.cancel"

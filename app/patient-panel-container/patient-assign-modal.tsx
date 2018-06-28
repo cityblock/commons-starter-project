@@ -38,7 +38,7 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   careWorkerId: string | null;
-  assignLoading?: boolean;
+  assignLoading: boolean;
   assignError: string | null;
   assignSuccess?: boolean;
   assignedCareWorker: careTeamAssignPatients['careTeamAssignPatients'];
@@ -48,6 +48,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
   state: IState = {
     careWorkerId: null,
     assignError: null,
+    assignLoading: false,
     assignedCareWorker: { id: '', firstName: '', lastName: '', patientCount: 0 },
   };
 

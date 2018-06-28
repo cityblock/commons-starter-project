@@ -188,6 +188,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
     return (
       <Modal
         isVisible={visible}
+        isLoading={loading}
         onClose={this.onClose}
         titleMessageId="taskCreate.addTask"
         subTitleMessageId="taskCreate.detail"
@@ -197,7 +198,6 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
         submitMessageId="taskCreate.submit"
         onSubmit={this.onSubmit}
         error={error}
-        isLoading={loading}
       >
         <CreateTaskInfo goal={goal} concern={concern} />
         <CreateTaskFields

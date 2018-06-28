@@ -40,6 +40,7 @@ interface IEditableFieldState {
 interface IState {
   saveError?: string | null;
   hasFieldError?: { [key: string]: boolean };
+  isLoading: boolean;
 }
 
 type allState = IState & IEditableFieldState;
@@ -67,29 +68,27 @@ export class PatientExternalOrganizationModal extends React.Component<IProps, al
     return null;
   }
 
-  state = {
-    name: null,
-    description: null,
-    phoneNumber: null,
-    faxNumber: null,
-    zip: null,
-    street1: null,
-    street2: null,
-    state: null,
-    city: null,
-    saveError: null,
-    hasFieldError: undefined,
-  };
+  state = this.getInitialState();
+
+  getInitialState() {
+    return {
+      name: null,
+      description: null,
+      phoneNumber: null,
+      faxNumber: null,
+      zip: null,
+      street1: null,
+      street2: null,
+      state: null,
+      city: null,
+      saveError: null,
+      hasFieldError: undefined,
+      isLoading: false,
+    };
+  }
 
   clearState() {
-    const clearedFields = {} as any;
-    Object.keys(this.state).forEach(field => {
-      clearedFields[field] = null;
-    }, {});
-
-    this.setState({
-      ...clearedFields,
-    });
+    this.setState(this.getInitialState());
   }
 
   validateFields() {
@@ -106,7 +105,7 @@ export class PatientExternalOrganizationModal extends React.Component<IProps, al
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handleClose = () => {
@@ -145,14 +144,17 @@ export class PatientExternalOrganizationModal extends React.Component<IProps, al
     } as any;
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveExternalOrganization(updatedPatientExternalOrganization);
+      this.setState({ isLoading: false });
+
       if (response.errors) {
         return this.setState({ saveError: response.errors[0].message });
       }
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -189,11 +191,12 @@ export class PatientExternalOrganizationModal extends React.Component<IProps, al
 
   render() {
     const { isVisible, titleMessageId, subTitleMessageId } = this.props;
-    const { saveError } = this.state;
+    const { saveError, isLoading } = this.state;
 
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         subTitleMessageId={subTitleMessageId}
         cancelMessageId="patientExternalOrganization.cancel"

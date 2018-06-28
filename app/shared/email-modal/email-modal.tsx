@@ -28,6 +28,7 @@ interface IState {
   description?: string | null;
   saveError?: string | null;
   updatedIsPrimary?: boolean | null;
+  isLoading: boolean;
 }
 
 class EmailModal extends React.Component<IProps, IState> {
@@ -36,6 +37,7 @@ class EmailModal extends React.Component<IProps, IState> {
     description: null,
     saveError: null,
     updatedIsPrimary: null,
+    isLoading: false,
   };
 
   clearState() {
@@ -44,12 +46,13 @@ class EmailModal extends React.Component<IProps, IState> {
       description: null,
       saveError: null,
       updatedIsPrimary: null,
+      isLoading: false,
     });
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handlePrimaryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,12 +74,13 @@ class EmailModal extends React.Component<IProps, IState> {
     };
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveEmail(updatedEmail, isPrimaryUpdatedToTrue);
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -88,7 +92,7 @@ class EmailModal extends React.Component<IProps, IState> {
   render() {
     const { isVisible, titleMessageId, isPrimary } = this.props;
     const email = this.props.email || {};
-    const { saveError, emailAddress, description, updatedIsPrimary } = this.state;
+    const { saveError, emailAddress, description, updatedIsPrimary, isLoading } = this.state;
 
     const updatedEmailAddress = isNil(emailAddress) ? email.emailAddress : emailAddress;
     const updatedDescription = isNil(description) ? email.description : description;
@@ -98,6 +102,7 @@ class EmailModal extends React.Component<IProps, IState> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         cancelMessageId="email.cancel"
         submitMessageId="email.save"

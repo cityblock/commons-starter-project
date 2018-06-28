@@ -48,12 +48,14 @@ interface IState {
   hasFileError?: boolean;
   documentType?: DocumentTypeOptions | null;
   description?: string | null;
-  isSaving?: boolean;
+  isSaving: boolean;
   error?: string | null;
 }
 
 export class PatientDocumentModal extends React.Component<allProps, IState> {
-  state: IState = {};
+  state: IState = {
+    isSaving: false,
+  };
 
   handleSave = async (): Promise<void> => {
     const {
@@ -101,12 +103,18 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
       this.setState({ isSaving: false, error: null });
       this.handleClose();
     } catch (err) {
-      this.setState({ error: err.message });
+      this.setState({ error: err.message, isSaving: false });
     }
   };
 
   handleClose = () => {
-    this.setState({ selectedFile: null, documentType: null, description: null, error: null });
+    this.setState({
+      selectedFile: null,
+      documentType: null,
+      description: null,
+      error: null,
+      isSaving: false,
+    });
     this.props.closePopup();
   };
 
@@ -124,7 +132,7 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value } as any);
   };
 
   renderForm() {
@@ -180,13 +188,13 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isSaving}
         onClose={this.handleClose}
         onSubmit={this.handleSave}
         titleMessageId="patientDocumentModal.title"
         subTitleMessageId="patientDocumentModal.subtitle"
         submitMessageId="patientDocumentModal.submit"
         cancelMessageId="patientDocumentModal.cancel"
-        isButtonHidden={isSaving}
         error={error}
       >
         {bodyHtml}

@@ -36,6 +36,7 @@ interface IState {
   description?: string | null;
   saveError?: string | null;
   updatedIsPrimary?: boolean | null;
+  isLoading: boolean;
 }
 
 class AddressModal extends React.Component<IProps, IState> {
@@ -48,6 +49,7 @@ class AddressModal extends React.Component<IProps, IState> {
     description: null,
     saveError: null,
     updatedIsPrimary: null,
+    isLoading: false,
   };
 
   clearState() {
@@ -60,12 +62,13 @@ class AddressModal extends React.Component<IProps, IState> {
       description: null,
       saveError: null,
       updatedIsPrimary: null,
+      isLoading: false,
     });
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value } as any);
   };
 
   handlePrimaryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -91,7 +94,9 @@ class AddressModal extends React.Component<IProps, IState> {
     };
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveAddress(updatedAddress, isPrimaryUpdatedToTrue);
+      this.setState({ isLoading: false });
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
@@ -117,6 +122,7 @@ class AddressModal extends React.Component<IProps, IState> {
       zip,
       city,
       description,
+      isLoading,
     } = this.state;
 
     const updatedStreet1 = isNil(street1) ? address.street1 : street1;
@@ -131,6 +137,7 @@ class AddressModal extends React.Component<IProps, IState> {
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         cancelMessageId="address.cancel"
         submitMessageId="address.save"

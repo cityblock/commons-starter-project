@@ -20,6 +20,7 @@ const RequestRefreshModal: React.StatelessComponent<IProps> = (props: IProps) =>
   return (
     <Modal
       isVisible={isVisible}
+      isLoading={false}
       titleMessageId={titleMessageId}
       subTitleMessageId={subTitleMessageId}
       headerIconName={headerIconName}

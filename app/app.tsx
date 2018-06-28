@@ -37,6 +37,7 @@ export default class App extends React.Component<IProps> {
               cancelMessageId="saveModal.cancel"
               submitMessageId="saveModal.continueWithoutSaving"
               isVisible={true}
+              isLoading={false}
               headerIconName="errorOutline"
               headerIconColor="red"
               redSubmitButton={true}

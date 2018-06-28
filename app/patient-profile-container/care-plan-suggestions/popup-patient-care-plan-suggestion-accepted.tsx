@@ -117,7 +117,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
 
   render() {
     const { carePlan, carePlanSuggestions, concerns, suggestion, visible } = this.props;
-    const { concernId, concernType, error } = this.state;
+    const { concernId, concernType, error, loading } = this.state;
 
     const suggestionType = (suggestion && suggestion.suggestionType) || '';
     const subTitleMessageId =
@@ -126,6 +126,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
     return (
       <Modal
         isVisible={visible}
+        isLoading={loading}
         onClose={this.onDismiss}
         onSubmit={this.onSubmit}
         error={error}

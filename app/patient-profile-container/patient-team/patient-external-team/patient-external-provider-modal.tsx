@@ -42,7 +42,7 @@ interface IProps {
 
 interface IGraphqlProps {
   patientExternalOrganizations?: getPatientExternalOrganizations['patientExternalOrganizations'];
-  isLoading?: boolean;
+  patientExternalOrganizationsLoading?: boolean;
   error?: ApolloError | null;
 }
 
@@ -63,6 +63,7 @@ interface IEditableFieldState {
 interface IState {
   saveError?: string | null;
   hasFieldError?: { [key: string]: boolean };
+  isLoading: boolean;
 }
 
 type allState = IState & IEditableFieldState;
@@ -90,29 +91,27 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
     return null;
   }
 
-  state = {
-    firstName: null,
-    lastName: null,
-    role: null,
-    roleFreeText: null,
-    patientExternalOrganizationId: null,
-    description: null,
-    emailAddress: null,
-    phoneNumber: null,
-    phoneType: null,
-    saveError: null,
-    hasFieldError: undefined,
-  };
+  state = this.getInitialState();
+
+  getInitialState() {
+    return {
+      firstName: null,
+      lastName: null,
+      role: null,
+      roleFreeText: null,
+      patientExternalOrganizationId: null,
+      description: null,
+      emailAddress: null,
+      phoneNumber: null,
+      phoneType: null,
+      saveError: null,
+      hasFieldError: undefined,
+      isLoading: false,
+    };
+  }
 
   clearState() {
-    const clearedFields = {} as any;
-    Object.keys(this.state).forEach(field => {
-      clearedFields[field] = null;
-    }, {});
-
-    this.setState({
-      ...clearedFields,
-    });
+    this.setState(this.getInitialState());
   }
 
   validateFields() {
@@ -137,7 +136,7 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    this.setState({ [name as any]: value });
+    this.setState({ [name as any]: value } as any);
   };
 
   handleClose = () => {
@@ -181,14 +180,17 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
     } as any;
 
     try {
+      this.setState({ isLoading: true });
       const response = await saveExternalProvider(updatedPatientExternalProvider);
+      this.setState({ isLoading: false });
+
       if (response.errors) {
         return this.setState({ saveError: response.errors[0].message });
       }
       this.handleClose();
     } catch (err) {
       // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -241,7 +243,7 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
       subTitleMessageId,
       patientExternalOrganizations,
     } = this.props;
-    const { saveError } = this.state;
+    const { saveError, isLoading } = this.state;
     const noOrganizations = !patientExternalOrganizations || !patientExternalOrganizations.length;
     const submitMessageId = noOrganizations
       ? 'patientExternalProvider.goToOrganizations'
@@ -251,6 +253,7 @@ export class PatientExternalProviderModal extends React.Component<allProps, allS
     return (
       <Modal
         isVisible={isVisible}
+        isLoading={isLoading}
         titleMessageId={titleMessageId}
         subTitleMessageId={subTitleMessageId}
         cancelMessageId="patientExternalProvider.cancel"
@@ -276,7 +279,7 @@ export default compose(
       },
     }),
     props: ({ data }): IGraphqlProps => ({
-      isLoading: data ? data.loading : false,
+      patientExternalOrganizationsLoading: data ? data.loading : false,
       error: data ? data.error : null,
       patientExternalOrganizations: data ? (data as any).patientExternalOrganizations : null,
     }),

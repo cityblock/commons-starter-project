@@ -43,7 +43,7 @@ describe('Render Patient Calendar', () => {
       fetchMoreCalendarEvents={fetchMoreCalendarEvents}
       createCalendarForPatient={createCalendarForPatient}
       refetchCalendar={refetchCalendar}
-      isLoading={false}
+      calendarEventsLoading={false}
       error={null}
     />,
   );

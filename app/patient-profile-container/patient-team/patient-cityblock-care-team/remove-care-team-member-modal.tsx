@@ -40,12 +40,15 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   reassignedToId?: string | null;
-  reassignUserLoading?: boolean;
+  reassignUserLoading: boolean;
   reassignUserError?: string | null;
 }
 
 export class RemoveCareTeamMemberModal extends React.Component<allProps, IState> {
-  state: IState = { reassignedToId: null };
+  state: IState = {
+    reassignedToId: null,
+    reassignUserLoading: false,
+  };
 
   getModalTitleBodyMessageId() {
     const { careTeamMemberTasks } = this.props;
@@ -114,7 +117,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
   };
 
   onChangeReassignedTo = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ [e.currentTarget.name as any]: e.currentTarget.value });
+    this.setState({ [e.currentTarget.name as any]: e.currentTarget.value } as any);
   };
 
   onClose = () => {

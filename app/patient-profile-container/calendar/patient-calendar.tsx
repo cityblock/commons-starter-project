@@ -35,7 +35,7 @@ interface IGraphqlProps {
   ) => { data: calendarCreateForPatient };
   calendarEventsResponse?: getCalendarEventsForPatient['calendarEventsForPatient'];
   calendarResponse?: getCalendarForPatient['calendarForPatient'];
-  isLoading?: boolean;
+  calendarEventsLoading?: boolean;
   error: ApolloError | null | undefined;
   fetchMoreCalendarEvents: () => any;
   refetchCalendar: () => any;
@@ -115,7 +115,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
 
   render() {
     const {
-      isLoading,
+      calendarEventsLoading,
       match,
       calendarEventsResponse,
       calendarResponse,
@@ -171,7 +171,7 @@ export class PatientCalendar extends React.Component<allProps, IState> {
         </div>
         <Calendar
           fetchMore={fetchMoreCalendarEvents}
-          loading={isLoading}
+          loading={calendarEventsLoading}
           calendarEvents={events}
           error={error}
           hasNextPage={hasNextPage}
@@ -272,7 +272,7 @@ export default compose(
           });
         }
       },
-      isLoading: data ? data.loading : false,
+      calendarEventsLoading: data ? data.loading : false,
       error: data ? data.error : null,
       calendarEventsResponse: data ? (data as any).calendarEventsForPatient : null,
       refetchCalendar: () => {

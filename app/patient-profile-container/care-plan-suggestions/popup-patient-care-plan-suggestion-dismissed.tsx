@@ -81,13 +81,14 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
 
   render() {
     const { suggestion, visible } = this.props;
-    const { dismissedReason, error } = this.state;
+    const { dismissedReason, error, loading } = this.state;
 
     const suggestionType = (suggestion && suggestion.suggestionType) || '';
 
     return (
       <Modal
         isVisible={visible}
+        isLoading={loading}
         onSubmit={this.onSubmit}
         onClose={this.onDismiss}
         titleMessageId="carePlanSuggestion.dismissReason"

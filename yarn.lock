@@ -1266,9 +1266,9 @@ apollo-codegen-typescript@^0.20.0:
     change-case "^3.0.1"
     inflected "^2.0.3"
 
-apollo-codegen@0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.20.0.tgz#18b532cc5fd2a168b5e0ab46f5b41875e39ce6ec"
+apollo-codegen@0.20.2:
+  version "0.20.2"
+  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.20.2.tgz#960972828651de74e043f8f92f6f819025a50f49"
   dependencies:
     apollo-codegen-core "^0.20.0"
     apollo-codegen-flow "^0.20.0"

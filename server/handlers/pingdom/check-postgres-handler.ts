@@ -9,8 +9,14 @@ import User from '../../models/user';
 const logger = config.NODE_ENV === 'test' ? (console as any) : Logging.get();
 
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {
-  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
-
+  const credentials = JSON.parse(String(config.GCP_CREDS));
+  const errorReporting = new ErrorReporting({
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
+    projectId: credentials.project_id,
+  });
   try {
     await transaction(User.knex(), async txn => {
       const db = knexConfig[config.NODE_ENV].connection.database;

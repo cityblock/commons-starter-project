@@ -9,8 +9,13 @@ import { getGraphQLContext } from '../graphql/shared/utils';
 import Logging from '../logging';
 
 export function formatError(error: IGraphQLResponseError): IGraphQLResponseError {
+  const credentials = JSON.parse(String(config.GCP_CREDS));
   const errorReporting = new ErrorReporting({
-    credentials: JSON.parse(String(config.GCP_CREDS)),
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
+    projectId: credentials.project_id,
   });
   if (error.path || error.name !== 'GraphQLError') {
     console.error(error.message);

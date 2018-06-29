@@ -4,7 +4,14 @@ import config from '../../config';
 import Logging from '../../logging';
 
 export async function checkRedisHandler(req: express.Request, res: express.Response) {
-  const errorReporting = new ErrorReporting({ credentials: JSON.parse(String(config.GCP_CREDS)) });
+  const credentials = JSON.parse(String(config.GCP_CREDS));
+  const errorReporting = new ErrorReporting({
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
+    projectId: credentials.project_id,
+  });
   const logger = Logging.get();
   const auth = 'Basic ' + Buffer.from(`jobManager:${config.KUE_UI_PASSWORD}`).toString('base64');
   try {

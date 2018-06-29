@@ -49,8 +49,13 @@ export interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
+  const credentials = JSON.parse(String(config.GCP_CREDS));
   const errorReporting = new ErrorReporting({
-    credentials: JSON.parse(String(config.GCP_CREDS)),
+    credentials: {
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
+    },
+    projectId: credentials.project_id,
   });
 
   await expressConfig(

@@ -63,37 +63,37 @@ describe('Render Consent Form', () => {
 
     const substanceCheck = checkboxInputs.at(0).props();
     expect(substanceCheck.value).toBe('isConsentedForSubstanceUse');
-    expect(substanceCheck.checked).toBeFalsy();
+    expect(substanceCheck.checked).toBeTruthy();
     expect(substanceCheck.onChange).toBe(onCheckChange);
     expect(substanceCheck.labelMessageId).toBe('sharingConsent.isConsentedForSubstanceUse');
 
     const hivCheck = checkboxInputs.at(1).props();
     expect(hivCheck.value).toBe('isConsentedForHiv');
-    expect(hivCheck.checked).toBeTruthy();
+    expect(hivCheck.checked).toBeFalsy();
     expect(hivCheck.onChange).toBe(onCheckChange);
     expect(hivCheck.labelMessageId).toBe('sharingConsent.isConsentedForHiv');
 
     const stdCheck = checkboxInputs.at(2).props();
     expect(stdCheck.value).toBe('isConsentedForStd');
-    expect(stdCheck.checked).toBeFalsy();
+    expect(stdCheck.checked).toBeTruthy();
     expect(stdCheck.onChange).toBe(onCheckChange);
     expect(stdCheck.labelMessageId).toBe('sharingConsent.isConsentedForStd');
 
     const geneticCheck = checkboxInputs.at(3).props();
     expect(geneticCheck.value).toBe('isConsentedForGeneticTesting');
-    expect(geneticCheck.checked).toBeTruthy();
+    expect(geneticCheck.checked).toBeFalsy();
     expect(geneticCheck.onChange).toBe(onCheckChange);
     expect(geneticCheck.labelMessageId).toBe('sharingConsent.isConsentedForGeneticTesting');
 
     const familyCheck = checkboxInputs.at(4).props();
     expect(familyCheck.value).toBe('isConsentedForFamilyPlanning');
-    expect(familyCheck.checked).toBeFalsy();
+    expect(familyCheck.checked).toBeTruthy();
     expect(familyCheck.onChange).toBe(onCheckChange);
     expect(familyCheck.labelMessageId).toBe('sharingConsent.isConsentedForFamilyPlanning');
 
     const mentalCheck = checkboxInputs.at(5).props();
     expect(mentalCheck.value).toBe('isConsentedForMentalHealth');
-    expect(mentalCheck.checked).toBeFalsy();
+    expect(mentalCheck.checked).toBeTruthy();
     expect(mentalCheck.onChange).toBe(onCheckChange);
     expect(mentalCheck.labelMessageId).toBe('sharingConsent.isConsentedForMentalHealth');
   });

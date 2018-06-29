@@ -82,7 +82,7 @@ export class ConsentModal extends React.Component<IProps, IState> {
 
   handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
-    this.setState({ [value as any]: checked } as any);
+    this.setState({ [value as any]: !checked } as any);
   };
 
   handleClose = () => {

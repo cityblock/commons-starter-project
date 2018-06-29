@@ -11,13 +11,15 @@ interface IProps {
   label?: string; // optional label, will default to value if not provided
   labelMessageId?: string;
   disabled?: boolean;
+  color?: 'red' | 'blue';
 }
 
 const CheckboxInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, checked, onChange, label, labelMessageId, disabled, inputId } = props;
+  const { value, checked, onChange, label, labelMessageId, disabled, inputId, color } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
     [styles.disabled]: !!disabled,
+    [styles.red]: color === 'red',
   });
 
   const labelHtml = labelMessageId ? (

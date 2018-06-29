@@ -23,6 +23,12 @@
   border-color: var(--black-color);
 }
 
+.checked.red label {
+  color: var(--white-color);
+  background-color: var(--red-color);
+  border-color: var(--border-color);
+}
+
 .disabled label {
   cursor: default;
   color: var(--gray-background-color);

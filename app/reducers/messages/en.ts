@@ -1133,6 +1133,10 @@ export const ENGLISH_TRANSLATION = {
     'settings.dayOff': 'Check this box if you are off this day',
     'patientExternalOrganization.phone': 'Tel:',
     'patientExternalOrganization.fax': 'Fax:',
+    'sharingConsent.partialExclusionDescriptionPt1': 'I ask that Cityblock Medical Practice',
+    'sharingConsent.partialExclusionDescriptionHighlighted': 'NOT share',
+    'sharingConsent.partialExclusionDescriptionPt2':
+      'the following sensitive information with this person:',
     'sharingConsent.fieldEmptyError': 'You must select one of the following options',
     'sharingConsent.pending': 'PENDING DOCUMENT UPLOAD:',
     'sharingConsent.fullConsent':

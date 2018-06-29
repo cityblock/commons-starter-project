@@ -265,7 +265,7 @@
     "sleep-promise": "8.0.1",
     "style-loader": "0.21.0",
     "subscriptions-transport-ws": "0.9.11",
-    "ts-loader": "4.4.1",
+    "ts-loader": "4.4.2",
     "ts-node": "6.2.0",
     "twilio": "3.17.4",
     "typescript": "2.9.2",

@@ -1,4 +1,5 @@
 export const header: string;
+export const black: string;
 export const container: string;
 export const link: string;
 export const zendeskIconContainer: string;

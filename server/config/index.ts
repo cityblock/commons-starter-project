@@ -43,5 +43,6 @@ export default {
   HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT: 'd42bd7c4dfc8ae7fda752cf06327a8d70904f48f',
   HELLOSIGN_TEMPLATE_ID_MOLST: '53844791145dab0d75cd5641db1824efdb388c0d',
   PATIENT_CALENDAR_ACCOUNT: 'patient-calendar-local@testorg.cityblock.engineering',
+  DISPLAY_TEST_MODE_HEADER: false,
   ...process.env,
 };

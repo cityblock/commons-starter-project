@@ -16,6 +16,7 @@ module.exports = ({ production = false } = {}) => {
       'HELLOSIGN_CLIENT_ID',
       'HELLOSIGN_TEST_MODE',
       'GOOGLE_OAUTH_VALID_EMAIL_DOMAIN',
+      'DISPLAY_TEST_MODE_HEADER',
     ]),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ];

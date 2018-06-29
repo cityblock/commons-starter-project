@@ -121,9 +121,12 @@ export class Header extends React.Component<allProps> {
         <Icon className={styles.zendeskIcon} name="help" color="white" />
       </a>
     );
-
     return (
-      <div className={styles.header}>
+      <div
+        className={classNames(styles.header, {
+          [styles.black]: !!process.env.DISPLAY_TEST_MODE_HEADER,
+        })}
+      >
         <div className={styles.container}>
           <div className={styles.left}>
             <Link className={styles.link} to={'/'}>

@@ -62,26 +62,26 @@ exports[`renders task template create-edit 1`] = `
         value="high"
       >
         <option
-          className="undefined"
+          className="option disabled"
           disabled={true}
           value=""
         >
           Select Priority
         </option>
         <option
-          className=""
+          className="option"
           value="low"
         >
           Low
         </option>
         <option
-          className=""
+          className="option"
           value="medium"
         >
           Medium
         </option>
         <option
-          className=""
+          className="option"
           value="high"
         >
           High
@@ -104,13 +104,13 @@ exports[`renders task template create-edit 1`] = `
         value="false"
       >
         <option
-          className=""
+          className="option"
           value="true"
         >
           Yes
         </option>
         <option
-          className=""
+          className="option"
           value="false"
         >
           No
@@ -132,38 +132,38 @@ exports[`renders task template create-edit 1`] = `
         value="hour"
       >
         <option
-          className="undefined"
+          className="option disabled"
           disabled={true}
           value=""
         >
           Select interval
         </option>
         <option
-          className=""
+          className="option"
           value="hour"
         >
           Hour
         </option>
         <option
-          className=""
+          className="option"
           value="day"
         >
           Day
         </option>
         <option
-          className=""
+          className="option"
           value="week"
         >
           Week
         </option>
         <option
-          className=""
+          className="option"
           value="month"
         >
           Month
         </option>
         <option
-          className=""
+          className="option"
           value="year"
         >
           Year
@@ -185,68 +185,68 @@ exports[`renders task template create-edit 1`] = `
         value="1"
       >
         <option
-          className="undefined"
+          className="option disabled"
           disabled={true}
           value=""
         >
           Select number
         </option>
         <option
-          className=""
+          className="option"
           value="1"
         >
           1
         </option>
         <option
-          className=""
+          className="option"
           value="2"
         >
           2
         </option>
         <option
-          className=""
+          className="option"
           value="3"
         >
           3
         </option>
         <option
-          className=""
+          className="option"
           value="4"
         >
           4
         </option>
         <option
-          className=""
+          className="option"
           value="5"
         >
           5
         </option>
         <option
-          className=""
+          className="option"
           value="6"
         >
           6
         </option>
         <option
-          className=""
+          className="option"
           value="7"
         >
           7
         </option>
         <option
-          className=""
+          className="option"
           value="8"
         >
           8
         </option>
         <option
-          className=""
+          className="option"
           value="9"
         >
           9
         </option>
         <option
-          className=""
+          className="option"
           value="10"
         >
           10
@@ -268,110 +268,110 @@ exports[`renders task template create-edit 1`] = `
         value="physician"
       >
         <option
-          className="undefined"
+          className="option disabled"
           disabled={true}
           value=""
         >
           Select role
         </option>
         <option
-          className=""
+          className="option"
           value="Back_Office_Admin"
         >
           Back Office Admin
         </option>
         <option
-          className=""
+          className="option"
           value="Behavioral_Health_Nurse_Practitioner"
         >
           Behavioral Health Nurse Practitioner
         </option>
         <option
-          className=""
+          className="option"
           value="Behavioral_Health_Specialist"
         >
           Behavioral Health Specialist
         </option>
         <option
-          className=""
+          className="option"
           value="Clinical_Operations_Lead"
         >
           Clinical Operations Lead
         </option>
         <option
-          className=""
+          className="option"
           value="Clinical_Operations_Manager"
         >
           Clinical Operations Manager
         </option>
         <option
-          className=""
+          className="option"
           value="Community_Engagement_Manager"
         >
           Community Engagement Manager
         </option>
         <option
-          className=""
+          className="option"
           value="Community_Health_Partner"
         >
           Community Health Partner
         </option>
         <option
-          className=""
+          className="option"
           value="Hub_Care_Coordinator"
         >
           Hub Care Coordinator
         </option>
         <option
-          className=""
+          className="option"
           value="Hub_Operations_Manager"
         >
           Hub Operations Manager
         </option>
         <option
-          className=""
+          className="option"
           value="Hub_RN"
         >
           Hub RN
         </option>
         <option
-          className=""
+          className="option"
           value="Member_Experience_Advocate"
         >
           Member Experience Advocate
         </option>
         <option
-          className=""
+          className="option"
           value="Nurse_Care_Manager"
         >
           Nurse Care Manager
         </option>
         <option
-          className=""
+          className="option"
           value="Nurse_Practitioner"
         >
           Nurse Practitioner
         </option>
         <option
-          className=""
+          className="option"
           value="Outreach_Specialist"
         >
           Outreach Specialist
         </option>
         <option
-          className=""
+          className="option"
           value="Pharmacist"
         >
           Pharmacist
         </option>
         <option
-          className=""
+          className="option"
           value="Primary_Care_Physician"
         >
           Primary Care Physician
         </option>
         <option
-          className=""
+          className="option"
           value="Psychiatrist"
         >
           Psychiatrist
@@ -389,7 +389,7 @@ exports[`renders task template create-edit 1`] = `
       value=""
     >
       <option
-        className="undefined"
+        className="option disabled"
         disabled={true}
         value=""
       >

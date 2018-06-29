@@ -11,14 +11,14 @@ exports[`renders dropdown answer 1`] = `
     value="answer-id"
   >
     <option
-      className="undefined"
+      className="option disabled"
       disabled={true}
       value=""
     >
       Select one
     </option>
     <option
-      className=""
+      className="option"
       value="answer-id"
     >
       answer value

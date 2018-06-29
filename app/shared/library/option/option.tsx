@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/option.css';
+import styles from './css/option.css';
 
 interface IProps {
   value: string | number;

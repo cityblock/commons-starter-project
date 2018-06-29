@@ -8,20 +8,20 @@ exports[`renders popup modal body for concern suggestion 1`] = `
   value="active"
 >
   <option
-    className="undefined"
+    className="option disabled"
     disabled={true}
     value=""
   >
     Select a concern type
   </option>
   <option
-    className=""
+    className="option"
     value="active"
   >
     Active concern
   </option>
   <option
-    className=""
+    className="option"
     value="inactive"
   >
     Inactive concern
@@ -38,7 +38,7 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     value="concern-id"
   >
     <option
-      className="undefined"
+      className="option disabled"
       disabled={true}
       value=""
     >
@@ -64,20 +64,20 @@ exports[`renders popup modal body for goal suggestion 1`] = `
       value="active"
     >
       <option
-        className="undefined"
+        className="option disabled"
         disabled={true}
         value=""
       >
         Select a concern type
       </option>
       <option
-        className=""
+        className="option"
         value="active"
       >
         Active concern
       </option>
       <option
-        className=""
+        className="option"
         value="inactive"
       >
         Inactive concern

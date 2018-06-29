@@ -11,7 +11,7 @@ import {
   helloSignTransferVariables,
 } from '../../../graphql/types';
 import Text from '../../../shared/library/text/text';
-import * as styles from './css/document-placeholder.css';
+import styles from './css/document-placeholder.css';
 
 interface IResponse {
   data: {

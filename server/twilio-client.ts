@@ -1,15 +1,15 @@
+import twilio from 'twilio';
 import config from './config';
-
-/* tslint:disable no-var-requires */
-const twilio = require('twilio');
-/* tslint:enable no-var-requires */
 
 let singleton: any;
 
 export default class TwilioClient {
   static get() {
     if (singleton) return singleton;
-    singleton = new twilio(config.TWILIO_SID, config.TWILIO_AUTH_TOKEN);
+    singleton = new (twilio as any)(
+      config.TWILIO_SID || 'test_sid',
+      config.TWILIO_AUTH_TOKEN || 'test_auth_token',
+    );
     return singleton;
   }
 }

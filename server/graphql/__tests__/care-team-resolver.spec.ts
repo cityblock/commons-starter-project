@@ -103,12 +103,13 @@ describe('care team', () => {
       expect(patientCareTeamIds).toContain(user2.id);
       expect(addUserToChannel).toBeCalledWith(patient.id, user2.id);
 
-      expect(queue.testMode.jobs.length).toBe(1);
-      expect(queue.testMode.jobs[0].data).toMatchObject({
-        patientId: patient.id,
-        type: 'addCareTeamMember',
-        userId: user2.id,
-      });
+      expect(queue.testMode.jobs.length).toBe(0);
+      // expect(queue.testMode.jobs.length).toBe(1);
+      // expect(queue.testMode.jobs[0].data).toMatchObject({
+      //   patientId: patient.id,
+      //   type: 'addCareTeamMember',
+      //   userId: user2.id,
+      // });
     });
 
     it('updates computed patient status when adding a user to a care team', async () => {
@@ -249,12 +250,13 @@ describe('care team', () => {
       expect(addUserToChannel).toBeCalledWith(patient.id, user.id);
       expect(addUserToChannel).toBeCalledWith(patient2.id, user.id);
 
-      expect(queue.testMode.jobs.length).toBe(1);
-      expect(queue.testMode.jobs[0].data).toMatchObject({
-        patientIds: [patient.id, patient2.id],
-        type: 'addCareTeamMember',
-        userId: user.id,
-      });
+      expect(queue.testMode.jobs.length).toBe(0);
+      // expect(queue.testMode.jobs.length).toBe(1);
+      // expect(queue.testMode.jobs[0].data).toMatchObject({
+      //   patientIds: [patient.id, patient2.id],
+      //   type: 'addCareTeamMember',
+      //   userId: user.id,
+      // });
     });
 
     it('updates computed patient status when bulk assigning patients', async () => {

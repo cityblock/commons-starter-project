@@ -60,11 +60,11 @@ export async function careTeamAddUser(
     mattermost.queueAddUserToPatientChannel(input.patientId, input.userId);
 
     // notify user of new contact
-    addJobToQueue('patientContactEdit', {
-      patientId: input.patientId,
-      type: 'addCareTeamMember',
-      userId: input.userId,
-    });
+    // addJobToQueue('patientContactEdit', {
+    //   patientId: input.patientId,
+    //   type: 'addCareTeamMember',
+    //   userId: input.userId,
+    // });
 
     return careTeam;
   });
@@ -141,11 +141,11 @@ export async function careTeamAssignPatients(
     });
 
     // notify user of new contacts
-    addJobToQueue('patientContactEdit', {
-      patientIds,
-      type: 'addCareTeamMember',
-      userId: input.userId,
-    });
+    // addJobToQueue('patientContactEdit', {
+    //   patientIds,
+    //   type: 'addCareTeamMember',
+    //   userId: input.userId,
+    // });
 
     return careTeam;
   });

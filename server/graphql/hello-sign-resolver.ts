@@ -27,8 +27,6 @@ import { IContext } from './shared/utils';
 
 const hellosign = HelloSign({ key: config.HELLOSIGN_API_KEY });
 
-const MAX_ORGANIZATIONS = 17;
-const MAX_INDIVIDUALS = 12;
 const TEMPLATE_MAP = {
   treatmentConsent: config.HELLOSIGN_TEMPLATE_ID_CONSENT_TO_TREAT,
   phiSharingConsent: config.HELLOSIGN_TEMPLATE_ID_PHI_SHARING_CONSENT,
@@ -144,16 +142,14 @@ export const getPHISharingConsentOptions = async (patient: Patient, txn: Transac
     date_of_birth: format(patient.dateOfBirth, 'MM/DD/YY'),
   } as any;
 
-  let organizations = await PatientExternalOrganization.getAllForConsents(patient.id, txn);
-  organizations = organizations.slice(0, MAX_ORGANIZATIONS);
+  const organizations = await PatientExternalOrganization.getAllForConsents(patient.id, txn);
 
   organizations.forEach((organization, index) => {
     customFields[`organization_name_${index}`] = organization.name;
     customFields[`organization_permissions_${index}`] = getPermissionText(organization);
   });
 
-  let individuals = await PatientContact.getAllForConsents(patient.id, txn);
-  individuals = individuals.slice(0, MAX_INDIVIDUALS);
+  const individuals = await PatientContact.getAllForConsents(patient.id, txn);
 
   individuals.forEach((individual, index) => {
     customFields[`individual_name_${index}`] = formatPatientName(

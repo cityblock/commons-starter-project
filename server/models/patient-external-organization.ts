@@ -1,16 +1,22 @@
 import { clone } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import {
+  getCountUndocumentedSharingConsentedForPatient,
+  getQueryForAllForConsents,
+  getQueryForAllNewlyUnconsented,
+  ConsentModel,
+} from '../helpers/consent-helpers';
+import {
   formatPhoneNumberForTwilio,
   validatePhoneNumberForTwilio,
 } from '../helpers/twilio-helpers';
 import Address from './address';
-import BaseModel from './base-model';
 import Patient from './patient';
 import PatientDocument from './patient-document';
 import PatientExternalProvider from './patient-external-provider';
 
 const EAGER_QUERY = '[address]';
+const MAX_ORGANIZATIONS = 17;
 
 export interface IPatientExternalOrganizationOptions {
   patientId: string;
@@ -26,6 +32,7 @@ export interface IPatientExternalOrganizationOptions {
   isConsentedForFamilyPlanning?: boolean;
   isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string;
+  isConsentDocumentOutdated?: boolean;
 }
 
 interface IEditPatientExternalOrganization {
@@ -41,10 +48,11 @@ interface IEditPatientExternalOrganization {
   isConsentedForFamilyPlanning?: boolean;
   isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean;
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientExternalOrganization extends BaseModel {
+export default class PatientExternalOrganization extends ConsentModel {
   id!: string;
   patientId!: string;
   name!: string;
@@ -60,6 +68,7 @@ export default class PatientExternalOrganization extends BaseModel {
   isConsentedForFamilyPlanning!: boolean;
   isConsentedForMentalHealth!: boolean;
   consentDocumentId!: string | null;
+  isConsentDocumentOutdated!: boolean;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string;
@@ -85,6 +94,7 @@ export default class PatientExternalOrganization extends BaseModel {
       isConsentedForFamilyPlanning: { type: 'boolean' },
       isConsentedForMentalHealth: { type: 'boolean' },
       consentDocumentId: { type: ['string', 'null'], format: 'uuid' },
+      isConsentDocumentOutdated: { type: 'boolean' },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
@@ -154,18 +164,41 @@ export default class PatientExternalOrganization extends BaseModel {
     patientId: string,
     txn: Transaction,
   ): Promise<PatientExternalOrganization[]> {
-    return this.query(txn)
-      .where({ patientId, deletedAt: null })
-      .where(builder => {
-        builder
-          .where({ isConsentedForFamilyPlanning: true })
-          .orWhere({ isConsentedForGeneticTesting: true })
-          .orWhere({ isConsentedForHiv: true })
-          .orWhere({ isConsentedForMentalHealth: true })
-          .orWhere({ isConsentedForStd: true })
-          .orWhere({ isConsentedForSubstanceUse: true });
-      })
-      .orderBy('name', 'asc');
+    const queryBuilder = this.query(txn);
+    return getQueryForAllForConsents(queryBuilder, patientId, MAX_ORGANIZATIONS, 'name');
+  }
+
+  static async assignDocumentToAllForPatient(
+    patientId: string,
+    consentDocumentId: string,
+    txn: Transaction,
+  ): Promise<number> {
+    let queryBuilder = this.query(txn);
+    const consentedNumber = await getQueryForAllForConsents(
+      queryBuilder,
+      patientId,
+      MAX_ORGANIZATIONS,
+      'name',
+    ).patch({
+      consentDocumentId,
+      isConsentDocumentOutdated: false,
+    });
+
+    queryBuilder = this.query(txn);
+    const unconsentedNumber = await getQueryForAllNewlyUnconsented(queryBuilder, patientId).patch({
+      consentDocumentId,
+      isConsentDocumentOutdated: false,
+    });
+
+    return consentedNumber + unconsentedNumber;
+  }
+
+  static async getCountUndocumentedSharingConsentedForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<number> {
+    const queryBuilder = this.query(txn);
+    return getCountUndocumentedSharingConsentedForPatient(queryBuilder, patientId);
   }
 
   static async create(input: IPatientExternalOrganizationOptions, txn: Transaction) {

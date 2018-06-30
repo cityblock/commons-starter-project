@@ -1,7 +1,12 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { PatientRelationOptions } from 'schema';
+import {
+  getCountUndocumentedSharingConsentedForPatient,
+  getQueryForAllForConsents,
+  getQueryForAllNewlyUnconsented,
+  ConsentModel,
+} from '../helpers/consent-helpers';
 import Address from './address';
-import BaseModel from './base-model';
 import Email from './email';
 import Patient from './patient';
 import PatientContactAddress from './patient-contact-address';
@@ -11,6 +16,7 @@ import PatientDocument from './patient-document';
 import Phone from './phone';
 
 const EAGER_QUERY = '[address, email, phone]';
+const MAX_INDIVIDUALS = 12;
 
 export interface IPatientContactOptions {
   patientId: string;
@@ -29,6 +35,7 @@ export interface IPatientContactOptions {
   isConsentedForFamilyPlanning?: boolean;
   isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string;
+  isConsentDocumentOutdated?: boolean;
 }
 
 interface IEditPatientContact {
@@ -47,10 +54,11 @@ interface IEditPatientContact {
   isConsentedForFamilyPlanning?: boolean;
   isConsentedForMentalHealth?: boolean;
   consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean;
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientContact extends BaseModel {
+export default class PatientContact extends ConsentModel {
   id!: string;
   patientId!: string;
   updatedById!: string;
@@ -71,6 +79,7 @@ export default class PatientContact extends BaseModel {
   isConsentedForFamilyPlanning!: boolean;
   isConsentedForMentalHealth!: boolean;
   consentDocumentId!: string | null;
+  isConsentDocumentOutdated!: boolean;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string;
@@ -98,6 +107,7 @@ export default class PatientContact extends BaseModel {
       isConsentedForFamilyPlanning: { type: 'boolean' },
       isConsentedForMentalHealth: { type: 'boolean' },
       consentDocumentId: { type: ['string', 'null'], format: 'uuid' },
+      isConsentDocumentOutdated: { type: 'boolean' },
       updatedAt: { type: 'string' },
       updatedById: { type: 'string', format: 'uuid' },
       createdAt: { type: 'string' },
@@ -196,20 +206,43 @@ export default class PatientContact extends BaseModel {
   }
 
   static async getAllForConsents(patientId: string, txn: Transaction): Promise<PatientContact[]> {
-    return this.query(txn)
+    const queryBuilder = this.query(txn);
+    return getQueryForAllForConsents(queryBuilder, patientId, MAX_INDIVIDUALS, 'lastName')
       .eager('phone')
-      .modifyEager('phone', builder => builder.where('phone.deletedAt', null))
-      .where({ patientId, deletedAt: null })
-      .where(builder => {
-        builder
-          .where({ isConsentedForFamilyPlanning: true })
-          .orWhere({ isConsentedForGeneticTesting: true })
-          .orWhere({ isConsentedForHiv: true })
-          .orWhere({ isConsentedForMentalHealth: true })
-          .orWhere({ isConsentedForStd: true })
-          .orWhere({ isConsentedForSubstanceUse: true });
-      })
-      .orderBy('lastName', 'asc');
+      .modifyEager('phone', builder => builder.where('phone.deletedAt', null));
+  }
+
+  static async assignDocumentToAllForPatient(
+    patientId: string,
+    consentDocumentId: string,
+    txn: Transaction,
+  ): Promise<number> {
+    let queryBuilder = this.query(txn);
+    const consentedNumber = await getQueryForAllForConsents(
+      queryBuilder,
+      patientId,
+      MAX_INDIVIDUALS,
+      'lastName',
+    ).patch({
+      consentDocumentId,
+      isConsentDocumentOutdated: false,
+    });
+
+    queryBuilder = this.query(txn);
+    const unconsentedNumber = await getQueryForAllNewlyUnconsented(queryBuilder, patientId).patch({
+      consentDocumentId,
+      isConsentDocumentOutdated: false,
+    });
+
+    return consentedNumber + unconsentedNumber;
+  }
+
+  static async getCountUndocumentedSharingConsentedForPatient(
+    patientId: string,
+    txn: Transaction,
+  ): Promise<number> {
+    const queryBuilder = this.query(txn);
+    return getCountUndocumentedSharingConsentedForPatient(queryBuilder, patientId);
   }
 
   static async getHealthcareProxiesForPatient(

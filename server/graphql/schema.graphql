@@ -523,6 +523,7 @@ type PatientContact implements uniqueId {
   isConsentedForFamilyPlanning: Boolean
   isConsentedForMentalHealth: Boolean
   consentDocumentId: String
+  isConsentDocumentOutdated: Boolean
   createdAt: String
   updatedAt: String
   deletedAt: String
@@ -562,6 +563,7 @@ type PatientExternalOrganization implements uniqueId {
   isConsentedForFamilyPlanning: Boolean
   isConsentedForMentalHealth: Boolean
   consentDocumentId: String
+  isConsentDocumentOutdated: Boolean
   createdAt: String
   updatedAt: String
   deletedAt: String
@@ -576,6 +578,12 @@ type PatientDocument implements uniqueId {
   description: String
   documentType: DocumentTypeOptions
   createdAt: String!
+}
+
+# status of documentation for phi sharing consents
+type PatientUndocumentedSharingConsentStatus {
+  patientId: ID!
+  isUndocumentedSharingConsent: Boolean!
 }
 
 # ComputedPatientStatus
@@ -1992,6 +2000,7 @@ input PatientContactEditInput {
   isConsentedForFamilyPlanning: Boolean
   isConsentedForMentalHealth: Boolean
   consentDocumentId: String
+  isConsentDocumentOutdated: Boolean
 }
 
 # params for creating a patient external provider in the db
@@ -2061,6 +2070,7 @@ input PatientExternalOrganizationEditInput {
   isConsentedForFamilyPlanning: Boolean
   isConsentedForMentalHealth: Boolean
   consentDocumentId: String
+  isConsentDocumentOutdated: Boolean
 }
 
 # params for creating a patient document in the db
@@ -3133,6 +3143,8 @@ type RootQueryType {
   patientExternalOrganizations(patientId: ID!): [PatientExternalOrganization!]
   # Patient documents for patient
   patientDocuments(patientId: ID!): [PatientDocument!]
+  # Whether or not there are undocumented phi sharing consents
+  patientUndocumentedSharingConsentStatus(patientId: ID!): PatientUndocumentedSharingConsentStatus
   # Patient documents by type
   patientDocumentsByType(patientId: ID!, documentType: DocumentTypeOptions!): [PatientDocument!]!
   # A single clinic

@@ -17,4 +17,5 @@ fragment FullPatientExternalOrganization on PatientExternalOrganization {
   isConsentedForFamilyPlanning
   isConsentedForMentalHealth
   consentDocumentId
+  isConsentDocumentOutdated
 }

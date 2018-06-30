@@ -1,11 +1,17 @@
 import { ApolloError } from 'apollo-client';
 import { find } from 'lodash';
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import Loadable from 'react-loadable';
 import patientDocumentsGraphql from '../../../graphql/queries/get-patient-documents.graphql';
+import patientUndocumentedSharingConsentStatusGraphql from '../../../graphql/queries/get-patient-undocumented-sharing-consent-status.graphql';
 import patientDocumentSubscriptionGraphql from '../../../graphql/queries/patient-document-subscription.graphql';
-import { getPatientDocuments, DocumentTypeOptions } from '../../../graphql/types';
+import {
+  getPatientDocuments,
+  getPatientUndocumentedSharingConsentStatus,
+  DocumentTypeOptions,
+} from '../../../graphql/types';
+import Text from '../../../shared/library/text/text';
 import styles from './css/patient-documents.css';
 import DocumentPlaceholder from './document-placeholder';
 import PatientDocument from './patient-document';
@@ -29,9 +35,12 @@ interface IProps {
 
 interface IGraphqlProps {
   patientDocuments?: getPatientDocuments['patientDocuments'];
-  isLoading: boolean;
-  error: ApolloError | null | undefined;
+  isPatientDocumentsLoading: boolean;
+  patientDocumentsError: ApolloError | null | undefined;
   subscribeToMore: ((args: any) => () => void) | null;
+  undocumentedSharingConsentStatus?: getPatientUndocumentedSharingConsentStatus['patientUndocumentedSharingConsentStatus'];
+  isUndocumentedSharingConsentStatusLoading: boolean;
+  undocumentedSharingConsentStatusError: ApolloError | null | undefined;
 }
 
 export type allProps = IGraphqlProps & IProps;
@@ -125,8 +134,18 @@ class PatientDocuments extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { patientId, isModalVisible } = this.props;
+    const { patientId, isModalVisible, undocumentedSharingConsentStatus } = this.props;
     const { modalDocumentType } = this.state;
+    const phiSharingWarning =
+      undocumentedSharingConsentStatus &&
+      undocumentedSharingConsentStatus.isUndocumentedSharingConsent ? (
+        <Text
+          messageId="patientDocuments.isUndocumentedSharingConsentWarning"
+          color="white"
+          size="large"
+          className={styles.warning}
+        />
+      ) : null;
 
     return (
       <div className={styles.container}>
@@ -136,6 +155,7 @@ class PatientDocuments extends React.Component<allProps, IState> {
           patientId={patientId}
           preferredDocumentType={modalDocumentType || undefined}
         />
+        {phiSharingWarning}
         {this.renderRequiredDocuments()}
         {this.renderOtherDocuments()}
       </div>
@@ -143,17 +163,34 @@ class PatientDocuments extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql(patientDocumentsGraphql, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.patientId,
-    },
-    fetchPolicy: 'network-only',
+export default compose(
+  graphql(patientDocumentsGraphql, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+      fetchPolicy: 'network-only',
+    }),
+    props: ({ data }): Partial<IGraphqlProps> => ({
+      isPatientDocumentsLoading: data ? data.loading : false,
+      patientDocumentsError: data ? data.error : null,
+      patientDocuments: data ? (data as any).patientDocuments : null,
+      subscribeToMore: data ? data.subscribeToMore : null,
+    }),
   }),
-  props: ({ data }): IGraphqlProps => ({
-    isLoading: data ? data.loading : false,
-    error: data ? data.error : null,
-    patientDocuments: data ? (data as any).patientDocuments : null,
-    subscribeToMore: data ? data.subscribeToMore : null,
+  graphql(patientUndocumentedSharingConsentStatusGraphql, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+      fetchPolicy: 'network-only',
+    }),
+    props: ({ data }): Partial<IGraphqlProps> => ({
+      isUndocumentedSharingConsentStatusLoading: data ? data.loading : false,
+      undocumentedSharingConsentStatusError: data ? data.error : null,
+      undocumentedSharingConsentStatus: data
+        ? (data as any).patientUndocumentedSharingConsentStatus
+        : null,
+    }),
   }),
-})(PatientDocuments);
+)(PatientDocuments) as React.ComponentClass<IProps>;

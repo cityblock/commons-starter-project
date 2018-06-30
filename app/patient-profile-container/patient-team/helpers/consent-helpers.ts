@@ -7,6 +7,8 @@ export interface IConsentSettings {
   isConsentedForGeneticTesting?: boolean | null;
   isConsentedForFamilyPlanning?: boolean | null;
   isConsentedForMentalHealth?: boolean | null;
+  consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean | null;
 }
 
 export type ConsentLevel = 'fullConsent' | 'partialConsent' | 'noConsent';
@@ -55,5 +57,6 @@ export const getConsentSettingsObject = (supersetObject: IConsentSettings): ICon
     'isConsentedForMentalHealth',
     'isConsentedForStd',
     'isConsentedForSubstanceUse',
+    'consentDocumentId',
   ]);
 };

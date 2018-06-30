@@ -3505,6 +3505,7 @@ export interface getPatientContactHealthcareProxies_patientContactHealthcareProx
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -3567,6 +3568,7 @@ export interface getPatientContacts_patientContacts {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -3725,6 +3727,7 @@ export interface getPatientExternalOrganizations_patientExternalOrganizations {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
 }
 
 export interface getPatientExternalOrganizations {
@@ -4724,6 +4727,27 @@ export interface getPatientTasksVariables {
   pageNumber?: number | null;
   pageSize?: number | null;
   orderBy?: TaskOrderOptions | null;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getPatientUndocumentedSharingConsentStatus
+// ====================================================
+
+export interface getPatientUndocumentedSharingConsentStatus_patientUndocumentedSharingConsentStatus {
+  patientId: string;
+  isUndocumentedSharingConsent: boolean;
+}
+
+export interface getPatientUndocumentedSharingConsentStatus {
+  patientUndocumentedSharingConsentStatus: getPatientUndocumentedSharingConsentStatus_patientUndocumentedSharingConsentStatus | null;  // Whether or not there are undocumented phi sharing consents
+}
+
+export interface getPatientUndocumentedSharingConsentStatusVariables {
+  patientId: string;
 }
 
 
@@ -9196,6 +9220,7 @@ export interface patientContactCreate_patientContactCreate {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -9274,6 +9299,7 @@ export interface patientContactDelete_patientContactDelete {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -9336,6 +9362,7 @@ export interface patientContactEdit_patientContactEdit {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -9364,6 +9391,7 @@ export interface patientContactEditVariables {
   isConsentedForFamilyPlanning?: boolean | null;
   isConsentedForMentalHealth?: boolean | null;
   consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean | null;
 }
 
 
@@ -9589,6 +9617,7 @@ export interface patientExternalOrganizationCreate_patientExternalOrganizationCr
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
 }
 
 export interface patientExternalOrganizationCreate {
@@ -9643,6 +9672,7 @@ export interface patientExternalOrganizationDelete_patientExternalOrganizationDe
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   deletedAt: string | null;
 }
 
@@ -9687,6 +9717,7 @@ export interface patientExternalOrganizationEdit_patientExternalOrganizationEdit
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
 }
 
 export interface patientExternalOrganizationEdit {
@@ -9707,6 +9738,7 @@ export interface patientExternalOrganizationEditVariables {
   isConsentedForFamilyPlanning?: boolean | null;
   isConsentedForMentalHealth?: boolean | null;
   consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean | null;
 }
 
 
@@ -15840,6 +15872,7 @@ export interface FullPatientContact {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt: string | null;
@@ -15937,6 +15970,7 @@ export interface FullPatientExternalOrganization {
   isConsentedForFamilyPlanning: boolean | null;
   isConsentedForMentalHealth: boolean | null;
   consentDocumentId: string | null;
+  isConsentDocumentOutdated: boolean | null;
 }
 
 

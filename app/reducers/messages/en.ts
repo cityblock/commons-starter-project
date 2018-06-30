@@ -948,6 +948,8 @@ export const ENGLISH_TRANSLATION = {
       'No organizations have been added for this member',
     'patientTeam.externalOrganizationsEmptyDetail':
       'Add organization that is providing care for this member outside of Cityblock.',
+    'patientDocuments.isUndocumentedSharingConsentWarning':
+      "Based on recent changes, this member's PHI consent form needs to be updated!",
     'patientDocuments.patientConsents': 'Consent forms',
     'patientDocuments.patientAdvancedDirectives': 'Advanced Directive forms',
     'patientDocuments.cancel': 'Cancel',

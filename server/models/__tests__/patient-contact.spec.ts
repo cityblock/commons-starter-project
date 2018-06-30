@@ -43,6 +43,24 @@ async function setup(txn: Transaction): Promise<ISetup> {
   await PatientContactPhone.create({ phoneId: phone.id, patientContactId: patientContact.id }, txn);
   const fullPatientContact = await PatientContact.get(patientContact.id, txn);
 
+  const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+  const phone2 = await Phone.create(createMockPhone('5556438890'), txn);
+  const patientContact2 = await PatientContact.create(
+    createMockPatientContact(patient2.id, user.id, phone2, {
+      isConsentedForHiv: true,
+      isConsentedForFamilyPlanning: true,
+      isConsentedForGeneticTesting: true,
+      isConsentedForMentalHealth: true,
+      isConsentedForStd: true,
+      isConsentedForSubstanceUse: true,
+    }),
+    txn,
+  );
+  await PatientContactPhone.create(
+    { phoneId: phone2.id, patientContactId: patientContact2.id },
+    txn,
+  );
+
   return { patient, patientContact: fullPatientContact, user, phone };
 }
 
@@ -85,6 +103,172 @@ describe('patient info model', () => {
 
       const result = await PatientContact.getEmergencyContactsForPatient(patient.id, txn);
       expect(result[0]).toMatchObject(emergencyContact);
+    });
+
+    it('should get assign consent document to all patient contacts needing an updated document', async () => {
+      const { user, patient } = await setup(txn);
+      const phone = await Phone.create(createMockPhone('6178889903'), txn);
+      const patientContact = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone, {
+          isConsentedForHiv: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          firstName: 'Hermione',
+          lastName: 'Granger',
+          isConsentDocumentOutdated: true,
+        }),
+        txn,
+      );
+      await PatientContactPhone.create(
+        { phoneId: phone.id, patientContactId: patientContact.id },
+        txn,
+      );
+
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(1);
+
+      const phone2 = await Phone.create(createMockPhone('6174549903'), txn);
+      const patientContact2 = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone2, {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          isConsentDocumentOutdated: true,
+          firstName: 'Harry',
+          lastName: 'Potter',
+          relationToPatient: 'friend' as PatientRelationOptions,
+        }),
+        txn,
+      );
+      await PatientContactPhone.create(
+        { phoneId: phone2.id, patientContactId: patientContact2.id },
+        txn,
+      );
+
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(2);
+
+      const phone3 = await Phone.create(createMockPhone('6174549903'), txn);
+      const patientContactDeleted = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone3, {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          isConsentDocumentOutdated: true,
+          firstName: 'Harry',
+          lastName: 'Potter',
+          relationToPatient: 'friend' as PatientRelationOptions,
+        }),
+        txn,
+      );
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(3);
+
+      await PatientContact.delete(patientContactDeleted.id, user.id, txn);
+
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(2);
+
+      const phone4 = await Phone.create(createMockPhone('9824549903'), txn);
+      const patientContact4 = await PatientContact.create(
+        createMockPatientContact(patient.id, user.id, phone4, {
+          isConsentedForHiv: false,
+          isConsentedForFamilyPlanning: false,
+          isConsentedForGeneticTesting: false,
+          isConsentedForMentalHealth: false,
+          isConsentedForStd: false,
+          isConsentedForSubstanceUse: false,
+          isConsentDocumentOutdated: false,
+          firstName: 'Luna',
+          lastName: 'Lovegood',
+          relationToPatient: 'partner' as PatientRelationOptions,
+        }),
+        txn,
+      );
+
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(2);
+
+      const consentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc.pdf',
+        },
+        txn,
+      );
+
+      const numberUpdated = await PatientContact.assignDocumentToAllForPatient(
+        patient.id,
+        consentDocument.id,
+        txn,
+      );
+      expect(numberUpdated).toBe(2);
+      expect(await PatientContact.get(patientContact.id, txn)).toMatchObject({
+        consentDocumentId: consentDocument.id,
+      });
+      expect(await PatientContact.get(patientContact2.id, txn)).toMatchObject({
+        consentDocumentId: consentDocument.id,
+      });
+      expect(
+        await PatientContact.getCountUndocumentedSharingConsentedForPatient(patient.id, txn),
+      ).toBe(0);
+
+      await PatientContact.edit(
+        { isConsentedForHiv: true, isConsentDocumentOutdated: true, updatedById: user.id },
+        patientContact4.id,
+        txn,
+      );
+      await PatientContact.edit(
+        {
+          isConsentedForHiv: false,
+          isConsentedForFamilyPlanning: false,
+          isConsentedForGeneticTesting: false,
+          isConsentedForMentalHealth: false,
+          isConsentedForStd: false,
+          isConsentedForSubstanceUse: false,
+          isConsentDocumentOutdated: true,
+          updatedById: user.id,
+        },
+        patientContact.id,
+        txn,
+      );
+
+      const updatedConsentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc_updated.pdf',
+        },
+        txn,
+      );
+
+      const newNumberUpdated = await PatientContact.assignDocumentToAllForPatient(
+        patient.id,
+        updatedConsentDocument.id,
+        txn,
+      );
+      expect(newNumberUpdated).toBe(3);
+      expect(await PatientContact.get(patientContact.id, txn)).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
+      expect(await PatientContact.get(patientContact2.id, txn)).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
+      expect(await PatientContact.get(patientContact4.id, txn)).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
     });
 
     it('should get patient contacts for the consent form', async () => {

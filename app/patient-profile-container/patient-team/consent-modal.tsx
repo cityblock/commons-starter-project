@@ -91,7 +91,8 @@ export class ConsentModal extends React.Component<IProps, IState> {
   };
 
   handleSubmit = async () => {
-    const { saveConsentSettings } = this.props;
+    const { saveConsentSettings, consentSettings } = this.props;
+    const { consentDocumentId } = consentSettings;
     const { consentSelectState } = this.state;
     const hasErrors = this.validateFields();
     if (hasErrors) {
@@ -107,6 +108,7 @@ export class ConsentModal extends React.Component<IProps, IState> {
         isConsentedForMentalHealth: true,
         isConsentedForStd: true,
         isConsentedForSubstanceUse: true,
+        isConsentDocumentOutdated: true,
       };
     } else if (consentSelectState === 'noConsent') {
       updatedConsentSettings = {
@@ -116,9 +118,13 @@ export class ConsentModal extends React.Component<IProps, IState> {
         isConsentedForMentalHealth: false,
         isConsentedForStd: false,
         isConsentedForSubstanceUse: false,
+        isConsentDocumentOutdated: !!consentDocumentId,
       };
     } else {
-      updatedConsentSettings = getConsentSettingsObject(this.state);
+      updatedConsentSettings = {
+        ...getConsentSettingsObject(this.state),
+        isConsentDocumentOutdated: true,
+      };
     }
 
     try {

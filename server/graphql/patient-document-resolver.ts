@@ -9,7 +9,9 @@ import {
   IRootMutationType,
   IRootQueryType,
 } from 'schema';
+import PatientContact from '../models/patient-contact';
 import PatientDocument from '../models/patient-document';
+import PatientExternalOrganization from '../models/patient-external-organization';
 import PubSub from '../subscriptions';
 import { loadPatientDocumentUrl } from './shared/gcs/helpers';
 import checkUserPermissions from './shared/permissions-check';
@@ -46,6 +48,33 @@ export async function resolvePatientDocumentsByType(
     logger.log(`GET documents of type ${documentType} for patient ${patientId} by ${userId}`);
 
     return PatientDocument.getByDocumentTypeForPatient(patientId, documentType, txn);
+  });
+}
+
+export async function resolvePatientUndocumentedSharingConsentStatus(
+  source: any,
+  { patientId }: IResolvePatientDocumentsOptions,
+  { permissions, userId, logger, testTransaction }: IContext,
+): Promise<IRootQueryType['patientUndocumentedSharingConsentStatus']> {
+  return transaction(testTransaction || PatientDocument.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
+    logger.log(`GET isUndocumentedSharingConsent status for patient ${patientId} by ${userId}`);
+    const undocumentedContactCount = await PatientContact.getCountUndocumentedSharingConsentedForPatient(
+      patientId,
+      txn,
+    );
+    if (undocumentedContactCount > 0) {
+      return { isUndocumentedSharingConsent: true, patientId };
+    }
+
+    const undocumentedOrganizationCount = await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+      patientId,
+      txn,
+    );
+    if (undocumentedOrganizationCount) {
+      return { isUndocumentedSharingConsent: true, patientId };
+    }
+    return { isUndocumentedSharingConsent: false, patientId };
   });
 }
 

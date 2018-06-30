@@ -3,3 +3,11 @@
   background-color: var(--gray-background-color);
   min-height: 100%;
 }
+
+.warning {
+  border-radius: var(--border-radius);
+  background-color: var(--red-color);
+  padding: var(--extra-small-gutter) var(--medium-gutter);
+  margin-bottom: var(--extra-small-gutter);
+  width: 100%;
+}

@@ -31,6 +31,20 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
+  const patient2 = await createPatient({ cityblockId: 234, homeClinicId: clinic.id }, txn);
+  await PatientExternalOrganization.create(
+    createMockPatientExternalOrganization(patient2.id, 'Test Organization for Patient 2', {
+      isConsentedForHiv: true,
+      isConsentedForFamilyPlanning: true,
+      isConsentedForGeneticTesting: true,
+      isConsentedForMentalHealth: true,
+      isConsentedForStd: true,
+      isConsentedForSubstanceUse: true,
+      isConsentDocumentOutdated: true,
+    }),
+    txn,
+  );
+
   return { patient, patientExternalOrganization, user };
 }
 
@@ -51,6 +65,176 @@ describe('patient external organization model', () => {
 
       const result = await PatientExternalOrganization.get(patientExternalOrganization.id, txn);
       expect(result).toMatchObject(patientExternalOrganization);
+    });
+
+    it('should get assign consent document to all patient external organizations needing an updated document', async () => {
+      const { user, patient } = await setup(txn);
+      const patientExternalOrganization = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test org', {
+          isConsentedForHiv: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          isConsentDocumentOutdated: true,
+        }),
+        txn,
+      );
+
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(1);
+
+      const patientExternalOrganization2 = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test Org 2', {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          isConsentDocumentOutdated: true,
+        }),
+        txn,
+      );
+
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(2);
+
+      const patientExternalOrganizationDeleted = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test org deleted', {
+          isConsentedForHiv: true,
+          isConsentedForFamilyPlanning: true,
+          isConsentedForGeneticTesting: true,
+          isConsentedForMentalHealth: true,
+          isConsentedForStd: true,
+          isConsentedForSubstanceUse: true,
+          isConsentDocumentOutdated: true,
+        }),
+        txn,
+      );
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(3);
+
+      await PatientExternalOrganization.delete(patientExternalOrganizationDeleted.id, txn);
+
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(2);
+
+      const patientExternalOrganization4 = await PatientExternalOrganization.create(
+        createMockPatientExternalOrganization(patient.id, 'Test Org 4', {
+          isConsentedForHiv: false,
+          isConsentedForFamilyPlanning: false,
+          isConsentedForGeneticTesting: false,
+          isConsentedForMentalHealth: false,
+          isConsentedForStd: false,
+          isConsentedForSubstanceUse: false,
+          isConsentDocumentOutdated: false,
+        }),
+        txn,
+      );
+
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(2);
+
+      const consentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc.pdf',
+        },
+        txn,
+      );
+
+      const numberUpdated = await PatientExternalOrganization.assignDocumentToAllForPatient(
+        patient.id,
+        consentDocument.id,
+        txn,
+      );
+      expect(numberUpdated).toBe(2);
+      expect(
+        await PatientExternalOrganization.get(patientExternalOrganization.id, txn),
+      ).toMatchObject({
+        consentDocumentId: consentDocument.id,
+      });
+      expect(
+        await PatientExternalOrganization.get(patientExternalOrganization2.id, txn),
+      ).toMatchObject({
+        consentDocumentId: consentDocument.id,
+      });
+      expect(
+        await PatientExternalOrganization.getCountUndocumentedSharingConsentedForPatient(
+          patient.id,
+          txn,
+        ),
+      ).toBe(0);
+
+      await PatientExternalOrganization.edit(
+        { isConsentedForHiv: true, isConsentDocumentOutdated: true },
+        patientExternalOrganization4.id,
+        txn,
+      );
+      await PatientExternalOrganization.edit(
+        {
+          isConsentedForHiv: false,
+          isConsentedForFamilyPlanning: false,
+          isConsentedForGeneticTesting: false,
+          isConsentedForMentalHealth: false,
+          isConsentedForStd: false,
+          isConsentedForSubstanceUse: false,
+          isConsentDocumentOutdated: true,
+        },
+        patientExternalOrganization.id,
+        txn,
+      );
+
+      const updatedConsentDocument = await PatientDocument.create(
+        {
+          patientId: patient.id,
+          uploadedById: user.id,
+          filename: 'test_consent_doc_updated.pdf',
+        },
+        txn,
+      );
+
+      const newNumberUpdated = await PatientExternalOrganization.assignDocumentToAllForPatient(
+        patient.id,
+        updatedConsentDocument.id,
+        txn,
+      );
+      expect(newNumberUpdated).toBe(3);
+      expect(
+        await PatientExternalOrganization.get(patientExternalOrganization.id, txn),
+      ).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
+      expect(
+        await PatientExternalOrganization.get(patientExternalOrganization2.id, txn),
+      ).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
+      expect(
+        await PatientExternalOrganization.get(patientExternalOrganization4.id, txn),
+      ).toMatchObject({
+        consentDocumentId: updatedConsentDocument.id,
+      });
     });
 
     it('should get patient contacts for the consent form', async () => {

@@ -15,6 +15,7 @@ interface IMember {
   isConsentedForSubstanceUse?: boolean | null;
   isConsentedForMentalHealth?: boolean | null;
   consentDocumentId?: string | null;
+  isConsentDocumentOutdated?: boolean | null;
   description?: string | null;
 }
 
@@ -108,16 +109,15 @@ export class ConsentDisplayCard<T extends IMember> extends React.Component<IProp
     const level = getConsentLevel(getConsentSettingsObject(member));
     const consentStyle = classNames(styles.body, styles[level]);
 
-    const pendingHtml =
-      !member.consentDocumentId && level !== 'noConsent' ? (
-        <Text
-          messageId={`sharingConsent.pending`}
-          color="black"
-          size="medium"
-          isBold={true}
-          className={styles.spacingRight}
-        />
-      ) : null;
+    const pendingHtml = member.isConsentDocumentOutdated ? (
+      <Text
+        messageId={`sharingConsent.pending`}
+        color="black"
+        size="medium"
+        isBold={true}
+        className={styles.spacingRight}
+      />
+    ) : null;
     let consentHtml = (
       <React.Fragment>
         {pendingHtml}

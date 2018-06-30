@@ -5,7 +5,9 @@ import { DocumentTypeOptions } from 'schema';
 import sleep from 'sleep-promise';
 import uuid from 'uuid/v4';
 import config from '../config';
+import PatientContact from '../models/patient-contact';
 import PatientDocument from '../models/patient-document';
+import PatientExternalOrganization from '../models/patient-external-organization';
 import PubSub from '../subscriptions';
 
 const hellosign = HelloSign({ key: config.HELLOSIGN_API_KEY });
@@ -65,6 +67,13 @@ export async function createPatientDocument(
 
     publishMessage(patientDocument);
   });
+
+  if (data.documentType === 'phiSharingConsent') {
+    await transaction(existingTxn || PatientContact.knex(), async txn => {
+      await PatientContact.assignDocumentToAllForPatient(data.patientId, id, txn);
+      await PatientExternalOrganization.assignDocumentToAllForPatient(data.patientId, id, txn);
+    });
+  }
 }
 
 export async function uploadDocument(data: IProcessHelloSignData, testConfig?: any): Promise<void> {

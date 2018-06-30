@@ -155,7 +155,11 @@ describe('patient external organization model', () => {
         organizationFields,
       );
 
-      const expected = { ...organizationFields, consentDocumentId: null };
+      const expected = {
+        ...organizationFields,
+        consentDocumentId: null,
+        isConsentDocumentOutdated: null,
+      };
       delete expected.addressId;
       expect(cloneDeep(result.data!.patientExternalOrganizationCreate)).toMatchObject(expected);
       expect(result.data!.patientExternalOrganizationCreate.address.id).toBeTruthy();

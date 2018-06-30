@@ -239,6 +239,7 @@ export function createMockPatientContact(
     isConsentedForFamilyPlanning?: boolean;
     isConsentedForMentalHealth?: boolean;
     consentDocumentId?: string;
+    isConsentDocumentOutdated?: boolean;
   },
 ) {
   const isEmergencyContact = get(options, 'isEmergencyContact');
@@ -264,6 +265,7 @@ export function createMockPatientContact(
     isConsentedForFamilyPlanning: get(options, 'isConsentedForFamilyPlanning'),
     isConsentedForMentalHealth: get(options, 'isConsentedForMentalHealth'),
     consentDocumentId: get(options, 'consentDocumentId'),
+    isConsentDocumentOutdated: get(options, 'isConsentDocumentOutdated'),
   };
 }
 
@@ -310,6 +312,7 @@ export function createMockPatientExternalOrganization(
     isConsentedForFamilyPlanning?: boolean;
     isConsentedForMentalHealth?: boolean;
     consentDocumentId?: string;
+    isConsentDocumentOutdated?: boolean;
   },
 ) {
   return {
@@ -326,6 +329,7 @@ export function createMockPatientExternalOrganization(
     isConsentedForFamilyPlanning: get(options, 'isConsentedForFamilyPlanning'),
     isConsentedForMentalHealth: get(options, 'isConsentedForMentalHealth'),
     consentDocumentId: get(options, 'consentDocumentId'),
+    isConsentDocumentOutdated: get(options, 'isConsentDocumentOutdated'),
   };
 }
 

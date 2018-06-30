@@ -140,6 +140,11 @@ declare module 'schema' {
     patientDocuments: Array<IPatientDocument>;
 
     /**
+     * Whether or not there are undocumented phi sharing consents
+     */
+    patientUndocumentedSharingConsentStatus: IPatientUndocumentedSharingConsentStatus | null;
+
+    /**
      * Patient documents by type
      */
     patientDocumentsByType: Array<IPatientDocument>;
@@ -767,6 +772,10 @@ declare module 'schema' {
   }
 
   interface IPatientDocumentsOnRootQueryTypeArguments {
+    patientId: string;
+  }
+
+  interface IPatientUndocumentedSharingConsentStatusOnRootQueryTypeArguments {
     patientId: string;
   }
 
@@ -1689,6 +1698,7 @@ declare module 'schema' {
     isConsentedForFamilyPlanning: boolean | null;
     isConsentedForMentalHealth: boolean | null;
     consentDocumentId: string | null;
+    isConsentDocumentOutdated: boolean | null;
     createdAt: string | null;
     updatedAt: string | null;
     deletedAt: string | null;
@@ -1783,6 +1793,7 @@ declare module 'schema' {
     isConsentedForFamilyPlanning: boolean | null;
     isConsentedForMentalHealth: boolean | null;
     consentDocumentId: string | null;
+    isConsentDocumentOutdated: boolean | null;
     createdAt: string | null;
     updatedAt: string | null;
     deletedAt: string | null;
@@ -1820,6 +1831,14 @@ declare module 'schema' {
     molstForDisabilities = 'molstForDisabilities',
     privacyPracticesNotice = 'privacyPracticesNotice',
     socialSecurityDisability = 'socialSecurityDisability'
+  }
+
+  /**
+   * status of documentation for phi sharing consents
+   */
+  interface IPatientUndocumentedSharingConsentStatus {
+    patientId: string;
+    isUndocumentedSharingConsent: boolean;
   }
 
   /**
@@ -4607,6 +4626,7 @@ declare module 'schema' {
     isConsentedForFamilyPlanning?: boolean | null;
     isConsentedForMentalHealth?: boolean | null;
     consentDocumentId?: string | null;
+    isConsentDocumentOutdated?: boolean | null;
   }
 
   /**
@@ -4719,6 +4739,7 @@ declare module 'schema' {
     isConsentedForFamilyPlanning?: boolean | null;
     isConsentedForMentalHealth?: boolean | null;
     consentDocumentId?: string | null;
+    isConsentDocumentOutdated?: boolean | null;
   }
 
   /**

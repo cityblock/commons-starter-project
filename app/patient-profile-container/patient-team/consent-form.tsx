@@ -1,3 +1,4 @@
+import { pull } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
@@ -25,6 +26,8 @@ export const ConsentForm: React.StatelessComponent<IProps> = props => {
     hasFieldError,
   } = props;
 
+  const options = pull(Object.keys(consentSettings), 'consentDocumentId');
+
   const partialConsentField =
     consentSelectState === 'partialConsent' ? (
       <React.Fragment>
@@ -46,7 +49,7 @@ export const ConsentForm: React.StatelessComponent<IProps> = props => {
           hasError={(hasFieldError || {}).consentSettings}
           errorMessageId="sharingConsent.fieldEmptyError"
         >
-          {Object.keys(consentSettings).map(settingName => (
+          {options.map(settingName => (
             <CheckboxInput
               inputId={`consentCheckbox-${settingName}`}
               key={`consentCheckbox-${settingName}`}

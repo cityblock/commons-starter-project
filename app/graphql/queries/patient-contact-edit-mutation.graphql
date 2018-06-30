@@ -19,6 +19,7 @@ mutation patientContactEdit(
   $isConsentedForFamilyPlanning: Boolean
   $isConsentedForMentalHealth: Boolean
   $consentDocumentId: String
+  $isConsentDocumentOutdated: Boolean
 ) {
   patientContactEdit(
     input: {
@@ -40,6 +41,7 @@ mutation patientContactEdit(
       isConsentedForFamilyPlanning: $isConsentedForFamilyPlanning
       isConsentedForMentalHealth: $isConsentedForMentalHealth
       consentDocumentId: $consentDocumentId
+      isConsentDocumentOutdated: $isConsentDocumentOutdated
     }
   ) {
     ...FullPatientContact

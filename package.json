@@ -164,7 +164,7 @@
     "@types/history": "4.6.2",
     "@types/ioredis": "3.2.10",
     "@types/jsonwebtoken": "7.2.7",
-    "@types/knex": "0.14.14",
+    "@types/knex": "0.14.15",
     "@types/kue": "0.11.9",
     "@types/lodash": "4.14.110",
     "@types/mime-types": "2.1.0",

@@ -548,9 +548,9 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
 
-"@types/knex@0.14.14":
-  version "0.14.14"
-  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.14.tgz#0fb45549e7cc8ea8400e42a9a61fa650cefe512f"
+"@types/knex@0.14.15":
+  version "0.14.15"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.15.tgz#06cc59bc2d33d4ff178374efdd0efedc9faf526e"
   dependencies:
     "@types/bluebird" "*"
     "@types/events" "*"

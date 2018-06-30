@@ -114,7 +114,9 @@ export class Header extends React.Component<allProps> {
 
     const zendeskLink = (
       <a
-        href={'https://docs.google.com/forms/d/1YlkoXSqqDLdNSr3Cf1YRMgXT2IeRyH15-y02xTCjboY'}
+        href={
+          'https://docs.google.com/forms/d/e/1FAIpQLSeIgAQiNAdJySQiVkbBTVkrtCLahc3kew9lw46Nf7fsg0-3eA/viewform'
+        }
         target="_blank"
         className={styles.zendeskIconContainer}
       >

@@ -34,6 +34,7 @@ const TEMPLATE_MAP = {
   hcp: config.HELLOSIGN_TEMPLATE_ID_HCP,
   molst: config.HELLOSIGN_TEMPLATE_ID_MOLST,
   textConsent: config.HELLOSIGN_TEMPLATE_ID_TEXT_CONSENT,
+  privacyPracticesNotice: config.HELLOSIGN_TEMPLATE_ID_PRIVACY,
 };
 
 interface ISigners {
@@ -78,13 +79,13 @@ export const getHelloSignOptions = async (
   if (documentType === 'phiSharingConsent') {
     options.custom_fields = await getPHISharingConsentOptions(patient, txn);
   } else if (documentType === 'hieHealthixConsent') {
-    options.custom_fields = await getHealthixOptions(patient, txn);
+    options.custom_fields = await getHealthixOptions(patient);
   } else if (documentType === 'hcp') {
-    options.custom_fields = await getHCPOptions(patient, txn);
-  } else if (documentType === 'treatmentConsent') {
-    options.custom_fields = await getConsentToTreatOptions(patient, txn);
+    options.custom_fields = await getHCPOptions(patient);
+  } else if (documentType === 'treatmentConsent' || documentType === 'privacyPracticesNotice') {
+    options.custom_fields = await getPatientNameOptions(patient);
   } else if (documentType === 'molst') {
-    options.custom_fields = await getMolstOptions(patient, txn);
+    options.custom_fields = await getMolstOptions(patient);
   }
 
   return options;
@@ -165,14 +166,14 @@ export const getPHISharingConsentOptions = async (patient: Patient, txn: Transac
   return customFields;
 };
 
-export const getHCPOptions = async (patient: Patient, txn: Transaction) => {
+export const getHCPOptions = async (patient: Patient) => {
   return {
     patient_name: formatPatientName(patient.firstName, patient.lastName),
     home_address: formatAddress(patient.patientInfo.primaryAddress),
   };
 };
 
-export const getHealthixOptions = async (patient: Patient, txn: Transaction) => {
+export const getHealthixOptions = async (patient: Patient) => {
   return {
     patient_name: formatPatientName(patient.firstName, patient.lastName),
     home_address: formatAddress(patient.patientInfo.primaryAddress),
@@ -181,13 +182,13 @@ export const getHealthixOptions = async (patient: Patient, txn: Transaction) => 
   };
 };
 
-export const getConsentToTreatOptions = async (patient: Patient, txn: Transaction) => {
+export const getPatientNameOptions = async (patient: Patient) => {
   return {
     patient_name: formatPatientName(patient.firstName, patient.lastName),
   };
 };
 
-export const getMolstOptions = async (patient: Patient, txn: Transaction) => {
+export const getMolstOptions = async (patient: Patient) => {
   return {
     first_name: patient.firstName,
     last_name: patient.lastName,

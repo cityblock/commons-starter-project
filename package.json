@@ -233,7 +233,7 @@
     "langs": "2.0.0",
     "lodash": "4.17.10",
     "mime-types": "2.1.18",
-    "mini-css-extract-plugin": "0.4.0",
+    "mini-css-extract-plugin": "0.4.1",
     "moment-timezone": "0.5.21",
     "morgan": "1.9.0",
     "nodemon": "1.17.5",

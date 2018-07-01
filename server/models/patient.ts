@@ -835,10 +835,10 @@ export default class Patient extends Model {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .leftOuterJoinRelation('patientState')
+      .innerJoin('care_team', 'patient.id', 'care_team.patientId')
       .where('patientState.currentState', 'assigned')
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
-      .orderBy('lastName', 'ASC')
-      .orderBy('firstName', 'ASC')
+      .orderBy('care_team.createdAt', 'ASC')
       .page(pageNumber, pageSize) as any;
   }
 

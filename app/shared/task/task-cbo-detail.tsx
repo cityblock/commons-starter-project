@@ -1,6 +1,6 @@
 import React from 'react';
 import { FullCBOReferral } from '../../graphql/types';
-import { formatAddress } from '../helpers/format-helpers';
+import { formatAddress, formatPhoneNumber } from '../helpers/format-helpers';
 import DefaultText from '../library/default-text/default-text';
 import FormLabel from '../library/form-label/form-label';
 import Link from '../library/link/link';
@@ -18,7 +18,7 @@ const TaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) => {
   const href = isDefinedCBO ? CBO!.url : CBOReferral.url;
   const faxText =
     isDefinedCBO && CBO!.fax ? (
-      <DefaultText label={CBO!.fax as string} className={styles.text} />
+      <DefaultText label={formatPhoneNumber(CBO!.fax)} className={styles.text} />
     ) : (
       <DefaultText messageId="CBO.noFax" className={styles.text} />
     );
@@ -31,7 +31,7 @@ const TaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) => {
       {isDefinedCBO && (
         <div className={styles.flex}>
           <DefaultText messageId="CBO.phone" color="lightBlue" className={styles.label} />
-          <DefaultText label={CBO!.phone} className={styles.textMarginRight} />
+          <DefaultText label={formatPhoneNumber(CBO!.phone)} className={styles.textMarginRight} />
           <DefaultText messageId="CBO.fax" color="lightBlue" className={styles.label} />
           {faxText}
         </div>

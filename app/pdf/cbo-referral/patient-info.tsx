@@ -6,6 +6,7 @@ import {
   formatCityblockId,
   formatDateOfBirth,
   formatGender,
+  formatPhoneNumber,
 } from '../../shared/helpers/format-helpers';
 import variables from '../shared/variables/variables';
 import copy from './copy/copy';
@@ -34,7 +35,7 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description })
     ? formatAddress(address.street1, address.city, address.state, address.zip, address.street2)
     : 'Unknown';
   const formattedPhone = patient.patientInfo.primaryPhone
-    ? patient.patientInfo.primaryPhone.phoneNumber
+    ? formatPhoneNumber(patient.patientInfo.primaryPhone.phoneNumber)
     : 'Unknown';
   const formattedCityblockId = formatCityblockId(patient.cityblockId);
 

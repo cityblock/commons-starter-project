@@ -11,7 +11,7 @@ import {
   patientContactDeleteVariables,
   FullPatientContact,
 } from '../../graphql/types';
-import { formatFullName } from '../../shared/helpers/format-helpers';
+import { formatFullName, formatPhoneNumber } from '../../shared/helpers/format-helpers';
 import Button from '../../shared/library/button/button';
 import DefaultText from '../../shared/library/default-text/default-text';
 import FormLabel from '../../shared/library/form-label/form-label';
@@ -122,7 +122,11 @@ export class AdvancedDirectives extends React.Component<allProps, IState> {
 
   renderHealthcareProxyCard = (proxy: FullPatientContact) => {
     const emailHtml = proxy.email ? <p>{proxy.email.emailAddress}</p> : <p>Unknown Email</p>;
-    const phoneHtml = proxy.phone ? <p>{proxy.phone.phoneNumber}</p> : <p>Unknown Phone</p>;
+    const phoneHtml = proxy.phone ? (
+      <p>{formatPhoneNumber(proxy.phone.phoneNumber)}</p>
+    ) : (
+      <p>Unknown Phone</p>
+    );
     const relationHtml =
       proxy.relationToPatient === 'other' ? (
         <Text text={proxy.relationFreeText || ''} color="gray" size="medium" />

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from '@react-pdf/core';
 import React from 'react';
 import { FullTaskForCBOReferralFormPDF, FullUser } from '../../graphql/types';
-import { formatFullName } from '../../shared/helpers/format-helpers';
+import { formatFullName, formatPhoneNumber } from '../../shared/helpers/format-helpers';
 import BodyText from '../shared/body-text';
 import Divider from '../shared/divider';
 import HeaderText from '../shared/header-text';
@@ -63,7 +63,10 @@ const Introduction: React.StatelessComponent<IProps> = ({ task }) => {
       </View>
       <View style={styles.body}>
         <TextGroup headerLabel={copy.referredBy} bodyLabel={referredByName} />
-        <TextGroup headerLabel={copy.careTeamPhone} bodyLabel={referredBy.phone || copy.unknown} />
+        <TextGroup
+          headerLabel={copy.careTeamPhone}
+          bodyLabel={formatPhoneNumber(referredBy.phone) || copy.unknown}
+        />
         <TextGroup headerLabel={copy.careTeamEmail} bodyLabel={referredBy.email || copy.unknown} />
       </View>
       {!!careTeamPCP && (

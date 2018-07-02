@@ -3,6 +3,7 @@ import { FullPatientExternalOrganization } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
   formatAddressSecondLine,
+  formatPhoneNumber,
 } from '../../../shared/helpers/format-helpers';
 import TextInfo from '../../../shared/library/text-info/text-info';
 import Text from '../../../shared/library/text/text';
@@ -49,13 +50,13 @@ export const PatientExternalOrganization: React.StatelessComponent<IProps> = pro
         <div className={styles.column}>
           <TextInfo
             messageId="patientExternalOrganization.phone"
-            text={phoneNumber || 'Unknown'}
+            text={formatPhoneNumber(phoneNumber) || 'Unknown'}
             messageColor="black"
             size="medium"
           />
           <TextInfo
             messageId="patientExternalOrganization.fax"
-            text={faxNumber || 'Unknown'}
+            text={formatPhoneNumber(faxNumber) || 'Unknown'}
             messageColor="black"
             size="medium"
           />

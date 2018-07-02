@@ -9,6 +9,7 @@ import {
   phoneDeleteForPatient,
   phoneDeleteForPatientVariables,
 } from '../../../graphql/types';
+import { formatPhoneNumber } from '../../../shared/helpers/format-helpers';
 import Button from '../../../shared/library/button/button';
 import DefaultText from '../../../shared/library/default-text/default-text';
 import { ISavedPhone } from '../../../shared/phone-modal/phone-modal';
@@ -161,7 +162,7 @@ export class PhoneInfo extends React.Component<allProps, IState> {
         <div className={styles.fieldRow}>
           <FlaggableDisplayField
             labelMessageId="phone.phoneNumber"
-            value={phone.phoneNumber || null}
+            value={formatPhoneNumber(phone.phoneNumber)}
           />
           {typeComponent}
           <FlaggableDisplayField

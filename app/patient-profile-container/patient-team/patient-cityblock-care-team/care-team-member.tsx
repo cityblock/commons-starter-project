@@ -8,7 +8,11 @@ import {
   careTeamMakeTeamLeadVariables,
   FullCareTeamUser,
 } from '../../../graphql/types';
-import { formatCareTeamMemberRole, formatFullName } from '../../../shared/helpers/format-helpers';
+import {
+  formatCareTeamMemberRole,
+  formatFullName,
+  formatPhoneNumber,
+} from '../../../shared/helpers/format-helpers';
 import Avatar from '../../../shared/library/avatar/avatar';
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
@@ -107,7 +111,11 @@ export class CareTeamMember extends React.Component<allProps, IState> {
             </div>
           </div>
           <div className={styles.column}>
-            <Text text={careTeamMember.phone || 'Unknown Phone'} color="black" size="medium" />
+            <Text
+              text={formatPhoneNumber(careTeamMember.phone) || 'Unknown Phone'}
+              color="black"
+              size="medium"
+            />
             <Text text={careTeamMember.email || 'Unknown Email'} color="black" size="medium" />
           </div>
         </div>

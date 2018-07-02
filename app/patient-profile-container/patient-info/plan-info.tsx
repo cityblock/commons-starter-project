@@ -2,6 +2,7 @@ import { filter, includes } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getPatient, patientDataFlagCreate, DataFlagOptions } from '../../graphql/types';
+import { formatPhoneNumber } from '../../shared/helpers/format-helpers';
 import styles from './css/patient-demographics.css';
 import FlaggableDisplayCard, { FooterState } from './flaggable-display-card';
 import FlaggableDisplayField from './flaggable-display-field';
@@ -150,7 +151,7 @@ export default class PlanInfo extends React.Component<IProps, IState> {
             />
             <FlaggableDisplayField
               labelMessageId="planInfo.pcpPhone"
-              value={pcpPhone}
+              value={formatPhoneNumber(pcpPhone)}
               correctedValue={this.findFlag('pcpPhone')}
             />
             <FlaggableDisplayField

@@ -4,6 +4,7 @@ import { FullPatientForProfile } from '../../../graphql/types';
 import {
   formatAddressFirstLine,
   formatAddressSecondLine,
+  formatPhoneNumber,
 } from '../../../shared/helpers/format-helpers';
 import { Accordion } from '../left-nav';
 import InfoGroupContainer from './container';
@@ -27,7 +28,7 @@ const Contact: React.StatelessComponent<IProps> = (props: IProps) => {
     primaryAddress,
   } = patient.patientInfo;
 
-  const formattedPhone = primaryPhone ? primaryPhone.phoneNumber : null;
+  const formattedPhone = primaryPhone ? formatPhoneNumber(primaryPhone.phoneNumber) : null;
   const formattedEmail = primaryEmail ? primaryEmail.emailAddress : null;
   const formattedPreferredMethod = preferredContactMethod
     ? capitalize(preferredContactMethod)

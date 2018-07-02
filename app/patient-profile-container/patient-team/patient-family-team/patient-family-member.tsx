@@ -5,6 +5,7 @@ import {
   formatAddressFirstLine,
   formatAddressSecondLine,
   formatFullName,
+  formatPhoneNumber,
 } from '../../../shared/helpers/format-helpers';
 import Text, { Color } from '../../../shared/library/text/text';
 import ConsentDisplayCard from '../consent-display-card';
@@ -31,7 +32,7 @@ export const PatientFamilyMember: React.StatelessComponent<IProps> = props => {
     address,
   } = patientContact;
   const emailAddress = email ? email.emailAddress : 'Unknown Email';
-  const phoneNumber = phone ? phone.phoneNumber : 'Unknown Phone';
+  const phoneNumber = phone ? formatPhoneNumber(phone.phoneNumber) : 'Unknown Phone';
 
   let roleMessageId;
   let color: Color | null = null;

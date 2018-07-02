@@ -1,6 +1,6 @@
 import React from 'react';
 import { FullPatientExternalProvider } from '../../../graphql/types';
-import { formatFullName } from '../../../shared/helpers/format-helpers';
+import { formatFullName, formatPhoneNumber } from '../../../shared/helpers/format-helpers';
 import Text from '../../../shared/library/text/text';
 import ConsentDisplayCard from '../consent-display-card';
 import styles from '../css/team-member.css';
@@ -23,7 +23,7 @@ export const PatientExternalProvider: React.StatelessComponent<IProps> = props =
     patientExternalOrganization,
   } = patientExternalProvider;
   const emailAddress = email ? email.emailAddress : 'Unknown Email';
-  const phoneNumber = phone ? phone.phoneNumber : 'Unknown Phone';
+  const phoneNumber = phone ? formatPhoneNumber(phone.phoneNumber) : 'Unknown Phone';
 
   const nameText =
     firstName || lastName ? formatFullName(firstName, lastName) : patientExternalOrganization.name;

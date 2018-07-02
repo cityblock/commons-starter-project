@@ -1,6 +1,6 @@
 import React from 'react';
 import { FullCBO } from '../../../graphql/types';
-import { formatAddress } from '../../helpers/format-helpers';
+import { formatAddress, formatPhoneNumber } from '../../helpers/format-helpers';
 import DefaultText from '../../library/default-text/default-text';
 import Link from '../../library/link/link';
 import styles from './css/cbo-detail.css';
@@ -14,7 +14,7 @@ const CreateTaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) =>
   const { name, address, city, state, zip, phone, fax, url } = props.CBO;
 
   const faxText = fax ? (
-    <DefaultText label={fax} inline={true} />
+    <DefaultText label={formatPhoneNumber(fax)} inline={true} />
   ) : (
     <DefaultText messageId="CBO.noFax" inline={true} />
   );
@@ -31,7 +31,7 @@ const CreateTaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) =>
             color="lightBlue"
             className={styles.marginRight}
           />
-          <DefaultText label={phone} inline={true} />
+          <DefaultText label={formatPhoneNumber(phone)} inline={true} />
         </div>
         <div>
           <DefaultText

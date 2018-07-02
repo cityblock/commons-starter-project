@@ -3,6 +3,7 @@ import express from 'express';
 import { transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
 import twilio from 'twilio';
+import config from '../../config';
 import { TWILIO_COMPLETE_ENDPOINT } from '../../express';
 import { reportError } from '../../helpers/error-helpers';
 import { addJobToQueue } from '../../helpers/queue-helpers';
@@ -149,9 +150,11 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
 }
 
 const recordVoicemail = (twiml: any) => {
-  twiml.say(
-    { voice: 'alice' },
-    "We're sorry we missed your call. Please leave a message at the beep.",
+  twiml.play(
+    {
+      loop: 1,
+    },
+    config.VOICEMAIL_MESSAGE_LINK,
   );
 
   twiml.record({

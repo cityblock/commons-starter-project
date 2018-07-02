@@ -44,6 +44,8 @@ export default {
   HELLOSIGN_TEMPLATE_ID_MOLST: '53844791145dab0d75cd5641db1824efdb388c0d',
   HELLOSIGN_TEMPLATE_ID_PRIVACY: '9fe55f56504366609b0474e600f722a760482dde',
   PATIENT_CALENDAR_ACCOUNT: 'patient-calendar-local@testorg.cityblock.engineering',
+  VOICEMAIL_MESSAGE_LINK:
+    'https://storage.googleapis.com/public-cityblock-production-voicemail-greetings/cbhvoicemail.mp3',
   DISPLAY_TEST_MODE_HEADER: false,
   ...process.env,
 };

@@ -91,7 +91,13 @@ export async function twilioCompleteCallHandler(req: express.Request, res: expre
 
   const twilioPayload = req.body;
   const isInbound = !req.query.outbound;
-  const { To, From, DialCallStatus, DialCallDuration, CallSid } = twilioPayload;
+  const { To, From, DialCallStatus, DialCallDuration, CallSid, RecordingUrl } = twilioPayload;
+
+  // if has to do with completed voicemail, do nothing as job processes it
+  if (RecordingUrl) {
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    return res.end(twiml.toString());
+  }
 
   await transaction(res.locals.existingTxn || PhoneCall.knex(), async txn => {
     try {

@@ -298,6 +298,31 @@ describe('Phone Call Handler', () => {
     });
   });
 
+  it('simply returns 200 if pinging after voicemail left', async () => {
+    const res = httpMocks.createResponse();
+    res.locals = { existingTxn: txn };
+    res.end = jest.fn();
+    res.sendStatus = jest.fn();
+
+    const req = httpMocks.createRequest({
+      body: {
+        RecordingUrl: 'https://winter.is.coming.com',
+        To: '+11234522222',
+        From: 'sim:DEBOGUS14990BOGUS580c2a54713dBOGUS',
+        DialCallStatus: 'completed',
+        DialCallDuration: '11',
+        Direction: 'inbound',
+        CallSid: callSid,
+      },
+      query: { outbound: true },
+    });
+
+    await twilioCompleteCallHandler(req, res);
+
+    expect(res.end).toHaveBeenCalledTimes(1);
+    expect(res.end).toHaveBeenCalledWith(expectedCompleteTwiml);
+  });
+
   it('returns 500 if error handling completed call', async () => {
     const res = httpMocks.createResponse();
     res.locals = { existingTxn: txn };

@@ -66,9 +66,7 @@ export const getHelloSignOptions = async (
     subject: `${patientName} - ${documentType} ${timestamp}`,
     signers: [
       {
-        email_address: patient.patientInfo.primaryEmail
-          ? patient.patientInfo.primaryEmail.emailAddress
-          : 'test.account@cityblock.com',
+        email_address: 'test.account@cityblock.com',
         name: patientName,
         role: 'Member',
       },

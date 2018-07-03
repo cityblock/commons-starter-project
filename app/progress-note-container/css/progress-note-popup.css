@@ -1,5 +1,5 @@
 .container {
-  z-index: 11;
+  z-index: var(--progress-note-z-index);
   position: fixed;
   bottom: 0;
   right: 0;

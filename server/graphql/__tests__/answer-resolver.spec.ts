@@ -54,6 +54,7 @@ async function setup(trx: Transaction): Promise<ISetup> {
       riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
+      summaryText: 'Summary Text',
       order: 1,
     },
     trx,
@@ -172,6 +173,7 @@ describe('answer tests', () => {
         displayValue: 'new display value',
       });
     });
+
     it('edits answer', async () => {
       const { answer, user } = await setup(txn);
       const result = await graphql(
@@ -197,11 +199,14 @@ describe('answer tests', () => {
           userId: user.id,
           testTransaction: txn,
         },
-        { inSummary: false, answerId: answer.id },
+        { inSummary: false, answerId: answer.id, summaryText: 'This is summary text' },
       );
       expect(cloneDeep(resultTwo.data!.answerEdit)).toMatchObject({
         inSummary: false,
+        summaryText: 'This is summary text',
       });
+      const fetchedAnswer = await Answer.get(answer.id, txn);
+      expect(fetchedAnswer.summaryText).toEqual('This is summary text');
     });
   });
 
@@ -224,12 +229,16 @@ describe('answer tests', () => {
           riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
           inSummary: false,
           questionId: question.id,
+          summaryText: 'Some Summary Text',
           order: 1,
         },
       );
-      expect(cloneDeep(result.data!.answerCreate)).toMatchObject({
+      const answer = cloneDeep(result.data!.answerCreate);
+      expect(answer).toMatchObject({
         displayValue: 'loves writing tests too!',
       });
+      const fetchedAnswer = await Answer.get(answer.id, txn);
+      expect(fetchedAnswer.summaryText).toEqual('Some Summary Text');
     });
   });
 

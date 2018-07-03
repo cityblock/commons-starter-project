@@ -54,7 +54,6 @@ async function setup(trx: Transaction): Promise<ISetup> {
       riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
       inSummary: false,
       questionId: question.id,
-      summaryText: 'Summary Text',
       order: 1,
     },
     trx,

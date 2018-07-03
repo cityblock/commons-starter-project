@@ -62,6 +62,35 @@ describe('answer model', () => {
     expect(await Answer.get(answer.id, txn)).toEqual(answer);
   });
 
+  it('can create an answer with a null summaryText', async () => {
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown' as AnswerTypeOptions,
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
+        inSummary: false,
+        summaryText: null,
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const fetchedAnswer = await Answer.get(answer.id, txn);
+    expect(fetchedAnswer.summaryText).toEqual(null);
+  });
+
   it('should handle relations', async () => {
     const { riskArea } = await setup(txn);
     const question = await Question.create(
@@ -258,6 +287,39 @@ describe('answer model', () => {
     );
     expect(editedRiskArea.updatedAt).not.toEqual(updatedAt);
     expect(editedRiskArea.displayValue).toEqual('luvs writing tests!');
+  });
+
+  it('can edit an answer with a null summaryText', async () => {
+    const { riskArea } = await setup(txn);
+    const question = await Question.create(
+      {
+        title: 'like writing tests?',
+        answerType: 'dropdown' as AnswerTypeOptions,
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      },
+      txn,
+    );
+    const answer = await Answer.create(
+      {
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
+        inSummary: false,
+        summaryText: 'Old Summary Text',
+        questionId: question.id,
+        order: 1,
+      },
+      txn,
+    );
+    const fetchedAnswer = await Answer.get(answer.id, txn);
+    expect(fetchedAnswer.summaryText).toEqual('Old Summary Text');
+
+    await Answer.edit({ summaryText: null }, answer.id, txn);
+    const refetchedAnswer = await Answer.get(answer.id, txn);
+    expect(refetchedAnswer.summaryText).toEqual(null);
   });
 
   it('gets answers for question', async () => {

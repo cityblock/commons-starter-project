@@ -62,7 +62,7 @@ export default class Answer extends BaseModel {
       valueType: { type: 'string', minLength: 1 }, // cannot be blank
       riskAdjustmentType: { type: 'string' },
       inSummary: { type: 'boolean' },
-      summaryText: { type: 'string' },
+      summaryText: { type: ['string', 'null'] },
       questionId: { type: 'string', minLength: 1 }, // cannot be blank
       order: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },

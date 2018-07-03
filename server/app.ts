@@ -23,7 +23,6 @@ export default function app(req: express.Request, res: express.Response) {
         <meta name='robots' content='noindex, nofollow'>
         <meta name='apple-mobile-web-app-capable' content='yes'>
         <meta name="theme-color" content='#2962FF'>
-        <meta name="insight-app-sec-validation" content="52583787-0f4f-4a35-89c9-de2698b47a0d">
         <link rel='apple-touch-icon' sizes='180x180' href='/assets/apple-icon-180x180.png'>
         <link rel='icon' type='image/png' sizes='96x96' href='/assets/favicon-32x32.png'>
         ${stylesheet}

@@ -123,14 +123,15 @@ export const calculateRisk = (
 export const formatRiskAreaGroupForPatient = (
   riskAreaGroup: RiskAreaGroup,
 ): IFullRiskAreaGroupForPatient => {
-  let automatedSummaryText: string[] = [];
-  let manualSummaryText: string[] = [];
-  const screeningToolResultSummaries: IScreeningToolResultSummary[] = [];
+  let automatedSummaryTextForRiskAreaGroup: string[] = [];
+  let manualSummaryTextForRiskAreaGroup: string[] = [];
+  let screeningToolResultSummariesForRiskAreaGroup: IScreeningToolResultSummary[] = [];
   let riskAreaGroupLastUpdated: string | null = null;
 
   const riskAreas = riskAreaGroup.riskAreas.map(riskArea => {
     const isAutomated = riskArea.assessmentType === 'automated';
-    const summaryText = isAutomated ? automatedSummaryText : manualSummaryText;
+    const summaryText: string[] = [];
+    const screeningToolResultSummaries: IScreeningToolResultSummary[] = [];
     const riskAreaSummaryStats = calculateRiskAreaSummaryStats(riskArea, {
       lastUpdated: null,
       totalScore: 0,
@@ -146,14 +147,20 @@ export const formatRiskAreaGroupForPatient = (
         ? riskAreaSummaryStats.lastUpdated
         : riskAreaGroupLastUpdated;
 
-    // Add manual / automated summaries
     if (isAutomated) {
-      automatedSummaryText = riskAreaSummaryStats.summaryText;
+      automatedSummaryTextForRiskAreaGroup = automatedSummaryTextForRiskAreaGroup.concat(
+        riskAreaSummaryStats.summaryText,
+      );
     } else {
-      manualSummaryText = riskAreaSummaryStats.summaryText;
+      manualSummaryTextForRiskAreaGroup = manualSummaryTextForRiskAreaGroup.concat(
+        riskAreaSummaryStats.summaryText,
+      );
     }
-    // Add screeningToolSummaries
-    screeningToolResultSummaries.concat(riskAreaSummaryStats.screeningToolResultSummaries || []);
+
+    // Add screeningToolSummaries to risk area group summaries
+    screeningToolResultSummariesForRiskAreaGroup = screeningToolResultSummariesForRiskAreaGroup.concat(
+      screeningToolResultSummaries,
+    );
 
     const riskAreaRiskScore = riskAreaSummaryStats.lastUpdated
       ? calculateRisk(
@@ -170,8 +177,8 @@ export const formatRiskAreaGroupForPatient = (
       lastUpdated: riskAreaSummaryStats.lastUpdated,
       forceHighRisk: riskAreaSummaryStats.forceHighRisk,
       totalScore: riskAreaSummaryStats.totalScore,
-      screeningToolResultSummaries,
-      summaryText: automatedSummaryText || manualSummaryText,
+      screeningToolResultSummaries: riskAreaSummaryStats.screeningToolResultSummaries,
+      summaryText: riskAreaSummaryStats.summaryText,
       riskScore: riskAreaRiskScore,
     };
   });
@@ -198,9 +205,9 @@ export const formatRiskAreaGroupForPatient = (
   return {
     ...riskAreaGroup,
     riskAreas,
-    automatedSummaryText,
-    manualSummaryText,
-    screeningToolResultSummaries,
+    automatedSummaryText: automatedSummaryTextForRiskAreaGroup,
+    manualSummaryText: manualSummaryTextForRiskAreaGroup,
+    screeningToolResultSummaries: screeningToolResultSummariesForRiskAreaGroup,
     lastUpdated: riskAreaGroupLastUpdated,
     totalScore: riskAreaGroupTotalScore > 0 ? riskAreaGroupTotalScore : null,
     forceHighRisk: riskAreaGroupForceHighRisk,

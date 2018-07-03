@@ -561,12 +561,15 @@ describe('risk area group format', () => {
       expect(result.riskAreas[0].lastUpdated).not.toBeFalsy();
       expect(result.riskAreas[0].riskScore).toBe('high');
       expect(result.riskAreas[0].forceHighRisk).toBeTruthy();
+      expect(result.riskAreas[0].summaryText[0]).toBe('omg summary');
       expect(result.riskAreas[1].lastUpdated).not.toBeFalsy();
       expect(result.riskAreas[1].riskScore).toBe('low');
       expect(result.riskAreas[1].forceHighRisk).toBeFalsy();
+      expect(result.riskAreas[1].summaryText[0]).toBe('automated summary');
       expect(result.riskAreas[2].lastUpdated).toBeFalsy();
       expect(result.riskAreas[2].riskScore).toBeFalsy();
       expect(result.riskAreas[2].forceHighRisk).toBeFalsy();
+      expect(result.riskAreas[2].summaryText).toHaveLength(0);
     });
   });
 });

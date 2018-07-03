@@ -6,7 +6,6 @@ import {
   RiskAdjustmentTypeOptions,
 } from 'schema';
 import uuid from 'uuid/v4';
-
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
 import ComputedField from '../computed-field';
@@ -335,6 +334,18 @@ describe('answer model', () => {
       },
       txn,
     );
+    const question2 = await Question.create(
+      {
+        title: 'a zombie question',
+        answerType: 'dropdown' as AnswerTypeOptions,
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        computedFieldId: computedField.id,
+      },
+      txn,
+    );
+
     const answer1 = await Answer.create(
       {
         displayValue: 'loves writing tests!',
@@ -359,7 +370,33 @@ describe('answer model', () => {
       },
       txn,
     );
-    const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
+    await Answer.create(
+      {
+        displayValue: 'zombie answer',
+        value: '3',
+        valueType: 'number' as AnswerValueTypeOptions,
+        riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
+        inSummary: false,
+        questionId: question2.id,
+        order: 1,
+      },
+      txn,
+    );
+
+    await expect(
+      Answer.getByComputedFieldSlugAndValue(
+        {
+          slug: 'computed-field',
+          value: answer1.value,
+        },
+        txn,
+      ),
+    ).rejects.toMatch(
+      'There is more than one answer for computed field with slug computed-field and value 3',
+    );
+
+    await Question.delete(question2.id, txn);
+    const updatedFetchedAnswer = await Answer.getByComputedFieldSlugAndValue(
       {
         slug: 'computed-field',
         value: answer1.value,
@@ -367,8 +404,8 @@ describe('answer model', () => {
       txn,
     );
 
-    expect(fetchedAnswer!.id).toEqual(answer1.id);
-    expect(fetchedAnswer!.value).toEqual(answer1.value);
+    expect(updatedFetchedAnswer!.id).toEqual(answer1.id);
+    expect(updatedFetchedAnswer!.value).toEqual(answer1.value);
   });
 
   it('returns null when getting an answer for an invalid computed field slug/value', async () => {

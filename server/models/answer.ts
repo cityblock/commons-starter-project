@@ -81,6 +81,7 @@ export default class Answer extends BaseModel {
           from: 'answer.questionId',
           to: 'question.id',
         },
+        modify: builder => builder.where({ deletedAt: null }),
       },
       concernSuggestions: {
         relation: Model.ManyToManyRelation,
@@ -171,10 +172,20 @@ export default class Answer extends BaseModel {
       .joinRelation('question.computedField')
       .where('question:computedField.slug', args.slug)
       .andWhere('answer.value', args.value)
-      .andWhere('answer.deletedAt', null)
-      .first()) as any;
+      .andWhere('answer.deletedAt', null)) as any;
 
-    return answer || null;
+    if (!answer || !answer.length) {
+      return null;
+    }
+    if (answer.length > 1) {
+      return Promise.reject(
+        `There is more than one answer for computed field with slug ${args.slug} and value ${
+          args.value
+        }`,
+      );
+    }
+
+    return answer[0];
   }
 
   static async create(input: IAnswerCreateFields, txn: Transaction) {

@@ -96,7 +96,8 @@
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {
       "ts-jest": {
-        "skipBabel": true
+        "skipBabel": true,
+        "tsConfigFile": "tsconfig.server.json"
       }
     }
   },

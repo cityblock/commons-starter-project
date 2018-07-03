@@ -24,9 +24,9 @@ import {
 const queue = kue.createQueue();
 
 const expectedIncomingTwiml =
-  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" timeout="20"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
+  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call" method="POST" timeout="20" ringTone="us"><Sim>DEBOGUS14990BOGUS580c2a54713dBOGUS</Sim></Dial></Response>';
 const expectedOutgoingTwiml =
-  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call?outbound=true" method="POST" callerId="+11234567777"><Number>+11234567890</Number></Dial></Response>';
+  '<?xml version="1.0" encoding="UTF-8"?><Response><Dial action="/twilio-complete-phone-call?outbound=true" method="POST" callerId="+11234567777" ringTone="us"><Number>+11234567890</Number></Dial></Response>';
 const expectedCompleteTwiml = '<?xml version="1.0" encoding="UTF-8"?><Response/>';
 const callSid = 'CAfbe57a569adc67124a71a10f965BOGUS';
 

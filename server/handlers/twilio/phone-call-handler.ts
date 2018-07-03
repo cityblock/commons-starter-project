@@ -37,6 +37,7 @@ export async function twilioIncomingCallHandler(req: express.Request, res: expre
         action: TWILIO_COMPLETE_ENDPOINT,
         method: 'POST',
         timeout: VOICEMAIL_TIMEOUT,
+        ringTone: 'us',
       });
 
       dial.sim(user.twilioSimId);
@@ -72,6 +73,7 @@ export async function twilioOutgoingCallHandler(req: express.Request, res: expre
         action: `${TWILIO_COMPLETE_ENDPOINT}?outbound=true`,
         method: 'POST',
         callerId: user.phone,
+        ringTone: 'us',
       });
 
       dial.number(To);

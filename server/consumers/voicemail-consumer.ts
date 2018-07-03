@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { format } from 'date-fns';
 import Knex from 'knex';
+import moment from 'moment-timezone';
 import { transaction, Model, Transaction } from 'objection';
 import { UserSignedUrlAction } from 'schema';
 import config from '../config';
@@ -12,7 +13,7 @@ import Voicemail from '../models/voicemail';
 import TwilioClient from '../twilio-client';
 
 const TWILIO_ROOT = 'https://api.twilio.com';
-export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mma';
+export const VOICEMAIL_DATE_FORMAT = 'ddd, MMM D, YYYY h:mm a';
 
 const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);
@@ -141,7 +142,16 @@ export async function notifyUserOfVoicemail(voicemail: Voicemail) {
         patient.patientInfo.preferredName,
       )} at `
     : '';
-  const formattedDate = format(twilioCreatedAt, VOICEMAIL_DATE_FORMAT);
+
+  const date = new Date(twilioCreatedAt);
+  // Get the offset from UTC
+  const zone = moment.tz.zone('America/New_York');
+  const offset = zone.utcOffset(date.valueOf());
+
+  // Convert date to local time zone
+  date.setMinutes(date.getMinutes() - offset);
+  const formattedDate = format(date, VOICEMAIL_DATE_FORMAT);
+
   const body = `${voicemailIdentity}${contactNumber} left you a voicemail at ${formattedDate}. Click the following link to listen to the message.`;
   const voicemailUrl = `${config.GOOGLE_OAUTH_REDIRECT_URI}/voicemails/${voicemail.id}`;
 

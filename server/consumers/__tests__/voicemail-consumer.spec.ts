@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { format } from 'date-fns';
+import moment from 'moment-timezone';
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection, UserRole } from 'schema';
 import uuid from 'uuid/v4';
@@ -205,10 +206,11 @@ describe('Voicemail Consumer', () => {
         txn,
       );
 
+      const createdAt = new Date('2018-04-26T18:21:00.235Z');
       const recording = {
         callSid: phoneCall.callSid,
         duration: '11',
-        dateCreated: new Date('2018-04-26T18:21:00.235Z'),
+        dateCreated: createdAt,
         dateUpdated: new Date('2018-04-26T18:27:00.235Z'),
       };
 
@@ -218,14 +220,19 @@ describe('Voicemail Consumer', () => {
 
       const args = createMessage.mock.calls;
 
+      // Get the offset from UTC
+      const zone = moment.tz.zone('America/New_York');
+      const offset = zone.utcOffset(createdAt.valueOf());
+
+      // Convert createdAt to local time zone
+      createdAt.setMinutes(createdAt.getMinutes() - offset);
+      const formattedDate = format(createdAt, VOICEMAIL_DATE_FORMAT);
+
       expect(createMessage).toHaveBeenCalledTimes(2);
       expect(args[0][0]).toMatchObject({
         from: '+16469417791',
         to: '+11234567777',
-        body: `+11234561111 left you a voicemail at ${format(
-          voicemail.twilioCreatedAt,
-          VOICEMAIL_DATE_FORMAT,
-        )}. Click the following link to listen to the message.`,
+        body: `+11234561111 left you a voicemail at ${formattedDate}. Click the following link to listen to the message.`,
       });
       expect(args[1][0]).toMatchObject({
         from: '+16469417791',
@@ -257,16 +264,24 @@ describe('Voicemail Consumer', () => {
         txn,
       );
 
+      const createdAt = new Date('2018-04-26T18:21:00.235Z');
       const recording = {
         callSid: 'CAfbe57a569adc67124a71a1BOGUSBOGUS',
         duration: '11',
-        dateCreated: new Date('2018-04-26T18:21:00.235Z'),
+        dateCreated: createdAt,
         dateUpdated: new Date('2018-04-26T18:27:00.235Z'),
       };
 
       const voicemail = await createVoicemail(recording as any, jobId, txn);
-
       await notifyUserOfVoicemail(voicemail);
+
+      // Get the offset from UTC
+      const zone = moment.tz.zone('America/New_York');
+      const offset = zone.utcOffset(createdAt.valueOf());
+
+      // Convert createdAt to local time zone
+      createdAt.setMinutes(createdAt.getMinutes() - offset);
+      const formattedDate = format(createdAt, VOICEMAIL_DATE_FORMAT);
 
       const args = createMessage.mock.calls;
 
@@ -274,10 +289,7 @@ describe('Voicemail Consumer', () => {
       expect(args[0][0]).toMatchObject({
         from: '+16469417791',
         to: '+11234567777',
-        body: `Dan P. at +11234567890 left you a voicemail at ${format(
-          voicemail.twilioCreatedAt,
-          VOICEMAIL_DATE_FORMAT,
-        )}. Click the following link to listen to the message.`,
+        body: `Dan P. at +11234567890 left you a voicemail at ${formattedDate}. Click the following link to listen to the message.`,
       });
       expect(args[1][0]).toMatchObject({
         from: '+16469417791',

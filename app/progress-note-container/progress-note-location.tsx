@@ -20,6 +20,8 @@ function getLocations(clinics: getClinics['clinics']): string[] {
     'Community',
     'Outside appointment',
     'CBO or social service agency',
+    'Telephone',
+    'Messaging',
     'Other',
   );
 

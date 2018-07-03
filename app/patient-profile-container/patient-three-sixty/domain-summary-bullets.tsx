@@ -5,26 +5,39 @@ import styles from './css/domain-summary-bullets.css';
 import { DomainSummaryBulletItems } from './domain-summary-bullet-items';
 
 interface IProps {
+  hasLastUpdated: boolean;
   automatedSummaryText: string[];
   manualSummaryText: string[];
   screeningToolResultSummaries: IScreeningToolResultSummary[];
 }
 
 const DomainSummaryBullets: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { automatedSummaryText, manualSummaryText, screeningToolResultSummaries } = props;
+  const {
+    automatedSummaryText,
+    manualSummaryText,
+    screeningToolResultSummaries,
+    hasLastUpdated,
+  } = props;
 
   if (
     !automatedSummaryText.length &&
     !manualSummaryText.length &&
     !screeningToolResultSummaries.length
   ) {
+    if (hasLastUpdated) {
+      return (
+        <FormattedMessage id="threeSixty.noSummary">
+          {(message: string) => <p className={styles.noAssessments}>{message}</p>}
+        </FormattedMessage>
+      );
+    }
     return (
       <FormattedMessage id="threeSixty.noAssessments">
         {(message: string) => <p className={styles.noAssessments}>{message}</p>}
       </FormattedMessage>
     );
   }
-  // Only one assessment type if both are empty or lengths are unequal
+  // Only one assessment type if both are empty or lengths are unequl
   const bothEmpty = !automatedSummaryText.length && !manualSummaryText.length;
   const onlyOneAssessmentType =
     bothEmpty || !!automatedSummaryText.length !== !!manualSummaryText.length;

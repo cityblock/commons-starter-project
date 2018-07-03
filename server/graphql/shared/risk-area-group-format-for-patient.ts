@@ -185,16 +185,16 @@ export const formatRiskAreaGroupForPatient = (
 
   const riskAreaGroupTotalScore = riskAreas
     .map(a => (a.totalScore && a.totalScore > 0 ? a.totalScore : 0))
-    .reduce((a, currentValue) => a + currentValue);
+    .reduce((a, currentValue) => a + currentValue, 0);
 
   const riskAreaGroupForceHighRisk = riskAreas
     .map(a => a.forceHighRisk)
-    .reduce((a, currentValue) => (a ? true : currentValue));
+    .reduce((a, currentValue) => (a ? true : currentValue), false);
 
   const riskScore = riskAreaGroupLastUpdated
     ? calculateRisk(
         {
-          totalScore: riskAreaGroupTotalScore > 0 ? riskAreaGroupTotalScore : null,
+          totalScore: riskAreaGroupTotalScore,
           forceHighRisk: riskAreaGroupForceHighRisk,
         },
         riskAreaGroup.mediumRiskThreshold,
@@ -209,7 +209,7 @@ export const formatRiskAreaGroupForPatient = (
     manualSummaryText: manualSummaryTextForRiskAreaGroup,
     screeningToolResultSummaries: screeningToolResultSummariesForRiskAreaGroup,
     lastUpdated: riskAreaGroupLastUpdated,
-    totalScore: riskAreaGroupTotalScore > 0 ? riskAreaGroupTotalScore : null,
+    totalScore: riskAreaGroupTotalScore,
     forceHighRisk: riskAreaGroupForceHighRisk,
     riskScore,
   };

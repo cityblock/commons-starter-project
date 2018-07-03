@@ -51,11 +51,32 @@ describe('Domain Summary Bullet Components', () => {
   describe('Domain Summary Bullets', () => {
     const wrapper = shallow(
       <DomainSummaryBullets
+        hasLastUpdated={false}
         manualSummaryText={manualSummaryText}
         automatedSummaryText={[]}
         screeningToolResultSummaries={[]}
       />,
     );
+
+    it('renders no summary if no summary text but has been updated', () => {
+      const wrapperWithLastUpdated = shallow(
+        <DomainSummaryBullets
+          hasLastUpdated={true}
+          manualSummaryText={[]}
+          automatedSummaryText={[]}
+          screeningToolResultSummaries={[]}
+        />,
+      );
+
+      expect(wrapperWithLastUpdated.find(FormattedMessage).length).toBe(1);
+      expect(
+        wrapperWithLastUpdated
+          .find(FormattedMessage)
+          .at(0)
+          .props().id,
+      ).toBe('threeSixty.noSummary');
+      expect(wrapperWithLastUpdated.find(DomainSummaryBulletItems).length).toBe(0);
+    });
 
     it('renders no labels and one list if only one list populated', () => {
       expect(wrapper.find(FormattedMessage).length).toBe(0);

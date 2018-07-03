@@ -44,6 +44,7 @@ export const DomainSummary: React.StatelessComponent<IProps> = (props: IProps) =
         {riskAreaGroup.lastUpdated && <DateInfo label="updated" date={riskAreaGroup.lastUpdated} />}
       </div>
       <DomainSummaryBullets
+        hasLastUpdated={!!riskAreaGroup.lastUpdated}
         screeningToolResultSummaries={riskAreaGroup.screeningToolResultSummaries}
         automatedSummaryText={riskAreaGroup.automatedSummaryText}
         manualSummaryText={riskAreaGroup.manualSummaryText}

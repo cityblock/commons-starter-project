@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { closePopup, openPopup } from '../actions/popup-action';
 import progressNotesForCurrentUserGraphql from '../graphql/queries/get-progress-notes-for-current-user.graphql';
 import progressNotesForSupervisorReviewGraphql from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
+import progressNoteCreateSubscriptionGraphql from '../graphql/queries/progress-note-create-subscription.graphql';
 import {
   getCurrentUser,
   getProgressNotesForCurrentUser,
@@ -14,6 +15,7 @@ import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import { IState as IAppState } from '../store';
 import styles from './css/progress-note-container.css';
 import ProgressNoteSmallRow from './progress-note-small-row';
+import { progressNotesUpdateQuery } from './update-queries/progress-notes';
 
 const PROGRESS_NOTE_HIDE_ROUTES = ['builder', 'contacts', 'manager', 'voicemails'];
 
@@ -31,6 +33,7 @@ interface IGraphqlProps {
   progressNotes: getProgressNotesForCurrentUser['progressNotesForCurrentUser'];
   progressNotesLoading?: boolean;
   progressNotesError: string | null;
+  subscribeToMore: ((args: any) => () => void) | null;
   progressNotesForSupervisorReview: getProgressNotesForSupervisorReview['progressNotesForSupervisorReview'];
   progressNotesForSupervisorReviewLoading?: boolean;
   progressNotesForSupervisorReviewError: string | null;
@@ -51,6 +54,31 @@ type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps & IRouterP
 
 export class ProgressNoteContainer extends React.Component<allProps> {
   state = { drawerIsOpen: false };
+  private unsubscribe: (() => void) | null = null;
+
+  componentDidMount(): void {
+    if (this.props.subscribeToMore) {
+      this.unsubscribe = this.subscribe();
+    }
+  }
+
+  componentWillUnmount(): void {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  subscribe = () => {
+    if (this.props.subscribeToMore) {
+      return this.props.subscribeToMore({
+        document: progressNoteCreateSubscriptionGraphql,
+        variables: {},
+        updateQuery: progressNotesUpdateQuery,
+      });
+    }
+
+    return null;
+  };
 
   getProgressNotesHtml() {
     const {
@@ -174,6 +202,7 @@ export default compose(
       progressNotesError: data ? data.error : null,
       progressNotes: data ? (data as any).progressNotesForCurrentUser : null,
       refetchProgressNotes: data ? data.refetch : null,
+      subscribeToMore: data ? data.subscribeToMore : null,
     }),
   }),
   graphql(progressNotesForSupervisorReviewGraphql, {

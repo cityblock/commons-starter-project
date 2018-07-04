@@ -1,3 +1,4 @@
+import { withFilter } from 'graphql-subscriptions';
 import { transaction } from 'objection';
 import {
   IProgressNoteAddSupervisorNotesInput,
@@ -10,6 +11,7 @@ import {
 } from 'schema';
 import ComputedPatientStatus from '../models/computed-patient-status';
 import ProgressNote from '../models/progress-note';
+import PubSub from '../subscriptions';
 import checkUserPermissions, { validateGlassBreak } from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
@@ -254,5 +256,21 @@ export async function resolveProgressNoteLatestForPatient(
     await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
     return ProgressNote.getLatestForPatient(patientId, txn);
+  });
+}
+
+export async function progressNoteCreateSubscribe(root: any, query: {}, context: IContext) {
+  const { permissions, userId, testTransaction } = context;
+  return transaction(testTransaction || ProgressNote.knex(), async txn => {
+    await checkUserPermissions(userId, permissions, 'view', 'allPatients', txn);
+
+    const pubsub = PubSub.get();
+    // only listen to messages for given user
+    return withFilter(
+      () => pubsub.asyncIterator('progressNoteCreated'),
+      payload => {
+        return payload.userId === userId;
+      },
+    )(root, query, context);
   });
 }

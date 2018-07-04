@@ -6665,7 +6665,7 @@ export interface getProgressNotesForCurrentUser_progressNotesForCurrentUser {
 }
 
 export interface getProgressNotesForCurrentUser {
-  progressNotesForCurrentUser: (getProgressNotesForCurrentUser_progressNotesForCurrentUser | null)[];  // progress notes for current user
+  progressNotesForCurrentUser: getProgressNotesForCurrentUser_progressNotesForCurrentUser[];  // progress notes for current user
 }
 
 export interface getProgressNotesForCurrentUserVariables {
@@ -6759,7 +6759,7 @@ export interface getProgressNotesForSupervisorReview_progressNotesForSupervisorR
 }
 
 export interface getProgressNotesForSupervisorReview {
-  progressNotesForSupervisorReview: (getProgressNotesForSupervisorReview_progressNotesForSupervisorReview | null)[];  // progress notes for supervisor review
+  progressNotesForSupervisorReview: getProgressNotesForSupervisorReview_progressNotesForSupervisorReview[];  // progress notes for supervisor review
 }
 
 
@@ -11102,6 +11102,96 @@ export interface progressNoteCompleteSupervisorReview {
 
 export interface progressNoteCompleteSupervisorReviewVariables {
   progressNoteId: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL subscription operation: progressNoteCreated
+// ====================================================
+
+export interface progressNoteCreated_progressNoteCreated_user {
+  id: string;
+  locale: string | null;
+  phone: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  userRole: UserRole;
+  email: string | null;
+  homeClinicId: string;
+  googleProfileImageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+  permissions: Permissions;
+  isAvailable: boolean;
+  awayMessage: string;
+}
+
+export interface progressNoteCreated_progressNoteCreated_patient_patientInfo {
+  id: string;
+  gender: Gender | null;
+  language: string | null;
+  preferredName: string | null;
+  hasUploadedPhoto: boolean | null;
+}
+
+export interface progressNoteCreated_progressNoteCreated_patient_patientState {
+  id: string;
+  currentState: CurrentPatientState;
+}
+
+export interface progressNoteCreated_progressNoteCreated_patient {
+  id: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  dateOfBirth: string | null;
+  createdAt: string;
+  coreIdentityVerifiedAt: string | null;
+  patientInfo: progressNoteCreated_progressNoteCreated_patient_patientInfo;
+  patientState: progressNoteCreated_progressNoteCreated_patient_patientState;
+}
+
+export interface progressNoteCreated_progressNoteCreated_supervisor {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  userRole: UserRole;
+  googleProfileImageUrl: string | null;
+}
+
+export interface progressNoteCreated_progressNoteCreated_progressNoteTemplate {
+  id: string;
+  title: string;
+  createdAt: string;
+  deletedAt: string | null;
+}
+
+export interface progressNoteCreated_progressNoteCreated {
+  id: string;
+  patientId: string;
+  user: progressNoteCreated_progressNoteCreated_user;
+  patient: progressNoteCreated_progressNoteCreated_patient;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  summary: string | null;
+  memberConcern: string | null;
+  startedAt: string | null;
+  location: string | null;
+  deletedAt: string | null;
+  needsSupervisorReview: boolean | null;
+  reviewedBySupervisorAt: string | null;
+  supervisorNotes: string | null;
+  supervisor: progressNoteCreated_progressNoteCreated_supervisor | null;
+  progressNoteTemplate: progressNoteCreated_progressNoteCreated_progressNoteTemplate | null;
+  worryScore: number | null;
+}
+
+export interface progressNoteCreated {
+  progressNoteCreated: progressNoteCreated_progressNoteCreated;
 }
 
 

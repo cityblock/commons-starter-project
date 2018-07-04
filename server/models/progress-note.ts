@@ -1,5 +1,6 @@
 import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import PubSub from '../subscriptions';
 import BaseModel from './base-model';
 import Patient from './patient';
 import ProgressNoteTemplate from './progress-note-template';
@@ -319,9 +320,12 @@ export default class ProgressNote extends BaseModel {
       });
 
     if (!existingProgressNote) {
-      return this.query(txn)
+      const note = await this.query(txn)
         .eager(EAGER_QUERY)
         .insertAndFetch(input);
+
+      this.publishCreateMessage(note);
+      return note;
     }
 
     return existingProgressNote;
@@ -387,6 +391,15 @@ export default class ProgressNote extends BaseModel {
     }
 
     return progressNote;
+  }
+
+  static publishCreateMessage(progressNote: ProgressNote) {
+    const pubsub = PubSub.get();
+
+    pubsub.publish('progressNoteCreated', {
+      progressNoteCreated: progressNote,
+      userId: progressNote.userId,
+    });
   }
 }
 /* tslint:enable:member-ordering */

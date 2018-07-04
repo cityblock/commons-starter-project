@@ -5,7 +5,6 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
 import patientAnswersGraphql from '../../graphql/queries/get-patient-answers.graphql';
 import getPatientScreeningToolSubmissionForPatientAndScreeningToolGraphql from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
-import progressNotesForCurrentUserGraphql from '../../graphql/queries/get-progress-notes-for-current-user.graphql';
 import patientScreeningToolSubmissionScoreGraphql from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
 import {
   getPatientAnswers,
@@ -192,12 +191,6 @@ export default compose(
             patientId: props.patientId,
             screeningToolId: props.screeningTool.id,
             scored: false,
-          },
-        },
-        {
-          query: progressNotesForCurrentUserGraphql,
-          variables: {
-            completed: false,
           },
         },
       ],

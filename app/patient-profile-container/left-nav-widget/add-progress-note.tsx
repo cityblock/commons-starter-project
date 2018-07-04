@@ -2,7 +2,6 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import progressNotesForCurrentUserGraphql from '../../graphql/queries/get-progress-notes-for-current-user.graphql';
 import progressNoteCreateGraphql from '../../graphql/queries/progress-note-create.graphql';
 import { progressNoteCreate, progressNoteCreateVariables } from '../../graphql/types';
 import LeftNavQuickAction from './left-nav-quick-action';
@@ -71,15 +70,5 @@ export default compose(
   ),
   graphql(progressNoteCreateGraphql, {
     name: 'progressNoteCreate',
-    options: {
-      refetchQueries: [
-        {
-          query: progressNotesForCurrentUserGraphql,
-          variables: {
-            completed: false,
-          },
-        },
-      ],
-    },
   }),
 )(AddProgressNote) as React.ComponentClass<IProps>;

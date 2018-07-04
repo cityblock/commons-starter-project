@@ -27,6 +27,7 @@ describe('progress note container', () => {
         location={{
           pathname: '/builder',
         }}
+        subscribeToMore={jest.fn()}
       />,
     );
   });

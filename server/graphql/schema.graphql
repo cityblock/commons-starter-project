@@ -3319,9 +3319,9 @@ type RootQueryType {
     glassBreakId: ID
   ): [PatientProgressNoteId!]!
   # progress notes for current user
-  progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]!
+  progressNotesForCurrentUser(completed: Boolean!): [ProgressNote!]!
   # progress notes for supervisor review
-  progressNotesForSupervisorReview: [ProgressNote]!
+  progressNotesForSupervisorReview: [ProgressNote!]!
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity!
   # latest progress note for patient
@@ -3414,6 +3414,7 @@ type RootQueryType {
 type RootSubscriptionType {
   smsMessageCreated(patientId: ID!): SmsMessageNode!
   patientDocumentCreated(patientId: ID!): PatientDocument!
+  progressNoteCreated: ProgressNote!
 }
 
 schema {

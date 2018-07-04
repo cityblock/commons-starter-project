@@ -216,6 +216,7 @@ import {
   progressNoteComplete,
   progressNoteCompleteSupervisorReview,
   progressNoteCreate,
+  progressNoteCreateSubscribe,
   progressNoteEdit,
   resolveProgressNote,
   resolveProgressNotesForCurrentUser,
@@ -627,6 +628,9 @@ const resolveFunctions = {
     },
     patientDocumentCreated: {
       subscribe: patientDocumentSubscribe,
+    },
+    progressNoteCreated: {
+      subscribe: progressNoteCreateSubscribe,
     },
   },
   // From https://github.com/apollographql/graphql-tools/pull/698

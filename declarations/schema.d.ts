@@ -5611,6 +5611,7 @@ declare module 'schema' {
   interface IRootSubscriptionType {
     smsMessageCreated: ISmsMessageNode;
     patientDocumentCreated: IPatientDocument;
+    progressNoteCreated: IProgressNote;
   }
 
   interface ISmsMessageCreatedOnRootSubscriptionTypeArguments {

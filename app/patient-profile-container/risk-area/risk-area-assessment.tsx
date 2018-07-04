@@ -3,7 +3,6 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
-import progressNotesForCurrentUserGraphql from '../../graphql/queries/get-progress-notes-for-current-user.graphql';
 import riskAreaAssessmentSubmissionForPatientGraphql from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
 import getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import riskAreaGraphql from '../../graphql/queries/get-risk-area.graphql';
@@ -307,16 +306,6 @@ export default compose(
   ),
   graphql(riskAreaAssessmentSubmissionCompleteGraphql, {
     name: 'riskAreaAssessmentSubmissionComplete',
-    options: {
-      refetchQueries: [
-        {
-          query: progressNotesForCurrentUserGraphql,
-          variables: {
-            completed: false,
-          },
-        },
-      ],
-    },
   }),
   graphql(riskAreaAssessmentSubmissionCreateGraphql, {
     name: 'riskAreaAssessmentSubmissionCreate',

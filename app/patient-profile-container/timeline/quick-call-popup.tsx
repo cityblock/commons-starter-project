@@ -6,7 +6,6 @@ import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
 import patientCareTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
 import patientGraphql from '../../graphql/queries/get-patient.graphql';
-import progressNotesForCurrentUserGraphql from '../../graphql/queries/get-progress-notes-for-current-user.graphql';
 import quickCallCreateGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
 import {
   getPatient,
@@ -323,16 +322,6 @@ export default compose(
   ),
   graphql(quickCallCreateGraphql, {
     name: 'createQuickCall',
-    options: {
-      refetchQueries: [
-        {
-          query: progressNotesForCurrentUserGraphql,
-          variables: {
-            completed: false,
-          },
-        },
-      ],
-    },
   }),
   graphql(patientCareTeamGraphql, {
     skip: (props: IStateProps & IDispatchProps) => !props.patientId,

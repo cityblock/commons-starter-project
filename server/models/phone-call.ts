@@ -74,7 +74,7 @@ export default class PhoneCall extends BaseModel {
     properties: {
       id: { type: 'string' },
       userId: { type: 'string', format: 'uuid' },
-      contactNumber: { type: 'string', minLength: 12, maxLength: 12 },
+      contactNumber: { type: 'string', minLength: 1 },
       patientId: { type: ['string', 'null'], format: 'uuid' },
       direction: { type: 'string', enum: DIRECTION },
       callStatus: { type: 'string', enum: CALL_STATUS },

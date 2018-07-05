@@ -3,22 +3,22 @@ import BaseModel from './base-model';
 
 export interface IAddressOptions {
   updatedById: string;
-  zip?: string;
-  street1?: string;
-  street2?: string;
-  state?: string;
-  city?: string;
-  description?: string;
+  zip?: string | null;
+  street1?: string | null;
+  street2?: string | null;
+  state?: string | null;
+  city?: string | null;
+  description?: string | null;
 }
 
 /* tslint:disable:member-ordering */
 export default class Address extends BaseModel {
-  street1!: string;
-  street2!: string;
-  zip!: string;
-  state!: string;
-  city!: string;
-  description!: string;
+  street1!: string | null;
+  street2!: string | null;
+  zip!: string | null;
+  state!: string | null;
+  city!: string | null;
+  description!: string | null;
   updatedById!: string;
 
   static tableName = 'address';
@@ -29,12 +29,12 @@ export default class Address extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      street1: { type: 'string' }, // Cannot set a min-length here because of attribution data, unfortunately
-      street2: { type: 'string' },
-      zip: { type: 'string' },
-      state: { type: 'string', minLength: 2, maxLength: 2 },
-      city: { type: 'string' },
-      description: { type: 'string' },
+      street1: { type: ['string', 'null'] }, // Cannot set a min-length here because of attribution data, unfortunately
+      street2: { type: ['string', 'null'] },
+      zip: { type: ['string', 'null'] },
+      state: { type: ['string', 'null'], minLength: 2, maxLength: 2 },
+      city: { type: ['string', 'null'] },
+      description: { type: ['string', 'null'] },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },

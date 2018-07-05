@@ -85,23 +85,37 @@ class AddressModal extends React.Component<IProps, IState> {
 
     const updatedAddress = {
       id: originalAddress.id,
-      street1: street1 || originalAddress.street1,
-      street2: street2 || originalAddress.street2,
-      state: state || originalAddress.state,
-      zip: zip || originalAddress.zip,
-      city: city || originalAddress.city,
-      description: description || originalAddress.description,
+      street1: isNil(street1) ? originalAddress.street1 : street1,
+      street2: isNil(street2) ? originalAddress.street2 : street2,
+      state: isNil(state) ? originalAddress.state : state,
+      zip: isNil(zip) ? originalAddress.zip : zip,
+      city: isNil(city) ? originalAddress.city : city,
+      description: isNil(description) ? originalAddress.description : description,
     };
+
+    if (
+      !updatedAddress.street1 &&
+      !updatedAddress.street2 &&
+      !updatedAddress.state &&
+      !updatedAddress.city &&
+      !updatedAddress.zip
+    ) {
+      return this.setState({
+        saveError: 'Please supply at least one field for this address before saving.',
+      });
+    }
 
     try {
       this.setState({ isLoading: true });
       const response = await saveAddress(updatedAddress, isPrimaryUpdatedToTrue);
+      if (response.errors && response.errors.length) {
+        return this.setState({ saveError: response.errors[0].message, isLoading: false });
+      }
       this.setState({ isLoading: false });
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
-      // TODO: do something with this error
-      this.setState({ saveError: err.message });
+      this.setState({ saveError: err.message, isLoading: false });
     }
   };
 
@@ -141,7 +155,6 @@ class AddressModal extends React.Component<IProps, IState> {
         titleMessageId={titleMessageId}
         cancelMessageId="address.cancel"
         submitMessageId="address.save"
-        errorMessageId="address.saveError"
         error={saveError}
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}

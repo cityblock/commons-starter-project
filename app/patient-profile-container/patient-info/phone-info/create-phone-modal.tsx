@@ -22,8 +22,16 @@ type allProps = IProps & IGraphqlProps;
 
 export class CreatePhoneModal extends React.Component<allProps> {
   createPhone = async (phone: IPhone) => {
-    if (phone.id || !phone.phoneNumber || !phone.type) {
-      return;
+    let error;
+    if (phone.id) {
+      error = 'There was an issue saving this phone number';
+    } else if (!phone.phoneNumber) {
+      error = 'You must enter a phone number before saving';
+    } else if (!phone.type) {
+      error = 'You must select a type for the phone number before saving';
+    }
+    if (error) {
+      return { errors: [{ message: error }] };
     }
 
     const { createPhone, patientId, isPrimary } = this.props;
@@ -31,8 +39,8 @@ export class CreatePhoneModal extends React.Component<allProps> {
       variables: {
         patientId,
         description: phone.description,
-        phoneNumber: phone.phoneNumber,
-        type: phone.type,
+        phoneNumber: phone.phoneNumber!,
+        type: phone.type!,
         isPrimary,
       },
     });

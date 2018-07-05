@@ -29,8 +29,11 @@ type allProps = IProps & IGraphqlProps;
 
 export class EditEmailModal extends React.Component<allProps> {
   editEmail = async (email: IEmail, isPrimaryUpdatedToTrue: boolean) => {
-    if (!email.id || !email.emailAddress) {
-      return;
+    if (!email.id) {
+      return { errors: [{ message: 'There was an issue editing this email' }] };
+    }
+    if (!email.emailAddress) {
+      return { errors: [{ message: 'You must enter an email before saving' }] };
     }
 
     const { editEmail, editPatientInfo, patientId, patientInfoId } = this.props;

@@ -1,4 +1,4 @@
-import { isNil, omitBy } from 'lodash';
+import { isNil, mapValues, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import {
   IAddressCreateForPatientInput,
@@ -26,7 +26,12 @@ export async function addressCreateForPatient(
   return transaction(testTransaction || Address.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-    const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
+    if (!input.street1 && !input.street2 && !input.state && !input.city && !input.zip) {
+      return Promise.reject('Please supply at least one field for this address before saving.');
+    }
+
+    let filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
+    filtered = mapValues(filtered, value => (value === '' ? null : value));
     filtered.updatedById = userId;
     logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
 
@@ -58,7 +63,12 @@ export async function addressCreate(
   return transaction(testTransaction || Address.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'create', 'address', txn);
 
-    const filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
+    if (!input.street1 && !input.street2 && !input.state && !input.city && !input.zip) {
+      return Promise.reject('Please supply at least one field for this address before saving.');
+    }
+
+    let filtered = omitBy<IAddressCreateInput>(input, isNil) as any;
+    filtered = mapValues(filtered, value => (value === '' ? null : value));
     filtered.updatedById = userId;
     logger.log(`CREATE address by ${userId}`);
 
@@ -107,8 +117,9 @@ export async function addressEdit(
   return transaction(testTransaction || Address.knex(), async txn => {
     await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
-    const filtered = omitBy<IAddressEditInput>(input, isNil);
-    logger.log(`CREATE address for patient ${input.patientId} by ${userId}`);
+    let filtered = omitBy<IAddressEditInput>(input, isNil);
+    filtered = mapValues(filtered, value => (value === '' ? null : value));
+    logger.log(`EDIT address for patient ${input.patientId} by ${userId}`);
 
     return Address.edit(filtered as any, input.addressId, txn);
   });

@@ -224,7 +224,7 @@ export function createMockPatientContact(
   phone: { phoneNumber: string },
   options?: {
     email?: { emailAddress: string };
-    address?: { zip: string; state?: string };
+    address?: { zip?: string | null; state?: string | null };
     firstName?: string;
     lastName?: string;
     relationToPatient?: PatientRelationOptions;

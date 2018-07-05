@@ -22,8 +22,11 @@ type allProps = IProps & IGraphqlProps;
 
 export class CreateEmailModal extends React.Component<allProps> {
   createEmail = async (email: IEmail) => {
-    if (email.id || !email.emailAddress) {
-      return;
+    if (email.id) {
+      return { errors: [{ message: 'There was an issue creating this email' }] };
+    }
+    if (!email.emailAddress) {
+      return { errors: [{ message: 'You must enter an email before saving' }] };
     }
 
     const { createEmail, patientId, isPrimary } = this.props;

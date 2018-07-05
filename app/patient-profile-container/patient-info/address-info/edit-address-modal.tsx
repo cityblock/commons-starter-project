@@ -30,7 +30,7 @@ type allProps = IProps & IGraphqlProps;
 export class EditAddressModal extends React.Component<allProps> {
   editAddress = async (address: IAddress, isPrimaryUpdatedToTrue: boolean) => {
     if (!address.id) {
-      return;
+      return { errors: [{ message: 'There was an issue editing this address' }] };
     }
 
     const { editAddress, editPatientInfo, patientId, patientInfoId } = this.props;

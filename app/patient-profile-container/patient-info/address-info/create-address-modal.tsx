@@ -23,7 +23,7 @@ type allProps = IProps & IGraphqlProps;
 export class CreateAddressModal extends React.Component<allProps> {
   createAddress = async (address: IAddress) => {
     if (address.id) {
-      return;
+      return { errors: [{ message: 'There was an issue creating this address' }] };
     }
 
     const { createAddress, patientId, isPrimary } = this.props;

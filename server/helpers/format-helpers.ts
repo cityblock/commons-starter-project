@@ -87,6 +87,9 @@ export const formatAddressSecondLine = (address: {
   if (city && (zip || state)) {
     formattedCity = `${city}, `;
   }
+  if (!state) {
+    return `${formattedCity}${zip || ''}`;
+  }
   return `${formattedCity}${state} ${zip || ''}`;
 };
 

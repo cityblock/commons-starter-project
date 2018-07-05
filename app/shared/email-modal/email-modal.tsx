@@ -69,17 +69,19 @@ class EmailModal extends React.Component<IProps, IState> {
 
     const updatedEmail = {
       id: originalEmail.id,
-      emailAddress: emailAddress || originalEmail.emailAddress,
-      description: description || originalEmail.description,
+      emailAddress: isNil(emailAddress) ? originalEmail.emailAddress : emailAddress,
+      description: isNil(description) ? originalEmail.description : description,
     };
 
     try {
       this.setState({ isLoading: true });
       const response = await saveEmail(updatedEmail, isPrimaryUpdatedToTrue);
+      if (response.errors && response.errors.length) {
+        return this.setState({ saveError: response.errors[0].message, isLoading: false });
+      }
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
-      // TODO: do something with this error
       this.setState({ saveError: err.message, isLoading: false });
     }
   };
@@ -106,7 +108,6 @@ class EmailModal extends React.Component<IProps, IState> {
         titleMessageId={titleMessageId}
         cancelMessageId="email.cancel"
         submitMessageId="email.save"
-        errorMessageId="email.saveError"
         error={saveError}
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}

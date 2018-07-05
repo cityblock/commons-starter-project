@@ -74,18 +74,20 @@ class PhoneModal extends React.Component<IProps, IState> {
 
     const updatedPhone = {
       id: originalPhone.id,
-      phoneNumber: phoneNumber || originalPhone.phoneNumber,
+      phoneNumber: isNil(phoneNumber) ? originalPhone.phoneNumber : phoneNumber,
       type: type || originalPhone.type,
-      description: description || originalPhone.description,
+      description: isNil(description) ? originalPhone.description : description,
     };
 
     try {
       this.setState({ isLoading: true });
       const response = await savePhone(updatedPhone, !!updatedIsPrimary);
+      if (response.errors && response.errors.length) {
+        return this.setState({ saveError: response.errors[0].message, isLoading: false });
+      }
       onSaved(response, isPrimaryUpdatedToTrue);
       this.handleClose();
     } catch (err) {
-      // TODO: do something with this error
       this.setState({ saveError: err.message, isLoading: false });
     }
   };
@@ -113,7 +115,6 @@ class PhoneModal extends React.Component<IProps, IState> {
         titleMessageId={titleMessageId}
         cancelMessageId="phone.cancel"
         submitMessageId="phone.save"
-        errorMessageId="phone.saveError"
         error={saveError}
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}

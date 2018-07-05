@@ -23,7 +23,6 @@ describe('Render Address Info Component', () => {
     expect(wrapper.find(Modal).props().closePopup).not.toBe(closePopup);
     expect(wrapper.find(Modal).props().cancelMessageId).toBe('address.cancel');
     expect(wrapper.find(Modal).props().submitMessageId).toBe('address.save');
-    expect(wrapper.find(Modal).props().errorMessageId).toBe('address.saveError');
     expect(wrapper.find(Modal).props().titleMessageId).toBe('title.id');
   });
 

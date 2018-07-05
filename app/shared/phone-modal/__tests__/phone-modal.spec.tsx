@@ -23,7 +23,6 @@ describe('Render Phone Info Component', () => {
     expect(wrapper.find(Modal).props().closePopup).not.toBe(closePopup);
     expect(wrapper.find(Modal).props().cancelMessageId).toBe('phone.cancel');
     expect(wrapper.find(Modal).props().submitMessageId).toBe('phone.save');
-    expect(wrapper.find(Modal).props().errorMessageId).toBe('phone.saveError');
     expect(wrapper.find(Modal).props().titleMessageId).toBe('title.id');
   });
 

@@ -23,7 +23,6 @@ describe('Render Email Info Component', () => {
     expect(wrapper.find(Modal).props().closePopup).not.toBe(closePopup);
     expect(wrapper.find(Modal).props().cancelMessageId).toBe('email.cancel');
     expect(wrapper.find(Modal).props().submitMessageId).toBe('email.save');
-    expect(wrapper.find(Modal).props().errorMessageId).toBe('email.saveError');
     expect(wrapper.find(Modal).props().titleMessageId).toBe('title.id');
   });
 

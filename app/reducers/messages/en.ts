@@ -973,11 +973,6 @@ export const ENGLISH_TRANSLATION = {
     'patientTeam.careMemberToReassignToPlaceholder': 'Select a care team member',
     'patientTeam.careMemberToRemoveLabel': 'Care team member to be removed:',
     'patientTeam.admin': 'Admin',
-    'patientTeam.communityHealthPartner': 'Community Health Partner',
-    'patientTeam.physician': 'Physician',
-    'patientTeam.primaryCarePhysician': 'Primary Care Physician',
-    'patientTeam.nurseCareManager': 'Nurse Care Manager',
-    'patientTeam.healthCoach': 'Health Coach',
     'patientTeam.openTasks': 'Open tasks:',
     'patientTeam.addCareTeamMemberModalHeader': 'Add Cityblock care team member',
     'patientTeam.addCareTeamMemberModalHeaderBody':

@@ -1,8 +1,9 @@
 import { ApolloError } from 'apollo-client';
+import { pull } from 'lodash';
 import React from 'react';
 import { graphql } from 'react-apollo';
 import userSummaryListGraphql from '../../graphql/queries/get-user-summary-list.graphql';
-import { getUserSummaryList } from '../../graphql/types';
+import { getUserSummaryList, UserRole } from '../../graphql/types';
 import { getUserInfo } from './get-info-helpers';
 import UserMultiSelect, { IUser } from './user-multi-select';
 
@@ -20,13 +21,6 @@ interface IGraphqlProps {
 }
 
 type allProps = IProps & IGraphqlProps;
-
-const CARE_WORKER_ROLES = [
-  'physician',
-  'nurseCareManager',
-  'healthCoach',
-  'communityHealthPartner',
-];
 
 export const AllCareWorkerMultiSelect: React.StatelessComponent<allProps> = props => {
   const {
@@ -58,7 +52,7 @@ export const AllCareWorkerMultiSelect: React.StatelessComponent<allProps> = prop
 export default graphql(userSummaryListGraphql, {
   options: (props: IProps) => ({
     variables: {
-      userRoleFilters: CARE_WORKER_ROLES,
+      userRoleFilters: pull(Object.keys(UserRole), 'Back_Office_Admin'),
     },
     fetchPolicy: 'network-only',
   }),

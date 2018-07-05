@@ -80,7 +80,9 @@ class RemoveCareTeamMember extends React.Component<IProps> {
     const careTeamMemberName = careTeamMember
       ? formatFullName(careTeamMember.firstName, careTeamMember.lastName)
       : 'Loading...';
-    const careTeamMemberUserRole = careTeamMember ? careTeamMember.userRole : 'unknown';
+    const careTeamMemberUserRole = careTeamMember
+      ? formatCareTeamMemberRole(careTeamMember.userRole)
+      : 'unknown';
 
     return (
       <div className={styles.removeCareTeamMember}>
@@ -95,7 +97,7 @@ class RemoveCareTeamMember extends React.Component<IProps> {
             <div className={styles.careTeamMemberNameAndTitle}>
               <Text text={careTeamMemberName} size="large" color="black" />
               <Text
-                messageId={`patientTeam.${careTeamMemberUserRole}`}
+                text={careTeamMemberUserRole}
                 size="medium"
                 color="gray"
                 className={styles.careTeamMemberTitle}

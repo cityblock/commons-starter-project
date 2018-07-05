@@ -15,7 +15,7 @@ const user2 = {
   phone: '(212) 555-2828',
   firstName: 'user',
   lastName: 'two',
-  userRole: 'communityHealthPartner' as any,
+  userRole: 'Community_Health_Partner' as UserRole,
   email: 'c@d.com',
   homeClinicId: clinic.id,
   googleProfileImageUrl: null,

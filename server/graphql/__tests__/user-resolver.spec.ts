@@ -486,7 +486,7 @@ describe('user tests', () => {
           userId: user.id,
           testTransaction: txn,
         },
-        { email: 'a@b.com', userRole: 'nurseCareManager' },
+        { email: 'a@b.com', userRole: 'Nurse_Care_Manager' },
       );
       expect(cloneDeep(result.errors![0].message)).toMatch('blue not able to edit user');
     });

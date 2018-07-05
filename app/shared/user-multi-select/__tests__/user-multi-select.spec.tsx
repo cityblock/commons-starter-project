@@ -12,7 +12,7 @@ describe('Care Team Multi Select', () => {
   const user1 = {
     id: 'id1',
     name: 'Martin Blank',
-    role: 'physician',
+    role: 'Primary_Care_Physician',
     email: 'user1@cityblock.com',
     avatar: 'https://avatar1.com',
   };
@@ -20,7 +20,7 @@ describe('Care Team Multi Select', () => {
   const user2 = {
     id: 'id2',
     name: 'Jenny Blank',
-    role: 'communityHealthPartner',
+    role: 'Community_Health_Partner',
     email: 'user2@cityblock.com',
     avatar: 'https://avatar2.com',
   };

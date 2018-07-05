@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
+import { UserRole } from '../../../../graphql/types';
 import { formatFullName } from '../../../../shared/helpers/format-helpers';
 import Text from '../../../../shared/library/text/text';
 import { clinic, userForCareTeam } from '../../../../shared/util/test-data';
@@ -11,7 +12,7 @@ const user2 = {
   phone: '(212) 555-2828',
   firstName: 'user',
   lastName: 'two',
-  userRole: 'communityHealthPartner' as any,
+  userRole: 'Community_Health_Partner' as UserRole,
   email: 'c@d.com',
   homeClinicId: clinic.id,
   googleProfileImageUrl: null,
@@ -51,8 +52,8 @@ describe('Render Remove Care Team Member Component', () => {
       wrapper
         .find(Text)
         .at(2)
-        .props().messageId,
-    ).toBe(`patientTeam.${userForCareTeam.userRole}`);
+        .props().text,
+    ).toBe('Primary Care Physician');
   });
 
   it('renders task stats and the care team select when tasks need to be reassigned', () => {

@@ -52,7 +52,7 @@ describe('task row', () => {
       locale: 'en',
       firstName: 'first2',
       lastName: 'last2',
-      userRole: 'physician' as any,
+      userRole: 'Primary_Care_Physician' as any,
       email: 'b@c.com',
       homeClinicId: '1',
       googleProfileImageUrl: null,

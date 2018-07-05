@@ -1,5 +1,5 @@
 import { FullPatientContact, FullPatientExternalProvider, UserRole } from '../../graphql/types';
-import { formatFullName } from '../helpers/format-helpers';
+import { formatCareTeamMemberRole, formatFullName } from '../helpers/format-helpers';
 import { IUser } from './user-multi-select';
 
 interface IUserFragment {
@@ -17,7 +17,7 @@ export const getUserInfo = (user: IUserFragment, isPermanent?: boolean) => {
     email: user.email,
     avatar: user.googleProfileImageUrl,
     name: formatFullName(user.firstName, user.lastName),
-    role: user.userRole,
+    role: formatCareTeamMemberRole(user.userRole),
     isPermanent: isPermanent || false,
   } as IUser;
 };

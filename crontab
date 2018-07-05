@@ -1,4 +1,4 @@
 # Run every minute
 */1 * * * * yarn run jobs:process-voicemail:production
 */1 * * * * yarn run jobs:process-phone-call:production
-*/1 * * * * yarn run jobs:process-sms-message:production
+*/1 * * * * yarn run jobs:process-sms-messages:production

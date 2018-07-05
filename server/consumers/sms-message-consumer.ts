@@ -33,7 +33,6 @@ export async function processSmsMessages(data: IProcessSmsMessageData, existingT
 
 export async function processSmsMessage(message: ITwilioSmsMessage, existingTxn?: Transaction) {
   const { status, sid } = message;
-
   // do not delete messages that are in progress
   if (isInProgress(status)) {
     return;

@@ -25,7 +25,7 @@ import {
   CALENDAR_EVENT_TOPIC,
   CALENDAR_PERMISSION_TOPIC,
 } from './scheduling-consumer';
-import { processSmsMessage } from './sms-message-consumer';
+import { processSmsMessages } from './sms-message-consumer';
 import { processTaskEvent } from './task-event-consumer';
 import { processVoicemails } from './voicemail-consumer';
 
@@ -133,16 +133,16 @@ queue.process('processVoicemail', async (job, done) => {
   }
 });
 
-queue.process('processSmsMessage', async (job, done) => {
+queue.process('processSmsMessages', async (job, done) => {
   try {
-    logger.log('[Consumer][processSmsMessage] Started processing');
-    await processSmsMessage(job.data);
-    logger.log('[Consumer][processSmsMessage] Completed processing');
+    logger.log('[Consumer][processSmsMessages] Started processing');
+    await processSmsMessages(job.data);
+    logger.log('[Consumer][processSmsMessages] Completed processing');
 
     return done();
   } catch (err) {
-    logger.log('[Consumer][processSmsMessage] Error processing');
-    reportError(err, 'Kue error processSmsMessage');
+    logger.log('[Consumer][processSmsMessages] Error processing');
+    reportError(err, 'Kue error processSmsMessages');
 
     return done(err);
   }

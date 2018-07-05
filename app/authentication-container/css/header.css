@@ -105,7 +105,8 @@ svg.zendeskIcon {
   margin-right: 10px;
 }
 
-.left, .right {
+.left,
+.right {
   display: flex;
   align-items: center;
 }

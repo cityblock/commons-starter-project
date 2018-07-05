@@ -1,4 +1,4 @@
-const PHONE_REGEX = /^\+1\d{10}$/;
+export const PHONE_REGEX = /^\+1\d{10}$/;
 
 export const VALID_PHONE_NUMBER_LENGTH = 12;
 

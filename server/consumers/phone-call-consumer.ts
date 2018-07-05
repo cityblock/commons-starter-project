@@ -1,5 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import { SmsMessageDirection } from 'schema';
+import { reportError } from '../helpers/error-helpers';
 import PhoneCall, { CallStatus } from '../models/phone-call';
 import User from '../models/user';
 import TwilioClient from '../twilio-client';
@@ -56,32 +57,37 @@ export async function createPhoneCall(call: ITwilioPhoneCall, existingTxn?: Tran
   const isInbound = to.includes('sim:');
 
   await transaction(existingTxn || PhoneCall.knex(), async txn => {
-    const user = isInbound
-      ? await User.getBy({ fieldName: 'twilioSimId', field: to.substring(4) }, txn)
-      : await User.getBy({ fieldName: 'phone', field: from }, txn);
+    try {
+      const user = isInbound
+        ? await User.getBy({ fieldName: 'twilioSimId', field: to.substring(4) }, txn)
+        : await User.getBy({ fieldName: 'phone', field: from }, txn);
 
-    if (!user) {
-      throw new Error(
-        `There is not user with the Twilio Phone Number: ${to} or Twilio SIM: ${from}`,
+      if (!user) {
+        throw new Error(
+          `There is not user with the Twilio Phone Number: ${to} or Twilio SIM: ${from}`,
+        );
+      }
+
+      await PhoneCall.create(
+        {
+          userId: user.id,
+          contactNumber: isInbound ? from : to,
+          direction: isInbound
+            ? ('toUser' as SmsMessageDirection)
+            : ('fromUser' as SmsMessageDirection),
+          callStatus: status,
+          duration: duration ? Number(duration) : 0,
+          twilioPayload: call,
+          callSid: parentCallSid || sid,
+          twilioCreatedAt: dateCreated.toISOString(),
+          twilioUpdatedAt: dateUpdated.toISOString(),
+        },
+        txn,
       );
+    } catch (err) {
+      reportError(err, 'Error creating phone call record in DB', call);
+      throw err;
     }
-
-    await PhoneCall.create(
-      {
-        userId: user.id,
-        contactNumber: isInbound ? from : to,
-        direction: isInbound
-          ? ('toUser' as SmsMessageDirection)
-          : ('fromUser' as SmsMessageDirection),
-        callStatus: status,
-        duration: duration ? Number(duration) : 0,
-        twilioPayload: call,
-        callSid: parentCallSid || sid,
-        twilioCreatedAt: dateCreated.toISOString(),
-        twilioUpdatedAt: dateUpdated.toISOString(),
-      },
-      txn,
-    );
   });
 }
 
@@ -92,7 +98,5 @@ export async function deletePhoneCall(sid: string) {
 }
 
 const isInProgress = (status: CallStatus): boolean => {
-  return (
-    status === 'ringing' || status === 'in-progress' || status === 'queued' || status === 'busy'
-  );
+  return status === 'ringing' || status === 'in-progress' || status === 'queued';
 };

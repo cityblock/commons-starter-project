@@ -93,6 +93,7 @@ export class PopupPatientCarePlanSuggestionDismissed extends React.Component<all
         onClose={this.onDismiss}
         titleMessageId="carePlanSuggestion.dismissReason"
         submitMessageId={`carePlanSuggestion.dismiss${suggestionType}`}
+        cancelMessageId="modalButtons.cancel"
         error={error}
       >
         <Select onChange={this.onChange} value={dismissedReason} large>

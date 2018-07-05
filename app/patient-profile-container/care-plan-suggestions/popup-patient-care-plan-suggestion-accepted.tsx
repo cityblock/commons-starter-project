@@ -133,6 +133,7 @@ export class PopupPatientCarePlanSuggestionAccepted extends React.Component<allP
         titleMessageId={`carePlanSuggestion.add${suggestionType}`}
         subTitleMessageId={subTitleMessageId}
         submitMessageId="patient.addToCarePlan"
+        cancelMessageId="modalButtons.cancel"
       >
         <PopupPatientCarePlanSuggestionAcceptedModalBody
           carePlan={carePlan}

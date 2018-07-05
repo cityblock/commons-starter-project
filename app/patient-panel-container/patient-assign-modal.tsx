@@ -141,15 +141,18 @@ class PatientAssignModal extends React.Component<allProps, IState> {
       ? 'patientAssignModal.assignSuccessTitle'
       : 'patientAssignModal.title';
     const subtitle = assignSuccess ? undefined : 'patientAssignModal.description';
+    const submitMessageId = assignSuccess ? 'patientAssignModal.done' : 'patientAssignModal.assign';
+    const cancelMessageId = assignSuccess ? undefined : 'patientAssignModal.cancel';
+    const onSubmit = assignSuccess ? this.handleClose : this.handleAssignMembers;
 
     return (
       <Modal
         titleMessageId={title}
         subTitleMessageId={subtitle}
-        cancelMessageId="patientAssignModal.cancel"
-        submitMessageId="patientAssignModal.assign"
+        cancelMessageId={cancelMessageId}
+        submitMessageId={submitMessageId}
         onClose={this.handleClose}
-        onSubmit={this.handleAssignMembers}
+        onSubmit={onSubmit}
         isVisible={isVisible}
         isLoading={assignLoading}
         error={assignError}

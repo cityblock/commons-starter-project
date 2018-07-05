@@ -151,6 +151,7 @@ export class RemoveCareTeamMemberModal extends React.Component<allProps, IState>
         titleMessageId="patientTeam.removeCityblockTeamModalHeader"
         subTitleMessageId={modalTitleBodyMessageId}
         submitMessageId={modalSubmitMessageId}
+        cancelMessageId="modalButtons.cancel"
         headerIconName="errorOutline"
         headerIconColor="red"
         headerIconSize="extraLarge"

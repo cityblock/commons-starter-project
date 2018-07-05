@@ -74,14 +74,14 @@ describe('Library Modal Buttons Component', () => {
     ).toBe(placeholderFn);
   });
 
-  it('passes default messages for cancel and submit if none provided', () => {
-    wrapper.setProps({ cancelMessageId: '', submitMessageId: '' });
+  it('passes default message for submit if none is provided', () => {
+    wrapper.setProps({ submitMessageId: '' });
     expect(
       wrapper
         .find(Button)
         .at(0)
         .props().messageId,
-    ).toBe('modalButtons.cancel');
+    ).toBe(cancelMessageId);
     expect(
       wrapper
         .find(Button)
@@ -90,8 +90,18 @@ describe('Library Modal Buttons Component', () => {
     ).toBe('modalButtons.submit');
   });
 
+  it('doesnt render cancel button if no message is provided', () => {
+    wrapper.setProps({ cancelMessageId: '', submitMessageId: '' });
+    expect(wrapper.find(Button).props().messageId).toBe('modalButtons.submit');
+  });
+
+  it('doesnt render cancel button if no cancel callback is provided', () => {
+    wrapper.setProps({ cancelMessageId, submitMessageId, cancel: undefined });
+    expect(wrapper.find(Button).props().messageId).toBe(submitMessageId);
+  });
+
   it('sets the submit button to red if specified', () => {
-    wrapper.setProps({ redSubmit: true });
+    wrapper.setProps({ cancelMessageId, submitMessageId, cancel: placeholderFn, redSubmit: true });
     expect(
       wrapper
         .find(Button)

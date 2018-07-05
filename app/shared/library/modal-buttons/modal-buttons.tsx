@@ -32,19 +32,20 @@ const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
       className={classNames(
         styles.flex,
         {
-          [styles.single]: !(cancel && submit),
+          [styles.single]: !(cancel && cancelMessageId && submit),
         },
         className,
       )}
     >
-      {cancel && (
-        <Button
-          messageId={cancelMessageId || 'modalButtons.cancel'}
-          color="white"
-          onClick={cancel}
-          className={styles.button}
-        />
-      )}
+      {cancel &&
+        cancelMessageId && (
+          <Button
+            messageId={cancelMessageId}
+            color="white"
+            onClick={cancel}
+            className={styles.button}
+          />
+        )}
       {submit && (
         <Button
           messageId={submitButtonMessageId}

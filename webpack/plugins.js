@@ -14,7 +14,7 @@ module.exports = ({ production = false } = {}) => {
       'GA_TRACKING_ID',
       'FORMS_LIBRARY_URL',
       'HELLOSIGN_CLIENT_ID',
-      'HELLOSIGN_TEST_MODE',
+      'HELLOSIGN_ENV',
       'GOOGLE_OAUTH_VALID_EMAIL_DOMAIN',
       'DISPLAY_TEST_MODE_HEADER',
     ]),

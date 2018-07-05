@@ -62,7 +62,7 @@ export class DocumentPlaceholder extends React.Component<allProps, IState> {
 
         if (res.data && res.data.helloSignCreate.url) {
           // use test mode if not in production
-          const testMode = process.env.HELLOSIGN_TEST_MODE === 'true';
+          const testMode = process.env.HELLOSIGN_ENV === 'test';
 
           (HelloSign as any).init(process.env.HELLOSIGN_CLIENT_ID || '');
 

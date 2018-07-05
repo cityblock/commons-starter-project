@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import careTeamGraphql from '../../graphql/queries/get-patient-care-team.graphql';
 import taskUserFollowGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
 import { taskUserFollow, taskUserFollowVariables, FullUser, ShortUser } from '../../graphql/types';
+import { formatCareTeamMemberRole } from '../../shared/helpers/format-helpers';
 import Avatar from '../library/avatar/avatar';
 import styles from './css/add-task-follower.css';
 
@@ -43,7 +44,7 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     const { addFollowerError, lastCareTeamMemberId } = this.state;
 
     const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
-    const role = careTeamMember.userRole;
+    const role = formatCareTeamMemberRole(careTeamMember.userRole);
     const errorStyles = classNames(styles.addError, {
       [styles.visible]: !!addFollowerError && lastCareTeamMemberId === careTeamMember.id,
     });

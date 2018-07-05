@@ -1,5 +1,5 @@
 import { transaction } from 'objection';
-import { AnswerValueTypeOptions, ComputedFieldDataTypes } from 'schema';
+import { AnswerTypeOptions, AnswerValueTypeOptions, ComputedFieldDataTypes } from 'schema';
 import uuid from 'uuid/v4';
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
@@ -287,6 +287,45 @@ describe('computed field model', () => {
       await expect(ComputedField.get(computedField.id, txn)).rejects.toMatch(
         `No such computed field: ${computedField.id}`,
       );
+    });
+
+    it('eager loads risk area from undeleted questions only', async () => {
+      const computedField = await ComputedField.create(
+        {
+          label: 'Computed Field',
+          slug: 'computed-field',
+          dataType: 'number' as ComputedFieldDataTypes,
+        },
+        txn,
+      );
+      const riskArea = await createRiskArea({ title: 'Housing' }, txn);
+      const question = await Question.create(
+        {
+          title: 'like writing tests?',
+          answerType: 'dropdown' as AnswerTypeOptions,
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+          computedFieldId: computedField.id,
+        },
+        txn,
+      );
+
+      let eagerComputedField = await ComputedField.query(txn)
+        .eager('riskArea')
+        .findOne({ id: computedField.id, deletedAt: null });
+
+      expect(eagerComputedField).toBeTruthy();
+      expect(eagerComputedField!.riskArea).toMatchObject(riskArea);
+
+      await Question.delete(question.id, txn);
+
+      eagerComputedField = await ComputedField.query(txn)
+        .eager('riskArea')
+        .findOne({ id: computedField.id, deletedAt: null });
+
+      expect(eagerComputedField).toBeTruthy();
+      expect(eagerComputedField!.riskArea).toBeFalsy();
     });
   });
 });

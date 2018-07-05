@@ -704,7 +704,7 @@ export const SPANISH_TRANSLATION = {
     'carePlanSuggestion.addgoal': 'Add this goal to a concern',
     'carePlanSuggestion.addgoalSub':
       'Select an existing patient concern, a suggested concern, or create a new one',
-    'carePlanSuggestion.captured': 'Caputred by another suggestion',
+    'carePlanSuggestion.captured': 'Captured by another suggestion',
     'carePlanSuggestion.computedField': 'Auto Assessment',
     'carePlanSuggestion.concern': 'Suggested Concern',
     'carePlanSuggestion.concernActive': 'Active concern',

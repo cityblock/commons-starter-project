@@ -65,6 +65,7 @@ export default class ComputedField extends BaseModel {
           },
           to: 'risk_area.id',
         },
+        modify: builder => builder.where({ 'question.deletedAt': null }),
       },
     };
   }

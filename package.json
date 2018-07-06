@@ -90,8 +90,7 @@
     "setupFiles": [
       "./browser-mocks.js",
       "./enzyme-setup.js",
-      "./objection-setup.js",
-      "./react-pdf-setup.js"
+      "./objection-setup.js"
     ],
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {

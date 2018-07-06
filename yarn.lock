@@ -412,9 +412,9 @@
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.1.tgz#9794c69c8385d0192acc471a540d1f8e0d16218a"
 
-"@types/chart.js@2.7.25":
-  version "2.7.25"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.25.tgz#f5b10bee5cca4e8bddebe49d4c6ed24b4017c184"
+"@types/chart.js@2.7.26":
+  version "2.7.26"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.26.tgz#bdb17b90e0698018498a1e55639d444995e4cce3"
 
 "@types/cheerio@*":
   version "0.22.7"

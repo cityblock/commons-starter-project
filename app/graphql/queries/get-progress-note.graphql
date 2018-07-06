@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note.graphql"
-
-query getProgressNote($progressNoteId: ID!, $glassBreakId: ID) {
-  progressNote(progressNoteId: $progressNoteId, glassBreakId: $glassBreakId) {
-    ...FullProgressNote
-  }
-}

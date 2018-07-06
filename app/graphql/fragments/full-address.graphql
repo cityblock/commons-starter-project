@@ -1,9 +1,0 @@
-fragment FullAddress on Address {
-  id
-  city
-  state
-  street1
-  street2
-  zip
-  description
-}

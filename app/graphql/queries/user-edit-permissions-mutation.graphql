@@ -1,7 +1,0 @@
-#import "../fragments/full-user.graphql"
-
-mutation userEditPermissions($email: String!, $permissions: Permissions!) {
-  userEditPermissions(input: { email: $email, permissions: $permissions }) {
-    ...FullUser
-  }
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-user.graphql"
-
-mutation patientCareTeamAddUser($patientId: ID!, $userId: ID!) {
-  careTeamAddUser(input: { patientId: $patientId, userId: $userId }) {
-    ...FullUser
-  }
-}

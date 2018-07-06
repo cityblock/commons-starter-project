@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note.graphql"
-
-subscription progressNoteCreated {
-  progressNoteCreated {
-    ...FullProgressNote
-  }
-}

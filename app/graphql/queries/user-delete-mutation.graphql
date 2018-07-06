@@ -1,7 +1,0 @@
-#import "../fragments/full-user.graphql"
-
-mutation userDelete($email: String!) {
-  userDelete(input: { email: $email }) {
-    ...FullUser
-  }
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-answer.graphql"
-
-query getQuestionAnswers($questionId: ID!) {
-  answersForQuestion(questionId: $questionId) {
-    ...FullAnswer
-  }
-}

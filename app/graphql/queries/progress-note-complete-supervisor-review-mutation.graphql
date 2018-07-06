@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note.graphql"
-
-mutation progressNoteCompleteSupervisorReview($progressNoteId: ID!) {
-  progressNoteCompleteSupervisorReview(input: { progressNoteId: $progressNoteId }) {
-    ...FullProgressNote
-  }
-}

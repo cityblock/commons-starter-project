@@ -1,7 +1,0 @@
-#import "../fragments/full-risk-area.graphql"
-
-query getRiskArea($riskAreaId: ID!) {
-  riskArea(riskAreaId: $riskAreaId) {
-    ...FullRiskArea
-  }
-}

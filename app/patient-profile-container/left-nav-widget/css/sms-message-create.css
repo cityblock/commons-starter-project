@@ -1,6 +1,0 @@
-.container {
-  width: 100%;
-  background: var(--gray-background-color);
-  border-top: 1px solid var(--border-color);
-  padding: var(--small-gutter);
-}

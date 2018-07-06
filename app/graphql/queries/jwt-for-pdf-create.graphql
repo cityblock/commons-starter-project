@@ -1,5 +1,0 @@
-mutation JwtForPdfCreate($patientId: ID!) {
-  JwtForPdfCreate(input: { patientId: $patientId }) {
-    authToken
-  }
-}

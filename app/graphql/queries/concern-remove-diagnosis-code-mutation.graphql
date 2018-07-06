@@ -1,7 +1,0 @@
-#import "../fragments/full-concern.graphql"
-
-mutation concernRemoveDiagnosisCode($concernId: ID!, $diagnosisCodeId: ID!) {
-  concernRemoveDiagnosisCode(input: { concernId: $concernId, diagnosisCodeId: $diagnosisCodeId }) {
-    ...FullConcern
-  }
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-computed-field.graphql"
-
-query getComputedFields($orderBy: ComputedFieldOrderOptions) {
-  computedFields(orderBy: $orderBy) {
-    ...FullComputedField
-  }
-}

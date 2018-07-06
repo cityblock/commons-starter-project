@@ -1,7 +1,0 @@
-#import "../fragments/short-event-notifications-for-user-task.graphql"
-
-query getEventNotificationsForUserTask($taskId: ID!) {
-  eventNotificationsForUserTask(taskId: $taskId) {
-    ...ShortEventNotificationsForUserTask
-  }
-}

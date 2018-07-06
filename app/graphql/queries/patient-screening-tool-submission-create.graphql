@@ -1,9 +1,0 @@
-#import "../fragments/full-patient-screening-tool-submission.graphql"
-
-mutation patientScreeningToolSubmissionCreate($patientId: ID!, $screeningToolId: ID!) {
-  patientScreeningToolSubmissionCreate(
-    input: { patientId: $patientId, screeningToolId: $screeningToolId }
-  ) {
-    ...FullPatientScreeningToolSubmission
-  }
-}

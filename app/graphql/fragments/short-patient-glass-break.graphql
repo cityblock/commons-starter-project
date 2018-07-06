@@ -1,4 +1,0 @@
-fragment ShortPatientGlassBreak on PatientGlassBreak {
-  id
-  patientId
-}

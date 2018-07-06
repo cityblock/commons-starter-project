@@ -1,3 +1,0 @@
-fragment FullPatientNeedToKnow on PatientNeedToKnow {
-  text
-}

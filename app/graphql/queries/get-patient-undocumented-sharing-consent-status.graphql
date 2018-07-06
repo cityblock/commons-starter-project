@@ -1,6 +1,0 @@
-query getPatientUndocumentedSharingConsentStatus($patientId: ID!) {
-  patientUndocumentedSharingConsentStatus(patientId: $patientId) {
-    patientId
-    isUndocumentedSharingConsent
-  }
-}

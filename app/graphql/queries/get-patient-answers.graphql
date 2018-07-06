@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-answer.graphql"
-
-query getPatientAnswers($filterType: AnswerFilterType!, $filterId: ID!, $patientId: ID!) {
-  patientAnswers(filterType: $filterType, filterId: $filterId, patientId: $patientId) {
-    ...FullPatientAnswer
-  }
-}

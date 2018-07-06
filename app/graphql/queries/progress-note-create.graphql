@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note.graphql"
-
-mutation progressNoteCreate($patientId: ID!) {
-  progressNoteCreate(input: { patientId: $patientId }) {
-    ...FullProgressNote
-  }
-}

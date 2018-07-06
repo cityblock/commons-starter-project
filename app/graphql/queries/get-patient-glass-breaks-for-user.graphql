@@ -1,7 +1,0 @@
-#import "../fragments/short-patient-glass-break.graphql"
-
-query getPatientGlassBreaksForUser {
-  patientGlassBreaksForUser {
-    ...ShortPatientGlassBreak
-  }
-}

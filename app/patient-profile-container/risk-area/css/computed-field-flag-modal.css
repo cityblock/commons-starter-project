@@ -1,8 +1,0 @@
-.popup,
-.fields {
-  border-radius: var(--big-border-radius);
-}
-
-.fields {
-  padding: var(--medium-gutter);
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-task.graphql"
-
-mutation taskUserFollow($taskId: ID!, $userId: ID!) {
-  taskUserFollow(input: { taskId: $taskId, userId: $userId }) {
-    ...FullTask
-  }
-}

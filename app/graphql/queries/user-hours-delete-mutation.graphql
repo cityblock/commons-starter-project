@@ -1,7 +1,0 @@
-#import "../fragments/full-user-hours.graphql"
-
-mutation userHoursDelete($userHoursId: ID!) {
-  userHoursDelete(input: { userHoursId: $userHoursId }) {
-    ...FullUserHours
-  }
-}

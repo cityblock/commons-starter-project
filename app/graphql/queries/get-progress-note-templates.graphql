@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note-template.graphql"
-
-query getProgressNoteTemplates {
-  progressNoteTemplates {
-    ...FullProgressNoteTemplate
-  }
-}

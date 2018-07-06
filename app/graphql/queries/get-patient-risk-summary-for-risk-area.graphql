@@ -1,7 +1,0 @@
-#import "../fragments/full-risk-area-summary.graphql"
-
-query getPatientRiskSummaryForRiskArea($riskAreaId: ID!, $patientId: ID!) {
-  patientRiskAreaSummary(riskAreaId: $riskAreaId, patientId: $patientId) {
-    ...FullRiskAreaSummary
-  }
-}

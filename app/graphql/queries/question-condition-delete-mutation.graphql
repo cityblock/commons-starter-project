@@ -1,7 +1,0 @@
-#import "../fragments/full-question-condition.graphql"
-
-mutation questionConditionDelete($questionConditionId: ID!) {
-  questionConditionDelete(input: { questionConditionId: $questionConditionId }) {
-    ...FullQuestionCondition
-  }
-}

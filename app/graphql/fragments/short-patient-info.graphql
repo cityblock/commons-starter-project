@@ -1,7 +1,0 @@
-fragment ShortPatientInfo on PatientInfo {
-  id
-  gender
-  language
-  preferredName
-  hasUploadedPhoto
-}

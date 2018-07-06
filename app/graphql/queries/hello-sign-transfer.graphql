@@ -1,5 +1,0 @@
-mutation helloSignTransfer($patientId: ID!, $documentType: DocumentTypeOptions!, $requestId: ID!) {
-  helloSignTransfer(
-    input: { patientId: $patientId, documentType: $documentType, requestId: $requestId }
-  )
-}

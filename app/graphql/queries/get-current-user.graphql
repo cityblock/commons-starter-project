@@ -1,7 +1,0 @@
-#import "../fragments/full-user.graphql"
-
-query getCurrentUser {
-  currentUser {
-    ...FullUser
-  }
-}

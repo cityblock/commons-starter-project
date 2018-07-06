@@ -1,9 +1,0 @@
-#import "../fragments/full-progress-note.graphql"
-
-mutation progressNoteAddSupervisorNotes($progressNoteId: ID!, $supervisorNotes: String!) {
-  progressNoteAddSupervisorNotes(
-    input: { progressNoteId: $progressNoteId, supervisorNotes: $supervisorNotes }
-  ) {
-    ...FullProgressNote
-  }
-}

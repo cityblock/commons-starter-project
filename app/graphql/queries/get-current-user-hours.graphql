@@ -1,7 +1,0 @@
-#import "../fragments/full-user-hours.graphql"
-
-query getCurrentUserHours {
-  currentUserHours {
-    ...FullUserHours
-  }
-}

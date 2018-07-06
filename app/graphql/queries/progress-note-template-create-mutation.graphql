@@ -1,7 +1,0 @@
-#import "../fragments/full-progress-note-template.graphql"
-
-mutation progressNoteTemplateCreate($title: String!) {
-  progressNoteTemplateCreate(input: { title: $title }) {
-    ...FullProgressNoteTemplate
-  }
-}

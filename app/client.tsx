@@ -1,11 +1,9 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient, ErrorPolicy, FetchPolicy } from 'apollo-client';
-import createHistory from 'history/createBrowserHistory';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import { getMiddlewareLink } from './middleware-link';
-import createStore from './store';
 
 // NOTE: These do absolutely nothing unfortunately
 const defaultOptions = {
@@ -28,11 +26,7 @@ const client = new ApolloClient({
   defaultOptions,
 });
 
-const history = createHistory();
-const store = createStore(history);
-
 const rootEl = document.getElementById('app');
-const render = (Component: typeof App) =>
-  ReactDOM.render(<Component store={store} client={client} />, rootEl);
+const render = (Component: typeof App) => ReactDOM.render(<Component client={client} />, rootEl);
 
 render(App);

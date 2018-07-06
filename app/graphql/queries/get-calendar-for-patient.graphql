@@ -1,8 +1,0 @@
-query getCalendarForPatient($patientId: ID!) {
-  calendarForPatient(patientId: $patientId) {
-    patientId
-    googleCalendarId
-    googleCalendarUrl
-    isCurrentUserPermissioned
-  }
-}

@@ -1,4 +1,0 @@
-fragment ShortProgressNoteGlassBreak on ProgressNoteGlassBreak {
-  id
-  progressNoteId
-}

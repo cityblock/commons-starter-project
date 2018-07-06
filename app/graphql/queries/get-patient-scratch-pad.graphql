@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-scratch-pad.graphql"
-
-query getPatientScratchPad($patientId: ID!, $glassBreakId: ID) {
-  patientScratchPad(patientId: $patientId, glassBreakId: $glassBreakId) {
-    ...FullPatientScratchPad
-  }
-}

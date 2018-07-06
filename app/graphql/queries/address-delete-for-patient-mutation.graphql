@@ -1,9 +1,0 @@
-#import "../fragments/full-address.graphql"
-
-mutation addressDeleteForPatient($addressId: ID!, $patientId: ID!, $isPrimary: Boolean) {
-  addressDeleteForPatient(
-    input: { addressId: $addressId, patientId: $patientId, isPrimary: $isPrimary }
-  ) {
-    ...FullAddress
-  }
-}

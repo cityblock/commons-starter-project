@@ -1,5 +1,0 @@
-fragment FullEmail on Email {
-  id
-  emailAddress
-  description
-}

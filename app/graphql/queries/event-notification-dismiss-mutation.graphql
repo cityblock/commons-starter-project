@@ -1,7 +1,0 @@
-#import "../fragments/full-event-notification.graphql"
-
-mutation eventNotificationDismiss($eventNotificationId: ID!) {
-  eventNotificationDismiss(input: { eventNotificationId: $eventNotificationId }) {
-    ...FullEventNotification
-  }
-}

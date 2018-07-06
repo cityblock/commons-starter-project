@@ -1,5 +1,0 @@
-fragment ShortEventNotificationsForUserTask on EventNotification {
-  id
-  title
-  createdAt
-}

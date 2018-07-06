@@ -1,9 +1,0 @@
-#import "../fragments/short-progress-note-glass-break.graphql"
-
-mutation progressNoteGlassBreakCreate($progressNoteId: ID!, $reason: String!, $note: String) {
-  progressNoteGlassBreakCreate(
-    input: { progressNoteId: $progressNoteId, reason: $reason, note: $note }
-  ) {
-    ...ShortProgressNoteGlassBreak
-  }
-}

@@ -5,21 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = ({ production = false } = {}) => {
-  const plugins = [
-    new webpack.EnvironmentPlugin([
-      'NODE_ENV',
-      'GOOGLE_OAUTH_TOKEN',
-      'IS_BUILDER_ENABLED',
-      'SUBSCRIPTIONS_ENDPOINT',
-      'GA_TRACKING_ID',
-      'FORMS_LIBRARY_URL',
-      'HELLOSIGN_CLIENT_ID',
-      'HELLOSIGN_ENV',
-      'GOOGLE_OAUTH_VALID_EMAIL_DOMAIN',
-      'DISPLAY_TEST_MODE_HEADER',
-    ]),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-  ];
+  const plugins = [new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)];
   if (!production) {
     plugins.push(
       new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),

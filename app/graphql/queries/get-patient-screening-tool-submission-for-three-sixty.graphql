@@ -1,7 +1,0 @@
-#import "../fragments/short-patient-screening-tool-submission-three-sixty.graphql"
-
-query getPatientScreeningToolSubmissionsFor360($patientId: ID!, $glassBreakId: ID) {
-  patientScreeningToolSubmissionsFor360(patientId: $patientId, glassBreakId: $glassBreakId) {
-    ...ShortPatientScreeningToolSubmission360
-  }
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-task.graphql"
-
-query getTask($taskId: ID!) {
-  task(taskId: $taskId) {
-    ...FullTask
-  }
-}

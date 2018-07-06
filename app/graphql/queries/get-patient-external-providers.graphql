@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-external-provider.graphql"
-
-query getPatientExternalProviders($patientId: ID!) {
-  patientExternalProviders(patientId: $patientId) {
-    ...FullPatientExternalProvider
-  }
-}

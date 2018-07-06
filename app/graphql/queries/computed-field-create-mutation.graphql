@@ -1,7 +1,0 @@
-#import "../fragments/full-computed-field.graphql"
-
-mutation computedFieldCreate($label: String!, $dataType: ComputedFieldDataTypes!) {
-  computedFieldCreate(input: { label: $label, dataType: $dataType }) {
-    ...FullComputedField
-  }
-}

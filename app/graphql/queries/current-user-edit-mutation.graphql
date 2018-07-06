@@ -1,9 +1,0 @@
-#import "../fragments/full-user.graphql"
-
-mutation currentUserEdit($locale: String, $isAvailable: Boolean, $awayMessage: String) {
-  currentUserEdit(
-    input: { locale: $locale, isAvailable: $isAvailable, awayMessage: $awayMessage }
-  ) {
-    ...FullUser
-  }
-}

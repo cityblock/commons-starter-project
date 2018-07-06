@@ -1,7 +1,0 @@
-.container {
-  height: var(--header-height);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(315deg, #66c5dd 0%, #2962ff 100%);
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-question.graphql"
-
-mutation questionDelete($questionId: ID!) {
-  questionDelete(input: { questionId: $questionId }) {
-    ...FullQuestion
-  }
-}

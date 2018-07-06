@@ -1,4 +1,0 @@
-fragment FullProgressNoteGlassBreakCheck on ProgressNoteGlassBreakCheck {
-  progressNoteId
-  isGlassBreakNotNeeded
-}

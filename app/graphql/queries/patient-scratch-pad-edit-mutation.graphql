@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-scratch-pad.graphql"
-
-mutation patientScratchPadEdit($patientScratchPadId: ID!, $body: String!) {
-  patientScratchPadEdit(input: { patientScratchPadId: $patientScratchPadId, body: $body }) {
-    ...FullPatientScratchPad
-  }
-}

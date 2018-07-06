@@ -1,7 +1,0 @@
-#import "../fragments/short-patient.graphql"
-
-mutation patientCoreIdentityVerify($patientId: ID!) {
-  patientCoreIdentityVerify(input: { patientId: $patientId }) {
-    ...ShortPatient
-  }
-}

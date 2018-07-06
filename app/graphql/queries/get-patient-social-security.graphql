@@ -1,6 +1,0 @@
-query getPatientSocialSecurity($patientId: ID!, $glassBreakId: ID) {
-  patientSocialSecurity(patientId: $patientId, glassBreakId: $glassBreakId) {
-    id
-    ssn
-  }
-}

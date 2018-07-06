@@ -1,7 +1,0 @@
-#import "../fragments/short-patient-glass-break.graphql"
-
-mutation patientGlassBreakCreate($patientId: ID!, $reason: String!, $note: String) {
-  patientGlassBreakCreate(input: { patientId: $patientId, reason: $reason, note: $note }) {
-    ...ShortPatientGlassBreak
-  }
-}

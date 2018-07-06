@@ -1,6 +1,0 @@
-fragment FullProgressNoteTemplate on ProgressNoteTemplate {
-  id
-  title
-  createdAt
-  deletedAt
-}

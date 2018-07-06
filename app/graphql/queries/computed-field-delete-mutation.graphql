@@ -1,7 +1,0 @@
-#import "../fragments/full-computed-field.graphql"
-
-mutation computedFieldDelete($computedFieldId: ID!) {
-  computedFieldDelete(input: { computedFieldId: $computedFieldId }) {
-    ...FullComputedField
-  }
-}

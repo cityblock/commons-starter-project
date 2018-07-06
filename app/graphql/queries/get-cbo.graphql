@@ -1,7 +1,0 @@
-#import "../fragments/full-cbo.graphql"
-
-query getCBO($CBOId: ID!) {
-  CBO(CBOId: $CBOId) {
-    ...FullCBO
-  }
-}

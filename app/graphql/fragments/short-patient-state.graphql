@@ -1,4 +1,0 @@
-fragment ShortPatientState on PatientState {
-  id
-  currentState
-}

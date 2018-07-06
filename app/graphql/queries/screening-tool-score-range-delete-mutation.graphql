@@ -1,7 +1,0 @@
-#import "../fragments/full-screening-tool-score-range.graphql"
-
-mutation screeningToolScoreRangeDelete($screeningToolScoreRangeId: ID!) {
-  screeningToolScoreRangeDelete(input: { screeningToolScoreRangeId: $screeningToolScoreRangeId }) {
-    ...FullScreeningToolScoreRange
-  }
-}

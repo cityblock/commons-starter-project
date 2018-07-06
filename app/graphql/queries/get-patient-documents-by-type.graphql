@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-document.graphql"
-
-query getPatientDocumentsByType($patientId: ID!, $documentType: DocumentTypeOptions!) {
-  patientDocumentsByType(patientId: $patientId, documentType: $documentType) {
-    ...FullPatientDocument
-  }
-}

@@ -1,7 +1,0 @@
-#import "../fragments/full-goal-suggestion-template.graphql"
-
-query getGoalSuggestionTemplates($orderBy: GoalSuggestionOrderOptions) {
-  goalSuggestionTemplates(orderBy: $orderBy) {
-    ...FullGoalSuggestionTemplate
-  }
-}

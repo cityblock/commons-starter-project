@@ -1,7 +1,0 @@
-#import "../fragments/short-urgent-task-for-patient.graphql"
-
-query getTasksDueSoonForPatient($patientId: ID!) {
-  tasksDueSoonForPatient(patientId: $patientId) {
-    ...ShortUrgentTaskForPatient
-  }
-}

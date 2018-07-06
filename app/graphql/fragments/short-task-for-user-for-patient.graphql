@@ -1,3 +1,0 @@
-fragment ShortTaskForUserForPatient on Task {
-  id
-}

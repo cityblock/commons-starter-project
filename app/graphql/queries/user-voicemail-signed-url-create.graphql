@@ -1,5 +1,0 @@
-mutation userVoicemailSignedUrlCreate($voicemailId: ID!) {
-  userVoicemailSignedUrlCreate(input: { voicemailId: $voicemailId }) {
-    signedUrl
-  }
-}

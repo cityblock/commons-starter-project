@@ -1,9 +1,0 @@
-#import "../fragments/full-screening-tool.graphql"
-
-mutation screeningToolEdit($screeningToolId: ID!, $title: String, $riskAreaId: ID) {
-  screeningToolEdit(
-    input: { screeningToolId: $screeningToolId, title: $title, riskAreaId: $riskAreaId }
-  ) {
-    ...FullScreeningTool
-  }
-}

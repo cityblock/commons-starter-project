@@ -1,5 +1,0 @@
-fragment FullRiskAreaSummary on RiskAreaSummary {
-  summary
-  started
-  lastUpdated
-}

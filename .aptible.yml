@@ -1,2 +1,0 @@
-before_release:
-  yarn migrate --env=production

@@ -1,9 +1,0 @@
-.container {
-  flex: row;
-  justify-content: right;
-}
-
-.select {
-  width: 300px;
-  margin-left: var(--extra-small-gutter);
-}

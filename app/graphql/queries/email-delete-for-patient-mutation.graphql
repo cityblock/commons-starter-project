@@ -1,9 +1,0 @@
-#import "../fragments/full-email.graphql"
-
-mutation emailDeleteForPatient($emailId: ID!, $patientId: ID!, $isPrimary: Boolean) {
-  emailDeleteForPatient(
-    input: { emailId: $emailId, patientId: $patientId, isPrimary: $isPrimary }
-  ) {
-    ...FullEmail
-  }
-}

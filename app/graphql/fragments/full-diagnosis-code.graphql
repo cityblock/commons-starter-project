@@ -1,7 +1,0 @@
-fragment FullDiagnosisCode on DiagnosisCode {
-  id
-  code
-  codesetName
-  label
-  version
-}

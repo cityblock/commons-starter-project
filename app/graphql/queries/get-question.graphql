@@ -1,7 +1,0 @@
-#import "../fragments/full-question.graphql"
-
-query getQuestion($questionId: ID!) {
-  question(questionId: $questionId) {
-    ...FullQuestion
-  }
-}

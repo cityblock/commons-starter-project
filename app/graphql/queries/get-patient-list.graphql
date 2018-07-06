@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-list.graphql"
-
-query getPatientList($patientListId: ID!) {
-  patientList(patientListId: $patientListId) {
-    ...FullPatientList
-  }
-}

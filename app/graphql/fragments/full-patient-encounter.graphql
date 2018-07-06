@@ -1,9 +1,0 @@
-fragment FullPatientEncounter on PatientEncounter {
-  id
-  location
-  source
-  date
-  title
-  notes
-  progressNoteId
-}

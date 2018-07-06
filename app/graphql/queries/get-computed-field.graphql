@@ -1,7 +1,0 @@
-#import "../fragments/full-computed-field.graphql"
-
-query getComputedField($computedFieldId: ID!) {
-  computedField(computedFieldId: $computedFieldId) {
-    ...FullComputedField
-  }
-}

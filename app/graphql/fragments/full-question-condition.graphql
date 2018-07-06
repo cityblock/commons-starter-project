@@ -1,5 +1,0 @@
-fragment FullQuestionCondition on QuestionCondition {
-  id
-  questionId
-  answerId
-}

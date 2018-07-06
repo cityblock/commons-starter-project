@@ -1,7 +1,0 @@
-query getRiskAreaGroupShort($riskAreaGroupId: ID!) {
-  riskAreaGroup(riskAreaGroupId: $riskAreaGroupId) {
-    id
-    title
-    shortTitle
-  }
-}

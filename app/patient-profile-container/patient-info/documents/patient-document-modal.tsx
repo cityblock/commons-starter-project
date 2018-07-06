@@ -46,7 +46,7 @@ type allProps = IProps & IGraphqlProps;
 interface IState {
   selectedFile?: File | null;
   hasFileError?: boolean;
-  documentType?: DocumentTypeOptions | null;
+  documentType?: DocumentTypeOptions | null | 'other';
   description?: string | null;
   isSaving: boolean;
   error?: string | null;
@@ -90,13 +90,14 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
         },
       });
 
+      const updatedDocumentType = documentType === 'other' ? null : documentType;
       await createPatientDocument({
         variables: {
           id,
           patientId,
           filename,
           description,
-          documentType: documentType || preferredDocumentType,
+          documentType: updatedDocumentType || preferredDocumentType,
         },
       });
 
@@ -139,6 +140,8 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
     const { selectedFile, hasFileError, documentType, description } = this.state;
     const { preferredDocumentType } = this.props;
     const filename = selectedFile ? selectedFile.name : '';
+    const documentOptions = values(DocumentTypeOptions);
+    documentOptions.push('other');
 
     return (
       <React.Fragment>
@@ -156,12 +159,11 @@ export class PatientDocumentModal extends React.Component<allProps, IState> {
         <div className={styles.field}>
           <FormLabel messageId="patientDocumentModal.documentType" />
           <Select
-            options={values(DocumentTypeOptions)}
+            options={documentOptions}
             name="documentType"
             value={documentType || preferredDocumentType || ''}
             onChange={this.handleInputChange}
             large={true}
-            isUnselectable={true}
             hasPlaceholder={true}
           />
         </div>

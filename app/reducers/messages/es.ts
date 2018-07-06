@@ -984,6 +984,7 @@ export const SPANISH_TRANSLATION = {
     'fileInput.maxSize': 'This file exceeds the maximum upload size',
     'fileInput.chooseAFile': 'Choose a file',
     'documentType.placeholder': 'Select document type',
+    'documentType.other': 'Other',
     'documentType.treatmentConsent': 'Consent to treat form',
     'documentType.phiSharingConsent': 'Authorization to share PHI',
     'documentType.hieHealthixConsent': 'Healthix consent',

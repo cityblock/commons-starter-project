@@ -3,7 +3,7 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      database: 'puppydex',
+      database: 'pokedex',
       host: '127.0.0.1',
       timezone: 'UTC',
     },
@@ -44,7 +44,7 @@ module.exports = {
   test: {
     client: 'pg',
     connection: {
-      database: 'puppydex_test',
+      database: 'pokedex_test',
       host: '127.0.0.1',
       timezone: 'UTC',
       user: process.env.DB_USER || 'root',

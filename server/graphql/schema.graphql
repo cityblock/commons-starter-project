@@ -4,28 +4,9 @@ interface uniqueId {
   id: ID!
 }
 
-# Puppy
-type Puppy implements uniqueId {
-  id: ID!
-  name: String!
-  createdAt: String
-  updatedAt: String
-  deletedAt: String
-}
+type RootMutationType {}
 
-input PuppyCreateInput {
-  name: String!
-}
-
-type RootMutationType {
-  # Create a puppy
-  puppyCreate(input: PuppyCreateInput): Puppy!
-}
-
-type RootQueryType {
-  # All puppies
-  puppies: [Puppy!]!
-}
+type RootQueryType {}
 
 schema {
   query: RootQueryType

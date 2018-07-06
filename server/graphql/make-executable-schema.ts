@@ -3,14 +3,11 @@ import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import { resolvePuppies } from './puppy-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
 const resolveFunctions = {
-  RootQueryType: {
-    puppies: resolvePuppies,
-  },
+  RootQueryType: {},
   RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

@@ -49,7 +49,7 @@ jobs:
       - image: node:8.11.3@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
       - image: postgres:10.4@sha256:be2885418a90568235170c52d68fe582f71349c9ee16eda38bc3468021b1ad43
         environment:
-          POSTGRES_DB: puppydex_test
+          POSTGRES_DB: pokedex_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
       - image: redis:4.0.10@sha256:6213e498c76eb159d959687c2beb9a77d2ce7b080a38dbd19130a3ad24a6a5c3
@@ -85,7 +85,7 @@ jobs:
       - image: node:8.11.3@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
       - image: postgres:10.4@sha256:be2885418a90568235170c52d68fe582f71349c9ee16eda38bc3468021b1ad43
         environment:
-          POSTGRES_DB: puppydex_test
+          POSTGRES_DB: pokedex_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
       - image: redis:4.0.10@sha256:6213e498c76eb159d959687c2beb9a77d2ce7b080a38dbd19130a3ad24a6a5c3
@@ -121,7 +121,7 @@ jobs:
       - image: node:8.11.3@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
       - image: postgres:10.4@sha256:be2885418a90568235170c52d68fe582f71349c9ee16eda38bc3468021b1ad43
         environment:
-          POSTGRES_DB: puppydex_test
+          POSTGRES_DB: pokedex_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: ""
       - image: redis:4.0.10@sha256:6213e498c76eb159d959687c2beb9a77d2ce7b080a38dbd19130a3ad24a6a5c3
@@ -189,7 +189,7 @@ workflows:
   test_and_deploy:
     jobs:
       - lint:
-          context: puppydex
+          context: pokedex
           filters:
             tags:
               only: /.*/

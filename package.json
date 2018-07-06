@@ -1,9 +1,9 @@
 {
-  "name": "puppydex",
+  "name": "pokedex",
   "version": "0.0.1",
   "description": "A Node.js app using Express and GraphQL",
   "license": "UNLICENSED",
-  "repository": "https://github.com/cityblock/puppydex",
+  "repository": "https://github.com/cityblock/pokedex",
   "private": true,
   "main": "index.js",
   "scripts": {

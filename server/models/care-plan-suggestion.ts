@@ -301,7 +301,9 @@ export default class CarePlanSuggestion extends BaseModel {
     const queryBuilder = this.query(txn)
       .eager(EAGER_QUERY)
       .mergeEager('computedField.[riskArea]')
-      .whereNotNull('computedFieldId');
+      .innerJoinRelation('computedField.question')
+      .whereNull('computedField:question.deletedAt')
+      .whereNull('computedField.deletedAt') as any;
 
     return this.getForPatient(queryBuilder, patientId, txn);
   }

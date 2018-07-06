@@ -268,7 +268,7 @@
     "subscriptions-transport-ws": "0.9.12",
     "ts-loader": "4.4.2",
     "ts-node": "7.0.0",
-    "twilio": "3.17.4",
+    "twilio": "3.17.5",
     "typescript": "2.9.2",
     "typescript-plugin-lodash": "0.1.0",
     "typings-for-css-modules-loader": "1.7.0",

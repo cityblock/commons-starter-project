@@ -1,7 +1,6 @@
 import express from 'express';
-import config from '../config';
 
-const subscriptionsEndpoint = config.SUBSCRIPTIONS_ENDPOINT;
+const subscriptionsEndpoint = 'ws://localhost:3000/subscriptions';
 
 export const addSecurityHeadersMiddleware = (
   req: express.Request,

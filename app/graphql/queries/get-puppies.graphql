@@ -1,0 +1,6 @@
+query getPuppies {
+  puppies {
+    id
+    name
+  }
+}

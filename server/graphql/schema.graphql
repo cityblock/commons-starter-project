@@ -1,3 +1,9 @@
+# An object with a Globally Unique ID
+interface uniqueId {
+  # The ID of the object.
+  id: ID!
+}
+
 # Puppy
 type Puppy implements uniqueId {
   id: ID!

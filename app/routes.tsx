@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import MainContainer from './main-container/main-container';
 
 /**
  * What is <Switch>?
@@ -9,12 +10,8 @@ import { Route, Switch } from 'react-router-dom';
  * NOTE: We async load infrequently used and admin routes
  */
 
-const TestComponent: React.StatelessComponent = () => {
-  return <div>Hi Starter Project!</div>;
-};
-
 export default (
   <Switch>
-    <Route exact path="/" component={TestComponent} />
+    <Route exact path="/" component={MainContainer} />
   </Switch>
 );

@@ -83,10 +83,12 @@ export default async (
   // Render a blank HTML page for the react app
   app.get('*', addSecurityHeadersMiddleware, renderApp);
 
+  /* tslint:disable no-console */
   if (config.NODE_ENV !== 'test') {
     console.log('--------------------------');
     console.log(`  Starting server on port: ${app.get('port')}`);
     console.log(`  Environment: ${config.NODE_ENV}`);
     console.log('--------------------------');
   }
+  /* tslint:enable no-console */
 };

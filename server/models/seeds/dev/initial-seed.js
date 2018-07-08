@@ -582,6 +582,15 @@ const seed = function(knex, Promise) {
         ['Ice Fang', 'Hail'],
         'https://cdn.bulbagarden.net/upload/thumb/2/23/471Glaceon.png/1200px-471Glaceon.png',
       ),
+      buildPokemon(
+        'Ruby',
+        999,
+        9000,
+        9000,
+        'fighting',
+        ['Rest', 'Snarl', 'Snore'],
+        'https://storage.googleapis.com/public-cityblock-production-voicemail-greetings/IMG_4328.JPG',
+      ),
     ]);
 };
 

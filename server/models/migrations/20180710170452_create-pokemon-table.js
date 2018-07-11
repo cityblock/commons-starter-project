@@ -37,7 +37,7 @@ exports.up = function(knex, Promise) {
           .notNullable();
         table
           .json('moves')
-          .defaultTo([])
+          .defaultTo('[]')
           .notNullable();
         table.string('imageUrl').notNullable();
         table

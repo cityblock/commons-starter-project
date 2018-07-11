@@ -36,7 +36,6 @@ exports.up = function(knex, Promise) {
             'poison',
           ])
           .notNullable();
-        // are enums & json used because they are preferable to a join table?
         table
           .json('moves')
           .defaultTo([])

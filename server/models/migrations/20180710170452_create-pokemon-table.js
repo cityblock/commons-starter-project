@@ -55,7 +55,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knew.schema.hasTable('pokemon').then(exists => {
+  return knex.schema.hasTable('pokemon').then(exists => {
     if (exists) {
       return knex.schema.dropTable('pokemon');
     }

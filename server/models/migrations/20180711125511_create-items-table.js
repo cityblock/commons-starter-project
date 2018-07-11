@@ -1,17 +1,15 @@
 exports.up = async function(knex, Promise) {
-  const exists = await knex.schema.hasTable('items');
+  const exists = await knex.schema.hasTable('item');
   if (!exists) {
-    return knex.schema.createTable('items', table => {
+    return knex.schema.createTable('item', table => {
       table.uuid('id').primary();
       table.string('name').notNullable();
       table
         .uuid('pokemonId')
         .references('id')
         .inTable('pokemon')
-        .notNullable()
-        .unique();
-      // should I index the foreign key?
-      // table.index('pokemonId');
+        .notNullable();
+      table.index('pokemonId');
       table.integer('price').notNullable();
       table.integer('happiness').notNullable();
       table.string('imageUrl').notNullable();
@@ -29,8 +27,8 @@ exports.up = async function(knex, Promise) {
 };
 
 exports.down = async function(knex, Promise) {
-  const exists = await knex.schema.hasTable('items');
+  const exists = await knex.schema.hasTable('item');
   if (exists) {
-    return knex.schema.dropTable('items');
+    return knex.schema.dropTable('item');
   }
 };

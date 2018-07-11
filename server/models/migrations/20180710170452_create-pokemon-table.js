@@ -3,7 +3,6 @@ exports.up = function(knex, Promise) {
     if (!exists) {
       return knex.schema.createTable('pokemon', table => {
         table.uuid('id').primary();
-        // want to confirm - primary keys are inherently notNullable
         table
           .integer('pokemonNumber')
           .notNullable()
@@ -40,7 +39,6 @@ exports.up = function(knex, Promise) {
           .json('moves')
           .defaultTo([])
           .notNullable();
-        // what is the default an array here if entries are of type JSON?
         table.string('imageUrl').notNullable();
         table
           .timestamp('createdAt')
@@ -51,10 +49,15 @@ exports.up = function(knex, Promise) {
           .defaultTo(knex.raw('now()'))
           .notNullable();
         table.timestamp('deletedAt');
-        // why in Commons example are some timestamps nullable?
       });
     }
   });
 };
 
-exports.down = function(knex, Promise) {};
+exports.down = function(knex, Promise) {
+  return knew.schema.hasTable('pokemon').then(exists => {
+    if (exists) {
+      return knex.schema.dropTable('pokemon');
+    }
+  });
+};

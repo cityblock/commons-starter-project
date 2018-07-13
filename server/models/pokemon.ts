@@ -2,6 +2,8 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid/v4';
 import Item from './item';
 
+const EAGER_QUERY = 'items';
+
 type PokeType =
   | 'normal'
   | 'grass'
@@ -54,6 +56,7 @@ export default class Pokemon extends Model {
   defense!: number;
   pokeType!: PokeType;
   moves!: string[];
+  items!: string[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
@@ -117,8 +120,8 @@ export default class Pokemon extends Model {
         relation: Model.HasManyRelation,
         modelClass: Item,
         join: {
-          from: 'pokemon.id',
-          to: 'item.pokemonId',
+          from: 'item.pokemonId',
+          to: 'pokemon.id',
         },
       },
     };
@@ -135,7 +138,15 @@ export default class Pokemon extends Model {
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn).findOne({ id: pokemonId, deletedAt: null });
+    console.log(
+      this.query(txn)
+        .eager(EAGER_QUERY)
+        .findOne({ id: pokemonId, deletedAt: null })
+        .toSql(),
+    );
+    const pokemon = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({ id: pokemonId, deletedAt: null });
     if (!pokemon) {
       return Promise.reject(`No such pokemon exists: ${pokemonId}`);
     }

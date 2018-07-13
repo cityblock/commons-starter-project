@@ -1,5 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import Item from '../item';
 import Pokemon from '../pokemon';
 
 interface ISetup {
@@ -15,10 +16,21 @@ async function setup(txn: Transaction): Promise<ISetup> {
       defense: 20,
       pokeType: 'bug',
       moves: ['sit still', 'eat pizza'],
-      imageUrl: 'fakeimageURL',
+      imageUrl: 'fakeImageURL',
     },
     txn,
   );
+  await Item.create(
+    {
+      name: 'scissors',
+      pokemonId: pokemon.id,
+      price: 20,
+      happiness: 50,
+      imageUrl: 'fakeImageUrl',
+    },
+    txn,
+  );
+
   return { pokemon };
 }
 
@@ -42,10 +54,11 @@ describe('Pokemon Model', () => {
   });
 
   describe('get', () => {
-    it('retrieves a pokemon', async () => {
+    it('retrieves a pokemon and associated items', async () => {
       const { pokemon } = await setup(txn);
       const fetchedPokemon = await Pokemon.get(pokemon.id, txn);
       expect(fetchedPokemon.name).toEqual('Newbie');
+      expect(fetchedPokemon.items[0].name).toEqual('scissors');
     });
 
     it('throws error message if pokemon does not exist', async () => {

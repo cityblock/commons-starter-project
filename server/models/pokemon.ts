@@ -1,5 +1,6 @@
-import { Model, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import Item from './item';
 
 type PokeType =
   | 'normal'
@@ -109,6 +110,19 @@ export default class Pokemon extends Model {
     },
     required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
+
+  static get relationMappings(): RelationMappings {
+    return {
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId',
+        },
+      },
+    };
+  }
 
   static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
     const formattedInput = {

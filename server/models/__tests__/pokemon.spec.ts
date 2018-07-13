@@ -1,5 +1,26 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
+import uuid from 'uuid/v4';
 import Pokemon from '../pokemon';
+
+interface ISetup {
+  pokemon: Pokemon;
+}
+
+async function setup(txn: Transaction): Promise<ISetup> {
+  const pokemon = await Pokemon.create(
+    {
+      pokemonNumber: 1111,
+      name: 'Newbie',
+      attack: 9,
+      defense: 20,
+      pokeType: 'bug',
+      moves: ['sit still', 'eat pizza'],
+      imageUrl: 'fakeimageURL',
+    },
+    txn,
+  );
+  return { pokemon };
+}
 
 describe('Pokemon Model', () => {
   let txn = null as any;
@@ -14,48 +35,65 @@ describe('Pokemon Model', () => {
 
   describe('create', () => {
     it('creates a pokemon', async () => {
-      const pokemon = await Pokemon.create(
+      const { pokemon } = await setup(txn);
+      expect(pokemon.name).toBe('Newbie');
+      expect(pokemon.defense).toBe(20);
+    });
+  });
+
+  describe('get', () => {
+    it('retrieves a pokemon', async () => {
+      const { pokemon } = await setup(txn);
+      const fetchedPokemon = await Pokemon.get(pokemon.id, txn);
+      expect(fetchedPokemon.name).toEqual('Newbie');
+    });
+
+    it('throws error message if pokemon does not exist', async () => {
+      const randomUUID = uuid();
+      await expect(Pokemon.get(randomUUID, txn)).rejects.toMatch(
+        `No such pokemon exists: ${randomUUID}`,
+      );
+    });
+  });
+
+  describe('getAll', () => {
+    it('retrieves all pokemon', async () => {
+      const { pokemon } = await setup(txn);
+      await Pokemon.create(
         {
-          pokemonNumber: 1111,
-          name: 'Newbie',
-          attack: 9,
-          defense: 20,
-          pokeType: 'bug',
-          moves: ['sit still', 'eat pizza'],
-          imageUrl: 'fakeimageURL',
+          pokemonNumber: 1112,
+          name: 'Poke',
+          attack: 12,
+          defense: 19,
+          pokeType: 'dragon',
+          moves: ['fly', 'breathe fire'],
+          imageUrl: 'fakeimageURL2',
         },
         txn,
       );
 
-      expect(pokemon.name).toBe('Newbie');
-    });
-
-    // it('throws an error for incorrect input', async () => {
-    //   expect(() => {
-    //     Pokemon.create(
-    //       {
-    //         pokemonNumber: 1111,
-    //         name: 'Newbie',
-    //       },
-    //       txn,
-    //     );
-    //   }).toThrow(ValidationError);
-      // const pokemon = await Pokemon.create(
-      //   {
-      //     pokemonNumber: 1111,
-      //     name: 'Newbie',
-      //   },
-      //   txn,
-      // );
-
-      // expect(pokemon).toThrow(ValidationError);
+      const allPokemon = await Pokemon.getAll(txn);
+      expect(allPokemon.length).toBe(2);
+      expect(allPokemon[0].id).toBe(pokemon.id);
     });
   });
 
-  // describe('getAll', () => {
-  //   it('retrieves all pokemon', async () => {
-  //     // create multiple pokemon
-  //     // call getAll
-  //   })
-  // })
+  describe('edit', () => {
+    it('correctly updates a pokemon', async () => {
+      const { pokemon } = await setup(txn);
+      const editedInput = {
+        name: 'Felix',
+      };
+      const editedPokemon = await Pokemon.edit(pokemon.id, editedInput, txn);
+      expect(editedPokemon.name).toEqual('Felix');
+    });
+  });
+
+  describe('delete', () => {
+    it('changes deletedAt from null', async () => {
+      const { pokemon } = await setup(txn);
+      const deletedPokemon = await Pokemon.delete(pokemon.id, txn);
+      expect(deletedPokemon.deletedAt).not.toBe(null);
+    });
+  });
 });

@@ -31,15 +31,14 @@ interface IPokemonCreateFields {
   imageUrl: string;
 }
 
-interface IPokemonUpdateFields {
-  pokemonId: string;
-  pokemonNumber: number;
-  name: string;
-  attack: number;
-  defense: number;
-  pokeType: PokeType;
-  moves: string[];
-  imageUrl: string;
+interface IPokemonEditInput {
+  pokemonNumber?: number;
+  name?: string;
+  attack?: number;
+  defense?: number;
+  pokeType?: PokeType;
+  moves?: string[];
+  imageUrl?: string;
 }
 
 /* tslint:disable member-ordering */
@@ -79,9 +78,31 @@ export default class Pokemon extends Model {
       name: { type: 'string', minLength: 1 },
       attack: { type: 'number' },
       defense: { type: 'number' },
-      pokeType: { type: 'PokeType' },
-      moves: { type: 'string[]' },
-      imageUrl: { type: 'string' },
+      pokeType: {
+        type: 'string',
+        enum: [
+          'normal',
+          'grass',
+          'fire',
+          'water',
+          'electric',
+          'psychic',
+          'ghost',
+          'dark',
+          'fairy',
+          'rock',
+          'ground',
+          'steel',
+          'flying',
+          'fighting',
+          'bug',
+          'ice',
+          'dragon',
+          'poison',
+        ],
+      },
+      moves: { type: 'string' },
+      imageUrl: { type: 'string', minLength: 1 },
       updatedAt: { type: 'string' },
       createdAt: { type: 'string' },
       deletedAt: { type: 'string' },
@@ -97,23 +118,47 @@ export default class Pokemon extends Model {
     return this.query(txn).insertAndFetch(formattedInput);
   }
 
-  static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    return this.query(txn).orderBy('pokemonNumber', 'ASC');
-  }
-
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn).findById(pokemonId);
+    const pokemon = await this.query(txn).findOne({ id: pokemonId, deletedAt: null });
+    if (!pokemon) {
+      return Promise.reject(`No such pokemon exists: ${pokemonId}`);
+    }
     return pokemon;
   }
 
-  static async edit(pokemonId: string, input: IPokemonUpdateFields, txn: Transaction) {
-    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, input);
+  static async getAll(txn: Transaction): Promise<Pokemon[]> {
+    return this.query(txn)
+      .where({ deletedAt: null })
+      .orderBy('pokemonNumber', 'ASC');
+  }
+
+  static async edit(
+    pokemonId: string,
+    input: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
+    const formattedInput = {
+      ...input,
+      moves: JSON.stringify(input.moves) as any,
+    };
+    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, formattedInput);
+
+    if (!updatedPokemon) {
+      return Promise.reject(`No such pokemon exists: ${updatedPokemon}`);
+    }
     return updatedPokemon;
   }
 
-  // static async create() {}
-  // static async edit() {}
-  // static async delete() {}
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, {
+      deletedAt: new Date().toISOString(),
+    });
+
+    if (!deletedPokemon) {
+      return Promise.reject(`No such pokemon: ${deletedPokemon}`);
+    }
+    return deletedPokemon;
+  }
 }
 
 /* tslint:enable member-ordering */

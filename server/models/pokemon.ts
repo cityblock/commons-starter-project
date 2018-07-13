@@ -113,6 +113,8 @@ export default class Pokemon extends Model {
   static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
     const formattedInput = {
       ...input,
+      // included type 'any' on moves below since TS expects an array of strings
+      // but DB validation expects JSON
       moves: JSON.stringify(input.moves) as any,
     };
     return this.query(txn).insertAndFetch(formattedInput);

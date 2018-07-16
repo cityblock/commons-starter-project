@@ -5,6 +5,7 @@ import Pokemon from '../pokemon';
 
 interface ISetup {
   pokemon: Pokemon;
+  item: Item;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -20,7 +21,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  await Item.create(
+  const item = await Item.create(
     {
       name: 'scissors',
       pokemonId: pokemon.id,
@@ -31,7 +32,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
 
-  return { pokemon };
+  return { pokemon, item };
 }
 
 describe('Pokemon Model', () => {
@@ -54,11 +55,36 @@ describe('Pokemon Model', () => {
   });
 
   describe('get', () => {
-    it('retrieves a pokemon and associated items', async () => {
-      const { pokemon } = await setup(txn);
+    it('retrieves a pokemon and its associated items', async () => {
+      const { pokemon, item } = await setup(txn);
       const fetchedPokemon = await Pokemon.get(pokemon.id, txn);
-      expect(fetchedPokemon.name).toEqual('Newbie');
-      expect(fetchedPokemon.items[0].name).toEqual('scissors');
+      expect(fetchedPokemon).toMatchObject(pokemon);
+      expect(fetchedPokemon.items[0]).toMatchObject(item);
+      expect(fetchedPokemon.items.length).toEqual(1);
+    });
+
+    it('only retrieves un-deleted pokemon items', async () => {
+      const { pokemon, item } = await setup(txn);
+      const itemTwo = await Item.create(
+        {
+          name: 'sticker',
+          pokemonId: pokemon.id,
+          price: 12,
+          happiness: 6,
+          imageUrl: 'fakeImageUrlTwo',
+        },
+        txn,
+      );
+      const fetchedPokemon = await Pokemon.get(pokemon.id, txn);
+      expect(fetchedPokemon.items).toContainEqual(item);
+      expect(fetchedPokemon.items).toContainEqual(itemTwo);
+      expect(fetchedPokemon.items.length).toEqual(2);
+
+      const deletedItem = await Item.delete(itemTwo.id, txn);
+      const reFetchedPokemon = await Pokemon.get(pokemon.id, txn);
+      expect(reFetchedPokemon.items.length).toEqual(1);
+      expect(reFetchedPokemon.items).not.toContainEqual(deletedItem);
+      expect(reFetchedPokemon.items).toContainEqual(item);
     });
 
     it('throws error message if pokemon does not exist', async () => {
@@ -72,7 +98,7 @@ describe('Pokemon Model', () => {
   describe('getAll', () => {
     it('retrieves all pokemon', async () => {
       const { pokemon } = await setup(txn);
-      await Pokemon.create(
+      const pokemonTwo = await Pokemon.create(
         {
           pokemonNumber: 1112,
           name: 'Poke',
@@ -87,7 +113,8 @@ describe('Pokemon Model', () => {
 
       const allPokemon = await Pokemon.getAll(txn);
       expect(allPokemon.length).toBe(2);
-      expect(allPokemon[0].id).toBe(pokemon.id);
+      expect(allPokemon[0]).toMatchObject(pokemon);
+      expect(allPokemon[1]).toMatchObject(pokemonTwo);
     });
   });
 
@@ -99,14 +126,34 @@ describe('Pokemon Model', () => {
       };
       const editedPokemon = await Pokemon.edit(pokemon.id, editedInput, txn);
       expect(editedPokemon.name).toEqual('Felix');
+      const reFetchedPokemon = await Pokemon.get(pokemon.id, txn);
+      expect(reFetchedPokemon.name).toEqual('Felix');
     });
   });
 
   describe('delete', () => {
-    it('changes deletedAt from null', async () => {
+    const deleteSetup = async (): Promise<Pokemon> => {
       const { pokemon } = await setup(txn);
       const deletedPokemon = await Pokemon.delete(pokemon.id, txn);
+      return deletedPokemon;
+    };
+
+    it('changes deletedAt from null', async () => {
+      const deletedPokemon = await deleteSetup();
       expect(deletedPokemon.deletedAt).not.toBe(null);
+    });
+
+    it('makes the deleted pokemon unretrievable', async () => {
+      const deletedPokemon = await deleteSetup();
+      await expect(Pokemon.get(deletedPokemon.id, txn)).rejects.toMatch(
+        `No such pokemon exists: ${deletedPokemon.id}`,
+      );
+    });
+
+    it('removes the deleted pokemon from the total pokemon list', async () => {
+      const deletedPokemon = await deleteSetup();
+      const allPokemon = await Pokemon.getAll(txn);
+      expect(allPokemon).not.toContainEqual(deletedPokemon);
     });
   });
 });

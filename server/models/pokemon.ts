@@ -140,6 +140,9 @@ export default class Pokemon extends Model {
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('items', builder => {
+        builder.where({ deletedAt: null });
+      })
       .findOne({ id: pokemonId, deletedAt: null });
     if (!pokemon) {
       return Promise.reject(`No such pokemon exists: ${pokemonId}`);

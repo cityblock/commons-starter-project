@@ -105,16 +105,18 @@ describe('Item Model', () => {
       const deletedItem = await deleteSetup();
       expect(deletedItem.deletedAt).not.toBe(null);
     });
+
     it('ensures the item cannot be fetched', async () => {
       const deletedItem = await deleteSetup();
       await expect(Item.get(deletedItem.id, txn)).rejects.toMatch(
         `No such item exists: ${deletedItem.id}`,
       );
     });
+
     it('prevents the item from appearing in the total items list', async () => {
       const deletedItem = await deleteSetup();
       const fetchedItems = await Item.getAll(txn);
-      expect(fetchedItems).not.toContain(deletedItem);
+      expect(fetchedItems).not.toContainEqual(deletedItem);
     });
   });
 });

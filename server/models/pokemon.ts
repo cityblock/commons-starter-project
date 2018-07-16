@@ -56,7 +56,7 @@ export default class Pokemon extends Model {
   defense!: number;
   pokeType!: PokeType;
   moves!: string[];
-  items!: string[];
+  items!: Item[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
@@ -138,12 +138,6 @@ export default class Pokemon extends Model {
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    console.log(
-      this.query(txn)
-        .eager(EAGER_QUERY)
-        .findOne({ id: pokemonId, deletedAt: null })
-        .toSql(),
-    );
     const pokemon = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: pokemonId, deletedAt: null });

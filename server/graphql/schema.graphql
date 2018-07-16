@@ -4,9 +4,58 @@ interface uniqueId {
   id: ID!
 }
 
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
+
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Number!
+  name: String!
+  attack: Number!
+  defense: Number!
+  pokeType: PokeType!
+  moves: [String]!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type Item implements uniqueId {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  price: Number!
+  happiness: Number!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 type RootMutationType {}
 
-type RootQueryType {}
+type RootQueryType {
+  pokemon: [Pokemon!]!
+}
 
 schema {
   query: RootQueryType

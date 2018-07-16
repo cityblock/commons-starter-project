@@ -67,16 +67,17 @@ describe('Item Model', () => {
     it('retrieves an item', async () => {
       const { item } = await setup(txn);
       const testItem = await Item.get(item.id, txn);
-      expect(item.id).toEqual(testItem.id);
+      expect(testItem).toMatchObject(item);
     });
   });
 
   describe('getAll', () => {
     it('retrieves all items', async () => {
-      const { item } = await setup(txn);
+      const { item, itemTwo } = await setup(txn);
       const allItems = await Item.getAll(txn);
       expect(allItems.length).toEqual(2);
-      expect(allItems[0].id).toBe(item.id);
+      expect(allItems[0]).toMatchObject(item);
+      expect(allItems[1]).toMatchObject(itemTwo);
     });
   });
 
@@ -88,14 +89,32 @@ describe('Item Model', () => {
       };
       const editedItem = await Item.edit(itemTwo.id, editedInput, txn);
       expect(editedItem.name).toEqual('Normal Raspberry');
+      const retrievedItem = await Item.get(itemTwo.id, txn);
+      expect(retrievedItem.name).toEqual('Normal Raspberry');
     });
   });
 
   describe('delete', () => {
-    it('removes an item', async () => {
+    const deleteSetup = async (): Promise<Item> => {
       const { item } = await setup(txn);
       const deletedItem = await Item.delete(item.id, txn);
+      return deletedItem;
+    };
+
+    it('removes an item', async () => {
+      const deletedItem = await deleteSetup();
       expect(deletedItem.deletedAt).not.toBe(null);
+    });
+    it('ensures the item cannot be fetched', async () => {
+      const deletedItem = await deleteSetup();
+      await expect(Item.get(deletedItem.id, txn)).rejects.toMatch(
+        `No such item exists: ${deletedItem.id}`,
+      );
+    });
+    it('prevents the item from appearing in the total items list', async () => {
+      const deletedItem = await deleteSetup();
+      const fetchedItems = await Item.getAll(txn);
+      expect(fetchedItems).not.toContain(deletedItem);
     });
   });
 });

@@ -1,5 +1,8 @@
-import { Model, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import Item from './item';
+
+const EAGER_QUERY = 'items';
 
 type PokeType =
   | 'normal'
@@ -53,6 +56,7 @@ export default class Pokemon extends Model {
   defense!: number;
   pokeType!: PokeType;
   moves!: string[];
+  items!: Item[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
@@ -110,6 +114,19 @@ export default class Pokemon extends Model {
     required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
 
+  static get relationMappings(): RelationMappings {
+    return {
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'item.pokemonId',
+          to: 'pokemon.id',
+        },
+      },
+    };
+  }
+
   static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
     const formattedInput = {
       ...input,
@@ -121,7 +138,12 @@ export default class Pokemon extends Model {
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn).findOne({ id: pokemonId, deletedAt: null });
+    const pokemon = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('items', builder => {
+        builder.where({ deletedAt: null });
+      })
+      .findOne({ id: pokemonId, deletedAt: null });
     if (!pokemon) {
       return Promise.reject(`No such pokemon exists: ${pokemonId}`);
     }

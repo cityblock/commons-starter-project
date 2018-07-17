@@ -37,6 +37,7 @@ type Pokemon implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  items: [Item!]
 }
 
 type Item implements uniqueId {
@@ -51,7 +52,9 @@ type Item implements uniqueId {
   deletedAt: String
 }
 
-type RootMutationType {}
+type RootMutationType {
+  placeholder: String
+}
 
 type RootQueryType {
   pokemon: [Pokemon!]!

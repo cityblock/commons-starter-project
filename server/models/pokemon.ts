@@ -1,28 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import uuid from 'uuid/v4';
 import Item from './item';
 
 const EAGER_QUERY = 'items';
-
-type PokeType =
-  | 'normal'
-  | 'grass'
-  | 'fire'
-  | 'water'
-  | 'electric'
-  | 'psychic'
-  | 'ghost'
-  | 'dark'
-  | 'fairy'
-  | 'rock'
-  | 'ground'
-  | 'steel'
-  | 'flying'
-  | 'fighting'
-  | 'bug'
-  | 'ice'
-  | 'dragon'
-  | 'poison';
 
 interface IPokemonCreateFields {
   pokemonNumber: number;

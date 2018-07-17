@@ -1,0 +1,10 @@
+#import "../fragments/full-pokemon.graphql"
+
+query getAllPokemon {
+  pokemon {
+    id
+    name
+    pokemonNumber
+    imageUrl
+  }
+}

@@ -27,10 +27,10 @@ enum PokeType {
 
 type Pokemon implements uniqueId {
   id: ID!
-  pokemonNumber: Number!
+  pokemonNumber: Int!
   name: String!
-  attack: Number!
-  defense: Number!
+  attack: Int!
+  defense: Int!
   pokeType: PokeType!
   moves: [String]!
   imageUrl: String!
@@ -43,8 +43,8 @@ type Item implements uniqueId {
   id: ID!
   name: String!
   pokemonId: String!
-  price: Number!
-  happiness: Number!
+  price: Int!
+  happiness: Int!
   imageUrl: String!
   createdAt: String!
   updatedAt: String!

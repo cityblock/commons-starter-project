@@ -49,6 +49,7 @@ export default class Pokemon extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
+  // what can I expect to get back from a Pokemon (inherent properties and associations)
   id!: string;
   pokemonNumber!: number;
   name!: string;

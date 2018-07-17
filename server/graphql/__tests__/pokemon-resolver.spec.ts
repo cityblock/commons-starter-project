@@ -1,5 +1,6 @@
 import { graphql, print } from 'graphql';
 import { transaction } from 'objection';
+import { PokeType } from 'schema';
 import getAllPokemon from '../../../app/graphql/queries/get-all-pokemon.graphql';
 import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
@@ -25,7 +26,7 @@ describe('Pokemon Resolver', () => {
           name: 'Tester',
           attack: 5,
           defense: 60,
-          pokeType: 'grass',
+          pokeType: 'grass' as PokeType,
           moves: ['eat lunch', 'sweat outdoors'],
           imageUrl: 'fakeImageUrl',
         },

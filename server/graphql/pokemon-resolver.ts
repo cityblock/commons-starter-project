@@ -9,7 +9,7 @@ export async function resolvePokemon(
   args: {},
   // context
   { testTransaction }: { testTransaction: Transaction },
-): Promise<IRootQueryType['pokemon']> {
+): Promise<IRootQueryType['allPokemon']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
     return Pokemon.getAll(txn);
   });

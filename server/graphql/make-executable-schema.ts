@@ -9,7 +9,7 @@ const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8
 
 const resolveFunctions = {
   RootQueryType: {
-    pokemon: resolvePokemon,
+    allPokemon: resolvePokemon,
   },
   RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698

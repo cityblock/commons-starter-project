@@ -37,8 +37,8 @@ describe('Pokemon Resolver', () => {
         testTransaction: txn,
       });
 
-      expect(result.data!.pokemon.length).toBe(1);
-      expect(result.data!.pokemon[0]).toMatchObject({
+      expect(result.data!.allPokemon.length).toBe(1);
+      expect(result.data!.allPokemon[0]).toMatchObject({
         id: pokemon.id,
         name: 'Tester',
         pokemonNumber: 15,

@@ -7,7 +7,7 @@
 // GraphQL query operation: getAllPokemon
 // ====================================================
 
-export interface getAllPokemon_pokemon {
+export interface getAllPokemon_allPokemon {
   id: string;
   name: string;
   pokemonNumber: number;
@@ -15,7 +15,7 @@ export interface getAllPokemon_pokemon {
 }
 
 export interface getAllPokemon {
-  pokemon: getAllPokemon_pokemon[];
+  allPokemon: getAllPokemon_allPokemon[];
 }
 
 

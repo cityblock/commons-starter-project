@@ -105,7 +105,7 @@ describe('Pokemon Model', () => {
           name: 'Poke',
           attack: 12,
           defense: 19,
-          pokeType: 'dragon',
+          pokeType: 'dragon' as PokeType,
           moves: ['fly', 'breathe fire'],
           imageUrl: 'fakeimageURL2',
         },

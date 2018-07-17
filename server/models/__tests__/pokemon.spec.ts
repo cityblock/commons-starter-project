@@ -1,4 +1,5 @@
 import { transaction, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import uuid from 'uuid/v4';
 import Item from '../item';
 import Pokemon from '../pokemon';
@@ -15,7 +16,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       name: 'Newbie',
       attack: 9,
       defense: 20,
-      pokeType: 'bug',
+      pokeType: 'bug' as PokeType,
       moves: ['sit still', 'eat pizza'],
       imageUrl: 'fakeImageURL',
     },
@@ -104,7 +105,7 @@ describe('Pokemon Model', () => {
           name: 'Poke',
           attack: 12,
           defense: 19,
-          pokeType: 'dragon',
+          pokeType: 'dragon' as PokeType,
           moves: ['fly', 'breathe fire'],
           imageUrl: 'fakeimageURL2',
         },

@@ -1,28 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { PokeType } from 'schema';
 import uuid from 'uuid/v4';
 import Item from './item';
 
 const EAGER_QUERY = 'items';
-
-type PokeType =
-  | 'normal'
-  | 'grass'
-  | 'fire'
-  | 'water'
-  | 'electric'
-  | 'psychic'
-  | 'ghost'
-  | 'dark'
-  | 'fairy'
-  | 'rock'
-  | 'ground'
-  | 'steel'
-  | 'flying'
-  | 'fighting'
-  | 'bug'
-  | 'ice'
-  | 'dragon'
-  | 'poison';
 
 interface IPokemonCreateFields {
   pokemonNumber: number;
@@ -49,6 +30,7 @@ export default class Pokemon extends Model {
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
 
+  // what can I expect to get back from a Pokemon (inherent properties and associations)
   id!: string;
   pokemonNumber!: number;
   name!: string;

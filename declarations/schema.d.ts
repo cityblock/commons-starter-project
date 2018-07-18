@@ -91,7 +91,37 @@ declare module 'schema' {
   }
 
   interface IRootMutationType {
-    placeholder: string | null;
+    pokemonCreate: IPokemon;
+    pokemonEdit: IPokemon;
+  }
+
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input?: IPokemonCreateInput | null;
+  }
+
+  interface IPokemonEditOnRootMutationTypeArguments {
+    input?: IPokemonEditInput | null;
+  }
+
+  interface IPokemonCreateInput {
+    name: string;
+    pokemonNumber: number;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    moves: Array<string>;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    pokemonId: string;
+    name?: string | null;
+    pokemonNumber?: number | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: PokeType | null;
+    moves: Array<string>;
+    imageUrl?: string | null;
   }
 }
 

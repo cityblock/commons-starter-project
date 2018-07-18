@@ -1,5 +1,3 @@
-#import "./full-item.graphql"
-
 fragment FullPokemon on Pokemon {
   id
   pokemonNumber
@@ -9,10 +7,9 @@ fragment FullPokemon on Pokemon {
   pokeType
   moves
   imageUrl
-  createdAt
-  updatedAt
-  deletedAt
   items {
-    ...FullItem
+    id
+    name
+    imageUrl
   }
 }

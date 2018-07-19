@@ -41,6 +41,9 @@ export interface getSinglePokemon_singlePokemon {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   items: getSinglePokemon_singlePokemon_items[] | null;
 }
 
@@ -75,6 +78,9 @@ export interface pokemonCreate_pokemonCreate {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   items: pokemonCreate_pokemonCreate_items[] | null;
 }
 
@@ -115,6 +121,9 @@ export interface pokemonDelete_pokemonDelete {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   items: pokemonDelete_pokemonDelete_items[] | null;
 }
 
@@ -149,6 +158,9 @@ export interface pokemonEdit_pokemonEdit {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   items: pokemonEdit_pokemonEdit_items[] | null;
 }
 
@@ -210,6 +222,9 @@ export interface FullPokemon {
   pokeType: PokeType;
   moves: string[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   items: FullPokemon_items[] | null;
 }
 

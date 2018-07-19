@@ -32,12 +32,37 @@ type Pokemon implements uniqueId {
   attack: Int!
   defense: Int!
   pokeType: PokeType!
-  moves: [String]!
+  moves: [String!]!
   imageUrl: String!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
   items: [Item!]
+}
+
+input PokemonCreateInput {
+  name: String!
+  pokemonNumber: Int!
+  attack: Int!
+  defense: Int!
+  pokeType: PokeType!
+  moves: [String!]!
+  imageUrl: String!
+}
+
+input PokemonEditInput {
+  pokemonId: ID!
+  name: String
+  pokemonNumber: Int
+  attack: Int
+  defense: Int
+  pokeType: PokeType
+  moves: [String!]
+  imageUrl: String
+}
+
+input PokemonDeleteInput {
+  pokemonId: ID!
 }
 
 type Item implements uniqueId {
@@ -53,11 +78,14 @@ type Item implements uniqueId {
 }
 
 type RootMutationType {
-  placeholder: String
+  pokemonCreate(input: PokemonCreateInput): Pokemon!
+  pokemonEdit(input: PokemonEditInput): Pokemon!
+  pokemonDelete(input: PokemonDeleteInput): Pokemon!
 }
 
 type RootQueryType {
-  pokemon: [Pokemon!]!
+  allPokemon: [Pokemon!]!
+  singlePokemon(pokemonId: ID!): Pokemon!
 }
 
 schema {

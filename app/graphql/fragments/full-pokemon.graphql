@@ -1,5 +1,3 @@
-#import "./full-item.graphql"
-
 fragment FullPokemon on Pokemon {
   id
   pokemonNumber
@@ -13,6 +11,8 @@ fragment FullPokemon on Pokemon {
   updatedAt
   deletedAt
   items {
-    ...FullItem
+    id
+    name
+    imageUrl
   }
 }

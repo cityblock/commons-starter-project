@@ -4,6 +4,7 @@ import { PokeType } from 'schema';
 import getAllPokemon from '../../../app/graphql/queries/get-all-pokemon.graphql';
 import getSinglePokemon from '../../../app/graphql/queries/get-single-pokemon.graphql';
 import pokemonCreate from '../../../app/graphql/queries/pokemon-create-mutation.graphql';
+import pokemonDelete from '../../../app/graphql/queries/pokemon-delete-mutation.graphql';
 import pokemonEdit from '../../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import Item from '../../models/item';
 import Pokemon from '../../models/pokemon';
@@ -16,6 +17,7 @@ describe('Pokemon Resolver', () => {
   const getSinglePokemonQuery = print(getSinglePokemon);
   const pokemonCreateMutation = print(pokemonCreate);
   const pokemonEditMutation = print(pokemonEdit);
+  const pokemonDeleteMutation = print(pokemonDelete);
 
   const setup = async () => {
     const pokemon = await Pokemon.create(
@@ -110,7 +112,7 @@ describe('Pokemon Resolver', () => {
 
   describe('resolve single pokemon', () => {
     it('fetches a single pokemon and associated items', async () => {
-      const { pokemonTwo, item, itemTwo, shortItem, shortItemTwo } = await setup();
+      const { pokemonTwo, shortItem, shortItemTwo } = await setup();
 
       const result = await graphql(
         schema,
@@ -198,12 +200,47 @@ describe('Pokemon Resolver', () => {
         },
       );
 
-      console.log({
+      expect(result.data!.pokemonEdit).toMatchObject({
         name: 'LL Bean',
-        pokemonId: pokemon.id,
+        pokemonNumber: 15,
+        attack: 5,
+        defense: 60,
+        pokeType: 'grass',
+        moves: ['eat lunch', 'sweat outdoors'],
+        imageUrl: 'fakeImageUrl',
       });
-      console.log(result);
+
+      const resultTwo = await graphql(
+        schema,
+        getSinglePokemonQuery,
+        null,
+        { testTransaction: txn },
+        { pokemonId: pokemon.id },
+      );
+
+      expect(resultTwo.data!.singlePokemon).toMatchObject({
+        name: 'LL Bean',
+        pokemonNumber: 15,
+        attack: 5,
+        defense: 60,
+        pokeType: 'grass',
+        moves: ['eat lunch', 'sweat outdoors'],
+        imageUrl: 'fakeImageUrl',
+      });
     });
   });
-  // describe('pokemon delete');
+
+  describe('pokemon delete', () => {
+    it('assigns a deletedAt time to the pokemon', async () => {
+      const { pokemonTwo } = await setup();
+      const result = await graphql(
+        schema,
+        pokemonDeleteMutation,
+        null,
+        { testTransaction: txn },
+        { pokemonId: pokemonTwo.id },
+      );
+      expect(result.data!.pokemonDelete.deletedAt).not.toBeFalsy();
+    });
+  });
 });

@@ -7,6 +7,9 @@ fragment FullPokemon on Pokemon {
   pokeType
   moves
   imageUrl
+  createdAt
+  updatedAt
+  deletedAt
   items {
     id
     name

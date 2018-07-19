@@ -1,5 +1,11 @@
 import { transaction, Transaction } from 'objection';
-import { IPokemonCreateInput, IPokemonEditInput, IRootMutationType, IRootQueryType } from 'schema';
+import {
+  IPokemonCreateInput,
+  IPokemonDeleteInput,
+  IPokemonEditInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import Pokemon from '../models/pokemon';
 
 interface IQuery {
@@ -16,6 +22,10 @@ interface IPokemonCreateArgs {
 
 interface IPokemonEditArgs {
   input: IPokemonEditInput;
+}
+
+interface IPokemonDeleteArgs {
+  input: IPokemonDeleteInput;
 }
 
 export async function resolvePokemon(
@@ -56,9 +66,29 @@ export async function pokemonEdit(
   { input }: IPokemonEditArgs,
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonEdit']> {
-  console.log(`the input is ${input}`);
-  // return transaction(testTransaction || Pokemon.knex(), async txn => {
-  //   console.log(`the input is ${input}`);
-  //   // return Pokemon.edit(input.pokemonId, input, txn);
-  // });
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.edit(
+      input.pokemonId,
+      {
+        name: input.name || undefined,
+        pokemonNumber: input.pokemonNumber || undefined,
+        attack: input.attack || undefined,
+        defense: input.defense || undefined,
+        pokeType: input.pokeType || undefined,
+        moves: input.moves || undefined,
+        imageUrl: input.imageUrl || undefined,
+      },
+      txn,
+    );
+  });
+}
+
+export async function pokemonDelete(
+  root: any,
+  { input }: IPokemonDeleteArgs,
+  { testTransaction }: IContext,
+): Promise<IRootMutationType['pokemonDelete']> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    return Pokemon.delete(input.pokemonId, txn);
+  });
 }

@@ -93,6 +93,7 @@ declare module 'schema' {
   interface IRootMutationType {
     pokemonCreate: IPokemon;
     pokemonEdit: IPokemon;
+    pokemonDelete: IPokemon;
   }
 
   interface IPokemonCreateOnRootMutationTypeArguments {
@@ -101,6 +102,10 @@ declare module 'schema' {
 
   interface IPokemonEditOnRootMutationTypeArguments {
     input?: IPokemonEditInput | null;
+  }
+
+  interface IPokemonDeleteOnRootMutationTypeArguments {
+    input?: IPokemonDeleteInput | null;
   }
 
   interface IPokemonCreateInput {
@@ -122,6 +127,10 @@ declare module 'schema' {
     pokeType?: PokeType | null;
     moves: Array<string>;
     imageUrl?: string | null;
+  }
+
+  interface IPokemonDeleteInput {
+    pokemonId: string;
   }
 }
 

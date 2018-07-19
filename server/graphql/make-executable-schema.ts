@@ -5,6 +5,7 @@ import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
   pokemonCreate,
+  pokemonDelete,
   pokemonEdit,
   resolvePokemon,
   resolveSinglePokemon,
@@ -20,6 +21,7 @@ const resolveFunctions = {
   RootMutationType: {
     pokemonCreate,
     pokemonEdit,
+    pokemonDelete,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

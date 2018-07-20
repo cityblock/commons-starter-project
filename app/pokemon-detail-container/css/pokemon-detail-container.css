@@ -1,0 +1,16 @@
+.imageHolder {
+  background-color: var(--yellow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 6px solid var(--dark-border-color);
+  border-radius: var(--big-border-radius);
+}
+
+.image {
+  max-height: 400px;
+  max-width: 400px;
+  object-fit: cover;
+  padding: 20px;
+  border-radius: var(--border-radius);
+}

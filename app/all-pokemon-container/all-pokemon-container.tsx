@@ -6,6 +6,7 @@ import allPokemonGraphql from '../graphql/queries/get-all-pokemon.graphql';
 // frontend type
 import { getAllPokemon } from '../graphql/types';
 
+import { Link } from 'react-router-dom';
 import allPokemonStyles from './css/all-pokemon.css';
 import styles from './css/main.css';
 
@@ -30,10 +31,10 @@ const AllPokemonContainer: React.StatelessComponent<allProps> = (props: allProps
 
   const renderedPokemon = allPokemon.map(pokemon => {
     return (
-      <div key={pokemon.id}>
+      <Link to={`/${pokemon.id}`} key={pokemon.id}>
         <img className={allPokemonStyles.pokemonImage} src={pokemon.imageUrl} />
         <p>{pokemon.name}</p>
-      </div>
+      </Link>
     );
   });
 

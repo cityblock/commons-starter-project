@@ -3,6 +3,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import singlePokemonGraphql from '../graphql/queries/get-single-pokemon.graphql';
 import { getSinglePokemon } from '../graphql/types';
+import styles from './css/pokemon-detail-container';
 import ItemsList from './items-list';
 
 interface IGraphqlProps {
@@ -27,7 +28,9 @@ const PokemonDetailContainer: React.StatelessComponent<allProps> = (props: allPr
 
   return (
     <div>
-      <img src={singlePokemon.imageUrl} />
+      <section className={styles.imageHolder}>
+        <img src={singlePokemon.imageUrl} className={styles.image} />
+      </section>
       <p>{singlePokemon.name}</p>
       <p>Type: {singlePokemon.pokeType}</p>
       <p>Attack: {singlePokemon.attack}</p>

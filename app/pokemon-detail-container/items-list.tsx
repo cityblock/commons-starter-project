@@ -1,6 +1,5 @@
 import React from 'react';
 import { getSinglePokemon_singlePokemon_items } from '../graphql/types';
-// import Item from '../../server/models/item';
 
 interface IProps {
   items: getSinglePokemon_singlePokemon_items[] | null;

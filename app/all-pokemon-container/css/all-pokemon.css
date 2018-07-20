@@ -1,0 +1,14 @@
+.appContainer {
+  display: flex;
+}
+
+.leftRail {
+  display: flex;
+  flex-direction: column;
+}
+
+.pokemonImage {
+  height: 50px;
+  width: 50px;
+  font-size: var(--medium-font-size);
+}

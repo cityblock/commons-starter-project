@@ -3,6 +3,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import pokemonCreateGraphql from '../graphql/queries/pokemon-create-mutation.graphql';
 import { pokemonCreate, pokemonCreateVariables, PokeType } from '../graphql/types';
+import styles from './css/create-pokemon-container.css';
 
 interface IOptions {
   variables: pokemonCreateVariables;
@@ -53,7 +54,7 @@ class CreatePokemonContainer extends React.Component<IGraphqlProps, IState> {
   }
 
   onChange(field: StateFields) {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
+    return (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
       this.setState({ [field as any]: e.target.value } as any);
     };
   }
@@ -85,13 +86,14 @@ class CreatePokemonContainer extends React.Component<IGraphqlProps, IState> {
   render() {
     return (
       <div>
+        <h1>Create a new Pokemon!</h1>
         <p>{this.state.error}</p>
-        <label>
+        <label className={styles.formLabel}>
           Name
           <input name="name" value={this.state.name} onChange={this.onChange('name')} />
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Pokemon Number
           <input
             name="pokemonNumber"
@@ -100,30 +102,50 @@ class CreatePokemonContainer extends React.Component<IGraphqlProps, IState> {
           />
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Attack
           <input name="attack" value={this.state.attack} onChange={this.onChange('attack')} />
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Defense
           <input name="defense" value={this.state.defense} onChange={this.onChange('defense')} />
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Poketype
-          <input name="pokeType" value={this.state.pokeType} onChange={this.onChange('pokeType')} />
+          <select onChange={this.onChange('pokeType')}>
+            <option value="" selected disabled>
+              Please select a Poketype
+            </option>
+            <option value="normal" selected={false}>
+              normal
+            </option>
+            <option value="grass" selected={false}>
+              grass
+            </option>
+            <option value="fire" selected={false}>
+              fire
+            </option>
+            <option value="water" selected={false}>
+              water
+            </option>
+            <option value="electric" selected={false}>
+              electric
+            </option>
+          </select>
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Moves
           <input name="moves" value={this.state.moves} onChange={this.onChange('moves')} />
         </label>
         <br />
-        <label>
+        <label className={styles.formLabel}>
           Image URL
           <input name="imageUrl" value={this.state.imageUrl} onChange={this.onChange('imageUrl')} />
         </label>
+        <br />
         <button onClick={this.onSubmit}>Create!</button>
       </div>
     );

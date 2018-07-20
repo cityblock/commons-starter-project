@@ -41,6 +41,9 @@ const AllPokemonContainer: React.StatelessComponent<allProps> = (props: allProps
   return (
     <div className={styles.body}>
       <div className={allPokemonStyles.appContainer}>
+        <div>
+          <Link to="/">Create a Pokemon!</Link>
+        </div>
         <div className={allPokemonStyles.leftRail}>{renderedPokemon}</div>
         {props.children}
       </div>

@@ -8,6 +8,8 @@ import { getAllPokemon } from '../graphql/types';
 
 import styles from './css/main.css';
 
+// query name is getAllPokemon
+// query type is allPokemon (aka will route to resolver allPokemon method)
 interface IGraphqlProps {
   allPokemon: getAllPokemon['allPokemon'];
   loading: boolean;

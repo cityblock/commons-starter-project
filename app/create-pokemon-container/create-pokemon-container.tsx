@@ -65,7 +65,7 @@ class CreatePokemonContainer extends React.Component<IGraphqlProps, IState> {
     if (!this.state.loading) {
       try {
         this.setState({ loading: true, error: null });
-        const pokemon = await createPokemon({
+        await createPokemon({
           variables: {
             name: this.state.name,
             pokemonNumber: this.state.pokemonNumber,

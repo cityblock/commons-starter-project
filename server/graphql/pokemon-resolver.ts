@@ -46,7 +46,7 @@ export async function resolveSinglePokemon(
   { pokemonId }: IQuery,
   { testTransaction }: IContext,
 ): Promise<IRootQueryType['singlePokemon']> {
-  return transaction(testTransaction || Pokemon.knex, async txn => {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
     return Pokemon.get(pokemonId, txn);
   });
 }

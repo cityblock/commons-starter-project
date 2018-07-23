@@ -13,8 +13,11 @@ interface IGraphqlProps {
 }
 
 interface IStateProps {
-  pokemonId: string | null;
-  match: any;
+  match: {
+    params: {
+      pokemonId: string;
+    };
+  };
 }
 
 type allProps = IGraphqlProps & IStateProps;

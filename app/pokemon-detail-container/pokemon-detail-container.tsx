@@ -3,7 +3,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import singlePokemonGraphql from '../graphql/queries/get-single-pokemon.graphql';
 import { getSinglePokemon } from '../graphql/types';
-import styles from './css/pokemon-detail-container';
+import styles from './css/pokemon-detail-container.css';
 import ItemsList from './items-list';
 
 interface IGraphqlProps {

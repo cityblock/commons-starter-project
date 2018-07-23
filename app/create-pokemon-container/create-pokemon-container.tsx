@@ -35,7 +35,6 @@ interface IState {
   error: string | null;
   loading: boolean;
 }
-// type IState = { [K in StateFields]: string };
 
 class CreatePokemonContainer extends React.Component<IGraphqlProps, IState> {
   constructor(props: IGraphqlProps) {

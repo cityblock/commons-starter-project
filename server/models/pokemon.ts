@@ -1,5 +1,4 @@
 import { Model, Transaction } from 'objection';
-import { isNil, omitBy } from 'lodash';
 import uuid from 'uuid/v4';
 
 enum PokeType {
@@ -52,14 +51,13 @@ export default class Pokemon extends Model {
   name!: string;
   attack!: number;
   defense!: number;
-  pokeType!: PokeType[];
+  pokeType!: PokeType;
   moves!: string[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string;
 
-  //$beforeInsert >> objection syntax
   $beforeInsert() {
     this.id = uuid();
     this.createdAt = new Date().toISOString();
@@ -98,17 +96,20 @@ export default class Pokemon extends Model {
     pokemon: IPokemonEditInput,
     txn: Transaction,
   ): Promise<Pokemon> {
-    const editPokemon = omitBy(
-      {
-        ...pokemon,
-        moves: JSON.stringify(pokemon.moves) as any,
-      },
-      isNil,
-    );
+    const editPokemon = {
+      ...pokemon,
+      moves: JSON.stringify(pokemon.moves) as any,
+    };
     return this.query(txn).patchAndFetchById(pokemonId, editPokemon);
   }
 
-  static async delete(pokemonId: string, txn: Transaction) {
-    return this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date().toISOString() });
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    if (!pokemonId) {
+      return Promise.reject(`Pokemon: ${pokemonId} does not exist`);
+    } else {
+      return await this.query(txn)
+        .where({ id: pokemonId, deletedAt: null })
+        .patchAndFetch({ deletedAt: new Date().toISOString() });
+    }
   }
 }

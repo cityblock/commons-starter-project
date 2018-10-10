@@ -1,4 +1,5 @@
 import { Model, Transaction } from 'objection';
+import { isNil, omitBy } from 'lodash';
 import uuid from 'uuid/v4';
 
 enum PokeType {
@@ -19,25 +20,27 @@ enum PokeType {
   bug,
   ice,
   dragon,
-  poison
+  poison,
 }
 
-//TODO: how to get JSON as typed array?????
-//look at lines: 28, 37 & 51
-
-interface movesJSON {
-  moves: moves[];
-}
-
-export interface IPokemonCreateFields {
+export interface IPokemonCreateInput {
   pokemonNumber: number;
   name: string;
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: movesJSON;
+  moves: string[];
   imageUrl: string;
+}
 
+export interface IPokemonEditInput {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string[];
+  imageUrl: string;
 }
 
 export default class Pokemon extends Model {
@@ -50,36 +53,31 @@ export default class Pokemon extends Model {
   attack!: number;
   defense!: number;
   pokeType!: PokeType[];
-  moves!: movesJSON[];
+  moves!: string[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string;
 
-  //objection.js syntax??
+  //$beforeInsert >> objection syntax
   $beforeInsert() {
     this.id = uuid();
     this.createdAt = new Date().toISOString();
     this.updatedAt = new Date().toISOString();
   }
 
-  //objection.js syntax??
   $beforeUpdate() {
     this.updatedAt = new Date().toISOString();
   }
 
   static tableName = 'pokemon';
 
-  //understand this function better...language around `Promise<Pokemon[]>`
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    //Promise<> ...returns Pokemon array ... is this typescript syntax?
-    return this.query(txn).orderBy('pokemonNumber ', 'ASC');
+    return this.query(txn).orderBy('pokemonNumber', 'ASC');
   }
 
-  //so what is this pokemon returning...is it an object??? How can I verify it's an object that is getting returned?
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn)
-      .findById(pokemonId);
+    const pokemon = await this.query(txn).findById(pokemonId);
 
     if (!pokemon) {
       return Promise.reject(`No such pokemon: ${pokemonId}`);
@@ -87,12 +85,30 @@ export default class Pokemon extends Model {
     return pokemon;
   }
 
-  static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
-    return this.query(txn).insertAndFetch(input);
-    //need to return instance of Pokemon
+  static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
+    const filteredInput = {
+      ...input,
+      moves: JSON.stringify(input.moves) as any,
+    };
+    return this.query(txn).insertAndFetch(filteredInput);
   }
 
+  static async edit(
+    pokemonId: string,
+    pokemon: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
+    const editPokemon = omitBy(
+      {
+        ...pokemon,
+        moves: JSON.stringify(pokemon.moves) as any,
+      },
+      isNil,
+    );
+    return this.query(txn).patchAndFetchById(pokemonId, editPokemon);
+  }
 
-
-
+  static async delete(pokemonId: string, txn: Transaction) {
+    return this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date().toISOString() });
+  }
 }

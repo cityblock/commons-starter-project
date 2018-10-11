@@ -53,27 +53,40 @@ describe('Pokemon Model', async () => {
         `No such pokemon: ${fakeUUID}`,
       );
     });
+
+    it('will not retrive a pokemon that has been deleted', async () => {
+      await Pokemon.delete(testPokemon.id, txn);
+      await expect(Pokemon.get(testPokemon.id, txn)).rejects.toMatchObject(
+        `No such pokemon: ${testPokemon.id}`,
+      );
+    });
   });
 
-  describe('getAll', () => {
+  describe('getAll', async () => {
+    await Pokemon.create(
+      {
+        pokemonNumber: 55000,
+        name: 'Anasauce',
+        attack: 10000,
+        defense: 85,
+        pokeType: PokeType.poison,
+        moves: ['sleeps', 'writes code'],
+        imageUrl: 'thisisanimage',
+      },
+      txn,
+    );
+
     it('gets all the pokemon', async () => {
-      await Pokemon.create(
-        {
-          pokemonNumber: 55000,
-          name: 'Anasauce',
-          attack: 10000,
-          defense: 85,
-          pokeType: PokeType.poison,
-          moves: ['sleeps', 'writes code'],
-          imageUrl: 'thisisanimage',
-        },
-        txn,
-      );
-
       const pokemons = await Pokemon.getAll(txn);
-
       expect(pokemons.length).toBe(2);
       expect(pokemons[0].id).toBe(testPokemon.id);
+    });
+
+    it('will not retrive pokemon that has been deleted', async () => {
+      await Pokemon.delete(testPokemon.id, txn);
+      const pokemons = await Pokemon.getAll(txn);
+      expect(pokemons.length).toBe(1);
+      expect(pokemons[0].name).toEqual('Anasauce');
     });
   });
 

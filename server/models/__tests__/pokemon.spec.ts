@@ -32,7 +32,7 @@ describe('Pokemon Model', async () => {
 
   describe('create', () => {
     it('creates a pokemon', async () => {
-      expect(testPokemon.name).toBe('Cityblockichu');
+      expect(testPokemon.name).toEqual('Cityblockichu');
 
       const pokemons = await Pokemon.getAll(txn);
 
@@ -44,12 +44,14 @@ describe('Pokemon Model', async () => {
   describe('get', () => {
     it('gets a pokemon', async () => {
       const thingIGot = await Pokemon.get(testPokemon.id, txn);
-      expect(thingIGot.name).toBe('Cityblockichu');
+      expect(thingIGot.name).toEqual('Cityblockichu');
     });
 
     it('will let you know if there is no pokemon', async () => {
       const fakeUUID = uuid();
-      await expect(Pokemon.get(fakeUUID, txn)).rejects.toBe(`No such pokemon: ${fakeUUID}`);
+      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatchObject(
+        `No such pokemon: ${fakeUUID}`,
+      );
     });
   });
 
@@ -78,7 +80,14 @@ describe('Pokemon Model', async () => {
   describe('edit', async () => {
     it('edits a pokemon', async () => {
       await Pokemon.edit(testPokemon.id, { name: 'Beyonce' }, txn);
-      expect(testPokemon.name).toBe('Beyonce');
+      expect(testPokemon.name).toEqual('Beyonce');
+    });
+
+    it('will let you know if there is no pokemon', async () => {
+      const fakeUUID = uuid();
+      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatchObject(
+        `Pokemon: ${fakeUUID} does not exist`,
+      );
     });
   });
 
@@ -86,6 +95,13 @@ describe('Pokemon Model', async () => {
     it('updates deletedAt status to null', async () => {
       const byePokemon = await Pokemon.delete(testPokemon.id, txn);
       expect(byePokemon.deletedAt).not.toBe(null);
+    });
+
+    it('will let you know if there is no pokemon', async () => {
+      const fakeUUID = uuid();
+      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatchObject(
+        `Pokemon: ${fakeUUID} does not exist`,
+      );
     });
   });
 });

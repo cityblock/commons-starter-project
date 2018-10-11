@@ -142,7 +142,11 @@ export default class Pokemon extends Model {
       ...pokemon,
       moves: JSON.stringify(pokemon.moves) as any,
     };
-    return this.query(txn).patchAndFetchById(pokemonId, editPokemon);
+    if (!pokemonId) {
+      return Promise.reject(`Pokemon: ${pokemonId} does not exist`);
+    } else {
+      return this.query(txn).patchAndFetchById(pokemonId, editPokemon);
+    }
   }
 
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {

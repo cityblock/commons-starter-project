@@ -1,7 +1,7 @@
-import { Model, Transaction } from 'objection';
+import { Model, Transaction, JsonSchema } from 'objection';
 import uuid from 'uuid/v4';
 
-enum PokeType {
+export enum PokeType {
   normal,
   grass,
   fire,
@@ -33,13 +33,13 @@ export interface IPokemonCreateInput {
 }
 
 export interface IPokemonEditInput {
-  pokemonNumber: number;
-  name: string;
-  attack: number;
-  defense: number;
-  pokeType: PokeType;
-  moves: string[];
-  imageUrl: string;
+  pokemonNumber?: number;
+  name?: string;
+  attack?: number;
+  defense?: number;
+  pokeType?: PokeType;
+  moves?: string[];
+  imageUrl?: string;
 }
 
 export default class Pokemon extends Model {
@@ -70,12 +70,54 @@ export default class Pokemon extends Model {
 
   static tableName = 'pokemon';
 
+  static: JsonSchema = {
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+      pokemonNumber: { type: 'number' },
+      name: { type: 'string' },
+      attack: { type: 'number' },
+      defense: { type: 'nunmber' },
+      pokeType: {
+        type: 'string',
+        enum: [
+          'normal',
+          'grass',
+          'fire',
+          'water',
+          'electric',
+          'psychic',
+          'ghost',
+          'dark',
+          'fairy',
+          'rock',
+          'ground',
+          'steel',
+          'flying',
+          'fighting',
+          'bug',
+          'ice',
+          'dragon',
+          'poison',
+        ],
+      },
+      moves: { type: 'string' },
+      imageUrl: { type: 'string' },
+      updatedAt: { type: 'string' },
+      createdAt: { type: 'string' },
+      deletedAt: { type: 'string' },
+    },
+    required: ['name', 'pokemonNumber', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
+  };
+
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    return this.query(txn).orderBy('pokemonNumber', 'ASC');
+    return this.query(txn)
+      .where({ deletedAt: null })
+      .orderBy('pokemonNumber', 'ASC');
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn).findById(pokemonId);
+    const pokemon = await this.query(txn).findOne({ id: pokemonId, deletedAt: null });
 
     if (!pokemon) {
       return Promise.reject(`No such pokemon: ${pokemonId}`);

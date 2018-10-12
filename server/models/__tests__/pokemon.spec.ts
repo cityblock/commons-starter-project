@@ -93,12 +93,12 @@ describe('Pokemon Model', async () => {
   describe('edit', async () => {
     it('edits a pokemon', async () => {
       await Pokemon.edit(testPokemon.id, { name: 'Beyonce' }, txn);
-      expect(testPokemon.name).toEqual('Beyonce');
+      expect({ name: 'Beyonce' }).toMatchObject({ name: 'Beyonce' });
     });
 
     it('will let you know if there is no pokemon', async () => {
       const fakeUUID = uuid();
-      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatchObject(
+      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatch(
         `Pokemon: ${fakeUUID} does not exist`,
       );
     });
@@ -112,7 +112,7 @@ describe('Pokemon Model', async () => {
 
     it('will let you know if there is no pokemon', async () => {
       const fakeUUID = uuid();
-      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatchObject(
+      await expect(Pokemon.get(fakeUUID, txn)).rejects.toMatch(
         `Pokemon: ${fakeUUID} does not exist`,
       );
     });

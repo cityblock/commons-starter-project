@@ -79,7 +79,7 @@ describe('Pokemon Model', async () => {
       const testPokemon = await setupTestPokemon(txn);
       const pokemons = await Pokemon.getAll(txn);
       expect(pokemons.length).toBe(2);
-      expect(pokemons[0].id).toBe(testPokemon.id);
+      expect(pokemons).toContainEqual(testPokemon);
     });
 
     it('will not retrive pokemon that has been deleted', async () => {

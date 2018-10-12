@@ -1,26 +1,25 @@
-import { Model, Transaction, JsonSchema } from 'objection';
+import { Model, Transaction } from 'objection';
 import uuid from 'uuid/v4';
 
-export enum PokeType {
-  normal,
-  grass,
-  fire,
-  water,
-  electric,
-  psychic,
-  ghost,
-  dark,
-  fairy,
-  rock,
-  ground,
-  steel,
-  flying,
-  fighting,
-  bug,
-  ice,
-  dragon,
-  poison,
-}
+export type PokeType =
+  | 'normal'
+  | 'grass'
+  | 'fire'
+  | 'water'
+  | 'electric'
+  | 'psychic'
+  | 'ghost'
+  | 'dark'
+  | 'fairy'
+  | 'rock'
+  | 'ground'
+  | 'steel'
+  | 'flying'
+  | 'fighting'
+  | 'bug'
+  | 'ice'
+  | 'dragon'
+  | 'poison';
 
 export interface IPokemonCreateInput {
   pokemonNumber: number;
@@ -70,7 +69,7 @@ export default class Pokemon extends Model {
 
   static tableName = 'pokemon';
 
-  static: JsonSchema = {
+  static jsonSchema = {
     type: 'object',
     properties: {
       id: { type: 'string' },
@@ -142,20 +141,20 @@ export default class Pokemon extends Model {
       ...pokemon,
       moves: JSON.stringify(pokemon.moves) as any,
     };
-    if (!pokemonId) {
-      return Promise.reject(`Pokemon: ${pokemonId} does not exist`);
-    } else {
-      return this.query(txn).patchAndFetchById(pokemonId, editPokemon);
+    const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, editPokemon);
+    if (!updatedPokemon) {
+      return Promise.reject(`No such pokemon: ${pokemonId}`);
     }
+    return updatedPokemon;
   }
 
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    if (!pokemonId) {
-      return Promise.reject(`Pokemon: ${pokemonId} does not exist`);
-    } else {
-      return await this.query(txn)
-        .where({ id: pokemonId, deletedAt: null })
-        .patchAndFetch({ deletedAt: new Date().toISOString() });
+    const pokemon = await this.query(txn)
+      .where({ deletedAt: null })
+      .patchAndFetchById(pokemonId, { deletedAt: new Date().toISOString() });
+    if (!pokemon) {
+      return Promise.reject(`No such pokemon: ${pokemonId}`);
     }
+    return pokemon;
   }
 }

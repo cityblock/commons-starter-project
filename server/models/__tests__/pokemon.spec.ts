@@ -64,7 +64,7 @@ describe('Pokemon Model', async () => {
 
   describe('getAll', () => {
     it('gets all the pokemon', async () => {
-      await Pokemon.create(
+      const otherPokemon = await Pokemon.create(
         {
           pokemonNumber: 55000,
           name: 'Anasauce',
@@ -80,6 +80,7 @@ describe('Pokemon Model', async () => {
       const pokemons = await Pokemon.getAll(txn);
       expect(pokemons.length).toBe(2);
       expect(pokemons).toContainEqual(testPokemon);
+      expect(pokemons).toContainEqual(otherPokemon);
     });
 
     it('will not retrive pokemon that has been deleted', async () => {
@@ -106,7 +107,8 @@ describe('Pokemon Model', async () => {
   describe('edit', async () => {
     it('edits a pokemon', async () => {
       const testPokemon = await setupTestPokemon(txn);
-      await Pokemon.edit(testPokemon.id, { name: 'Beyonce' }, txn);
+      const editedPokemon = await Pokemon.edit(testPokemon.id, { name: 'Beyonce' }, txn);
+      await expect(editedPokemon.name).toBe('Beyonce';)
     });
 
     it('will let you know if there is no pokemon', async () => {

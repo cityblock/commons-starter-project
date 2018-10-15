@@ -67,11 +67,15 @@ export default class Item extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Pokemon,
         join: {
-          from: 'item.pokemonId',
-          to: 'pokemon.id',
+          from: 'pokemon.id',
+          to: 'item.pokemonID',
         },
       },
     };
+  }
+
+  static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async get(itemId: string, txn: Transaction): Promise<Item> {
@@ -84,9 +88,7 @@ export default class Item extends Model {
   }
 
   static async getAll(txn: Transaction): Promise<Item[]> {
-    return this.query(txn)
-      .where({ deletedAt: null })
-      .orderBy('', 'ASC');
+    return this.query(txn).where({ deletedAt: null });
   }
 
   static async edit(itemId: string, input: IItemEditInput, txn: Transaction): Promise<Item> {

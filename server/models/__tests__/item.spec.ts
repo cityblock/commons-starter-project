@@ -101,6 +101,7 @@ describe('Item Model', async () => {
       const items = await Item.getAll(txn);
       expect(items.length).toBe(1);
       expect(items[0].name).toEqual('orange');
+      expect(items).not.toContainEqual(otherItem);
     });
   });
 

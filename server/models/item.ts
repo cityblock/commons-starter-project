@@ -67,8 +67,8 @@ export default class Item extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Pokemon,
         join: {
-          from: 'pokemon.id',
-          to: 'item.pokemonID',
+          from: 'item.pokemonId',
+          to: 'pokemon.id',
         },
       },
     };

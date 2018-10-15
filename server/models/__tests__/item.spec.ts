@@ -100,7 +100,7 @@ describe('Item Model', async () => {
       await Item.delete(otherItem.id, txn);
       const items = await Item.getAll(txn);
       expect(items.length).toBe(1);
-      expect(items[0].name).toEqual('Orange');
+      expect(items[0].name).toEqual('orange');
     });
   });
 
@@ -115,7 +115,7 @@ describe('Item Model', async () => {
   describe('delete', async () => {
     it('updates deletedAt status to null', async () => {
       const { testItem } = await setupForTestingItem(txn);
-      const byeItem = await Pokemon.delete(testItem.id, txn);
+      const byeItem = await Item.delete(testItem.id, txn);
       expect(byeItem.deletedAt).not.toBe(null);
     });
   });

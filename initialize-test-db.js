@@ -1,5 +1,6 @@
 const Knex = require('knex');
 const knexConfig = require('./server/models/knexfile');
+
 function initializeDatabase() {
   if (process.env.NODE_ENV === 'test') {
     const knex = Knex(knexConfig['test']);

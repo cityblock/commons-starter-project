@@ -1,5 +1,5 @@
 exports.up = function (knex, Promise) {
-  knex.schema.table('item', table => {
+  return knex.schema.table('item', table => {
     table.index('pokemonId');
   })
 };

@@ -1,5 +1,6 @@
-import { Model, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid/v4';
+import Item from './item';
 
 export type PokeType =
   | 'normal'
@@ -53,6 +54,7 @@ export default class Pokemon extends Model {
   pokeType!: PokeType;
   moves!: string[];
   imageUrl!: string;
+  items!: Item[];
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string;
@@ -108,6 +110,19 @@ export default class Pokemon extends Model {
     },
     required: ['name', 'pokemonNumber', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
+
+  static get relationMappings(): RelationMappings {
+    return {
+      items: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'item.pokemonId',
+          to: 'pokemon.id',
+        },
+      },
+    };
+  }
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     return this.query(txn)

@@ -108,7 +108,7 @@ describe('Pokemon Model', async () => {
     it('edits a pokemon', async () => {
       const testPokemon = await setupTestPokemon(txn);
       const editedPokemon = await Pokemon.edit(testPokemon.id, { name: 'Beyonce' }, txn);
-      await expect(editedPokemon.name).toBe('Beyonce';)
+      await expect(editedPokemon.name).toBe('Beyonce');
     });
 
     it('will let you know if there is no pokemon', async () => {

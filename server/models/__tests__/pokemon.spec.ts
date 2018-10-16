@@ -5,8 +5,8 @@ import uuid from 'uuid/v4';
 
 interface IPokemonTestSetup {
   testPokemon: Pokemon;
-  testItem: Item;
-  otherItem: Item;
+  item1: Item;
+  item2: Item;
 }
 
 async function setupTestPokemon(txn: Transaction): Promise<IPokemonTestSetup> {
@@ -22,7 +22,7 @@ async function setupTestPokemon(txn: Transaction): Promise<IPokemonTestSetup> {
     },
     txn,
   );
-  const testItem = await Item.create(
+  const item1 = await Item.create(
     {
       name: 'orange',
       pokemonId: testPokemon.id,
@@ -33,7 +33,7 @@ async function setupTestPokemon(txn: Transaction): Promise<IPokemonTestSetup> {
     txn,
   );
 
-  const otherItem = await Item.create(
+  const item2 = await Item.create(
     {
       name: 'purple',
       pokemonId: testPokemon.id,
@@ -43,7 +43,7 @@ async function setupTestPokemon(txn: Transaction): Promise<IPokemonTestSetup> {
     },
     txn,
   );
-  return { testPokemon, testItem, otherItem };
+  return { testPokemon, item1, item2 };
 }
 
 describe('Pokemon Model', async () => {
@@ -71,12 +71,12 @@ describe('Pokemon Model', async () => {
 
   describe('get', () => {
     it('gets a pokemon and its items', async () => {
-      const { testPokemon, testItem, otherItem } = await setupTestPokemon(txn);
+      const { testPokemon, item1, item2 } = await setupTestPokemon(txn);
       const thingIGot = await Pokemon.get(testPokemon.id, txn);
       expect(thingIGot.name).toEqual('Cityblockichu');
       expect(thingIGot.items.length).toEqual(2);
-      expect(thingIGot.items).toContainEqual(testItem);
-      expect(thingIGot.items).toContainEqual(otherItem);
+      expect(thingIGot.items).toContainEqual(item1);
+      expect(thingIGot.items).toContainEqual(item2);
     });
 
     it('will let you know if there is no pokemon', async () => {
@@ -85,10 +85,10 @@ describe('Pokemon Model', async () => {
     });
 
     it('will only get items that are not deleted', async () => {
-      const { testItem, testPokemon, otherItem } = await setupTestPokemon(txn);
-      const goAwayItem = await Item.delete(otherItem.id, txn);
+      const { item1, testPokemon, item2 } = await setupTestPokemon(txn);
+      const goAwayItem = await Item.delete(item2.id, txn);
       const pokemonIGot = await Pokemon.get(testPokemon.id, txn);
-      expect(pokemonIGot.items[0]).toMatchObject(testItem);
+      expect(pokemonIGot.items[0]).toMatchObject(item1);
       expect(pokemonIGot.items).not.toContainEqual(goAwayItem);
     });
 

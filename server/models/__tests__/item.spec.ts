@@ -4,8 +4,8 @@ import Pokemon, { PokeType } from '../pokemon';
 import uuid from 'uuid/v4';
 
 interface IItemSetup {
-  testItem: Item;
-  otherItem: Item;
+  item1: Item;
+  item2: Item;
   testPokemon: Pokemon;
 }
 
@@ -23,7 +23,7 @@ async function setupForTestingItem(txn: Transaction): Promise<IItemSetup> {
     txn,
   );
 
-  const testItem = await Item.create(
+  const item1 = await Item.create(
     {
       name: 'orange',
       pokemonId: testPokemon.id,
@@ -34,7 +34,7 @@ async function setupForTestingItem(txn: Transaction): Promise<IItemSetup> {
     txn,
   );
 
-  const otherItem = await Item.create(
+  const item2 = await Item.create(
     {
       name: 'blue',
       pokemonId: testPokemon.id,
@@ -45,7 +45,7 @@ async function setupForTestingItem(txn: Transaction): Promise<IItemSetup> {
     txn,
   );
 
-  return { testItem, testPokemon, otherItem };
+  return { item1, testPokemon, item2 };
 }
 
 describe('Item Model', async () => {
@@ -61,17 +61,17 @@ describe('Item Model', async () => {
 
   describe('create', () => {
     it('creates a item', async () => {
-      const { testItem } = await setupForTestingItem(txn);
-      expect(testItem.name).toEqual('orange');
-      expect(testItem.price).toEqual(10001);
+      const { item1 } = await setupForTestingItem(txn);
+      expect(item1.name).toEqual('orange');
+      expect(item1.price).toEqual(10001);
     });
   });
 
   describe('get', () => {
     it('gets an item', async () => {
-      const { testItem } = await setupForTestingItem(txn);
-      const thingIGot = await Item.get(testItem.id, txn);
-      expect(thingIGot).toMatchObject(testItem);
+      const { item1 } = await setupForTestingItem(txn);
+      const thingIGot = await Item.get(item1.id, txn);
+      expect(thingIGot).toMatchObject(item1);
     });
 
     it('will let you know if there is no item', async () => {
@@ -80,43 +80,43 @@ describe('Item Model', async () => {
     });
 
     it('will not retrive an item that has been deleted', async () => {
-      const { testItem } = await setupForTestingItem(txn);
-      await Item.delete(testItem.id, txn);
-      await expect(Item.get(testItem.id, txn)).rejects.toMatch(`No such item: ${testItem.id}`);
+      const { item1 } = await setupForTestingItem(txn);
+      await Item.delete(item1.id, txn);
+      await expect(Item.get(item1.id, txn)).rejects.toMatch(`No such item: ${item1.id}`);
     });
   });
 
   describe('getAll', () => {
     it('gets all the items', async () => {
-      const { testItem, otherItem } = await setupForTestingItem(txn);
+      const { item1, item2 } = await setupForTestingItem(txn);
       const items = await Item.getAll(txn);
       expect(items.length).toBe(2);
-      expect(items).toContainEqual(testItem);
-      expect(items).toContainEqual(otherItem);
+      expect(items).toContainEqual(item1);
+      expect(items).toContainEqual(item2);
     });
 
     it('will not retrive an item that has been deleted', async () => {
-      const { otherItem } = await setupForTestingItem(txn);
-      await Item.delete(otherItem.id, txn);
+      const { item2 } = await setupForTestingItem(txn);
+      await Item.delete(item2.id, txn);
       const items = await Item.getAll(txn);
       expect(items.length).toBe(1);
       expect(items[0].name).toEqual('orange');
-      expect(items).not.toContainEqual(otherItem);
+      expect(items).not.toContainEqual(item2);
     });
   });
 
   describe('edit', async () => {
     it('edits a item', async () => {
-      const { testItem } = await setupForTestingItem(txn);
-      const editedItem = await Item.edit(testItem.id, { name: 'OrangeYouGoingToGetMeAnItem' }, txn);
+      const { item1 } = await setupForTestingItem(txn);
+      const editedItem = await Item.edit(item1.id, { name: 'OrangeYouGoingToGetMeAnItem' }, txn);
       await expect(editedItem.name).toBe('OrangeYouGoingToGetMeAnItem');
     });
   });
 
   describe('delete', async () => {
     it('updates deletedAt status to null', async () => {
-      const { testItem } = await setupForTestingItem(txn);
-      const byeItem = await Item.delete(testItem.id, txn);
+      const { item1 } = await setupForTestingItem(txn);
+      const byeItem = await Item.delete(item1.id, txn);
       expect(byeItem.deletedAt).not.toBe(null);
     });
   });

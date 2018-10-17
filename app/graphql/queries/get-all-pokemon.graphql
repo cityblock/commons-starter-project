@@ -1,0 +1,8 @@
+query getAllPokemon {
+  pokemon {
+    id
+    name
+    pokemonNumber
+    imageUrl
+  }
+}

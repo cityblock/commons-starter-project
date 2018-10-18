@@ -45,10 +45,7 @@ describe('Pokemon Resolver', () => {
       const graphqlReturn = await graphql(schema, pokemonGetAllQuery, null, {
         testTransaction: txn,
       });
-
-      expect(graphqlReturn.data!.pokemon[0].name).toEqual(testPokemon.name);
-      expect(graphqlReturn.data!.pokemon[0].id).toEqual(testPokemon.id);
-      expect(graphqlReturn.data!.pokemon[0].pokemonNumber).toEqual(testPokemon.pokemonNumber);
+      expect(testPokemon).toEqual(expect.objectContaining(graphqlReturn.data!.pokemon[0]));
       expect(graphqlReturn.data!.pokemon.length).toBe(1);
     });
   });

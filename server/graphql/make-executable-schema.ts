@@ -8,6 +8,7 @@ import {
   resolveOnePokemon,
   createPokemon,
   deletePokemon,
+  editPokemon,
 } from './pokemon-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -20,6 +21,7 @@ const resolveFunctions = {
   RootMutationType: {
     pokemonCreate: createPokemon,
     pokemonDelete: deletePokemon,
+    pokemonEdit: editPokemon,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

@@ -61,7 +61,7 @@ input PokemonEditInput {
   attack: Int
   defense: Int
   pokeType: PokeType
-  moves: [String!]!
+  moves: [String!]
   imageUrl: String
 }
 

@@ -84,6 +84,50 @@ export interface pokemonDeleteVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: pokemonEdit
+// ====================================================
+
+export interface pokemonEdit_pokemonEdit_items {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
+export interface pokemonEdit_pokemonEdit {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: (string | null)[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  items: pokemonEdit_pokemonEdit_items[] | null;
+}
+
+export interface pokemonEdit {
+  pokemonEdit: pokemonEdit_pokemonEdit;
+}
+
+export interface pokemonEditVariables {
+  pokemonId: string;
+  name?: string | null;
+  pokemonNumber?: number | null;
+  attack?: number | null;
+  defense?: number | null;
+  pokeType?: PokeType | null;
+  moves?: string[] | null;
+  imageUrl?: string | null;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getAllPokemon
 // ====================================================
 

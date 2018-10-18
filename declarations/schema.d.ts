@@ -129,7 +129,7 @@ declare module 'schema' {
     attack?: number | null;
     defense?: number | null;
     pokeType?: PokeType | null;
-    moves: Array<string>;
+    moves?: Array<string> | null;
     imageUrl?: string | null;
   }
 }

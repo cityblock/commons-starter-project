@@ -5,6 +5,7 @@ import getAllPokemon from '../../../app/graphql/queries/get-all-pokemon.graphql'
 import getSinglePokemon from '../../../app/graphql/queries/get-one-pokemon.graphql';
 import pokemonCreate from '../../../app/graphql/queries/create-pokemon.graphql';
 import pokemonDelete from '../../../app/graphql/queries/delete-pokemon.graphql';
+import pokemonEdit from '../../../app/graphql/queries/edit-pokemon.graphql';
 import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
 import Item from '../../models/item';
@@ -16,19 +17,18 @@ interface IPokemonTestSetup {
   itemTwo: Item;
 }
 
+const pokemonInput = {
+  name: 'resolveichu',
+  pokemonNumber: 707,
+  attack: 90,
+  defense: 88,
+  pokeType: 'dragon' as PokeType,
+  moves: ['resolves queries', 'talks to client'],
+  imageUrl: 'stringystring',
+};
+
 async function setupPokemonResolverTest(txn: Transaction): Promise<IPokemonTestSetup> {
-  const pokemonOne = await Pokemon.create(
-    {
-      name: 'resolveichu',
-      pokemonNumber: 707,
-      attack: 90,
-      defense: 88,
-      pokeType: 'dragon' as PokeType,
-      moves: ['resolves queries', 'talks to client'],
-      imageUrl: 'stringystring',
-    },
-    txn,
-  );
+  const pokemonOne = await Pokemon.create(pokemonInput, txn);
   const pokemonTwo = await Pokemon.create(
     {
       name: 'hufflepuff',
@@ -71,6 +71,7 @@ describe('Pokemon Resolver', () => {
   const getOneQuery = print(getSinglePokemon);
   const createPokemon = print(pokemonCreate);
   const deletePokemon = print(pokemonDelete);
+  const editPokemon = print(pokemonEdit);
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());
@@ -149,6 +150,23 @@ describe('Pokemon Resolver', () => {
         { pokemonId: pokemonOne.id },
       );
       expect(graphqlReturn.data!.pokemonDelete.deletedAt).not.toBe(null);
+    });
+  });
+
+  describe('editPokemon', () => {
+    it('edits a pokemon', async () => {
+      const { pokemonOne } = await setupPokemonResolverTest(txn);
+      const graphqlReturn = await graphql(
+        schema,
+        editPokemon,
+        null,
+        { testTransaction: txn },
+        { name: 'testyPokemon', pokemonId: pokemonOne.id },
+      );
+      expect(graphqlReturn.data!.pokemonEdit).toMatchObject({
+        ...pokemonInput,
+        name: 'testyPokemon',
+      });
     });
   });
 });

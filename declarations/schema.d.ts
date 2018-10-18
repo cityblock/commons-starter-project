@@ -18,28 +18,28 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    pokemon: Array<IPokemon | null>;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemon {
     id: string;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
+    pokemonNumber: number;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    items: Array<IItem> | null;
+    moves: Array<string | null>;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
     deletedAt: string | null;
   }
 
   /**
    * An object with a Globally Unique ID
    */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon | IItem;
 
   /**
    * An object with a Globally Unique ID
@@ -52,20 +52,55 @@ declare module 'schema' {
     id: string;
   }
 
-  interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
-  }
-
-  interface IPuppyCreateInput {
+  interface IItem {
+    id: string;
     name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string;
+  }
+
+  interface IRootMutationType {
+    pokemonCreate: IPokemon;
+  }
+
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input?: IPokemonCreateFields | null;
+  }
+
+  interface IPokemonCreateFields {
+    name: string;
+    pokemonNumber: number;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    moves: Array<string | null>;
+    imageUrl: string;
   }
 }
 

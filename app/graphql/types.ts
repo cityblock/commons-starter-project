@@ -4,16 +4,18 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getPuppies
+// GraphQL query operation: getAllPokemon
 // ====================================================
 
-export interface getPuppies_puppies {
+export interface getAllPokemon_pokemon {
   id: string;
   name: string;
+  pokemonNumber: number;
+  imageUrl: string;
 }
 
-export interface getPuppies {
-  puppies: getPuppies_puppies[];  // All puppies
+export interface getAllPokemon {
+  pokemon: (getAllPokemon_pokemon | null)[];
 }
 
 /* tslint:disable */

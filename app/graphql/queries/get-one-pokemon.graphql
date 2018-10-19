@@ -1,0 +1,20 @@
+query getSinglePokemon($pokemonId: ID!) {
+  fullPokemon(pokemonId: $pokemonId) {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+    items {
+      id
+      name
+      imageUrl
+    }
+  }
+}

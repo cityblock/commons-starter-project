@@ -1,0 +1,20 @@
+mutation pokemonDelete($pokemonId: ID!) {
+  pokemonDelete(input: { pokemonId: $pokemonId }) {
+    id
+    pokemonNumber
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    createdAt
+    updatedAt
+    deletedAt
+    items {
+      id
+      name
+      imageUrl
+    }
+  }
+}

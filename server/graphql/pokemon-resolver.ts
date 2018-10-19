@@ -49,7 +49,7 @@ export async function resolveOnePokemon(
 }
 
 export async function createPokemon(
-  root: any,
+  root: {},
   { input }: ICreatePokemon,
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonCreate']> {
@@ -59,7 +59,7 @@ export async function createPokemon(
 }
 
 export async function deletePokemon(
-  root: any,
+  root: {},
   { input }: IDeletePokemon,
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonDelete']> {
@@ -69,7 +69,7 @@ export async function deletePokemon(
 }
 
 export async function editPokemon(
-  root: any,
+  root: {},
   { input }: IEditPokemon,
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonEdit']> {

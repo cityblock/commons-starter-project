@@ -101,7 +101,7 @@ describe('Pokemon Resolver', () => {
 
   describe('resolveOnePokemon', () => {
     it('gets one pokemon and its items', async () => {
-      const { pokemonOne, itemOne } = await setupPokemonResolverTest(txn);
+      const { pokemonOne, itemOne, itemTwo } = await setupPokemonResolverTest(txn);
       const graphqlReturn = await graphql(
         schema,
         getOneQuery,
@@ -113,6 +113,7 @@ describe('Pokemon Resolver', () => {
       expect(graphqlReturn.data!.fullPokemon.id).toEqual(pokemonOne.id);
       expect(graphqlReturn.data!.fullPokemon.items.length).toBe(2);
       expect(itemOne).toEqual(expect.objectContaining(graphqlReturn.data!.fullPokemon.items[1]));
+      expect(itemTwo).toEqual(expect.objectContaining(graphqlReturn.data!.fullPokemon.items[0]));
     });
   });
 

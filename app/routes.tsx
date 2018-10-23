@@ -12,9 +12,8 @@ import CreatePokemonForm from './create-pokemon-form/create-pokemon-form';
  */
 
 export default (
-  <PokemonList>
-    <Switch>
-      <Route exact path="/" component={CreatePokemonForm} />
-    </Switch>
-  </PokemonList>
+  <Switch>
+    <Route exact path="/" component={PokemonList} />
+    <Route exact path="/add-pokemon" component={CreatePokemonForm} />
+  </Switch>
 );

@@ -39,6 +39,17 @@ type createPokemonFields =
 class CreatePokemonForm extends React.Component<IGraphqlProps, IState> {
   constructor(props: IGraphqlProps) {
     super(props);
+    this.state = {
+      name: '',
+      pokemonNumber: 0,
+      attack: 0,
+      defense: 0,
+      pokeType: 'electric' as PokeType,
+      moves: [],
+      imageUrl: '',
+      error: null,
+      loading: false,
+    };
   }
 
   handleChange(field: createPokemonFields) {
@@ -78,56 +89,51 @@ class CreatePokemonForm extends React.Component<IGraphqlProps, IState> {
         <p>{this.state.error}</p>
         <label>
           Name
-          <input name="name" onChange={this.handleChange('name')} />
+          <input name="name" value={this.state.name} onChange={this.handleChange('name')} />
         </label>
         <br />
         <label>
           Pokemon Number
-          <input name="pokemonNumber" onChange={this.handleChange('pokemonNumber')} />
+          <input
+            name="pokemonNumber"
+            value={this.state.pokemonNumber}
+            onChange={this.handleChange('pokemonNumber')}
+          />
         </label>
         <br />
         <label>
           Attack
-          <input name="attack" onChange={this.handleChange('attack')} />
+          <input name="attack" value={this.state.attack} onChange={this.handleChange('attack')} />
         </label>
         <br />
         <label>
           Defense
-          <input name="defense" placeholder="name" onChange={this.handleChange('defense')} />
+          <input
+            name="defense"
+            value={this.state.defense}
+            onChange={this.handleChange('defense')}
+          />
         </label>
         <br />
-        <label>
-          Poketype
-          <select onChange={this.handleChange('pokeType')}>
-            <option value="" selected disabled>
-              Please select a Poketype
-            </option>
-            <option value="normal" selected={false}>
-              normal
-            </option>
-            <option value="grass" selected={false}>
-              grass
-            </option>
-            <option value="fire" selected={false}>
-              fire
-            </option>
-            <option value="water" selected={false}>
-              water
-            </option>
-            <option value="electric" selected={false}>
-              electric
-            </option>
-          </select>
-        </label>
+        <label>Poketype</label>
+        <input
+          name="pokeType"
+          value={this.state.pokeType}
+          onChange={this.handleChange('pokeType')}
+        />
         <br />
         <label>
           Moves
-          <input name="moves" onChange={this.handleChange('moves')} />
+          <input name="moves" value={this.state.moves} onChange={this.handleChange('moves')} />
         </label>
         <br />
         <label>
           Image URL
-          <input name="imageUrl" onChange={this.handleChange('imageUrl')} />
+          <input
+            name="imageUrl"
+            value={this.state.imageUrl}
+            onChange={this.handleChange('imageUrl')}
+          />
         </label>
         <br />
         <button onClick={this.handleSubmit}>Create!</button>

@@ -48,6 +48,6 @@ export default graphql(getAllPokemonGraphql, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
-    pokemonList: data ? (data as any).pokemonList : null,
+    pokemonList: data ? (data as any).pokemon : null,
   }),
 })(PokemonList);

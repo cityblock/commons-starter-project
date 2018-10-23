@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
+import { ApolloError } from 'apollo-client';
 import { getAllPokemon } from '../graphql/types';
 import getAllPokemonGraphql from '../graphql/queries/get-all-pokemon.graphql';
 import styles from './css/pokemon-list.css';
@@ -7,14 +8,14 @@ import styles from './css/pokemon-list.css';
 interface IGraphqlProps {
   pokemonList: getAllPokemon['pokemon'];
   loading?: boolean;
-  error?: string | null;
+  error?: ApolloError | null;
 }
 
 interface IProps {
   children?: any;
 }
 
-export type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps;
 
 const PokemonList: React.StatelessComponent<allProps> = (props: allProps) => {
   const { pokemonList, loading, error } = props;
@@ -22,7 +23,7 @@ const PokemonList: React.StatelessComponent<allProps> = (props: allProps) => {
   if (loading || error) {
     return <h1>Loading...</h1>;
   }
-
+  console.log('PROPS!!!!! >>>>>>', props);
   console.log(pokemonList);
 
   const getPokemonList = pokemonList.map(onePokemon => {
@@ -47,6 +48,6 @@ export default graphql(getAllPokemonGraphql, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
-    allPokemon: data ? (data as any).allPokemon : null,
+    pokemonList: data ? (data as any).pokemonList : null,
   }),
 })(PokemonList);

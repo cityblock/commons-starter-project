@@ -1,4 +1,4 @@
-query getAllPokemonGraphql {
+query getAllPokemon {
   pokemon {
     id
     name

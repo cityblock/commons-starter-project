@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PokemonList from './pokemon-list/pokemon-list';
+import CreatePokemonForm from './create-pokemon-form/create-pokemon-form';
 
 /**
  * What is <Switch>?
@@ -11,7 +12,9 @@ import PokemonList from './pokemon-list/pokemon-list';
  */
 
 export default (
-  <Switch>
-    <Route exact path="/" component={PokemonList} />
-  </Switch>
+  <PokemonList>
+    <Switch>
+      <Route exact path="/" component={CreatePokemonForm} />
+    </Switch>
+  </PokemonList>
 );

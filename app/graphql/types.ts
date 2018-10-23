@@ -128,18 +128,18 @@ export interface pokemonEditVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAllPokemon
+// GraphQL query operation: getAllPokemonGraphql
 // ====================================================
 
-export interface getAllPokemon_pokemon {
+export interface getAllPokemonGraphql_pokemon {
   id: string;
   name: string;
   pokemonNumber: number;
   imageUrl: string;
 }
 
-export interface getAllPokemon {
-  pokemon: (getAllPokemon_pokemon | null)[];
+export interface getAllPokemonGraphql {
+  pokemon: (getAllPokemonGraphql_pokemon | null)[];
 }
 
 

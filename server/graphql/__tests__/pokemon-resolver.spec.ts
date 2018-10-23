@@ -1,7 +1,7 @@
 import { graphql, print } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import { PokeType } from 'schema';
-import getAllPokemon from '../../../app/graphql/queries/get-all-pokemon.graphql';
+import getAllPokemonGraphql from '../../../app/graphql/queries/get-all-pokemon.graphql';
 import getSinglePokemon from '../../../app/graphql/queries/get-one-pokemon.graphql';
 import pokemonCreate from '../../../app/graphql/queries/create-pokemon.graphql';
 import pokemonDelete from '../../../app/graphql/queries/delete-pokemon.graphql';
@@ -67,7 +67,7 @@ async function setupPokemonResolverTest(txn: Transaction): Promise<IPokemonTestS
 describe('Pokemon Resolver', () => {
   let txn = null as any;
 
-  const pokemonGetAllQuery = print(getAllPokemon);
+  const pokemonGetAllQuery = print(getAllPokemonGraphql);
   const getOneQuery = print(getSinglePokemon);
   const createPokemon = print(pokemonCreate);
   const deletePokemon = print(pokemonDelete);

@@ -178,3 +178,8 @@ img {
   flex: 1;
   display: flex;
 }
+
+.container {
+  display: flex;
+  flex-direction: row;
+}

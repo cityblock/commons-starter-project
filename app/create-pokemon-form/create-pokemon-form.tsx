@@ -145,3 +145,5 @@ class CreatePokemonForm extends React.Component<IGraphqlProps, IState> {
 export default graphql<IGraphqlProps, {}, IGraphqlProps>(pokemonCreateGraphql, {
   name: 'createPokemon',
 })(CreatePokemonForm);
+
+export { CreatePokemonForm };

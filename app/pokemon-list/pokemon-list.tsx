@@ -23,8 +23,6 @@ const PokemonList: React.StatelessComponent<allProps> = (props: allProps) => {
   if (loading || error) {
     return <h1>Loading...</h1>;
   }
-  console.log('PROPS!!!!! >>>>>>', props);
-  console.log(pokemonList);
 
   const getPokemonList = pokemonList.map(onePokemon => {
     return (
@@ -51,3 +49,5 @@ export default graphql(getAllPokemonGraphql, {
     pokemonList: data ? (data as any).pokemon : null,
   }),
 })(PokemonList);
+
+export { PokemonList };

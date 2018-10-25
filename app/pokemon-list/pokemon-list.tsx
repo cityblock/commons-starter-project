@@ -24,20 +24,18 @@ const PokemonList: React.StatelessComponent<allProps> = (props: allProps) => {
     return <h1>Loading...</h1>;
   }
 
-  const getPokemonList = pokemonList.map(onePokemon => {
+  const getPokemonListElement = pokemonList.map(onePokemon => {
     return (
-      <div className={styles.pokemonDetail} key={onePokemon.id}>
-        <img src={onePokemon.imageUrl} />
+      <li className={styles.listItem} key={onePokemon.id}>
+        <img className={styles.pokemonImg} src={onePokemon.imageUrl} />
         <p className={styles.pokemonChild}>{onePokemon.name}</p>
-      </div>
+      </li>
     );
   });
 
   return (
     <div className={styles.listContainer}>
-      <ul>
-        <li className={styles.listItem}>{getPokemonList}</li>
-      </ul>
+      <ul>{getPokemonListElement}</ul>
     </div>
   );
 };

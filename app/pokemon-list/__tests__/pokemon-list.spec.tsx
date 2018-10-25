@@ -24,7 +24,7 @@ describe('pokemon list component', () => {
     />,
   );
 
-  it('renders a paragraph for each pokemon', () => {
+  it('renders the name for each pokemon', () => {
     expect(wrapper.find('p').length).toBe(2);
 
     expect(
@@ -44,6 +44,20 @@ describe('pokemon list component', () => {
 
   it('renders an image for each pokemon', () => {
     expect(wrapper.find('img').length).toBe(2);
+
+    expect(
+      wrapper
+        .find('img')
+        .at(0)
+        .text(),
+    ).toBe('hiImAnImage');
+
+    expect(
+      wrapper
+        .find('img')
+        .at(1)
+        .text(),
+    ).toBe('hiImAnImage2');
   });
 
   it('renders loading if loading', () => {

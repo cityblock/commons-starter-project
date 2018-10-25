@@ -139,7 +139,7 @@ export interface getAllPokemon_pokemon {
 }
 
 export interface getAllPokemon {
-  pokemon: (getAllPokemon_pokemon | null)[];
+  pokemon: getAllPokemon_pokemon[];
 }
 
 

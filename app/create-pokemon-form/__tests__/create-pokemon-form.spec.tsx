@@ -11,35 +11,80 @@ describe('Create Pokemon Form', () => {
     expect(wrapper.find('input').length).toBe(7);
   });
 
-  it('renders an input for a name', () => {
-    expect(wrapper.find('[name="name"]').length).toBe(1);
+  it('first input is for "name"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(0)
+        .prop('name'),
+    ).toBe('name');
   });
 
-  it('renders an input for a Pokemon Number', () => {
-    expect(wrapper.find('[name="pokemonNumber"]').length).toBe(1);
+  it('second input is for "pokemonNumber"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(1)
+        .prop('name'),
+    ).toBe('pokemonNumber');
   });
 
-  it('renders an input for Attack', () => {
-    expect(wrapper.find('[name="attack"]').length).toBe(1);
+  it('third input if for "attack"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(2)
+        .prop('name'),
+    ).toBe('attack');
   });
 
-  it('renders an input for Defense', () => {
-    expect(wrapper.find('[name="defense"]').length).toBe(1);
+  it('fourth input is for "defense"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(3)
+        .prop('name'),
+    ).toBe('defense');
   });
 
-  it('renders an input for a Poketype', () => {
-    expect(wrapper.find('[name="pokeType"]').length).toBe(1);
+  it('fifth input is for "pokeType"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(4)
+        .prop('name'),
+    ).toBe('pokeType');
   });
 
-  it('renders an input for Moves', () => {
-    expect(wrapper.find('[name="moves"]').length).toBe(1);
+  it('sixth input is for "moves"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(5)
+        .prop('name'),
+    ).toBe('moves');
   });
 
-  it('renders an input for an Image URL', () => {
-    expect(wrapper.find('[name="imageUrl"]').length).toBe(1);
+  it('seventh input is for "imageUrl"', () => {
+    expect(
+      wrapper
+        .find('input')
+        .at(6)
+        .prop('name'),
+    ).toBe('imageUrl');
   });
 
   it('has a button to submit the form', () => {
     expect(wrapper.find('button').length).toBe(1);
+  });
+
+  it('renders updates the for the name input', () => {
+    wrapper.setState({ name: 'Alicia' });
+    expect(
+      wrapper
+        .find('input')
+        .at(0)
+        .prop('value'),
+    ).toBe('Alicia');
   });
 });

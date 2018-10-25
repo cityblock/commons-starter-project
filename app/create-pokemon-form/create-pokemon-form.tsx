@@ -53,7 +53,7 @@ class CreatePokemonForm extends React.Component<IGraphqlProps, IState> {
   }
 
   handleChange(field: createPokemonFields) {
-    return (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
       this.setState({ [field as any]: e.target.value } as any);
     };
   }

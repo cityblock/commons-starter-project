@@ -1,17 +1,20 @@
 .listContainer {
   margin-right: var(--gutter);
+  background-color: var(--red-color);
 }
 
 .listItem {
   list-style-type: none;
-  border-bottom: solid #000000 1px;
-}
-
-.pokemonDetail {
   display: flex;
   flex-direction: row;
 }
 
+.pokemonImg {
+  height: 40px;
+  width: auto;
+}
+
 .pokemonChild {
-  padding: 20px 5px 0 5px;
+  padding: var(--gutter) 5px 0 5px;
+  background-color: var(--blue-color);
 }

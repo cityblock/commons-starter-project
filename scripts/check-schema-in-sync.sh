@@ -12,7 +12,7 @@ if ! git diff --exit-code declarations/schema.d.ts; then
 
 schema.d.ts and schema.graphql are out of sync. Run:
 
-    yarn update-schema
+    npx update-schema
 
 To update schema.d.ts.
 

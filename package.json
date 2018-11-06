@@ -7,9 +7,9 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "lint": "npx tslint --project tsconfig.json --config tslint.json",
     "stylelint": "stylelint 'app/**/*.css'",
-    "typecheck": "tsc --project tsconfig.json --noEmit --pretty",
+    "typecheck": "npx tsc --project tsconfig.json --noEmit --pretty",
     "clean": "rimraf public server-compiled",
     "staging-db": "./scripts/aptible-psql.sh commons-staging",
     "prod-db": "./scripts/aptible-psql.sh commons-production",

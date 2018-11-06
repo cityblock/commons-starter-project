@@ -31,7 +31,6 @@
     "test:notify": "npx run test:watch --notify",
     "migrate": "knex migrate:latest --knexfile=server/models/knexfile.js",
     "migrate:rollback": "knex-migrate down --knexfile=server/models/knexfile.js",
-    "prepush": "pretty-quick --staged && npx run lint && npx typecheck",
     "update-schema": "./scripts/generate-schema-types.sh",
     "codegen": "./scripts/codegen.sh",
     "typegen": "./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
@@ -67,7 +66,6 @@
     "node-mocks-http": "1.7.0",
     "postcss": "6.0.23",
     "prettier": "1.13.7",
-    "pretty-quick": "1.6.0",
     "react-test-renderer": "16.4.1",
     "redux-mock-store": "1.5.3",
     "stylefmt": "6.0.0",
@@ -159,7 +157,7 @@
     "fetch-everywhere": "1.0.5",
     "file-loader": "1.1.11",
     "forever": "0.15.3",
-    "fork-ts-checker-webpack-plugin": "0.4.2",
+    "fork-ts-checker-webpack-plugin": "0.4.14",
     "fuse.js": "3.2.1",
     "google-auth-library": "1.6.1",
     "googleapis": "31.0.2",
@@ -221,7 +219,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "pretty-quick --staged && npm run lint && npm run typecheck"
+      "pre-push": "npm run lint && npm run typecheck"
     }
   }
 }

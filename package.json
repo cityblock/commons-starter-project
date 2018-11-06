@@ -95,7 +95,7 @@
     "expect": "23.3.0",
     "gql2ts": "1.8.0",
     "graphql-document-collector": "0.2.1",
-    "husky": "0.14.3",
+    "husky": "^0.14.3",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.3.0",
     "jest-transform-graphql": "2.1.0",

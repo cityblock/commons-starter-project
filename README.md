@@ -7,6 +7,7 @@
 - Install [nvm][] and node 8.12
   - make sure you follow the brew postintall commans (put `export NVM_DIR="$HOME/.nvm; . /usr/local/opt/nvm/nvm.sh`in your shell's startup file)
 - Install [npm][] 6.4 (`rm -rf node_modules/ && npm i -g npm@6.4.1 && npm i -g npm && npm ci`)
+- Run `npm install` and `npm ci`
 - Install `husky` (`npm install husky --save-dev`)
 - Install core utils (with Homebrew, `brew install coreutils` )
 - Install xcode-select (`xcode-select --install`)

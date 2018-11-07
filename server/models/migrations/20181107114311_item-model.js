@@ -1,7 +1,7 @@
 exports.up = (knex, Promise) => (
-  knex.schema.hasTable('items').then(exists => {
+  knex.schema.hasTable('item').then(exists => {
     if (!exists) {
-      return knex.schema.createTable('items', table => {
+      return knex.schema.createTable('item', table => {
         table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
         table
@@ -22,9 +22,9 @@ exports.up = (knex, Promise) => (
 );
 
 exports.down = (knex, Promise) => (
-  knex.schema.hasTable('items').then(exists => {
+  knex.schema.hasTable('item').then(exists => {
     if (exists) {
-      return knex.schema.dropTable('items');
+      return knex.schema.dropTable('item');
     }
   })
 );

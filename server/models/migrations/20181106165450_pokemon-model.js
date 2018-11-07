@@ -52,7 +52,7 @@ exports.up = function (knex, Promise) {
         table
           .json('moves')
           .notNullable()
-          .defaultTo([]);
+          .defaultTo('[]');
 
         table
           .string('imageUrl')
@@ -75,5 +75,9 @@ exports.up = function (knex, Promise) {
 };
 
 exports.down = function (knex, Promise) {
-
+  return knex.schema.hasTable('pokemon').then(exists => {
+    if (exists) {
+      return knex.schema.dropTable('pokemon');
+    }
+  });
 };

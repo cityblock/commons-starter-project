@@ -11,19 +11,19 @@ jobs:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
-      - run: yarn install
+      - run: npx install
       - save_cache:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: yarn lint
-      - run: yarn stylelint
-      - run: yarn typecheck
+      - run: npx lint
+      - run: npx stylelint
+      - run: npx typecheck
       - run:
           name: check-schema
           command: './scripts/check-schema-in-sync.sh'
-      - run: yarn codegen
-      - run: yarn danger ci
+      - run: npx codegen
+      - run: npx danger ci
 
   test_frontend:
     working_directory: ~/repo
@@ -36,12 +36,12 @@ jobs:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
-      - run: yarn install
+      - run: npx install
       - save_cache:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: yarn test:frontend
+      - run: npx test:frontend
 
   test_api:
     working_directory: ~/repo
@@ -66,7 +66,7 @@ jobs:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
-      - run: yarn install
+      - run: npx install
       - save_cache:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Wait for Redis
           command: dockerize -wait tcp://localhost:6379 -timeout 1m
-      - run: yarn test:api
+      - run: npx test:api
 
   test_api_support:
     working_directory: ~/repo
@@ -102,7 +102,7 @@ jobs:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
-      - run: yarn install
+      - run: npx install
       - save_cache:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
@@ -113,7 +113,7 @@ jobs:
       - run:
           name: Wait for Redis
           command: dockerize -wait tcp://localhost:6379 -timeout 1m
-      - run: yarn test:api-support
+      - run: npx test:api-support
 
   test_models:
     working_directory: ~/repo
@@ -138,7 +138,7 @@ jobs:
             - v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
-      - run: yarn install
+      - run: npx install
       - save_cache:
           key: v3-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
@@ -149,7 +149,7 @@ jobs:
       - run:
           name: Wait for Redis
           command: dockerize -wait tcp://localhost:6379 -timeout 1m
-      - run: yarn test:models
+      - run: npx test:models
 
   deploy_staging:
     working_directory: ~/repo

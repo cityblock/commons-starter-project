@@ -4,7 +4,6 @@
   "recommendations": [
     "christian-kohler.path-intellisense",
     "christian-kohler.npm-intellisense",
-    "carlosjs23.vscode-yarn-script",
     "kumar-harsh.graphql-for-vscode",
     "eg2.tslint",
     "shinnn.stylelint",

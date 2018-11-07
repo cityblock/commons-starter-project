@@ -1,116 +1,37 @@
-# Commons
-
-[![CircleCI](https://circleci.com/gh/cityblock/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/cityblock/commons)
-[![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80/badge)](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcityblock%2Fcommons.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcityblock%2Fcommons?ref=badge_shield)
-
-This app is an Express server running GraphQL and PostgreSQL (Objection.js) written in
-TypeScript. Tested using Jest. Hosted on [Aptible][].
-
-## Meta
-
-- **State:** development
-- **Github:** [https://github.com/cityblock/commons](https://github.com/cityblock/commons)
-- **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
-  `cityblock/commons#master` are automatically deployed to staging
-- **Point People:** See [features](#features) chart below
-- **Stackdriver:** [https://app.google.stackdriver.com/?project=commons-183915](https://app.google.stackdriver.com/?project=commons-183915)
-- **Pagerduty:** [https://cityblock.pagerduty.com](https://cityblock.pagerduty.com)
-- **Data Model Documentation:** [https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit](https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit)
-- **Tools Documentation:** [https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit](https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit)
-
-## Environments
-
-### Production
-
-- [https://commons.cityblock.com](https://commons.cityblock.com)
-- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177838485p176451408)
-- [GraphQL performance monitoring](https://engine.apollographql.com/service/commons-prod)
-- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-production)
-- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-production)
-
-### Demo
-
-- [https://commons-demo.cityblock.com](https://commons-demo.cityblock.com)
-- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177862006p176449007)
-- [GraphQL performance monitoring](https://engine.apollographql.com/service/cityblock-7583)
-- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-demo)
-- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-demo)
-
-### Staging
-
-- [https://commons-staging.cityblock.com](https://commons-staging.cityblock.com)
-- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177915534p176499987)
-- [GraphQL performance monitoring](https://engine.apollographql.com/service/commons-staging)
-- [Error Tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=commons-183915)
-- [Logs](https://console.cloud.google.com/logs/viewer?authuser=0&project=commons-183915) (note demo also logs here - filter out by application id in log messages)
-
-### Development
-
-- [localhost:3000](localhost:3000)
-- [Google Analytics](https://analytics.google.com/analytics/web/#/report-home/a105679021w177838651p176454447)
-- [GraphQL performance monitoring](https://engine.apollographql.com/service/cityblock-test)
-- [Error tracking](https://console.cloud.google.com/errors?time=PT1H&order=LAST_SEEN_DESC&resolution=OPEN&resolution=ACKNOWLEDGED&project=cityblock-development)
-
-## Features
-
-The goal of this section give us high visibility of both documentation and test plans for features in order to keep us accountable when they are missing. Also to indicate point people for questions.
-
-| **Feature**                   | **Point Person** | **Test Plan**                                                                                                            | **Design Doc**                                                                           | **PRD**                                                                                     |
-| ----------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Progress Note                 | Brennan          | [Test Plan](https://docs.google.com/document/d/1JDekPxDBsGFs3SEUwfEmdYNLSLB4hwgCCBD8um_gDMc/edit#heading=h.se1fcozgemyu) |                                                                                          | [PRD](https://docs.google.com/document/d/1NK0qMw_nnK6rsh1schnzmphksJQ_QJ4zfUbgDyhLp4M/edit) |
-| Timeline                      | Brennan / Logan  | See Progress Note Test Plan                                                                                              |                                                                                          |                                                                                             |
-| Patient Left Nav              | Laura            | [Test Plan](https://docs.google.com/document/d/1xO7gVauPy1nDsoift2pHm4PQO7H0Ey8H1H7I3W-wFH8/edit)                        | [Designs](https://cityblock.invisionapp.com/d/main/#/console/13463529/283336293/preview) | [PRD](https://docs.google.com/document/d/1GDH4wv4_Ay3iT9a4xlr528EqSf8VRcPFGRBnrIHYmeQ/edit) |
-| Screening Tool                | Logan            | [Test Plan](https://docs.google.com/document/d/1hnCzCKb_YhqG1GzETN1p00oVYIfstGibzM1qJIK1ttI/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/15iDja4IOfIpBKX0kyZqVxXpX5fR_klxavMHcZOjY_D8/edit) |
-| 360 Profile                   | Laura            | [Test Plan](https://docs.google.com/document/d/1aoCrvgFj5OLft7ZWlv_aydE7t71I7D18JTqfmHtcnlg/edit#)                       |                                                                                          | [PRD](https://docs.google.com/document/d/1ad4vUTD-vh7w8zxlUXqY9f1OAEFlHD42IudpKeMRLuE/edit) |
-| Patient Intake                | Cristina / Logan | [Test Plan](https://docs.google.com/document/d/1tfUgGhZPtKI270U41RzZDMttzWmnb4nQYeSaiI6UtB8/edit#heading=h.sgioobag91v3) | [Designs](https://cityblock.invisionapp.com/d/main/#/console/13213473/276399118/preview) | [PRD](https://docs.google.com/document/d/1xpxxmGDc9ZV1FhTRUteqbXjEerw2qofCM0iMvGqFwpc/edit) |
-| MAP                           | Cross team       | [Test Plan](https://docs.google.com/document/d/1B8iDeO1Nh-4zW_VPv1xEUnoe1AMNSkoukoASENYpnaI/edit#)                       |                                                                                          | [PRD](https://docs.google.com/document/d/1EzMO7015cKSBcrALBDMFavUSpqB6SYUaRfmIpogzlr8/edit) |
-| Care team management          | Cristina         | [Test Plan](https://docs.google.com/document/d/1bZiI18MMcBykHihv5AK49XG4R6WXmV9OTKacUIJ03Xw/edit#)                       |                                                                                          | [PRD](https://docs.google.com/document/d/1dsEqCz2I5K2v3Z3STK9tQiDaRAj0IaiXiTPOmcxGBTY/edit) |
-| Outreach assignment           | Cristina / Logan | See care team management test plan                                                                                       |                                                                                          | [PRD](https://docs.google.com/document/d/1fkVKD936NxHAZObixIl912tTU2VTLnGxYhPf_fOzkQA/edit) |
-| Patient Comms                 | Laura            | [Test Plan](https://docs.google.com/document/d/1eWY2554I5ptA1qfQMG58AhDECZJ9P0AQxmgC9JqKaqk/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/10ajWed84-PnmC9iUba9zmTEWSJNmV74_L4pX3ilNZvc/edit) |
-| My tasks                      | Cross team       | [Test Plan](https://docs.google.com/document/d/1fFscYItoN_GoRqSEaD6XtG1Nz9_XHkHANpEhgLNsb90/edit#)                       |                                                                                          |                                                                                             |
-| Break the glass               | Laura            | [Test Plan](https://docs.google.com/document/d/1CGFHzS9z297SQ4hfscv7oeev_ho1MyuqG3_ltmOwO2E/edit#heading=h.njnce6z3td4n) |                                                                                          |                                                                                             |
-| Role and Permissions          | Laura            | [Test Plan](https://docs.google.com/document/d/1jjQUK0PxQkvz-FLwpL1zTRtULCMEklglVLuZphmJsh8/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/1qgRtEvrp7fOyjw3zs_-hjAbCmHyAx_XNRNpvPeStKAw/edit) |
-| Mattermost careworker comms   | Laura            | [Test Plan](https://docs.google.com/document/d/1SY01xY0r8WQvKQarwDZOEbrHUkXVIefu26fQQzUGohk/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/1-11lJaOadMnsW-TwOBqS-iAPrEvfLZvJ8P4LB4nq6bI/edit) |
-| CBO Referral                  | Laura            | [Test Plan](https://docs.google.com/document/d/1bNNUkkVQtum62rR4txlX_P5U2AEG0Yq79210Jzbh8r4/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/1Vs7H3E3Rgi3mRNFpK4jz-9SgPvW0lNabEP13lx24Nsg/edit) |
-| Member search                 | Laura            | [Test Plan](https://docs.google.com/document/d/1Yk0Df7a3OpffZS46KlJ0Qb4vX66XQVaDWNQG9-v-tEw/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/1jpwYeayBkCAwhKsHVdht7aqW6xuSUjKKrPUUncY9Ff4/edit) |
-| Care team dash                | Laura            | [Test Plan](https://docs.google.com/document/d/1OeyX3NQcK_6iKyBwyBjma7ZT-2Ey7eIkyiV4M2lfrmo/edit)                        |                                                                                          | [PRD](https://docs.google.com/document/d/1G0En_1H1fv_36uVSmRfjAj88f5AxbMHxusx-cocBvQs/edit) |
-| Love your body Doc Management | Cristina         | See Patient Intake                                                                                                       | [Designs](https://cityblock.invisionapp.com/d/main/#/console/13747699/286876704/preview) | [PRD](https://docs.google.com/document/d/1w0OqN8nZ_gRMaRbvrGaGDQdRmAMXLPcSu1EnawhdPkE/edit) |
-| Calendar Support in Commons   | Cristina         | NA                                                                                                                       |                                                                                          | [PRD](https://docs.google.com/document/d/1iS5vae_ua6yt-0JrynUmIGoWhvw8H2NbtR76cm2q0dk/edit) |
-| Printable MAP                 | Laura            | See MAP test plan                                                                                                        | [Designs](https://cityblock.invisionapp.com/d/main/#/projects/prototypes/13504486)       | [PRD](https://docs.google.com/document/d/1l0kxaJTLjXUeSpiYU0R_uitpvQvomY7spbDdpG76XvU/edit) |
-| Worry Score                   | Laura            | See Progress Note Test Plan                                                                                              |                                                                                          | [PRD](https://docs.google.com/document/d/1HUsvUirz1-Md6VaHteKyE7q1ZGjDAn-fKs_OBsAkuqA/edit) |
-
-NOTE: This is an auto-generated table from a subset of @rachel1392's spreadsheet. If you want to update this, first update Rachel's document, then DM Brennan or run [MarkdownTableMaker][]
+# Commons starter project
 
 ## Onboarding
 
 ### Setup
 
-- Install [nvm][] and node 8.11
-- Install [yarn][]
-- Create a `.env` file in the project root (see: [.env][])
-- Install [Zenhub][]
-- [Setup your local database](#create-local-postgres-database)
-- [Install Redis](#install-redis)
-- Ask a Point Person to add you as a user in staging and change your user permissions to 'green' (user role does not affect permissions).
-- [Copy staging database to your local database](#copying-staging-database-to-local-database)
-- [Create a database for running tests][#create-test-postgres-database]
+- Install [nvm][] and node 8.12
+  - make sure you follow the brew postintall commans (put `export NVM_DIR="$HOME/.nvm; . /usr/local/opt/nvm/nvm.sh`in your shell's startup file)
+- Install [npm][] 6.4 (`rm -rf node_modules/ && npm i -g npm@6.4.1 && npm i -g npm && npm ci`)
+- Run `npm install` and `npm ci`
+- Install `husky` (`npm install husky --save-dev`)
+- Install core utils (with Homebrew, `brew install coreutils` )
+- Install xcode-select (`xcode-select --install`)
+- Install Postgres via [Postgres.app](https://postgresapp.com/) and [Postgres CLI](https://postgresapp.com/documentation/cli-tools.html)
+  - make sure you open the Postgres app and click `Initialize` to start the server
+- Install [Postico](https://eggerapps.at/postico/) for a clean UI to look at Postgres data
+- [Create a local database](#create-a-local-database)
+- [Create a database for running tests](#create-a-test-postgres-database)
+- Install [VS Code](https://code.visualstudio.com/docs/setup/mac) as our preferred text editor
+- Clone this repo locally
 
 ### Development
 
-Ensure you have copied from staging to local and have your user created in staging by another employee via Manager. Ensure you have a redis server running:
-
-    redis-server
+Ensure you have copied from staging to local and have your user created in staging by another employee via Manager.
 
 Then run:
 
-    yarn run dev
+    npx dev
 
 ### Testing locally
 
 Our test database uses postgres. Before running tests, ensure that postgres is running and use:
 
-    yarn test
+    npx test
 
 ### Making changes
 
@@ -132,153 +53,6 @@ GitHub approval UI. As the code's author, it is your responsibility to merge you
 
 For reverting code in master, use Github's [revert functionality][].
 
-### Deploying to production
-
-We use a ‘pipeline’ deployment process which means we have well defined steps and all steps must be accomplished in order to do a deployment.
-
-The pipeline steps are:
-
-1.  submit a pull request
-1.  run the automated tests [automatic via circleci]
-1.  merge the pull request
-1.  release on test/qa/staging environment [automatic via circleci]
-1.  create a release using github releases
-1.  release on production [automatic via circleci]
-
-### Automatic coding tools
-
-- Tslint
-  - enforces code quality rules (eg no-unused-vars, no-extra-bind, no-implicit-globals, prefer-promise-reject-errors)
-  - done on commit and build
-- Typescript
-  - done on commit and build
-- Stylelint (linting for css)
-  - done on build but NOT commit
-- Prettier
-  - enforces code formatting
-  - done on build
-- code/type generation
-  - [Type Generation][]
-
-### Compiling Typescript to Javascript
-
-TSC compiles both the server and the client. It adds libs to support async/await and other newer functionality so that we do not need to use Babel. Due to Node 8 not supporting es6 modules, we set TSC to use commonjs on the server and es6 on the client.
-
-- The client uses tsc from webpack and uses es6 modules (not commonjs) with bundle splitting and tree shaking enabled
-- The server is compiled just with tsc, commonjs modules and is not minified
-- Client target: latest Chrome
-- Server target: Node 8.x
-
-### Adding a feature
-
-#### Adding a model
-
-- Create a migration `yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js`
-- Add a model in `server/models/`
-- Add tests for the model in `server/models/**tests**
-- _commit that change / send a pull request_
-
-#### Adding a resolver and/or mutation in graphql
-
-- Ensure you have created the model and any associated method already
-- Add your model as a ‘type’ to server/schema.graphql
-- Add the mutation and mutation inputs within server/schema.graphql
-- Add the resolver to the bottom of schema.graphql
-- Double check that fields or inputs are required are actually required
-- Run `yarn typegen`to generate the types for the mutation inputs and return values you just created
-- Write your resolver in`server/graphql/my-model-resolver.ts`
-- Import types from`schema`to ensure that your input and return values match what you declared in the schema (graphql will also validate this at run time...but is a helpful sanity check)
-- Add your resolver methods to`server/make-executable-schema` in a way that mirrors the query and mutations
-- Write tests for the resolver and mutations
-- commit change and send a pull request
-
-#### Adding a front end feature
-
-- Write your graphql query and associated fragment if needed to app/graphql/fragments and app/graphql/queries respectively
-- Add your react component - note that we split containers by folder rather than having a ‘containers’ and ‘components’ colder’
-- Import the query types into your react component (see progress-note-container as an example)
-- Split out your various input types (IProps for input props, IStateProps for mapStateToProps return and IDispatchProps for mapDispatchToProps and IGraphqlProps for things returned from apollo graphql)
-- Write the rest of your react component in the usual react style (ie: draw the rest of the owl)
-
-### Things we have not done yet
-
-When you are for something, you are against something else. We should document our tradeoffs well. Currently we do this through the [#debt][] tag in github issues.
-
-### Security Practices
-
-- In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
-  daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
-  Lifecycle][] through security focused ts-lint rules.
-- We prefer standard or popular libraries with institutional backing
-- Commiting directly to master is disabled via Github 'Protected Branches'
-- All commits to master must be made through a pull request that is approved by another engineer
-
-### Performing code review
-
-This is a handy checklist for when you are performing code review for others. Modified from [Fog Creek code review][] docs. You should respond within ~2 business hours to requests for code review.
-
-#### General
-
-- Does the code work? Does it perform its intended function, the logic is correct etc.
-- Is all the code easily understood?
-- Is the coding style consistent with our existing style? (linting should solve this)
-- Is there any commented out code?
-- Is there any redundant or duplicate code?
-- Is the code as modular as possible?
-- Can any of the code be replaced with library functions?
-- Can any logging or debugging code be removed?
-- Does the code explicitly return booleans? Perhaps could be written in a better way
-- Does the code wrap in a large if statement rather than early exit?
-
-#### Security
-
-- Are all data inputs checked and encoded? (GraphQl + Objection.js handle much of this for us)
-- Are access controls for data correctly checked at the API level?
-- Are invalid parameter values handled?
-
-#### Documentation
-
-- Do comments exist and describe the intent of the code if code is not easily understood?
-- Is any unusual behavior or edge-case handling described?
-- Is the use and function of third-party libraries documented?
-- Are data structures and units of measurement explained?
-- Is there any incomplete code? If so, should it be removed or flagged with a suitable marker like
-  ‘TODO’?
-
-#### Testing
-
-- Is the code testable? i.e. don’t add too many or hide dependencies, unable to initialize objects,
-  test frameworks can use methods etc.
-- Do tests exist and are they comprehensive?
-- Do unit tests actually test that the code is performing the intended functionality?
-- Could any test code be replaced with the use of an existing API?
-
-## Production
-
-### How deploying a production build to Aptible works
-
-Short run through of what Aptible does when deploying our app.
-
-- Open Dockerfile
-- install node modules
-- Tsc compiles the server (into /server-compiled) `yarn build-server`
-- Webpack compiles client js files (into /public with js, css, images etc) `yarn build`
-- Runs migrations (`yarn migrate`)
-- Aptible starts the server (`yarn start`) as indicated in the procfile from our compiled javascript (/server-compiled)
-- Aptible waits for the servers to come online and respond to a health check
-- Aptible points our load balancer at the new servers
-- Server renders a blank html page pointed at client.js which renders the correct route in the browser using react
-
-### Builder in production
-
-Tables represented in Builder are not editable in production. Builder is edited in staging and then deployed to production by copying the builder associated tables from staging to production. For more info, see the [builder stability in production][] document.
-
-To copy builder data from staging to production, run `yarn copy-builder-staging-to-production`. If that does not work, or if there are new columns or tables, continue reading.
-
-As we add models or modify tables that are represented in builder, we will need to recreate the foreign tables ([FDW][]) in production. If tables are modified, first run `yarn update-fdw-production` but if new tables were added or removed, add the tables to `setup-fdw-production.sql` and run `yarn update-fdw-production`.
-
-After ensuring the foreign data wrapper is up to date, we then need to copy the builder tables from staging to production. If new columns or tables were added, add them to `aptible-copy-builder-staging-to-production.sql`. Then, once the migrations have run on production, run `yarn copy-builder-staging-to-production`.
-
 ## How-to
 
 ### Create a test postgres database
@@ -287,6 +61,14 @@ Setup your database. First install postgres 10 from brew or postgresapp.
 
     createdb commons_test
     psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root"
+
+
+### Create a local database
+
+    dropdb commons
+    createdb commons
+    psql -d commons -c "CREATE ROLE aptible LOGIN"
+
 
 ### Use GraphiQL
 
@@ -310,193 +92,26 @@ except login require you to be authenticated. In order to pass auth information 
 
 ### To automatically fix linter errors, run
 
-    yarn lint --fix
+    npx lint --fix
     # for style changes
-    yarn stylelint --fix
-
-### To print config vars or env vars from aptible production or staging
-
-Once you've added the aptible git remote, you can use Aptible toolbelt to interface with the app:
-
-    aptible config --app=commons-staging # prints environment variables from staging
-    aptible config --app=commons-production  # prints environment variables from production
-
-### To connect to the Aptible database from your machine, run
-
-    yarn prod-db
-
-Or, alternatively, use `aptible db:tunnel commons-staging` or `aptible db:tunnel commons-production`. Note: If you get an auth error here, you may need to login to Aptible again. Login tokens last 12 hours.
-
-### To push your local version of the server to Aptible, run
-
-    git push aptible HEAD:master
-
-Be careful, though! Your changes will go live immediately, then be overridden by the next push to
-master.
-
-### Update custom tslint rules (such as checkIsAllowedRule)
-
-Our custom rule to check if `accessControls.isAllowed` is run in graphql resolvers. To recompile this rule after changes. First, ensure you have typescript installed globally (`yarn global install typescript`). Then run:
-
-    cd rules
-    tsc checkIsAllowedRule.ts
+    npx stylelint --fix
 
 ### Update react jest snapshots
 
-    yarn test -u
+    npx test -u
 
 ### Create a new migration
 
 Create a migration (using [knex][]) with:
 
-    yarn knex migrate:make migration-name-here --knexfile=server/models/knexfile.js
+    npx knex migrate:make migration-name-here --knexfile=server/models/knexfile.js
 
 Run a migration with:
 
-    yarn migrate
+    npx migrate
 
 ### PostgreSQL
 
-#### Log Settings
-
-We've modified the default PostgreSQL logging behavior to give us more visibility into the database.
-A good description of what all of these different settings can be found in the [PostgreSQL
-Documentation][]. All of these settings are modified by running the following statements against the
-database:
-
-1.  `ALTER SYSTEM SET desired_setting = value;`
-1.  `SELECT pg_reload_conf();`
-
-The settings are as follows:
-
-1.  `log_statement = 'all'`
-1.  `log_connections = true`
-1.  `log_disconnections = true`
-1.  `log_duration = true`
-1.  `log_min_duration_statement = -1`
-1.  `log_min_messages = 'DEBUG2'`
-
-#### Spotlight Optimization
-
-Running the test suite causes a lot of database churning. This can cause low performance when
-Spotlight is attempting to index every change to your database files. To prevent this, [add][] your
-Postgres data directory (with a Homebrew install, typically `/usr/local/var/postgres`) to
-Spotlight's privacy list.
-
-### Running in Production Mode Locally Using Docker
-
-We are able to run the application locally using Docker and Docker Compose. For now, this means
-running the web application with a postgres database. To get started, download and
-install [Docker][]. After you have Docker installed and running, follow these steps:
-
-1.  Start the application and database by running `yarn run docker-prod:start`. The first time you do
-    this, you will have to wait a little while.
-1.  In a separate terminal window, run: `yarn run docker-prod:migrate`.
-1.  To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
-    1.  Alternatively, connect to the database using Postico (user is 'postgres', port is '5431', and database is 'db').
-1.  Visit `localhost:3000` in your browser.
-1.  If you make changes to the application and wish to see them, the application container will need
-    to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
-1.  To stop the application, run: `yarn run docker-prod:stop`.
-
-### Copying staging database to local database
-
-Note: this will eventually become untenable but for now it is convenient.
-
-First, login with `aptible login`, then:
-
-    aptible db:dump commons-staging
-    dropdb commons
-    createdb commons
-    psql -d commons -c "CREATE ROLE aptible LOGIN"
-    psql commons < commons-staging.dump
-    rm commons-staging.dump
-
-### Create a database schema explorer
-
-To get started with [Schemaspy][] which creates an interactive website to explore the schema, first, download and install [Docker][]. After you have Docker installed and running, follow these steps:
-
-    cd some-new-directoy
-    docker run -v "$PWD:/output" schemaspy/schemaspy:snapshot -t pgsql -db commons -u insertYourDbUsernameHere -host docker.for.mac.localhost -hq
-    open some-new-directoy/index.html
-
-To get started with [Schemacrawler][], which creates a somewhat nicer image of the schema but is not interactive, first, setup docker and then follow these steps:
-
-    docker run -v $(pwd):/share --rm -i -t --entrypoint=/bin/bash sualeh/schemacrawler ./schemacrawler.sh -server=pgsql -user= insertYourDbUsernameHere -database=commons -host=docker.for.mac.localhost -infolevel=maximum -routines= -command=schema -outputfile=/share/sc_db.png
-    exit
-    open sc_db.png
-
-### Test PubSub locally
-
-To get started, install the [Google Cloud SDK][] along with the [JDK][] (verision 7 or 8).
-
-Next, install the Google PubSub Emulator by running the following commands:
-
-    gcloud components install pubsub-emulator
-    gcloud components update
-
-The following instructions assume you have a recent version of Ruby installed:
-
-First, ensure that you have the google-cloud gem installed:
-
-    gem install google-cloud
-
-Then, run:
-
-    gcloud beta emulators pubsub start
-
-In a fresh Terminal tab, run:
-
-    $(gcloud beta emulators pubsub env-init)
-
-In the same tab, open an IRB session, and execute the following commands, substituting data where required:
-
-    require 'google/cloud/pubsub'
-    pubsub = Google::Cloud::Pubsub.new(project_id: 'whatever_you_want')
-    topic = pubsub.create_topic('this_does_not_matter')
-    subscription = topic.create_subscription('this_also_does_not_matter')
-    subscription.endpoint = 'http://localhost:3000/pubsub/push'
-    data = '{"patientId":"VALID_PATIENT_ID_HERE","slug":"VALID_COMPUTED_FIELD_SLUG_HERE","value":"VALID_ANSWER_VALUE_HERE","jobId":"this_does_not_matter"}'
-    hmac = OpenSSL::HMAC.hexdigest('SHA256', 'supertopsecret', data)
-    topic.publish(data, hmac: hmac)
-
-### Import ICD-10 Codes
-
-On development, run:
-
-    yarn import:icd:dev
-
-On production, run:
-
-    yarn import:icd:production
-
-For exact script usage instructions, read the comments at the top of 'scripts/import-icd-ten-codes.ts'
-
-### Install Redis
-
-We use [Kue][] as our system for delayed jobs. As a backend, this relies on the open source in-memory store, [Redis][]. In order to run Commons, you will need to install Redis locally. The easiest way to do this is using [Homebrew][]. To install, run the following command:
-
-    brew install redis
-
-Alternatively, you can install following the instructions on the [Redis download page][].
-
-### View status of background jobs
-
-[Kue][] comes with a barebones UI that can be used to see the status of all jobs. To see it, run one of the following commands, depending on environment, and visit localhost:8080:
-
-    yarn kue-dashboard-dev
-    yarn kue-dashboard-demo
-    yarn kue-dashboard-staging
-    yarn kue-dashboard-prod
-
-### Run PgHero (a performance dashboard for postgres)
-
-[PgHero][] is easy to run using docker if you create an endpoint for the staging postgres database.
-
-First log into Aptible and create an endpoint for the staging postgres database. Then run,
-`docker run -ti -e DATABASE_URL=GET_FROM_APTIBLE -p 8080:8080 ankane/pghero`. Then go to `localhost:8080`.
-
-You can also run this against your local commons database using `docker run -ti -e DATABASE_URL=postgresql://YOUR_NAME@docker.for.mac.host.internal:5432/commons -p 8080:8080 ankane/pghero`
 
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
@@ -504,7 +119,6 @@ You can also run this against your local commons database using `docker run -ti 
 [aptible]: https://aptible.com
 [aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://commons-staging.cityblock.com
-[yarn]: https://yarnpkg.com/lang/en/docs/install/
 [.env]: https://drive.google.com/open?id=1wWe8wGskk-X4AzblpmSLYGBsfWxb3EVC
 [prd]: https://docs.google.com/document/d/1yfcbwghOUcJ2PlK_J5JxBIUcXaYuArZuR6VN8-NcZ6g/edit?usp=sharing
 [modheader]: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj

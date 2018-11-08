@@ -1,23 +1,26 @@
 import { transaction } from 'objection';
 import Pokemon from '../models/Pokemon';
+import { pokemonSample } from '../pokemon-mocks';
 
 describe('Pokemon Model', () => {
   let txn = null as any;
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());
-    console.log({ txn });
   });
 
-  // afterEach(async () => {
-  //   if (txn) await txn.rollback();
-  // });
+  afterEach(async () => {
+    await txn.rollback();
+  });
 
-  describe('getAll', () => {
-    it('retrieves all Pokemon from database', async () => {
-      const allPokemon = await Pokemon.getAll(txn);
-      expect(allPokemon).not.toBeUndefined();
-      // expect(allPokemon.length).toBeGreaterThan(1);
+  describe('create', () => {
+    it('creates a Pokemon instance', async () => {
+      const [samplePokemon] = pokemonSample(0, 1);
+      const newPoke = await Pokemon.create(samplePokemon, txn);
+      Object.keys(samplePokemon).forEach((propName: string) => {
+        expect(newPoke).toHaveProperty(propName);
+        expect(newPoke[propName]).not.toBeFalsy();
+      })
     });
   });
 });

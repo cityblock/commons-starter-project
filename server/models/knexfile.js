@@ -47,7 +47,7 @@ module.exports = {
       database: 'pokedex_test',
       host: '127.0.0.1',
       timezone: 'UTC',
-      user: process.env.DB_USER || 'root',
+      user: 'postgres',
     },
     migrations: {
       directory: __dirname + '/migrations',

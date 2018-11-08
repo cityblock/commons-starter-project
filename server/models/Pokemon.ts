@@ -1,8 +1,18 @@
 import { Model, Transaction } from 'objection';
 // import uuid from 'uuid/v4';
 
-interface IPokemonCreateFields {
+export interface IPokemonCreateFields {
+  id: string;
   name: string;
+  pokemonNumber: number;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  // How do I type a JSON string? Calling it string for now.
+  moves: string;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // getAll(txn: Transaction) - returns all Pokemon, ordered by pokemonNumber ascending
@@ -13,14 +23,13 @@ interface IPokemonCreateFields {
 
 
 export default class Pokemon extends Model {
-  // static modelPaths = [__dirname];
-  // static pickJsonSchemaProperties = true;
+  static tableName = 'pokemon';
+  static modelPaths = [__dirname];
+  static pickJsonSchemaProperties = true;
   // id!: string;
-  name!: string;
   // createdAt!: string;
   // updatedAt!: string;
   // deletedAt!: string;
-  static tableName = 'pokemon';
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     const allPokemon = await this.query(txn).orderBy('pokemonNumber', 'ASC');
     return allPokemon;
@@ -41,6 +50,9 @@ export default class Pokemon extends Model {
   static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
     return this.query(txn).insertAndFetch(input);
   }
+
+  name!: string;
+  [k: string]: any;
 
   // static async getAll(txn: Transaction): Promise<Puppy[]> {
   //   return this.query(txn).orderBy('name', 'ASC');

@@ -1,8 +1,8 @@
 import { transaction } from 'objection';
-import Pokemon, { IPokemonCreateFields } from '../models/Pokemon';
-import Item from '../models/item';
-import { pokemonSample } from '../pokemon-mocks';
 import { buildRandomItem } from '../item-mocks';
+import Item from '../models/item';
+import Pokemon, { IPokemonCreateFields } from '../models/Pokemon';
+import { pokemonSample } from '../pokemon-mocks';
 
 describe('Pokemon Model', () => {
   let txn = null as any;
@@ -34,7 +34,7 @@ describe('Pokemon Model', () => {
       await Item.create(sampleItem, txn);
 
       // get pokemon instance & linked items
-      const firstPoke = await Pokemon.get(newPoke.id, txn);
+      // const firstPoke = await Pokemon.get(newPoke.id, txn);
       expect(true).toBe(true);
     })
   });

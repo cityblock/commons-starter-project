@@ -1,5 +1,4 @@
 import { Model, Transaction } from 'objection';
-// import uuid from 'uuid/v4';
 
 interface IItemCreateFields {
   id: string;
@@ -17,6 +16,10 @@ export default class Item extends Model {
   static tableName = 'item';
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
+
+  static async create(input: IItemCreateFields, txn: Transaction): Promise<Item> {
+    return this.query(txn).insertAndFetch(input);
+  }
   id!: string;
   name!: string;
   pokemonId!: string;
@@ -26,8 +29,4 @@ export default class Item extends Model {
   createdAt!: string;
   updatedAt!: string;
   deletedAt?: string;
-
-  static async create(input: IItemCreateFields, txn: Transaction): Promise<Item> {
-    return this.query(txn).insertAndFetch(input);
-  }
 }

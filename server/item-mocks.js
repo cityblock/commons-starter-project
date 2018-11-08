@@ -1,3 +1,4 @@
+/* tslint:disable */
 const uuid = require('uuid');
 
 function buildItem(name, pokemonId, price, happiness, imageUrl) {

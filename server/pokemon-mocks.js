@@ -1,5 +1,5 @@
-const uuid = require('uuid');
 /* tslint:disable */
+const uuid = require('uuid');
 function buildPokemon(name, pokemonNumber, attack, defense, pokeType, moves, imageUrl) {
   return {
     attack,

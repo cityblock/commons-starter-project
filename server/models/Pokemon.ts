@@ -1,6 +1,7 @@
-import { Model, Transaction } from 'objection';
+import { Model, Transaction, RelationMappings, QueryBuilder } from 'objection';
 import uuid from 'uuid/v4';
 import Item from './item';
+import { Query } from 'react-apollo';
 
 export interface IPokemonCreateFields {
   id: string;
@@ -33,19 +34,26 @@ export default class Pokemon extends Model {
   static tableName = 'pokemon';
   static modelPaths = [__dirname];
   static pickJsonSchemaProperties = true;
-  static relationMappings = {
-    item: {
-      relation: Model.HasManyRelation,
-      modelClass: Item,
-      join: {
-        from: 'pokemon.id',
-        to: 'item.pokemonId'
+  static get relationMappings(): RelationMappings {
+    return {
+      item: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId'
+        },
+        modify: (builder: QueryBuilder<any>): QueryBuilder<any> => {
+          return builder.where({ 'item.deletedAt': null });
+        }
       }
-    }
+    };
   };
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    const allPokemon = await this.query(txn).orderBy('pokemonNumber', 'ASC');
+    const allPokemon = await this.query(txn)
+      .orderBy('pokemonNumber', 'ASC')
+      .whereNull('deletedAt');
     return allPokemon;
   }
 
@@ -77,7 +85,7 @@ export default class Pokemon extends Model {
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
-  deletedAt?: string;
+  deletedAt!: string | null;
   item: Item[] = [];
   [k: string]: any;
 

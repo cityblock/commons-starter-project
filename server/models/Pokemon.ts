@@ -16,11 +16,18 @@ export interface IPokemonCreateFields {
   deletedAt?: string;
 }
 
-// getAll(txn: Transaction) - returns all Pokemon, ordered by pokemonNumber ascending
-// create(input: IPokemonCreateInput, txn: Transaction) - creates and returns a Pokemon
-// edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits an existing Pokemon
-// delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
-
+export interface IPokemonEditInput {
+  id: string;
+  name?: string;
+  pokemonNumber?: number;
+  attack?: number;
+  defense?: number;
+  pokeType?: string;
+  moves?: string;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export default class Pokemon extends Model {
   static tableName = 'pokemon';
@@ -53,6 +60,12 @@ export default class Pokemon extends Model {
     if (!pokemon) return Promise.reject(`Pokemon with id ${pokemonId} not found.`);
     return pokemon;
   }
+
+  static async edit(pokemonId: string, fieldsToUpdate: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+    return this.query(txn).updateAndFetchById(pokemonId, fieldsToUpdate);
+  }
+
+  // delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
 
   id!: string;
   name!: string;

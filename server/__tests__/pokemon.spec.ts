@@ -1,7 +1,7 @@
 import { transaction } from 'objection';
 import { buildRandomItem } from '../item-mocks';
 import Item, { IItemCreateFields } from '../models/item';
-import Pokemon, { IPokemonCreateFields } from '../models/pokemon';
+import Pokemon, { IPokemonCreateFields, IPokemonEditInput } from '../models/pokemon';
 import { pokemonSample } from '../pokemon-mocks';
 
 describe('Pokemon Model', () => {
@@ -13,8 +13,8 @@ describe('Pokemon Model', () => {
     txn = await transaction.start(Pokemon.knex());
   });
 
-  afterEach(() => {
-    return txn.rollback();
+  afterEach(async () => {
+    await txn.rollback();
   });
 
   describe('create', () => {
@@ -57,6 +57,14 @@ describe('Pokemon Model', () => {
           expect(poke[propName]).not.toBeFalsy();
         });
       });
+    });
+  });
+  describe('edit', () => {
+    it('edits specified pokemon and returns it', async () => {
+      const pokeToEdit = await Pokemon.create(samplePokemon, txn);
+      const fieldsToEdit: IPokemonEditInput = { id: pokeToEdit.id, name: 'Dan' };
+      const editedPoke: Pokemon = await Pokemon.edit(pokeToEdit.id, fieldsToEdit, txn);
+      expect(editedPoke.name).toBe('Dan');
     });
   });
 });

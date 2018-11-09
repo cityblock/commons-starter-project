@@ -1,6 +1,6 @@
 import { Model, Transaction } from 'objection';
 
-interface IItemCreateFields {
+export interface IItemCreateFields {
   id: string;
   name: string;
   pokemonId: string;

@@ -1,7 +1,7 @@
 import { transaction } from 'objection';
 import { buildRandomItem } from '../item-mocks';
-import Item from '../models/item';
-import Pokemon, { IPokemonCreateFields } from '../models/Pokemon';
+import Item, { IItemCreateFields } from '../models/item';
+import Pokemon, { IPokemonCreateFields } from '../models/pokemon';
 import { pokemonSample } from '../pokemon-mocks';
 
 describe('Pokemon Model', () => {
@@ -28,14 +28,18 @@ describe('Pokemon Model', () => {
   });
   describe('get', () => {
     it('retrieves a pokemon and associated items', async () => {
-      // seed test db
-      const newPoke = await Pokemon.create(samplePokemon, txn);
-      const sampleItem = buildRandomItem(newPoke.id);
-      await Item.create(sampleItem, txn);
+      let pokeItem = null as any;
 
-      // get pokemon instance & linked items
-      // const firstPoke = await Pokemon.get(newPoke.id, txn);
-      expect(true).toBe(true);
+      const newPoke: Pokemon = await Pokemon.create(samplePokemon, txn);
+      const sampleItem: IItemCreateFields = buildRandomItem(newPoke.id);
+      await Item.create(sampleItem, txn);
+      const firstPoke: Pokemon = await Pokemon.get(newPoke.id, txn);
+      const firstPokeItems: Item[] = firstPoke.item;
+      [pokeItem] = firstPokeItems;
+
+      expect(firstPoke.name).toBe(samplePokemon.name);
+      expect(firstPokeItems.length).toBeGreaterThan(0);
+      expect(pokeItem.pokemonId).toEqual(firstPoke.id);
     })
   });
 });

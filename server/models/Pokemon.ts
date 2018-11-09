@@ -16,11 +16,6 @@ export interface IPokemonCreateFields {
   deletedAt?: string;
 }
 
-interface IPokemonWithItems {
-  pokemon: IPokemonCreateFields;
-  items?: any[];
-}
-
 // getAll(txn: Transaction) - returns all Pokemon, ordered by pokemonNumber ascending
 // create(input: IPokemonCreateInput, txn: Transaction) - creates and returns a Pokemon
 // edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits an existing Pokemon
@@ -51,17 +46,12 @@ export default class Pokemon extends Model {
     return this.query(txn).insertAndFetch(input);
   }
 
-  static async get(pokemonId: string, txn: Transaction): Promise<IPokemonWithItems> {
-    const pokemon = await this.query(txn).findById(pokemonId);
-    const items = await this.query(txn)
-      .select('*').from('item')
-      .where('item.pokemonId', pokemonId);
-
+  static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    const pokemon = await this.query(txn)
+      .findById(pokemonId)
+      .eager('item');
     if (!pokemon) return Promise.reject(`Pokemon with id ${pokemonId} not found.`);
-    return {
-      pokemon,
-      items
-    };
+    return pokemon;
   }
 
   id!: string;
@@ -74,7 +64,8 @@ export default class Pokemon extends Model {
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
-  deletedAt: string | undefined;
+  deletedAt?: string;
+  item: Item[] = [];
   [k: string]: any;
 
   $beforeInsert() {

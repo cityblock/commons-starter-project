@@ -487,5 +487,4 @@ exports.allPokemon = [
   ),
 ];
 
-exports.pokemonSample = (start, end) => exports.allPokemon.slice(start, end);
 

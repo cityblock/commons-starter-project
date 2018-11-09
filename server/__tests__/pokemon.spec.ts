@@ -1,13 +1,12 @@
 import { transaction } from 'objection';
 import { buildRandomItem } from '../item-mocks';
 import Item, { IItemCreateFields } from '../models/item';
-import Pokemon, { IPokemonCreateFields, IPokemonEditInput } from '../models/pokemon';
-import { pokemonSample } from '../pokemon-mocks';
+import Pokemon, { IPokemonEditInput } from '../models/pokemon';
+import pokemonSample from '../pokemon-sample';
 
 describe('Pokemon Model', () => {
   let txn = null as any;
-  let samplePokemon: IPokemonCreateFields;
-  [samplePokemon] = pokemonSample(0, 1);
+  const [samplePokemon] = pokemonSample(0, 1);
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());

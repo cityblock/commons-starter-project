@@ -26,6 +26,14 @@ export default class Item extends Model {
       .whereNull('deletedAt');
     return allItems;
   }
+  static async get(itemId: string, txn: Transaction): Promise<Item> {
+    const item = await this.query(txn)
+      .findById(itemId)
+      .whereNull('deletedAt');
+
+    if (!item) return Promise.reject(`item with id ${itemId} not found.`);
+    return item;
+  }
   id!: string;
   name!: string;
   pokemonId!: string;

@@ -1,7 +1,7 @@
 import { transaction } from 'objection';
 import { buildRandomItem } from '../item-mocks';
-import Item, { IItemCreateFields } from '../models/item';
-import Pokemon, { IPokemonEditInput } from '../models/pokemon';
+import Item from '../models/item';
+import Pokemon from '../models/pokemon';
 import { samplePokemon } from './pokemon.spec';
 // import pokemonSample from '../pokemon-sample';
 
@@ -38,13 +38,17 @@ describe('Item model', () => {
       expect(allItems.length).toEqual(NUM_OF_ITEMS);
     });
   });
-  describe('edit', () => {
-    it('edits an item', async () => {
-      expect(true).toBe(true);
-    });
-  });
   describe('get', () => {
     it('retrieves a single item from the database', async () => {
+      const pokemon = await Pokemon.create(samplePokemon, txn);
+      const itemInput = buildRandomItem(pokemon.id);
+      const newItem = await Item.create(itemInput, txn);
+      const retrievedItem = await Item.get(newItem.id, txn);
+      expect(retrievedItem.id).toEqual(newItem.id);
+    });
+  });
+  describe('edit', () => {
+    it('edits an item', async () => {
       expect(true).toBe(true);
     });
   });

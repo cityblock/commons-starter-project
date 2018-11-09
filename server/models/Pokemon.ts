@@ -1,7 +1,11 @@
-import { Model, Transaction, RelationMappings, QueryBuilder } from 'objection';
+import {
+  Model,
+  QueryBuilder,
+  RelationMappings,
+  Transaction
+} from 'objection';
 import uuid from 'uuid/v4';
 import Item from './item';
-import { Query } from 'react-apollo';
 
 export interface IPokemonCreateFields {
   id: string;
@@ -86,7 +90,6 @@ export default class Pokemon extends Model {
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string | null;
-  item: Item[] = [];
   [k: string]: any;
 
   $beforeInsert() {

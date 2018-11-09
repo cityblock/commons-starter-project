@@ -20,6 +20,12 @@ export default class Item extends Model {
   static async create(input: IItemCreateFields, txn: Transaction): Promise<Item> {
     return this.query(txn).insertAndFetch(input);
   }
+  static async getAll(txn: Transaction): Promise<Item[]> {
+    const allItems = await this.query(txn)
+      .orderBy('createdAt', 'DESC')
+      .whereNull('deletedAt');
+    return allItems;
+  }
   id!: string;
   name!: string;
   pokemonId!: string;
@@ -28,5 +34,6 @@ export default class Item extends Model {
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;
-  deletedAt?: string;
+  deletedAt!: string | null;
+  [k: string]: any;
 }

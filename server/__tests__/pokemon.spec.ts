@@ -4,9 +4,9 @@ import Item, { IItemCreateFields } from '../models/item';
 import Pokemon, { IPokemonEditInput } from '../models/pokemon';
 import pokemonSample from '../pokemon-sample';
 
+export const [samplePokemon] = pokemonSample(0, 1);
 describe('Pokemon Model', () => {
   let txn = null as any;
-  const [samplePokemon] = pokemonSample(0, 1);
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());

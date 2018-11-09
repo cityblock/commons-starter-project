@@ -68,6 +68,7 @@ export default class Pokemon extends Model {
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await this.query(txn)
       .findById(pokemonId)
+      .whereNull('deletedAt')
       .eager('item');
     if (!pokemon) return Promise.reject(`Pokemon with id ${pokemonId} not found.`);
     return pokemon;
@@ -77,7 +78,9 @@ export default class Pokemon extends Model {
     return this.query(txn).updateAndFetchById(pokemonId, fieldsToUpdate);
   }
 
-  // delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    return this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date().toISOString() });
+  }
 
   id!: string;
   name!: string;

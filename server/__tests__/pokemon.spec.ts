@@ -66,4 +66,16 @@ describe('Pokemon Model', () => {
       expect(editedPoke.name).toBe('Dan');
     });
   });
+  describe('delete', () => {
+    it('Soft deletes pokemon', async () => {
+      const [samplePoke] = pokemonSample(6, 7);
+      const pokeToDelete = await Pokemon.create(samplePoke, txn);
+      await Pokemon.delete(pokeToDelete.id, txn);
+      try {
+        await Pokemon.get(pokeToDelete.id, txn);
+      } catch (e) {
+        expect(e).toMatch(`Pokemon with id ${pokeToDelete.id} not found.`);
+      }
+    });
+  });
 });

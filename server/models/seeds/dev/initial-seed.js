@@ -1,8 +1,9 @@
-const { allPokemon } = require('../../../pokemon-mocks');
-const { buildRandomItem } = require('../../../item-mocks');
+var uuid = require('uuid');
+const allPokemon = require('../all-pokemon');
+const createItems = require('../create-items');
 
-function deleteTables(knex, Promise) {
-  return knex.transaction(function (trx) {
+const deleteTables = (knex, Promise) => (
+  knex.transaction(function (trx) {
     const deletePromises = trx
       .withSchema('information_schema')
       .select('table_name')
@@ -17,34 +18,20 @@ function deleteTables(knex, Promise) {
       });
 
     return Promise.all(deletePromises);
-  });
-}
+  })
+);
 
-function createItems(knex, Promise) {
-  return knex
-    .table('pokemon')
-    .pluck('id')
-    .then(function (pokemonIds) {
-      const itemPromises = [];
-      for (let i = 0; i < pokemonIds.length; i++) {
-        for (let j = 0; j < 3; j++) {
-          itemPromises.push(knex.table('item').insert(buildRandomItem(pokemonIds[i])));
-        }
-      }
-      return Promise.all(itemPromises);
-    });
-}
+const seed = (knex, Promise) => knex.table('pokemon').insert(allPokemon);
 
-const seed = function (knex, Promise) {
-  return knex
-    .table('pokemon')
-    .insert(pokemonMocks);
-};
-
-exports.seed = function (knex, Promise) {
-  return deleteTables(knex, Promise).then(function () {
-    return seed(knex, Promise).then(function () {
+exports.seed = (knex, Promise) => (
+  deleteTables(knex, Promise)
+    .then(() => {
+      return seed(knex, Promise)
+    })
+    .then(() => {
       return createItems(knex, Promise);
-    });
-  });
-};
+    })
+    .catch(err => {
+      console.error(err);
+    })
+);

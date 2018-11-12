@@ -26,10 +26,10 @@ describe('pokemon resolver', () => {
       }
 
       const result: any = await graphql(schema, getAllPokemonQuery, null, txn);
-      console.log(result);
-      // expect(data.allPokemon.length).toEqual(4);
-      // const firstPokemon = data.allPokemon[0];
-      // expect(firstPokemon.name).toEqual(allPokemonInput[0].name);
+      expect(result.data.allPokemon.length).toEqual(4);
+
+      const firstPokemon = result.data.allPokemon[0];
+      expect(firstPokemon.name).toEqual(allPokemonInput[0].name);
     });
   });
 });

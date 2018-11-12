@@ -18,28 +18,38 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    allPokemon: Array<IPokemon | null> | null;
+    pokemon: IPokemon;
+    allItem: Array<IItem | null> | null;
+    item: IItem;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemonOnRootQueryTypeArguments {
+    pokemonId: string;
+  }
+
+  interface IItemOnRootQueryTypeArguments {
+    itemId: string;
+  }
+
+  interface IPokemon {
     id: string;
+    pokemonNumber: number;
     name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
+    attack: number;
+    defense: number;
+    pokeType: Array<string>;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
     deletedAt: string | null;
+    item: Array<IItem | null> | null;
   }
 
   /**
    * An object with a Globally Unique ID
    */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon | IItem;
 
   /**
    * An object with a Globally Unique ID
@@ -52,20 +62,87 @@ declare module 'schema' {
     id: string;
   }
 
-  interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
-  }
-
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
-  }
-
-  interface IPuppyCreateInput {
+  interface IItem {
+    id: string;
     name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  interface IRootMutationType {
+    pokemonCreate: IPokemon;
+    pokemonEdit: IPokemon;
+    pokemonDelete: IPokemon;
+    itemCreate: IItem;
+    itemEdit: IItem;
+    itemDelete: IItem;
+  }
+
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input?: IPokemonCreateInput | null;
+  }
+
+  interface IPokemonEditOnRootMutationTypeArguments {
+    input?: IPokemonEditInput | null;
+  }
+
+  interface IPokemonDeleteOnRootMutationTypeArguments {
+    input?: string | null;
+  }
+
+  interface IItemCreateOnRootMutationTypeArguments {
+    input?: IItemCreateInput | null;
+  }
+
+  interface IItemEditOnRootMutationTypeArguments {
+    input?: IItemEditInput | null;
+  }
+
+  interface IItemDeleteOnRootMutationTypeArguments {
+    input?: string | null;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
+    name: string;
+    attack: number;
+    defense: number;
+    pokeType: Array<string>;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    id: string;
+    pokemonNumber?: number | null;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: Array<string | null> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IItemCreateInput {
+    id: string;
+    name: string;
+    pokemonId: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt?: string | null;
+  }
+
+  interface IItemEditInput {
+    id: string;
+    price?: number | null;
+    happiness?: number | null;
+    imageUrl?: string | null;
   }
 }
 

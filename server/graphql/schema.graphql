@@ -4,9 +4,44 @@ interface uniqueId {
   id: ID!
 }
 
-type RootMutationType {}
+# pokemon
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: [String!]!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
 
-type RootQueryType {}
+type PokemonCreateInput {
+  name: String!
+}
+
+type PokemonEditInput {
+  id: ID!
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: [String]
+  imageUrl: String
+}
+
+type RootMutationType {
+  pokemonCreate(input: PokemonCreateInput): Pokemon!
+  pokemonEdit(input: PokemonEditInput): Pokemon!
+  pokemonDelete(input: ID): Pokemon!
+}
+
+type RootQueryType {
+  allPokemon: [Pokemon]
+  pokemon(pokemonId: ID!): Pokemon!
+}
 
 schema {
   query: RootQueryType

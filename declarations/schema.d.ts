@@ -38,12 +38,12 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: Array<string>;
+    pokeType: string;
     imageUrl: string;
+    moves: string;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-    item: Array<IItem | null> | null;
   }
 
   /**
@@ -112,8 +112,9 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: Array<string>;
+    pokeType: string;
     imageUrl: string;
+    moves: string;
   }
 
   interface IPokemonEditInput {
@@ -122,8 +123,9 @@ declare module 'schema' {
     name?: string | null;
     attack?: number | null;
     defense?: number | null;
-    pokeType?: Array<string | null> | null;
+    pokeType?: string | null;
     imageUrl?: string | null;
+    moves?: string | null;
   }
 
   interface IItemCreateInput {

@@ -13,7 +13,7 @@ export interface getAllPokemon_allPokemon {
   name: string;
   attack: number;
   defense: number;
-  moves: string;
+  moves: string[];
   imageUrl: string;
   createdAt: string;
   updatedAt: string;

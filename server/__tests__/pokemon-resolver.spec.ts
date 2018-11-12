@@ -21,17 +21,15 @@ describe('pokemon resolver', () => {
   describe('getAllPokemon resolver', async () => {
     it('resolves gql query for all pokemon', async () => {
       const allPokemonInput = pokemonSample(0, 4);
-      await Pokemon.create(allPokemonInput[0], txn);
-      const { data }: any | undefined = await graphql(
-        schema,
-        getAllPokemonQuery,
-        null,
-        txn
-      );
+      for (const pokeInput of allPokemonInput) {
+        await Pokemon.create(pokeInput, txn);
+      }
 
-      expect(data.allPokemon.length).toBeGreaterThan(0);
+      const result: any = await graphql(schema, getAllPokemonQuery, null, txn);
+      console.log(result);
+      // expect(data.allPokemon.length).toEqual(4);
+      // const firstPokemon = data.allPokemon[0];
+      // expect(firstPokemon.name).toEqual(allPokemonInput[0].name);
     });
-  })
-
-})
-
+  });
+});

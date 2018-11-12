@@ -42,7 +42,7 @@ input PokemonCreateInput {
   defense: Int!
   pokeType: String!
   imageUrl: String!
-  moves: String!
+  moves: [String!]!
 }
 
 input PokemonEditInput {
@@ -53,7 +53,7 @@ input PokemonEditInput {
   defense: Int
   pokeType: String
   imageUrl: String
-  moves: String
+  moves: [String]
 }
 
 type Pokemon implements uniqueId {
@@ -64,7 +64,7 @@ type Pokemon implements uniqueId {
   defense: Int!
   pokeType: String!
   imageUrl: String!
-  moves: String!
+  moves: [String!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String

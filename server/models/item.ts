@@ -1,4 +1,5 @@
 import { Model, Transaction } from 'objection';
+
 import uuid from 'uuid/v4';
 
 export interface IItemCreateFields {
@@ -14,7 +15,6 @@ export interface IItemCreateFields {
 }
 
 export interface IItemEditInput {
-  id: string;
   name?: string;
   pokemonNumber?: number;
   attack?: number;
@@ -25,6 +25,8 @@ export interface IItemEditInput {
   createdAt?: string;
   updatedAt?: string;
 }
+
+const errorMsg = (id: string) => `item with id ${id} not found.`;
 
 export default class Item extends Model {
   static tableName = 'item';
@@ -45,16 +47,32 @@ export default class Item extends Model {
       .findById(itemId)
       .whereNull('deletedAt');
 
-    if (!item) return Promise.reject(`item with id ${itemId} not found.`);
+    if (!item) {
+      return Promise.reject(errorMsg(itemId));
+    }
     return item;
   }
 
-  static async edit(itemId: string, fieldsToUpdate: IItemEditInput, txn: Transaction): Promise<Item> {
-    return this.query(txn).updateAndFetchById(itemId, fieldsToUpdate);
+  static async edit(
+    itemId: string,
+    itemFields: Partial<IItemEditInput>,
+    txn: Transaction,
+  ): Promise<Item> {
+    const editedItem = await this.query(txn).updateAndFetchById(itemId, itemFields);
+    if (!editedItem) {
+      return Promise.reject(errorMsg(itemId));
+    }
+    return editedItem;
   }
 
   static async delete(itemId: string, txn: Transaction): Promise<Item> {
-    return this.query(txn).patchAndFetchById(itemId, { deletedAt: new Date().toISOString() });
+    const itemToDelete = await this.query(txn).patchAndFetchById(itemId, {
+      deletedAt: new Date().toISOString(),
+    });
+    if (!itemToDelete) {
+      return Promise.reject(errorMsg(itemId));
+    }
+    return itemToDelete;
   }
   id!: string;
   name!: string;

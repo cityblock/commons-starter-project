@@ -123,9 +123,30 @@ declare module 'schema' {
     name?: string | null;
     attack?: number | null;
     defense?: number | null;
-    pokeType?: string | null;
+    pokeType?: PokeType | null;
     imageUrl?: string | null;
     moves?: Array<string | null> | null;
+  }
+
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
   interface IItemCreateInput {

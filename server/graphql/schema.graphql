@@ -4,6 +4,27 @@ interface uniqueId {
   id: ID!
 }
 
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
+
 input ItemCreateInput {
   id: ID!
   name: String!
@@ -51,7 +72,7 @@ input PokemonEditInput {
   name: String
   attack: Int
   defense: Int
-  pokeType: String
+  pokeType: PokeType
   imageUrl: String
   moves: [String]
 }

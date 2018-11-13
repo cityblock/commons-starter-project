@@ -1,10 +1,9 @@
+import { GraphQLResolveInfo } from 'graphql';
 import { Transaction } from 'objection';
-import { IRootQueryType } from 'schema';
+import { IRootMutationType, IRootQueryType } from 'schema';
 import Pokemon from '../models/pokemon';
 
-export interface IContext {
-  testTransaction?: Transaction;
-}
+// type IInfoContext extends GraphQLResolveInfo & IPokemonEditInput;
 
 export const resolveAllPokemon = async (
   root: {},
@@ -17,7 +16,14 @@ export const resolvePokemon = async (
   root: {},
   args: {},
   context: Transaction,
-  info: any,
-): Promise<IRootQueryType['pokemon']> => {
-  return Pokemon.get(info.variableValues.pokemonId, context);
-};
+  { variableValues }: GraphQLResolveInfo,
+): Promise<IRootQueryType['pokemon']> => Pokemon.get(variableValues.pokemonId, context);
+
+export const resolveEditPokemon = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // I couldn't figure out how to type variable values in the edit case
+  { variableValues }: any,
+): Promise<IRootMutationType['pokemonEdit']> =>
+  Pokemon.edit(variableValues.id, variableValues, context);

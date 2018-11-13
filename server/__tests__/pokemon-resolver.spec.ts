@@ -3,7 +3,8 @@ import { graphql, print } from 'graphql';
 import { ExecutionResultDataDefault } from 'graphql/execution/execute';
 import { transaction } from 'objection';
 import getAllPokemon from '../../app/graphql/queries/get-all-pokemon.graphql';
-import getPokemon from '../../app/graphql/queries/get-pokemon.graphql';
+import pokemonEdit from '../../app/graphql/queries/get-pokemon.graphql';
+import editPokemon from '../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
 import Pokemon from '../models/Pokemon';
 import pokemonSample from '../pokemon-sample';
@@ -11,8 +12,10 @@ import pokemonSample from '../pokemon-sample';
 describe('pokemon resolver', () => {
   let txn = null as any;
   const getAllPokemonQuery = print(getAllPokemon);
-  const getPokemonQuery = print(getPokemon);
+  const getPokemonQuery = print(pokemonEdit);
+  const editPokemonQuery = print(editPokemon);
   const allPokemonInput = pokemonSample(0, 4);
+  const [firstPokeInput] = allPokemonInput;
 
   beforeEach(async () => {
     txn = await transaction.start(Pokemon.knex());
@@ -38,7 +41,6 @@ describe('pokemon resolver', () => {
 
   describe('getPokemon resolver', () => {
     it('resolves gql query for a single pokemon', async () => {
-      const [firstPokeInput] = allPokemonInput;
       const poke = await Pokemon.create(firstPokeInput, txn);
       const { data }: ExecutionResultDataDefault = await graphql(
         schema,
@@ -55,6 +57,21 @@ describe('pokemon resolver', () => {
           pokemonNumber: poke.pokemonNumber,
         }),
       );
+    });
+  });
+
+  describe('editPokemon resolver', () => {
+    it('edits a pokemon object with fields specified and returns the updated object', async () => {
+      const poke = await Pokemon.create(firstPokeInput, txn);
+      const fieldsToEdit = { id: poke.id, name: 'Dan' };
+      const { data }: ExecutionResultDataDefault = await graphql(
+        schema,
+        editPokemonQuery,
+        null,
+        txn,
+        fieldsToEdit,
+      );
+      expect(data.pokemonEdit.name).toEqual('Dan');
     });
   });
 });

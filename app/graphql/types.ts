@@ -4,16 +4,43 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getPuppies
+// GraphQL query operation: getAllPokemon
 // ====================================================
 
-export interface getPuppies_puppies {
+export interface getAllPokemon_allPokemon {
   id: string;
+  pokemonNumber: number;
   name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface getPuppies {
-  puppies: getPuppies_puppies[];  // All puppies
+export interface getAllPokemon {
+  allPokemon: (getAllPokemon_allPokemon | null)[] | null;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL fragment: FullPokemon
+// ====================================================
+
+export interface FullPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 /* tslint:disable */

@@ -1,9 +1,5 @@
-import {
-  Model,
-  QueryBuilder,
-  RelationMappings,
-  Transaction
-} from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+
 import uuid from 'uuid/v4';
 import Item from './item';
 
@@ -14,7 +10,7 @@ export interface IPokemonCreateFields {
   attack: number;
   defense: number;
   pokeType: string;
-  moves: string;
+  moves: string[];
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
@@ -28,7 +24,7 @@ export interface IPokemonEditInput {
   attack?: number;
   defense?: number;
   pokeType?: string;
-  moves?: string;
+  moves?: string[];
   imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -45,14 +41,14 @@ export default class Pokemon extends Model {
         modelClass: Item,
         join: {
           from: 'pokemon.id',
-          to: 'item.pokemonId'
+          to: 'item.pokemonId',
         },
         modify: (builder: QueryBuilder<any>): QueryBuilder<any> => {
           return builder.where({ 'item.deletedAt': null });
-        }
-      }
+        },
+      },
     };
-  };
+  }
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     const allPokemon = await this.query(txn)
@@ -74,7 +70,11 @@ export default class Pokemon extends Model {
     return pokemon;
   }
 
-  static async edit(pokemonId: string, fieldsToUpdate: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+  static async edit(
+    pokemonId: string,
+    fieldsToUpdate: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
     return this.query(txn).updateAndFetchById(pokemonId, fieldsToUpdate);
   }
 
@@ -88,7 +88,7 @@ export default class Pokemon extends Model {
   attack!: number;
   defense!: number;
   pokeType!: string;
-  moves!: string;
+  moves!: string[];
   imageUrl!: string;
   createdAt!: string;
   updatedAt!: string;

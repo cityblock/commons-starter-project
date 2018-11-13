@@ -4,9 +4,87 @@ interface uniqueId {
   id: ID!
 }
 
-type RootMutationType {}
+input ItemCreateInput {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
 
-type RootQueryType {}
+input ItemEditInput {
+  id: ID!
+  price: Int
+  happiness: Int
+  imageUrl: String
+}
+
+type Item implements uniqueId {
+  id: ID!
+  name: String!
+  pokemonId: String!
+  price: Int!
+  happiness: Int!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  imageUrl: String!
+  moves: [String!]!
+}
+
+input PokemonEditInput {
+  id: ID!
+  pokemonNumber: Int
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: String
+  imageUrl: String
+  moves: [String]
+}
+
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  imageUrl: String!
+  moves: [String!]!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type RootMutationType {
+  pokemonCreate(input: PokemonCreateInput): Pokemon!
+  pokemonEdit(input: PokemonEditInput): Pokemon!
+  pokemonDelete(input: ID): Pokemon!
+  itemCreate(input: ItemCreateInput): Item!
+  itemEdit(input: ItemEditInput): Item!
+  itemDelete(input: ID): Item!
+}
+
+type RootQueryType {
+  allPokemon: [Pokemon]
+  pokemon(pokemonId: ID!): Pokemon!
+  allItem: [Item]
+  item(itemId: ID!): Item!
+}
 
 schema {
   query: RootQueryType

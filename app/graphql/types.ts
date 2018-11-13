@@ -28,6 +28,34 @@ export interface getAllPokemon {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: getPokemon
+// ====================================================
+
+export interface getPokemon_pokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface getPokemon {
+  pokemon: getPokemon_pokemon;
+}
+
+export interface getPokemonVariables {
+  pokemonId: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL fragment: FullPokemon
 // ====================================================
 

@@ -3,7 +3,12 @@ import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
-import { resolveAllPokemon, resolveEditPokemon, resolvePokemon } from './pokemon-resolver';
+import {
+  resolveAllPokemon,
+  resolveCreatePokemon,
+  resolveEditPokemon,
+  resolvePokemon,
+} from './pokemon-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
@@ -14,6 +19,7 @@ const resolveFunctions = {
   },
   RootMutationType: {
     pokemonEdit: resolveEditPokemon,
+    pokemonCreate: resolveCreatePokemon,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

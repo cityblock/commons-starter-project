@@ -56,6 +56,41 @@ export interface getPokemonVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: pokemonCreate
+// ====================================================
+
+export interface pokemonCreate_pokemonCreate {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface pokemonCreate {
+  pokemonCreate: pokemonCreate_pokemonCreate;
+}
+
+export interface pokemonCreateVariables {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string;
+  imageUrl: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: pokemonEdit
 // ====================================================
 

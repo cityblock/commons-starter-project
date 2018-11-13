@@ -58,7 +58,9 @@ export default class Pokemon extends Model {
   }
 
   static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
-    return this.query(txn).insertAndFetch(input);
+    const newPoke = await this.query(txn).insertAndFetch(input);
+    if (!newPoke) return Promise.reject('There was a problem creating your Pokemon.');
+    return newPoke;
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {

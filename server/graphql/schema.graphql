@@ -57,13 +57,14 @@ type Item implements uniqueId {
 }
 
 input PokemonCreateInput {
+  id: ID!
   pokemonNumber: Int!
   name: String!
   attack: Int!
   defense: Int!
-  pokeType: String!
+  pokeType: PokeType!
   imageUrl: String!
-  moves: [String!]!
+  moves: String!
 }
 
 input PokemonEditInput {

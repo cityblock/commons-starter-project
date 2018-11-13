@@ -4,6 +4,7 @@ import { ExecutionResultDataDefault } from 'graphql/execution/execute';
 import { transaction } from 'objection';
 import getAllPokemon from '../../app/graphql/queries/get-all-pokemon.graphql';
 import pokemonEdit from '../../app/graphql/queries/get-pokemon.graphql';
+import createPokemon from '../../app/graphql/queries/pokemon-create-mutation.graphql';
 import editPokemon from '../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
 import Pokemon from '../models/Pokemon';
@@ -14,6 +15,7 @@ describe('pokemon resolver', () => {
   const getAllPokemonQuery = print(getAllPokemon);
   const getPokemonQuery = print(pokemonEdit);
   const editPokemonQuery = print(editPokemon);
+  const createPokemonQuery = print(createPokemon);
   const allPokemonInput = pokemonSample(0, 4);
   const [firstPokeInput] = allPokemonInput;
 
@@ -72,6 +74,19 @@ describe('pokemon resolver', () => {
         fieldsToEdit,
       );
       expect(data.pokemonEdit.name).toEqual('Dan');
+    });
+  });
+
+  describe('createPokemon resolver', () => {
+    it('creates and returns a pokemon object', async () => {
+      const { data }: ExecutionResultDataDefault = await graphql(
+        schema,
+        createPokemonQuery,
+        null,
+        txn,
+        firstPokeInput,
+      );
+      expect(data.pokemonCreate.name).toEqual(firstPokeInput.name);
     });
   });
 });

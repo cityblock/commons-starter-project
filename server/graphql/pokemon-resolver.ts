@@ -27,3 +27,14 @@ export const resolveEditPokemon = async (
   { variableValues }: any,
 ): Promise<IRootMutationType['pokemonEdit']> =>
   Pokemon.edit(variableValues.id, variableValues, context);
+
+export const resolveCreatePokemon = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // I couldn't figure out how to type variable values in the create case
+  { variableValues }: any,
+): Promise<IRootMutationType['pokemonCreate']> => {
+  const newPoke = await Pokemon.create(variableValues, context);
+  return newPoke;
+};

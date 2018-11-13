@@ -1,5 +1,9 @@
 import { Model, Transaction } from 'objection';
 
+import uuid from 'uuid/v4';
+
+import errorMsg from '../../error-msg';
+
 export interface IItemCreateFields {
   id: string;
   name: string;
@@ -10,6 +14,18 @@ export interface IItemCreateFields {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+}
+
+export interface IItemEditInput {
+  name?: string;
+  pokemonNumber?: number;
+  attack?: number;
+  defense?: number;
+  pokeType?: string;
+  moves?: string;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export default class Item extends Model {
@@ -31,8 +47,32 @@ export default class Item extends Model {
       .findById(itemId)
       .whereNull('deletedAt');
 
-    if (!item) return Promise.reject(`item with id ${itemId} not found.`);
+    if (!item) {
+      return Promise.reject(errorMsg(itemId));
+    }
     return item;
+  }
+
+  static async edit(
+    itemId: string,
+    itemFields: Partial<IItemEditInput>,
+    txn: Transaction,
+  ): Promise<Item> {
+    const editedItem = await this.query(txn).updateAndFetchById(itemId, itemFields);
+    if (!editedItem) {
+      return Promise.reject(errorMsg(itemId));
+    }
+    return editedItem;
+  }
+
+  static async delete(itemId: string, txn: Transaction): Promise<Item> {
+    const itemToDelete = await this.query(txn).patchAndFetchById(itemId, {
+      deletedAt: new Date().toISOString(),
+    });
+    if (!itemToDelete) {
+      return Promise.reject(errorMsg(itemId));
+    }
+    return itemToDelete;
   }
   id!: string;
   name!: string;
@@ -44,4 +84,14 @@ export default class Item extends Model {
   updatedAt!: string;
   deletedAt!: string | null;
   [k: string]: any;
+
+  $beforeInsert() {
+    this.id = uuid();
+    this.createdAt = new Date().toISOString();
+    this.updatedAt = new Date().toISOString();
+  }
+
+  $beforeUpdate() {
+    this.updatedAt = new Date().toISOString();
+  }
 }

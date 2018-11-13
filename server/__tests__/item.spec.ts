@@ -76,10 +76,10 @@ describe('Item model', () => {
   });
   describe('delete', () => {
     it('soft deletes an item', async () => {
-      await Item.delete(item.id, txn);
+      const itemToDelete = await Item.delete(item.id, txn);
       await expect(Item.get(item.id, txn)).rejects.toMatch(errorMsg(item.id));
       const allItems = await Item.getAll(txn);
-      expect(allItems.filter(itm => itm.name === item.name)).toEqual([]);
+      expect(allItems).not.toContainEqual(itemToDelete);
     });
     it('will throw if id provided does not yield an item for deletion', async () => {
       await expect(Item.delete(fakeId, txn)).rejects.toMatch(errorMsg(fakeId));

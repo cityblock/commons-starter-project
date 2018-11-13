@@ -23,6 +23,26 @@ export interface getAllPokemon {
   allPokemon: (getAllPokemon_allPokemon | null)[] | null;
 }
 
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL fragment: FullPokemon
+// ====================================================
+
+export interface FullPokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  moves: string[];
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /* tslint:disable */
 // This file was automatically generated and should not be edited.
 

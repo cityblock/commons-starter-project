@@ -1,13 +1,7 @@
+#import "../fragments/full-pokemon.graphql"
+
 query getAllPokemon {
   allPokemon {
-    id
-    pokemonNumber
-    name
-    attack
-    defense
-    moves
-    imageUrl
-    createdAt
-    updatedAt
+    ...FullPokemon
   }
 }

@@ -2,12 +2,13 @@ import Item, { IItemEditInput } from '../models/item';
 
 import { transaction } from 'objection';
 import uuid from 'uuid';
+import errorMsg from '../../error-msg';
 import { buildRandomItem } from '../item-mocks';
 import Pokemon from '../models/pokemon';
 import { samplePokemon } from './pokemon.spec';
 
 describe('Item model', () => {
-  const notFoundId = uuid.v4();
+  const fakeId = uuid.v4();
   let txn = null as any;
   let pokemon = null as any;
   let itemInput = null as any;
@@ -55,42 +56,33 @@ describe('Item model', () => {
     it('retrieves a single item from the database', async () => {
       const retrievedItem = await Item.get(item.id, txn);
       expect(retrievedItem.id).toEqual(item.id);
-      try {
-        await Item.get(notFoundId, txn);
-      } catch (e) {
-        expect(e).toEqual(`item with id ${notFoundId} not found.`);
-      }
+    });
+    it('will throw if id provided does not yield an item', async () => {
+      await expect(Item.get(fakeId, txn)).rejects.toMatch(errorMsg(fakeId));
     });
   });
   describe('edit', () => {
+    let fieldsToEdit: IItemEditInput;
     it('edits an item', async () => {
       const { name: itemInputName } = itemInput;
       expect(item.name).toEqual(itemInputName);
-      const fieldsToEdit: IItemEditInput = { name: 'Dan' };
+      fieldsToEdit = { name: 'Dan' };
       const itemAfterEdit = await Item.edit(item.id, fieldsToEdit, txn);
       expect(itemAfterEdit.name).toEqual(fieldsToEdit.name);
-      try {
-        await Item.edit(notFoundId, fieldsToEdit, txn);
-      } catch (e) {
-        expect(e).toEqual(`item with id ${notFoundId} not found.`);
-      }
+    });
+    it('will throw if id provided does not yield an item for editing', async () => {
+      await expect(Item.edit(fakeId, fieldsToEdit, txn)).rejects.toMatch(errorMsg(fakeId));
     });
   });
   describe('delete', () => {
     it('soft deletes an item', async () => {
       await Item.delete(item.id, txn);
-      try {
-        await Item.get(item.id, txn);
-      } catch (e) {
-        expect(e).toMatch(`item with id ${item.id} not found.`);
-      }
-      try {
-        await Item.delete(notFoundId, txn);
-      } catch (e) {
-        expect(e).toEqual(`item with id ${notFoundId} not found.`);
-      }
+      await expect(Item.get(item.id, txn)).rejects.toMatch(errorMsg(item.id));
       const allItems = await Item.getAll(txn);
       expect(allItems.filter(itm => itm.name === item.name)).toEqual([]);
+    });
+    it('will throw if id provided does not yield an item for deletion', async () => {
+      await expect(Item.delete(fakeId, txn)).rejects.toMatch(errorMsg(fakeId));
     });
   });
 });

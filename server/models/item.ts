@@ -2,6 +2,8 @@ import { Model, Transaction } from 'objection';
 
 import uuid from 'uuid/v4';
 
+import errorMsg from '../../error-msg';
+
 export interface IItemCreateFields {
   id: string;
   name: string;
@@ -25,8 +27,6 @@ export interface IItemEditInput {
   createdAt?: string;
   updatedAt?: string;
 }
-
-const errorMsg = (id: string) => `item with id ${id} not found.`;
 
 export default class Item extends Model {
   static tableName = 'item';

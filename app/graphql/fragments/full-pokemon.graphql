@@ -8,4 +8,9 @@ fragment FullPokemon on Pokemon {
   imageUrl
   createdAt
   updatedAt
+  item {
+    id
+    name
+    imageUrl
+  }
 }

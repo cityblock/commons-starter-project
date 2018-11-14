@@ -99,6 +99,7 @@ type Pokemon implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  item: [Item]
 }
 
 type RootMutationType {

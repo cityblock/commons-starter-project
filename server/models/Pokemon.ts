@@ -1,5 +1,4 @@
 import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
-
 import uuid from 'uuid/v4';
 import Item from './item';
 
@@ -96,6 +95,7 @@ export default class Pokemon extends Model {
   updatedAt!: string;
   deletedAt!: string | null;
   [k: string]: any;
+  item!: Item[] | null;
 
   $beforeInsert() {
     this.id = uuid();

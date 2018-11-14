@@ -14,16 +14,6 @@ import Item from '../models/item';
 import Pokemon from '../models/Pokemon';
 import pokemonSample from '../pokemon-sample';
 
-// const subsetOf = (source: {}, filter: string[]): {} => {
-//   return Object.keys(source).reduce((key, accumulator) => {
-//     if (!filter.includes(key)) {
-//       accumulator[key] = source[key];
-//       return accumulator;
-//     }
-//     return accumulator;
-//   }, {});
-// };
-
 describe('item resolver', () => {
   const NUM_OF_ITEMS: number = 4;
   let txn = null as any;
@@ -60,7 +50,6 @@ describe('item resolver', () => {
         txn,
       );
       expect(data.allItem.length).toEqual(4);
-      expect({ a: 1, b: 2, c: 3 }).toEqual(expect.objectContaining({ a: 1, b: 2, c: 3 }));
 
       const priceSortedFetchedItems = orderBy(data.allItem, ['price'], ['desc']);
       const priceSortedItems = orderBy(itemList, ['price'], ['desc']);

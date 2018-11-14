@@ -33,7 +33,7 @@ describe('Pokemon Model', () => {
       const sampleItem: IItemCreateFields = buildRandomItem(newPoke.id);
       await Item.create(sampleItem, txn);
       const firstPoke: Pokemon = await Pokemon.get(newPoke.id, txn);
-      const firstPokeItems: Item[] = firstPoke.item;
+      const firstPokeItems: any = firstPoke.item;
       [pokeItem] = firstPokeItems;
 
       expect(firstPoke.name).toBe(samplePokemon.name);

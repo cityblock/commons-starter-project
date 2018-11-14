@@ -44,6 +44,7 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    item: Array<IItem | null> | null;
   }
 
   /**

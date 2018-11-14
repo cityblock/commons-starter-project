@@ -8,6 +8,8 @@ import createPokemon from '../../app/graphql/queries/pokemon-create-mutation.gra
 import deletePokemon from '../../app/graphql/queries/pokemon-delete-mutation.graphql';
 import editPokemon from '../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
+import { buildRandomItem } from '../item-mocks';
+import Item from '../models/item';
 import Pokemon from '../models/Pokemon';
 import pokemonSample from '../pokemon-sample';
 
@@ -61,6 +63,25 @@ describe('pokemon resolver', () => {
           pokemonNumber: poke.pokemonNumber,
         }),
       );
+    });
+    it('fetches associated items for the pokemon', async () => {
+      const poke = await Pokemon.create(firstPokeInput, txn);
+      const newItem = await Item.create(buildRandomItem(poke.id), txn);
+      const { data }: ExecutionResultDataDefault = await graphql(
+        schema,
+        getPokemonQuery,
+        null,
+        txn,
+        {
+          pokemonId: poke.id,
+        },
+      );
+      const [pokeItem] = data.pokemon.item;
+      expect(pokeItem).toEqual({
+        id: newItem.id,
+        name: newItem.name,
+        imageUrl: newItem.imageUrl,
+      });
     });
   });
 

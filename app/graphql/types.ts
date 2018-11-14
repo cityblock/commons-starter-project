@@ -30,6 +30,12 @@ export interface getAllItem {
 // GraphQL query operation: getAllPokemon
 // ====================================================
 
+export interface getAllPokemon_allPokemon_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface getAllPokemon_allPokemon {
   id: string;
   pokemonNumber: number;
@@ -40,6 +46,7 @@ export interface getAllPokemon_allPokemon {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (getAllPokemon_allPokemon_item | null)[] | null;
 }
 
 export interface getAllPokemon {
@@ -81,6 +88,12 @@ export interface getItemVariables {
 // GraphQL query operation: getPokemon
 // ====================================================
 
+export interface getPokemon_pokemon_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface getPokemon_pokemon {
   id: string;
   pokemonNumber: number;
@@ -91,6 +104,7 @@ export interface getPokemon_pokemon {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (getPokemon_pokemon_item | null)[] | null;
 }
 
 export interface getPokemon {
@@ -201,6 +215,12 @@ export interface itemEditVariables {
 // GraphQL mutation operation: pokemonCreate
 // ====================================================
 
+export interface pokemonCreate_pokemonCreate_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface pokemonCreate_pokemonCreate {
   id: string;
   pokemonNumber: number;
@@ -211,6 +231,7 @@ export interface pokemonCreate_pokemonCreate {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (pokemonCreate_pokemonCreate_item | null)[] | null;
 }
 
 export interface pokemonCreate {
@@ -236,6 +257,12 @@ export interface pokemonCreateVariables {
 // GraphQL mutation operation: pokemonDelete
 // ====================================================
 
+export interface pokemonDelete_pokemonDelete_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface pokemonDelete_pokemonDelete {
   id: string;
   pokemonNumber: number;
@@ -246,6 +273,7 @@ export interface pokemonDelete_pokemonDelete {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (pokemonDelete_pokemonDelete_item | null)[] | null;
 }
 
 export interface pokemonDelete {
@@ -264,6 +292,12 @@ export interface pokemonDeleteVariables {
 // GraphQL mutation operation: pokemonEdit
 // ====================================================
 
+export interface pokemonEdit_pokemonEdit_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface pokemonEdit_pokemonEdit {
   id: string;
   pokemonNumber: number;
@@ -274,6 +308,7 @@ export interface pokemonEdit_pokemonEdit {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (pokemonEdit_pokemonEdit_item | null)[] | null;
 }
 
 export interface pokemonEdit {
@@ -299,6 +334,12 @@ export interface pokemonEditVariables {
 // GraphQL fragment: FullPokemon
 // ====================================================
 
+export interface FullPokemon_item {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface FullPokemon {
   id: string;
   pokemonNumber: number;
@@ -309,6 +350,7 @@ export interface FullPokemon {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
+  item: (FullPokemon_item | null)[] | null;
 }
 
 /* tslint:disable */

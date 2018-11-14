@@ -51,6 +51,33 @@ export interface getAllPokemon {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: getItem
+// ====================================================
+
+export interface getItem_item {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface getItem {
+  item: getItem_item;
+}
+
+export interface getItemVariables {
+  id: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getPokemon
 // ====================================================
 

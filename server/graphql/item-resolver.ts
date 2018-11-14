@@ -10,12 +10,12 @@ export const resolveAllItem = async (
   info: {},
 ): Promise<IRootQueryType['allItem']> => Item.getAll(context);
 
-// export const resolvePokemon = async (
-//   root: {},
-//   args: {},
-//   context: Transaction,
-//   { variableValues }: GraphQLResolveInfo,
-// ): Promise<IRootQueryType['pokemon']> => Pokemon.get(variableValues.pokemonId, context);
+export const resolveItem = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  { variableValues }: GraphQLResolveInfo,
+): Promise<IRootQueryType['item']> => Item.get(variableValues.id, context);
 
 // export const resolveEditPokemon = async (
 //   root: {},

@@ -5,10 +5,10 @@ import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
   resolveAllItem,
-  // resolveCreatePokemon,
-  // resolveDeletePokemon,
-  // resolveEditPokemon,
-  // resolvePokemon,
+  // resolveCreateItem,
+  // resolveDeleteItem,
+  // resolveEditItem,
+  resolveItem,
 } from './item-resolver';
 import {
   resolveAllPokemon,
@@ -25,6 +25,7 @@ const resolveFunctions = {
     allPokemon: resolveAllPokemon,
     pokemon: resolvePokemon,
     allItem: resolveAllItem,
+    item: resolveItem,
   },
   RootMutationType: {
     pokemonEdit: resolveEditPokemon,

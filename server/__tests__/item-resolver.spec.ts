@@ -4,7 +4,7 @@ import { ExecutionResultDataDefault } from 'graphql/execution/execute';
 import orderBy from 'lodash/orderBy';
 import { transaction } from 'objection';
 import getAllItem from '../../app/graphql/queries/get-all-item.graphql';
-// import itemEdit from '../../app/graphql/queries/get-item.graphql';
+import getItem from '../../app/graphql/queries/get-item.graphql';
 // import createItem from '../../app/graphql/queries/item-create-mutation.graphql';
 // import deleteItem from '../../app/graphql/queries/item-delete-mutation.graphql';
 // import editItem from '../../app/graphql/queries/item-edit-mutation.graphql';
@@ -20,7 +20,7 @@ describe('item resolver', () => {
   let samplePokemon = null as any;
   let itemList: Item[] = [];
   const getAllItemQuery = print(getAllItem);
-  // const getItemQuery = print(getItem);
+  const getItemQuery = print(getItem);
   // const editItemQuery = print(editItem);
   // const createItemQuery = print(createItem);
   // const deleteItemQuery = print(deleteItem);
@@ -69,26 +69,23 @@ describe('item resolver', () => {
     });
   });
 
-  // describe('getPokemon resolver', () => {
-  //   it('resolves gql query for a single pokemon', async () => {
-  //     const poke = await Pokemon.create(firstPokeInput, txn);
-  //     const { data }: ExecutionResultDataDefault = await graphql(
-  //       schema,
-  //       getPokemonQuery,
-  //       null,
-  //       txn,
-  //       {
-  //         pokemonId: poke.id,
-  //       },
-  //     );
-  //     expect(data.pokemon).toEqual(
-  //       expect.objectContaining({
-  //         name: poke.name,
-  //         pokemonNumber: poke.pokemonNumber,
-  //       }),
-  //     );
-  //   });
-  // });
+  fdescribe('getItem resolver', () => {
+    it('resolves gql query for a single item', async () => {
+      const [referenceItem] = itemList;
+      const { data }: ExecutionResultDataDefault = await graphql(schema, getItemQuery, null, txn, {
+        id: referenceItem.id,
+      });
+      expect(data.item).toEqual(
+        expect.objectContaining({
+          id: referenceItem.id,
+          name: referenceItem.name,
+          pokemonId: referenceItem.pokemonId,
+          price: referenceItem.price,
+          happiness: referenceItem.happiness,
+        }),
+      );
+    });
+  });
 
   // describe('editPokemon resolver', () => {
   //   it('edits a pokemon object with fields specified and returns the updated object', async () => {

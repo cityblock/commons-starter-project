@@ -104,7 +104,7 @@ declare module 'schema' {
   }
 
   interface IItemDeleteOnRootMutationTypeArguments {
-    input?: string | null;
+    input?: IItemDeleteInput | null;
   }
 
   interface IPokemonCreateInput {
@@ -172,6 +172,10 @@ declare module 'schema' {
     happiness?: number | null;
     imageUrl?: string | null;
     name?: string | null;
+  }
+
+  interface IItemDeleteInput {
+    id: string;
   }
 }
 

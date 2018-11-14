@@ -6,8 +6,8 @@ import { transaction } from 'objection';
 import getAllItem from '../../app/graphql/queries/get-all-item.graphql';
 import getItem from '../../app/graphql/queries/get-item.graphql';
 import createItem from '../../app/graphql/queries/item-create-mutation.graphql';
+import deleteItem from '../../app/graphql/queries/item-delete-mutation.graphql';
 import editItem from '../../app/graphql/queries/item-edit-mutation.graphql';
-// import deleteItem from '../../app/graphql/queries/item-delete-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
 import { buildRandomItem } from '../item-mocks';
 import Item from '../models/item';
@@ -33,7 +33,7 @@ describe('item resolver', () => {
   const getItemQuery = print(getItem);
   const createItemQuery = print(createItem);
   const editItemQuery = print(editItem);
-  // const deleteItemQuery = print(deleteItem);
+  const deleteItemQuery = print(deleteItem);
 
   const [pokemonInput] = pokemonSample(0, 1);
 
@@ -133,15 +133,12 @@ describe('item resolver', () => {
     });
   });
 
-  // describe('deletePokemon resolver', () => {
-  //   it('soft deletes and returns a pokemon object', async () => {
-  //     let poke = null as any;
-  //     for (const pokeInput of allPokemonInput) {
-  //       poke = await Pokemon.create(pokeInput, txn);
-  //     }
-  //     await graphql(schema, deletePokemonQuery, null, txn, { id: poke.id });
-  //     const allPokemon = await Pokemon.getAll(txn);
-  //     expect(allPokemon).not.toContainEqual(poke);
-  //   });
-  // });
+  describe('deleteItem resolver', () => {
+    it('soft deletes and returns an item object', async () => {
+      const [itemForDeletion] = itemList;
+      await graphql(schema, deleteItemQuery, null, txn, { id: itemForDeletion.id });
+      const allItems = await Item.getAll(txn);
+      expect(allItems).not.toContainEqual(itemForDeletion);
+    });
+  });
 });

@@ -36,13 +36,13 @@ export const resolveEditItem = async (
   { variableValues }: any,
 ): Promise<IRootMutationType['itemEdit']> => Item.edit(variableValues.id, variableValues, context);
 
-// export const resolveDeletePokemon = async (
-//   root: {},
-//   args: {},
-//   context: Transaction,
-//   // couldn't figure out how to type variable values in the create case
-//   { variableValues: { id } }: any,
-// ): Promise<IRootMutationType['pokemonCreate']> => {
-//   const newPoke = await Pokemon.delete(id, context);
-//   return newPoke;
-// };
+export const resolveDeleteItem = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // couldn't figure out how to type variable values in the create case
+  { variableValues: { id } }: any,
+): Promise<IRootMutationType['itemDelete']> => {
+  const itemToDelete = await Item.delete(id, context);
+  return itemToDelete;
+};

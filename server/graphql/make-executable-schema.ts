@@ -6,7 +6,7 @@ import config from '../config';
 import {
   resolveAllItem,
   resolveCreateItem,
-  // resolveDeleteItem,
+  resolveDeleteItem,
   resolveEditItem,
   resolveItem,
 } from './item-resolver';
@@ -33,6 +33,7 @@ const resolveFunctions = {
     pokemonDelete: resolveDeletePokemon,
     itemCreate: resolveCreateItem,
     itemEdit: resolveEditItem,
+    itemDelete: resolveDeleteItem,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

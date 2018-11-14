@@ -1,0 +1,12 @@
+mutation itemDelete($id: ID!) {
+  itemDelete(input: { id: $id }) {
+    id
+    name
+    pokemonId
+    price
+    happiness
+    imageUrl
+    createdAt
+    updatedAt
+  }
+}

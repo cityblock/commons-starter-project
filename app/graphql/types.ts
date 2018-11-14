@@ -106,6 +106,40 @@ export interface getPokemonVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: itemCreate
+// ====================================================
+
+export interface itemCreate_itemCreate {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface itemCreate {
+  itemCreate: itemCreate_itemCreate;
+}
+
+export interface itemCreateVariables {
+  id: string;
+  name: string;
+  pokemonId: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: pokemonCreate
 // ====================================================
 

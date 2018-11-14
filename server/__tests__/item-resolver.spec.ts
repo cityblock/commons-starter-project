@@ -5,7 +5,7 @@ import orderBy from 'lodash/orderBy';
 import { transaction } from 'objection';
 import getAllItem from '../../app/graphql/queries/get-all-item.graphql';
 import getItem from '../../app/graphql/queries/get-item.graphql';
-// import createItem from '../../app/graphql/queries/item-create-mutation.graphql';
+import createItem from '../../app/graphql/queries/item-create-mutation.graphql';
 // import deleteItem from '../../app/graphql/queries/item-delete-mutation.graphql';
 // import editItem from '../../app/graphql/queries/item-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
@@ -14,6 +14,16 @@ import Item from '../models/item';
 import Pokemon from '../models/Pokemon';
 import pokemonSample from '../pokemon-sample';
 
+// const subsetOf = (source: {}, filter: string[]): {} => {
+//   return Object.keys(source).reduce((key, accumulator) => {
+//     if (!filter.includes(key)) {
+//       accumulator[key] = source[key];
+//       return accumulator;
+//     }
+//     return accumulator;
+//   }, {});
+// };
+
 describe('item resolver', () => {
   const NUM_OF_ITEMS: number = 4;
   let txn = null as any;
@@ -21,8 +31,8 @@ describe('item resolver', () => {
   let itemList: Item[] = [];
   const getAllItemQuery = print(getAllItem);
   const getItemQuery = print(getItem);
+  const createItemQuery = print(createItem);
   // const editItemQuery = print(editItem);
-  // const createItemQuery = print(createItem);
   // const deleteItemQuery = print(deleteItem);
 
   const [pokemonInput] = pokemonSample(0, 1);
@@ -69,7 +79,7 @@ describe('item resolver', () => {
     });
   });
 
-  fdescribe('getItem resolver', () => {
+  describe('getItem resolver', () => {
     it('resolves gql query for a single item', async () => {
       const [referenceItem] = itemList;
       const { data }: ExecutionResultDataDefault = await graphql(schema, getItemQuery, null, txn, {
@@ -87,6 +97,27 @@ describe('item resolver', () => {
     });
   });
 
+  fdescribe('createItem resolver', () => {
+    it('creates and returns a pokemon object', async () => {
+      const itemInput = buildRandomItem(samplePokemon.id);
+      const { data }: ExecutionResultDataDefault = await graphql(
+        schema,
+        createItemQuery,
+        null,
+        txn,
+        itemInput,
+      );
+
+      expect(data.itemCreate).toEqual(
+        expect.objectContaining({
+          name: itemInput.name,
+          pokemonId: itemInput.pokemonId,
+          price: itemInput.price,
+          happiness: itemInput.happiness,
+        }),
+      );
+    });
+  });
   // describe('editPokemon resolver', () => {
   //   it('edits a pokemon object with fields specified and returns the updated object', async () => {
   //     const poke = await Pokemon.create(firstPokeInput, txn);
@@ -99,19 +130,6 @@ describe('item resolver', () => {
   //       fieldsToEdit,
   //     );
   //     expect(data.pokemonEdit.name).toEqual('Dan');
-  //   });
-  // });
-
-  // describe('createPokemon resolver', () => {
-  //   it('creates and returns a pokemon object', async () => {
-  //     const { data }: ExecutionResultDataDefault = await graphql(
-  //       schema,
-  //       createPokemonQuery,
-  //       null,
-  //       txn,
-  //       firstPokeInput,
-  //     );
-  //     expect(data.pokemonCreate.name).toEqual(firstPokeInput.name);
   //   });
   // });
 

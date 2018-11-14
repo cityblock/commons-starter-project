@@ -1,0 +1,32 @@
+mutation itemCreate(
+  $id: ID!
+  $name: String!
+  $pokemonId: String!
+  $price: Int!
+  $happiness: Int!
+  $imageUrl: String!
+  $createdAt: String!
+  $updatedAt: String!
+) {
+  itemCreate(
+    input: {
+      id: $id
+      name: $name
+      pokemonId: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+      createdAt: $createdAt
+      updatedAt: $updatedAt
+    }
+  ) {
+    id
+    name
+    pokemonId
+    price
+    happiness
+    imageUrl
+    createdAt
+    updatedAt
+  }
+}

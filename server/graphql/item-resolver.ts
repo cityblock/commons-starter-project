@@ -17,6 +17,17 @@ export const resolveItem = async (
   { variableValues }: GraphQLResolveInfo,
 ): Promise<IRootQueryType['item']> => Item.get(variableValues.id, context);
 
+export const resolveCreateItem = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // couldn't figure out how to type variable values in the create case
+  { variableValues }: any,
+): Promise<IRootMutationType['itemCreate']> => {
+  const newItem = await Item.create(variableValues, context);
+  return newItem;
+};
+
 // export const resolveEditPokemon = async (
 //   root: {},
 //   args: {},
@@ -25,17 +36,6 @@ export const resolveItem = async (
 //   { variableValues }: any,
 // ): Promise<IRootMutationType['pokemonEdit']> =>
 //   Pokemon.edit(variableValues.id, variableValues, context);
-
-// export const resolveCreatePokemon = async (
-//   root: {},
-//   args: {},
-//   context: Transaction,
-//   // couldn't figure out how to type variable values in the create case
-//   { variableValues }: any,
-// ): Promise<IRootMutationType['pokemonCreate']> => {
-//   const newPoke = await Pokemon.create(variableValues, context);
-//   return newPoke;
-// };
 
 // export const resolveDeletePokemon = async (
 //   root: {},

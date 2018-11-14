@@ -5,6 +5,7 @@ import { transaction } from 'objection';
 import getAllPokemon from '../../app/graphql/queries/get-all-pokemon.graphql';
 import pokemonEdit from '../../app/graphql/queries/get-pokemon.graphql';
 import createPokemon from '../../app/graphql/queries/pokemon-create-mutation.graphql';
+import deletePokemon from '../../app/graphql/queries/pokemon-delete-mutation.graphql';
 import editPokemon from '../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
 import Pokemon from '../models/Pokemon';
@@ -16,6 +17,7 @@ describe('pokemon resolver', () => {
   const getPokemonQuery = print(pokemonEdit);
   const editPokemonQuery = print(editPokemon);
   const createPokemonQuery = print(createPokemon);
+  const deletePokemonQuery = print(deletePokemon);
   const allPokemonInput = pokemonSample(0, 4);
   const [firstPokeInput] = allPokemonInput;
 
@@ -87,6 +89,18 @@ describe('pokemon resolver', () => {
         firstPokeInput,
       );
       expect(data.pokemonCreate.name).toEqual(firstPokeInput.name);
+    });
+  });
+
+  describe('deletePokemon resolver', () => {
+    it('soft deletes and returns a pokemon object', async () => {
+      let poke = null as any;
+      for (const pokeInput of allPokemonInput) {
+        poke = await Pokemon.create(pokeInput, txn);
+      }
+      await graphql(schema, deletePokemonQuery, null, txn, { id: poke.id });
+      const allPokemon = await Pokemon.getAll(txn);
+      expect(allPokemon).not.toContainEqual(poke);
     });
   });
 });

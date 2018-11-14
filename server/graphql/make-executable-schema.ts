@@ -6,6 +6,7 @@ import config from '../config';
 import {
   resolveAllPokemon,
   resolveCreatePokemon,
+  resolveDeletePokemon,
   resolveEditPokemon,
   resolvePokemon,
 } from './pokemon-resolver';
@@ -20,6 +21,7 @@ const resolveFunctions = {
   RootMutationType: {
     pokemonEdit: resolveEditPokemon,
     pokemonCreate: resolveCreatePokemon,
+    pokemonDelete: resolveDeletePokemon,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

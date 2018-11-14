@@ -78,6 +78,10 @@ input PokemonEditInput {
   moves: [String]
 }
 
+input PokemonDeleteInput {
+  id: ID!
+}
+
 type Pokemon implements uniqueId {
   id: ID!
   pokemonNumber: Int!
@@ -95,7 +99,7 @@ type Pokemon implements uniqueId {
 type RootMutationType {
   pokemonCreate(input: PokemonCreateInput): Pokemon!
   pokemonEdit(input: PokemonEditInput): Pokemon!
-  pokemonDelete(input: ID): Pokemon!
+  pokemonDelete(input: PokemonDeleteInput): Pokemon!
   itemCreate(input: ItemCreateInput): Item!
   itemEdit(input: ItemEditInput): Item!
   itemDelete(input: ID): Item!

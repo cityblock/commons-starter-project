@@ -23,7 +23,7 @@ export const resolveEditPokemon = async (
   root: {},
   args: {},
   context: Transaction,
-  // I couldn't figure out how to type variable values in the edit case
+  // couldn't figure out how to type variable values in the edit case
   { variableValues }: any,
 ): Promise<IRootMutationType['pokemonEdit']> =>
   Pokemon.edit(variableValues.id, variableValues, context);
@@ -32,9 +32,20 @@ export const resolveCreatePokemon = async (
   root: {},
   args: {},
   context: Transaction,
-  // I couldn't figure out how to type variable values in the create case
+  // couldn't figure out how to type variable values in the create case
   { variableValues }: any,
 ): Promise<IRootMutationType['pokemonCreate']> => {
   const newPoke = await Pokemon.create(variableValues, context);
+  return newPoke;
+};
+
+export const resolveDeletePokemon = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // couldn't figure out how to type variable values in the create case
+  { variableValues: { id } }: any,
+): Promise<IRootMutationType['pokemonCreate']> => {
+  const newPoke = await Pokemon.delete(id, context);
   return newPoke;
 };

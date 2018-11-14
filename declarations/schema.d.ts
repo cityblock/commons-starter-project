@@ -92,7 +92,7 @@ declare module 'schema' {
   }
 
   interface IPokemonDeleteOnRootMutationTypeArguments {
-    input?: string | null;
+    input?: IPokemonDeleteInput | null;
   }
 
   interface IItemCreateOnRootMutationTypeArguments {
@@ -148,6 +148,10 @@ declare module 'schema' {
     pokeType?: PokeType | null;
     imageUrl?: string | null;
     moves?: Array<string | null> | null;
+  }
+
+  interface IPokemonDeleteInput {
+    id: string;
   }
 
   interface IItemCreateInput {

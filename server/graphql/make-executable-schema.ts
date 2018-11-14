@@ -4,6 +4,13 @@ import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
+  resolveAllItem,
+  // resolveCreatePokemon,
+  // resolveDeletePokemon,
+  // resolveEditPokemon,
+  // resolvePokemon,
+} from './item-resolver';
+import {
   resolveAllPokemon,
   resolveCreatePokemon,
   resolveDeletePokemon,
@@ -17,6 +24,7 @@ const resolveFunctions = {
   RootQueryType: {
     allPokemon: resolveAllPokemon,
     pokemon: resolvePokemon,
+    allItem: resolveAllItem,
   },
   RootMutationType: {
     pokemonEdit: resolveEditPokemon,

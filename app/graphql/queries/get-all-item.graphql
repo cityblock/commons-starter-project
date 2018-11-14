@@ -1,0 +1,12 @@
+query getAllItem {
+  allItem {
+    id
+    name
+    pokemonId
+    price
+    happiness
+    imageUrl
+    createdAt
+    updatedAt
+  }
+}

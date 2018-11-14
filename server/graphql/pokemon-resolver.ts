@@ -3,8 +3,6 @@ import { Transaction } from 'objection';
 import { IRootMutationType, IRootQueryType } from 'schema';
 import Pokemon from '../models/pokemon';
 
-// type IInfoContext extends GraphQLResolveInfo & IPokemonEditInput;
-
 export const resolveAllPokemon = async (
   root: {},
   args: {},

@@ -3,7 +3,7 @@ import { graphql, print } from 'graphql';
 import { ExecutionResultDataDefault } from 'graphql/execution/execute';
 import { transaction } from 'objection';
 import getAllPokemon from '../../app/graphql/queries/get-all-pokemon.graphql';
-import pokemonEdit from '../../app/graphql/queries/get-pokemon.graphql';
+import getPokemon from '../../app/graphql/queries/get-pokemon.graphql';
 import createPokemon from '../../app/graphql/queries/pokemon-create-mutation.graphql';
 import deletePokemon from '../../app/graphql/queries/pokemon-delete-mutation.graphql';
 import editPokemon from '../../app/graphql/queries/pokemon-edit-mutation.graphql';
@@ -14,7 +14,7 @@ import pokemonSample from '../pokemon-sample';
 describe('pokemon resolver', () => {
   let txn = null as any;
   const getAllPokemonQuery = print(getAllPokemon);
-  const getPokemonQuery = print(pokemonEdit);
+  const getPokemonQuery = print(getPokemon);
   const editPokemonQuery = print(editPokemon);
   const createPokemonQuery = print(createPokemon);
   const deletePokemonQuery = print(deletePokemon);

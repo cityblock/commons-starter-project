@@ -16,7 +16,7 @@
     "copy-builder-staging-to-production": "aptible db:execute commons-production ./scripts/aptible-copy-builder-staging-to-production.sql",
     "update-fdw-production": "aptible db:execute commons-production ./scripts/setup-fdw-production.sql",
     "start": "NODE_ENV=production npx forever -a -f ./server-compiled/server/index.js",
-    "dev": "npx migrate && NODE_ENV=development nodemon --exec 'ts-node --transpileOnly -P tsconfig.server.json ./server/index.ts'",
+    "dev": "npm run migrate && NODE_ENV=development nodemon --exec 'ts-node --transpileOnly -P tsconfig.server.json ./server/index.ts'",
     "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "build": "npx run clean && npx run build-server && cross-env NODE_ENV=production webpack --colors --config ./webpack/webpack.config.js",
     "build-stats": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js --profile --json > stats.json",

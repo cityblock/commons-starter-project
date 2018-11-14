@@ -11,7 +11,9 @@ import MainContainer from './main-container/main-container';
  */
 
 export default (
-  <Switch>
-    <Route exact path="/" component={MainContainer} />
-  </Switch>
+  <MainContainer>
+    <Switch>
+      <Route exact path="/" render={props => <h3>hey hey</h3>} />
+    </Switch>
+  </MainContainer>
 );

@@ -42,6 +42,7 @@ input ItemEditInput {
   price: Int
   happiness: Int
   imageUrl: String
+  name: String
 }
 
 type Item implements uniqueId {

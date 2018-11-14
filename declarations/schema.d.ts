@@ -171,6 +171,7 @@ declare module 'schema' {
     price?: number | null;
     happiness?: number | null;
     imageUrl?: string | null;
+    name?: string | null;
   }
 }
 

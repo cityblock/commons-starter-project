@@ -28,14 +28,13 @@ export const resolveCreateItem = async (
   return newItem;
 };
 
-// export const resolveEditPokemon = async (
-//   root: {},
-//   args: {},
-//   context: Transaction,
-//   // couldn't figure out how to type variable values in the edit case
-//   { variableValues }: any,
-// ): Promise<IRootMutationType['pokemonEdit']> =>
-//   Pokemon.edit(variableValues.id, variableValues, context);
+export const resolveEditItem = async (
+  root: {},
+  args: {},
+  context: Transaction,
+  // couldn't figure out how to type variable values in the edit case
+  { variableValues }: any,
+): Promise<IRootMutationType['itemEdit']> => Item.edit(variableValues.id, variableValues, context);
 
 // export const resolveDeletePokemon = async (
 //   root: {},

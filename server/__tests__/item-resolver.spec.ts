@@ -6,8 +6,8 @@ import { transaction } from 'objection';
 import getAllItem from '../../app/graphql/queries/get-all-item.graphql';
 import getItem from '../../app/graphql/queries/get-item.graphql';
 import createItem from '../../app/graphql/queries/item-create-mutation.graphql';
+import editItem from '../../app/graphql/queries/item-edit-mutation.graphql';
 // import deleteItem from '../../app/graphql/queries/item-delete-mutation.graphql';
-// import editItem from '../../app/graphql/queries/item-edit-mutation.graphql';
 import schema from '../graphql/make-executable-schema';
 import { buildRandomItem } from '../item-mocks';
 import Item from '../models/item';
@@ -32,7 +32,7 @@ describe('item resolver', () => {
   const getAllItemQuery = print(getAllItem);
   const getItemQuery = print(getItem);
   const createItemQuery = print(createItem);
-  // const editItemQuery = print(editItem);
+  const editItemQuery = print(editItem);
   // const deleteItemQuery = print(deleteItem);
 
   const [pokemonInput] = pokemonSample(0, 1);
@@ -97,7 +97,7 @@ describe('item resolver', () => {
     });
   });
 
-  fdescribe('createItem resolver', () => {
+  describe('createItem resolver', () => {
     it('creates and returns a pokemon object', async () => {
       const itemInput = buildRandomItem(samplePokemon.id);
       const { data }: ExecutionResultDataDefault = await graphql(
@@ -118,20 +118,20 @@ describe('item resolver', () => {
       );
     });
   });
-  // describe('editPokemon resolver', () => {
-  //   it('edits a pokemon object with fields specified and returns the updated object', async () => {
-  //     const poke = await Pokemon.create(firstPokeInput, txn);
-  //     const fieldsToEdit = { id: poke.id, name: 'Dan' };
-  //     const { data }: ExecutionResultDataDefault = await graphql(
-  //       schema,
-  //       editPokemonQuery,
-  //       null,
-  //       txn,
-  //       fieldsToEdit,
-  //     );
-  //     expect(data.pokemonEdit.name).toEqual('Dan');
-  //   });
-  // });
+  describe('editItem resolver', () => {
+    it('edits a pokemon object with fields specified and returns the updated object', async () => {
+      const itemToEdit = await Item.create(buildRandomItem(samplePokemon.id), txn);
+      const fieldsToEdit = { id: itemToEdit.id, name: 'Dan' };
+      const { data }: ExecutionResultDataDefault = await graphql(
+        schema,
+        editItemQuery,
+        null,
+        txn,
+        fieldsToEdit,
+      );
+      expect(data.itemEdit.name).toEqual('Dan');
+    });
+  });
 
   // describe('deletePokemon resolver', () => {
   //   it('soft deletes and returns a pokemon object', async () => {

@@ -1,0 +1,14 @@
+mutation itemEdit($id: ID!, $name: String, $price: Int, $happiness: Int, $imageUrl: String) {
+  itemEdit(
+    input: { id: $id, name: $name, price: $price, happiness: $happiness, imageUrl: $imageUrl }
+  ) {
+    id
+    name
+    pokemonId
+    price
+    happiness
+    imageUrl
+    createdAt
+    updatedAt
+  }
+}

@@ -7,7 +7,7 @@ import {
   resolveAllItem,
   resolveCreateItem,
   // resolveDeleteItem,
-  // resolveEditItem,
+  resolveEditItem,
   resolveItem,
 } from './item-resolver';
 import {
@@ -32,6 +32,7 @@ const resolveFunctions = {
     pokemonCreate: resolveCreatePokemon,
     pokemonDelete: resolveDeletePokemon,
     itemCreate: resolveCreateItem,
+    itemEdit: resolveEditItem,
   },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

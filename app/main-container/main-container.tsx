@@ -21,6 +21,9 @@ const MainContainer: React.StatelessComponent<IGraphqlProps> = props => {
 };
 
 export default graphql(getAllPokemonQuery, {
+  options: () => ({
+    fetchPolicy: 'network-only',
+  }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

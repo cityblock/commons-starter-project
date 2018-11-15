@@ -10,10 +10,12 @@ import MainContainer from './main-container/main-container';
  * NOTE: We async load infrequently used and admin routes
  */
 
+const Homepage: React.StatelessComponent = props => <p>homepage</p>;
+
 export default (
   <MainContainer>
     <Switch>
-      <Route exact path="/" render={props => <h3>hey hey</h3>} />
+      <Route exact path="/" component={Homepage} />
     </Switch>
   </MainContainer>
 );

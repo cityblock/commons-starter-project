@@ -11,10 +11,11 @@ interface IGraphqlProps {
   error?: ApolloError | null;
 }
 
-export const MainContainer: React.StatelessComponent<{}> = (props: IGraphqlProps) => {
+const MainContainer: React.StatelessComponent<IGraphqlProps> = props => {
   return (
     <div className={styles.body}>
       <h1>Pokedex</h1>
+      {props.children}
     </div>
   );
 };

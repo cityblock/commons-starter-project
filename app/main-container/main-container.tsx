@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import getAllPokemonQuery from '../graphql/queries/get-all-pokemon.graphql';
 import { getAllPokemon } from '../graphql/types';
 import styles from './css/main.css';

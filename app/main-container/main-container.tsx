@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-client';
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import getAllPokemonQuery from '../graphql/queries/get-all-pokemon.graphql';
 import { getAllPokemon } from '../graphql/types';
 import styles from './css/main.css';
@@ -21,6 +21,9 @@ const MainContainer: React.StatelessComponent<IGraphqlProps> = props => {
 };
 
 export default graphql(getAllPokemonQuery, {
+  options: () => ({
+    fetchPolicy: 'network-only',
+  }),
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,

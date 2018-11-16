@@ -12,10 +12,14 @@ interface IGraphqlProps {
 }
 
 const MainContainer: React.StatelessComponent<IGraphqlProps> = props => {
+  const pokemonHtml = (props.pokemon || []).map(pokemon => (
+    <div key={pokemon.id}>{pokemon.name}</div>
+  ));
   return (
     <div className={styles.body}>
       <h1>Pokedex</h1>
       {props.children}
+      {pokemonHtml}
     </div>
   );
 };
@@ -27,6 +31,6 @@ export default graphql(getAllPokemonQuery, {
   props: ({ data }): IGraphqlProps => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
-    pokemon: data ? (data as any).pokemon : null,
+    pokemon: data ? (data as any).allPokemon : null,
   }),
 })(MainContainer);

@@ -112,7 +112,7 @@ type RootMutationType {
 }
 
 type RootQueryType {
-  allPokemon: [Pokemon]
+  allPokemon: [Pokemon!]
   pokemon(pokemonId: ID!): Pokemon!
   allItem: [Item]
   item(itemId: ID!): Item!

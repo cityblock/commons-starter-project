@@ -50,7 +50,7 @@ export interface getAllPokemon_allPokemon {
 }
 
 export interface getAllPokemon {
-  allPokemon: (getAllPokemon_allPokemon | null)[] | null;
+  allPokemon: getAllPokemon_allPokemon[] | null;
 }
 
 

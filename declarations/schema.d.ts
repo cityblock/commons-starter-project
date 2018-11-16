@@ -38,7 +38,7 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: string;
+    pokeType: PokeType;
     imageUrl: string;
     moves: Array<string>;
     createdAt: string;
@@ -61,6 +61,27 @@ declare module 'schema' {
      * The ID of the object.
      */
     id: string;
+  }
+
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
   interface IItem {
@@ -116,39 +137,18 @@ declare module 'schema' {
     defense: number;
     pokeType: PokeType;
     imageUrl: string;
-    moves: string;
-  }
-
-  const enum PokeType {
-    normal = 'normal',
-    grass = 'grass',
-    fire = 'fire',
-    water = 'water',
-    electric = 'electric',
-    psychic = 'psychic',
-    ghost = 'ghost',
-    dark = 'dark',
-    fairy = 'fairy',
-    rock = 'rock',
-    ground = 'ground',
-    steel = 'steel',
-    flying = 'flying',
-    fighting = 'fighting',
-    bug = 'bug',
-    ice = 'ice',
-    dragon = 'dragon',
-    poison = 'poison'
+    moves: Array<string>;
   }
 
   interface IPokemonEditInput {
     id: string;
-    pokemonNumber?: number | null;
-    name?: string | null;
-    attack?: number | null;
-    defense?: number | null;
-    pokeType?: PokeType | null;
-    imageUrl?: string | null;
-    moves?: Array<string | null> | null;
+    pokemonNumber?: number;
+    name?: string;
+    attack?: number;
+    defense?: number;
+    pokeType?: PokeType;
+    imageUrl?: string;
+    moves?: Array<string>;
   }
 
   interface IPokemonDeleteInput {

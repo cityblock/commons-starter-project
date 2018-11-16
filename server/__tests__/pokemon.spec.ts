@@ -1,7 +1,8 @@
 import { transaction } from 'objection';
+import { IPokemonEditInput } from 'schema';
 import { buildRandomItem } from '../item-mocks';
 import Item, { IItemCreateFields } from '../models/item';
-import Pokemon, { IPokemonEditInput } from '../models/pokemon';
+import Pokemon from '../models/pokemon';
 import pokemonSample from '../pokemon-sample';
 
 export const [samplePokemon] = pokemonSample(0, 1);

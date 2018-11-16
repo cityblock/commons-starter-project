@@ -107,7 +107,7 @@ describe('pokemon resolver', () => {
         createPokemonQuery,
         null,
         txn,
-        firstPokeInput,
+        { ...firstPokeInput, moves: JSON.parse(firstPokeInput.moves) },
       );
       expect(data.pokemonCreate.name).toEqual(firstPokeInput.name);
     });

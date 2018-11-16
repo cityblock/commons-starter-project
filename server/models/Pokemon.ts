@@ -1,33 +1,7 @@
 import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { IPokemonCreateInput, IPokemonEditInput, PokeType } from 'schema';
 import uuid from 'uuid/v4';
 import Item from './item';
-
-export interface IPokemonCreateFields {
-  id: string;
-  name: string;
-  pokemonNumber: number;
-  attack: number;
-  defense: number;
-  pokeType: string;
-  moves: string[];
-  imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
-}
-
-export interface IPokemonEditInput {
-  id: string;
-  name?: string;
-  pokemonNumber?: number;
-  attack?: number;
-  defense?: number;
-  pokeType?: string;
-  moves?: string[];
-  imageUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
 
 export default class Pokemon extends Model {
   static tableName = 'pokemon';
@@ -56,8 +30,12 @@ export default class Pokemon extends Model {
     return allPokemon;
   }
 
-  static async create(input: IPokemonCreateFields, txn: Transaction): Promise<Pokemon> {
-    const newPoke = await this.query(txn).insertAndFetch(input);
+  static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
+    let postgresReadyInput = null as any;
+    if (Array.isArray(input.moves)) {
+      postgresReadyInput = Object.assign({}, input, { moves: JSON.stringify(input.moves) });
+    }
+    const newPoke = await this.query(txn).insertAndFetch(postgresReadyInput || input);
     if (!newPoke) return Promise.reject('There was a problem creating your Pokemon.');
     return newPoke;
   }
@@ -76,6 +54,13 @@ export default class Pokemon extends Model {
     fieldsToUpdate: IPokemonEditInput,
     txn: Transaction,
   ): Promise<Pokemon> {
+    // const postgresReadyInput = null as any;
+    // if (fieldsToUpdate.moves) {
+    //   fieldsToUpdate = Object.assign({}, fieldsToUpdate, {
+    //     moves: JSON.stringify(fieldsToUpdate.moves),
+    //   });
+    // }
+    // console.log({ postgresReadyInput }, fieldsToUpdate);
     return this.query(txn).updateAndFetchById(pokemonId, fieldsToUpdate);
   }
 
@@ -88,7 +73,7 @@ export default class Pokemon extends Model {
   pokemonNumber!: number;
   attack!: number;
   defense!: number;
-  pokeType!: string;
+  pokeType!: PokeType;
   moves!: string[];
   imageUrl!: string;
   createdAt!: string;

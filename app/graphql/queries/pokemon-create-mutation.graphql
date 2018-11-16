@@ -6,7 +6,7 @@ mutation pokemonCreate(
   $attack: Int!
   $defense: Int!
   $pokeType: PokeType!
-  $moves: String!
+  $moves: [String!]!
   $imageUrl: String!
 ) {
   pokemonCreate(

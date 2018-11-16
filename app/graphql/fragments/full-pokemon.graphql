@@ -1,6 +1,7 @@
 fragment FullPokemon on Pokemon {
   id
   pokemonNumber
+  pokeType
   name
   attack
   defense

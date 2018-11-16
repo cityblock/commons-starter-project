@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Transaction } from 'objection';
-import { IRootMutationType, IRootQueryType } from 'schema';
+import { IPokemonCreateInput, IPokemonEditInput, IRootMutationType, IRootQueryType } from 'schema';
 import Pokemon from '../models/pokemon';
 
 export const resolveAllPokemon = async (
@@ -19,19 +19,16 @@ export const resolvePokemon = async (
 
 export const resolveEditPokemon = async (
   root: {},
-  args: {},
+  { input }: { input: IPokemonEditInput },
   context: Transaction,
-  { variableValues }: any,
-): Promise<IRootMutationType['pokemonEdit']> =>
-  Pokemon.edit(variableValues.id, variableValues, context);
+): Promise<IRootMutationType['pokemonEdit']> => Pokemon.edit(input.id, input, context);
 
 export const resolveCreatePokemon = async (
   root: {},
-  args: {},
+  { input }: { input: IPokemonCreateInput },
   context: Transaction,
-  { variableValues }: any,
 ): Promise<IRootMutationType['pokemonCreate']> => {
-  const newPoke = await Pokemon.create(variableValues, context);
+  const newPoke = await Pokemon.create(input, context);
   return newPoke;
 };
 

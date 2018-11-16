@@ -39,6 +39,7 @@ export interface getAllPokemon_allPokemon_item {
 export interface getAllPokemon_allPokemon {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;
@@ -97,6 +98,7 @@ export interface getPokemon_pokemon_item {
 export interface getPokemon_pokemon {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;
@@ -224,6 +226,7 @@ export interface pokemonCreate_pokemonCreate_item {
 export interface pokemonCreate_pokemonCreate {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;
@@ -245,7 +248,7 @@ export interface pokemonCreateVariables {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: string;
+  moves: string[];
   imageUrl: string;
 }
 
@@ -266,6 +269,7 @@ export interface pokemonDelete_pokemonDelete_item {
 export interface pokemonDelete_pokemonDelete {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;
@@ -301,6 +305,7 @@ export interface pokemonEdit_pokemonEdit_item {
 export interface pokemonEdit_pokemonEdit {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;
@@ -343,6 +348,7 @@ export interface FullPokemon_item {
 export interface FullPokemon {
   id: string;
   pokemonNumber: number;
+  pokeType: PokeType;
   name: string;
   attack: number;
   defense: number;

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { IRootMutationType, IRootQueryType } from 'schema';
 import Pokemon from '../models/pokemon';
 
@@ -8,7 +8,8 @@ export const resolveAllPokemon = async (
   args: {},
   context: Transaction,
   info: {},
-): Promise<IRootQueryType['allPokemon']> => Pokemon.getAll(context);
+): Promise<IRootQueryType['allPokemon']> =>
+  transaction(Pokemon.knex(), async txn => Pokemon.getAll(txn));
 
 export const resolvePokemon = async (
   root: {},

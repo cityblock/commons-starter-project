@@ -6,8 +6,7 @@
 
 - Install [nvm][] and node 8.12
   - make sure you follow the brew postintall commans (put `export NVM_DIR="$HOME/.nvm; . /usr/local/opt/nvm/nvm.sh`in your shell's startup file)
-- Install [npm][] 6.4 (`rm -rf node_modules/ && npm i -g npm@6.4.1 && npm i -g npm && npm ci`)
-- Run `npm install` and `npm ci`
+- Install [npm][] 6.5 (`rm -rf node_modules/ && npm i -g npm@6.5.0 && npm i -g npm && npm ci`)
 - Install `husky` (`npm install husky --save-dev`)
 - Install core utils (with Homebrew, `brew install coreutils` )
 - Install xcode-select (`xcode-select --install`)
@@ -20,8 +19,6 @@
 - Clone this repo locally
 
 ### Development
-
-Ensure you have copied from staging to local and have your user created in staging by another employee via Manager.
 
 Then run:
 
@@ -62,33 +59,11 @@ Setup your database. First install postgres 10 from brew or postgresapp.
     createdb commons_test
     psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root"
 
-
 ### Create a local database
 
     dropdb commons
     createdb commons
     psql -d commons -c "CREATE ROLE aptible LOGIN"
-
-
-### Use GraphiQL
-
-GraphiQL is accessible locally at [http://localhost:3000/graphiql](http://localhost:3000/graphiql). All endpoints
-except login require you to be authenticated. In order to pass auth information we need to...
-
-1.  create a user (NOTE: You may need to disable authentication checks locally in the `createUser`
-    mutation resolver.) `mutation { createUser(input: {email: "your-name@cityblock.com"}) { user { id } } }`
-1.  log in via your google account
-1.  copy `authToken` from local storage
-1.  pass auth information via [modheader][] for future requests
-1.  add `auth_token` to the request header (note underscore!)
-
-### Revert a PR merge into master
-
-1.  As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to
-    staging or production if a production deploy was started.
-1.  Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
-1.  GitHub will generate a revert PR on your behalf.
-1.  Merge the generated PR.
 
 ### To automatically fix linter errors, run
 
@@ -96,7 +71,7 @@ except login require you to be authenticated. In order to pass auth information 
     # for style changes
     npx stylelint --fix
 
-### Update react jest snapshots
+### Update jest snapshots
 
     npx test -u
 
@@ -110,9 +85,7 @@ Run a migration with:
 
     npx migrate
 
-### PostgreSQL
-
-
+[npm]: https://docs.npmjs.com/cli/npm
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/

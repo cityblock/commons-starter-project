@@ -1,23 +1,3 @@
-@font-face {
-  font-family: 'BaseticaBlackItalic';
-  src: url('../../assets/fonts/basetica-black-italic.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'BaseticaBlack';
-  src: url('../../assets/fonts/basetica-black.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'BaseticaMediumItalic';
-  src: url('../../assets/fonts/basetica-medium-italic.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'BaseticaMedium';
-  src: url('../../assets/fonts/basetica-medium.woff2') format('woff2');
-}
-
 :root {
   --gutter: 40px;
   --medium-gutter: 30px;
@@ -65,10 +45,6 @@
   --body-copy-line-height: 20px;
   --header-font-size: 21px;
   --header-line-height: 25px;
-  --basetica-black-italic: 'BaseticaBlackItalic', Helvetica, sans-serif;
-  --basetica-black: 'BaseticaBlack', Helvetica, sans-serif;
-  --basetica-medium-italic: 'BaseticaMediumItalic', Helvetica, sans-serif;
-  --basetica-medium: 'BaseticaMedium', Helvetica, sans-serif;
   --roboto: 'Roboto', Helvetica, sans-serif;
   --roboto-medium-weight: 500;
   --default-font-weight: 400;
@@ -112,8 +88,7 @@ html {
   width: 100%;
 }
 
-html,
-body {
+html, body {
   padding: 0;
   letter-spacing: 0;
   background: inherit;
@@ -157,12 +132,7 @@ a:hover {
   text-decoration: none;
 }
 
-p,
-ul,
-ol,
-table,
-pre,
-dl {
+p, ul, ol, table, pre, dl {
   margin: 0 0 20px;
 }
 

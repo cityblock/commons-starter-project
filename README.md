@@ -17,6 +17,7 @@
 - Install [VS Code](https://code.visualstudio.com/docs/setup/mac) as our preferred text editor
 - Clone this repo locally
 - `npm install && npm ci`
+- `createdb pokedex && createdb pokedex_test`
 
 ### Development
 

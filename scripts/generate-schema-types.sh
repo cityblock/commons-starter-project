@@ -11,7 +11,7 @@ TS_SCHEMA=declarations/schema.d.ts
 OVERRIDES=../../../scripts/generate-schema-types-overrides.js
 
 # Step 1: generate schema.json from schema.graphql (output location is hard-coded).
-$BIN/apollo-codegen introspect-schema $GRAPHQL_SCHEMA
+$BIN/apollo schema:download --endpoint=$GRAPHQL_SCHEMA
 
 # Step 2: generate schema.d.ts from schema.json, applying some transformations.
 $BIN/gql2ts $JSON_SCHEMA -e $OVERRIDES -n schema \
@@ -19,4 +19,3 @@ $BIN/gql2ts $JSON_SCHEMA -e $OVERRIDES -n schema \
   > $TS_SCHEMA
 
 rm $JSON_SCHEMA
-

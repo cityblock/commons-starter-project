@@ -54,6 +54,6 @@
     // Where we disagree with tslint-react
     "jsx-boolean-value": false,
     "jsx-no-lambda": false, // would like to re-enable this one
-    "jsx-use-translation-function": false // would like to enable this one but requires significant work in Builder
+    "jsx-use-translation-function": false // would like to enable this one but requires significant work
   }
 }

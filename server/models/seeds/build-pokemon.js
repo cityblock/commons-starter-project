@@ -1,14 +1,6 @@
 const uuid = require('uuid');
 
-module.exports = (
-  name,
-  pokemonNumber,
-  attack,
-  defense,
-  pokeType,
-  moves,
-  imageUrl
-) => ({
+module.exports = (name, pokemonNumber, attack, defense, pokeType, moves, imageUrl) => ({
   id: uuid.v4(),
   name,
   pokemonNumber,

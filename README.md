@@ -7,7 +7,6 @@
 - Install [nvm][] and node 8.12
   - make sure you follow the brew postintall commans (put `export NVM_DIR="$HOME/.nvm; . /usr/local/opt/nvm/nvm.sh`in your shell's startup file)
 - Install [npm][] 6.5 (`rm -rf node_modules/ && npm i -g npm@6.5.0 && npm i -g npm && npm ci`)
-- Install `husky` (`npm install husky --save-dev`)
 - Install core utils (with Homebrew, `brew install coreutils` )
 - Install xcode-select (`xcode-select --install`)
 - Install Postgres via [Postgres.app](https://postgresapp.com/) and [Postgres CLI](https://postgresapp.com/documentation/cli-tools.html)
@@ -17,6 +16,7 @@
 - [Create a database for running tests](#create-a-test-postgres-database)
 - Install [VS Code](https://code.visualstudio.com/docs/setup/mac) as our preferred text editor
 - Clone this repo locally
+- `npm install && npm ci`
 
 ### Development
 

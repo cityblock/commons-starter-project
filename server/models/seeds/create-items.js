@@ -65,11 +65,11 @@ const buildRandomItem = pokemonId => {
   );
 };
 
-module.exports = (knex, Promise) => (
+module.exports = (knex, Promise) =>
   knex
     .table('pokemon')
     .pluck('id')
-    .then(function (pokemonIds) {
+    .then(function(pokemonIds) {
       const itemPromises = [];
       for (let i = 0; i < pokemonIds.length; i++) {
         for (let j = 0; j < 3; j++) {
@@ -77,5 +77,4 @@ module.exports = (knex, Promise) => (
         }
       }
       return Promise.all(itemPromises);
-    })
-);
+    });

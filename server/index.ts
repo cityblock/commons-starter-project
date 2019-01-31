@@ -44,7 +44,7 @@ export async function main(options: IMainOptions) {
   const server = new HttpServer(app);
 
   const engine = new ApolloEngine({
-    apiKey: config.ENGINE_API_KEY,
+    apiKey: 'no-key',
     origins: [{ supportsBatch: true }],
     reporting: {
       noTraceErrors: true,

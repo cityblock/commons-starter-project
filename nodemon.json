@@ -1,0 +1,4 @@
+{
+  "ext": "ts graphql",
+  "ignore": ["app/*", "server/**/*.spec.ts"]
+}

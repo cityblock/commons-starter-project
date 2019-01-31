@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./server-compiled",
+    "module": "commonjs"
+  },
+  "include": ["./declarations/*"],
+  "files": [
+    "./server/index",
+    "./server/consumers/worker",
+    "./server/jobs/process-voicemail",
+    "./server/jobs/process-phone-call",
+    "./server/jobs/process-sms-message"
+  ],
+  "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
+}

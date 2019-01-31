@@ -1,0 +1,59 @@
+{
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
+  "rules": {
+    // Rules where we disagree with tslint:recommended
+    "curly": false,
+    "triple-equals": true,
+    "ordered-imports": [
+      true,
+      {
+        "named-imports-order": "lowercase-first" // aka Nehabetical
+      }
+    ],
+    "variable-name": [true, "ban-keywords", "allow-pascal-case"],
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    "only-arrow-functions": [true, "allow-named-functions"],
+    "arrow-return-shorthand": false,
+    // New rules that we add beyond tslint:recommended
+    "no-angle-bracket-type-assertion": true,
+    "interface-over-type-literal": true,
+    "no-string-throw": true,
+    "prefer-const": true,
+    "no-for-in-array": true,
+    // disabled: we have been unable to change the code in such a way that makes this rule happy.
+    //           it's responsible for the "put it on its own line" linting error.
+    "no-void-expression": false,
+    "no-inferred-empty-object-type": true,
+    "promise-function-async": true,
+    // Prefer T[] to Array<T>, but allow Array<{complex type}>.
+    "array-type": [true, "array-simple"],
+    "no-console": [true, "log"],
+    "object-literal-shorthand": true,
+    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-type-assertion": true,
+    "cyclomatic-complexity": true,
+    "radix": true,
+    "no-invalid-template-strings": true,
+    // Secuity rules from tslint-microsoft-contrib
+    "no-banned-terms": true,
+    "no-delete-expression": true,
+    "no-document-domain": true,
+    "no-disable-auto-sanitization": true,
+    "no-duplicate-parameter-names": true,
+    "no-exec-script": true,
+    "no-function-constructor-with-string-args": true,
+    "no-octal-literal": true,
+    "no-reserved-keywords": false, // incorrectly flags method names
+    "no-string-based-set-immediate": true,
+    "no-string-based-set-interval": true,
+    "no-string-based-set-timeout": true,
+    "no-eval": true,
+    "no-return-await": true,
+    // Where we disagree with tslint-react
+    "jsx-boolean-value": false,
+    "jsx-no-lambda": false, // would like to re-enable this one
+    "jsx-use-translation-function": false // would like to enable this one but requires significant work
+  }
+}

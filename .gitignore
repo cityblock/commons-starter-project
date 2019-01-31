@@ -1,0 +1,30 @@
+# OSX
+.DS_Store
+
+# node.js
+node_modules/
+
+# compiled ts
+server-compiled
+
+# type generation - should be removed if type generation succeeds
+schema.json
+
+# logs
+*.log
+npm-debug.log*
+
+# dotenv file for local development
+.env
+
+.cache-loader
+
+# build
+public
+
+# build stats
+stats.json
+
+# redis
+dump.rdb
+

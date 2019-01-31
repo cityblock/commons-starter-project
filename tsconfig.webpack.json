@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig",
+  "exclude": ["rules", "scripts", "server", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
+}

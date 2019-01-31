@@ -1,0 +1,14 @@
+# An object with a Globally Unique ID
+interface uniqueId {
+  # The ID of the object.
+  id: ID!
+}
+
+type RootMutationType {}
+
+type RootQueryType {}
+
+schema {
+  query: RootQueryType
+  mutation: RootMutationType
+}

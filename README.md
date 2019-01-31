@@ -1,4 +1,4 @@
-# Commons starter project
+# Commons starter project: Pokedex
 
 ## Onboarding
 
@@ -57,14 +57,14 @@ For reverting code in master, use Github's [revert functionality][].
 
 Setup your database. First install postgres 10 from brew or postgresapp.
 
-    createdb commons_test
-    psql commons_test -c "create extension btree_gist; create extension pg_trgm; alter database commons_test owner to root"
+    createdb pokedex_test
+    psql pokedex_test -c "create extension btree_gist; create extension pg_trgm; alter database pokedex_test owner to root"
 
 ### Create a local database
 
-    dropdb commons
-    createdb commons
-    psql -d commons -c "CREATE ROLE aptible LOGIN"
+    dropdb pokedex
+    createdb pokedex
+    psql -d pokedex -c "CREATE ROLE aptible LOGIN"
 
 ### To automatically fix linter errors, run
 

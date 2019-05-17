@@ -1,9 +1,11 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
-  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
+  "rulesDirectory": ["node_modules/tslint-microsoft-contrib", "rules"],
   "rules": {
     // Rules where we disagree with tslint:recommended
     "curly": false,
+    "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
+    "check-model-variable": true, // our custom rule to check that each model has "hasPHI" boolean class variable
     "triple-equals": true,
     "ordered-imports": [
       true,
@@ -25,8 +27,10 @@
     // disabled: we have been unable to change the code in such a way that makes this rule happy.
     //           it's responsible for the "put it on its own line" linting error.
     "no-void-expression": false,
+    "no-var-requires": false,
     "no-inferred-empty-object-type": true,
     "promise-function-async": true,
+    "no-floating-promises": true,
     // Prefer T[] to Array<T>, but allow Array<{complex type}>.
     "array-type": [true, "array-simple"],
     "no-console": [true, "log"],
@@ -43,7 +47,6 @@
     "no-disable-auto-sanitization": true,
     "no-duplicate-parameter-names": true,
     "no-exec-script": true,
-    "no-function-constructor-with-string-args": true,
     "no-octal-literal": true,
     "no-reserved-keywords": false, // incorrectly flags method names
     "no-string-based-set-immediate": true,
@@ -54,6 +57,6 @@
     // Where we disagree with tslint-react
     "jsx-boolean-value": false,
     "jsx-no-lambda": false, // would like to re-enable this one
-    "jsx-use-translation-function": false // would like to enable this one but requires significant work
+    "jsx-use-translation-function": false // would like to enable this one but requires significant work in Builder
   }
 }

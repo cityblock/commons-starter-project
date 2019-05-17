@@ -64,6 +64,7 @@ export async function main(options: IMainOptions) {
 
 if (require.main === module) {
   try {
+    /* tslint:disable-next-line:no-floating-promises */
     main({ env: config.NODE_ENV as Env });
   } catch (err) {
     logger.error(err);

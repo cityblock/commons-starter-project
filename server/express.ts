@@ -1,6 +1,4 @@
-import bodyParser from 'body-parser';
 import express from 'express';
-import { graphiqlExpress } from 'graphql-server-express';
 import morgan from 'morgan';
 import { Transaction } from 'objection';
 import path from 'path';
@@ -28,9 +26,9 @@ export default async (
 
   if (config.NODE_ENV === 'development') {
     // Enable webpack dev middleware
-    const devConfig = webpackConfig() as any;
+    const devConfig = webpackConfig;
     const compiler = webpack(devConfig);
-    app.use(webpackDevMiddleware(compiler, { publicPath: devConfig.output.publicPath }));
+    app.use(webpackDevMiddleware(compiler, { publicPath: devConfig.output!.publicPath! }));
   }
 
   // This adds request logging using some decent defaults.
@@ -54,31 +52,16 @@ export default async (
   // Static assets
   app.use('/assets', express.static(path.join(__dirname, '..', '..', 'public')));
 
-  if (config.NODE_ENV === 'development') {
-    // GraphiQL
-    app.get(
-      '/graphiql',
-      graphiqlExpress({
-        endpointURL: '/graphql',
-        subscriptionsEndpoint: `wss://localhost:3000/subscriptions`,
-      }),
-    );
-  }
-
   // Used for integration tests
   if (allowCrossDomainRequests && config.NODE_ENV === 'test') {
     app.use(allowCrossDomainMiddleware);
   }
 
+  const server = await graphqlMiddleware(existingTxn);
+
   // Graphql API
-  app.use(
-    '/graphql',
-    addSecurityHeadersMiddleware,
-    ensurePostMiddleware,
-    bodyParser.json(),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) =>
-      graphqlMiddleware(req, res, next, existingTxn),
-  );
+  app.use(server.graphqlPath, addSecurityHeadersMiddleware, ensurePostMiddleware);
+  server.applyMiddleware({ app });
 
   // Render a blank HTML page for the react app
   app.get('*', addSecurityHeadersMiddleware, renderApp);

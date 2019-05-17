@@ -9,7 +9,7 @@ import { Model, Transaction } from 'objection';
 import pg from 'pg';
 import config from './config';
 import expressConfig from './express';
-import knexConfig from './models/knexfile';
+import * as knexConfig from './models/knexfile';
 
 const logger = console as any;
 

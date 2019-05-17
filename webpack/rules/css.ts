@@ -1,11 +1,10 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import PATHS from '../paths';
+
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssReporter = require('postcss-reporter');
-const cssnano = require('cssnano');
-const PATHS = require('../paths');
 
-module.exports = ({ production = false } = {}) => {
+export default ({ production = false } = {}) => {
   const localIdentName = '[name]-[local]-[hash:base64:6]';
 
   const createCssLoaders = () => [
@@ -23,17 +22,15 @@ module.exports = ({ production = false } = {}) => {
       loader: 'postcss-loader',
       options: {
         plugins: [
-          postcssPresetEnv({ browsers: ['last 2 Chrome versions'], warnForDuplicates: false }),
+          postcssPresetEnv({ browsers: ['last 2 Chrome versions'] }),
           // cssnano in prod and reporter (for errors) in dev
-          production
-            ? require('cssnano')({ discardUnused: { fontFace: false } })
-            : postcssReporter({ clearMessages: true }),
+          postcssReporter({ clearMessages: true }),
         ],
       },
     },
   ];
 
-  const createBrowserLoaders = extractCssToFile => loaders => {
+  const createBrowserLoaders = (extractCssToFile: any) => (loaders: any) => {
     if (extractCssToFile) {
       return [MiniCssExtractPlugin.loader, ...loaders];
     }

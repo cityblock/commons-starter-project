@@ -1,6 +1,6 @@
-const PATHS = require('../paths');
+import PATHS from '../paths';
 
-module.exports = ({ limit = 30000 } = {}) => ({
+export default ({ limit = 30000 } = {}) => ({
   include: PATHS.app,
   loader: 'url-loader',
   options: { name: '[hash].[ext]', limit },

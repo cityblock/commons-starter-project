@@ -1,6 +1,6 @@
-const { createLodashTransformer } = require('typescript-plugin-lodash');
+import { createLodashTransformer } from 'typescript-plugin-lodash';
 
-module.exports = () => {
+export default () => {
   return {
     exclude: /node_modules/,
     test: /\.tsx?$/,

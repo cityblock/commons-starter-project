@@ -1,4 +1,7 @@
-const path = require('path');
+import dotenv from 'dotenv';
+dotenv.config();
+import path from 'path';
+import config from '../server/config';
 
 /*
  * __dirname is changed after webpack-ed to another directory
@@ -7,9 +10,9 @@ const path = require('path');
  */
 const CURRENT_WORKING_DIR = process.cwd();
 
-module.exports = {
+export default {
   app: path.resolve(CURRENT_WORKING_DIR, 'app'),
   assets: path.resolve(CURRENT_WORKING_DIR, 'public'),
   modules: path.resolve(CURRENT_WORKING_DIR, 'node_modules'),
-  public: '/assets/',
+  public: `${config.ASSET_URL}/`,
 };

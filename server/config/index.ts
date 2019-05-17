@@ -4,5 +4,6 @@ export default {
   PORT: '3000',
   NODE_ENV: 'development',
   TZ: 'UTC',
+  ASSET_URL: '/assets',
   ...process.env,
 };

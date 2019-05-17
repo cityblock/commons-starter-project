@@ -1,8 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Config file for Knex
-module.exports = {
+const config = {
+  ext: 'ts',
   development: {
     client: 'pg',
     connection: {
+      application_name: 'pokedex dev',
       database: 'pokedex',
       host: '127.0.0.1',
       timezone: 'UTC',
@@ -13,17 +18,15 @@ module.exports = {
     pool: {
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 1000,
-      max: 200,
-      min: 4,
-    },
-    seeds: {
-      directory: __dirname + '/seeds/dev',
+      max: 50,
+      min: 1,
     },
   },
   production: {
     client: 'pg',
     connection: {
-      database: 'db',
+      application_name: 'pokedex production',
+      database: 'pokedex',
       host: process.env.DB_HOST,
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT,
@@ -37,13 +40,14 @@ module.exports = {
     pool: {
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 1000,
-      max: 200,
-      min: 4,
+      max: 50,
+      min: 1,
     },
   },
   test: {
     client: 'pg',
     connection: {
+      application_name: 'pokedex test',
       database: 'pokedex_test',
       host: '127.0.0.1',
       timezone: 'UTC',
@@ -52,5 +56,14 @@ module.exports = {
     migrations: {
       directory: __dirname + '/migrations',
     },
+    pool: {
+      connectionTimeoutMillis: 10000,
+      idleTimeoutMillis: 1000,
+      max: 2,
+      min: 1,
+    },
   },
 };
+
+// For the migration script
+module.exports = config;

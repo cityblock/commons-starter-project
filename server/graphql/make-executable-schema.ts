@@ -4,9 +4,7 @@ import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 
-const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
-
-const resolveFunctions = {
+export const resolveFunctions = {
   RootQueryType: {},
   RootMutationType: {},
   // From https://github.com/apollographql/graphql-tools/pull/698
@@ -25,10 +23,10 @@ const logger = {
   },
 };
 
-const schema = makeExecutableSchema({
+const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
+
+export default makeExecutableSchema({
   typeDefs: schemaGql,
   resolvers: resolveFunctions,
   logger,
 } as any);
-
-export default schema;

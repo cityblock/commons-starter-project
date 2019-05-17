@@ -1,6 +1,6 @@
-const PATHS = require('./paths');
+import PATHS from './paths';
 
-module.exports = {
+export default {
   extensions: ['.ts', '.tsx', '.js', '.css', '.graphql', '.gql', '.json'],
   modules: [PATHS.app, PATHS.modules],
 };

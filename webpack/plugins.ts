@@ -1,12 +1,12 @@
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
+import webpack from 'webpack';
 
-module.exports = ({ production = false } = {}) => {
+export default ({ isProduction = false } = {}) => {
   const plugins = [new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)];
-  if (!production) {
+  if (!isProduction) {
     plugins.push(
       new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
       new webpack.HotModuleReplacementPlugin(),
@@ -19,7 +19,7 @@ module.exports = ({ production = false } = {}) => {
   } else {
     plugins.push(
       new MiniCssExtractPlugin({
-        filename: 'styles/main.css',
+        filename: 'styles/main.[hash].css',
       }),
       new CopyWebpackPlugin([
         { from: 'assets' },

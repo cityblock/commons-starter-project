@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+let dotenv = require('dotenv');
 dotenv.config();
 
 // Config file for Knex
@@ -20,6 +20,9 @@ const config = {
       idleTimeoutMillis: 1000,
       max: 50,
       min: 1,
+    },
+    seeds: {
+      directory: __dirname + '/seeds/dev',
     },
   },
   production: {

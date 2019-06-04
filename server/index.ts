@@ -27,7 +27,7 @@ pg.types.setTypeParser(DATE_OID, val => {
   return val;
 });
 
-const knex = Knex((knexConfig as any)[config.NODE_ENV || 'development']);
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);
 
 export type Env = 'production' | 'development' | 'test';

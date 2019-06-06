@@ -1,0 +1,15 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "/Users/aldapontes/code/commons"
+	}
+],
+  "settings": {
+    "files.autoSave": "onFocusChange",
+    "stylelint.enable": true,
+    "typescript.tsdk": "./node_modules/typescript/lib"
+  }
+}

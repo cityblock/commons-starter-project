@@ -1,4 +1,4 @@
-let dotenv = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.config();
 
 // Config file for Knex

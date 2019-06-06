@@ -60,6 +60,8 @@ For reverting code in master, use Github's [revert functionality](https://www.at
 
 ## Branch from Master
 
+Make a replica of master in origin by running `git push origin master:answer_key`; From now on, you'll be using this to
+
 From master, checkout a development branch that will serve as your personal base branch for pull requests.
 For naming, use <your name>-development. For example:
 `git checkout -b alda-development`

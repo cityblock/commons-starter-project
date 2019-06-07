@@ -60,7 +60,7 @@ For reverting code in master, use Github's [revert functionality](https://www.at
 
 ## Branch from Master
 
-Make a replica of master in origin by running `git push origin master:answer_key`; From now on, you'll be using this to
+Make a replica of master in origin by running `git push origin master:<name>-pokedex`; From now on, you'll use this branch to submit your work and merge after pull requests are approved (so that your reviewers can be looking at incremental work).
 
 From master, checkout a development branch that will serve as your personal base branch for pull requests.
 For naming, use <your name>-development. For example:
@@ -133,11 +133,25 @@ The methods your model should include are:
 
 _Note: All model methods need to take a transaction (as you see above)._
 
-After you have written the model for Pokemon, create a test file called `pokemon.spec.ts` inside a `__tests__` folder inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here is [a skeleton](https://github.com/cityblock/commons-starter-project/blob/test-feature/server/models/__tests__/puppy.spec.ts) of a test file, as well as [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
+After that is all set, write the model for items in `Item.ts`, including the same model methods as for Pokemon. Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
-At this point, make another pull request for us to review!
+After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here is [a skeleton](https://github.com/cityblock/commons-starter-project/blob/test-feature/server/models/__tests__/puppy.spec.ts) of a test file, as well as [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
 
-After that is all set, write the model for items in `Item.ts`, including the same model methods as for Pokemon. Again, be sure to include at least one test per method. Finally, make another pull request!
+In order for you to run your tests, you'll want to run the migrations against your pokedex_test database and load it up with the seed file.
+
+    NODE_ENV=test npm run migrate
+
+Make sure on Postico that you can see the tables in your test database
+
+    NODE_ENV=test npm run seed
+
+Check that your test database has mock data.
+
+Run all of your tests using:
+
+    TEST COMMAND
+
+Once these pass, make another pull request for us to review!
 
 ## CONTINUE WORK HERE
 

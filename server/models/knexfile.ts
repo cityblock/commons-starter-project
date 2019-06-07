@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
 
 // Config file for Knex
@@ -58,6 +58,9 @@ const config = {
     },
     migrations: {
       directory: __dirname + '/migrations',
+    },
+    seeds: {
+      directory: './seeds/dev',
     },
     pool: {
       connectionTimeoutMillis: 10000,

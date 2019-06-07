@@ -17,7 +17,7 @@
     "build": "npx run clean && npx run build-server && cross-env NODE_ENV=production webpack --colors --config ./webpack/webpack.config.js",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
-    "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand --logHeapUsage",
+    "test": "NODE_ENV=test node --inspect node_modules/.bin/jest --runInBand --logHeapUsage",
     "knex": "ts-node -P tsconfig.server.json node_modules/.bin/knex",
     "test:watch": "npx test --watch",
     "test:notify": "npx run test:watch --notify",
@@ -26,7 +26,8 @@
     "update-schema": "./scripts/generate-schema-types.sh",
     "codegen": "./scripts/codegen.sh",
     "typegen": "./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
-    "seed": "knex seed:run --knexfile=server/models/knexfile.ts"
+    "seed": "npm run knex -- seed:run --knexfile=server/models/knexfile.ts"
+
   },
   "author": "Brennan Moore",
   "devDependencies": {
@@ -44,6 +45,7 @@
     "gql2ts": "1.10.1",
     "husky": "2.3.0",
     "jest": "24.8.0",
+    "jest-extended": "^0.11.1",
     "jest-resolve": "24.8.0",
     "jest-transform-graphql": "2.1.0",
     "knex-migrate": "1.7.0",
@@ -159,6 +161,11 @@
   "husky": {
     "hooks": {
       "pre-push": "npm run lint && npm run typecheck"
+    },
+    "jest": {
+      "setupFilesAfterEnv": [
+        "jest-extended"
+      ]
     }
   }
 }

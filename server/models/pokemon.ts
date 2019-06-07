@@ -1,8 +1,9 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { PokeType } from '../constants/poke-types';
 import BaseModel from './base-model';
-// import Item from './item';
+import Item from './item';
 
+// is there any reason here why we would not want the create interface to inherit from the edit interface?
 interface IPokemonCreateInput {
   id: string;
   pokemonNumber: number;
@@ -24,7 +25,7 @@ interface IPokemonEditInput {
 }
 
 /*tslint:disable:member-ordering*/
-class Pokemon extends BaseModel {
+export default class Pokemon extends BaseModel {
   id!: string;
   pokemonNumber!: number;
   name!: string;
@@ -33,13 +34,44 @@ class Pokemon extends BaseModel {
   pokeType!: PokeType;
   moves!: JSON;
   imageUrl!: string;
+  item!: Item[];
 
   static tableName = 'pokemon';
+
+  static jsonSchema = {
+    type: 'object',
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      pokemonNumber: { type: 'number' },
+      name: { type: 'string', minLength: 1 },
+      attack: { type: 'number' },
+      defense: { type: 'number' },
+      pokeType: { type: 'string' },
+      moves: { type: 'object' },
+      imageUrl: { type: 'string' },
+      item: { type: 'array' },
+      createdAt: { type: 'string' },
+      updatedAt: { type: 'string' },
+      deletedAt: { type: 'string' },
+    },
+    required: [
+      'id',
+      'pokemonNumber',
+      'name',
+      'attack',
+      'defense',
+      'pokeType',
+      'moves',
+      'imageUrl',
+      'createdAt',
+      'item',
+    ],
+  };
 
   static get relationMappings(): RelationMappings {
     return {
       item: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasManyRelation,
         modelClass: Item,
         join: {
           from: 'pokemon.id',
@@ -53,36 +85,45 @@ class Pokemon extends BaseModel {
     return this.query(txn).insert(pokemon);
   }
 
-  static async getAll(txn: Transaction): Promise<Pokemon> {
+  static async getAll(txn: Transaction): Promise<Pokemon[]> {
     const pokemon = await this.query(txn)
       .where('deletedAt', null)
       .orderBy('pokemonNumber');
-    if (!pokemon) {
-      return Promise.reject(`You have no pokemon in your pocket`);
-    }
     return pokemon;
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query()
+    const pokemon = await this.query(txn)
       .findById(pokemonId)
       .eager('item')
-      .where('item.deletedAt', null)
-      .andWhere('pokemon.deletedAt', null)
-      .andWhere('item.pokemonId', pokemonId);
+      .modifyEager('item', builder => builder.where('item.deletedAt', null))
+      .where('pokemon.deletedAt', null);
+    // weird that we need to cast here
 
-    return pokemon as Pokemon;
-  }
-
-  static async edit(pokemonId: string, IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query().findById(pokemonId);
+    if (!pokemon) {
+      return Promise.reject(`No such pokemon in your pocket with ${pokemonId}`);
+    }
 
     return pokemon;
   }
+
+  static async delete(pokemonId: string, txn: Transaction) {
+    await Pokemon.query(txn)
+      .findById(pokemonId)
+      .patch({ deletedAt: new Date().toISOString() });
+  }
+
+  static async edit(
+    pokemonId: string,
+    pokemonEditInput: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
+    const editedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemonEditInput);
+
+    return editedPokemon;
+  }
 }
 /*tslint:disable:member-ordering*/
-
-module.exports = Pokemon;
 
 /*
 DONE ● getAll(txn: Transaction) ­ returns all Pokemon, ordered by pokemonNumber ascending

@@ -118,7 +118,7 @@ Finally, make a pull request for us to review!
 
 You are now ready to start writing data models. We use [Objection.js](https://vincit.github.io/objection.js/) as our ORM, which is actually built on top of Knex.js.
 
-First, write out the model for accessing your pokemon table in `pokemon.ts`. For reference, here is our [patient model](https://github.com/cityblock/commons/blob/master/server/models/patient.ts) from Commons.
+First, write out the model for accessing your pokemon table in `pokemon.ts`. For reference, here is our [patient model](https://github.com/cityblock/commons/blob/master/server/models/patient.ts) from Commons. For the JSON schema, ensure Objection reads your Postgres JSON data types as arrays of strings.
 
 You can also see all models in Commons [here](https://github.com/cityblock/commons/tree/master/server/models).
 
@@ -135,7 +135,7 @@ _Note: All model methods need to take a transaction (as you see above)._
 
 After that is all set, write the model for items in `Item.ts`, including a get, create, edit and delete method. Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
-After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here is [a skeleton](https://github.com/cityblock/commons-starter-project/blob/test-feature/server/models/__tests__/puppy.spec.ts) of a test file, as well as [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
+After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here are [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
 
 In order for you to run your tests, you'll want to run the migrations against your pokedex_test database and load it up with the seed file.
 
@@ -175,7 +175,7 @@ FinePrint: `npm run typegen` will run both `npm run update-schema` and `npm run 
 
 ### STEP 3: Resolvers
 
-Create a file called `pokemon-resolver.ts` in the `server/graphql` folder. In it, write the resolver resolvePokemon that will call your model method to get all Pokemon. Use [this resolver](https://github.com/cityblock/commons/blob/master/server/graphql/patient-resolver.ts) from Commons as a guide. You can find even more examples from Commons [here](https://github.com/cityblock/commons/tree/master/server/graphql).
+Create a file called `pokemon-resolver.ts` in the `server/graphql` folder. In it, write the resolver resolvePokemon that will call your model method to get all Pokemon. Use [this resolver](https://github.com/cityblock/commons/blob/master/server/graphql/phone-resolver.ts) from Commons as a guide. You can find even more examples from Commons [here](https://github.com/cityblock/commons/tree/master/server/graphql).
 
 Fineprint: you can return your Pokemon methods for CRUD transactions directly in your resolvers. It’s not necessary to pass them to transaction as a callback.
 

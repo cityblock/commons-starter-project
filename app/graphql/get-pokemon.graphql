@@ -1,0 +1,15 @@
+query getPokemon($pokemonId: ID!) {
+  pokemon(pokemonId: $pokemonId) {
+    id
+    name
+    attack
+    defense
+    pokeType
+    moves
+    imageUrl
+    item {
+      id
+      name
+    }
+  }
+}

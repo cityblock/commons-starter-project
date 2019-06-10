@@ -72,7 +72,7 @@ const POKEMON_CREATE = {
   attack: 11,
   defense: 22,
   pokeType: PokeType[PokeType.grass],
-  moves: JSON.parse(JSON.stringify(['Tackle', 'Growl', 'Leech Seed'])),
+  moves: ['Tackle', 'Growl', 'Leech Seed'],
   imageUrl:
     'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
 };

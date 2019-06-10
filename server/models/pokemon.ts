@@ -10,7 +10,7 @@ interface IPokemonCreateInput {
   attack: number;
   defense: number;
   pokeType: string;
-  moves: JSON;
+  moves: string[];
   imageUrl: string;
 }
 
@@ -19,7 +19,7 @@ interface IPokemonEditInput {
   attack?: number;
   defense?: number;
   pokeType?: string;
-  moves?: JSON;
+  moves?: string[];
   imageUrl?: string;
 }
 
@@ -31,7 +31,7 @@ export default class Pokemon extends BaseModel {
   attack!: number;
   defense!: number;
   pokeType!: string;
-  moves!: JSON;
+  moves!: string[];
   imageUrl!: string;
   item!: Item[];
 

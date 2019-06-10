@@ -161,11 +161,6 @@
   "husky": {
     "hooks": {
       "pre-push": "npm run lint && npm run typecheck"
-    },
-    "jest": {
-      "setupFilesAfterEnv": [
-        "jest-extended"
-      ]
     }
   }
 }

@@ -26,7 +26,7 @@ Welcome to Cityblock! Our goal these first few weeks is to get you acquainted wi
   - Run `npm install` to set up all the dependency modules
 - Create a local database
 
-  `dropdb pokedex; createdb pokedex; psql -d pokedex -c "CREATE ROLE aptible LOGIN"`
+  `db pokedex; createdb pokedex; psql -d pokedex -c "CREATE ROLE aptible LOGIN"`
 
 - Create a local test database
 

@@ -85,27 +85,25 @@ describe('pokemon', () => {
     });
   });
 
-  // describe('create', () => {
-  //   it('should create email', async () => {
-  //     // const { email, user } = await setup(txn);
-  //     expect(email).toMatchObject({
-  //       emailAddress: 'spam@email.com',
-  //       description: 'spam email',
-  //       updatedById: user.id,
-  //     });
-  //   });
-  // });
+  describe('create', () => {
+    it('should create a pokemon', async () => {
+      const createdPokemon = await Pokemon.create(POKEMON, txn);
+      expect(POKEMON).toMatchObject(createdPokemon);
+    });
+  });
 
-  // describe('delete', () => {
-  //   it('should delete pokemon', async () => {
-  //     const deleted = await Pokemon.delete(pokemon.id, txn);
+  // expect(concernById).toMatchObject(concern);
 
-  //     expect(deleted.deletedAt).toBeTruthy();
-  //     expect(deleted.id).toBe(email.id);
-
-  //     await expect(Email.get(email.id, txn)).rejects.toMatch(`No such email: ${email.id}`);
-  //   });
-  // });
+  describe('delete', () => {
+    it('should delete pokemon', async () => {
+      const deleted = await Pokemon.delete(POKEMON.id, txn);
+      expect(deleted.deletedAt).toBeTruthy();
+      expect(deleted.id).toBe(POKEMON.id);
+      await expect(Pokemon.get(deleted.id, txn)).toReject();
+      // do I need to rollback here?
+      await txn.rollback();
+    });
+  });
 
   // describe('edit', () => {
   //   it('should edit email', async () => {

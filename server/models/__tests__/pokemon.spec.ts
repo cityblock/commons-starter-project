@@ -1,9 +1,12 @@
 import 'jest-extended';
 import { transaction } from 'objection';
+import { PokeType } from '../../constants/poke-types';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
 
 // DATA FIXTURES
+const NUM_POKEMON = 52;
+
 const POKEMON = {
   id: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
   pokemonNumber: 1,
@@ -16,6 +19,7 @@ const POKEMON = {
     'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
   createdAt: new Date(Date.parse('2019-06-06 13:57:58.363-04')),
   updatedAt: new Date(Date.parse('2019-06-06 13:57:58.363-04')),
+  deletedAt: null,
 };
 
 const ITEMS = [
@@ -56,6 +60,23 @@ const ITEMS = [
   },
 ];
 
+const POKEMON_EDIT = {
+  name: 'Bubba-Saurus',
+  attack: 0,
+  defense: 55,
+};
+
+const POKEMON_CREATE = {
+  pokemonNumber: 99,
+  name: 'Bubble-Saurus',
+  attack: 11,
+  defense: 22,
+  pokeType: PokeType[PokeType.grass],
+  moves: JSON.parse(JSON.stringify(['Tackle', 'Growl', 'Leech Seed'])),
+  imageUrl:
+    'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
+};
+
 describe('pokemon', () => {
   let testDb = null as any;
   let txn = null as any;
@@ -85,14 +106,20 @@ describe('pokemon', () => {
     });
   });
 
-  describe('create', () => {
-    it('should create a pokemon', async () => {
-      const createdPokemon = await Pokemon.create(POKEMON, txn);
-      expect(POKEMON).toMatchObject(createdPokemon);
+  describe('getAll', () => {
+    it('should get all pokemons', async () => {
+      const fetchedPokemons = await Pokemon.getAll(txn);
+      expect(fetchedPokemons).toHaveLength(NUM_POKEMON);
+      expect(fetchedPokemons).toIncludeAllMembers([POKEMON]);
     });
   });
 
-  // expect(concernById).toMatchObject(concern);
+  describe('create', () => {
+    it('should create a pokemon', async () => {
+      const createdPokemon = await Pokemon.create(POKEMON_CREATE, txn);
+      expect(createdPokemon).toMatchObject(POKEMON_CREATE);
+    });
+  });
 
   describe('delete', () => {
     it('should delete pokemon', async () => {
@@ -100,28 +127,17 @@ describe('pokemon', () => {
       expect(deleted.deletedAt).toBeTruthy();
       expect(deleted.id).toBe(POKEMON.id);
       await expect(Pokemon.get(deleted.id, txn)).toReject();
-      // do I need to rollback here?
-      await txn.rollback();
     });
   });
 
-  // describe('edit', () => {
-  //   it('should edit email', async () => {
-  //     const { email, user } = await setup(txn);
-  //     const editedEmail = await Email.edit(
-  //       {
-  //         emailAddress: 'new@email.edu',
-  //         description: 'new',
-  //         updatedById: user.id,
-  //       },
-  //       email.id,
-  //       txn,
-  //     );
-  //     expect(editedEmail).toMatchObject({
-  //       emailAddress: 'new@email.edu',
-  //       description: 'new',
-  //       updatedById: user.id,
-  //     });
-  //   });
-  // });
+  describe('edit', () => {
+    it('should edit the bulb-emon', async () => {
+      const editedPokemon = await Pokemon.edit(POKEMON.id, POKEMON_EDIT, txn);
+      expect(editedPokemon).toMatchObject({
+        name: 'Bubba-Saurus',
+        attack: 0,
+        defense: 55,
+      });
+    });
+  });
 });

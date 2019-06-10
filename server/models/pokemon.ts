@@ -5,12 +5,11 @@ import Item from './item';
 
 // is there any reason here why we would not want the create interface to inherit from the edit interface?
 interface IPokemonCreateInput {
-  id: string;
   pokemonNumber: number;
   name: string;
   attack: number;
   defense: number;
-  pokeType: PokeType;
+  pokeType: string;
   moves: JSON;
   imageUrl: string;
 }
@@ -19,7 +18,7 @@ interface IPokemonEditInput {
   name?: string;
   attack?: number;
   defense?: number;
-  pokeType?: PokeType;
+  pokeType?: string;
   moves?: JSON;
   imageUrl?: string;
 }
@@ -31,7 +30,7 @@ export default class Pokemon extends BaseModel {
   name!: string;
   attack!: number;
   defense!: number;
-  pokeType!: PokeType;
+  pokeType!: string;
   moves!: JSON;
   imageUrl!: string;
   item!: Item[];
@@ -46,26 +45,18 @@ export default class Pokemon extends BaseModel {
       name: { type: 'string', minLength: 1 },
       attack: { type: 'number' },
       defense: { type: 'number' },
-      pokeType: { type: 'string' },
-      moves: { type: 'object' },
+      pokeType: {
+        type: 'string',
+        enum: Object.keys(PokeType).filter(k => typeof PokeType[k as any] === 'number'),
+      },
+      moves: { type: 'array' },
       imageUrl: { type: 'string' },
       item: { type: 'array' },
       createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: [
-      'id',
-      'pokemonNumber',
-      'name',
-      'attack',
-      'defense',
-      'pokeType',
-      'moves',
-      'imageUrl',
-      'createdAt',
-      'item',
-    ],
+    required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
   };
 
   static get relationMappings(): RelationMappings {
@@ -82,7 +73,7 @@ export default class Pokemon extends BaseModel {
   }
 
   static async create(pokemon: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
-    return this.query(txn).insert(pokemon);
+    return this.query(txn).insertAndFetch(pokemon);
   }
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
@@ -125,21 +116,3 @@ export default class Pokemon extends BaseModel {
   }
 }
 /*tslint:disable:member-ordering*/
-
-/*
-DONE ● getAll(txn: Transaction) ­ returns all Pokemon, ordered by pokemonNumber ascending
---> test: check that it returned something, test that it returns the table length?
-DONE● get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated
-items
---> test: it returns a single pokemon
---> test that it returned the length of items associated with that poke
-DONE● create(input: IPokemonCreateInput, txn: Transaction) ­ creates and returns a Pokemon
---> test that it generated one pokemon
---> test that it returned just one pokemon
-● edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) ­ edits an
-existing Pokemon
---> test that it edited just one pokemon
-● delete(pokemonId: string, txn: Transaction) ­ marks a Pokemon as deleted, but does not
-actually delete it from the database
---> test that it marked the poke as deleted
-*/

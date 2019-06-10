@@ -133,7 +133,7 @@ The methods your model should include are:
 
 _Note: All model methods need to take a transaction (as you see above)._
 
-After that is all set, write the model for items in `Item.ts`, including the same model methods as for Pokemon. Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
+After that is all set, write the model for items in `Item.ts`, including a get, create, edit and delete method. Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
 After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here is [a skeleton](https://github.com/cityblock/commons-starter-project/blob/test-feature/server/models/__tests__/puppy.spec.ts) of a test file, as well as [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
 
@@ -149,16 +149,84 @@ Check that your test database has mock data.
 
 Run all of your tests using:
 
-    TEST COMMAND
+    npm run test
 
 Once these pass, make another pull request for us to review!
 
-## CONTINUE WORK HERE
+## The Controller Layer (+ tests!)
 
-### Issues, tissues and debugging tips:
+The next step is to build out our “controller” layer by adding GraphQL endpoints for the basic CRUD model methods that you wrote previously.
 
-- how to test that my models are written right?
-- how to start up the application? `npx dev`
+### STEP 1: Graphql schemas
+
+Graphql schemas set allowable queries and mutations on Pokemon and Item objects, and specify which fields to use for each database transaction. Here is [our schema from Commons](https://github.com/cityblock/commons/blob/master/server/graphql/schema.graphql). Your job is to define the schemas for Pokemon and Items for every CRUD transaction. It’s recommended to write schemas, queries and tests for one transaction at a time, i.e., Create first, then Read, etc., to catch any errors and best learn the workflow.
+
+After you have defined a schema, run `npm run update-schema`, which automagically generates a typescript file for your schema. Check out the result in `declarations/schema.d.ts`!
+
+### STEP 2: Graphql Queries
+
+Write a [graphQL query](https://graphql.org/learn/queries/) that we eventually will use on the client-side to fetch Pokemon. In app/graphql, create a file get-all-pokemon.graphql that specifies allowable fields for Pokemon objects.
+
+Here is [an example](https://github.com/cityblock/commons/blob/master/app/graphql/queries/get-concerns.graphql) from Commons. In the Commons example, notice the use of the [Graphql fragment](https://graphql.org/learn/queries/#fragments) to specify which fields from the underlying schema to expose. Even though the Pokemon queries are not a great use case, it’s good practice to get in the habit of using a fragments for your queries. [Here](https://github.com/cityblock/commons/tree/master/app/graphql) is the folder of queries and fragments in Commons to get a better sense of how they’re used.
+
+After you have defined a query, run `npm run codegen` to generate corresponding typescript types for your query, to be used by the client-side application. Check out the file `app/graphql/types.ts` to see the generated result!
+
+FinePrint: `npm run typegen` will run both `npm run update-schema` and `npm run codegen` if you find yourself wanting to update both schema types and query types at the same time (our team does this quite a lot). If there is a schema or query diff between your Git staging area or working directory and your HEAD commit, the type generating scripts above will exit by design. If you have to update a schema, query, or both, run `npm run typegen` to generate `types.ts` and `documents.json`. The script will exit, but once you commit and run `npm run typegen` again, it will not exit.
+
+### STEP 3: Resolvers
+
+Create a file called `pokemon-resolver.ts` in the `server/graphql` folder. In it, write the resolver resolvePokemon that will call your model method to get all Pokemon. Use [this resolver](https://github.com/cityblock/commons/blob/master/server/graphql/patient-resolver.ts) from Commons as a guide. You can find even more examples from Commons [here](https://github.com/cityblock/commons/tree/master/server/graphql).
+
+Fineprint: you can return your Pokemon methods for CRUD transactions directly in your resolvers. It’s not necessary to pass them to transaction as a callback.
+
+Then, add your resolver to the `make-executable-schema` file. This file maps requests sent from the client (queries and mutations) to the appropriate resolver function on the server. Pay special attention to `resolveFunctions` where we map all queries in our API to resolvers under the `RootQueryType` key and all mutations under `RootMutationType`. For more color, check out the [same file](https://github.com/cityblock/commons/blob/master/server/graphql/make-executable-schema.ts) in Commons.
+
+Finally, we must end with tests. `In the server/graphql/__tests__` folder, create a `pokemon-resolver.spec.ts` file that will contain our tests. We will be ensuring that our written query and resolver works as intended. Here is [an example](https://github.com/cityblock/commons/blob/master/server/graphql/__tests__/concern-resolver.spec.ts) from Commons. You can find even more example test files [here](https://github.com/cityblock/commons/tree/master/server/graphql/__tests__).
+
+After you have that working, make a PR so we can see how it’s going!
+
+Next, write the rest of resolvers for Pokemon, and make another PR. Make sure you cover the basic CRUD operations that you wrote model methods for previously. Finally, do the same for items! Note that you can break up PRs even further if you find it helpful.
+
+## Building out the Frontend
+
+### STEP 1: Start the server
+
+Run `npm run dev` and then go to `localhost:3000` to see a basic app render!
+
+NOTE: you may have to `run npm install` again if packages are not up to date.
+
+NOTE: The purpose of this is to stretch in new areas like using TypeScript with React and [GraphQL/Apollo](https://www.apollographql.com/docs/react/api/react-apollo/#graphql). Do not stress or spend too much time on “bells and whistles” like pixel perfect CSS, loading spinners, etc. Also make sure to make a Pull Request after each chunk of work (left rail, Pokemon detail, create Pokemon form).
+
+### STEP 2: Build Routes
+
+Routes will be stored [here](https://github.com/cityblock/commons-starter-project/blob/master/app/routes.tsx) in `routes.tsx`, and for our MVP we only need two:
+
+1. `/` – home page that will eventually contain the create Pokemon form
+2. `/:pokemonId` – for viewing the detail of a specific pokemon. The left rail listing all Pokemon will be present on all pages.
+
+Start with building out the left rail component that lists all `Pokemon`. We will want to wrap our `<Switch>` component in routes with a component that will be present on all pages - see the [<Main> component](https://github.com/cityblock/commons/blob/master/app/main-container/main-container.tsx) and how it wraps all routes in the [Commons routes file](https://github.com/cityblock/commons/blob/master/app/routes.tsx). Here, we will want to run our GraphQL query to get all Pokemon and render the results. [Here](https://github.com/cityblock/commons/blob/fc32cc1c7e3e7d61c387c83eaae97588a1da5534/app/settings-container/settings-container.tsx) is an example of running a query.
+
+Next, inside your `<Main>` component, create a new route for `/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This will also run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
+
+Finally, beef up the / route by adding a create Pokemon form. You will need to ensure that your mutation is passed as a prop to the React component. [Here](https://github.com/cityblock/commons/blob/master/app/builder-container/concern-create.tsx) is an example from Commons (focus on the GraphQL part).
+
+## Testing the front end
+
+We’re on the homestretch of Pokedex now! Let’s finish off the project by adding in testing for each of our front end components.
+
+We use [Enzyme](https://airbnb.io/enzyme/docs/api/shallow.html) as a supplement to the Jest testing framework for testing our frontend React components. Specifically, we use their shallow rendering API linked just above. You may have noticed that in some parts of Commons we employ snapshot testing, but we are fading out of that in favor of more precise Enzyme testing. As a default, do not use snapshot testing.
+
+As an overview, we look at testing React components to make sure of 2 things: (1) that what DOM elements we expect to render on the page has rendered and (2) that what has rendered has also received the correct props and holds the correct state. (To clarify this means you are NOT testing queries and mutations, that has already been done in the resolver).
+
+For an example of how we handle those things, check out a more complex example in the Commons spec for [risk-area-assessment.tsx](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/risk-area/__tests__/risk-area-assessment.spec.tsx).
+
+Note a couple key tests to poke around with a bit more:
+
+- Our use of `shallow` wrappers for rendering components, which we do all the time to mock components for testing. We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see #4 and #5 below)
+- `.find(component)` for locating a native component or a custom component (don't forget to import it if using a custom component!)
+- `.at(number)` used with `.find()` if there are multiple of that component
+- `.props()` for testing any expected props, and `.state()` for expected state
+- `.setState()` and `.setProps` respectively for testing how components will change with new state and props
 
 ## Debugging Tips
 

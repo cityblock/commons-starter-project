@@ -34,7 +34,7 @@ const ITEM_EDIT = {
   price: 0,
 };
 
-describe('pokemon', () => {
+describe('item', () => {
   let testDb = null as any;
   let txn = null as any;
 
@@ -80,12 +80,7 @@ describe('pokemon', () => {
   describe('edit', () => {
     it('should edit the item used here', async () => {
       const editedItem = await Item.edit(ITEM.id, ITEM_EDIT, txn);
-      expect(editedItem).toMatchObject({
-        happiness: 99,
-        name: 'a socialist item',
-        pokemonId: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
-        price: 0,
-      });
+      expect(editedItem).toMatchObject(ITEM_EDIT);
     });
   });
 });

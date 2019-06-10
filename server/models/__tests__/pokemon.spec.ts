@@ -133,11 +133,7 @@ describe('pokemon', () => {
   describe('edit', () => {
     it('should edit the bulb-emon', async () => {
       const editedPokemon = await Pokemon.edit(POKEMON.id, POKEMON_EDIT, txn);
-      expect(editedPokemon).toMatchObject({
-        name: 'Bubba-Saurus',
-        attack: 0,
-        defense: 55,
-      });
+      expect(editedPokemon).toMatchObject(POKEMON_EDIT);
     });
   });
 });

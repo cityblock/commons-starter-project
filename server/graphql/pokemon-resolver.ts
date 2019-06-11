@@ -23,6 +23,6 @@ export async function resolvePokemons(
   { testTransaction, getOrCreateTransaction }: IContext,
 ): Promise<IRootQueryType['pokemonGetAll']> {
   return getOrCreateTransaction(testTransaction, async txn => {
-    return Pokemon.get(pokemonId, txn);
+    return Pokemon.getAll(txn);
   });
 }

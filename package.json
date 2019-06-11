@@ -27,7 +27,6 @@
     "codegen": "./scripts/codegen.sh",
     "typegen": "./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
     "seed": "npm run knex -- seed:run --knexfile=server/models/knexfile.ts"
-
   },
   "author": "Brennan Moore",
   "devDependencies": {
@@ -88,6 +87,7 @@
     "@types/dotenv": "4.0.3",
     "@types/express": "4.16.0",
     "@types/graphql": "14.0.5",
+    "@types/graphql-iso-date": "^3.3.1",
     "@types/history": "4.7.0",
     "@types/jsonwebtoken": "7.2.8",
     "@types/knex": "0.14.15",
@@ -129,6 +129,7 @@
     "forever": "0.15.3",
     "fork-ts-checker-webpack-plugin": "0.5.2",
     "graphql": "14.0.2",
+    "graphql-iso-date": "^3.6.1",
     "graphql-tag": "2.10.1",
     "graphql-tools": "4.0.4",
     "identity-obj-proxy": "3.0.0",

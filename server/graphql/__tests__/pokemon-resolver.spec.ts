@@ -1,15 +1,38 @@
 import { graphql, print } from 'graphql';
+import 'jest-extended';
+import { cloneDeep } from 'lodash'
 import { transaction, Transaction } from 'objection';
-import getPokemon from '../../app/graphql/queries/get-pokemon.graphql';
-import { setupDb } from '../../lib/test-utils';
+import getPokemon from '../../../app/graphql/queries/get-pokemon.graphql';
+import { setupDb, testGraphqlContext } from '../../lib/test-utils';
+import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
 
-// async function setup(txn: Transaction): Promise<ISetup> {
-//   const clinic = await Clinic.create(createMockClinic(), txn);
-//   const market = await Market.findOrCreateNycMarket(txn);
-//   const user = await User.create(createMockUser(11, clinic.id, market.id, userRole), txn);
-//   return { user };
-// }
+// TESTING FIXTURES
+const POKEMON = {
+  id: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
+  name: 'Bulbasaur',
+  attack: 11,
+  defense: 22,
+  pokeType: 'grass',
+  moves: ['Tackle', 'Growl', 'Leech Seed'],
+  imageUrl:
+    'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
+};
+
+const ITEMS = [
+  {
+    id: '1f77d3da-e173-4c14-b252-b580fb548acf',
+    name: 'Amulet Coin',
+  },
+  {
+    id: '1c79c5d3-7883-4fdd-8ff9-cd49ff28438c',
+    name: "King's Rock",
+  },
+  {
+    id: '85fd60e9-6327-4572-9427-b132e335d3b8',
+    name: 'Pokemon Egg',
+  },
+];
 
 describe('pokemon resolver', () => {
   const getPokemonQuery = print(getPokemon);
@@ -37,7 +60,7 @@ describe('pokemon resolver', () => {
   });
 
   beforeEach(async () => {
-    txn = await transaction.start(User.knex());
+    txn = await transaction.start(Pokemon.knex());
   });
 
   afterEach(async () => {
@@ -50,229 +73,232 @@ describe('pokemon resolver', () => {
         schema,
         getPokemonQuery,
         null,
-        { testTransaction: txn },
+        testGraphqlContext({ testTransaction: txn }),
         {
-          pokemonId: pokemon.id,
+          pokemonId: POKEMON.id,
         },
       );
-      expect(cloneDeep(result.data!.concern)).toMatchObject(concernInput);
+      const cloned = cloneDeep(result.data!.pokemon);
+      expect(cloned).toMatchObject(POKEMON);
+      expect(cloned.item).toIncludeSameMembers(ITEMS);
     });
   });
 
-  describe('concern create', () => {
-    it('creates a concern', async () => {
-      const { user } = await setup(txn);
-      const result = await graphql(
-        schema,
-        concernCreateMutation,
-        null,
-        { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
-        concernInput,
-      );
-      expect(cloneDeep(result.data!.concernCreate)).toMatchObject(concernInput);
-    });
-  });
 
-  describe('concern edit', () => {
-    let user = null as any;
-    let concern = null as any;
-    beforeEach(async () => {
-      const testSetup = await setup(txn);
-      user = testSetup.user;
-      concern = await Concern.create({ title: 'housing' }, txn);
-    });
-    it('edits a concern title', async () => {
-      const { data } = await graphql(
-        schema,
-        concernEditMutation,
-        null,
-        { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
-        {
-          title: 'Medical',
-          concernId: concern.id,
-        },
-      );
-      expect(cloneDeep(data.concernEdit)).toMatchObject({
-        title: 'Medical',
-      });
-    });
-    it('edits a concern by adding a resource url', async () => {
-      const { data } = await graphql(
-        schema,
-        concernEditMutation,
-        null,
-        { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
-        {
-          title: 'Medical',
-          concernId: concern.id,
-          resourceUrl: mockResourceUrl,
-        },
-      );
-      expect(cloneDeep(data.concernEdit)).toMatchObject({
-        title: 'Medical',
-        resourceUrl: mockResourceUrl,
-      });
-    });
-    it('edits a concern by removing a resource url', async () => {
-      const { data } = await graphql(
-        schema,
-        concernEditMutation,
-        null,
-        { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
-        {
-          concernId: concern.id,
-          title: 'Medical',
-          resourceUrl: null,
-        },
-      );
-      expect(data.concernEdit.resourceUrl).toBeNull();
-    });
-  });
+//   describe('concern create', () => {
+//     it('creates a concern', async () => {
+//       const { user } = await setup(txn);
+//       const result = await graphql(
+//         schema,
+//         concernCreateMutation,
+//         null,
+//         { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
+//         concernInput,
+//       );
+//       expect(cloneDeep(result.data!.concernCreate)).toMatchObject(concernInput);
+//     });
+//   });
 
-  describe('concern delete', () => {
-    it('deletes a concern', async () => {
-      const { user } = await setup(txn);
-      const concern = await Concern.create({ title: 'housing' }, txn);
-      const result = await graphql(
-        schema,
-        concernDeleteMutation,
-        null,
-        { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
-        {
-          concernId: concern.id,
-        },
-      );
-      expect(cloneDeep(result.data!.concernDelete).deletedAt).not.toBeFalsy();
-    });
-  });
+//   describe('concern edit', () => {
+//     let user = null as any;
+//     let concern = null as any;
+//     beforeEach(async () => {
+//       const testSetup = await setup(txn);
+//       user = testSetup.user;
+//       concern = await Concern.create({ title: 'housing' }, txn);
+//     });
+//     it('edits a concern title', async () => {
+//       const { data } = await graphql(
+//         schema,
+//         concernEditMutation,
+//         null,
+//         { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
+//         {
+//           title: 'Medical',
+//           concernId: concern.id,
+//         },
+//       );
+//       expect(cloneDeep(data.concernEdit)).toMatchObject({
+//         title: 'Medical',
+//       });
+//     });
+//     it('edits a concern by adding a resource url', async () => {
+//       const { data } = await graphql(
+//         schema,
+//         concernEditMutation,
+//         null,
+//         { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
+//         {
+//           title: 'Medical',
+//           concernId: concern.id,
+//           resourceUrl: mockResourceUrl,
+//         },
+//       );
+//       expect(cloneDeep(data.concernEdit)).toMatchObject({
+//         title: 'Medical',
+//         resourceUrl: mockResourceUrl,
+//       });
+//     });
+//     it('edits a concern by removing a resource url', async () => {
+//       const { data } = await graphql(
+//         schema,
+//         concernEditMutation,
+//         null,
+//         { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
+//         {
+//           concernId: concern.id,
+//           title: 'Medical',
+//           resourceUrl: null,
+//         },
+//       );
+//       expect(data.concernEdit.resourceUrl).toBeNull();
+//     });
+//   });
 
-  describe('concerns', () => {
-    it('returns concerns', async () => {
-      const { user } = await setup(txn);
-      const concern1 = await Concern.create({ title: 'housing' }, txn);
-      const concern2 = await Concern.create({ title: 'medical' }, txn);
+//   describe('concern delete', () => {
+//     it('deletes a concern', async () => {
+//       const { user } = await setup(txn);
+//       const concern = await Concern.create({ title: 'housing' }, txn);
+//       const result = await graphql(
+//         schema,
+//         concernDeleteMutation,
+//         null,
+//         { permissions, userId: user.id, marketId: user.homeMarketId, testTransaction: txn },
+//         {
+//           concernId: concern.id,
+//         },
+//       );
+//       expect(cloneDeep(result.data!.concernDelete).deletedAt).not.toBeFalsy();
+//     });
+//   });
 
-      const result = await graphql(schema, getConcernsQuery, null, {
-        permissions,
-        userId: user.id,
-        marketId: user.homeMarketId,
-        testTransaction: txn,
-      });
-      const concernTitles = cloneDeep(result.data!.concerns).map((c: Concern) => c.title);
-      expect(concernTitles).toContain(concern2.title);
-      expect(concernTitles).toContain(concern1.title);
-    });
+//   describe('concerns', () => {
+//     it('returns concerns', async () => {
+//       const { user } = await setup(txn);
+//       const concern1 = await Concern.create({ title: 'housing' }, txn);
+//       const concern2 = await Concern.create({ title: 'medical' }, txn);
 
-    it('returns concerns in a custom order', async () => {
-      const { user } = await setup(txn);
-      const concern1 = await Concern.create({ title: 'abc' }, txn);
-      const concern2 = await Concern.create({ title: 'def' }, txn);
+//       const result = await graphql(schema, getConcernsQuery, null, {
+//         permissions,
+//         userId: user.id,
+//         marketId: user.homeMarketId,
+//         testTransaction: txn,
+//       });
+//       const concernTitles = cloneDeep(result.data!.concerns).map((c: Concern) => c.title);
+//       expect(concernTitles).toContain(concern2.title);
+//       expect(concernTitles).toContain(concern1.title);
+//     });
 
-      const result = await graphql(
-        schema,
-        getConcernsQuery,
-        null,
-        {
-          userId: user.id,
-          marketId: user.homeMarketId,
-          permissions,
-          testTransaction: txn,
-        },
-        {
-          orderBy: 'titleAsc',
-        },
-      );
-      expect(cloneDeep(result.data!.concerns)).toMatchObject([
-        {
-          title: concern1.title,
-        },
-        {
-          title: concern2.title,
-        },
-      ]);
-    });
-  });
+//     it('returns concerns in a custom order', async () => {
+//       const { user } = await setup(txn);
+//       const concern1 = await Concern.create({ title: 'abc' }, txn);
+//       const concern2 = await Concern.create({ title: 'def' }, txn);
 
-  describe('concern add diagnosis code', () => {
-    it('adds a diagnosis code to a concern', async () => {
-      const { user } = await setup(txn);
-      await DiagnosisCode.create(
-        {
-          codesetName: 'ICD-10',
-          code: 'A00',
-          label: 'Cholera',
-          version: '2018',
-        },
-        txn,
-      );
-      const concern = await Concern.create({ title: 'Housing' }, txn);
-      expect(concern.diagnosisCodes.length).toEqual(0);
+//       const result = await graphql(
+//         schema,
+//         getConcernsQuery,
+//         null,
+//         {
+//           userId: user.id,
+//           marketId: user.homeMarketId,
+//           permissions,
+//           testTransaction: txn,
+//         },
+//         {
+//           orderBy: 'titleAsc',
+//         },
+//       );
+//       expect(cloneDeep(result.data!.concerns)).toMatchObject([
+//         {
+//           title: concern1.title,
+//         },
+//         {
+//           title: concern2.title,
+//         },
+//       ]);
+//     });
+//   });
 
-      const result = await graphql(
-        schema,
-        concernAddDiagnosisCodeMutation,
-        null,
-        { userId: user.id, marketId: user.homeMarketId, permissions, testTransaction: txn },
-        {
-          codesetName: 'ICD-10',
-          code: 'A00',
-          version: '2018',
-          concernId: concern.id,
-        },
-      );
-      expect(cloneDeep(result.data!.concernAddDiagnosisCode)).toMatchObject({
-        title: concern.title,
-        diagnosisCodes: [
-          {
-            codesetName: 'ICD-10',
-            code: 'A00',
-            label: 'Cholera',
-            version: '2018',
-          },
-        ],
-      });
-    });
-  });
+//   describe('concern add diagnosis code', () => {
+//     it('adds a diagnosis code to a concern', async () => {
+//       const { user } = await setup(txn);
+//       await DiagnosisCode.create(
+//         {
+//           codesetName: 'ICD-10',
+//           code: 'A00',
+//           label: 'Cholera',
+//           version: '2018',
+//         },
+//         txn,
+//       );
+//       const concern = await Concern.create({ title: 'Housing' }, txn);
+//       expect(concern.diagnosisCodes.length).toEqual(0);
 
-  describe('concern remove diagnosis code', () => {
-    it('removes a diagnosis code from a concern', async () => {
-      const { user } = await setup(txn);
-      const diagnosisCode = await DiagnosisCode.create(
-        {
-          codesetName: 'ICD-10',
-          code: 'A00',
-          label: 'Cholera',
-          version: '2018',
-        },
-        txn,
-      );
-      const concern = await Concern.create({ title: 'Housing' }, txn);
-      await Concern.addDiagnosisCode(
-        concern.id,
-        {
-          codesetName: 'ICD-10',
-          code: 'A00',
-          version: '2018',
-        },
-        txn,
-      );
-      const refetchedConcern = await Concern.get(concern.id, txn);
-      expect(refetchedConcern.diagnosisCodes.length).toEqual(1);
+//       const result = await graphql(
+//         schema,
+//         concernAddDiagnosisCodeMutation,
+//         null,
+//         { userId: user.id, marketId: user.homeMarketId, permissions, testTransaction: txn },
+//         {
+//           codesetName: 'ICD-10',
+//           code: 'A00',
+//           version: '2018',
+//           concernId: concern.id,
+//         },
+//       );
+//       expect(cloneDeep(result.data!.concernAddDiagnosisCode)).toMatchObject({
+//         title: concern.title,
+//         diagnosisCodes: [
+//           {
+//             codesetName: 'ICD-10',
+//             code: 'A00',
+//             label: 'Cholera',
+//             version: '2018',
+//           },
+//         ],
+//       });
+//     });
+//   });
 
-      const result = await graphql(
-        schema,
-        concernRemoveDiagnosisCodeMutation,
-        null,
-        { userId: user.id, marketId: user.homeMarketId, permissions, testTransaction: txn },
-        {
-          concernId: concern.id,
-          diagnosisCodeId: diagnosisCode.id,
-        },
-      );
-      expect(cloneDeep(result.data!.concernRemoveDiagnosisCode)).toMatchObject({
-        title: concern.title,
-        diagnosisCodes: [],
-      });
-    });
-  });
-});
+//   describe('concern remove diagnosis code', () => {
+//     it('removes a diagnosis code from a concern', async () => {
+//       const { user } = await setup(txn);
+//       const diagnosisCode = await DiagnosisCode.create(
+//         {
+//           codesetName: 'ICD-10',
+//           code: 'A00',
+//           label: 'Cholera',
+//           version: '2018',
+//         },
+//         txn,
+//       );
+//       const concern = await Concern.create({ title: 'Housing' }, txn);
+//       await Concern.addDiagnosisCode(
+//         concern.id,
+//         {
+//           codesetName: 'ICD-10',
+//           code: 'A00',
+//           version: '2018',
+//         },
+//         txn,
+//       );
+//       const refetchedConcern = await Concern.get(concern.id, txn);
+//       expect(refetchedConcern.diagnosisCodes.length).toEqual(1);
+
+//       const result = await graphql(
+//         schema,
+//         concernRemoveDiagnosisCodeMutation,
+//         null,
+//         { userId: user.id, marketId: user.homeMarketId, permissions, testTransaction: txn },
+//         {
+//           concernId: concern.id,
+//           diagnosisCodeId: diagnosisCode.id,
+//         },
+//       );
+//       expect(cloneDeep(result.data!.concernRemoveDiagnosisCode)).toMatchObject({
+//         title: concern.title,
+//         diagnosisCodes: [],
+//       });
+//     });
+//   });
+// });

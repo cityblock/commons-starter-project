@@ -1,5 +1,5 @@
 query getPokemons() {
-  pokemons() {
+  pokemonGetAll {
     pokemon {
       id
       name

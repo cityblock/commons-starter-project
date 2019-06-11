@@ -9,6 +9,8 @@ import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
 
 // TESTING FIXTURES
+const NUM_POKEMON = 52;
+
 const POKEMON = {
   id: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
   name: 'Bulbasaur',
@@ -37,7 +39,7 @@ const ITEMS = [
 
 describe('pokemon resolver', () => {
   const getPokemonQuery = print(getPokemon);
-  // const getPokemonsQuery = print(getPokemons);
+  const getPokemonsQuery = print(getPokemons);
 
   // some more:
   // const pokemonCreateMutation = print(pokemonCreate);
@@ -79,9 +81,26 @@ describe('pokemon resolver', () => {
           pokemonId: POKEMON.id,
         },
       );
+
       const cloned = cloneDeep(result.data!.pokemon);
       expect(cloned).toMatchObject(POKEMON);
       expect(cloned.item).toIncludeSameMembers(ITEMS);
+    });
+  });
+
+  describe('resolve pokemons', () => {
+    it('fetches all pokemons', async () => {
+      const result = await graphql(
+        schema,
+        getPokemonsQuery,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        {},
+      );
+
+      const cloned = cloneDeep(result.data!);
+      expect(cloned).toHaveLength(NUM_POKEMON);
+      expect(cloned).toIncludeAllMembers([POKEMON]);
     });
   });
 });

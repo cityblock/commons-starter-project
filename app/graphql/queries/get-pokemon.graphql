@@ -1,12 +1,8 @@
+#import "../fragments/base-pokemon.graphql"
+
 query getPokemon($pokemonId: ID!) {
   pokemon(pokemonId: $pokemonId) {
-    id
-    name
-    attack
-    defense
-    pokeType
-    moves
-    imageUrl
+    ...BasePokemon
     item {
       id
       name

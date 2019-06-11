@@ -91,7 +91,7 @@ type RootQueryType {
   # GET A POKEMON & ITEMS
   pokemon(pokemonId: ID!): Pokemon
   # GET ALL POKEMONS
-  pokemonGetAll: [Pokemon!]
+  pokemons: [Pokemon!]!
 
   # GET ITEM
   item(itemId: ID!): Item

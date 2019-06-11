@@ -1,0 +1,8 @@
+fragment BaseItem on Item {
+  id
+  pokemonId
+  name
+  price
+  happiness
+  imageUrl
+}

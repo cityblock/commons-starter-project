@@ -1,0 +1,9 @@
+fragment BasePokemon on Pokemon {
+  id
+  name
+  attack
+  defense
+  pokeType
+  moves
+  imageUrl
+}

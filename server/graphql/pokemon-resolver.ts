@@ -21,7 +21,7 @@ export async function resolvePokemons(
   root: any,
   {  }: IQuery,
   { testTransaction, getOrCreateTransaction }: IContext,
-): Promise<IRootQueryType['pokemonGetAll']> {
+): Promise<IRootQueryType['pokemons']> {
   return getOrCreateTransaction(testTransaction, async txn => {
     return Pokemon.getAll(txn);
   });

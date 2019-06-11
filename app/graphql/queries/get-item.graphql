@@ -1,10 +1,7 @@
+#import "../fragments/base-item.graphql"
+
 query getItem($itemId: ID!) {
   item(itemId: $itemId) {
-    id
-    pokemonId
-    name
-    price
-    happiness
-    imageUrl
+    ...BaseItem
   }
 }

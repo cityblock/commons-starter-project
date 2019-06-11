@@ -1,0 +1,13 @@
+query getPokemons() {
+  pokemons() {
+    pokemon {
+      id
+      name
+      attack
+      defense
+      pokeType
+      moves
+      imageUrl
+  }
+}
+}

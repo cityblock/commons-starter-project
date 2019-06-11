@@ -133,7 +133,16 @@ The methods your model should include are:
 
 _Note: All model methods need to take a transaction (as you see above)._
 
-After that is all set, write the model for items in `Item.ts`, including a get, create, edit and delete method. Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
+After that is all set, write the model for items in `Item.ts`:
+
+- get(itemId: string, txn: Transaction) ­ returns a single item
+- create(input: IItemCreateInput, txn: Transaction) ­ creates and returns an item
+- edit(itemId: string, pokemon: IItemEditInput, txn: Transaction) ­ edits an existing item
+- delete(itemId: string, txn: Transaction) ­ marks an item as deleted, but does not actually delete it from the database
+
+Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
+
+--> NOTE THIS BETTER. Take note here that graphQL best practices is to make objects available through singular queries.
 
 After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here are [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
 

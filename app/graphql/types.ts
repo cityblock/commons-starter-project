@@ -3,6 +3,31 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: getItem
+// ====================================================
+
+export interface getItem_item {
+  id: string;
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
+export interface getItem {
+  item: getItem_item | null;
+}
+
+export interface getItemVariables {
+  itemId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getPokemon
 // ====================================================
 

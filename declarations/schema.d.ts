@@ -54,7 +54,7 @@ declare module 'schema' {
 
   interface IItem {
     id: string;
-    pokemon: IPokemon;
+    pokemonId: string;
     name: string;
     price: number;
     happiness: number;
@@ -80,6 +80,31 @@ declare module 'schema' {
     pokeType: string;
     moves: Array<string>;
     imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    pokemonId: string;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: string | null;
+    moves?: Array<string> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IItemCreateInput {
+    name: string;
+    price: number;
+    happiness: number;
+    imageUrl: string;
+  }
+
+  interface IItemEditInput {
+    pokemonId: string;
+    name?: string | null;
+    price?: number | null;
+    happiness?: number | null;
+    imageUrl?: string | null;
   }
 }
 

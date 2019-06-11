@@ -1,0 +1,10 @@
+query getItem($itemId: ID!) {
+  item(itemId: $itemId) {
+    id
+    pokemonId
+    name
+    price
+    happiness
+    imageUrl
+  }
+}

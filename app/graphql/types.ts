@@ -82,6 +82,23 @@ export interface getPokemons {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL fragment: BaseItem
+// ====================================================
+
+export interface BaseItem {
+  id: string;
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL fragment: BasePokemon
 // ====================================================
 

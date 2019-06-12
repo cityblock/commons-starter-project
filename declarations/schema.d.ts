@@ -1,13 +1,13 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
     data?: IRootQueryType | IRootMutationType;
-    errors?: Array<IGraphQLResponseError>;
+    errors?: IGraphQLResponseError[];
   }
 
   interface IGraphQLResponseError {
     /** Required for all errors */
     message: string;
-    locations?: Array<IGraphQLResponseErrorLocation>;
+    locations?: IGraphQLResponseErrorLocation[];
     /** 7.2.2 says 'GraphQL servers may provide additional entries to error' */
     [propName: string]: any;
   }
@@ -19,7 +19,7 @@ declare module 'schema' {
 
   interface IRootQueryType {
     pokemon: IPokemon | null;
-    pokemons: Array<IPokemon>;
+    pokemons: IPokemon[];
     item: IItem | null;
   }
 
@@ -38,9 +38,9 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: string;
-    moves: Array<string>;
+    moves: string[];
     imageUrl: string;
-    item: Array<IItem>;
+    item: IItem[];
     createdAt: any;
     updatedAt: any;
     deletedAt: any | null;
@@ -66,10 +66,27 @@ declare module 'schema' {
 
   interface IRootMutationType {
     pokemonCreate: IPokemon | null;
+    pokemonDelete: IPokemon;
+    pokemonEdit: IPokemon | null;
+    itemCreate: IItem | null;
+    itemDelete: IItem;
+    itemEdit: IItem | null;
   }
 
   interface IPokemonCreateOnRootMutationTypeArguments {
     input: IPokemonCreateInput;
+  }
+
+  interface IPokemonEditOnRootMutationTypeArguments {
+    input: IPokemonEditInput;
+  }
+
+  interface IItemCreateOnRootMutationTypeArguments {
+    input: IItemCreateInput;
+  }
+
+  interface IItemEditOnRootMutationTypeArguments {
+    input: IItemEditInput;
   }
 
   interface IPokemonCreateInput {
@@ -78,7 +95,7 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: string;
-    moves: Array<string>;
+    moves: string[];
     imageUrl: string;
   }
 
@@ -88,19 +105,21 @@ declare module 'schema' {
     attack?: number | null;
     defense?: number | null;
     pokeType?: string | null;
-    moves?: Array<string> | null;
+    moves?: string[] | null;
     imageUrl?: string | null;
   }
 
   interface IItemCreateInput {
     name: string;
+    pokemonId: string;
     price: number;
     happiness: number;
     imageUrl: string;
   }
 
   interface IItemEditInput {
-    pokemonId: string;
+    itemId: string;
+    pokemonId?: string | null;
     name?: string | null;
     price?: number | null;
     happiness?: number | null;

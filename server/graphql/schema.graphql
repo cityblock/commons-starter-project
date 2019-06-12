@@ -58,13 +58,15 @@ input PokemonEditInput {
 
 input ItemCreateInput {
   name: String!
+  pokemonId: String!
   price: Int!
   happiness: Int!
   imageUrl: String!
 }
 
 input ItemEditInput {
-  pokemonId: String!
+  itemId: String!
+  pokemonId: String
   name: String
   price: Int
   happiness: Int
@@ -75,16 +77,16 @@ type RootMutationType {
   # CREATE A POKEMON
   pokemonCreate(input: PokemonCreateInput!): Pokemon
   # # DELETE POKEMON
-  # pokemonDelete: Pokemon!
+  pokemonDelete: Pokemon!
   # # EDIT POKEMON
-  # pokemonEdit(input: PokemonEditInput!): Pokemon
+  pokemonEdit(input: PokemonEditInput!): Pokemon
 
   # CREATE AN ITEM
-  # pokemonItem(input: ItemCreateInput!): Item
+  itemCreate(input: ItemCreateInput!): Item
   # DELETE ITEM
-  # itemDelete: Item!
+  itemDelete: Item!
   # EDIT ITEM
-  # itemEdit(input: ItemEditInput!): Item
+  itemEdit(input: ItemEditInput!): Item
 }
 
 type RootQueryType {

@@ -18,7 +18,7 @@ const ITEM = {
   price: 59,
 };
 
-describe('pokemon resolver', () => {
+describe('item resolver', () => {
   const getItemQuery = print(getItem);
   // const getPokemonsQuery = print(getPokemons);
 

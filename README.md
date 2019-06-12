@@ -142,7 +142,7 @@ After that is all set, write the model for items in `Item.ts`:
 
 Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
---> NOTE THIS BETTER. Take note here that graphQL best practices is to make objects available through singular queries.
+Take note here that graphQL best practice is to make all objects needed in the front end available through singular queries. For the sake of this exercise, we are implementing this only in Pokemon.get() for practice.
 
 After you have written your data models, create a test file called `pokemon.spec.ts` and `item.spec.ts` inside a `__tests__` folder, inside the `models` folder. This will contain your tests be sure to write at least one test per method. Here are [the tests for the patient model](https://github.com/cityblock/commons/blob/master/server/models/__tests__/patient.spec.ts). You can also check out [other model tests here](https://github.com/cityblock/commons/tree/master/server/models/__tests__).
 

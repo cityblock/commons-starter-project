@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import getPokemon from '../../../app/graphql/queries/get-pokemon.graphql';
 import getPokemons from '../../../app/graphql/queries/get-pokemons.graphql';
+import editPokemon from '../../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import { setupDb, testGraphqlContext } from '../../lib/test-utils';
 import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
@@ -37,14 +38,20 @@ const ITEMS = [
   },
 ];
 
+const POKEMON_EDIT = {
+  name: 'Bubba-Saurus',
+  attack: 0,
+  defense: 55,
+};
+
 describe('pokemon resolver', () => {
   const getPokemonQuery = print(getPokemon);
   const getPokemonsQuery = print(getPokemons);
+  const pokemonEditMutation = print(editPokemon);
 
   // some more:
   // const pokemonCreateMutation = print(pokemonCreate);
   // const pokemonDeleteMutation = print(pokemonDelete);
-  // const pokemonEditMutation = print(pokemonEdit);
 
   // const getItemQuery = print(getItem);
   // const itemCreateMutation = print(itemCreate);
@@ -98,9 +105,26 @@ describe('pokemon resolver', () => {
         {},
       );
 
-      const cloned = cloneDeep(result.data!);
+      const cloned = cloneDeep(result.data!.pokemons);
       expect(cloned).toHaveLength(NUM_POKEMON);
       expect(cloned).toIncludeAllMembers([POKEMON]);
     });
   });
+
+  // describe('resolve a pokemon edit', () => {
+  //   it('edits a pokemon', async () => {
+  //     const result = await graphql(
+  //       schema,
+  //       pokemonEditMutation,
+  //       null,
+  //       testGraphqlContext({ testTransaction: txn }),
+  //       {
+  //         POKEMON_EDIT,
+  //       },
+  //     );
+
+  //     const cloned = cloneDeep(result.data!.pokemon);
+  //     expect(cloned).toMatchObject(POKEMON_EDIT);
+  //   });
+  // });
 });

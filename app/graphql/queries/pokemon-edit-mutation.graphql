@@ -1,0 +1,7 @@
+#import "../fragments/base-pokemon.graphql"
+
+mutation pokemonEdit($pokemonId: ID!) {
+  pokemon {
+    ...BasePokemon
+  }
+}

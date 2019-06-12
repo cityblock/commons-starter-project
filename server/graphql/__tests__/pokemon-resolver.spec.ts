@@ -1,7 +1,7 @@
 import { graphql, print } from 'graphql';
 import 'jest-extended';
 import { cloneDeep } from 'lodash';
-import { transaction, Transaction } from 'objection';
+import { transaction } from 'objection';
 import getPokemon from '../../../app/graphql/queries/get-pokemon.graphql';
 import getPokemons from '../../../app/graphql/queries/get-pokemons.graphql';
 import pokemonCreate from '../../../app/graphql/queries/pokemon-create-mutation.graphql';

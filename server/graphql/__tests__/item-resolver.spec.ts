@@ -4,8 +4,8 @@ import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
 import getItem from '../../../app/graphql/queries/get-item.graphql';
 import itemCreate from '../../../app/graphql/queries/item-create-mutation.graphql';
-import itemDelete from '../../../app/graphql/queries/item-delete-mutation.graphql';
-import itemEdit from '../../../app/graphql/queries/item-edit-mutation.graphql';
+import itemDelete from '../../../app/graphql/queries/item-delete-mutation.graphql';
+import itemEdit from '../../../app/graphql/queries/item-edit-mutation.graphql';
 import { setupDb, testGraphqlContext } from '../../lib/test-utils';
 import Item from '../../models/item';
 import schema from '../make-executable-schema';
@@ -86,7 +86,7 @@ describe('item resolver', () => {
         itemCreateMutation,
         null,
         testGraphqlContext({ testTransaction: txn }),
-          ITEM_CREATE,
+        ITEM_CREATE,
       );
 
       const cloned = cloneDeep(result.data!.itemCreate);
@@ -126,5 +126,4 @@ describe('item resolver', () => {
       expect(cloned.id).toBe(ITEM.id);
     });
   });
-
 });

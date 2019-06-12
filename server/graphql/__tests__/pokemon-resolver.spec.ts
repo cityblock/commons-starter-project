@@ -30,7 +30,7 @@ const POKEMON_CREATE = {
   name: 'Bubble-Saurus',
   attack: 11,
   defense: 22,
-  pokeType: 'grass',,
+  pokeType: 'grass',
   moves: ['Tackle', 'Growl', 'Leech Seed'],
   imageUrl:
     'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',

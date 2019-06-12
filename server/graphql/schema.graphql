@@ -77,14 +77,14 @@ type RootMutationType {
   # CREATE A POKEMON
   pokemonCreate(input: PokemonCreateInput!): Pokemon
   # # DELETE POKEMON
-  pokemonDelete: Pokemon!
+  pokemonDelete(pokemonId: ID!): Pokemon!
   # # EDIT POKEMON
   pokemonEdit(input: PokemonEditInput!): Pokemon
 
   # CREATE AN ITEM
   itemCreate(input: ItemCreateInput!): Item
   # DELETE ITEM
-  itemDelete: Item!
+  itemDelete(itemId: ID!): Item!
   # EDIT ITEM
   itemEdit(input: ItemEditInput!): Item
 }

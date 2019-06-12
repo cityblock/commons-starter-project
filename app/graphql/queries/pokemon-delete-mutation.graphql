@@ -1,7 +1,7 @@
 #import "../fragments/base-pokemon.graphql"
 
 mutation pokemonDelete($pokemonId: ID!) {
-  pokemon {
+  pokemonDelete(pokemonId: $pokemonId) {
     ...BasePokemon
     deletedAt
   }

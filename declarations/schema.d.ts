@@ -77,12 +77,20 @@ declare module 'schema' {
     input: IPokemonCreateInput;
   }
 
+  interface IPokemonDeleteOnRootMutationTypeArguments {
+    pokemonId: string;
+  }
+
   interface IPokemonEditOnRootMutationTypeArguments {
     input: IPokemonEditInput;
   }
 
   interface IItemCreateOnRootMutationTypeArguments {
     input: IItemCreateInput;
+  }
+
+  interface IItemDeleteOnRootMutationTypeArguments {
+    itemId: string;
   }
 
   interface IItemEditOnRootMutationTypeArguments {
@@ -119,6 +127,7 @@ declare module 'schema' {
 
   interface IItemEditInput {
     itemId: string;
+    pokemonId?: string | null;
     name?: string | null;
     price?: number | null;
     happiness?: number | null;

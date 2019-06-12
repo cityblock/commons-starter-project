@@ -1,7 +1,7 @@
 #import "../fragments/base-item.graphql"
 
 mutation itemDelete($itemId: ID!) {
-  item {
+  itemDelete(itemId: $itemId) {
     ...BaseItem
     deletedAt
   }

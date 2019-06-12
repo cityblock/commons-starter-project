@@ -7,7 +7,15 @@ mutation itemCreate(
   $happiness: Int!
   $imageUrl: String!
 ) {
-  item {
+  itemCreate(
+    input: {
+      name: $name
+      pokemonid: $pokemonId
+      price: $price
+      happiness: $happiness
+      imageUrl: $imageUrl
+    }
+  ) {
     ...BaseItem
   }
 }

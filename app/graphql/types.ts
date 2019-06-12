@@ -82,6 +82,152 @@ export interface getPokemons {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: itemCreate
+// ====================================================
+
+export interface itemCreate_itemCreate {
+  id: string;
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
+export interface itemCreate {
+  itemCreate: itemCreate_itemCreate | null;
+}
+
+export interface itemCreateVariables {
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: itemDelete
+// ====================================================
+
+export interface itemDelete_itemDelete {
+  id: string;
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+  deletedAt: any | null;
+}
+
+export interface itemDelete {
+  itemDelete: itemDelete_itemDelete;
+}
+
+export interface itemDeleteVariables {
+  itemId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: pokemonCreate
+// ====================================================
+
+export interface pokemonCreate_pokemonCreate {
+  id: string;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+}
+
+export interface pokemonCreate {
+  pokemonCreate: pokemonCreate_pokemonCreate | null;
+}
+
+export interface pokemonCreateVariables {
+  pokemonNumber: number;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: pokemonDelete
+// ====================================================
+
+export interface pokemonDelete_pokemonDelete {
+  id: string;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+  deletedAt: any | null;
+}
+
+export interface pokemonDelete {
+  pokemonDelete: pokemonDelete_pokemonDelete;
+}
+
+export interface pokemonDeleteVariables {
+  pokemonId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: pokemonEdit
+// ====================================================
+
+export interface pokemonEdit_pokemonEdit {
+  id: string;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+}
+
+export interface pokemonEdit {
+  pokemonEdit: pokemonEdit_pokemonEdit | null;
+}
+
+export interface pokemonEditVariables {
+  pokemonId: string;
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: string;
+  moves: string[];
+  imageUrl: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL fragment: BaseItem
 // ====================================================
 

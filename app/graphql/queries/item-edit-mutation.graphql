@@ -1,7 +1,7 @@
 #import "../fragments/base-item.graphql"
 
 mutation itemCreate(
-  $pokemonId: String!
+  $pokemonId: ID!
   $name: String!
   $price: Int!
   $happiness: Int!

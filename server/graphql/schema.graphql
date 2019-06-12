@@ -47,7 +47,7 @@ input PokemonCreateInput {
 }
 
 input PokemonEditInput {
-  pokemonId: String!
+  pokemonId: ID!
   name: String
   attack: Int
   defense: Int
@@ -58,14 +58,14 @@ input PokemonEditInput {
 
 input ItemCreateInput {
   name: String!
-  pokemonId: String!
+  pokemonId: ID!
   price: Int!
   happiness: Int!
   imageUrl: String!
 }
 
 input ItemEditInput {
-  itemId: String!
+  itemId: ID!
   pokemonId: String
   name: String
   price: Int

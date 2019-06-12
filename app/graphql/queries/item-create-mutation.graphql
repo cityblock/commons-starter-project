@@ -10,7 +10,7 @@ mutation itemCreate(
   itemCreate(
     input: {
       name: $name
-      pokemonid: $pokemonId
+      pokemonId: $pokemonId
       price: $price
       happiness: $happiness
       imageUrl: $imageUrl

@@ -100,6 +100,7 @@ describe('pokemon', () => {
   describe('get', () => {
     it('should get pokemon by id', async () => {
       const fetchedPokemon = await Pokemon.get(POKEMON.id, txn);
+
       expect(fetchedPokemon).toMatchObject(POKEMON);
       expect(fetchedPokemon).toHaveProperty('item');
       expect(fetchedPokemon.item).toIncludeSameMembers(ITEMS);

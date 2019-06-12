@@ -7,8 +7,8 @@ import config from '../config';
 import { itemCreate, itemDelete, itemEdit, resolveItem } from './item-resolver';
 import {
   pokemonCreate,
-  pokemonDelete,
-  pokemonEdit,
+  // pokemonDelete,
+  // pokemonEdit,
   resolvePokemon,
   resolvePokemons,
 } from './pokemon-resolver';
@@ -24,8 +24,8 @@ export const resolveFunctions = {
   },
   RootMutationType: {
     pokemonCreate,
-    pokemonDelete,
-    pokemonEdit,
+    // pokemonDelete,
+    // pokemonEdit,
     itemCreate,
     itemDelete,
     itemEdit,

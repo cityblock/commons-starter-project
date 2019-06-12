@@ -79,56 +79,52 @@ describe('item resolver', () => {
     });
   });
 
-  describe('resolve creating an item', () => {
-    it('creates an item', async () => {
-      const result = await graphql(
-        schema,
-        itemCreateMutation,
-        null,
-        testGraphqlContext({ testTransaction: txn }),
-        {
-          ITEM_CREATE,
-        },
-      );
+  // describe('resolve creating an item', () => {
+  //   it('creates an item', async () => {
+  //     const result = await graphql(
+  //       schema,
+  //       itemCreateMutation,
+  //       null,
+  //       testGraphqlContext({ testTransaction: txn }),
+  //         ITEM_CREATE,
+  //     );
 
-      const cloned = cloneDeep(result.data!.item);
-      expect(cloned).toMatchObject(ITEM_CREATE);
-    });
-  });
+  //     const cloned = cloneDeep(result.data!.item);
+  //     expect(cloned).toMatchObject(ITEM_CREATE);
+  //   });
+  // });
 
-  describe('resolve editing an item', () => {
-    it('edits an item', async () => {
-      const result = await graphql(
-        schema,
-        itemEditMutation,
-        null,
-        testGraphqlContext({ testTransaction: txn }),
-        {
-          ITEM_EDIT,
-        },
-      );
+  // describe('resolve editing an item', () => {
+  //   it('edits an item', async () => {
+  //     const result = await graphql(
+  //       schema,
+  //       itemEditMutation,
+  //       null,
+  //       testGraphqlContext({ testTransaction: txn }),
+  //         ITEM_EDIT,
+  //     );
 
-      const cloned = cloneDeep(result.data!.item);
-      expect(cloned).toMatchObject(ITEM_EDIT);
-    });
-  });
+  //     const cloned = cloneDeep(result.data!.item);
+  //     expect(cloned).toMatchObject(ITEM_EDIT);
+  //   });
+  // });
 
-  describe('resolve deleting an item', () => {
-    it('deletes an item', async () => {
-      const result = await graphql(
-        schema,
-        itemDeleteMutation,
-        null,
-        testGraphqlContext({ testTransaction: txn }),
-        {
-          itemId: ITEM.id,
-        },
-      );
+  // describe('resolve deleting an item', () => {
+  //   it('deletes an item', async () => {
+  //     const result = await graphql(
+  //       schema,
+  //       itemDeleteMutation,
+  //       null,
+  //       testGraphqlContext({ testTransaction: txn }),
+  //       {
+  //         itemId: ITEM.id,
+  //       },
+  //     );
 
-      const cloned = cloneDeep(result.data!.item);
-      expect(cloned.deletedAt).toBeTruthy();
-      expect(cloned.id).toBe(ITEM.id);
-    });
-  });
+  //     const cloned = cloneDeep(result.data!.item);
+  //     expect(cloned.deletedAt).toBeTruthy();
+  //     expect(cloned.id).toBe(ITEM.id);
+  //   });
+  // });
 
 });

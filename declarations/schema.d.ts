@@ -1,13 +1,13 @@
 declare module 'schema' {
   interface IGraphQLResponseRoot {
     data?: IRootQueryType | IRootMutationType;
-    errors?: IGraphQLResponseError[];
+    errors?: Array<IGraphQLResponseError>;
   }
 
   interface IGraphQLResponseError {
     /** Required for all errors */
     message: string;
-    locations?: IGraphQLResponseErrorLocation[];
+    locations?: Array<IGraphQLResponseErrorLocation>;
     /** 7.2.2 says 'GraphQL servers may provide additional entries to error' */
     [propName: string]: any;
   }
@@ -19,7 +19,7 @@ declare module 'schema' {
 
   interface IRootQueryType {
     pokemon: IPokemon | null;
-    pokemons: IPokemon[];
+    pokemons: Array<IPokemon>;
     item: IItem | null;
   }
 
@@ -38,9 +38,9 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: string;
-    moves: string[];
+    moves: Array<string>;
     imageUrl: string;
-    item: IItem[];
+    item: Array<IItem>;
     createdAt: any;
     updatedAt: any;
     deletedAt: any | null;
@@ -95,7 +95,7 @@ declare module 'schema' {
     attack: number;
     defense: number;
     pokeType: string;
-    moves: string[];
+    moves: Array<string>;
     imageUrl: string;
   }
 
@@ -105,7 +105,7 @@ declare module 'schema' {
     attack?: number | null;
     defense?: number | null;
     pokeType?: string | null;
-    moves?: string[] | null;
+    moves?: Array<string> | null;
     imageUrl?: string | null;
   }
 
@@ -119,7 +119,6 @@ declare module 'schema' {
 
   interface IItemEditInput {
     itemId: string;
-    pokemonId?: string | null;
     name?: string | null;
     price?: number | null;
     happiness?: number | null;

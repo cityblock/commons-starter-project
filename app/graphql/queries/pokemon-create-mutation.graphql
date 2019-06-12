@@ -1,0 +1,15 @@
+#import "../fragments/base-pokemon.graphql"
+
+mutation pokemonCreate(
+  $pokemonNumber: Int!
+  $name: String!
+  $attack: Int!
+  $defense: Int!
+  $pokeType: String!
+  $moves: String!
+  $imageUrl: String!
+) {
+  pokemon {
+    ...BasePokemon
+  }
+}

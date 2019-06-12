@@ -1,6 +1,14 @@
 #import "../fragments/base-pokemon.graphql"
 
-mutation pokemonEdit($pokemonId: ID!) {
+mutation pokemonEdit(
+  $pokemonId: ID!
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: String
+  $moves: String
+  $imageUrl: String
+) {
   pokemon {
     ...BasePokemon
   }

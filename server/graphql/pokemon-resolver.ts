@@ -37,14 +37,13 @@ export async function resolvePokemons(
   });
 }
 
-export async function pokemonCreate(
+export async function pokemonDelete(
   root: any,
-  { input }: IPokemonCreateOnRootMutationTypeArguments,
-  {  }: IPokemonQuery,
+  { pokemonId }: IPokemonDelete,
   { testTransaction, getOrCreateTransaction }: IContext,
-): Promise<IRootMutationType['pokemonCreate']> {
+): Promise<IRootMutationType['pokemonDelete']> {
   return getOrCreateTransaction(testTransaction, async txn => {
-    return Pokemon.create(input, txn);
+    return Pokemon.delete(pokemonId, txn);
   });
 }
 
@@ -60,12 +59,13 @@ export async function pokemonEdit(
   });
 }
 
-export async function pokemonDelete(
+export async function pokemonCreate(
   root: any,
-  { pokemonId }: IPokemonDelete,
+  { input }: IPokemonCreateOnRootMutationTypeArguments,
+  {  }: IPokemonQuery,
   { testTransaction, getOrCreateTransaction }: IContext,
-): Promise<IRootMutationType['pokemonDelete']> {
+): Promise<IRootMutationType['pokemonCreate']> {
   return getOrCreateTransaction(testTransaction, async txn => {
-    return Pokemon.delete(pokemonId, txn);
+    return Pokemon.create(input, txn);
   });
 }

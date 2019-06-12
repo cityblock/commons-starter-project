@@ -4,7 +4,9 @@ import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
 import getPokemon from '../../../app/graphql/queries/get-pokemon.graphql';
 import getPokemons from '../../../app/graphql/queries/get-pokemons.graphql';
-import editPokemon from '../../../app/graphql/queries/pokemon-edit-mutation.graphql';
+import pokemonCreate from '../../../app/graphql/queries/pokemon-create-mutation.graphql';
+import pokemonDelete from '../../../app/graphql/queries/pokemon-delete-mutation.graphql';
+import pokemonEdit from '../../../app/graphql/queries/pokemon-edit-mutation.graphql';
 import { setupDb, testGraphqlContext } from '../../lib/test-utils';
 import Pokemon from '../../models/pokemon';
 import schema from '../make-executable-schema';
@@ -18,6 +20,17 @@ const POKEMON = {
   attack: 11,
   defense: 22,
   pokeType: 'grass',
+  moves: ['Tackle', 'Growl', 'Leech Seed'],
+  imageUrl:
+    'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
+};
+
+const POKEMON_CREATE = {
+  pokemonNumber: 99,
+  name: 'Bubble-Saurus',
+  attack: 11,
+  defense: 22,
+  pokeType: 'grass',,
   moves: ['Tackle', 'Growl', 'Leech Seed'],
   imageUrl:
     'https://cdn.bulbagarden.net/upload/thumb/2/21/001Bulbasaur.png/1200px-001Bulbasaur.png',
@@ -39,6 +52,7 @@ const ITEMS = [
 ];
 
 const POKEMON_EDIT = {
+  pokemonId: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
   name: 'Bubba-Saurus',
   attack: 0,
   defense: 55,
@@ -47,16 +61,9 @@ const POKEMON_EDIT = {
 describe('pokemon resolver', () => {
   const getPokemonQuery = print(getPokemon);
   const getPokemonsQuery = print(getPokemons);
-  const pokemonEditMutation = print(editPokemon);
-
-  // some more:
-  // const pokemonCreateMutation = print(pokemonCreate);
-  // const pokemonDeleteMutation = print(pokemonDelete);
-
-  // const getItemQuery = print(getItem);
-  // const itemCreateMutation = print(itemCreate);
-  // const itemDeleteMutation = print(itemDelete);
-  // const itemEditMutation = print(itemEdit);
+  const pokemonEditMutation = print(pokemonEdit);
+  const pokemonDeleteMutation = print(pokemonDelete);
+  const pokemonCreateMutation = print(pokemonCreate);
 
   let testDb = null as any;
   let txn = null as any;
@@ -111,20 +118,55 @@ describe('pokemon resolver', () => {
     });
   });
 
-  // describe('resolve a pokemon edit', () => {
-  //   it('edits a pokemon', async () => {
-  //     const result = await graphql(
-  //       schema,
-  //       pokemonEditMutation,
-  //       null,
-  //       testGraphqlContext({ testTransaction: txn }),
-  //       {
-  //         POKEMON_EDIT,
-  //       },
-  //     );
+  describe('resolve a pokemon create', () => {
+    it('creates a pokemon', async () => {
+      const result = await graphql(
+        schema,
+        pokemonCreateMutation,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        {
+          POKEMON_CREATE,
+        },
+      );
 
-  //     const cloned = cloneDeep(result.data!.pokemon);
-  //     expect(cloned).toMatchObject(POKEMON_EDIT);
-  //   });
-  // });
+      const cloned = cloneDeep(result.data!.pokemon);
+      expect(cloned).toMatchObject(POKEMON_CREATE);
+    });
+  });
+
+  describe('resolve a pokemon edit', () => {
+    it('edits a pokemon', async () => {
+      const result = await graphql(
+        schema,
+        pokemonEditMutation,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        {
+          POKEMON_EDIT,
+        },
+      );
+
+      const cloned = cloneDeep(result.data!.pokemon);
+      expect(cloned).toMatchObject(POKEMON_EDIT);
+    });
+  });
+
+  describe('resolve a pokemon delete', () => {
+    it('delete a pokemon', async () => {
+      const result = await graphql(
+        schema,
+        pokemonDeleteMutation,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        {
+          pokemonId: POKEMON.id,
+        },
+      );
+
+      const cloned = cloneDeep(result.data!.pokemon);
+      expect(cloned.deletedAt).toBeTruthy();
+      expect(cloned.id).toBe(POKEMON.id);
+    });
+  });
 });

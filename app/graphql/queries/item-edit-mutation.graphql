@@ -1,0 +1,7 @@
+#import "../fragments/base-item.graphql"
+
+mutation itemCreate($itemId: ID!, $name: String, $price: Int, $happiness: Int, $imageUrl: String) {
+  item {
+    ...BaseItem
+  }
+}

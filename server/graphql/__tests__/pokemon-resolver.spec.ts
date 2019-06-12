@@ -61,8 +61,8 @@ const POKEMON_EDIT = {
 describe('pokemon resolver', () => {
   const getPokemonQuery = print(getPokemon);
   const getPokemonsQuery = print(getPokemons);
-  // const pokemonEditMutation = print(pokemonEdit);
-  // const pokemonDeleteMutation = print(pokemonDelete);
+  const pokemonEditMutation = print(pokemonEdit);
+  const pokemonDeleteMutation = print(pokemonDelete);
   const pokemonCreateMutation = print(pokemonCreate);
 
   let testDb = null as any;
@@ -128,41 +128,41 @@ describe('pokemon resolver', () => {
         POKEMON_CREATE,
       );
 
-      const cloned = cloneDeep(result.data!.pokemon);
+      const cloned = cloneDeep(result.data!.pokemonCreate);
       expect(cloned).toMatchObject(POKEMON_CREATE);
     });
   });
 
-  // describe('resolve a pokemon edit', () => {
-  //   it('edits a pokemon', async () => {
-  //     const result = await graphql(
-  //       schema,
-  //       pokemonEditMutation,
-  //       null,
-  //       testGraphqlContext({ testTransaction: txn }),
-  //         POKEMON_EDIT,
-  //     );
+  describe('resolve a pokemon edit', () => {
+    it('edits a pokemon', async () => {
+      const result = await graphql(
+        schema,
+        pokemonEditMutation,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        POKEMON_EDIT,
+      );
 
-  //     const cloned = cloneDeep(result.data!.pokemon);
-  //     expect(cloned).toMatchObject(POKEMON_EDIT);
-  //   });
-  // });
+      const cloned = cloneDeep(result.data!.pokemonEdit);
+      expect(cloned).toMatchObject(POKEMON_EDIT);
+    });
+  });
 
-  // describe('resolve a pokemon delete', () => {
-  //   it('delete a pokemon', async () => {
-  //     const result = await graphql(
-  //       schema,
-  //       pokemonDeleteMutation,
-  //       null,
-  //       testGraphqlContext({ testTransaction: txn }),
-  //       {
-  //         pokemonId: POKEMON.id,
-  //       },
-  //     );
+  describe('resolve a pokemon delete', () => {
+    it('delete a pokemon', async () => {
+      const result = await graphql(
+        schema,
+        pokemonDeleteMutation,
+        null,
+        testGraphqlContext({ testTransaction: txn }),
+        {
+          pokemonId: POKEMON.id,
+        },
+      );
 
-  //     const cloned = cloneDeep(result.data!.pokemon);
-  //     expect(cloned.deletedAt).toBeTruthy();
-  //     expect(cloned.id).toBe(POKEMON.id);
-  //   });
-  // });
+      const cloned = cloneDeep(result.data!.pokemonDelete);
+      expect(cloned.deletedAt).toBeTruthy();
+      expect(cloned.id).toBe(POKEMON.id);
+    });
+  });
 });

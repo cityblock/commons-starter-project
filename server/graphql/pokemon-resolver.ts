@@ -40,7 +40,6 @@ export async function resolvePokemons(
 export async function pokemonCreate(
   root: any,
   { input }: IPokemonCreateOnRootMutationTypeArguments,
-  {  }: IPokemonQuery,
   { testTransaction, getOrCreateTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonCreate']> {
   return getOrCreateTransaction(testTransaction, async txn => {
@@ -48,24 +47,23 @@ export async function pokemonCreate(
   });
 }
 
-// export async function pokemonEdit(
-//   root: any,
-//   { input }: IPokemonEditOnRootMutationTypeArguments,
-//   { testTransaction, getOrCreateTransaction }: IContext,
-// ): Promise<IRootMutationType['pokemonEdit']> {
-//   const filtered = omitBy<IPokemonEditInput>(input, isNil) as any;
+export async function pokemonEdit(
+  root: any,
+  { input }: IPokemonEditOnRootMutationTypeArguments,
+  { testTransaction, getOrCreateTransaction }: IContext,
+): Promise<IRootMutationType['pokemonEdit']> {
+  const filtered = omitBy<IPokemonEditInput>(input, isNil) as any;
+  return getOrCreateTransaction(testTransaction, async txn => {
+    return Pokemon.edit(input.pokemonId, filtered, txn);
+  });
+}
 
-//   return getOrCreateTransaction(testTransaction, async txn => {
-//     return Pokemon.edit(input.pokemonId, filtered, txn);
-//   });
-// }
-
-// export async function pokemonDelete(
-//   root: any,
-//   { pokemonId }: IPokemonDelete,
-//   { testTransaction, getOrCreateTransaction }: IContext,
-// ): Promise<IRootMutationType['pokemonDelete']> {
-//   return getOrCreateTransaction(testTransaction, async txn => {
-//     return Pokemon.delete(pokemonId, txn);
-//   });
-// }
+export async function pokemonDelete(
+  root: any,
+  { pokemonId }: IPokemonDelete,
+  { testTransaction, getOrCreateTransaction }: IContext,
+): Promise<IRootMutationType['pokemonDelete']> {
+  return getOrCreateTransaction(testTransaction, async txn => {
+    return Pokemon.delete(pokemonId, txn);
+  });
+}

@@ -30,7 +30,6 @@ export async function resolveItem(
 export async function itemCreate(
   root: any,
   { input }: IItemCreateOnRootMutationTypeArguments,
-  {  }: IItemQuery,
   { testTransaction, getOrCreateTransaction }: IContext,
 ): Promise<IRootMutationType['itemCreate']> {
   return getOrCreateTransaction(testTransaction, async txn => {

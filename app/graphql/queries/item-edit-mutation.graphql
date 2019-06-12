@@ -1,16 +1,18 @@
 #import "../fragments/base-item.graphql"
 
-mutation itemCreate(
-  $pokemonId: ID!
-  $name: String!
-  $price: Int!
-  $happiness: Int!
-  $imageUrl: String!
+mutation itemEdit(
+  $itemId: ID!
+  $name: String
+  $pokemonId: ID
+  $price: Int
+  $happiness: Int
+  $imageUrl: String
 ) {
-  itemCreate(
+  itemEdit(
     input: {
-      pokemonId: $pokemonId
+      itemId: $itemId
       name: $name
+      pokemonId: $pokemonId
       price: $price
       happiness: $happiness
       imageUrl: $imageUrl

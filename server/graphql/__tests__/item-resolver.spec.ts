@@ -89,7 +89,7 @@ describe('item resolver', () => {
           ITEM_CREATE,
       );
 
-      const cloned = cloneDeep(result.data!.item);
+      const cloned = cloneDeep(result.data!.itemCreate);
       expect(cloned).toMatchObject(ITEM_CREATE);
     });
   });
@@ -101,10 +101,10 @@ describe('item resolver', () => {
         itemEditMutation,
         null,
         testGraphqlContext({ testTransaction: txn }),
-          ITEM_EDIT,
+        { itemId: ITEM.id, ...ITEM_EDIT },
       );
 
-      const cloned = cloneDeep(result.data!.item);
+      const cloned = cloneDeep(result.data!.itemEdit);
       expect(cloned).toMatchObject(ITEM_EDIT);
     });
   });
@@ -121,7 +121,7 @@ describe('item resolver', () => {
         },
       );
 
-      const cloned = cloneDeep(result.data!.item);
+      const cloned = cloneDeep(result.data!.itemDelete);
       expect(cloned.deletedAt).toBeTruthy();
       expect(cloned.id).toBe(ITEM.id);
     });

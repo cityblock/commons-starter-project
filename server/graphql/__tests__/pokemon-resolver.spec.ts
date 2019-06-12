@@ -52,7 +52,6 @@ const ITEMS = [
 ];
 
 const POKEMON_EDIT = {
-  pokemonId: 'd3e85631-93bd-41dd-a363-bd5e67e73f81',
   name: 'Bubba-Saurus',
   attack: 0,
   defense: 55,
@@ -140,7 +139,7 @@ describe('pokemon resolver', () => {
         pokemonEditMutation,
         null,
         testGraphqlContext({ testTransaction: txn }),
-        POKEMON_EDIT,
+        { pokemonId: POKEMON.id, ...POKEMON_EDIT },
       );
 
       const cloned = cloneDeep(result.data!.pokemonEdit);

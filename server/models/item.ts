@@ -1,6 +1,5 @@
 import { Transaction } from 'objection';
 import BaseModel from './base-model';
-import Pokemon from './pokemon';
 
 // is there any reason here why we would not want the create interface to inherit from the edit interface?
 interface IItemCreateInput {

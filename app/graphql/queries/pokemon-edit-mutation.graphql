@@ -2,12 +2,12 @@
 
 mutation pokemonEdit(
   $pokemonId: ID!
-  $name: String!
-  $attack: Int!
-  $defense: Int!
-  $pokeType: String!
-  $moves: [String!]!
-  $imageUrl: String!
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: String
+  $moves: [String!]
+  $imageUrl: String
 ) {
   pokemonEdit(
     input: {

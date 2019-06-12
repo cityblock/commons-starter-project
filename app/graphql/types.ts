@@ -99,8 +99,8 @@ export interface itemCreate {
 }
 
 export interface itemCreateVariables {
-  pokemonId: string;
   name: string;
+  pokemonId: string;
   price: number;
   happiness: number;
   imageUrl: string;
@@ -137,10 +137,41 @@ export interface itemDeleteVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: itemEdit
+// ====================================================
+
+export interface itemEdit_itemEdit {
+  id: string;
+  pokemonId: string;
+  name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
+}
+
+export interface itemEdit {
+  itemEdit: itemEdit_itemEdit | null;
+}
+
+export interface itemEditVariables {
+  itemId: string;
+  name?: string | null;
+  pokemonId?: string | null;
+  price?: number | null;
+  happiness?: number | null;
+  imageUrl?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: pokemonCreate
 // ====================================================
 
 export interface pokemonCreate_pokemonCreate {
+  pokemonNumber: number;
   id: string;
   name: string;
   attack: number;
@@ -215,12 +246,12 @@ export interface pokemonEdit {
 
 export interface pokemonEditVariables {
   pokemonId: string;
-  name: string;
-  attack: number;
-  defense: number;
-  pokeType: string;
-  moves: string[];
-  imageUrl: string;
+  name?: string | null;
+  attack?: number | null;
+  defense?: number | null;
+  pokeType?: string | null;
+  moves?: string[] | null;
+  imageUrl?: string | null;
 }
 
 /* tslint:disable */

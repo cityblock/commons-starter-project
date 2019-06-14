@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from './css/main.css';
+import SidePanel from './side-panel';
 
-export const MainContainer: React.StatelessComponent = () => {
+export const MainContainer: React.StatelessComponent = props => {
   return (
     <div className={styles.body}>
-      <h1>Your Project here!</h1>
+      <SidePanel />
+      {props.children}
     </div>
   );
 };

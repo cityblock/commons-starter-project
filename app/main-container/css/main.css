@@ -88,7 +88,8 @@ html {
   width: 100%;
 }
 
-html, body {
+html,
+body {
   padding: 0;
   letter-spacing: 0;
   background: inherit;
@@ -110,13 +111,19 @@ html, body {
 body {
   margin: 0;
   display: flex;
+  flex: 1;
   flex-direction: column;
+  background-color: yellow;
 }
 
 .body {
   width: 100%;
   height: 100%;
   min-height: 100%;
+  display: flex;
+  flex: 5;
+  flex-direction: row;
+  padding: 10px;
 }
 
 a {
@@ -132,7 +139,12 @@ a:hover {
   text-decoration: none;
 }
 
-p, ul, ol, table, pre, dl {
+p,
+ul,
+ol,
+table,
+pre,
+dl {
   margin: 0 0 20px;
 }
 

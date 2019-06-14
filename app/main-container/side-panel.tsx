@@ -1,5 +1,6 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { Link } from 'react-router-dom';
 import pokemonsGraphql from '../graphql/queries/get-pokemons.graphql';
 import { getPokemons } from '../graphql/types';
 import PokemonRow from './pokemon-row';
@@ -24,7 +25,16 @@ export const SidePanel: React.StatelessComponent<allProps> = (props: allProps) =
   }
 
   const result = pokemons.map((pokemon, index) => <PokemonRow key={index} pokemon={pokemon} />);
-  return <div>{result}</div>;
+  return (
+    <div>
+      <p>
+        <Link to={`/`}>
+          <b>create a pokemon!!!</b>
+        </Link>
+      </p>
+      <div>{result}</div>
+    </div>
+  );
 };
 
 export default compose(

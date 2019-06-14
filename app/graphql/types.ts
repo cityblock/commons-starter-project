@@ -33,7 +33,11 @@ export interface getItemVariables {
 
 export interface getPokemon_pokemon_item {
   id: string;
+  pokemonId: string;
   name: string;
+  price: number;
+  happiness: number;
+  imageUrl: string;
 }
 
 export interface getPokemon_pokemon {

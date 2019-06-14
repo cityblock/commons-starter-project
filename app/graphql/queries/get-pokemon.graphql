@@ -1,11 +1,11 @@
 #import "../fragments/base-pokemon.graphql"
+#import "../fragments/base-item.graphql"
 
 query getPokemon($pokemonId: ID!) {
   pokemon(pokemonId: $pokemonId) {
     ...BasePokemon
     item {
-      id
-      name
+      ...BaseItem
     }
   }
 }

@@ -3,6 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import pokemonGraphql from '../graphql/queries/get-pokemon.graphql';
 import { getPokemon } from '../graphql/types';
 import styles from './css/pokemon-detail.css';
+import ItemRow from './pokemon-item-detail';
 
 interface IProps {
   mutate?: any;
@@ -16,7 +17,6 @@ interface IProps {
 interface IGraphqlProps extends getPokemon {
   pokemonLoading?: boolean;
   pokemonError?: string | null;
-  pokeMove?: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -29,17 +29,28 @@ export const PokemonDetail: React.StatelessComponent<allProps> = (props: allProp
     return <p> fetching your pokemon! </p>;
   }
   const pokeMove = pokemon.moves.join(', ');
-  const itemVals = Object.keys(pokemon.item).map(function(key) {
-    return pokemon.item[key as any];
-  });
+  const pokeItems = pokemon.item.map((item, index) => <ItemRow key={index} item={item} />);
 
   return (
     <div className={styles.container}>
-      <p>{pokemon.name}</p>
-      <p>{pokemon.attack}</p>
-      <p>{pokemon.defense}</p>
-      <p>{pokemon.pokeType}</p>
-      <p>{pokeMove}</p>
+      <p>
+        <b>name: </b> {pokemon.name}
+      </p>
+      <p>
+        <b>attack: </b> {pokemon.attack}
+      </p>
+      <p>
+        <b>defense:</b> {pokemon.defense}
+      </p>
+      <p>
+        <b>poketype:</b> {pokemon.pokeType}
+      </p>
+      <p>
+        <b>poke-moves:</b> {pokeMove}
+      </p>
+      <div>
+        <b>----------------------------------------------------------->poke-items</b> {pokeItems}
+      </div>
     </div>
   );
 };

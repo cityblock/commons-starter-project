@@ -145,7 +145,7 @@
     "react-apollo": "2.1.11",
     "react-dom": "16.8.6",
     "react-redux": "7.0.0",
-    "react-router-dom": "5.0.0",
+    "react-router-dom": "^5.0.0",
     "redux": "4.0.1",
     "rimraf": "2.6.3",
     "run": "^1.4.0",

@@ -1,0 +1,11 @@
+.container {
+  flex: 1;
+  justify-content: right;
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+  overflow: hidden;
+  position: relative;
+  background-color: lightgreen;
+}

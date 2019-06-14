@@ -1,7 +1,5 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import pokemonGraphql from '../graphql/queries/get-pokemon.graphql';
 import { getPokemon } from '../graphql/types';
 import styles from './css/pokemon-detail.css';
@@ -18,6 +16,7 @@ interface IProps {
 interface IGraphqlProps extends getPokemon {
   pokemonLoading?: boolean;
   pokemonError?: string | null;
+  pokeMove?: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -29,12 +28,18 @@ export const PokemonDetail: React.StatelessComponent<allProps> = (props: allProp
   if (pokemonLoading || pokemonError || !pokemon) {
     return <p> fetching your pokemon! </p>;
   }
+  const pokeMove = pokemon.moves.join(', ');
+  const itemVals = Object.keys(pokemon.item).map(function(key) {
+    return pokemon.item[key as any];
+  });
+
   return (
     <div className={styles.container}>
       <p>{pokemon.name}</p>
       <p>{pokemon.attack}</p>
       <p>{pokemon.defense}</p>
       <p>{pokemon.pokeType}</p>
+      <p>{pokeMove}</p>
     </div>
   );
 };

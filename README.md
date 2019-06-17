@@ -217,12 +217,7 @@ We will start with building out the left rail component that lists all `Pokemon`
 
 We will want to wrap our `<Switch>` component in routes with a component that will be present on all pages - see the [<Main> container](https://github.com/cityblock/commons/blob/master/app/main-container/main-container.tsx) and how it wraps all routes in the [Commons routes file](https://github.com/cityblock/commons/blob/master/app/routes.tsx). Here, we will want to run our GraphQL query to get all Pokemon and render the results. [Here](https://github.com/cityblock/commons/blob/fc32cc1c7e3e7d61c387c83eaae97588a1da5534/app/settings-container/settings-container.tsx) is an example of running a query.
 
-<<<<<<< HEAD
-Next, inside your `<Main>` component, create a new route for `/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This route should be hit when clicking on your Pokemon on the sidebar (using react's `Link` may be helpful). This should run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
-=======
 Next, inside your `<Main>` component, create a new route for `/pokemon/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This route should be hit when clicking on your Pokemon on the sidebar (using React Router's `Link` may be helpful). This should run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
-
-> > > > > > > 8dfee84e006e7f8581a62ccac5f31ec348e8a11a
 
 Finally, beef up the `/` route by adding a create Pokemon form. You will need to ensure that your mutation is passed as a prop to the React component. [Here](https://github.com/cityblock/commons/blob/master/app/builder-container/concern-create.tsx) is an example from Commons (focus on the GraphQL part).
 

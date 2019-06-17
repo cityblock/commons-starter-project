@@ -233,9 +233,8 @@ For an example of how we handle those things, check out a more complex example i
 
 Note a couple key tests to poke around with a bit more:
 
-- # We use `shallow` wrappers for rendering components (to mock components for testing). We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see `.setState()` and `.setProps` below)
+- We use `shallow` wrappers for rendering components (to mock components for testing). We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see `.setState()` and `.setProps` below)
 - Our use of `shallow` wrappers for rendering components, which we do all the time to mock components for testing. We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see #4 and #5 below)
-  > > > > > > > 8dfee84e006e7f8581a62ccac5f31ec348e8a11a
 - `.find(component)` for locating a native component or a custom component (don't forget to import it if using a custom component!)
 - `.at(number)` used with `.find()` if there are multiple of that component
 - `.props()` for testing any expected props, and `.state()` for expected state

@@ -9,7 +9,7 @@ import { Model, Transaction } from 'objection';
 import pg from 'pg';
 import config from './config';
 import expressConfig from './express';
-import * as knexConfig from './models/knexfile';
+const knexConfig = require('./models/knexfile');
 
 const logger = console as any;
 
@@ -27,7 +27,7 @@ pg.types.setTypeParser(DATE_OID, val => {
   return val;
 });
 
-const knex = Knex((knexConfig as any)[config.NODE_ENV || 'development']);
+const knex = Knex(knexConfig[config.NODE_ENV || 'development']);
 Model.knex(knex);
 
 export type Env = 'production' | 'development' | 'test';

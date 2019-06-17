@@ -217,7 +217,12 @@ We will start with building out the left rail component that lists all `Pokemon`
 
 We will want to wrap our `<Switch>` component in routes with a component that will be present on all pages - see the [<Main> container](https://github.com/cityblock/commons/blob/master/app/main-container/main-container.tsx) and how it wraps all routes in the [Commons routes file](https://github.com/cityblock/commons/blob/master/app/routes.tsx). Here, we will want to run our GraphQL query to get all Pokemon and render the results. [Here](https://github.com/cityblock/commons/blob/fc32cc1c7e3e7d61c387c83eaae97588a1da5534/app/settings-container/settings-container.tsx) is an example of running a query.
 
+<<<<<<< HEAD
 Next, inside your `<Main>` component, create a new route for `/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This route should be hit when clicking on your Pokemon on the sidebar (using react's `Link` may be helpful). This should run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
+=======
+Next, inside your `<Main>` component, create a new route for `/pokemon/:pokemonId` that will render a new component you create (something along the lines of PokemonDetail). This route should be hit when clicking on your Pokemon on the sidebar (using React Router's `Link` may be helpful). This should run a query, but in this case it will be to get a specific Pokemon. [Here](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/patient-profile-container.tsx) is an example of passing a variable to a query in Commons.
+
+> > > > > > > 8dfee84e006e7f8581a62ccac5f31ec348e8a11a
 
 Finally, beef up the `/` route by adding a create Pokemon form. You will need to ensure that your mutation is passed as a prop to the React component. [Here](https://github.com/cityblock/commons/blob/master/app/builder-container/concern-create.tsx) is an example from Commons (focus on the GraphQL part).
 
@@ -225,15 +230,26 @@ Finally, beef up the `/` route by adding a create Pokemon form. You will need to
 
 We’re on the homestretch of Pokedex now! Let’s finish off the project by adding in testing for each of our front end components.
 
+<<<<<<< HEAD
 We use [Enzyme](https://airbnb.io/enzyme/docs/api/shallow.html) as a supplement to the Jest testing framework for testing our frontend React components. Specifically, we use their shallow rendering API linked just above. As a default, do not use snapshot testing.
 
-As an overview, we look at testing React components to make sure of 2 things: (1) that what DOM elements we expect to render on the page has rendered and (2) that what has rendered has also received the correct props and holds the correct state. (To clarify this means you are NOT testing queries and mutations, that has already been done in the resolver). Thus, we test the unwrapped component (not the higher order component that composes a graphQL query). In other words, pass in the props manually and don't try to compose the component with graphQL.
+# As an overview, we look at testing React components to make sure of 2 things: (1) that what DOM elements we expect to render on the page has rendered and (2) that what has rendered has also received the correct props and holds the correct state. (To clarify this means you are NOT testing queries and mutations, that has already been done in the resolver). Thus, we test the unwrapped component (not the higher order component that composes a graphQL query). In other words, pass in the props manually and don't try to compose the component with graphQL.
+
+We use [Enzyme](https://airbnb.io/enzyme/docs/api/shallow.html) as a supplement to the Jest testing framework for testing our frontend React components. Specifically, we use their shallow rendering API linked just above. You may have noticed that in some parts of Commons we employ snapshot testing, but we are fading out of that in favor of more precise Enzyme testing. As a default, do not use snapshot testing.
+
+As an overview, we look at testing React components to make sure of 2 things: (1) that what DOM elements we expect to render on the page has rendered and (2) that what has rendered has also received the correct props and holds the correct state. (To clarify this means you are NOT testing queries and mutations, that has already been done in the resolver).
+
+> > > > > > > 8dfee84e006e7f8581a62ccac5f31ec348e8a11a
 
 For an example of how we handle those things, check out a more complex example in the Commons spec for [risk-area-assessment.tsx](https://github.com/cityblock/commons/blob/master/app/patient-profile-container/risk-area/__tests__/risk-area-assessment.spec.tsx).
 
 Note a couple key tests to poke around with a bit more:
 
-- We use `shallow` wrappers for rendering components (to mock components for testing). We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see `.setState()` and `.setProps` below)
+<<<<<<< HEAD
+
+- # We use `shallow` wrappers for rendering components (to mock components for testing). We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see `.setState()` and `.setProps` below)
+- Our use of `shallow` wrappers for rendering components, which we do all the time to mock components for testing. We do this to keep tests insular -- taking care to not test anything outside the scope of this one front end component. You'll see for example that we pass in fake functions where needed by calling `jest.fn()`. That's just to test that a functional prop exists and is called when expected, but we don’t care about it returning the appropriate thing. (If we want to test that a callback changes props or state, see #4 and #5 below)
+  > > > > > > > 8dfee84e006e7f8581a62ccac5f31ec348e8a11a
 - `.find(component)` for locating a native component or a custom component (don't forget to import it if using a custom component!)
 - `.at(number)` used with `.find()` if there are multiple of that component
 - `.props()` for testing any expected props, and `.state()` for expected state

@@ -21,6 +21,9 @@ const config = {
       max: 50,
       min: 1,
     },
+    seeds: {
+      directory: __dirname + '/seeds/dev',
+    },
   },
   production: {
     client: 'pg',
@@ -55,6 +58,9 @@ const config = {
     },
     migrations: {
       directory: __dirname + '/migrations',
+    },
+    seeds: {
+      directory: './seeds/dev',
     },
     pool: {
       connectionTimeoutMillis: 10000,

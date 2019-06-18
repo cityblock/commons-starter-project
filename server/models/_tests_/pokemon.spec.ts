@@ -16,7 +16,7 @@ describe('Pokemon', () => {
   it('getAll: Returns all pokemons ordered using promises', async () => {
     const trx = await transaction.start(Pokemon.knex()); // Create transaction
     Pokemon.getAll(trx)
-      .then(pokemon => {
+      .then(async pokemon => {
         expect(pokemon instanceof Pokemon);
         // expect(pokemon.length).toBe(52);
         return trx.commit();
@@ -31,12 +31,12 @@ describe('Pokemon', () => {
     let beforePokemon = {}
 
     Pokemon.getAll(trx)
-      .then(res => {
+      .then(async res => {
         beforePokemon = res[0];
         return beforePokemon.id;
       })
-      .then(id => Pokemon.get(id, trx))
-      .then(afterPokemon => {
+      .then(async id => Pokemon.get(id, trx))
+      .then(async afterPokemon => {
         expect(beforePokemon).toStrictEqual(afterPokemon);
         return trx.commit()
       })
@@ -49,7 +49,7 @@ describe('Pokemon', () => {
   it('create: Can Insert a Pokemon', async () => {
     const trx = await transaction.start(Pokemon.knex());
     Pokemon.getAll(trx)
-      .then(arr => {
+      .then(async arr => {
         // grab the last of the list
         const testPokemon = arr.slice(-1)[0];
 
@@ -62,7 +62,7 @@ describe('Pokemon', () => {
         // Create the new Pokemon
         return Pokemon.create(testPokemon, trx)
       })
-      .then(pokemon => {
+      .then(async pokemon => {
         expect(pokemon instanceof Pokemon);
         return trx.commit()
       }).catch(err => {
@@ -76,11 +76,11 @@ describe('Pokemon', () => {
     const name = 'edited_name_' + uuid();
 
     Pokemon.getAll(trx)
-      .then(res => res[0].id)
-      .then(id => {
+      .then(async res => res[0].id)
+      .then(async id => {
         return Pokemon.edit(id, { 'name': name }, trx)
       })
-      .then(res => {
+      .then(async res => {
         expect(res).toBe(1);
         return trx.commit();
       })

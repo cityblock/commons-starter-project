@@ -13,106 +13,83 @@ describe('Pokemon', () => {
   - delete(pokemonId: string, txn: Transaction) ­ marks a Pokemon as deleted, but does not actually delete it from the database
   */
 
-  it('getAll: Returns all pokemons ordered using promises', async () => {
-    const trx = await transaction.start(Pokemon.knex()); // Create transaction
-    Pokemon.getAll(trx)
-      .then(async pokemon => {
-        expect(pokemon instanceof Pokemon);
-        // expect(pokemon.length).toBe(52);
-        return trx.commit();
-      })
-      .catch(err => {
-        throw err;
-      })
+  let trx = null as any;
+
+  beforeEach(async () => {
+    trx = await transaction.start(Pokemon.knex());
   });
 
-  it('get: Returns one particular pokemon', async () => {
-    const trx = await transaction.start(Pokemon.knex()); // Create transaction
-    let beforePokemon = {}
+  afterEach(async () => {
+    await trx.rollback();
+  });
 
-    Pokemon.getAll(trx)
-      .then(async res => {
-        beforePokemon = res[0];
-        return beforePokemon.id;
-      })
-      .then(async id => Pokemon.get(id, trx))
-      .then(async afterPokemon => {
-        expect(beforePokemon).toStrictEqual(afterPokemon);
-        return trx.commit()
-      })
-      .catch(err => {
-        throw err;
-      })
+
+  it('getAll: Returns all pokemons ordered using promises', async () => {
+    const pokemon = await Pokemon.getAll(trx);
+    expect(pokemon).toBeInstanceOf(Array);
+  });
+
+
+  it('get: Returns one particular pokemon', async () => {
+    const pokemonList = await Pokemon.getAll(trx);
+    const id = pokemonList[0].id
+    const pokemon = await Pokemon.get(id, trx)
+
+    expect(pokemon).toBeInstanceOf(Pokemon);
   });
 
 
   it('create: Can Insert a Pokemon', async () => {
-    const trx = await transaction.start(Pokemon.knex());
-    Pokemon.getAll(trx)
-      .then(async arr => {
-        // grab the last of the list
-        const testPokemon = arr.slice(-1)[0];
 
-        // modify some properties to be able to insert
-        testPokemon.id = uuid()
-        testPokemon.pokemonNumber += 1
-        testPokemon.name = 'test_' + uuid()
-        testPokemon.moves = []
+    // Get the first from the list
+    const pokemonList = await Pokemon.getAll(trx);
+    const pokemon = pokemonList[0]
 
-        // Create the new Pokemon
-        return Pokemon.create(testPokemon, trx)
-      })
-      .then(async pokemon => {
-        expect(pokemon instanceof Pokemon);
-        return trx.commit()
-      }).catch(err => {
-        throw err;
-      })
+    // modify some properties to be able to insert as a new one
+    pokemon.id = uuid()
+    pokemon.pokemonNumber += 1000
+    pokemon.name = 'test_' + uuid()
+    pokemon.moves = []
+
+    // Insert
+    const newPokemon = await Pokemon.create(pokemon, trx)
+
+    // Test
+    expect(newPokemon).toBeInstanceOf(Pokemon);
   });
+
 
   it('edit: Can Edit a Pokemon', async () => {
 
-    const trx = await transaction.start(Pokemon.knex()); // Create transaction
+    // Get the first from the list
+    const pokemonList = await Pokemon.getAll(trx);
+    const id = pokemonList[0].id
+
+    // Create a random name
     const name = 'edited_name_' + uuid();
 
-    Pokemon.getAll(trx)
-      .then(async res => res[0].id)
-      .then(async id => {
-        return Pokemon.edit(id, { 'name': name }, trx)
-      })
-      .then(async res => {
-        expect(res).toBe(1);
-        return trx.commit();
-      })
-      .catch(err => {
-        throw err;
-      })
+    // Modify the name
+    const editedPokemon = await Pokemon.edit(id, { 'name': name }, trx)
+
+    // Test
+    expect(editedPokemon).toBeInstanceOf(Pokemon);
+    expect(editedPokemon.name).toBe(name);
   });
 
 
   it('delete: Can mark a Pokemon as deleted', async () => {
-    let trx;
-    let allPokemon;
-    trx = await transaction.start(Pokemon.knex()); // Create transaction
-    let beforePokemon;
-    let totalPokemonAffected;
 
-    try {
-      allPokemon = await Pokemon.getAll(trx);
-      beforePokemon = allPokemon[0];
+    // Get the first from the list
+    const pokemonList = await Pokemon.getAll(trx);
+    const id = pokemonList[0].id
 
-      totalPokemonAffected = await Pokemon.delete(beforePokemon.id, trx)
-    }
-    catch (err) {
-      trx.rollback();
-    }
-    finally {
-      trx.commit();
-    }
+    // Delete Pokemon
+    const deletedPokemon = await Pokemon.delete(id, trx);
 
-    expect(totalPokemonAffected).toBe(1);
+    // Test
+    expect(deletedPokemon).toBeInstanceOf(Pokemon);
+    expect(deletedPokemon).not.toBeNull();
 
   });
-
 
 });

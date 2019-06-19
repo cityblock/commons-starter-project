@@ -83,32 +83,33 @@ export default class Pokemon extends Model {
 
   // returns all Pokemon, ordered by pokemonNumber ascending
   static async getAll(txn: Transaction) {
-    return this.query(txn).whereNull('deletedAt'); // Exclude deleted pokemons
+    const pokemonList = await this.query(txn).whereNull('deletedAt');
+    return pokemonList;
   }
 
   // get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated items
   // useful link: http://ivanbatic.com/using-async-await-typescript-classes/
   static async get(pokemonId: string, txn: Transaction) {
-    return this.query(txn).findById(pokemonId);
+    const pokemon = await this.query(txn).findById(pokemonId);
+    return pokemon;
   }
 
   // creates and returns a Pokemon
   static async create(input: IPokemonCreateInput, txn: Transaction) {
-    await this.query(txn).insert(input);
+    const numInserted = await this.query(txn).insert(input);
+    return numInserted;
   }
 
   // edits an existing Pokemon
-  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) {
-    return this.query(txn)
-      .findById(pokemonId)
-      .patch(pokemon)
+  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+    const editedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
+    return editedPokemon;
   }
 
   // marks a Pokemon as deleted, but does not actually delete it from the database
   static async delete(pokemonId: string, txn: Transaction) {
-    return this.query(txn)
-      .findById(pokemonId)
-      .patch({ deletedAt: new Date() })
+    const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date() });
+    return deletedPokemon;
   }
 
   // Public Properties

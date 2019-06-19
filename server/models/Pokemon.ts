@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { join } from 'path';
+import { string } from 'prop-types';
 import { PokeType } from './PokeType';
 
 
@@ -20,6 +21,7 @@ import { PokeType } from './PokeType';
 
 // Interfaces
 export interface IPokemonCreateInput {
+  id: string;
   pokemonNumber: number;
   name: string;
   attack: number;

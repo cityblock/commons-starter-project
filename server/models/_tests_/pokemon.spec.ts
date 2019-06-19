@@ -1,5 +1,6 @@
 import { transaction } from 'objection';
 import uuid from 'uuid';
+import { setupDb } from '../../lib/test-utils'
 import Pokemon from '../Pokemon';
 import { PokeType } from '../PokeType';
 
@@ -14,6 +15,20 @@ describe('Pokemon', () => {
   - delete(pokemonId: string, txn: Transaction) ­ marks a Pokemon as deleted, but does not actually delete it from the database
   */
 
+
+  // Recreate the DB
+  let testDb = null as any;
+
+  beforeAll(async () => {
+    testDb = setupDb();
+  });
+
+  afterAll(async () => {
+    testDb.destroy();
+  });
+
+
+  // For each test start a new transaction and roll it back.
   let trx = null as any;
 
   beforeEach(async () => {
@@ -28,6 +43,7 @@ describe('Pokemon', () => {
   it('getAll: Returns all pokemons ordered using promises', async () => {
     const pokemon = await Pokemon.getAll(trx);
     expect(pokemon).toBeInstanceOf(Array);
+    expect(pokemon.length).toBe(51);
   });
 
 
@@ -44,13 +60,14 @@ describe('Pokemon', () => {
 
     // Insert
     const newPokemon = await Pokemon.create({
+      id: uuid(),
       pokemonNumber: 100,
       name: 'test_' + uuid(),
       moves: ['Slash', 'Flame Wheel'],
       attack: 0,
       defense: 0,
       pokeType: PokeType.dragon,
-      imageUrl: ''
+      imageUrl: 'test.png'
     }, trx)
 
     // Test

@@ -1,7 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { join } from 'path';
-import { uniqueId } from 'schema';
-import { pokeType } from './pokeType';
+import { PokeType } from './PokeType';
 
 
 /*
@@ -21,13 +20,12 @@ import { pokeType } from './pokeType';
 
 // Interfaces
 export interface IPokemonCreateInput {
-  id: uniqueId;
   pokemonNumber: number;
   name: string;
   attack: number;
   defense: number;
-  pokeType: pokeType;
-  moves: JSON;
+  pokeType: PokeType;
+  moves: string[];
   imageUrl: string;
 }
 
@@ -35,8 +33,8 @@ export interface IPokemonEditInput {
   name?: string;
   attack?: number;
   defense?: number;
-  pokeType?: pokeType;
-  moves?: JSON;
+  pokeType?: PokeType;
+  moves?: string[];
   imageUrl?: string;
 }
 
@@ -50,13 +48,13 @@ export default class Pokemon extends Model {
     required: [],
 
     properties: {
-      id: { type: 'uuid' },
+      id: { type: 'string', format: 'uuid' },
       pokemonNumber: { type: ['integer', 'null'] },
       name: { type: 'string', minLength: 1, maxLength: 255 },
       attack: { type: 'integer' },
       defense: { type: 'integer' },
       pokeType: { type: 'enu' },
-      moves: { type: 'JSON' },
+      moves: { type: 'array' },
       imageUrl: { type: 'string', minLength: 1, maxLength: 255 },
       createdAt: { type: 'timestamp' },
       updatedAt: { type: 'timestamp' },
@@ -82,22 +80,26 @@ export default class Pokemon extends Model {
 
 
   // returns all Pokemon, ordered by pokemonNumber ascending
-  static async getAll(txn: Transaction) {
+  static async getAll(txn: Transaction): Promise<Pokemon[]> {
     const pokemonList = await this.query(txn).whereNull('deletedAt');
     return pokemonList;
   }
 
   // get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated items
   // useful link: http://ivanbatic.com/using-async-await-typescript-classes/
-  static async get(pokemonId: string, txn: Transaction) {
-    const pokemon = await this.query(txn).findById(pokemonId);
-    return pokemon;
+  static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    const individualPokemon = await this.query(txn).findById(pokemonId);
+
+    // No data, just reject
+    if (!individualPokemon) return Promise.reject();
+
+    return individualPokemon;
   }
 
   // creates and returns a Pokemon
-  static async create(input: IPokemonCreateInput, txn: Transaction) {
-    const numInserted = await this.query(txn).insert(input);
-    return numInserted;
+  static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
+    const createdPokemon = await this.query(txn).insertAndFetch(input);
+    return createdPokemon;
   }
 
   // edits an existing Pokemon
@@ -107,19 +109,19 @@ export default class Pokemon extends Model {
   }
 
   // marks a Pokemon as deleted, but does not actually delete it from the database
-  static async delete(pokemonId: string, txn: Transaction) {
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date() });
     return deletedPokemon;
   }
 
   // Public Properties
-  readonly id!: uniqueId;
+  readonly id!: string;
   pokemonNumber?: number;
   name!: string;
   attack?: number;
   defense!: number;
-  pokeType!: pokeType;
-  moves!: JSON;
+  pokeType!: PokeType;
+  moves!: string[];
   imageUrl!: string;
   createdAt!: Date;
   updatedAt!: Date;

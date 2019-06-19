@@ -1,6 +1,7 @@
 import { transaction } from 'objection';
 import uuid from 'uuid';
 import Pokemon from '../Pokemon';
+import { PokeType } from '../PokeType';
 
 
 
@@ -41,18 +42,16 @@ describe('Pokemon', () => {
 
   it('create: Can Insert a Pokemon', async () => {
 
-    // Get the first from the list
-    const pokemonList = await Pokemon.getAll(trx);
-    const pokemon = pokemonList[0]
-
-    // modify some properties to be able to insert as a new one
-    pokemon.id = uuid()
-    pokemon.pokemonNumber += 1000
-    pokemon.name = 'test_' + uuid()
-    pokemon.moves = []
-
     // Insert
-    const newPokemon = await Pokemon.create(pokemon, trx)
+    const newPokemon = await Pokemon.create({
+      pokemonNumber: 100,
+      name: 'test_' + uuid(),
+      moves: ['Slash', 'Flame Wheel'],
+      attack: 0,
+      defense: 0,
+      pokeType: PokeType.dragon,
+      imageUrl: ''
+    }, trx)
 
     // Test
     expect(newPokemon).toBeInstanceOf(Pokemon);

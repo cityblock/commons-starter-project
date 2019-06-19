@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import uuid from 'uuid';
 import Pokemon from './Pokemon';
 
 /*
@@ -16,7 +17,6 @@ import Pokemon from './Pokemon';
 
 // Interfaces
 export interface IItemCreateInput {
-  id: string;
   name: string;
   pokemonId: string;
   price: number;
@@ -101,7 +101,7 @@ export default class Item extends Model {
 
 
   // Public Properties
-  readonly id!: string;
+  id!: string;
   name!: string;
   pokemonId!: string;
   price!: number;
@@ -113,9 +113,9 @@ export default class Item extends Model {
 
   // Lifecycle
   $beforeInsert() {
-    const date = new Date();
-    this.createdAt = date;
-    this.updatedAt = date;
+    this.id = uuid.v4()
+    this.createdAt = new Date();;
+    this.updatedAt = new Date();;
   }
 
   $beforeUpdate() {

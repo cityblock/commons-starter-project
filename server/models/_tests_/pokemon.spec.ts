@@ -65,7 +65,6 @@ describe('Pokemon', () => {
 
     // Insert
     const newPokemon = await Pokemon.create({
-      id: uuid(),
       pokemonNumber: 100,
       name: 'test_' + uuid(),
       moves: ['Slash', 'Flame Wheel'],

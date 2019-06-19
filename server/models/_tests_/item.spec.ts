@@ -1,5 +1,4 @@
 import { transaction } from 'objection';
-import uuid from 'uuid';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../Item';
 import Pokemon from '../Pokemon';
@@ -63,7 +62,6 @@ describe('Item', () => {
 
     // Query
     const createdItem = await Item.create({
-      id: uuid(),
       name: 'test item',
       pokemonId: id,
       price: 0,

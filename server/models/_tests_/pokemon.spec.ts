@@ -40,19 +40,24 @@ describe('Pokemon', () => {
   });
 
 
-  it('getAll: Returns all pokemons ordered using promises', async () => {
+  it('getAll: Returns all pokemons ordered', async () => {
     const pokemon = await Pokemon.getAll(trx);
+
+    // Test
     expect(pokemon).toBeInstanceOf(Array);
     expect(pokemon.length).toBe(51);
+    // TODO: Ordered?
   });
 
 
-  it('get: Returns one particular pokemon', async () => {
+  it('get: Returns one particular pokemon and related items', async () => {
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id
     const pokemon = await Pokemon.get(id, trx)
 
+    // Test
     expect(pokemon).toBeInstanceOf(Pokemon);
+    expect(pokemon).toHaveProperty('item');
   });
 
 

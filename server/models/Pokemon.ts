@@ -66,16 +66,15 @@ export default class Pokemon extends Model {
 
   // Relations
   static relationMappings: RelationMappings = {
-    items: {
+    item: {
       relation: Model.HasManyRelation,
       modelClass: join(__dirname, 'Item'),
       join: {
         from: 'pokemon.id',
-        to: 'items.pokemon_id',
+        to: 'item.pokemonId',
       },
     },
   };
-
 
   // Custom Methods
 
@@ -89,7 +88,7 @@ export default class Pokemon extends Model {
   // get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated items
   // useful link: http://ivanbatic.com/using-async-await-typescript-classes/
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const individualPokemon = await this.query(txn).findById(pokemonId);
+    const individualPokemon = await this.query(txn).findById(pokemonId).eager('item');
 
     // No data, just reject
     if (!individualPokemon) return Promise.reject();

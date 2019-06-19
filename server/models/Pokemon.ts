@@ -1,6 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { join } from 'path';
-import { string } from 'prop-types';
 import { PokeType } from './PokeType';
 
 

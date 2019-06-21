@@ -58,13 +58,9 @@ describe('Pokemon', () => {
     // Test
     expect(pokemon).toBeInstanceOf(Pokemon);
     expect(pokemon).toHaveProperty('item');
-
-    const pokemonIdCompare = pokemon.item.reduce((result, x) => {
-      return x.pokemonId === id && result;
-    }, true);
-
-    expect(pokemonIdCompare).toBeTruthy();
-
+    expect(pokemon.item).toEqual(
+      expect.arrayContaining([expect.objectContaining({ pokemonId: id })]),
+    );
   });
 
 

@@ -45,7 +45,7 @@ describe('Pokemon', () => {
 
     // Test
     expect(pokemon).toBeInstanceOf(Array);
-    expect(pokemon.length).toBe(51);
+    expect(pokemon.length).toBe(52);
     // TODO: Ordered?
   });
 
@@ -58,6 +58,13 @@ describe('Pokemon', () => {
     // Test
     expect(pokemon).toBeInstanceOf(Pokemon);
     expect(pokemon).toHaveProperty('item');
+
+    const pokemonIdCompare = pokemon.item.reduce((result, x) => {
+      return x.pokemonId === id && result;
+    }, true);
+
+    expect(pokemonIdCompare).toBeTruthy();
+
   });
 
 

@@ -82,7 +82,7 @@ export default class Pokemon extends Model {
 
   // returns all Pokemon, ordered by pokemonNumber ascending
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    const pokemonList = await this.query(txn).whereNull('deletedAt');
+    const pokemonList = await this.query(txn).whereNull('deletedAt').orderBy('pokemonNumber');;
     return pokemonList;
   }
 
@@ -90,6 +90,7 @@ export default class Pokemon extends Model {
   // useful link: http://ivanbatic.com/using-async-await-typescript-classes/
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const individualPokemon = await this.query(txn).findById(pokemonId).eager('item');
+    // .modifyEager('item', builder => builder.where('item.deletedAt', null))
 
     // No data, just reject
     if (!individualPokemon) return Promise.reject();

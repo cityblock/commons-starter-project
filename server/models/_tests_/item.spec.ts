@@ -50,6 +50,7 @@ describe('Item', () => {
 
     // Test
     expect(item).toBeInstanceOf(Item);
+    expect(item).not.toBeInstanceOf(Array);
 
   });
 
@@ -60,18 +61,21 @@ describe('Item', () => {
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id;
 
-    // Query
-    const createdItem = await Item.create({
+    const testItem = {
       name: 'test item',
       pokemonId: id,
       price: 0,
       happiness: 0,
       imageUrl: 'test.png'
-    }, trx);
+    }
+
+    // Query
+    const createdItem = await Item.create(testItem, trx);
+
 
     // Test
     expect(createdItem).toBeInstanceOf(Item);
-    expect(createdItem.pokemonId).toBe(id);
+    expect(createdItem).toMatchObject(testItem)
   });
 
   it('edit: Edits an existing item', async () => {

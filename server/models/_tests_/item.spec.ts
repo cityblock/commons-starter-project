@@ -69,13 +69,16 @@ describe('Item', () => {
       imageUrl: 'test.png'
     }
 
-    // Query
+    // Create a mutated pokemon
     const createdItem = await Item.create(testItem, trx);
 
+    // Grab the mutated item from the db
+    const fetchedFromDb = await Item.query(trx).findById(createdItem.id)
 
     // Test
-    expect(createdItem).toBeInstanceOf(Item);
-    expect(createdItem).toMatchObject(testItem)
+    expect(createdItem).toEqual(fetchedFromDb);
+
+
   });
 
   it('edit: Edits an existing item', async () => {
@@ -104,12 +107,15 @@ describe('Item', () => {
     const pokemon = await Pokemon.get(id, trx);
     const itemId = pokemon.item[0].id;
 
-    // Delete Pokemon
+    // Delete the item
     const deletedItem = await Item.delete(itemId, trx);
 
+    // Get the pokemon again
+    const newPokemon = await Pokemon.get(id, trx);
+
     // Test
-    expect(deletedItem).toBeInstanceOf(Item);
-    expect(deletedItem).not.toBeNull();
+    // Check that the item is not in the result.
+    expect(newPokemon.item).not.toContain(deletedItem);
 
   });
 

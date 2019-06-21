@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { PokeType } from '../PokeType';
+import { pokeType } from '../pokeType';
 
 export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable('pokemon', pokemon => {
@@ -17,7 +17,7 @@ export async function up(knex: Knex): Promise<any> {
       .unique();
     pokemon.integer('attack').notNullable();
     pokemon.integer('defense').notNullable();
-    pokemon.enu('pokeType', Object.keys(PokeType)).notNullable();
+    pokemon.enu('pokeType', Object.keys(pokeType)).notNullable();
     pokemon
       .json('moves')
       .notNullable()

@@ -6,4 +6,5 @@ fragment fullPokemon on Pokemon {
   pokeType
   moves
   imageUrl
+  deletedAt
 }

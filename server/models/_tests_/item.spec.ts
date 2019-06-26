@@ -17,11 +17,11 @@ describe('Item', () => {
   let testDb = null as any;
 
   beforeAll(async () => {
-    testDb = setupDb();
+    testDb = await setupDb();
   });
 
   afterAll(async () => {
-    testDb.destroy();
+    await testDb.destroy();
   });
 
 

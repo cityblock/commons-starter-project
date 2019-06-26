@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash';
+
 import { transaction } from 'objection';
 import { IContext } from './shared/utils';
 
@@ -48,18 +48,18 @@ export async function pokemonEdit(
 
     if (!input) return Promise.reject('No input given for Edit');
 
-    const filtered = mapValues(input.moves, row => (row === '' ? null : row)) as any;
+    const editedItem = {
+      name: input.name || undefined,
+      attack: input.attack || undefined,
+      defense: input.defense || undefined,
+      pokeType: input.pokeType || undefined,
+      imageUrl: input.name || undefined
 
-    const pokemon = await Pokemon.edit(input.pokemonId,
-      {
-        name: input.name || undefined,
-        attack: input.attack || undefined,
-        defense: input.defense || undefined,
-        pokeType: input.pokeType || undefined,
-        moves: filtered || undefined,
-        imageUrl: input.name || undefined
+    }
 
-      }, txn);
+    console.log('editedItem', editedItem)
+
+    const pokemon = await Pokemon.edit(input.pokemonId, editedItem, txn);
     return pokemon;
   });
 }

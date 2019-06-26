@@ -14,6 +14,7 @@ export interface pokemonCreate_pokemonCreate {
   pokeType: string | null;
   moves: (string | null)[] | null;
   imageUrl: string | null;
+  deletedAt: any | null;
 }
 
 export interface pokemonCreate {
@@ -46,6 +47,7 @@ export interface pokemonDelete_pokemonDelete {
   pokeType: string | null;
   moves: (string | null)[] | null;
   imageUrl: string | null;
+  deletedAt: any | null;
 }
 
 export interface pokemonDelete {
@@ -72,6 +74,7 @@ export interface pokemonEdit_pokemonEdit {
   pokeType: string | null;
   moves: (string | null)[] | null;
   imageUrl: string | null;
+  deletedAt: any | null;
 }
 
 export interface pokemonEdit {
@@ -104,6 +107,7 @@ export interface getAllPokemon_pokemonAll {
   pokeType: string | null;
   moves: (string | null)[] | null;
   imageUrl: string | null;
+  deletedAt: any | null;
 }
 
 export interface getAllPokemon {
@@ -126,6 +130,7 @@ export interface fullPokemon {
   pokeType: string | null;
   moves: (string | null)[] | null;
   imageUrl: string | null;
+  deletedAt: any | null;
 }
 
 /* tslint:disable */

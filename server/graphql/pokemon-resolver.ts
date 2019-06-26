@@ -57,8 +57,6 @@ export async function pokemonEdit(
 
     }
 
-    console.log('editedItem', editedItem)
-
     const pokemon = await Pokemon.edit(input.pokemonId, editedItem, txn);
     return pokemon;
   });

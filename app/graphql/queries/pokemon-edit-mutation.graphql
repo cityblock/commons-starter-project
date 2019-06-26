@@ -1,17 +1,17 @@
 #import "../fragments/pokemon-full.graphql"
 
-mutation pokemonCreate(
-  $pokemonNumber: Int!
-  $name: String!
-  $attack: Int!
-  $defense: Int!
-  $pokeType: String!
-  $moves: [String!]!
-  $imageUrl: String!
+mutation pokemonEdit(
+  $pokemonId: ID!
+  $name: String
+  $attack: Int
+  $defense: Int
+  $pokeType: String
+  $moves: [String]
+  $imageUrl: String
 ) {
-  pokemonCreate(
+  pokemonEdit(
     input: {
-      pokemonNumber: $pokemonNumber
+      pokemonId: $pokemonId
       name: $name
       attack: $attack
       defense: $defense

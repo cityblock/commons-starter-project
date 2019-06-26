@@ -26,18 +26,18 @@ export interface IPokemonCreateInput {
   name: string;
   attack: number;
   defense: number;
-  pokeType: PokeType;
+  pokeType: string;
   moves: string[];
   imageUrl: string;
 }
 
 export interface IPokemonEditInput {
-  name?: string;
-  attack?: number;
-  defense?: number;
-  pokeType?: PokeType;
-  moves?: string[];
-  imageUrl?: string;
+  name?: string | null;
+  attack?: number | null;
+  defense?: number | null;
+  pokeType?: string | null;
+  moves?: Array<string | null> | null;
+  imageUrl?: string | null;
 }
 
 export default class Pokemon extends Model {
@@ -126,7 +126,7 @@ export default class Pokemon extends Model {
   imageUrl!: string;
   createdAt!: Date;
   updatedAt!: Date;
-  deletedAt?: Date;
+  deletedAt!: Date;
   item!: Item[];
 
   // Lifecycle

@@ -15,7 +15,7 @@ type Pokemon implements uniqueId {
   name: String
   attack: Int
   defense: Int
-  pokeType: PokeType
+  pokeType: String
   moves: [String]
   imageUrl: String
   createdAt: DateTime!
@@ -45,7 +45,7 @@ input PokemonCreateInput {
   name: String!
   attack: Int!
   defense: Int!
-  pokeType: PokeType!
+  pokeType: String!
   moves: [String!]!
   imageUrl: String!
 }
@@ -55,34 +55,13 @@ input PokemonEditInput {
   name: String
   attack: Int
   defense: Int
-  pokeType: PokeType
-  moves: [String!]
+  pokeType: String
+  moves: [String]
   imageUrl: String
 }
 
 input PokemonDeleteInput {
-  pokemonNumber: Int!
-}
-
-enum PokeType {
-  normal
-  grass
-  fire
-  water
-  electric
-  psychic
-  ghost
-  dark
-  fairy
-  rock
-  ground
-  steel
-  flying
-  fighting
-  bug
-  ice
-  dragon
-  poison
+  pokemonId: ID!
 }
 
 schema {
@@ -94,11 +73,11 @@ schema {
 type RootMutationType {
   pokemonCreate(input: PokemonCreateInput!): Pokemon
   pokemonEdit(input: PokemonEditInput!): Pokemon
-  pokemonDelete(input: PokemonDeleteInput!): Pokemon
-  pokemon(input: PokemonInput): Pokemon
+  pokemonDelete(input: PokemonDeleteInput): Pokemon
 }
 
 # Selects
 type RootQueryType {
   pokemonAll: [Pokemon!]!
+  pokemon(pokemonId: String!): Pokemon
 }

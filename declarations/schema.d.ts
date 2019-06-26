@@ -19,6 +19,11 @@ declare module 'schema' {
 
   interface IRootQueryType {
     pokemonAll: Array<IPokemon>;
+    pokemon: IPokemon | null;
+  }
+
+  interface IPokemonOnRootQueryTypeArguments {
+    pokemonId: string;
   }
 
   interface IPokemon {
@@ -27,7 +32,7 @@ declare module 'schema' {
     name: string | null;
     attack: number | null;
     defense: number | null;
-    pokeType: PokeType | null;
+    pokeType: string | null;
     moves: Array<string | null> | null;
     imageUrl: string | null;
     createdAt: any;
@@ -41,32 +46,10 @@ declare module 'schema' {
     id: string;
   }
 
-  const enum PokeType {
-    normal = 'normal',
-    grass = 'grass',
-    fire = 'fire',
-    water = 'water',
-    electric = 'electric',
-    psychic = 'psychic',
-    ghost = 'ghost',
-    dark = 'dark',
-    fairy = 'fairy',
-    rock = 'rock',
-    ground = 'ground',
-    steel = 'steel',
-    flying = 'flying',
-    fighting = 'fighting',
-    bug = 'bug',
-    ice = 'ice',
-    dragon = 'dragon',
-    poison = 'poison'
-  }
-
   interface IRootMutationType {
     pokemonCreate: IPokemon | null;
     pokemonEdit: IPokemon | null;
     pokemonDelete: IPokemon | null;
-    pokemon: IPokemon | null;
   }
 
   interface IPokemonCreateOnRootMutationTypeArguments {
@@ -78,11 +61,7 @@ declare module 'schema' {
   }
 
   interface IPokemonDeleteOnRootMutationTypeArguments {
-    input: IPokemonDeleteInput;
-  }
-
-  interface IPokemonOnRootMutationTypeArguments {
-    input?: IPokemonInput | null;
+    input?: IPokemonDeleteInput | null;
   }
 
   interface IPokemonCreateInput {
@@ -90,7 +69,7 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: PokeType;
+    pokeType: string;
     moves: Array<string>;
     imageUrl: string;
   }
@@ -100,13 +79,13 @@ declare module 'schema' {
     name?: string | null;
     attack?: number | null;
     defense?: number | null;
-    pokeType?: PokeType | null;
-    moves?: Array<string> | null;
+    pokeType?: string | null;
+    moves?: Array<string | null> | null;
     imageUrl?: string | null;
   }
 
   interface IPokemonDeleteInput {
-    pokemonNumber: number;
+    pokemonId: string;
   }
 
   interface IPokemonInput {

@@ -1,0 +1,7 @@
+#import "../fragments/pokemon-full.graphql"
+
+query getAllPokemon {
+  pokemonAll {
+    ...fullPokemon
+  }
+}

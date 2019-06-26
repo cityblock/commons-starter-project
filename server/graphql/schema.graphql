@@ -1,14 +1,104 @@
+scalar DateTime
+scalar Date
+scalar Time
+
 # An object with a Globally Unique ID
 interface uniqueId {
   # The ID of the object.
   id: ID!
 }
 
-type RootMutationType {}
+# Models mappers
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: PokeType
+  moves: [String]
+  imageUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
 
-type RootQueryType {}
+#type Item implements uniqueId {
+#  id: ID!
+#  pokemonId: Int!
+#  name: String!
+#  price: Int!
+#  happiness: Int!
+#  imageUrl: String
+#  createdAt: Date!
+#  updatedAt: Date!
+#  deletedAt: Date
+#}
+
+# Interfaces
+input PokemonInput {
+  pokemonNumber: Int!
+}
+
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: PokeType!
+  moves: [String!]!
+  imageUrl: String!
+}
+
+input PokemonEditInput {
+  pokemonId: ID!
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: PokeType
+  moves: [String!]
+  imageUrl: String
+}
+
+input PokemonDeleteInput {
+  pokemonNumber: Int!
+}
+
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
 
 schema {
   query: RootQueryType
   mutation: RootMutationType
+}
+
+# ADMs
+type RootMutationType {
+  pokemonCreate(input: PokemonCreateInput!): Pokemon
+  pokemonEdit(input: PokemonEditInput!): Pokemon
+  pokemonDelete(input: PokemonDeleteInput!): Pokemon
+  pokemon(input: PokemonInput): Pokemon
+}
+
+# Selects
+type RootQueryType {
+  pokemonAll: [Pokemon!]!
 }

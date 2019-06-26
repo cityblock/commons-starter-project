@@ -18,54 +18,99 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    pokemonAll: Array<IPokemon>;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemon {
     id: string;
-    name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    pokemonNumber: number;
+    name: string | null;
+    attack: number | null;
+    defense: number | null;
+    pokeType: PokeType | null;
+    moves: Array<string | null> | null;
+    imageUrl: string | null;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon;
 
-  /**
-   * An object with a Globally Unique ID
-   */
   interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
     id: string;
+  }
+
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
   interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+    pokemonCreate: IPokemon | null;
+    pokemonEdit: IPokemon | null;
+    pokemonDelete: IPokemon | null;
+    pokemon: IPokemon | null;
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input: IPokemonCreateInput;
   }
 
-  interface IPuppyCreateInput {
+  interface IPokemonEditOnRootMutationTypeArguments {
+    input: IPokemonEditInput;
+  }
+
+  interface IPokemonDeleteOnRootMutationTypeArguments {
+    input: IPokemonDeleteInput;
+  }
+
+  interface IPokemonOnRootMutationTypeArguments {
+    input?: IPokemonInput | null;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
     name: string;
+    attack: number;
+    defense: number;
+    pokeType: PokeType;
+    moves: Array<string>;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    pokemonId: string;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: PokeType | null;
+    moves?: Array<string> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IPokemonDeleteInput {
+    pokemonNumber: number;
+  }
+
+  interface IPokemonInput {
+    pokemonNumber: number;
   }
 }
 

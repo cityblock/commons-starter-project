@@ -2,7 +2,6 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { join } from 'path';
 import uuid from 'uuid';
 import Item from './Item';
-import { PokeType } from './PokeType';
 
 
 /*
@@ -32,12 +31,12 @@ export interface IPokemonCreateInput {
 }
 
 export interface IPokemonEditInput {
-  name?: string | null;
-  attack?: number | null;
-  defense?: number | null;
-  pokeType?: string | null;
-  moves?: Array<string | null> | null;
-  imageUrl?: string | null;
+  name?: string;
+  attack?: number;
+  defense?: number;
+  pokeType?: string;
+  moves?: string[];
+  imageUrl?: string;
 }
 
 export default class Pokemon extends Model {
@@ -55,7 +54,7 @@ export default class Pokemon extends Model {
       name: { type: 'string', minLength: 1, maxLength: 255 },
       attack: { type: 'integer' },
       defense: { type: 'integer' },
-      pokeType: { type: 'enu' },
+      pokeType: { type: 'string' },
       moves: { type: 'array', items: { type: 'string' } },
       imageUrl: { type: 'string', minLength: 1, maxLength: 255 },
       createdAt: { type: 'timestamp' },
@@ -121,7 +120,7 @@ export default class Pokemon extends Model {
   name!: string;
   attack!: number;
   defense!: number;
-  pokeType!: PokeType;
+  pokeType!: string;
   moves!: string[];
   imageUrl!: string;
   createdAt!: Date;

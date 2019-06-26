@@ -1,4 +1,6 @@
+import { mapValues } from 'lodash';
 import { transaction } from 'objection';
+import { IContext } from './shared/utils';
 
 // Interfaces
 import {
@@ -13,7 +15,6 @@ import {
 
 // Models
 import Pokemon from '../models/Pokemon';
-import { IContext } from './shared/utils';
 
 
 // Pokemon Create
@@ -45,8 +46,20 @@ export async function pokemonEdit(
 ): Promise<IRootMutationType['pokemonEdit']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
 
-    if (!input) return Promise.reject('No input given for Edit')
-    const pokemon = await Pokemon.edit(input.pokemonId, input, txn);
+    if (!input) return Promise.reject('No input given for Edit');
+
+    const filtered = mapValues(input.moves, row => (row === '' ? null : row)) as any;
+
+    const pokemon = await Pokemon.edit(input.pokemonId,
+      {
+        name: input.name || undefined,
+        attack: input.attack || undefined,
+        defense: input.defense || undefined,
+        pokeType: input.pokeType || undefined,
+        moves: filtered || undefined,
+        imageUrl: input.name || undefined
+
+      }, txn);
     return pokemon;
   });
 }

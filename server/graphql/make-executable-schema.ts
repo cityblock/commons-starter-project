@@ -4,10 +4,10 @@ import path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 
-import { pokemon, pokemonAll, pokemonCreate, pokemonDelete, pokemonEdit } from './pokemon-resolver';
+import { pokemon, pokemons, pokemonCreate, pokemonDelete, pokemonEdit } from './pokemon-resolver';
 
 export const resolveFunctions = {
-  RootQueryType: { pokemonAll, pokemon },
+  RootQueryType: { pokemons, pokemon },
   RootMutationType: { pokemonCreate, pokemonDelete, pokemonEdit },
   // From https://github.com/apollographql/graphql-tools/pull/698
   uniqueId: {

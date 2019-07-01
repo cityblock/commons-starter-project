@@ -96,10 +96,10 @@ export interface pokemonEditVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAllPokemon
+// GraphQL query operation: pokemons
 // ====================================================
 
-export interface getAllPokemon_pokemonAll {
+export interface pokemons_pokemons {
   pokemonNumber: number;
   name: string | null;
   attack: number | null;
@@ -110,8 +110,8 @@ export interface getAllPokemon_pokemonAll {
   deletedAt: any | null;
 }
 
-export interface getAllPokemon {
-  pokemonAll: getAllPokemon_pokemonAll[];
+export interface pokemons {
+  pokemons: pokemons_pokemons[];
 }
 
 /* tslint:disable */

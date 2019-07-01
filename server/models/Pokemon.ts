@@ -65,15 +65,17 @@ export default class Pokemon extends Model {
 
 
   // Relations
-  static relationMappings: RelationMappings = {
-    item: {
-      relation: Model.HasManyRelation,
-      modelClass: join(__dirname, 'Item'),
-      join: {
-        from: 'pokemon.id',
-        to: 'item.pokemonId',
+  static get relationMappings(): RelationMappings {
+    return {
+      item: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId',
+        },
       },
-    },
+    }
   };
 
   // Custom Methods

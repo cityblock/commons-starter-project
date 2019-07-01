@@ -51,7 +51,7 @@ input PokemonCreateInput {
 }
 
 input PokemonEditInput {
-  pokemonId: ID!
+  id: ID!
   name: String
   attack: Int
   defense: Int

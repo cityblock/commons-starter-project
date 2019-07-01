@@ -10,7 +10,7 @@ import pokemonEdit from '../../../app/graphql/queries/pokemon-edit-mutation.grap
 
 // Queries
 // import getPokemon from '../../../app/graphql/queries/get-pokemon-query.graphql';
-// import getPokemons from '../../../app/graphql/queries/pokemon-getall-query.graphql';
+import getPokemonsQuery from '../../../app/graphql/queries/pokemon-getall-query.graphql';
 
 import { setupDb } from '../../lib/test-utils';
 
@@ -19,10 +19,6 @@ import Pokemon from '../../models/Pokemon';
 import { PokeType } from '../../models/PokeType';
 
 import schema from '../make-executable-schema';
-
-
-
-
 
 
 describe('Pokemon', () => {
@@ -84,11 +80,10 @@ describe('Pokemon', () => {
   it('edits a pokemon name', async () => {
 
     const pokemonList = await Pokemon.getAll(trx);
-    const id = pokemonList[0].id
+    const pokemon = pokemonList[0]
 
     // Create a random name
     const name = 'edited_name_' + uuid();
-
 
     const { data } = await graphql(
       schema,
@@ -96,12 +91,12 @@ describe('Pokemon', () => {
       null,
       { testTransaction: trx },
       {
-        pokemonId: id,
+        id: pokemon.id,
         name,
       },
     );
 
-    expect(cloneDeep(data.pokemonEdit)).toMatchObject({ name, });
+    expect(data.pokemonEdit.name).toBe(name);
   });
 
 
@@ -118,6 +113,42 @@ describe('Pokemon', () => {
       },
     );
     expect(cloneDeep(result.data!.pokemonDelete).deletedAt).not.toBeFalsy();
+  });
+
+
+
+  it('returns all pokemons', async () => {
+
+    const getPokemons = print(getPokemonsQuery)
+
+    const pokemon1 = await Pokemon.create({
+      pokemonNumber: 100,
+      name: 'test_' + uuid(),
+      moves: ['Slash', 'Flame Wheel'],
+      attack: 0,
+      defense: 0,
+      pokeType: PokeType.dragon,
+      imageUrl: 'test.png'
+    }, trx);
+
+    const pokemon2 = await Pokemon.create({
+      pokemonNumber: 101,
+      name: 'test_' + uuid(),
+      moves: ['Flame Wheel'],
+      attack: 3,
+      defense: 4,
+      pokeType: PokeType.fairy,
+      imageUrl: 'test.png'
+    }, trx);
+
+    let result = await graphql(schema, getPokemons, null, {
+      testTransaction: trx,
+    });
+
+    result = cloneDeep(result.data!.pokemonAll).map((c: Pokemon) => c.name);
+
+    expect(result).toContain(pokemon2.name);
+    expect(result).toContain(pokemon1.name);
   });
 
 

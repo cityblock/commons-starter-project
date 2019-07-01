@@ -1,7 +1,7 @@
 #import "../fragments/pokemon-full.graphql"
 
 mutation pokemonEdit(
-  $pokemonId: ID!
+  $id: ID!
   $name: String
   $attack: Int
   $defense: Int
@@ -11,7 +11,7 @@ mutation pokemonEdit(
 ) {
   pokemonEdit(
     input: {
-      pokemonId: $pokemonId
+      id: $id
       name: $name
       attack: $attack
       defense: $defense

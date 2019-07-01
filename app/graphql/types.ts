@@ -82,7 +82,7 @@ export interface pokemonEdit {
 }
 
 export interface pokemonEditVariables {
-  pokemonId: string;
+  id: string;
   name?: string | null;
   attack?: number | null;
   defense?: number | null;

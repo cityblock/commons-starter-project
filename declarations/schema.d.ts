@@ -75,7 +75,7 @@ declare module 'schema' {
   }
 
   interface IPokemonEditInput {
-    pokemonId: string;
+    id: string;
     name?: string | null;
     attack?: number | null;
     defense?: number | null;

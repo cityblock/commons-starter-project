@@ -1,4 +1,5 @@
 
+import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import { IContext } from './shared/utils';
 
@@ -10,11 +11,15 @@ import {
   IPokemonDeleteOnRootMutationTypeArguments,
   IPokemonEditInput,
   IPokemonEditOnRootMutationTypeArguments,
+  IPokemonInput,
+  IPokemonOnRootQueryTypeArguments,
   IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 
 // Models
 import Pokemon from '../models/Pokemon';
+
 
 
 // Pokemon Create
@@ -28,8 +33,8 @@ export async function pokemonCreate(
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonCreate']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
-    const pokemon = await Pokemon.create(input, txn);
-    return pokemon;
+    const createdPokemon = await Pokemon.create(input, txn);
+    return createdPokemon;
   });
 }
 
@@ -48,17 +53,12 @@ export async function pokemonEdit(
 
     if (!input) return Promise.reject('No input given for Edit');
 
-    const editedItem = {
-      name: input.name || undefined,
-      attack: input.attack || undefined,
-      defense: input.defense || undefined,
-      pokeType: input.pokeType || undefined,
-      imageUrl: input.name || undefined
+    console.log('input', input)
 
-    }
+    const filtered = omitBy<IPokemonEditInput>(input, isNil) as any;
 
-    const pokemon = await Pokemon.edit(input.pokemonId, editedItem, txn);
-    return pokemon;
+    const editedPokemon = await Pokemon.edit(input.id, filtered, txn);
+    return editedPokemon;
   });
 }
 
@@ -74,12 +74,11 @@ export async function pokemonDelete(
 ): Promise<IRootMutationType['pokemonDelete']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
     if (!input) return Promise.reject('No input given for Delete')
-    const pokemon = await Pokemon.delete(input.pokemonId, txn);
-    return pokemon;
+    const deletedPokemon = await Pokemon.delete(input.pokemonId, txn);
+    return deletedPokemon;
   });
 }
 
-/*
 // Pokemon Get
 export interface IPokemonOptions {
   input: IPokemonInput;
@@ -87,12 +86,24 @@ export interface IPokemonOptions {
 
 export async function pokemon(
   source: any,
-  { input }: IPokemonOnRootMutationTypeArguments,
+  { pokemonId }: IPokemonOnRootQueryTypeArguments,
   { testTransaction }: IContext,
-): Promise<IRootMutationType['pokemon']> {
+): Promise<IRootQueryType['pokemon']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
-    const onePokemon = await Pokemon.get(input.pokemonId, txn);
+    const onePokemon = await Pokemon.get(pokemonId, txn);
     return onePokemon;
   });
 }
-*/
+
+
+// Pokemon Get All
+export async function pokemonAll(
+  source: any,
+  { pokemonId }: IPokemonOnRootQueryTypeArguments,
+  { testTransaction }: IContext
+): Promise<Array<IRootQueryType['pokemon']>> {
+  return transaction(testTransaction || Pokemon.knex(), async txn => {
+    const allPokemon = await Pokemon.getAll(txn);
+    return allPokemon;
+  });
+};

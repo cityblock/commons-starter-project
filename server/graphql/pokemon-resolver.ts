@@ -53,8 +53,6 @@ export async function pokemonEdit(
 
     if (!input) return Promise.reject('No input given for Edit');
 
-    console.log('input', input)
-
     const filtered = omitBy<IPokemonEditInput>(input, isNil) as any;
 
     const editedPokemon = await Pokemon.edit(input.id, filtered, txn);

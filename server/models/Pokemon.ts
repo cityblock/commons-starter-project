@@ -2,7 +2,6 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid';
 import Item from './Item';
 
-
 /*
 - id (primary key, unique, [uuid], not null) ­ note we use uuid rather than integer ids
 - pokemonNumber (integer, not null, unique)

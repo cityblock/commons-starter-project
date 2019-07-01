@@ -1,0 +1,10 @@
+fragment fullPokemon on Pokemon {
+  pokemonNumber
+  name
+  attack
+  defense
+  pokeType
+  moves
+  imageUrl
+  deletedAt
+}

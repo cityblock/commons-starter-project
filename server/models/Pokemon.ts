@@ -1,9 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import { join } from 'path';
 import uuid from 'uuid';
 import Item from './Item';
-import { PokeType } from './PokeType';
-
 
 /*
 - id (primary key, unique, [uuid], not null) ­ note we use uuid rather than integer ids
@@ -26,7 +23,7 @@ export interface IPokemonCreateInput {
   name: string;
   attack: number;
   defense: number;
-  pokeType: PokeType;
+  pokeType: string;
   moves: string[];
   imageUrl: string;
 }
@@ -35,7 +32,7 @@ export interface IPokemonEditInput {
   name?: string;
   attack?: number;
   defense?: number;
-  pokeType?: PokeType;
+  pokeType?: string;
   moves?: string[];
   imageUrl?: string;
 }
@@ -51,12 +48,12 @@ export default class Pokemon extends Model {
 
     properties: {
       id: { type: 'string', format: 'uuid' },
-      pokemonNumber: { type: ['integer', 'null'] },
+      pokemonNumber: { type: ['integer'] },
       name: { type: 'string', minLength: 1, maxLength: 255 },
       attack: { type: 'integer' },
       defense: { type: 'integer' },
-      pokeType: { type: 'enu' },
-      moves: { type: 'array' },
+      pokeType: { type: 'string' },
+      moves: { type: 'array', items: { type: 'string' } },
       imageUrl: { type: 'string', minLength: 1, maxLength: 255 },
       createdAt: { type: 'timestamp' },
       updatedAt: { type: 'timestamp' },
@@ -66,15 +63,17 @@ export default class Pokemon extends Model {
 
 
   // Relations
-  static relationMappings: RelationMappings = {
-    item: {
-      relation: Model.HasManyRelation,
-      modelClass: join(__dirname, 'Item'),
-      join: {
-        from: 'pokemon.id',
-        to: 'item.pokemonId',
+  static get relationMappings(): RelationMappings {
+    return {
+      item: {
+        relation: Model.HasManyRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId',
+        },
       },
-    },
+    }
   };
 
   // Custom Methods
@@ -117,16 +116,16 @@ export default class Pokemon extends Model {
 
   // Public Properties
   id!: string;
-  pokemonNumber?: number;
+  pokemonNumber!: number;
   name!: string;
-  attack?: number;
+  attack!: number;
   defense!: number;
-  pokeType!: PokeType;
+  pokeType!: string;
   moves!: string[];
   imageUrl!: string;
   createdAt!: Date;
   updatedAt!: Date;
-  deletedAt?: Date;
+  deletedAt!: Date;
   item!: Item[];
 
   // Lifecycle

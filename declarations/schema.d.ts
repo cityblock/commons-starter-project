@@ -18,54 +18,78 @@ declare module 'schema' {
   }
 
   interface IRootQueryType {
-
-    /**
-     * All puppies
-     */
-    puppies: Array<IPuppy>;
+    pokemons: Array<IPokemon>;
+    pokemon: IPokemon | null;
   }
 
-  /**
-   * Puppy
-   */
-  interface IPuppy {
+  interface IPokemonOnRootQueryTypeArguments {
+    pokemonId: string;
+  }
+
+  interface IPokemon {
     id: string;
-    name: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    pokemonNumber: number;
+    name: string | null;
+    attack: number | null;
+    defense: number | null;
+    pokeType: string | null;
+    moves: Array<string | null> | null;
+    imageUrl: string | null;
+    createdAt: any;
+    updatedAt: any;
+    deletedAt: any | null;
   }
 
-  /**
-   * An object with a Globally Unique ID
-   */
-  type uniqueId = IPuppy;
+  type uniqueId = IPokemon;
 
-  /**
-   * An object with a Globally Unique ID
-   */
   interface IUniqueId {
-
-    /**
-     * The ID of the object.
-     */
     id: string;
   }
 
   interface IRootMutationType {
-
-    /**
-     * Create a puppy
-     */
-    puppyCreate: IPuppy;
+    pokemonCreate: IPokemon | null;
+    pokemonEdit: IPokemon | null;
+    pokemonDelete: IPokemon | null;
   }
 
-  interface IPuppyCreateOnRootMutationTypeArguments {
-    input?: IPuppyCreateInput | null;
+  interface IPokemonCreateOnRootMutationTypeArguments {
+    input: IPokemonCreateInput;
   }
 
-  interface IPuppyCreateInput {
+  interface IPokemonEditOnRootMutationTypeArguments {
+    input: IPokemonEditInput;
+  }
+
+  interface IPokemonDeleteOnRootMutationTypeArguments {
+    input?: IPokemonDeleteInput | null;
+  }
+
+  interface IPokemonCreateInput {
+    pokemonNumber: number;
     name: string;
+    attack: number;
+    defense: number;
+    pokeType: string;
+    moves: Array<string>;
+    imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    id: string;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: string | null;
+    moves?: Array<string | null> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IPokemonDeleteInput {
+    pokemonId: string;
+  }
+
+  interface IPokemonInput {
+    pokemonNumber: number;
   }
 }
 

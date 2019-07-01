@@ -57,17 +57,18 @@ export default class Item extends Model {
   static modelPaths = [__dirname];
 
   // Relationships
-  static relationMappings: RelationMappings = {
-    pokemon: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Pokemon,
-      join: {
-        from: 'item.pokemonId',
-        to: 'pokemon.id',
+  static get relationMappings(): RelationMappings {
+    return {
+      pokemon: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Pokemon,
+        join: {
+          from: 'item.pokemonId',
+          to: 'pokemon.id',
+        },
       },
-    },
+    }
   };
-
 
   // Custom methods
 

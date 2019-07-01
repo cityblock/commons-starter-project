@@ -1,14 +1,83 @@
+scalar DateTime
+scalar Date
+scalar Time
+
 # An object with a Globally Unique ID
 interface uniqueId {
   # The ID of the object.
   id: ID!
 }
 
-type RootMutationType {}
+# Models mappers
+type Pokemon implements uniqueId {
+  id: ID!
+  pokemonNumber: Int!
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: String
+  moves: [String]
+  imageUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
 
-type RootQueryType {}
+#type Item implements uniqueId {
+#  id: ID!
+#  pokemonId: Int!
+#  name: String!
+#  price: Int!
+#  happiness: Int!
+#  imageUrl: String
+#  createdAt: Date!
+#  updatedAt: Date!
+#  deletedAt: Date
+#}
+
+# Interfaces
+input PokemonInput {
+  pokemonNumber: Int!
+}
+
+input PokemonCreateInput {
+  pokemonNumber: Int!
+  name: String!
+  attack: Int!
+  defense: Int!
+  pokeType: String!
+  moves: [String!]!
+  imageUrl: String!
+}
+
+input PokemonEditInput {
+  id: ID!
+  name: String
+  attack: Int
+  defense: Int
+  pokeType: String
+  moves: [String]
+  imageUrl: String
+}
+
+input PokemonDeleteInput {
+  pokemonId: ID!
+}
 
 schema {
   query: RootQueryType
   mutation: RootMutationType
+}
+
+# ADMs
+type RootMutationType {
+  pokemonCreate(input: PokemonCreateInput!): Pokemon
+  pokemonEdit(input: PokemonEditInput!): Pokemon
+  pokemonDelete(input: PokemonDeleteInput): Pokemon
+}
+
+# Selects
+type RootQueryType {
+  pokemons: [Pokemon!]!
+  pokemon(pokemonId: String!): Pokemon
 }

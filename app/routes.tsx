@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import MainContainer from './main-container/main-container';
+import PokeAdd from './pokeadd-container/pokeadd-container';
+import PokeDetail from './pokedetail-container/pokedetail-container';
 
 /**
  * What is <Switch>?
@@ -12,6 +14,9 @@ import MainContainer from './main-container/main-container';
 
 export default (
   <Switch>
-    <Route exact path="/" component={MainContainer} />
+    <MainContainer>
+      <Route exact path="/" component={PokeAdd} />
+      <Route exact path="/pokemon/:pokemonId" component={PokeDetail} />
+    </MainContainer>
   </Switch>
 );

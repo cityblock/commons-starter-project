@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './css/main.css';
 
-import PokeListContainer from '../pokelist-container/pokelist-container';
+import PokeListContainer from '../poke-list-container/poke-list-container';
 
 const App: React.StatelessComponent<{}> = props => (
   <div className={styles.body}>

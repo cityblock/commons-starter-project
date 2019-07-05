@@ -16,7 +16,6 @@ import Item from './Item';
 - deletedAt (timestamp, nullable) ­ note we mark things as deleted, but rarely ever actually delete them in our database (“soft deletion”)
 */
 
-
 // Interfaces
 export interface IPokemonCreateInput {
   pokemonNumber: number;
@@ -61,7 +60,6 @@ export default class Pokemon extends Model {
     },
   };
 
-
   // Relations
   static get relationMappings(): RelationMappings {
     return {
@@ -73,22 +71,26 @@ export default class Pokemon extends Model {
           to: 'item.pokemonId',
         },
       },
-    }
-  };
+    };
+  }
 
   // Custom Methods
 
-
   // returns all Pokemon, ordered by pokemonNumber ascending
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    const pokemonList = await this.query(txn).whereNull('deletedAt').orderBy('pokemonNumber');;
+    const pokemonList = await this.query(txn)
+      .whereNull('deletedAt')
+      .orderBy('pokemonNumber');
     return pokemonList;
   }
 
   // get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated items
   // useful link: http://ivanbatic.com/using-async-await-typescript-classes/
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const individualPokemon = await this.query(txn).findById(pokemonId).eager('item').where('deletedAt', null)
+    const individualPokemon = await this.query(txn)
+      .findById(pokemonId)
+      .eager('item')
+      .where('deletedAt', null);
 
     // No data, just reject
     if (!individualPokemon) return Promise.reject();
@@ -103,14 +105,20 @@ export default class Pokemon extends Model {
   }
 
   // edits an existing Pokemon
-  static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<Pokemon> {
+  static async edit(
+    pokemonId: string,
+    pokemon: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
     const editedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
     return editedPokemon;
   }
 
   // marks a Pokemon as deleted, but does not actually delete it from the database
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, { deletedAt: new Date() });
+    const deletedPokemon = await this.query(txn).patchAndFetchById(pokemonId, {
+      deletedAt: new Date(),
+    });
     return deletedPokemon;
   }
 
@@ -130,7 +138,7 @@ export default class Pokemon extends Model {
 
   // Lifecycle
   $beforeInsert() {
-    this.id = uuid.v4()
+    this.id = uuid.v4();
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }

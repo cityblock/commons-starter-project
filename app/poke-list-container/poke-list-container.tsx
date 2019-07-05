@@ -20,8 +20,6 @@ const PokeList: React.StatelessComponent<allProps> = (props: allProps) => {
 
   if (!pokemons) return null;
 
-  console.log('pokemons', pokemons);
-
   const style = { width: '10%' };
   return (
     <ul>

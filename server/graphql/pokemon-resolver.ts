@@ -1,4 +1,3 @@
-
 import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import { IContext } from './shared/utils';
@@ -20,8 +19,6 @@ import {
 // Models
 import Pokemon from '../models/Pokemon';
 
-
-
 // Pokemon Create
 export interface IPokemonCreateOptions {
   input: IPokemonCreateInput;
@@ -37,7 +34,6 @@ export async function pokemonCreate(
   });
 }
 
-
 // Pokemon Edit
 export interface IPokemonEditOptions {
   input: IPokemonEditInput;
@@ -49,7 +45,6 @@ export async function pokemonEdit(
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonEdit']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
-
     if (!input) return Promise.reject('No input given for Edit');
 
     const filtered = omitBy<IPokemonEditInput>(input, isNil) as any;
@@ -69,7 +64,7 @@ export async function pokemonDelete(
   { testTransaction }: IContext,
 ): Promise<IRootMutationType['pokemonDelete']> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
-    if (!input) return Promise.reject('No input given for Delete')
+    if (!input) return Promise.reject('No input given for Delete');
     return Pokemon.delete(input.pokemonId, txn);
   });
 }
@@ -89,14 +84,13 @@ export async function pokemon(
   });
 }
 
-
 // Pokemons Get All
 export async function pokemons(
   source: any,
   { pokemonId }: IPokemonOnRootQueryTypeArguments,
-  { testTransaction }: IContext
+  { testTransaction }: IContext,
 ): Promise<Array<IRootQueryType['pokemon']>> {
   return transaction(testTransaction || Pokemon.knex(), async txn => {
     return Pokemon.getAll(txn);
   });
-};
+}

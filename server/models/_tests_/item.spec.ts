@@ -3,7 +3,6 @@ import { setupDb } from '../../lib/test-utils';
 import Item from '../Item';
 import Pokemon from '../Pokemon';
 
-
 describe('Item', () => {
   /*
   - get(itemId: string, txn: Transaction) ­ returns a single item
@@ -11,7 +10,6 @@ describe('Item', () => {
   - edit(itemId: string, pokemon: IItemEditInput, txn: Transaction) ­ edits an existing item
   - delete(itemId: string, txn: Transaction) ­ marks an item as deleted, but does not actually delete it from the database
   */
-
 
   // Recreate the DB
   let testDb = null as any;
@@ -24,7 +22,6 @@ describe('Item', () => {
     await testDb.destroy();
   });
 
-
   // For each test start a new transaction and roll it back.
   let trx = null as any;
 
@@ -36,9 +33,7 @@ describe('Item', () => {
     await trx.rollback();
   });
 
-
   it('get: Returns a single item', async () => {
-
     // Get an item id
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id;
@@ -51,12 +46,9 @@ describe('Item', () => {
     // Test
     expect(item).toBeInstanceOf(Item);
     expect(item).not.toBeInstanceOf(Array);
-
   });
 
-
   it('create: Creates and returns an item', async () => {
-
     // Get a pokemon id
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id;
@@ -66,23 +58,20 @@ describe('Item', () => {
       pokemonId: id,
       price: 0,
       happiness: 0,
-      imageUrl: 'test.png'
-    }
+      imageUrl: 'test.png',
+    };
 
     // Create a mutated pokemon
     const createdItem = await Item.create(testItem, trx);
 
     // Grab the mutated item from the db
-    const fetchedFromDb = await Item.query(trx).findById(createdItem.id)
+    const fetchedFromDb = await Item.query(trx).findById(createdItem.id);
 
     // Test
     expect(createdItem).toEqual(fetchedFromDb);
-
-
   });
 
   it('edit: Edits an existing item', async () => {
-
     // Get an item id
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id;
@@ -98,9 +87,7 @@ describe('Item', () => {
     expect(editedItem.name).toBe(name);
   });
 
-
   it('delete: Marks an item as deleted', async () => {
-
     // Get an item id
     const pokemonList = await Pokemon.getAll(trx);
     const id = pokemonList[0].id;
@@ -116,9 +103,5 @@ describe('Item', () => {
     // Test
     // Check that the item is not in the result.
     expect(newPokemon.item).not.toContain(deletedItem);
-
   });
-
-
-
 });

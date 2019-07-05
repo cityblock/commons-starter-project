@@ -16,5 +16,5 @@ export enum PokeType {
   bug = 'bug',
   ice = 'ice',
   dragon = 'dragon',
-  poison = 'poison'
+  poison = 'poison',
 }

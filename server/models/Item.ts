@@ -14,7 +14,6 @@ import Pokemon from './Pokemon';
   - deletedAt (timestamp, nullable)
 */
 
-
 // Interfaces
 export interface IItemCreateInput {
   name: string;
@@ -67,8 +66,8 @@ export default class Item extends Model {
           to: 'pokemon.id',
         },
       },
-    }
-  };
+    };
+  }
 
   // Custom methods
 
@@ -100,7 +99,6 @@ export default class Item extends Model {
     return deletedItem;
   }
 
-
   // Public Properties
   id!: string;
   name!: string;
@@ -114,9 +112,9 @@ export default class Item extends Model {
 
   // Lifecycle
   $beforeInsert() {
-    this.id = uuid.v4()
-    this.createdAt = new Date();;
-    this.updatedAt = new Date();;
+    this.id = uuid.v4();
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 
   $beforeUpdate() {

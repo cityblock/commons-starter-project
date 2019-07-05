@@ -99,6 +99,34 @@ export interface pokemonEditVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: pokemon
+// ====================================================
+
+export interface pokemon_pokemon {
+  id: string;
+  pokemonNumber: number;
+  name: string | null;
+  attack: number | null;
+  defense: number | null;
+  pokeType: string | null;
+  moves: (string | null)[] | null;
+  imageUrl: string | null;
+  deletedAt: any | null;
+}
+
+export interface pokemon {
+  pokemon: pokemon_pokemon | null;
+}
+
+export interface pokemonVariables {
+  pokemonId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: pokemons
 // ====================================================
 

@@ -1,4 +1,3 @@
-
 import { graphql, print } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction } from 'objection';
@@ -20,9 +19,7 @@ import { PokeType } from '../../models/PokeType';
 
 import schema from '../make-executable-schema';
 
-
 describe('Pokemon', () => {
-
   const pokemonInput = {
     pokemonNumber: 123,
     name: 'test_' + uuid(),
@@ -30,9 +27,8 @@ describe('Pokemon', () => {
     attack: 0,
     defense: 0,
     pokeType: PokeType.dragon,
-    imageUrl: 'test.png'
-  }
-
+    imageUrl: 'test.png',
+  };
 
   const pokemonCreateMutation = print(pokemonCreate);
   const pokemonDeleteMutation = print(pokemonDelete);
@@ -40,7 +36,6 @@ describe('Pokemon', () => {
 
   // const getPokemonQuery = print(getConcern);
   // const getPokemonsQuery = print(getPokemons);
-
 
   // Recreate the DB
   let testDb = null as any;
@@ -64,7 +59,6 @@ describe('Pokemon', () => {
     await trx.rollback();
   });
 
-
   it('creates a pokemon', async () => {
     const result = await graphql(
       schema,
@@ -76,11 +70,9 @@ describe('Pokemon', () => {
     expect(cloneDeep(result.data!.pokemonCreate)).toMatchObject(pokemonInput);
   });
 
-
   it('edits a pokemon name', async () => {
-
     const pokemonList = await Pokemon.getAll(trx);
-    const pokemon = pokemonList[0]
+    const pokemon = pokemonList[0];
 
     // Create a random name
     const name = 'edited_name_' + uuid();
@@ -99,9 +91,7 @@ describe('Pokemon', () => {
     expect(data.pokemonEdit.name).toBe(name);
   });
 
-
   it('deletes a pokemon', async () => {
-
     const pokemon = await Pokemon.create(pokemonInput, trx);
     const result = await graphql(
       schema,
@@ -109,37 +99,40 @@ describe('Pokemon', () => {
       null,
       { testTransaction: trx },
       {
-        pokemonId: pokemon.id
+        pokemonId: pokemon.id,
       },
     );
     expect(cloneDeep(result.data!.pokemonDelete).deletedAt).not.toBeFalsy();
   });
 
-
-
   it('returns all pokemons', async () => {
+    const getPokemons = print(getPokemonsQuery);
 
-    const getPokemons = print(getPokemonsQuery)
+    const pokemon1 = await Pokemon.create(
+      {
+        pokemonNumber: 100,
+        name: 'test_' + uuid(),
+        moves: ['Slash', 'Flame Wheel'],
+        attack: 0,
+        defense: 0,
+        pokeType: PokeType.dragon,
+        imageUrl: 'test.png',
+      },
+      trx,
+    );
 
-    const pokemon1 = await Pokemon.create({
-      pokemonNumber: 100,
-      name: 'test_' + uuid(),
-      moves: ['Slash', 'Flame Wheel'],
-      attack: 0,
-      defense: 0,
-      pokeType: PokeType.dragon,
-      imageUrl: 'test.png'
-    }, trx);
-
-    const pokemon2 = await Pokemon.create({
-      pokemonNumber: 101,
-      name: 'test_' + uuid(),
-      moves: ['Flame Wheel'],
-      attack: 3,
-      defense: 4,
-      pokeType: PokeType.fairy,
-      imageUrl: 'test.png'
-    }, trx);
+    const pokemon2 = await Pokemon.create(
+      {
+        pokemonNumber: 101,
+        name: 'test_' + uuid(),
+        moves: ['Flame Wheel'],
+        attack: 3,
+        defense: 4,
+        pokeType: PokeType.fairy,
+        imageUrl: 'test.png',
+      },
+      trx,
+    );
 
     let result = await graphql(schema, getPokemons, null, {
       testTransaction: trx,
@@ -150,5 +143,4 @@ describe('Pokemon', () => {
     expect(result).toContain(pokemon2.name);
     expect(result).toContain(pokemon1.name);
   });
-
 });

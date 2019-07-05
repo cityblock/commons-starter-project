@@ -71,15 +71,11 @@ export class PokemonCreate extends React.Component<allProps, IState> {
   }
 
   async onSubmit() {
-    console.log('clicked submit');
     const { history, routeBase } = this.props;
 
-    console.log('this.props', this.props.createPokemon);
     if (this.props.createPokemon) {
       try {
         this.setState({ loading: true });
-
-        console.log('pokemon to be created', this.state.pokemon);
 
         // Add the pokemon by calling the graphQL
         const pokemon = await this.props.createPokemon({
@@ -87,8 +83,6 @@ export class PokemonCreate extends React.Component<allProps, IState> {
             ...this.state.pokemon,
           },
         });
-
-        console.log('newly created pokemon', pokemon);
 
         this.setState({ loading: false });
 

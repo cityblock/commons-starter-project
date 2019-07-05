@@ -7,6 +7,7 @@
 // ====================================================
 
 export interface pokemonCreate_pokemonCreate {
+  id: string;
   pokemonNumber: number;
   name: string | null;
   attack: number | null;
@@ -40,6 +41,7 @@ export interface pokemonCreateVariables {
 // ====================================================
 
 export interface pokemonDelete_pokemonDelete {
+  id: string;
   pokemonNumber: number;
   name: string | null;
   attack: number | null;
@@ -67,6 +69,7 @@ export interface pokemonDeleteVariables {
 // ====================================================
 
 export interface pokemonEdit_pokemonEdit {
+  id: string;
   pokemonNumber: number;
   name: string | null;
   attack: number | null;
@@ -100,6 +103,7 @@ export interface pokemonEditVariables {
 // ====================================================
 
 export interface pokemons_pokemons {
+  id: string;
   pokemonNumber: number;
   name: string | null;
   attack: number | null;
@@ -123,6 +127,7 @@ export interface pokemons {
 // ====================================================
 
 export interface fullPokemon {
+  id: string;
   pokemonNumber: number;
   name: string | null;
   attack: number | null;

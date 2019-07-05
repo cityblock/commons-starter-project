@@ -1,4 +1,5 @@
 fragment fullPokemon on Pokemon {
+  id
   pokemonNumber
   name
   attack

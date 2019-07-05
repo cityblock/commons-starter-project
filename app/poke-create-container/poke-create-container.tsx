@@ -44,10 +44,10 @@ export class PokemonCreate extends React.Component<allProps, IState> {
         name: '',
         attack: 0,
         defense: 0,
-        pokemonNumber: 0,
+        pokemonNumber: 200,
         pokeType: '',
-        moves: [],
-        imageUrl: '',
+        moves: ['Slash', 'Flame Wheel'],
+        imageUrl: 'test.png',
       },
     };
   }
@@ -71,17 +71,28 @@ export class PokemonCreate extends React.Component<allProps, IState> {
   }
 
   async onSubmit() {
+    console.log('clicked submit');
     const { history, routeBase } = this.props;
+
+    console.log('this.props', this.props.createPokemon);
     if (this.props.createPokemon) {
       try {
         this.setState({ loading: true });
+
+        console.log('pokemon to be created', this.state.pokemon);
+
+        // Add the pokemon by calling the graphQL
         const pokemon = await this.props.createPokemon({
           variables: {
             ...this.state.pokemon,
           },
         });
+
+        console.log('newly created pokemon', pokemon);
+
         this.setState({ loading: false });
-        this.props.onClose();
+
+        // If success, redirect to the newly created pokemon
         if (pokemon.data.pokemonCreate) {
           history.push(`${routeBase}/${pokemon.data.pokemonCreate.id}`);
         }
@@ -97,7 +108,16 @@ export class PokemonCreate extends React.Component<allProps, IState> {
 
     return (
       <div>
+        <input
+          type="text"
+          name="pokemonNumber"
+          value={pokemon.pokemonNumber}
+          onChange={this.onChange}
+        />
         <input type="text" name="name" value={pokemon.name} onChange={this.onChange} />
+        <input type="text" name="attack" value={pokemon.attack} onChange={this.onChange} />
+        <input type="text" name="defense" value={pokemon.defense} onChange={this.onChange} />
+        <input type="text" name="pokeType" value={pokemon.pokeType} onChange={this.onChange} />
         <input type="button" onClick={this.onSubmit} value="Add" />
       </div>
     );
@@ -107,7 +127,7 @@ export class PokemonCreate extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   graphql(pokemomCreateGraphql, {
-    name: 'pokemonCreate',
+    name: 'createPokemon',
     options: {
       refetchQueries: ['pokemons'],
     },

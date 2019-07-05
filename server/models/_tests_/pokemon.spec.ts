@@ -85,7 +85,7 @@ describe('Pokemon', () => {
     const name = 'edited_name_' + uuid();
 
     // Modify the name
-    const editedPokemon = await Pokemon.edit(id, { name: name }, trx);
+    const editedPokemon = await Pokemon.edit(id, { name }, trx);
 
     // Test
     expect(editedPokemon).toBeInstanceOf(Pokemon);

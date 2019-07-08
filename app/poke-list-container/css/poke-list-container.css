@@ -1,0 +1,9 @@
+/* pokelist-container.css */
+
+.leftCol {
+  position: 'fixed';
+  width: '50vw';
+  background-color: '#DDD';
+  top: 0;
+  bottom: 0;
+}

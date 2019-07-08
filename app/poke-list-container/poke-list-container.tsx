@@ -42,7 +42,7 @@ const style = {
   width: '10%',
 };
 
-const PokeList: React.StatelessComponent<allProps> = (props: allProps) => {
+export const PokeList: React.StatelessComponent<allProps> = (props: allProps) => {
   const { pokemons } = props;
 
   if (!pokemons) return null;
@@ -57,7 +57,13 @@ const PokeList: React.StatelessComponent<allProps> = (props: allProps) => {
       {pokemons.map((item: fullPokemon) => (
         <span key={item.id} style={styleSpan}>
           <Link to={`/pokemon/${item.id}`}>
-            <img src={`${item.imageUrl}`} style={style} alt={`{item.name || ''}`} />
+            <img
+              id={`${item.name}`}
+              className="pokeImg"
+              src={`${item.imageUrl}`}
+              style={style}
+              alt={item.name || ''}
+            />
           </Link>
         </span>
       ))}

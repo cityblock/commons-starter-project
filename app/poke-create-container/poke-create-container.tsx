@@ -2,8 +2,9 @@ import { History } from 'history';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
+import { PokeType } from '../../server/models/PokeType';
 import pokemomCreateGraphql from '../graphql/queries/pokemon-create-mutation.graphql';
-import { pokemonCreate, pokemonCreateVariables, PokeType } from '../graphql/types';
+import { pokemonCreate, pokemonCreateVariables } from '../graphql/types';
 import { ToArray } from '../shared/util/helpers';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import withErrorHandler, {
@@ -103,7 +104,8 @@ export class PokemonCreate extends React.Component<allProps, IState> {
         if (pokemon.data.pokemonCreate) {
           history.push(`${routeBase}/${pokemon.data.pokemonCreate.id}`);
         } else {
-          const error = pokemon.errors[0].message;
+          // const error = pokemon.errors[0].message;
+          const error = '';
           this.setState({ error });
         }
       } catch (err) {

@@ -23,7 +23,7 @@ export interface IPokemonCreateInput {
   name: string;
   attack: number;
   defense: number;
-  pokeType: PokeType;
+  pokeType: string;
   moves: string[];
   imageUrl: string;
 }

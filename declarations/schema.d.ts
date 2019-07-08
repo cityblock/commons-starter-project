@@ -69,9 +69,23 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: PokeType;
+    pokeType: string;
     moves: Array<string>;
     imageUrl: string;
+  }
+
+  interface IPokemonEditInput {
+    id: string;
+    name?: string | null;
+    attack?: number | null;
+    defense?: number | null;
+    pokeType?: string | null;
+    moves?: Array<string | null> | null;
+    imageUrl?: string | null;
+  }
+
+  interface IPokemonDeleteInput {
+    pokemonId: string;
   }
 
   const enum PokeType {
@@ -93,20 +107,6 @@ declare module 'schema' {
     ice = 'ice',
     dragon = 'dragon',
     poison = 'poison'
-  }
-
-  interface IPokemonEditInput {
-    id: string;
-    name?: string | null;
-    attack?: number | null;
-    defense?: number | null;
-    pokeType?: string | null;
-    moves?: Array<string | null> | null;
-    imageUrl?: string | null;
-  }
-
-  interface IPokemonDeleteInput {
-    pokemonId: string;
   }
 
   interface IPokemonInput {

@@ -66,7 +66,7 @@ input PokemonCreateInput {
   name: String!
   attack: Int!
   defense: Int!
-  pokeType: PokeType!
+  pokeType: String!
   moves: [String!]!
   imageUrl: String!
 }

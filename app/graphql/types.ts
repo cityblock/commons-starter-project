@@ -27,7 +27,7 @@ export interface pokemonCreateVariables {
   name: string;
   attack: number;
   defense: number;
-  pokeType: string;
+  pokeType: PokeType;
   moves: string[];
   imageUrl: string;
 }
@@ -173,6 +173,27 @@ export interface fullPokemon {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export enum PokeType {
+  bug = "bug",
+  dark = "dark",
+  dragon = "dragon",
+  electric = "electric",
+  fairy = "fairy",
+  fighting = "fighting",
+  fire = "fire",
+  flying = "flying",
+  ghost = "ghost",
+  grass = "grass",
+  ground = "ground",
+  ice = "ice",
+  normal = "normal",
+  poison = "poison",
+  psychic = "psychic",
+  rock = "rock",
+  steel = "steel",
+  water = "water",
+}
 
 //==============================================================
 // END Enums and Input Objects

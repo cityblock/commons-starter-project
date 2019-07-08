@@ -14,24 +14,54 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
+const leftCol = {
+  position: 'fixed' as 'fixed',
+  width: '50vw',
+  backgroundColor: '#DDD',
+  top: 0,
+  bottom: 0,
+};
+
+const styleSpan = {
+  padding: '10px',
+};
+
+const styleDivImage = {
+  width: '100%',
+};
+
+const styleImage = {
+  display: 'block',
+  width: '30%',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  padding: 10,
+};
+
+const style = {
+  width: '10%',
+};
+
 const PokeList: React.StatelessComponent<allProps> = (props: allProps) => {
-  // Decompose the properties
   const { pokemons } = props;
 
   if (!pokemons) return null;
 
-  const style = { width: '10%' };
   return (
-    <ul>
+    <div style={leftCol}>
+      <div style={styleDivImage}>
+        <Link to={`/`}>
+          <img src="/assets/pokemon-logo.png" style={styleImage} alt="pokemon" />
+        </Link>
+      </div>
       {pokemons.map((item: fullPokemon) => (
-        <li key={item.id}>
+        <span key={item.id} style={styleSpan}>
           <Link to={`/pokemon/${item.id}`}>
-            <img src={`${item.imageUrl}`} {...style} />
-            {item.name}
+            <img src={`${item.imageUrl}`} style={style} alt={`{item.name || ''}`} />
           </Link>
-        </li>
+        </span>
       ))}
-    </ul>
+    </div>
   );
 };
 

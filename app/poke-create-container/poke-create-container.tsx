@@ -3,8 +3,12 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import pokemomCreateGraphql from '../graphql/queries/pokemon-create-mutation.graphql';
-import { pokemonCreate, pokemonCreateVariables } from '../graphql/types';
+import { pokemonCreate, pokemonCreateVariables, PokeType } from '../graphql/types';
+import { ToArray } from '../shared/util/helpers';
 import { IUpdatedField } from '../shared/util/updated-fields';
+import withErrorHandler, {
+  IInjectedErrorProps,
+} from '../shared/with-error-handler/with-error-handler';
 
 interface IOptions {
   variables: pokemonCreateVariables;
@@ -26,9 +30,16 @@ interface IGraphqlProps {
 interface IState {
   loading: boolean;
   pokemon: pokemonCreateVariables;
+  error: string;
 }
 
-type allProps = IProps & IGraphqlProps & IRouterProps;
+type allProps = IProps & IGraphqlProps & IInjectedErrorProps & IRouterProps;
+
+const content = {
+  position: 'relative' as 'relative',
+  marginLeft: '50vw',
+  padding: '10px',
+};
 
 export class PokemonCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -45,10 +56,11 @@ export class PokemonCreate extends React.Component<allProps, IState> {
         attack: 0,
         defense: 0,
         pokemonNumber: 200,
-        pokeType: '',
+        pokeType: PokeType.dragon,
         moves: ['Slash', 'Flame Wheel'],
         imageUrl: 'test.png',
       },
+      error: '',
     };
   }
 
@@ -72,6 +84,7 @@ export class PokemonCreate extends React.Component<allProps, IState> {
 
   async onSubmit() {
     const { history, routeBase } = this.props;
+    this.setState({ error: '' });
 
     if (this.props.createPokemon) {
       try {
@@ -89,6 +102,9 @@ export class PokemonCreate extends React.Component<allProps, IState> {
         // If success, redirect to the newly created pokemon
         if (pokemon.data.pokemonCreate) {
           history.push(`${routeBase}/${pokemon.data.pokemonCreate.id}`);
+        } else {
+          const error = pokemon.errors[0].message;
+          this.setState({ error });
         }
       } catch (err) {
         this.setState({ loading: false });
@@ -98,21 +114,47 @@ export class PokemonCreate extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { pokemon } = this.state;
+    const { pokemon, error } = this.state;
+
+    const pokeTypeList = ToArray(PokeType);
 
     return (
-      <div>
-        <input
-          type="text"
-          name="pokemonNumber"
-          value={pokemon.pokemonNumber}
-          onChange={this.onChange}
-        />
-        <input type="text" name="name" value={pokemon.name} onChange={this.onChange} />
-        <input type="text" name="attack" value={pokemon.attack} onChange={this.onChange} />
-        <input type="text" name="defense" value={pokemon.defense} onChange={this.onChange} />
-        <input type="text" name="pokeType" value={pokemon.pokeType} onChange={this.onChange} />
-        <input type="button" onClick={this.onSubmit} value="Add" />
+      <div style={content}>
+        <h1>New Pokemon</h1>
+        <div>{error}</div>
+        <div>
+          number >
+          <input
+            type="text"
+            name="pokemonNumber"
+            value={pokemon.pokemonNumber}
+            onChange={this.onChange}
+          />
+        </div>
+        <div>
+          name > <input type="text" name="name" value={pokemon.name} onChange={this.onChange} />
+        </div>
+        <div>
+          attach >
+          <input type="text" name="attack" value={pokemon.attack} onChange={this.onChange} />
+        </div>
+        <div>
+          defense >
+          <input type="text" name="defense" value={pokemon.defense} onChange={this.onChange} />
+        </div>
+        <div>
+          poketype >
+          <select id="pokeType" value={pokemon.pokeType} onChange={this.onChange}>
+            {pokeTypeList.map(x => (
+              <option key={x} value={x}>
+                {x}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <input type="button" onClick={this.onSubmit} value="Add" />
+        </div>
       </div>
     );
   }
@@ -120,6 +162,7 @@ export class PokemonCreate extends React.Component<allProps, IState> {
 
 export default compose(
   withRouter,
+  withErrorHandler(),
   graphql(pokemomCreateGraphql, {
     name: 'createPokemon',
     options: {

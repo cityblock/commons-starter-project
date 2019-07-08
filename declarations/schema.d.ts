@@ -69,9 +69,30 @@ declare module 'schema' {
     name: string;
     attack: number;
     defense: number;
-    pokeType: string;
+    pokeType: PokeType;
     moves: Array<string>;
     imageUrl: string;
+  }
+
+  const enum PokeType {
+    normal = 'normal',
+    grass = 'grass',
+    fire = 'fire',
+    water = 'water',
+    electric = 'electric',
+    psychic = 'psychic',
+    ghost = 'ghost',
+    dark = 'dark',
+    fairy = 'fairy',
+    rock = 'rock',
+    ground = 'ground',
+    steel = 'steel',
+    flying = 'flying',
+    fighting = 'fighting',
+    bug = 'bug',
+    ice = 'ice',
+    dragon = 'dragon',
+    poison = 'poison'
   }
 
   interface IPokemonEditInput {

@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid';
 import Item from './Item';
+import { PokeType } from './PokeType';
 
 /*
 - id (primary key, unique, [uuid], not null) ­ note we use uuid rather than integer ids
@@ -22,7 +23,7 @@ export interface IPokemonCreateInput {
   name: string;
   attack: number;
   defense: number;
-  pokeType: string;
+  pokeType: PokeType;
   moves: string[];
   imageUrl: string;
 }
@@ -51,7 +52,7 @@ export default class Pokemon extends Model {
       name: { type: 'string', minLength: 1, maxLength: 255 },
       attack: { type: 'integer' },
       defense: { type: 'integer' },
-      pokeType: { type: 'string' },
+      pokeType: { type: 'enum', values: { PokeType } },
       moves: { type: 'array', items: { type: 'string' } },
       imageUrl: { type: 'string', minLength: 1, maxLength: 255 },
       createdAt: { type: 'timestamp' },

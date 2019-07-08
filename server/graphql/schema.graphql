@@ -23,6 +23,27 @@ type Pokemon implements uniqueId {
   deletedAt: DateTime
 }
 
+enum PokeType {
+  normal
+  grass
+  fire
+  water
+  electric
+  psychic
+  ghost
+  dark
+  fairy
+  rock
+  ground
+  steel
+  flying
+  fighting
+  bug
+  ice
+  dragon
+  poison
+}
+
 #type Item implements uniqueId {
 #  id: ID!
 #  pokemonId: Int!
@@ -45,7 +66,7 @@ input PokemonCreateInput {
   name: String!
   attack: Int!
   defense: Int!
-  pokeType: String!
+  pokeType: PokeType!
   moves: [String!]!
   imageUrl: String!
 }

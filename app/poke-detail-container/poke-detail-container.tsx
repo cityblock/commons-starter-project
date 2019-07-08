@@ -30,8 +30,14 @@ const PokeDetail: React.StatelessComponent<allProps> = (props: allProps) => {
   const style = { width: '50%' };
   const img = selectedPokemon.imageUrl || '';
 
+  const content = {
+    position: 'relative' as 'relative',
+    marginLeft: '50vw',
+    padding: '10px',
+  };
+
   return (
-    <div>
+    <div style={content}>
       <h1>{selectedPokemon.name}</h1>
       <p>Type: {selectedPokemon.pokeType}</p>
       <p>Attack: {selectedPokemon.attack}</p>

@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 export async function up(knex: Knex): Promise<any> {
   const itemsExist = await knex.schema.hasTable('item');
   if (!itemsExist) {
-    await knex.schema.createTable('item', table => {
+    return knex.schema.createTable('item', table => {
       table.uuid('id').primary();
       table.string('name').notNullable();
       table
@@ -23,7 +23,7 @@ export async function up(knex: Knex): Promise<any> {
 
 export async function down(knex: Knex): Promise<any> {
   const itemsExist = await knex.schema.hasTable('item');
-  if (!itemsExist) {
+  if (itemsExist) {
     return knex.schema.dropTable('item');
   }
 }

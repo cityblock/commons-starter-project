@@ -1,6 +1,6 @@
 // got error using import assuming because old node package doesn't support import
-// import dotenv from 'dotenv';
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
+// const dotenv = require('dotenv');
 dotenv.config();
 
 // Config file for Knex

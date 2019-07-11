@@ -60,11 +60,11 @@ For reverting code in master, use Github's [revert functionality](https://www.at
 
 ## Branch from Master
 
-Make a replica of master in origin by running `git push origin master:<name>-pokedex`; From now on, you'll use this branch to submit your work and merge after pull requests are approved (so that your reviewers can be looking at incremental work).
+Make a replica of master in origin by running `git push origin master:<your name>-pokedex`; From now on, you'll use this branch to submit your work and merge after pull requests are approved (so that your reviewers can be looking at incremental work).
 
 From master, checkout a development branch that will serve as your personal base branch for pull requests.
-For naming, use <your name>-development. For example:
-`git checkout -b alda-development`
+For naming, use \<your name\>-development. For example:
+`git checkout -b <your name>-development`
 
 ## Migrations
 

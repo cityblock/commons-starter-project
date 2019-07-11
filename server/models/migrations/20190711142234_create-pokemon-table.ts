@@ -9,6 +9,10 @@ export async function up(knex: Knex): Promise<any> {
         .integer('pokemonNumber')
         .notNullable()
         .unique();
+      table
+        .string('name')
+        .notNullable()
+        .unique();
       table.integer('attack').notNullable();
       table.integer('defense').notNullable();
       table

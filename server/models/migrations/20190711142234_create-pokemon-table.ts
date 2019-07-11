@@ -46,9 +46,8 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  // type guard ??
-  if (knex.schema.hasTable('pokemon')) {
-    // await instead of return
+  const exists = await knex.schema.hasTable('pokemon');
+  if (!exists) {
     await knex.schema.dropTable('pokemon');
   }
 }

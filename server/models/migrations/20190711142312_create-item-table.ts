@@ -6,7 +6,6 @@ export async function up(knex: Knex): Promise<any> {
     await knex.schema.createTable('item', table => {
       table.uuid('id').primary();
       table.string('name').notNullable();
-      // review commons
       table
         .uuid('pokemonId')
         .references('id')
@@ -20,12 +19,11 @@ export async function up(knex: Knex): Promise<any> {
       table.timestamp('deletedAt');
     });
   }
-  // return knex.schema;
 }
 
 export async function down(knex: Knex): Promise<any> {
-  // type guard ??
-  if (knex.schema.hasTable('item')) {
+  const itemsExist = await knex.schema.hasTable('item');
+  if (!itemsExist) {
     return knex.schema.dropTable('item');
   }
 }

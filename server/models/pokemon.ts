@@ -1,4 +1,4 @@
-import { QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { Transaction } from 'objection';
 import BaseModel from './base-model';
 
 const EAGER_QUERY = `[
@@ -92,31 +92,24 @@ export default class Pokemon extends BaseModel {
     return pokemon;
   }
 
-  // create and return pokemon
   static async create(pokemon: IPokemonCreate, txn: Transaction): Promise<Pokemon> {
-    // check to see if it already exists but can't search by id so use getByName func
     const pokemonExists = await this.getByName(pokemon.name, txn);
-    // if not then create
     if (!pokemonExists) {
       return this.query(txn).insert(pokemon);
     }
     return Promise.reject(`Error:  ${pokemon.name} already exists.`);
   }
 
-  // edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) ­ edits an existing Pokemon
   static async edit(
     pokemonId: string,
     pokemon: IPokemonEditInput,
     txn: Transaction,
   ): Promise<Pokemon> {
-    // check to see if already exists
     const exists = await this.getById(pokemonId, txn);
-    // if exists
     if (exists) {
       return this.query(txn).patchAndFetchById(pokemonId, pokemon);
     }
     return Promise.reject(`Error: couldn't update ${pokemon.name}`);
-    // then edit
   }
   // delete
 

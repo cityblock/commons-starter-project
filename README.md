@@ -72,7 +72,7 @@ Let's write some migrations you can generate tables in your local database. Keep
 
 Create a migration file template (using [knex](http://perkframework.com/v1/guides/database-migrations-knex.html)) with the following command:
 
-    npx knex migrate:make migration-name-here --knexfile=server/models/knexfile.ts
+    npm run knex migrate:make migration-name-here -- --knexfile=server/models/knexfile.ts
 
 After you run the command, you should see a file with that name (you can search for it with `cmd + p` in Visual Studio Code). Enter that file, and write a migration for the Pokemon table with the following characteristics. Here is a [fleshed out commons migration](https://github.com/cityblock/commons/blob/master/server/models/migrations/20180417100700_create-phone-call.js) from Commons. Let's call this table `pokemon`.
 

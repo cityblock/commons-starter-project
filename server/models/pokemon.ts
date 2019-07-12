@@ -113,6 +113,16 @@ export default class Pokemon extends BaseModel {
   }
   // delete
 
+  static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+    const exists = await this.getById(pokemonId, txn);
+    if (exists) {
+      return this.query(txn).patchAndFetchById(pokemonId, {
+        deletedAt: new Date(Date.now()).toISOString(),
+      });
+    }
+    return Promise.reject(`Error: couldn't delete Pokemon (ID): ${pokemonId}`);
+  }
+
   pokemonNumber!: number;
   name!: string;
   attack!: number;

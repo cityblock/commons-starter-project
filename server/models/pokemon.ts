@@ -16,11 +16,25 @@ export interface IPokemon {
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
 }
 
 export interface IPokemonCreate {
   name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string;
+  imageUrl: string;
+}
+
+export interface IPokemonEditInput {
+  name: string;
+  attack: number;
+  defense: number;
+  pokeType: PokeType;
+  moves: string;
+  imageUrl: string;
 }
 
 export type PokeType =
@@ -52,7 +66,7 @@ export default class Pokemon extends BaseModel {
     return pokemon;
   }
 
-  static async getOne(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+  static async getById(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await this.query(txn)
       .findOne({
         id: pokemonId,
@@ -62,18 +76,48 @@ export default class Pokemon extends BaseModel {
       .where({ pokemonId })
       .findById(pokemonId);
     if (!pokemon) {
-      return Promise.reject(`No such partner: ${pokemonId}`);
+      return Promise.reject(`No such pokemon with id: ${pokemonId}`);
     }
     return pokemon;
   }
 
-  // create
-  static async create(pokemon: IPokemon, txn: Transaction): Promise<Pokemon> {
-    return this.query(txn).insert(pokemon);
+  static async getByName(pokemonName: string, txn: Transaction): Promise<Pokemon> {
+    const pokemon = await this.query(txn).findOne({
+      name: pokemonName,
+      deletedAt: null,
+    });
+    if (!pokemon) {
+      return Promise.reject(`No such pokemon with name: ${pokemonName}`);
+    }
+    return pokemon;
   }
 
-  // edit
+  // create and return pokemon
+  static async create(pokemon: IPokemonCreate, txn: Transaction): Promise<Pokemon> {
+    // check to see if it already exists but can't search by id so use getByName func
+    const pokemonExists = await this.getByName(pokemon.name, txn);
+    // if not then create
+    if (!pokemonExists) {
+      return this.query(txn).insert(pokemon);
+    }
+    return Promise.reject(`Error:  ${pokemon.name} already exists.`);
+  }
 
+  // edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) ­ edits an existing Pokemon
+  static async edit(
+    pokemonId: string,
+    pokemon: IPokemonEditInput,
+    txn: Transaction,
+  ): Promise<Pokemon> {
+    // check to see if already exists
+    const exists = await this.getById(pokemonId, txn);
+    // if exists
+    if (exists) {
+      return this.query(txn).patchAndFetchById(pokemonId, pokemon);
+    }
+    return Promise.reject(`Error: couldn't update ${pokemon.name}`);
+    // then edit
+  }
   // delete
 
   pokemonNumber!: number;

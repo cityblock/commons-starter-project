@@ -1,9 +1,10 @@
-import { Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Item from './item';
 
-const EAGER_QUERY = `[
-  item
-]`;
+const EAGER_QUERY = `
+  [item]
+`;
 
 export interface IPokemon {
   id: string;
@@ -12,7 +13,7 @@ export interface IPokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: string;
+  moves: JSON;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
@@ -21,6 +22,7 @@ export interface IPokemon {
 
 export interface IPokemonCreate {
   name: string;
+  pokemonNumber: number;
   attack: number;
   defense: number;
   pokeType: PokeType;
@@ -30,10 +32,11 @@ export interface IPokemonCreate {
 
 export interface IPokemonEditInput {
   name: string;
+  pokemonNumber: number;
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: string;
+  moves: JSON;
   imageUrl: string;
 }
 
@@ -58,8 +61,24 @@ export type PokeType =
   | 'poison';
 
 export default class Pokemon extends BaseModel {
+  static modelPaths = [__dirname];
+  static tableName = 'pokemon';
+
+  static get relationMappings(): RelationMappings {
+    return {
+      pokemon: {
+        relation: Model.HasOneRelation,
+        modelClass: Item,
+        join: {
+          from: 'pokemon.id',
+          to: 'item.pokemonId',
+        },
+      },
+    };
+  }
+
   static async get(): Promise<Pokemon[] | null[]> {
-    const pokemon = await this.query().orderBy('pokemonId');
+    const pokemon = await this.query().orderBy('pokemonNumber');
     if (!pokemon) {
       return Promise.reject('No pokemon in db');
     }
@@ -67,14 +86,13 @@ export default class Pokemon extends BaseModel {
   }
 
   static async getById(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await this.query(txn)
-      .findOne({
-        id: pokemonId,
-        deletedAt: null,
-      })
-      .eager(EAGER_QUERY)
-      .where({ pokemonId })
-      .findById(pokemonId);
+    const pokemon = await Pokemon.query(txn).findOne({
+      id: pokemonId,
+      deletedAt: null,
+    });
+    // .eager('pokemon')
+    // .where({ pokemonId })
+    // .findById(pokemonId);
     if (!pokemon) {
       return Promise.reject(`No such pokemon with id: ${pokemonId}`);
     }
@@ -87,15 +105,26 @@ export default class Pokemon extends BaseModel {
       deletedAt: null,
     });
     if (!pokemon) {
-      return Promise.reject(`No such pokemon with name: ${pokemonName}`);
+      return Promise.reject(`Pokemon doesn't exist in DB`);
     }
     return pokemon;
   }
 
+  static async pokemonExists(pokemonName: string, txn: Transaction): Promise<boolean> {
+    const pokemon = await this.query(txn).findOne({
+      name: pokemonName,
+      deletedAt: null,
+    });
+    if (!pokemon) {
+      return false;
+    }
+    return true;
+  }
+
   static async create(pokemon: IPokemonCreate, txn: Transaction): Promise<Pokemon> {
-    const pokemonExists = await this.getByName(pokemon.name, txn);
+    const pokemonExists = await this.pokemonExists(pokemon.name, txn);
     if (!pokemonExists) {
-      return this.query(txn).insert(pokemon);
+      return this.query(txn).insertAndFetch(pokemon);
     }
     return Promise.reject(`Error:  ${pokemon.name} already exists.`);
   }
@@ -111,7 +140,6 @@ export default class Pokemon extends BaseModel {
     }
     return Promise.reject(`Error: couldn't update ${pokemon.name}`);
   }
-  // delete
 
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const exists = await this.getById(pokemonId, txn);

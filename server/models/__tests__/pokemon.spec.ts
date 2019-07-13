@@ -31,12 +31,14 @@ describe('pokemon model', () => {
       expect(pokemonById.name).toEqual('Caterpie');
       // check for the 2 items that Caterpie has
     });
+
     it('GET ALL -- retreives all pokemon in db and in order', async () => {
       const allPokemon = await Pokemon.get();
       expect(allPokemon.length).toEqual(52);
       expect(allPokemon[2].name).toEqual('Venusaur');
       expect(allPokemon[3].name).toEqual('Charmander');
     });
+
     it('CREATE -- creates a Pokemon and adds them to db', async () => {
       const newPokemon = await Pokemon.create(
         {
@@ -52,6 +54,20 @@ describe('pokemon model', () => {
       );
       const findNewPokemon = await Pokemon.getByName('Jaimon', txn);
       expect(findNewPokemon).toEqual(newPokemon);
+    });
+
+    it('EDIT -- successfully edits a pokemons attributes', async () => {
+      const editCaterpie = await Pokemon.edit(
+        '0315cff6-9fc3-4882-ac0a-0835a211a843',
+        {
+          attack: 100,
+          defense: 101,
+        },
+        txn,
+      );
+      expect(editCaterpie.attack).toEqual(100);
+      expect(editCaterpie.defense).toEqual(101);
+      expect(editCaterpie.name).toEqual('Caterpie');
     });
   });
 });

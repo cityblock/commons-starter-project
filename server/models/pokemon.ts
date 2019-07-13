@@ -13,7 +13,7 @@ export interface IPokemon {
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: JSON;
+  moves: string;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;
@@ -31,13 +31,13 @@ export interface IPokemonCreate {
 }
 
 export interface IPokemonEditInput {
-  name: string;
-  pokemonNumber: number;
-  attack: number;
-  defense: number;
-  pokeType: PokeType;
-  moves: JSON;
-  imageUrl: string;
+  name?: string;
+  pokemonNumber?: number;
+  attack?: number;
+  defense?: number;
+  pokeType?: PokeType;
+  moves?: string;
+  imageUrl?: string;
 }
 
 export type PokeType =

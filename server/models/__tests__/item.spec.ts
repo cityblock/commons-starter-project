@@ -1,6 +1,7 @@
 import { transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
+import Pokemon from '../pokemon';
 
 describe('item model', () => {
   const mockResourceUrl = 'http://google.com';
@@ -29,14 +30,7 @@ describe('item model', () => {
       expect(itemById.name).toEqual('Focus Band');
     });
 
-    xit('GET ALL -- retreives all pokemon in db and in order', async () => {
-      const allPokemon = await Pokemon.get();
-      expect(allPokemon.length).toEqual(52);
-      expect(allPokemon[2].name).toEqual('Venusaur');
-      expect(allPokemon[3].name).toEqual('Charmander');
-    });
-
-    xit('CREATE -- creates a Pokemon and adds them to db', async () => {
+    it('CREATE -- creates a Item and successfully associates to a Pokemon', async () => {
       const newPokemon = await Pokemon.create(
         {
           name: 'Jaimon',
@@ -49,29 +43,40 @@ describe('item model', () => {
         },
         txn,
       );
-      const findNewPokemon = await Pokemon.getByName('Jaimon', txn);
-      expect(findNewPokemon).toEqual(newPokemon);
-    });
-
-    xit('EDIT -- successfully edits a pokemons attributes', async () => {
-      const editCaterpie = await Pokemon.edit(
-        '0315cff6-9fc3-4882-ac0a-0835a211a843',
+      const newItem = await Item.create(
         {
-          attack: 100,
-          defense: 101,
+          name: 'Boxing Gloves',
+          pokemonId: newPokemon.id,
+          price: 317,
+          happiness: 100,
+          imageUrl: mockResourceUrl,
         },
         txn,
       );
-      expect(editCaterpie.attack).toEqual(100);
-      expect(editCaterpie.defense).toEqual(101);
-      expect(editCaterpie.name).toEqual('Caterpie');
+      const findNewItem = await Item.getByName('Boxing Gloves', txn);
+      expect(findNewItem.id).toEqual(newItem.id);
+      expect(newItem.pokemonId).toEqual(newPokemon.id);
     });
 
-    xit('DELETE -- soft deletes a pokemon from the DB', async () => {
-      const deleteCaterpie = await Pokemon.delete('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
-      const notDeletedPokemon = await Pokemon.getByName('Charizard', txn);
-      expect(deleteCaterpie.deletedAt).toBeTruthy();
-      expect(notDeletedPokemon.deletedAt).toBeFalsy();
+    it('EDIT -- successfully edits an items attributes', async () => {
+      const editGrassySeed = await Item.edit(
+        'f093880d-77fd-4ca5-9b12-e6c110c58dc0',
+        {
+          happiness: 100,
+          price: 101,
+        },
+        txn,
+      );
+      expect(editGrassySeed.happiness).toEqual(100);
+      expect(editGrassySeed.price).toEqual(101);
+      expect(editGrassySeed.name).toEqual('Grassy Seed');
+    });
+
+    it('DELETE -- soft deletes an item from the DB', async () => {
+      const deleteGrassySeed = await Item.delete('f093880d-77fd-4ca5-9b12-e6c110c58dc0', txn);
+      const notDeletedItem = await Item.getByName('Lucky Egg', txn);
+      expect(deleteGrassySeed.deletedAt).toBeTruthy();
+      expect(notDeletedItem.deletedAt).toBeFalsy();
     });
   });
 });

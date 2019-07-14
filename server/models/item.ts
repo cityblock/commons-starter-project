@@ -23,8 +23,8 @@ export default class Item extends BaseModel {
 
   static get relationMappings(): RelationMappings {
     return {
-      item: {
-        relation: Model.HasOneRelation,
+      pokemon: {
+        relation: Model.BelongsToOneRelation,
         modelClass: Pokemon,
         join: {
           from: 'pokemon.id',

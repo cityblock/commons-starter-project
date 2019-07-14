@@ -28,7 +28,9 @@ describe('pokemon model', () => {
   describe('pokemon methods', () => {
     it('GET ONE -- finds a pokemon by id and returns items', async () => {
       const pokemonById = await Pokemon.getById('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
+      const items = pokemonById.hasOwnProperty('item') ? pokemonById.item : {};
       expect(pokemonById.name).toEqual('Caterpie');
+      expect(items.length).toEqual(3);
       // check for the 2 items that Caterpie has
     });
 
@@ -68,6 +70,13 @@ describe('pokemon model', () => {
       expect(editCaterpie.attack).toEqual(100);
       expect(editCaterpie.defense).toEqual(101);
       expect(editCaterpie.name).toEqual('Caterpie');
+    });
+
+    it('DELETE -- soft deletes a pokemon from the DB', async () => {
+      const deleteCaterpie = await Pokemon.delete('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
+      const notDeletedPokemon = await Pokemon.getByName('Charizard', txn);
+      expect(deleteCaterpie.deletedAt).toBeTruthy();
+      expect(notDeletedPokemon.deletedAt).toBeFalsy();
     });
   });
 });

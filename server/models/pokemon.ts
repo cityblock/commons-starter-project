@@ -66,13 +66,14 @@ export default class Pokemon extends BaseModel {
 
   static get relationMappings(): RelationMappings {
     return {
-      pokemon: {
-        relation: Model.HasOneRelation,
+      item: {
+        relation: Model.HasManyRelation,
         modelClass: Item,
         join: {
           from: 'pokemon.id',
           to: 'item.pokemonId',
         },
+        modify: builder => builder.where({ 'item.deletedAt': null }),
       },
     };
   }
@@ -86,13 +87,12 @@ export default class Pokemon extends BaseModel {
   }
 
   static async getById(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const pokemon = await Pokemon.query(txn).findOne({
-      id: pokemonId,
-      deletedAt: null,
-    });
-    // .eager('pokemon')
-    // .where({ pokemonId })
-    // .findById(pokemonId);
+    const pokemon = await Pokemon.query(txn)
+      .eager('item')
+      .findOne({
+        id: pokemonId,
+        deletedAt: null,
+      });
     if (!pokemon) {
       return Promise.reject(`No such pokemon with id: ${pokemonId}`);
     }

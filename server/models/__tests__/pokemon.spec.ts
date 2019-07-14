@@ -26,7 +26,7 @@ describe('pokemon model', () => {
   describe('pokemon methods', () => {
     it('GET ONE -- finds a pokemon by id and returns items', async () => {
       const pokemonById = await Pokemon.getById('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
-      const items = pokemonById.hasOwnProperty('item') ? pokemonById.item : {};
+      const items = pokemonById.hasOwnProperty('item') ? pokemonById.item : [];
       expect(pokemonById.name).toEqual('Caterpie');
       expect(items.length).toEqual(3);
     });

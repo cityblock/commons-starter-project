@@ -133,7 +133,7 @@ The methods your model should include are:
 
 _Note: All model methods need to take a transaction (as you see above)._ In order to be able to eager load the items (the the pokemon get() method) you will need to generate the skeleton of the items file in tandem.
 
-After that is all set, write the model for items in `Item.ts`:
+After that is all set, write the model for items in `item.ts`:
 
 - get(itemId: string, txn: Transaction) ­ returns a single item
 - create(input: IItemCreateInput, txn: Transaction) ­ creates and returns an item

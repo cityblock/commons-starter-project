@@ -253,27 +253,23 @@ If you run into database related issues while running your tests, consider these
 
 ### To spin up your app locally
 
-    npx dev
-
-    or
-
     npm run dev
 
 ### Testing locally
 
 Our test database uses postgres. Before running tests, ensure that postgres is running and use:
 
-    npx test
+    npm run test
 
 ### To automatically fix linter errors, run
 
-    npx lint --fix
+    npm run lint -- --fix
     # for style changes
-    npx stylelint --fix
+    npm run stylelint -- --fix
 
 ### Update jest snapshots
 
-    npx test -u
+    npm run test -- -u
 
 ## Documentation Library
 

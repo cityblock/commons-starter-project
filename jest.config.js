@@ -18,7 +18,7 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFiles: ['./browser-mocks.js', './enzyme-setup.js', './objection-setup.js'],
-  setupTestFrameworkScriptFile: './jest-setup.js',
+  setupFilesAfterEnv: ['./jest-setup.js'],
   globals: {
     'ts-jest': {
       babelConfig: false,

@@ -26,7 +26,7 @@ Welcome to Cityblock! Our goal these first few weeks is to get you acquainted wi
   - Run `npm install` to set up all the dependency modules
 - Create a local database
 
-  `db pokedex; createdb pokedex; psql -d pokedex -c "CREATE ROLE aptible LOGIN"`
+  `createdb pokedex; psql -d pokedex -c "CREATE ROLE aptible LOGIN"`
 
 - Create a local test database
 
@@ -60,11 +60,11 @@ For reverting code in master, use Github's [revert functionality](https://www.at
 
 ## Branch from Master
 
-Make a replica of master in origin by running `git push origin master:<name>-pokedex`; From now on, you'll use this branch to submit your work and merge after pull requests are approved (so that your reviewers can be looking at incremental work).
+Make a replica of master in origin by running `git push origin master:<your name>-pokedex`; From now on, you'll use this branch to submit your work and merge after pull requests are approved (so that your reviewers can be looking at incremental work).
 
 From master, checkout a development branch that will serve as your personal base branch for pull requests.
-For naming, use <your name>-development. For example:
-`git checkout -b alda-development`
+For naming, use \<your name\>-development. For example:
+`git checkout -b <your name>-development`
 
 ## Migrations
 
@@ -72,7 +72,7 @@ Let's write some migrations you can generate tables in your local database. Keep
 
 Create a migration file template (using [knex](http://perkframework.com/v1/guides/database-migrations-knex.html)) with the following command:
 
-    npx knex migrate:make migration-name-here --knexfile=server/models/knexfile.ts
+    npm run knex migrate:make migration-name-here -- --knexfile=server/models/knexfile.ts
 
 After you run the command, you should see a file with that name (you can search for it with `cmd + p` in Visual Studio Code). Enter that file, and write a migration for the Pokemon table with the following characteristics. Here is a [fleshed out commons migration](https://github.com/cityblock/commons/blob/master/server/models/migrations/20180417100700_create-phone-call.js) from Commons. Let's call this table `pokemon`.
 
@@ -124,21 +124,21 @@ You can also see all models in Commons [here](https://github.com/cityblock/commo
 
 The methods your model should include are:
 
-- getAll(txn: [Transaction](https://stackoverflow.com/questions/974596/what-is-a-database-transaction)) ­ returns all Pokemon, ordered by pokemonNumber ascending
-- get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated
+- getAll(txn: [Transaction](https://stackoverflow.com/questions/974596/what-is-a-database-transaction)) - returns all Pokemon, ordered by pokemonNumber ascending
+- get(pokemonId: string, txn: Transaction) - returns a single Pokemon, and associated
   items
-- create(input: IPokemonCreateInput, txn: Transaction) ­ creates and returns a Pokemon
-- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) ­ edits an existing Pokemon
-- delete(pokemonId: string, txn: Transaction) ­ marks a Pokemon as deleted, but does not actually delete it from the database
+- create(input: IPokemonCreateInput, txn: Transaction) - creates and returns a Pokemon
+- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits an existing Pokemon
+- delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
 
 _Note: All model methods need to take a transaction (as you see above)._ In order to be able to eager load the items (the the pokemon get() method) you will need to generate the skeleton of the items file in tandem.
 
-After that is all set, write the model for items in `Item.ts`:
+After that is all set, write the model for items in `item.ts`:
 
-- get(itemId: string, txn: Transaction) ­ returns a single item
-- create(input: IItemCreateInput, txn: Transaction) ­ creates and returns an item
-- edit(itemId: string, pokemon: IItemEditInput, txn: Transaction) ­ edits an existing item
-- delete(itemId: string, txn: Transaction) ­ marks an item as deleted, but does not actually delete it from the database
+- get(itemId: string, txn: Transaction) - returns a single item
+- create(input: IItemCreateInput, txn: Transaction) - creates and returns an item
+- edit(itemId: string, item: IItemEditInput, txn: Transaction) - edits an existing item
+- delete(itemId: string, txn: Transaction) - marks an item as deleted, but does not actually delete it from the database
 
 Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 
@@ -253,27 +253,23 @@ If you run into database related issues while running your tests, consider these
 
 ### To spin up your app locally
 
-    npx dev
-
-    or
-
     npm run dev
 
 ### Testing locally
 
 Our test database uses postgres. Before running tests, ensure that postgres is running and use:
 
-    npx test
+    npm run test
 
 ### To automatically fix linter errors, run
 
-    npx lint --fix
+    npm run lint -- --fix
     # for style changes
-    npx stylelint --fix
+    npm run stylelint -- --fix
 
 ### Update jest snapshots
 
-    npx test -u
+    npm run test -- -u
 
 ## Documentation Library
 

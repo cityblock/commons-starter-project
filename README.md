@@ -124,21 +124,21 @@ You can also see all models in Commons [here](https://github.com/cityblock/commo
 
 The methods your model should include are:
 
-- getAll(txn: [Transaction](https://stackoverflow.com/questions/974596/what-is-a-database-transaction)) ­ returns all Pokemon, ordered by pokemonNumber ascending
-- get(pokemonId: string, txn: Transaction) ­ returns a single Pokemon, and associated
+- getAll(txn: [Transaction](https://stackoverflow.com/questions/974596/what-is-a-database-transaction)) - returns all Pokemon, ordered by pokemonNumber ascending
+- get(pokemonId: string, txn: Transaction) - returns a single Pokemon, and associated
   items
-- create(input: IPokemonCreateInput, txn: Transaction) ­ creates and returns a Pokemon
-- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) ­ edits an existing Pokemon
-- delete(pokemonId: string, txn: Transaction) ­ marks a Pokemon as deleted, but does not actually delete it from the database
+- create(input: IPokemonCreateInput, txn: Transaction) - creates and returns a Pokemon
+- edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction) - edits an existing Pokemon
+- delete(pokemonId: string, txn: Transaction) - marks a Pokemon as deleted, but does not actually delete it from the database
 
 _Note: All model methods need to take a transaction (as you see above)._ In order to be able to eager load the items (the the pokemon get() method) you will need to generate the skeleton of the items file in tandem.
 
 After that is all set, write the model for items in `item.ts`:
 
-- get(itemId: string, txn: Transaction) ­ returns a single item
-- create(input: IItemCreateInput, txn: Transaction) ­ creates and returns an item
-- edit(itemId: string, pokemon: IItemEditInput, txn: Transaction) ­ edits an existing item
-- delete(itemId: string, txn: Transaction) ­ marks an item as deleted, but does not actually delete it from the database
+- get(itemId: string, txn: Transaction) - returns a single item
+- create(input: IItemCreateInput, txn: Transaction) - creates and returns an item
+- edit(itemId: string, item: IItemEditInput, txn: Transaction) - edits an existing item
+- delete(itemId: string, txn: Transaction) - marks an item as deleted, but does not actually delete it from the database
 
 Again, be sure to include at least one test per method. Finally, make another pull request! For your Model data model to be properly typed, you will want to define and import the item interface.
 

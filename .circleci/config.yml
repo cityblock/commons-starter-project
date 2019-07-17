@@ -11,8 +11,28 @@ jobs:
       - run: npm run stylelint
       - run: npm run typecheck
 
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: node:10.16.0
+        environment:
+          TERM: xterm
+          NODE_ENV: test
+      - image: postgres:10.9
+        environment:
+          POSTGRES_DB: 'pokedex_test'
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ''
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run migrate
+      - run: npm run seed
+      - run: npm run test
+
 workflows:
   version: 2
   lint_and_test:
     jobs:
       - lint
+      - test

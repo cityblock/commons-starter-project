@@ -1,0 +1,18 @@
+version: 2.1
+jobs:
+  lint:
+    working_directory: ~/repo
+    docker:
+      - image: node:10.16.0
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run stylelint
+      - run: npm run typecheck
+
+workflows:
+  version: 2
+  lint_and_test:
+    jobs:
+      - lint

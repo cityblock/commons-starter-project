@@ -4,6 +4,8 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: node:10.16.0
+        environment:
+          TERM: xterm
     steps:
       - checkout
       - run: npm ci

@@ -2,38 +2,23 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Item from './item';
 
-export interface IPokemon {
-  id: string;
-  pokemonNumber: number;
-  name: string;
-  attack: number;
-  defense: number;
-  pokeType: PokeType;
-  moves: string;
-  imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  item: Item[];
-}
-
-export interface IPokemonCreate {
+interface IPokemonCreate {
   name: string;
   pokemonNumber: number;
   attack: number;
   defense: number;
   pokeType: PokeType;
-  moves: string;
+  moves: string[];
   imageUrl: string;
 }
 
-export interface IPokemonEditInput {
+interface IPokemonEditInput {
   name?: string;
   pokemonNumber?: number;
   attack?: number;
   defense?: number;
   pokeType?: PokeType;
-  moves?: string;
+  moves?: string[];
   imageUrl?: string;
 }
 
@@ -60,6 +45,47 @@ export type PokeType =
 export default class Pokemon extends BaseModel {
   static modelPaths = [__dirname];
   static tableName = 'pokemon';
+  static pickJsonSchemaProperties = true;
+
+  static jsonSchema = {
+    type: 'object',
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      pokemonNumber: { type: 'number' },
+      name: { type: 'string' },
+      attack: { type: 'number' },
+      defense: { type: 'number' },
+      pokeType: {
+        type: 'string',
+        enum: [
+          'normal',
+          'grass',
+          'fire',
+          'water',
+          'electric',
+          'psychic',
+          'ghost',
+          'dark',
+          'fairy',
+          'rock',
+          'ground',
+          'steel',
+          'flying',
+          'fighting',
+          'bug',
+          'ice',
+          'dragon',
+          'poison',
+        ],
+      },
+      moves: { type: 'array', items: { type: 'string' } },
+      imageUrl: { type: 'string' },
+      createdAt: { type: 'string' },
+      updatedAt: { type: 'string' },
+      deletedAt: { type: ['string', 'null'] },
+    },
+    required: ['pokemonNumber', 'name', 'attack', 'defense', 'pokeType', 'moves', 'imageUrl'],
+  };
 
   static get relationMappings(): RelationMappings {
     return {
@@ -75,17 +101,13 @@ export default class Pokemon extends BaseModel {
     };
   }
 
-  static async get(txn: Transaction): Promise<Pokemon[]> {
-    const pokemon = await this.query(txn)
+  static async getAll(txn: Transaction): Promise<Pokemon[]> {
+    return this.query(txn)
       .eager('item')
       .orderBy('pokemonNumber');
-    if (!pokemon) {
-      return Promise.reject('No pokemon in db');
-    }
-    return pokemon;
   }
 
-  static async getById(pokemonId: string, txn: Transaction): Promise<Pokemon> {
+  static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await Pokemon.query(txn)
       .eager('item')
       .findOne({
@@ -104,28 +126,13 @@ export default class Pokemon extends BaseModel {
       deletedAt: null,
     });
     if (!pokemon) {
-      return Promise.reject(`Pokemon doesn't exist in DB`);
+      return Promise.reject(`No such pokemon with name: ${pokemonName}`);
     }
     return pokemon;
   }
 
-  static async pokemonExists(pokemonName: string, txn: Transaction): Promise<boolean> {
-    const pokemon = await this.query(txn).findOne({
-      name: pokemonName,
-      deletedAt: null,
-    });
-    if (!pokemon) {
-      return false;
-    }
-    return true;
-  }
-
   static async create(pokemon: IPokemonCreate, txn: Transaction): Promise<Pokemon> {
-    const pokemonExists = await this.pokemonExists(pokemon.name, txn);
-    if (!pokemonExists) {
-      return this.query(txn).insertAndFetch(pokemon);
-    }
-    return Promise.reject(`Error:  ${pokemon.name} already exists.`);
+    return this.query(txn).insertAndFetch(pokemon);
   }
 
   static async edit(
@@ -133,7 +140,7 @@ export default class Pokemon extends BaseModel {
     pokemon: IPokemonEditInput,
     txn: Transaction,
   ): Promise<Pokemon> {
-    const exists = await this.getById(pokemonId, txn);
+    const exists = await this.get(pokemonId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(pokemonId, pokemon);
     }
@@ -141,7 +148,7 @@ export default class Pokemon extends BaseModel {
   }
 
   static async delete(pokemonId: string, txn: Transaction): Promise<Pokemon> {
-    const exists = await this.getById(pokemonId, txn);
+    const exists = await this.get(pokemonId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(pokemonId, {
         deletedAt: new Date(Date.now()).toISOString(),
@@ -155,7 +162,7 @@ export default class Pokemon extends BaseModel {
   attack!: number;
   defense!: number;
   pokeType!: PokeType;
-  moves!: string;
+  moves!: string[];
   imageUrl!: string;
   item!: Item[];
 }

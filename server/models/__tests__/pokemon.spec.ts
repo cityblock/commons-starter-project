@@ -8,7 +8,7 @@ describe('pokemon model', () => {
   let txn = null as any;
 
   const getRandomPokemon = async (txxn: Transaction): Promise<Pokemon> => {
-    const allPokemon = await Pokemon.get(txxn);
+    const allPokemon = await Pokemon.getAll(txxn);
     const genNumber = Math.floor(Math.random() * allPokemon.length);
     return allPokemon[genNumber];
   };
@@ -32,13 +32,13 @@ describe('pokemon model', () => {
   describe('pokemon methods', () => {
     it('GET ONE -- finds a pokemon by id and returns items', async () => {
       const randomPokemon = await getRandomPokemon(txn);
-      const pokemonById = await Pokemon.getById(randomPokemon.id, txn);
+      const pokemonById = await Pokemon.get(randomPokemon.id, txn);
       expect(pokemonById.name).toEqual(randomPokemon.name);
       expect(pokemonById.item.length).toEqual(randomPokemon.item.length);
     });
 
     it('GET ALL -- retreives all pokemon in db and in order', async () => {
-      const allPokemon = await Pokemon.get(txn);
+      const allPokemon = await Pokemon.getAll(txn);
       expect(allPokemon.length).toEqual(52);
       expect(allPokemon[2].name).toEqual('Venusaur');
       expect(allPokemon[3].name).toEqual('Charmander');
@@ -52,7 +52,7 @@ describe('pokemon model', () => {
           attack: 9001,
           defense: 100,
           pokeType: 'dragon',
-          moves: JSON.stringify(['Electric Slide', 'Ali Shuffle']),
+          moves: ['Electric Slide', 'Ali Shuffle'],
           imageUrl: mockResourceUrl,
         },
         txn,

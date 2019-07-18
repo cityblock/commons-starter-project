@@ -33,7 +33,7 @@ describe('item model', () => {
   describe('item methods', () => {
     it('GET ONE -- finds an item by id', async () => {
       const randomItem = await getRandomItem(txn);
-      const itemById = await Item.getById(randomItem.id, txn);
+      const itemById = await Item.get(randomItem.id, txn);
       expect(itemById.name).toEqual(randomItem.name);
     });
 
@@ -45,7 +45,7 @@ describe('item model', () => {
           attack: 9001,
           defense: 100,
           pokeType: 'dragon',
-          moves: JSON.stringify(['Electric Slide', 'Ali Shuffle']),
+          moves: ['Electric Slide', 'Ali Shuffle'],
           imageUrl: mockResourceUrl,
         },
         txn,
@@ -60,7 +60,7 @@ describe('item model', () => {
         },
         txn,
       );
-      const findNewItem = await Item.getById(newItem.id, txn);
+      const findNewItem = await Item.get(newItem.id, txn);
       expect(findNewItem.id).toEqual(newItem.id);
       expect(newItem.pokemonId).toEqual(newPokemon.id);
     });

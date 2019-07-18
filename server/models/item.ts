@@ -2,7 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Pokemon from './pokemon';
 
-export interface IItemCreateInput {
+interface IItemCreateInput {
   name: string;
   pokemonId: string;
   price: number;
@@ -10,7 +10,7 @@ export interface IItemCreateInput {
   imageUrl: string;
 }
 
-export interface IItemEditInput {
+interface IItemEditInput {
   name?: string;
   pokemonId?: string;
   price?: number;
@@ -20,6 +20,23 @@ export interface IItemEditInput {
 
 export default class Item extends BaseModel {
   static tableName = 'item';
+  static pickJsonSchemaProperties = true;
+
+  static jsonSchema = {
+    type: 'object',
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      name: { type: 'string' },
+      pokemonId: { type: 'string', format: 'uuid' },
+      price: { type: 'number' },
+      happiness: { type: 'number' },
+      imageUrl: { type: 'string' },
+      createdAt: { type: 'string' },
+      updatedAt: { type: 'string' },
+      deletedAt: { type: ['string', 'null'] },
+    },
+    required: ['name', 'pokemonId', 'price', 'happiness', 'imageUrl'],
+  };
 
   static get relationMappings(): RelationMappings {
     return {
@@ -34,7 +51,7 @@ export default class Item extends BaseModel {
     };
   }
 
-  static async getById(itemId: string, txn: Transaction): Promise<Item> {
+  static async get(itemId: string, txn: Transaction): Promise<Item> {
     const item = await this.query(txn).findOne({
       id: itemId,
       deletedAt: null,
@@ -45,27 +62,14 @@ export default class Item extends BaseModel {
     return item;
   }
 
-  static async getByName(itemName: string, txn: Transaction): Promise<boolean> {
-    const item = await this.query(txn).findOne({
-      name: itemName,
-      deletedAt: null,
-    });
-    if (!item) {
-      return false;
-    }
-    return true;
-  }
-
   static async create(item: IItemCreateInput, txn: Transaction): Promise<Item> {
-    const itemExists = await this.getByName(item.name, txn);
-    if (!itemExists) {
-      return this.query(txn).insert(item);
-    }
-    return Promise.reject(`Error:  ${item.name} already exists.`);
+    return this.query(txn)
+      .insert(item)
+      .returning('*');
   }
 
   static async edit(itemId: string, pokemon: IItemEditInput, txn: Transaction): Promise<Item> {
-    const exists = await this.getById(itemId, txn);
+    const exists = await this.get(itemId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(itemId, pokemon);
     }
@@ -73,7 +77,7 @@ export default class Item extends BaseModel {
   }
 
   static async delete(itemId: string, txn: Transaction): Promise<Item> {
-    const exists = await this.getById(itemId, txn);
+    const exists = await this.get(itemId, txn);
     if (exists) {
       return this.query(txn).patchAndFetchById(itemId, {
         deletedAt: new Date(Date.now()).toISOString(),

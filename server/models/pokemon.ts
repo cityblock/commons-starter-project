@@ -150,6 +150,8 @@ export default class Pokemon extends Model {
     });
 
     if (!pokemon) return Promise.reject('No pokemon with given ID');
+
+    await Item.query(txn).patch({ deletedAt: new Date().toISOString() }).where({ pokemonId });
   }
 
   id!: string;

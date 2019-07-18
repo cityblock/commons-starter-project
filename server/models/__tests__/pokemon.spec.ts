@@ -1,6 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
+import Item from '../item';
 import random from 'lodash/random'
 
 describe('Pokemon', () => {
@@ -140,6 +141,14 @@ describe('Pokemon', () => {
       } catch(error) {
         expect(error).toEqual('No pokemon with given ID');
       }
+    });
+
+    it('deletes any associated items', async () => {
+      const allPokemon = await Pokemon.getAll(txn);
+      const pokemonId = allPokemon[0].id
+      await Pokemon.delete(pokemonId, txn);
+      const items = await Item.query(txn).where({ pokemonId, deletedAt: null });
+      expect(items).toEqual([]);
     });
   });
 });

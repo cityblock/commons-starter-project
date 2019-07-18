@@ -48,7 +48,7 @@ export default class Item extends Model {
   static get relationMappings(): RelationMappings {
     return {
       pokemon: {
-        relation: Model.HasOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: Pokemon,
         join: {
           from: 'item.pokemonId',
@@ -88,7 +88,7 @@ export default class Item extends Model {
   price!: number;
   happiness!: number;
   imageUrl!: string;
-  pokemon!: Pokemon | null;
+  pokemon!: Pokemon;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string | null;

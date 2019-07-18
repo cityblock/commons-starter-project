@@ -2,10 +2,6 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Item from './item';
 
-const EAGER_QUERY = `
-  [item]
-`;
-
 export interface IPokemon {
   id: string;
   pokemonNumber: number;
@@ -18,6 +14,7 @@ export interface IPokemon {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  item: Item[];
 }
 
 export interface IPokemonCreate {
@@ -158,4 +155,5 @@ export default class Pokemon extends BaseModel {
   pokeType!: PokeType;
   moves!: string;
   imageUrl!: string;
+  item!: Item[];
 }

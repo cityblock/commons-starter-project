@@ -53,7 +53,7 @@ describe('item model', () => {
         },
         txn,
       );
-      const findNewItem = await Item.getByName('Boxing Gloves', txn);
+      const findNewItem = await Item.getById(newItem.id, txn);
       expect(findNewItem.id).toEqual(newItem.id);
       expect(newItem.pokemonId).toEqual(newPokemon.id);
     });
@@ -74,9 +74,7 @@ describe('item model', () => {
 
     it('DELETE -- soft deletes an item from the DB', async () => {
       const deleteGrassySeed = await Item.delete('f093880d-77fd-4ca5-9b12-e6c110c58dc0', txn);
-      const notDeletedItem = await Item.getByName('Lucky Egg', txn);
       expect(deleteGrassySeed.deletedAt).toBeTruthy();
-      expect(notDeletedItem.deletedAt).toBeFalsy();
     });
   });
 });

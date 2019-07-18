@@ -11,11 +11,11 @@ export interface IItemCreateInput {
 }
 
 export interface IItemEditInput {
-  name: string;
-  pokemonId: string;
-  price: number;
-  happiness: number;
-  imageUrl: string;
+  name?: string;
+  pokemonId?: string;
+  price?: number;
+  happiness?: number;
+  imageUrl?: string;
 }
 
 export default class Item extends BaseModel {
@@ -35,28 +35,25 @@ export default class Item extends BaseModel {
   }
 
   static async getById(itemId: string, txn: Transaction): Promise<Item> {
-    const item = await this.query(txn)
-      .findOne({
-        id: itemId,
-        deletedAt: null,
-      })
-      .where({ itemId })
-      .findById(itemId);
+    const item = await this.query(txn).findOne({
+      id: itemId,
+      deletedAt: null,
+    });
     if (!item) {
       return Promise.reject(`No such itemId with id: ${itemId}`);
     }
     return item;
   }
 
-  static async getByName(itemName: string, txn: Transaction): Promise<Item> {
+  static async getByName(itemName: string, txn: Transaction): Promise<boolean> {
     const item = await this.query(txn).findOne({
       name: itemName,
       deletedAt: null,
     });
     if (!item) {
-      return Promise.reject(`No such item with name: ${itemName}`);
+      return false;
     }
-    return item;
+    return true;
   }
 
   static async create(item: IItemCreateInput, txn: Transaction): Promise<Item> {

@@ -34,8 +34,8 @@ describe('pokemon model', () => {
     it('GET ALL -- retreives all pokemon in db and in order', async () => {
       const allPokemon = await Pokemon.get();
       expect(allPokemon.length).toEqual(52);
-      expect(allPokemon[2].name).toEqual('Venusaur');
-      expect(allPokemon[3].name).toEqual('Charmander');
+      expect(allPokemon[2]!.name).toEqual('Venusaur');
+      expect(allPokemon[3]!.name).toEqual('Charmander');
     });
 
     it('CREATE -- creates a Pokemon and adds them to db', async () => {

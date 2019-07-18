@@ -52,10 +52,12 @@ export default class Item extends BaseModel {
   }
 
   static async get(itemId: string, txn: Transaction): Promise<Item> {
-    const item = await this.query(txn).findOne({
-      id: itemId,
-      deletedAt: null,
-    });
+    const item = await this.query(txn)
+      .eager('pokemon')
+      .findOne({
+        id: itemId,
+        deletedAt: null,
+      });
     if (!item) {
       return Promise.reject(`No such itemId with id: ${itemId}`);
     }
@@ -65,13 +67,16 @@ export default class Item extends BaseModel {
   static async create(item: IItemCreateInput, txn: Transaction): Promise<Item> {
     return this.query(txn)
       .insert(item)
+      .eager('pokemon')
       .returning('*');
   }
 
   static async edit(itemId: string, pokemon: IItemEditInput, txn: Transaction): Promise<Item> {
     const exists = await this.get(itemId, txn);
     if (exists) {
-      return this.query(txn).patchAndFetchById(itemId, pokemon);
+      return this.query(txn)
+        .eager('pokemon')
+        .patchAndFetchById(itemId, pokemon);
     }
     return Promise.reject(`Error: couldn't update ${pokemon.name}'s item`);
   }
@@ -79,9 +84,11 @@ export default class Item extends BaseModel {
   static async delete(itemId: string, txn: Transaction): Promise<Item> {
     const exists = await this.get(itemId, txn);
     if (exists) {
-      return this.query(txn).patchAndFetchById(itemId, {
-        deletedAt: new Date(Date.now()).toISOString(),
-      });
+      return this.query(txn)
+        .eager('pokemon')
+        .patchAndFetchById(itemId, {
+          deletedAt: new Date(Date.now()).toISOString(),
+        });
     }
     return Promise.reject(`Error: couldn't delete Item (ID): ${itemId}`);
   }
@@ -91,4 +98,5 @@ export default class Item extends BaseModel {
   price!: number;
   happiness!: number;
   imageUrl!: string;
+  pokemon!: Pokemon;
 }

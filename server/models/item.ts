@@ -61,12 +61,8 @@ export default class Item extends Model {
 
   static async get(itemId: string, txn: Transaction): Promise<Item> {
     const item = await this.query(txn).eager('pokemon').findOne({ id: itemId, deletedAt: null });
-
-    if (item) {
-      return item;
-    } else {
-      return Promise.reject('No item with given ID');
-    }
+    if (!item) return Promise.reject('No item with given ID');
+    return item;
   }
 
   static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {

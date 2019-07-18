@@ -111,36 +111,21 @@ export default class Pokemon extends Model {
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
     const pokemon = await this.query(txn).orderBy('pokemonNumber').eager('items');
-
-    if (pokemon) {
-      return pokemon;
-    } else {
-      return Promise.reject('No pokemon in db');
-    }
+    return pokemon;
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {
     const pokemon = await this.query(txn).eager('items').findOne({ id: pokemonId, deletedAt: null });
-
-    if (pokemon) {
-      return pokemon;
-    } else {
-      return Promise.reject('No pokemon with given ID');
-    }
+    if (!pokemon) return Promise.reject('No pokemon with given ID');
+    return pokemon;
   }
 
   static async create(input: IPokemonCreateInput, txn: Transaction): Promise<Pokemon> {
-    try {
-      const pokemon = await this.query(txn).insert(input).returning('*').eager('items');
-      return pokemon;
-    } catch(error) {
-      return Promise.reject(`Couldn't create pokemon: ${error}`);
-    }
+    return this.query(txn).insert(input).returning('*').eager('items');
   }
 
   static async edit(pokemonId: string, pokemon: IPokemonEditInput, txn: Transaction): Promise<void> {
     const updatedPokemon = await this.query(txn).patchAndFetchById(pokemonId, pokemon);
-
     if (!updatedPokemon) return Promise.reject('No pokemon with given ID');
   }
 

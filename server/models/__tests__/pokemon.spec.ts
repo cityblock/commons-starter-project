@@ -99,7 +99,7 @@ describe('Pokemon', () => {
           txn
         )
       } catch(error) {
-        expect(error).toMatch('duplicate key value violates unique constraint');
+        expect(error).toMatchObject({ constraint: 'pokemon_pokemonnumber_unique' });
       }
     });
   });
@@ -112,6 +112,15 @@ describe('Pokemon', () => {
       const editedPokemon = await Pokemon.get(editedPokemonId, txn);
       expect(editedPokemon.attack).toEqual(100);
       expect(editedPokemon.defense).toEqual(200);
+    });
+
+    it('raises an error when trying to submit an edit that violates uniquness', async () => {
+      try {
+        const editedPokemonId = await getRandomPokemonId(txn);
+        await Pokemon.edit(editedPokemonId, { name: 'Bulbasaur' }, txn);
+      } catch(error) {
+        expect(error).toMatchObject({ constraint: 'pokemon_name_unique' });
+      }
     });
 
     it('returns an error when given an invalid id', async () => {

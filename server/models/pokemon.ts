@@ -110,8 +110,7 @@ export default class Pokemon extends Model {
   }
 
   static async getAll(txn: Transaction): Promise<Pokemon[]> {
-    const pokemon = await this.query(txn).orderBy('pokemonNumber').eager('items');
-    return pokemon;
+    return this.query(txn).orderBy('pokemonNumber').eager('items');
   }
 
   static async get(pokemonId: string, txn: Transaction): Promise<Pokemon> {

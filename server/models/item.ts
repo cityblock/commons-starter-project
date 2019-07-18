@@ -1,5 +1,6 @@
-import { Model, Transaction } from 'objection';
+import { Model, Transaction, RelationMappings } from 'objection';
 import uuid from 'uuid/v4';
+import Pokemon from './pokemon';
 
 interface IItemCreateInput {
   name: string;
@@ -44,8 +45,22 @@ export default class Item extends Model {
     ]
   };
 
+  static get relationMappings(): RelationMappings {
+    return {
+      pokemon: {
+        relation: Model.HasOneRelation,
+        modelClass: Pokemon,
+        join: {
+          from: 'item.pokemonId',
+          to: 'pokemon.id'
+        },
+        modify: builder => builder.where({ 'pokemon.deletedAt': null })
+      }
+    };
+  }
+
   static async get(itemId: string, txn: Transaction): Promise<Item> {
-    const item = await this.query(txn).findOne({ id: itemId, deletedAt: null });
+    const item = await this.query(txn).eager('pokemon').findOne({ id: itemId, deletedAt: null });
 
     if (item) {
       return item;
@@ -55,7 +70,7 @@ export default class Item extends Model {
   }
 
   static async create(input: IItemCreateInput, txn: Transaction): Promise<Item> {
-    return this.query(txn).insert(input).returning('*');
+    return this.query(txn).insert(input).returning('*').eager('pokemon');
   }
 
   static async edit(itemId: string, item: IItemEditInput, txn: Transaction): Promise<void> {
@@ -77,6 +92,7 @@ export default class Item extends Model {
   price!: number;
   happiness!: number;
   imageUrl!: string;
+  pokemon!: Pokemon | null;
   createdAt!: string;
   updatedAt!: string;
   deletedAt!: string | null;

@@ -1,8 +1,8 @@
+import random from 'lodash/random'
 import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
-import Pokemon from '../pokemon';
 import Item from '../item';
-import random from 'lodash/random'
+import Pokemon from '../pokemon';
 
 describe('Pokemon', () => {
   let testDb = null as any;
@@ -10,8 +10,8 @@ describe('Pokemon', () => {
   
   const nonexistentId = '0315cff6-9fc3-4882-ac0a-0835a211a843';
 
-  const getRandomPokemonId = async (txn: Transaction) => {
-    const allPokemon = await Pokemon.getAll(txn);
+  const getRandomPokemonId = async (txxn: Transaction) => {
+    const allPokemon = await Pokemon.getAll(txxn);
     return allPokemon[random(allPokemon.length - 1)].id
   };
 

@@ -1,4 +1,4 @@
-import { Model, Transaction, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import uuid from 'uuid/v4';
 import Item from './item';
 

@@ -1,4 +1,4 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Item from '../item';
 import Pokemon from '../pokemon';
@@ -7,6 +7,12 @@ describe('item model', () => {
   const mockResourceUrl = 'http://google.com';
   let testDb = null as any;
   let txn = null as any;
+
+  const getRandomItem = async (txxn: Transaction): Promise<Item> => {
+    const allItems = await Item.query(txxn).where({ deletedAt: null });
+    const randomNumberGen = Math.floor(Math.random() * allItems.length);
+    return allItems[randomNumberGen];
+  };
 
   beforeAll(async () => {
     testDb = setupDb();
@@ -26,8 +32,9 @@ describe('item model', () => {
 
   describe('item methods', () => {
     it('GET ONE -- finds an item by id', async () => {
-      const itemById = await Item.getById('139a18ed-979a-4ffd-bee9-2ebf92ad8811', txn);
-      expect(itemById.name).toEqual('Focus Band');
+      const randomItem = await getRandomItem(txn);
+      const itemById = await Item.getById(randomItem.id, txn);
+      expect(itemById.name).toEqual(randomItem.name);
     });
 
     it('CREATE -- creates a Item and successfully associates to a Pokemon', async () => {
@@ -59,22 +66,23 @@ describe('item model', () => {
     });
 
     it('EDIT -- successfully edits an items attributes', async () => {
-      const editGrassySeed = await Item.edit(
-        'f093880d-77fd-4ca5-9b12-e6c110c58dc0',
+      const randomItem = await getRandomItem(txn);
+      const editRandomItem = await Item.edit(
+        randomItem.id,
         {
           happiness: 100,
           price: 101,
         },
         txn,
       );
-      expect(editGrassySeed.happiness).toEqual(100);
-      expect(editGrassySeed.price).toEqual(101);
-      expect(editGrassySeed.name).toEqual('Grassy Seed');
+      expect(editRandomItem.happiness).toEqual(100);
+      expect(editRandomItem.price).toEqual(101);
     });
 
     it('DELETE -- soft deletes an item from the DB', async () => {
-      const deleteGrassySeed = await Item.delete('f093880d-77fd-4ca5-9b12-e6c110c58dc0', txn);
-      expect(deleteGrassySeed.deletedAt).toBeTruthy();
+      const randomItem = await getRandomItem(txn);
+      const deleteRandomItem = await Item.delete(randomItem.id, txn);
+      expect(deleteRandomItem.deletedAt).toBeTruthy();
     });
   });
 });

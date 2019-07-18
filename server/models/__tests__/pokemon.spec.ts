@@ -1,4 +1,4 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import { setupDb } from '../../lib/test-utils';
 import Pokemon from '../pokemon';
 
@@ -6,6 +6,12 @@ describe('pokemon model', () => {
   const mockResourceUrl = 'http://google.com';
   let testDb = null as any;
   let txn = null as any;
+
+  const getRandomPokemon = async (txxn: Transaction): Promise<Pokemon> => {
+    const allPokemon = await Pokemon.get(txxn);
+    const genNumber = Math.floor(Math.random() * allPokemon.length);
+    return allPokemon[genNumber];
+  };
 
   beforeAll(async () => {
     testDb = setupDb();
@@ -25,17 +31,17 @@ describe('pokemon model', () => {
 
   describe('pokemon methods', () => {
     it('GET ONE -- finds a pokemon by id and returns items', async () => {
-      const pokemonById = await Pokemon.getById('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
-      const items = pokemonById.hasOwnProperty('item') ? pokemonById.item : [];
-      expect(pokemonById.name).toEqual('Caterpie');
-      expect(items.length).toEqual(3);
+      const randomPokemon = await getRandomPokemon(txn);
+      const pokemonById = await Pokemon.getById(randomPokemon.id, txn);
+      expect(pokemonById.name).toEqual(randomPokemon.name);
+      expect(pokemonById.item.length).toEqual(randomPokemon.item.length);
     });
 
     it('GET ALL -- retreives all pokemon in db and in order', async () => {
-      const allPokemon = await Pokemon.get();
+      const allPokemon = await Pokemon.get(txn);
       expect(allPokemon.length).toEqual(52);
-      expect(allPokemon[2]!.name).toEqual('Venusaur');
-      expect(allPokemon[3]!.name).toEqual('Charmander');
+      expect(allPokemon[2].name).toEqual('Venusaur');
+      expect(allPokemon[3].name).toEqual('Charmander');
     });
 
     it('CREATE -- creates a Pokemon and adds them to db', async () => {
@@ -56,24 +62,23 @@ describe('pokemon model', () => {
     });
 
     it('EDIT -- successfully edits a pokemons attributes', async () => {
-      const editCaterpie = await Pokemon.edit(
-        '0315cff6-9fc3-4882-ac0a-0835a211a843',
+      const randomPokemon = await getRandomPokemon(txn);
+      const editRandomPokemon = await Pokemon.edit(
+        randomPokemon.id,
         {
           attack: 100,
           defense: 101,
         },
         txn,
       );
-      expect(editCaterpie.attack).toEqual(100);
-      expect(editCaterpie.defense).toEqual(101);
-      expect(editCaterpie.name).toEqual('Caterpie');
+      expect(editRandomPokemon.attack).toEqual(100);
+      expect(editRandomPokemon.defense).toEqual(101);
     });
 
     it('DELETE -- soft deletes a pokemon from the DB', async () => {
-      const deleteCaterpie = await Pokemon.delete('0315cff6-9fc3-4882-ac0a-0835a211a843', txn);
-      const notDeletedPokemon = await Pokemon.getByName('Charizard', txn);
-      expect(deleteCaterpie.deletedAt).toBeTruthy();
-      expect(notDeletedPokemon.deletedAt).toBeFalsy();
+      const randomPokemon = await getRandomPokemon(txn);
+      const deleteRandomPokemon = await Pokemon.delete(randomPokemon.id, txn);
+      expect(deleteRandomPokemon.deletedAt).toBeTruthy();
     });
   });
 });

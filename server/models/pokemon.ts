@@ -75,8 +75,10 @@ export default class Pokemon extends BaseModel {
     };
   }
 
-  static async get(): Promise<Pokemon[] | null[]> {
-    const pokemon = await this.query().orderBy('pokemonNumber');
+  static async get(txn: Transaction): Promise<Pokemon[]> {
+    const pokemon = await this.query(txn)
+      .eager('item')
+      .orderBy('pokemonNumber');
     if (!pokemon) {
       return Promise.reject('No pokemon in db');
     }
